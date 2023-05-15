@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EF5703FE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31439703FEB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245325AbjEOVha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33360 "EHLO
+        id S244456AbjEOViC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjEOVh3 (ORCPT
+        with ESMTP id S245437AbjEOVhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:37:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAA35B80
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684186647; x=1715722647;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to;
-  bh=Z4ysCkmsMQ8/UQQK6plTlWxmhVINUrKzNMXoSXuGyC8=;
-  b=DQ15HInmfuhdDtudY5UPxEUmM0KavdB1FsY2wOLQFAqcHIEDCH38I/KT
-   7h27onlOnK5TR1B2lCmdaO8bdcLorzItMZMBWIqyGa/lz4CAp6QySJ7+y
-   jY8ZZVnpmero3FymmAcCkeXpR09sBWExiTYFwXA+RE0kGX8VZzhnKumR8
-   1FBy+4R2qAKDY1LlWgOS8hjcv/wUJP9gUZJUbfaif/HpO3aVmvluEb3U+
-   ayet/EqisEb+P1715uOaEX/pYkAr+SZKr+Ku22m6cK7+SaC2u0h8IyUXi
-   AR0jyQfpOEUBanwPh2DgBHpwloLoifoYaXF5FyC21ijNK7/zpLY1KFEn/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="351350662"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="351350662"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 14:37:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="695183582"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="695183582"
-Received: from satwikja-mobl.amr.corp.intel.com (HELO [10.212.213.112]) ([10.212.213.112])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 14:37:27 -0700
-Content-Type: multipart/mixed; boundary="------------BePvJyiy0wMXwplpIRovCDid"
-Message-ID: <bfa65f6c-8d6f-3111-caf8-6c02cf78877c@intel.com>
-Date:   Mon, 15 May 2023 14:37:27 -0700
+        Mon, 15 May 2023 17:37:53 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A9F59FF;
+        Mon, 15 May 2023 14:37:52 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6ab032b33cdso8791433a34.0;
+        Mon, 15 May 2023 14:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684186672; x=1686778672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FVMuxsS2AyLD1/V6++7XAV6yzgy8hSgIj+BDEQpjE54=;
+        b=W9HDZcGnI9+ek1B7bA8FaHB9lwyhGmNZ1EgymTz3gar98sh3Or8gWpjTUZc98Vvuxu
+         RLCv0qc+o81LEY28txxkm6OUX5ktmYkyrWoYejBEnUjE1FXTTECubtbB+xCc1wfchBho
+         YjtINtPiVfdbLFbnZyW8aqLfOcBlqmf7Vg/mcugnITYr5ttiwln0rsGs0SYqlimKhpYe
+         kvnh3BcyRJFam57GY671VH2x7ZcUq4kZWhA4fLrDKpjLKMHfhbkFm+CysfYuYtejBUi3
+         NNc/1943cCWeqscFO2U7Pgy7P3uk+7LuYKdtfhgT5cujuwq9lnBBRjAMXKCOD//R02r/
+         Rdyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684186672; x=1686778672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FVMuxsS2AyLD1/V6++7XAV6yzgy8hSgIj+BDEQpjE54=;
+        b=SDCzH1A1kSwjrKLiWG7ZdUzPMbvEEA37Jk5xGs9ZfdajS3+CuoUR4FRedSfdKbe5li
+         bu6xiFoyi2ISwXIl1OWN7IPrDEquMlfYvLS824C52DDjxo0GwwMq6I2mO10K0k9yDdf+
+         GjUI9/AzOqc1IjUtU8L0kEV3kZ7QNJGH/qnCxviyiljZlFm8wT/5X57Xpbh9KWahY6sS
+         Ipe5mFhV581xTavE6pL8TNIRgV2wxxvM+/6y38BCrnK5Dv5Xd1jatFFEtWIZfMbNy2iH
+         6AhT2aOORFwVo6vKZjd3RNnPNwMI/M3qd6j6QI9aNUunG18K6AAfe0fAiKhIv2iLqQfy
+         IGEw==
+X-Gm-Message-State: AC+VfDwMn7wR0oFXak1ml2oKyH4oxWUD0Exd/lcvdHeBNtk2bG416sJr
+        kxzTTO0R7+iJmyjJb4p2iceph6u6IXkeFsI3NiCM0nEH
+X-Google-Smtp-Source: ACHHUZ5K6xhtdZFLWfE9KZFvociY3IW0kLIpPtgnTWZicz58dwr3NJLbILYSjo9mLv2/bBwnM3yBG58OdClHpPvuPN8=
+X-Received: by 2002:a05:6808:211f:b0:395:dd60:852c with SMTP id
+ r31-20020a056808211f00b00395dd60852cmr5465165oiw.43.1684186671678; Mon, 15
+ May 2023 14:37:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] x86/shstk for 6.4
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
- <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
- <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
- <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com>
- <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
- <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
- <4171c4b0-e24b-a7e2-9928-030cc14f1d8d@intel.com>
- <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
- <CAHk-=wg4vpYz+xRtd+PsdmQ9gtNGbXrFKW3ndvXcrLEEDN0hyw@mail.gmail.com>
- <95c2e669-bce9-3dd5-e197-3faf816c4b45@intel.com>
- <CAHk-=wjzEA_TO0wWNir0HzAFJ5_tMoQnrL_-8+igqmCZGVGdcw@mail.gmail.com>
- <93ae88a4-1dac-77bf-37f6-f8708a6d83b7@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <93ae88a4-1dac-77bf-37f6-f8708a6d83b7@intel.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230515013428.38798-1-suhui@nfschina.com>
+In-Reply-To: <20230515013428.38798-1-suhui@nfschina.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 15 May 2023 17:37:40 -0400
+Message-ID: <CADnq5_ND5fdXh0=HubG9xh9D30ZNQSQwVgQ9GasxmwB_mtWdMA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: remove unnecessary (void*) conversions
+To:     Su Hui <suhui@nfschina.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,107 +72,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------BePvJyiy0wMXwplpIRovCDid
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Applied.  Thanks!
 
-On 5/15/23 14:36, Dave Hansen wrote:
-> Is this worth pursuing?
+Alex
 
-... and with the actual patch this time
---------------BePvJyiy0wMXwplpIRovCDid
-Content-Type: text/x-patch; charset=UTF-8; name="get_task_mm-locking.patch"
-Content-Disposition: attachment; filename="get_task_mm-locking.patch"
-Content-Transfer-Encoding: base64
-
-CgotLS0KCiBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL3BndGFibGUuaCB8ICAgIDYgKysKIGIv
-aW5jbHVkZS9saW51eC9zY2hlZC5oICAgICAgICAgIHwgICAgMSAKIGIva2VybmVsL2Zvcmsu
-YyAgICAgICAgICAgICAgICAgIHwgICA4MSArKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysKIDMgZmlsZXMgY2hhbmdlZCwgODcgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
-dGlvbigtKQoKZGlmZiAtcHVOIGtlcm5lbC9mb3JrLmN+Z2V0X3Rhc2tfbW0tbG9ja2luZyBr
-ZXJuZWwvZm9yay5jCi0tLSBhL2tlcm5lbC9mb3JrLmN+Z2V0X3Rhc2tfbW0tbG9ja2luZwky
-MDIzLTA1LTE1IDA4OjU1OjU5LjE2ODkxODk3MSAtMDcwMAorKysgYi9rZXJuZWwvZm9yay5j
-CTIwMjMtMDUtMTUgMTQ6MTc6MzQuNDM0NTQ3MjMxIC0wNzAwCkBAIC02NjEsNiArNjYxLDEy
-IEBAIHN0YXRpYyBfX2xhdGVudF9lbnRyb3B5IGludCBkdXBfbW1hcChzdHIKIAkJcmV0dmFs
-ID0gLUVJTlRSOwogCQlnb3RvIGZhaWxfdXByb2JlX2VuZDsKIAl9CisKKwlpZiAoKGF0b21p
-Y19yZWFkKCZvbGRtbS0+bW1fdXNlcnMpID09IDEpICYmCisJICAgIChhdG9taWNfcmVhZCgm
-b2xkbW0tPm1tX2NvdW50KSA9PSAxKSkKKwkJY3VycmVudC0+dGFza19kb2luZ19mYXN0X2Zv
-cmsgPSAxOworCisKIAlmbHVzaF9jYWNoZV9kdXBfbW0ob2xkbW0pOwogCXVwcm9iZV9kdXBf
-bW1hcChvbGRtbSwgbW0pOwogCS8qCkBAIC03NzQsNiArNzgwLDcgQEAgbG9vcF9vdXQ6CiBv
-dXQ6CiAJbW1hcF93cml0ZV91bmxvY2sobW0pOwogCWZsdXNoX3RsYl9tbShvbGRtbSk7CisJ
-Y3VycmVudC0+dGFza19kb2luZ19mYXN0X2ZvcmsgPSAwOwogCW1tYXBfd3JpdGVfdW5sb2Nr
-KG9sZG1tKTsKIAlkdXBfdXNlcmZhdWx0ZmRfY29tcGxldGUoJnVmKTsKIGZhaWxfdXByb2Jl
-X2VuZDoKQEAgLTE1MjcsNiArMTUzNCw0NiBAQCBzdHJ1Y3QgZmlsZSAqZ2V0X3Rhc2tfZXhl
-X2ZpbGUoc3RydWN0IHRhCiAJcmV0dXJuIGV4ZV9maWxlOwogfQogCisvKgorICogQSAiZmFz
-dCBmb3JrKCkiIHRhc2sgbWlnaHQgYmUgdGFraW5nIHNob3J0Y3V0cyB0aGF0IG1ha2UKKyAq
-IHRoZSBtbSdzIGFkZHJlc3Mgc3BhY2UgdW5zdGFibGUgZm9yIG11bHRpdGhyZWFkZWQgYWNj
-ZXNzLgorICogVGhlIG1tIGNhbid0IGJlIGNvbnNpZGVyZWQgc3RhYmxlIHVudGlsIGhvbGRp
-bmcKKyAqIG1tYXBfd3JpdGVfbG9jaygpIHRvIGVuc3VyZSB0aGF0IHRoZSBmb3JrKCkgaXMg
-ZmluaXNoZWQuCisgKgorICogVGhpcyBmdW5jdGlvbiBpcyBhICJtYXliZSIgYmVjYXVzZSBp
-dCBjYW4gInJldHVybiB0cnVlIgorICogZm9yIG1hbnkgcmVhc29ucyBvdGhlciB0aGFuIGFu
-IG1tIHRoYXQgaXMgZG9pbmcgYSBmYXN0CisgKiBmb3JrLiAgQnV0IGl0IHNob3VsZCBiZSBy
-aWdodCBlbm91Z2ggb2YgdGhlIHRpbWUgdG8ga2VlcAorICogY2FsbGVycyB1c2luZyB0aGVp
-ciBmYXN0IHBhdGhzIHRoZSBtYWpvcml0eSBvZiB0aGUgdGltZS4KKyAqLworc3RhdGljIGJv
-b2wgbW1fbWF5YmVfZmFzdF9mb3JrKHN0cnVjdCBtbV9zdHJ1Y3QgKm1tKQoreworCS8qIEZh
-c3QgZm9yaygpIHdvbid0IHN0YXJ0IGlmIC0+bW1fdXNlcnMgaXMgZWxldmF0ZWQgKi8KKwlp
-ZiAoYXRvbWljX3JlYWQoJm1tLT5tbV91c2VycykgIT0gMSkKKwkJcmV0dXJuIGZhbHNlOwor
-CisJLyoKKwkgKiBTb21lIHVzZXJzLCBsaWtlIHByb2NfbWVtX29wZXJhdGlvbnMgd2FudCB0
-byBhdm9pZCBwaW5uaW5nCisJICogdGhlIGFkZHJlc3Mgc3BhY2Ugd2l0aCAtPm1tX3VzZXJz
-LiAgVGhleSBpbnN0ZWFkIGVsZXZhdGUKKwkgKiAtPm1tX2NvdW50IGFuZCB0aGVuICh0ZW1w
-b3JhcmlseSkgInVwZ3JhZGUiIHRoYXQgLT5tbV9jb3VudAorCSAqIHJlZiB0byBhbiAtPm1t
-X3VzZXJzIHJlZiB3aXRoIG1tZ2V0X25vdF96ZXJvKCkuCisJICoKKwkgKiBDaGVjayBmb3Ig
-LT5tbV9jb3VudD09MS4gIFRoaXMgZW5zdXJlcyB0aGF0IG5vIG9uZSB3aWxsCisJICogbGF0
-ZXIgdXBncmFkZSB0aGF0IHJlZiB3aXRoIG1tZ2V0X25vdF96ZXJvKCkgYW5kIGFjY2Vzcwor
-CSAqIHRoZSBwYWdlIHRhYmxlcyB3aXRob3V0IHRoZSAic2xvdyIgbW1hcF9sb2NrIHBhdGgu
-CisJICovCisJaWYgKGF0b21pY19yZWFkKCZtbS0+bW1fY291bnQpICE9IDEpCisJCXJldHVy
-biBmYWxzZTsKKworCS8qCisJICogQSB0YXNrIGNhbiBub3Qgbm90IGJlIGRvaW5nIGEgZm9y
-aygpIGlmIHRoZSBsb2NrCisJICogaXMgbm90IGhlbGQuCisJICovCisJaWYgKCFyd3NlbV9p
-c19sb2NrZWQoJm1tLT5tbWFwX2xvY2spKQorCQlyZXR1cm4gZmFsc2U7CisKKwlyZXR1cm4g
-dHJ1ZTsKK30KKwogLyoqCiAgKiBnZXRfdGFza19tbSAtIGFjcXVpcmUgYSByZWZlcmVuY2Ug
-dG8gdGhlIHRhc2sncyBtbQogICoKQEAgLTE1NDMsNiArMTU5MCw4IEBAIHN0cnVjdCBtbV9z
-dHJ1Y3QgKmdldF90YXNrX21tKHN0cnVjdCB0YXMKIAl0YXNrX2xvY2sodGFzayk7CiAJbW0g
-PSB0YXNrLT5tbTsKIAlpZiAobW0pIHsKKwkJaWYgKG1tX21heWJlX2Zhc3RfZm9yayhtbSkp
-CisJCQlnb3RvIHNsb3c7CiAJCWlmICh0YXNrLT5mbGFncyAmIFBGX0tUSFJFQUQpCiAJCQlt
-bSA9IE5VTEw7CiAJCWVsc2UKQEAgLTE1NTAsNiArMTU5OSwzMSBAQCBzdHJ1Y3QgbW1fc3Ry
-dWN0ICpnZXRfdGFza19tbShzdHJ1Y3QgdGFzCiAJfQogCXRhc2tfdW5sb2NrKHRhc2spOwog
-CXJldHVybiBtbTsKK3Nsb3c6IHsKKwlzdHJ1Y3QgbW1fc3RydWN0ICpyZXRfbW0gPSBtbTsK
-KworCW1tZ3JhYihtbSk7CisJdGFza191bmxvY2sodGFzayk7CisKKwkvKgorCSAqIFRoYW5r
-cyB0byB0aGUgbW1ncmFiKCksICdtbScgaXRzZWxmIGlzIG5vdyBzdGFibGUuCisJICogJ3Rh
-c2snIG1pZ2h0IGV4aXQgYnV0IGNhbiBub3QgZnJlZSB0aGUgbW0uCisJICovCisKKwkvKiBJ
-ZiBhIGZvcmsoKSB3YXMgaGFwcGVuaW5nLCB3YWl0IGZvciBpdCB0byBjb21wbGV0ZTogKi8K
-KwltbWFwX3dyaXRlX2xvY2sobW0pOworCWlmICghbW1nZXRfbm90X3plcm8obW0pKSB7CisJ
-CS8qCisJCSAqIFRoZSBtbSdzIGFkZHJlc3Mgc3BhY2UgaGFzIGdvbmUgYXdheS4gIFRlbGwK
-KwkJICogdGhlIGNhbGxlciB0aGF0IHRoZSB0YXNrJ3MgbW0gd2FzIHVuYXZhaWxhYmxlOgor
-CQkgKi8KKwkJcmV0X21tID0gTlVMTDsKKwl9CisJbW1hcF93cml0ZV91bmxvY2sobW0pOwor
-CW1tZHJvcChtbSk7CisKKwlyZXR1cm4gcmV0X21tOworICAgICAgfQogfQogRVhQT1JUX1NZ
-TUJPTF9HUEwoZ2V0X3Rhc2tfbW0pOwogCkBAIC0zNTYxLDMgKzM2MzUsMTAgQEAgaW50IHN5
-c2N0bF9tYXhfdGhyZWFkcyhzdHJ1Y3QgY3RsX3RhYmxlCiAKIAlyZXR1cm4gMDsKIH0KKwor
-Ym9vbCBjdXJyZW50X2RvaW5nX2Zhc3RfZm9yayh2b2lkKQoreworCVdBUk5fT04oY3VycmVu
-dC0+dGFza19kb2luZ19mYXN0X2ZvcmsgJiYgKGF0b21pY19yZWFkKCZjdXJyZW50LT5tbS0+
-bW1fdXNlcnMpID4gMSkpOworCXJldHVybiBjdXJyZW50LT50YXNrX2RvaW5nX2Zhc3RfZm9y
-azsKK30KKwpkaWZmIC1wdU4gaW5jbHVkZS9saW51eC9zY2hlZC5ofmdldF90YXNrX21tLWxv
-Y2tpbmcgaW5jbHVkZS9saW51eC9zY2hlZC5oCi0tLSBhL2luY2x1ZGUvbGludXgvc2NoZWQu
-aH5nZXRfdGFza19tbS1sb2NraW5nCTIwMjMtMDUtMTUgMDk6MzI6NTcuMzkzNzIxOTYyIC0w
-NzAwCisrKyBiL2luY2x1ZGUvbGludXgvc2NoZWQuaAkyMDIzLTA1LTE1IDA5OjMzOjMxLjI0
-MDU5OTQ5OSAtMDcwMApAQCAtNzYyLDYgKzc2Miw3IEBAIHN0cnVjdCB0YXNrX3N0cnVjdCB7
-CiAJLyogUGVyIHRhc2sgZmxhZ3MgKFBGXyopLCBkZWZpbmVkIGZ1cnRoZXIgYmVsb3c6ICov
-CiAJdW5zaWduZWQgaW50CQkJZmxhZ3M7CiAJdW5zaWduZWQgaW50CQkJcHRyYWNlOworCWJv
-b2wgdGFza19kb2luZ19mYXN0X2Zvcms7CiAKICNpZmRlZiBDT05GSUdfU01QCiAJaW50CQkJ
-CW9uX2NwdTsKZGlmZiAtcHVOIGFyY2gveDg2L2luY2x1ZGUvYXNtL3BndGFibGUuaH5nZXRf
-dGFza19tbS1sb2NraW5nIGFyY2gveDg2L2luY2x1ZGUvYXNtL3BndGFibGUuaAotLS0gYS9h
-cmNoL3g4Ni9pbmNsdWRlL2FzbS9wZ3RhYmxlLmh+Z2V0X3Rhc2tfbW0tbG9ja2luZwkyMDIz
-LTA1LTE1IDA5OjM2OjEzLjAzMDM2MTMxNiAtMDcwMAorKysgYi9hcmNoL3g4Ni9pbmNsdWRl
-L2FzbS9wZ3RhYmxlLmgJMjAyMy0wNS0xNSAxMDoyNzo0NS4xMTI2NTI5NDAgLTA3MDAKQEAg
-LTEwOTQsNyArMTA5NCwxMSBAQCBzdGF0aWMgaW5saW5lIHB0ZV90IHB0ZXBfZ2V0X2FuZF9j
-bGVhcl9mCiBzdGF0aWMgaW5saW5lIHZvaWQgcHRlcF9zZXRfd3Jwcm90ZWN0KHN0cnVjdCBt
-bV9zdHJ1Y3QgKm1tLAogCQkJCSAgICAgIHVuc2lnbmVkIGxvbmcgYWRkciwgcHRlX3QgKnB0
-ZXApCiB7Ci0JY2xlYXJfYml0KF9QQUdFX0JJVF9SVywgKHVuc2lnbmVkIGxvbmcgKikmcHRl
-cC0+cHRlKTsKKwlleHRlcm4gYm9vbCBjdXJyZW50X2RvaW5nX2Zhc3RfZm9yayh2b2lkKTsK
-KwlpZiAoY3VycmVudF9kb2luZ19mYXN0X2ZvcmsoKSkKKwkJX19jbGVhcl9iaXQoX1BBR0Vf
-QklUX1JXLCAodW5zaWduZWQgbG9uZyAqKSZwdGVwLT5wdGUpOworCWVsc2UKKwkJY2xlYXJf
-Yml0KF9QQUdFX0JJVF9SVywgKHVuc2lnbmVkIGxvbmcgKikmcHRlcC0+cHRlKTsKIH0KIAog
-I2RlZmluZSBmbHVzaF90bGJfZml4X3NwdXJpb3VzX2ZhdWx0KHZtYSwgYWRkcmVzcywgcHRl
-cCkgZG8geyB9IHdoaWxlICgwKQpfCg==
-
---------------BePvJyiy0wMXwplpIRovCDid--
+On Mon, May 15, 2023 at 3:18=E2=80=AFAM Su Hui <suhui@nfschina.com> wrote:
+>
+> No need cast (void*) to (struct amdgpu_device *).
+>
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 4 ++--
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c   | 2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c     | 2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c      | 2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c     | 2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c     | 2 +-
+>  6 files changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/dr=
+m/amd/amdgpu/amdgpu_debugfs.c
+> index f60753f97ac5..c837e0bf2cfc 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
+> @@ -1470,7 +1470,7 @@ int amdgpu_debugfs_regs_init(struct amdgpu_device *=
+adev)
+>
+>  static int amdgpu_debugfs_test_ib_show(struct seq_file *m, void *unused)
+>  {
+> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
+;
+> +       struct amdgpu_device *adev =3D m->private;
+>         struct drm_device *dev =3D adev_to_drm(adev);
+>         int r =3D 0, i;
+>
+> @@ -1581,7 +1581,7 @@ static int amdgpu_debugfs_benchmark(void *data, u64=
+ val)
+>
+>  static int amdgpu_debugfs_vm_info_show(struct seq_file *m, void *unused)
+>  {
+> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
+;
+> +       struct amdgpu_device *adev =3D m->private;
+>         struct drm_device *dev =3D adev_to_drm(adev);
+>         struct drm_file *file;
+>         int r;
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/=
+amd/amdgpu/amdgpu_fence.c
+> index f52d0ba91a77..f0615a43b3cc 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
+> @@ -835,7 +835,7 @@ static const struct dma_fence_ops amdgpu_job_fence_op=
+s =3D {
+>  #if defined(CONFIG_DEBUG_FS)
+>  static int amdgpu_debugfs_fence_info_show(struct seq_file *m, void *unus=
+ed)
+>  {
+> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
+;
+> +       struct amdgpu_device *adev =3D m->private;
+>         int i;
+>
+>         for (i =3D 0; i < AMDGPU_MAX_RINGS; ++i) {
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/am=
+d/amdgpu/amdgpu_gem.c
+> index 863cb668e000..28f79cf8c3fb 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> @@ -948,7 +948,7 @@ int amdgpu_mode_dumb_create(struct drm_file *file_pri=
+v,
+>  #if defined(CONFIG_DEBUG_FS)
+>  static int amdgpu_debugfs_gem_info_show(struct seq_file *m, void *unused=
+)
+>  {
+> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
+;
+> +       struct amdgpu_device *adev =3D m->private;
+>         struct drm_device *dev =3D adev_to_drm(adev);
+>         struct drm_file *file;
+>         int r;
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c b/drivers/gpu/drm/amd=
+/amdgpu/amdgpu_ib.c
+> index 4ff348e10e4d..49a4238a120e 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c
+> @@ -436,7 +436,7 @@ int amdgpu_ib_ring_tests(struct amdgpu_device *adev)
+>
+>  static int amdgpu_debugfs_sa_info_show(struct seq_file *m, void *unused)
+>  {
+> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
+;
+> +       struct amdgpu_device *adev =3D m->private;
+>
+>         seq_printf(m, "--------------------- DELAYED --------------------=
+- \n");
+>         amdgpu_sa_bo_dump_debug_info(&adev->ib_pools[AMDGPU_IB_POOL_DELAY=
+ED],
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c b/drivers/gpu/drm/am=
+d/amdgpu/amdgpu_kms.c
+> index 0efb38539d70..9f9274249b57 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
+> @@ -1441,7 +1441,7 @@ void amdgpu_disable_vblank_kms(struct drm_crtc *crt=
+c)
+>
+>  static int amdgpu_debugfs_firmware_info_show(struct seq_file *m, void *u=
+nused)
+>  {
+> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
+;
+> +       struct amdgpu_device *adev =3D m->private;
+>         struct drm_amdgpu_info_firmware fw_info;
+>         struct drm_amdgpu_query_fw query_fw;
+>         struct atom_context *ctx =3D adev->mode_info.atom_context;
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/am=
+d/amdgpu/amdgpu_ttm.c
+> index 2cd081cbf706..21f340ed4cca 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+> @@ -2164,7 +2164,7 @@ int amdgpu_ttm_evict_resources(struct amdgpu_device=
+ *adev, int mem_type)
+>
+>  static int amdgpu_ttm_page_pool_show(struct seq_file *m, void *unused)
+>  {
+> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
+;
+> +       struct amdgpu_device *adev =3D m->private;
+>
+>         return ttm_pool_debugfs(&adev->mman.bdev.pool, m);
+>  }
+> --
+> 2.30.2
+>
