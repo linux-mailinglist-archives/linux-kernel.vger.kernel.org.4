@@ -2,112 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EF470410A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2692570410D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245739AbjEOWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 18:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S1343500AbjEOWjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 18:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjEOWib (ORCPT
+        with ESMTP id S231416AbjEOWjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 18:38:31 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DE4DDBC
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 15:38:22 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        Mon, 15 May 2023 18:39:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C95BA5DA;
+        Mon, 15 May 2023 15:39:39 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.28])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 770773F797;
-        Tue, 16 May 2023 00:38:20 +0200 (CEST)
-Date:   Tue, 16 May 2023 00:38:19 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 3/8] drm/msm/dpu: test DPU_PINGPONG_DSC bit before
- assign DSC ops to PINGPONG
-Message-ID: <y37celsdtzqlyfvpg6ctkjv53keflykj36l7hd6gxsf7f4suzx@d6ywqy6fyutc>
-References: <1684185928-24195-1-git-send-email-quic_khsieh@quicinc.com>
- <1684185928-24195-4-git-send-email-quic_khsieh@quicinc.com>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 573D366031CE;
+        Mon, 15 May 2023 23:39:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684190378;
+        bh=6vM/tOGnmSln8Pv6kLk4Nazaz+fmc1Ds2gNBAqt+6QY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DFnrYCBNczfCveW7dnMU+fPv/O26FpDbqbPIpYed+dTvvmEQ+MgMqX5tX0hg9XpvA
+         gYUcqumzHphpwrpQFmPiGPln0se6QiGfDu9zGvRozoyONGQcYQjCWB06+NH3zjo3OJ
+         NGLoh+zMdz1TV+Wtk1Yfk3yG2OmXHgze2qCtClJ7fQr+hhfwJkdahdx3Bk5QQeHjCR
+         hQqHcs00KcPTMU4+p9daYFfLZfgG98ty1X81iXopQUYqQ5ms3r8dK2so63/SCy5W1G
+         9tC5PAn1Px/zaRbIzggH7TrjKbJeiGbpPAj79+BJ/MXS5tHIM4ScXuTyYdRgIXEN9l
+         oriZFsc2waV7w==
+Received: by mercury (Postfix, from userid 1000)
+        id 26E0E1060F7F; Tue, 16 May 2023 00:39:36 +0200 (CEST)
+Date:   Tue, 16 May 2023 00:39:36 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] power: max17040: get thermal data from adc if
+ available
+Message-ID: <20230515223936.fwayzfd77hvgpscy@mercury.elektranox.org>
+References: <20230308084419.11934-1-clamor95@gmail.com>
+ <20230308084419.11934-5-clamor95@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qf65dea75uga2xk7"
 Content-Disposition: inline
-In-Reply-To: <1684185928-24195-4-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230308084419.11934-5-clamor95@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-You forgot to address the title suggestion "before assign" isn't proper
-English.
 
-Copying from v8 review:
+--qf65dea75uga2xk7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    "Guard PINGPONG DSC ops behind DPU_PINGPONG_DSC bit"
+Hi,
 
-On 2023-05-15 14:25:23, Kuogee Hsieh wrote:
-> 
-> DPU < 7.0.0 has DPU_PINGPONG_DSC feature bit set to indicate it requires
-> both dpu_hw_pp_setup_dsc() and dpu_hw_pp_dsc_{enable,disable}() to be
-> executed to complete DSC configuration if DSC hardware block is present.
-> Hence test DPU_PINGPONG_DSC feature bit and assign DSC related functions
-> to the ops of PINGPONG block accordingly if DPU_PINGPONG_DSC bit is set.
-> 
-> changes in v6:
-> -- split patches, this patch has function handles DPU_PINGPONG_DSC bit
-> 
-> changes in v9:
-> -- remove un condition assign dsc related functions to pingpong ops
-
-Remember that in the DRM subsystem, these horrible changelogs are
-allowed as part of the commit message.  I already disagree with that,
-and as pointed out by Dmitry this particular one is unreadable.  I
-typically see them through as noise, but this one could use a rewrite.
-I won't bother suggesting the right wording yet again though.
-
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-For the contents:
-
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
+On Wed, Mar 08, 2023 at 10:44:19AM +0200, Svyatoslav Ryhel wrote:
+> Since fuel gauge does not support thermal monitoring,
+> some vendors may couple this fuel gauge with thermal/adc
+> sensor to monitor battery cell exact temperature.
+>=20
+> Add this feature by adding optional iio thermal channel.
+>=20
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> index 79e4576..437d9e6 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-> @@ -291,9 +291,12 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
->  		c->ops.get_line_count = dpu_hw_pp_get_line_count;
->  		c->ops.disable_autorefresh = dpu_hw_pp_disable_autorefresh;
+>  drivers/power/supply/max17040_battery.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supp=
+ly/max17040_battery.c
+> index 6dfce7b1309e..8c743c26dc6e 100644
+> --- a/drivers/power/supply/max17040_battery.c
+> +++ b/drivers/power/supply/max17040_battery.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+> +#include <linux/iio/consumer.h>
+> =20
+>  #define MAX17040_VCELL	0x02
+>  #define MAX17040_SOC	0x04
+> @@ -143,6 +144,7 @@ struct max17040_chip {
+>  	struct power_supply		*battery;
+>  	struct power_supply_battery_info	*batt_info;
+>  	struct chip_data		data;
+> +	struct iio_channel		*channel_temp;
+> =20
+>  	/* battery capacity */
+>  	int soc;
+> @@ -416,6 +418,11 @@ static int max17040_get_property(struct power_supply=
+ *psy,
+>  	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+>  		val->intval =3D chip->batt_info->charge_full_design_uah;
+>  		break;
+> +	case POWER_SUPPLY_PROP_TEMP:
+> +		iio_read_channel_raw(chip->channel_temp,
+> +				     &val->intval);
+> +		val->intval *=3D 10;
+
+return iio_read_channel_processed_scale(chip->channel_temp, &val->intval, 1=
+0);
+
+> +		break;
+>  	case POWER_SUPPLY_PROP_TEMP_MIN:
+>  		if (chip->batt_info->temp_min =3D=3D INT_MIN)
+>  			return -ENODATA;
+> @@ -452,6 +459,7 @@ static enum power_supply_property max17040_battery_pr=
+ops[] =3D {
+>  	POWER_SUPPLY_PROP_HEALTH,
+>  	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
+>  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+> +	POWER_SUPPLY_PROP_TEMP,
+
+You should only expose this, if chip->channel_temp is not NULL. Use
+devm_kmemdup() to copy the array into a private copy in chip and
+modify it on the fly.
+   =20
+>  	POWER_SUPPLY_PROP_TEMP_MIN,
+>  	POWER_SUPPLY_PROP_TEMP_MAX,
+>  };
+> @@ -560,9 +568,24 @@ static int max17040_probe(struct i2c_client *client)
+>  		}
 >  	}
-> -	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
-> -	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
-> -	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> =20
+> +	if (of_property_read_bool(client->dev.of_node, "io-channels")) {
+
+device_property_present()
+
+> +		chip->channel_temp =3D iio_channel_get(&client->dev, "temp");
+
+devm_iio_channel_get()
+
+> +		if (IS_ERR(chip->channel_temp))
+> +			return dev_err_probe(&client->dev, PTR_ERR(chip->channel_temp),
+> +					     "failed to get temp\n");
+> +	};
+
+Also this must be acquired before registering the power-supply device.
+
+-- Sebastian
+
 > +
-> +	if (test_bit(DPU_PINGPONG_DSC, &features)) {
-> +		c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
-> +		c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
-> +		c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
-> +	}
->  
->  	if (test_bit(DPU_PINGPONG_DITHER, &features))
->  		c->ops.setup_dither = dpu_hw_pp_setup_dither;
-> -- 
-> 2.7.4
-> 
+>  	return 0;
+>  }
+> =20
+> +static void max17040_remove(struct i2c_client *client)
+> +{
+> +	struct max17040_chip *chip =3D i2c_get_clientdata(client);
+> +
+> +	if (chip->channel_temp)
+> +		iio_channel_release(chip->channel_temp);
+> +}
+> +
+>  #ifdef CONFIG_PM_SLEEP
+> =20
+>  static int max17040_suspend(struct device *dev)
+> @@ -642,6 +665,7 @@ static struct i2c_driver max17040_i2c_driver =3D {
+>  		.pm	=3D MAX17040_PM_OPS,
+>  	},
+>  	.probe_new	=3D max17040_probe,
+> +	.remove		=3D max17040_remove,
+>  	.id_table	=3D max17040_id,
+>  };
+>  module_i2c_driver(max17040_i2c_driver);
+> --=20
+> 2.37.2
+>=20
+
+--qf65dea75uga2xk7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRitKQACgkQ2O7X88g7
++poRgBAAoaWYMbFxktJscB6lYr/T3va54JzJqn51XXuvWr1kUghcrL4NPSVlxfWS
+MVbgljHERs0DeNmnXTT0cPwBh7q0Bur9Fttn+hsRWN7iHsSb4DCPpZALdNO5f+gI
+d+eFiqSPPMm40gOBYn/vyQRVJ4TloU9yeglbCWkA1EKeG0Glg/PtYO3PYiXnkrE8
+5LNjRd8+zVyC0S678gDCIp6qhlLWh8vjQoJhxWT51OSnSEUnXSb9G1OO2bXyPiNU
++eqrPfvtpLP5PvYzuJAXoN3tH8wQxZQAgnGZvlvOC3FcvZYZuj6T8OUIVzCWTi5j
+sdidzm8sgAdHaQBq7uF7UtWgZU+FzFMZAtWaz73UuQErSqUB5gxaWS4jNU3ij92M
+ZgPop+nwTSWfW8bpd5ozmKoPqxdBghO3K02DdgPk2sAzWg/G6B5vDP2swDosgiX1
+Y5MMwYUQB1zPF01o6T0JEEapvqwWqNGE5i+0QBD8thqezFDZVrxlE95sAcwU6au2
+JKmqBsUppYR1qBhJFOhkmrpaYBMxBQpXiioUr5VLjoOX7dqDQOkDzWA783iAVMFS
+0NqdCv8VyTyDUUb/1asqaWZZ+YGhml4LYY/R8aJ89MczGEpgcEo8j3XStxSASzTz
+hsXURUNYifNWvPH0xWYEzNLsIBsnwpgFYi/SqpWNn+1tI8H7LJ8=
+=+09U
+-----END PGP SIGNATURE-----
+
+--qf65dea75uga2xk7--
