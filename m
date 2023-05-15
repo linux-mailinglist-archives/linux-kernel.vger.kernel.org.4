@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4156A702287
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95113702264
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238459AbjEODjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 23:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S239238AbjEODcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 23:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238737AbjEODih (ORCPT
+        with ESMTP id S238670AbjEODbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 23:38:37 -0400
+        Sun, 14 May 2023 23:31:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4B32103;
-        Sun, 14 May 2023 20:35:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF2C3C10;
+        Sun, 14 May 2023 20:29:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4C0261E2F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94F8C61E53;
+        Mon, 15 May 2023 03:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6057AC433EF;
         Mon, 15 May 2023 03:29:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11659C433A4;
-        Mon, 15 May 2023 03:29:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684121364;
-        bh=HRIToHkGRH4pOwUqzIxZbRZQcsaatfgrVmn3/fmoO2k=;
+        s=k20201202; t=1684121365;
+        bh=TP9Ur5mJ5Qvq08+4jnFbC5NsEU1s56mQNjEVtxhE8Vk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wkjp9hT9C49r4vpCOdfUfIkvNe6/cADSqzn9ZnGexdj48j8U4B23D42YPQzeIqAEG
-         9Geo7iMJF2iPp1PYRb+d86aPQmUH3ufrkEba5dTo3qprSnjWb1jtFZw+goQGkqK4XH
-         6Ne3yhooro08/u3YQCpXF1PiIfPeNm8+VopHhTn20Z+DMJnzhs9JDCMS1DiaciKkVC
-         LMXjtkTS0B3BwFlKabVvoL4ylt+PKAWPCc2qoyVR/wSmvzNtXIXxTI6vkQsa2i3tqz
-         RqJWaxJKcJFA2nMgSWOPcUHJQnb9PNL2isLj31iZQWE+KgizHKmWFHh60WbbCMjNXo
-         DeXE/mtv+TDOA==
+        b=mblY0XGBxUPCjbf3v0gyShLxAwbI/pUnjTLYV8OYY0ZSZNMxNRiyxqViLdkazul84
+         QQqOYVtbcacD7stIHTxaTZu1hZ1TOU/Crw61zWyslvwCy0ld6qX5UMApCiCSESTieN
+         L8CWl/GoaBawrU4GT0O1CLoY24kBDaaqdGWAmEtKSFD3/uFC1P1LL+tmk7dTaLQPMR
+         2BA7tz3VK+8w6BhlLJQN9l0f9X099Z364nf1BJcQ5UpUsLyS5jEsOugtIJQXOlgXc+
+         lp4ceOkHhaF3ypjPGMnK2q6KeX9VyHF8/mbBnpKFma7NH40DxzDHNTNtjDqhgdG8l1
+         lOl1P/V0+diZg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>, Will Deacon <will@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+To:     Andy Gross <agross@kernel.org>, Dang Huynh <danct12@riseup.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 0/5] arm64: dts: qcom: sa8775p: add more IOMMUs
-Date:   Sun, 14 May 2023 20:33:02 -0700
-Message-Id: <168412158455.1260758.7417505729277068962.b4-ty@kernel.org>
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Add F(x)tec Pro1X (QX1050) DTS
+Date:   Sun, 14 May 2023 20:33:03 -0700
+Message-Id: <168412158454.1260758.15231030886098180948.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230417125844.400782-1-brgl@bgdev.pl>
-References: <20230417125844.400782-1-brgl@bgdev.pl>
+In-Reply-To: <20230505-fxtec-pro1x-support-v3-0-0c9c7f58b205@riseup.net>
+References: <20230505-fxtec-pro1x-support-v3-0-0c9c7f58b205@riseup.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -64,21 +58,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 17 Apr 2023 14:58:39 +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Sat, 13 May 2023 08:05:03 +0700, Dang Huynh wrote:
+> The F(x)tec Pro1X is a mobile phone released by FX Technologies Ltd
+> in 2022.
 > 
-> Add the GPU and PCIe IOMMUs for sa8775p platforms as well as the required
-> GPU clock controller driver.
-> 
-> NOTE: I didn't pick up Krzysztof's tag for patch 4/5 as the patch changed
-> significantly.
+> The phone is exactly the same as the Pro1 released in 2019 with some
+> changes:
+> - MSM8998 -> SM6115
+> - Camera button is no longer multistate
+> - Only one 48MP back camera
+> - A new keyboard layout picked by the community.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/5] arm64: defconfig: enable the SA8775P GPUCC driver
-      commit: 8125a56125114d91843918cc6ef95367c4c39fc7
+[1/2] dt-bindings: arm: qcom: Add Fxtec Pro1X
+      commit: 775d08f3954174c030d41bc31a145c027e98b7f7
+[2/2] arm64: dts: qcom: Add Fxtec Pro1X (QX1050) DTS
+      commit: 0e59d9e210912e037ec28bd057d06481100f0ba5
 
 Best regards,
 -- 
