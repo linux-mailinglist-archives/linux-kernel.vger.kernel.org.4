@@ -2,134 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D077702A71
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BBE702A75
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240789AbjEOK03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        id S240915AbjEOK32 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 06:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjEOK01 (ORCPT
+        with ESMTP id S230091AbjEOK3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:26:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291FF1B4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:26:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=KlGV2Uq9r7IyVe38YPKCmnCoKgdwioBrjNMLC/4V+jo=; b=jV+GjZbpbbM94JK+TYSpqI+fsM
-        4dKFq2C5leD5Vw9uRrXDvIU1NavfC63Dw1M/FiRNdSqzskNB7qIe4a5D6hYIUxZ8LoMKQM4/FcJlO
-        jerjRgUh4HEcCklfBWVP9FBD95T/e5ivjyR6Zwp73Mz63gPyP6Hy6PROP9fK/r3+/lnJPqbbAKYd7
-        xu9dIhqsfL9MLbRFJKehnCT72410C6/5WAY3kEAjfCpmsdsfJT/ko4L3kOVsW7AwJcK+kVUXjhLus
-        p/aqdfyVEInsbr8uE5hyBlCDCh2NV3uc3ZzKOKH7qJtEef8RlWBLuArbFfV4zCxT2Wtm0O9L3eFtM
-        l+Zuyuaw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pyVPH-00BS2w-1M;
-        Mon, 15 May 2023 10:26:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 97939300244;
-        Mon, 15 May 2023 12:26:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7B2AB268D4223; Mon, 15 May 2023 12:26:18 +0200 (CEST)
-Date:   Mon, 15 May 2023 12:26:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrew.Cooper3@citrix.com
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, mhiramat@kernel.org,
-        jpoimboe@redhat.com
-Subject: Re: [PATCH 2/2] x86: Shorten RESET_CALL_DEPTH
-Message-ID: <20230515102618.GF83892@hirez.programming.kicks-ass.net>
-References: <20230515092804.120600032@infradead.org>
- <20230515093020.729622326@infradead.org>
- <0111b953-500e-3716-b349-d5c8012e5220@citrix.com>
+        Mon, 15 May 2023 06:29:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A2D10C1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:29:22 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-9-fk4fV_TIMaibnjx8Kk2ggA-1; Mon, 15 May 2023 11:29:20 +0100
+X-MC-Unique: fk4fV_TIMaibnjx8Kk2ggA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 15 May
+ 2023 11:29:19 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 15 May 2023 11:29:19 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Kent Overstreet' <kent.overstreet@linux.dev>,
+        Eric Biggers <ebiggers@kernel.org>
+CC:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: RE: [PATCH 07/32] mm: Bring back vmalloc_exec
+Thread-Topic: [PATCH 07/32] mm: Bring back vmalloc_exec
+Thread-Index: AQHZhidTKdvNQYED30e4lpVLdXSS2q9bIbmQ
+Date:   Mon, 15 May 2023 10:29:18 +0000
+Message-ID: <1f1d88a6a33f4e5db99544fda965c594@AcuMS.aculab.com>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZFqxEWqD19eHe353@infradead.org> <ZFq3SdSBJ_LWsOgd@murray>
+ <ZFq7JhrhyrMTNfd/@moria.home.lan> <20230510064849.GC1851@quark.localdomain>
+ <ZF6HHRDeUWLNtuL7@moria.home.lan> <20230513015752.GC3033@quark.localdomain>
+ <ZGB1eevk/u2ssIBT@moria.home.lan>
+In-Reply-To: <ZGB1eevk/u2ssIBT@moria.home.lan>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0111b953-500e-3716-b349-d5c8012e5220@citrix.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 10:47:42AM +0100, Andrew.Cooper3@citrix.com wrote:
-> On 15/05/2023 10:28 am, Peter Zijlstra wrote:
-
-> > Shrink it by 4 bytes:
-> >
-> >   0:   31 c0                   xor    %eax,%eax
-> >   2:   48 0f ba e8 3f          bts    $0x3f,%rax
-> >   7:   65 48 89 04 25 00 00 00 00      mov    %rax,%gs:0x0
-
-> >  #define RESET_CALL_DEPTH					\
-> > -	mov	$0x80, %rax;					\
-> > -	shl	$56, %rax;					\
-> > +	xor	%eax, %eax;					\
-> > +	bts	$59, %rax;					\
+From: Kent Overstreet
+> Sent: 14 May 2023 06:45
+...
+> dynamically generated unpack:
+> rand_insert: 20.0 MiB with 1 threads in    33 sec,  1609 nsec per iter, 607 KiB per sec
 > 
-> $63 ?
+> old C unpack:
+> rand_insert: 20.0 MiB with 1 threads in    35 sec,  1672 nsec per iter, 584 KiB per sec
 > 
-> The disassembly looks correct.
+> the Eric Biggers special:
+> rand_insert: 20.0 MiB with 1 threads in    35 sec,  1676 nsec per iter, 583 KiB per sec
+> 
+> Tested two versions of your approach, one without a shift value, one
+> where we use a shift value to try to avoid unaligned access - second was
+> perhaps 1% faster
 
-Yeah, uhmm, clearly I fixed it somewhere but not on the version I send
-out :-(
+You won't notice any effect of avoiding unaligned accesses on x86.
+I think then get split into 64bit accesses and again on 64 byte
+boundaries (that is what I see for uncached access to PCIe).
+The kernel won't be doing >64bit and the 'out of order'
+pipeline will tend to cover the others (especially since you
+get 2 reads/clock).
 
-Too bad we need the RAX.W prefix...
+> so it's not looking good. This benchmark doesn't even hit on
+> unpack_key() quite as much as I thought, so the difference is
+> significant.
 
----
-Subject: x86: Shorten RESET_CALL_DEPTH
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Fri Feb 10 10:10:57 CET 2023
+Beware: unless you manage to lock the cpu frequency (which is ~impossible
+on some cpu) timings in nanoseconds are pretty useless.
+You can use the performance counter to get accurate cycle times
+(provided there isn't a cpu switch in the middle of a micro-benchmark).
 
-RESET_CALL_DEPTH is a pretty fat monster and blows up UNTRAIN_RET to
-20 bytes:
+	David
 
-  19:       48 c7 c0 80 00 00 00    mov    $0x80,%rax
-  20:       48 c1 e0 38             shl    $0x38,%rax
-  24:       65 48 89 04 25 00 00 00 00      mov    %rax,%gs:0x0     29: R_X86_64_32S        pcpu_hot+0x10
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-Shrink it by 4 bytes:
-
-  0:   31 c0                   xor    %eax,%eax
-  2:   48 0f ba e8 3f          bts    $0x3f,%rax
-  7:   65 48 89 04 25 00 00 00 00      mov    %rax,%gs:0x0
-
-Shrink RESET_CALL_DEPTH_FROM_CALL by 5 bytes by only setting al, the
-other bits are shifted out (the same could be done for
-RESET_CALL_DEPTH, but the xor+bts sequence has less depencies due to
-the zeroing).
-
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/asm/nospec-branch.h |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -84,12 +84,12 @@
- 	movq	$-1, PER_CPU_VAR(pcpu_hot + X86_call_depth);
- 
- #define RESET_CALL_DEPTH					\
--	mov	$0x80, %rax;					\
--	shl	$56, %rax;					\
-+	xor	%eax, %eax;					\
-+	bts	$63, %rax;					\
- 	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);
- 
- #define RESET_CALL_DEPTH_FROM_CALL				\
--	mov	$0xfc, %rax;					\
-+	movb	$0xfc, %al;					\
- 	shl	$56, %rax;					\
- 	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);	\
- 	CALL_THUNKS_DEBUG_INC_CALLS
