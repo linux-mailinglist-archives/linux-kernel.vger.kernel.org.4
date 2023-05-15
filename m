@@ -2,136 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17626702DBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF1B702DBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242329AbjEONMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
+        id S242341AbjEONNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241211AbjEONLy (ORCPT
+        with ESMTP id S242315AbjEONMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:11:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68A5358E
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:11:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684156277; x=1715692277;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RmR0L+YDgD1QLZ10gzUgm8SlxT2V25Lg6Rec/avwLBA=;
-  b=kjB0yNoWmp+RbAdVMxrS7iyj+qi9JSRPIl+7EJ+LE9HItN/sIHFSJ1W5
-   dPVIm0vakcM/3Tze9nz/FDbUiji77dC6/kFExyufTxr4Ha9C/Moi22Hmn
-   BasVdNPYjU77PupxSLLCg+NQYhX2T0gHIbUzgalv+FrzKAP3mgVmGNo7K
-   8nySSq9wslZBm+3NqrWDTxdpd9fckg9RshDhWJdp8THMefWk8J5ZYALt1
-   KszhIGAzFHUk6brTkXFIyV8PtpE1nTBsvEw129cx3VDg6KouQ7JpvDyIM
-   2pLiv2ZY3x2qlW/7xU/K5z5Y88ZyXJiAEeClAoXwh4t+hNRoOJ/wmFiwU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="437536855"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="437536855"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 06:11:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="703974903"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="703974903"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 15 May 2023 06:11:16 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pyXyt-0006MO-1Q;
-        Mon, 15 May 2023 13:11:15 +0000
-Date:   Mon, 15 May 2023 21:10:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect
- type in assignment (different address spaces)
-Message-ID: <202305152109.tZxT6QGP-lkp@intel.com>
+        Mon, 15 May 2023 09:12:51 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2057.outbound.protection.outlook.com [40.107.104.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A105110E;
+        Mon, 15 May 2023 06:12:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kN8RVyXXS8BU/Tjpdybbb9TsE2cDpMLPC9xCG17HufszIEYJFWa4qKdK7moOjaU0cBTXJt5kP9oNVUgKE2lJR4c7d5j/Dme1jnBmhHh1Uf93nhKGBqz8UtA1bbrhuLLamDjzjt6KANV47gzdzDblp4GNnABaqyIs+UBlVLlpIezX3x2Om0xVeBpsj0WwQRZbVbOTpj4Sw35ss50Kc3MDHe9m6kBnSPeHZHm+qnGZNvX/20NfZHPWt9dqaxZ/GhYIfxYH4lyS9ehv/FsKyGjBjOPptTa6++KWJO1XkElb5xLqgh6ePw4cDCent68iaPFUqgfXDuo/M1l2xqQyQRol9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ggeWfl2u9h5sAHvU9xpRf5d2/DSuOu5KAaRt2m0JsKc=;
+ b=YOKUEzmgrEYtAXT+WRH1gIiRY5U4qXQGZL6hhn77E9dINykvJtLx2Mdsomb9yeF3U/ucyasQQxw/g3zxeMB8eswYyYwHL6qe38pf6dRyUwHQ6WFj2RkBQW4EzdqNxznKqxd8Bftphjivoko0O6hnNqBKBW5ZCmNva9hm4YxfxkDMVPUfNnTyWe9EyKqD32ncPibOQyG3Bk0WOB2Y+RA2/4gHBy9CFgsPT6o5B/XU9WkjeaI0x8mJzkvPujS6R/zz93Bb9RuObRvk6Mx0SjYkfYb57tnDemr1ewK3mK1Rl3WOtYkN4q6EO7y88KydB0mTRXaNHvxHig/GvNuMcgfS7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ggeWfl2u9h5sAHvU9xpRf5d2/DSuOu5KAaRt2m0JsKc=;
+ b=UVMVrmzdeNwRx/f0s1KW0nWIRGAV2SdKELkhqfONzrmlMS1Go8UYX5RuxQPamwbd+DdhJAczLaYUrw5FZwkULQZtC3mHFwG1CKs4vGDv9S4uAF6mf2fA3wAQfdBGZn88tKXjvlvmIY7klfY0CX4C/06xdleRvKmJbCzSXSwTfDdd0kEC9a0J+5PuE9L5AFd6X4GRii+/i8Cjf6L29ofsR7jhwjDkYJRQDILkeGicKlgksoXTHtGg+i+7JnMVgucmeJjy1qcI0mVBA5hYsz5dyS7TQyI2ulZ1nKTSYCHYr3QtrfuoMY2PzKy5nfvy8cNvcAteJxuYUcEiePhXej5Dbw==
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5b6::22)
+ by GV2PR10MB7512.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:d8::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 13:11:33 +0000
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2324:90ea:1454:5027]) by AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2324:90ea:1454:5027%6]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 13:11:33 +0000
+From:   "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
+To:     "alexander.stein@ew.tq-group.com" <alexander.stein@ew.tq-group.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "aisheng.dong@nxp.com" <aisheng.dong@nxp.com>
+Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
+Thread-Topic: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
+Thread-Index: AQHZU1FiB+tZxN7Xn0OaUbnFTWPYCq82CWmAgCWtfIA=
+Date:   Mon, 15 May 2023 13:11:33 +0000
+Message-ID: <40a2af076fb86301dd1ffac60488ae550a083be7.camel@siemens.com>
+References: <20230310130815.562418-1-alexander.sverdlin@siemens.com>
+         <9272339.EvYhyI6sBW@steina-w>
+In-Reply-To: <9272339.EvYhyI6sBW@steina-w>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR10MB6867:EE_|GV2PR10MB7512:EE_
+x-ms-office365-filtering-correlation-id: 2370d659-82a8-47a3-85d0-08db5545e818
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WPX2gaSzuESr6CfBlxXjhEEF8KJAv5Blj9dgAbCtCnGPMQqY6FpWyXp4L40PmMAinvbUTaTouS87dfs/fioAd0GUZSLDy1mYMKd+vCIq+xmcSXUolKSmu+mOEaM0+uwaFu91yhUMTBiJth8Q0bPpIpFXS4SqDf4qWPbu/KszRkVUxI2ny7TwWJmutlNddSLXZsExaPFD7JgiYWbYS4DsuM8YzKEEm+aoGvzJyxQTZ6Wc1SgCX71w99rzSIlRv7LRdvY512QuR8XmGtBmj/MvgsZNaye1OWaUdis7/oWcIpeHgi5gtT7HZEaSEhSWrl7rwO3ZGtI0veDHveubjJ1u127P2lfL8svmKLX6L3IQWJglundL3jHucI5MmUTpRQLHZAJpkj41gOEBt/z5uPTEHhkvOAHJ6DipKXQ1vfSQq8dTmnjJWOyBRCg+hqvHmR62DakMUweNqBr14OizrAURHvf6LiMYAi1xaB+cejPZCiVndrCPqhrvalCcakM9LbbnW19z2xH8lsduIQqipCPsMbqfvgS+qd5YGRZ+kqR+3X8N3NUyZff5VvWYCNyWRc5h7lyNfblhm6TkEPoH4gUmyX8F051WS5wyULQuLTwevc1CMDNkcDZGzudBAplOwnDpsD7vzbAGfexNM8nei7BlCg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(366004)(136003)(451199021)(15974865002)(110136005)(86362001)(54906003)(478600001)(55236004)(36756003)(186003)(6512007)(6486002)(6506007)(26005)(71200400001)(122000001)(316002)(38100700002)(41300700001)(66556008)(66476007)(66946007)(66446008)(76116006)(91956017)(64756008)(4326008)(82960400001)(7416002)(5660300002)(38070700005)(8936002)(83380400001)(2906002)(8676002)(2616005)(18886075002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YWh2UnFEVGtPL3lUejFRR0MvZm9hMkVGRU9GVkM0TTQ5REFCZUZIK1Q5TVdO?=
+ =?utf-8?B?YzcrSVlCUWpXTTdHNU5COVlERElobTdMQVhjQ255Mm5LMVNoOTgzYjhEM0Zu?=
+ =?utf-8?B?dngzN1V5ZXc0Wng5YmNOaTNuS3BGTWdsbmZvbEFZMUwraFpDRjlNaDRqY0o0?=
+ =?utf-8?B?WmoyRmFiS2NCUWpyT0JaeVpvbnJMRFcyaWVBeE54cjdWNndOaVdnYlVpYnp0?=
+ =?utf-8?B?dzg3UzcxclF4T2VwOVFtc3F2NTFyZG52M2wranNUU3doSUtpOGhrYjNLa1lB?=
+ =?utf-8?B?aUp4ZFVSWWxPQ0d3KzFEUUJDMDMxemFOeVZJOVJOa3ZDaWRmcENUd0pMU3hF?=
+ =?utf-8?B?RmRTRnkwcHRFMmFINit3WmtkZk9iZG9JSVZWRFZ4NWwrRlZrRlVZbVhPN0tG?=
+ =?utf-8?B?ZXRLRnJpdDRXY1NqMlpacUdrTjMxK1l1N3RxeW5UNFZsZmJKb0taWktaVW5P?=
+ =?utf-8?B?MXpvTjIyOHlvSFM2eW9IVkN1VkdCYnRraXVsVUFzNGN2eHYzZnY3VkRzTHdh?=
+ =?utf-8?B?UFBIb2Ztb2UvS3JmZGNNbUtiL3E5bzVNeEFTQkxXMjlrY3RCWnhjTXlyby9E?=
+ =?utf-8?B?M2JjYkpoaHdGWGI3QXQyc2JGaWRWZXRIeDdQelZqTTMzcnB5VXNxU2hUbC9X?=
+ =?utf-8?B?NndaU2dYVDNCNzE4UytmWVdHSFNMNUJNODlpZ0dVK1ZyeXJreElWMXlzM25u?=
+ =?utf-8?B?T2tIajZmVTVMbGZERGxobG1rNVQ2NWJIQnRKaDZRZmtycmlCYjdxNm9iVWhk?=
+ =?utf-8?B?OTVFZDdQelZyNDhPMS9rVGgxSGU5aFhmUFIrcCtEYWtoMzd2aDR4Nkh1cWdR?=
+ =?utf-8?B?ZVIzOGxOZnpxV3J2KzV1SEFFRG1KMHpyWEx5VjF5QUpqcXFIaG1PVXVwcEpo?=
+ =?utf-8?B?a1hvdEVPZ2JFTG83UktxaWMvTFRNcXQ0OGVPU3dTV3BmSHV5V1hLZUlWZWVQ?=
+ =?utf-8?B?OEsxaWJtWDg0YXFFWjB2SW51YmpJaEdaVW9DTXJXVnYyWlFUQlB3NXcra0tn?=
+ =?utf-8?B?bDZybXpCTmlleVJGWVFRWHZBd1pUc3ZQVWRoRWdUVldtMDBWWnJ3RjZFdFBE?=
+ =?utf-8?B?UzUxK2J3SE9Ta1BKMnM0cXFnOUtYNTVsdVNnWjJoZXlkdnIyK2k1MUg5dDla?=
+ =?utf-8?B?VUNWMHhubVN1dTA4TTN4dzBzdlpWTFJFZG5CYU1EMXVydnFSYmQzRlZTQVZa?=
+ =?utf-8?B?OHlnOWRDWStTalorYTVRb01VL0xTQkhtenA5TWUySkZPU3NPenhqNEgrOFY5?=
+ =?utf-8?B?bVo2Tzh4c3BQQlpaNEtINjJsc0kyNUh1K0Y3M3M5bzRKazNDb1JBaWFlamRr?=
+ =?utf-8?B?NGc1R3M2eWFUNEUzQ2dMNUIyV2pOcmJXS3FucnRRTE0wRGZRVkR0MUJxcFcy?=
+ =?utf-8?B?RFFxYkVyY2dwMVMzaDVNWlNyTEhvT2ZFZittMFJmcW53TVV2N0IvSnBqY0x3?=
+ =?utf-8?B?TnF4bG1wNDltekVuZEpuTTBoOUJiM3FvaTIzaHVVYzZUdll3TDlCZkJZVDJp?=
+ =?utf-8?B?U25hUnoxZjRLYk5PbEtEbmhVemVIUjBFWCs3eUYwVGFmM3IrckhiVnQ2VnJK?=
+ =?utf-8?B?RWdTNzB3aVRVeFJZd0lYaHg3dEM1WWV0OU5VNEs4aTUvelFMNHMxSFJQenR2?=
+ =?utf-8?B?K2cydGJaeTRQWThwcXFyZW5raUtoSWFmakxobDRycXFHbGFzNHY5WmNITEw4?=
+ =?utf-8?B?b0NEcDdpdXlwK1VmeDRQTGFpUFMrMnd1VWc3dDMvY1B1ZXVybUVZVFlMTmFy?=
+ =?utf-8?B?TTE2M0ZlazhJY0tpZmFkK2hGdzBGbTZXb2w1VmxLTWNOYUsyeE9nOUw4L1dL?=
+ =?utf-8?B?NDU0UFF5Z2JOYnlUWGx0N3ByT1MzK29Rb1kxKzNWTytrUUpVd1ZoVU1mRzZu?=
+ =?utf-8?B?a25vSjRPRWNMdDUzdS9GdC9UWUcyMlM5a1dyWHhQcFY3bGJDK2RkWXN1R1pE?=
+ =?utf-8?B?V1hseWZPRkNyNkpYQ0dLQ1ZHcGxwSGlKZU9IczRNN0lZQXRiNzV5cW5BTnBi?=
+ =?utf-8?B?MXZDNG90d3dUd0hoeCtONVB5bzVSS2VuZ1Z1RUkyVHZPZG1Vd25SdGZ2NDhm?=
+ =?utf-8?B?QzFuQ0piNzBhOXJjck5xRkZjQTBuUjF1R20yemxEa2dkb01ZVlY2UUFFbWZr?=
+ =?utf-8?B?dWJSbjVQWWdxMmtlaWlNajZSSXVHMGFaY2UrWG9GcDVZTXhXaThEMGhvRUJS?=
+ =?utf-8?Q?5Qg8xn6lEHzAp2T2UNUCes8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <807B3F5FA2EED8418FE9A21B67B02E7B@EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2370d659-82a8-47a3-85d0-08db5545e818
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 13:11:33.7803
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: U4oD8cU9nQXJFO1HjGWOVHmxhVny3V1TMa44MiU/g9ZEtwMJP+9XSDcYg8S8EzggNJCWhTM2RP0ngdAJiR1LgnlS0krtJ+2gfN3uAQSXoWA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR10MB7512
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
-commit: 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b fbdev: omap: avoid using mach/*.h files
-date:   1 year, 1 month ago
-config: arm-randconfig-s031-20230515 (https://download.01.org/0day-ci/archive/20230515/202305152109.tZxT6QGP-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/ drivers/video/fbdev/omap/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305152109.tZxT6QGP-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *vaddr @@     got void *static [addressable] [assigned] [toplevel] vram_virt @@
-   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     expected void [noderef] __iomem *vaddr
-   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     got void *static [addressable] [assigned] [toplevel] vram_virt
---
->> drivers/video/fbdev/omap/omapfb_main.c:1027:11: sparse: sparse: cast removes address space '__iomem' of expression
-
-vim +642 drivers/video/fbdev/omap/lcdc.c
-
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  620  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  621  static int alloc_fbmem(struct omapfb_mem_region *region)
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  622  {
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  623  	int bpp;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  624  	int frame_size;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  625  	struct lcd_panel *panel = lcdc.fbdev->panel;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  626  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  627  	bpp = panel->bpp;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  628  	if (bpp == 12)
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  629  		bpp = 16;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  630  	frame_size = PAGE_ALIGN(panel->x_res * bpp / 8 * panel->y_res);
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  631  	if (region->size > frame_size)
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  632  		frame_size = region->size;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  633  	lcdc.vram_size = frame_size;
-f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  634  	lcdc.vram_virt = dma_alloc_wc(lcdc.fbdev->dev, lcdc.vram_size,
-f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  635  				      &lcdc.vram_phys, GFP_KERNEL);
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  636  	if (lcdc.vram_virt == NULL) {
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  637  		dev_err(lcdc.fbdev->dev, "unable to allocate FB DMA memory\n");
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  638  		return -ENOMEM;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  639  	}
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  640  	region->size = frame_size;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  641  	region->paddr = lcdc.vram_phys;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17 @642  	region->vaddr = lcdc.vram_virt;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  643  	region->alloc = 1;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  644  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  645  	memset(lcdc.vram_virt, 0, lcdc.vram_size);
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  646  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  647  	return 0;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  648  }
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  649  
-
-:::::: The code at line 642 was first introduced by commit
-:::::: 569755c706f0f94409edd2ae60b9878cb420844f OMAP: add TI OMAP1 internal LCD controller
-
-:::::: TO: Imre Deak <imre.deak@solidboot.com>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+SGVsbG8gQWxleGFuZGVyLAoKT24gRnJpLCAyMDIzLTA0LTIxIGF0IDE1OjQ4ICswMjAwLCBBbGV4
+YW5kZXIgU3RlaW4gd3JvdGU6Cj4gPiArwqDCoMKgwqDCoMKgwqBscGkyY19pbXgtPmNsa19jaGFu
+Z2VfbmIubm90aWZpZXJfY2FsbCA9Cj4gPiBscGkyY19pbXhfY2xrX2NoYW5nZV9jYjsKPiA+ICvC
+oMKgwqDCoMKgwqDCoHJldCA9IGRldm1fY2xrX25vdGlmaWVyX3JlZ2lzdGVyKCZwZGV2LT5kZXYs
+IGxwaTJjX2lteC0KPiA+ID5jbGtzWzBdLmNsaywKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+JmxwaTJjX2lteC0KPiA+ID5jbGtfY2hhbmdlX25iKTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChy
+ZXQpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGRldl9lcnJfcHJv
+YmUoJnBkZXYtPmRldiwgcmV0LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgImNhbid0IHJlZ2lzdGVyIHBl
+cmlwaGVyYWwKPiA+IGNsb2NrIAo+IG5vdGlmaWVyXG4iKTsKPiA+ICvCoMKgwqDCoMKgwqDCoGxw
+aTJjX2lteC0+cmF0ZV9wZXIgPSBjbGtfZ2V0X3JhdGUobHBpMmNfaW14LT5jbGtzWzBdLmNsayk7
+Cj4gPiArwqDCoMKgwqDCoMKgwqBpZiAoIWxwaTJjX2lteC0+cmF0ZV9wZXIpIHsKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkZXZfZXJyKCZwZGV2LT5kZXYsICJjYW4ndCBnZXQg
+STJDIHBlcmlwaGVyYWwgY2xvY2sKPiByYXRlXG4iKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqByZXR1cm4gLUVJTlZBTDsKPiA+ICvCoMKgwqDCoMKgwqDCoH0KPiA+ICsKPiAK
+PiBJIHdvdWxkIHN3aXRjaCB0aGUgb3JkZXIgb2YgdGhlIGNhbGxzIHRvIGRldm1fY2xrX25vdGlm
+aWVyX3JlZ2lzdGVyKCkKPiBhbmQgCj4gY2xrX2dldF9yYXRlKCkuIEFGQUlDUyB0aGlzIGxvb2tz
+IGxpa2UgYSBwb3NzaWJsZSBsb3N0IHVwZGF0ZS4gVGhlCj4gbm90aWZpZXIgCj4gbWlnaHQgY2hh
+bmdlIHJhdGVfcGVyIGJlZm9yZSB0aGUgKG9sZCkgdmFsdWUgZnJvbSBjbGtfZ2V0X3JhdGUgaXMK
+PiBhY3R1YWxseSAKPiBhc3NpZ25lZC4KCmp1c3Qgc3dhcHBpbmcgd291bGQgbm90IGJlIGVub3Vn
+aCBJIGJlbGlldmUsIGluIHRoZSBjYXNlIHVwZGF0ZSBldmVudApoYXBwZW5zIGJldHdlZW4gY2xr
+X2dldF9yYXRlKCkgYW5kIGRldm1fY2xrX25vdGlmaWVyX3JlZ2lzdGVyKCkuIEknbGwKdGhpbmsg
+YWJvdXQgaXQuLi4KCi0tIApBbGV4YW5kZXIgU3ZlcmRsaW4KU2llbWVucyBBRwp3d3cuc2llbWVu
+cy5jb20K
