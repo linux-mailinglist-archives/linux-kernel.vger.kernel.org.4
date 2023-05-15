@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DD870315F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B631703163
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242135AbjEOPTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S242334AbjEOPUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242306AbjEOPT0 (ORCPT
+        with ESMTP id S242365AbjEOPTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:19:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD68213D;
-        Mon, 15 May 2023 08:19:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C70E361F0D;
-        Mon, 15 May 2023 15:19:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EACC433D2;
-        Mon, 15 May 2023 15:19:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684163962;
-        bh=gSsz0TtD4VwTX5/SiNoopUYE4KqZEhjXfngLTmzZtnw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ouzHOk/POs9ihJcT5jFuJ6wSQyvQoWmvcGhchKiEzE3/u7VdNW5LhXOeMvXNtWLLT
-         qhAO0Zm/NfpDzvKxhkwJuxIB469P+0Js2+GVsYtInOEuD7lP+1NuOk0Xhe6+KaxAq5
-         oQjmRI8u8LP0jfSYjMz9FHNzdSqhV4e9v4LzQAWHXX4QNbNApPglidaC4l+Cmfsu05
-         A7IiznSHmy/BzxEfZX3skPaDdgNCSr8lGkl9RVaD1mntvZm5Gr9r612ek+m3B/33bz
-         nakja/e5O8nvBtgmi8Z5lQHYNAbW9gEjNdQSVAjrM3Ejn8AcM76uaOsOdH19G4bvXL
-         83OxEBEDZtT0Q==
-Date:   Mon, 15 May 2023 16:19:14 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Vincent Legoll <vincent.legoll@gmail.com>
-Subject: Re: [PATCH v8 05/14] mfd: rk808: split into core and i2c
-Message-ID: <20230515151914.GQ10825@google.com>
-References: <20230504173618.142075-1-sebastian.reichel@collabora.com>
- <20230504173618.142075-6-sebastian.reichel@collabora.com>
+        Mon, 15 May 2023 11:19:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BC5E172A;
+        Mon, 15 May 2023 08:19:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 522F92F4;
+        Mon, 15 May 2023 08:20:29 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 186883F663;
+        Mon, 15 May 2023 08:19:42 -0700 (PDT)
+Date:   Mon, 15 May 2023 16:19:40 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Shengyu Qu <wiagn233@outlook.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com,
+        Martin Botka <martin.botka@somainline.org>
+Subject: Re: [PATCH v3 2/3] mfd: axp20x: Add support for AXP15060 PMIC
+Message-ID: <20230515161940.3bcbe932@donnerap.cambridge.arm.com>
+In-Reply-To: <20230515105229.GI8963@google.com>
+References: <20230421150816.10513-1-wiagn233@outlook.com>
+        <TY3P286MB261162D57695AC8164ED50E298609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+        <20230426142740.GN50521@google.com>
+        <20230503120759.6fd6a7a9@donnerap.cambridge.arm.com>
+        <19bccb62-b7e0-855d-fb5f-4fd3dde4f6f0@linaro.org>
+        <20230515105229.GI8963@google.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230504173618.142075-6-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,34 +54,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 04 May 2023, Sebastian Reichel wrote:
+On Mon, 15 May 2023 11:52:29 +0100
+Lee Jones <lee@kernel.org> wrote:
 
-> Split rk808 into a core and an i2c part in preparation for
-> SPI support.
+> On Thu, 04 May 2023, Krzysztof Kozlowski wrote:
 > 
-> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com> # for RTC
-> Tested-by: Diederik de Haas <didi.debian@cknow.org> # Rock64, Quartz64 Model A + B
-> Tested-by: Vincent Legoll <vincent.legoll@gmail.com> # Pine64 QuartzPro64
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/clk/Kconfig                   |   2 +-
->  drivers/input/misc/Kconfig            |   2 +-
->  drivers/mfd/Kconfig                   |   7 +-
->  drivers/mfd/Makefile                  |   3 +-
->  drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
->  drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
->  drivers/pinctrl/Kconfig               |   2 +-
->  drivers/power/supply/Kconfig          |   2 +-
->  drivers/regulator/Kconfig             |   2 +-
->  drivers/rtc/Kconfig                   |   2 +-
->  include/linux/mfd/rk808.h             |   6 +
->  sound/soc/codecs/Kconfig              |   2 +-
->  12 files changed, 256 insertions(+), 183 deletions(-)
->  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
->  create mode 100644 drivers/mfd/rk8xx-i2c.c
+> > On 03/05/2023 13:07, Andre Przywara wrote:  
+> > > On Wed, 26 Apr 2023 15:27:40 +0100
+> > > Lee Jones <lee@kernel.org> wrote:
+> > > 
+> > > Hi Lee,
+> > > 
+> > > I see this patch in Linus' tree, but something must have gone wrong here,
+> > > can you please check? See below ...
+> > >   
+> > >> On Fri, 21 Apr 2023, Shengyu Qu wrote:
+> > >>  
+> > >>> The AXP15060 is a PMIC chip produced by X-Powers, and could be connected
+> > >>> via an I2C bus.
+> > >>>
+> > >>> Describe the regmap and the MFD bits, along with the registers exposed
+> > >>> via I2C. Eventually advertise the device using a new compatible string
+> > >>> and add support for power off the system.
+> > >>>
+> > >>> The driver would disable PEK function if IRQ is not configured in device
+> > >>> tree, since some boards (For example, Starfive Visionfive 2) didn't
+> > >>> connect IRQ line of PMIC to SOC.
+> > >>>
+> > >>> GPIO function isn't enabled in this commit, since its configuration
+> > >>> operation is different from any existing AXP PMICs and needs
+> > >>> logic modification on existing driver. GPIO support might come in later
+> > >>> patches.
+> > >>>
+> > >>> ---    
+> > >>
+> > >> You must not use these above the tags or Git will drop them.
+> > >>  
+> > >>> Changes since v2:
+> > >>>  - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch  
+> > > 
+> > > So this patch was based on the AXP313a series, but I don't see that in
+> > > Linus' tree (or in any of your trees, if I have checked correctly).
+> > > There must have been a conflict, as this [PATCH v3 2/3] diff actually lists
+> > > the axp313a entry in the context lines.
+> > >   
+> > >>>  - Add axp_regulator_only_cells rather than directly using axp806_cells
+> > >>>    for cases that IRQ line isn't connected.
+> > >>>
+> > >>> Changes since v1:
+> > >>>  - Nothing
+> > >>>
+> > >>> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
+> > >>>
+> > >>> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+> > >>> ---    
+> > >>
+> > >> Put change-logs here instead.
+> > >>  
+> > >>>  drivers/mfd/axp20x-i2c.c   |   2 +
+> > >>>  drivers/mfd/axp20x.c       | 107 +++++++++++++++++++++++++++++++++++++
+> > >>>  include/linux/mfd/axp20x.h |  85 +++++++++++++++++++++++++++++
+> > >>>  3 files changed, 194 insertions(+)    
+> > >>
+> > >> I manually added the missing tags for this and the DT patch and applied.  
+> > > 
+> > > So this patch doesn't list any tags aside from Shengyu's
+> > > Signed-off-by. The patch in Linus' tree list a Reviewed-by: from
+> > > Krzysztof, which I don't see anywhere in the thread, he just reviewed the
+> > > binding patch, AFAICT.   
+> > 
+> > Yep, I never reviewed this.
+> >   
+> > > I see your tentative R-b: on v2, but with the
+> > > request to rebase and resend, which he did with v3. The applied patch
+> > > looks like v3, but not on the base commit this was send against.
+> > > 
+> > > So I am slightly confused, and am also wondering what happened to the
+> > > AXP313a patches? I see the binding patch merged, but not the MFD part,
+> > > even though you replied saying so.  
+> > 
+> > Because the patch #1 was broken, see:
+> > https://lore.kernel.org/all/TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+> > 
+> > The SoB and Reviewed-by were after --- and apparently b4 understood it
+> > as cover letter and applied everywhere.
+> > 
+> > Lee,
+> > Do you have the latest b4? If yes, this should be reported as b4 bug,
+> > assuming you used it.  
+> 
+> I am using b4, although the version I'm using is quite old (0.9.0).
+> 
+> Also, this was quite some time ago - I have slept since applying this
+> and do not distinctly remember doing so.  Thus, the application of your
+> R-b may well have been a mistake on my part.  I'll keep an eye for such
+> things in the future and if I see (and remember) an issue, I'll report
+> it.
 
-Applied, thanks
+So what are we going to do about the two series now? I guess it's not
+worthwhile to revert Shengyu's patch, just for the wrong R-b: tag?
+So does this mean both series should be rebased on top of that and re-sent?
 
--- 
-Lee Jones [李琼斯]
+Cheers,
+Andre
