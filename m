@@ -2,129 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E79703F74
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22195703F88
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245467AbjEOVPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S245277AbjEOVVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245308AbjEOVPi (ORCPT
+        with ESMTP id S245124AbjEOVVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:15:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AD8A27C;
-        Mon, 15 May 2023 14:15:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 15 May 2023 17:21:33 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B571D05A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:21:28 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D96A6621BA;
-        Mon, 15 May 2023 21:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F193FC433EF;
-        Mon, 15 May 2023 21:15:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684185336;
-        bh=enJwNWaLT/meCbucP4lqULVPUm7Z2anbwiRCF5jSvnM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H3zjzNo6kWA6B9UFM9EqS17kkmQTU5sYbi9N6m1jY7ALNqKsyxrcVmkMM9xGvwNdW
-         8t9TDkZDXpLshYYxrnACwUAqmfzaqSWi6xOGE///W8CnbmsoIconzPKo1uMAeMdn0a
-         RM9P44Tr0g3plnCh8jE4vclyEnauJ34MkGPeVtlz9M1NU0KSRGk0BkjQ3tm2KdEMua
-         XDKqoRao70IL3M2fbp6ldjniomCdKteN79SiTDM3dIlbkbTTkmppbNrriSXL5Hm7hr
-         qUyIu9NbpHHZTrIim5JxeKGtVZ86Lh0sgA68Sjc5NOJRa3klD7F6wYyPC3A+4wmcVG
-         xTzyYGSrtyoNg==
-Date:   Mon, 15 May 2023 14:19:27 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 4/9] usb: dwc3: core: Skip setting event buffers for
- host only controllers
-Message-ID: <20230515211927.bcartfqerpcgmp5w@ripper>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-5-quic_kriskura@quicinc.com>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 9461D1F9A7;
+        Mon, 15 May 2023 23:21:25 +0200 (CEST)
+Date:   Mon, 15 May 2023 23:21:23 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 7/8] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
+ chipsets
+Message-ID: <cmoqfe5nunreajdvu2vk3ztwkbjesivgejjoi2wmsxske5gq3q@lr25iuwmuevb>
+References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683914423-17612-8-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230514054917.21318-5-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1683914423-17612-8-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 11:19:12AM +0530, Krishna Kurapati wrote:
-> On some SoC's like SA8295P where the tertiary controller is host-only
+On 2023-05-12 11:00:22, Kuogee Hsieh wrote:
+> 
+> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> 
+> Add DSC 1.2 hardware blocks to the catalog with necessary sub-block and
+> feature flag information.  Each display compression engine (DCE) contains
+> dual hard slice DSC encoders so both share same base address but with
+> its own different sub block address.
 
-Please add "Qualcomm" before SA8295P.
-
-> capable, GEVTADDRHI/LO, GEVTSIZ, GEVTCOUNT registers are not accessible.
-> Trying to setup them up during core_init leads to a crash.
-
-s/setup/access/ (or "write to"?) and presumably this is a problem beyond
-core_init, so I would suggest dropping "up during core_init" from the
-sentence.
+Can we have an explanation of hard vs soft slices in some commit message
+and/or code documentation?
 
 > 
-> For DRD/Peripheral supported controllers, event buffer setup is done
-> again in gadget_pullup. Skip setup or cleanup of event buffers if
-> controller is host-only capable.
+> changes in v4:
+> -- delete DPU_DSC_HW_REV_1_1
+> -- re arrange sc8280xp_dsc[]
 > 
-
-With that, this looks reasonable to me.
-
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-
-Regards,
-Bjorn
-
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> changes in v4:
+> -- fix checkpatch warning
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  drivers/usb/dwc3/core.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h | 14 ++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  7 ++++++
+>  .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   | 16 ++++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h | 14 ++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 14 ++++++++++++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 25 +++++++++++++++++++++-
+>  6 files changed, 89 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index e983aef1fb93..46192d08d1b6 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -505,6 +505,11 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
->  int dwc3_event_buffers_setup(struct dwc3 *dwc)
->  {
->  	struct dwc3_event_buffer	*evt;
-> +	unsigned int			hw_mode;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> index 500cfd0..c4c93c8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> @@ -153,6 +153,18 @@ static const struct dpu_merge_3d_cfg sm8350_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+>  };
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sm8350_dsc[] = {
+> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
+
+Downstream says that the size is 0x10 (and 0x100 for the enc sblk, 0x10
+for the ctl sblk).  This simply fills it up to the start of the enc sblk
+so that we can see all registers in the dump?  After all only
+DSC_CMN_MAIN_CNF is defined in the main register space, so 0x10 is
+adequate.
+
+> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
+
+Should we add an extra suffix to the name to indicate which hard-slice
+DSC encoder it is?  i.e. "dce_0_0" and "dce_0_1" etc?
+
+> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
+
+See comment below about loose BIT() in features.
+
+> +};
 > +
-> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
-> +		return 0;
+>  static const struct dpu_intf_cfg sm8350_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -215,6 +227,8 @@ const struct dpu_mdss_cfg dpu_sm8350_cfg = {
+>  	.dspp = sm8350_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sm8350_pp),
+>  	.pingpong = sm8350_pp,
+> +	.dsc = sm8350_dsc,
+> +	.dsc_count = ARRAY_SIZE(sm8350_dsc),
+
+Count goes first **everywhere else**, let's not break consistency here.
+
+>  	.merge_3d_count = ARRAY_SIZE(sm8350_merge_3d),
+>  	.merge_3d = sm8350_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sm8350_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> index 5646713..42c66fe 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> @@ -93,6 +93,11 @@ static const struct dpu_pingpong_cfg sc7280_pp[] = {
+>  	PP_BLK_DITHER("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
+>  };
 >  
->  	evt = dwc->ev_buf;
->  	evt->lpos = 0;
-> @@ -522,6 +527,11 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
->  void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
->  {
->  	struct dwc3_event_buffer	*evt;
-> +	unsigned int			hw_mode;
+> +/* NOTE: sc7280 only has one dsc hard slice encoder */
+
+DSC
+
+> +static const struct dpu_dsc_cfg sc7280_dsc[] = {
+> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
+> +};
 > +
-> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
-> +		return;
+>  static const struct dpu_intf_cfg sc7280_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -149,6 +154,8 @@ const struct dpu_mdss_cfg dpu_sc7280_cfg = {
+>  	.mixer = sc7280_lm,
+>  	.pingpong_count = ARRAY_SIZE(sc7280_pp),
+>  	.pingpong = sc7280_pp,
+> +	.dsc_count = ARRAY_SIZE(sc7280_dsc),
+> +	.dsc = sc7280_dsc,
+>  	.intf_count = ARRAY_SIZE(sc7280_intf),
+>  	.intf = sc7280_intf,
+>  	.vbif_count = ARRAY_SIZE(sdm845_vbif),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> index 808aacd..1901fff 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> @@ -141,6 +141,20 @@ static const struct dpu_merge_3d_cfg sc8280xp_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+>  };
 >  
->  	evt = dwc->ev_buf;
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sc8280xp_dsc[] = {
+> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_2", DSC_4, 0x82000, 0x100, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_2", DSC_5, 0x82000, 0x100, 0, dsc_sblk_1),
+> +};
+> +
+>  /* TODO: INTF 3, 8 and 7 are used for MST, marked as INTF_NONE for now */
+>  static const struct dpu_intf_cfg sc8280xp_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+> @@ -216,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8280xp_cfg = {
+>  	.dspp = sc8280xp_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sc8280xp_pp),
+>  	.pingpong = sc8280xp_pp,
+> +	.dsc = sc8280xp_dsc,
+> +	.dsc_count = ARRAY_SIZE(sc8280xp_dsc),
+
+Swap the two lines.
+
+>  	.merge_3d_count = ARRAY_SIZE(sc8280xp_merge_3d),
+>  	.merge_3d = sc8280xp_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sc8280xp_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> index 1a89ff9..741d03f 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> @@ -161,6 +161,18 @@ static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
+>  };
 >  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sm8450_dsc[] = {
+> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
+> +};
+> +
+>  static const struct dpu_intf_cfg sm8450_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -223,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8450_cfg = {
+>  	.dspp = sm8450_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sm8450_pp),
+>  	.pingpong = sm8450_pp,
+> +	.dsc = sm8450_dsc,
+> +	.dsc_count = ARRAY_SIZE(sm8450_dsc),
+
+Another swap.
+
+>  	.merge_3d_count = ARRAY_SIZE(sm8450_merge_3d),
+>  	.merge_3d = sm8450_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sm8450_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> index 497b34c..3ee6dc8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> @@ -165,6 +165,18 @@ static const struct dpu_merge_3d_cfg sm8550_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
+>  };
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
+> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
+> +};
+> +
+>  static const struct dpu_intf_cfg sm8550_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -227,6 +239,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
+>  	.dspp = sm8550_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sm8550_pp),
+>  	.pingpong = sm8550_pp,
+> +	.dsc = sm8550_dsc,
+> +	.dsc_count = ARRAY_SIZE(sm8550_dsc),
+
+Swap.
+
+>  	.merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
+>  	.merge_3d = sm8550_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sm8550_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 78e4bf6..c1d7338 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  
+>  #define pr_fmt(fmt)	"[drm:%s:%d] " fmt, __func__, __LINE__
+> @@ -522,6 +522,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+>  /*************************************************************
+>   * DSC sub blocks config
+>   *************************************************************/
+> +static const struct dpu_dsc_sub_blks dsc_sblk_0 = {
+> +	.enc = {.base = 0x100, .len = 0x100},
+> +	.ctl = {.base = 0xF00, .len = 0x10},
+> +};
+> +
+> +static const struct dpu_dsc_sub_blks dsc_sblk_1 = {
+> +	.enc = {.base = 0x200, .len = 0x100},
+> +	.ctl = {.base = 0xF80, .len = 0x10},
+> +};
+> +
+>  #define DSC_BLK(_name, _id, _base, _features) \
+>  	{\
+>  	.name = _name, .id = _id, \
+> @@ -529,6 +539,19 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+>  	.features = _features, \
+>  	}
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
+
+There are no address values here so this comment doesn't seem very
+useful, and it is already duplicated on every DSC block array, where the
+duplication is more visible.  Drop the comment here?
+
+> +	{\
+> +	.name = _name, .id = _id, \
+> +	.base = _base, .len = _len, \
+
+The len is always 0x100 (downstream says 0x10), should we hardcode it
+here and drop _len?  We can always add it back if a future revision
+starts changing it, but that's not the case currently.
+
+> +	.features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
+
+We don't willy-nilly append bits like that: should there be global
+feature flags?
+
+Or is this the start of a new era where we expand those defines in-line
+and drop them altogether?  I'd much prefer that but we should first
+align on this direction (and then also make the switch globally in a
+followup).
+
+- Marijn
+
+> +	.sblk = &_sblk, \
+> +	}
+> +
+>  /*************************************************************
+>   * INTF sub blocks config
+>   *************************************************************/
 > -- 
-> 2.40.0
+> 2.7.4
 > 
