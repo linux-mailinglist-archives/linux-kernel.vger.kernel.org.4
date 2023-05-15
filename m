@@ -2,96 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB04C7031F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2512D703211
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242316AbjEOP4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
+        id S241839AbjEOQCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbjEOP4c (ORCPT
+        with ESMTP id S241655AbjEOQCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:56:32 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D1FE52
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:56:30 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc394919cso19086623a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:56:30 -0700 (PDT)
+        Mon, 15 May 2023 12:02:11 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C698F9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:02:10 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f139de8cefso66182697e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684166189; x=1686758189;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YkouFW20JzzuaHMHZlrmNq9tS+5cnYopE+beF+b+m2k=;
-        b=HI5BAWj65uI+2FvBMTDnSynAXsAXC989f0371owOdAejsiDnL5JtOJwj/elZfqbtmR
-         y6DMy9F3/Wz02eUOtwtEnDMfTysjUM3mdxLQI57acakIekxXmwDuy4wVoWa4phMMO0lv
-         hVGaPa6GhFcXOmyJaOZmGsniHxQXdRR1KpL9ArZp8myErUMr2BlF7RgaxQy6L+HVfteB
-         Q+4bfeDBJ6xGYTh2WCCqPQwYpPQ2rRO9TQ2GQNtg8ODYXg/MDJ/KQbN64LeZmp+9nPn0
-         ie+vysSsG1aJUOUpm0NWho+U/sI3WdksW/bChVn6zbCdwPK9FXcAFUUBR4SGbvj0S9rE
-         np/w==
+        d=linux-foundation.org; s=google; t=1684166528; x=1686758528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WgkXNey1qqkRYDn0ndFfina8YyIW2oFgV1/nBHyisSM=;
+        b=L0mzWjPIfIXM4lY9pDFM6KcSPIwfsMmZiDUA8szt3u6/o0JzcAxopC9UPGIOU6jY0A
+         ZXrfX2RvrYXwmAZV4U+lQc7JImALy/RifvwIPBcS4DoVwoqxF7dnXMwyKptjvB8NY41I
+         MRXjxGr1Tlptfs8ZlSNOeKddWFX7GOyEOrrkQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684166189; x=1686758189;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YkouFW20JzzuaHMHZlrmNq9tS+5cnYopE+beF+b+m2k=;
-        b=lWSGcwqHK3sumWZhj1919rH9pZOhigwhsKlHOH4FGjFEzPvFZQkA/yw8dbyVbj3Chs
-         KUOGaTFlx6kFu1IGLCKZ6m+TP147LE7Ov9NqWUo/r/BgnA4FPD7rt/f5spNph5FMh3aF
-         ArcSPxlrEK/0vUSpdL3FKVCHSbHgG7dw4qPnb9/vzjDvIVqiqD+n91FrDlCqN4R1g41B
-         ZYrDO1rrtNHvJwJvc7S9Q4iRID+wGPSFgKzMZz/9/hcYMnuoOOUxwGz4BYk1jQQWIKZs
-         suXoiBBrYhmWF0jZzYnJb7gPXWPTuz/w3Tltn3SWpl/leDdHNBJlDc+19Wvm542eHNXk
-         w9PA==
-X-Gm-Message-State: AC+VfDw6yDPM7vAGaL8x6HInmYO7Y5Ap72XfYOk95bX8nBL4q9Tf7XVz
-        ddGDBeTlbNexpky/jll6Apm+Xg==
-X-Google-Smtp-Source: ACHHUZ6GRbmvc6wpuZVkVxSoPXedQtVnvRI1oEmNM5eXUodXM+9R372TbXhnWl6rp5ztjLiErqN3wA==
-X-Received: by 2002:aa7:da08:0:b0:506:8470:c323 with SMTP id r8-20020aa7da08000000b005068470c323mr24080906eds.24.1684166189058;
-        Mon, 15 May 2023 08:56:29 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
-        by smtp.gmail.com with ESMTPSA id h10-20020a50ed8a000000b004c2158e87e6sm7358044edr.97.2023.05.15.08.56.28
+        d=1e100.net; s=20221208; t=1684166528; x=1686758528;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WgkXNey1qqkRYDn0ndFfina8YyIW2oFgV1/nBHyisSM=;
+        b=Li/tIW6LExYiqlq+nExzojO5nCPPu1p/POzLNCcJgClEgFKvewkHmla/8iwjccHLDl
+         StiggJFLAluQCDLfaP/fcUxDit71xRlHrzKhilZc3OQ4EEI9pkwCVOmCN2I9jeVquVxj
+         vrRYRphn9JDBRQ128Ifnc+1IiPr/MEkMbg1XneKmvxtIwzELyDm/qba8uj/PlYRBpUVU
+         6VkGc4Zv3ykMrOZoOQ1x2WQkMcP0uvuP4riXwiFy3jUaDKZGLlDNSPg7lkZdINLYfg81
+         Vj1pGE8KlsVRgd+RKENn4rFtZkOhLl8xV/aOnSplCz9hskDeDc+aY8ckCBUbDZh7H00G
+         N8yA==
+X-Gm-Message-State: AC+VfDwMHEgMpZWIAqS/eB73qDRJZ8+vStNH93vd0L/K7TmV5jH0vB07
+        cG5xFHP/PH7wLQ4jWvyK3R2ZEQCs6QNcY+1CcCi3EA==
+X-Google-Smtp-Source: ACHHUZ6vEyp9oHN58fjVCTwjVYN4G+/OdaShozx4U/+VQUtrcDx1CK2NLLCG98918AQWWjyh+/E3jA==
+X-Received: by 2002:ac2:5fee:0:b0:4f1:4898:d183 with SMTP id s14-20020ac25fee000000b004f14898d183mr6189515lfg.25.1684166527967;
+        Mon, 15 May 2023 09:02:07 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id t27-20020ac243bb000000b004f27d033994sm1251964lfl.267.2023.05.15.09.02.07
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 08:56:28 -0700 (PDT)
-Message-ID: <156eb77e-b586-53d9-7d90-17b5dfce0682@linaro.org>
-Date:   Mon, 15 May 2023 17:56:27 +0200
+        Mon, 15 May 2023 09:02:07 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f139de8cefso66182535e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:02:07 -0700 (PDT)
+X-Received: by 2002:a17:907:97c4:b0:966:4669:7e8d with SMTP id
+ js4-20020a17090797c400b0096646697e8dmr27235914ejc.16.1684166217079; Mon, 15
+ May 2023 08:56:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 1/2] dt-bindings: omap: Partially convert omap.txt to
- yaml
-Content-Language: en-US
-To:     Andreas Kemnade <andreas@kemnade.info>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tony@atomide.com, afd@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-References: <20230515074512.66226-1-andreas@kemnade.info>
- <20230515074512.66226-2-andreas@kemnade.info>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230515074512.66226-2-andreas@kemnade.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230202232517.8695-1-michael.christie@oracle.com>
+ <20230202232517.8695-9-michael.christie@oracle.com> <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
+ <CAHk-=wgadfsCnKHLON7op=Qs5t3w3PVz5ZDbvbKsfb=yBg=yjQ@mail.gmail.com>
+ <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com> <48842e92-835e-bc3f-7118-48b8f415f532@leemhuis.info>
+ <CAHk-=wicXCNR1bBioaAiBqEDgv-CoQD9z2RsM2VOTPzkK0xr8g@mail.gmail.com>
+ <20230515-vollrausch-liebgeworden-2765f3ca3540@brauner> <CAHk-=wgXJ5VS1iBkfsG=HDjsyhn5XYDKt5xhQcNuz-e7VKyg8A@mail.gmail.com>
+ <33b84605-1d0c-1b0e-7927-7ffa96b3c308@kernel.dk>
+In-Reply-To: <33b84605-1d0c-1b0e-7927-7ffa96b3c308@kernel.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 15 May 2023 08:56:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whmN7cxAgmhDBqiE=c67Q2pp2+SqCknNcj3K+QNKivaSg@mail.gmail.com>
+Message-ID: <CAHk-=whmN7cxAgmhDBqiE=c67Q2pp2+SqCknNcj3K+QNKivaSg@mail.gmail.com>
+Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Mike Christie <michael.christie@oracle.com>,
+        nicolas.dichtel@6wind.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
+        mst@redhat.com, sgarzare@redhat.com,
+        virtualization@lists.linux-foundation.org, ebiederm@xmission.com,
+        konrad.wilk@oracle.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 09:45, Andreas Kemnade wrote:
-> From: Andrew Davis <afd@ti.com>
-> 
-> Convert omap.txt to yaml.
-> 
-> CC: linux-omap@vger.kernel.org
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> [reduced to only OMAP3/4/5 and AM3, adding Epson Moverio BT-200]
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
+On Mon, May 15, 2023 at 8:52=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> Only potential downside is that it does make file references more
+> expensive for other syscalls, since you now have a shared file table.
+> But probably not something to worry about here?
 
+Would the vhost user worker user processes ever be otherwise single-threade=
+d?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I'd *assume* that a vhost user is already doing its own threads. But
+maybe that's a completely bogus assumption. I don't actually use any
+of this, so...
 
-Best regards,
-Krzysztof
+Because you are obviously 100% right that if you're otherwise
+single-threaded, then a CLONE_FILES kernel helper thread will cause
+the extra cost for file descriptor lookup/free due to all the race
+prevention.
 
+                 Linus
