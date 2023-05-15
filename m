@@ -2,140 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655C770240E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB91A702411
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbjEOGG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S238122AbjEOGGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbjEOGFq (ORCPT
+        with ESMTP id S238157AbjEOGGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:05:46 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A9349F2;
-        Sun, 14 May 2023 22:58:22 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94a342f4c8eso311236766b.0;
-        Sun, 14 May 2023 22:58:22 -0700 (PDT)
+        Mon, 15 May 2023 02:06:19 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5093C10;
+        Sun, 14 May 2023 22:58:48 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64359d9c531so9145976b3a.3;
+        Sun, 14 May 2023 22:58:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684130300; x=1686722300;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NPQtZOXsXDtCauwTHNXvzScss6wN7/6B+b24lKETaGY=;
-        b=VK/SJmfFZupbAd5/+2FwqSOo5GZXg1tMePpH0B9ihJg7i9s70UKRXN7pjr/rJ+Ccti
-         vDMxqrkXkt2ev2XIK4l2mpLHAHjNmU9K7T/uZxBGLj3v5x2XFtIGmbNf7p8ROYWbB70E
-         7bHRbQmqKhYQAAILyh20N/DkDwZBvCBmPJHG2xYwKzFmZEkrVWZm1jy8VlCvRafH6wEA
-         UUqUCKsFqg7uO5fHNlVnznb9KkCr54n0Yijsf0i+1SiIzMzy4Vmh/jl67rkwWBQLpiYk
-         Xu3s9GH1cMXUwp6himyLZGzdYFCgJ4839KyyRUI4p81baVKpY8KqzejeZkN+wCbhkKrx
-         AC0g==
+        d=gmail.com; s=20221208; t=1684130328; x=1686722328;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8KGssz1w4DZJK1Vr5zt5uYG0JD7zKe5eeNlCKr5k0f0=;
+        b=pfZXVDCKY+APnOW7TGlyyuh2Gd+ps29ElH2GkUVlknjGDamI76pt9yVK4x7f2+Xd3o
+         xOgpD7s7nrvHWLooKBHNqzN52rQgzlZs2tEF24oFMx7Nl/fQQYZYMKlrnC6bwQscwHhF
+         Aj/Xy6MdiWdujoxvg2nri5ry/BQcUKw8jF/82y/Xu/SJhlOZFG8oLnGxobcATw18SmaL
+         JKo8IBA3Zco0dplY4SHgesKrIzViiMc9vPGijnBBO8xBVYj+i3yTZH1SQSXdXSm5d2+/
+         Ear8yTtlRUhHIYBkn00vt0dXv+JBS0m8HY2nE+cKZjNaJzbt3ULpQ/QipSTUDiAotKHu
+         lKog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684130300; x=1686722300;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NPQtZOXsXDtCauwTHNXvzScss6wN7/6B+b24lKETaGY=;
-        b=eB0EsS5kDmGT9gw7rZredhyBE2IS2Dlx4sdQt7okdGX6D6ff/aMrL4ShCjfImqmZ4t
-         vAKhAnh6WEc5pkr5JmC9j6diATZXWknQIdEbOmO9n8YJZr32sEXrmPDKO5osEPxfui6g
-         K8IbW11ScMovktn2UEDMbNXQFHjg6SaL1Q9BqC+0SOHzsXs9JwhG2WMb6CapV/L6r5MC
-         9wdT2hDSTTBFsb564Z/DV+gQX4ewdOgilJaPAx16+UTdljqkMV83x/AepnLeYuFvTSs2
-         Lmh9lq1+khBVV8t/1Fh25QfI2otbaqznJsKJdXWZvCQTbfe1x9PA0h+yWXPFk2to0Mks
-         qF2g==
-X-Gm-Message-State: AC+VfDxQQJSx2uHGzgYXwFkunyLRxaLUpxbtRLs5xPxikCi5E9goK/1C
-        DMRwKwuV2OpRXqY60sq9A74=
-X-Google-Smtp-Source: ACHHUZ6nMW9a0P1Ql/uFkqv12DRTC4hSCe3KL6gtMdm1+0pa5miAPoRV2RKERnYzaZnI/EEomTYr/g==
-X-Received: by 2002:a17:906:1051:b0:966:1f60:fd32 with SMTP id j17-20020a170906105100b009661f60fd32mr5945505ejj.6.1684130300277;
-        Sun, 14 May 2023 22:58:20 -0700 (PDT)
-Received: from [192.168.10.10] ([37.252.94.55])
-        by smtp.gmail.com with ESMTPSA id de47-20020a1709069bef00b0096b20c968afsm1464579ejc.124.2023.05.14.22.58.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 22:58:20 -0700 (PDT)
-Message-ID: <9a76e550-fd1e-851c-e322-4bf51ab11e97@gmail.com>
-Date:   Mon, 15 May 2023 09:58:18 +0400
+        d=1e100.net; s=20221208; t=1684130328; x=1686722328;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8KGssz1w4DZJK1Vr5zt5uYG0JD7zKe5eeNlCKr5k0f0=;
+        b=LjMfaZhZZ/nLqLLqHNbNNEYK7RTRPOJh//p4FXaDzkRCvLDnCBRWt5xYsuB9COl2dg
+         2VjEHtW4URHm0CiWlujuRaAHrYo782yzH7FKK245r4zQQuo0oheUqeh9lC5i5nDJT3wR
+         KdVqqVlwVYnkHRgY0QYuHbpxZlghxCDJDIKY4tpFdI0IX6yA3jdHPZOF7SJI0M89Z1ws
+         J1V86jFWRj+W+G1gCb56Sfn88egkUHdKJhmFf6fciNl9Pz58OzS5cwprj6xnNX9LkQ6n
+         UWpfgXwuBAPPrYlzf8LJE1JbA6dUSLlroXO18Q/oqJeHAznDLBvkSzPR7qhLUZlQuNC9
+         bDaw==
+X-Gm-Message-State: AC+VfDwa/xj1L7vu2ZLM0I57KXI20Cfh6fpIPdgdYvv4WXfBgTjcp3vE
+        PLWAvlHseyD62gJFp1m1L7CTGxqKBKh+t/b2r/w=
+X-Google-Smtp-Source: ACHHUZ7Q6AqHlcirZ3/CWy+O9nweD+u1pqXIhTP/OvNRsXXL+YLKQ3y+cBLtOJHNQVOUaKBJPXGEZPRfMNfOP3PWCXg=
+X-Received: by 2002:a05:6a00:2d09:b0:63b:5c82:e209 with SMTP id
+ fa9-20020a056a002d0900b0063b5c82e209mr46680756pfb.10.1684130327699; Sun, 14
+ May 2023 22:58:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/3] selftests: ALSA: Add test for the 'valsa' driver
-To:     Mark Brown <broonie@kernel.org>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
-        tiwai@suse.com, skhan@linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
- <20230513202037.158777-3-ivan.orlov0322@gmail.com>
- <ZGGKwA10shGGUr87@finisterre.sirena.org.uk>
-Content-Language: en-US
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <ZGGKwA10shGGUr87@finisterre.sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
+ <CAK8P3a1biW1qygRS8Mf0F5n8e6044+W-5v+Gnv+gh+Cyzj-Vjg@mail.gmail.com>
+ <8bd1dc3b-e1f0-e7f9-bf65-8d243c65adb5@opensynergy.com> <ed2d2ea7-4a8c-4616-bca4-c78e6f260ba9@app.fastmail.com>
+ <CAMZ6Rq+RjOHaGx-7GLsj-PNAcHd=nGd=JERddqw4FWbNN3sAXA@mail.gmail.com> <9bdba1e2-9d1f-72b3-8793-24851c11e953@opensynergy.com>
+In-Reply-To: <9bdba1e2-9d1f-72b3-8793-24851c11e953@opensynergy.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Mon, 15 May 2023 14:58:36 +0900
+Message-ID: <CAMZ6RqKfdBio3cnH+FpeCwasoVNBZ3x55FiM+BpgrurKkT8aHg@mail.gmail.com>
+Subject: Re: [virtio-dev] [RFC PATCH 1/1] can: virtio: Initial virtio CAN driver.
+To:     Harald Mommer <harald.mommer@opensynergy.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
+        Harald Mommer <hmo@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
+        Stratos Mailing List <stratos-dev@op-lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 05:28, Mark Brown wrote:
-> On Sun, May 14, 2023 at 12:20:37AM +0400, Ivan Orlov wrote:
-> 
->> +uid=$(id -u)
->> +if [ $uid -ne 0 ]; then
->> +	echo "$0: Must be run as root"
->> +	exit 1
->> +fi
-> 
-> It is not an error to run the selftest as a non-root user, the test
-> should be skipped.
+Hi Harald,
 
-Alright, thanks!
->> +modprobe snd-valsa
-> 
-> We don't check if the module was already loaded.
-> 
->> +if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
->> +	mount -t debugfs none /sys/kernel/debug
->> +
->> +	if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
->> +		echo "$0: Error mounting debugfs"
->> +		exit 4
->> +	fi
->> +fi
-> 
-> This will unconditionally attempt to mount debugfs in a standard
-> location and won't clean up after itself, if the system didn't have
-> debugfs mounted for some reason then this will leave it sitting there.
+On Fri. 12 May 2023 at 22:19, Harald Mommer
+<harald.mommer@opensynergy.com> wrote:
+> Hello Vincent,
+>
+> searched for the old E-Mail, this was one of that which slipped through.
+> Too much of those.
+>
+> On 05.11.22 10:21, Vincent Mailhol wrote:
+> > On Fry. 4 nov. 2022 at 20:13, Arnd Bergmann <arnd@kernel.org> wrote:
+> >> On Thu, Nov 3, 2022, at 13:26, Harald Mommer wrote:
+> >>> On 25.08.22 20:21, Arnd Bergmann wrote:
+> >> ...
+> >>> The messages are not necessarily processed in sequence by the CAN stack.
+> >>> CAN is priority based. The lower the CAN ID the higher the priority. So
+> >>> a message with CAN ID 0x100 can surpass a message with ID 0x123 if the
+> >>> hardware is not just simple basic CAN controller using a single TX
+> >>> mailbox with a FIFO queue on top of it.
+> > Really? I acknowledge that it is priority based *on the bus*, i.e. if
+> > two devices A and B on the same bus try to send CAN ID 0x100 and 0x123
+> > at the same time, then device A will win the CAN arbitration.
+> > However, I am not aware of any devices which reorder their own stack
+> > according to the CAN IDs. If I first send CAN ID 0x123 and then ID
+> > 0x100 on the device stack, 0x123 would still go out first, right?
+>
+> The CAN hardware may be a basic CAN hardware: Single mailbox only with a
+> TX FIFO on top of this.
+>
+> No reordering takes place, the CAN hardware will try to arbitrate the
+> CAN bus with a low priority CAN message (big CAN ID) while some high
+> priority CAN message (small CAN ID) is waiting in the FIFO. This is
+> called "internal priority inversion", a property of basic CAN hardware.
+> A basic CAN hardware does exactly what you describe.
+>
+> Should be the FIFO in software it's a bad idea to try to improve this
+> doing some software sorting, the processing time needed is likely to
+> make things even worse. Therefore no software does this or at least it's
+> not recommended to do this.
+>
+> But the hardware may also be a better one. No FIFO but a lot of TX
+> mailboxes. A full CAN hardware tries to arbitrate the bus using the
+> highest priority waiting CAN message considering all hardware TX
+> mailboxes. Such a better (full CAN) hardware does not cause "internal
+> priority inversion" but tries to arbitrate the bus in the correct order
+> given by the message IDs.
+>
+> We don't know about the actually used CAN hardware and how it's used on
+> this level we are with our virtio can device. We are using SocketCAN, no
+> information about the properties of the underlying hardware is provided
+> at some API. May be basic CAN using a FIFO and a single TX mailbox or
+> full CAN using a lot of TX mailboxes in parallel.
+>
+> On the bus it's guaranteed always that the sender with the lowest CAN ID
+> winds regardless which hardware is used, the only difference is whether
+> we have "internal priority inversion" or not.
+>
+> If I look at the CAN stack = Software + hardware (and not only software)
+> it's correct: The hardware device may re-order if it's a better (full
+> CAN) one and thus the actual sending on the bus is not done in the same
+> sequence as the messages were provided internally (e.g. at some socket).
 
-Yes, I agree... I'll remove this in the future versions, I think the 
-approach with skipping in case of missing debugfs would be better.
+OK. Thanks for the clarification.
 
-By the way, I used the 'fpa' test as an example, and it looks like it 
-should be fixed as well...
+So, you are using scatterlist to be able to interface with the
+different CAN mailboxes. But then, it means that all the heuristics to
+manage those mailboxes are done in the virtio host.
 
-> Would it not be better to have a C program that actually calls the ioctl
-> rather than a custom debugfs thing that may or may not be wired up to do
-> the same thing as an ioctl would?  It seems like other than whatever
-> this ioctl test actually does this is all just a simplified version of
-> the existing pcm-test.
+Did you consider exposing the number of supported mailboxes as a
+configuration parameter and let the virtio guest manage these? In
+Linux, it is supported since below commit:
 
-Well, the idea was to test the playback buffer consistency - the driver 
-has the functionality of testing the playback buffer for containing the 
-looped pattern (and if the buffer doesn't contain the looped pattern the 
-test fails). So, firstly we get the capture buffer with this pattern 
-(via arecord), and then send it to the driver for the test (via aplay).
+  commit 038709071328 ("can: dev: enable multi-queue for SocketCAN devices")
+  Link: https://git.kernel.org/torvalds/c/038709071328
 
-The pcm-test (as I understand) performs only time checks, not the checks 
-of the data played/captured, and I think it is pointless to test the 
-time again. But I agree, that C test implementation would be better - 
-using this approach I can perform additional buffer checks and cover 
-more functionality of the driver.
-
-Thank you very much for the review!
-
-Kind regards,
-Ivan Orlov.
+Generally, from a design perspective, isn't it better to make the
+virtio host as dumb as possible and let the host do the management?
