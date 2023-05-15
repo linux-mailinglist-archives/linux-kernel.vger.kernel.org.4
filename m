@@ -2,159 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB91A702411
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0E2702415
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238122AbjEOGGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S239368AbjEOGHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238157AbjEOGGT (ORCPT
+        with ESMTP id S238926AbjEOGGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:06:19 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5093C10;
-        Sun, 14 May 2023 22:58:48 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64359d9c531so9145976b3a.3;
-        Sun, 14 May 2023 22:58:48 -0700 (PDT)
+        Mon, 15 May 2023 02:06:41 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E412D41;
+        Sun, 14 May 2023 23:00:12 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so22492455a12.0;
+        Sun, 14 May 2023 23:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684130328; x=1686722328;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8KGssz1w4DZJK1Vr5zt5uYG0JD7zKe5eeNlCKr5k0f0=;
-        b=pfZXVDCKY+APnOW7TGlyyuh2Gd+ps29ElH2GkUVlknjGDamI76pt9yVK4x7f2+Xd3o
-         xOgpD7s7nrvHWLooKBHNqzN52rQgzlZs2tEF24oFMx7Nl/fQQYZYMKlrnC6bwQscwHhF
-         Aj/Xy6MdiWdujoxvg2nri5ry/BQcUKw8jF/82y/Xu/SJhlOZFG8oLnGxobcATw18SmaL
-         JKo8IBA3Zco0dplY4SHgesKrIzViiMc9vPGijnBBO8xBVYj+i3yTZH1SQSXdXSm5d2+/
-         Ear8yTtlRUhHIYBkn00vt0dXv+JBS0m8HY2nE+cKZjNaJzbt3ULpQ/QipSTUDiAotKHu
-         lKog==
+        d=gmail.com; s=20221208; t=1684130411; x=1686722411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GWJZN0AxnMLj8Z4KaxYfGt0FY36qubWQkKlCweV20LE=;
+        b=iKjTvLOaLIAQInv4Zg3BQl2vPIyVFhi3CpcLEmlrMGBMoqotkbBGotUeAdfq21fElc
+         cy/xMPodX7Gzzg1tBArbJcBknuUJ1HSw/3aqtfOO8R7DPQ8RJTLgnpxXyYhfxWd+zscU
+         w0bmdI7FYW8O+e6RwW3bylQil94PcQ6lDb0Xc7KCrXCXraOs08V313MQmwhDBdnw7b0D
+         t2jeED38yEr3U0W2Jfy6fSbtsCWW1YhGM6jxcOjAqQOMWw8KJpGFSxbPqdP4NrJN0OCv
+         yyRiVX/WJFFmUChE/F6w4x8K6n3qxFApsZxtSAYsjc+mF8WoZ9Ap+0GJru6DYRta7Syk
+         zhdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684130328; x=1686722328;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8KGssz1w4DZJK1Vr5zt5uYG0JD7zKe5eeNlCKr5k0f0=;
-        b=LjMfaZhZZ/nLqLLqHNbNNEYK7RTRPOJh//p4FXaDzkRCvLDnCBRWt5xYsuB9COl2dg
-         2VjEHtW4URHm0CiWlujuRaAHrYo782yzH7FKK245r4zQQuo0oheUqeh9lC5i5nDJT3wR
-         KdVqqVlwVYnkHRgY0QYuHbpxZlghxCDJDIKY4tpFdI0IX6yA3jdHPZOF7SJI0M89Z1ws
-         J1V86jFWRj+W+G1gCb56Sfn88egkUHdKJhmFf6fciNl9Pz58OzS5cwprj6xnNX9LkQ6n
-         UWpfgXwuBAPPrYlzf8LJE1JbA6dUSLlroXO18Q/oqJeHAznDLBvkSzPR7qhLUZlQuNC9
-         bDaw==
-X-Gm-Message-State: AC+VfDwa/xj1L7vu2ZLM0I57KXI20Cfh6fpIPdgdYvv4WXfBgTjcp3vE
-        PLWAvlHseyD62gJFp1m1L7CTGxqKBKh+t/b2r/w=
-X-Google-Smtp-Source: ACHHUZ7Q6AqHlcirZ3/CWy+O9nweD+u1pqXIhTP/OvNRsXXL+YLKQ3y+cBLtOJHNQVOUaKBJPXGEZPRfMNfOP3PWCXg=
-X-Received: by 2002:a05:6a00:2d09:b0:63b:5c82:e209 with SMTP id
- fa9-20020a056a002d0900b0063b5c82e209mr46680756pfb.10.1684130327699; Sun, 14
- May 2023 22:58:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684130411; x=1686722411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GWJZN0AxnMLj8Z4KaxYfGt0FY36qubWQkKlCweV20LE=;
+        b=UjBwIhlwUi5DhBtXeWZCUUZ+UEkYJIpT4FgKhcGJgSPxDUDvTg6VobATjDTW5O59ap
+         lT2NxBf+fINzpt7qgan6EJupJot/EaFwTQv4CCMrhf5z/KfeZHK5Lc5UBE0WuJUNED33
+         S+TWZnLyEA6P1z4J5YvHuAtG4F54swIA1euYqcuj+O+a7JodIKBc9SqKkvzKdgz9MsfF
+         fmyGGM/8X3HOgjDklGyjGczdGqkhggLgr9cfZLXE0uLUF5m9sAUY+I3imvhLM0dOLDmy
+         RTkCcL2IKj6JqTb5c2u4xXvH4fxFi0YHxgSTjENlBK6OhBUXQE2aEpJ1a4JGHXSw3Dxz
+         0UnA==
+X-Gm-Message-State: AC+VfDyxb/JOdOgsr927K8/p59r7pg4/OKFh8DPedXuIOiXgw21QSti2
+        kZfHNGZ2ynD76h3UjyeDVLJfvKRq2CwuqBqj2I0=
+X-Google-Smtp-Source: ACHHUZ428Sh5bSg84RYNX+ILZH5/eZRrfIEPJc5zLusPZ0jIaVj393VeEHUomPxsyyo61gVIkyWMBWrJD7tI0NjcfMo=
+X-Received: by 2002:aa7:c747:0:b0:50b:fb49:c4a8 with SMTP id
+ c7-20020aa7c747000000b0050bfb49c4a8mr25276264eds.27.1684130410646; Sun, 14
+ May 2023 23:00:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
- <CAK8P3a1biW1qygRS8Mf0F5n8e6044+W-5v+Gnv+gh+Cyzj-Vjg@mail.gmail.com>
- <8bd1dc3b-e1f0-e7f9-bf65-8d243c65adb5@opensynergy.com> <ed2d2ea7-4a8c-4616-bca4-c78e6f260ba9@app.fastmail.com>
- <CAMZ6Rq+RjOHaGx-7GLsj-PNAcHd=nGd=JERddqw4FWbNN3sAXA@mail.gmail.com> <9bdba1e2-9d1f-72b3-8793-24851c11e953@opensynergy.com>
-In-Reply-To: <9bdba1e2-9d1f-72b3-8793-24851c11e953@opensynergy.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Mon, 15 May 2023 14:58:36 +0900
-Message-ID: <CAMZ6RqKfdBio3cnH+FpeCwasoVNBZ3x55FiM+BpgrurKkT8aHg@mail.gmail.com>
-Subject: Re: [virtio-dev] [RFC PATCH 1/1] can: virtio: Initial virtio CAN driver.
-To:     Harald Mommer <harald.mommer@opensynergy.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Mikhail Golubev <Mikhail.Golubev@opensynergy.com>,
-        Harald Mommer <hmo@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>,
-        Stratos Mailing List <stratos-dev@op-lists.linaro.org>
+References: <20230510122045.2259-1-zegao@tencent.com> <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
+ <CAD8CoPBBipQWP0xT5unAshL93OtXLQox_rz0f7rfrGgy05UVJg@mail.gmail.com>
+In-Reply-To: <CAD8CoPBBipQWP0xT5unAshL93OtXLQox_rz0f7rfrGgy05UVJg@mail.gmail.com>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Mon, 15 May 2023 13:59:59 +0800
+Message-ID: <CAD8CoPCfPmqZH6BJCk3Y1-02BLVVsbQ6OeaNOhcfGWmdF0oX8A@mail.gmail.com>
+Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
+ recursive trap
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Harald,
+Dear all,
 
-On Fri. 12 May 2023 at 22:19, Harald Mommer
-<harald.mommer@opensynergy.com> wrote:
-> Hello Vincent,
+On Thu, May 11, 2023 at 9:06=E2=80=AFAM Ze Gao <zegao2021@gmail.com> wrote:
 >
-> searched for the old E-Mail, this was one of that which slipped through.
-> Too much of those.
+> I'm afraid filtering in user space tools is not enough, cause it's a kern=
+el BUG.
 >
-> On 05.11.22 10:21, Vincent Mailhol wrote:
-> > On Fry. 4 nov. 2022 at 20:13, Arnd Bergmann <arnd@kernel.org> wrote:
-> >> On Thu, Nov 3, 2022, at 13:26, Harald Mommer wrote:
-> >>> On 25.08.22 20:21, Arnd Bergmann wrote:
-> >> ...
-> >>> The messages are not necessarily processed in sequence by the CAN stack.
-> >>> CAN is priority based. The lower the CAN ID the higher the priority. So
-> >>> a message with CAN ID 0x100 can surpass a message with ID 0x123 if the
-> >>> hardware is not just simple basic CAN controller using a single TX
-> >>> mailbox with a FIFO queue on top of it.
-> > Really? I acknowledge that it is priority based *on the bus*, i.e. if
-> > two devices A and B on the same bus try to send CAN ID 0x100 and 0x123
-> > at the same time, then device A will win the CAN arbitration.
-> > However, I am not aware of any devices which reorder their own stack
-> > according to the CAN IDs. If I first send CAN ID 0x123 and then ID
-> > 0x100 on the device stack, 0x123 would still go out first, right?
+> it would 100% trigger a kernel crash if you run cmd like
 >
-> The CAN hardware may be a basic CAN hardware: Single mailbox only with a
-> TX FIFO on top of this.
+> retsnoop -e 'pick_next_task_fair' -a ':kernel/sched/*.c' -vvv
 >
-> No reordering takes place, the CAN hardware will try to arbitrate the
-> CAN bus with a low priority CAN message (big CAN ID) while some high
-> priority CAN message (small CAN ID) is waiting in the FIFO. This is
-> called "internal priority inversion", a property of basic CAN hardware.
-> A basic CAN hardware does exactly what you describe.
->
-> Should be the FIFO in software it's a bad idea to try to improve this
-> doing some software sorting, the processing time needed is likely to
-> make things even worse. Therefore no software does this or at least it's
-> not recommended to do this.
->
-> But the hardware may also be a better one. No FIFO but a lot of TX
-> mailboxes. A full CAN hardware tries to arbitrate the bus using the
-> highest priority waiting CAN message considering all hardware TX
-> mailboxes. Such a better (full CAN) hardware does not cause "internal
-> priority inversion" but tries to arbitrate the bus in the correct order
-> given by the message IDs.
->
-> We don't know about the actually used CAN hardware and how it's used on
-> this level we are with our virtio can device. We are using SocketCAN, no
-> information about the properties of the underlying hardware is provided
-> at some API. May be basic CAN using a FIFO and a single TX mailbox or
-> full CAN using a lot of TX mailboxes in parallel.
->
-> On the bus it's guaranteed always that the sender with the lowest CAN ID
-> winds regardless which hardware is used, the only difference is whether
-> we have "internal priority inversion" or not.
->
-> If I look at the CAN stack = Software + hardware (and not only software)
-> it's correct: The hardware device may re-order if it's a better (full
-> CAN) one and thus the actual sending on the bus is not done in the same
-> sequence as the messages were provided internally (e.g. at some socket).
+> which is caused by that BPF_LINK_TYPE_KPROBE_MULTI accidentally
+> attaches bpf progs
+> to preempt_count_{add, sub}, which in turn triggers stackoverflow
+> because the handler itself
+> calls those functions.
 
-OK. Thanks for the clarification.
+I managed to see the big picture of this problem by digging into the code.
 
-So, you are using scatterlist to be able to interface with the
-different CAN mailboxes. But then, it means that all the heuristics to
-manage those mailboxes are done in the virtio host.
+here is what it goes:
 
-Did you consider exposing the number of supported mailboxes as a
-configuration parameter and let the virtio guest manage these? In
-Linux, it is supported since below commit:
+rethook_trampoline_handler{
+   preempt_disable() {
+      preempt_count_add() {  <-- trace
+          fprobe_handler() {
+            ftrace_test_recursion_trylock
+            ...
+            ftrace_test_recursion_unlock    <- it fails to detect the
+recursion caused by rethook (rethook_trampoline_handler precisely for
+this case)  routines.
+          }
+          ...
+          rethook_trampoline_handler {
+          [ wash, rinse, repeat, CRASH!!! ]
 
-  commit 038709071328 ("can: dev: enable multi-queue for SocketCAN devices")
-  Link: https://git.kernel.org/torvalds/c/038709071328
+There are some pitfalls here:
+1.  fprobe exit callback should be guarded by ftrace recursion check
+as well since user might call any traceable functions
+just like kprobe_multi_link_prog_run calls migrate_{disable, enable}.
+In this case,  detection in fprobe_handler only is not
+enough.
+2. rethook_trampoline_handler should use preempt_{disable,
+enable}_notrace instead because it's beyond recursion-free
+region guarded like 1
+3. many rethook helper functions are also used outside the
+recursion-free regions and therefore they should be marked
+notrace
 
-Generally, from a design perspective, isn't it better to make the
-virtio host as dumb as possible and let the host do the management?
+I've post a new series of patches to resolve cases mentioned above:
+  [Link]: https://lkml.org/lkml/2023/5/14/452
+
+In theory, bpf_kprobe as the user of fprobe+ rethook, is spared from
+suffering recursion again by applying these. And
+  [Link]: https://lore.kernel.org/all/20230513090548.376522-1-zegao@tencent=
+.com/T/#u
+becomes optional.
+
+That leaves one final question, whether we need probe blacklist or
+bpf_kprobe blacklist depends on how we deal with
+user requests if one of its expected hook points fails because of
+recursion detected. Do we need to reject them in the first place
+by blacklist or  let it fail to execute the callback silently, which
+needs your gentle advice.
+
+Regards,
+Ze
