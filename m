@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2136703E62
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED80703E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245284AbjEOUQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 16:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        id S245213AbjEOUQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 16:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245275AbjEOUQR (ORCPT
+        with ESMTP id S245280AbjEOUQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 May 2023 16:16:17 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46B9E60
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:12 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-643aad3bc41so12677319b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:12 -0700 (PDT)
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2783811B54
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:15 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-643990c5373so13581731b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684181772; x=1686773772;
+        d=chromium.org; s=google; t=1684181774; x=1686773774;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jqiqb2iWttvdC3HhbyFxiKycIZ3v56zeARkXn2CaIG8=;
-        b=BA3eC9fLQ13vqDEGsDHWDDvCuyngMEyna4+dAlzia76PnarszsniqtMipx0u6e/Cgu
-         pZhndmlgcmZL7Gzwwo/LJO6pj3Xy+eIAe7K/9wo4PDEpUyEfaxXYbjl62N6VDTzs+HYc
-         rEYn7k3sYXQ8wqyaLPlkSZ/xbOOQKI//ZA1iM=
+        bh=bSFZLbNpPgEje16hneDjcdrQcGQsPzQHluB44E8FHjY=;
+        b=NzeeeyMk/hpNF9RAIv4WS+B4v3mYCs9HKMq562nfambK4GSGTB0CGnrcK2r+VFo780
+         HOrS4BGRvf+d3B4kDMaLMX4m2Mw73l4go1EcX5Ax9aT0LcH8ZWquW7hE67EC5SC5ZbyG
+         BFfEo7608Jp0pE+46I0xG19lunTRA96KvfVhk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684181772; x=1686773772;
+        d=1e100.net; s=20221208; t=1684181774; x=1686773774;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jqiqb2iWttvdC3HhbyFxiKycIZ3v56zeARkXn2CaIG8=;
-        b=WVIJhJO/0Jn/90c9YRl+d/vpkrvOrv+/I2kJtX9A/5JUXoOAfqsTViX97EpGhASjLT
-         nwMTpnRH69omrr8CAzHzF2xD+6E9RDEIObla+LJXnlDu9xI0TQi9JMS5HjSUBJ/R4L1n
-         CbmGpaxCVFbVnx5NFosfPAsRKC4/s7vWeXqvQ4wLKdzAhBJHwMjTwu7pOJtRAd49XZBa
-         yUjYGFdRKT1VGBxl4Br5ASC+CtdSxYNZ3Kw2gsYw0EZMmXb/wOViudmFU8reEUONUamz
-         0Layfp/XUWO2gZz/QLhmehK/gTXN9n1B9ym89mbJmKNWGvs22KDp06NaSOQJCIfp8UTG
-         MZ2Q==
-X-Gm-Message-State: AC+VfDyi+YUBWEVPh2iAwXXKaoWCTEpsaE0+2sSDPJYMq7LJQdueJEY0
-        Bs9AtLDBH0/Q+gzvoCNixRKH4w==
-X-Google-Smtp-Source: ACHHUZ4afNWoz/IHm3+tYuCUS2VKPE/E3iS8LS0IzUgQs4MtgxjGipjnhVX+ILNAtW2aKIz0GlGgLw==
-X-Received: by 2002:a05:6a00:2285:b0:643:88b1:9bd1 with SMTP id f5-20020a056a00228500b0064388b19bd1mr45311433pfe.26.1684181772491;
-        Mon, 15 May 2023 13:16:12 -0700 (PDT)
+        bh=bSFZLbNpPgEje16hneDjcdrQcGQsPzQHluB44E8FHjY=;
+        b=cvYnTN/L7/FN6xluCxFc1LpuNwz4owFsBDQywdNxE0ZFPeRue515YF/FP4FLM2bGLD
+         /ehNeM/13q7FGvrTW/G3EXtOue6StN8vWN7Div8ZtJmq98wa+4lvTYQoCUL1olphqtIK
+         HPxYCfHO4qfK9BxmSXEZXSa9TWgHwTMViTaizpomZzi779AP9of5G/UvCJCiG/W7Kbdz
+         5rWsf0Suo77BzXzz3s7ancG0CBOOwXXDEpWwt8FPUwfLZJm9T9lZRpfMMCnYFzuMFKAC
+         5QR7DJXF7KOXthpQihxgL+lXnceOy1UtdhFH5uArlR8E5/8K3Faxviko/AATloZCLaef
+         Dwmw==
+X-Gm-Message-State: AC+VfDzKmQZjYLTSI0fYop4uSJ8DHV6e0ovR0DrBNkDES/GEGKiBPbwH
+        LeOgBUipmkp6gfqZh3oc1RnEyA==
+X-Google-Smtp-Source: ACHHUZ6AiGghtlJlsLLlfd1VuDZv1nQaPFrstBdAfKOZ49IsIsdqeqYgi0pnJ00tpX1ojW99Y/UVeg==
+X-Received: by 2002:a05:6a00:188f:b0:63b:8eeb:77b8 with SMTP id x15-20020a056a00188f00b0063b8eeb77b8mr50708074pfh.13.1684181774645;
+        Mon, 15 May 2023 13:16:14 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:9f33:9d98:277a:d4cd])
-        by smtp.gmail.com with ESMTPSA id a19-20020a62bd13000000b0063f0c9eadc7sm7981411pff.200.2023.05.15.13.16.10
+        by smtp.gmail.com with ESMTPSA id a19-20020a62bd13000000b0063f0c9eadc7sm7981411pff.200.2023.05.15.13.16.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 13:16:11 -0700 (PDT)
+        Mon, 15 May 2023 13:16:14 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Marc Zyngier <maz@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,11 +66,11 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Seiya Wang <seiya.wang@mediatek.com>,
         Douglas Anderson <dianders@chromium.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/5] arm64: dts: mediatek: mt8183: Add mediatek,broken-save-restore-fw to kukui
-Date:   Mon, 15 May 2023 13:13:52 -0700
-Message-ID: <20230515131353.v2.3.I525a2ed4260046d43c885ee1275e91707743df1c@changeid>
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 4/5] arm64: dts: mediatek: mt8192: Add mediatek,broken-save-restore-fw to asurada
+Date:   Mon, 15 May 2023 13:13:53 -0700
+Message-ID: <20230515131353.v2.4.Ie7e600278ffbed55a1e5a58178203787b1449b35@changeid>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 In-Reply-To: <20230515131353.v2.cover@dianders>
 References: <20230515131353.v2.cover@dianders>
@@ -86,30 +86,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firmware shipped on mt8183 Chromebooks is affected by the GICR
+Firmware shipped on mt8192 Chromebooks is affected by the GICR
 save/restore issue as described by the patch ("dt-bindings:
 interrupt-controller: arm,gic-v3: Add quirk for Mediatek SoCs w/
 broken FW"). Add the quirk property.
 
-Fixes: cd894e274b74 ("arm64: dts: mt8183: Add krane-sku176 board")
+Fixes: 331fae2fc922 ("arm64: dts: mediatek: Introduce MT8192-based Asurada board family")
 Reviewed-by: Julius Werner <jwerner@chromium.org>
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
 Changes in v2:
 - Changed "Fixes" tag.
-- Moved from mt8183.dtsi to mt8183-kukui.dtsi
+- Moved from mt8192.dtsi to mt8192-asurada.dtsi
 - mediatek,gicr-save-quirk => mediatek,broken-save-restore-fw
 
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
+ arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 63952c1251df..8892b2f64a0f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -292,6 +292,10 @@ dsi_out: endpoint {
- 	};
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+index 5a440504d4f9..0e8b34117090 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+@@ -275,6 +275,10 @@ &dsi_out {
+ 	remote-endpoint = <&anx7625_in>;
  };
  
 +&gic {
@@ -117,8 +117,8 @@ index 63952c1251df..8892b2f64a0f 100644
 +};
 +
  &gpu {
- 	mali-supply = <&mt6358_vgpu_reg>;
- };
+ 	mali-supply = <&mt6315_7_vbuck1>;
+ 	status = "okay";
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
