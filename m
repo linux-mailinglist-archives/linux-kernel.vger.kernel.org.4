@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C49E703CFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7AE703D00
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244387AbjEOSs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 14:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S244510AbjEOStD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 14:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244384AbjEOSss (ORCPT
+        with ESMTP id S243617AbjEOSs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 14:48:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BCC14923
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684176481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5hqIAn873QsCpWU5fVaK4Ln/oVmQG1LGyWmBLtBWvnQ=;
-        b=L4v1e4yKg6zYLYbEh+cqzFf48V8cN8hE5s7zjGTcSJV5tNJTcXv27Q4WOZbquAujgj9QOf
-        3jz7AfNPfhzYSLaY2jiPGwUjtbDWGnUki+roE3uxFmdxt93DL8yXLSuB+Q7DUXJ130NHVy
-        WuBf+yqzGnCUUph62OGaJMw/DFP+SqM=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-508-e2UIXAz_OAaWQ3m6SdL2zQ-1; Mon, 15 May 2023 14:47:57 -0400
-X-MC-Unique: e2UIXAz_OAaWQ3m6SdL2zQ-1
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6ab1bcd8c8bso5414842a34.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:47:57 -0700 (PDT)
+        Mon, 15 May 2023 14:48:59 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D76A1491A;
+        Mon, 15 May 2023 11:48:58 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f24ceae142so11672144e87.3;
+        Mon, 15 May 2023 11:48:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684176537; x=1686768537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iTBWs9VN/AmEk5vXMNYksrxne0o7kn1chFKcCzHHpNU=;
+        b=OfaA86AQomUNauoaFFPAvp3N+WxOxPoBcEeP/Gjw1guhaydm3FI/3cQZlWmwOCjFPi
+         X8gab610LUS17dQH5D4A13bMC9ARjpVwDt2glchCCIUO9CtoaGpTJR3YSnLRxnBD36/U
+         Ts0l9jG+xFfL8jWyHT6jKuqdpRPd1onYvl1I+K/jtkdyA7XuQiqGyvQPrCR2Z9DRhOfZ
+         ETv3nrX3aQILZjZMsswt9S/upRVOmL0Zz3Q9xDa+22ONb0fxYulAiIrW8SGG2xhTFvhb
+         OAYWmxgQXvMk4VKX6BWPVc/CdR4kaDIzq8eNdTGEencaRY7v5S1MEaldvYge7eUazfq+
+         grTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684176477; x=1686768477;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5hqIAn873QsCpWU5fVaK4Ln/oVmQG1LGyWmBLtBWvnQ=;
-        b=PgixC48XdeDSfFBKIw3sWGpfPW3kEC1frulGAo7lu67/gNjYX3vBlacglkfBn76lsk
-         L8JkOEeJgNUuiJ0ztJ89S6Q5yow45kVlE+a4vS0E4BTXK2VvGP9g/z7Tz4QnXnzoCoXC
-         LGtER7x5v81dDE8tTKrfKHvuR0ygcxkd4MuSjvNE/H7c/KQOeCZzigGsR7ZEIReAXSXF
-         GAjJ/XJFkRYzBqsvCzVLBPsSBJz4mv3lXEFnEDfJgBN/7xaEXTudHQ1tJB7BrsyA2MBN
-         zZAtovt6gP6Bm71eZ7FggcsPPJn/qW8eL9iHU99uQrMHxPf6Ki5fVe37O+PUCAvgBlwS
-         PhNg==
-X-Gm-Message-State: AC+VfDwh64GV6UKozxy+Aa+yU/jAqNmu+fgPx1fqOugJKskW/CiG/7TB
-        UBGHVXl4YI8zsvewQUjEiVBldktdiFPtjTPu3dSWmlNHpzhELC+gIDfthkxWlLaLw1xKQTDOeWa
-        +KgFuRQ9IdUtzqBPiH7Iu0Is8
-X-Received: by 2002:a9d:6c05:0:b0:6aa:f9c8:42ee with SMTP id f5-20020a9d6c05000000b006aaf9c842eemr11342146otq.38.1684176477142;
-        Mon, 15 May 2023 11:47:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7w8rqRjYuIs5zI+oXDDwHSM39djcYXopSet1+cG56krvnX1VIMPKmnMOQaeweOUPK8LYIxHg==
-X-Received: by 2002:a9d:6c05:0:b0:6aa:f9c8:42ee with SMTP id f5-20020a9d6c05000000b006aaf9c842eemr11342139otq.38.1684176476861;
-        Mon, 15 May 2023 11:47:56 -0700 (PDT)
-Received: from ?IPv6:2804:1b3:a803:46cc:5b68:5c23:dd7a:8cb3? ([2804:1b3:a803:46cc:5b68:5c23:dd7a:8cb3])
-        by smtp.gmail.com with ESMTPSA id j16-20020a9d7690000000b006a6558ef17fsm11450965otl.30.2023.05.15.11.47.52
+        d=1e100.net; s=20221208; t=1684176537; x=1686768537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iTBWs9VN/AmEk5vXMNYksrxne0o7kn1chFKcCzHHpNU=;
+        b=PV+l2zr3+5fYbg01Chqzeb51luHs0QT3j1A6Tmf5y7WIXYaU0MW0vnXdGk0bf0Umh6
+         1S6hAxmLv5iQCx68ix4opIK49kfH02lwoCqCjnposh/MM9jZ86GOOcoocCsLmrkuM9kX
+         nV3K9ktHzcUyTIicpBXOSvppno5TTLUzZEYSqAeL0J7NCW6i7iwwD4FVqZe6734ujFNn
+         SpY7tHCQ5/zZBhPA5m689X2SlRfLQSnibM/HAAEaETeiyZHGUcMcqJwxZ6kwMSduNb5G
+         PjVaOEbVncRaWxiCPAp070l1gAyBE6VncdFIhb05gEFbtwOZ+kfIlYpCrz2pt5hLmmC9
+         mOww==
+X-Gm-Message-State: AC+VfDxlMdjR5iz6qlxkahur9x42cff80Ew3NuaJMRwXeHhH+Lf5HzpP
+        tcPIw+X5erPluNvBy8/dvfA=
+X-Google-Smtp-Source: ACHHUZ79wHJB/Ghdi7Cm4011cCmntxQXuFSxHB/31ZlUzeFBiBemCtGnbVt+2cD1sM0VJ+L0Xyrh5w==
+X-Received: by 2002:a19:5214:0:b0:4f3:8411:f146 with SMTP id m20-20020a195214000000b004f38411f146mr913589lfb.68.1684176536567;
+        Mon, 15 May 2023 11:48:56 -0700 (PDT)
+Received: from komp.lan (83.24.33.169.ipv4.supernova.orange.pl. [83.24.33.169])
+        by smtp.gmail.com with ESMTPSA id z5-20020ac24f85000000b004ec8de8ab43sm2655742lfs.139.2023.05.15.11.48.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 11:47:56 -0700 (PDT)
-Message-ID: <cefdad7f7154155f69d9613efe53f9cbbea2ed20.camel@redhat.com>
-Subject: Re: [RFC PATCH v4 0/2] trace,smp: Add tracepoints for csd
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Nadav Amit <namit@vmware.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Date:   Mon, 15 May 2023 15:47:51 -0300
-In-Reply-To: <20230515183045.654199-1-leobras@redhat.com>
-References: <20230515183045.654199-1-leobras@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 
+        Mon, 15 May 2023 11:48:56 -0700 (PDT)
+From:   Maya Matuszczyk <maccraft123mc@gmail.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Hans de Goede <hdegoede@redhat.com>, stable@vger.kernel.org,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: panel-orientation-quirks: Change Air's quirk to support Air Plus
+Date:   Mon, 15 May 2023 20:48:43 +0200
+Message-Id: <20230515184843.1552612-1-maccraft123mc@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-15 at 15:30 -0300, Leonardo Bras wrote:
-> Changes since RFCv3:
-> - Split the patch in 2: entry/exit and queue
-> - Fix 'struct __call_single_data' & call_single_data_t alignment issue
-> - Made all TP_printk follow the same pattern
->=20
-> Changes since RFCv2:
-> - Fixed some spacing issues and trace calls
->=20
-> Changes since RFCv1:
-> - Implemented trace_csd_queue_cpu() as suggested by Valentin Schneider
-> - Using EVENT_CLASS in order to avoid duplication
-> - Introduced new helper: csd_do_func()
-> - Name change from smp_call_function_* to csd_function_*
-> - Rebased on top of torvalds/master
->=20
-> Leonardo Bras (2):
->   trace,smp: Add tracepoints around remotelly called functions
->   trace,smp: Add tracepoints for scheduling remotelly called functions
->=20
->  include/trace/events/smp.h | 72 ++++++++++++++++++++++++++++++++++++++
->  kernel/smp.c               | 41 +++++++++++++---------
->  2 files changed, 96 insertions(+), 17 deletions(-)
->  create mode 100644 include/trace/events/smp.h
->=20
+It turned out that Aya Neo Air Plus had a different board name than
+expected.
+This patch changes Aya Neo Air's quirk to account for that, as both
+devices share "Air" in DMI product name.
 
-argh, almost sure some llvm build will output some alignment warning becaus=
-e
-csd_do_func() has an=C2=A0'struct __call_single_data' argument while the tr=
-acepoints
-have call_single_data_t arguments.
+Tested on Air claiming to be an Air Pro, and on Air Plus.
 
-Other than that, it should be fine.
-I will collect other suggestions before sending a v5 with this fix.
+Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+---
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Leo
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index b1a38e6ce2f8..0cb646cb04ee 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -179,7 +179,7 @@ static const struct dmi_system_id orientation_data[] = {
+ 	}, {	/* AYA NEO AIR */
+ 		.matches = {
+ 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
+-		  DMI_MATCH(DMI_BOARD_NAME, "AIR"),
++		  DMI_MATCH(DMI_PRODUCT_NAME, "AIR"),
+ 		},
+ 		.driver_data = (void *)&lcd1080x1920_leftside_up,
+ 	}, {	/* AYA NEO NEXT */
+-- 
+2.40.1
 
