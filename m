@@ -2,121 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1216F703C9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FCC703CAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243322AbjEOS2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 14:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S243378AbjEOScN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 14:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236270AbjEOS2i (ORCPT
+        with ESMTP id S236831AbjEOScI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 14:28:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B3046B2;
-        Mon, 15 May 2023 11:28:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75E3F620BA;
-        Mon, 15 May 2023 18:28:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6196AC433D2;
-        Mon, 15 May 2023 18:28:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684175304;
-        bh=uA+SpOMqprPZ3lP47QFJp0wllKNyr/Crd+3iBg3DRj8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=F8mE4AroG+Zip9N6xZ6c/6RNitCRem8ymrWbwyV9piGLFz5lazdPX+jHZCxBas5oT
-         HeJgXb6jtJFPk7eEQP3bLyBhs7cEFEwa0ou38WkbeXhq/iit1Tyu9gc0c0OZ4h+7ey
-         OSJiWhQ2fbR9SOLqYnIEJZ+9bZEeavO6Vt4no6B9c7TVEmxH6/ctwhdfnzDcm0HLj+
-         y84MEcgEeLWu8Ute/XsPdZuNhGnmRJ2BG0Vco24pXIrMUEDycbK0uTSG4Gcb0E0Dfy
-         bAWaLbdXDsXtyoN/LUgaLiUZuACnagbEGkkjLAHBfKDDINziuQ0550KmP76UBG1dAU
-         yf9fz4qOUSekQ==
-Date:   Mon, 15 May 2023 13:28:22 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Wilczy??ski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
- for LNKCTL{,2}
-Message-ID: <ZGJ5xhWqxOc7vHjZ@bhelgaas>
+        Mon, 15 May 2023 14:32:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0AC18C8D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:31:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684175480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MOj6t1AMbPCvGUuEBcmtwWAQ86XL4E71akbkpHomH5I=;
+        b=TBAqVaqaBxXm/Zv27rpmhyGJgPBSVaHigovM3fvqYvg867mMxccOdhUzfH6j5cCmFbpI8+
+        2N+4Ltem/wEH5Ku2PGZMR9Cq83b3d3HTnkJgxIhX8o7wgTP5yBhxevDOUv8KvjN39TdwxL
+        As1dmf7bD3zMGwNW5yW8Rjp+aI4l8Bs=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-150-vLCJX4f6M_mACQiA1D_b6A-1; Mon, 15 May 2023 14:31:19 -0400
+X-MC-Unique: vLCJX4f6M_mACQiA1D_b6A-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-1877e4dff8aso8561506fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:31:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684175479; x=1686767479;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MOj6t1AMbPCvGUuEBcmtwWAQ86XL4E71akbkpHomH5I=;
+        b=YNUFrQX4BjG7Qgd5YOc+b5xhOtL10VKV6k15F9Ej8xptffDAoN9eOnU7/bP6fc9SxF
+         UsTWj8IWxbArfZIetAlqti/crz0zo/mL8zfhc96tWdy8dAVt4767moEQjvDh6rIVXcvm
+         QSLy8tYgIF4iIZyXNfzR0c2DLAqRkCW53p0QvuzTXZa6Pig+QqPOyU/tV2/aKpq3RY1E
+         bjLY9Oo3kV59Q38W3Wq9uj2QlWqgl6yAdzNP3kohQ2uOIRuyrxrVIwTlPgmqksheCZ16
+         zzbeuBX3R3XwPARhLTgNmYHHm4qtH8w1RHnjMpSTZ1Vo4BqKSt5ftKDLWYjFalthIl7A
+         LBIQ==
+X-Gm-Message-State: AC+VfDzeXS204+mtcP0CsPUJTis12TI5YTqDMw4z/q9HSHZxj8ItmocM
+        +hjdi66fmzxbY5PiPxUvy8FacikbnNk006eWTSE19n1QzArqctK8s0oZrHeoyM0ls45ktGoealh
+        ApzGFeh0btE0kw9m0+ZIgRoyy
+X-Received: by 2002:a05:6870:6255:b0:195:fe38:3b91 with SMTP id r21-20020a056870625500b00195fe383b91mr12443389oak.40.1684175479079;
+        Mon, 15 May 2023 11:31:19 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ442pvdikS2ZMXzMgyzrVm2wRGicD8EmqCx96Wc9UrLDq3ZNgPqozxnFHfDNm2b2bXgWuUKqA==
+X-Received: by 2002:a05:6870:6255:b0:195:fe38:3b91 with SMTP id r21-20020a056870625500b00195fe383b91mr12443378oak.40.1684175478802;
+        Mon, 15 May 2023 11:31:18 -0700 (PDT)
+Received: from localhost.localdomain ([2804:1b3:a803:46cc:5b68:5c23:dd7a:8cb3])
+        by smtp.gmail.com with ESMTPSA id ea20-20020a056870071400b001964dc3dadesm6094075oab.45.2023.05.15.11.31.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 11:31:18 -0700 (PDT)
+From:   Leonardo Bras <leobras@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Nadav Amit <namit@vmware.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: [RFC PATCH v4 0/2] trace,smp: Add tracepoints for csd
+Date:   Mon, 15 May 2023 15:30:44 -0300
+Message-Id: <20230515183045.654199-1-leobras@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2832e4a-8ef5-8695-3ca2-2b2f287a44d@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 02:59:42PM +0300, Ilpo Järvinen wrote:
-> On Sun, 14 May 2023, Lukas Wunner wrote:
-> > On Fri, May 12, 2023 at 11:25:32AM +0300, Ilpo Järvinen wrote:
-> > > On Thu, 11 May 2023, Lukas Wunner wrote:
-> > > > On Thu, May 11, 2023 at 10:55:06AM -0500, Bjorn Helgaas wrote:
-> > > > > I didn't see the prior discussion with Lukas, so maybe this was
-> > > > > answered there, but is there any reason not to add locking to
-> > > > > pcie_capability_clear_and_set_word() and friends directly?
-> > > > > 
-> > > > > It would be nice to avoid having to decide whether to use the locked
-> > > > > or unlocked versions.
-> > > > 
-> > > > I think we definitely want to also offer lockless accessors which
-> > > > can be used in hotpaths such as interrupt handlers if the accessed
-> > > > registers don't need any locking (e.g. because there are no concurrent
-> > > > accesses).
-> > > > ...
+Changes since RFCv3:
+- Split the patch in 2: entry/exit and queue
+- Fix 'struct __call_single_data' & call_single_data_t alignment issue
+- Made all TP_printk follow the same pattern
 
-> All PCI_EXP_SLTSTA ones looked not real RMW but ACK bits type of writes
+Changes since RFCv2:
+- Fixed some spacing issues and trace calls
 
-PCI_EXP_SLTSTA, PCI_EXP_LNKSTA, etc are typically RW1C and do not need
-the usual RMW locking (which I think is what you were saying).
+Changes since RFCv1:
+- Implemented trace_csd_queue_cpu() as suggested by Valentin Schneider
+- Using EVENT_CLASS in order to avoid duplication
+- Introduced new helper: csd_do_func()
+- Name change from smp_call_function_* to csd_function_*
+- Rebased on top of torvalds/master
 
-> > ...
-> > What I think is unnecessary and counterproductive is to add wholesale
-> > locking of any access to the PCI Express Capability Structure.
-> > 
-> > It's fine to have a single spinlock, but I'd suggest only using it
-> > for registers which are actually accessed concurrently by multiple
-> > places in the kernel.
-> 
-> While it does feel entirely unnecessary layer of complexity to me, it would 
-> be possible to rename the original pcie_capability_clear_and_set_word() to 
-> pcie_capability_clear_and_set_word_unlocked() and add this into 
-> include/linux/pci.h:
-> 
-> static inline int pcie_capability_clear_and_set_word(struct pci_dev *dev,
-> 					int pos, u16 clear, u16 set)
-> {
-> 	if (pos == PCI_EXP_LNKCTL || pos == PCI_EXP_LNKCTL2 ||
-> 	    pos == PCI_EXP_RTCTL)
-> 		pcie_capability_clear_and_set_word_locked(...);
-> 	else
-> 		pcie_capability_clear_and_set_word_unlocked(...);
-> }
-> 
-> It would keep the interface exactly the same but protect only a selectable 
-> set of registers. As pos is always a constant, the compiler should be able 
-> to optimize all the dead code away.
-> 
-> Would that be ok then?
+Leonardo Bras (2):
+  trace,smp: Add tracepoints around remotelly called functions
+  trace,smp: Add tracepoints for scheduling remotelly called functions
 
-Sounds like you have a pretty strong opinion, Lukas, but I guess I
-don't really understand the value of having locked and unlocked
-variants of RMW accessors.  Config accesses are relatively slow and I
-don't think they're used in performance-sensitive paths.  I would
-expect the lock to be uncontended and cheap relative to the config
-access itself, but I have no actual numbers to back up my speculation.
-Is the performance win worth the extra complexity in callers?
+ include/trace/events/smp.h | 72 ++++++++++++++++++++++++++++++++++++++
+ kernel/smp.c               | 41 +++++++++++++---------
+ 2 files changed, 96 insertions(+), 17 deletions(-)
+ create mode 100644 include/trace/events/smp.h
 
-Bjorn
+-- 
+2.40.1
+
