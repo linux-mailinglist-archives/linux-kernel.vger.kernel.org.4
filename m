@@ -2,156 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10F7702A2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF06702A40
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240904AbjEOKOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S239577AbjEOKPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240842AbjEOKOI (ORCPT
+        with ESMTP id S238637AbjEOKPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:14:08 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6C4E5D;
-        Mon, 15 May 2023 03:14:06 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F66FJJ032340;
-        Mon, 15 May 2023 05:13:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=7IKt5jGNUizT52ydViSRpHn5zdWJuSq0iR7Btrzg31A=;
- b=c8rTVO95XcOOvDRnL27augF0T7qUn3Uh+nUSj3tq+WNGyQVXpUmG5KPq5mJGKLxmTinK
- ltENPY8mbK5CYk8syIIo3RfJw++eY7B9vWSzZT2VygwTE1E+WDWyoleAyxa2aq9baxyc
- GCzH7R15Wr6R9l3yMfywtz6ddg7DpOPAXE5zCnfS/KRiDnkmf0jFmMf1If9RZa5XKW0T
- zx2JCiuSK1SaAuHfm8kXT6NXyyI/eI4b1pjoig4dmHp+I8Cw4DiXrnYMVl6+ja4ZD8lz
- 3ouHAm8crpYn0KpMiB+WDZ4q9XCiO3Rx1nkxd6Wi8uLS6bPc8YS14BsFWZrFnclRpRsz IA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qj7y12qcd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 05:13:53 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 15 May
- 2023 05:13:51 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Mon, 15 May 2023 05:13:51 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id F00E845;
-        Mon, 15 May 2023 10:13:50 +0000 (UTC)
-Date:   Mon, 15 May 2023 10:13:50 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <andy.shevchenko@gmail.com>
-CC:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <linus.walleij@linaro.org>,
-        <vkoul@kernel.org>, <lgirdwood@gmail.com>,
-        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
-Message-ID: <20230515101350.GS68926@ediswmail.ad.cirrus.com>
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
- <ZF6RMqElYZVMpWRt@surfacebook>
+        Mon, 15 May 2023 06:15:48 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB192103
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:15:19 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc394919cso18473226a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684145716; x=1686737716;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1c+SeNkWf2A4Xiy160mQbs75FOVXhfG5tI3XlCflVaA=;
+        b=PQwTnwoTVrZyBikP8ikwXMNrOZyEGhNIV6TDxPZ0tPMKDhZ9TlKLKEns2HT3GWbe7Y
+         r4ue7zSIyi+RfBXq9N9rO3Ken/y2cj47300WnRY40LqaPg4DWX3wNQmYHgT5pBiKJZ10
+         rhTAGaLF0sujPIkFpTnk7aixl0mwjRYU2XHH2TlHR0QHj/m+bNkH8VICLi69AtA6Hqnf
+         Gwydt6YFyfkf3A6MPme8IpExZyB5GKkK2Ei7sMUbNlTXw1kB6cH5zRoadFrb7gRMANHf
+         hKGg3wDSGj7xz3JwHQnATfAYgZ5MhCxScqnb9PQUqqtCby7JX+3A1OpdONGaHe6svqe1
+         4UIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684145716; x=1686737716;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1c+SeNkWf2A4Xiy160mQbs75FOVXhfG5tI3XlCflVaA=;
+        b=dtxgMU/Ad6VZL57M1TszH8G0CtL/Ra6hyG4FBcdlGcmGVQzbN2geQjzLrzRgWF7LcU
+         Ne1HozlPWKL/nUHFGnQ7zAEpoS4xVI11UyDHQJtsqeQhbJyEpHc0AtUMwHEb+NruE2ck
+         M5v0loSFBA8jgR05Z95myZ33Kwv5w74sl3XJSNkjbyXsnW1UtxYLbFJu/ON8+4NbKM9g
+         6t4dA6c2sGQFkwAyF5+I35LIzFLcrrYq/+LRFFv7YdCr6C6ik/eLHhzuBWjqZls3F6I7
+         G2BmGU4tCWzxTDI3papn3nKnaMKiP+erzVsHlS6Kk5kF2TFg4NdUmIbjMoKFoCsXHzIF
+         dsJg==
+X-Gm-Message-State: AC+VfDx9CTQ7r+cFW25UP0AeHNEd1fKPu3ERH717CqRDNVLLkk3JKEU3
+        mNJ3Nl+2hFFX8maFXSHQqg+LpQ==
+X-Google-Smtp-Source: ACHHUZ6exVH9Slyi2MO0TG463pZshcSqmTjOAHj0jmECxl3Ck+ouTbXHTJL3uL9Dpv5RPnt4GvhClg==
+X-Received: by 2002:a17:906:dc93:b0:965:d7c7:24cc with SMTP id cs19-20020a170906dc9300b00965d7c724ccmr33694648ejc.23.1684145716070;
+        Mon, 15 May 2023 03:15:16 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id j2-20020a170906534200b0096b4c3489e6sm750834ejo.177.2023.05.15.03.15.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 03:15:15 -0700 (PDT)
+Date:   Mon, 15 May 2023 12:15:13 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add microchip USB5807 HUB
+Message-ID: <20230515101513.rr7i5wpajlhla27d@krzk-bin>
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.f4f6ec47-9e6b-4978-b229-53520227ed28@emailsignatures365.codetwo.com>
+ <20230515062502.29273-1-mike.looijmans@topic.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZF6RMqElYZVMpWRt@surfacebook>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: qnoTQzyEZoya4jBSWCSaegAU65Cz04Qu
-X-Proofpoint-ORIG-GUID: qnoTQzyEZoya4jBSWCSaegAU65Cz04Qu
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230515062502.29273-1-mike.looijmans@topic.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:19:14PM +0300, andy.shevchenko@gmail.com wrote:
-> Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
-> > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> > for portable applications. It provides a high dynamic range, stereo
-> > DAC for headphone output, two integrated Class D amplifiers for
-> > loudspeakers, and two ADCs for wired headset microphone input or
-> > stereo line input. PDM inputs are provided for digital microphones.
-> > 
-> > Add a basic pinctrl driver which supports driver strength for the
-> > various pins, gpios, and pinmux for the 2 multi-function pins.
+On Mon, 15 May 2023 08:25:01 +0200, Mike Looijmans wrote:
+> The USB5807 is a 7-port USB 3.1 hub that can be configured by I2C.
+> This driver resets the chip, optionally allows D+/D- lines to be
+> swapped in the devicetree config, and then sends an ATTACH command to
+> put the device in operational mode.
+> 
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> 
+> ---
+> 
+> Changes in v2:
+> Rename to microchip,usb5807.yaml
+> Remove reset-gpios description
+> Add maxItems
+> Add vddXX-supply properties
+> 
+>  .../bindings/usb/microchip,usb5807.yaml       | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/microchip,usb5807.yaml
 > 
 
-Thanks for the review, will fix up most of the comments.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> > +#define CS42L43_PIN(_number, _name, _reg, _field) { \
-> > +	.number = _number, .name = _name, \
-> > +	.drv_data = &((struct cs42l43_pin_data){ \
-> > +		.reg = CS42L43_##_reg, \
-> > +		.shift = CS42L43_##_field##_DRV_SHIFT, \
-> > +		.mask = CS42L43_##_field##_DRV_MASK, \
-> > +	}), \
-> 
-> Do you need this to be GCC extention for the value evaluation?
-> I mean the compound literal, IIRC, can be used directly as
-> 
-> 	.foo = &(struct foo){ ... },
-> 
-> Am I mistaken?
+yamllint warnings/errors:
 
-I will double check this, I had a feeling it needed the GCC
-extension.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/usb251xb.example.dtb: usb-hub@2d: swap-dx-lanes: size is 32, expected 8
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/usb251xb.yaml
 
-> > +	dev_dbg(priv->dev, "Setting gpio%d to %s\n",
-> > +		offset + 1, input ? "input" : "output");
-> 
-> How ' + 1' part won't be confusing?
+See https://patchwork.ozlabs.org/patch/1781103
 
-Kinda an un-avoidable confusion somewhere, the GPIOs in the datasheet are
-numbered from one. So this makes the debug print match the
-datasheet name for the pin, which is used in the pinctrl strings
-as well.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-> > +	if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
-> > +		ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
-> > +					     0, 0, CS42L43_NUM_GPIOS);
-> > +		if (ret) {
-> > +			dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
-> > +			goto err_pm;
-> > +		}
-> > +	}
-> 
-> Besides the fact that we have a callback for this, why GPIO library can't
-> handle this for you already?
-> 
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Apologies but I am not quite sure I follow you, in the device
-tree case this will be handled by the GPIO library. But for ACPI
-this information does not exist so has to be called manually, the
-library does not necessarily know which values to call with,
-although admittedly our case is trivial but not all are.
+pip3 install dtschema --upgrade
 
-> ...
-> 
-> > +static int cs42l43_pin_remove(struct platform_device *pdev)
-> > +{
-> > +	pm_runtime_disable(&pdev->dev);
-> 
-> This is simply wrong order because it's a mix of non-devm_*() followed by
-> devm_*() calls in the probe.
-> 
-
-I had missed there are now devm_pm_runtime calls, I will switch
-to that. But I would like to understand the wrong order, remove
-will be called before the devm bits are destroyed and it seems
-reasonable to disable the pm_runtime before destroying the
-pinctrl device. What exactly would run in the wrong order here?
-
-Thanks,
-Charles
+Please check and re-submit.
