@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF5D703251
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6D370325E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242555AbjEOQII convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 12:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S242359AbjEOQJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242479AbjEOQIG (ORCPT
+        with ESMTP id S242613AbjEOQJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:08:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A008B2D73
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:07:37 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-143-uRU4qE7IPxOBaj4CStDw6Q-1; Mon, 15 May 2023 17:07:06 +0100
-X-MC-Unique: uRU4qE7IPxOBaj4CStDw6Q-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 15 May
- 2023 17:07:01 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 15 May 2023 17:07:01 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ruihan Li' <lrh2000@pku.edu.cn>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Pasha Tatashin" <pasha.tatashin@soleen.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2 2/4] usb: usbfs: Use consistent mmap functions
-Thread-Topic: [PATCH v2 2/4] usb: usbfs: Use consistent mmap functions
-Thread-Index: AQHZhy64xAEf6PI6fk2CO41aswORIq9be+FQ
-Date:   Mon, 15 May 2023 16:07:01 +0000
-Message-ID: <2b6cb73d2cd14a46b7e4553566030b22@AcuMS.aculab.com>
-References: <20230515130958.32471-1-lrh2000@pku.edu.cn>
- <20230515130958.32471-3-lrh2000@pku.edu.cn>
-In-Reply-To: <20230515130958.32471-3-lrh2000@pku.edu.cn>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 15 May 2023 12:09:48 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF996213A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:09:19 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so19634097a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684166948; x=1686758948;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=341TNjLWrBgE06nFCXy3o4trQtS4Kz/UyWl3asj+o58=;
+        b=ONmAmt0S8b3OAN/l1TQZYtuIvY0578ZosX/w1FdaADgF8DjUcfRXTTvt6hP0d1v2cc
+         37EtDRvHGmFf4ep9TBiC40u+2tTqMMNYSuoa8B6CLxXznVl7Zj35gzWrnXen5rSXtF0a
+         BocBIDBVOBCCg7EFXXvjjEuecNXt2zn252WGHbfckcca8W/gGY3x/zvcscQtjUHbzkge
+         B2jmXvLUsvMd1doGDaq0ZGSCjWKA0li4kyHZMuAHXOTcDEgPmuv0soWQVLCqx507aqzr
+         b8xiTDG0qL3WGBSSM6vtYcp0LL1c7ZVjP6F6ZwVUa+cgJz/ns5O17zYKDsKb6V0g1t6R
+         4T0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684166948; x=1686758948;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=341TNjLWrBgE06nFCXy3o4trQtS4Kz/UyWl3asj+o58=;
+        b=ExbiFpgnaES00mw2ycgN3ODKeQvusCoNr1VXPiEg4IrSqjcAO5Uxtm4Vh5xC/g57mz
+         hTlhUK8LDKN2dUQhAbxV9DYTv0mQTbaCI/0luxwTM0+0qj+qxPVTS9ZDFuFEQLrXdpCz
+         JRtZk5+mtXFq76LMCJrtbBXUhaniLw/5WeaYUMUu1O2a8aZPy9AW0CxOXoHcJOXBGUj4
+         IAKgWNI7/Pu2neSG6OwNRAHcJm8uch+BxeeK0hm29D/kymsPzbc2wmj35gXot39XW7w0
+         kgjICUiCfmCVHVKfJtWXymNcBUSs8xFMHFeoVm6NRmk8fgxf4LukdhbW4g84dPPIYRV+
+         EKIg==
+X-Gm-Message-State: AC+VfDy3t9Oo6oAP8oqJcpNh1BazU1CxAqfYyLNo8dX8i+LZNe7iSnBx
+        ngB3RQAjyLjWN477KQqttZMVDg==
+X-Google-Smtp-Source: ACHHUZ4odzxwMAuZw7Ku9tt9Loesq0gqkp8UBDEeokIAa/0wKQVcMK8RQ1H3FKZsj1eTfL2Hu17Z/w==
+X-Received: by 2002:a17:906:fd83:b0:94a:845c:3529 with SMTP id xa3-20020a170906fd8300b0094a845c3529mr29009595ejb.9.1684166948208;
+        Mon, 15 May 2023 09:09:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id bm11-20020a170906c04b00b00965ec1faf27sm9738207ejb.74.2023.05.15.09.09.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 09:09:07 -0700 (PDT)
+Message-ID: <d6ea080e-f16b-d5e3-d826-3d7d620af820@linaro.org>
+Date:   Mon, 15 May 2023 18:09:06 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: thermal: tsens: Fix "make dtbs_check"
+ error
 Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <72707b76a717b410b06ed7fcc854314104f5f845.1684140883.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <72707b76a717b410b06ed7fcc854314104f5f845.1684140883.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ruihan Li
-> Sent: 15 May 2023 14:10
-> 
-> When hcd->localmem_pool is non-null, localmem_pool is used to allocate
-> DMA memory. In this case, the dma address will be properly returned (in
-> dma_handle), and dma_mmap_coherent should be used to map this memory
-> into the user space. However, the current implementation uses
-> pfn_remap_range, which is supposed to map normal pages.
+On 15/05/2023 12:13, Varadarajan Narayanan wrote:
+> While verifying make dtbs_check for ipq9574, qcm2290-tsens and
+> sm6375-tsens threw the following errors.
+> 	['qcom,qcm2290-tsens', 'qcom,tsens-v2'] is too long
+> 	...
+> 	['qcom,sm6375-tsens', 'qcom,tsens-v2'] is too long
 
-I've an (out of tree) driver that does the same.
-Am I right in thinking that this does still work?
+Subject: Fix error can be anything, so this should be specific, e.g.
+Document missing QCM2290
 
-I can't change the driver to use dma_map_coherent() because it
-doesn't let me mmap from a page offset within a 16k allocation.
 
-In this case the memory area is an 8MB shared transfer area to an
-FPGA PCIe target sparsely filled with 16kB allocation (max 512 allocs).
-The discontinuous physical memory blocks appear as logically
-contiguous to both the FPGA logic and when mapped to userspace.
-(But not to driver code.)
+https://lore.kernel.org/all/20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org/
 
-I don't really want to expose the 16k allocation size to userspace.
-If we need more than 8MB then the allocation size would need
-changing.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Best regards,
+Krzysztof
 
