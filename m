@@ -2,160 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F34D702795
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B594870279C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238236AbjEOIwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S238282AbjEOIxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238193AbjEOIw2 (ORCPT
+        with ESMTP id S238258AbjEOIxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:52:28 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E951AE;
-        Mon, 15 May 2023 01:52:24 -0700 (PDT)
-Received: from ip4d148da6.dynamic.kabel-deutschland.de ([77.20.141.166] helo=truhe.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1pyTwK-000721-PL; Mon, 15 May 2023 10:52:20 +0200
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1] docs: quickly-build-trimmed-linux: various small fixes and improvements
-Date:   Mon, 15 May 2023 10:52:19 +0200
-Message-Id: <6f4684b9a5d11d3adb04e0af3cfc60db8b28eeb2.1684140700.git.linux@leemhuis.info>
-X-Mailer: git-send-email 2.40.1
+        Mon, 15 May 2023 04:53:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D571A4;
+        Mon, 15 May 2023 01:53:04 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F8dWhE030931;
+        Mon, 15 May 2023 08:52:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=tL2Dh34WXBi3w0uOo/CEgFzRe9FVdf1V2DHXt3B1hzQ=;
+ b=RgF2SLU/GSbIC43sewd93OJMJuQob/OvXp/h4GcpmDVvR3haOU9gtgWCmUKnHIJqaRGS
+ zM/YtGmo0F8o8AehEEdxcNS5S0EutJWDp4JzJk07alCpgvPG+u+6OvcpgT1klbETGM7R
+ B3vqZS3dTkEwbYIKYt4ZQsetvwQt11RWsnoYCa5Px4UUmeFelWObYB7JNRzhe/quKuJD
+ vMFqFRrITU3nBkbW2ns34tBjo2HW/+MSDGQuEIVXyWuTB3BizyyzEZpEsC9781iymOJu
+ Bb0Z15FQiZPDvAoBVmZu1rGvQpa8B5kCqVkHQuthmRbvDz+D5OTlICsTTU9UlTO916UP ag== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkgnsskcr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 08:52:52 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34F8g6jY012065;
+        Mon, 15 May 2023 08:52:52 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkgnsskbd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 08:52:52 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34F4cDHw008930;
+        Mon, 15 May 2023 08:52:49 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qj264rt34-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 08:52:49 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34F8qlos22151814
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 May 2023 08:52:47 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E464220043;
+        Mon, 15 May 2023 08:52:46 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27F9620040;
+        Mon, 15 May 2023 08:52:45 +0000 (GMT)
+Received: from osiris (unknown [9.179.13.205])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon, 15 May 2023 08:52:45 +0000 (GMT)
+Date:   Mon, 15 May 2023 10:52:43 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v3 10/11] arch: Remove cmpxchg_double
+Message-ID: <ZGHy21ZEK4Q6umhV@osiris>
+References: <20230515075659.118447996@infradead.org>
+ <20230515080554.589824283@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1684140744;00699a24;
-X-HE-SMSGID: 1pyTwK-000721-PL
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515080554.589824283@infradead.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: t1yqOEs5O0QDxVKZWXKnAMcNMUkxJyzX
+X-Proofpoint-GUID: 01k30nTH3vJOdbRkPWfhMNqXAs4dbI1r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_06,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ spamscore=0 bulkscore=0 clxscore=1011 phishscore=0 adultscore=0
+ mlxlogscore=660 priorityscore=1501 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305150073
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* improve the short description of localmodconfig in the step-by-step
-  guide while fixing its broken first sentence
+On Mon, May 15, 2023 at 09:57:09AM +0200, Peter Zijlstra wrote:
+> No moar users, remove the monster.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+...
+>  arch/s390/include/asm/cmpxchg.h            |   34 -----------------
+>  arch/s390/include/asm/percpu.h             |   18 ---------
 
-* briefly mention immutable Linux distributions
-
-* use '--shallow-exclude=v6.0' throughout the document
-
-* instead of "git reset --hard; git checkout ..." use "git checkout
-  --force ..." in the step-by-step guide: this matches the TLDR and is
-  one command less to execute. This led to a few small adjustments to
-  the text and the flow in the surrounding area.
-
-* fix two thinkos in the section explaining full git clones
-
-Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
----
-
-Hi. Let me know if you would have prefered this as five seperate
-commits. Ciao, Thorsten
----
- .../quickly-build-trimmed-linux.rst           | 49 ++++++++++---------
- 1 file changed, 27 insertions(+), 22 deletions(-)
-
-diff --git a/Documentation/admin-guide/quickly-build-trimmed-linux.rst b/Documentation/admin-guide/quickly-build-trimmed-linux.rst
-index ff4f4cc8522b..f08149bc53f8 100644
---- a/Documentation/admin-guide/quickly-build-trimmed-linux.rst
-+++ b/Documentation/admin-guide/quickly-build-trimmed-linux.rst
-@@ -215,12 +215,14 @@ again.
-    reduce the compile time enormously, especially if you are running an
-    universal kernel from a commodity Linux distribution.
- 
--   There is a catch: the make target 'localmodconfig' will disable kernel
--   features you have not directly or indirectly through some program utilized
--   since you booted the system. You can reduce or nearly eliminate that risk by
--   using tricks outlined in the reference section; for quick testing purposes
--   that risk is often negligible, but it is an aspect you want to keep in mind
--   in case your kernel behaves oddly.
-+   There is a catch: 'localmodconfig' is likely to disable kernel features you
-+   did not use since you booted your Linux -- like drivers for currently
-+   disconnected peripherals or a virtualization software not haven't used yet.
-+   You can reduce or nearly eliminate that risk with tricks the reference
-+   section outlines; but when building a kernel just for quick testing purposes
-+   it is often negligible if such features are missing. But you should keep that
-+   aspect in mind when using a kernel built with this make target, as it might
-+   be the reason why something you only use occasionally stopped working.
- 
-    [:ref:`details<configuration>`]
- 
-@@ -271,6 +273,9 @@ again.
-    does nothing at all; in that case you have to manually install your kernel,
-    as outlined in the reference section.
- 
-+   If you are running a immutable Linux distribution, check its documentation
-+   and the web to find out how to install your own kernel there.
-+
-    [:ref:`details<install>`]
- 
- .. _another_sbs:
-@@ -291,29 +296,29 @@ again.
-    version you care about, as git otherwise might retrieve the entire commit
-    history::
- 
--     git fetch --shallow-exclude=v6.1 origin
--
--   If you modified the sources (for example by applying a patch), you now need
--   to discard those modifications; that's because git otherwise will not be able
--   to switch to the sources of another version due to potential conflicting
--   changes::
--
--     git reset --hard
-+     git fetch --shallow-exclude=v6.0 origin
- 
--   Now checkout the version you are interested in, as explained above::
-+   Now switch to the version you are interested in -- but be aware the command
-+   used here will discard any modifications you performed, as they would
-+   conflict with the sources you want to checkout::
- 
--     git checkout --detach origin/master
-+     git checkout --force --detach origin/master
- 
-    At this point you might want to patch the sources again or set/modify a build
--   tag, as explained earlier; afterwards adjust the build configuration to the
--   new codebase and build your next kernel::
-+   tag, as explained earlier. Afterwards adjust the build configuration to the
-+   new codebase using olddefconfig, which will now adjust the configuration file
-+   you prepared earlier using localmodconfig  (~/linux/.config) for your next
-+   kernel::
- 
-      # reminder: if you want to apply patches, do it at this point
-      # reminder: you might want to update your build tag at this point
-      make olddefconfig
-+
-+   Now build your kernel::
-+
-      make -j $(nproc --all)
- 
--   Install the kernel as outlined above::
-+   Afterwards install the kernel as outlined above::
- 
-      command -v installkernel && sudo make modules_install install
- 
-@@ -584,11 +589,11 @@ versions and individual commits at hand at any time::
-     curl -L \
-       https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/clone.bundle \
-       -o linux-stable.git.bundle
--    git clone clone.bundle ~/linux/
-+    git clone linux-stable.git.bundle ~/linux/
-     rm linux-stable.git.bundle
-     cd ~/linux/
--    git remote set-url origin
--    https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-+    git remote set-url origin \
-+      https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-     git fetch origin
-     git checkout --detach origin/master
- 
-
-base-commit: cdc822dda6f82269b94d5fa60ddc71d98c160fa0
--- 
-2.40.1
-
+FWIW, for s390:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
