@@ -2,221 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A63A703511
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92CA703520
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243193AbjEOQz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
+        id S243135AbjEOQzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243200AbjEOQzE (ORCPT
+        with ESMTP id S243143AbjEOQzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:55:04 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FC77292
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:54:56 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FGnKZf022730;
-        Mon, 15 May 2023 16:54:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=e745i9dUClWwOU51030xlBvW/fQegvEQxD5f5b4x+90=;
- b=iYbPixg4/ZtXszeXFslp1NM2a5Sxfa8I11lOrxvtOpHfgwduN0QvTl3M4H+HCNK9rs9D
- DXHnxp90BoLCroekgrj+krybBdsJgFWdW1z4G1lMLrR4sCxJeUrxdOw3AiedV6g0P6MB
- oqjppLZsJNrdlmEC4eT90W8j+8pVlvhCkWhd31H3PaCsJ7SCIt54arlfxF1KVJxJU6r8
- UVTn6xtzapMJgbiJfyil3v+fMZ53LggsLmcIZbqGgABh2xz6ouliqc4ki0IzjDf2NH5n
- Hcjy6JBORbkqzINLIpw+Gs05UDxrC/Y/ytvRIFJxZkNWtRB8oVOfgvnUWjujI5Das9Ju lQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj1b3rp9r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 May 2023 16:54:40 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34FGfnFU022522;
-        Mon, 15 May 2023 16:54:39 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qj1096582-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 May 2023 16:54:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LpkCP2pjEJ1epvnhZSdI1ImAMdamMsBlQ2mnW24pHjUnxWVCYbVunlG6DasqsC+pknLVtTpRiuvMwiUZhE9TfRscVHvoM/reHDoTANNugQaS+TZ1U9vJCJZL9yYH2WQzUkkX3aNKUi2aV4oJXZGf+G0lPinXv4/9Iadxx72/f4MjVhRLXZt1ni0iN+rMm/RPDoNvhgvt/kqAqB7sr5Aeyl8nb4sFEWA7y20JCJ5iFUwLAEc+PU0yYfcP2djWbLmv0/F7DcFp+qft/w0qvJbL0bYy0HsOO639GgSJxs9eAaKBIAV6Y22n5YDqWkE59Q9OfnKlxGIcFRCJQZVFcAzuVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e745i9dUClWwOU51030xlBvW/fQegvEQxD5f5b4x+90=;
- b=eSZCYT5OoSR//qlH3AwyWo8rX9RFsBNM432pDs9Lx4Ff5GcFsDzCN9jYRnlc+bB5ens8b+TGJ162HxazRlX0tEMFZlGNQHTL/Cfyfe+Ijr9UGRjn365Vk624WHGsxIAEp6Snnz6nZyVHjqCiQbgaie12us+7dANgOFqTgTByuW5jADBj65e+aYPZDCUQeENF10DVrmnl/2TCCjqD9pxd3UgJbvEfeB1hFY0ml3Xxz66rO8uYQX9ekity7tqn+vWc0hMU4NpdI1Va0J0E5peKQUKVunSjDlKpDeA8qCj8i/12EUwkVURCcnnlVrH7nqiC07D7UhMT1VNT3MpppEKzAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 15 May 2023 12:55:52 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12CF7280
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:55:44 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30771c68a9eso12284925f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:55:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e745i9dUClWwOU51030xlBvW/fQegvEQxD5f5b4x+90=;
- b=MaRXjmfMDPlE/WKYWLlwJWuYrpzQuVVpLuKT39+IIYi/tsG3xaPoD8gamVVv8TitzK39W+Kv101Ih6/QbU+1WEflm7b7hFfqQRpxWcJN7k22afuNbrYu1LoeN17COSgYF+pNucYC1wQISFaPn6pHOTRv6KCxtHb4ii1f+XhFsps=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by PH7PR10MB6312.namprd10.prod.outlook.com (2603:10b6:510:1b3::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Mon, 15 May
- 2023 16:54:16 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%6]) with mapi id 15.20.6387.030; Mon, 15 May 2023
- 16:54:16 +0000
-Date:   Mon, 15 May 2023 12:54:14 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
-Subject: Re: [PATCH 05/10] maple_tree: Make the code symmetrical in
- mas_wr_extend_null()
-Message-ID: <20230515165414.6akosqad45fbr2f6@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        maple-tree@lists.infradead.org
-References: <20230515131757.60035-1-zhangpeng.00@bytedance.com>
- <20230515131757.60035-6-zhangpeng.00@bytedance.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515131757.60035-6-zhangpeng.00@bytedance.com>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT3PR01CA0012.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:86::8) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        d=isovalent.com; s=google; t=1684169743; x=1686761743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ryd2XuUTtCTZE/0WdYTs96h3cJ4tdizQ3n9bS7GhAmI=;
+        b=dlfa3ZGjEGaCrxf907QCFTx1SXYssEwAqw6spdwq6uTfCnAOF+Mrvr+oTFwO6cR4g2
+         64ZgOhCESXHvSZY447Wy3MvM+2dfBejZCnS/6rVsE7tFX3/Rnq4n1bNQCi8Pth/hxrB0
+         +sKEU0fpR4kwVbciPBVh1Hp/T+RwJTovfUL83RK/PDO0PXSLJFfnYFZFxWeOzB5CSv/U
+         IaMeYU2g2ARifC42ufQCiWUMs+81cB4ZjyeGrt+zjMV6sxXyEwstEV4cwX/IZ8AuI19a
+         +M4zCCt1AqPXLmQAeMI7dxpybFcGTBitilkVa7A+9quYsmOf4QCC1SS3ajNMzQFa1D0N
+         +z2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684169743; x=1686761743;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ryd2XuUTtCTZE/0WdYTs96h3cJ4tdizQ3n9bS7GhAmI=;
+        b=DRCA8eSK7MdWp/VMnRfnPFpkaZInv5N6PC4cNOlzIIWP658JV5TIl6PxannYVy9sx2
+         YNwaXxNNkMvMTMmDFioTrZ82sazM5j/IwedQqiv47AUrrLgFop2wxVT2islfp6pzo4QE
+         UanrA4fglKgoXPl71q+ox6cDRqXEbFp6v+eDOpHBgMHOxHBv4IKRnRQBXC2Zify1MoBJ
+         tAqxVrSFxfsJadFJsU9RYJLFLGPe+U3uQLgE6SD0WuCdclWNETQpItD52WqcZQoasQ1Y
+         tpBoTzwSq9EEUkVfiLLmtKNjm+sRX/byMcecmUHDRzT6ae4a/avALP+qQ+GeD53lopr4
+         CH5Q==
+X-Gm-Message-State: AC+VfDw9MCghcnsjidbVO68CWAEetb99V5hy2QYDOkHYqHgsECL8Xfur
+        xsvU1Zdm2T3o/gqEXP5B0HIo5A==
+X-Google-Smtp-Source: ACHHUZ7wNcQDnO7VweE4lxfIGG5iAn5Ew1pMbwnzDqMCUXbOPa4SueI/k35X2ohcizEBHD1wiPxfkQ==
+X-Received: by 2002:a5d:51c3:0:b0:2f6:bf04:c8cc with SMTP id n3-20020a5d51c3000000b002f6bf04c8ccmr21896932wrv.55.1684169743166;
+        Mon, 15 May 2023 09:55:43 -0700 (PDT)
+Received: from ?IPV6:2a02:8011:e80c:0:9cdc:e9dc:864d:1455? ([2a02:8011:e80c:0:9cdc:e9dc:864d:1455])
+        by smtp.gmail.com with ESMTPSA id j17-20020adff551000000b003090cb7a9e6sm334293wrp.31.2023.05.15.09.55.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 09:55:42 -0700 (PDT)
+Message-ID: <f804f5f2-1114-4aeb-2199-4dda597e1f5e@isovalent.com>
+Date:   Mon, 15 May 2023 17:55:42 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|PH7PR10MB6312:EE_
-X-MS-Office365-Filtering-Correlation-Id: b392b15d-655c-46a3-ce73-08db556504ca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XyDgBIqQHFUhd76cKmYkoAqWkaVxwE6V4EPuwzyilvE0vvgoMRvDcWcOf8+L4ORFMYXENjMlB/C8gsvAZpZjqYufUB0h2TMmL3WuAi9NYje7BdfJtBtTLGXKicp8zSXza7BoHHfiLy9aTw1guOrk7+1ApwHNt1I1cthLZ2dy3VJZtZCpac8rH0VjDrmf6Pt7dR0LFRwYmtMJh4fShxKbaR5Rrx4jhkw4Z7jWcI5wlmXBJijmeO2UY23Yy5aLTDqJ4N9m2ZAaAh9XFpbhpqcW2iG7hqOdptAJ0H6VfrJW7Z8xjN9niQyRKq9lMqORABmrgVJeIGXrLTpdQkAQEhac+CjKnuit4UIxkXcySMqn2sVwvY/aUpp7gQYvIL3VSXbjYXPWe+tTUWvvwVn4mH5PFJiOlaeTS0UEmXwS7KjuTqscM2ATP5PgLvfu2U+3oOlSFoomsYIIBe91rFZ8fGsiZtDW38CLnAqTxkwQLRbp6j5ScBAiCWpS1KogQaPNrJesROH5FRiSnZVN+liqM6Nm8locHaL3TF/t7CVkaCaZvWfceX+yn2rrug2Sp6irarBz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(39860400002)(346002)(136003)(366004)(396003)(451199021)(33716001)(5660300002)(6486002)(316002)(41300700001)(478600001)(6916009)(86362001)(66476007)(4326008)(1076003)(83380400001)(6512007)(26005)(66946007)(66556008)(186003)(38100700002)(6506007)(9686003)(8936002)(8676002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aLdrFtktLnUSyDaj2CvxhgHWq5klkN+qy48o6V42w9Tp4siskWNeHP7X8vvP?=
- =?us-ascii?Q?iFgIRWiPov75+cQsKFv5miStJR1lWXWSyFsvHqVycDEHm4l6OPmsTuWfzkMu?=
- =?us-ascii?Q?Capy4sKnvJ2j1hjd5okJ+XcaKxWaxfZ3eIxw/oD3lPy7/FcfWpp1oEUpL05D?=
- =?us-ascii?Q?lccLMSwq1QklCyvfvV6GWBDLPn+8zozDqlIaDgw5oxW7Oh12+siU+5+RU9xv?=
- =?us-ascii?Q?dBiZTYF/JzR9UTnGgsaEHODGSFxjrgvMygNBAayhIXnX1jq7MxFeOB6hk5ZQ?=
- =?us-ascii?Q?L2teeukhF8iaaa3WzTJZAYJZFicm3DZT1Rv8wIs9ODIsAXxqxicZHz1qvzne?=
- =?us-ascii?Q?MT3auIiUQnLvNfTv5BOpJ5xJwv+EmShOgWlrxowIuOWtRxT1UVaalmxhZfQD?=
- =?us-ascii?Q?s1ievXa0pN1gvawwfJyp2YF9s64JaP059weFMKsYqqPrFYNOj06tHL6LRsKP?=
- =?us-ascii?Q?QuRmZs9qG3cxTfIGFyLKwimYTbJB8GK+L3U8/P5gzLdm+PSSptVFAZlZ4pTo?=
- =?us-ascii?Q?YMBfIbaivWnZ7ZQzGT0PqyoXNTjTiv14NBU3ueJLYWttp0xWKZiIWPtMwwcG?=
- =?us-ascii?Q?fOx3B+q1ylzPN27WNqQZDFC3pv7+Sfm5cxNtXhi+3R0BL0h0rIytdvKD5Y1T?=
- =?us-ascii?Q?ixEn4kzfkPh7bpPBd6lT7GeSgM99ywsswkXDMuz4fmxzM7wvnMQPWiMQmf40?=
- =?us-ascii?Q?2DDmLDC9XLtAXrfctwpwpFQieRjgMg1WNKIbN7GTiJod9OvdJRC87xAS4cA5?=
- =?us-ascii?Q?oZi8hGpLC33+D9qItq+Xnuta5Y3UulF2jmSskDcwRrfSyWGNxPLkDwb/HnHz?=
- =?us-ascii?Q?lLDKyUG1kiPUfIOwiBSbwL1ELDdkqO13mDVBV2vmRFiU8Hd53y61gvMPAsPo?=
- =?us-ascii?Q?/FXTU0rM74fA/t2F0cfTiZoYSEbI+KwFkXGOToeo/iNhunauteCWyoAcNdsw?=
- =?us-ascii?Q?pu9Qz3W8gqwxDvU/26CH1iZAkV7l1rT2tGi/xCG4HWHH47Vi6uVv9h3izF0V?=
- =?us-ascii?Q?TmLMljb01mF7OR+tOYUaa/Vp4of2dyP+kWTFdqABtXTNUUVsB9Dc3QPS+wve?=
- =?us-ascii?Q?8GdaHrxeFxi2mBTTZzx6mfhgY5TwuvXg+enB7B7VhWPuvPEWIDSIevX09F3G?=
- =?us-ascii?Q?b/z6qO9VnJYeu9+3YEgkRREyDv6ux/89WWgW6oI64apv2TqWf2c8YLQSCACj?=
- =?us-ascii?Q?wV/J6YfY2J2aqT15KNPii2mANVgLyo4EKtw+GHt3l2Xvei9L7jSdquLzXctD?=
- =?us-ascii?Q?aaKhPhD97+C5Pg37csF+uSE7Xuvw1TW/VruS4P91pVqXyMx2+M/lquaCp//1?=
- =?us-ascii?Q?m3OJzugZsAaFse/R6JpYRscyLzdEWPQBW7Jhsf8UOHyHPzFd052S4AhUqjvZ?=
- =?us-ascii?Q?eXYNrphxqNMlZYMAM7IClyejBFmTy6RqceYxP4M3zXqGEgxoPlItVj3rJkBN?=
- =?us-ascii?Q?77ISoJTWRO4fPMWMYaSBmUwQCPrWOM5lfyyS6g7Ky5JI2xCES7RKvSkr6uDn?=
- =?us-ascii?Q?79T3rvZnn9/O6BUQCpbs8bcq2YIPBeoxt36b+ooskwXu/Cm8VX53rRV6Thw9?=
- =?us-ascii?Q?1mbmxcJgFFC2OwvJM4eq27LV/XZ6aZZWf86E6LbeqT6V9SJtsVvJ5qrpfOEA?=
- =?us-ascii?Q?UA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?2K+1I4HzA+n2w12Vm38k6TkMsn3lNY9gMoIJX/Pi+5dcN83yGmYQtrmsBoij?=
- =?us-ascii?Q?NgtmtSE+C2KIzVducgpNZ4Ro1JKkvC3FkQwglG3K+6DwEAmUg8BI885Qgq/s?=
- =?us-ascii?Q?Y9zEn2Xv07g25BulXjMUyDu90+38VWbodDsibrz7qE56ha7rU9cVZgb1Krpu?=
- =?us-ascii?Q?pQWQekZ4yWbj0IkKS4/xmZFS0zpbqVSo0ZQqFgeM88gKQFDNj5INHbOIUklQ?=
- =?us-ascii?Q?1Klilyy4EKEfA0Dwcw5AGU7kqIeaeLBJG058K+IuCCaTJL+xVJAAf5SS8plX?=
- =?us-ascii?Q?R0JsQ3G4e9etlHv35pWdtvEJvefiWvgLajVWf2OQC2U6hQ8RPCw2XNyY17Qa?=
- =?us-ascii?Q?rpdx27oR3o1HkCOVwlvxsmO9YgVG4L9FhwNPrszaoqv9f9NWMxAG29Q/lT0O?=
- =?us-ascii?Q?RSYEP1J/8iCq9xFV6hfLEVh3zxEMG2UhcXrXYRoU6gNMxR5V+8kWdhvkmDgg?=
- =?us-ascii?Q?NB957jyEkvgXIBChTN9MYJ29aMD5I1t12Ii11z4uod9rau7Ms/CeZkDc8PMw?=
- =?us-ascii?Q?YkumXR+7R/ymldUSt7lrOc6WIaJEgEWPLEawQ7TR+QMCZR6/1qeo0BrIBc0I?=
- =?us-ascii?Q?piMxuCwBCQHhjgPo6vEqT/6FJHu2pIZuVmg3PRRQ/ViMChZe8BB3ylP+B2OP?=
- =?us-ascii?Q?SMwtHtnzZiAlIG4kgkkmI/yK+TsTwj5s1wYxyL6vUyz95DT4ogMCd5qeyTuE?=
- =?us-ascii?Q?GsMWbs6OHmyX+DmiKjoBJawDG0rj9ilMEms6b/6vBIVl+zZeAVIN+0UhoS6J?=
- =?us-ascii?Q?nYeUUF+gmrgSXEvRBqfEgipWcrGPVdaUowR37nz4DwRpLZISnDEMJT5YgUMv?=
- =?us-ascii?Q?NkA7Y6L3xSTpR+43dpmxb0Z33FPN1SSSEBtbPjaFHHfFERaZfAmS4NNs1WOz?=
- =?us-ascii?Q?/T/a8Y7YqF7mMUUMIThcQQCTPPeLGXcqqMa6UOfwtQArFutEIxn97qtvAxNY?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b392b15d-655c-46a3-ce73-08db556504ca
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 16:54:16.5147
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QiVw5dgO+uPFXHLQ03l50dpKHWDewr5QQZetcVftM7OwD+vw26nQ+VgHvI5uRPBtGPtQ/3ZneElUmqdKGvhQ3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6312
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_15,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=972 spamscore=0
- phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150142
-X-Proofpoint-GUID: nEVBNRpBSzZgFwWdl8PbIF6TTw_4iaoT
-X-Proofpoint-ORIG-GUID: nEVBNRpBSzZgFwWdl8PbIF6TTw_4iaoT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH bpf-next] bpftool: specify XDP Hints ifname when loading
+ program
+Content-Language: en-GB
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@corigine.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230511151345.7529-1-larysa.zaremba@intel.com>
+ <dd7a4bec-c0d0-4ffe-3bb8-e4d7ab4a01b8@isovalent.com>
+ <ZF5A752Z4eu8FAw9@lincoln> <ZGJePGCkfuCITRxn@oden.dyn.berto.se>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <ZGJePGCkfuCITRxn@oden.dyn.berto.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Peng Zhang <zhangpeng.00@bytedance.com> [230515 09:18]:
-> Just make the code symmetrical to improve readability.
+2023-05-15 18:30 UTC+0200 ~ Niklas Söderlund <niklas.soderlund@corigine.com>
+> On 2023-05-12 15:36:47 +0200, Larysa Zaremba wrote:
+>> [You don't often get email from larysa.zaremba@intel.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+>>
+>> On Fri, May 12, 2023 at 11:23:00AM +0100, Quentin Monnet wrote:
+>>> 2023-05-11 17:13 UTC+0200 ~ Larysa Zaremba <larysa.zaremba@intel.com>
+>>>> Add ability to specify a network interface used to resolve
+>>>> XDP Hints kfuncs when loading program through bpftool.
+>>>>
+>>>> Usage:
+>>>> bpftool prog load <bpf_obj_path> <pin_path> dev xdpmeta <ifname>
+>>>
+>>> Thanks for this patch!
+>>>
+>>> Regarding the command-line syntax, I'm not a big fan of the optional
+>>> sub-keyword for the device for XDP hints. I must admit I had not
+>>> anticipated other another use for the "dev" keyword. Instead, have you
+>>> considered one of the following:
+>>>
+>>> 1) Adding a different keyword ("xdpmeta_dev"?) and making it
+>>> incompatible with "dev"
+>>>
+>>> 2) Another alternative would be adding a sub-keyword for offload too:
+>>>
+>>>     bpftool p l [...] dev <[offload <ifname> | xdpmeta <ifname>]>
+>>>
+>>> If the ifname is provided with no sub-keyword, we would consider it for
+>>> offload for legacy support, possibly warn that the syntax is deprecated.
+>>>
+>>> What do you think?
+>>>
+>>
+>> I think first option would look a little bit nicer, but I like the idea to
+>> deprecate "dev <ifname>". In my current version, forgetting to add "xdpmeta"
+>> resulted in not very descriptive errors, this may confuse new users. So what
+>> about:
 > 
-> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+> I agree the first option looks a little bit nicer, but I think both 
+> options would work.
+> 
+>>
+>> bpftool prog load [...] xdpmeta_dev/offload_dev <ifname>
+>>
+>> "dev <ifname>" syntax would still work, but with a big warning, like this:
+>>
+>>   'bpftool prog [...] dev <ifname>' syntax is deprecated. Going further, please
+>>   use 'offload_dev <ifname>' to offload program to device. For XDP hints
+>>   applications, use 'xdpmeta_dev <ifname>'.
 
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+OK let's go with this
 
-> ---
->  lib/maple_tree.c | 26 ++++++++++++++------------
->  1 file changed, 14 insertions(+), 12 deletions(-)
-> 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index fbb6efc40e576..4c649d75a4923 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -4256,19 +4256,21 @@ static inline void mas_wr_extend_null(struct ma_wr_state *wr_mas)
->  {
->  	struct ma_state *mas = wr_mas->mas;
->  
-> -	if (mas->last < wr_mas->end_piv && !wr_mas->slots[wr_mas->offset_end])
-> +	if (!wr_mas->slots[wr_mas->offset_end]) {
-> +		/* If this one is null, the next and prev are not */
->  		mas->last = wr_mas->end_piv;
-> -
-> -	/* Check next slot(s) if we are overwriting the end */
-> -	if ((mas->last == wr_mas->end_piv) &&
-> -	    (wr_mas->node_end != wr_mas->offset_end) &&
-> -	    !wr_mas->slots[wr_mas->offset_end + 1]) {
-> -		wr_mas->offset_end++;
-> -		if (wr_mas->offset_end == wr_mas->node_end)
-> -			mas->last = mas->max;
-> -		else
-> -			mas->last = wr_mas->pivots[wr_mas->offset_end];
-> -		wr_mas->end_piv = mas->last;
-> +	} else {
-> +		/* Check next slot(s) if we are overwriting the end */
-> +		if ((mas->last == wr_mas->end_piv) &&
-> +		    (wr_mas->node_end != wr_mas->offset_end) &&
-> +		    !wr_mas->slots[wr_mas->offset_end + 1]) {
-> +			wr_mas->offset_end++;
-> +			if (wr_mas->offset_end == wr_mas->node_end)
-> +				mas->last = mas->max;
-> +			else
-> +				mas->last = wr_mas->pivots[wr_mas->offset_end];
-> +			wr_mas->end_piv = mas->last;
-> +		}
->  	}
->  
->  	if (!wr_mas->content) {
-> -- 
-> 2.20.1
-> 
+Thanks,
+Quentin
+
