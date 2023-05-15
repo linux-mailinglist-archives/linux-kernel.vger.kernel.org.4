@@ -2,83 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C702703800
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7461C7037FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244162AbjEOR00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
+        id S244253AbjEOR0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244154AbjEOR0H (ORCPT
+        with ESMTP id S244084AbjEORZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:26:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9213299
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684171451;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WA/oTDONq4SSLwtY9ScAiCK010QAeUOXJ2/R7swknQM=;
-        b=Wwx188gahr/xltq4PEW9oQMuIPcLRnLTzYv+uwcP8GMnivLoFDXF3y22GSG9y0OokCBm8B
-        4+ADHNvaJ5p4AjShI0H3GmCGNtKeb+D1jGj+BHfN+ebhnpFNJPNmmyC29sXJ8y1QZBkoB3
-        INyXavUZ7ptukRPdd5BB2/DGh+Agims=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-496-bG6seQ-3Pt67mCaL1Ras2Q-1; Mon, 15 May 2023 13:24:10 -0400
-X-MC-Unique: bG6seQ-3Pt67mCaL1Ras2Q-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f4231d7893so58050995e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:24:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684171449; x=1686763449;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WA/oTDONq4SSLwtY9ScAiCK010QAeUOXJ2/R7swknQM=;
-        b=IvE4boyUFGZAAHxPWx/aaWG9k2YDlK6n7shjFamAkaE0p1Ox/7A5QSD0vnya8Lyl4s
-         718ypqcCGkjI4X1qGUMjdyDTYOc33/fk22ZKsYC+91P4+n0p3OGGHCjKooU7mBThTEtV
-         //o6mMBmzdEIUqD4dJae1gW5/LXLFeFK94ZYccBLYlpnQNOyrtvF6ULN2ovSAkm9w4lj
-         Z9dZ3Wg9VHr7f5CSW1Uhb4z/MGx6Fibbxb85lZoIdVIc1i7jA2VNY+a0NAvFQiVea8T3
-         99IauWJTnQ40ArFto2WJHGHN9XKEP6NM7OqAttTvSb8ty60H/TGYIhAj2YN+KJarC6MP
-         rZFg==
-X-Gm-Message-State: AC+VfDx0X+d6qXE/JhhPq8fxgaBTezKDtEgecyhVllxEJOrQ2hHYzNbv
-        tg076twjuMf6Lxj5ppG7FpNmOf7RimFyUwDW9f33UGe2YPi3KZx15qJtnF5yQzr1oUhztppNKRP
-        R6pX7geYlRZKMDP6H+nMFb3k=
-X-Received: by 2002:a05:600c:3658:b0:3f4:2374:3517 with SMTP id y24-20020a05600c365800b003f423743517mr18234014wmq.19.1684171449182;
-        Mon, 15 May 2023 10:24:09 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7Qa+UfJ/+7G0UeAm3GAtIUkGXPqGB24MoELUZyiaHOKL2BgTHgJkW0o+U1cXnSTnpsxhynIA==
-X-Received: by 2002:a05:600c:3658:b0:3f4:2374:3517 with SMTP id y24-20020a05600c365800b003f423743517mr18233998wmq.19.1684171448794;
-        Mon, 15 May 2023 10:24:08 -0700 (PDT)
-Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c230100b003f423508c6bsm15373wmo.44.2023.05.15.10.24.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 10:24:08 -0700 (PDT)
-Message-ID: <a50022a6-59e1-6b53-2c5b-c6eb44277876@redhat.com>
-Date:   Mon, 15 May 2023 19:24:07 +0200
+        Mon, 15 May 2023 13:25:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49ABC100F4;
+        Mon, 15 May 2023 10:24:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 293CB62CD7;
+        Mon, 15 May 2023 17:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A7CC4339B;
+        Mon, 15 May 2023 17:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684171484;
+        bh=2WihzjevgA/VftUyRW5cgW08ExyJfimZx9zxWsTB+Bo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eGk1ivJDCnlpT9Abm/hXbBUycqR9dUnSnLNFdUWJemevTNpFm1UPz9hFe9C0s6M1n
+         qXaPK1rSHR++txgXexCXWsVGs+FL6n5BkKZ+68M3WQWTh1TrdFtXMC8DTP5NNlsbwn
+         8aa9VELn5jfpfzPtoIDTjBppP2tGioOuRKovaKRjzZiEwFkkIAJWeC1aeNbijzmrra
+         Po0Ech39PbHFrJJEVD4QknC822WsHYDkn5jhd+7mShuUg0JJZ4xSubv5pjr0VMpjNl
+         9I5ENLj2gQhN/Et/CvsVzmLH2dpm7AsXNAtxeg5io6h+yc8qVAvLnFfzE+rl++O+Oq
+         /m8T/J8SdTKaQ==
+Date:   Mon, 15 May 2023 18:24:40 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andreas Kemnade <andreas@kemnade.info>
+Subject: Re: [PATCH] dt-bindings: vendor-prefixes: document TeeJet
+Message-ID: <20230515-cover-dallying-fb1599444827@spud>
+References: <20230515155747.499371-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH v5 4/4] fpga: add initial KUnit test suites
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20230511141922.437328-1-marpagan@redhat.com>
- <20230511141922.437328-5-marpagan@redhat.com>
- <ZF/LpdlyBu2Z1uQE@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZF/LpdlyBu2Z1uQE@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f6Qn7+5fTTxrbIBt"
+Content-Disposition: inline
+In-Reply-To: <20230515155747.499371-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,146 +59,55 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--f6Qn7+5fTTxrbIBt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2023-05-13 19:40, Xu Yilun wrote:
-> On 2023-05-11 at 16:19:22 +0200, Marco Pagani wrote:
->> Introduce initial KUnit tests for the FPGA subsystem. Tests are organized
->> into three test suites. The first suite tests the FPGA Manager.
->> The second suite tests the FPGA Bridge. Finally, the last test suite
->> models a complete FPGA platform and tests static and partial reconfiguration.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+On Mon, May 15, 2023 at 05:57:47PM +0200, Krzysztof Kozlowski wrote:
+> Document TeeJet vendor prefix (used in am3517_mt_ventoux.dts board).
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[...]
+I tried to google what a mt ventoux was but there appears to be precious
+little information on it.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
->> +static void fpga_bridge_test_get_put_list(struct kunit *test)
->> +{
->> +	struct list_head bridge_list;
->> +	struct fake_fpga_bridge *bridge_0_ctx, *bridge_1_ctx;
->> +	int ret;
->> +
->> +	bridge_0_ctx = test->priv;
->> +
->> +	/* Register another bridge for this test */
->> +	bridge_1_ctx = fake_fpga_bridge_register(test, NULL);
->> +	KUNIT_ASSERT_FALSE(test, IS_ERR(bridge_1_ctx));
-> 
-> I think bridge_1 could also be initialized in test_init together with
-> bridge_0
+Cheers,
+Conor.
 
-I can do it, but it would remain unused in the previous test case.
- 
->> +
->> +	INIT_LIST_HEAD(&bridge_list);
->> +
->> +	/* Get bridge_0 and add it to the list */
->> +	ret = fpga_bridge_get_to_list(bridge_1_ctx->bridge->dev.parent, NULL,
->> +				      &bridge_list);
->> +	KUNIT_EXPECT_EQ(test, ret, 0);
->> +
->> +	KUNIT_EXPECT_PTR_EQ(test, bridge_1_ctx->bridge,
->> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
-> 
-> Should operate on bridge_0_ctx?
+> Cc: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Doc=
+umentation/devicetree/bindings/vendor-prefixes.yaml
+> index c3d426509e7e..5258090e2e02 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -1341,6 +1341,8 @@ patternProperties:
+>      description: Technologic Systems
+>    "^techstar,.*":
+>      description: Shenzhen Techstar Electronics Co., Ltd.
+> +  "^teejet,.*":
+> +    description: TeeJet
+>    "^teltonika,.*":
+>      description: Teltonika Networks
+>    "^tempo,.*":
+> --=20
+> 2.34.1
+>=20
 
-Yes, sorry. Code and comments are reversed. I'll fix it in the next version.
+--f6Qn7+5fTTxrbIBt
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> +
->> +	/* Get bridge_1 and add it to the list */
->> +	ret = fpga_bridge_get_to_list(bridge_0_ctx->bridge->dev.parent, NULL,
->> +				      &bridge_list);
->> +	KUNIT_EXPECT_EQ(test, ret, 0);
->> +
->> +	KUNIT_EXPECT_PTR_EQ(test, bridge_0_ctx->bridge,
->> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
-> 
-> Should operate on bridge_1_ctx?
+-----BEGIN PGP SIGNATURE-----
 
-Same.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGJq2AAKCRB4tDGHoIJi
+0qp7AP9m1NXo9WESblF1ux0++KWkRFk5T4b8CcRC7hoNS82MpgEAw/ZIuWXYPrLC
+7FV8RDjRiEi1eZn1KT44o2iPFz2urAk=
+=rQuS
+-----END PGP SIGNATURE-----
 
->> +
->> +	/* Disable an then enable both bridges from the list */
->> +	KUNIT_EXPECT_TRUE(test, bridge_0_ctx->stats.enable);
-> 
-> Why expect enable without fpga_bridges_enable()?
-
-To check that the bridge is initialized in the correct (enabled) state.
-
-[...]
-
->> +static void fpga_test_partial_rcfg(struct kunit *test)
->> +{
->> +	struct fpga_base_ctx *base_ctx;
->> +	struct fake_fpga_region *sub_region_0_ctx, *sub_region_1_ctx;
->> +	struct fake_fpga_bridge *sub_bridge_0_ctx, *sub_bridge_1_ctx;
->> +	struct fpga_image_info *partial_img_info;
->> +	int ret;
->> +
->> +	base_ctx = test->priv;
->> +
->> +	/*
->> +	 * Add two reconfigurable sub-regions, each controlled by a bridge. The
->> +	 * reconfigurable sub-region are children of their bridges which are,
->> +	 * in turn, children of the base region. For simplicity, the same image
->> +	 * is used to configure reconfigurable regions
->> +	 */
->> +	sub_bridge_0_ctx = fake_fpga_bridge_register(test,
->> +						     &base_ctx->region_ctx->region->dev);
->> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_0_ctx));
->> +
->> +	sub_region_0_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
->> +						     &sub_bridge_0_ctx->bridge->dev);
->> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_0_ctx));
->> +
->> +	ret = fake_fpga_region_add_bridge(sub_region_0_ctx, sub_bridge_0_ctx->bridge);
->> +	KUNIT_ASSERT_EQ(test, ret, 0);
->> +
->> +	sub_bridge_1_ctx = fake_fpga_bridge_register(test,
->> +						     &base_ctx->region_ctx->region->dev);
->> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_1_ctx));
->> +
->> +	sub_region_1_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
->> +						     &sub_bridge_1_ctx->bridge->dev);
->> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_1_ctx));
->> +
->> +	ret = fake_fpga_region_add_bridge(sub_region_1_ctx, sub_bridge_1_ctx->bridge);
->> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> 
-> I'm wondering if we need to construct the topology for partial
-> reconfiguration test. The FPGA core doesn't actually check the topology.
-> It is OK to do partial reconfiguration for a region without parents as
-> long as its associated FPGA manager device has the capability.
-> 
-> Thanks,
-> Yilun
-
-I agree with you. Creating a hierarchical layout is rather unnecessary.
-
-Initially, the idea was to test that all components behave as expected
-in a complete setup, e.g., only the bridge of the specific reconfigurable
-region gets disabled during programming and then re-enabled.
-
-However, after some iterations, I'm starting to think that it would be
-better to restructure the whole test code into a set of self-contained
-test modules, one for each core component. 
-
-In that way, each module would contain the implementation of the fake/mock
-low-level driver and the related tests. For instance, the manager module
-would contain the implementation of the fake manager and the test_img_load_buf
-and test_img_load_sgt test cases. Similarly, the bridge module would contain
-the fake/mock bridge implementation and the test_toggle and test_get_put_list
-cases.
-
-I think that in this way, the code would be simpler and more adherent to the
-unit testing methodology. The downside is that making tests that need multiple
-components would be more cumbersome and possibly lead to code duplication.
-For instance, testing the region's fpga_region_program_fpga() would require
-implementing additional local mock/fakes for the manager and bridge.
-
-What do you think?
-
-Thanks,
-Marco
-
-[...]
-
+--f6Qn7+5fTTxrbIBt--
