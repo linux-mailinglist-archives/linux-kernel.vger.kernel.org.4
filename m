@@ -2,88 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E58702BFF
+	by mail.lfdr.de (Postfix) with ESMTP id D0131702C00
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:56:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241670AbjEOL4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S241184AbjEOL4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241197AbjEOLza (ORCPT
+        with ESMTP id S241573AbjEOLza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 May 2023 07:55:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2F130D5;
-        Mon, 15 May 2023 04:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=1ZrFV+Wc8/ZJUp/FX577rHKoHb
-        pguabdBOPfN9icKLDwx8+lfxd4KDXZXBt65mjoFYofoKg9TRudHshWljB9gYETArKptQo+oFRmJA1
-        eo+2zBbp2gLaQcK/ZxTmXWX97XuuhWXTpwW/8B/J5idTE6bKUfrokWnlmPydpnBH4EOjx3U9VQodk
-        naXhjhdEubAh9RyJuU3+ESV+S8FH7s0ArSTHvUwa8nMEiMKJBSae2NCDhoQv3+VGQt1/Xqw4leXUd
-        4n5VoEHIgXVD6eCHDBgn3WYe118PghBRjPE8s+mIhsg8a84B4PUzFWDZj49OKSahwEUNl8P/qrzX/
-        5Bg9taNg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pyWi1-00224V-0U;
-        Mon, 15 May 2023 11:49:45 +0000
-Date:   Mon, 15 May 2023 04:49:45 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v5 3/6] mm/gup: remove vmas parameter from
- get_user_pages_remote()
-Message-ID: <ZGIcWaZBUXiTh1G9@infradead.org>
-References: <cover.1684097001.git.lstoakes@gmail.com>
- <afe323639b7bda066ee5c7a6cca906f5ad8df940.1684097002.git.lstoakes@gmail.com>
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F0F30D7;
+        Mon, 15 May 2023 04:49:59 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F9B366058D2;
+        Mon, 15 May 2023 12:49:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684151398;
+        bh=uLQ/16EflB7+33SpW7tkukm03+MQ1MMQ8JfjTfIpkps=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JKcjfZ84MUxXab+z5aVIruWHTLwJdV9jfEJ5NSggWUTVLJLr8tPH+O1w7M671QAl/
+         L3/SXo9DvaH+19OChEMyRYVh9Ca00ow8z7ztrZMUHUxwOE2+H1TjMjwt0HCk9x/Fxd
+         2NX2gWg2UwaO9oi+jymEODLXywC1thWn1Zj37B/wvZzB209h8b2fvoNTwRMwID8uAB
+         DunoY+ZWzqNmdysO8jcGc18iMS02xFevLMi+Zgr/E4pQ7gST2MLj0PT8I8MH3ertpZ
+         bEd6h8IWkYWzmXGcMjrluBlTAUtmQ8X9/bBEf2ibdDVkW3RBkcSYHLivJM6Ra84UQt
+         sNVQsVA6v4LuQ==
+Message-ID: <aa383909-7a03-eb24-3a61-397f2a6adb54@collabora.com>
+Date:   Mon, 15 May 2023 13:49:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <afe323639b7bda066ee5c7a6cca906f5ad8df940.1684097002.git.lstoakes@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] clk: mediatek: mt8365: Fix inverted topclk operations
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Mergnat <amergnat@baylibre.com>
+References: <20230511133226.913600-1-msp@baylibre.com>
+ <8603c2b2-2a5b-48f6-9b08-9b3b518b716b@gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <8603c2b2-2a5b-48f6-9b08-9b3b518b716b@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,6 +64,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+Il 12/05/23 13:51, Matthias Brugger ha scritto:
+> 
+> 
+> On 11/05/2023 15:32, Markus Schneider-Pargmann wrote:
+>> The given operations are inverted for the wrong registers which makes
+>> multiple of the mt8365 hardware units unusable. In my setup at least usb
+>> did not work.
+>>
+>> Fixed by swapping the operations with the inverted ones.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+...with the not inverted ones, you mean!
+
+Anyway,
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+>>
+>> Reported-by: Alexandre Mergnat <amergnat@baylibre.com>
+>> Fixes: 905b7430d3cc ("clk: mediatek: mt8365: Convert simple_gate to mtk_gate 
+>> clocks")
+>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+>> ---
+>>   drivers/clk/mediatek/clk-mt8365.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/clk/mediatek/clk-mt8365.c b/drivers/clk/mediatek/clk-mt8365.c
+>> index 6b4e193f648d..6d785ec5754d 100644
+>> --- a/drivers/clk/mediatek/clk-mt8365.c
+>> +++ b/drivers/clk/mediatek/clk-mt8365.c
+>> @@ -583,15 +583,15 @@ static const struct mtk_gate_regs top2_cg_regs = {
+>>   #define GATE_TOP0(_id, _name, _parent, _shift)            \
+>>       GATE_MTK(_id, _name, _parent, &top0_cg_regs,        \
+>> -         _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>> +         _shift, &mtk_clk_gate_ops_no_setclr)
+>>   #define GATE_TOP1(_id, _name, _parent, _shift)            \
+>>       GATE_MTK(_id, _name, _parent, &top1_cg_regs,        \
+>> -         _shift, &mtk_clk_gate_ops_no_setclr)
+>> +         _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>>   #define GATE_TOP2(_id, _name, _parent, _shift)            \
+>>       GATE_MTK(_id, _name, _parent, &top2_cg_regs,        \
+>> -         _shift, &mtk_clk_gate_ops_no_setclr)
+>> +         _shift, &mtk_clk_gate_ops_no_setclr_inv)
+>>   static const struct mtk_gate top_clk_gates[] = {
+>>       GATE_TOP0(CLK_TOP_CONN_32K, "conn_32k", "clk32k", 10),
+
+
