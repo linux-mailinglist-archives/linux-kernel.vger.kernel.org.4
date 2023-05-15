@@ -2,327 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C97703E81
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A4E703E82
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245371AbjEOUTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 16:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S245315AbjEOUTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 16:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245301AbjEOUSn (ORCPT
+        with ESMTP id S245312AbjEOUS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 16:18:43 -0400
-Received: from sonic310-11.consmr.mail.ir2.yahoo.com (sonic310-11.consmr.mail.ir2.yahoo.com [77.238.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B3A132AB
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1684181881; bh=PH47Hq7/S8NqOww8hP8w5e2nE3GA6cTmgI+LCsNt/lw=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=ahosl3irSEK+8Yf3ViIDOkJZzaodMbFpi6Tw52duT/T4UfvZmP3iH6qwbZNnaOXoySbEgSp8BaDN95BXIjmS7aw4j5oHcX6Ap1X0nEVlnbmzmayPY9ieDRVWINDXDfLH/AWsTDNTSuSVzU7ZPW0bAB8EsT2dn/w7aX41+NlEeJTZ3sV4ZnXvTWNcWpCc7IPZper819MX8mPMacsWjIeCZ6N0vfPVKP2Z0U1whPS7RW+Mk6PD9ptPyzClslJDjxQBvPecljoYLQVit3gSSi1Hw6r+PtwbSyDpkjKYgiJzD6I5GBx2/n2aerpqZDFFHrZ7voeSA2IJ0UhB1YEA5+jfFw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1684181881; bh=0Plgg6qWOoVkz/yqfdS4d7tWO1+QOLo8jFpFZC+Z5rb=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=pT3dmhoKENHVlGsrHcqnJhfJ9fgBFaNWq5ePvGd3P246/gcv29xnZRn6sd8fq7N16hiTb2wsvLkOwFUirrporqnJmr8eSf5Rxy68sbXJRfoxV/JpRo/g3lHYgYg8gncdHvkA0SJgeF7Jq+2JBRtJobSsQ4h/iWY0Ue3Xjim3x7jKa6YDTbRkgU/ta+hx8DP1cFTW3QUaObMFBXeJl6tQIjpNbt7+LSVdlehA9rNj0EJLeN7MCzcEaqKWBG+ziXThHlEr/hvKRHLBgbT7b3RBurdJpyGGPlpewlGtl3ndOVrW1zrQ/lJx2ZowmEZcBlJHplKIvInSc1bXRl0duWC74Q==
-X-YMail-OSG: SAgfoq0VM1kwQM1Mef7SRjqJn87QzRWzX_Yxbq780VUSrE33UeDp9.nG0YzQ39a
- rpaJVBA8tjqQT_d5k2HtMtBdwEFcqwnCFapa0rGvivM0RoV_bgL4UOsA70GZ1k5b99qn2ZtqGUkF
- v.e7GsIdQd2WHE2FymewxAdzT3zoINtC_eFtvnm9DIQxmqJaCHUISZMIs9oqC5cznfBs.pA.fCwQ
- 2uFc49EzYHBu7Y2pyTdJ_O7132owUb6nl4l1U6UHBNpBQpZJIRwzxSF3CDsc9amLT76x02grkuFj
- ykK23NwAbKSff3Y4FegxR5LW_AhguDk2aXvHsVvl3ShmmufTj8L8nx98pEIOKLGNQtKI__BcaqUy
- Hkbd9.Smzv.KVySa6cdnWEQDB3WlyszuFERxYLqtZh9n5VTwkeZSvduu.bMVxEmiu7vKs9r9o6zv
- 9Ga.VwMqV_MybnULWNvqrIPqUoi9S_IcJ3nsQiDBkZZTc2wbV5rGCg_CRkiJ_My0VPiSw5Seu5a9
- XM_goEgmaBgtqDdp3H0F3dQp3cRpeOUvMrEPoioOBIVBVxbJtvceA5ssbzSzeO95PZbVqaymGPOe
- LqeyBO6gi0qguO9wwpuAWK7sb8I1Ilru0oA8qBWrrJ1bInfZgRjae9NUNk0wITN3L4Eh6c5uFKO9
- F3tKA5oHXIVL0W19MoPY1qg7yQvZ6FmLrdYLHlETPlBP4uOPY7RXpwP4YotgriAAWhsEkBnmiaCY
- nPlMN1xGuN8rv7isxpVzYSYnBO_spNNj7Pcc..q9Mbvwx9vzpvtTHTiNXcRWisyOK9SxD7_F_fi1
- n7VF4kXIMMJL4cVbZ2VvMbVjV18_r0QABiVZlP9TPBsPANzLpGj2m.OHW8CKTeB7lUyt3uJ22wIy
- g.SG39uLuzTVgcYPXcmO75X.F2WM92wvI6o1ZyArWkLT2NMPMUfFHpp8paPJapcFzFnDJPFHCcL0
- R6PTyvPDDTfxryuUbgIMxRD123C8r1qivIurs7VAm7Kba92Pt0QE0eGjAyzElCAHmenx9E0RMebY
- I0jLqFpZHrdNBsDkDzH776nlbUIwUMv5wzyJGXbTym.ADCW5QXIIMkYXOckFY0mO8N_ht9Avwo6X
- NFNz.9f8EJn5jv1MgKnu7qASe4xgJ6YClabQyUvWGDewJkjNP13iBa5jAkjNeWPOIROq4nrdGHxA
- E5STaTWRW3AocL3iJlxKc3k0cxH_nF6ROXRzHtXhq3eU.F2DLqv86mZTb5wFMqdCjePwY7NRS1Yh
- SkNBKpQXBdrvQwi.z65Y8OZ1E8LFprlA2s8HDYce1iX4wsK_zyu8MOGxL7rhnp8D5CARSjrgSR_P
- jP0KaKPA4gs7_SPY4PmSItSph2V7.pnH2CrIPB0FMwPUlMRUQe2w_3Kb1FnhuY9NRvUBgFcPfI_f
- DzacYl4g7yOtRHp1Hj4OYC3gY2cRNWlC_YC0xjnXJWaClceGhY3BqU5Jt95Z50j3GYRdaKmWZoVw
- _TrNONIzx6MUpnNZDWh0cUl5GEAbXqP1SoXZ0QtwK5Crqb5l_MsOlyzn1q34SgsS_t0Bc5bG6.kR
- pe5DvPnYKvrqUPP_4JOyNTfloNIbd8QsMuuWmxfV1cyMVjPI0unkHKe6HC9CJ7YPzNYuqwA80amM
- FdlkiGrF1BdZPcRcJ1ex14V1QOvOI3NURMctr1jxsPlC4AfrnAsu8GxmbM7Yu7.XLacxQJ9PsnnC
- F.zIWzz4TngnGCheeZA4991rqRipSo6YmSKzGMqe7HjeEHZQrDx9oWXYcw_hxVGzegRu1_pMr0O6
- tXnp8b01ZucsBUZvJCRlGsDJlM.SMBJlSPWCYDQ3ofbjWIPiftTVk0xFDR2IbGI_TUx74IFfPRy1
- pbtskOGzeYa59tbD6aXVPFZV590mbUKn0vj8aZn3_yy5PFAIy608c701TB1LfhmQiQH5n7oYQeAC
- jqX9bh7RHmWYmOnNBxG_zleTIxr8QZKmDafGSu2gl7rwPSJ87DhV_rk5OuZ5qzFNk_AYJFNfESBR
- O_i18dt9.llXQN6FolTFZzWQ8BC9ZpCRxH.yEE1r34.rUVZ37_2_yNN6b4MItpeaz.oyP5O1BxWz
- X_XAFhidJFjKx2Z2T1LsLatXUauE0WpD1EFKJCXJnK7U77tHzVeotxu089IWUblQAxWxGBXTFj7M
- me2YL2C6ue_wQ6VXbwhbQNz.EC0IlqH.OLhRnQjdnfJbUZZTraYn1GVsmJMXDjHiUkPswQfVzdOr
- 50ptj1q5yhTDQdirdqkEsUUFn9GGtIL9Y0UwkK_ex9H_YPGgsUmTq6_iiKRZo3wi.cO16y0SZ.wR
- 7OIdrrq5wJEFCU1r2XyQriUwif1p1
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 80f32848-3f08-4cf1-8e5e-ad35d3e9bc3e
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Mon, 15 May 2023 20:18:01 +0000
-Received: by hermes--production-ir2-7867f454fc-8nkq6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID cb456a1ee9275492b492c35f2e11856e;
-          Mon, 15 May 2023 20:17:56 +0000 (UTC)
-From:   Jakob Hauser <jahau@rocketmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Jakob Hauser <jahau@rocketmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 10/10] dt-bindings: Add rt5033 mfd, regulator and charger
-Date:   Mon, 15 May 2023 22:17:12 +0200
-Message-Id: <20230515201712.30124-11-jahau@rocketmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230515201712.30124-7-jahau@rocketmail.com>
-References: <20230515201712.30124-7-jahau@rocketmail.com>
+        Mon, 15 May 2023 16:18:58 -0400
+Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF53E711
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:18:51 -0700 (PDT)
+Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 20230515201848f930aa1f7b055764a4
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 15 May 2023 22:18:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=alexander.sverdlin@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=Qd4hyXtUtAFWGI1NtX0qnzunvWWBL8kJFEDK0PYGeX8=;
+ b=XDX6YPOkAAHJ7oFR0xOkbhV0VYjs9Jv1pjWdTvI8AGdMPgoMfXSb9+WaUoD97kPKw/jBVg
+ HuVqVmoITKO5riKtm39VwSlVVrTywpBcVBgnaswLdkLAl+02M6SmOnRME6PY6RvS1erZPXFx
+ BbjJ612EoZHBeVPkT/poSV7+ZCdqE=;
+From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
+To:     NXP Linux Team <linux-imx@nxp.com>
+Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] i2c: lpi2c: cache peripheral clock rate
+Date:   Mon, 15 May 2023 22:18:44 +0200
+Message-Id: <20230515201844.215253-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-456497:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree binding documentation for rt5033 multifunction device, voltage
-regulator and battery charger.
+From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-Cc: Beomho Seo <beomho.seo@samsung.com>
-Cc: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
+under mutex. The second reason if the (false-positive) lockdep splat caused
+by the recursive feature of the "prepare_lock" (one clock instance is I2C
+peripheral clock and another is pcf85063 RTC as clock provider):
+
+======================================================
+WARNING: possible circular locking dependency detected
+5.15.71+... #1 Tainted: G           O
+------------------------------------------------------
+.../2332 is trying to acquire lock:
+ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0xb0
+
+but task is already holding lock:
+ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
+
+which lock already depends on the new lock.
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (i2c_register_adapter){+.+.}-{3:3}:
+       lock_acquire+0x68/0x8c
+       rt_mutex_lock_nested+0x88/0xe0
+       i2c_adapter_lock_bus+0x2c/0x3c
+       i2c_transfer+0x58/0x130
+       regmap_i2c_read+0x64/0xb0
+       _regmap_raw_read+0x114/0x440
+       _regmap_bus_read+0x4c/0x84
+       _regmap_read+0x6c/0x270
+       regmap_read+0x54/0x80
+       pcf85063_probe+0xec/0x4cc
+       i2c_device_probe+0x10c/0x350
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       device_add+0x398/0x8ac
+       device_register+0x28/0x40
+       i2c_new_client_device+0x144/0x290
+       of_i2c_register_devices+0x18c/0x230
+       i2c_register_adapter+0x1dc/0x6b0
+       __i2c_add_numbered_adapter+0x68/0xbc
+       i2c_add_adapter+0xb0/0xe0
+       lpi2c_imx_probe+0x354/0x5e0
+       platform_probe+0x70/0xec
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       deferred_probe_work_func+0xa0/0xfc
+       process_one_work+0x2ac/0x6f4
+       worker_thread+0x7c/0x47c
+       kthread+0x150/0x16c
+       ret_from_fork+0x10/0x20
+
+-> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
+       lock_acquire+0x68/0x8c
+       __mutex_lock+0x9c/0x4d0
+       mutex_lock_nested+0x48/0x5c
+       regmap_lock_mutex+0x1c/0x30
+       regmap_read+0x44/0x80
+       pcf85063_clkout_recalc_rate+0x34/0x80
+       __clk_register+0x520/0x880
+       devm_clk_register+0x64/0xc4
+       pcf85063_probe+0x24c/0x4cc
+       i2c_device_probe+0x10c/0x350
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       device_add+0x398/0x8ac
+       device_register+0x28/0x40
+       i2c_new_client_device+0x144/0x290
+       of_i2c_register_devices+0x18c/0x230
+       i2c_register_adapter+0x1dc/0x6b0
+       __i2c_add_numbered_adapter+0x68/0xbc
+       i2c_add_adapter+0xb0/0xe0
+       lpi2c_imx_probe+0x354/0x5e0
+       platform_probe+0x70/0xec
+       really_probe+0xc4/0x470
+       __driver_probe_device+0x11c/0x190
+       driver_probe_device+0x48/0x110
+       __device_attach_driver+0xc4/0x160
+       bus_for_each_drv+0x80/0xe0
+       __device_attach+0xb0/0x1f0
+       device_initial_probe+0x1c/0x2c
+       bus_probe_device+0xa4/0xb0
+       deferred_probe_work_func+0xa0/0xfc
+       process_one_work+0x2ac/0x6f4
+       worker_thread+0x7c/0x47c
+       kthread+0x150/0x16c
+       ret_from_fork+0x10/0x20
+
+-> #0 (prepare_lock){+.+.}-{3:3}:
+       __lock_acquire+0x1298/0x20d0
+       lock_acquire.part.0+0xf0/0x250
+       lock_acquire+0x68/0x8c
+       __mutex_lock+0x9c/0x4d0
+       mutex_lock_nested+0x48/0x5c
+       clk_prepare_lock+0x50/0xb0
+       clk_get_rate+0x28/0x80
+       lpi2c_imx_xfer+0xb0/0xa9c
+       __i2c_transfer+0x174/0xa80
+       i2c_transfer+0x68/0x130
+       regmap_i2c_read+0x64/0xb0
+       _regmap_raw_read+0x114/0x440
+       regmap_raw_read+0x19c/0x28c
+       regmap_bulk_read+0x1b8/0x244
+       at24_read+0x14c/0x2c4
+       nvmem_reg_read+0x2c/0x54
+       bin_attr_nvmem_read+0x8c/0xbc
+       sysfs_kf_bin_read+0x74/0x94
+       kernfs_fop_read_iter+0xb0/0x1d0
+       new_sync_read+0xf0/0x184
+       vfs_read+0x154/0x1f0
+       ksys_read+0x70/0x100
+       __arm64_sys_read+0x24/0x30
+       invoke_syscall+0x50/0x120
+       el0_svc_common.constprop.0+0x68/0x124
+       do_el0_svc+0x30/0x9c
+       el0_svc+0x54/0x110
+       el0t_64_sync_handler+0xa4/0x130
+       el0t_64_sync+0x1a0/0x1a4
+
+other info that might help us debug this:
+
+Chain exists of:
+  prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock --> i2c_register_adapter
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(i2c_register_adapter);
+                               lock(rtc_pcf85063:560:(&config->regmap)->lock);
+                               lock(i2c_register_adapter);
+  lock(prepare_lock);
+
+ *** DEADLOCK ***
+
+4 locks held by .../2332:
+ #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x74/0x1d0
+ #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0
+ #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4
+ #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
+
+stack backtrace:
+CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
+Hardware name: ... (DT)
+Call trace:
+ dump_backtrace+0x0/0x1d4
+ show_stack+0x20/0x2c
+ dump_stack_lvl+0x8c/0xb8
+ dump_stack+0x18/0x34
+ print_circular_bug+0x1f8/0x200
+ check_noncircular+0x130/0x144
+ __lock_acquire+0x1298/0x20d0
+ lock_acquire.part.0+0xf0/0x250
+ lock_acquire+0x68/0x8c
+ __mutex_lock+0x9c/0x4d0
+ mutex_lock_nested+0x48/0x5c
+ clk_prepare_lock+0x50/0xb0
+ clk_get_rate+0x28/0x80
+ lpi2c_imx_xfer+0xb0/0xa9c
+ __i2c_transfer+0x174/0xa80
+ i2c_transfer+0x68/0x130
+ regmap_i2c_read+0x64/0xb0
+ _regmap_raw_read+0x114/0x440
+ regmap_raw_read+0x19c/0x28c
+ regmap_bulk_read+0x1b8/0x244
+ at24_read+0x14c/0x2c4
+ nvmem_reg_read+0x2c/0x54
+ bin_attr_nvmem_read+0x8c/0xbc
+ sysfs_kf_bin_read+0x74/0x94
+ kernfs_fop_read_iter+0xb0/0x1d0
+ new_sync_read+0xf0/0x184
+ vfs_read+0x154/0x1f0
+ ksys_read+0x70/0x100
+ __arm64_sys_read+0x24/0x30
+ invoke_syscall+0x50/0x120
+ el0_svc_common.constprop.0+0x68/0x124
+ do_el0_svc+0x30/0x9c
+ el0_svc+0x54/0x110
+ el0t_64_sync_handler+0xa4/0x130
+ el0t_64_sync+0x1a0/0x1a4
+
+Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 ---
- .../bindings/mfd/richtek,rt5033.yaml          | 138 ++++++++++++++++++
- .../power/supply/richtek,rt5033-charger.yaml  |  65 +++++++++
- 2 files changed, 203 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+Changelog:
+v4: switched to atomic_t
+    included clk_rate_exclusive_get()/clk_rate_exclusive_put()
+v3: fixed build error reported by kernel test robot <lkp@intel.com>
+    https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
+v2: added clk_notifier as Alexander suggested
 
-diff --git a/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-new file mode 100644
-index 000000000000..386b1a50158a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-@@ -0,0 +1,138 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/richtek,rt5033.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+ drivers/i2c/busses/i2c-imx-lpi2c.c | 47 +++++++++++++++++++++++++++---
+ 1 file changed, 43 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+index 1af0a637d7f1..b31d29d684fa 100644
+--- a/drivers/i2c/busses/i2c-imx-lpi2c.c
++++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+@@ -5,6 +5,7 @@
+  * Copyright 2016 Freescale Semiconductor, Inc.
+  */
+ 
++#include <linux/atomic.h>
+ #include <linux/clk.h>
+ #include <linux/completion.h>
+ #include <linux/delay.h>
+@@ -100,6 +101,8 @@ struct lpi2c_imx_struct {
+ 	__u8			*rx_buf;
+ 	__u8			*tx_buf;
+ 	struct completion	complete;
++	struct notifier_block	clk_change_nb;
++	atomic_t		rate_per;
+ 	unsigned int		msglen;
+ 	unsigned int		delivered;
+ 	unsigned int		block_data;
+@@ -198,25 +201,39 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
+ 	} while (1);
+ }
+ 
++static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
++				   unsigned long action, void *data)
++{
++	struct clk_notifier_data *ndata = data;
++	struct lpi2c_imx_struct *lpi2c_imx = container_of(nb,
++							  struct lpi2c_imx_struct,
++							  clk_change_nb);
 +
-+title: Richtek RT5033 Power Management Integrated Circuit
++	if (action & POST_RATE_CHANGE)
++		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
 +
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
++	return NOTIFY_OK;
++}
 +
-+description:
-+  RT5033 is a multifunction device which includes battery charger, fuel gauge,
-+  flash LED current source, LDO and synchronous Buck converter for portable
-+  applications. It is interfaced to host controller using I2C interface. The
-+  battery fuel gauge uses a separate I2C bus.
+ /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
+ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+ {
+ 	u8 prescale, filt, sethold, clkhi, clklo, datavd;
+-	unsigned int clk_rate, clk_cycle;
++	unsigned int clk_cycle;
+ 	enum lpi2c_imx_pincfg pincfg;
+ 	unsigned int temp;
+ 
+ 	lpi2c_imx_set_mode(lpi2c_imx);
+ 
+-	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
+ 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
+ 		filt = 0;
+ 	else
+ 		filt = 2;
+ 
+ 	for (prescale = 0; prescale <= 7; prescale++) {
+-		clk_cycle = clk_rate / ((1 << prescale) * lpi2c_imx->bitrate)
+-			    - 3 - (filt >> 1);
++		clk_cycle = atomic_read(&lpi2c_imx->rate_per) /
++			    ((1 << prescale) * lpi2c_imx->bitrate) - 3 -
++			    (filt >> 1);
+ 		clkhi = (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
+ 		clklo = clk_cycle - clkhi;
+ 		if (clklo < 64)
+@@ -594,6 +611,28 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
++	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
++					 &lpi2c_imx->clk_change_nb);
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "can't register peripheral clock notifier\n");
++	/*
++	 * Lock the clock rate to avoid rate change between clk_get_rate() and
++	 * atomic_set()
++	 */
++	ret = clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
++	if (ret) {
++		dev_err(&pdev->dev, "can't lock I2C peripheral clock rate\n");
++		return ret;
++	}
++	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
++	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
++	if (!atomic_read(&lpi2c_imx->rate_per)) {
++		dev_err(&pdev->dev, "can't get I2C peripheral clock rate\n");
++		return -EINVAL;
++	}
 +
-+properties:
-+  compatible:
-+    const: richtek,rt5033
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  regulators:
-+    description:
-+      The regulators of RT5033 have to be instantiated under a sub-node named
-+      "regulators". For SAFE_LDO voltage there is only one value of 4.9 V. LDO
-+      voltage ranges from 1.2 V to 3.0 V in 0.1 V steps. BUCK voltage ranges
-+      from 1.0 V to 3.0 V in 0.1 V steps.
-+    type: object
-+    patternProperties:
-+      "^(SAFE_LDO|LDO|BUCK)$":
-+        type: object
-+        $ref: /schemas/regulator/regulator.yaml#
-+        unevaluatedProperties: false
-+    additionalProperties: false
-+
-+  charger:
-+    type: object
-+    $ref: /schemas/power/supply/richtek,rt5033-charger.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    battery: battery {
-+        compatible = "simple-battery";
-+        precharge-current-microamp = <450000>;
-+        constant-charge-current-max-microamp = <1000000>;
-+        charge-term-current-microamp = <150000>;
-+        precharge-upper-limit-microvolt = <3500000>;
-+        constant-charge-voltage-max-microvolt = <4350000>;
-+    };
-+
-+    extcon {
-+        usb_con: connector {
-+            compatible = "usb-b-connector";
-+            label = "micro-USB";
-+            type = "micro";
-+        };
-+    };
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        i2c@0 {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            reg = <0>;
-+
-+            fuel-gauge@35 {
-+                compatible = "richtek,rt5033-battery";
-+                reg = <0x35>;
-+
-+                interrupt-parent = <&msmgpio>;
-+                interrupts = <121 IRQ_TYPE_EDGE_FALLING>;
-+
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&fg_alert_default>;
-+
-+                power-supplies = <&rt5033_charger>;
-+            };
-+        };
-+
-+        i2c@1 {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            reg = <1>;
-+
-+            pmic@34 {
-+                compatible = "richtek,rt5033";
-+                reg = <0x34>;
-+
-+                interrupt-parent = <&msmgpio>;
-+                interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
-+
-+                pinctrl-names = "default";
-+                pinctrl-0 = <&pmic_int_default>;
-+
-+                regulators {
-+                    safe_ldo_reg: SAFE_LDO {
-+                        regulator-name = "SAFE_LDO";
-+                        regulator-min-microvolt = <4900000>;
-+                        regulator-max-microvolt = <4900000>;
-+                        regulator-always-on;
-+                    };
-+                    ldo_reg: LDO {
-+                        regulator-name = "LDO";
-+                        regulator-min-microvolt = <2800000>;
-+                        regulator-max-microvolt = <2800000>;
-+                    };
-+                    buck_reg: BUCK {
-+                        regulator-name = "BUCK";
-+                        regulator-min-microvolt = <1200000>;
-+                        regulator-max-microvolt = <1200000>;
-+                    };
-+                };
-+
-+                rt5033_charger: charger {
-+                    compatible = "richtek,rt5033-charger";
-+                    monitored-battery = <&battery>;
-+                    richtek,usb-connector = <&usb_con>;
-+                };
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-new file mode 100644
-index 000000000000..5b3edd79a523
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Richtek RT5033 PMIC Battery Charger
-+
-+maintainers:
-+  - Jakob Hauser <jahau@rocketmail.com>
-+
-+description:
-+  The battery charger of the multifunction device RT5033 has to be instantiated
-+  under sub-node named "charger" using the following format.
-+
-+properties:
-+  compatible:
-+    const: richtek,rt5033-charger
-+
-+  monitored-battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      Phandle to the monitored battery according to battery.yaml. The battery
-+      node needs to contain five parameters.
-+
-+      precharge-current-microamp:
-+      Current of pre-charge mode. The pre-charge current levels are 350 mA
-+      to 650 mA programmed by I2C per 100 mA.
-+
-+      constant-charge-current-max-microamp:
-+      Current of fast-charge mode. The fast-charge current levels are 700 mA
-+      to 2000 mA programmed by I2C per 100 mA.
-+
-+      charge-term-current-microamp:
-+      This property is end of charge current. Its level ranges from 150 mA
-+      to 600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and
-+      600 mA in 100 mA steps.
-+
-+      precharge-upper-limit-microvolt:
-+      Voltage of pre-charge mode. If the battery voltage is below the pre-charge
-+      threshold voltage, the charger is in pre-charge mode with pre-charge
-+      current. Its levels are 2.3 V to 3.8 V programmed by I2C per 0.1 V.
-+
-+      constant-charge-voltage-max-microvolt:
-+      Battery regulation voltage of constant voltage mode. This voltage levels
-+      from 3.65 V to 4.4 V by I2C per 0.025 V.
-+
-+  richtek,usb-connector:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to a USB connector according to usb-connector.yaml. The connector
-+      should be a child of the extcon device.
-+
-+required:
-+  - monitored-battery
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    charger {
-+        compatible = "richtek,rt5033-charger";
-+        monitored-battery = <&battery>;
-+        richtek,usb-connector = <&usb_con>;
-+    };
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+ 	pm_runtime_get_noresume(&pdev->dev);
 -- 
-2.39.2
+2.40.1
 
