@@ -2,124 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB347025B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6B470254C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239844AbjEOHJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 03:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S239639AbjEOGuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbjEOHJV (ORCPT
+        with ESMTP id S232090AbjEOGuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 03:09:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F137E60;
-        Mon, 15 May 2023 00:09:20 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F6b2xS016937;
-        Mon, 15 May 2023 07:09:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ezrCAq5SGgSWhAp9SRpG6vrj+OTqUnkKuCr9XJhQ4O0=;
- b=n2JK+xqZ6dIz4xdmXCxXzfZLj8zHycxo+luyV5NVXyheEBSGAx8WY7qHw4GPCG8r4hMY
- 5FJMujOLpLLN6afrhe8r+K5RJ5K8MC18zTBuFTjp1Rw9bcQxxM7cxDFKInCg7BRR5dcD
- jGbUv5kfDcGoPYDgsVwqQ/Txx5KkVqAvZMn+bjYXIlinBNmRXvGB23KRzzqxty5pPsPc
- iXtpOkrZ+dLLSfScrq0Li1/K9hI99+cqBpo1SATeMiPmePwWEK2cT9t5CvIz9fbs7R7n
- MrKN4CHe8q1C/XIBpqEZt0K49CUAfXV2TQwbG3eRnjhslXF/9TUa96y543z4Z0rsIqgV WA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj2sb3002-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 07:09:17 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34F79BNP031427
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 07:09:11 GMT
-Received: from [10.214.230.142] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
- 2023 00:08:34 -0700
-Message-ID: <ec2f0259-9d57-7125-7df8-c773b60e8c72@quicinc.com>
-Date:   Mon, 15 May 2023 12:38:30 +0530
+        Mon, 15 May 2023 02:50:22 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3F28F
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684133421; x=1715669421;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1oo0XsT3nA10k1WbskK/cxU0CChuvZrvYt+c1bbAmtk=;
+  b=eQnl5UmA3wSTu0VOmhEKBdlwCWMjbZtii/wSsBZh+J+x008of2ipJT3O
+   3qk5ppAAMvKs3YqLI185NJaXg8uU7jULCt9JTQbAxAcFNAii/HLuKfT6i
+   KPaFtzOBaqpftlkxk6XJJIU0DtXgSA0m+x5Ro2Ft1WYcGO/xNGQhwr1iJ
+   vsDo6nDoED5O6EnWBy93psw2g43UR8gSgaawQnOd24SDhrb1udOshUvI0
+   dglxEUVh0bsL6EFvwl8dSevZ66IXBarmu9szSnZuH2DUdVlnc9DrBVwAM
+   x8slH+lMsD1fLk6Bor5j7tRCldHmoLdShRWtTGoTHiicKYKZX1k57Bfcj
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966233"
+X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
+   d="scan'208";a="349966233"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908559"
+X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
+   d="scan'208";a="694908559"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:18 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org, broonie@kernel.org,
+        tiwai@suse.de
+Cc:     linux-kernel@vger.kernel.org, vinod.koul@linaro.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH v2 00/26] ASoC/soundwire: add support for ACE2.x
+Date:   Mon, 15 May 2023 15:10:16 +0800
+Message-Id: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 02/10] dt-bindings: nvmem: qfprom: Add compatible for
- QDU1000/QRU1000
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
- <20230512122134.24339-3-quic_kbajaj@quicinc.com>
- <4766aabc-9b03-3241-82e3-8c4799ea7978@linaro.org>
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-In-Reply-To: <4766aabc-9b03-3241-82e3-8c4799ea7978@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: I6ESg3VsdIqBlSYt16-dXym-YIxc5fF4
-X-Proofpoint-ORIG-GUID: I6ESg3VsdIqBlSYt16-dXym-YIxc5fF4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=896
- priorityscore=1501 lowpriorityscore=0 adultscore=0 malwarescore=0
- spamscore=0 bulkscore=0 impostorscore=0 clxscore=1015 mlxscore=0
- phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305150064
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series uses the abstraction added in past kernel cycles to provide
+support for the ACE2.x integration. The existing SHIM and Cadence
+registers are now split in 3 (SHIM, IP, SHIM vendor-specific), with some
+parts also moved to the HDaudio Extended Multi link structures. Nothing
+fundamentally different except for the register map.
 
+This series only provides the basic mechanisms to expose SoundWire-based
+DAIs. The PCI parts and DSP management will be contributed later, and the
+DAI ops are now empty as well.
 
-On 5/12/2023 10:26 PM, Krzysztof Kozlowski wrote:
-> On 12/05/2023 14:21, Komal Bajaj wrote:
->> Document the QFPROM on QDU1000/QRU1000 SOCs.
->>
->> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
->> index 8d8503dd934b..59082f6e8c9f 100644
->> --- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
->> +++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
->> @@ -26,6 +26,7 @@ properties:
->>             - qcom,msm8996-qfprom
->>             - qcom,msm8998-qfprom
->>             - qcom,qcs404-qfprom
->> +          - qcom,qdu1000-qfprom
-> Above qcs, to keep alphabetical order.
-qdu alphatecially comes after qcs, right? Did I misinterpret your comment?
->
-> That's a new patch? Nothing in changelog suggested it...
-Yes, that is a new patch from v2. Will mention in cover letter in the 
-next patch.
+The change is mainly on SoundWire. It would be better to go through
+SoundWire tree.
 
-Thanks,
-Komal
->
-> Best regards,
-> Krzysztof
->
+v2:
+ - Some cleanup for free, trigger, hw_params callbacks before introducing
+   ACE2.x callbacks.
+
+Pierre-Louis Bossart (26):
+  ASoC: SOF: Intel: shim: add enum for ACE 2.0 IP used in LunarLake
+  soundwire: intel: add ACE2.x SHIM definitions
+  soundwire: intel_ace2x: add empty new ops for LunarLake
+  soundwire/ASOC: Intel: update offsets for LunarLake
+  soundwire: intel/cadence: set ip_offset at run-time
+  ASoC/soundwire: intel: pass hdac_bus pointer for link management
+  soundwire: intel: add eml_lock in the interface for new platforms
+  ASoC: SOF: Intel: hda: retrieve SoundWire eml_lock and pass pointer
+  soundwire: intel_init: use eml_lock parameter
+  soundwire: intel_ace2x: add debugfs support
+  soundwire: intel_ace2x: add link power-up/down helpers
+  soundwire: intel_ace2x: set SYNCPRD before powering-up
+  soundwire: intel_ace2x: configure link PHY
+  soundwire: intel_ace2x: add DAI registration
+  soundwire: intel_ace2x: add sync_arm/sync_go helpers
+  soundwire: intel_ace2x: use common helpers for bus start/stop
+  soundwire: intel_ace2x: enable wake support
+  soundwire: intel_ace2x: add check_cmdsync_unlocked helper
+  soundwire: bus: add new manager callback to deal with peripheral
+    enumeration
+  soundwire: intel_ace2x: add new_peripheral_assigned callback
+  soundwire: intel_ace2x: add pre/post bank switch callbacks
+  ASoC: SOF/soundwire: re-add substream in params_stream structure
+  soundwire: intel: remove .trigger callback implementation
+  soundwire: intel: use substream for .trigger callback
+  soundwire: intel: remove .free callback implementation
+  soundwire: intel: use substream for .free callback
+
+ drivers/soundwire/Makefile              |   3 +-
+ drivers/soundwire/bus.c                 |   3 +
+ drivers/soundwire/cadence_master.h      |   2 +
+ drivers/soundwire/intel.c               |  54 +---
+ drivers/soundwire/intel.h               |  16 +
+ drivers/soundwire/intel_ace2x.c         | 393 ++++++++++++++++++++++++
+ drivers/soundwire/intel_ace2x_debugfs.c | 147 +++++++++
+ drivers/soundwire/intel_auxdevice.c     |  17 +
+ drivers/soundwire/intel_init.c          |  21 +-
+ include/linux/soundwire/sdw.h           |   3 +-
+ include/linux/soundwire/sdw_intel.h     |  94 +++++-
+ sound/soc/sof/intel/hda.c               |  33 +-
+ sound/soc/sof/intel/shim.h              |   1 +
+ 13 files changed, 723 insertions(+), 64 deletions(-)
+ create mode 100644 drivers/soundwire/intel_ace2x.c
+ create mode 100644 drivers/soundwire/intel_ace2x_debugfs.c
+
+-- 
+2.25.1
 
