@@ -2,150 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0E2702415
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9423A702417
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239368AbjEOGHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S235849AbjEOGHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238926AbjEOGGl (ORCPT
+        with ESMTP id S229985AbjEOGGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:06:41 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E412D41;
-        Sun, 14 May 2023 23:00:12 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so22492455a12.0;
-        Sun, 14 May 2023 23:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684130411; x=1686722411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GWJZN0AxnMLj8Z4KaxYfGt0FY36qubWQkKlCweV20LE=;
-        b=iKjTvLOaLIAQInv4Zg3BQl2vPIyVFhi3CpcLEmlrMGBMoqotkbBGotUeAdfq21fElc
-         cy/xMPodX7Gzzg1tBArbJcBknuUJ1HSw/3aqtfOO8R7DPQ8RJTLgnpxXyYhfxWd+zscU
-         w0bmdI7FYW8O+e6RwW3bylQil94PcQ6lDb0Xc7KCrXCXraOs08V313MQmwhDBdnw7b0D
-         t2jeED38yEr3U0W2Jfy6fSbtsCWW1YhGM6jxcOjAqQOMWw8KJpGFSxbPqdP4NrJN0OCv
-         yyRiVX/WJFFmUChE/F6w4x8K6n3qxFApsZxtSAYsjc+mF8WoZ9Ap+0GJru6DYRta7Syk
-         zhdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684130411; x=1686722411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GWJZN0AxnMLj8Z4KaxYfGt0FY36qubWQkKlCweV20LE=;
-        b=UjBwIhlwUi5DhBtXeWZCUUZ+UEkYJIpT4FgKhcGJgSPxDUDvTg6VobATjDTW5O59ap
-         lT2NxBf+fINzpt7qgan6EJupJot/EaFwTQv4CCMrhf5z/KfeZHK5Lc5UBE0WuJUNED33
-         S+TWZnLyEA6P1z4J5YvHuAtG4F54swIA1euYqcuj+O+a7JodIKBc9SqKkvzKdgz9MsfF
-         fmyGGM/8X3HOgjDklGyjGczdGqkhggLgr9cfZLXE0uLUF5m9sAUY+I3imvhLM0dOLDmy
-         RTkCcL2IKj6JqTb5c2u4xXvH4fxFi0YHxgSTjENlBK6OhBUXQE2aEpJ1a4JGHXSw3Dxz
-         0UnA==
-X-Gm-Message-State: AC+VfDyxb/JOdOgsr927K8/p59r7pg4/OKFh8DPedXuIOiXgw21QSti2
-        kZfHNGZ2ynD76h3UjyeDVLJfvKRq2CwuqBqj2I0=
-X-Google-Smtp-Source: ACHHUZ428Sh5bSg84RYNX+ILZH5/eZRrfIEPJc5zLusPZ0jIaVj393VeEHUomPxsyyo61gVIkyWMBWrJD7tI0NjcfMo=
-X-Received: by 2002:aa7:c747:0:b0:50b:fb49:c4a8 with SMTP id
- c7-20020aa7c747000000b0050bfb49c4a8mr25276264eds.27.1684130410646; Sun, 14
- May 2023 23:00:10 -0700 (PDT)
+        Mon, 15 May 2023 02:06:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED093C25;
+        Sun, 14 May 2023 23:01:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42A4D61F33;
+        Mon, 15 May 2023 06:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3956C433D2;
+        Mon, 15 May 2023 06:01:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684130475;
+        bh=QD/HwA4qfumc5WDkLMf7soF3JasPpx6RTvIErVLM/Qs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BVOEjRs0IWncanINrFIzP7r0gywzPtqVv39ClV8X0bMr/d9JmvfS+G71j4j2qqBIh
+         K5npbpIwdW5jMMNXe/O7HcPNOASknxaBm5AxeidloxWARfpF02NSlwoeY256L8JHLZ
+         H0M1+szAJ2JAahZwukMJpo4PP7a0fO0EjI5t94YbNXosG62CZ2g7+14UUQV8BHQZLL
+         MbDbgyVC9R5s2PpvLJKu8UZENWWnv6wYpWioLf2w6qREPMYS5/aUB5CsSvdSdl8U6m
+         t9lJJueUzjdnTqqPCe9c59eTe/lNoeqojDnevxLK/X0+Us7sfZf7vkxm1o5BJ4kHMZ
+         otgSJFL1RIK7g==
+Received: from mchehab by mail.kernel.org with local (Exim 4.96)
+        (envelope-from <mchehab@kernel.org>)
+        id 1pyRGi-003IYx-1I;
+        Mon, 15 May 2023 07:01:12 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
+        "Sakari Ailus" <sakari.ailus@linux.intel.com>,
+        "Tomi Valkeinen" <tomi.valkeinen@ideasonboard.com>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH] media: v4l2-subdev.h: document client_caps at struct v4l2_subdev_fh
+Date:   Mon, 15 May 2023 07:01:11 +0100
+Message-Id: <382ce82fe2b186c7d8067d8b4e945a947c7c7047.1684130460.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230510122045.2259-1-zegao@tencent.com> <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
- <CAD8CoPBBipQWP0xT5unAshL93OtXLQox_rz0f7rfrGgy05UVJg@mail.gmail.com>
-In-Reply-To: <CAD8CoPBBipQWP0xT5unAshL93OtXLQox_rz0f7rfrGgy05UVJg@mail.gmail.com>
-From:   Ze Gao <zegao2021@gmail.com>
-Date:   Mon, 15 May 2023 13:59:59 +0800
-Message-ID: <CAD8CoPCfPmqZH6BJCk3Y1-02BLVVsbQ6OeaNOhcfGWmdF0oX8A@mail.gmail.com>
-Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
- recursive trap
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear all,
+Gets rid of this documentation warning:
 
-On Thu, May 11, 2023 at 9:06=E2=80=AFAM Ze Gao <zegao2021@gmail.com> wrote:
->
-> I'm afraid filtering in user space tools is not enough, cause it's a kern=
-el BUG.
->
-> it would 100% trigger a kernel crash if you run cmd like
->
-> retsnoop -e 'pick_next_task_fair' -a ':kernel/sched/*.c' -vvv
->
-> which is caused by that BPF_LINK_TYPE_KPROBE_MULTI accidentally
-> attaches bpf progs
-> to preempt_count_{add, sub}, which in turn triggers stackoverflow
-> because the handler itself
-> calls those functions.
+	./include/media/v4l2-subdev.h:1130: warning: Function parameter or member 'client_caps' not described in 'v4l2_subdev_fh'
 
-I managed to see the big picture of this problem by digging into the code.
+By adding a documentation about such new field.
 
-here is what it goes:
+Fixes: f57fa2959244 ("media: v4l2-subdev: Add new ioctl for client capabilities")
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ include/media/v4l2-subdev.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-rethook_trampoline_handler{
-   preempt_disable() {
-      preempt_count_add() {  <-- trace
-          fprobe_handler() {
-            ftrace_test_recursion_trylock
-            ...
-            ftrace_test_recursion_unlock    <- it fails to detect the
-recursion caused by rethook (rethook_trampoline_handler precisely for
-this case)  routines.
-          }
-          ...
-          rethook_trampoline_handler {
-          [ wash, rinse, repeat, CRASH!!! ]
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index cfd19e72d0fc..62362da0d604 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1119,6 +1119,9 @@ struct v4l2_subdev {
+  * @vfh: pointer to &struct v4l2_fh
+  * @state: pointer to &struct v4l2_subdev_state
+  * @owner: module pointer to the owner of this file handle
++ * @client_caps:
++ *	client capabilities to inform the kernel of the behavior
++ *	of the client as set by VIDIOC_SUBDEV_S_CLIENT_CAP.
+  */
+ struct v4l2_subdev_fh {
+ 	struct v4l2_fh vfh;
+-- 
+2.40.1
 
-There are some pitfalls here:
-1.  fprobe exit callback should be guarded by ftrace recursion check
-as well since user might call any traceable functions
-just like kprobe_multi_link_prog_run calls migrate_{disable, enable}.
-In this case,  detection in fprobe_handler only is not
-enough.
-2. rethook_trampoline_handler should use preempt_{disable,
-enable}_notrace instead because it's beyond recursion-free
-region guarded like 1
-3. many rethook helper functions are also used outside the
-recursion-free regions and therefore they should be marked
-notrace
-
-I've post a new series of patches to resolve cases mentioned above:
-  [Link]: https://lkml.org/lkml/2023/5/14/452
-
-In theory, bpf_kprobe as the user of fprobe+ rethook, is spared from
-suffering recursion again by applying these. And
-  [Link]: https://lore.kernel.org/all/20230513090548.376522-1-zegao@tencent=
-.com/T/#u
-becomes optional.
-
-That leaves one final question, whether we need probe blacklist or
-bpf_kprobe blacklist depends on how we deal with
-user requests if one of its expected hook points fails because of
-recursion detected. Do we need to reject them in the first place
-by blacklist or  let it fail to execute the callback silently, which
-needs your gentle advice.
-
-Regards,
-Ze
