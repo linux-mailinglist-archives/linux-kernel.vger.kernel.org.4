@@ -2,147 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C63702DAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17626702DBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242289AbjEONLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        id S242329AbjEONMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242254AbjEONKr (ORCPT
+        with ESMTP id S241211AbjEONLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:10:47 -0400
-Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF4B32686;
-        Mon, 15 May 2023 06:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:In-Reply-To:References:MIME-Version:
-        Content-Transfer-Encoding; bh=L+SQ0nmfGSPRi8glqTzv3fHgUPypuBnrsB
-        ZKLf4on5Y=; b=ox9S7sNSOR+qIM/NofYQxW7bDUidbSTXFsfF5W//szZbyOtCdS
-        Zx5RZyiJbOaHg5CnaOa7fFpoekGi458S3qVhX4jk9l9h2KWAPGvkA57DX64e6HkD
-        QZsoMnu23gTA4M6u1BC6GpPdd7iAD65zNx3q2817kRszYNDYcsmlLlyt4=
-Received: from localhost.localdomain (unknown [10.7.98.243])
-        by front02 (Coremail) with SMTP id 54FpogAnLDgqL2JkVboyFA--.10053S6;
-        Mon, 15 May 2023 21:10:08 +0800 (CST)
-From:   Ruihan Li <lrh2000@pku.edu.cn>
-To:     linux-mm@kvack.org, linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Subject: [PATCH v2 4/4] mm: page_table_check: Ensure user pages are not slab pages
-Date:   Mon, 15 May 2023 21:09:58 +0800
-Message-Id: <20230515130958.32471-5-lrh2000@pku.edu.cn>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230515130958.32471-1-lrh2000@pku.edu.cn>
-References: <20230515130958.32471-1-lrh2000@pku.edu.cn>
+        Mon, 15 May 2023 09:11:54 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68A5358E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684156277; x=1715692277;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RmR0L+YDgD1QLZ10gzUgm8SlxT2V25Lg6Rec/avwLBA=;
+  b=kjB0yNoWmp+RbAdVMxrS7iyj+qi9JSRPIl+7EJ+LE9HItN/sIHFSJ1W5
+   dPVIm0vakcM/3Tze9nz/FDbUiji77dC6/kFExyufTxr4Ha9C/Moi22Hmn
+   BasVdNPYjU77PupxSLLCg+NQYhX2T0gHIbUzgalv+FrzKAP3mgVmGNo7K
+   8nySSq9wslZBm+3NqrWDTxdpd9fckg9RshDhWJdp8THMefWk8J5ZYALt1
+   KszhIGAzFHUk6brTkXFIyV8PtpE1nTBsvEw129cx3VDg6KouQ7JpvDyIM
+   2pLiv2ZY3x2qlW/7xU/K5z5Y88ZyXJiAEeClAoXwh4t+hNRoOJ/wmFiwU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="437536855"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="437536855"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 06:11:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="703974903"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="703974903"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 15 May 2023 06:11:16 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pyXyt-0006MO-1Q;
+        Mon, 15 May 2023 13:11:15 +0000
+Date:   Mon, 15 May 2023 21:10:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect
+ type in assignment (different address spaces)
+Message-ID: <202305152109.tZxT6QGP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: 54FpogAnLDgqL2JkVboyFA--.10053S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxurWrCw4UAFyDWF48ZrW3Awb_yoW5Wr4Dpa
-        95u3W0krW5Ka4akw1kZ3ZayryrJFZ8G3yUCry7J3Wjv3ZxtFy0vF1jkr9ay3s8KrW7CFy5
-        AFZ8tr1j9rWDZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBa1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF
-        7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
-        x26w4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAI
-        cVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
-        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQZ23UUUUU=
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEMBVPy77495wAAsg
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current uses of PageAnon in page table check functions can lead to
-type confusion bugs between struct page and slab [1], if slab pages are
-accidentally mapped into the user space. This is because slab reuses the
-bits in struct page to store its internal states, which renders PageAnon
-ineffective on slab pages.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+commit: 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b fbdev: omap: avoid using mach/*.h files
+date:   1 year, 1 month ago
+config: arm-randconfig-s031-20230515 (https://download.01.org/0day-ci/archive/20230515/202305152109.tZxT6QGP-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/ drivers/video/fbdev/omap/
 
-Since slab pages are not expected to be mapped into the user space, this
-patch adds BUG_ON(PageSlab(page)) checks to make sure that slab pages
-are not inadvertently mapped. Otherwise, there must be some bugs in the
-kernel.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305152109.tZxT6QGP-lkp@intel.com/
 
-Reported-by: syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/lkml/000000000000258e5e05fae79fc1@google.com/ [1]
-Fixes: df4e817b7108 ("mm: page table check")
-Cc: <stable@vger.kernel.org> # 5.17
-Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
----
- include/linux/page-flags.h | 6 ++++++
- mm/page_table_check.c      | 6 ++++++
- 2 files changed, 12 insertions(+)
+sparse warnings: (new ones prefixed by >>)
+>> drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *vaddr @@     got void *static [addressable] [assigned] [toplevel] vram_virt @@
+   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     expected void [noderef] __iomem *vaddr
+   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     got void *static [addressable] [assigned] [toplevel] vram_virt
+--
+>> drivers/video/fbdev/omap/omapfb_main.c:1027:11: sparse: sparse: cast removes address space '__iomem' of expression
 
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 1c68d67b8..92a2063a0 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -617,6 +617,12 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
-  * Please note that, confusingly, "page_mapping" refers to the inode
-  * address_space which maps the page from disk; whereas "page_mapped"
-  * refers to user virtual address space into which the page is mapped.
-+ *
-+ * For slab pages, since slab reuses the bits in struct page to store its
-+ * internal states, the page->mapping does not exist as such, nor do these
-+ * flags below.  So in order to avoid testing non-existent bits, please
-+ * make sure that PageSlab(page) actually evaluates to false before calling
-+ * the following functions (e.g., PageAnon).  See mm/slab.h.
-  */
- #define PAGE_MAPPING_ANON	0x1
- #define PAGE_MAPPING_MOVABLE	0x2
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 25d8610c0..f2baf97d5 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -71,6 +71,8 @@ static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
- 
- 	page = pfn_to_page(pfn);
- 	page_ext = page_ext_get(page);
-+
-+	BUG_ON(PageSlab(page));
- 	anon = PageAnon(page);
- 
- 	for (i = 0; i < pgcnt; i++) {
-@@ -107,6 +109,8 @@ static void page_table_check_set(struct mm_struct *mm, unsigned long addr,
- 
- 	page = pfn_to_page(pfn);
- 	page_ext = page_ext_get(page);
-+
-+	BUG_ON(PageSlab(page));
- 	anon = PageAnon(page);
- 
- 	for (i = 0; i < pgcnt; i++) {
-@@ -133,6 +137,8 @@ void __page_table_check_zero(struct page *page, unsigned int order)
- 	struct page_ext *page_ext;
- 	unsigned long i;
- 
-+	BUG_ON(PageSlab(page));
-+
- 	page_ext = page_ext_get(page);
- 	BUG_ON(!page_ext);
- 	for (i = 0; i < (1ul << order); i++) {
+vim +642 drivers/video/fbdev/omap/lcdc.c
+
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  620  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  621  static int alloc_fbmem(struct omapfb_mem_region *region)
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  622  {
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  623  	int bpp;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  624  	int frame_size;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  625  	struct lcd_panel *panel = lcdc.fbdev->panel;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  626  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  627  	bpp = panel->bpp;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  628  	if (bpp == 12)
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  629  		bpp = 16;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  630  	frame_size = PAGE_ALIGN(panel->x_res * bpp / 8 * panel->y_res);
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  631  	if (region->size > frame_size)
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  632  		frame_size = region->size;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  633  	lcdc.vram_size = frame_size;
+f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  634  	lcdc.vram_virt = dma_alloc_wc(lcdc.fbdev->dev, lcdc.vram_size,
+f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  635  				      &lcdc.vram_phys, GFP_KERNEL);
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  636  	if (lcdc.vram_virt == NULL) {
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  637  		dev_err(lcdc.fbdev->dev, "unable to allocate FB DMA memory\n");
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  638  		return -ENOMEM;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  639  	}
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  640  	region->size = frame_size;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  641  	region->paddr = lcdc.vram_phys;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17 @642  	region->vaddr = lcdc.vram_virt;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  643  	region->alloc = 1;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  644  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  645  	memset(lcdc.vram_virt, 0, lcdc.vram_size);
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  646  
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  647  	return 0;
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  648  }
+569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  649  
+
+:::::: The code at line 642 was first introduced by commit
+:::::: 569755c706f0f94409edd2ae60b9878cb420844f OMAP: add TI OMAP1 internal LCD controller
+
+:::::: TO: Imre Deak <imre.deak@solidboot.com>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
