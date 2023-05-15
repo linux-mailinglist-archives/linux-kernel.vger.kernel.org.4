@@ -2,93 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE2B703173
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E6D703179
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242365AbjEOPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S242355AbjEOPX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242413AbjEOPWQ (ORCPT
+        with ESMTP id S242210AbjEOPX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:22:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5127E2D74;
-        Mon, 15 May 2023 08:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B2A76261F;
-        Mon, 15 May 2023 15:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018BEC433EF;
-        Mon, 15 May 2023 15:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684164131;
-        bh=8pixPTs1hKpzfgnN7sWBey95JJn+751x7B1R4Xl+cu4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tV5tt8+0AILsbLnCo796sFFYgUkFfBJzx6Iq8TeF7XLXRqT9OSTk0mBteC7HiQSHS
-         ppuI05esFlrByz/B+cIVYL63LEP7/cdWC/YT0OR5vbY2hPv0CwcCO6QsXio98wuCi/
-         8gB0JJwJzRv+AbiuAMM5JpqLGn8vK/Xy9ecHq5rPb1RnTsXISvsuIo6tRSQzVuyfjm
-         l46rfuovoXHMGNCcEvYMVyCtr4uo0aetUg2rYoKFaGlBZxTF4HtKfd2Z0Z1ArSvOhp
-         iW5gFDhs0kG0+pkTKbS/5djuR97dfPrZ9lu9OeaLqzMKWUVuU7FTRq4iOP2Yad5AMl
-         6OKwFfshiaBMA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com
-In-Reply-To: <20230512104746.1797865-1-joychakr@google.com>
-References: <20230512104746.1797865-1-joychakr@google.com>
-Subject: Re: [PATCH v11 0/3] spi: dw: DW SPI DMA Driver updates
-Message-Id: <168416412980.414118.17659139951368059982.b4-ty@kernel.org>
-Date:   Tue, 16 May 2023 00:22:09 +0900
+        Mon, 15 May 2023 11:23:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B32EAF;
+        Mon, 15 May 2023 08:23:54 -0700 (PDT)
+Date:   Mon, 15 May 2023 17:23:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684164232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z0Yfh3NxQgNMgOMFGMNP1V605BZVqvLuCh2pQvBjFFM=;
+        b=NAUC94ahcxOjuc2bNlocmLdLRNTvEElhcKs8DE6m8zLU8Dqh7enlo9eZ2omq2eH0+e0PwA
+        iMKJpOKqvSaCUR+hjwheDx0ub1YrnjY084OpeWYpMYQuyJ/26PqTLakcZb5Cbzh8gvRnTz
+        mX2+Y5DomVS0TLC5+D2XZOYiUqyGX2VN6K/HmpxpimxOZa/vPAWH9gsgs+KIQRswm+EdXF
+        MyCwC6dGgy6VCvn+6CqjadnAeqKdcBX4IVvAQt6YG257PAr1UoGOvaMfmLe9Z66Uwn5X8R
+        WRgWUlWQ3Dk2UENBOaYevrrGZtEBtjTu1TLaUtthGIoE+MWo7tA2BY9TFuWdtA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684164232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z0Yfh3NxQgNMgOMFGMNP1V605BZVqvLuCh2pQvBjFFM=;
+        b=wZQt75odboxL5DTQ2eTXyVWuRZ+wtqsFBO7FywTJQiQ8c/wb6+4I0ZJcz++EaUigkwOlFI
+        rOHVx2wr0RiO6DAA==
+From:   "Ahmed S. Darwish" <darwi@linutronix.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kbuild@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] scripts/tags.sh: Resolve gtags empty index
+ generation
+Message-ID: <ZGJOht09HwRY7GK+@lx-t490>
+References: <20230504201833.202494-1-darwi@linutronix.de>
+ <20230509012616.81579-1-darwi@linutronix.de>
+ <20230509012616.81579-2-darwi@linutronix.de>
+ <CAK7LNARO6HOutPf2VZJMTR2Xmepj_3UiUgH-SLXhH57CNnGfOg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNARO6HOutPf2VZJMTR2Xmepj_3UiUgH-SLXhH57CNnGfOg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 10:47:42 +0000, Joy Chakraborty wrote:
-> This Patch series adds support for 32 bits per word trasfers using DMA
-> and some defensive checks around dma controller capabilities.
-> 
+On Fri, 12 May 2023, Masahiro Yamada wrote:
+>
+> The code works as claimed, but I am just curious.
 
-Applied to
+Thanks.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> If all the paths are relative, how can you use the tags files located
+> in a separate directory?
+>
+> "make O=foo gtags" creates tags files in foo/.
+> I want to use them from emacs.
+> emacs cannot find the right file because
+> it assumes the path is relative to 'foo' instead of the source tree.
+>
 
-Thanks!
+Correct.
 
-[1/3] spi: dw: Add DMA directional capability check
-      commit: d1ca1c5297ba9260942c0b3f1171a98a432bdfec
-[2/3] spi: dw: Add DMA address widths capability check
-      commit: 020a3947e7f18e790cc72785281755f8c49e11d4
-[3/3] spi: dw: Round of n_bytes to power of 2
-      commit: 9f34baf67e4d08908fd94ff29c825bb673295336
+In theory, since all the indexed linux source tree paths at the gtags
+generated files (GPATH/GRTAGS/GTAGS) are relative to the linux source
+tree root, opening such files from emacs ggtags-mode, *wherever* these
+files are, "should" work.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+In practice, ggtags/global (and thus also emacs ggtags-mode) operate
+with a model of the world where all indexed files must be under the
+source "root directory". So, the GPATH/GRTAGS/GTAGS files are expected
+to be under the source tree (except in special GTAGSLIBPATH= cases).
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> I set GTAGSROOT to the source tree, but I could not find a way
+> to use it in a useful way.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Yes, that won't work, as emacs will search for the G* database files
+under that folder instead.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Meanwhile setting GTAGSROOT to the O= directory, or to a build directory
+that is different from the kernel source tree, as in:
 
-Thanks,
-Mark
+  cd ~/linux
+  O=~/build/build-linux-x86
+  make O=$O x86_64_defconfig
+  make O=$O gtags
+  GTAGSROOT=$O emacs init/main.c
 
+will "mostly" succeed (as you hinted at):
+
+  M-x ggtags-mode
+
+  # emacs finds gtags files under ${GTAGSROOT} and sets ${GTAGSROOT} as
+  # the root of the project
+
+  M-x ggtags-find-definition
+  Definition: rcu_read_lock
+
+    -*- mode: ggtags-global; default-directory: "~/build/build-linux-x86/" -*-
+    Global started at Mon May 15 15:54:01
+
+    global -v --result=grep --color=always --path-style=shorter -- rcu_read_lock
+    include/linux/rcupdate.h:769:static __always_inline void rcu_read_lock(void)
+    1 object located (using '/home/darwi/build/build-linux-x86/GTAGS').
+
+    Global found 1 definition at Mon May 15 15:54:01
+
+  # Prompt
+  Find this match in (default include/linux/rcupdate.h)?: ~/build/build-linux-x86/
+  ^^^
+
+But at the Prompt step above, things break.
+
+In a fully working setup, this prompt will not be shown and emacs just
+jumps to rcuupdate.h line 769.
+
+What I personally do to mitigate that problem is:
+
+    cd ~/linux
+    for f in GTAGS GRTAGS GPATH; do
+        ln -vsf ${O}/$f .
+    done
+
+and switch these symlinks through minor local shell plumbing whenever
+I'm switching kernel projects with different build directories.
+
+It is not ideal, but maybe we can discuss this with the global(1) people
+at a later step. At least with this patch series, "make O=xyz/ gtags"
+produces a valid index.
+
+>
+> > +# gtags(1) refuses to index any file outside of its current working dir.
+> > +# If gtags indexing is requested and the build output directory is not
+> > +# the kernel source tree, index all files in absolute-path form.
+> > +if [ "$1" = "gtags" -a -n "${tree}" ]; then
+> > +       tree=$(realpath $tree)/
+>
+> I decided to run shellcheck for new code.
+> Please follow the suggestion from the tool.
+>
+> In scripts/tags.sh line 40:
+> tree=$(realpath $tree)/
+>                         ^---^ SC2086 (info): Double quote to prevent
+> globbing and word splitting.
+>
+> Did you mean:
+> tree=$(realpath "$tree")/
+>
+> (You do not need to fix the entire script.
+> This is only for new code).
+>
+
+Yes, the reason was to following the existing coding pattern at
+scripts/tags.sh.  But, sure, will do.
+
+>
+> > @@ -131,7 +139,11 @@ docscope()
+> >
+> >  dogtags()
+> >  {
+> > -       all_target_sources | gtags -i -f -
+> > +       local gtagsoutdir="${PWD}"
+> > +       local gtagsroot="${tree}"
+> > +
+> > +       [ -z "${gtagsroot}" ] && gtagsroot="."
+> > +       all_target_sources | gtags -i -C $gtagsroot -f - $gtagsoutdir
+> >  }
+>
+> You can write it in one line.
+>
+> dogtags()
+> {
+>     all_target_sources | gtags -i -C "${tree:-.}" -f - "${PWD}"
+> }
+>
+
+Ditto. The script was almost-fully POSIX style (except the first line),
+so I avoided bash features on purpose.
+
+I personlly always prefer using Bash features though, so I'll definitely
+update the code.
+
+Thanks a lot for the review. I'll send a v3.
+
+--
+Ahmed S. Darwish
+Linutronix GmbH
