@@ -2,116 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B50A703038
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08E970305C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241699AbjEOOm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35546 "EHLO
+        id S238248AbjEOOns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbjEOOmX (ORCPT
+        with ESMTP id S242044AbjEOOna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:42:23 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13771FCF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:21 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso98500435e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684161740; x=1686753740;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mbrnFaoPoV6auTnbAVlCpOChJelNMoaQ+2iKpw9ZQo8=;
-        b=WDeApaIrAr+nh2FVyb9Z6WeHppbkgOb2aoo76JB8r2GU2gpn+xDvf7iEja0Uj0t0sq
-         zz0SGP3rV8EL7vCCnmHRoibOo1wwNfGhKLNX6fXr7gM+0pHjPzO006kxoI+hIkXfmz5c
-         NznoxgDGdmZD13gTlnhlFeDdUhiCFnqKSxYiKicqCHNTCElJKDOAZe/CEr5kiOuHifN1
-         lza/YD10Z1BKY+HNIwjR6juaMTHLKcbCnJfk3+ZWTnOv0TORHgQ5tG9z2Ut+ruizi+3+
-         QXLO1JoIOQenBxAoHqQprCf0TyWBUfSby8bdxjv03ewsdWp1wFbq2QMJEv9nEuPxDcPy
-         Uweg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684161740; x=1686753740;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mbrnFaoPoV6auTnbAVlCpOChJelNMoaQ+2iKpw9ZQo8=;
-        b=N8BZkOPbEFKJ5EibLRrulHz4OEgSENmpNwCv51ROFW8GhHu+WVejSMB69uhpDg3s5k
-         iHTpu5978omkf2Mzl9AMaaVJ/MRcbjEp8qpqTSWZFLCxMpS5WvuQo5Zuxq4bqJl+vjBN
-         0gkDfwr90vRz3zrTb+P5TxUvA3nCj0PRQYKN70X19w8gKRYVNlTw00u5jPPQk8ZdCqmW
-         mIYhdzBT6fSsI7LPEG/hMfEBci/bXqpLAGcJzImp01an1ElufYqcrpQ5CKcHVncBsInC
-         uwH4g1AcIu35NR641Ta/fVFwQrYUvR132Rp4pSd4rP9a3Jr1Q66UpO7TmF86UyJSWz5z
-         mcWg==
-X-Gm-Message-State: AC+VfDz0XuGHXc9UYsM0nfZVMdRpN8dVg7YENeZldfNwjVcSsJeXRssX
-        6/7x4qIOc4VQbF+OGYrcrhQajISEdCumuLsHU6I=
-X-Google-Smtp-Source: ACHHUZ4ZdYo0QmdipmTJhbkhtqheg8LHZCjI5dchfxlFIwk6dZAR0+yhLfsv/+iAKWWM7rlClTMNrQ==
-X-Received: by 2002:a05:6000:1191:b0:306:462a:b78d with SMTP id g17-20020a056000119100b00306462ab78dmr21924023wrx.53.1684161740075;
-        Mon, 15 May 2023 07:42:20 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id i6-20020adfdec6000000b002c70ce264bfsm32690343wrn.76.2023.05.15.07.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 07:42:18 -0700 (PDT)
-Date:   Mon, 15 May 2023 17:42:14 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Su Hui <suhui@nfschina.com>, Xinhui.Pan@amd.com,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com
-Subject: Re: [PATCH] drm/amdgpu: remove unnecessary (void*) conversions
-Message-ID: <be331480-4ea1-4798-81ec-540cb662c8b7@kili.mountain>
-References: <20230515013428.38798-1-suhui@nfschina.com>
- <ebe9d98c-148d-4694-8f97-96bacd0b9f7d@kili.mountain>
- <CADnq5_Nei-XHsD8DQkpUGZwZAik5X-S1R3znOJGD1X2jAxD6_g@mail.gmail.com>
+        Mon, 15 May 2023 10:43:30 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78A02D67;
+        Mon, 15 May 2023 07:43:24 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FEdfW2001912;
+        Mon, 15 May 2023 14:42:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=3xmrodnLEt3plr6PfR2NiDKXpK4TnrjIaL6sDzQ/7GU=;
+ b=q+a2WxQK3J7w6NJiJUphIIf9ajPoK7dLJYqI+t2yd270W7CmFhfqcxPQ4sLDs8I3yoHG
+ pxet7qhizsDe49r5qacnn0up7txnPYLcrU93fC8Bm+i3aeBN80Ggy2bsIoIYrG+r6kUc
+ J1XYXBbpdTFIkOMbNS2Hzs4i6D8uAWoosggxD2ywApVOUoB3k+0BLdM34/EKgjTr0v0I
+ M1Qugs2xEIxBRanx3Lb4zTEg+aHcUy6ykjy9rtQaZ1BfcKCrOV62c4cgy2n4HHtWIcJg
+ tOJu+la3PVYmFqjAttTuVrNtJHuyBkPyuDeqcvdGca4YJcbHej4ZLYZBslN6wQePhEil xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkpes0q07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 14:42:47 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34FEe63m005221;
+        Mon, 15 May 2023 14:42:46 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkpes0pvy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 14:42:46 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34FD2VOD016196;
+        Mon, 15 May 2023 14:42:43 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qj264rxmt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 14:42:42 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34FEgdw220447944
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 May 2023 14:42:39 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4949420043;
+        Mon, 15 May 2023 14:42:39 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF9C920040;
+        Mon, 15 May 2023 14:42:36 +0000 (GMT)
+Received: from [9.171.65.23] (unknown [9.171.65.23])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 15 May 2023 14:42:36 +0000 (GMT)
+Message-ID: <a2a9a2bdb431d7611588a9f9bdca64856ac56139.camel@linux.ibm.com>
+Subject: Re: [PATCH v9 5/6] iommu/dma: Allow a single FQ in addition to
+ per-CPU FQs
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Robin Murphy <robin.murphy@arm.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Julian Ruess <julianr@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Date:   Mon, 15 May 2023 16:42:36 +0200
+In-Reply-To: <ZGIuj2pRjOPffqZZ@ziepe.ca>
+References: <20230310-dma_iommu-v9-0-65bb8edd2beb@linux.ibm.com>
+         <20230310-dma_iommu-v9-5-65bb8edd2beb@linux.ibm.com>
+         <ZGIuj2pRjOPffqZZ@ziepe.ca>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gNuxWXJsmokdhsaD92T6yUFS_UMSNhrG
+X-Proofpoint-ORIG-GUID: me_7t4m8_jWebgWrnvUvQ84qdxzJLwc5
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADnq5_Nei-XHsD8DQkpUGZwZAik5X-S1R3znOJGD1X2jAxD6_g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 phishscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=596 bulkscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305150121
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 10:11:39AM -0400, Alex Deucher wrote:
-> On Mon, May 15, 2023 at 3:17 AM Dan Carpenter <dan.carpenter@linaro.org> wrote:
-> >
-> > On Mon, May 15, 2023 at 09:34:28AM +0800, Su Hui wrote:
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > > index f60753f97ac5..c837e0bf2cfc 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> > > @@ -1470,7 +1470,7 @@ int amdgpu_debugfs_regs_init(struct amdgpu_device *adev)
-> > >
-> > >  static int amdgpu_debugfs_test_ib_show(struct seq_file *m, void *unused)
-> > >  {
-> > > -     struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-> > > +     struct amdgpu_device *adev = m->private;
-> > >       struct drm_device *dev = adev_to_drm(adev);
-> > >       int r = 0, i;
-> > >
-> >
-> > This declaration block was originally written in reverse Christmas tree
-> > order:
-> >
-> >         long long long variable name;
-> >         medium length name;
-> >         short name;
-> >
-> > So you probably want to change the order now that the lengths have
-> > changed.  Same in the other places as well.
-> 
-> I don't think it's possible due to the variable dependencies unless
-> you separate the declarations and assignments which doesn't seem like
-> a net win to me.
+On Mon, 2023-05-15 at 10:07 -0300, Jason Gunthorpe wrote:
+> On Mon, May 15, 2023 at 11:15:55AM +0200, Niklas Schnelle wrote:
+>=20
+> > +/**
+> > + * struct dma_iommu_options - Options for dma-iommu
+> > + *
+> > + * @flags: Flag bits for enabling/disabling dma-iommu settings
+> > + *
+> > + * This structure is intended to provide IOMMU drivers a way to influe=
+nce the
+> > + * behavior of the dma-iommu DMA API implementation. This allows optim=
+izing for
+> > + * example for a virtualized environment with slow IOTLB flushes.
+> > + */
+> > +struct dma_iommu_options {
+> > +#define IOMMU_DMA_OPTS_PER_CPU_QUEUE	(0L << 0)
+> > +#define IOMMU_DMA_OPTS_SINGLE_QUEUE	(1L << 0)
+> > +	u64	flags;
+> > +};
+>=20
+> You need to hash it out with robin if we do something like this or use
+> more untyped caps as he put in this series:
+>=20
+> https://lore.kernel.org/linux-iommu/cover.1683233867.git.robin.murphy@arm=
+.com/
+>=20
+> Jason
 
-Gar.  I'm dumb.  Sorry for the noise.
+Ok. I do wonder how to best represent this as a capability.
+Semantically I think a capability needs to be something positive i.e.
+while IOMMU_CAP_EXPENSIVE_FLUSH would technically work having slow
+IOTLB flushes really isn't a capability. So the best I can think of is
+maybe IOMMU_CAP_SHADOW_ON_FLUSH. It's a bit specific but does convey
+that the IOTLB flush does more than dropping hardware caches where the
+main cost is the then empty TLB not the operation itself. Or maybe to
+keep thing separate one would have to add capabilities for the existing
+users IOMMU_CAP_HW_FLUSH and IOMMU_CAP_CONCURRENT_FLUSH.
 
-regards,
-dan carpenter
+Not sure though. It does feel more clunky than the tuning op I added
+and maybe instead these mechanisms should co-exist. After all even
+though the IOTLB flushes with shadowing are expensive they still
+benefit from the flush queue just with more entries and less
+parallelism.
 
+Thanks,
+Niklas
