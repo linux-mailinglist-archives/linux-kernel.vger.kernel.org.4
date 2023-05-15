@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D102702B20
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927F3702B21
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241258AbjEOLKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S241277AbjEOLKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241209AbjEOLJt (ORCPT
+        with ESMTP id S241244AbjEOLJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:09:49 -0400
+        Mon, 15 May 2023 07:09:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40AE1716
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 04:09:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED03E5B;
+        Mon, 15 May 2023 04:09:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90ABA6229D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4E8C433EF;
-        Mon, 15 May 2023 11:09:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C271462295;
+        Mon, 15 May 2023 11:09:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0814C433D2;
+        Mon, 15 May 2023 11:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684148988;
-        bh=Dvh9tI9Xl3uzM2jJ1Xep2xAC6Nc/oaoWIoRatlpPUfE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=a8nilyUvosgWLYfZFkc00NkLieMjNhu0fdDIXucxn4MZjLLAzSkjY1MBHmVls528O
-         bw6Pce54LlBfFJAtCnN6qzksCr3wFKj/3oZ/ywXCiqaCO7nHsusv/WiVh8JvYafmmD
-         DfU+MMGLUhJKxzSYoXkTKSZxZvTI4RhZDRbY5mIoJihG4/+vs0XRV98R40a+GtxgFu
-         hnpSrES89Jv9zT9M0F8B6M+v0m4jxQ5WFOhUydaz7YqMQPkl0/9nfJBNK8md5Wm2eG
-         9UQf7g95XLVOmRgDpyJepSyBEVy+SWZBGrabXMQ/10uG6HIMTQpYUz1poUyV0sO1Mi
-         EOGwUz7HfoPNg==
+        s=k20201202; t=1684148992;
+        bh=dY7dcUuhtCnaIotYfTGR91pIk6dZNsFbIzgqKiaUhL4=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=pBwcLOM5+iavGmzVbrLZ8x7hXzFMI71seHb8fYtFhF0/9J4/E3d0jS4HyOidOJlfR
+         wL9bvm2/zjRWe+7ctIY9isccslzoYDCpJuZqIKBRn+6ElG9TmHFKOyZTsnbi3njWui
+         hhFVIkXHUOgEtcu+uJiawyfJ1navPvBA1VTgVgBLvveyw42Z+31fHbARztfq3Svs3H
+         wlSLyMQXuw9c2YSK63H1HWB8IX2q9xo6gMw4j9s/1TdRjyPZFt7WNM/V8u2aSvc8wo
+         N53+umW7IlO6amkNspsD63MTbEY2rOroAtZaY2WckkZue7n1y2P+vG6arjB1sWoyIS
+         /riLzPgNKC0UQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com,
-        Simon Trimmer <simont@opensource.cirrus.com>
-In-Reply-To: <20230512144237.739000-1-rf@opensource.cirrus.com>
-References: <20230512144237.739000-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH] ASoC: cs35l56: Prevent unbalanced pm_runtime in
- dsp_work() on SoundWire
-Message-Id: <168414898656.394037.4680314609233066357.b4-ty@kernel.org>
-Date:   Mon, 15 May 2023 20:09:46 +0900
+To:     Andi Shyti <andi.shyti@kernel.org>, linux-spi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230513173646.4306-1-krzysztof.kozlowski@linaro.org>
+References: <20230513173646.4306-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] spi: MAINTAINERS: drop Krzysztof Kozlowski from
+ Samsung SPI
+Message-Id: <168414899059.394221.12943543309007276806.b4-ty@kernel.org>
+Date:   Mon, 15 May 2023 20:09:50 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -57,24 +57,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 15:42:37 +0100, Richard Fitzgerald wrote:
-> Flush the SoundWire interrupt handler work instead of cancelling it.
-> 
-> When a SoundWire interrupt is triggered the pm_runtime is held
-> until the work has completed. It's therefore unsafe to cancel
-> the work, it must be flushed.
+On Sat, 13 May 2023 19:36:46 +0200, Krzysztof Kozlowski wrote:
+> Remove Krzysztof Kozlowski from maintainers of Samsung SoC SPI drivers.
 > 
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: cs35l56: Prevent unbalanced pm_runtime in dsp_work() on SoundWire
-      commit: 17082e09b94cfe60bf39088f3d37c1f10e6c5928
+[1/1] spi: MAINTAINERS: drop Krzysztof Kozlowski from Samsung SPI
+      commit: ec9452594e04804cabbc561e88e96b48ab4655e4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
