@@ -2,42 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF36702C75
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A87702C57
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241604AbjEOMPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S241296AbjEOMKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241710AbjEOMOw (ORCPT
+        with ESMTP id S240519AbjEOMKW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:14:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234D0E50
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:14:50 -0700 (PDT)
-Received: from dggpemm500003.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QKdV231LczTkjW;
-        Mon, 15 May 2023 20:10:02 +0800 (CST)
-Received: from localhost.localdomain (10.28.77.120) by
- dggpemm500003.china.huawei.com (7.185.36.56) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 15 May 2023 20:14:47 +0800
-From:   wangwudi <wangwudi@hisilicon.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     wangwudi <wangwudi@hisilicon.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH] irqchip: gic-v3: Collection table support muti pages
-Date:   Mon, 15 May 2023 20:10:04 +0800
-Message-ID: <1684152604-12621-1-git-send-email-wangwudi@hisilicon.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 15 May 2023 08:10:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924BCFB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:10:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 281D36202B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 12:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D43CC4339B;
+        Mon, 15 May 2023 12:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684152620;
+        bh=knmX2hbyeuH2Fxmczb3rA1YEedMCegcc1TMU46kf35Y=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=IpzVY81XIXCAqf1P16YBk24AWZzK+0l6k41mnBgLSB0cNKcbAzlDdQfV4lXDRmVwh
+         cUeQL1uUrEpenLjI5rrrb1ADtbtDQbXXERsPQ8lqs6fQ+0AQ0AVE8llc4slbVJWOg2
+         u8+WDkk28GTSabyEO989a8vpVpZGhnpQAI2/Q4mfxeqRwXXQ1jstWxDKnYPgc4TE//
+         wpUQBM7oxCsDuUkegsVg3gUIGH48VLJqWpejaIEnth48gvu/zmdiAdLcDGnWi1QYNk
+         nZKJ2gkFDCr1nI9zH7QmJ2+n19oYl0TO5fvwexwvBRQlaTr5KpkniAOZB15u1nLixo
+         rKynv5ubO3lZA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B251E5421D;
+        Mon, 15 May 2023 12:10:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.28.77.120]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500003.china.huawei.com (7.185.36.56)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] nfc: llcp: fix possible use of uninitialized
+ variable in nfc_llcp_send_connect()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168415262030.24388.6199183287824170155.git-patchwork-notify@kernel.org>
+Date:   Mon, 15 May 2023 12:10:20 +0000
+References: <20230513115204.179437-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230513115204.179437-1-krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, thierry.escande@collabora.com,
+        sameo@linux.intel.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,32 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only one page is allocated to the collection table.
-Recalculate the page number of collection table based on the number of
-CPUs.
+Hello:
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Signed-off-by: wangwudi <wangwudi@hisilicon.com>
----
- drivers/irqchip/irq-gic-v3-its.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 0ec2b1e1df75..dfdeba86b9aa 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -2626,6 +2626,10 @@ static int its_alloc_tables(struct its_node *its)
- 			indirect = its_parse_indirect_baser(its, baser, &order,
- 							    ITS_MAX_VPEID_BITS);
- 			break;
-+		case GITS_BASER_TYPE_COLLECTION:
-+			indirect = its_parse_indirect_baser(its, baser, &order,
-+								order_base_2(num_possible_cpus()));
-+			break;
- 		}
- 
- 		err = its_setup_baser(its, baser, cache, shr, order, indirect);
+On Sat, 13 May 2023 13:52:04 +0200 you wrote:
+> If sock->service_name is NULL, the local variable
+> service_name_tlv_length will not be assigned by nfc_llcp_build_tlv(),
+> later leading to using value frmo the stack.  Smatch warning:
+> 
+>   net/nfc/llcp_commands.c:442 nfc_llcp_send_connect() error: uninitialized symbol 'service_name_tlv_length'.
+> 
+> Fixes: de9e5aeb4f40 ("NFC: llcp: Fix usage of llcp_add_tlv()")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2] nfc: llcp: fix possible use of uninitialized variable in nfc_llcp_send_connect()
+    https://git.kernel.org/netdev/net-next/c/0d9b41daa590
+
+You are awesome, thank you!
 -- 
-2.7.4
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
