@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C44F703E5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4D9703E5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245264AbjEOUQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 16:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S245263AbjEOUQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 16:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244176AbjEOUQH (ORCPT
+        with ESMTP id S243149AbjEOUQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 16:16:07 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED2DE52
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:06 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-643995a47f7so13764977b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:06 -0700 (PDT)
+        Mon, 15 May 2023 16:16:09 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FD1C1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:08 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6436e075166so9907734b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:16:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684181766; x=1686773766;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NdrXa/PlVV43Pf78fHCONHu55eewXuTj8I+Jt1XajL4=;
-        b=X9UotK3nIcZR9mIfhjg25eDJxkcGD+acT07JpZEckYeI+bTkV3P9Fdkgw1EWtT9jV2
-         IO63n2RSI1nMLnyHJQxSGIgS94GjNw01y7bdsmNmNkxPMWdQErTCS8eIgAf8JamBLgbq
-         JYpiV390X5/1BgjzuPvK5AbSMp/lQLYT8msx0=
+        d=chromium.org; s=google; t=1684181768; x=1686773768;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q+xclHRJbfTaOco3ogcoYlZx1POsGrbKOC60b7YSguU=;
+        b=g36wlx4dAT/5M/at1hKyNtZto26zWfKQwhNbIbrF+H00O03nyEY6BiCUtUDqrcdMbq
+         e7fz+6QIIokAKhGcCOG2WqzT4Luc93tGNTu737dq9vjufkb3y1jzvHWHWkE0QjekmU7p
+         lApebxoBnaqlPNm5AlNHXeaQIEHLeKk+EJKHo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684181766; x=1686773766;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NdrXa/PlVV43Pf78fHCONHu55eewXuTj8I+Jt1XajL4=;
-        b=D2kwFr+QxLNIGSdvd5DzIRSUL7ANId/iE5XCOJvT7SCClly3rO0+HTsTizIJt90kqK
-         1XBJzS6vlEx/7123xB0fX9oRTEIHnZfRmhyc9ZZN+LtgaVDN8ofqRLFBkekmOmGpv6MZ
-         8CPC31eilesXYwXBAr2Gn96zyyiWDLpZN+0ZcnM75zo12fOW95eBgOuDatA4PXqeJwCb
-         tlXWxGRACd8Ig7IN4eIR9mXxFKzWxoBsxY4RzQc+eepDFBjzMsyUnVbYn9R5w9lcMFBQ
-         ZsUveCTb+W0tpCk4rgFdlb1PIitETRtmEWp1Z5wnPL/pzs7cx8MGK12rHNACr/BOaayl
-         ugbA==
-X-Gm-Message-State: AC+VfDzNXwJuhvP7Q1w2uDeqnfitDn0vodI2pyQN7FTe5BUctq2ucr0s
-        Hxs5SW+IY5FWFr1FK6QyT2QxZQ==
-X-Google-Smtp-Source: ACHHUZ7WrmkGpx7fG2HxU/uySV9x6q9FF5ouvQW5vcNqFi/UOINhM724hDTKdx7iOkCYhq6cqFKofA==
-X-Received: by 2002:a05:6a20:7295:b0:f2:ae03:4020 with SMTP id o21-20020a056a20729500b000f2ae034020mr41711998pzk.54.1684181766038;
-        Mon, 15 May 2023 13:16:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684181768; x=1686773768;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q+xclHRJbfTaOco3ogcoYlZx1POsGrbKOC60b7YSguU=;
+        b=Xzp/Q4KatNEK/9Ni7WvcJXzCCVfyuQe4wGBBmEgzm1pJxW0CeiwYuJsnWWLLa3WiwA
+         Cxyn35m9mGNdezAJfoXvq4vjHF7vfmPDjZNpVna276GPR+oIRBzSYkvmM1/4QVx7tLPj
+         aW5mjydkw2gbJGEs+gtUjoz3hMp0EybvVFcUfhzrcEXfsJXyKJxoKWIoFuIV/a7iZhFj
+         E25pVXMJJf7UI9TXtKk04aNmU+BTBMrYYt7ZR437tjYCyisx/dFozRZ2c50espj1koYu
+         FsUrtaWaqX4B6UI2lhbhr+buqXsPjOwekoUeJHcfjEVpiHXXY6Omycz7wNetdvcDm2ab
+         2sAg==
+X-Gm-Message-State: AC+VfDzF/65iHkKpiOVEbJ02LliSrayk3IkPrlKiefJpR6bW+O+5RnXr
+        KDv4eXX1P672DFQZXlx8nsUhrg==
+X-Google-Smtp-Source: ACHHUZ5WhKqgoMTuex1L+d9MK/DlTrH0o+Ldk/9GGkvVe2VsoV5lyk+s+Rn1dX3B0wpYq4ALaKdvAA==
+X-Received: by 2002:a05:6a00:10d3:b0:63b:5496:7afa with SMTP id d19-20020a056a0010d300b0063b54967afamr41742520pfu.11.1684181768187;
+        Mon, 15 May 2023 13:16:08 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:9f33:9d98:277a:d4cd])
-        by smtp.gmail.com with ESMTPSA id a19-20020a62bd13000000b0063f0c9eadc7sm7981411pff.200.2023.05.15.13.16.04
+        by smtp.gmail.com with ESMTPSA id a19-20020a62bd13000000b0063f0c9eadc7sm7981411pff.200.2023.05.15.13.16.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 13:16:05 -0700 (PDT)
+        Mon, 15 May 2023 13:16:07 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Marc Zyngier <maz@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -65,13 +66,13 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Seiya Wang <seiya.wang@mediatek.com>,
         Douglas Anderson <dianders@chromium.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/5] irqchip/gic-v3: Disable pseudo NMIs on Mediatek Chromebooks w/ bad FW
-Date:   Mon, 15 May 2023 13:13:49 -0700
-Message-ID: <20230515131353.v2.cover@dianders>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/5] dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for Mediatek SoCs w/ broken FW
+Date:   Mon, 15 May 2023 13:13:50 -0700
+Message-ID: <20230515131353.v2.1.Iabe67a827e206496efec6beb5616d5a3b99c1e65@changeid>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+In-Reply-To: <20230515131353.v2.cover@dianders>
+References: <20230515131353.v2.cover@dianders>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -84,54 +85,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As talked about in the bindings patch included in this series
-("dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for
-Mediatek SoCs w/ broken FW"), many Mediatek-based Chromebooks shipped
-with firmware that doesn't properly save/restore some GICR
-registers. This causes the system to crash if "pseudo NMIs" are turned
-on.
+When trying to turn on the "pseudo NMI" kernel feature in Linux, it
+was discovered that all Mediatek-based Chromebooks that ever shipped
+(at least ones with GICv3) had a firmware bug where they wouldn't save
+certain GIC "GICR" registers properly. If a processor ever entered a
+suspend/idle mode where the GICR registers lost state then they'd be
+reset to their default state.
 
-This series makes sure that we never allow turning on "pseudo NMIs" if
-we are running with the problematic firmware.
+As a result of the bug, if you try to enable "pseudo NMIs" on the
+affected devices then certain interrupts will unexpectedly get
+promoted to be "pseudo NMIs" and cause crashes / freezes / general
+mayhem.
 
-The patches in this series can land in any order and can go through
-entirely different trees. None of the patches are harmful on their
-own, but to get things fixed we need all of them.
+ChromeOS is looking to start turning on "pseudo NMIs" in production to
+make crash reports more actionable. To do so, we will release firmware
+updates for at least some of the affected Mediatek Chromebooks.
+However, even when we update the firmware of a Chromebook it's always
+possible that a user will end up booting with old firmware. We need to
+be able to detect when we're running with firmware that will crash and
+burn if pseudo NMIs are enabled.
 
-v2 fixes the quirk name and also moves the quirk out of the SoC.dtsi
-file and into the Chromebook file. This, unfortunately, means that
-mt8186-based Chromebooks are no longer handled since they don't appear
-to be upstream yet. :(
+The current plan is:
+* Update the device trees of all affected Chromebooks to include the
+  'mediatek,broken-save-restore-fw' property. The kernel can use this
+  to know not to enable certain features like "pseudo NMI". NOTE:
+  device trees for Chromebooks are never baked into the firmware but
+  are bundled with the kernel. A kernel will never be configured to
+  use "pseudo NMIs" and be bundled with an old device tree.
+* When we get a fixed firmware for one of these Chromebooks, it will
+  patch the device tree to remove this property.
+
+For some details, you can also see the public bug
+<https://issuetracker.google.com/281831288>
+
+Reviewed-by: Julius Werner <jwerner@chromium.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
 Changes in v2:
 - "when CPUs are powered" => "when the GIC redistributors are..."
-- Changed "Fixes" tag.
-- Moved from mt8183.dtsi to mt8183-kukui.dtsi
-- Moved from mt8192.dtsi to mt8192-asurada.dtsi
-- Moved from mt8195.dtsi to mt8195-cherry.dtsi
 - mediatek,gicr-save-quirk => mediatek,broken-save-restore-fw
 
-Douglas Anderson (5):
-  dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for Mediatek
-    SoCs w/ broken FW
-  irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware
-    issues
-  arm64: dts: mediatek: mt8183: Add mediatek,broken-save-restore-fw to
-    kukui
-  arm64: dts: mediatek: mt8192: Add mediatek,broken-save-restore-fw to
-    asurada
-  arm64: dts: mediatek: mt8195: Add mediatek,broken-save-restore-fw to
-    cherry
+ .../bindings/interrupt-controller/arm,gic-v3.yaml           | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- .../interrupt-controller/arm,gic-v3.yaml      |  6 ++++++
- .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  4 ++++
- .../boot/dts/mediatek/mt8192-asurada.dtsi     |  4 ++++
- .../boot/dts/mediatek/mt8195-cherry.dtsi      |  4 ++++
- drivers/irqchip/irq-gic-common.c              |  8 ++++++--
- drivers/irqchip/irq-gic-common.h              |  1 +
- drivers/irqchip/irq-gic-v3.c                  | 20 +++++++++++++++++++
- 7 files changed, 45 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+index 92117261e1e1..39e64c7f6360 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+@@ -166,6 +166,12 @@ properties:
+   resets:
+     maxItems: 1
+ 
++  mediatek,broken-save-restore-fw:
++    type: boolean
++    description:
++      Asserts that the firmware on this device has issues saving and restoring
++      GICR registers when the GIC redistributors are powered off.
++
+ dependencies:
+   mbi-ranges: [ msi-controller ]
+   msi-controller: [ mbi-ranges ]
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
