@@ -2,177 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AAA2702786
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBF8702789
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235889AbjEOIsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33120 "EHLO
+        id S238124AbjEOItG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237581AbjEOIsQ (ORCPT
+        with ESMTP id S238029AbjEOIs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:48:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D35BFF;
-        Mon, 15 May 2023 01:48:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 490334B3;
-        Mon, 15 May 2023 01:48:56 -0700 (PDT)
-Received: from [192.168.1.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FA443F67D;
-        Mon, 15 May 2023 01:48:08 -0700 (PDT)
-Message-ID: <27520bc9-21f4-b4d6-3159-39542a93cfca@arm.com>
-Date:   Mon, 15 May 2023 10:48:03 +0200
+        Mon, 15 May 2023 04:48:59 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E9B10C9;
+        Mon, 15 May 2023 01:48:51 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 1D16D15F16F;
+        Mon, 15 May 2023 10:48:48 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1684140528; bh=tStAwueOxbXDMBwSLNTJ9Qsuwa6+o5KusDWfCkARZKs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iH23OyGTr4tc1eztxSRC7l5DyGiPYJCtProPLZW0bSCFOghwW/tINr+gJraHtwGry
+         hX72zLn8R/XonT8ju3AnubkdQpZTJZAV6EpvpedhqTn/K2s23lm9d5q9YeWEC4fImw
+         xn45833kH9Y4z/8Gkb/OZjH2nRPRqo0gmtt7ovFRS7gqvveT1jnIIVSvWHsiBlDiQ2
+         EIXlYIBZjGenSLF92tW6bjW8pzmeZYOMluUfdjGybfuSiBlNwooy5dBWhi6PoMQIaj
+         3Fe3KCsXq2kAY34gB1tRoD4jNkukE+Txg9XTDFtk3uLqX+vjXhnaeEwJtdiCer9VTq
+         ErmGi5SmkKILw==
+Date:   Mon, 15 May 2023 10:48:47 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2 RESEND 7/7] swiotlb: per-device flag if there are
+ dynamically allocated buffers
+Message-ID: <20230515104847.6dfdf31b@meshulam.tesarici.cz>
+In-Reply-To: <ZGEuYxR2PM6wHeDh@arm.com>
+References: <cover.1683623618.git.petr.tesarik.ext@huawei.com>
+        <69f9e058bb1ad95905a62a4fc8461b064872af97.1683623618.git.petr.tesarik.ext@huawei.com>
+        <ZGEuYxR2PM6wHeDh@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Pierre Gondois <pierre.gondois@arm.com>
-Subject: Re: [PATCH 10/17] PM: EM: Add runtime update interface to modify EM
- power
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, ionela.voinescu@arm.com,
-        linux-pm@vger.kernel.org, rostedt@goodmis.org,
-        linux-kernel@vger.kernel.org, rafael@kernel.org,
-        mhiramat@kernel.org
-References: <20230314103357.26010-1-lukasz.luba@arm.com>
- <20230314103357.26010-11-lukasz.luba@arm.com>
- <e7d7d337-b9bd-ad7f-ab5e-adb7e8236c19@arm.com>
- <94e7bbaa-3a25-6634-f5af-fff4932a44b9@arm.com>
-Content-Language: en-US
-In-Reply-To: <94e7bbaa-3a25-6634-f5af-fff4932a44b9@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukasz,
+Hi Catalin,
 
-On 5/10/23 08:55, Lukasz Luba wrote:
-> Hi Pierre,
-> 
-> On 4/11/23 16:40, Pierre Gondois wrote:
->> Hello Lukasz,
->>
->> On 3/14/23 11:33, Lukasz Luba wrote:
->>> Add an interface which allows to modify EM power data at runtime.
->>> The new power information is populated by the provided callback, which
->>> is called for each performance state. The CPU frequencies' efficiency is
->>> re-calculated since that might be affected as well. The old EM memory
->>> is going to be freed later using RCU mechanism.
->>>
->>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>> ---
->>>    include/linux/energy_model.h |   8 +++
->>>    kernel/power/energy_model.c  | 109 +++++++++++++++++++++++++++++++++++
->>>    2 files changed, 117 insertions(+)
->>>
->>> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->>> index a616006a8130..e1772aa6c843 100644
->>> --- a/include/linux/energy_model.h
->>> +++ b/include/linux/energy_model.h
->>> @@ -202,6 +202,8 @@ struct em_data_callback {
->>>    struct em_perf_domain *em_cpu_get(int cpu);
->>>    struct em_perf_domain *em_pd_get(struct device *dev);
->>> +int em_dev_update_perf_domain(struct device *dev, struct
->>> em_data_callback *cb,
->>> +                  void *priv);
->>>    int em_dev_register_perf_domain(struct device *dev, unsigned int
->>> nr_states,
->>>                    struct em_data_callback *cb, cpumask_t *span,
->>>                    bool microwatts);
->>> @@ -382,6 +384,12 @@ static inline int em_pd_nr_perf_states(struct
->>> em_perf_domain *pd)
->>>    {
->>>        return 0;
->>>    }
->>> +static inline
->>> +int em_dev_update_perf_domain(struct device *dev, struct
->>> em_data_callback *cb,
->>> +                  void *priv)
->>> +{
->>> +    return -EINVAL;
->>> +}
->>>    #endif
->>>    #endif
->>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->>> index 87962b877376..e0e8fba3d02b 100644
->>> --- a/kernel/power/energy_model.c
->>> +++ b/kernel/power/energy_model.c
->>
->> [snip]
->>
->>> @@ -531,9 +628,21 @@ void em_dev_unregister_perf_domain(struct device
->>> *dev)
->>>        tmp = pd->runtime_table;
->>> +    /*
->>> +     * Safely destroy runtime modifiable EM. By using the call
->>> +     * synchronize_rcu() we make sure we don't progress till last user
->>> +     * finished the RCU section and our update got applied.
->>> +     */
->>>        rcu_assign_pointer(pd->runtime_table, NULL);
->>>        synchronize_rcu();
->>> +    /*
->>> +     * After the sync no updates will be in-flight, so free the old
->>> +     * memory.
->>> +     */
->>> +    if (tmp->state != pd->table)
->>> +        kfree(tmp->state);
->>> +
->>
->> NIT: I think that the call 'kfree(pd->default_table->state)' which is
->> done in
->> the patch:
->>     PM: EM: Refactor struct em_perf_domain and add default_table
->> should be done here, otherwise this bit of memory is not freed.
-> 
-> In this patch 10/17 there is no 'default_table' field yet, so cannot
-> be freed in this patch's code.
+On Sun, 14 May 2023 19:54:27 +0100
+Catalin Marinas <catalin.marinas@arm.com> wrote:
 
-I copy/pasted the statement:
-    'kfree(pd->default_table->state)'
-but I meant that the dynamic/runtime 'state' structure is freed, but the
-'state' structure belonging to the default table is not freed. I.e. there
-should be the following call:
-    'kfree(pd->table->state)'
-in this patch, which would be updated to
-    'kfree(pd->default_table->state)'
-in the patch:
-    PM: EM: Refactor struct em_perf_domain and add default_table
+> On Tue, May 09, 2023 at 11:18:19AM +0200, Petr Tesarik wrote:
+> > diff --git a/include/linux/device.h b/include/linux/device.h
+> > index d1d2b8557b30..e340e0f06dce 100644
+> > --- a/include/linux/device.h
+> > +++ b/include/linux/device.h
+> > @@ -516,6 +516,9 @@ struct device_physical_location {
+> >   * @dma_io_tlb_dyn_slots:
+> >   *		Dynamically allocated bounce buffers for this device.
+> >   *		Not for driver use.
+> > + * @dma_io_tlb_have_dyn:
+> > + *		Does this device have any dynamically allocated bounce
+> > + *		buffers? Not for driver use.
+> >   * @archdata:	For arch-specific additions.
+> >   * @of_node:	Associated device tree node.
+> >   * @fwnode:	Associated device node supplied by platform firmware.
+> > @@ -623,6 +626,7 @@ struct device {
+> >  	struct io_tlb_mem *dma_io_tlb_mem;
+> >  	spinlock_t dma_io_tlb_dyn_lock;
+> >  	struct list_head dma_io_tlb_dyn_slots;
+> > +	bool dma_io_tlb_have_dyn;
+> >  #endif
+> >  	/* arch specific additions */
+> >  	struct dev_archdata	archdata;
+> > diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
+> > index daa2064f2ede..8cbb0bebb0bc 100644
+> > --- a/include/linux/swiotlb.h
+> > +++ b/include/linux/swiotlb.h
+> > @@ -152,7 +152,11 @@ static inline bool is_swiotlb_buffer(struct device *dev, phys_addr_t paddr)
+> >  
+> >  	return mem &&
+> >  		(is_swiotlb_fixed(mem, paddr) ||
+> > -		 (mem->allow_dyn && is_swiotlb_dyn(dev, paddr)));
+> > +		 /* Pairs with smp_store_release() in swiotlb_dyn_map()
+> > +		  * and swiotlb_dyn_unmap().
+> > +		  */
+> > +		 (smp_load_acquire(&dev->dma_io_tlb_have_dyn) &&
+> > +		  is_swiotlb_dyn(dev, paddr)));
+> >  }
+> >  
+> >  static inline bool is_swiotlb_force_bounce(struct device *dev)
+> > diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> > index 81eab1c72c50..e8be3ee50f18 100644
+> > --- a/kernel/dma/swiotlb.c
+> > +++ b/kernel/dma/swiotlb.c
+> > @@ -642,6 +642,9 @@ static phys_addr_t swiotlb_dyn_map(struct device *dev, phys_addr_t orig_addr,
+> >  
+> >  	spin_lock_irqsave(&dev->dma_io_tlb_dyn_lock, flags);
+> >  	list_add(&slot->node, &dev->dma_io_tlb_dyn_slots);
+> > +	if (!dev->dma_io_tlb_have_dyn)
+> > +		/* Pairs with smp_load_acquire() in is_swiotlb_buffer() */
+> > +		smp_store_release(&dev->dma_io_tlb_have_dyn, true);
+> >  	spin_unlock_irqrestore(&dev->dma_io_tlb_dyn_lock, flags);  
+> 
+> I'm not sure this works. What this seems to do is that if the caller of
+> is_swiotlb_buffer() sees the flag set, it's guaranteed that something
+> was added to the dma_io_tlb_dyn_slots list. But the reverse is not
+> necessarily true. IOW, if something was added to the list, there is a
+> brief window where the dma_io_tlb_have_dyn flag is still false. In the
+> general case, I doubt any ordering between list_add() and the flag
+> setting changes anything since neither of them may be visible to another
+> CPU.
 
-Ultimately, all the memory is freed with all the patches applied, so this
-is just a NIT about re-ordering (if this comment is indeed accurate).
+Thank you for the review! This patch probably needs a bit more
+explanation.
 
-> 
-> 
->>>        kfree(tmp);
->>>        kfree(dev->em_pd->table);
-> 
-> ^^^^ in this current code we have the clean-up.
-> Here we clean the dev->em_pd->table, which is our conceptual
-> 'default_table' in current code (before refactoring in 13/17)
-> 
-> 
-> In the patch 13/17 that you was referring to, there is also similar
-> but new cleaning process:
-> ------------------->8---------------------------
-> -	kfree(dev->em_pd->table);
-> +	kfree(pd->default_table->state);
-> +	kfree(pd->default_table);
-> ------------------8<----------------------------
-> 
-> So, it should be good.
-> 
-> Regards,
-> Lukasz
+The goal is to avoid taking a spin lock in the mkost common case that
+the dynamic list is empty. The only required invariant is:
 
-Regards,
-Pierre
+  When the flag is clear, it is safe to skip the list.
+
+It's not a bug to walk an empty list, it's merely less efficient. Such
+race window would be acceptable. OTOH that's not your concern if I
+understand you correctly.
+
+> What you need is for a 'paddr' added to the dynamic list to be correctly
+> identified by another CPU as dynamic swiotlb. That other CPU doesn't
+> check random addresses but only those returned by the DMA API.
+
+Yes, that's correct.
+
+> Such
+> values would be normally passed through a memory location (e.g. driver
+> local structures) and that's what you want to order against.
+
+This would certainly work, but I'm not sure I need it. My only goal is
+that when the flag is set, the new value is observed by all CPUs on the
+next call to is_swiotlb_buffer().
+
+> What I mean is that a 'dev->blah = paddr' needs to be ordered _after_
+> your flag setting. So you need the either the 'blah = paddr' assignment
+> to have release semantics or the flag setting to be an
+> smp_store_acquire() (but we don't have such thing). You'd have to use an
+> explicit smp_wmb() barrier after the flag setting (it can be outside the
+> lock). The spin_unlock() is not sufficient since it only has release
+> semantics.
+
+Understood. The spinlock is supposed to order changes to the list, not
+to the flag.
+
+> I also don't think the ordering between list_add() and flag
+> setting matters since the smp_wmb() would ensure that both are visible
+> when the 'paddr' value made it to the other CPU.
+
+If the flag makes it before the list, then the other CPU will walk the
+list only after acquiring dma_io_tlb_dyn_lock, and that's what the list
+is ordered against.
+
+I don't think there is any concern if the list makes it before the
+flag, as long as the new value of the flag is observed on the next call
+to is_swiotlb_buffer (on any CPU).
+
+> Similarly on the is_swiotlb_buffer() side, you want the flag reading to
+> be ordered after the 'blah = paddr' is observed. Here the
+> smp_load_acquire() is sufficient.
+> 
+> >  	return page_to_phys(slot->page);
+> > @@ -668,6 +671,9 @@ static void swiotlb_dyn_unmap(struct device *dev, phys_addr_t tlb_addr,
+> >  	unsigned long flags;
+> >  
+> >  	spin_lock_irqsave(&dev->dma_io_tlb_dyn_lock, flags);
+> > +	if (list_is_singular(&dev->dma_io_tlb_dyn_slots))
+> > +		/* Pairs with smp_load_acquire() in is_swiotlb_buffer() */
+> > +		smp_store_release(&dev->dma_io_tlb_have_dyn, false);
+> >  	slot = lookup_dyn_slot_locked(dev, tlb_addr);
+> >  	list_del(&slot->node);
+> >  	spin_unlock_irqrestore(&dev->dma_io_tlb_dyn_lock, flags);  
+> 
+> As with the map case, I don't think the ordering between list_del() and
+> the flag setting matters. If you unmap the last dynamic buffer, the
+> worst that can happen is that an is_swiotlb_buffer() call attempts a
+> read of the list but the flag will eventually become visible. There
+> shouldn't be another caller trying to unmap the same paddr (in well
+> behaved drivers).
+> 
+> Now, thinking about the list_head access and the flag ordering, since it
+> doesn't matter, you might as well not bother with the flag at all and
+> rely on list_add() and list_empty() ordering vs the hypothetical 'blah'
+> access. Both of these use READ/WRITE_ONCE() for setting
+> dma_io_tlb_dyn_slots.next. You only need an smp_wmb() after the
+> list_add() and an smp_rmb() before a list_empty() check in
+> is_swiotlb_buffer(), no dma_iotlb_have_dyn variable.
+
+Wait, let me check that I understand you right. Do you suggest that I
+convert dma_io_tlb_dyn_slots to a lockless list and get rid of the
+spinlock?
+
+I'm sure it can be done for list_add() and list_del(). I'll have
+to think about list_move().
+
+> That's my reasoning but to I'll have be absolutely sure, you can pass that through
+> some formal modelling.
+
+Good idea. Especially if I try to get rid of the lock.
+
+Petr T
