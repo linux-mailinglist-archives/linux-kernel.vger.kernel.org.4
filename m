@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6BC702B15
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5787C702B1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbjEOLIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
+        id S241188AbjEOLJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241084AbjEOLIa (ORCPT
+        with ESMTP id S231730AbjEOLJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:08:30 -0400
+        Mon, 15 May 2023 07:09:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B390172B;
-        Mon, 15 May 2023 04:08:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC0610F1;
+        Mon, 15 May 2023 04:09:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D14D62294;
-        Mon, 15 May 2023 11:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12552C433D2;
-        Mon, 15 May 2023 11:08:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F4646227B;
+        Mon, 15 May 2023 11:09:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76DBC433EF;
+        Mon, 15 May 2023 11:09:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684148908;
-        bh=MtwEv3vfSBVajDcCGwj+e6BsgT+xT4QSKmC6n9r79G8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nmhBuRXjCWOJ5j4WIbT0lPWOWCLFTgrwTArN0r3FQNdxn4jXnjWGuyCzi6BAyUoXU
-         yDGyXiDuTtaEkxHSo6CgqXx16H2uSBY10vFzyrZJLZRctw4q1mB6no/9gF8/2MBpfj
-         mt5Q3kWxpvPf7txYQO38JVc9q0vQVbK70W+9W4/iYTQCqWdcChGTjGS7H35q+lyshN
-         yiEiXPZmAvy+d/ODr5oyMxJt7NzcgyS6/c7XFxh/NclhyfhoQ1EJNSk6xc+Y0FsSKN
-         iKOl5u9zBG/uIIVSUnqtvGqLZc4ILb4hai6hAYQzBviu4pxJoqfjNSZ2Stg2Jv8sml
-         wjZSLY3uUCeTA==
-Date:   Mon, 15 May 2023 13:08:23 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     miklos@szeredi.hu, amir73il@gmail.com,
-        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] ovl: get_acl: Fix null pointer dereference at
- realinode in rcu-walk mode
-Message-ID: <20230515-hilfreich-zeilen-d4a8cf469896@brauner>
-References: <20230505122452.405661-1-chengzhihao1@huawei.com>
- <20230505122452.405661-2-chengzhihao1@huawei.com>
+        s=k20201202; t=1684148975;
+        bh=lwjgziLcEsIzBPxxZ1N8abCwzxvPGfURke6CIpHvtww=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=YuNMzPkbzr28+j0Zo8hTdy3k5Ja8MNwey/47bnhvvp39UClQ1RjDBJwvXkB3vK9jb
+         +FrQrprKO/3/gtG3k7KoorIUtPuMv/luFfVAxrafGmthNLmIDUmKqGIwaWAF/SATn7
+         DUPtBx9KtK8L5f05ze+WfcJA40mLLtEa0+X7KAE9GVOmHT9xQx0WirJgS7VZdHM5uq
+         aUYxWWdb6FD/9QlHZvIIlvG1pSS56OmLLhdZCQq7WLyl7x3Fmp4DsRcDBQPu39Lhk2
+         KcJG5M1oISFsZBpcXsU/H4ckjQ8TmGFpIf/eLrVmvTEARafIxwNF6EanGDG9HGgYmS
+         i3fXELO7XL3mg==
+From:   Mark Brown <broonie@kernel.org>
+To:     linux-samsung-soc@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+In-Reply-To: <20230513090228.4340-1-krzysztof.kozlowski@linaro.org>
+References: <20230513090228.4340-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] ASoC: MAINTAINERS: drop Krzysztof Kozlowski from
+ Samsung audio
+Message-Id: <168414897357.394037.3389766402303422512.b4-ty@kernel.org>
+Date:   Mon, 15 May 2023 20:09:33 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230505122452.405661-2-chengzhihao1@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,79 +62,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 08:24:51PM +0800, Zhihao Cheng wrote:
-> Following process:
->          P1                     P2
->  path_openat
->   link_path_walk
->    may_lookup
->     inode_permission(rcu)
->      ovl_permission
->       acl_permission_check
->        check_acl
->         get_cached_acl_rcu
-> 	 ovl_get_inode_acl
-> 	  realinode = ovl_inode_real(ovl_inode)
-> 	                      drop_cache
-> 		               __dentry_kill(ovl_dentry)
-> 				iput(ovl_inode)
-> 		                 ovl_destroy_inode(ovl_inode)
-> 		                  dput(oi->__upperdentry)
-> 		                   dentry_kill(upperdentry)
-> 		                    dentry_unlink_inode
-> 				     upperdentry->d_inode = NULL
-> 	    ovl_inode_upper
-> 	     upperdentry = ovl_i_dentry_upper(ovl_inode)
-> 	     d_inode(upperdentry) // returns NULL
-> 	  IS_POSIXACL(realinode) // NULL pointer dereference
-> , will trigger an null pointer dereference at realinode:
->   [  205.472797] BUG: kernel NULL pointer dereference, address:
->                  0000000000000028
->   [  205.476701] CPU: 2 PID: 2713 Comm: ls Not tainted
->                  6.3.0-12064-g2edfa098e750-dirty #1216
->   [  205.478754] RIP: 0010:do_ovl_get_acl+0x5d/0x300
->   [  205.489584] Call Trace:
->   [  205.489812]  <TASK>
->   [  205.490014]  ovl_get_inode_acl+0x26/0x30
->   [  205.490466]  get_cached_acl_rcu+0x61/0xa0
->   [  205.490908]  generic_permission+0x1bf/0x4e0
->   [  205.491447]  ovl_permission+0x79/0x1b0
->   [  205.491917]  inode_permission+0x15e/0x2c0
->   [  205.492425]  link_path_walk+0x115/0x550
->   [  205.493311]  path_lookupat.isra.0+0xb2/0x200
->   [  205.493803]  filename_lookup+0xda/0x240
->   [  205.495747]  vfs_fstatat+0x7b/0xb0
+On Sat, 13 May 2023 11:02:28 +0200, Krzysztof Kozlowski wrote:
+> Remove Krzysztof Kozlowski from maintainer of Samsung SoC Audio drivers
+> and change the status to maintenance (no one is reality being paid for
+> looking at this).
 > 
-> Fetch a reproducer in [Link].
 > 
-> Fix it by checking realinode whether to be NULL before accessing it.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217404
-> Fixes: 332f606b32b6 ("ovl: enable RCU'd ->get_acl()")
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> ---
->  fs/overlayfs/inode.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
-> index 541cf3717fc2..38cfdf9e2b44 100644
-> --- a/fs/overlayfs/inode.c
-> +++ b/fs/overlayfs/inode.c
-> @@ -563,16 +563,16 @@ struct posix_acl *do_ovl_get_acl(struct mnt_idmap *idmap,
->  	struct posix_acl *acl;
->  	struct path realpath;
->  
-> -	if (!IS_POSIXACL(realinode))
-> -		return NULL;
-> -
->  	/* Careful in RCU walk mode */
->  	ovl_i_path_real(inode, &realpath);
-> -	if (!realpath.dentry) {
-> +	if (!realpath.dentry || !realinode) {
->  		WARN_ON(!rcu);
->  		return ERR_PTR(-ECHILD);
->  	}
 
-I think the logic here is now a bit strange. I would just not bother
-calling ovl_inode_real() anymore and simply use the same logic as in
-ovl_permission() (Thus my comment about using a tiny helper.).
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: MAINTAINERS: drop Krzysztof Kozlowski from Samsung audio
+      commit: 647b5f5fdcbaba6f6fd8db69508fcbeb1fdfc2a6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
