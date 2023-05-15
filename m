@@ -2,117 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC1A70417C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 01:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14C370417E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 01:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343579AbjEOXnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 19:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S245313AbjEOXrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 19:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240909AbjEOXnD (ORCPT
+        with ESMTP id S234623AbjEOXqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 19:43:03 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E6B83C2;
-        Mon, 15 May 2023 16:42:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKwsX54Htz4x3x;
-        Tue, 16 May 2023 09:42:56 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684194177;
-        bh=OrgdnrGF4v8mN+2U0+5f2NWgObxDsfRt21qDJiLrFeI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=r5hCXrc6q2jBi8zEztQkisBbd/8qQczT6Upx7kVEvGdbUoMlEmvL9yRZQRkHWlJMU
-         E8OkWyrgW4w3TbINrB01LgUVayOgyDMWwvvsiZAh1RNJjXCdiY1EK2JY5jh/+Y9IAh
-         rvuE463jWeK5a4H/o9R2rwoiayP7QdaA/5rk2Z6sZs4JIzbOhQrcRZM3ReDNQ0PXlz
-         NgLQf2Nvl/0Q3c4S9Jk1wdhcydLqTLzDjPB/bg3H2oCwZUzvXSOeS/RZo/9C0bFl3F
-         5tsL3kSL6HzTKvpF2j77gcfxj1C/jJpJOoOsKkxNkXmtgEoy1sGpoM6hAM1Bi78Xmn
-         dAWCpLVZOgwAQ==
-Date:   Tue, 16 May 2023 09:42:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Shenwei Wang <shenwei.wang@nxp.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230516094254.0dce3596@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xReCTcQmM/+3dpFGl4YLIjz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 15 May 2023 19:46:55 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197386199
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:46:54 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba71ed074ceso1637149276.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:46:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684194413; x=1686786413;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hKsIhDAHTI5ZGBx0uDNeQEoycM9HPHgfOdTtTFPu9+s=;
+        b=hWjyFiegM0tb/GaofgR7rRw3hIZNOV9FsPrhVWxTiKhHWqy6v0SUvlAjliF0ErVHJ7
+         Kz36gSecGJfOx5lmd37GnYQIXY/kt0kRwLdgrudskRZUGCpWfbBYEW/aGMIBWFsIIdNf
+         Bv2GFO7D0fLJlIBVO20wFzOmQoSqdIVKUUFDY6qv0gMzhzh6cYjrnbd0laa41ocCHvee
+         fStSOpGtclJAFcmhRcdWCFBM2yx94S5r0pXRzqTLnPqrgVOvUHR9nJoAG13J3sKPm6Vm
+         ss5vrtADrgVIer0DCcDTdGWmk927umJkQYXu71KPAD7Anf9kWBmf6BqmQUqhQINReCVR
+         iLFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684194413; x=1686786413;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hKsIhDAHTI5ZGBx0uDNeQEoycM9HPHgfOdTtTFPu9+s=;
+        b=iwBm9TdOgXhyEXyQRVeNXAz3Yqo6aP8DrSdrnmvrQEZ5147Ufj8Fy2o5OFHVPmFe89
+         zmZct1TG/R3W/qjNSvY07pHE1IZtew36Y+pTRX1inVKmgut8y1nN2css8HTTE7NUHIHy
+         fTPKHMlknjA9K8o4ntvr9xo730MfXq7gqWngSh/s0CPp+Zwf0m9OmGTXj5bwdsbdR/Ww
+         y0rIktm6N53mOQMkvUn5Ges+rRbWa/jNXn2cSz5lnWDSjGj7hxG11bakcIuqVwc0E/4t
+         XkHLK4wkJSy4D3KsqEaIL1/kdJ+5wzS4nB4YytX/98IrUKicGXC/xoT8UKX/L4/cU4Bl
+         Jvig==
+X-Gm-Message-State: AC+VfDy2kTS0+4J5ms8ZlXATPxCY+c7JDXT3Wn1yXDlYqJe8x88rILYX
+        Odp2YIYkkP8SFpGll/sD1HQGKvGorO8=
+X-Google-Smtp-Source: ACHHUZ5nKlYqg8fqkFRiAsU+szzbdXJrcWjwocU8iSc7OEG0O5T8XFggiMvHTBNDo9CrEEoZ2dw4RNcURAY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:9290:0:b0:ba8:1e5f:8514 with SMTP id
+ y16-20020a259290000000b00ba81e5f8514mr184923ybl.5.1684194413294; Mon, 15 May
+ 2023 16:46:53 -0700 (PDT)
+Date:   Mon, 15 May 2023 16:46:51 -0700
+In-Reply-To: <ZFWli2/H5M8MZRiY@google.com>
+Mime-Version: 1.0
+References: <ZEM5Zq8oo+xnApW9@google.com> <diqz8re2ftzb.fsf@ackerleytng-ctop.c.googlers.com>
+ <ZFWli2/H5M8MZRiY@google.com>
+Message-ID: <ZGLEa2j4wi0t4xLI@google.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     david@redhat.com, chao.p.peng@linux.intel.com, pbonzini@redhat.com,
+        vkuznets@redhat.com, jmattson@google.com, joro@8bytes.org,
+        mail@maciej.szmigiero.name, vbabka@suse.cz, vannapurve@google.com,
+        yu.c.zhang@linux.intel.com, kirill.shutemov@linux.intel.com,
+        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
+        michael.roth@amd.com, wei.w.wang@intel.com, rppt@kernel.org,
+        liam.merwick@oracle.com, isaku.yamahata@gmail.com,
+        jarkko@kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hughd@google.com, brauner@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xReCTcQmM/+3dpFGl4YLIjz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 05, 2023, Sean Christopherson wrote:
+> On Fri, May 05, 2023, Ackerley Tng wrote:
+> > One issue I=E2=80=99ve found so far is that the pointer to kvm (gmem->k=
+vm) is
+> > not cleaned up, and hence it is possible to crash the host kernel in th=
+e
+> > following way
+> >=20
+> > 1. Create a KVM VM
+> > 2. Create a guest mem fd on that VM
+> > 3. Create a memslot with the guest mem fd (hence binding the fd to the
+> >    VM)
+> > 4. Close/destroy the KVM VM
+> > 5. Call fallocate(PUNCH_HOLE) on the guest mem fd, which uses gmem->kvm
+> >    when it tries to do invalidation.
+> >=20
+> > I then tried to clean up the gmem->kvm pointer during unbinding when th=
+e
+> > KVM VM is destroyed.
+> >=20
+> > That works, but then I realized there=E2=80=99s a simpler way to use th=
+e pointer
+> > after freeing:
+> >=20
+> > 1. Create a KVM VM
+> > 2. Create a guest mem fd on that VM
+> > 3. Close/destroy the KVM VM
+> > 4. Call fallocate(PUNCH_HOLE) on the guest mem fd, which uses gmem->kvm
+> >    when it tries to do invalidation.
+> >=20
+> > Perhaps binding should mean setting the gmem->kvm pointer in addition t=
+o
+> > gmem->bindings. This makes binding and unbinding symmetric and avoids
+> > the use-after-frees described above.
+>=20
+> Hrm, that would work, though it's a bit convoluted, e.g. would require de=
+tecting
+> when the last binding is being removed.  A similar (also ugly) solution w=
+ould be
+> to nullify gmem->kvm when KVM dies.
+>=20
+> I don't love either approach idea because it means a file created in the =
+context
+> of a VM can outlive the VM itself, and then userspace ends up with a file=
+ descriptor
+> that it can't do anything with except close().  I doubt that matters in p=
+ractice
+> though, e.g. when the VM dies, all memory can be freed so that the file e=
+nds up
+> being little more than a shell.  And if we go that route, there's no need=
+ to grab
+> a reference to the file during bind, KVM can just grab a longterm referen=
+ce when
+> the file is initially created and then drop it when KVM dies (and nullifi=
+es gmem->kvm).
+>=20
+> Blech, another wart is that I believe gmem would need to do __module_get(=
+) during
+> file creation to prevent kvm.ko from being unloaded after the last VM die=
+s.  Ah,
+> but that'd also be true if we went with a system-scoped KVM ioctl(), so I=
+ suppose
+> it's not _that_ ugly.
+>=20
+> Exchanging references (at binding or at creation) doesn't work, because t=
+hat
+> creates a circular dependency, i.e. gmem and KVM would pin each other.=20
+>=20
+> A "proper" refcounting approach, where the file pins KVM and not vice ver=
+sa, gets
+> nasty because of how KVM's memslots work.  The least awful approach I can=
+ think of
+> would be to delete the associated memslot(s) when the file is released, p=
+ossibly
+> via deferred work to avoid deadlock issues.  Not the prettiest thing ever=
+ and in
+> some ways that'd yield an even worse ABI.
 
-Hi all,
+Circling back to this.  Pending testing, the "proper" refcounting approach =
+seems
+to be the way to go.  KVM's existing memslots actually work this way, e.g. =
+if
+userspace does munmap() on an active memslot, KVM zaps any PTEs but the mem=
+slot
+stays alive.  A similar approach can be taken here, the only wrinkle is tha=
+t the
+association between gmem and the memslot is stronger than between VMAs and =
+memslots,
+specifically KVM binds the file and not simply the file descriptor.  This i=
+s
+necessary because not binding to an exact file would let userspace install =
+a
+different file at the file descriptor.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+That's solvable without having to delete memslots though, e.g. by protectin=
+g the
+file pointer in the memslot with RCU and directly bumping the refcount in t=
+he two
+places where KVM needs to get at gmem (the file) via the memslot (unbind an=
+d
+faulting in a page).  E.g.
 
-  drivers/net/ethernet/freescale/fec_main.c
+  static struct file *kvm_gmem_get_file(struct kvm_memory_slot *slot)
+  {
+	struct file *file;
 
-between commit:
+	rcu_read_lock();
 
-  6ead9c98cafc ("net: fec: remove the xdp_return_frame when lack of tx BDs")
+	file =3D rcu_dereference(slot->gmem.file);
+	if (file && !get_file_rcu(file))
+		file =3D NULL;
+	rcu_read_unlock();
 
-from the net tree and commit:
+	return file;
+  }
 
-  144470c88c5d ("net: fec: using the standard return codes when xdp xmit er=
-rors")
+The gotcha is that ->release could race with memslot deletion, as kvm_gmem_=
+unbind()
+won't be able to differentiate between "file was deleted" and "file is curr=
+ently
+being deleted".  That's easy enough to deal with though, kvm_gmem_release()=
+ can
+take slots_lock to prevent the memslot from going away when nullifying and
+invalidating ranges for the memslot.
 
-from the net-next tree.
+> Side topic, there's a second bug (and probably more lurking): kvm_swap_ac=
+tive_memslots()'s
+> call to synchronize_srcu_expedited() is done _before_ the call to kvm_gme=
+m_unbind(),
+> i.e. doesn't wait for readers in kvm_gmem_invalidate_begin() to go away. =
+ The easy
+> solution for that one is to add another synchronize_srcu_expedited() afte=
+r unbinding.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/freescale/fec_main.c
-index 577d94821b3e,cd215ab20ff9..000000000000
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@@ -3798,7 -3798,8 +3798,7 @@@ static int fec_enet_txq_xmit_frame(stru
-  	entries_free =3D fec_enet_get_free_txdesc_num(txq);
-  	if (entries_free < MAX_SKB_FRAGS + 1) {
-  		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
-- 		return NETDEV_TX_BUSY;
- -		xdp_return_frame(frame);
-+ 		return -EBUSY;
-  	}
- =20
-  	/* Fill in a Tx ring entry */
-
---Sig_/xReCTcQmM/+3dpFGl4YLIjz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRiw34ACgkQAVBC80lX
-0GxE3Qf/dQRSICKa/aXKnAipj0c64fKGFp4Mw3WVFWpEc2lYd8a60D5xp486j5Bl
-ue91l7iejsnqZLZDj+5X8OYLtRYEpI5IEIFRcTaz1S0N2AYUB+huX4+3hMDWksEv
-TaE9sx8fdsGjUEzKc78o7RRlRllx8pMRMRvWc+iGQyDNyXQyOdESZlDGzH0slQ7G
-nMuU3jb31dXPA2hwdMzMit/yY2UqBIoMcw9G4qsiIqbtVKWk6sKPDioYs6mOf15j
-2ZQSioN9KHYEmC6V/IKooZTFCso8zUX6tzu698dt1rRdHrcQuVAe2dRjIvWU0UGF
-5equ57YPVGV2nrSFjpHkgGItvNrSAQ==
-=+yrr
------END PGP SIGNATURE-----
-
---Sig_/xReCTcQmM/+3dpFGl4YLIjz--
+There's a bug here, but not the one I pointed out.  Acquiring kvm->srcu doe=
+sn't
+provide any protection, the binding already has a pointer to the memslot, i=
+.e.
+isn't doing an SRCU-protected lookup in the memslots.  The actual protectio=
+n is
+provided by the filemap invalidate lock, which prevents unbinding a memslot=
+ until
+all invalidations complete, i.e. acquiring kvm->srcu in the punch hole path=
+ is
+completely unnecessary.
