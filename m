@@ -2,115 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E045702F15
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D60702F28
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239530AbjEOOA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
+        id S240274AbjEOOCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239146AbjEOOAu (ORCPT
+        with ESMTP id S239569AbjEOOCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:00:50 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDCD2128;
-        Mon, 15 May 2023 07:00:49 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8F45D5C019F;
-        Mon, 15 May 2023 10:00:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 15 May 2023 10:00:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684159248; x=
-        1684245648; bh=juiNHrUzx0kPifAlLPcVKdoJyC3AmE7OLGyX51c9DvU=; b=k
-        JlCZf3HpdzCXu1qEjQlf3K302d5suoREVYTdvielGFcRRxsVsoJWAtSNgxGtyJR8
-        KfTFCD2ma/FEWoZM/i84xr6rEfr8rDN509y6vkH+2RwkIng0WZQd5e3oQU72Wwci
-        RAVUXc3pZngXriyox1AnSJapYb+YR+Xw4T4Lc6p3Ppe7kR1UvGEk7d9Rr+OIwZ5A
-        ++jiuJD3IGZ65U+OlGvyhtfrOp18b9rthHMqffdp7OWtBMpPEqszf8FmxHXOT5qd
-        zO24QjKr+oM/8XhXDir/DvXoI4i/poHcEzKFt77g8MfB+WladJ/TgXE/h+CpNB8F
-        sj161HxifLol9hU7GvXOQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684159248; x=1684245648; bh=juiNHrUzx0kPi
-        fAlLPcVKdoJyC3AmE7OLGyX51c9DvU=; b=fSvn1l+ENyyL5InwaJoOLz2tG7yQU
-        YEZs2k9DWIqcCsWJNFCx0/NngDpomHnKe1Pi9dpYMFrKhXLvI9SToF2JWMtWYpmb
-        eAMn4odxEEtzFeFBOG6g1DDdc9sjdELXNLeG3nGQ+06XZPEdP3FejMzBWp1u8C0E
-        2C2+egF4FCpeOD8hbKgpg1x/RD1JnwWCGt0wOEsf+rVuv1WwScs77q5XOSdesvXo
-        g2GqoZB8zIp8QJSVpcVrNcGYei/CA/YXDOY2RdOqdxLRhWb8XHKcKqFHOOhsah7v
-        OSNOjNxhFwcxz8XKQk2olUC6nY65J4yna4PK7IBkoJVMhqOGUc6K/Fyag==
-X-ME-Sender: <xms:EDtiZEd7MrWrGhWAzbD8yNHk2kMUohEsYdIvZ7p8zaSeXoaY_YmkAg>
-    <xme:EDtiZGNjqgA1Ur_yaYAjv-HRKvqTjgkPJY92zXh7f-xSlRitQ8WjLznW1g84T5J0W
-    HZsBtWCQDpnQO0kk68>
-X-ME-Received: <xmr:EDtiZFibe87AvCcFiHaKVdWj8wYhYvMg7PIgwcS_oIdzKZsQHTtm60vtBHQla1cj-oU5ow>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehjedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:EDtiZJ-gNcIJbfD7-2PRiAKkSH9g9DvKmA6rwhsybRKLYP46GH-oKg>
-    <xmx:EDtiZAsC_A8gdsD0jYCxYS92YqN6meVfsjykGbAMKaBXPPFq-p8b5Q>
-    <xmx:EDtiZAFdLSXuMZYRb05CuINBNbHrfUNgSjY9YjuYUXxGlcay4OpwKw>
-    <xmx:EDtiZASFTzqtskjVY1xxd5Gr28Vt_qlgbNrz_iFPr_mO5nz3tbqVnA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 May 2023 10:00:47 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 3291410D1DE; Mon, 15 May 2023 17:00:46 +0300 (+03)
-Date:   Mon, 15 May 2023 17:00:46 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 04/20] x86: decompressor: Use standard calling
- convention for trampoline
-Message-ID: <20230515140046.yaxvt462bt6ovew2@box.shutemov.name>
-References: <20230508070330.582131-1-ardb@kernel.org>
- <20230508070330.582131-5-ardb@kernel.org>
+        Mon, 15 May 2023 10:02:12 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8051BCC;
+        Mon, 15 May 2023 07:01:54 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52c759b7d45so11783741a12.3;
+        Mon, 15 May 2023 07:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684159293; x=1686751293;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oRoP5jqWCAmzc8rrXSIbsnSWE9zHZOIDm3FBRH44e6w=;
+        b=ZQP6vE+hbTxer4jaN+LsDydMZJljPw2h2se0UxdcQjRWqtvaP+XqGe0xpe8wRnl9iO
+         JubtBnEWNYA8OVFpdAhgPez1EQv9Ru58utaAE/TWDKsmCzHTUK4uclMNHUfGNJp3OajH
+         VICUCI7EFKcOTN0JpfxFzP9tgiivWsofnDVJsqxKRQh94B4kFDFSsZipA45+6Cavs7c5
+         lIsf59Bq9+WwOzorYWRvs0Pxvff4IN9wevK/2ODx3NelFItZNyQ4NfNajm/GYg8n+lhF
+         B3sz3W+znF8PWfxcwnkL/b9cyu41sHAnkUTCshDsvYAu6XEt69rlB8M9Rb/re8VsezUs
+         ssYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684159293; x=1686751293;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oRoP5jqWCAmzc8rrXSIbsnSWE9zHZOIDm3FBRH44e6w=;
+        b=VjILtQYJ35YBRkRZaGj2xlnynJY2hWodgRl3KJ5H34M1Usq+YGT8s5zSRgUEpDUnbh
+         jc6o4/HZ7WBT7GXyOtMs75V0yxPoXpNXvf0IaCiumSlOzXSkZPGkdJE4vkppA2GtAMcj
+         MGW7PTTGxxv00Wha5Bc2cPN+p1N1auEmR+TnUQLMsk5PgvYPz6GPK6hrgh2HCpGHkXIN
+         2ISBLOoYErEvUwLFi5XV/lZwL/thIJ4GuXteOvCBKf3z/pN6uZQP35sT5FQO9UsJdyRY
+         e13bxdOQEdjWOHCF0ZWZWfMe7mmDdiS2b/YychdbpVWrA3S/8kBlFcVPFKy7Jsv9ErGK
+         dQSg==
+X-Gm-Message-State: AC+VfDybUWQZry3S3TB4MXk6Imt0ZZE4RLCcXjrcWg63YSWBdPqI9TQq
+        puzQuVaFA1qX2rpRY5X9Y2s=
+X-Google-Smtp-Source: ACHHUZ57WwbmwA3T0tT0zJT+1UICvdFrCcL//NUBElSjAV0S/whbsEqDHbZ6xe8MohJTk3oyKNaDrA==
+X-Received: by 2002:a17:902:a604:b0:1ac:b363:83b3 with SMTP id u4-20020a170902a60400b001acb36383b3mr18322825plq.41.1684159291950;
+        Mon, 15 May 2023 07:01:31 -0700 (PDT)
+Received: from localhost.localdomain ([103.133.201.162])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170903120800b001a674fb0dd8sm13520949plh.247.2023.05.15.07.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 07:01:31 -0700 (PDT)
+From:   Mubashshir <ahmubashshir@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     huseyinbiyik@hotmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5] staging: HID: Add ShanWan USB WirelessGamepad driver
+Date:   Mon, 15 May 2023 20:01:22 +0600
+Message-Id: <c213f2100e8f99b422b3014f1d5419d06cc61d00.1684159036.git.ahmubashshir@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <39b44678dc54b519fa469b69d80757b36ab3cf25.1681118245.git.ahmubashshir@gmail.com>
+References: <39b44678dc54b519fa469b69d80757b36ab3cf25.1681118245.git.ahmubashshir@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508070330.582131-5-ardb@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:03:14AM +0200, Ard Biesheuvel wrote:
-> Update the trampoline code so its arguments are passed via RDI and RSI,
-> which matches the ordinary SysV calling convention for x86_64. This will
-> allow us to call this code directly from C.
-> 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+This device has a quirky initialization process.
+Depending on how it was initialized, behaves completely differently.
+In default mode, it behaves as expected, but in fallback it disables
+force-feedback, analog stick configurations and L3/R3.
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Different OEMs manufactures joypads with same vid:pid but different
+axis/button mapping[1], and I don't know which one has which layout,
+so, we'll let hid-core figure that out, and handle only FF here.
 
+ * The one I have has different axis layout than the one of Huseyin.
+
+Signed-off-by: Huseyin BIYIK <huseyinbiyik@hotmail.com>
+Signed-off-by: Mubashshir <ahmubashshir@gmail.com>
+---
+v5: Use hid_{get,set}_drvdata to pass data to `->play()`
+
+ drivers/hid/Kconfig       |  19 +++++
+ drivers/hid/Makefile      |   1 +
+ drivers/hid/hid-ids.h     |   3 +
+ drivers/hid/hid-shanwan.c | 145 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 168 insertions(+)
+ create mode 100644 drivers/hid/hid-shanwan.c
+
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 4ce012f83253..e6c8aa855252 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -990,6 +990,25 @@ config HID_SEMITEK
+ 	- Woo-dy
+ 	- X-Bows Nature/Knight
+ 
++config HID_SHANWAN
++	tristate "ShanWan USB WirelessGamepad"
++	depends on USB_HID
++	help
++	Support for Shanwan USB WirelessGamepad (and clones).
++
++	This device has a quirky initialization process.
++	Depending on how it was initialized, it behaves completely differently.
++	In default mode, it behaves as expected, but in fallback it disables
++	force-feedback, analog stick configurations and L3/R3.
++
++config SHANWAN_FF
++	bool "ShanWan USB WirelessGamepad force feedback support"
++	depends on HID_SHANWAN
++	select INPUT_FF_MEMLESS
++	help
++	Say Y here if you have a ShanWan USB WirelessGamepad and want to enable
++	force feedback support for it.
++
+ config HID_SIGMAMICRO
+ 	tristate "SiGma Micro-based keyboards"
+ 	depends on USB_HID
+diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+index 5d37cacbde33..52878455fc10 100644
+--- a/drivers/hid/Makefile
++++ b/drivers/hid/Makefile
+@@ -116,6 +116,7 @@ obj-$(CONFIG_HID_RMI)		+= hid-rmi.o
+ obj-$(CONFIG_HID_SAITEK)	+= hid-saitek.o
+ obj-$(CONFIG_HID_SAMSUNG)	+= hid-samsung.o
+ obj-$(CONFIG_HID_SEMITEK)	+= hid-semitek.o
++obj-$(CONFIG_HID_SHANWAN)	+= hid-shanwan.o
+ obj-$(CONFIG_HID_SIGMAMICRO)	+= hid-sigmamicro.o
+ obj-$(CONFIG_HID_SMARTJOYPLUS)	+= hid-sjoy.o
+ obj-$(CONFIG_HID_SONY)		+= hid-sony.o
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index d79e946acdcb..04c3324dc453 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -627,6 +627,9 @@
+ #define USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_0641	0x0641
+ #define USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_1f4a	0x1f4a
+ 
++#define USB_VENDOR_ID_SHANWAN 0x2563
++#define USB_PRODUCT_ID_SHANWAN_USB_WIRELESSGAMEPAD 0x0575
++
+ #define USB_VENDOR_ID_HUION		0x256c
+ #define USB_DEVICE_ID_HUION_TABLET	0x006e
+ #define USB_DEVICE_ID_HUION_TABLET2	0x006d
+diff --git a/drivers/hid/hid-shanwan.c b/drivers/hid/hid-shanwan.c
+new file mode 100644
+index 000000000000..c80bfcac5dc7
+--- /dev/null
++++ b/drivers/hid/hid-shanwan.c
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Force feedback support for Shanwan USB WirelessGamepad
++ *
++ * Copyright (c) 2022-2023	Huseyin BIYIK	<huseyinbiyik@hotmail.com>
++ * Copyright (c) 2023	Ahmad Hasan Mubashshir	<ahmubashshir@gmail.com>
++ *
++ */
++
++#include <linux/input.h>
++#include <linux/slab.h>
++#include <linux/hid.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/string.h>
++
++#include "hid-ids.h"
++
++static bool swap_motors;
++module_param_named(swap, swap_motors, bool, 0);
++MODULE_PARM_DESC(swap, "Swap Weak/Strong Feedback motors");
++
++#ifdef CONFIG_SHANWAN_FF
++static int shanwan_play_effect(struct input_dev *dev, void *data, struct ff_effect *effect)
++{
++	struct hid_device *hid    = input_get_drvdata(dev);
++	struct hid_report *report = hid_get_drvdata(hid);
++	struct hid_field  *field0 = report->field[0];
++	s32 payload_template[] = {
++		0x02,  // 2 = rumble effect message
++		0x08, // reserved value, always 8
++		0x00, // rumble value
++		0x00, // rumble value
++		0xff  // duration 0-254 (255 = nonstop)
++	};
++
++	if (effect->type != FF_RUMBLE)
++		return 0;
++
++	memcpy_and_pad(field0->value,
++		       (sizeof(s32) * 8),
++		       payload_template,
++		       (sizeof(s32) * 4),
++		       0x00);
++
++	if (swap_motors) {
++		/* weak rumble / strong rumble */
++		field0->value[2] = effect->u.rumble.strong_magnitude / 256;
++		field0->value[3] = effect->u.rumble.weak_magnitude / 256;
++	} else {
++		/* strong rumble / weak rumble */
++		field0->value[2] = effect->u.rumble.weak_magnitude / 256;
++		field0->value[3] = effect->u.rumble.strong_magnitude / 256;
++	}
++
++	hid_hw_request(hid, report, HID_REQ_SET_REPORT);
++
++	return 0;
++}
++
++static int shanwan_init_ff(struct hid_device *hid)
++{
++	struct hid_report *report;
++	struct hid_input *hidinput;
++	struct list_head *report_list = &hid->report_enum[HID_OUTPUT_REPORT].report_list;
++	struct input_dev *dev;
++
++	if (list_empty(&hid->inputs)) {
++		hid_err(hid, "no inputs found\n");
++		return -ENODEV;
++	}
++	hidinput = list_first_entry(&hid->inputs, struct hid_input, list);
++	dev = hidinput->input;
++
++	if (list_empty(report_list)) {
++		hid_err(hid, "no output reports found\n");
++		return -ENODEV;
++	}
++
++	report = list_first_entry(report_list, struct hid_report, list);
++	hid_set_drvdata(hid, report);
++
++	set_bit(FF_RUMBLE, dev->ffbit);
++	if (input_ff_create_memless(dev, NULL, shanwan_play_effect))
++		return -ENODEV;
++
++	return 0;
++}
++#else
++static int shanwan_init_ff(struct hid_device *hid)
++{
++	return 0;
++}
++#endif
++
++static int shanwan_probe(struct hid_device *hdev, const struct hid_device_id *id)
++{
++	int ret;
++
++	ret = hid_parse(hdev);
++	if (ret) {
++		hid_err(hdev, "parse failed\n");
++		return ret;
++	}
++
++	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
++	if (ret) {
++		hid_err(hdev, "hw start failed\n");
++		return ret;
++	}
++
++	ret = shanwan_init_ff(hdev);
++	if (ret)
++		hid_warn(hdev, "Failed to enable force feedback support, error: %d\n", ret);
++
++	ret = hid_hw_open(hdev);
++	if (ret) {
++		dev_err(&hdev->dev, "hw open failed\n");
++		hid_hw_stop(hdev);
++		return ret;
++	}
++
++	hid_hw_close(hdev);
++	return ret;
++}
++
++static const struct hid_device_id shanwan_devices[] = {
++	{ HID_USB_DEVICE(USB_VENDOR_ID_SHANWAN, USB_PRODUCT_ID_SHANWAN_USB_WIRELESSGAMEPAD) },
++	{ }
++};
++MODULE_DEVICE_TABLE(hid, shanwan_devices);
++
++static struct hid_driver shanwan_driver = {
++	.name			= "shanwan",
++	.id_table		= shanwan_devices,
++	.probe			= shanwan_probe,
++};
++module_hid_driver(shanwan_driver);
++
++MODULE_AUTHOR("Huseyin BIYIK <huseyinbiyik@hotmail.com>");
++MODULE_AUTHOR("Ahmad Hasan Mubashshir <ahmubashshir@gmail.com>");
++MODULE_DESCRIPTION("Force feedback support for Shanwan USB WirelessGamepad");
++MODULE_LICENSE("GPL");
++
++// vim: ts=8:noet
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.40.1
+
