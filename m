@@ -2,143 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D11702CA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31209702CAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241818AbjEOM0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
+        id S241614AbjEOM2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241211AbjEOM00 (ORCPT
+        with ESMTP id S240112AbjEOM2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:26:26 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846CD10F3;
-        Mon, 15 May 2023 05:26:25 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id E40AA5C00EC;
-        Mon, 15 May 2023 08:26:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 15 May 2023 08:26:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1684153584; x=1684239984; bh=FS
-        hj9jhaCJscn4VhLGeY2HLL/OvONSHw3LtQ6873UHU=; b=bDn/R9R8UiUb1g96qU
-        s+BUMqi4w9X4MLqr/g66nNXkUHJb5Urp1qbIoZIC785Oye4Wnmb3At4gt6DQEvls
-        iPbBgS2vyJShq0orBrjZpdCLA77U3y2zBPQqTTFuH7VW40jCDOZic2FtVTVSMeC/
-        NMgvz2+Wwcq1+UbUWNenbsdUev+qHTLSsx+fHCKRlKEzDDqSHnqPR+lecFQqUlyW
-        Z1DNL5jAoSAnBaznrg9gSrLI+Zhg11uKMHPx3v6x6QN2CSqnCsTCe5WCyYvfsohT
-        JH/89wdHigdYyKAD+zi3fFiSYCnbezyBWLBWImJOU8/1BA4uNVxokvxNICxjCuGI
-        +Ulg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684153584; x=1684239984; bh=FShj9jhaCJscn
-        4VhLGeY2HLL/OvONSHw3LtQ6873UHU=; b=gBpqrQuF+8pxllcGPFkkD3GSCz2FO
-        EE3r2LuO4J9FF5K2optxIWEyx5d6X/xjJXrdyEGSObRu26TxH3bhmIjo4EUn8Vut
-        hTpZGnor3W/21sNv1fjfXIvQL6DHA9K9lsVLYNC+6aiKkR2U9M3v6EH6GTPf/hom
-        hH4uTbLc3sG4bVovoWiBxAWQB7Ori0a4yF98Ylo9xf1lc5aXiI1YNRdBaWfBbeuZ
-        x/VlRrsHhgcaNdi7x2oy03OvN7WoYKUK7gZhGQxXw7H8wYLug+FaSxrAHPmtJcL6
-        aZu1YClcYlBko77gQWgxVJcu+40QswikFkdjUYscgahiLUg5Cr2vLIyaA==
-X-ME-Sender: <xms:8CRiZFrfwhwajeZFioYSVAGnYub6dqDlmm-62eSXWs53CI4tOXS2nA>
-    <xme:8CRiZHoRko6houI2cfdSdLHQCaiVVb3HANDGtt_BqdU0Vv2qEGFA65pJ_Yl-ZWUuP
-    Zc1BiPzXM9lng>
-X-ME-Received: <xmr:8CRiZCNlvc9XxVVLnttcSWqxzwJyuJGTGivNjHawZ8kzjeb523F8q_T4tWxrIbVwDRzmQCC6AeHgvPxDs8seZ7YvORsPrICfhZT8Hw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehjedgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
-    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:8CRiZA7uqHeMKjthjza3RwkPFFhVppxNQImtfSey6HkV0b8u4GQHTQ>
-    <xmx:8CRiZE60-Y2lbAJTsCnqIxjuq5S7lmImGlDCkSNaRu-lTohSmoWXNQ>
-    <xmx:8CRiZIh1HihDM6eDV9i30eenngYlQasZz0VWY3MauP0NiFpYqjERng>
-    <xmx:8CRiZCZ5Ou2kkYhgzqRl7F09D5fGbR8bV9ENmqsf7t5w2xIzrvE6Yg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 May 2023 08:26:23 -0400 (EDT)
-Date:   Mon, 15 May 2023 14:26:16 +0200
-From:   Greg KH <greg@kroah.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "Goswami, Sanket" <Sanket.Goswami@amd.com>,
-        "Gong, Richard" <Richard.Gong@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/2] amd_nb: Add PCI ID for family 19h model 78h
-Message-ID: <2023051505-bright-armrest-028e@gregkh>
-References: <20230427053338.16653-1-mario.limonciello@amd.com>
- <20230427053338.16653-2-mario.limonciello@amd.com>
- <7b74c389-97b7-4f56-851b-6ce17950a4d1@roeck-us.net>
- <f2b81356-e702-3026-660f-d9a88edff632@amd.com>
- <084837c4-72c8-be92-fd1c-5ccbd805c559@leemhuis.info>
- <20230508112543.GBZFjcN2oxk4do31w4@fat_crate.local>
- <a8b29619-f1da-4cb9-a5bd-a396b52e159f@roeck-us.net>
- <20230508134414.GCZFj8rieNwF1AOerB@fat_crate.local>
- <MN0PR12MB610132F2277B0F1DB1039A15E2749@MN0PR12MB6101.namprd12.prod.outlook.com>
+        Mon, 15 May 2023 08:28:06 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C831E4F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:28:04 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso14573561e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:28:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684153683; x=1686745683;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yoeAd/K4QIDgkvT3+E4nIpalAbE2Kg0RA7njx4ZUB9o=;
+        b=kkUhFgQBKR3CcOLZ9bFPHYivAdu25L9X8RiIypwoROJyetd8r0Ijm6NwyWGI6W3r45
+         7swiHnN0HK80Quvm4j2vnlTESSyc0CS+V/ury/4G3CoQxRJQw6WvbTOQYc0dJCD529az
+         A/It3iOj1E3njTHUq2RifrNr8b/l5hy4GAtN7grl8o7TEFLOikptTe4KBX2HY5uylhRP
+         fObXZ6Ton5DY1CJmJx5nnLBpL30s8BsK250ocXTFe/5GyKeKiMOHVHDdw6t46PFDxyj1
+         zx1u9vjrxa4F8JOfkE79XQs6jSN+hb8hgzpecphvsL7kFTXSaOzsi/lDbdzcMAknf+sN
+         X7yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684153683; x=1686745683;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yoeAd/K4QIDgkvT3+E4nIpalAbE2Kg0RA7njx4ZUB9o=;
+        b=ikkSk3fXJ06oJyA01raTdTOvQi2SaVggtP2tUPQTdEqgJ4RlAzf2UoZ5uwYJLmaO/F
+         7NHEZ3lKtK8gRwn3JaZscJinHDV3Xq/AP+Rk91zECad4e3Y+AgsT1CzMpWqReh72pF4M
+         +Rn6FQWsHi7ANsTRWkahi9AOQFnUeQ51xzDtxGNE73v6YVc1OIFc5IHPSHBV1yvOuvVy
+         9cG/DloSwffp666Up86woSRk5loiRhc274yGrxExpAwD84PJPtwYgeKBrSVFNv2WYqcX
+         sFpJBMTpan0lKDoyxqX1/t3sqfH8mn8Rhu9lHW2GqPPaUEbPt2GAbFIqtrVbvSGjCE2+
+         OIIw==
+X-Gm-Message-State: AC+VfDxDRngY/04HYhWgc25EwqVMWqmF40SOTM8wvK95D8y0CgL18b/I
+        65ghj6/MCTmsqsSxD6Ng6IQLkw==
+X-Google-Smtp-Source: ACHHUZ5k7aoY9byMTZ4V9sueHRpljE0/O1NNZq32QU6twxBwfUwsRYGK2AsXbQMLig6sPqvQcM+5Eg==
+X-Received: by 2002:a05:6512:66:b0:4ef:f5fe:bc76 with SMTP id i6-20020a056512006600b004eff5febc76mr6008797lfo.14.1684153682685;
+        Mon, 15 May 2023 05:28:02 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id v3-20020ac25583000000b004f143c11cbcsm2559651lfg.51.2023.05.15.05.28.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 05:28:02 -0700 (PDT)
+Message-ID: <7faf4c16-98ff-f27d-d1fd-3058370c06f5@linaro.org>
+Date:   Mon, 15 May 2023 14:28:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN0PR12MB610132F2277B0F1DB1039A15E2749@MN0PR12MB6101.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8550: Add video clock controller
+Content-Language: en-US
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230509161218.11979-1-quic_jkona@quicinc.com>
+ <20230509161218.11979-5-quic_jkona@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230509161218.11979-5-quic_jkona@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 07:51:42PM +0000, Limonciello, Mario wrote:
-> [AMD Official Use Only - General]
-> 
-> +stable, Sasha
-> 
-> > > Together with this patch there are now at least two regressions if
-> > > -rc1 whch could have been avoided and may impact testability on
-> > > affected systems.
-> >
-> > Are you saying that this patch which fixes s2idle on some random box
-> > should've gone to Linus *immediately*?
-> >
-> > And read my mail again:
-> >
-> > "Some fixes need longer testing because there have been cases where
-> > a fix breaks something else."
-> >
-> > So yes, I disagree with rushing fixes immediately. If they're obvious
-> > - whatever that means - then sure but not all of them are such.
-> >
-> > --
-> 
-> Unfortunately, it looks like the broken commit got backported into 6.1.28,
-> but the fix still isn't in Linus' tree.
-> 
-> Sasha,
-> 
-> Can you please pick up
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/urgent&id=23a5b8bb022c1e071ca91b1a9c10f0ad6a0966e9
-> for 6.1.29 to fix the regression?
 
-Now that this is in Linus's tree, it's queued up, thanks.
 
-greg k-h
+On 9.05.2023 18:12, Jagadeesh Kona wrote:
+> Add device node for video clock controller on Qualcomm SM8550 platform.
+> 
+> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 6e9bad8f6f33..e67e7c69dae6 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -7,6 +7,7 @@
+>  #include <dt-bindings/clock/qcom,sm8550-gcc.h>
+>  #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
+>  #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
+> +#include <dt-bindings/clock/qcom,sm8550-videocc.h>
+>  #include <dt-bindings/dma/qcom-gpi.h>
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+> @@ -759,6 +760,17 @@ gcc: clock-controller@100000 {
+>  				 <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
+>  		};
+>  
+> +		videocc: clock-controller@aaf0000 {
+This node should be moved down. Nodes with unit addresses
+should be sorted alphanumerically.
+
+> +			compatible = "qcom,sm8550-videocc";
+> +			reg = <0 0x0aaf0000 0 0x10000>;
+> +			clocks = <&bi_tcxo_div2>, <&gcc GCC_VIDEO_AHB_CLK>;
+One per line, please
+
+Also, any reason the XO clock does not come from RPMhCC?
+
+Konrad
+> +			power-domains = <&rpmhpd SM8550_MMCX>;
+> +			required-opps = <&rpmhpd_opp_low_svs>;
+> +			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+> +			#power-domain-cells = <1>;
+> +		};
+> +
+>  		ipcc: mailbox@408000 {
+>  			compatible = "qcom,sm8550-ipcc", "qcom,ipcc";
+>  			reg = <0 0x00408000 0 0x1000>;
