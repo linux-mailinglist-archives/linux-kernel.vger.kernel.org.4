@@ -2,94 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F045702D7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ABA702D81
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242197AbjEONFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S242181AbjEONGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242189AbjEONFU (ORCPT
+        with ESMTP id S242174AbjEONGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:05:20 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9370273E;
-        Mon, 15 May 2023 06:04:54 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4QKfjD11sHz9sZF;
-        Mon, 15 May 2023 15:04:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1684155888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aReNDZORAsT9vC55Sza0lixh/dFu7bUAxE370evU9U0=;
-        b=HSExI2TLDxPazFnZAhnKWQUKsI6/VM6N+LUj1nR7G4Y7GRJ6gfBbOk0RF06aColi9xPiBa
-        /U/Z1KcwTbjQVNFIwxzbB7jsVd28JkDLRx/6kDpAsD0MmBQ76sasbnfF7UjVXE9++vChoi
-        xtWF6odERRxAzWeNS71fwHdE7e2pCu9R+6ckEDKfYPcgP1qN5lm0mOe5CKjbgBrW1kTjSx
-        FrkhdrEpzvkaQo/r5pecksfU6TV7Jg7Hz+P9IU2N2XVmg4qFw7cvDVuVZTmDRtOB+JQ9/Y
-        oiaR4fLB7SbbHAtblk6utPSe3Kxcrc9ULpFftEnT4Az7zBQkXUn/ElwbCAmWdA==
-Message-ID: <bc4d10f2-6ded-bed3-1d81-7e09292adf6f@mailbox.org>
-Date:   Mon, 15 May 2023 15:04:43 +0200
+        Mon, 15 May 2023 09:06:32 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A624C2133
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:06:02 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1aaef97652fso87517705ad.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684155960; x=1686747960;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=x8d5WHH7LCFe26MinsbsZnyby5kr64LG/XJK9V0WNKg=;
+        b=NaHgRv2bUNBZrF0o+5C3FTpheRmJqZQFaOSP8QzMXPq7WqJETIhWEOKc2lqj4Nm5T5
+         a32pCCSQx3QIgMU9tHmNWc24LCETh4+iOmKh8vrKudEVT2S+1tbvRWw9LG+/FQnfDIYd
+         tKTg4DVijbBMGL0PW9Mno6mGxd/JJ4F4NkV9M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684155960; x=1686747960;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x8d5WHH7LCFe26MinsbsZnyby5kr64LG/XJK9V0WNKg=;
+        b=GSkd25jaItyCPbbOKdqstOtLt0JoGtNlLsgaKlF376Q7/5ynNcnBj0T2nw4SnghlWq
+         QX30FeEkBoZrQyRgWFuT8APRKdSl+1Ezt8xRm8c8uoOATJpqbJjDssVods4USOeEKgL9
+         KZ9sBCU8NkhITPAhkf6Mx49ZtN2B3P1fX6c2Lq0MoCazJfEyR/Sxh753Cb795oohtXyI
+         mZXNZWeLw3LCZ0+RCgVDiZIldMx5ynhZuNAdxXeflwnSmmyNLusE7dE39fpPQ0wJVgUY
+         JXaUkEbGkYTVuSoPlXdD+1h/CXlw8Ci4IzX4lfqo5zdReewNnzMmktxbfBxy99gIL+yX
+         jK0A==
+X-Gm-Message-State: AC+VfDycD6W876RXJgMx+Dh8kWNeURG2K/TcWsHy1zDZUxYXHKkVFYkJ
+        VjEwzuhST5KDmZXc2vCxS42+Hw==
+X-Google-Smtp-Source: ACHHUZ5TQiYvEA3rPzvQv/lZBIMaILwMcV3Xu9P4Ckghl/s+uNjurYMNj1KtT/hqR4tacuNKKlahcA==
+X-Received: by 2002:a17:902:dace:b0:1ac:6e1f:d1bd with SMTP id q14-20020a170902dace00b001ac6e1fd1bdmr37375631plx.19.1684155960357;
+        Mon, 15 May 2023 06:06:00 -0700 (PDT)
+Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with UTF8SMTPSA id ji1-20020a170903324100b001a9b7584824sm13461277plb.159.2023.05.15.06.05.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 06:05:59 -0700 (PDT)
+From:   jeffxu@chromium.org
+To:     dave.hansen@intel.com, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        sroettger@google.com
+Cc:     akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+Date:   Mon, 15 May 2023 13:05:46 +0000
+Message-ID: <20230515130553.2311248-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 MIME-Version: 1.0
-Subject: Re: [PATCH AUTOSEL 6.1 4/9] drm/amd/display: Do not set drr on pipe
- commit
-Content-Language: en-CA
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     felipe.clark@amd.com, Aric.Cyr@amd.com, wenjing.liu@amd.com,
-        dri-devel@lists.freedesktop.org, Jun.Lei@amd.com,
-        airlied@gmail.com, jiapeng.chong@linux.alibaba.com,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        amd-gfx@lists.freedesktop.org, aurabindo.pillai@amd.com,
-        Alvin.Lee2@amd.com, harry.wentland@amd.com, sunpeng.li@amd.com,
-        mwen@igalia.com, Daniel Wheeler <daniel.wheeler@amd.com>,
-        Dillon.Varone@amd.com, Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        qingqing.zhuo@amd.com, Xinhui.Pan@amd.com, daniel@ffwll.ch,
-        Alex Deucher <alexander.deucher@amd.com>,
-        christian.koenig@amd.com
-References: <20230511193945.623476-1-sashal@kernel.org>
- <20230511193945.623476-4-sashal@kernel.org>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <20230511193945.623476-4-sashal@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: yjitohq9diod3ii4o71ztepm4eueahaa
-X-MBO-RS-ID: 14971900af013488b0a
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/23 21:39, Sasha Levin wrote:
-> From: Wesley Chalmers <Wesley.Chalmers@amd.com>
-> 
-> [ Upstream commit 474f01015ffdb74e01c2eb3584a2822c64e7b2be ]
-> 
-> [WHY]
-> Writing to DRR registers such as OTG_V_TOTAL_MIN on the same frame as a
-> pipe commit can cause underflow.
-> 
-> [HOW]
-> Move DMUB p-state delegate into optimze_bandwidth; enabling FAMS sets
-> optimized_required.
-> 
-> This change expects that Freesync requests are blocked when
-> optimized_required is true.
+From: Jeff Xu <jeffxu@google.com>
 
-This change caused a regression, see https://patchwork.freedesktop.org/patch/532240/?series=116487&rev=1#comment_972234 / 9deeb132-a317-7419-e9da-cbc0a379c0eb@daenzer.net .
+This is the first set of Memory mapping (VMA) protection patches using PKU.
+
+* * * 
+
+Background:
+
+As discussed previously in the kernel mailing list [1], V8 CFI [2] uses 
+PKU to protect memory, and Stephen Röttger proposes to extend the PKU to 
+memory mapping [3].
+
+We're using PKU for in-process isolation to enforce control-flow integrity
+for a JIT compiler. In our threat model, an attacker exploits a 
+vulnerability and has arbitrary read/write access to the whole process
+space concurrently to other threads being executed. This attacker can
+manipulate some arguments to syscalls from some threads.
+
+Under such a powerful attack, we want to create a “safe/isolated”
+thread environment. We assign dedicated PKUs to this thread, 
+and use those PKUs to protect the threads’ runtime environment.
+The thread has exclusive access to its run-time memory. This
+includes modifying the protection of the memory mapping, or
+munmap the memory mapping after use. And the other threads
+won’t be able to access the memory or modify the memory mapping
+(VMA) belonging to the thread.
+
+* * * 
+
+Proposed changes:
+
+This patch introduces a new flag, PKEY_ENFORCE_API, to the pkey_alloc()
+function. When a PKEY is created with this flag, it is enforced that any
+thread that wants to make changes to the memory mapping (such as mprotect)
+of the memory must have write access to the PKEY. PKEYs created without
+this flag will continue to work as they do now, for backwards 
+compatibility.
+
+Only PKEY created from user space can have the new flag set, the PKEY
+allocated by the kernel internally will not have it. In other words,
+ARCH_DEFAULT_PKEY(0) and execute_only_pkey won’t have this flag set,
+and continue work as today.
+
+This flag is checked only at syscall entry, such as mprotect/munmap in
+this set of patches. It will not apply to other call paths. In other
+words, if the kernel want to change attributes of VMA for some reasons,
+the kernel is free to do that and not affected by this new flag.
+
+This set of patch covers mprotect/munmap, I plan to work on other 
+syscalls after this. 
+
+* * * 
+
+Testing:
+
+I have tested this patch on a Linux kernel 5.15, 6,1, and 6.4-rc1,
+new selftest is added in: pkey_enforce_api.c 
+
+* * * 
+
+Discussion:
+
+We believe that this patch provides a valuable security feature. 
+It allows us to create “safe/isolated” thread environments that are 
+protected from attackers with arbitrary read/write access to 
+the process space.
+
+We believe that the interface change and the patch don't 
+introduce backwards compatibility risk.
+
+We would like to disucss this patch in Linux kernel community
+for feedback and support. 
+
+* * * 
+
+Reference:
+
+[1]https://lore.kernel.org/all/202208221331.71C50A6F@keescook/
+[2]https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit?usp=sharing
+[3]https://docs.google.com/document/d/1qqVoVfRiF2nRylL3yjZyCQvzQaej1HRPh3f5wj1AS9I/edit
 
 
+Best Regards,
+-Jeff Xu
+
+Jeff Xu (6):
+  PKEY: Introduce PKEY_ENFORCE_API flag
+  PKEY: Add arch_check_pkey_enforce_api()
+  PKEY: Apply PKEY_ENFORCE_API to mprotect
+  PKEY:selftest pkey_enforce_api for mprotect
+  KEY: Apply PKEY_ENFORCE_API to munmap
+  PKEY:selftest pkey_enforce_api for munmap
+
+ arch/powerpc/include/asm/pkeys.h              |   19 +-
+ arch/x86/include/asm/mmu.h                    |    7 +
+ arch/x86/include/asm/pkeys.h                  |   92 +-
+ arch/x86/mm/pkeys.c                           |    2 +-
+ include/linux/mm.h                            |    2 +-
+ include/linux/pkeys.h                         |   18 +-
+ include/uapi/linux/mman.h                     |    5 +
+ mm/mmap.c                                     |   34 +-
+ mm/mprotect.c                                 |   31 +-
+ mm/mremap.c                                   |    6 +-
+ tools/testing/selftests/mm/Makefile           |    1 +
+ tools/testing/selftests/mm/pkey_enforce_api.c | 1312 +++++++++++++++++
+ 12 files changed, 1507 insertions(+), 22 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/pkey_enforce_api.c
+
+
+base-commit: ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab
 -- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
+2.40.1.606.ga4b1b128d6-goog
 
