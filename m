@@ -2,128 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255F6703A30
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B72F703A83
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244820AbjEORtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
+        id S238522AbjEORvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243405AbjEORtJ (ORCPT
+        with ESMTP id S238780AbjEORvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:49:09 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13016088;
-        Mon, 15 May 2023 10:47:19 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FHCnhK010977;
-        Mon, 15 May 2023 17:46:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AKq3OA68Xdh2Pwr0i6y5rLL9DOMYklqjB584l2l1Ee8=;
- b=otVEz15wmw2pcJ2YRHfZi7mxB5/+FXPTsgzER9jF21mPskXshj6McZFJgMbv8e6qfW9m
- z4oktvKsbVHSsG3Yl3y7wsbR/LrskDhbieu+dwcf18IykeZyAogxTCWX26cnJ5kmTZor
- 6BIgpqsXL+xcpS0UYeV39S0ZbACqY6ZC5YTFzi33MeyecdD2Hzx1H4v4ysk+w+lIsptw
- t/mRxLFH9ye8sHt7Z92gGfDelUCPro4gz/QYculUZ7MDyATD7ImQlRfqxlHZQmvXbM4P
- VcpGWaoHGwDdXqGYvHTpDnq5uwQoWDF8Pvr8si6N8p1FrJufjf/O3SS47VpiHt3bGCuv Uw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkjwds83k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 17:46:55 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FHksn8021026
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 17:46:54 GMT
-Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
- 2023 10:46:53 -0700
-Message-ID: <1fd8fd48-9a0a-774c-1366-ea4c893f3b25@quicinc.com>
-Date:   Mon, 15 May 2023 10:46:48 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v8 5/8] drm/msm/dpu: add support for DSC encoder v1.2
- engine
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-6-git-send-email-quic_khsieh@quicinc.com>
- <41243dc6-eb9d-dea6-f945-cb1f6594a2a4@linaro.org>
- <w6uswjuf7fiorrplqzhrpg3vrjbbdd3bgaxej5l6ez3pebn3d5@ytuxhim25j6q>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <w6uswjuf7fiorrplqzhrpg3vrjbbdd3bgaxej5l6ez3pebn3d5@ytuxhim25j6q>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PigQ09qt6WdvzSy-Qk0yH7QxqHjPzdTp
-X-Proofpoint-GUID: PigQ09qt6WdvzSy-Qk0yH7QxqHjPzdTp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_16,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150149
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 15 May 2023 13:51:17 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5FF183FA
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:49:22 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-24e1d272afaso6919469a91.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684172962; x=1686764962;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YUXfDVEOZN73+1c0jBwpYDx4Lp9671FBUhLy9esSzws=;
+        b=2Y4rqA63ePB40J0RrmyaWoCdNET9IDC+RHvWceFj1vN24maTmC33yhQ4BU4vewfnQA
+         LTt6YayFFTypg3qgR3xkilYk9L86yIhtH5I+IeWy2FI6XCP3mF3TSUtVDxjYKXnh0NmZ
+         u1FJ/QVMLyxnNPBqTDobD184UJP5ldnhCwimpb52+0BsoUP0iOi15PQte4j49pYFOAeR
+         0YTS6The5SJhq7gAt/OmDCuGfIdrsBcMdMJfZwL2C1hi7vG+f0D4URgeCcGFK06HqBrB
+         bFgh8WbxAdjdGwApYLmm5wfTKXDQn8TDgZ8h9kwx3bG8rGb3sdYrDFe+w7UOxfRy5seu
+         w4/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684172962; x=1686764962;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YUXfDVEOZN73+1c0jBwpYDx4Lp9671FBUhLy9esSzws=;
+        b=KD5Td+RXLLDJqaEAxyFGwXTOU40RJKn6dEgWFMZV9YAheRDBXdctLCXvPapDTXSQKI
+         qZigPd0TZwJZCtwU/wWs0GBPyMxR3mMIDvLkI6YwM1EVzjcnN2wMS5/56X3gSsUyOS5/
+         ftqUD1MX+Bdqy8zCFf4z2/Eop2WDL0L+PHtPWx5jIFGh0I/aW+HCceMOjYlFI33IhfZE
+         yXoitGwBHYDnJjGcNAzFGVbwvXV0AeFW45UsXO8R2HQJUj+Cn5qqrIyWUCewcVLPY8x9
+         8XrW1Y6aFRDDeSVcTAkS3SepQB1Ow6wgMy4YfmqdIgr2hWuBbkgDCT/S3UNc/CJGYTlZ
+         A9Mw==
+X-Gm-Message-State: AC+VfDzFxuBl8cXn/v2YycBzhPglw4wewnBeBdGuZGIe8q9Jwm3CPzDY
+        ZDmwOXz3tPePQSI54vNddSjOuVV3Meo=
+X-Google-Smtp-Source: ACHHUZ7TaBfG344HLW8kEXFgjWe9h2Wo72d14XZZmcYXeo7U23yXiv4bhyvVuzgqLKu5xrzUYSrF2nzPUaY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:c595:b0:250:aae3:4668 with SMTP id
+ l21-20020a17090ac59500b00250aae34668mr6270721pjt.1.1684172961756; Mon, 15 May
+ 2023 10:49:21 -0700 (PDT)
+Date:   Mon, 15 May 2023 10:49:20 -0700
+In-Reply-To: <7972883f69abe6fe61a2e76def6a0a1f1f28228b.camel@intel.com>
+Mime-Version: 1.0
+References: <20230511233351.635053-1-seanjc@google.com> <20230511233351.635053-6-seanjc@google.com>
+ <ecbcfb6ca243cf587eb6e61c6e852b4f474a36d7.camel@intel.com>
+ <ZF5qnQQYa6OAI0Hy@google.com> <7972883f69abe6fe61a2e76def6a0a1f1f28228b.camel@intel.com>
+Message-ID: <ZGJwoFCWVWMSX5c3@google.com>
+Subject: Re: [PATCH v2 5/8] KVM: x86: Use MTRR macros to define possible MTRR
+ MSR ranges
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "guoke@uniontech.com" <guoke@uniontech.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 15, 2023, Kai Huang wrote:
+> On Fri, 2023-05-12 at 09:35 -0700, Sean Christopherson wrote:
+> > On Fri, May 12, 2023, Kai Huang wrote:
+> > > On Thu, 2023-05-11 at 16:33 -0700, Sean Christopherson wrote:
+> > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > > index e7f78fe79b32..8b356c9d8a81 100644
+> > > > --- a/arch/x86/kvm/x86.c
+> > > > +++ b/arch/x86/kvm/x86.c
+> > > > @@ -3700,8 +3700,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu,=
+ struct msr_data *msr_info)
+> > > >  			return 1;
+> > > >  		}
+> > > >  		break;
+> > > > -	case 0x200 ... MSR_IA32_MC0_CTL2 - 1:
+> > > > -	case MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) ... 0x2ff:
+> > > > +	case MSR_IA32_CR_PAT:
+> > > > +	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
+> > > > +	case MSR_MTRRdefType:
+> > > >  		return kvm_mtrr_set_msr(vcpu, msr, data);
+> > > >  	case MSR_IA32_APICBASE:
+> > > >  		return kvm_set_apic_base(vcpu, msr_info);
+> > > > @@ -4108,9 +4109,10 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu=
+, struct msr_data *msr_info)
+> > > >  		msr_info->data =3D kvm_scale_tsc(rdtsc(), ratio) + offset;
+> > > >  		break;
+> > > >  	}
+> > > > +	case MSR_IA32_CR_PAT:
+> > > >  	case MSR_MTRRcap:
+> > >=20
+> > > ... Should we put MSR_IA32_CR_PAT after MSR_MTRRcap so it can be symm=
+etric to
+> > > kvm_set_msr_common()?
+> > >=20
+> > > Looks there's no reason to put it before MSR_MTRRcap.
+> >=20
+> > No, it's above MTRRcap for two reasons:
+> >=20
+> >  1. When PAT is moved out of mtrr.c, PAT doesn't get bunded with the ot=
+her MTRRs
+> >     and so would just need to be hoisted back up.  The end code looks l=
+ike:
+> >=20
+> > 	case MSR_IA32_CR_PAT:
+> > 		msr_info->data =3D vcpu->arch.pat;
+> > 		break;
+> > 	case MSR_MTRRcap:
+> > 	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
+> > 	case MSR_MTRRdefType:
+> > 		return kvm_mtrr_get_msr(vcpu, msr_info->index, &msr_info->data);
+>=20
+> Sorry I mistakenly thought MSR_MTRRcap wasn't handled in kvm_mtrr_get_msr=
+().=20
+> Yes looks good to me.
+>=20
+> > =20
+> >  2. There is no MSR_MTRRcap case statement in kvm_set_msr_common() beca=
+use it's
+> >     a read-only MSR, i.e. the two can't be symmetric :-)
+>=20
+> Do you know why it is a read-only MSR, which enables both FIXED ranges an=
+d
+> (fixed number of) dynamic ranges?
 
-On 5/14/2023 2:46 PM, Marijn Suijten wrote:
-> On 2023-05-12 21:19:19, Dmitry Baryshkov wrote:
-> <snip.
->>> +static inline void dpu_hw_dsc_bind_pingpong_blk_1_2(struct dpu_hw_dsc *hw_dsc,
->>> +						    const enum dpu_pingpong pp)
->>> +{
->>> +	struct dpu_hw_blk_reg_map *hw;
->>> +	const struct dpu_dsc_sub_blks *sblk;
->>> +	int mux_cfg = 0xf; /* Disabled */
->>> +
->>> +	hw = &hw_dsc->hw;
->>> +
->>> +	sblk = hw_dsc->caps->sblk;
->>> +
->>> +	if (pp)
->>> +		mux_cfg = (pp - PINGPONG_0) & 0x7;
->> Do we need an unbind support here like we do for the DSC 1.1?
->>
->>> +
->>> +	DPU_REG_WRITE(hw, sblk->ctl.base + DSC_CTL, mux_cfg);
->>> +}
-> <snip>
->
-> Friendly request to strip/snip unneeded context (as done in this reply)
-> to make it easier to spot the conversation, and replies to it.
->
-> - Marijn
+MTTRcap doesn't "enable" anything, it's a capabilities MSR (MTRR Capability=
+ is
+its given name in the SDM), similar to ARCH_CAPABILITIES, PERF_CAPABILITIES=
+, etc.
+They're all essentially CPUID leafs, but presumably are MSRs due to being r=
+elevant
+only to CPL0.  Or maybe some higher ups at Intel just spin a wheel to deter=
+mine
+whether to use a CPUID leaf or an MSR.  :-)
 
-Thanks for suggestion.
+> I am asking because there's a x86 series to fake a simple synthetic MTRR =
+which
+> neither has fixed nor dynamic ranges but only has a default MSR_MTRRdefTy=
+pe:
+>=20
+> https://lore.kernel.org/lkml/20230509233641.GGZFrZCTDH7VwUMp5R@fat_crate.=
+local/T/
+>=20
+> The main use cases are Xen PV guests and SEV-SNP guests running under
+> Hyper-V, but it appears TDX guest is also desired to have similar handlin=
+g,
+> because:=EF=BF=BD
+>=20
+> 1) TDX module exposes MTRR in CPUID to guest, but handles nothing about M=
+TRR
+> MSRs but only injects #VE.
+>=20
+> 2) TDX module always maps guest private memory as WB (and ignores guest's=
+ PAT
+> IIUC);
+>=20
+> 3) For shared memory, w/o non-coherent DMA guest's MTRRs are ignored by K=
+VM
+> anyway.  TDX doesn't officially support non-trusted device assignment AFA=
+ICT.
+> Even we want to consider non-coherent DMA, it would only add confusion to=
+ honor
+> guest's MTRRs since they can point to private memory, which is always map=
+ped as
+> WB.
 
-How can I do that?
+Yeah, I think the best option is for KVM to disallow attaching non-coherent=
+ DMA
+to TDX VMs.  AFAIK, there's no use case for such a setup.
 
-just manually delete unneeded context?
+> So basically looks there's no value to exposing FIXED and dynamic MTRR ra=
+nges to
+> TDX guest.
 
-Or are they other way (tricks) to do it automatically?
-
-
+Agreed.
