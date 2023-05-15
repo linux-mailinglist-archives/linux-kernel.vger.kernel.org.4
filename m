@@ -2,122 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FFA703DC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16EB703DC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245186AbjEOTfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 15:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S245200AbjEOTil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 15:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244201AbjEOTfm (ORCPT
+        with ESMTP id S231910AbjEOTik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 15:35:42 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 139D226AC;
-        Mon, 15 May 2023 12:35:41 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 42A012044710;
-        Mon, 15 May 2023 12:35:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 42A012044710
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1684179340;
-        bh=PcFG+iIa/PA7p0IIgskPb1ruV+sX7mzcczF0a582zuI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dZC0Y1cjSTLSoaHgLlbLJz9qTrQZ3hbcf9ZlQOPGYVMVbbgOQUi309o/v++fIOct8
-         LHS6+lCLPr2yc32sNNHeyQ5P/wGZYLepluAC+iqSDagyJ+z/heZVKg/h/vy+tMLiRH
-         PuNPVhL0D1XkdrY1gEUA1LyM//Mw+1f+cCn7ln4U=
-Date:   Mon, 15 May 2023 12:35:32 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dthaler@microsoft.com, brauner@kernel.org, hch@infradead.org
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-ID: <20230515193532.GA153@W11-BEAU-MD.localdomain>
-References: <20230508163751.841-1-beaub@linux.microsoft.com>
- <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
- <20230509130111.62d587f1@rorschach.local.home>
- <20230509163050.127d5123@rorschach.local.home>
- <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
- <20230515143305.4f731fa9@gandalf.local.home>
+        Mon, 15 May 2023 15:38:40 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFB710C1;
+        Mon, 15 May 2023 12:38:37 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id C53AC2800B776;
+        Mon, 15 May 2023 21:38:35 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id BC13C1B8046; Mon, 15 May 2023 21:38:35 +0200 (CEST)
+Date:   Mon, 15 May 2023 21:38:35 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>
+Subject: Re: [PATCH 1/2] PCI: pciehp: Add support for OS-First Hotplug and
+ AER/DPC
+Message-ID: <20230515193835.GA17526@wunner.de>
+References: <20221101000719.36828-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20221101000719.36828-2-Smita.KoralahalliChannabasappa@amd.com>
+ <20221104101536.GA11363@wunner.de>
+ <fba22d6b-c225-4b44-674b-2c62306135ed@amd.com>
+ <20230510201937.GA11550@wunner.de>
+ <20230511152326.GA16215@wunner.de>
+ <579cb233-4827-2d03-56ad-1b807a189ba8@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230515143305.4f731fa9@gandalf.local.home>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <579cb233-4827-2d03-56ad-1b807a189ba8@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 02:33:05PM -0400, Steven Rostedt wrote:
-> On Mon, 15 May 2023 09:57:07 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> 
-> > Thank you for these details. Answer below...
-> 
-> Thanks for this well thought out reply!
-> 
-> 
-
+On Mon, May 15, 2023 at 12:20:42PM -0700, Smita Koralahalli wrote:
+> On 5/11/2023 8:23 AM, Lukas Wunner wrote:
+> > Subject: [PATCH] PCI: pciehp: Disable Surprise Down Error reporting
+> > 
+> > On hotplug ports capable of surprise removal, Surprise Down Errors are
+> > expected and no reason for AER or DPC to spring into action.  Although
+> > a Surprise Down event might be caused by an error, software cannot
+> > discern that from regular surprise removal.
+> > 
+> > Any well-behaved BIOS should mask such errors, but Smita reports a case
+> > where hot-removing an Intel NVMe SSD [8086:0a54] from an AMD Root Port
+> > [1022:14ab] results in irritating AER log messages and a delay of more
+> > than 1 second caused by DPC handling:
 [...]
+> Thanks for the patch. I tested it and I notice that the AER status registers
+> will still be set. I just don't see a DPC event with these settings.
+> 
+> I have logged in the status registers after the device is removed in
+> pciehp_handle_presence_or_link_change().
+[...]
+> Section 6.2.3.2.2 in PCIe Spec v6.0 has also mentioned that:
+> "If an individual error is masked when it is detected, its error status bit
+> is still affected, but no error reporting Message is sent to the Root
+> Complex, and the error is not recorded in the Header Log, TLP Prefix Log, or
+> First Error Pointer"..
 
-> > 
-> > > 	if (unlikely(ret <= 0)) {
-> > > 		if (!fixup_fault)
-> > > 			return -EFAULT;
-> > > 
-> > > 		if (!user_event_enabler_queue_fault(mm, enabler, *attempt))
-> > > 			pr_warn("user_events: Unable to queue fault handler\n");  
-> > 
-> > This part looks questionable.
-> > 
-> > The only users of fixup_user_fault() were futex and KVM.
-> > Now user_events are calling it too from user_event_mm_fault_in() where
-> > "bool unlocked;" is uninitialized and state of this flag is not checked
-> > after fixup_user_fault() call.
-> > Not an MM expert, but this is suspicious.
-> 
-> Hmm, yeah, this should be:
-> 
-> static int user_event_mm_fault_in()
-> {
-> 	bool unlocked = false;
-> 
-> 	[..]
-> 
-> out:
-> 	if (!unlocked)
-> 		mmap_read_unlock(mm->mm);
-> }
-> 
-> Good catch!
-> 
+Thanks for the thorough testing.  So the error is logged and next time
+a reporting message for a different error is sent to the Root Complex,
+that earlier Surprise Down Error will be seen and you'd get belated
+log messages for it, is that what you're saying?
 
-I don't believe that's correct. fixup_user_fault() re-acquires the
-mmap lock, and when it does, it lets you know via unlocked getting set
-to true. IE: Something COULD have changed in the mmap during this call,
-but the lock is still held.
+I guess I could amend the patch to let pciehp unconditionally clear
+the Surprise Down Error Status bit upon a DLLSC event.
 
-See comments here:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/gup.c#n1287
+Does the patch otherwise do what you want, i.e. no irritating messages
+and no extra delay incurred by AER/DPC handling?
 
-Thanks,
--Beau
+Thanks!
 
-> 
-> Thank you Alexei for asking these. The above are all valid concerns.
-> 
-> -- Steve
-> 
+Lukas
