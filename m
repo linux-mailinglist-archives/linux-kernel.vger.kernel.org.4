@@ -2,338 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3166B7029D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAC270288D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240492AbjEOKBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        id S239954AbjEOJ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240414AbjEOKA3 (ORCPT
+        with ESMTP id S238321AbjEOJ23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:00:29 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDA7C10E7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
-        Content-Type; bh=S5jTo4rjfGJGWhpr1EMpM5x6rJCnsSEBM5A9WLMnjKk=;
-        b=qaZDGyqCZCmtH7ZJJtBLnpyHTTdzFufQCNvkGlxSX/q/wlwUHFHhrJM9gOPume
-        eHDG9YQD3FzeD2qGHrvi9xoZq1PU1tSeIcYVVgW8Qas/O3nZCBHSiqw9OQ+lFvy3
-        fE93IQANf6WYNSvYQlVS+KmV6hk876m8ndPs4ZLDcYGjY=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g5-0 (Coremail) with SMTP id _____wAnpjKjAmJkSEjSBw--.43998S2;
-        Mon, 15 May 2023 18:00:03 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     shaggy@kernel.org
-Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, security@kernel.org,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] fs/jfs: Add a mutex named txEnd_lmLogClose_mutex to prevent a race  condition between txEnd and lmLogClose functions
-Date:   Mon, 15 May 2023 17:59:56 +0800
-Message-Id: <20230515095956.17898-1-zyytlz.wz@163.com>
+        Mon, 15 May 2023 05:28:29 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7C32130;
+        Mon, 15 May 2023 02:27:49 -0700 (PDT)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QKYnK6gKpzTkGJ;
+        Mon, 15 May 2023 17:23:01 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 15 May
+ 2023 17:27:46 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <lenb@kernel.org>, <viresh.kumar@linaro.org>, <rafael@kernel.org>
+CC:     <weiyongjun1@huawei.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xiexiuqi@huawei.com>,
+        <linux-acpi@vger.kernel.org>, <liwei391@huawei.com>,
+        <wangxiongfeng2@huawei.com>
+Subject: [PATCH 1/2] cpufreq: CPPC: keep target core awake when reading its cpufreq rate
+Date:   Mon, 15 May 2023 18:00:03 +0800
+Message-ID: <20230515100005.3540793-1-zengheng4@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wAnpjKjAmJkSEjSBw--.43998S2
-X-Coremail-Antispam: 1Uf129KBjvAXoW3ur1kZr4ftrWDtw1Dtr48Crg_yoW8JryDZo
-        ZI9a15Cr48Gry5JFyruF1rKryrWry0q3Z7Jr4rCF4I9FnrG3WkAF1Iqw17G3y5JF4fGa9x
-        JFyjqw4rJ3yUJrn5n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4R9miiUUUUU
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiGgNwU1aEFPYTOAAAsh
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reported an error "slab-use-after-free Write in txEnd".
+As ARM AMU's document says, all counters are subject to any changes
+in clock frequency, including clock stopping caused by the WFI and WFE
+instructions.
 
-crash report：
+Therefore, using smp_call_function_single() to trigger target CPU to
+read self's AMU counters, which ensures the counters are working
+properly during calculation.
 
-==================================================================
-BUG: KASAN: slab-use-after-free in instrument_atomic_write include/linux/instrumented.h:87 [inline]
-BUG: KASAN: slab-use-after-free in clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
-BUG: KASAN: slab-use-after-free in txEnd+0x2a3/0x5a0 fs/jfs/jfs_txnmgr.c:535
-Write of size 8 at addr ffff888021bee840 by task jfsCommit/130
-
-CPU: 3 PID: 130 Comm: jfsCommit Not tainted 6.3.0-rc7-pasta #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:319 [inline]
- print_report+0xc1/0x5e0 mm/kasan/report.c:430
- kasan_report+0xc0/0xf0 mm/kasan/report.c:536
- check_region_inline mm/kasan/generic.c:181 [inline]
- kasan_check_range+0x144/0x190 mm/kasan/generic.c:187
- instrument_atomic_write include/linux/instrumented.h:87 [inline]
- clear_bit include/asm-generic/bitops/instrumented-atomic.h:41 [inline]
- txEnd+0x2a3/0x5a0 fs/jfs/jfs_txnmgr.c:535
- txLazyCommit fs/jfs/jfs_txnmgr.c:2679 [inline]
- jfs_lazycommit+0x75f/0xb10 fs/jfs/jfs_txnmgr.c:2727
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 86743:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- ____kasan_kmalloc mm/kasan/common.c:333 [inline]
- __kasan_kmalloc+0xa3/0xb0 mm/kasan/common.c:383
- kmalloc include/linux/slab.h:580 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- open_inline_log fs/jfs/jfs_logmgr.c:1159 [inline]
- lmLogOpen+0x562/0x1430 fs/jfs/jfs_logmgr.c:1069
- jfs_mount_rw+0x2f6/0x6d0 fs/jfs/jfs_mount.c:257
- jfs_fill_super+0xa00/0xd40 fs/jfs/super.c:565
- mount_bdev+0x351/0x410 fs/super.c:1380
- legacy_get_tree+0x109/0x220 fs/fs_context.c:610
- vfs_get_tree+0x8d/0x350 fs/super.c:1510
- do_new_mount fs/namespace.c:3042 [inline]
- path_mount+0x675/0x1e30 fs/namespace.c:3372
- do_mount fs/namespace.c:3385 [inline]
- __do_sys_mount fs/namespace.c:3594 [inline]
- __se_sys_mount fs/namespace.c:3571 [inline]
- __x64_sys_mount+0x283/0x300 fs/namespace.c:3571
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 16288:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x13b/0x1a0 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:162 [inline]
- __cache_free mm/slab.c:3390 [inline]
- __do_kmem_cache_free mm/slab.c:3577 [inline]
- __kmem_cache_free+0xcd/0x2c0 mm/slab.c:3584
- lmLogClose+0x595/0x720 fs/jfs/jfs_logmgr.c:1461
- jfs_umount+0x2ef/0x430 fs/jfs/jfs_umount.c:114
- jfs_put_super+0x85/0x1d0 fs/jfs/super.c:194
- generic_shutdown_super+0x158/0x480 fs/super.c:500
- kill_block_super+0x9b/0xf0 fs/super.c:1407
- deactivate_locked_super+0x98/0x160 fs/super.c:331
- deactivate_super+0xb1/0xd0 fs/super.c:362
- cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1177
- task_work_run+0x168/0x260 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Last potentially related work creation:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- __kasan_record_aux_stack+0x7b/0x90 mm/kasan/generic.c:491
- kvfree_call_rcu+0x70/0xad0 kernel/rcu/tree.c:3327
- neigh_destroy+0x431/0x660 net/core/neighbour.c:941
- neigh_release include/net/neighbour.h:449 [inline]
- neigh_cleanup_and_release+0x1f8/0x280 net/core/neighbour.c:103
- neigh_periodic_work+0x60c/0xac0 net/core/neighbour.c:1025
- process_one_work+0x98a/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-The buggy address belongs to the object at ffff888021bee800
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 64 bytes inside of
- freed 1024-byte region [ffff888021bee800, ffff888021beec00)
-
-The buggy address belongs to the physical page:
-page:ffffea000086fb80 refcount:1 mapcount:0 mapping:0000000000000000
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff888012440700 ffffea0000583ed0 ffffea0000609790
-raw: 0000000000000000 ffff888021bee000 0000000100000002 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
- prep_new_page mm/page_alloc.c:2553 [inline]
- get_page_from_freelist+0x119c/0x2d40 mm/page_alloc.c:4326
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5592
- __alloc_pages_node include/linux/gfp.h:237 [inline]
- kmem_getpages mm/slab.c:1360 [inline]
- cache_grow_begin+0x9b/0x3b0 mm/slab.c:2570
- cache_alloc_refill+0x27e/0x380 mm/slab.c:2943
- ____cache_alloc mm/slab.c:3019 [inline]
- ____cache_alloc mm/slab.c:3002 [inline]
- __do_cache_alloc mm/slab.c:3202 [inline]
- slab_alloc_node mm/slab.c:3250 [inline]
- __kmem_cache_alloc_node+0x360/0x3f0 mm/slab.c:3541
- __do_kmalloc_node mm/slab_common.c:966 [inline]
- __kmalloc+0x4e/0x190 mm/slab_common.c:980
- kmalloc include/linux/slab.h:584 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- ieee802_11_parse_elems_full+0x106/0x1320 net/mac80211/util.c:1609
- ieee802_11_parse_elems_crc.constprop.0+0x99/0xd0
- net/mac80211/ieee80211_i.h:2265
- ieee802_11_parse_elems net/mac80211/ieee80211_i.h:2272 [inline]
- ieee80211_bss_info_update+0x410/0xb50 net/mac80211/scan.c:212
- ieee80211_rx_bss_info net/mac80211/ibss.c:1120 [inline]
- ieee80211_rx_mgmt_probe_beacon net/mac80211/ibss.c:1609 [inline]
- ieee80211_ibss_rx_queued_mgmt+0x18b2/0x2d30 net/mac80211/ibss.c:1638
- ieee80211_iface_process_skb net/mac80211/iface.c:1583 [inline]
- ieee80211_iface_work+0xa47/0xd60 net/mac80211/iface.c:1637
- process_one_work+0x98a/0x15c0 kernel/workqueue.c:2390
- worker_thread+0x669/0x1090 kernel/workqueue.c:2537
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1454 [inline]
- free_pcp_prepare+0x4e3/0x920 mm/page_alloc.c:1504
- free_unref_page_prepare mm/page_alloc.c:3388 [inline]
- free_unref_page+0x1d/0x4e0 mm/page_alloc.c:3483
- slab_destroy mm/slab.c:1613 [inline]
- slabs_destroy+0x85/0xc0 mm/slab.c:1633
- __cache_free_alien mm/slab.c:773 [inline]
- cache_free_alien mm/slab.c:789 [inline]
- ___cache_free+0x203/0x3e0 mm/slab.c:3417
- qlink_free mm/kasan/quarantine.c:168 [inline]
- qlist_free_all+0x4f/0x1a0 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x188/0x1d0 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:769 [inline]
- slab_alloc_node mm/slab.c:3257 [inline]
- slab_alloc mm/slab.c:3266 [inline]
- __kmem_cache_alloc_lru mm/slab.c:3443 [inline]
- kmem_cache_alloc+0x1bd/0x3f0 mm/slab.c:3452
- vm_area_alloc+0x20/0x100 kernel/fork.c:458
- mmap_region+0x389/0x2270 mm/mmap.c:2553
- do_mmap+0x853/0xf20 mm/mmap.c:1364
- vm_mmap_pgoff+0x1af/0x280 mm/util.c:542
- ksys_mmap_pgoff+0x41f/0x5a0 mm/mmap.c:1410
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff888021bee700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff888021bee780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff888021bee800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                           ^
- ffff888021bee880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888021bee900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-Through analysis, it was found that a race condition occurred between two
-functions lmLogClose and txEnd, which were executed in different threads.
-The possible sequence is as follows:
-
--------------------------------------------------------------------------
-cpu1(free thread)        |        cpu2(use thread)
--------------------------------------------------------------------------
-lmLogClose               |        txEnd
-                         |        log = JFS_SBI(tblk->sb)->log;
-sbi->log = NULL;         |
-kfree(log); [1] free log |
-                         |        clear_bit(log_FLUSH, &log->flag); [2] UAF
-
-Fix it by add a mutex lock between lmLogClose and txEnd:
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 ---
- fs/jfs/jfs_debug.c  | 1 +
- fs/jfs/jfs_debug.h  | 1 +
- fs/jfs/jfs_logmgr.c | 2 ++
- fs/jfs/jfs_txnmgr.c | 8 ++++++++
- 4 files changed, 12 insertions(+)
+ drivers/cpufreq/cppc_cpufreq.c | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/fs/jfs/jfs_debug.c b/fs/jfs/jfs_debug.c
-index 44b62b3c322e..a9c9266b222b 100644
---- a/fs/jfs/jfs_debug.c
-+++ b/fs/jfs/jfs_debug.c
-@@ -78,3 +78,4 @@ void jfs_proc_clean(void)
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 022e3555407c..169af7ff9a2a 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -837,29 +837,31 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
+ 	return (reference_perf * delta_delivered) / delta_reference;
  }
  
- #endif /* PROC_FS_JFS */
-+DEFINE_MUTEX(txEnd_lmLogClose_mutex);
-\ No newline at end of file
-diff --git a/fs/jfs/jfs_debug.h b/fs/jfs/jfs_debug.h
-index 48e2150c092e..25da8ee71f5e 100644
---- a/fs/jfs/jfs_debug.h
-+++ b/fs/jfs/jfs_debug.h
-@@ -107,3 +107,4 @@ int jfs_xtstat_proc_show(struct seq_file *m, void *v);
- #endif				/* CONFIG_JFS_STATISTICS */
- 
- #endif				/* _H_JFS_DEBUG */
-+extern struct mutex txEnd_lmLogClose_mutex;
-\ No newline at end of file
-diff --git a/fs/jfs/jfs_logmgr.c b/fs/jfs/jfs_logmgr.c
-index 695415cbfe98..05c5391075db 100644
---- a/fs/jfs/jfs_logmgr.c
-+++ b/fs/jfs/jfs_logmgr.c
-@@ -1442,6 +1442,7 @@ int lmLogClose(struct super_block *sb)
- 	jfs_info("lmLogClose: log:0x%p", log);
- 
- 	mutex_lock(&jfs_log_mutex);
-+	mutex_lock(&txEnd_lmLogClose_mutex);
- 	LOG_LOCK(log);
- 	list_del(&sbi->log_list);
- 	LOG_UNLOCK(log);
-@@ -1490,6 +1491,7 @@ int lmLogClose(struct super_block *sb)
- 	kfree(log);
- 
-       out:
-+	mutex_unlock(&txEnd_lmLogClose_mutex);
- 	mutex_unlock(&jfs_log_mutex);
- 	jfs_info("lmLogClose: exit(%d)", rc);
- 	return rc;
-diff --git a/fs/jfs/jfs_txnmgr.c b/fs/jfs/jfs_txnmgr.c
-index ffd4feece078..5b4351e59535 100644
---- a/fs/jfs/jfs_txnmgr.c
-+++ b/fs/jfs/jfs_txnmgr.c
-@@ -490,6 +490,7 @@ void txEnd(tid_t tid)
- 	struct jfs_log *log;
- 
- 	jfs_info("txEnd: tid = %d", tid);
-+	mutex_lock(&txEnd_lmLogClose_mutex);
- 	TXN_LOCK();
- 
- 	/*
-@@ -500,6 +501,11 @@ void txEnd(tid_t tid)
- 
- 	log = JFS_SBI(tblk->sb)->log;
- 
-+	if (!log) {
-+		mutex_unlock(&txEnd_lmLogClose_mutex);
-+		return;
-+	}
++static void cppc_get_perf_ctrs_smp(void *val)
++{
++	int cpu = smp_processor_id();
++	struct cppc_perf_fb_ctrs *fb_ctrs = val;
 +
- 	/*
- 	 * Lazy commit thread can't free this guy until we mark it UNLOCKED,
- 	 * otherwise, we would be left with a transaction that may have been
-@@ -515,6 +521,7 @@ void txEnd(tid_t tid)
- 		spin_lock_irq(&log->gclock);	// LOGGC_LOCK
- 		tblk->flag |= tblkGC_UNLOCKED;
- 		spin_unlock_irq(&log->gclock);	// LOGGC_UNLOCK
-+		mutex_unlock(&txEnd_lmLogClose_mutex);
- 		return;
- 	}
++	cppc_get_perf_ctrs(cpu, fb_ctrs);
++
++	udelay(2); /* 2usec delay between sampling */
++
++	cppc_get_perf_ctrs(cpu, fb_ctrs + 1);
++}
++
+ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ {
+-	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
++	struct cppc_perf_fb_ctrs fb_ctrs[2] = {0};
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+ 	struct cppc_cpudata *cpu_data = policy->driver_data;
+ 	u64 delivered_perf;
+-	int ret;
  
-@@ -561,6 +568,7 @@ void txEnd(tid_t tid)
- 	 * wakeup all waitors for a free tblock
- 	 */
- 	TXN_WAKEUP(&TxAnchor.freewait);
-+	mutex_unlock(&txEnd_lmLogClose_mutex);
+ 	cpufreq_cpu_put(policy);
+ 
+-	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
+-	if (ret)
+-		return ret;
+-
+-	udelay(2); /* 2usec delay between sampling */
+-
+-	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
+-	if (ret)
+-		return ret;
+-
+-	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
+-					       &fb_ctrs_t1);
++	smp_call_function_single(cpu, cppc_get_perf_ctrs_smp, fb_ctrs, 1);
+ 
++	delivered_perf = cppc_perf_from_fbctrs(cpu_data, fb_ctrs,
++					       fb_ctrs + 1);
+ 	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
  }
  
- /*
 -- 
 2.25.1
 
