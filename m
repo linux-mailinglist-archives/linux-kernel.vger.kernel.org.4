@@ -2,166 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40E3702D97
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163DF702D9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242124AbjEONI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S241267AbjEONJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242284AbjEONIa (ORCPT
+        with ESMTP id S242311AbjEONJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:08:30 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E64926B0;
-        Mon, 15 May 2023 06:08:00 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3075e802738so11694985f8f.1;
-        Mon, 15 May 2023 06:08:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684156079; x=1686748079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I2gFAV1Bt11rr0HeGWTCJG9IDGxOMnHQHXHHbOCPYDo=;
-        b=Fb4+g02YBBu38SltuhS+IwpYVzoxe80rT1yHPlTht9o95uLaKhQM6L02U8FIQSzG0u
-         F74fhxfxj9aXytF3FtFdEEivo2st0IMgxLRibmpbYacA0zZWuO4fj3Y/9A2Tn78oIvY0
-         C18Ml0c4V5ahXxqIhkCUiPcNutxniHakG8FQrBJdJLkk/GUk7OPBmr0muET13IO4vKdc
-         v2E4936Adb3bkr5bfETRmIsjKU+IeoFpOqtNr3sLG0IJtBNMYIXtbopzPX+x1mhNuV0l
-         7s9GaeOiQuSZ54g+KUPd/b3efDKiKbFOuOxbTCZbYbh4sbs0SxUN3ALJYt6u0HfENSCo
-         XHXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684156079; x=1686748079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I2gFAV1Bt11rr0HeGWTCJG9IDGxOMnHQHXHHbOCPYDo=;
-        b=e3FGC8kMaDzgy3p9yWvJFuQPqCrkBzTk77qhtRMz7/AcEzselnEB//cYVFmk3hBbil
-         TL//2nbcZzr1h3hldwaEGoOonTuDQ1jyIXIW5nGaV/uthTgcM38xqwD8ouitC/QPS58J
-         7weJo8DMx20GFiQiOmIJ4Uh4P8rTWIVqiIVrx3cl6uAafgMYH74lq5+Us2cmrR79FmCA
-         DVwewb8q1BF0vmZ64Mq88UNSaKGd/SqBT9bzFwxfn4Dhp+ZXDgEpPOEhVJ6K9DK8TSpc
-         hVc6Ebhu2WZEoWAcXQ85jdrXuIyo0ZSyY9Qf2r5IliksGNWRGXYsY7hSEVFJ0cJ7/3Ba
-         HzLA==
-X-Gm-Message-State: AC+VfDyDTcKuNNHCGqlAyjOi54doki9HD4X/kBjCUlWZ+L8gMsxqKQQT
-        vwFEsQTJVRf2k9O9PzH8vUc=
-X-Google-Smtp-Source: ACHHUZ65cUXTV46JE+DSVeEZihKZOp7o4pCuhzCZeDl0jKBfbZDdPGdAnhGyJWS4kVWmFwZtM8978g==
-X-Received: by 2002:adf:cc90:0:b0:307:8718:7891 with SMTP id p16-20020adfcc90000000b0030787187891mr25640550wrj.54.1684156078532;
-        Mon, 15 May 2023 06:07:58 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id e12-20020adfe7cc000000b002c54c9bd71fsm32604261wrn.93.2023.05.15.06.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 06:07:57 -0700 (PDT)
-Date:   Mon, 15 May 2023 14:07:57 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Kirill A . Shutemov" <kirill@shutemov.name>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-Message-ID: <ad0053a4-fa34-4b95-a262-d27942b168fd@lucifer.local>
-References: <cover.1683235180.git.lstoakes@gmail.com>
- <20230515110315.uqifqgqkzcrrrubv@box.shutemov.name>
- <7f6dbe36-88f2-468e-83c1-c97e666d8317@lucifer.local>
- <ZGIhwZl2FbLodLrc@nvidia.com>
+        Mon, 15 May 2023 09:09:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 811532D57;
+        Mon, 15 May 2023 06:08:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C941B2F4;
+        Mon, 15 May 2023 06:08:56 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C55EF3F67D;
+        Mon, 15 May 2023 06:08:09 -0700 (PDT)
+Date:   Mon, 15 May 2023 14:08:07 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "lihuisong (C)" <lihuisong@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
+        liuyonglong@huawei.com, huangdaode@huawei.com,
+        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Message-ID: <20230515130807.pdvx7bxwjkfdsmsr@bogus>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
+ <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
+ <20230425103040.znv66k364ant6klq@bogus>
+ <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
+ <20230425131918.5tf5vot4h7jf54xk@bogus>
+ <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZGIhwZl2FbLodLrc@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 09:12:49AM -0300, Jason Gunthorpe wrote:
-> On Mon, May 15, 2023 at 12:16:21PM +0100, Lorenzo Stoakes wrote:
-> > > One thing that came to mind is KVM with "qemu -object memory-backend-file,share=on..."
-> > > It is mostly used for pmem emulation.
-> > >
-> > > Do we have plan B?
-> >
-> > Yes, we can make it opt-in or opt-out via a FOLL_FLAG. This would be easy
-> > to implement in the event of any issues arising.
+On Thu, May 04, 2023 at 09:16:16PM +0800, lihuisong (C) wrote:
 >
-> I'm becoming less keen on the idea of a per-subsystem opt out. I think
-> we should make a kernel wide opt out. I like the idea of using lower
-> lockdown levels. Lots of things become unavaiable in the uAPI when the
-> lockdown level increases already.
+> I'm tring to use CRS with GAS to report PCC channel ID and get other
+> informations driver need by address.
 
-This would be the 'safest' in the sense that a user can't be surprised by
-higher lockdown = access modes disallowed, however we'd _definitely_ need
-to have an opt-in in that instance so io_uring can make use of this
-regardless. That's easy to add however.
+OK you had pcc-chan-id pcc-type and device-flags in the DSD style bindings
+to begin with. I haven't understood device-flags here so can't comment on
+that.
 
-If we do go down that road, we can be even stricter/vary what we do at
-different levels right?
-
+> I found a way to obtain the generic register information according to
+> "Referencing the PCC address space" in ACPI spec.
+> And driver also get the PCC generic register information successfully.
 >
-> > Jason will have some thoughts on this I'm sure. I guess the key question
-> > here is - is it actually feasible for this to work at all? Once we
-> > establish that, the rest are details :)
+
+Can you elaborate ? I assume by that you must be able to get pcc-chan-id
+right ? You must not need pcc-type as the pcc mailbox driver must handle
+the type for you. If not, we may need to fix or add any missing support.
+
+> But I don't know how to set and use the address in PCC register.
+
+It must be same as what you would have specified in you new bindings
+under "pcc-chan-id". I am confused as you say you were able to get the
+PCC generic register information successfully but you still claim you
+don't know how to set or use the address.
+
+> Where should this address come from?
+> It seems that ACPI spec is not very detailed about this.
+> Do you have any suggestions?
 >
-> Surely it is, but like Ted said, the FS folks are not interested and
-> they are at least half the solution..
 
-:'(
+I am afraid, I don't have any as I am failing to understand the exact issue
+you are facing. 
 
->
-> The FS also has to actively not write out the page while it cannot be
-> write protected unless it copies the data to a stable page. The block
-> stack needs the source data to be stable to do checksum/parity/etc
-> stuff. It is a complicated subject.
+Let me try to ask the question explicity here: 
 
-Yes my sense was that being able to write arbitrarily to these pages _at
-all_ was a big issue, not only the dirty tracking aspect.
+If you are just referring to just the <RegisterAddress,> in
 
-I guess at some level letting filesystems have such total flexibility as to
-how they implement things leaves us in a difficult position.
+Register (PCC, RegisterBitWidth, RegisterBitOffset, RegisterAddress, AccessSize)
 
->
-> Jason
+then,
+
+RegisterAddress is usually the offset in the comms address associated with
+the PCC subspace ID specified in AccessSize. Yes the use of AccessSize for
+the PCC subspace ID is bit confusing though.
+
+You can either list all the registers with _CRS individually or the driver
+can just use the PCC subspace ID in AccessSize and keep RegisterAddress = 0
+but access individual offset based on its own knowledge. I haven't seen the
+full driver yet but I assuming that's how you would have used if you went with
+your DSD pcc-chan-id proposal.
+
+> On the other hand, we think that System Memory space + method can also
+> achieve above goal. What do you think of that?
+
+Again I don't understand what you mean by that.
+
+-- 
+Regards,
+Sudeep
