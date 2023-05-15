@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AE5702A8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67EE702A9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241027AbjEOKdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S241183AbjEOKeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241022AbjEOKdq (ORCPT
+        with ESMTP id S241074AbjEOKeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:33:46 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F0D10D7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:33:42 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so110209484a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684146821; x=1686738821;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J1Io9xJbU4JX39VK14nXRnzKFl0uDZxNNtw5+nQANrY=;
-        b=ope3CTSsmM5+nVGa6nDQ23eDeo6m42GlWQq+HNb7BKilPdW4bR3mXUiy091oi8TPC1
-         YDgjX/ggvnKelkEWVBwh4rW9K/Hi0TNylwpuoJuksl1pgoRTmrKacrdvDQWlOUDdEs1D
-         ld7YGKdDoAE9qimRne5zWKkxo4V1rqx7cUus7iPdEkNUPTw+4wnCayYYIhN9ZpLkGIUg
-         YrVLX89UGrv0rqMFwW8pqnXtYWjFvw2MQxxOUcbgufaHs5uWIHJbFA1+PSVD60ogtvrC
-         v7+23INVZGFKvD+lSaTb/n4dqSengc8Hsh2F50J3E1r44oa11XHil+JEc8lm4XNtp1yZ
-         BLVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684146821; x=1686738821;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J1Io9xJbU4JX39VK14nXRnzKFl0uDZxNNtw5+nQANrY=;
-        b=C8HSved5Tl5rhydnk8J8JnSmrNYXGNDA7geqMeayj6k3W1oNUstqBHWMcxi4CyIgjE
-         Xzw3/zJNOLRZovolwNYsgmYTkkyx7BTuyYzK3V5UJ6GwcceV+0U+4DS88dMkINnhFLqx
-         gAmCeDDqLFkSYP0VyaoxtVkbI4rCet6QKDutbBDMAH+k72cQmnvQIBCnB+aYYJTya7OK
-         y2tfcVvBl72lv00IXiUjTPQRc8A3snqNH18xSKtKrHSo4cdQOITfPzX1HAcMFjY5JSI0
-         ot2b/xd1cSjInNzlKm0UrQYieDAwyne4Nrzb9E6wYI+DDMJuGfuwqLDKqO/uG7XeD+aK
-         L5OA==
-X-Gm-Message-State: AC+VfDzEHZ4EvQ5UvaJtDksgeS5SzguptKonbhZu3tXvpUnrKGxM49T6
-        P1BpjctgVV7HxSDQTsahcEH4xw==
-X-Google-Smtp-Source: ACHHUZ79XKwcCPu/JTFUpdIw2AzsRhVp+XYMqqRIaOwDce/uXxAthld1TOf1T6g3strjFczZX+lKUw==
-X-Received: by 2002:a17:906:da8c:b0:94a:653b:ba41 with SMTP id xh12-20020a170906da8c00b0094a653bba41mr16678956ejb.15.1684146821031;
-        Mon, 15 May 2023 03:33:41 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
-        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b00959c6cb82basm9276788ejc.105.2023.05.15.03.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 03:33:40 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Richard Leitner <richard.leitner@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marek Vasut <marex@denx.de>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        mike.looijmans@topic.nl
-Subject: [PATCH] dt-bindings: usb: usb251xb: correct swap-dx-lanes type to uint32
-Date:   Mon, 15 May 2023 12:33:37 +0200
-Message-Id: <20230515103337.130607-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 15 May 2023 06:34:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E22E6E;
+        Mon, 15 May 2023 03:33:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B2F861767;
+        Mon, 15 May 2023 10:33:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1595CC433EF;
+        Mon, 15 May 2023 10:33:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684146836;
+        bh=5tmSZMTrH48otorY7sLrXC7yV0twLhRBW3UaH6lhA84=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E1Y6ZR0WzHfeBpvPqw70ZdEnLQQpgWKdvoQLpVhX+5wJVudUhLnJbQKQ2L7d8drrx
+         vaba6Sv7UUva6cY/90vupd2i0jeWyJImmPki/eVyWS/qSMa4zlGwG45Onyby+LYuxz
+         t4v6jVxMQtxbDLB5kD152NTGCQXYVQ9LjsNZS98+cpJ/IHA1JmLip8tRBk9o0W7UFS
+         +hXPahVEsUNYeokdYRgs4mMcHkNUFNQTsItXvcYkTMceYm84h1teCoroif0s3h9uPe
+         sqWkX5W99uvKpXcxOHqVsL+ray+oaNU/T2ud44pu1HOLF41InFyVvhMR9XVkRjPq03
+         36vFVPrZNiVOw==
+Date:   Mon, 15 May 2023 12:33:47 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        amir73il@gmail.com, Jan Kara <jack@suse.cz>, jlayton@kernel.org,
+        cyphar@cyphar.com, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [RFC PATCH v2] fs/xattr: add *at family syscalls
+Message-ID: <20230515-kopfgeld-umkurven-f27be4b68a26@brauner>
+References: <20230511150802.737477-1-cgzones@googlemail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20230511150802.737477-1-cgzones@googlemail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,33 +64,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "swap-dx-lanes" was never described as uint8 in original TXT
-bindings and Linuxx driver expects uint32.  Fix the type to match Linux
-driver expectation and original binding.
+On Thu, May 11, 2023 at 05:08:02PM +0200, Christian Göttsche wrote:
+> Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
+> removexattrat().  Those can be used to operate on extended attributes,
+> especially security related ones, either relative to a pinned directory
+> or on a file descriptor without read access, avoiding a
+> /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
+> 
+> One use case will be setfiles(8) setting SELinux file contexts
+> ("security.selinux") without race conditions.
+> 
+> Add XATTR flags to the private namespace of AT_* flags.
+> 
+> Use the do_{name}at() pattern from fs/open.c.
+> 
+> Use a single flag parameter for extended attribute flags (currently
+> XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
+> syscall arguments in setxattrat().
+> 
+> Previous approach ("f*xattr: allow O_PATH descriptors"): https://lore.kernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
+> v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-cgzones@googlemail.com/
+> 
+> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> CC: x86@kernel.org
+> CC: linux-alpha@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> CC: linux-arm-kernel@lists.infradead.org
+> CC: linux-ia64@vger.kernel.org
+> CC: linux-m68k@lists.linux-m68k.org
+> CC: linux-mips@vger.kernel.org
+> CC: linux-parisc@vger.kernel.org
+> CC: linuxppc-dev@lists.ozlabs.org
+> CC: linux-s390@vger.kernel.org
+> CC: linux-sh@vger.kernel.org
+> CC: sparclinux@vger.kernel.org
+> CC: linux-fsdevel@vger.kernel.org
+> CC: audit@vger.kernel.org
+> CC: linux-arch@vger.kernel.org
+> CC: linux-api@vger.kernel.org
+> CC: linux-security-module@vger.kernel.org
+> CC: selinux@vger.kernel.org
+> ---
 
-Fixes: fff61d4ccf3d ("dt-bindings: usb: usb251xb: Convert to YAML schema")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fwiw, your header doesn't let me see who the mail was directly sent to
+so I'm only able to reply to lists which is a bit pointless...
 
----
+> v2:
+>   - squash syscall introduction and wire up commits
+>   - add AT_XATTR_CREATE and AT_XATTR_REPLACE constants
 
-Cc: mike.looijmans@topic.nl
----
- Documentation/devicetree/bindings/usb/usb251xb.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +#define AT_XATTR_CREATE	        0x1	/* setxattrat(2): set value, fail if attr already exists */
+> +#define AT_XATTR_REPLACE	0x2	/* setxattrat(2): set value, fail if attr does not exist */
 
-diff --git a/Documentation/devicetree/bindings/usb/usb251xb.yaml b/Documentation/devicetree/bindings/usb/usb251xb.yaml
-index 4d1530816817..ac5b99710332 100644
---- a/Documentation/devicetree/bindings/usb/usb251xb.yaml
-+++ b/Documentation/devicetree/bindings/usb/usb251xb.yaml
-@@ -231,7 +231,7 @@ properties:
-       power-on sequence to a port until the port has adequate power.
- 
-   swap-dx-lanes:
--    $ref: /schemas/types.yaml#/definitions/uint8-array
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-     description: |
-       Specifies the ports which will swap the differential-pair (D+/D-),
-       default is not-swapped.
--- 
-2.34.1
+We really shouldn't waste any AT_* flags for this. Otherwise we'll run
+out of them rather quickly. Two weeks ago we added another AT_* flag
+which is up for merging for v6.5 iirc and I've glimpsed another AT_*
+flag proposal in one of the talks at last weeks Vancouver conference
+extravaganza.
 
+Even if we reuse 0x200 for AT_XATTR_CREATE (like we did for AT_EACCESS
+and AT_REMOVEDIR) we still need another bit for AT_XATTR_REPLACE.
+
+Plus, this is really ugly since AT_XATTR_{CREATE,REPLACE} really isn't
+in any way related to lookup and we're mixing it in with lookup
+modifying flags.
+
+So my proposal for {g,s}etxattrat() would be:
+
+struct xattr_args {
+        __aligned_u64 value;
+        __u32 size;
+        __u32 cmd;
+};
+
+So everything's nicely 64bit aligned in the struct. Use the @cmd member
+to set either XATTR_REPLACE or XATTR_CREATE and treat it as a proper
+enum and not as a flag argument like the old calls did.
+
+So then we'd have:
+
+setxattrat(int dfd, const char *path, const char __user *name,
+           struct xattr_args __user *args, size_t size, unsigned int flags)
+getxattrat(int dfd, const char *path, const char __user *name,
+           struct xattr_args __user *args, size_t size, unsigned int flags)
+
+The current in-kernel struct xattr_ctx would be renamed to struct
+kernel_xattr_args and then we do the usual copy_struct_from_user()
+dance:
+
+struct xattr_args args;
+err = copy_struct_from_user(&args, sizeof(args), uargs, usize);
+
+and then go on to handle value/size for setxattrat()/getxattrat()
+accordingly.
+
+getxattr()/setxattr() aren't meaningfully filterable by seccomp already
+so there's not point in not using a struct.
+
+If that isn't very appealing then another option is to add a new flag
+namespace just for setxattrat() similar to fspick() and move_mount()
+duplicating the needed lookup modifying flags.
+Thoughts?
