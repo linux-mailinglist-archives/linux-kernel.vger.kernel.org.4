@@ -2,224 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F194702478
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB37670247C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238189AbjEOGW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S239091AbjEOGXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbjEOGW0 (ORCPT
+        with ESMTP id S229942AbjEOGXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:22:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F6FF1FE8;
-        Sun, 14 May 2023 23:22:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D6CA2F4;
-        Sun, 14 May 2023 23:23:02 -0700 (PDT)
-Received: from [10.163.71.10] (unknown [10.163.71.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 769EE3F7BD;
-        Sun, 14 May 2023 23:22:12 -0700 (PDT)
-Message-ID: <168e26b3-e995-88ad-b0a0-d917313956c8@arm.com>
-Date:   Mon, 15 May 2023 11:52:08 +0530
+        Mon, 15 May 2023 02:23:03 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EC8FD
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:23:01 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-953343581a4so1925905666b.3
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684131780; x=1686723780;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7mkOa7RGOem2p2FaaquTYyaUy5EE4ipdPRCvshSlyQ=;
+        b=tbnef+kOmfZW51v+VNLQOSV4rx0+Ic5xV6exhELIbvUKRc/eu3CdhPMnLF0QRpaLPR
+         b6BuYGsYuiW5TaqV6sdpYB0NlKFcQBvRceEPAIL4EbxTKvmTOGod5sZoZfGlKBIN9Yag
+         elk/zHRDMqYWldbnPJwKb6auScsj9622DBxQws2SXDJHDZ0E0DE8tRrZmnzGPT5po3Qh
+         BnhVgwkR7uMCOvPV5D2Oy/x4yUSBVqhLtCP/KF/qJ9y3v3QUkyScOkGHg4tzM2EZIx2+
+         XydmRp8rwX2xV0jKBUEyajSS2uQMQj3uHteOj9ZdDpGP1WA0kXc9KSrwZ4TBVn9Worfg
+         qyEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684131780; x=1686723780;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s7mkOa7RGOem2p2FaaquTYyaUy5EE4ipdPRCvshSlyQ=;
+        b=JRC9TRU2veE1GzlGYiqo69P/hLpTimTYh1+tYi3/QOypGpPxy35kYv54C5ZQn97ZLO
+         p1vYGew+VdBhzaGE2MWxPIzSv4adPyuzKwuRoza10t/vZiEncMfXJz62tSkN0uk1ROle
+         xqIyQZBXC6RqgjFd2Gb/cF2uxA/LVVac9LdkcmhHucVoxEU1DiTYIsVJi9m8r+kHmwLy
+         AFNA3kHbg4w4Tl+u41Pd7572529p8jBEpRKU7T+j4daXsrDAvkZApVUtIX8KEIqzX4Ca
+         KYkmVaJOknpn7k6hciOhzlDbziEdYr+IXGNJ03m3XhnQJH/fdDVV/ipluNDiX8FFQmds
+         dY8A==
+X-Gm-Message-State: AC+VfDwBNHDMsKC1BpsqM1noR9ZeAIQymNAZeXxIqCyKY6Le0JXsIBca
+        alk5zoTIlL6XfEsOUeE1+Hd56Q==
+X-Google-Smtp-Source: ACHHUZ493IcGLkpWFXY2aFpoX+MXDo+VhdhEdKZ5LMwrRSbVU98BaRHoVr2JBOCbMqRUPpa1vkUjYA==
+X-Received: by 2002:a17:906:fd83:b0:94a:845c:3529 with SMTP id xa3-20020a170906fd8300b0094a845c3529mr27604916ejb.9.1684131779897;
+        Sun, 14 May 2023 23:22:59 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id ks16-20020a170906f85000b00947740a4373sm8872377ejb.81.2023.05.14.23.22.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 23:22:59 -0700 (PDT)
+Date:   Mon, 15 May 2023 08:22:57 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     linux-riscv@lists.infradead.org, Icenowy Zheng <uwu@icenowy.me>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        mturquette@baylibre.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        sboyd@kernel.org, Wei Fu <wefu@redhat.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: clock: Add thead th1520 clock
+Message-ID: <20230515062257.zjwtbl4xjbzj7qdh@krzk-bin>
+References: <20230515054402.27633-1-frank.li@vivo.com>
+ <20230515054402.27633-2-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V9 02/10] arm64/perf: Add BRBE registers and fields
-To:     Yang Shen <shenyang39@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Mark Brown <broonie@kernel.org>, James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
- <20230315051444.1683170-3-anshuman.khandual@arm.com>
- <3a8ae180-5a0f-7996-58de-edb0e370e4f5@huawei.com>
-Content-Language: en-US
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <3a8ae180-5a0f-7996-58de-edb0e370e4f5@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230515054402.27633-2-frank.li@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 15 May 2023 13:43:59 +0800, Yangtao Li wrote:
+> Add devicetree binding document and related header file
+> for the T-HEAD TH1520 clock.
+> 
+> Cc: Icenowy Zheng <uwu@icenowy.me>
+> Cc: Wei Fu <wefu@redhat.com>
+> Cc: Jisheng Zhang <jszhang@kernel.org>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  .../bindings/clock/thead,th1520-ccu.yaml      | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-On 4/12/23 14:02, Yang Shen wrote:
-> 
-> 
-> 在 2023/3/15 13:14, Anshuman Khandual 写道:
->> This adds BRBE related register definitions and various other related field
->> macros there in. These will be used subsequently in a BRBE driver which is
->> being added later on.
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Marc Zyngier <maz@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Reviewed-by: Mark Brown <broonie@kernel.org>
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   arch/arm64/include/asm/sysreg.h | 103 +++++++++++++++++++++
->>   arch/arm64/tools/sysreg         | 159 ++++++++++++++++++++++++++++++++
->>   2 files changed, 262 insertions(+)
->>
->> diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
->> index 9e3ecba3c4e6..b3bc03ee22bd 100644
->> --- a/arch/arm64/include/asm/sysreg.h
->> +++ b/arch/arm64/include/asm/sysreg.h
->> @@ -165,6 +165,109 @@
->>   #define SYS_DBGDTRTX_EL0        sys_reg(2, 3, 0, 5, 0)
->>   #define SYS_DBGVCR32_EL2        sys_reg(2, 4, 0, 7, 0)
->>   +#define __SYS_BRBINFO(n)        sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 0))
->> +#define __SYS_BRBSRC(n)            sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 1))
->> +#define __SYS_BRBTGT(n)            sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 2))
->> +
->> +#define SYS_BRBINF0_EL1            __SYS_BRBINFO(0)
->> +#define SYS_BRBINF1_EL1            __SYS_BRBINFO(1)
->> +#define SYS_BRBINF2_EL1            __SYS_BRBINFO(2)
->> +#define SYS_BRBINF3_EL1            __SYS_BRBINFO(3)
->> +#define SYS_BRBINF4_EL1            __SYS_BRBINFO(4)
->> +#define SYS_BRBINF5_EL1            __SYS_BRBINFO(5)
->> +#define SYS_BRBINF6_EL1            __SYS_BRBINFO(6)
->> +#define SYS_BRBINF7_EL1            __SYS_BRBINFO(7)
->> +#define SYS_BRBINF8_EL1            __SYS_BRBINFO(8)
->> +#define SYS_BRBINF9_EL1            __SYS_BRBINFO(9)
->> +#define SYS_BRBINF10_EL1        __SYS_BRBINFO(10)
->> +#define SYS_BRBINF11_EL1        __SYS_BRBINFO(11)
->> +#define SYS_BRBINF12_EL1        __SYS_BRBINFO(12)
->> +#define SYS_BRBINF13_EL1        __SYS_BRBINFO(13)
->> +#define SYS_BRBINF14_EL1        __SYS_BRBINFO(14)
->> +#define SYS_BRBINF15_EL1        __SYS_BRBINFO(15)
->> +#define SYS_BRBINF16_EL1        __SYS_BRBINFO(16)
->> +#define SYS_BRBINF17_EL1        __SYS_BRBINFO(17)
->> +#define SYS_BRBINF18_EL1        __SYS_BRBINFO(18)
->> +#define SYS_BRBINF19_EL1        __SYS_BRBINFO(19)
->> +#define SYS_BRBINF20_EL1        __SYS_BRBINFO(20)
->> +#define SYS_BRBINF21_EL1        __SYS_BRBINFO(21)
->> +#define SYS_BRBINF22_EL1        __SYS_BRBINFO(22)
->> +#define SYS_BRBINF23_EL1        __SYS_BRBINFO(23)
->> +#define SYS_BRBINF24_EL1        __SYS_BRBINFO(24)
->> +#define SYS_BRBINF25_EL1        __SYS_BRBINFO(25)
->> +#define SYS_BRBINF26_EL1        __SYS_BRBINFO(26)
->> +#define SYS_BRBINF27_EL1        __SYS_BRBINFO(27)
->> +#define SYS_BRBINF28_EL1        __SYS_BRBINFO(28)
->> +#define SYS_BRBINF29_EL1        __SYS_BRBINFO(29)
->> +#define SYS_BRBINF30_EL1        __SYS_BRBINFO(30)
->> +#define SYS_BRBINF31_EL1        __SYS_BRBINFO(31)
->> +
->> +#define SYS_BRBSRC0_EL1            __SYS_BRBSRC(0)
->> +#define SYS_BRBSRC1_EL1            __SYS_BRBSRC(1)
->> +#define SYS_BRBSRC2_EL1            __SYS_BRBSRC(2)
->> +#define SYS_BRBSRC3_EL1            __SYS_BRBSRC(3)
->> +#define SYS_BRBSRC4_EL1            __SYS_BRBSRC(4)
->> +#define SYS_BRBSRC5_EL1            __SYS_BRBSRC(5)
->> +#define SYS_BRBSRC6_EL1            __SYS_BRBSRC(6)
->> +#define SYS_BRBSRC7_EL1            __SYS_BRBSRC(7)
->> +#define SYS_BRBSRC8_EL1            __SYS_BRBSRC(8)
->> +#define SYS_BRBSRC9_EL1            __SYS_BRBSRC(9)
->> +#define SYS_BRBSRC10_EL1        __SYS_BRBSRC(10)
->> +#define SYS_BRBSRC11_EL1        __SYS_BRBSRC(11)
->> +#define SYS_BRBSRC12_EL1        __SYS_BRBSRC(12)
->> +#define SYS_BRBSRC13_EL1        __SYS_BRBSRC(13)
->> +#define SYS_BRBSRC14_EL1        __SYS_BRBSRC(14)
->> +#define SYS_BRBSRC15_EL1        __SYS_BRBSRC(15)
->> +#define SYS_BRBSRC16_EL1        __SYS_BRBSRC(16)
->> +#define SYS_BRBSRC17_EL1        __SYS_BRBSRC(17)
->> +#define SYS_BRBSRC18_EL1        __SYS_BRBSRC(18)
->> +#define SYS_BRBSRC19_EL1        __SYS_BRBSRC(19)
->> +#define SYS_BRBSRC20_EL1        __SYS_BRBSRC(20)
->> +#define SYS_BRBSRC21_EL1        __SYS_BRBSRC(21)
->> +#define SYS_BRBSRC22_EL1        __SYS_BRBSRC(22)
->> +#define SYS_BRBSRC23_EL1        __SYS_BRBSRC(23)
->> +#define SYS_BRBSRC24_EL1        __SYS_BRBSRC(24)
->> +#define SYS_BRBSRC25_EL1        __SYS_BRBSRC(25)
->> +#define SYS_BRBSRC26_EL1        __SYS_BRBSRC(26)
->> +#define SYS_BRBSRC27_EL1        __SYS_BRBSRC(27)
->> +#define SYS_BRBSRC28_EL1        __SYS_BRBSRC(28)
->> +#define SYS_BRBSRC29_EL1        __SYS_BRBSRC(29)
->> +#define SYS_BRBSRC30_EL1        __SYS_BRBSRC(30)
->> +#define SYS_BRBSRC31_EL1        __SYS_BRBSRC(31)
->> +
->> +#define SYS_BRBTGT0_EL1            __SYS_BRBTGT(0)
->> +#define SYS_BRBTGT1_EL1            __SYS_BRBTGT(1)
->> +#define SYS_BRBTGT2_EL1            __SYS_BRBTGT(2)
->> +#define SYS_BRBTGT3_EL1            __SYS_BRBTGT(3)
->> +#define SYS_BRBTGT4_EL1            __SYS_BRBTGT(4)
->> +#define SYS_BRBTGT5_EL1            __SYS_BRBTGT(5)
->> +#define SYS_BRBTGT6_EL1            __SYS_BRBTGT(6)
->> +#define SYS_BRBTGT7_EL1            __SYS_BRBTGT(7)
->> +#define SYS_BRBTGT8_EL1            __SYS_BRBTGT(8)
->> +#define SYS_BRBTGT9_EL1            __SYS_BRBTGT(9)
->> +#define SYS_BRBTGT10_EL1        __SYS_BRBTGT(10)
->> +#define SYS_BRBTGT11_EL1        __SYS_BRBTGT(11)
->> +#define SYS_BRBTGT12_EL1        __SYS_BRBTGT(12)
->> +#define SYS_BRBTGT13_EL1        __SYS_BRBTGT(13)
->> +#define SYS_BRBTGT14_EL1        __SYS_BRBTGT(14)
->> +#define SYS_BRBTGT15_EL1        __SYS_BRBTGT(15)
->> +#define SYS_BRBTGT16_EL1        __SYS_BRBTGT(16)
->> +#define SYS_BRBTGT17_EL1        __SYS_BRBTGT(17)
->> +#define SYS_BRBTGT18_EL1        __SYS_BRBTGT(18)
->> +#define SYS_BRBTGT19_EL1        __SYS_BRBTGT(19)
->> +#define SYS_BRBTGT20_EL1        __SYS_BRBTGT(20)
->> +#define SYS_BRBTGT21_EL1        __SYS_BRBTGT(21)
->> +#define SYS_BRBTGT22_EL1        __SYS_BRBTGT(22)
->> +#define SYS_BRBTGT23_EL1        __SYS_BRBTGT(23)
->> +#define SYS_BRBTGT24_EL1        __SYS_BRBTGT(24)
->> +#define SYS_BRBTGT25_EL1        __SYS_BRBTGT(25)
->> +#define SYS_BRBTGT26_EL1        __SYS_BRBTGT(26)
->> +#define SYS_BRBTGT27_EL1        __SYS_BRBTGT(27)
->> +#define SYS_BRBTGT28_EL1        __SYS_BRBTGT(28)
->> +#define SYS_BRBTGT29_EL1        __SYS_BRBTGT(29)
->> +#define SYS_BRBTGT30_EL1        __SYS_BRBTGT(30)
->> +#define SYS_BRBTGT31_EL1        __SYS_BRBTGT(31)
->> +
->>   #define SYS_MIDR_EL1            sys_reg(3, 0, 0, 0, 0)
->>   #define SYS_MPIDR_EL1            sys_reg(3, 0, 0, 0, 5)
->>   #define SYS_REVIDR_EL1            sys_reg(3, 0, 0, 0, 6)
->> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
->> index dd5a9c7e310f..d74d9dbe18a7 100644
->> --- a/arch/arm64/tools/sysreg
->> +++ b/arch/arm64/tools/sysreg
->> @@ -924,6 +924,165 @@ UnsignedEnum    3:0    BT
->>   EndEnum
->>   EndSysreg
->>   +
->> +SysregFields BRBINFx_EL1
->> +Res0    63:47
->> +Field    46    CCU
->> +Field    45:32    CC
->> +Res0    31:18
->> +Field    17    LASTFAILED
->> +Field    16    T
->> +Res0    15:14
->> +Enum    13:8        TYPE
-> 
-> Hi Anshuman,
-> 
-> I met a problem when built kernel which was based on 6.3-rc1. Here is the error log:
->     GEN     Makefile
->     GEN     arch/arm64/include/generated/asm/sysreg-defs.h
-> Error at 936: unexpected Enum (inside SysregFields)
-> 
-> I think this is because the 'SysregFields' doesn't support the 'Enum' type region.
-> And this problem can be fixed when I roll back this part to v7.
-> 
-> Do I need to apply some patches or do some other configures?
+yamllint warnings/errors:
 
-Yes, the following patch was required, but it's now merged mainline.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml: properties:clock-names: 'const' should not be valid under {'enum': ['const', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'minimum', 'maximum', 'multipleOf', 'pattern']}
+	hint: Scalar and array keywords cannot be mixed
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml: properties:clocks: 'const' should not be valid under {'enum': ['const', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'minimum', 'maximum', 'multipleOf', 'pattern']}
+	hint: Scalar and array keywords cannot be mixed
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml: properties:clock-names:const: 2 is not of type 'string'
+	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml: properties:clocks: 'oneOf' conditional failed, one must be fixed:
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml: properties:clocks: 'anyOf' conditional failed, one must be fixed:
+		'maxItems' is a required property
+			hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+		'const' is not one of ['maxItems', 'description', 'deprecated']
+			hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+		'items' is not one of ['maxItems', 'description', 'deprecated']
+			hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+		Additional properties are not allowed ('const' was unexpected)
+			hint: Arrays must be described with a combination of minItems/maxItems/items
+		'items' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
+		hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
+		from schema $id: http://devicetree.org/meta-schemas/clocks.yaml#
+	'const' is not one of ['type', 'description', 'dependencies', 'dependentRequired', 'dependentSchemas', 'properties', 'patternProperties', 'additionalProperties', 'unevaluatedProperties', 'deprecated', 'required', 'not', 'allOf', 'anyOf', 'oneOf', '$ref']
+	'items' is not one of ['type', 'description', 'dependencies', 'dependentRequired', 'dependentSchemas', 'properties', 'patternProperties', 'additionalProperties', 'unevaluatedProperties', 'deprecated', 'required', 'not', 'allOf', 'anyOf', 'oneOf', '$ref']
+	'type' is a required property
+		hint: DT nodes ("object" type in schemas) can only use a subset of json-schema keywords
+	from schema $id: http://devicetree.org/meta-schemas/clocks.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.example.dtb: clock-controller@ffef010000: reg: [[255, 4009820160], [0, 4096]] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.example.dtb: clock-controller@ffef010000: clocks:0:0: 2 was expected
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.example.dtb: clock-controller@ffef010000: clock-names:0: 'losc' is not of type 'array'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.example.dtb: clock-controller@ffef010000: clock-names: ['losc', 'hosc'] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/thead,th1520-ccu.yaml
 
-https://lore.kernel.org/all/20230306114836.2575432-1-mark.rutland@arm.com/
+See https://patchwork.ozlabs.org/patch/1781099
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
