@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D21703E7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46F7703E80
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245303AbjEOUTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 16:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S245347AbjEOUTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 16:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245322AbjEOUSg (ORCPT
+        with ESMTP id S245335AbjEOUSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 16:18:36 -0400
-Received: from sonic301-22.consmr.mail.ir2.yahoo.com (sonic301-22.consmr.mail.ir2.yahoo.com [77.238.176.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6512120BC
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1684181871; bh=Orv9xlXl2ys7vR4uDv3BL0KEya+/X55FDQeChcF+Wx8=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=QC82tEqVnOdPOLck4AWPS1Oxbuo6+6vUzcLTxSi7UvC74CACKWah3ColkFxUKy/4bLiPzco+s7z3tuwno9GZ5F3av6qnDDLmzqR2cftkWoa4Yl19Pb4GnVuNvRQLEgWR+TH9IDS8OS9ZzZG7FNjiYNXu453NB1RmMYpO5+5rdmeud2CK4xidw2Mtsc2vd+eUEwwTzDLKD9IV2na6TSBayQtQXcTpv9SC8HaX3sF1oW+ufROjMAaKztHamjLILhKIDlvPXLtNhK2hMejkkeOU/gB39xehnz0V3oSDoNrrQKqUd1NfRNRY6KCS3KI0laJIWhJRsn86HQi+cABFMS6zCA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1684181871; bh=K49QPtGjNbriJKMuofqiZphv/NCgNob2jjg+2INQjBi=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=sE2D6Ksk64u23xb7lw8h8pWrtYHQdFrHC6he/ZoVGG+Mkwi3kzyGOaoJhK0Cl5DdPcdpLuSxrKayCV2dnIB1Fq3PBMaksGdFFmsivafRBM762LIcMzpnDeK6CcXIek6nFqmGTCGI7//OAmhweGKezCDQJxlvnPlgXU011DfrmODjwa5s9ds7MIeef5MPKzDShDeXhm0JsKO+oAl8leQbknSxBv9oeaYQjct0i61obbrPvfONn1Lj6m5flQGBe6hdrzqh+4+M7m+6N5gU36uqdWJoBkvs5YYbzQ27HCoD91e1CHNpMcLNSF92SSSPTWjuApTM/l+giPqFlIw8JzKYvQ==
-X-YMail-OSG: IFxmzi4VM1mO3.iur2nQWy7FV2Opphkfxxw.UOkcA43Lrm9uGwvyDtW4A2kwYX5
- OLU8Gv3cMTAUdmhPuRZIwHLUBkuwyBxJmRTbSeAg0.EXJYPWeAM4jqx.YvlUhZTzdh_WKrZM43bq
- x02X.GOOVs.p5_0ggsghOFzidmA3tGJ9RljkXzmA._5LDkbbGEqlcOyX6ZCtV724Yqmew56CFeUk
- r3W0cZ3JsYEQI0l3Ww6evTaf1otFTxwLYb98WdSxVxm_kzmsL.VgzukObkBV60AmLXZ2qV7J45Lb
- dopE05_FNF89BNHLMv4TfRcCMOVvdK4u.fXMWhllSw9fv3zWJJbPccUrB7UD6USMwQ8e2BD_F4jk
- mLYql7ZRTWyb1VTMWaxTD.0ZTnFOvZD42bl9hdC8vFLFffbJ0qzkyZQmGmru2lr..gZdyhepu766
- HPhT_ola_CC2tNB1oK5BK7EtPDthYrKZPTFheuvWGwBhsCJnOXzrvHug5Bzh_XSsC8EGtsxfw7bB
- 7PPE6gdKB3f5sW9WVhkw9DIWnA2KkPflkoO2i2Z6cdCQ_BeKLUL9zRIGO3n_EHCVXqXEosraZxJj
- qfGl4t.7x0TKVzKAO5kN9vj_EW2Qm71R07CjnEFo.onGS9Ow92S37Mas.DZM7yUPCRYYaqhmWAvY
- UvZnul2IdwZwrUTZuqcLFfaPl7SudJTyvunTytrSqu6Ld8_tO.Wsi6RhBRZgQkE_RCvFL71tRr3r
- __kXwfWfOErn0NW4O094cZwVHo.RCBvHxauU3AvF0nmcdlpkg0EfPvIdueM257Ig311.zbNNFPYI
- hYn0xqL86sbfMmBvC66ifBDmiGBXMmf97P54OGOyTbSE1snsTSkIaJvVeD2HOWP3iJOEOahQvKfa
- 73EjWCarNM97Ew01jSZ0AGZL4KzXGJDuM3rR1m4mRWm4r6cSISPHdMggOxog1ku06p2SNHD9rhgK
- wc977rhTgpa0Eb2t0T8psfU1OzAl_9W2eVYlE733KjispTRveS0p7WFD0fopPaKMtzUGCX28tpoG
- zzQSuha2CZPRyJepKRZPe3mM3E9BtuitKNJzn_kdHl0dn08oXAsKKVImHErNSAiz6KsxScKnBzzN
- pH1gZ.dAbemuz_.fsCUaS1WDqetIZ4Lh5D9l2fqhLshly0x6qDZnu0QiPi0lylqx.N_EjW5sXijI
- ihmp8lhOBsBlKnl.jQN6jybU4lZMvKB8Uel4Gc__.CNzeBXlCsXc7BZx8jPVTuAEgn3aCja.uRez
- GwcBziX272ZhYA.9RCOKsPxYHBCfEEHiHeVQ2yzhdDtt2_ctVnNssZz9hQtLc2_.bT8_4XpuetzY
- DErzWez6NvYGAXyylY.3LrkqAELOYbMGMP9moHKiqe8nbS.wq8l.93wDt2xpmI.IbASizbL5e8LJ
- QJ2Z5C6pk64lUviUGiatz8PmK7OZUk2ThQbPEwdReasR7XnWXT94ufSmZamhnAtFT.EkTR9uB_sO
- y.tnBLn5Tk3ZwwTn1tAUaDPsXmKDU7fZwr0w1srg14cWRX7fQ8EmCi_2KQFkQ7sqNW4FT40rE9i0
- DVWSouinBDUp1uK34C7rQtiWezdmPk3yvUShTCX.o2t8CM8v0ZYkbbsIhKin_QZQtoaWGEe7eccm
- uHeVrGkVzEK7bIMK5QBBCGs2RvFU7FKEbKC4r5bkIuCOp5B.46kBC6NN_u6c4syiAgsCLYK6x.aT
- yrWs95qUP_NaxDLnFkULKb2TR_DCcrIypFGnKkfN4n5xKUS5zLl0pkt_CRCa.kyiOflypRsAeDai
- .CEFZrdxIuP5Du2OGAH5DEKhCGirEFzCq1GhX3JwWfKYlR9eCLx0QIxqE5cVdjD68ui0UmkDq0FY
- KjGs2NUTqTyqRGfGmZDoIyOlIc4lFVmGeQk8JCg505joMrRaKR_x_7rHauiy10QPNaI_uy9PP4Je
- GH7pi10gGGB.fKhHP9Cz0Y8uGAhptHxSMxweRUc4J6pqsF5LaOlVNBTFi9WFc7vB8X1eH5jXZ78v
- wGSNA_VKbiAkq7Nc.mDW7.o8sJ4KxGqMZuBENF202hO3VIdbjqfuDAhAM1rzihEAHwVlINpL5w78
- qFJUAkBRjR9T5wpPlEfJImw7Sg6.AHGEzuN_ge82ZVU8sZEdO5Sn7d5xI2niaFwBzecsbZwLFtgf
- kwpB_TFcEsdh9E41iQ0XEcs0ImPcI5nmuD7hfqJdD2z86j7l9SNdDGNVxLPylkURD6UTFOHLqQrU
- DPMfzse1Qgk6EHR8wndYlsxKls92hQfWX9VqiDylvw2Cp_jvHTtsovjnFlg.h3NLpyLT.IhHJteq
- yBQDU0EK3OSCANYV2MU6GIhf5AA--
+        Mon, 15 May 2023 16:18:40 -0400
+Received: from sonic312-26.consmr.mail.ir2.yahoo.com (sonic312-26.consmr.mail.ir2.yahoo.com [77.238.178.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A522D13C2C
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1684181877; bh=jEBoYmuGZw6R38I5tsonVRB7fSpXqSHBWIu+bqGhF2Q=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=TKzN8LosM65KfRJTs+hh+FxEqmrp4uZbDojyhP89SZZC6P4ndSNAj7bGOCOqPcc5PgDcXyJ3iCCLzWbbs/SXXCedhlVnfJbViE2yvjoIB3iH4weynLfE/p/ASFVd0f1HTCr/eyTvImobCUDm6Lu2J40zJU9j1t/c0fTvoyMC5V9Dj32wawU4UeHqVuc+LLQtP7qCx14AsVxO6f1aVD8wYv616kS8S8eSskOgeWJKiOk54H5UmbztAafGo/42TMiVisvo5f2cAH92u68w+D6aJCYM76UZ+QZiWXqp1lBQXuY4Ppg62fehfAtZPvkkYOdykiy+kfd2aYFWHbzJqUAyQw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1684181877; bh=z1MWPX9N9Ze7lK43Aded5OrML3qZlL5e/9G9x1AmnTI=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=T4wN4+xabuk64OHB8hkT2h4M45XVMCAUyixcM8uJ4ol0bMeLmu9baIUCOwaNVIwCbPe/Og6CxK+pcIbINwiTw0b2Di22XiAgq1oPnyQE4bjA+cCuTqnjbQi7p6lQMvDH0lL1WtCkDfs387QElt25A654wjNlV80iHwaGd1x5sSyvWe7W94KgMLNFfVLWn5jBvmCookY1uGfOfBYFm1rkQhh65k26Nu0Yf6ZM8Kjc0kSy/A9mzSLB2ofuzh+nuKZ+PUGLRlae7qW+cMcptMOgJxdHtYWX3A7UeSKai4ZcGhHyhyYUwYyrEf4U/DqqaJbjT1SabaZAmGDYII3x2A89OQ==
+X-YMail-OSG: bVDn_HkVM1m7cbailOR5hswwOnN35CHaMlXZST1TMrnSS1bDZxwyN9yjB2_YCsb
+ wLiUsTWlXGQNDiHhcvgUCpuxgdHVqwIxpB_msnG80MerYMYbP51SI9JNui5KwXnoBSBKA.Au.rVY
+ 8OiAo5vX2FpJCbjPabsG8tZhoFcPx_g9Fjb_P70YeduIOvB_AUmb.0HiwBaqr2.SCr.unoZYnNd8
+ OEBiF.g4HPWwJNeafHxnM8EWyU_cAZYltedQpW5yP5BwpskhYh3qhVH9qvR9kcbVWyGNAHwuyI.t
+ bLY2IYjKWrjSninX3.GnnuKy6Vk3mqMr9MpapXq37xKdevlPJeYq1tttE0EqlZzWGSpG3iPUD_qh
+ vx.5u5GvXF2sLelw4VGm4Pt7G6_8sHaNIj4MMc8boeEuPYiZMm7opXBxjCCn74kpUwQCau4M6Cb5
+ _gfmS9uLrjcoIDn87tBq8XxPspE5GBZVWGqWQg4jcxaYj4a1COBrNWYHJnshJo8GmnxcenKcdcPh
+ u22SUQi4RD2mryP8m5RWGmzUQrx.XgrdXkC_yBb32H5G8a4.5flJK5n73Y_Qqgdjinf3XKOHoW0t
+ jGIt__cVhWPSujuOBmLqBt7yJghrczIQtzv_IXqJFnG2BAj4D75E4BlKFX2pKqzy3gEhAnJSZIOm
+ V8u7PIaesYi6zqRW7hPaKFNtTTFdfCRWztPyKByG1Hq8U5eZ8XcbLH_ddpQCMHiES8iRSEL1zMPc
+ FaKGEn98zMIJrbuoS27U44lFRLGn8exZbYZNHGlevaokdL1JLvTQekmivuNxTXSPyPmSJ2uQB1OC
+ UuSDfN5fBjYmja0eYb.cSk9Pwkomyzn4ALXSS5TVPocHPxcuGD9JrB7nd_CjGuIPIgpkfLA8tfJN
+ _XdO96kdWejdWUE1EpEC5M7ogob61xvRr6t8AfsrHMuQpbHowLo.KDzKYpN2gzS3NyVlCMDhqcT6
+ z6X9fodXqW3SL.XjrJEbLgmiHbV1R3UZNHt.7GFoQ7gWasVeevNcxy7WXwtmIY7YyxRTgskC7JSw
+ yKE0VYGCGI3QEJdErlQk7FrS3ZFxYedRQJmBKry9u9mm.Bk65kgj6AZrj0gEFCDuQa9NmwEf_BDi
+ R4xOuTjf4Ti2D4gQGOyGj9OkLs8W2PBbQO3GAHNiPMzg2y_iciTqjYyvJI.TAYpBS7m.3KpcyClB
+ ZbPP78A1LX2MkISBGOeVolSldeWYi7WMKjn7UZ5Wk12kMElXJSke_aVaFi0srwDup6RI8.2DKpzp
+ pmeJSanuoWyNg8tFjC.h8I4q6imA48svjgjwwFx4cG0wMmHr_ti2.fBqscPBPZYeLCntxF509Mve
+ 4XoloWZTvaXMihZl.vLVPzyfjKybl4b7O2u8c57wNSfcXNrC_Ell2Wsz6Dk4cO_fxNbu9JbkT2ot
+ thDnyuKhDy6Jx6Sn3vu8OoyH.TZJblQ0X1w5g9DYZhLnVsK9GeDNf6SnpO16z0MTQfpwTR7NIRQZ
+ NmWNAzC4dBNM2Pl0q5_WUU_TJLnDk_OKgX5Lbc522cOp.0wFUNbx1uzXZ7KoGxkwTkqSRFjZ6omj
+ rgLsiJfG0EendCVwBUi5ExhPkOMxHvPMvYC.pvpki_PvQ5Yx1zS4xXGh8toemcna4VNjzT6sQUwQ
+ 9CHFfxiLoo1bwrby1K22nLSJHDPHzbs7ec7rozRBeV4lgoglL_VsKblV5zFfsGprsWsuwo2Dmute
+ lXQxU_KTWr3sVBUB43NNGk8I14I8G6FmpHI.R_6zNXS55yEFeoa_tfi1nJ7gBvXoLqCIPO4icz.l
+ ELAtOhD42vT8qJ7HwejmsikIAmjeu3oas3LJAR2z3nzeH_aUkirH8BHOMDqezs4Iez177E2E97md
+ 4fxH3.F5VBlrxWynrqUO1ml0p7aClGhTSy_c.LvbSsYI4qxFbC.HOYOHVAf_5JCP66wcghjJiwy8
+ TliEeSLNXZI6nZG_.nlWaDtQyo9Cs0KUY7Mat1lX4.8Ejp5yRgV0eKnCEvXPHVMfivTUtn29vuK1
+ xPYEvCzBAQPu6BK9KVCgAKghCCfdQ_KA0TOY_LaN7_h.NgSw7_Gq6Q2SJM3G4_v3tcNTZEn9ePiT
+ zikkoZljJUQWZnONpvc2lZzUMcidoIRpTmqEdrzP4L7ZwW2N_n_nWlL2QRdzh7L3bY2zHRDyxznm
+ 9b.GZU8hTa2uH_pTLx6UsNdQ29W.INVRvUz5KrBVUqQyYO6BgenAsHAMqkvqlPA9jxjbU2LDLAUM
+ bv.eOFRdCH_THP8tT7Jz5FiNvyNFQ8tvnw3lQonnOxS4R7ErcLjZcwZw.nUcpzbN6N4x2ZHvP8O0
+ quFUA7lZfC.CBXL9CL13X9_WjWKQ-
 X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 128f9572-9d09-4333-b790-65a0e522659e
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Mon, 15 May 2023 20:17:51 +0000
+X-Sonic-ID: 0cc3a068-384b-49e5-92c1-cd7962690774
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ir2.yahoo.com with HTTP; Mon, 15 May 2023 20:17:57 +0000
 Received: by hermes--production-ir2-7867f454fc-8nkq6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID cb456a1ee9275492b492c35f2e11856e;
-          Mon, 15 May 2023 20:17:50 +0000 (UTC)
+          Mon, 15 May 2023 20:17:53 +0000 (UTC)
 From:   Jakob Hauser <jahau@rocketmail.com>
 To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -72,11 +72,10 @@ Cc:     Beomho Seo <beomho.seo@samsung.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
-        Jakob Hauser <jahau@rocketmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH v6 08/10] power: supply: rt5033_battery: Adopt status property from charger
-Date:   Mon, 15 May 2023 22:17:10 +0200
-Message-Id: <20230515201712.30124-9-jahau@rocketmail.com>
+        Jakob Hauser <jahau@rocketmail.com>
+Subject: [PATCH v6 09/10] dt-bindings: power: supply: rt5033-battery: Apply unevaluatedProperties
+Date:   Mon, 15 May 2023 22:17:11 +0200
+Message-Id: <20230515201712.30124-10-jahau@rocketmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230515201712.30124-7-jahau@rocketmail.com>
 References: <20230515201712.30124-7-jahau@rocketmail.com>
@@ -92,94 +91,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rt5033-battery fuelgauge can't get a status by itself. The rt5033-charger
-can, let's get this value.
-
-To get the charger as a "supplier" from the devicetree, the "of_node" needs
-to be initiated.
-
-Additionally, in the probe function replace dev_err() with dev_err_probe(),
-this will avoid printing an error for -EPROBE_DEFER when the battery driver
-probes before the charger driver.
+Additionally to the already available ref "power-supply.yaml", replace
+"additionalProperties: false" by "unevaluatedProperties: false". Otherwise,
+when referencing rt5033-battery in an example, message "'power-supplies' does
+not match any of the regexes: 'pinctrl-[0-9]+'" will be returned.
 
 Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/power/supply/rt5033_battery.c | 29 +++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ .../bindings/power/supply/richtek,rt5033-battery.yaml           | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
-index 91e1efd81f69..94d2dea7ef5e 100644
---- a/drivers/power/supply/rt5033_battery.c
-+++ b/drivers/power/supply/rt5033_battery.c
-@@ -19,6 +19,21 @@ struct rt5033_battery {
- 	struct power_supply	*psy;
- };
+diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-battery.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-battery.yaml
+index 756c16d1727d..b5d8888d03d2 100644
+--- a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-battery.yaml
++++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-battery.yaml
+@@ -26,7 +26,7 @@ required:
+   - compatible
+   - reg
  
-+static int rt5033_battery_get_status(struct i2c_client *client)
-+{
-+	struct rt5033_battery *battery = i2c_get_clientdata(client);
-+	union power_supply_propval val;
-+	int ret;
-+
-+	ret = power_supply_get_property_from_supplier(battery->psy,
-+						POWER_SUPPLY_PROP_STATUS,
-+						&val);
-+	if (ret)
-+		val.intval = POWER_SUPPLY_STATUS_UNKNOWN;
-+
-+	return val.intval;
-+}
-+
- static int rt5033_battery_get_capacity(struct i2c_client *client)
- {
- 	struct rt5033_battery *battery = i2c_get_clientdata(client);
-@@ -91,6 +106,9 @@ static int rt5033_battery_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CAPACITY:
- 		val->intval = rt5033_battery_get_capacity(battery->client);
- 		break;
-+	case POWER_SUPPLY_PROP_STATUS:
-+		val->intval = rt5033_battery_get_status(battery->client);
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -103,6 +121,7 @@ static enum power_supply_property rt5033_battery_props[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_OCV,
- 	POWER_SUPPLY_PROP_PRESENT,
- 	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_STATUS,
- };
+-additionalProperties: false
++unevaluatedProperties: false
  
- static const struct regmap_config rt5033_battery_regmap_config = {
-@@ -124,7 +143,6 @@ static int rt5033_battery_probe(struct i2c_client *client)
- 	struct i2c_adapter *adapter = client->adapter;
- 	struct power_supply_config psy_cfg = {};
- 	struct rt5033_battery *battery;
--	u32 ret;
- 
- 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
- 		return -EIO;
-@@ -142,15 +160,14 @@ static int rt5033_battery_probe(struct i2c_client *client)
- 	}
- 
- 	i2c_set_clientdata(client, battery);
-+	psy_cfg.of_node = client->dev.of_node;
- 	psy_cfg.drv_data = battery;
- 
- 	battery->psy = power_supply_register(&client->dev,
- 					     &rt5033_battery_desc, &psy_cfg);
--	if (IS_ERR(battery->psy)) {
--		dev_err(&client->dev, "Failed to register power supply\n");
--		ret = PTR_ERR(battery->psy);
--		return ret;
--	}
-+	if (IS_ERR(battery->psy))
-+		return dev_err_probe(&client->dev, PTR_ERR(battery->psy),
-+				     "Failed to register power supply\n");
- 
- 	return 0;
- }
+ examples:
+   - |
 -- 
 2.39.2
 
