@@ -2,139 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEE67035BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8FF7035CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243381AbjEORBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S243576AbjEORCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243456AbjEOQ7z (ORCPT
+        with ESMTP id S243479AbjEORC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:59:55 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130E683CE;
-        Mon, 15 May 2023 09:59:47 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ab032d9266so120602405ad.0;
-        Mon, 15 May 2023 09:59:47 -0700 (PDT)
+        Mon, 15 May 2023 13:02:26 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8474A9001
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:00:25 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f00d41df22so67528407e87.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:00:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684169986; x=1686761986;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cmY2ej1hy4vAs/f4OlrbKuvNcHo8SUtv7o8IcsrQg3U=;
-        b=llobHjZ8CaIv83lisuWYuHqNS76/tNXm2lgpfFKCeP6ap94oN1gkuO+vAaGen3l7Zf
-         /5N9F6v7G42Et49vEQ4VYj0iNh3BUmWx45NHrOwY6DFCAIrau+ZWoft2KLtHIvm+J6M9
-         GjXehqZjYbmt+TDyDM0qFuICTBIMGYCZJjMeAojhXpVR0uqz0+acO0YybhbjaQSHPA55
-         7cMs9Y+n6PFLSzYGnlLM4tkK5Vg0NZFew5KLtO3NBkZ3+zlJQIsyO86fR30/uLY0m003
-         iDD9GC0tTbV8Lpcm8XbGD1Cds3XMYs+m+DcjhoIwNKfuS9Tb7GXTMDNPUoFoWObxFFES
-         E3RA==
+        d=linaro.org; s=google; t=1684170019; x=1686762019;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GYDwAxBjxKaXqirWOJFxiCv8QGm8k3OjcSxYqeRJPfI=;
+        b=YOnY7USwDtFpLdcfcnjLDXxR3Rzemt5HfA95dOoQzZszqRGaiWd1Nh2ZdcpX3NLYGs
+         ikS4HhOTrLSC3eqx5bJNlWMJ38p3duPgFYy84YImiuHN9UL2CtQ524UBEjo4ul1n2mcI
+         kweMJRMKAOrP2QX/TWshabbDDGyJmldHK+FeRDwypPOM6Z5U2ErvEpm2VyO84FzNHrJr
+         xwhG5b1EfprPc86YWG5Kumi6X60VIpQM07snIXkkvUIS4qjMPGBNvDnlNJeRZy1n17SM
+         s7Z7M+puRDKzrjItuogDhpOao3H+WRXY9TBZVJ4YMFhGvZd4t/YfXLDOqvVivQABDkyE
+         HcXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684169986; x=1686761986;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cmY2ej1hy4vAs/f4OlrbKuvNcHo8SUtv7o8IcsrQg3U=;
-        b=UU5Q0/y4zuhNb40+zmiO122y1xSm3PTXBHhnMmuanAiuFU+fM1awCsG5UFzduwuyuc
-         pmrsxW29Ke1Dh7f9FYzXRE+WJnNOHklGwFEj8B5gVO8ge5nGdMsgrmnlH6x19SmDxs57
-         Y7tZKDYR8E4GD/Irb+SKRx0M/nYbCuKPW6/w27EkMaM1wLwgCn3QnuRlfIVTRD7lIPuq
-         6fU46eph2U+oISgx+oTGa1uA+8gHNutTp9iXGQiFfqaCD4BhmCQiqX93h4aemCSHq8VG
-         A8O2wZssfxR11/14fBBm9SIOHZplswKVA0kWPUWusTUcJKtgfOHIp5AY3Vr2LxuXEqjI
-         L4Lw==
-X-Gm-Message-State: AC+VfDybsvqnf7wuu+SprOO44lBFmaDNjzPe2VBrLL2ogorXsSyDVUEq
-        kz30QyUI46bC3MGvKvfJTs0=
-X-Google-Smtp-Source: ACHHUZ5ax8PMzMJyb4JE01QgIu1eN/8WniJ6gslKo//Mqlo5UEC9KUHdakOZkvioQ2T6mK0YMaHGpQ==
-X-Received: by 2002:a17:90a:e50d:b0:247:6a31:d59d with SMTP id t13-20020a17090ae50d00b002476a31d59dmr33951385pjy.1.1684169986489;
-        Mon, 15 May 2023 09:59:46 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:f:85bb:dfc8:391f:ff73])
-        by smtp.gmail.com with ESMTPSA id x13-20020a17090aa38d00b0024df6bbf5d8sm2151pjp.30.2023.05.15.09.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 09:59:46 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [RFC PATCH V6 14/14] x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
-Date:   Mon, 15 May 2023 12:59:16 -0400
-Message-Id: <20230515165917.1306922-15-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230515165917.1306922-1-ltykernel@gmail.com>
-References: <20230515165917.1306922-1-ltykernel@gmail.com>
+        d=1e100.net; s=20221208; t=1684170019; x=1686762019;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GYDwAxBjxKaXqirWOJFxiCv8QGm8k3OjcSxYqeRJPfI=;
+        b=fnledsSMWMRKQMYeU9xW0VFwMaXF6WEpapoV2RgO2jsiYxaUgjzix8F7s5j2Kh+OKc
+         2bBYNjA0JSpiLsh7nFDaAszM8feAoCtjheanuJNqq37pid55xiqhD97wCM6PqLNE5FEt
+         zsGNLVaZZs3hc0XEzo5uI/CIXuxRWcgMcSZfhNsD/G6w+z1IUjXWCsiac0ac+wFOB7Cl
+         F6gVbTU1wVqRX05CW5qJ1KKqy1bNXj9wXQlCMUtU9TvwH6W/6T7Z5NXLYi6EA2uOvsd3
+         8uTeTT8rsAVmdpQSxEP4QTSG0/bhmCBXikvtCED/r0hPMr8/wb148Xkk5gu6RCrjKACA
+         /4/Q==
+X-Gm-Message-State: AC+VfDxGDkUmG95BrpdUi3/CQZEoV1To31FqBM8ZyrTKEtJYua6UYRKF
+        gbBhYOalAS16dOt+Vhu6MB8SMw==
+X-Google-Smtp-Source: ACHHUZ5p/F4cQAqLEz7OU0T2Q8kbCZQCyAysDd2OXRAyAEd+2o0ur2AykpobhzcwlPiRwmA5VFiqmg==
+X-Received: by 2002:a2e:b4a6:0:b0:2ac:7fc5:e4a9 with SMTP id q6-20020a2eb4a6000000b002ac7fc5e4a9mr5957561ljm.16.1684170018863;
+        Mon, 15 May 2023 10:00:18 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id c24-20020a05651c015800b002a9ebff8431sm3856802ljd.94.2023.05.15.10.00.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 10:00:18 -0700 (PDT)
+Message-ID: <b0cf5634-60e4-adba-92df-73f05451cd9f@linaro.org>
+Date:   Mon, 15 May 2023 19:00:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/5] arm64: dts: qcom: qrb4210-rb2: Enable display out
+Content-Language: en-US
+To:     Caleb Connolly <caleb.connolly@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230515-topic-rb2-bits-v1-0-a52d154a639d@linaro.org>
+ <20230515-topic-rb2-bits-v1-2-a52d154a639d@linaro.org>
+ <fd4276f6-f54b-3455-1263-8a8d534f0bda@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <fd4276f6-f54b-3455-1263-8a8d534f0bda@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianyu Lan <tiala@microsoft.com>
 
-Add Hyperv-specific handling for faults caused by VMMCALL
-instructions.
 
-Signed-off-by: Tianyu Lan <tiala@microsoft.com>
----
- arch/x86/kernel/cpu/mshyperv.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+On 15.05.2023 17:57, Caleb Connolly wrote:
+> 
+> 
+> On 15/05/2023 13:04, Konrad Dybcio wrote:
+>> The RB2 has a HDMI output via an LT9611UXC bridge. Set it up.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 88 +++++++++++++++++++++++++++++++-
+>>  1 file changed, 87 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+>> index 80c6b59c8ff6..9b539720f05d 100644
+>> --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+>> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> 
+> [...]
+>> @@ -312,11 +385,24 @@ &sleep_clk {
+>>  };
+>>  
+>>  &tlmm {
+>> -	gpio-reserved-ranges = <37 5>, <43 2>, <47 1>,
+>> +	gpio-reserved-ranges = <43 2>, <47 1>,
+> 
+> Is this intentional?
+Yes, notice how this included the reset pin. These pins are
+not even really reserved, there's no FPC on this board..
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 0c5f9f7bd7ba..3469b369e627 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -32,6 +32,7 @@
- #include <asm/nmi.h>
- #include <clocksource/hyperv_timer.h>
- #include <asm/numa.h>
-+#include <asm/svm.h>
- 
- /* Is Linux running as the root partition? */
- bool hv_root_partition;
-@@ -577,6 +578,20 @@ static bool __init ms_hyperv_msi_ext_dest_id(void)
- 	return eax & HYPERV_VS_PROPERTIES_EAX_EXTENDED_IOAPIC_RTE;
- }
- 
-+static void hv_sev_es_hcall_prepare(struct ghcb *ghcb, struct pt_regs *regs)
-+{
-+	/* RAX and CPL are already in the GHCB */
-+	ghcb_set_rcx(ghcb, regs->cx);
-+	ghcb_set_rdx(ghcb, regs->dx);
-+	ghcb_set_r8(ghcb, regs->r8);
-+}
-+
-+static bool hv_sev_es_hcall_finish(struct ghcb *ghcb, struct pt_regs *regs)
-+{
-+	/* No checking of the return state needed */
-+	return true;
-+}
-+
- const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
- 	.name			= "Microsoft Hyper-V",
- 	.detect			= ms_hyperv_platform,
-@@ -584,4 +599,6 @@ const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
- 	.init.x2apic_available	= ms_hyperv_x2apic_available,
- 	.init.msi_ext_dest_id	= ms_hyperv_msi_ext_dest_id,
- 	.init.init_platform	= ms_hyperv_init_platform,
-+	.runtime.sev_es_hcall_prepare = hv_sev_es_hcall_prepare,
-+	.runtime.sev_es_hcall_finish = hv_sev_es_hcall_finish,
- };
--- 
-2.25.1
-
+Konrad
+>>  			       <49 1>, <52 1>, <54 1>,
+>>  			       <56 3>, <61 2>, <64 1>,
+>>  			       <68 1>, <72 8>, <96 1>;
+>>  
+>> +	lt9611_rst_pin: lt9611-rst-state {
+>> +		pins = "gpio41";
+>> +		function = "gpio";
+>> +		input-disable;
+>> +		output-high;
+>> +	};
+>> +
+>> +	lt9611_irq_pin: lt9611-irq-state {
+>> +		pins = "gpio46";
+>> +		function = "gpio";
+>> +		bias-disable;
+>> +	};
+>> +
+>>  	sdc2_card_det_n: sd-card-det-n-state {
+>>  		pins = "gpio88";
+>>  		function = "gpio";
+>>
+> 
