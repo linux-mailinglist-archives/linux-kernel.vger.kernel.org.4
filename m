@@ -2,124 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC3E702655
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3652A70260C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjEOHrQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 03:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        id S238603AbjEOH2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 03:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238286AbjEOHq6 (ORCPT
+        with ESMTP id S235023AbjEOH2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 03:46:58 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C20F9C;
-        Mon, 15 May 2023 00:46:56 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-ba7854ff5abso2411023276.2;
-        Mon, 15 May 2023 00:46:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684136815; x=1686728815;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x+sesuhYFb2sMrWYAczp8907eYFIY/Qn6ML1DW9XCIk=;
-        b=T7ycIbK7Dz+UPVbKp9pXyMWIuYuH4y4+1rU6eehIoztmpbM35thJFu5+c3uJ5NSkZi
-         4NVKXw5136jwqCdgOIv6zlt36ILStuGqrWtYmVNMh1s1NiusS2F/HxSL+jY+4MPApd49
-         L7wXYYHsluCdlA/w3iM9PzwLTawrHQYwtjNaELAmFPTLGmNwaKmobuwTSuFjFg8+jJW4
-         +6gv47lIaGhQWirnlHJvDd3eaAU8WJy9ET6ZGqspElWss8ABziYHxAcDL4N9iyTX/vsS
-         SfVxggIUI6LLjyUDgHg06LzLuV3YSZebN5vZdxuSolJF483GfIt6WgpPUGx3xubGcj/Z
-         DyPw==
-X-Gm-Message-State: AC+VfDy7w9gLAtCIpNmJ4OaqgEj/aS0RifcfbexJ5O5oKVp9JFvLo6Cf
-        TlplE8wwDilPLyNP/Mm6YSe4up+gBSCWjw==
-X-Google-Smtp-Source: ACHHUZ4p/UuEVpPL7oTnhZWORoxfzjoPLJTqeEFE0Obf+G4hjIxpYJ58Cg8rpAVWoyVVD1XQQCyzsw==
-X-Received: by 2002:a05:6902:1008:b0:b94:bbf1:fec7 with SMTP id w8-20020a056902100800b00b94bbf1fec7mr31436113ybt.47.1684136814953;
-        Mon, 15 May 2023 00:46:54 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id n188-20020a2540c5000000b00b9eeffa1abfsm1759045yba.39.2023.05.15.00.46.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 00:46:53 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-ba7854ff5abso2410931276.2;
-        Mon, 15 May 2023 00:46:53 -0700 (PDT)
-X-Received: by 2002:a25:d308:0:b0:b92:3ed2:1cae with SMTP id
- e8-20020a25d308000000b00b923ed21caemr33787915ybf.12.1684136812848; Mon, 15
- May 2023 00:46:52 -0700 (PDT)
+        Mon, 15 May 2023 03:28:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0E8FF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684135714; x=1715671714;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mgbFI2LcjG+t3blbDMXWX8oWe0oop5OUSyXsMN4g61I=;
+  b=kOGr9YKvw/QWLz2wKzL5BH5wFXn8aBx0X7pDpHS+lsdmtqvYLXUNHOzc
+   xmLrs0D0QZmEjowO8R1iOo7iX+cI30zDroaMtl3cMPTJh3IusvxGRIU18
+   TemTdGJl42IU7ASPhl/tjxDxqGrWl3hbWzklzI5imXS10HKJp25uYw1Hd
+   uZQP6MlRda8fIjHUfaHIaMKzspCRUG+TZ1Wb15QdTuk/foiga3zl5x17I
+   8RO0D2dUDQJj+wMRYpNNbTCirJYSie2GkujoC6me19mgiP5eFepT3/Cwq
+   mM77rqZ46lr21KzhSKyP7KWranK5ASE1EofszRpHWcthVDbcNILZ3ys+8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349973278"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="349973278"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 00:28:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694916013"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="694916013"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 00:28:27 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH] soundwire: dmi-quirks: add new mapping for HP Spectre x360
+Date:   Mon, 15 May 2023 15:48:59 +0800
+Message-Id: <20230515074859.3097-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <ZElaVmxDsOkZj2DK@debian> <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
- <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
- <20230510090527.25e26127@sal.lan> <55d5ec29-f30f-4596-a3b9-7e5b8adf0582@kernel.org>
-In-Reply-To: <55d5ec29-f30f-4596-a3b9-7e5b8adf0582@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 15 May 2023 09:46:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV=b8j=X3XEBWsAghsHrPT58xp7peaMiTZisqf7wRJf3w@mail.gmail.com>
-Message-ID: <CAMuHMdV=b8j=X3XEBWsAghsHrPT58xp7peaMiTZisqf7wRJf3w@mail.gmail.com>
-Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
- i.MX8 ISI driver")
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-On Sun, May 14, 2023 at 1:01 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On 10/05/2023 10:05, Mauro Carvalho Chehab wrote:
-> > And another CI job testing bisect breakages as I receive pull requests,
-> > applying patch per patch and using both allyesconfig and allmodconfig,
-> > also on x86_64 arch with W=1:
-> >
-> >       https://builder.linuxtv.org/job/patchwork/
-> >
-> > The rule is to not merge stuff on media tree if any of those jobs
-> > fail. I also fast-forward merging patches whose subject states that
-> > the build has failed.
-> >
-> > In order to help with that, on normal situation, I usually take one week
-> > to merge stuff from media_stage into media_tree, doing rebases at
-> > media_stage if needed to avoid git bisect build breakages at media_tree
-> > (which is from where I send my update PRs to you).
-> >
-> > Unfortunately, currently we don't have resources to do multiple randconfig
->
-> Is you media staging tree included in LKP (kernel test robot)? You would
-> get huge build coverage after every push to your staging repo.
+A BIOS/DMI update seems to have broken some devices, let's add a new
+mapping.
 
-As (multiple[*[) fixes for the build issues were submitted before the
-opening of the merge window, there must have been some build coverage,
-with even some people acting upon it...
+Link: https://github.com/thesofproject/linux/issues/4323
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+---
+ drivers/soundwire/dmi-quirks.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-[*] General note, not limited to media: please apply build fixes and
-    regression fixes ASAP, to avoid multiple people running into the
-    same issues, and spending time on bisecting, investigating,
-    fixing, ...
-    Thanks a lot!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/soundwire/dmi-quirks.c b/drivers/soundwire/dmi-quirks.c
+index 58ea013fa918..2a1096dab63d 100644
+--- a/drivers/soundwire/dmi-quirks.c
++++ b/drivers/soundwire/dmi-quirks.c
+@@ -99,6 +99,13 @@ static const struct dmi_system_id adr_remap_quirk_table[] = {
+ 		},
+ 		.driver_data = (void *)intel_tgl_bios,
+ 	},
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "HP"),
++			DMI_MATCH(DMI_BOARD_NAME, "8709"),
++		},
++		.driver_data = (void *)intel_tgl_bios,
++	},
+ 	{
+ 		/* quirk used for NUC15 'Bishop County' LAPBC510 and LAPBC710 skews */
+ 		.matches = {
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
