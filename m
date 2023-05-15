@@ -2,124 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A507702F93
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0451F702F9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240087AbjEOOXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S238949AbjEOOX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240465AbjEOOWp (ORCPT
+        with ESMTP id S229568AbjEOOXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:22:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF81FF4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:22:42 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 15 May 2023 10:23:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC28FF4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:23:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A2D5660309E;
-        Mon, 15 May 2023 15:22:40 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684160561;
-        bh=ZZrfXP972sfV5Y+tOtvn+DgCDdAWngdy6rYVlJ53Otc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nTvbH8rGNM+fr5Lygp4cWg6duck3YxxkhOvtbsplOKtDQ1HQglqEcjiipdY8PxSEN
-         QTnf2xgvII0Uvl+j4zAmcAeQgu9uiJ3hye55HrXARYljhnjKukdS1pAryXucUS3nO8
-         cjcTHIoe82vvSoCik5qMY8z2/WM/Y9PbaGQ1irA39iH+ebeFWB+BdnBVLriCRtCgjt
-         EH7hiIMi15sTTA4DaLIYci4Kepvjrv2fWQH2u4DaTIDP58MkxEibrgWLhldZ3WIhEP
-         8/72IETEyXQN3Uxghx1Z1lLDgoZbZNh3CjE+E1b4oy4LnzWuN0Mlj8vdhS2B65tCSg
-         WUD6EwY7zMkmQ==
-Message-ID: <85500bcc-c5e8-8ce2-edea-233de86c2d35@collabora.com>
-Date:   Mon, 15 May 2023 16:22:38 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FED561DE3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CE93C433EF;
+        Mon, 15 May 2023 14:23:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684160633;
+        bh=BS6JVi3U6AfGKU8Juy8abcYENm4+fIaoNY9mN6+Bwy8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GrK32zAplnlrqy40OU3XJSBXClfmG9O7ZOlTlNfLZCNAlZqPWij/MvKdYbCd95gR2
+         aqBJ9Phg/BhKmSH3JKt+kK36Yp/sCMMpu/hWfqT82d/Jb2G4M3mJusvu6e3ksv2lpE
+         pRedKzAVyDGXLVPsGb1RLCwMmDe33hoWngAKowOcuFqmAj6ue952HtF7GcJd31dx8S
+         GaX/sf4DiWvSy52m27xRONQ8jgx9Z9kAUXUy8FoHrvVXYrv/R0FQntd8ziWJx9Zt9x
+         u40aiCpN4LNpF3i/wJXZaAFB4YJPNraVBZqlzdMwTf3oHdOkbawI64usc7zsQu3nJH
+         Xl2vfX5SxQyRA==
+Date:   Mon, 15 May 2023 16:23:46 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Mike Christie <michael.christie@oracle.com>,
+        nicolas.dichtel@6wind.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
+        mst@redhat.com, sgarzare@redhat.com,
+        virtualization@lists.linux-foundation.org, ebiederm@xmission.com,
+        konrad.wilk@oracle.com, linux-kernel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
+Message-ID: <20230515-vollrausch-liebgeworden-2765f3ca3540@brauner>
+References: <20230202232517.8695-1-michael.christie@oracle.com>
+ <20230202232517.8695-9-michael.christie@oracle.com>
+ <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
+ <CAHk-=wgadfsCnKHLON7op=Qs5t3w3PVz5ZDbvbKsfb=yBg=yjQ@mail.gmail.com>
+ <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
+ <48842e92-835e-bc3f-7118-48b8f415f532@leemhuis.info>
+ <CAHk-=wicXCNR1bBioaAiBqEDgv-CoQD9z2RsM2VOTPzkK0xr8g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/2] phy: mtk-mipi-csi: add driver for CSI phy
-Content-Language: en-US
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
-        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
-        Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:DRM DRIVERS FOR MEDIATEK" 
-        <dri-devel@lists.freedesktop.org>
-References: <20230515090551.1251389-1-jstephan@baylibre.com>
- <20230515090551.1251389-3-jstephan@baylibre.com>
- <cd6067b2-660a-8f2c-697d-26814a9dc131@collabora.com>
- <ynrvqt24hjgng25r2xa3hxj35cvgotx7sdfrbqfjcvj3foegmr@4lqhen5yu6fh>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ynrvqt24hjgng25r2xa3hxj35cvgotx7sdfrbqfjcvj3foegmr@4lqhen5yu6fh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wicXCNR1bBioaAiBqEDgv-CoQD9z2RsM2VOTPzkK0xr8g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/05/23 15:36, Julien Stephan ha scritto:
-> On Mon, May 15, 2023 at 02:22:52PM +0200, AngeloGioacchino Del Regno wrote:
->> Il 15/05/23 11:05, Julien Stephan ha scritto:
->   ..snip..
->>> +	port->is_cdphy = of_property_read_bool(dev->of_node, "mediatek,is_cdphy");
->>
->> This driver doesn't support C-PHY mode, so you either add support for that, or in
->> my opinion you should simply refuse to probe it, as it is *dysfunctional* for the
->> unsupported case (and might even introduce unstabilities).
->>
->> 	/* At the moment, only D-PHY mode is supported */
->> 	if (!port->is_cdphy)
->> 		return -EINVAL;
->>
->> Also, please don't use underscores for devicetree properties: "mediatek,is-cdphy"
->> is fine.
->>
-> Hi Angelo,
-> You are right this driver does not support C-PHY mode, but some of the
-> PHYs themselves support BOTH C-PHY AND D-PHY. The idea of `is_cdphy` variable
-> is to know if the CSI port supports BOTH C-PHY AND D-PHY or only DPHY.
-> For example mt8365 has 2 PHYs: CSI0 and CSI1. CSI1 support only D-PHY,
-> while CSI0 can be configured in C-PHY or D-PHY. Registers for CD-PHY and
-> D-PHY are almost identical, except that CD-PHY compatible has some extra
-> bitfields to configure properly the mode and the lanes (because supporting
-> trios for CD-PHY).
-> If C-PHY support is eventually added into the driver, I think we will need
-> another variable such as `mode` to know the mode. I was also thinking
-> of adding a phy argument to determine if the mode is C-PHY or D-PHY.
+On Sat, May 13, 2023 at 10:08:04AM -0500, Linus Torvalds wrote:
+> On Sat, May 13, 2023 at 7:39 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+> >
+> > Jumping in here, as I found another problem with that patch: it broke
+> > s2idle on my laptop when a qemu-kvm VM is running, as freezing user
+> > space processes now fails for me:
 > 
-> So here, I don't want to stop the probe if `is_cdphy` variable is set to
-> true. Does it make sense ?
+> Hmm. kthreads have PF_NOFREEZE by default, which is probably the reason.
 > 
+> Adding
+> 
+>         current->flags |= PF_NOFREEZE;
+> 
+> to the vhost_task setup might just fix it, but it feels a bit off.
+> 
+> The way io_uring does this is to  do
+> 
+>                 if (signal_pending(current)) {
+>                         struct ksignal ksig;
+> 
+>                         if (!get_signal(&ksig))
+>                                 continue;
+>                         break;
+>                 }
+> 
+> in the main loop, which ends up handling the freezer situation too.
+> But it should handle things like SIGSTOP etc as well, and also exit on
+> actual signals.
+> 
+> I get the feeling that the whole "vhost_task_should_stop()" logic
+> should have the exact logic above, and basically make those threads
+> killable as well.
+> 
+> Hmm?
 
-Comments in the code convinced me that the other PHYs providing only C or D PHY
-support weren't compatible at all with this driver.
+I'm still trying to catch up after LSFMM with everything that's happened
+on the fs side so coming back to this thread with a fresh set of eyes is
+difficult. Sorry about the delay here.
 
-I got it now - but at this point can you please add a comment in the code actually
-clarifying that this driver supports both PHYs providing *only* D-PHY and ones
-providing selectable C-or-D PHY?
+So we seem to two immediate issues:
+(1) The current logic breaks ps output because vhost creates helper
+    processes instead of threads. The suggested patch by Mike was to
+    make them proper threads again but somehow special threads in the
+    sense that they don't unshare signal handlers. The latter part is
+    possibly broken and seems hacky. (That's earlier in the thread.)
+(2) Freezing of vhost tasks fails. (This mail.)
 
-That clarified, it would not make sense to stop probing if it's not a CDPHY because
-as you said there might be a D-only PHY that would be actually supported here.
+So I think we will be able to address (1) and (2) by making vhost tasks
+proper threads and blocking every signal except for SIGKILL and SIGSTOP
+and then having vhost handle get_signal() - as you mentioned - the same
+way io uring already does. We should also remove the ingore_signals
+thing completely imho. I don't think we ever want to do this with user
+workers.
 
-Regards,
-Angelo
-
-
+@Mike, can you get a patch ready ideally this week so we can get this
+fixed soon?
