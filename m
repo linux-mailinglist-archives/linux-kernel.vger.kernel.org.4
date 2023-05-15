@@ -2,62 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687AF7030F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26707030F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241547AbjEOPGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S242094AbjEOPGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241705AbjEOPGS (ORCPT
+        with ESMTP id S241849AbjEOPGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:06:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828192D79
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:05:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF0662369
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 15:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E618BC433A4;
-        Mon, 15 May 2023 15:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684163137;
-        bh=M+R7QJX9tlmUfjLa93PTIOcnlPo8fCYSptpe+Z31hvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dm0/l0pj1T5XWHflBhC+rfrSh3kzTg9GrY3XVsk6KrT0+mVHpuIhNCj7Q/SQKC3B+
-         VcxdsPs/gS8vjGV/PlidJBaytbkh6gKS0ONKAj7ERQoL/ms/rjdByWiMOmQxGxvfJJ
-         Kirghm//gDxI5jmKCmJfIcXLI3rIxSPlLfKWGUL29bvI0HZLo3II+p6Oiy39J6pZk/
-         M1KJmQK/Wlm0UPQMpIQIlFxk18Deot2xqLx5kBtseaflGKQWDljTRkmXrJPTl6PGeD
-         53WTQ1vw+sZjrNINUlM/0LLzWD9mmqs7eX6E0mqjdDYZfEbblThqLdCKrOxdvRCW/K
-         nAt8dy2OpwULg==
-Date:   Tue, 16 May 2023 00:05:34 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Trevor Wu <trevor.wu@mediatek.com>,
-        pierre-louis.bossart@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, lgirdwood@gmail.com, tiwai@suse.com,
-        perex@perex.cz, matthias.bgg@gmail.com, yc.hung@mediatek.com,
-        tinghan.shen@mediatek.com, sound-open-firmware@alsa-project.org,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] ASoC: SOF: mediatek: add mt8188 audio support
-Message-ID: <ZGJKPuf1FX4AYLXl@finisterre.sirena.org.uk>
-References: <20230515052540.9037-1-trevor.wu@mediatek.com>
- <20230515052540.9037-2-trevor.wu@mediatek.com>
- <7c784932-951a-65c0-c48f-bfa4c098b2e1@collabora.com>
+        Mon, 15 May 2023 11:06:32 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF751720
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:06:08 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-7577a91cfd6so478712485a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684163166; x=1686755166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Og220UowjXbjVmuC4TtBNxJbr3SzQPFOA/NQzEh0cHw=;
+        b=PsQxGdFlzGbjKFy2PPDSEXHzCKtbZY3OM7I27XEzQGcEvqkOCN32mJVhGggHsG4DUU
+         4Hk+XjWneKNJjQDhQD3Noi06fQmp6U6n4x0Wr8lULeWjGrvl3Bcl76EED2uoRF9pwMF+
+         CQ2IuQbEJg5nThWiJrw1ytbpUMfPFfEYpwvas=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684163166; x=1686755166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Og220UowjXbjVmuC4TtBNxJbr3SzQPFOA/NQzEh0cHw=;
+        b=fcN2IGR8wBYXj0AH5vBfzesxAQsnqBrHYNDFXZUSakKBcHOFWdfFZ3QYh1sBgcBuLt
+         a4bpU1B5zFMa1Ni/3NkPiMhkHsOZqMZOsUmaidKkrFqZIYLcM7C6F/e5f+yLWqJpM4OA
+         wiOjPSxjtxi4pt1ei6POnbR4l6TVP192rqMQ1NIg3Rvo0awNopmNspe3amIZRHQWa1mW
+         lCF+XvUVwBSisSZADrWNl4KKAlddDQpM/IQvrCXmYVKKWpoQvthK3FpRLokWX3BcC5v0
+         afWfUEzBtuOVcz4scsREy+Kv1Sm59eL6cHG22yqVx+5pR0hOsFsCFBVDWG+oz28oKyHX
+         gLgg==
+X-Gm-Message-State: AC+VfDzYYhXzrxDJ6GyyYLvnYawNPT+Zc2aHhSfJai5CODqZSQgp3RHf
+        mzBkZLu1ftgdT/ekK7mkEicli5Q1KOrmaf3NqkQ=
+X-Google-Smtp-Source: ACHHUZ5W0rB7J5tTDWYm8TjnMxL8n6JIzkz1dU99LysfpUzkdqJpLH2kmZc3n7oIW0qCWrZxHudzpQ==
+X-Received: by 2002:a05:6214:4107:b0:5ea:2575:dccb with SMTP id kc7-20020a056214410700b005ea2575dccbmr59481425qvb.46.1684163166270;
+        Mon, 15 May 2023 08:06:06 -0700 (PDT)
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com. [209.85.160.169])
+        by smtp.gmail.com with ESMTPSA id t11-20020a0cf98b000000b005ea9156e72bsm5015480qvn.33.2023.05.15.08.06.05
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 08:06:05 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-3f51ea3a062so233471cf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:06:05 -0700 (PDT)
+X-Received: by 2002:ac8:5dd1:0:b0:3ef:3083:a437 with SMTP id
+ e17-20020ac85dd1000000b003ef3083a437mr1183921qtx.18.1684163164854; Mon, 15
+ May 2023 08:06:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="a4Gd7i8RRVnq1R5N"
-Content-Disposition: inline
-In-Reply-To: <7c784932-951a-65c0-c48f-bfa4c098b2e1@collabora.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230515145323.1693044-1-amit.pundir@linaro.org>
+In-Reply-To: <20230515145323.1693044-1-amit.pundir@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 15 May 2023 08:05:53 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WXB9tJWTcQJ5zuJ0zNhBD0FYvQf1y+zDFFmY9CBd7CCw@mail.gmail.com>
+Message-ID: <CAD=FV=WXB9tJWTcQJ5zuJ0zNhBD0FYvQf1y+zDFFmY9CBd7CCw@mail.gmail.com>
+Subject: Re: [PATCH] Revert "regulator: qcom-rpmh: Revert "regulator:
+ qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS""
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,52 +83,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---a4Gd7i8RRVnq1R5N
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 15, 2023 at 7:53=E2=80=AFAM Amit Pundir <amit.pundir@linaro.org=
+> wrote:
+>
+> This reverts commit ad44ac082fdff7ee57fe125432f7d9d7cb610a23.
+>
+> This patch restores the synchronous probing for
+> qcom-rpmh-regulator because asynchronous probing broke
+> Dragonboard 845c (SDM845) running AOSP. UFSHC fail to
+> initialize properly and DB845c fails to boot regardless
+> of "rootwait" bootarg being present or not
+> https://bugs.linaro.org/show_bug.cgi?id=3D5975.
+>
+> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> ---
+>  drivers/regulator/qcom-rpmh-regulator.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, May 15, 2023 at 01:25:44PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 15/05/23 07:25, Trevor Wu ha scritto:
+As mentioned in the other thread [1], I'd rather at least do a little
+debugging before jumping to a revert, just so we don't end up having
+to do a revert of a revert for the same driver again.
 
-> > +{
-> > +	/* common defaults */
-> > +	memcpy(&sof_mt8188_ops, &sof_mt8186_ops, sizeof(struct snd_sof_dsp_op=
-s));
-
-> Never use sizeof(type), always use destination var size! Anyway, there's =
-more.
->=20
-> I don't think we need to perform this memcpy: we'll never see an instance=
- of
-> both mt8186 and mt8188 drivers on the same machine, so you can safely jus=
-t use
-> sof_mt8186_ops for mt8188...
-
-> > +	sof_mt8188_ops.drv =3D mt8188_dai;
-
-> ...which obviously means that this becomes
-
-> 	sof_mt8186_ops.drv =3D mt8188_dai;
-
-This does have the issue that it then means the ops struct isn't const
-which isn't ideal.  It's also not the end of the world though so I don't
-have super strong feelings.
-
---a4Gd7i8RRVnq1R5N
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRiSj0ACgkQJNaLcl1U
-h9DXNgf5AfJtzdmTyLjLoAOi+seXTanouzlJtqeDLp9sgeXi4XAMwpxoKIZjJmdy
-VsSH4ChbVLoFOfsJhTFHPNL25XiJzmpLcXSLSHX6ICeF+4smiSTVfnNmOhr0sjoa
-6O64OvuPRfWJwsTuUnaUpnrre638+d13uyk/kdotCEvmIwTOWnLexBlin6pdeyJa
-SoPO2RPTuLkO2QLodLDoW3s/C4pP5Oj1hS8UobyIDxbYnH8Azk2mzhOeg4R+aRS0
-1JQl4uGFzB0TzW8Ob2Q31pD4lIxV5tSCEc2ChjaUchAqu2TAUDz6ZgMQRus11mSh
-OVRLrGihJnGRLQOGDlrtsOS0Uwqa8Q==
-=VHrp
------END PGP SIGNATURE-----
-
---a4Gd7i8RRVnq1R5N--
+[1] https://lore.kernel.org/r/CAD=3DFV=3DVSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd=
+4eyhn3rHyA@mail.gmail.com
