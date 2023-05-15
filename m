@@ -2,443 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DF5702A45
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A682702A32
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240859AbjEOKQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
+        id S240847AbjEOKOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240574AbjEOKQL (ORCPT
+        with ESMTP id S240832AbjEOKOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:16:11 -0400
-X-Greylist: delayed 177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 May 2023 03:15:34 PDT
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849C71720;
-        Mon, 15 May 2023 03:15:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684145545; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=AVNObnpCebT2dn9dpdOekcEmluZb2EBW4sKZD6jFw/NAVDirkVYJ82rz19Vjn5aAGh
-    Z1graIDVHSBvFIDTW7U7rIFOllPtXIoFDjS0HnhZ9ruIYTYRyM8S4iW20W1sui75ruIn
-    kmrVY1fvBNxANYwcvrDjc7vsRw/buDWjpqqP5AYAME6wPLgDOaKdaaf/TFaAyMES+eWH
-    R03OAYcDSws9he0qbBX4GuBdSCLg82+TJ3+69UhyPbkiDvZgTAmIsMksCdIfQmYyyBGD
-    9IfAs7xwvGtgwP4tpO9wk2n1CNVmf/tW5fWrwBrTkUlQ1tbvQdnagJ06IQFCtWZo/Lao
-    ed9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145545;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=PG1/HhYRt67ZjjvC3b/0RRaBqAYMx2ZNVcQFqLHzqRo=;
-    b=p747C66IiskdjUifiSHaiWrLKw14UypkT3bRPBuwm6G4M480pvY2afWQ9sJGRryx0a
-    YnIgQOvzhV/bYqlf74HUEvPreAlU9HxeocCDEB5mbQAA34dnvjwg06O7QBsjxXi+P0UQ
-    FF5pZCFIMjVdhetycfMzf/KtYLUxC7H0qcYbHRfQVljjM9z/MakPP/3i6V8VLwCJrTKG
-    KYCGgQaSphbbL1eACnbQZdtsUAx3g+viHkPkjr5J9vEzy4erAkWg8048/AtmCf1OgsxZ
-    VrSyVNyTAe96640kbB6dz4J4X2EpTJyqZu5vwq8XuOKPhOKZHmgBgBnthc5oKtUSnkfE
-    DUrA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145545;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=PG1/HhYRt67ZjjvC3b/0RRaBqAYMx2ZNVcQFqLHzqRo=;
-    b=e6GsGuerdYL8cTjyPg0uxiNq163vL1fxE+X9VM7QMXjZ44YbW3lqpUfuvqcemzZSG4
-    HQyIv0Xv+GVTB5g6ydUvhrIXxJ43/GAPC3FjVJpRf7BfnYurtUk4tOH3zS6CkwUea/Kh
-    Y15Iwgt3viuWbRfA3D4mBmkVfZuoHVaB+yKMnx0iBJNUX/xERZaB8n5GGPS14oMwoHm5
-    wehaN2YWsnfFUu25vWoSBZZKO9ERbXPgsQY7EQ+l/PzwA7TnHzKYxWig73mMTSeaxhRY
-    FCNALeXZkQ3Xu3SgV9wPJijoIBeevmlhzXVGF026xnjybXWC/sXXin5FLefE8sRZMfQH
-    imPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684145545;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=PG1/HhYRt67ZjjvC3b/0RRaBqAYMx2ZNVcQFqLHzqRo=;
-    b=0XaHEr06/C9yX8Cr6qL0DbAi7kImA8Lndmyn+KVE2yj7oUVzbVuPmKljvDZAul9y8x
-    MItCmQ6Xf7BHmyH1z6BQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4ly9TY="
-Received: from [192.168.244.3]
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4FACP1JK
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 15 May 2023 12:12:25 +0200 (CEST)
-From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Mon, 15 May 2023 12:12:20 +0200
-Subject: [PATCH RFC 5/5] arm64: dts: qcom: msm8916: Reserve firmware memory
- dynamically
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net>
-References: <20230510-dt-resv-bottom-up-v1-0-3bf68873dbed@gerhold.net>
-In-Reply-To: <20230510-dt-resv-bottom-up-v1-0-3bf68873dbed@gerhold.net>
-To:     Rob Herring <robh+dt@kernel.org>,
+        Mon, 15 May 2023 06:14:21 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2119.outbound.protection.outlook.com [40.107.215.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D13E4;
+        Mon, 15 May 2023 03:13:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iq6IJzbMsCxM/SFR54seqKoZSbArFzgQIHmj+gN+EAS8rrEuicLlVR+NfUey4mAHkcPICqdQtn4lT/B+vpTVDOhrJ/gs5DBjARHZUDWi3y8slU5Y3YglhdXPCYwvVWzL3kZj3hXKlzFx5bCTZtpCuJy/V3l4s2U9xOmTQpxlo77QjL3bpq/EeFPJR/SdpfrD/YuADdn6GtxODP7NQ9/rgfaMGUsswoQapwQiXDDFak+1fhVGz6kQlMjexfxG7cwdKlXhcFUAwUUn3/iCh34cVzDnw6ff9fIORDJzBbsItN22MvPpehjUJVhczw8xqbjxryw6Kz6Us9FTXo0as22W+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BHwazPUNWXjg+hntrO+2kOX64lw/zMGjREXV4tIDIGA=;
+ b=dw6Zcr1iWOhXZC4lERgI4Ak+w8TVYBCEbrzsbN5dL1yX2hj4LKEZtkoVWtPishru5OabM/lpQzc/5Iedtqc2lhyAv2ax2CXIR5KUxgYzsTZqCC2sX546NT6AL/bphIx5+uta1AUmPqW03WW10E9UfYC3YZAPIon/rVLKQeq7GVdXTMkSmWRAG6cpuQoJSb8lzXDQD/YZr99sceRA8ye9cH92Tq3yLVEBUiEZVVwDHP0Qw7/Eq27uSfFdQjrJumF3MDnwHU2K35gWregGV4CdKM3t8QGCb7Dq1glc7c29sr8v5MvaqNKC4RITKPrHn1/7SiQMhqSzZoJJ7SDAIs0dBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BHwazPUNWXjg+hntrO+2kOX64lw/zMGjREXV4tIDIGA=;
+ b=gStxhDCeu+GfOXFusU+oTcusKbmxB0APNsLq0zWRbW8Id8meTJbrvexUaw4iGRqVDUVoxl2yHINm5OLIStdzCWGV0PFL51iV4swdgPy0dJ5/B3d7U8PCGNnYRGwJRzmLVPcS/A7egD64c8aZ0VhQSiRv6Q+IYBBd4lds0DLhL3JYgcURAFeF40Figwt6Iv1u1Ynbt11XOED6g1x4gR3Aba5jkxGfDSk6OckSRQ3salnN/G499uSOD3nqk51QukBXwoAaQd8OYvyMHw1KtpATcSDB3Q637i0eKbTUDZP90a9hMu0ReEPq1A0bA8ALeV344ue37n1cU1fDaenmvjmnRg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+Received: from SG2PR03MB6730.apcprd03.prod.outlook.com (2603:1096:4:1d5::9) by
+ PSAPR03MB5574.apcprd03.prod.outlook.com (2603:1096:301:4f::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.30; Mon, 15 May 2023 10:13:29 +0000
+Received: from SG2PR03MB6730.apcprd03.prod.outlook.com
+ ([fe80::e116:7d2a:af78:fcf1]) by SG2PR03MB6730.apcprd03.prod.outlook.com
+ ([fe80::e116:7d2a:af78:fcf1%5]) with mapi id 15.20.6387.023; Mon, 15 May 2023
+ 10:13:28 +0000
+Message-ID: <74531faa-a583-03ad-b8e2-83799ecbfa6c@amlogic.com>
+Date:   Mon, 15 May 2023 18:12:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH V8 1/4] dt-bindings: clock: document Amlogic S4 SoC PLL
+ clock controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        devicetree@vger.kernel.org, devicetree-spec@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
+References: <20230515031557.31143-1-yu.tu@amlogic.com>
+ <20230515031557.31143-2-yu.tu@amlogic.com>
+ <590560c9-4da6-bbd4-6aac-de57ab5403ba@linaro.org>
+ <8c6ad0a9-7820-c7a2-bd3b-1eee87d96728@amlogic.com>
+ <33f5ff59-db7b-7576-64cb-972c0dfb0f7b@amlogic.com>
+ <4a04ef11-d87d-4464-a907-badc920d595d@linaro.org>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <4a04ef11-d87d-4464-a907-badc920d595d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TYCPR01CA0082.jpnprd01.prod.outlook.com
+ (2603:1096:405:3::22) To SG2PR03MB6730.apcprd03.prod.outlook.com
+ (2603:1096:4:1d5::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG2PR03MB6730:EE_|PSAPR03MB5574:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c4e5ef8-812c-4b8b-d2a0-08db552d06ec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: slvKdTNMCSkwgOAciC58rVGo/S6LLNBzHXOLzZad6fVhGVi9onDWUrY9Uv4DmW4Igsc9Pj6SbveJcC2s4MXOaMBd2o3TNF8PG3RUWT05ERzwevglpso2mEj8rzacL/BxQLYdlpnqu598zEH8FW24eeEHEo7O4bxoOfVsHvPs9m6JEt5nsMw3g9IYfi1Cx/DptqMo6a4Jn0bgLHg7nj9l7gRRrfW2i+gfv+3U5UVQTcf+9h2G7MzeiUpDLbIfnQhTfT97HJWEvZ7qGJiaQBWAevfoBIhpgvVfNupUxn1tp1MJLcoECMBwu27FLnTS3T7Ku+9IyT+CMFwxPLrXQVRCJhII5wCRWzy+1X0Nuf0Ok7EqJMfvh6KUR4zBwO+qQQ5i9Luk9mLUuX7djl3GmddkXgxpDC32e6BcEPcbsEvnYO/J3sUntoY4NmFa3ARXCJxODdSIr2zBUl+hDbCPcCkQZ2RmnZNnIzIFtTEIhmR1uHYD/uIitNPIVi8WWT2umbVrzAI+NmbH7Ax2D9l8p9CO/bmteuC3JRXr9UmzJzjDfN8ccQ8MeoneqxMBd/NC2vPpWY5FGzFDXAduvi52T9jGm/7UpLEQmFKnVoGTYQbaqKddqRqW/re9Tw+/CwLNgb3TTqagf0GjooIZmGKghDBahy7sdy7pUM1bJE2rIlVN+GhDcthKGwmpFjswU/2Z98EzR31pXvDHsxwQgBuUiWwGCQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR03MB6730.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39850400004)(366004)(346002)(396003)(451199021)(6486002)(83380400001)(966005)(478600001)(110136005)(6666004)(2616005)(6506007)(26005)(6512007)(186003)(107886003)(53546011)(44832011)(2906002)(7416002)(36756003)(4326008)(38100700002)(66476007)(66556008)(41300700001)(66946007)(8676002)(8936002)(5660300002)(316002)(921005)(86362001)(31696002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SXNTa0dEemVpeUtDeWhyMFpsai80bjlQdkxFOCszZmxUaXZEVHVReVMxR21j?=
+ =?utf-8?B?L1NxVVd3dzBoNWZuQkUyOTRWd3RKbXE2d2RzSW9zMTZOZE5seWpTVldxQjdh?=
+ =?utf-8?B?dm9vNWV6Z25PWEtob2QvbWt6WEtSb21TQkt1c2h1YjBRWHJkYnU1Q3ZaSDJU?=
+ =?utf-8?B?NjJyV3pHWWcwNXNnQWYzNmJlN2VxVDNHaWFab08rS3dNeWo0RlJFWnJJdW9I?=
+ =?utf-8?B?bDNrNjlzaTB6UDdZakxNdWE3MkZnc2F5dW5XV3NLT2pNbjFWYm1CYkcvV2dh?=
+ =?utf-8?B?L3l4dm1wd2JqdnYyNi9iSVFZRjdaczhvRzh4Zm4vU1QzTVFtVC94YllrQzhD?=
+ =?utf-8?B?aWRZcHRiUmltSDFvMDQwRDZCNDB6bUFsKy9abUc0SXNEd0gwZkRYL1Mzbkxx?=
+ =?utf-8?B?eTl3THdMTmtvVkdyMDVFODJzbWFmRnFQdzhHU2pHbUcyUjE3M0JOdHVKTHZS?=
+ =?utf-8?B?cEIySVNmWDF4YXhVdHlaTXBWUlRLZEg3ZWQ1Z0d6TTQrUmtTa2dOM2J2Qkxv?=
+ =?utf-8?B?YmgrMm5YU1pNRHNiOHltR3hSU1BTdUE5RWNndEduY1dYdXNUcGFJTmVyanNV?=
+ =?utf-8?B?c1NWcERtU2R3YSt4YXllWFYxbEo3Nk1idFovQ0cvSjFYaDlhWmNiVmFFUzh5?=
+ =?utf-8?B?QXpTUFQ5b1ZZa2czeWJ6Y2pNcCtHaFdCR2Nyc0tlNlE2bVJmUG9ReVh0WlR6?=
+ =?utf-8?B?ZTRaTENVd2xjRlhtWCtGYmJXSG44Z1c5TS8vNTA0RnpNWW5hOHI3a3dOeXkw?=
+ =?utf-8?B?YThpUFErK0gzT0JFbXRNaWlqSkx3K0VWaEh0OWFsd01GeDl1MVVoWmQ2dzJM?=
+ =?utf-8?B?WWVudWVNVnoyNERjM1FSZzNUVnZSSXUxdTd5MGVKbmx0RkZqTy9aMHlIRlhj?=
+ =?utf-8?B?czFic3ZpcWx2K1dpWjVLT2JSMHRVNFVQakMwNitxYld2ajlWOGhkZCt6bzJI?=
+ =?utf-8?B?cmEvZ01QZ2JWZkFjTHp2ZWZxUU1vZzEyanpSY1A0Uy8rZ0d2QjRadlc3a3dS?=
+ =?utf-8?B?YldKakJkZWJHTHZWMzRVQytISU9rNDdUYlhBZnVieWVTK3EyeTA5TDNEdXJK?=
+ =?utf-8?B?TERkR3gyNjM5U1dONTJFSnJVdndvRmFpVXprdUJHVkplNGJ2aDRwaXRJemFu?=
+ =?utf-8?B?cHFYT2tTaVM1Y2RRWldmMTNJT2ZCS3BTM2ZiTDJISXNCSXpkTWpBaEg3NXEz?=
+ =?utf-8?B?N2QwbVJVQ2tiR0tNZkZRdXd1RVNESkllVGNKUDVrTmgxRmh6Z1dYZmRpWUVH?=
+ =?utf-8?B?cHYxbVhWOFFDRHRIRnZoci9IdTNkRnNyWGVCbmJPd0JmM0xkR3p5NGF6ak5L?=
+ =?utf-8?B?RHI0aWxkYUdyYllrcThBTFZOeHpDelpkRlRvT3hSdHJPOExGc0E0RGxGbzdS?=
+ =?utf-8?B?TEdCM1RGbk9lbTJvQ0szWWVMVkFsenJnWnB5WCtUZjRtMDNpV1hOVm9nTHdw?=
+ =?utf-8?B?YStLKy9oeE5UeTZITjhudDNESU1HR25MZnVFT3BRSzlBU1dNNEVuYkZvYmlX?=
+ =?utf-8?B?bFdwZ3IwSVN3eEh2S21BeVlsTHZvb0YvQjI3ZHBpRkl5TlNocExMc1hMRTFR?=
+ =?utf-8?B?NTJBeVcyd0pNWlJXQlduMmJWcnBPRjZEMld6OEZablhpQWxraElJK1M1Um1J?=
+ =?utf-8?B?dUtwZG96WnB5TjV4bzVtTVhsU3RzMmNBSjBkaVdZdUtwVjY1YU02SWRXQjlz?=
+ =?utf-8?B?cmV0RHdjdG5xNnVFZUs3dGFya2VzdktXVUs0UjFKMEJaYjRQcjlDL0JXWkRG?=
+ =?utf-8?B?clRkNGF1NzFudWd2cHE0YlBHTEtsVXA1RFViNWFkbDl1UHZaVFNaU09TbzRU?=
+ =?utf-8?B?QmNqbGc5bnBGb1U1OFNBbVpDR3VFbkMzOFZoWlhZc0tFNjRkenJOYjlSQlJU?=
+ =?utf-8?B?MXdCMEYvZ3cwaVVsSko4QVNvTi9NV1ZSbkVJWTNSQkxBVkdYUU9jKy9OZWhP?=
+ =?utf-8?B?OFZUSC96RlhwajBueCtuVUN1RURDeEZYeEN3MU91M2hzUzRVdE8vMGlkbWFX?=
+ =?utf-8?B?dzU1QUFqTXZnR3lJOGVoYnhpRHJrQkdHRzZCbDdpVnBQc2l4U1J2a1A5K0Ra?=
+ =?utf-8?B?d0lyRFhXbVNjc0JpbnUzbldaeUc1MkM4dXFPV05rRmhra096OTRWMWtLNWo2?=
+ =?utf-8?Q?jP2gaGGocaK5uzWQV/3qN/rVI?=
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c4e5ef8-812c-4b8b-d2a0-08db552d06ec
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR03MB6730.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 10:13:28.5522
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xbm/e0INf4NEAXJCH/1vNZLiKO/Kvj2My2dRw78iliP2A5MFDNWHTJCy8S0WnupJB+nD88FWOw5dD/EJZc97BA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR03MB5574
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DO NOT APPLY - this is just an example to show the motivation for the
-patch series. For clarity only some of the device trees are updated.
 
-Most of the reserved firmware memory on MSM8916 can be relocated when
-respecting the required alignment. To avoid having to precompute the
-reserved memory regions in every board DT, describe the actual
-requirements (size, alignment, alloc-ranges) using the dynamic reserved
-memory allocation. Use the new "alloc-bottom-up" option to allocate the
-memory contiguously to the other reserved memory regions.
 
-This approach has several advantages:
+On 2023/5/15 18:06, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> On 15/05/2023 09:57, Yu Tu wrote:
+>>
+>>
+>> On 2023/5/15 15:35, Yu Tu wrote:
+>>> Hi Krzysztof,
+>>>       Thank you for your prompt reply.
+>>>
+>>> On 2023/5/15 14:32, Krzysztof Kozlowski wrote:
+>>>> On 15/05/2023 05:15, Yu Tu wrote:
+>>>>> Add the S4 PLL clock controller dt-bindings in the s4 SoC family.
+>>>>>
+>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>>>
+>>>> This is a friendly reminder during the review process.
+>>>>
+>>>> It looks like you received a tag and forgot to add it.
+>>>>
+>>>> If you do not know the process, here is a short explanation:
+>>>> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+>>>> versions. However, there's no need to repost patches *only* to add the
+>>>> tags. The upstream maintainer will do that for acks received on the
+>>>> version they apply.
+>>>>
+>>>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>>>
+>>>> If a tag was not added on purpose, please state why and what changed.
+>>>
+>>> Yes. I don't know the process. So I need to add Reviewed-by: Rob Herring
+>>> <robh@kernel.org>. And resend V8?
+>>>
+>>
+>> I would like to ask you again by the way. I'm not sure if I can just add
+>> the TAG. Because I actually changed the V8.
+> 
+> Your changelog in cover letter does not describe it. It only mentions
+> vaguely "change patch series". Describe exactly what changed.
 
- 1. We can define "templates" for the reserved memory regions in
-    msm8916.dtsi and keep only device-specific details in the board DT.
-    This is useful for the "mpss" region size for example, which varies
-    from device to device. It is no longer necessary to redefine all
-    firmware regions to shift their addresses.
+Okay. I will correct and resend this patch.
 
- 2. When some of the functionality (e.g. WiFi, Bluetooth, modem) is not
-    enabled or needed for a device, the reserved memory can stay
-    disabled, freeing up the unused reservation for Linux.
-
- 3. Devices with special requirements for one of the firmware regions
-    are handled automatically. For example, msm8916-longcheer-l8150
-    has non-relocatable "wcnss" firmware that must be loaded exactly
-    at address 0x8b600000. When this is defined as a static region,
-    the other dynamic allocations automatically adjust to a different
-    place with suitable alignment.
-
-All in all this approach significantly reduces the boilerplate necessary
-to define the different firmware regions, and makes it easier to enable
-functionality on the different devices.
-
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
----
- arch/arm64/boot/dts/qcom/apq8016-sbc.dts           | 13 +++++++
- .../boot/dts/qcom/msm8916-longcheer-l8150.dts      | 36 +++++++++----------
- .../boot/dts/qcom/msm8916-samsung-serranove.dts    | 41 +++++++++------------
- arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi          | 29 ++++++++-------
- arch/arm64/boot/dts/qcom/msm8916.dtsi              | 42 ++++++++++++++++------
- 5 files changed, 96 insertions(+), 65 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-index 59860a2223b8..534fc9b2f816 100644
---- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-+++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-@@ -310,6 +310,10 @@ &lpass {
- 	status = "okay";
- };
- 
-+&mba_mem {
-+	status = "okay";
-+};
-+
- &mdss {
- 	status = "okay";
- };
-@@ -320,6 +324,11 @@ &mpss {
- 	firmware-name = "qcom/apq8016/mba.mbn", "qcom/apq8016/modem.mbn";
- };
- 
-+&mpss_mem {
-+	status = "okay";
-+	size = <0x0 0x2b00000>;
-+};
-+
- &pm8916_resin {
- 	status = "okay";
- 	linux,code = <KEY_VOLUMEDOWN>;
-@@ -418,6 +427,10 @@ &wcnss_iris {
- 	compatible = "qcom,wcn3620";
- };
- 
-+&wcnss_mem {
-+	status = "okay";
-+};
-+
- /* Enable CoreSight */
- &cti0 { status = "okay"; };
- &cti1 { status = "okay"; };
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
-index 4a5eab06c18b..2d2bf255b315 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
-@@ -29,29 +29,12 @@ chosen {
- 	 * fixed address and all other firmware regions are moved to a fitting place.
- 	 */
- 	reserved-memory {
--		/delete-node/ mpss@86800000;
--		/delete-node/ wcnss@89300000;
--		/delete-node/ venus@89900000;
-+		/delete-node/ wcnss;
- 
- 		wcnss_mem: wcnss@8b600000 {
- 			reg = <0x0 0x8b600000 0x0 0x600000>;
- 			no-map;
- 		};
--
--		venus_mem: venus@8bc00000 {
--			reg = <0x0 0x8bc00000 0x0 0x500000>;
--			no-map;
--		};
--
--		mpss_mem: mpss@8ec00000 {
--			reg = <0x0 0x8ec00000 0x0 0x5000000>;
--			no-map;
--		};
--
--		gps_mem: gps@93c00000 {
--			reg = <0x0 0x93c00000 0x0 0x200000>;
--			no-map;
--		};
- 	};
- 
- 	gpio-keys {
-@@ -241,10 +224,23 @@ &blsp1_uart2 {
- 	status = "okay";
- };
- 
-+&gps_mem {
-+	status = "okay";
-+};
-+
-+&mba_mem {
-+	status = "okay";
-+};
-+
- &mpss {
- 	status = "okay";
- };
- 
-+&mpss_mem {
-+	status = "okay";
-+	size = <0x0 0x5000000>;
-+};
-+
- &pm8916_resin {
- 	status = "okay";
- 	linux,code = <KEY_VOLUMEDOWN>;
-@@ -294,6 +290,10 @@ &wcnss_iris {
- 	compatible = "qcom,wcn3620";
- };
- 
-+&wcnss_mem {
-+	status = "okay";
-+};
-+
- &smd_rpm_regulators {
- 	vdd_l1_l2_l3-supply = <&pm8916_s3>;
- 	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-index 25ad098b1503..82402689b414 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
-@@ -36,35 +36,11 @@ chosen {
- 	};
- 
- 	reserved-memory {
--		/delete-node/ mpss@86800000;
--		/delete-node/ wcnss@89300000;
--		/delete-node/ venus@89900000;
--
- 		/* Additional memory used by Samsung firmware modifications */
- 		tz-apps@85500000 {
- 			reg = <0x0 0x85500000 0x0 0xb00000>;
- 			no-map;
- 		};
--
--		mpss_mem: mpss@86800000 {
--			reg = <0x0 0x86800000 0x0 0x5a00000>;
--			no-map;
--		};
--
--		gps_mem: gps@8c200000 {
--			reg = <0x0 0x8c200000 0x0 0x200000>;
--			no-map;
--		};
--
--		wcnss_mem: wcnss@8c400000 {
--			reg = <0x0 0x8c400000 0x0 0x600000>;
--			no-map;
--		};
--
--		venus_mem: venus@8ca00000 {
--			reg = <0x0 0x8ca00000 0x0 0x500000>;
--			no-map;
--		};
- 	};
- 
- 	gpio-keys {
-@@ -287,10 +263,23 @@ &blsp1_uart2 {
- 	status = "okay";
- };
- 
-+&gps_mem {
-+	status = "okay";
-+};
-+
-+&mba_mem {
-+	status = "okay";
-+};
-+
- &mpss {
- 	status = "okay";
- };
- 
-+&mpss_mem {
-+	status = "okay";
-+	size = <0x0 0x5a00000>;
-+};
-+
- &pm8916_resin {
- 	status = "okay";
- 	linux,code = <KEY_VOLUMEDOWN>;
-@@ -348,6 +337,10 @@ &wcnss_iris {
- 	compatible = "qcom,wcn3660b";
- };
- 
-+&wcnss_mem {
-+	status = "okay";
-+};
-+
- &smd_rpm_regulators {
- 	vdd_l1_l2_l3-supply = <&pm8916_s3>;
- 	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-index 50bae6f214f1..ec073cfbb435 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
-@@ -16,18 +16,6 @@ chosen {
- 		stdout-path = "serial0";
- 	};
- 
--	reserved-memory {
--		mpss_mem: mpss@86800000 {
--			reg = <0x0 0x86800000 0x0 0x5500000>;
--			no-map;
--		};
--
--		gps_mem: gps@8bd00000 {
--			reg = <0x0 0x8bd00000 0x0 0x200000>;
--			no-map;
--		};
--	};
--
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
-@@ -91,10 +79,23 @@ &gcc {
- 	clocks = <&xo_board>, <&sleep_clk>, <0>, <0>, <0>, <0>, <0>;
- };
- 
-+&gps_mem {
-+	status = "okay";
-+};
-+
-+&mba_mem {
-+	status = "okay";
-+};
-+
- &mpss {
- 	status = "okay";
- };
- 
-+&mpss_mem {
-+	status = "okay";
-+	size = <0x0 0x5500000>;
-+};
-+
- &pm8916_usbin {
- 	status = "okay";
- };
-@@ -126,6 +127,10 @@ &wcnss_iris {
- 	compatible = "qcom,wcn3620";
- };
- 
-+&wcnss_mem {
-+	status = "okay";
-+};
-+
- &smd_rpm_regulators {
- 	vdd_l1_l2_l3-supply = <&pm8916_s3>;
- 	vdd_l4_l5_l6-supply = <&pm8916_s4>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index 7e0fa37a3adf..bc072a0e4d4f 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -78,24 +78,44 @@ rfsa@867e0000 {
- 			no-map;
- 		};
- 
--		mpss_mem: mpss@86800000 {
--			reg = <0x0 0x86800000 0x0 0x2b00000>;
-+		mpss_mem: mpss {
-+			/* size is device-specific */
-+			alignment = <0x0 0x400000>;
-+			alloc-ranges = <0x0 0x86800000 0x0 0x10000000>;
-+			alloc-bottom-up;
- 			no-map;
-+			status = "disabled";
- 		};
--
--		wcnss_mem: wcnss@89300000 {
--			reg = <0x0 0x89300000 0x0 0x600000>;
-+		gps_mem: gps {
-+			size = <0x0 0x200000>;
-+			alignment = <0x0 0x100000>;
-+			alloc-ranges = <0x0 0x86800000 0x0 0x10000000>;
-+			alloc-bottom-up;
- 			no-map;
-+			status = "disabled";
- 		};
--
--		venus_mem: venus@89900000 {
--			reg = <0x0 0x89900000 0x0 0x600000>;
-+		mba_mem: mba {
-+			size = <0x0 0x100000>;
-+			alignment = <0x0 0x100000>;
-+			alloc-ranges = <0x0 0x86800000 0x0 0x10000000>;
-+			alloc-bottom-up;
- 			no-map;
-+			status = "disabled";
- 		};
--
--		mba_mem: mba@8ea00000 {
-+		wcnss_mem: wcnss {
-+			size = <0x0 0x600000>;
-+			alignment = <0x0 0x100000>;
-+			alloc-ranges = <0x0 0x86800000 0x0 0x10000000>;
-+			alloc-bottom-up;
-+			no-map;
-+			status = "disabled";
-+		};
-+		venus_mem: venus {
-+			size = <0x0 0x500000>;
-+			alignment = <0x0 0x100000>;
-+			alloc-ranges = <0x0 0x86800000 0x0 0x10000000>;
-+			alloc-bottom-up;
- 			no-map;
--			reg = <0 0x8ea00000 0 0x100000>;
- 		};
- 	};
- 
-
--- 
-2.40.1
-
+> 
+> Best regards,
+> Krzysztof
+> 
