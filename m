@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5787C702B1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46640702B1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241188AbjEOLJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S241220AbjEOLKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbjEOLJo (ORCPT
+        with ESMTP id S241190AbjEOLJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC0610F1;
-        Mon, 15 May 2023 04:09:36 -0700 (PDT)
+        Mon, 15 May 2023 07:09:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252A4172B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 04:09:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F4646227B;
-        Mon, 15 May 2023 11:09:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76DBC433EF;
-        Mon, 15 May 2023 11:09:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A29E16227B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A94DC4339B;
+        Mon, 15 May 2023 11:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684148975;
-        bh=lwjgziLcEsIzBPxxZ1N8abCwzxvPGfURke6CIpHvtww=;
+        s=k20201202; t=1684148985;
+        bh=KEaOEqbRtYhzunYdC2/oNS4bINLreQCjokum/W9ombs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=YuNMzPkbzr28+j0Zo8hTdy3k5Ja8MNwey/47bnhvvp39UClQ1RjDBJwvXkB3vK9jb
-         +FrQrprKO/3/gtG3k7KoorIUtPuMv/luFfVAxrafGmthNLmIDUmKqGIwaWAF/SATn7
-         DUPtBx9KtK8L5f05ze+WfcJA40mLLtEa0+X7KAE9GVOmHT9xQx0WirJgS7VZdHM5uq
-         aUYxWWdb6FD/9QlHZvIIlvG1pSS56OmLLhdZCQq7WLyl7x3Fmp4DsRcDBQPu39Lhk2
-         KcJG5M1oISFsZBpcXsU/H4ckjQ8TmGFpIf/eLrVmvTEARafIxwNF6EanGDG9HGgYmS
-         i3fXELO7XL3mg==
+        b=I8kWKmCNSXJxEyQqVg5SyQHpH0m6kt/oPeTkr5WHFdQibKL4IrlR3tVsoEkyccdS9
+         8nrWB5hkWxU88g7ywkEs0FmweXvOOmYIrxmKx0nFNmwOmrGWISiXh4EWzwz/faVwZN
+         8Bcu2ODWp6SpfNfFz9zecTt9GpgH4UsaeCfnPELleQ6vxk6U1USEF2iyPONES74/H4
+         wGyixTNp+Qw561VRilHClaTznFAI7OnuwH6kKJpgsy0pNkR7ooAUHK3knKZuizycvL
+         m2JM3R6KYK7mbf49YcYkNa1pgwjp7HKnNMin0wMojjXsIUxDcgv+q8clEc5dCZ4k9F
+         ddeTkSqy3XADA==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chunxu Li <chunxu.li@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-In-Reply-To: <20230513090228.4340-1-krzysztof.kozlowski@linaro.org>
-References: <20230513090228.4340-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] ASoC: MAINTAINERS: drop Krzysztof Kozlowski from
- Samsung audio
-Message-Id: <168414897357.394037.3389766402303422512.b4-ty@kernel.org>
-Date:   Mon, 15 May 2023 20:09:33 +0900
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+In-Reply-To: <20230511092437.1.I31cceffc8c45bb1af16eb613e197b3df92cdc19e@changeid>
+References: <20230511092437.1.I31cceffc8c45bb1af16eb613e197b3df92cdc19e@changeid>
+Subject: Re: [PATCH] ASoC: mediatek: mt8186: Fix use-after-free in driver
+ remove path
+Message-Id: <168414898289.394037.12962945078412931473.b4-ty@kernel.org>
+Date:   Mon, 15 May 2023 20:09:42 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,12 +63,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 May 2023 11:02:28 +0200, Krzysztof Kozlowski wrote:
-> Remove Krzysztof Kozlowski from maintainer of Samsung SoC Audio drivers
-> and change the status to maintenance (no one is reality being paid for
-> looking at this).
+On Thu, 11 May 2023 09:25:12 -0700, Douglas Anderson wrote:
+> When devm runs function in the "remove" path for a device it runs them
+> in the reverse order. That means that if you have parts of your driver
+> that aren't using devm or are using "roll your own" devm w/
+> devm_add_action_or_reset() you need to keep that in mind.
 > 
+> The mt8186 audio driver didn't quite get this right. Specifically, in
+> mt8186_init_clock() it called mt8186_audsys_clk_register() and then
+> went on to call a bunch of other devm function. The caller of
+> mt8186_init_clock() used devm_add_action_or_reset() to call
+> mt8186_deinit_clock() but, because of the intervening devm functions,
+> the order was wrong.
 > 
+> [...]
 
 Applied to
 
@@ -75,8 +84,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: MAINTAINERS: drop Krzysztof Kozlowski from Samsung audio
-      commit: 647b5f5fdcbaba6f6fd8db69508fcbeb1fdfc2a6
+[1/1] ASoC: mediatek: mt8186: Fix use-after-free in driver remove path
+      commit: a93d2afd3f77a7331271a0f25c6a11003db69b3c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
