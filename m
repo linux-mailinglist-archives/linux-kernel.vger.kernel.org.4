@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D06EC702C92
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC07702C6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241725AbjEOMXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S241456AbjEOMNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240917AbjEOMW4 (ORCPT
+        with ESMTP id S241379AbjEOMM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:22:56 -0400
+        Mon, 15 May 2023 08:12:56 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 214FA1BD
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:22:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E12C41A6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:12:54 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC8BD4B3;
-        Mon, 15 May 2023 04:58:37 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB2EEFEC;
+        Mon, 15 May 2023 04:58:39 -0700 (PDT)
 Received: from e125579.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 90CB53F7BD;
-        Mon, 15 May 2023 04:57:51 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7568B3F7BD;
+        Mon, 15 May 2023 04:57:53 -0700 (PDT)
 From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
 To:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -32,9 +32,9 @@ Cc:     Qais Yousef <qyousef@layalina.io>,
         Quentin Perret <qperret@google.com>,
         Abhijeet Dharmapurikar <adharmap@quicinc.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/2] sched/fair: Refactor CPU utilization functions
-Date:   Mon, 15 May 2023 13:57:34 +0200
-Message-Id: <20230515115735.296329-2-dietmar.eggemann@arm.com>
+Subject: [PATCH v3 2/2] sched/fair, cpufreq: Introduce 'runnable boosting'
+Date:   Mon, 15 May 2023 13:57:35 +0200
+Message-Id: <20230515115735.296329-3-dietmar.eggemann@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230515115735.296329-1-dietmar.eggemann@arm.com>
 References: <20230515115735.296329-1-dietmar.eggemann@arm.com>
@@ -49,210 +49,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a lot of code duplication in cpu_util_next() & cpu_util_cfs().
+The responsiveness of the Per Entity Load Tracking (PELT) util_avg in
+mobile devices is still considered too low for utilization changes
+during task ramp-up.
 
-Remove this by allowing cpu_util_next() to be called with p = NULL.
-Rename cpu_util_next() to cpu_util() since the '_next' suffix is no
-longer necessary to distinct cpu utilization related functions.
-Implement cpu_util_cfs(cpu) as cpu_util(cpu, p = NULL, -1).
+In Android this manifests in the fact that the first frames of a UI
+activity are very prone to be jankframes (a frame which doesn't meet
+the required frame rendering time, e.g. 16ms@60Hz) since the CPU
+frequency is normally low at this point and has to ramp up quickly.
 
-This will allow to code future related cpu util changes only in one
-place, namely in cpu_util().
+The beginning of an UI activity is also characterized by the occurrence
+of CPU contention, especially on little CPUs. Current little CPUs can
+have an original CPU capacity of only ~ 150 which means that the actual
+CPU capacity at lower frequency can even be much smaller.
 
+Schedutil maps CPU util_avg into CPU frequency request via:
+
+  util = effective_cpu_util(..., cpu_util_cfs(cpu), ...) ->
+  util = map_util_perf(util) -> freq = map_util_freq(util, ...)
+
+CPU contention for CFS tasks can be detected by 'CPU runnable > CPU
+utililization' in cpu_util_cfs_boost() -> cpu_util(..., boost = 1).
+Schedutil uses 'runnable boosting' by calling cpu_util_cfs_boost().
+
+To be in sync with schedutil's CPU frequency selection, Energy Aware
+Scheduling (EAS) also calls cpu_util(..., boost = 1) during max util
+detection.
+
+Moreover, 'runnable boosting' is also used in load-balance for busiest
+CPU selection when the migration type is 'migrate_util', i.e. only at
+sched domains which don't have the SD_SHARE_PKG_RESOURCES flag set.
+
+Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
 Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 ---
- kernel/sched/fair.c  | 63 ++++++++++++++++++++++++++++++++++----------
- kernel/sched/sched.h | 47 +--------------------------------
- 2 files changed, 50 insertions(+), 60 deletions(-)
+ kernel/sched/cpufreq_schedutil.c |  3 ++-
+ kernel/sched/fair.c              | 38 +++++++++++++++++++++++++-------
+ kernel/sched/sched.h             |  1 +
+ 3 files changed, 33 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 3f8135d7c89d..9874e28d5e38 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7145,11 +7145,41 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	return target;
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index e3211455b203..4492608b7d7f 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -155,10 +155,11 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+ 
+ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+ {
++	unsigned long util = cpu_util_cfs_boost(sg_cpu->cpu);
+ 	struct rq *rq = cpu_rq(sg_cpu->cpu);
+ 
+ 	sg_cpu->bw_dl = cpu_bw_dl(rq);
+-	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
++	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, util,
+ 					  FREQUENCY_UTIL, NULL);
  }
  
--/*
-- * Predicts what cpu_util(@cpu) would return if @p was removed from @cpu
-- * (@dst_cpu = -1) or migrated to @dst_cpu.
-- */
--static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
-+/**
-+ * cpu_util() - Estimates the amount of CPU capacity used by CFS tasks.
-+ * @cpu: the CPU to get the utilization for
-+ * @p: task for which the CPU utilization should be predicted or NULL
-+ * @dst_cpu: CPU @p migrates to, -1 if @p moves from @cpu or @p == NULL
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 9874e28d5e38..3b5b6186f2b9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7150,6 +7150,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+  * @cpu: the CPU to get the utilization for
+  * @p: task for which the CPU utilization should be predicted or NULL
+  * @dst_cpu: CPU @p migrates to, -1 if @p moves from @cpu or @p == NULL
++ * @boost: 1 to enable boosting, otherwise 0
+  *
+  * The unit of the return value must be the same as the one of CPU capacity
+  * so that CPU utilization can be compared with CPU capacity.
+@@ -7167,6 +7168,12 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+  * be when a long-sleeping task wakes up. The contribution to CPU utilization
+  * of such a task would be significantly decayed at this point of time.
+  *
++ * Boosted CPU utilization is defined as max(CPU runnable, CPU utilization).
++ * CPU contention for CFS tasks can be detected by CPU runnable > CPU
++ * utilization. Boosting is implemented in cpu_util() so that internal
++ * users (e.g. EAS) can use it next to external users (e.g. schedutil),
++ * latter via cpu_util_cfs_boost().
 + *
-+ * The unit of the return value must be the same as the one of CPU capacity
-+ * so that CPU utilization can be compared with CPU capacity.
-+ *
-+ * CPU utilization is the sum of running time of runnable tasks plus the
-+ * recent utilization of currently non-runnable tasks on that CPU.
-+ * It represents the amount of CPU capacity currently used by CFS tasks in
-+ * the range [0..max CPU capacity] with max CPU capacity being the CPU
-+ * capacity at f_max.
-+ *
-+ * The estimated CPU utilization is defined as the maximum between CPU
-+ * utilization and sum of the estimated utilization of the currently
-+ * runnable tasks on that CPU. It preserves a utilization "snapshot" of
-+ * previously-executed tasks, which helps better deduce how busy a CPU will
-+ * be when a long-sleeping task wakes up. The contribution to CPU utilization
-+ * of such a task would be significantly decayed at this point of time.
-+ *
-+ * CPU utilization can be higher than the current CPU capacity
-+ * (f_curr/f_max * max CPU capacity) or even the max CPU capacity because
-+ * of rounding errors as well as task migrations or wakeups of new tasks.
-+ * CPU utilization has to be capped to fit into the [0..max CPU capacity]
-+ * range. Otherwise a group of CPUs (CPU0 util = 121% + CPU1 util = 80%)
-+ * could be seen as over-utilized even though CPU1 has 20% of spare CPU
-+ * capacity. CPU utilization is allowed to overshoot current CPU capacity
-+ * though since this is useful for predicting the CPU capacity required
-+ * after task migrations (scheduler-driven DVFS).
-+ *
-+ * Return: (Estimated) utilization for the specified CPU.
-+ */
-+static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
+  * CPU utilization can be higher than the current CPU capacity
+  * (f_curr/f_max * max CPU capacity) or even the max CPU capacity because
+  * of rounding errors as well as task migrations or wakeups of new tasks.
+@@ -7177,12 +7184,19 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+  * though since this is useful for predicting the CPU capacity required
+  * after task migrations (scheduler-driven DVFS).
+  *
+- * Return: (Estimated) utilization for the specified CPU.
++ * Return: (Boosted) (estimated) utilization for the specified CPU.
+  */
+-static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
++static unsigned long
++cpu_util(int cpu, struct task_struct *p, int dst_cpu, int boost)
  {
  	struct cfs_rq *cfs_rq = &cpu_rq(cpu)->cfs;
  	unsigned long util = READ_ONCE(cfs_rq->avg.util_avg);
-@@ -7160,9 +7190,9 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- 	 * contribution. In all the other cases @cpu is not impacted by the
- 	 * migration so its util_avg is already correct.
- 	 */
--	if (task_cpu(p) == cpu && dst_cpu != cpu)
-+	if (p && task_cpu(p) == cpu && dst_cpu != cpu)
- 		lsub_positive(&util, task_util(p));
--	else if (task_cpu(p) != cpu && dst_cpu == cpu)
-+	else if (p && task_cpu(p) != cpu && dst_cpu == cpu)
- 		util += task_util(p);
++	unsigned long runnable;
++
++	if (boost) {
++		runnable = READ_ONCE(cfs_rq->avg.runnable_avg);
++		util = max(util, runnable);
++	}
  
- 	if (sched_feat(UTIL_EST)) {
-@@ -7198,7 +7228,7 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- 		 */
- 		if (dst_cpu == cpu)
- 			util_est += _task_util_est(p);
--		else if (unlikely(task_on_rq_queued(p) || current == p))
-+		else if (p && unlikely(task_on_rq_queued(p) || current == p))
- 			lsub_positive(&util_est, _task_util_est(p));
+ 	/*
+ 	 * If @dst_cpu is -1 or @p migrates from @cpu to @dst_cpu remove its
+@@ -7200,6 +7214,9 @@ static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
  
- 		util = max(util, util_est);
-@@ -7207,6 +7237,11 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
- 	return min(util, capacity_orig_of(cpu));
- }
+ 		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
  
-+unsigned long cpu_util_cfs(int cpu)
-+{
-+	return cpu_util(cpu, NULL, -1);
++		if (boost)
++			util_est = max(util_est, runnable);
++
+ 		/*
+ 		 * During wake-up @p isn't enqueued yet and doesn't contribute
+ 		 * to any cpu_rq(cpu)->cfs.avg.util_est.enqueued.
+@@ -7239,7 +7256,12 @@ static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
+ 
+ unsigned long cpu_util_cfs(int cpu)
+ {
+-	return cpu_util(cpu, NULL, -1);
++	return cpu_util(cpu, NULL, -1, 0);
 +}
 +
- /*
-  * cpu_util_without: compute cpu utilization without any contributions from *p
-  * @cpu: the CPU which utilization is requested
-@@ -7224,9 +7259,9 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
- {
- 	/* Task has no contribution or is new */
- 	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
--		return cpu_util_cfs(cpu);
-+		p = NULL;
- 
--	return cpu_util_next(cpu, p, -1);
-+	return cpu_util(cpu, p, -1);
++unsigned long cpu_util_cfs_boost(int cpu)
++{
++	return cpu_util(cpu, NULL, -1, 1);
  }
  
  /*
-@@ -7273,7 +7308,7 @@ static inline void eenv_task_busy_time(struct energy_env *eenv,
-  * cpu_capacity.
-  *
-  * The contribution of the task @p for which we want to estimate the
-- * energy cost is removed (by cpu_util_next()) and must be calculated
-+ * energy cost is removed (by cpu_util()) and must be calculated
-  * separately (see eenv_task_busy_time). This ensures:
-  *
-  *   - A stable PD utilization, no matter which CPU of that PD we want to place
-@@ -7294,7 +7329,7 @@ static inline void eenv_pd_busy_time(struct energy_env *eenv,
+@@ -7261,7 +7283,7 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
+ 	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
+ 		p = NULL;
+ 
+-	return cpu_util(cpu, p, -1);
++	return cpu_util(cpu, p, -1, 0);
+ }
+ 
+ /*
+@@ -7329,7 +7351,7 @@ static inline void eenv_pd_busy_time(struct energy_env *eenv,
  	int cpu;
  
  	for_each_cpu(cpu, pd_cpus) {
--		unsigned long util = cpu_util_next(cpu, p, -1);
-+		unsigned long util = cpu_util(cpu, p, -1);
+-		unsigned long util = cpu_util(cpu, p, -1);
++		unsigned long util = cpu_util(cpu, p, -1, 0);
  
  		busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
  	}
-@@ -7318,7 +7353,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
+@@ -7353,7 +7375,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
  
  	for_each_cpu(cpu, pd_cpus) {
  		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
--		unsigned long util = cpu_util_next(cpu, p, dst_cpu);
-+		unsigned long util = cpu_util(cpu, p, dst_cpu);
+-		unsigned long util = cpu_util(cpu, p, dst_cpu);
++		unsigned long util = cpu_util(cpu, p, dst_cpu, 1);
  		unsigned long cpu_util;
  
  		/*
-@@ -7464,7 +7499,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+@@ -7499,7 +7521,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
  			if (!cpumask_test_cpu(cpu, p->cpus_ptr))
  				continue;
  
--			util = cpu_util_next(cpu, p, cpu);
-+			util = cpu_util(cpu, p, cpu);
+-			util = cpu_util(cpu, p, cpu);
++			util = cpu_util(cpu, p, cpu, 0);
  			cpu_cap = capacity_of(cpu);
  
  			/*
+@@ -10559,7 +10581,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+ 			break;
+ 
+ 		case migrate_util:
+-			util = cpu_util_cfs(i);
++			util = cpu_util_cfs_boost(i);
+ 
+ 			/*
+ 			 * Don't try to pull utilization from a CPU with one
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index ec7b3e0a2b20..f78c0f85cc76 100644
+index f78c0f85cc76..5861e236adc6 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -2946,53 +2946,8 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
- 	return READ_ONCE(rq->avg_dl.util_avg);
- }
+@@ -2948,6 +2948,7 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
  
--/**
-- * cpu_util_cfs() - Estimates the amount of CPU capacity used by CFS tasks.
-- * @cpu: the CPU to get the utilization for.
-- *
-- * The unit of the return value must be the same as the one of CPU capacity
-- * so that CPU utilization can be compared with CPU capacity.
-- *
-- * CPU utilization is the sum of running time of runnable tasks plus the
-- * recent utilization of currently non-runnable tasks on that CPU.
-- * It represents the amount of CPU capacity currently used by CFS tasks in
-- * the range [0..max CPU capacity] with max CPU capacity being the CPU
-- * capacity at f_max.
-- *
-- * The estimated CPU utilization is defined as the maximum between CPU
-- * utilization and sum of the estimated utilization of the currently
-- * runnable tasks on that CPU. It preserves a utilization "snapshot" of
-- * previously-executed tasks, which helps better deduce how busy a CPU will
-- * be when a long-sleeping task wakes up. The contribution to CPU utilization
-- * of such a task would be significantly decayed at this point of time.
-- *
-- * CPU utilization can be higher than the current CPU capacity
-- * (f_curr/f_max * max CPU capacity) or even the max CPU capacity because
-- * of rounding errors as well as task migrations or wakeups of new tasks.
-- * CPU utilization has to be capped to fit into the [0..max CPU capacity]
-- * range. Otherwise a group of CPUs (CPU0 util = 121% + CPU1 util = 80%)
-- * could be seen as over-utilized even though CPU1 has 20% of spare CPU
-- * capacity. CPU utilization is allowed to overshoot current CPU capacity
-- * though since this is useful for predicting the CPU capacity required
-- * after task migrations (scheduler-driven DVFS).
-- *
-- * Return: (Estimated) utilization for the specified CPU.
-- */
--static inline unsigned long cpu_util_cfs(int cpu)
--{
--	struct cfs_rq *cfs_rq;
--	unsigned long util;
--
--	cfs_rq = &cpu_rq(cpu)->cfs;
--	util = READ_ONCE(cfs_rq->avg.util_avg);
  
--	if (sched_feat(UTIL_EST)) {
--		util = max_t(unsigned long, util,
--			     READ_ONCE(cfs_rq->avg.util_est.enqueued));
--	}
--
--	return min(util, capacity_orig_of(cpu));
--}
-+extern unsigned long cpu_util_cfs(int cpu);
+ extern unsigned long cpu_util_cfs(int cpu);
++extern unsigned long cpu_util_cfs_boost(int cpu);
  
  static inline unsigned long cpu_util_rt(struct rq *rq)
  {
