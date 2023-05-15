@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C807027D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A987027D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238107AbjEOJFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S239144AbjEOJG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEOJFI (ORCPT
+        with ESMTP id S239134AbjEOJFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:05:08 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522BCA7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:05:05 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so109415386a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:05:05 -0700 (PDT)
+        Mon, 15 May 2023 05:05:34 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5A3199B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:05:23 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f423c17bafso343195e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:05:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684141504; x=1686733504;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KuwukPTyOXu6w4JEQ/VrXwexvRuPurINFM94wED3Sso=;
-        b=Kv2ht60gYFBv4etr27i9EKrgSochPbuhVf5uJlzNG/lc21Y8EBQWy06sYdLkyISS23
-         zDgVeR5VJinSrx76bcM1QgZp4Rsuf677CDq9ChvmSrKYiIg7rBbvcWexOtZ//G17lvHr
-         v3CRmxnrmn6gCyhQlTWtc3f0BpOx9gXao+Wj9chY3IftxW/aDganPGRviRHhINuFCd+N
-         EPeMO0spmg7puz0od5egsciVSeB2iUherUdEjHJGnQ1Ayi7+7TxJtNTb8NVsSM7GVKTJ
-         OcdIkV4KvYAAkAVTW1i2xmwaYG4OETpSXfqG15bQXQ0BO5ovfp+HrXsk0n/KadvFS5bc
-         mrDA==
+        d=google.com; s=20221208; t=1684141522; x=1686733522;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tgQznShlcEU/owRXS5pB/bMBA0shOHO8fmj2OZ6DolA=;
+        b=G1EFKyQhvfOB1DU+z3A4aXg+42N7In3liWiZG/Jh9/5e9ZxgZPtgVhnS4LmfVsL3fW
+         3R6OLEaDm5y3mAW/Hc6e7Iau+vS5YtVdWZnAiBrIRNozqWeebVkcb9Bpj2PcmPicTuS5
+         TxOQO70y9WcMN0GQuuG2e6mq72dFlxVQQXORUiLvwI4t2Hkfsxl4E3+nD8J9EP1Zvnpn
+         KMY+sGDUQD7q5dIM9OSAzU6/Sbxg4JdSbHNPckBtJXbJEryjMe0sUBRGwJW+oKeYfFIr
+         lnL67gCkCwkfoOxHT8cIPJvO3szgUVGkdUHW6xe9iVUlG3kfFwgagmE49KY2CND+yuX7
+         yRhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684141504; x=1686733504;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KuwukPTyOXu6w4JEQ/VrXwexvRuPurINFM94wED3Sso=;
-        b=gn9zfaPpJdfvU22vXJV2MlFRQReyQPXvxXQVpJP49iRPtGIdqQrJolUY9FzF51og4F
-         MaqxOnStTqLIoAOv+Y4jeGUcU9AHYYAa8XEkfcKo79wrfxpOs9+ZCby1RZFwwR65zrCT
-         7Tg0QQC3BFuNNDbDXiGc6wnHv3r6MKf05ZE9yZG8jlDktgO9aunoN7mGGdpwMWPCEFXI
-         sieiWTMU+78kAtLFHDK0vcgXdAJ60v9HJWTTbzGCGJNpwAvvEAR1tsmTL2HUbQdT4VTH
-         Add19+AQSa4yWbKk9qLddtV5QPaCsl/hMpigP07xuyWAQfPOlJ4fR2SRB024i63xkCIM
-         SK9A==
-X-Gm-Message-State: AC+VfDwXOilY94DJV5Oz5J8Io/q2w1NUqXuomLuZAepez+UXuTxg1iAj
-        /XmeoMgfjKedxv8LrFqL/9g66A==
-X-Google-Smtp-Source: ACHHUZ69UoYWOUicY+L0mCVSuMqQk8xbvxh05YvF9x5IjZ3VBDavAVm8Ei+PNtD2wopg59g8izC9eA==
-X-Received: by 2002:a17:907:7baa:b0:966:1484:469e with SMTP id ne42-20020a1709077baa00b009661484469emr25828771ejc.17.1684141503759;
-        Mon, 15 May 2023 02:05:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
-        by smtp.gmail.com with ESMTPSA id my37-20020a1709065a6500b0094f44bdf7acsm9232272ejc.57.2023.05.15.02.05.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 02:05:03 -0700 (PDT)
-Message-ID: <e553d2c4-8891-fe84-eff3-d3f6a35b7e09@linaro.org>
-Date:   Mon, 15 May 2023 11:05:01 +0200
+        d=1e100.net; s=20221208; t=1684141522; x=1686733522;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tgQznShlcEU/owRXS5pB/bMBA0shOHO8fmj2OZ6DolA=;
+        b=TicDWsoEyIKHBHrD1HhHE0Nkt41EXwMmkVElVvO3oBY0MZrHuYRNxAEofUl/Y3jqXs
+         iSp/dLREV14gD8SAmvcS5FbdNEJH1lCkNbCjeer+EutTplnws0AiaF1ucMKMgNIFmylu
+         JxsGr9rZXibiw6L0Jf0O+0WVWs/YMak7tYcCiAGnC6glDSmtfLemzAYfm1Iw+pKAagje
+         KetFHV/h9aD8V6XaU6x5Kz8ccbwob70dF6bpzCEWaeI0azDnoP/NBl6CxcdvSTstB56N
+         SBKPGNAnuhQ/cKHKCxDGZIgYdU7ebdHYXPnZTdBzaMyPMdy90MC7cEuuAhu1nEswUWp4
+         ON8Q==
+X-Gm-Message-State: AC+VfDxbxymNXaySiQIYs04Jou3pPnk/2BloIAKECGIggfd1PywId4qh
+        NyAwi0cHdlIWcEE3aZx+STrEwKI+VUozdhSglT4BzA==
+X-Google-Smtp-Source: ACHHUZ6WthzQz9qP/dl9280gK94WV7M4oXkVGcnS1LR3ZqMQqgt/Gt0cR1YOG5/Da/hzd9z/aBElFdN3hT3VqB5a/mI=
+X-Received: by 2002:a05:600c:354a:b0:3f5:f63:d490 with SMTP id
+ i10-20020a05600c354a00b003f50f63d490mr40224wmq.5.1684141522281; Mon, 15 May
+ 2023 02:05:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 02/10] dt-bindings: nvmem: qfprom: Add compatible for
- QDU1000/QRU1000
-Content-Language: en-US
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
- <20230512122134.24339-3-quic_kbajaj@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230512122134.24339-3-quic_kbajaj@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <0000000000001ca8c205f0f3ee00@google.com> <0000000000001f239205fb969174@google.com>
+In-Reply-To: <0000000000001f239205fb969174@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 15 May 2023 11:05:10 +0200
+Message-ID: <CANp29Y6G_1hKheTLG9NeSWv4+GYK=zOsUuu_sKCWqEBwGeOYig@mail.gmail.com>
+Subject: Re: [syzbot] [xfs?] KASAN: use-after-free Read in xfs_btree_lookup_get_block
+To:     syzbot <syzbot+7e9494b8b399902e994e@syzkaller.appspotmail.com>
+Cc:     david@fromorbit.com, dchinner@redhat.com, djwong@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 14:21, Komal Bajaj wrote:
-> Document the QFPROM on QDU1000/QRU1000 SOCs.
-> 
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
+On Sat, May 13, 2023 at 7:29=E2=80=AFPM syzbot
+<syzbot+7e9494b8b399902e994e@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 22ed903eee23a5b174e240f1cdfa9acf393a5210
+> Author: Darrick J. Wong <djwong@kernel.org>
+> Date:   Wed Apr 12 05:49:23 2023 +0000
+>
+>     xfs: verify buffer contents when we skip log replay
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12710f7a28=
+0000
+> start commit:   1b929c02afd3 Linux 6.2-rc1
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D68e0be42c8ee4=
+bb4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D7e9494b8b399902=
+e994e
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D172ff2e4480=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D11715ea848000=
+0
+>
+> If the result looks correct, please mark the issue as fixed by replying w=
+ith:
+>
+> #syz fix: xfs: verify buffer contents when we skip log replay
 
+#syz fix: xfs: verify buffer contents when we skip log replay
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+>
