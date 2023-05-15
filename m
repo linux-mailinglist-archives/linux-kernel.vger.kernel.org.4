@@ -2,177 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F13703039
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C155E703040
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239368AbjEOOma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
+        id S241913AbjEOOnP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 10:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241776AbjEOOm0 (ORCPT
+        with ESMTP id S241759AbjEOOnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:42:26 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C512419A1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:23 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7576deacbd6so533928385a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684161743; x=1686753743;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iGP3XVEPwqBcsiq4Qh1PUJ4CILfdBcete8YdPUejdVE=;
-        b=mMk/z7Qq2iRZWbgMwCyhrQf42Qszvo1Qzj7a4TXk/wxFV6HA6q20axWlvgBpAX/jyk
-         dH1PxFVCXhhwpOABKXTgHD4FOfZjWu6cFyORgt5fcLpxh68vEpc1hImnk3Nd5aKImBgn
-         XlZMqS7Sin+ectt4rA0z5eawTDPcxBftF7jOZbYts5uHNz+jlweJu67p4b7NZCmazjmk
-         4wQAUBqsafXReEQmcoCMxdMN47PUAPIqTbtUzF47pygZsTvs/O/cgvv8vfxTxVRHmke4
-         x9cmddcEbvuA75S1eorYTkSSVKrTtcjdE73eRk0QNpAAZ2O9N8Nj9M8o0odx+U39MRnb
-         tMWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684161743; x=1686753743;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iGP3XVEPwqBcsiq4Qh1PUJ4CILfdBcete8YdPUejdVE=;
-        b=ef33e5HLCBSlmpA63utDRUMo7X6OCYyfYEMrd/xEuIOooLjd97Ed8TpND8/xPqfVIy
-         PaE+ooFcZ9DQGLZtl1pX1SOR83r9ikAWLo3b9jSC7jkpwgdlo5+bM8hGaJ5INzW/34rD
-         BRfZHV5w6ji7OIk434mInySpI9ytXxc/F1jGasXGbzLSwBGQ/rRRDkoor0gTB4D2P/gU
-         F186vROujasaoSbuaxxtinzidxlmObMxXGWzAXYGvd6kOcpUR1y5xcS6E8IOxvidNj9D
-         IY9uZGJs0v3bYEZMBKUBW6OCMU7y7dprKAyAV/dQc7kMuCKh05i8q/+pXBGzhf9gU2Py
-         a14Q==
-X-Gm-Message-State: AC+VfDyi9H7Hyh7AkDlOORzrh2PAGPNQpAsuGMbHESk/tvzjf3eBiwO4
-        6fD3Mh1EZFIZwl6/ktckvFyCZbciBmQMP1G1kzu/xQ==
-X-Google-Smtp-Source: ACHHUZ4CjCTZxDvePqq/jYehFEnF54Va9KfaqiuEQZ0ysjNvjRIGMUDXuMqCfgTSk/8rkZFLKlf8VUCx7fNrkXVSuRc=
-X-Received: by 2002:a05:6214:401c:b0:5f1:5ed3:dd82 with SMTP id
- kd28-20020a056214401c00b005f15ed3dd82mr47494329qvb.48.1684161742789; Mon, 15
- May 2023 07:42:22 -0700 (PDT)
+        Mon, 15 May 2023 10:43:06 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41229270D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:50 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:41028)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1pyZPT-000HU2-Ep; Mon, 15 May 2023 08:42:47 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:48662 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1pyZPR-003Kxl-OI; Mon, 15 May 2023 08:42:47 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <CAAhV-H79bUF396+dWaafanzcMq41VtcOsfa_3SYSUftyNDOyvw@mail.gmail.com>
+        (Huacai Chen's message of "Sat, 13 May 2023 11:18:37 +0800")
+References: <20230509104127.1997562-1-chenhuacai@loongson.cn>
+        <87ild0w5qs.fsf@email.froward.int.ebiederm.org>
+        <CAAhV-H79bUF396+dWaafanzcMq41VtcOsfa_3SYSUftyNDOyvw@mail.gmail.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Mon, 15 May 2023 09:41:50 -0500
+Message-ID: <87ttwdu05t.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
- <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com> <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org>
-In-Reply-To: <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Mon, 15 May 2023 20:11:46 +0530
-Message-ID: <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1pyZPR-003Kxl-OI;;;mid=<87ttwdu05t.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX18kmDAXAFN2evKbBlpraJSCti1ihQ0mM6I=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Huacai Chen <chenhuacai@kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1032 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 3.9 (0.4%), b_tie_ro: 2.8 (0.3%), parse: 0.71
+        (0.1%), extract_message_metadata: 12 (1.1%), get_uri_detail_list: 1.56
+        (0.2%), tests_pri_-2000: 19 (1.8%), tests_pri_-1000: 1.88 (0.2%),
+        tests_pri_-950: 1.10 (0.1%), tests_pri_-900: 0.80 (0.1%),
+        tests_pri_-200: 0.67 (0.1%), tests_pri_-100: 3.0 (0.3%),
+        tests_pri_-90: 240 (23.2%), check_bayes: 227 (22.0%), b_tokenize: 6
+        (0.6%), b_tok_get_all: 7 (0.7%), b_comp_prob: 1.81 (0.2%),
+        b_tok_touch_all: 208 (20.2%), b_finish: 0.89 (0.1%), tests_pri_0: 299
+        (29.0%), check_dkim_signature: 0.55 (0.1%), check_dkim_adsp: 2.6
+        (0.3%), poll_dns_idle: 436 (42.2%), tests_pri_10: 2.6 (0.2%),
+        tests_pri_500: 445 (43.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH RFC] kthread: Unify kernel_thread() and user_mode_thread()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 14 May 2023 at 18:11, Caleb Connolly <caleb.connolly@linaro.org> wrote:
->
->
->
-> On 13/05/2023 18:08, Amit Pundir wrote:
-> > On Fri, 24 Mar 2023 at 19:05, Douglas Anderson <dianders@chromium.org> wrote:
-> >>
-> >> This reverts commit 58973046c1bf ("regulator: qcom-rpmh: Use
-> >> PROBE_FORCE_SYNCHRONOUS"). Further digging into the problems that
-> >> prompted the us to switch to synchronous probe showed that the root
-> >> cause was a missing "rootwait" in the kernel command line
-> >> arguments. Let's reinstate asynchronous probe.
-> >
-> > Hi, the asynchronous probe is broken on Dragonboard 845c (SDM845)
-> > running AOSP (Android Open Source Project) with v6.4-rc1
-> > https://bugs.linaro.org/show_bug.cgi?id=5975.
-> > Can we please go back to synchronous probe.
-> >
-> > AOSP do not make use of rootwait, IIRC, but it is added by the
-> > bootloader anyway. And the device fails to boot AOSP regardless of
-> > "rootwait" bootarg being present or not.
->
-> Could you try applying this diff to enable some log spam and let me know
-> what you get? I'm keen to try and figure this one out. My mail client
-> might crunch this a bit so I have pasted it here too
-> https://p.calebs.dev/ab74b7@raw
+Huacai Chen <chenhuacai@kernel.org> writes:
 
-These prints add just enough delay for the UFS probe to succeed that I
-can't reproduce the failure anymore.
+> Hi, Eric,
+>
+> On Wed, May 10, 2023 at 11:45 PM Eric W. Biederman
+> <ebiederm@xmission.com> wrote:
+>>
+>> Huacai Chen <chenhuacai@loongson.cn> writes:
+>>
+>> > Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
+>> > and umh") introduces a new function user_mode_thread() for init and umh.
+>> > But the name is a bit confusing because init and umh are indeed kernel
+>> > threads at creation time, the real difference is "they will become user
+>> > processes".
+>>
+>> No they are not "kernel threads" at creation time.  At creation time
+>> init and umh are threads running in the kernel.
+>>
+>> It is a very important distinction and you are loosing it.
+>>
+>> Because they don't have a kthread_struct such tasks in the kernel
+>> are not allowed to depend on anything that is ``kthread''.
+> Hmm, traditionally, we call a "task" without userland address space
+> (i.e., the task_struct has no mm, it shares kernel's address space) as
+> a kernel thread, so init and umh are kernel threads until they call
+> kernel_execve().
 
->
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index f93544f6d796..67859f1bdb28 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-> @@ -653,11 +653,23 @@ int rpmh_rsc_send_data(struct rsc_drv *drv, const
-> struct tcs_request *msg)
->
->         spin_lock_irqsave(&drv->lock, flags);
->
-> +       dev_info(drv->dev, "%s: %p tcs->type=%d state=%d, "
-> +               "wait_for_compl=%d, num_cmds=%d\n",
-> +               __func__, msg, tcs->type, msg->state,
-> +               msg->wait_for_compl, msg->num_cmds);
-> +       for (int i = 0; i < msg->num_cmds; i++)
-> +               dev_info(drv->dev, "%s: %p cmd[%d] "
-> +                       "addr=0x%x data=0x%x\n", __func__,
-> +                       msg, i, msg->cmds[i].addr, msg->cmds[i].data);
-> +
->         /* Wait forever for a free tcs. It better be there eventually! */
->         wait_event_lock_irq(drv->tcs_wait,
->                             (tcs_id = claim_tcs_for_req(drv, tcs, msg))
-> >= 0,
->                             drv->lock);
->
-> +       dev_info(drv->dev, "%s: %px GOT TCS! %d\n",
-> +               __func__, msg, tcs_id);
-> +
->         tcs->req[tcs_id - tcs->offset] = msg;
->         set_bit(tcs_id, drv->tcs_in_use);
->         if (msg->state == RPMH_ACTIVE_ONLY_STATE && tcs->type !=
-> ACTIVE_TCS) {
->
-> >
-> > FWIW I do not see this regression on RB5 (QRB5165/SM8250) running the
-> > same set of AOSP images.
-> >
-> > Regards,
-> > Amit Pundir
-> >
-> >
-> >
-> >
-> >>
-> >> Fixes: 58973046c1bf ("regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS")
-> >> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-> >> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> >> ---
-> >>
-> >>  drivers/regulator/qcom-rpmh-regulator.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
-> >> index 903032b2875f..4826d60e5d95 100644
-> >> --- a/drivers/regulator/qcom-rpmh-regulator.c
-> >> +++ b/drivers/regulator/qcom-rpmh-regulator.c
-> >> @@ -1462,7 +1462,7 @@ MODULE_DEVICE_TABLE(of, rpmh_regulator_match_table);
-> >>  static struct platform_driver rpmh_regulator_driver = {
-> >>         .driver = {
-> >>                 .name = "qcom-rpmh-regulator",
-> >> -               .probe_type = PROBE_FORCE_SYNCHRONOUS,
-> >> +               .probe_type = PROBE_PREFER_ASYNCHRONOUS,
-> >>                 .of_match_table = of_match_ptr(rpmh_regulator_match_table),
-> >>         },
-> >>         .probe = rpmh_regulator_probe,
-> >> --
-> >> 2.40.0.348.gf938b09366-goog
-> >>
->
-> --
-> Kind Regards,
-> Caleb (they/them)
+No.
+
+The important distinction is not the userland address space.
+
+The important distinction is how such tasks interact with the rest of
+the system.
+
+It is true the mm does not initially have userspace content but
+that does not change the fact that it is a valid userspace mm.
+
+For scheduling, for signal delivery, and for everything else
+these tasks are userspace tasks.
+
+The very important detail is that it is not at kernel_execve time that
+the distinction is made, but that it is made earlier when the thread
+is created.
+
+This is a subtle change from the way things used to work once upon a
+time.  But the way things used to work was buggy and racy.  Deciding at
+thread creation time what the thread will be used for, what limitations
+etc is much less error prone.
+
+We had this concept of kthread_create that used to create a special
+class of tasks.  What was special, and what extra could be done with
+those tasks was defined by the presence "struct kthread" (my apologies
+I mispoke when I said kthread_struct earlier).
+
+Then because that specialness was needed on other tasks struct kthread
+started to be added to tasks at run-time.  That runtime addition of
+struct kthread introduced races that complicated the code, and had
+bugs.
+
+> Of course in your patch a kernel thread should have a
+> "kthread" struct (I can't grep "kthread_struct" so I suppose you are
+> saying "kthread"), but I think the traditional definition is more
+> natural for most people?
+
+Natural and traditional is a silly argument.  The fact is those are
+tasks that ultimately run userspace code.  That ability needs to
+be decided upon at creation time to make them race free.
+
+Therefore the old code and definition are wrong.
+
+Eric
