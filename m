@@ -2,146 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0CB702C4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21CF702C55
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241257AbjEOMHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S241118AbjEOMJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241292AbjEOMHO (ORCPT
+        with ESMTP id S241428AbjEOMJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:07:14 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36B3E75;
-        Mon, 15 May 2023 05:07:05 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ad89c7a84fso104814881fa.2;
-        Mon, 15 May 2023 05:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684152424; x=1686744424;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T8S8sAP8Fagl8K2YKg4fpZu8ftXd+FY79lvepC4kyJc=;
-        b=gl10t5IbWZvPcfimSxWMYLFLFqoygfcXT3axtUv5YJ0sZCmKOVDWCcA2VWB/F/jfl1
-         tOX0mXfr8Is8+xw0FyIJDHCHM+7EjBNF+iwr2/sabkjo+RzWjFa4HXk1rYF4Ug54Zd3i
-         psJomYgEd//rjA5m9jk7cDquT0MUT/nj9GFEB7JpiwatlWBoDWCBmKKDo45ybD7xwH2U
-         3i8Fy5t/yKYMUu1McU8RhaFc3Pmk+/yWron5oQ23I8SCJ9dDvi5JoTb02Jl2Oqd7wRY1
-         KmDbBrwzVQiwb0+iRND6zIv6PYQIlKsyD1Q4Q4Y2k6wDC5gR6SR68LG+ssXW2pMADWP3
-         zVjg==
+        Mon, 15 May 2023 08:09:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECE5138
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684152545;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1OPYbFK1MaRB/Vx7gvgvUiirswNhs1Gc4aAk6bBszZU=;
+        b=DY+biKCdzC3bZPaovA2/TToS1moklnugj18biaCaZVqZO1tn4YWpBhsq2q8xS2sapSmh+f
+        VvWAhNPlmDv2g2cciXY0bovZlOkB0GTCgqxlmsDSvnicIkvlFRvrmdC5pa8jUDTbbIr93f
+        reawKECdCULlm8psRkSbyqpEisX5br8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-639-eA0U6THxO5-TsddgRWqRng-1; Mon, 15 May 2023 08:09:04 -0400
+X-MC-Unique: eA0U6THxO5-TsddgRWqRng-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f42867b47dso48476345e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:09:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684152424; x=1686744424;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T8S8sAP8Fagl8K2YKg4fpZu8ftXd+FY79lvepC4kyJc=;
-        b=IqfL1cdi2epzAwjnbwrMmtAC0xsHNesVf8C+vCP28xCqBlDlx63kYesgDOpyzn0m1y
-         Mxch++AOW7k+ExA108thYghlESpgGPHnfS+28NRUu/fQmB09IWtg6xRTi+q8BBAmoY8x
-         vNKqQapSsOn7pZQzcS0yyOPfoM7vf8eiUC+qgBGNLfT/4mUoU4sSXXIL4+UF4ZPZfAp7
-         rREZsSjOd6wSZ3kfR1/ZmkdEiZmDV+mCigT+8+iqQzOZG9v4VmHwNLor7ezcQdJTYRGz
-         Vr3wNbtndACmhuMH23eDvSJnL5h9tq16TVVShKaJNprXxRlWFmnYBOnFdfpfW0KPOsQj
-         UWfQ==
-X-Gm-Message-State: AC+VfDxeAKJpdmOcWHhhuItnqXjsflYYgQGN/hBC9tjxiFqFy9t6mrIf
-        fKk6S26PmuOMmktP1/47qiU=
-X-Google-Smtp-Source: ACHHUZ4ImT+NseNLVCHJyYNbiz8/qaEbKm2bXboMyU3yUX3Tpo+dB8WlLspZbxMxQ3NzRnCu321l5g==
-X-Received: by 2002:a2e:9496:0:b0:2a7:9884:ad53 with SMTP id c22-20020a2e9496000000b002a79884ad53mr6689938ljh.48.1684152423793;
-        Mon, 15 May 2023 05:07:03 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id q18-20020a2e9692000000b002ac7a25c001sm3756668lji.24.2023.05.15.05.07.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 05:07:03 -0700 (PDT)
-Message-ID: <0fb0ef4f-b310-0922-2823-e8737159bf26@gmail.com>
-Date:   Mon, 15 May 2023 15:07:02 +0300
+        d=1e100.net; s=20221208; t=1684152543; x=1686744543;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1OPYbFK1MaRB/Vx7gvgvUiirswNhs1Gc4aAk6bBszZU=;
+        b=ZON7/uRDNLVwDHMZxdbOmbiORnFaAusZGZPk1yFR5XMhI/m6uNFzCxa7TDKdfrQ3De
+         aJAmQ6kZHPJd6QRiU6AmX2zvXQHuS2okLEZaKSaESjQNUnqphYQk/q7hs0ZQNZoEIMU6
+         5PVqQhCBCBy5eUC09J32UBPIig+ghn97CLv+4ROtr1DVOXkCuWvSn3H5y1RjHaQlaI9J
+         SaR94Z/aGhDLKqATSSoHQ9h4CDtBAynguOnjO4vkcQzG4DWvyJZPsbftUvg4ITYPj+f2
+         Bd2+/bagtRQXZl8unBEfQjfgtub3SRI0yRqOzJXemaZoU90xNv/VCNDlWRkQsychUyQt
+         Zk9w==
+X-Gm-Message-State: AC+VfDw896dEMrrSqwuevPBP638MfBoGiqrgQPGJ316crWqH4Rhl1C5P
+        R6qHZ3GMqbwcRv8+FTXHhhK81LiRyTmf5qYZiLDlquP/HXWlQ/yRcLfTHpP5Jo94/t/knq8Ue0V
+        FOLLDfQpnWyuFJAIJl533JOVqIrCpnyKI
+X-Received: by 2002:a05:600c:cf:b0:3f4:9bee:b9c with SMTP id u15-20020a05600c00cf00b003f49bee0b9cmr13827116wmm.18.1684152543294;
+        Mon, 15 May 2023 05:09:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6cA1R4HrXV4puy/LOr07navRMi/rmZmaiDm/8VhAVfXpABZay9tsPMWtZHk7Tz8iknQ9yAiA==
+X-Received: by 2002:a05:600c:cf:b0:3f4:9bee:b9c with SMTP id u15-20020a05600c00cf00b003f49bee0b9cmr13827106wmm.18.1684152543010;
+        Mon, 15 May 2023 05:09:03 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id z8-20020adfec88000000b003062675d4c9sm32285269wrn.39.2023.05.15.05.09.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 05:09:02 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Sui Jingfeng <15330273260@189.cn>, linux-kernel@vger.kernel.org
+Cc:     dri-devel@lists.freedesktop.org
+Subject: Re: drm/ssd130x: Fix include guard name
+In-Reply-To: <ab3a2467-2236-604f-b4aa-862a7ac838e9@189.cn>
+References: <20230512120232.304603-1-javierm@redhat.com>
+ <ab3a2467-2236-604f-b4aa-862a7ac838e9@189.cn>
+Date:   Mon, 15 May 2023 14:09:02 +0200
+Message-ID: <87jzx9aja9.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/3] drivers: fwnode: fix fwnode_irq_get_byname()
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org
-References: <cover.1683875389.git.mazziesaccount@gmail.com>
- <9dd75817886fbb2a0cc58e2248dbba52d8a6d908.1683875389.git.mazziesaccount@gmail.com>
- <20230513194003.5a27a841@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230513194003.5a27a841@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+Sui Jingfeng <15330273260@189.cn> writes:
 
-It was somewhat busy "Mother's day" weekend for me but now I'm back in 
-the business :)
+> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>
+>
 
-On 5/13/23 21:40, Jonathan Cameron wrote:
-> On Fri, 12 May 2023 10:53:00 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
->> The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
->> failure. This is contradicting the function documentation and can
->> potentially be a source of errors like:
->>
->> int probe(...) {
->> 	...
->>
->> 	irq = fwnode_irq_get_byname();
->> 	if (irq <= 0)
->> 		return irq;
->>
->> 	...
->> }
->>
->> Here we do correctly check the return value from fwnode_irq_get_byname()
->> but the driver probe will now return success. (There was already one
->> such user in-tree).
->>
->> Change the fwnode_irq_get_byname() to work as documented and according to
->> the common convention and abd always return a negative errno upon failure.
->>
->> Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
->> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> 
-> Whilst the docs don't contradict behaviour for fwnode_irq_get()
-> unlike the byname() variant, it does seem odd to fix it only in this
-> version rather than modifying them both not to return 0.
-
-I think you're right. I think I overlooked this because the whole thing 
-started as a documentation fix :)
-
-> Is there clear logic why they should be different?
-
-Not that I know of. I'll re-spin this with fwnode_irq_get() modified if 
-no-one objects. Thanks for pointing this out!
-
-Yours,
-	-- Matti
+Pushed to drm-misc (drm-misc-next). Thanks!
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+Best regards,
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
