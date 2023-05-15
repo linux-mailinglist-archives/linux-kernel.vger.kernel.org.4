@@ -2,91 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6FA770273E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14B870273B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjEOIcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S230052AbjEOIcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238046AbjEOIbQ (ORCPT
+        with ESMTP id S238010AbjEOIbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 May 2023 04:31:16 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56167198E;
-        Mon, 15 May 2023 01:29:10 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id B2F0A24E1B5;
-        Mon, 15 May 2023 16:29:08 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 15 May
- 2023 16:29:08 +0800
-Received: from [192.168.125.124] (113.72.146.187) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 15 May
- 2023 16:29:07 +0800
-Message-ID: <21bc5b06-3d3e-5a30-a90d-ea9f7abc6575@starfivetech.com>
-Date:   Mon, 15 May 2023 16:29:07 +0800
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 537E61992
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:29:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B401A2F4;
+        Mon, 15 May 2023 01:30:03 -0700 (PDT)
+Received: from [10.57.73.22] (unknown [10.57.73.22])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A16163F67D;
+        Mon, 15 May 2023 01:29:17 -0700 (PDT)
+Message-ID: <2d43731e-3a38-c96e-320e-6a0dc16f10e4@arm.com>
+Date:   Mon, 15 May 2023 09:29:16 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 2/3] ASoC: starfive: Add JH7110 TDM driver
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230511091549.28003-1-walker.chen@starfivetech.com>
- <20230511091549.28003-3-walker.chen@starfivetech.com>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <20230511091549.28003-3-walker.chen@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v1 1/5] mm: vmalloc must set pte via arch code
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        SeongJae Park <sj@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "damon@lists.linux.dev" <damon@lists.linux.dev>,
+        Christoph Hellwig <hch@infradead.org>,
+        Uladzislau Rezki <urezki@gmail.com>
+References: <20230511132113.80196-1-ryan.roberts@arm.com>
+ <20230511132113.80196-2-ryan.roberts@arm.com>
+ <db1b8b8f-c3ac-4dbb-8b15-125c0929856a@lucifer.local>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <db1b8b8f-c3ac-4dbb-8b15-125c0929856a@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.187]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Lorenzo,
 
-On 2023/5/11 17:15, Walker Chen wrote:
-> Add tdm driver support for the StarFive JH7110 SoC.
+Thanks for the review - I appreciate it!
+
+
+On 13/05/2023 14:14, Lorenzo Stoakes wrote:
+> You've not cc'd the vmalloc reviewers, including the author of 3e9a9e256b1e
+> whose patch you purport to fix. Please remember to run get_maintainers.pl
+> on all files you patch and cc them at least on relevant patches.
 > 
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
-> ---
->  MAINTAINERS                     |   6 +
->  sound/soc/Kconfig               |   1 +
->  sound/soc/Makefile              |   1 +
->  sound/soc/starfive/Kconfig      |  15 +
->  sound/soc/starfive/Makefile     |   2 +
->  sound/soc/starfive/jh7110_tdm.c | 554 ++++++++++++++++++++++++++++++++
->  sound/soc/starfive/jh7110_tdm.h | 138 ++++++++
->  7 files changed, 717 insertions(+)
->  create mode 100644 sound/soc/starfive/Kconfig
->  create mode 100644 sound/soc/starfive/Makefile
->  create mode 100644 sound/soc/starfive/jh7110_tdm.c
->  create mode 100644 sound/soc/starfive/jh7110_tdm.h
+> Have added Christoph + Uladzislau as cc.
+
+I did run get_maintainers.pl, but it gave me 82 names. I assumed I wouldn't be
+making any friends by CCing everyone, so tried to choose what I thought was a
+sensible base. I guess I didn't quite get it right. Sorry about that. Thanks for
+noticing and adding the right people.
+
 > 
+> You'll definitely want an ack from Christoph on this!
+> 
+> On Thu, May 11, 2023 at 02:21:09PM +0100, Ryan Roberts wrote:
+>> It is bad practice to directly set pte entries within a pte table.
+>> Instead all modifications must go through arch-provided helpers such as
+>> set_pte_at() to give the arch code visibility and allow it to validate
+>> (and potentially modify) the operation.
+> 
+> This does make sense, and I see for example in xtensa that an arch-specific
+> instruction is issued under certain circumstances so I do suspect we should
+> do this.
 
-Hi Mark / Claudiu,
+arm64 provides another example, where barriers are required to ensure the page
+table walker sees the new pte and no fault is raised. See
+arch/arm64/include/asm/pgtable.h:set_pte() (which is called by its
+implementation of set_pte_at()).
 
-I have submitted new version of patch for TDM driver. Could you please help to review and give your comments? 
-Thanks a lot!
+> 
+> As for validation, the function never indicates an error, so only in the
+> sense that a WARN_ON() could _in theory_ trigger is it being
+> validated. This might be quite a nitty point :) as set_pte_at() has no
+> means of indicating an error. But maybe to be pedantic 'check' rather than
+> 'validate'?
 
-Best regards,
-Walker
+I'm sorry, I'm not sure what you are asking here? set_pte_at() forms part of the
+contract with he arch code and is defined never to return an error. Some
+implementations might have code enabled in debug configs to detect incorrect
+usage and emit warnings (see arm64's implementation).
+
+> 
+>>
+>> Fixes: 3e9a9e256b1e ("mm: add a vmap_pfn function")
+> 
+> Not sure if this is really 'fixing' anything, I mean ostensibly, but not
+> sure if the tag is relevant here, that is more so for a bug being
+> introduced, and unless an issue has arisen not sure if it's
+> appropriate. But this might be a nit, again!
+
+Well I'm happy to remove it if that's the concensus. But I do believe there is a
+real bug here. At least on arm64, the barriers are needed to prevent a race with
+the page table walker. That said, the only place in the tree I can see
+vmap_pfn() used, is in the i915 driver, which I guess has never been used on an
+arm64 platform.
+
+> 
+>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>> ---
+>>  mm/vmalloc.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+>> index 9683573f1225..d8d2fe797c55 100644
+>> --- a/mm/vmalloc.c
+>> +++ b/mm/vmalloc.c
+>> @@ -2899,10 +2899,13 @@ struct vmap_pfn_data {
+>>  static int vmap_pfn_apply(pte_t *pte, unsigned long addr, void *private)
+>>  {
+>>  	struct vmap_pfn_data *data = private;
+>> +	pte_t ptent;
+>>
+>>  	if (WARN_ON_ONCE(pfn_valid(data->pfns[data->idx])))
+>>  		return -EINVAL;
+>> -	*pte = pte_mkspecial(pfn_pte(data->pfns[data->idx++], data->prot));
+>> +
+>> +	ptent = pte_mkspecial(pfn_pte(data->pfns[data->idx++], data->prot));
+>> +	set_pte_at(&init_mm, addr, pte, ptent);>
+> While we're refactoring, it'd be nice to stash data->pfns[data->idx] into a
+> local pfn variable.
+
+OK, I'll do this for v2.
+
+Thanks,
+Ryan
+
+
+> 
+>>  	return 0;
+>>  }
+>>
+>> --
+>> 2.25.1
+>>
+
