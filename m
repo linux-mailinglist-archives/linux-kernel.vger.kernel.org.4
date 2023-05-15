@@ -2,172 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCDF702302
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 06:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9BE7022FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 06:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237858AbjEOEqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 00:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S236152AbjEOEpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 00:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjEOEqV (ORCPT
+        with ESMTP id S229590AbjEOEpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 00:46:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8719A2686
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 21:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684125932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2XjOq8S6eLxylOWfxVE7lTJHF71GQ9YxxKOvqpFm4bE=;
-        b=exUnSQD/WWSO6r7RF1/EoKPPpPpkmZnlq1E37o9gc8p2etB2OUWzVKAAHD0zmYXoZiObWU
-        /YINpiLM8bPXfFnKfKozfEXN9U2SU6g94/3vWSwD7DAYjvQ/ydeMvJ6wf2zPEzJ+sDv22r
-        WWvVq12/M0+oOu+/PYi7ZNsz2VsEZEY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-497-HXHP-ZxHNCK15agmx-wBWA-1; Mon, 15 May 2023 00:45:30 -0400
-X-MC-Unique: HXHP-ZxHNCK15agmx-wBWA-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f433a2308bso110156905e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 21:45:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684125929; x=1686717929;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2XjOq8S6eLxylOWfxVE7lTJHF71GQ9YxxKOvqpFm4bE=;
-        b=iEMM34ofEw+n6rzVuiFM57ZIxSwBSC1kbJCSmWCFxI76VHngs4O6/i/kyEk04cowAp
-         wlDp3hoAqNL3Fb//gMb/oH40kfXqLzBbR/jl2mm9cGO1sp5ebD0S9uBiv2yvTfng0Nyb
-         IsrBlD5t5/oSEc2KXlYAN514WyGodOPYMYPBQXVfDirFTHwUlxpFIiwYehUPcFGlinsU
-         pFLUio/UtqtyvbRjSXZEr/Yh6NunE9K9BFZGYx/PdMO9vymJmoTYa9+WLyr5uYtqVFGK
-         WVqYx9DFLac6zcVCIwl8mwo1RfYrupcQFi6mwyZc1srtfJNdogpRs5O9oST3Zm5O+t7U
-         7arg==
-X-Gm-Message-State: AC+VfDyEd3zeucHg49Mnk3ivoA4C/BWMsG+z4jvO2PEhjGdcgFpOxbsO
-        y/uH3S7aBoegnEiJVmm43hgArmiUhERHuhfqa6zVh71gKctpSQsoUzglUMOFGhWdJpDTeVPdgDE
-        vd0/+fi//f4CE+CZIt7FO99zq
-X-Received: by 2002:adf:dd83:0:b0:307:7d1a:20fd with SMTP id x3-20020adfdd83000000b003077d1a20fdmr21880986wrl.12.1684125929769;
-        Sun, 14 May 2023 21:45:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4OdZsGOJb5yblTc2DXNqTp+ArQzg1WhoBfxb9JKuFEQkr0FvMpdV5CBb5jM57qjG8ZfvnWbw==
-X-Received: by 2002:adf:dd83:0:b0:307:7d1a:20fd with SMTP id x3-20020adfdd83000000b003077d1a20fdmr21880965wrl.12.1684125929446;
-        Sun, 14 May 2023 21:45:29 -0700 (PDT)
-Received: from redhat.com ([2.52.146.3])
-        by smtp.gmail.com with ESMTPSA id k11-20020adff5cb000000b0030649242b72sm31024743wrp.113.2023.05.14.21.45.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 21:45:28 -0700 (PDT)
-Date:   Mon, 15 May 2023 00:45:24 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        alvaro.karsz@solid-run.com, eperezma@redhat.com,
-        xuanzhuo@linux.alibaba.com, david.marchand@redhat.com,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next V2 1/2] virtio-net: convert rx mode setting to
- use workqueue
-Message-ID: <20230515004422-mutt-send-email-mst@kernel.org>
-References: <20230413064027.13267-1-jasowang@redhat.com>
- <20230413064027.13267-2-jasowang@redhat.com>
- <20230413121525-mutt-send-email-mst@kernel.org>
- <CACGkMEunn1Z3n8yjVaWLqdV502yjaCBSAb_LO4KsB0nuxXmV8A@mail.gmail.com>
- <20230414031947-mutt-send-email-mst@kernel.org>
- <CACGkMEtutGn0CoJhoPHbzPuqoCLb4OCT6a_vB_WPV=MhwY0DXg@mail.gmail.com>
- <20230510012951-mutt-send-email-mst@kernel.org>
- <CACGkMEszPydzw_MOUOVJKBBW_8iYn66i_9OFvLDoZMH34hMx=w@mail.gmail.com>
+        Mon, 15 May 2023 00:45:47 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2074.outbound.protection.outlook.com [40.107.12.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76136213D;
+        Sun, 14 May 2023 21:45:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a7kR+N3GXqfmhte1hdOJDGJtUfihquU/A1JnAOpy5uRc6RY84wwR8MEIP20R9VgCkUEarZlwGKQgM4ytil7oVStXxYBRMhBk0LgbybQWwX9bj78zBYXZRbLTNS7ULhfm/rO7zYPkVK3LOyxq4lNri2QxYBr8WClz4ISyM+QEAvaJN09Gbxmlg4cwGcY1LhdxoKIwZM+QuAYke3+NUQs4pl0uDQN5H/Jqb6sBZD+ekDu8s9cVbRP3O/OmZrmnebwXGAO69GD1AfBC5FcstYwTlT6lr/BPNjC6HMV6lhEVh6tKjYSLltG/ifjl51YnG/am8bWWiEEePRU61/O7y9oelg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QgUk3IEYYsvp3eXY2tKFgzDR65XgteOF691S2mk/VVc=;
+ b=e+aTgvEpcJlWRe6yry+QBVvUqL62GjVw1dswf9hXmmg6eoXc1KVYHa4rzotdOjZg6tuyze0YCF1ay8CEhjDOJoyW9jpb82Qt5/7hj7nT4CqbJAGvgMfkBnKpTXeEUGe3W5sHGV2gn8hO6bI0dmlqG1bgXgKC1gkxlaqMvZZ12Z7a9K4W84V82mzxxgn4aebF5D6fvTMNbnMkNmnn/P84pitCHJ0sup3yokCFmF4xf/GF8DwINbNY+8PX3mjCuEsWF7zQfqD8JQ6JCSMsVFjqRlJC/7/3GZUDCwmLiPxX3AbKhrNqEKLfKFyMzjaVLKL3RH9WCRGkJFnP5oDg5Bn/Qg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QgUk3IEYYsvp3eXY2tKFgzDR65XgteOF691S2mk/VVc=;
+ b=emNgjpNKKNc6BPTyHrMOJ1FqpQDCMEJwiPUpyzw5Cg9F2krKm3KaX1uH/sn/CqEcPFy7j4zGv/n0eX0hpBxpuefyFU17zZXi33xQzx4OLATdT+SY2PS1Qs7NjCG3UoaqM8NEdQKzSddWW9tWLmOu2b6wtjV+klx0f0dUKfzPWlFDHQgrYAWSwoDzEojDnY1Jf1U1YO73TD+jjyBnvowKenoHdoF36WZL3pFT1Tb3lT52aGOWTxJaIJE7FywjbM6b2lF2R1tPBHI/BomaxuImtaVFnCGDvmHsGhnuGyvtvmaSHkUa4G0mIYgiJEEpYIW3JHGPRnn4iHKmsehY6HA45Q==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAZP264MB2942.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 04:45:42 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::447b:6135:3337:d243]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::447b:6135:3337:d243%3]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 04:45:42 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+CC:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Thread-Topic: [PATCH 07/32] mm: Bring back vmalloc_exec
+Thread-Index: AQHZgpdUsgx7flCbUE+3jXS45Hg7zK9SaWKAgAAHaoCABcbjAIAB6dOAgABVD4CAAFR0gA==
+Date:   Mon, 15 May 2023 04:45:42 +0000
+Message-ID: <6f049870-1684-1875-3cdc-73e1323ffdb0@csgroup.eu>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZFqxEWqD19eHe353@infradead.org> <ZFq3SdSBJ_LWsOgd@murray>
+ <8f76b8c2-f59d-43fc-9613-bb094e53fb16@lucifer.local>
+ <ce5125be-464e-44ad-8d9e-7c818f794db1@csgroup.eu>
+ <ZGFyHY6pH9CU4fzf@moria.home.lan>
+In-Reply-To: <ZGFyHY6pH9CU4fzf@moria.home.lan>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAZP264MB2942:EE_
+x-ms-office365-filtering-correlation-id: 21d78b4d-01d8-4f93-5fcd-08db54ff3d29
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +lfKy2T2pH1+24qQcLF2y/FLUNR+YbuoZ+HD/ggpPd0jxLkKrMDLyLDbbnzDCmDg1BXx1LwTBOrcUw3HslJyTq0AqKPiSkn9QOb2En96VsxrW0udSAgqa/QfvBEKVMRyxZe7QZg8douDszFRnll1FPtb9LiVCMn1r/SC6fe46xme24NYO84h6HNnHtAhmBqeZzfCaD/AbKBlfBIwDFBWZJ9vu7iLsLnBt8nXD9KOkWFJqJY9dBWH2C27lN9iKVz5znGDi69YJab4k/mvrZJRX6HNYlbZzgAkXo4+1da3NEozf7kt251Y9tGn1E4jP2+fqyG1bixmE4b3ckoC7vf1bgVMOPeqNOdtt8AIJkHkfsynDU2iLw5UU3mmdkx8XFdGHbxZkk6DVx7g+QkbnD2pmGGX0bBJDHJU/9Xa40TspU8E0ROjkEKDJDjfYZVehluf0DMDMo3IcNpflIKgoFq8uOjCMpo6kgQh306tsJpHNWay4fD+8f38fISBWW4Q51A2vSU1SUOh7f+YgjUSbJRhlo1hTwIXhXN2ZsOS/Un5HB8BzbF6+pv90EUQwBXHbKrT6uZieqhafaUsbcQ4PBgEkMoYsTQxeS4wqWQ6PZCXCnYG6l+6fxrqqH1dIc73QhBggam6Y3uEMicwMD1N78lQjF0slGmOP7GHpjan8dVedXEia/5liOPew0aB5eU3KP5s
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(376002)(396003)(366004)(346002)(136003)(451199021)(31686004)(83380400001)(66574015)(4326008)(6916009)(36756003)(38100700002)(122000001)(41300700001)(38070700005)(316002)(6512007)(6506007)(6486002)(26005)(478600001)(66946007)(66446008)(66556008)(64756008)(66476007)(2616005)(91956017)(76116006)(8676002)(8936002)(7416002)(44832011)(31696002)(5660300002)(2906002)(54906003)(86362001)(186003)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bjllUHpQNXU0MWFMbUE3bHRjY3Bad3d4L0RNOVVjdk1FaUxvazB6L1ZSTG50?=
+ =?utf-8?B?VnJwaEp3U2NVS1BLS0xFTWFlZHc2K3hKRy94b3BUSUUwM2NzajlTQzBncUFx?=
+ =?utf-8?B?Z3cwOTg2S1ZFUXVaYnRDckN1MEtHeC9ocG1qZUltaDRpS2VHTFhjU1V1UUFM?=
+ =?utf-8?B?WDlrTk5MamhPUWovMWJvY3pGWWxVeG1vcFhneDhCMmEwcFROM1YzSXpLaDNu?=
+ =?utf-8?B?cENid2x4a2JoZlU5TVlwVm81UmRtcDBzYmVkbkpGUGxObWc3d0VTNGJFQjVD?=
+ =?utf-8?B?Sm1mbkRnQU5zenFzZ2E0ZTlheGxYZjA3bW96YXhCR050eWhBa2tOdW5LSG0y?=
+ =?utf-8?B?cmdodUxpWjBVT3Bqc0srd1c4bEtGcTMyRzZCN3h6Y21SVjZKem5JQlZxWmFS?=
+ =?utf-8?B?RVdENFBzVWhxWXk2cSsvSlJlZFJ4WFpQNFY4WjV6eU1rdVJMcHJSY0lseU0x?=
+ =?utf-8?B?OTBzNVBOTWxER1oxc0hPNG1uV2EzTnpCRS9wMi9mRzJwM3AvVHRRVCt2RTla?=
+ =?utf-8?B?UzdoYVBLelp6MS9ldzdabDh0ODBTcEg5Y2ZGNVM4WjNHakVZeXc2QmZhL3BU?=
+ =?utf-8?B?WnVEdzd6M0F5K0ErZlZidnVaRDNvVkYxVU8vQnFTMlhPdkFZN2xYNDBHMmtr?=
+ =?utf-8?B?YzllYXFwaUpJWjJZQkFLeGx5RllBbEFqdWYydVFFTVg3T2txVStLY1hwODYw?=
+ =?utf-8?B?QVhKcEtrbXIySnhlTld3R09CcEI2aGtzOTdxb0hqb3V5bW44b2VydEF0QVFy?=
+ =?utf-8?B?R1N0MVJuQm5Tc2pHdDZjWDhnZXJFTTVacjRNcDlyNlNQNXU0OEU3ejlZenJi?=
+ =?utf-8?B?K3lXR0ZRNEFyRUZwWHdZbllicEhJNmJFdEJYOEs3Q1F5TEdNd2tSVUk1bWZi?=
+ =?utf-8?B?TGphMFc5Tm1LSE9mV2hIWG5nWVlKc2Zqc2crZWl5ZEU1RmlZSnpiUnJvbUpL?=
+ =?utf-8?B?OFc5cDN0dzhXTlJSWTRwNFZUc01GYzRqdzZDaXdBK2FCTG1WMm05V2ZXcFIz?=
+ =?utf-8?B?N0NOa3BkSUh6K3owckZ4QXRNcVR0UXFVMzdYdEd4Yno2YnM1UDRkUmtrQ043?=
+ =?utf-8?B?R2lwcVhaRXA2MGs3bGFkNmtnakVKZlBneUh2bWNhbHdINGw3OHlsc0FKbnZM?=
+ =?utf-8?B?K3RJTzZpOWEyS296SFl3L01LZzBvVXFMaUtYSE5hMVplUEF5Wk5yU2F2WG13?=
+ =?utf-8?B?TnFsY1lPWU9GWGN5eHZST1hBQ0dYZFhZRDIzbFcra3FLMHVIdWFPdjhjaGVv?=
+ =?utf-8?B?Q1pObXJlMlpwNGJjQktHanNtbVRVVzFScEVQdUk1YXQreXN2VjdBU1kwTTZD?=
+ =?utf-8?B?OWRtcFlzS3RBaWlUWDV4WHRIeWxRdzRNSFQrVjJMbWh4MDF6c0w0NGJnVllD?=
+ =?utf-8?B?K3ZxTzFXcHlkRGZDMDlMVGlDdzRMM0J3QVBKSmtoTEFiVjc3RGFxNFhaMDVW?=
+ =?utf-8?B?dklNS3pkTXkxQzA4SkhkTzMwN3JCaFhJMmJyZXpQMW4rdDVaZDNyY0tmRXh2?=
+ =?utf-8?B?Zm84RlFtRjRmbXBRa25MM3loZ0VBcVJrb1ZRWm1CaVRWRGdlbEdmT1MrWWRL?=
+ =?utf-8?B?TlJkMktrblFqWGhSS0tOR09Ua21ZUGR5ZEFTSGdBMU8yblpNT0l0aS9LV3My?=
+ =?utf-8?B?dmZNakxNZmJ4ZFczOUFnSWJnZ1pQRWV3MHZ4UGNCTEFvZThyemlzMVdGbVFQ?=
+ =?utf-8?B?Z2xoQWM4V1NQU3VLdjZRMzNvbnhtMlNPMzQwbjFEZDllaWNxU2NzZndSdmha?=
+ =?utf-8?B?QU9wcHF5UVRiK0kwdWZhUW9FNGpYU1BaMkxyY2tSODdjMlNtWlZuWHNIYXA3?=
+ =?utf-8?B?Rk9nUzN6RVc0NGxFN1VjS09tU1BPa0JGK2xxNG0xeUIwK3lRVVlTckxvUmo4?=
+ =?utf-8?B?NUFORG1jRjRXMEdvYTZqdkNsbUpGQklDelZJMTFaWkdFSzNiU2thbE1YT2p6?=
+ =?utf-8?B?b0pVOTVaRUpYclpKNkNSSDUzdFJydFl1R0pxZ2lTNVBCbEhJZ1V3SjBwQkNl?=
+ =?utf-8?B?UVB6ZHU5S2M1OUhENTFRWmtGN0Rwb0xsa3VpcDBaTHBDR0htZGJ3WENvTVUy?=
+ =?utf-8?B?eHVTRzg3czRpNzJyMmZrUHhDYWEzSG1UZFJKL0s3bVpQUmoyUDFMN25hYUto?=
+ =?utf-8?Q?XWx9iPydnK8JEbDy0aolGjdub?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7114471F58A50243B48B069A92668383@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEszPydzw_MOUOVJKBBW_8iYn66i_9OFvLDoZMH34hMx=w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21d78b4d-01d8-4f93-5fcd-08db54ff3d29
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 04:45:42.2353
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: n9vnrwfNqBRBsVwD6pcf6EejBgogihyUEINxxaxnPdr3OZw1UZd2/OAtlAPJ/bcc2RZB56RlLoQPXu5vnGNBXcgSEiIS6GaJEB+lETML4WE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB2942
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 09:05:54AM +0800, Jason Wang wrote:
-> On Wed, May 10, 2023 at 1:33 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Mon, Apr 17, 2023 at 11:40:58AM +0800, Jason Wang wrote:
-> > > On Fri, Apr 14, 2023 at 3:21 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Fri, Apr 14, 2023 at 01:04:15PM +0800, Jason Wang wrote:
-> > > > > Forget to cc netdev, adding.
-> > > > >
-> > > > > On Fri, Apr 14, 2023 at 12:25 AM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > >
-> > > > > > On Thu, Apr 13, 2023 at 02:40:26PM +0800, Jason Wang wrote:
-> > > > > > > This patch convert rx mode setting to be done in a workqueue, this is
-> > > > > > > a must for allow to sleep when waiting for the cvq command to
-> > > > > > > response since current code is executed under addr spin lock.
-> > > > > > >
-> > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > >
-> > > > > > I don't like this frankly. This means that setting RX mode which would
-> > > > > > previously be reliable, now becomes unreliable.
-> > > > >
-> > > > > It is "unreliable" by design:
-> > > > >
-> > > > >       void                    (*ndo_set_rx_mode)(struct net_device *dev);
-> > > > >
-> > > > > > - first of all configuration is no longer immediate
-> > > > >
-> > > > > Is immediate a hard requirement? I can see a workqueue is used at least:
-> > > > >
-> > > > > mlx5e, ipoib, efx, ...
-> > > > >
-> > > > > >   and there is no way for driver to find out when
-> > > > > >   it actually took effect
-> > > > >
-> > > > > But we know rx mode is best effort e.g it doesn't support vhost and we
-> > > > > survive from this for years.
-> > > > >
-> > > > > > - second, if device fails command, this is also not
-> > > > > >   propagated to driver, again no way for driver to find out
-> > > > > >
-> > > > > > VDUSE needs to be fixed to do tricks to fix this
-> > > > > > without breaking normal drivers.
-> > > > >
-> > > > > It's not specific to VDUSE. For example, when using virtio-net in the
-> > > > > UP environment with any software cvq (like mlx5 via vDPA or cma
-> > > > > transport).
-> > > > >
-> > > > > Thanks
-> > > >
-> > > > Hmm. Can we differentiate between these use-cases?
-> > >
-> > > It doesn't look easy since we are drivers for virtio bus. Underlayer
-> > > details were hidden from virtio-net.
-> > >
-> > > Or do you have any ideas on this?
-> > >
-> > > Thanks
-> >
-> > I don't know, pass some kind of flag in struct virtqueue?
-> >         "bool slow; /* This vq can be very slow sometimes. Don't wait for it! */"
-> >
-> > ?
-> >
-> 
-> So if it's slow, sleep, otherwise poll?
-> 
-> I feel setting this flag might be tricky, since the driver doesn't
-> know whether or not it's really slow. E.g smartNIC vendor may allow
-> virtio-net emulation over PCI.
-> 
-> Thanks
-
-driver will have the choice, depending on whether
-vq is deterministic or not.
-
-
-> > --
-> > MST
-> >
-
+DQoNCkxlIDE1LzA1LzIwMjMgw6AgMDE6NDMsIEtlbnQgT3ZlcnN0cmVldCBhIMOpY3JpdMKgOg0K
+PiBPbiBTdW4sIE1heSAxNCwgMjAyMyBhdCAwNjozOTowMFBNICswMDAwLCBDaHJpc3RvcGhlIExl
+cm95IHdyb3RlOg0KPj4gSSBhZGRpdGlvbiB0byB0aGF0LCBJIHN0aWxsIGRvbid0IHVuZGVyc3Rh
+bmQgd2h5IHlvdSBicmluZyBiYWNrDQo+PiB2bWFsbG9jX2V4ZWMoKSBpbnN0ZWFkIG9mIHVzaW5n
+IG1vZHVsZV9hbGxvYygpLg0KPj4NCj4+IEFzIHJlbWluZGVkIGluIGEgcHJldmlvdXMgcmVzcG9u
+c2UsIHNvbWUgYXJjaGl0ZWN0dXJlcyBsaWtlIHBvd2VycGMvMzJzDQo+PiBjYW5ub3QgYWxsb2Nh
+dGUgZXhlYyBtZW1vcnkgaW4gdm1hbGxvYyBzcGFjZS4gT24gcG93ZXJwYyB0aGlzIGlzIGJlY2F1
+c2UNCj4+IGV4ZWMgcHJvdGVjdGlvbiBpcyBwZXJmb3JtZWQgb24gMjU2TWJ5dGVzIHNlZ21lbnRz
+IGFuZCB2bWFsbG9jIHNwYWNlIGlzDQo+PiBmbGFnZ2VkIG5vbi1leGVjLiBTb21lIG90aGVyIGFy
+Y2hpdGVjdHVyZXMgaGF2ZSBhIGNvbnN0cmFpbnQgb24gZGlzdGFuY2UNCj4+IGJldHdlZW4ga2Vy
+bmVsIGNvcmUgdGV4dCBhbmQgb3RoZXIgdGV4dC4NCj4+DQo+PiBUb2RheSB5b3UgaGF2ZSBmb3Ig
+aW5zdGFuY2Uga3Byb2JlcyBpbiB0aGUga2VybmVsIHRoYXQgbmVlZCBkeW5hbWljIGV4ZWMNCj4+
+IG1lbW9yeS4gSXQgdXNlcyBtb2R1bGVfYWxsb2MoKSB0byBnZXQgaXQuIE9uIHNvbWUgYXJjaGl0
+ZWN0dXJlcyB5b3UgYWxzbw0KPj4gaGF2ZSBmdHJhY2UgdGhhdCBnZXRzIHNvbWUgZXhlYyBtZW1v
+cnkgd2l0aCBtb2R1bGVfYWxsb2MoKS4NCj4+DQo+PiBTbywgSSBzdGlsbCBkb24ndCB1bmRlcnN0
+YW5kIHdoeSB5b3UgY2Fubm90IHVzZSBtb2R1bGVfYWxsb2MoKSBhbmQgbmVlZA0KPj4gdm1hbGxv
+Y19leGVjKCkgaW5zdGVhZC4NCj4gDQo+IEJlY2F1c2UgSSBkaWRuJ3Qga25vdyBhYm91dCBpdCA6
+KQ0KPiANCj4gTG9va3MgbGlrZSB0aGF0IGlzIGluZGVlZCB0aGUgYXBwcm9wcmlhdGUgaW50ZXJm
+YWNlIChpZiBhIGJpdCBwb29ybHkNCj4gbmFtZWQpLCBJJ2xsIHN3aXRjaCB0byB1c2luZyB0aGF0
+LCB0aGFua3MuDQo+IA0KPiBJdCdsbCBzdGlsbCBuZWVkIHRvIGJlIGV4cG9ydGVkLCBidXQgaXQg
+bG9va3MgbGlrZSB0aGUgV3xYIGF0dHJpYnV0ZQ0KPiBkaXNjdXNzaW9uIGlzIG5vdCByZWFsbHkg
+Z2VybWFuZSBoZXJlIHNpbmNlIGl0J3Mgd2hhdCBvdGhlciBpbiBrZXJuZWwNCj4gdXNlcnMgYXJl
+IHVzaW5nLCBhbmQgdGhlcmUncyBub3RoaW5nIHBhcnRpY3VsYXJseSBzcGVjaWFsIGFib3V0IGhv
+dw0KPiBiY2FjaGVmcyBpcyB1c2luZyBpdCBjb21wYXJlZCB0byB0aGVtLg0KDQpUaGUgV3xYIHN1
+YmplY3QgaXMgYXBwbGljYWJsZS4NCg0KSWYgeW91IGxvb2sgaW50byBwb3dlcnBjJ3MgbW9kdWxl
+X2FsbG9jKCksIHlvdSdsbCBzZWUgdGhhdCB3aGVuIA0KQ09ORklHX1NUUklDVF9NT0RVTEVfUldY
+IGlzIHNlbGVjdGVkLCBtb2R1bGVfYWxsb2MoKSBhbGxvY2F0ZSANClBBR0VfS0VSTkVMIG1lbW9y
+eS4gSXQgaXMgdGhlbiB1cCB0byB0aGUgY29uc3VtZXIgdG8gY2hhbmdlIGl0IHRvIFJPLVguDQoN
+ClNlZSBmb3IgaW5zdGFuY2UgaW4gYXJjaC9wb3dlcnBjL2tlcm5lbC9rcHJvYmVzLmM6DQoNCnZv
+aWQgKmFsbG9jX2luc25fcGFnZSh2b2lkKQ0Kew0KCXZvaWQgKnBhZ2U7DQoNCglwYWdlID0gbW9k
+dWxlX2FsbG9jKFBBR0VfU0laRSk7DQoJaWYgKCFwYWdlKQ0KCQlyZXR1cm4gTlVMTDsNCg0KCWlm
+IChzdHJpY3RfbW9kdWxlX3J3eF9lbmFibGVkKCkpDQoJCXNldF9tZW1vcnlfcm94KCh1bnNpZ25l
+ZCBsb25nKXBhZ2UsIDEpOw0KDQoJcmV0dXJuIHBhZ2U7DQp9DQoNCg0KQ2hyaXN0b3BoZQ0K
