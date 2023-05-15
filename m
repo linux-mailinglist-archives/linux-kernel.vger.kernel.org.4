@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D09702343
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 07:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC341702347
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 07:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbjEOFXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 01:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S234481AbjEOFZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 01:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231651AbjEOFXL (ORCPT
+        with ESMTP id S231651AbjEOFZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 01:23:11 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910FFE71;
-        Sun, 14 May 2023 22:23:08 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F4sCgD017139;
-        Mon, 15 May 2023 05:22:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=v1aBA1r1KRoRkDwqUWcWRENzZbw5Wq+4ydwI2IwC4lk=;
- b=AR/F/hTbnFAR9wAoH8imtgF/+ER4U9tmuEKoDSKc/psr1OI2ba/I3ffcsMZHdPan+TwQ
- LftAc+m7bdJrn7FzcFISTQWpwdJAl1/T+gjpphmK8iq0dw6f9KNz1TjSfsCgIsFiSW4u
- xNWuChLWt/c3AhosoLmhSAteTrE85u5armcsHKgibL9PlUBoS6VWY1w9AuK7SH4nRwMX
- Ysc/2wBVPyHuGq8J/H0uoufbrTsxh9QR2zDj0hVHYX9d6Ffacd49uy49nXQJNgjY2Un7
- NpKD95apnEDTpiCGz79gTcgAeOlCSPjmBXZe1jr4xAuq/6H43jbnRJLhOGI2U9aYC92w 9g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj1jf2trv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 05:22:44 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34F5MhLs012504
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 05:22:43 GMT
-Received: from [10.216.55.129] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 14 May
- 2023 22:22:41 -0700
-Message-ID: <0869e59b-cf6b-c8f2-580b-f07fcd55ee36@quicinc.com>
-Date:   Mon, 15 May 2023 10:52:38 +0530
+        Mon, 15 May 2023 01:25:56 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1FEE71
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 22:25:51 -0700 (PDT)
+X-UUID: ef7f3c6ef2e011edb20a276fd37b9834-20230515
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=c7btEfxvbpwIOokojsR0AWVbYjq2voOultDBPOmiO5s=;
+        b=G2SjSFZTc5Rd083km8thYhYxDBU6AduXpbZ5m2mz5qULCf4hQctlId0srmZQjjd2SG9wXEEcLycKDtVS8vvxTlFfV0NZdEUYW3ovXWFO7wHsk6RsoJURT54BDGZ3Zdvbef25XxiwJUNiAiFjlWK3SbbonyF35aibYJja9YNs8+E=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.24,REQID:f87406c8-6876-4618-9f9c-146064067f46,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:178d4d4,CLOUDID:f3bd2a3b-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: ef7f3c6ef2e011edb20a276fd37b9834-20230515
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1272309633; Mon, 15 May 2023 13:25:42 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 15 May 2023 13:25:41 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 15 May 2023 13:25:41 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <pierre-louis.bossart@linux.intel.com>,
+        <peter.ujfalusi@linux.intel.com>,
+        <yung-chuan.liao@linux.intel.com>,
+        <ranjani.sridharan@linux.intel.com>,
+        <kai.vehmanen@linux.intel.com>, <daniel.baluta@nxp.com>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
+        <perex@perex.cz>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>
+CC:     <trevor.wu@mediatek.com>, <yc.hung@mediatek.com>,
+        <tinghan.shen@mediatek.com>,
+        <sound-open-firmware@alsa-project.org>,
+        <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] ASoC: SOF: add mt8188 audio support
+Date:   Mon, 15 May 2023 13:25:38 +0800
+Message-ID: <20230515052540.9037-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Roger Quadros <rogerq@kernel.org>
-References: <20230515123524.74e7bda3@canb.auug.org.au>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230515123524.74e7bda3@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GhiN2ma17ExoQcQr9x2unevTKBkrFDfF
-X-Proofpoint-ORIG-GUID: GhiN2ma17ExoQcQr9x2unevTKBkrFDfF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_02,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 clxscore=1011 impostorscore=0 suspectscore=0
- malwarescore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150046
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds mt8188 audio support and dbg_dump callback for
+mt8186 and mt8188.
 
+Trevor Wu (2):
+  ASoC: SOF: mediatek: add mt8188 audio support
+  ASoC: SOF: mediatek: add adsp debug dump
 
-On 5/15/2023 8:05 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->    drivers/usb/dwc3/gadget.c
-> 
-> between commit:
-> 
->    c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()")
-> 
-> from the usb.current tree and commit:
-> 
->    813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeout happens")
-> 
-> from the usb tree.
-> 
-> I fixed it up (I think - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
-> 
+ sound/soc/sof/mediatek/mt8186/mt8186.c | 83 +++++++++++++++++++++++++-
+ sound/soc/sof/mediatek/mt8186/mt8186.h |  5 ++
+ 2 files changed, 87 insertions(+), 1 deletion(-)
 
-Hi Stephen,
+-- 
+2.18.0
 
-  I think the core soft reset has been called two times in the patch 
-present in this mail. Anything on my end I can do to help.
-
-Regards,
-Krishna,
