@@ -2,175 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5339F702FAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1ACC702FB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbjEOO1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
+        id S240575AbjEOO2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:28:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239826AbjEOO06 (ORCPT
+        with ESMTP id S232072AbjEOO2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:26:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F3F135;
-        Mon, 15 May 2023 07:26:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BBF8961E81;
-        Mon, 15 May 2023 14:26:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D68C433EF;
-        Mon, 15 May 2023 14:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684160816;
-        bh=4klK1qNnVxB9VfQGKW5xcLuUT3JrqtA3WFCXNlPR5e8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y8YKV4IgdgV4lOeVqUT5MbcKSF2/d+kFXL7BLrJXBxqcCm+40pTxVruHXP0OHxxRW
-         3dIyFDUnm5Hm2qwawyPPQwGed1/NLtySpC9Vbz86T3KeUZbVULTB1k7fWLn3iG17CF
-         yh/6gzcDXUBtO4R2ljTfPuP3C3zf8TtdJ0veNFVnrHk/aTKUO7faG3lOiuZmknjNp7
-         nHuyNNVHyhvLkCAbZr08qMT4xL3mymeQByZehe0Lv3zU1PZQDCLevdLoHCx3ijgcue
-         4ATlI1OMmjBLivdmEaxYLxdH+A7Vde8VD+Tnjqkth6N35rUadBPbKNV2sBvKrW/huy
-         +g4LZZUlyTobw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pyZA5-0002JU-BO; Mon, 15 May 2023 16:26:53 +0200
-Date:   Mon, 15 May 2023 16:26:53 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 7/9] arm64: dts: qcom: sc8280xp: Add multiport
- controller node for SC8280
-Message-ID: <ZGJBLUsPcbsxj989@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-8-quic_kriskura@quicinc.com>
+        Mon, 15 May 2023 10:28:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B4E135;
+        Mon, 15 May 2023 07:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684160910; x=1715696910;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xfYqN7JzCkoWyoq5r778vSA22m35h9Rh/Z7ivVg+D70=;
+  b=MgJzIN65On4PRivQcdUiaKv9uI/ANGlIdE1FenyRi2tmeqLONzMYQS9p
+   R7082gQymCIssLyq1uuKBqh/KwOb5RIfBAICi4XJqRWTY1g9A2VOQiPti
+   uPXjydQ8/hu1EjraE3SlR6cOxwu2HyhGt9EyTo048mKFSV7o0eBKTAuSi
+   CCf4/agoo8hqHFGiTrZtj6pZd1p2XhtMpIeg9pB1wMFlgC9ZFVHKXbsXr
+   c8X0s8j3ciQPhq4lAUqrq9PGJSMnllrLqc01xCNzjtjvFGbz9D4JfWVUj
+   whM2n/+HPK06qNWfjiMoGr4+IqA9r4Pffm7Ie2jQflL3nkRca5XFnjrj0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="354372400"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="354372400"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 07:28:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="733897472"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="733897472"
+Received: from satwikja-mobl.amr.corp.intel.com (HELO [10.212.213.112]) ([10.212.213.112])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 07:28:30 -0700
+Message-ID: <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+Date:   Mon, 15 May 2023 07:28:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230514054917.21318-8-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+Content-Language: en-US
+To:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        sroettger@google.com
+Cc:     akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230515130553.2311248-1-jeffxu@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 11:19:15AM +0530, Krishna Kurapati wrote:
-> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
-> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
-> platforms.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 66 ++++++++++++++++++++++++++
->  1 file changed, 66 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 8fa9fbfe5d00..50f6a8424537 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -3133,6 +3133,72 @@ usb_1_role_switch: endpoint {
->  			};
->  		};
->  
-> +		usb_2: usb@a4f8800 {
+On 5/15/23 06:05, jeffxu@chromium.org wrote:
+> We're using PKU for in-process isolation to enforce control-flow integrity
+> for a JIT compiler. In our threat model, an attacker exploits a 
+> vulnerability and has arbitrary read/write access to the whole process
+> space concurrently to other threads being executed. This attacker can
+> manipulate some arguments to syscalls from some threads.
 
-As I believe someone already pointed out, this node is not in sort order
-(i.e. it should go before usb@a6f8800).
+This all sounds like it hinges on the contents of PKRU in the attacker
+thread.
 
-> +			compatible = "qcom,sc8280xp-dwc3-mp", "qcom,dwc3";
-> +			reg = <0 0x0a4f8800 0 0x400>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_MP_AXI_CLK>,
-> +				 <&gcc GCC_USB30_MP_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_MP_AXI_CLK>,
-> +				 <&gcc GCC_USB30_MP_SLEEP_CLK>,
-> +				 <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_NORTH_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB_NOC_SOUTH_AXI_CLK>,
-> +				 <&gcc GCC_SYS_NOC_USB_AXI_CLK>;
-> +			clock-names = "cfg_noc", "core", "iface", "sleep", "mock_utmi",
-> +				      "noc_aggr", "noc_aggr_north", "noc_aggr_south", "noc_sys";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_MP_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_MP_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
-> +					      <&pdc 126 IRQ_TYPE_EDGE_RISING>,
-> +					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&intc GIC_SPI 857 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&intc GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interrupt-names = "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq",
-> +					  "ss_phy_irq",
-> +					  "pwr_event_1",
-> +					  "pwr_event_2",
-> +					  "pwr_event_3",
-> +					  "pwr_event_4";
-> +
-> +			power-domains = <&gcc USB30_MP_GDSC>;
-> +			required-opps = <&rpmhpd_opp_nom>;
-> +
-> +			resets = <&gcc GCC_USB30_MP_BCR>;
-> +
-> +			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
-
-This is not the correct interconnect master and slave; it should be
-MASTER_USB3_MP and SLAVE_USB3_MP.
-
-> +			interconnect-names = "usb-ddr", "apps-usb";
-
-Looks like 'wakeup-source' is missing here too.
-
-> +
-> +			status = "disabled";
-> +
-> +			usb_2_dwc3: usb@a400000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x0a400000 0 0xcd00>;
-> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0x800 0x0>;
-> +				phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>,
-> +					<&usb_2_hsphy1>, <&usb_2_qmpphy1>,
-> +					<&usb_2_hsphy2>,
-> +					<&usb_2_hsphy3>;
-> +				phy-names = "usb2-port0", "usb3-port0",
-> +						"usb2-port1", "usb3-port1",
-> +						"usb2-port2",
-> +						"usb2-port3";
-
-The phys and phy-names continuation lines above are still not aligned.
-
-> +			};
-> +		};
-> +
->  		mdss0: display-subsystem@ae00000 {
->  			compatible = "qcom,sc8280xp-mdss";
->  			reg = <0 0x0ae00000 0 0x1000>;
-
-Johan
+Could you talk a bit about how the attacker is prevented from running
+WRPKRU, XRSTOR or compelling the kernel to write to PKRU like at sigreturn?
