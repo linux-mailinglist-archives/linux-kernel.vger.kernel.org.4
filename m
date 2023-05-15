@@ -2,179 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDBF702B6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C36D702B71
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241111AbjEOL0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S232353AbjEOL0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239672AbjEOL0H (ORCPT
+        with ESMTP id S241250AbjEOL0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:26:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7AA13A
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 04:25:50 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 15 May 2023 07:26:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8FC1736;
+        Mon, 15 May 2023 04:26:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 66CEA66031D7;
-        Mon, 15 May 2023 12:25:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684149948;
-        bh=43lCd7DbxPZwcO9IH4LOmzSa65a75ebXHssNM18hOQI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=k4DEO22w8ZvsvFzka7v6ra0zcazgo/zVZe4iMYMmSdXueGxDOFJsIj7B+1++9dAPK
-         xXx1eUQ5zC1IlS6nE6SahE/HhAAlyCeB/1yA09chWxLvX3EYg70bbJwsEUqKh/pjT1
-         1pHpOF9qwKAJjcF4MMdH1XBOilOHa2Yyh7fJBJlbJYFcUAmb+X06Uhscao17hGeUUq
-         kXQcLrNhw1BBuX0FCCl77lUBdn7gs2CRZIw6BuuNN7xwWUR06SRxmgfhMAozsdWvX9
-         sh8F5QTR+WqxbejUievIY8xgySJuRKT2KklLhrk7a7/NMpe3H3byJWetIzWRGnWg8Q
-         RFm3RiC6E1LWQ==
-Message-ID: <7c784932-951a-65c0-c48f-bfa4c098b2e1@collabora.com>
-Date:   Mon, 15 May 2023 13:25:44 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B522C622BE;
+        Mon, 15 May 2023 11:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9818CC433D2;
+        Mon, 15 May 2023 11:25:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684149961;
+        bh=MBqNZwSUWIVyUFPu5xzrWq+IS+ipisPvB7leUbn8x7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KFbji4AXA3hGRsqTwofLDZiiIfOsCOOHJjiwkI4H4/iGfs82EgkS5b1Xg0tLaoqh/
+         tJ3DPhdMHBOVrCpMIZdlKFsIAa3H18C9ex5U3yjpI6X83AIpfcyksAvxVywqgfkpoW
+         sVVLV0/2LJ5LaVTgNFNS6P+BrBxDDkogc2PQdFDVzskUrXiXZWJVGFGjU36gn8sAPZ
+         t6feA4rv/otyZkO6Cim+P7ICaZ2Myn68JP356IAppwnzC+OuvMgyGYAQrGzLrvmCRv
+         qE0XMb5fBJz9q9qUd785/TUka+DUI4OPC1H6/LMzHlne0JMH0BQC4YeL5q6bP8g4PM
+         lr8KyMx0+2NpQ==
+Date:   Mon, 15 May 2023 12:25:54 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
+Message-ID: <20230515112554.GA10825@google.com>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+ <86o7mpmvqq.wl-maz@kernel.org>
+ <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+ <86mt29mt2m.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/2] ASoC: SOF: mediatek: add mt8188 audio support
-To:     Trevor Wu <trevor.wu@mediatek.com>,
-        pierre-louis.bossart@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, broonie@kernel.org, lgirdwood@gmail.com,
-        tiwai@suse.com, perex@perex.cz, matthias.bgg@gmail.com
-Cc:     yc.hung@mediatek.com, tinghan.shen@mediatek.com,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230515052540.9037-1-trevor.wu@mediatek.com>
- <20230515052540.9037-2-trevor.wu@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230515052540.9037-2-trevor.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <86mt29mt2m.wl-maz@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/05/23 07:25, Trevor Wu ha scritto:
-> Add mt8188 dai driver and specify of_machine to support mt8188 audio.
+On Fri, 12 May 2023, Marc Zyngier wrote:
+
+> On Fri, 12 May 2023 16:39:33 +0100,
+> Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > 
+> > On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
+> > > On Fri, 12 May 2023 13:28:35 +0100,
+> > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > > > 
+> > > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> > > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> > > > for portable applications. It provides a high dynamic range, stereo
+> > > > DAC for headphone output, two integrated Class D amplifiers for
+> > > > loudspeakers, and two ADCs for wired headset microphone input or
+> > > > stereo line input. PDM inputs are provided for digital microphones.
+> > > > 
+> > > > The IRQ chip provides IRQ functionality both to other parts of the
+> > > > cs42l43 device and to external devices that wish to use its IRQs.
+> > > 
+> > > Sorry, but this isn't much of an interrupt controller driver. A modern
+> > > interrupt controller driver is firmware-driven (DT or ACPI, pick your
+> > > poison), uses irq domains, and uses the irqchip API.
+> > > 
+> > 
+> > Apologies but I really need a little help clarifying the issues
+> > here. I am totally happy to fix things up but might need a couple
+> > pointers.
+> > 
+> > 1) uses the irqchip API / uses irq domains
+> > 
+> > The driver does use both the irqchip API and domains, what
+> > part of the IRQ API are we not using that we should be?
+> > 
+> > The driver registers an irq domain using
+> > irq_domain_create_linear.  It requests its parent IRQ using
+> > request_threaded_irq. It passes IRQs onto the devices requesting
+> > IRQs from it using handle_nested_irq and irq_find_mapping.
+> > 
+> > Is the objection here that regmap is making these calls for us,
+> > rather than them being hard coded into this driver?
 > 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Yaochun Hung <yc.hung@mediatek.com>
-> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-> ---
->   sound/soc/sof/mediatek/mt8186/mt8186.c | 61 +++++++++++++++++++++++++-
->   1 file changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/sof/mediatek/mt8186/mt8186.c b/sound/soc/sof/mediatek/mt8186/mt8186.c
-> index 419913c8474d..3a9c81418c1f 100644
-> --- a/sound/soc/sof/mediatek/mt8186/mt8186.c
-> +++ b/sound/soc/sof/mediatek/mt8186/mt8186.c
-> @@ -594,7 +594,65 @@ static const struct sof_dev_desc sof_of_mt8186_desc = {
->   	.ops = &sof_mt8186_ops,
->   };
->   
-> +/*
-> + * DL2, DL3, UL4, UL5 are registered as SOF FE, so creating the corresponding
-> + * SOF BE to complete the pipeline.
-> + */
-> +static struct snd_soc_dai_driver mt8188_dai[] = {
-> +{
-> +	.name = "SOF_DL2",
-> +	.playback = {
-> +		.channels_min = 1,
-> +		.channels_max = 2,
-> +	},
-> +},
-> +{
-> +	.name = "SOF_DL3",
-> +	.playback = {
-> +		.channels_min = 1,
-> +		.channels_max = 2,
-> +	},
-> +},
-> +{
-> +	.name = "SOF_UL4",
-> +	.capture = {
-> +		.channels_min = 1,
-> +		.channels_max = 2,
-> +	},
-> +},
-> +{
-> +	.name = "SOF_UL5",
-> +	.capture = {
-> +		.channels_min = 1,
-> +		.channels_max = 2,
-> +	},
-> +},
-> +};
-> +
-> +/* mt8188 ops */
-> +static struct snd_sof_dsp_ops sof_mt8188_ops;
-> +
-> +static int sof_mt8188_ops_init(struct snd_sof_dev *sdev)
-> +{
-> +	/* common defaults */
-> +	memcpy(&sof_mt8188_ops, &sof_mt8186_ops, sizeof(struct snd_sof_dsp_ops));
+> That's one of the reasons. Look at the existing irqchip drivers: they
+> have nothing in common with yours. The regmap irqchip abstraction may
+> be convenient for what you are doing, but the result isn't really an
+> irqchip driver. It is something that is a small bit of a larger device
+> and not an interrupt controller driver on its own. The irqchip
+> subsystem is there for "first class" interrupt controllers.
 
-Never use sizeof(type), always use destination var size! Anyway, there's more.
+I'm not aware of another subsystem that deals with !IRQChip level IRQ
+controllers.  Where do simple or "second class" interrupt controllers
+go?
 
-I don't think we need to perform this memcpy: we'll never see an instance of
-both mt8186 and mt8188 drivers on the same machine, so you can safely just use
-sof_mt8186_ops for mt8188...
-
-> +
-> +	sof_mt8188_ops.drv = mt8188_dai;
-
-...which obviously means that this becomes
-
-	sof_mt8186_ops.drv = mt8188_dai;
-
-and....
-
-> +	sof_mt8186_ops.num_drv = ARRAY_SIZE(mt8188_dai);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct snd_sof_of_mach sof_mt8188_machs[] = {
-> +	{
-> +		.compatible = "mediatek,mt8188",
-> +		.sof_tplg_filename = "sof-mt8188.tplg",
-> +	},
-> +	{}
-> +};
-> +
->   static const struct sof_dev_desc sof_of_mt8188_desc = {
-> +	.of_machines = sof_mt8188_machs,
->   	.ipc_supported_mask	= BIT(SOF_IPC),
->   	.ipc_default		= SOF_IPC,
->   	.default_fw_path = {
-> @@ -607,7 +665,8 @@ static const struct sof_dev_desc sof_of_mt8188_desc = {
->   		[SOF_IPC] = "sof-mt8188.ri",
->   	},
->   	.nocodec_tplg_filename = "sof-mt8188-nocodec.tplg",
-> -	.ops = &sof_mt8186_ops,
-> +	.ops = &sof_mt8188_ops,
-
-...this keeps being sof_mt8186_ops as well.
-
-> +	.ops_init = sof_mt8188_ops_init,
->   };
->   
->   static const struct of_device_id sof_of_mt8186_ids[] = {
-
-Regards,
-Angelo
-
+-- 
+Lee Jones [李琼斯]
