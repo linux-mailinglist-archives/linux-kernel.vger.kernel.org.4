@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DB3703108
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081BE70311A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242167AbjEOPIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
+        id S242221AbjEOPJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242110AbjEOPIT (ORCPT
+        with ESMTP id S242105AbjEOPJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:08:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A24E1720
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684163251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jqAunJggVfMk8DVsWWYkCIQsfbXlahXMSDO8JBjiKzE=;
-        b=DG5LXRu2c+AFvkUL6iJHFyECUOjfPpNjB+p5ZGJFjVpgU7F4WX3Ujne056f5zDhj91qiyl
-        JDAT7SckMxyWv1LutsAyYwYzctazC1amzdt+Yybdws+e8CU+Sx9uM+nlq2yT7ooWxKr04t
-        TskAMsjdqXfYYDoam2u6FXFgiVmS0l4=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-620-RpY46iqUPJOU9MuvkLD1BQ-1; Mon, 15 May 2023 11:07:24 -0400
-X-MC-Unique: RpY46iqUPJOU9MuvkLD1BQ-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a348facbbso1607738266b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:07:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684163242; x=1686755242;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:subject:cc:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jqAunJggVfMk8DVsWWYkCIQsfbXlahXMSDO8JBjiKzE=;
-        b=cZ4mGOrWhpMOloyONB1f9IH7vEMbLAJpAEWhQdVUTTV3E0lxLUsmDmUwKO/IIGTgFJ
-         TkIMm//nFSbvLRQNCIFrlBT7/WyWI0UNiA1l6gOD5KkCSK/hRLWMuguIoB41pvAZMbp4
-         plroLl56Y0U+einrERFfxme/3x3a6EukukQA4zDksvFHZLpildFsIq/HEA9nDx/umwjo
-         oapz9MtP56vPpWKG/cWEJJYOZfnuJS8Tcm7D7BcIPOTAD8g60C9Pqbf04BMqYd5JdWqJ
-         g9uJO4+FInjB0g6JOQtVxUbdlD5OuAHaiQ1d64VfBWhYyh3EjvGSe0pjNEyQeATdLTQJ
-         ic4Q==
-X-Gm-Message-State: AC+VfDwPgwXkDGohXbAKhuSSvXWs1DaqwtwrKdNRLsSO2ldGxaatmyNW
-        6p7XV1IMbtnjhBW8hPhIzNKyVqQld7nR9WPls9E9FSvw/aGMdsCWC2QN8B9HYi2DmBYwl4XsynK
-        XmcPAmJ6Q80CZbMl72t5IWBXj
-X-Received: by 2002:a17:907:d91:b0:933:4d37:82b2 with SMTP id go17-20020a1709070d9100b009334d3782b2mr31485003ejc.57.1684163242585;
-        Mon, 15 May 2023 08:07:22 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4KJfmiDaL9BJh3jJxYB1OG8NuTPCjYqSvJHsOpWGNg4A0jTsW7kReLmT9LoGqXUg8hKEYa+Q==
-X-Received: by 2002:a17:907:d91:b0:933:4d37:82b2 with SMTP id go17-20020a1709070d9100b009334d3782b2mr31484980ejc.57.1684163242248;
-        Mon, 15 May 2023 08:07:22 -0700 (PDT)
-Received: from [192.168.41.200] (83-90-141-187-cable.dk.customer.tdc.net. [83.90.141.187])
-        by smtp.gmail.com with ESMTPSA id l17-20020a170907915100b0095004c87676sm9682583ejs.199.2023.05.15.08.07.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 08:07:21 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <e4a9fa43-06f7-5271-effc-20cac59b0e64@redhat.com>
-Date:   Mon, 15 May 2023 17:07:19 +0200
+        Mon, 15 May 2023 11:09:28 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E29D9;
+        Mon, 15 May 2023 08:09:24 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FEgXlQ028607;
+        Mon, 15 May 2023 15:08:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=UFfvbucbmkWXKyT0DDx2Sbol/717J1HY00ehIICcShU=;
+ b=TtISEzwbN9H0448kMwnRpBbXkZygIAIqOOvlcfnLOlHUQUjQeTfHRdoiVB3EeoiOUaUD
+ yTEG9sPVRbY5UwVC0vjGoEjLY1UKejHV6OCAQqkUHpMVk12vkq3mIfpONn8R5y9/9Fep
+ qrmDRU36nFWU7Wt7WANGnSdcXu8CKZ6sci3qucyui+N1MkbrsumDD+sdnAmg+B6tS6+x
+ g/w2bRZDiKxyJ/0JErL69Xr0x4Ep4R7px8qWLodw7byrGypRIj8QHXhLdeG+LyRz3fRU
+ Ha1fHdPl7RvUB28fiIcCA3Ddh/Rl8Ybn/uqWWnPM2/GfiNEdnT5d11GXTyYHzEEq0pQd LQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj257v8n4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 15:08:18 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FF8HBn010741
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 15:08:17 GMT
+Received: from anusha-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 15 May 2023 08:08:09 -0700
+From:   Anusha Rao <quic_anusha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <thara.gopinath@gmail.com>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <bhupesh.sharma@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
+Subject: [PATCH V2 1/4] dt-bindings: clock: Add crypto clock and reset definitions
+Date:   Mon, 15 May 2023 20:37:19 +0530
+Message-ID: <20230515150722.12196-2-quic_anusha@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230515150722.12196-1-quic_anusha@quicinc.com>
+References: <20230515150722.12196-1-quic_anusha@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     brouer@redhat.com, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND bpf-next 10/15] ice: Implement VLAN tag hint
-To:     Larysa Zaremba <larysa.zaremba@intel.com>,
-        Stanislav Fomichev <sdf@google.com>
-References: <20230512152607.992209-1-larysa.zaremba@intel.com>
- <20230512152607.992209-11-larysa.zaremba@intel.com>
- <ZF6F+UQlXA9REqag@google.com> <ZGI2oDcWX+o9Ea0T@lincoln>
-Content-Language: en-US
-In-Reply-To: <ZGI2oDcWX+o9Ea0T@lincoln>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: q6v4s_C7DkTyzdYawNwMIkSyOMsRNRdU
+X-Proofpoint-GUID: q6v4s_C7DkTyzdYawNwMIkSyOMsRNRdU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=997 lowpriorityscore=0 clxscore=1015
+ spamscore=0 mlxscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305150124
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,22 +85,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add crypto clock and reset ID definitions for ipq9574.
 
+Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+---
+ Changes in V2:
+	- Separated out the clock/reset binding changes to a new patch.
 
-On 15/05/2023 15.41, Larysa Zaremba wrote:
->>> +	*vlan_tag = ice_get_vlan_tag_from_rx_desc(xdp_ext->eop_desc);
->> Should we also do the following:
->>
->> if (!*vlan_tag)
->> 	return -ENODATA;
->>
->> ?
-> Oh, returning VLAN tag with zero value really made sense to me at the beginning,
-> but after playing with different kinds of packets, I think returning error makes
-> more sense. Will change.
-> 
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h | 4 ++++
+ include/dt-bindings/reset/qcom,ipq9574-gcc.h | 1 +
+ 2 files changed, 5 insertions(+)
 
-IIRC then VLAN tag zero is also a valid id, right?
-
---Jesper
+diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+index 5a2961bfe893..86790efa10f0 100644
+--- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
++++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+@@ -210,4 +210,8 @@
+ #define GCC_SNOC_PCIE1_1LANE_S_CLK			201
+ #define GCC_SNOC_PCIE2_2LANE_S_CLK			202
+ #define GCC_SNOC_PCIE3_2LANE_S_CLK			203
++#define CRYPTO_CLK_SRC					204
++#define GCC_CRYPTO_CLK					205
++#define GCC_CRYPTO_AXI_CLK				206
++#define GCC_CRYPTO_AHB_CLK				207
+ #endif
+diff --git a/include/dt-bindings/reset/qcom,ipq9574-gcc.h b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
+index d01dc6a24cf1..c709d103673d 100644
+--- a/include/dt-bindings/reset/qcom,ipq9574-gcc.h
++++ b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
+@@ -160,5 +160,6 @@
+ #define GCC_WCSS_Q6_BCR						151
+ #define GCC_WCSS_Q6_TBU_BCR					152
+ #define GCC_TCSR_BCR						153
++#define GCC_CRYPTO_BCR						154
+ 
+ #endif
+-- 
+2.17.1
 
