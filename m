@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C7B702569
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDF670256B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240246AbjEOGwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
+        id S240326AbjEOGxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240155AbjEOGw0 (ORCPT
+        with ESMTP id S240488AbjEOGwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:52:26 -0400
+        Mon, 15 May 2023 02:52:34 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919C7CF
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:52:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B480272A
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:52:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684133522; x=1715669522;
+  t=1684133529; x=1715669529;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tzzjYf0orwaeoCq1YKwuJr6YmoUY5TgIK1ZLlpL2MUE=;
-  b=eVbEupJDGvAFj9nZGf29U+K8mEsbKo3LQAdB5o3NKexwNHwuk6cYcGR0
-   1w74edPsabg7jitGmDqpZ/RVHZ/Biztw4B+MrHJf/x/JwX6JVzW215Mpw
-   YuiY6T3HmUM6DEY4qHBgNCdWDckOg3/wNt/69D/IgsauNtdrAm/fKebT3
-   +RDkyBs1omgV2BNhV8emy6MBdMySndqxycw+IVIaN44/6MyU4Etyuh/rR
-   BMZoa9nh9q6Pp2kzfBzjt4lTxQrFNdnIxLzEgbA+T4rCzZ4VcfJiT6Fhz
-   wX/dBSADbJEWqHYsAGyUVYQifIa40iZANgW7QaqbNXnzcZaeSdxzKEbdQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966503"
+  bh=TlqOeHgkbXdW2xoR4RiQV11K0x6UxVbL1lj2WJsghI8=;
+  b=aytix35Rc8UhIgIBHKjVwwQ+gNL3bkL4NpnK516DnVuCcXofYdJcvKLg
+   H9yb2G8eadKzW0XMC5BoMuSZB7cNzqI2/u8rQYY/TSYqWYXrp3ktBfbly
+   9149z+vixYvxteeB1y/83c270oyzi7Thap4uQVYFwd+7EwJw/k8LjxfLV
+   XWjyrkg/Z0W+E7O81PJ+jthCo2jrEetptQCXAKmJc+EweO7ZihTIuUyuS
+   MZ7+45fMIlWLlnCKs7BBhNRbn99YnAF7u6q1vmqlmodkqR5m0nbiizjDA
+   BokUCT2iw/exTBxOTQvCxWH1WOddTfL0s0riSH64gNTbuxd56tcmseHtD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966520"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="349966503"
+   d="scan'208";a="349966520"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:51:06 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:51:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908767"
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908776"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="694908767"
+   d="scan'208";a="694908776"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:51:04 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:51:06 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org, broonie@kernel.org,
         tiwai@suse.de
 Cc:     linux-kernel@vger.kernel.org, vinod.koul@linaro.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH v2 19/26] soundwire: bus: add new manager callback to deal with peripheral enumeration
-Date:   Mon, 15 May 2023 15:10:35 +0800
-Message-Id: <20230515071042.2038-20-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH v2 20/26] soundwire: intel_ace2x: add new_peripheral_assigned callback
+Date:   Mon, 15 May 2023 15:10:36 +0800
+Message-Id: <20230515071042.2038-21-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
 References: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
@@ -65,16 +65,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-When a peripheral reports as ATTACHED, the manager may need to follow
-a programming sequence, e.g. to assign DMA resources and/or assign a
-command queue for that peripheral.
-
-This patch adds an optional callback, which will be invoked every time
-the peripheral attaches. This might be overkill in some scenarios, and
-one could argue that this should be invoked only on the first
-attachment. The bus does not however track this first attachment with
-any existing state-mirroring variable, and using dev_num_sticky would
-not work across suspend-resume cycles.
+Add the abstraction needed to only program the LSDIID registers for
+the HDaudio extended links. It's perfectly fine to program this
+register multiple times in case devices lose sync and reattach.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
@@ -82,45 +75,96 @@ Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/bus.c       | 3 +++
- include/linux/soundwire/sdw.h | 3 ++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/soundwire/intel_ace2x.c     | 12 ++++++++++++
+ drivers/soundwire/intel_auxdevice.c | 16 ++++++++++++++++
+ include/linux/soundwire/sdw_intel.h |  3 +++
+ 3 files changed, 31 insertions(+)
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 338f4f0b5d0c..b44f8d0affa6 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -769,6 +769,9 @@ static int sdw_assign_device_num(struct sdw_slave *slave)
- 	/* After xfer of msg, restore dev_num */
- 	slave->dev_num = slave->dev_num_sticky;
- 
-+	if (bus->ops && bus->ops->new_peripheral_assigned)
-+		bus->ops->new_peripheral_assigned(bus, dev_num);
-+
- 	return 0;
+diff --git a/drivers/soundwire/intel_ace2x.c b/drivers/soundwire/intel_ace2x.c
+index a12fee8a5bfa..65deb4345354 100644
+--- a/drivers/soundwire/intel_ace2x.c
++++ b/drivers/soundwire/intel_ace2x.c
+@@ -350,6 +350,16 @@ static int intel_register_dai(struct sdw_intel *sdw)
+ 					       dais, num_dai);
  }
  
-diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
-index ef645de13ae9..c076a3f879b3 100644
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@ -846,6 +846,7 @@ struct sdw_defer {
-  * @post_bank_switch: Callback for post bank switch
-  * @read_ping_status: Read status from PING frames, reported with two bits per Device.
-  * Bits 31:24 are reserved.
-+ * @new_peripheral_assigned: Callback to handle enumeration of new peripheral.
-  */
- struct sdw_master_ops {
- 	int (*read_prop)(struct sdw_bus *bus);
-@@ -860,7 +861,7 @@ struct sdw_master_ops {
- 	int (*pre_bank_switch)(struct sdw_bus *bus);
- 	int (*post_bank_switch)(struct sdw_bus *bus);
- 	u32 (*read_ping_status)(struct sdw_bus *bus);
--
-+	void (*new_peripheral_assigned)(struct sdw_bus *bus, int dev_num);
++static void intel_program_sdi(struct sdw_intel *sdw, int dev_num)
++{
++	int ret;
++
++	ret = hdac_bus_eml_sdw_set_lsdiid(sdw->link_res->hbus, sdw->instance, dev_num);
++	if (ret < 0)
++		dev_err(sdw->cdns.dev, "%s: could not set lsdiid for link %d %d\n",
++			__func__, sdw->instance, dev_num);
++}
++
+ const struct sdw_intel_hw_ops sdw_intel_lnl_hw_ops = {
+ 	.debugfs_init = intel_ace2x_debugfs_init,
+ 	.debugfs_exit = intel_ace2x_debugfs_exit,
+@@ -372,6 +382,8 @@ const struct sdw_intel_hw_ops sdw_intel_lnl_hw_ops = {
+ 	.sync_go_unlocked = intel_sync_go_unlocked,
+ 	.sync_go = intel_sync_go,
+ 	.sync_check_cmdsync_unlocked = intel_check_cmdsync_unlocked,
++
++	.program_sdi = intel_program_sdi,
+ };
+ EXPORT_SYMBOL_NS(sdw_intel_lnl_hw_ops, SOUNDWIRE_INTEL);
+ 
+diff --git a/drivers/soundwire/intel_auxdevice.c b/drivers/soundwire/intel_auxdevice.c
+index fcdf4f2d60e3..0daa6ca9a224 100644
+--- a/drivers/soundwire/intel_auxdevice.c
++++ b/drivers/soundwire/intel_auxdevice.c
+@@ -60,6 +60,21 @@ static int generic_post_bank_switch(struct sdw_bus *bus)
+ 	return sdw->link_res->hw_ops->post_bank_switch(sdw);
+ }
+ 
++static void generic_new_peripheral_assigned(struct sdw_bus *bus, int dev_num)
++{
++	struct sdw_cdns *cdns = bus_to_cdns(bus);
++	struct sdw_intel *sdw = cdns_to_intel(cdns);
++
++	/* paranoia check, this should never happen */
++	if (dev_num < INTEL_DEV_NUM_IDA_MIN || dev_num > SDW_MAX_DEVICES)  {
++		dev_err(bus->dev, "%s: invalid dev_num %d\n", __func__, dev_num);
++		return;
++	}
++
++	if (sdw->link_res->hw_ops->program_sdi)
++		sdw->link_res->hw_ops->program_sdi(sdw, dev_num);
++}
++
+ static int sdw_master_read_intel_prop(struct sdw_bus *bus)
+ {
+ 	struct sdw_master_prop *prop = &bus->prop;
+@@ -117,6 +132,7 @@ static struct sdw_master_ops sdw_intel_ops = {
+ 	.pre_bank_switch = generic_pre_bank_switch,
+ 	.post_bank_switch = generic_post_bank_switch,
+ 	.read_ping_status = cdns_read_ping_status,
++	.new_peripheral_assigned = generic_new_peripheral_assigned,
  };
  
- /**
+ /*
+diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
+index bafc6f2554b0..1a8f32059cd8 100644
+--- a/include/linux/soundwire/sdw_intel.h
++++ b/include/linux/soundwire/sdw_intel.h
+@@ -399,6 +399,7 @@ struct sdw_intel;
+  * @sync_go: helper for multi-link synchronization
+  * @sync_check_cmdsync_unlocked: helper for multi-link synchronization
+  * and bank switch - shim_lock is assumed to be locked at higher level
++ * @program_sdi: helper for codec command/control based on dev_num
+  */
+ struct sdw_intel_hw_ops {
+ 	void (*debugfs_init)(struct sdw_intel *sdw);
+@@ -425,6 +426,8 @@ struct sdw_intel_hw_ops {
+ 	int (*sync_go_unlocked)(struct sdw_intel *sdw);
+ 	int (*sync_go)(struct sdw_intel *sdw);
+ 	bool (*sync_check_cmdsync_unlocked)(struct sdw_intel *sdw);
++
++	void (*program_sdi)(struct sdw_intel *sdw, int dev_num);
+ };
+ 
+ extern const struct sdw_intel_hw_ops sdw_intel_cnl_hw_ops;
 -- 
 2.25.1
 
