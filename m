@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD216702564
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654A7702565
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240262AbjEOGwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S240494AbjEOGwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240454AbjEOGwK (ORCPT
+        with ESMTP id S240298AbjEOGwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:52:10 -0400
+        Mon, 15 May 2023 02:52:11 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D892101
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:51:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7589826A1
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684133507; x=1715669507;
+  t=1684133511; x=1715669511;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zulnEGWCaE/ce7on2AHJOrEISXuutjX2aua9tmM2yVE=;
-  b=WT6/sr+GjCk608Rgj65IJ2nebMUTwi178AL1Kp1f0n6v2MbpwaJEP69+
-   D97nwjSW6Nlv1JgEVQmmxBxYIRL6AaXmG9w3DJY1CL29wkSezALDU+zg/
-   ugze5Gt+PwEkCGMTX7A25yAw38flW3MjVsSmFgNlc1c/f4SzpiAMtvyKV
-   GdVyQ5RSedoL/+7HziQ1dA9j9dntWeHwi6ntCTCoO2sBRdutciErm+XTT
-   tzlo6SYj6xo4nGji2zm7u9TfJ6+oEupsU687RI48adLWrrweIq4Kk5Smw
-   hC5SiIA7JOdrDLBKNDHptdJ4mG4UL3jA+aIAvEioEMdFAJFOnnHaLfyZz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966479"
+  bh=SbHuuXPdMaBgfOruu1bZggLsJuDVCwmXsFFke6IavfA=;
+  b=f8nvBV/cox3pzavCbuJ3tJVc39Ag23i/StR2+B4Buw8xWX97pSjQi0/H
+   eBfjEBJS8mZa9wvRwrXSx/I+6EtSWot73Jyhgy/QJL10u3zRDuG+kvqUe
+   u4HHpvd//jHYaU4MfDLFTu4H6sns0fF0Q64qzMGJXfDsdMOn+nUHd/FYr
+   ySNyGvLmLU5VXi/BVQ5WOUtjMjIEpPJopiOnJ8GE1IGxMrDs0tpDzaThH
+   c3mFXGxEZwj50sRa0VpQzFZPPoI7IV0k0r7iXSC3PU8vr+3Exp8QOcHI/
+   0lhmGta2N9Whg16ZZ+xPhuxmKlSg91hlRsNvk2MYVLz/jVQ/BWemuWeAk
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966491"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="349966479"
+   d="scan'208";a="349966491"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:51:01 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:51:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908748"
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908759"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="694908748"
+   d="scan'208";a="694908759"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:59 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:51:01 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org, broonie@kernel.org,
         tiwai@suse.de
 Cc:     linux-kernel@vger.kernel.org, vinod.koul@linaro.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH v2 17/26] soundwire: intel_ace2x: enable wake support
-Date:   Mon, 15 May 2023 15:10:33 +0800
-Message-Id: <20230515071042.2038-18-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH v2 18/26] soundwire: intel_ace2x: add check_cmdsync_unlocked helper
+Date:   Mon, 15 May 2023 15:10:34 +0800
+Message-Id: <20230515071042.2038-19-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
 References: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
@@ -65,8 +65,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-The WAKEEN and WAKESTS registers were moved to the per-link SHIM_VS
-area.
+This is the last callback needed for all bus management routines on
+new hardware. Same concept as before, just different register.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
@@ -74,65 +74,33 @@ Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/intel_ace2x.c | 38 +++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ drivers/soundwire/intel_ace2x.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/soundwire/intel_ace2x.c b/drivers/soundwire/intel_ace2x.c
-index 2e33e8a00b55..fe950b3ea3bc 100644
+index fe950b3ea3bc..a12fee8a5bfa 100644
 --- a/drivers/soundwire/intel_ace2x.c
 +++ b/drivers/soundwire/intel_ace2x.c
-@@ -31,6 +31,41 @@ static void intel_shim_vs_init(struct sdw_intel *sdw)
- 	usleep_range(10, 15);
+@@ -186,6 +186,11 @@ static int intel_sync_go(struct sdw_intel *sdw)
+ 	return ret;
  }
  
-+static int intel_shim_check_wake(struct sdw_intel *sdw)
++static bool intel_check_cmdsync_unlocked(struct sdw_intel *sdw)
 +{
-+	void __iomem *shim_vs;
-+	u16 wake_sts;
-+
-+	shim_vs = sdw->link_res->shim_vs;
-+	wake_sts = intel_readw(shim_vs, SDW_SHIM2_INTEL_VS_WAKESTS);
-+
-+	return wake_sts & SDW_SHIM2_INTEL_VS_WAKEEN_PWS;
++	return hdac_bus_eml_sdw_check_cmdsync_unlocked(sdw->link_res->hbus);
 +}
 +
-+static void intel_shim_wake(struct sdw_intel *sdw, bool wake_enable)
-+{
-+	void __iomem *shim_vs = sdw->link_res->shim_vs;
-+	u16 wake_en;
-+	u16 wake_sts;
-+
-+	wake_en = intel_readw(shim_vs, SDW_SHIM2_INTEL_VS_WAKEEN);
-+
-+	if (wake_enable) {
-+		/* Enable the wakeup */
-+		wake_en |= SDW_SHIM2_INTEL_VS_WAKEEN_PWE;
-+		intel_writew(shim_vs, SDW_SHIM2_INTEL_VS_WAKEEN, wake_en);
-+	} else {
-+		/* Disable the wake up interrupt */
-+		wake_en &= ~SDW_SHIM2_INTEL_VS_WAKEEN_PWE;
-+		intel_writew(shim_vs, SDW_SHIM2_INTEL_VS_WAKEEN, wake_en);
-+
-+		/* Clear wake status (W1C) */
-+		wake_sts = intel_readw(shim_vs, SDW_SHIM2_INTEL_VS_WAKESTS);
-+		wake_sts |= SDW_SHIM2_INTEL_VS_WAKEEN_PWS;
-+		intel_writew(shim_vs, SDW_SHIM2_INTEL_VS_WAKESTS, wake_sts);
-+	}
-+}
-+
- static int intel_link_power_up(struct sdw_intel *sdw)
- {
- 	struct sdw_bus *bus = &sdw->cdns.bus;
-@@ -325,6 +360,9 @@ const struct sdw_intel_hw_ops sdw_intel_lnl_hw_ops = {
- 	.link_power_up = intel_link_power_up,
- 	.link_power_down = intel_link_power_down,
- 
-+	.shim_check_wake = intel_shim_check_wake,
-+	.shim_wake = intel_shim_wake,
-+
+ /*
+  * DAI operations
+  */
+@@ -366,6 +371,7 @@ const struct sdw_intel_hw_ops sdw_intel_lnl_hw_ops = {
  	.sync_arm = intel_sync_arm,
  	.sync_go_unlocked = intel_sync_go_unlocked,
  	.sync_go = intel_sync_go,
++	.sync_check_cmdsync_unlocked = intel_check_cmdsync_unlocked,
+ };
+ EXPORT_SYMBOL_NS(sdw_intel_lnl_hw_ops, SOUNDWIRE_INTEL);
+ 
 -- 
 2.25.1
 
