@@ -2,190 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B72F703A83
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130E5703AA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbjEORvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S244841AbjEORxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238780AbjEORvR (ORCPT
+        with ESMTP id S244922AbjEORxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:51:17 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5FF183FA
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:49:22 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-24e1d272afaso6919469a91.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684172962; x=1686764962;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YUXfDVEOZN73+1c0jBwpYDx4Lp9671FBUhLy9esSzws=;
-        b=2Y4rqA63ePB40J0RrmyaWoCdNET9IDC+RHvWceFj1vN24maTmC33yhQ4BU4vewfnQA
-         LTt6YayFFTypg3qgR3xkilYk9L86yIhtH5I+IeWy2FI6XCP3mF3TSUtVDxjYKXnh0NmZ
-         u1FJ/QVMLyxnNPBqTDobD184UJP5ldnhCwimpb52+0BsoUP0iOi15PQte4j49pYFOAeR
-         0YTS6The5SJhq7gAt/OmDCuGfIdrsBcMdMJfZwL2C1hi7vG+f0D4URgeCcGFK06HqBrB
-         bFgh8WbxAdjdGwApYLmm5wfTKXDQn8TDgZ8h9kwx3bG8rGb3sdYrDFe+w7UOxfRy5seu
-         w4/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684172962; x=1686764962;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YUXfDVEOZN73+1c0jBwpYDx4Lp9671FBUhLy9esSzws=;
-        b=KD5Td+RXLLDJqaEAxyFGwXTOU40RJKn6dEgWFMZV9YAheRDBXdctLCXvPapDTXSQKI
-         qZigPd0TZwJZCtwU/wWs0GBPyMxR3mMIDvLkI6YwM1EVzjcnN2wMS5/56X3gSsUyOS5/
-         ftqUD1MX+Bdqy8zCFf4z2/Eop2WDL0L+PHtPWx5jIFGh0I/aW+HCceMOjYlFI33IhfZE
-         yXoitGwBHYDnJjGcNAzFGVbwvXV0AeFW45UsXO8R2HQJUj+Cn5qqrIyWUCewcVLPY8x9
-         8XrW1Y6aFRDDeSVcTAkS3SepQB1Ow6wgMy4YfmqdIgr2hWuBbkgDCT/S3UNc/CJGYTlZ
-         A9Mw==
-X-Gm-Message-State: AC+VfDzFxuBl8cXn/v2YycBzhPglw4wewnBeBdGuZGIe8q9Jwm3CPzDY
-        ZDmwOXz3tPePQSI54vNddSjOuVV3Meo=
-X-Google-Smtp-Source: ACHHUZ7TaBfG344HLW8kEXFgjWe9h2Wo72d14XZZmcYXeo7U23yXiv4bhyvVuzgqLKu5xrzUYSrF2nzPUaY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:c595:b0:250:aae3:4668 with SMTP id
- l21-20020a17090ac59500b00250aae34668mr6270721pjt.1.1684172961756; Mon, 15 May
- 2023 10:49:21 -0700 (PDT)
-Date:   Mon, 15 May 2023 10:49:20 -0700
-In-Reply-To: <7972883f69abe6fe61a2e76def6a0a1f1f28228b.camel@intel.com>
-Mime-Version: 1.0
-References: <20230511233351.635053-1-seanjc@google.com> <20230511233351.635053-6-seanjc@google.com>
- <ecbcfb6ca243cf587eb6e61c6e852b4f474a36d7.camel@intel.com>
- <ZF5qnQQYa6OAI0Hy@google.com> <7972883f69abe6fe61a2e76def6a0a1f1f28228b.camel@intel.com>
-Message-ID: <ZGJwoFCWVWMSX5c3@google.com>
-Subject: Re: [PATCH v2 5/8] KVM: x86: Use MTRR macros to define possible MTRR
- MSR ranges
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "guoke@uniontech.com" <guoke@uniontech.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 15 May 2023 13:53:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030CB1CA4D;
+        Mon, 15 May 2023 10:51:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD24062F51;
+        Mon, 15 May 2023 17:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8159C4339C;
+        Mon, 15 May 2023 17:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684173016;
+        bh=ZOa1DuUaalVCTQ5zS8baq1fo8jfyEiJs85l6V1kJejo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tFBB5QmZRIkddN1jXrL0rxgk+YytZrH7cS/JUc/RyYLgIDM4Kkyy8yuO5rjnKFvDH
+         MqqGEQvhse7GWhRZX/gyZ5MQmxzPDa4OI2vlxKzO+XScyEUHqfEoddAxGkP8ZxN21j
+         F1CIwJqEeUzA3tH6wKZztMSu5xgJkMwDbQinJHZAyl7OWvFinSV3O8AGaU5q42mwwy
+         D9WatvBizQmoLohHCc7SWJKgSYJphFAzBIssilSkUJG3BWhAj5Krb+XkD9aW298s+H
+         FnkJSM8OeI92H2iZhqvDk2TDwOTUg39i4kRefZwtXAsOZYDj/bEOL/iMsmj1kqdZoD
+         wzHDL4qn/ytJA==
+Date:   Mon, 15 May 2023 18:50:09 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 00/10] riscv: Allow userspace to directly access perf
+ counters
+Message-ID: <20230515-unmoved-promenade-9e678c4f14f5@spud>
+References: <20230512085321.13259-1-alexghiti@rivosinc.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="yUJ9qocDe5RgavIo"
+Content-Disposition: inline
+In-Reply-To: <20230512085321.13259-1-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023, Kai Huang wrote:
-> On Fri, 2023-05-12 at 09:35 -0700, Sean Christopherson wrote:
-> > On Fri, May 12, 2023, Kai Huang wrote:
-> > > On Thu, 2023-05-11 at 16:33 -0700, Sean Christopherson wrote:
-> > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > > index e7f78fe79b32..8b356c9d8a81 100644
-> > > > --- a/arch/x86/kvm/x86.c
-> > > > +++ b/arch/x86/kvm/x86.c
-> > > > @@ -3700,8 +3700,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu,=
- struct msr_data *msr_info)
-> > > >  			return 1;
-> > > >  		}
-> > > >  		break;
-> > > > -	case 0x200 ... MSR_IA32_MC0_CTL2 - 1:
-> > > > -	case MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) ... 0x2ff:
-> > > > +	case MSR_IA32_CR_PAT:
-> > > > +	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
-> > > > +	case MSR_MTRRdefType:
-> > > >  		return kvm_mtrr_set_msr(vcpu, msr, data);
-> > > >  	case MSR_IA32_APICBASE:
-> > > >  		return kvm_set_apic_base(vcpu, msr_info);
-> > > > @@ -4108,9 +4109,10 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu=
-, struct msr_data *msr_info)
-> > > >  		msr_info->data =3D kvm_scale_tsc(rdtsc(), ratio) + offset;
-> > > >  		break;
-> > > >  	}
-> > > > +	case MSR_IA32_CR_PAT:
-> > > >  	case MSR_MTRRcap:
-> > >=20
-> > > ... Should we put MSR_IA32_CR_PAT after MSR_MTRRcap so it can be symm=
-etric to
-> > > kvm_set_msr_common()?
-> > >=20
-> > > Looks there's no reason to put it before MSR_MTRRcap.
-> >=20
-> > No, it's above MTRRcap for two reasons:
-> >=20
-> >  1. When PAT is moved out of mtrr.c, PAT doesn't get bunded with the ot=
-her MTRRs
-> >     and so would just need to be hoisted back up.  The end code looks l=
-ike:
-> >=20
-> > 	case MSR_IA32_CR_PAT:
-> > 		msr_info->data =3D vcpu->arch.pat;
-> > 		break;
-> > 	case MSR_MTRRcap:
-> > 	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
-> > 	case MSR_MTRRdefType:
-> > 		return kvm_mtrr_get_msr(vcpu, msr_info->index, &msr_info->data);
->=20
-> Sorry I mistakenly thought MSR_MTRRcap wasn't handled in kvm_mtrr_get_msr=
-().=20
-> Yes looks good to me.
->=20
-> > =20
-> >  2. There is no MSR_MTRRcap case statement in kvm_set_msr_common() beca=
-use it's
-> >     a read-only MSR, i.e. the two can't be symmetric :-)
->=20
-> Do you know why it is a read-only MSR, which enables both FIXED ranges an=
-d
-> (fixed number of) dynamic ranges?
 
-MTTRcap doesn't "enable" anything, it's a capabilities MSR (MTRR Capability=
- is
-its given name in the SDM), similar to ARCH_CAPABILITIES, PERF_CAPABILITIES=
-, etc.
-They're all essentially CPUID leafs, but presumably are MSRs due to being r=
-elevant
-only to CPL0.  Or maybe some higher ups at Intel just spin a wheel to deter=
-mine
-whether to use a CPUID leaf or an MSR.  :-)
+--yUJ9qocDe5RgavIo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> I am asking because there's a x86 series to fake a simple synthetic MTRR =
-which
-> neither has fixed nor dynamic ranges but only has a default MSR_MTRRdefTy=
-pe:
->=20
-> https://lore.kernel.org/lkml/20230509233641.GGZFrZCTDH7VwUMp5R@fat_crate.=
-local/T/
->=20
-> The main use cases are Xen PV guests and SEV-SNP guests running under
-> Hyper-V, but it appears TDX guest is also desired to have similar handlin=
-g,
-> because:=EF=BF=BD
->=20
-> 1) TDX module exposes MTRR in CPUID to guest, but handles nothing about M=
-TRR
-> MSRs but only injects #VE.
->=20
-> 2) TDX module always maps guest private memory as WB (and ignores guest's=
- PAT
-> IIUC);
->=20
-> 3) For shared memory, w/o non-coherent DMA guest's MTRRs are ignored by K=
-VM
-> anyway.  TDX doesn't officially support non-trusted device assignment AFA=
-ICT.
-> Even we want to consider non-coherent DMA, it would only add confusion to=
- honor
-> guest's MTRRs since they can point to private memory, which is always map=
-ped as
-> WB.
+On Fri, May 12, 2023 at 10:53:11AM +0200, Alexandre Ghiti wrote:
 
-Yeah, I think the best option is for KVM to disallow attaching non-coherent=
- DMA
-to TDX VMs.  AFAIK, there's no use case for such a setup.
+> base-commit-tag: v6.3
 
-> So basically looks there's no value to exposing FIXED and dynamic MTRR ra=
-nges to
-> TDX guest.
 
-Agreed.
+BTW Alex, in the future it'd be great if you could pick a more recent
+base (eg -rc1 or riscv/for-next) so that the patchwork automation
+doesn't run into a bunch of conflicts while trying to apply patches.
+
+Cheers,
+Conor.
+
+--yUJ9qocDe5RgavIo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGJw0QAKCRB4tDGHoIJi
+0ttiAQCvuOgsTmAbHoptLuttHFak0avpeoAERDI2wkQYdNUeUwD/Q+eHjCl2EwCO
+AMEo1k9TljgZ9ZWXb/Q9SCxc/XeGawQ=
+=4Rls
+-----END PGP SIGNATURE-----
+
+--yUJ9qocDe5RgavIo--
