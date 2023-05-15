@@ -2,111 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B287703413
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FAD7033FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242909AbjEOQo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S242904AbjEOQnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241879AbjEOQo1 (ORCPT
+        with ESMTP id S242895AbjEOQni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:44:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB81546AE
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684169014;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hemr9fYTXdjOkIhPf2RSmv1Y41p8SIi4cFyzTQq0CC4=;
-        b=DzCkDD1Ds3ximGdm+JAcWFX6MdzfBvkhpkH+6+Y72TO1eftIittZjO7X+CCRWhxa1h9VDC
-        xpd/mPdrfH58evEjNW8deK0An3jfuoM9QKdwEcxnsOfl4BRYDWNsAVy9zLfwzr7T3QJ8im
-        SDj0/hM8kv1tSbzEKYmrr2nBvB/WE5g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-PuyN2mdwMhS1bu3BzSUwQw-1; Mon, 15 May 2023 12:43:31 -0400
-X-MC-Unique: PuyN2mdwMhS1bu3BzSUwQw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C2B97101A554;
-        Mon, 15 May 2023 16:43:30 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.147])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 7DBF3140E917;
-        Mon, 15 May 2023 16:43:26 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 15 May 2023 18:43:17 +0200 (CEST)
-Date:   Mon, 15 May 2023 18:43:12 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Guo Ren <guoren@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hu Chunyu <chuhu@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Paul McKenney <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v8] kernel/fork: beware of __put_task_struct calling
- context
-Message-ID: <20230515164311.GC10759@redhat.com>
-References: <20230515162249.709839-1-wander@redhat.com>
+        Mon, 15 May 2023 12:43:38 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F4049C7;
+        Mon, 15 May 2023 09:43:30 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pybIG-0007b4-AX; Mon, 15 May 2023 18:43:28 +0200
+Message-ID: <547c4c61-26af-ee0d-146f-d0db077dc53f@leemhuis.info>
+Date:   Mon, 15 May 2023 18:43:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515162249.709839-1-wander@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Fwd: Freeze after resuming from hibernation (culprit is brcmfmac
+ change?)
+Content-Language: en-US, de-DE
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Broadcom 80211 Devices <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA cyfmac Subsystem <SHA-cyfmac-dev-list@infineon.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>
+Cc:     Hante Meuleman <hante.meuleman@broadcom.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>, julien.falque@gmail.com
+References: <018f62d0-ee1d-9198-9c38-e45b10921e2e@gmail.com>
+ <f629341e-5920-8061-6120-cb954d22ffe9@redhat.com>
+ <b3bb9fc7-c7ec-ad32-5d6f-e6ba55e2dd7d@gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <b3bb9fc7-c7ec-ad32-5d6f-e6ba55e2dd7d@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684169010;5867046c;
+X-HE-SMSGID: 1pybIG-0007b4-AX
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certainly I have missed something...
+On 15.05.23 15:09, Bagas Sanjaya wrote:
+> On 5/15/23 15:56, Hans de Goede wrote:
+>> On 5/15/23 04:21, Bagas Sanjaya wrote:
+>>> I notice a regression report on bugzilla [1]. Quoting from it:
+> [...]
+>>>> A bisect on linux-git gave commit da6d9c8ecd00 as the cause of the problem.
+>>
+>> da6d9c8ecd00e2 is known to cause a NULL pointer deref on resume,
 
-but,
+Bagas, fwiw, to prevent situations like these I usually search on lore
+for a shorted variant of the commit-id[1] before telling regzbot about
+it. In quite a lot of cases I find something useful that might mean that
+tracking is not worth it.
 
-On 05/15, Wander Lairson Costa wrote:
->
-> -extern void __put_task_struct(struct task_struct *t);
-> +extern void ___put_task_struct(struct task_struct *t);
-> +extern void __put_task_struct_rcu_cb(struct rcu_head *rhp);
+Ciao, Thorsten
 
-I don't understand these renames, why can't you simply put this fix
-into put_task_struct() ?
-
-but this is minor,
-
-> +static inline void __put_task_struct(struct task_struct *tsk)
-> +{
-...
-> +	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
-> +		call_rcu(&tsk->rcu, __put_task_struct_rcu_cb);
-> +	else
-> +		___put_task_struct(tsk);
-> +}
-
-did you see the emails from Peter? In particular, this one:
-
-	https://lore.kernel.org/lkml/20230505133902.GC38236@hirez.programming.kicks-ass.net/
-
-Oleg.
+e.g. [1] https://lore.kernel.org/all/?q=da6d9c8*
 
