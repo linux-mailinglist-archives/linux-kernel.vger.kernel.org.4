@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67EE702A9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21699702AAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241183AbjEOKeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S237438AbjEOKgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241074AbjEOKeB (ORCPT
+        with ESMTP id S229582AbjEOKgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:34:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E22E6E;
-        Mon, 15 May 2023 03:33:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B2F861767;
-        Mon, 15 May 2023 10:33:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1595CC433EF;
-        Mon, 15 May 2023 10:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684146836;
-        bh=5tmSZMTrH48otorY7sLrXC7yV0twLhRBW3UaH6lhA84=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E1Y6ZR0WzHfeBpvPqw70ZdEnLQQpgWKdvoQLpVhX+5wJVudUhLnJbQKQ2L7d8drrx
-         vaba6Sv7UUva6cY/90vupd2i0jeWyJImmPki/eVyWS/qSMa4zlGwG45Onyby+LYuxz
-         t4v6jVxMQtxbDLB5kD152NTGCQXYVQ9LjsNZS98+cpJ/IHA1JmLip8tRBk9o0W7UFS
-         +hXPahVEsUNYeokdYRgs4mMcHkNUFNQTsItXvcYkTMceYm84h1teCoroif0s3h9uPe
-         sqWkX5W99uvKpXcxOHqVsL+ray+oaNU/T2ud44pu1HOLF41InFyVvhMR9XVkRjPq03
-         36vFVPrZNiVOw==
-Date:   Mon, 15 May 2023 12:33:47 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        amir73il@gmail.com, Jan Kara <jack@suse.cz>, jlayton@kernel.org,
-        cyphar@cyphar.com, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC PATCH v2] fs/xattr: add *at family syscalls
-Message-ID: <20230515-kopfgeld-umkurven-f27be4b68a26@brauner>
-References: <20230511150802.737477-1-cgzones@googlemail.com>
+        Mon, 15 May 2023 06:36:52 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF0B186;
+        Mon, 15 May 2023 03:36:51 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F9wd8j029249;
+        Mon, 15 May 2023 10:36:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2Q2H/6F0QA6haF/RsibQHIgK0WwHTGtWTzV2dagm4/M=;
+ b=R/sg+DHG1eGPJyp26EG7GfQrr5PNJJ08ZK25KRGyXNOwx484GFce285rsFG5VEs8ZLiA
+ Wqu7t+fM/bFPBwwpFPoXXy16bpJfTMohrHUw17+kdOW8yC9P5rmYUZ0Xl/djZ1fbnPzW
+ 0wK7KKPU5cbPio0oM+Vw549I/OywpgqFT/mFfUpV9r6j3SAnt1FE+OMB2deHUTlIsgxB
+ xtQmFxParDFu22qkgrgEWUvHob8YT6gQg+ch39iiXV9rSBTMFxkEqbuZbz/siKxyUsPf
+ 78XbzDk3GN3I+DvjhAGG5fvfXyUauZSu1mKDD19ju7jnkaBKNWN9N0Mfn7/4WWG/0sRB Pw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkjk183s1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 10:36:43 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FAagJH012725
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 10:36:42 GMT
+Received: from [10.216.17.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
+ 2023 03:36:34 -0700
+Message-ID: <dc816d43-d3ca-62be-3e8d-9e6d7470c530@quicinc.com>
+Date:   Mon, 15 May 2023 16:06:29 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511150802.737477-1-cgzones@googlemail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v11 7/9] arm64: dts: qcom: ipq9574: Add USB related nodes
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <cover.1683630932.git.quic_varada@quicinc.com>
+ <b4c9dcfbfc328e9404be0edeaa70dde076cb7144.1683630932.git.quic_varada@quicinc.com>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <b4c9dcfbfc328e9404be0edeaa70dde076cb7144.1683630932.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: q3oFru8Y1a-Qa7wyjETsnDLfNc65JTYE
+X-Proofpoint-ORIG-GUID: q3oFru8Y1a-Qa7wyjETsnDLfNc65JTYE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_08,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011 priorityscore=1501
+ adultscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305150091
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,104 +87,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 05:08:02PM +0200, Christian Göttsche wrote:
-> Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
-> removexattrat().  Those can be used to operate on extended attributes,
-> especially security related ones, either relative to a pinned directory
-> or on a file descriptor without read access, avoiding a
-> /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
-> 
-> One use case will be setfiles(8) setting SELinux file contexts
-> ("security.selinux") without race conditions.
-> 
-> Add XATTR flags to the private namespace of AT_* flags.
-> 
-> Use the do_{name}at() pattern from fs/open.c.
-> 
-> Use a single flag parameter for extended attribute flags (currently
-> XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
-> syscall arguments in setxattrat().
-> 
-> Previous approach ("f*xattr: allow O_PATH descriptors"): https://lore.kernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
-> v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-cgzones@googlemail.com/
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> CC: x86@kernel.org
-> CC: linux-alpha@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-arm-kernel@lists.infradead.org
-> CC: linux-ia64@vger.kernel.org
-> CC: linux-m68k@lists.linux-m68k.org
-> CC: linux-mips@vger.kernel.org
-> CC: linux-parisc@vger.kernel.org
-> CC: linuxppc-dev@lists.ozlabs.org
-> CC: linux-s390@vger.kernel.org
-> CC: linux-sh@vger.kernel.org
-> CC: sparclinux@vger.kernel.org
-> CC: linux-fsdevel@vger.kernel.org
-> CC: audit@vger.kernel.org
-> CC: linux-arch@vger.kernel.org
-> CC: linux-api@vger.kernel.org
-> CC: linux-security-module@vger.kernel.org
-> CC: selinux@vger.kernel.org
+
+On 5/9/2023 5:24 PM, Varadarajan Narayanan wrote:
+> Add USB phy and controller related nodes
+>
+> SS PHY need two supplies and HS PHY needs three supplies. 0.925V
+> and 3.3V are from fixed regulators and 1.8V is generated from
+> PMIC's LDO
+>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
+>   Changes in v11:
+> 	- Rename dwc_0 -> usb_0_dwc3
+>   Changes in v10:
+> 	- Fix regulator definitions
+>   Changes in v8:
+> 	- Change clocks order to match the bindings
+>   Changes in v7:
+> 	- Change com_aux -> cfg_ahb
+>   Changes in v6:
+> 	- Introduce fixed regulators for the phy
+> 	- Resolved all 'make dtbs_check' messages
+>
+>   Changes in v5:
+> 	- Fix additional comments
+> 	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> 	- 'make dtbs_check' giving the following messages since
+> 	  ipq9574 doesn't have power domains. Hope this is ok
+>
+> 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+>          	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+>          	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>
+>   Changes in v4:
+> 	- Use newer bindings without subnodes
+> 	- Fix coding style issues
+>
+>   Changes in v3:
+> 	- Insert the nodes at proper location
+>
+>   Changes in v2:
+> 	- Fixed issues flagged by Krzysztof
+> 	- Fix issues reported by make dtbs_check
+> 	- Remove NOC related clocks (to be added with proper
+> 	  interconnect support)
+> ---
+>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 104 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 104 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index 93b4ba9..42b61f6 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -150,6 +150,24 @@
+>   		method = "smc";
+>   	};
+>   
+> +	fixed_3p3: s3300 {
+> +		compatible = "regulator-fixed";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +		regulator-name = "fixed_3p3";
+> +	};
+> +
+> +	fixed_0p925: s0925 {
+> +		compatible = "regulator-fixed";
+> +		regulator-min-microvolt = <925000>;
+> +		regulator-max-microvolt = <925000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +		regulator-name = "fixed_0p925";
+> +	};
+> +
+>   	reserved-memory {
+>   		#address-cells = <2>;
+>   		#size-cells = <2>;
+> @@ -191,6 +209,45 @@
+>   			reg = <0x00060000 0x6000>;
+>   		};
+>   
+> +		usb_0_qusbphy: phy@7b000 {
+> +			compatible = "qcom,ipq9574-qusb2-phy";
+> +			reg = <0x0007b000 0x180>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&xo_board_clk>;
+> +			clock-names = "cfg_ahb",
+> +				      "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			status = "disabled";
+> +		};
+> +
+> +		usb_0_qmpphy: phy@7d000 {
+> +			compatible = "qcom,ipq9574-qmp-usb3-phy";
+> +			reg = <0x0007d000 0xa00>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> +				 <&xo_board_clk>,
+> +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&gcc GCC_USB0_PIPE_CLK>;
+> +			clock-names = "aux",
+> +				      "ref",
+> +				      "cfg_ahb",
+> +				      "pipe";
+> +
+> +			resets = <&gcc GCC_USB0_PHY_BCR>,
+> +				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> +			reset-names = "phy",
+> +				      "phy_phy";
+> +
+> +			status = "disabled";
+> +
+> +			#clock-cells = <0>;
+> +			clock-output-names = "usb0_pipe_clk";
+> +		};
+> +
+>   		pcie0_phy: phy@84000 {
+>   			compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+>   			reg = <0x00084000 0x1000>;
+> @@ -560,6 +617,53 @@
+>   			status = "disabled";
+>   		};
+>   
+> +		usb3: usb@8a00000 {
 
-Fwiw, your header doesn't let me see who the mail was directly sent to
-so I'm only able to reply to lists which is a bit pointless...
+node address should be updated to 8af8800 ?
 
-> v2:
->   - squash syscall introduction and wire up commits
->   - add AT_XATTR_CREATE and AT_XATTR_REPLACE constants
+Thanks,
 
-> +#define AT_XATTR_CREATE	        0x1	/* setxattrat(2): set value, fail if attr already exists */
-> +#define AT_XATTR_REPLACE	0x2	/* setxattrat(2): set value, fail if attr does not exist */
-
-We really shouldn't waste any AT_* flags for this. Otherwise we'll run
-out of them rather quickly. Two weeks ago we added another AT_* flag
-which is up for merging for v6.5 iirc and I've glimpsed another AT_*
-flag proposal in one of the talks at last weeks Vancouver conference
-extravaganza.
-
-Even if we reuse 0x200 for AT_XATTR_CREATE (like we did for AT_EACCESS
-and AT_REMOVEDIR) we still need another bit for AT_XATTR_REPLACE.
-
-Plus, this is really ugly since AT_XATTR_{CREATE,REPLACE} really isn't
-in any way related to lookup and we're mixing it in with lookup
-modifying flags.
-
-So my proposal for {g,s}etxattrat() would be:
-
-struct xattr_args {
-        __aligned_u64 value;
-        __u32 size;
-        __u32 cmd;
-};
-
-So everything's nicely 64bit aligned in the struct. Use the @cmd member
-to set either XATTR_REPLACE or XATTR_CREATE and treat it as a proper
-enum and not as a flag argument like the old calls did.
-
-So then we'd have:
-
-setxattrat(int dfd, const char *path, const char __user *name,
-           struct xattr_args __user *args, size_t size, unsigned int flags)
-getxattrat(int dfd, const char *path, const char __user *name,
-           struct xattr_args __user *args, size_t size, unsigned int flags)
-
-The current in-kernel struct xattr_ctx would be renamed to struct
-kernel_xattr_args and then we do the usual copy_struct_from_user()
-dance:
-
-struct xattr_args args;
-err = copy_struct_from_user(&args, sizeof(args), uargs, usize);
-
-and then go on to handle value/size for setxattrat()/getxattrat()
-accordingly.
-
-getxattr()/setxattr() aren't meaningfully filterable by seccomp already
-so there's not point in not using a struct.
-
-If that isn't very appealing then another option is to add a new flag
-namespace just for setxattrat() similar to fspick() and move_mount()
-duplicating the needed lookup modifying flags.
-Thoughts?
