@@ -2,157 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E27D703F56
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6B8703F27
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245463AbjEOVGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+        id S244989AbjEOVAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245436AbjEOVF7 (ORCPT
+        with ESMTP id S240909AbjEOVAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:05:59 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0863A91;
-        Mon, 15 May 2023 14:05:58 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FKVeKl006742;
-        Mon, 15 May 2023 20:58:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4lsTkDA2uOZkNjsnRFWj6bpzU280j0xCKZgtmGKlSbA=;
- b=fhIx1SVoXxz1CY72y7N6MDk7kTNYuBYczkF3tM9RU0OFthoQ169bAInE2zOEnr/RjreU
- 1QYxkXCtDqb2cidoBd32Ulfkdvz/OSas4ZovwQw+Sl/vB6Wr4YmE24wO8Enrmj2h2wNe
- j3jKWsTB2c+pgAKYBO3oY5FBT4JGeNBoqUhIxF28CHg59BKSzwiobls/jIi5BnMut5n5
- tTMFkEE19pQWefU9mFtwLWjr9x0X3VLGK/8bazj6KwoNqogHZz2n83YNAylchScgtKji
- K5RinUx+Oh0BkiwmpBrhYtBGvUwEB20NDDWBNuI1b/pc267MHvaBoZceVBklFeFvIVx0 eQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkjwdsjqn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 20:58:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FKwiCG008189
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 20:58:44 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
- 2023 13:58:43 -0700
-Message-ID: <d10da0ce-a22e-24e9-e895-fae4c3a35222@quicinc.com>
-Date:   Mon, 15 May 2023 13:58:35 -0700
+        Mon, 15 May 2023 17:00:53 -0400
+Received: from sender3-of-o59.zoho.com (sender3-of-o59.zoho.com [136.143.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A23A5FB;
+        Mon, 15 May 2023 14:00:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684184340; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=eTGG1qsyWmh6mu4/xm11IQw7s1gdYv4wGvAMFKKyLRT51V+/z6BOjxVCBpiwB6CMycnMECWystMjsmL/u0JqgXPRB5EXaxgK4eQOlJjVO2CkUNz2vfSt0t4slM/RQ63f27JiCFzCq1I5bPQwEWAeY67A/hOdr6OJYk8FG1MVYcI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1684184340; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=O2n7lr3iwvkCVvfhSjCoMROTkl+hJy1NY/ie4hm8LcM=; 
+        b=FeCTxvsGT8jeqxZkhjgu39fSBaYYu7S8x0zxTztiUlKYIa1wXsKfbNQaRPOZA9aMuT1U8PwBzzAUEv8HeP0XHl2bhGisLG9ga7nDgwxxQWMnZpkjeYcd5tT6TyaSHUIGJNrdwPn8pBExC/pMlfg3e6e7z7dTjhjE+JXWOSd/DRQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684184340;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=O2n7lr3iwvkCVvfhSjCoMROTkl+hJy1NY/ie4hm8LcM=;
+        b=OiNJMmRZ3ylUV4zirQtm7+fuyXPEpSnMGwX0T+NHQ0fPeierTKbni+JLyU3PkarY
+        vGfd/MkFaPxp1Hzmg/eGHriCNOmgLj9f+ipBILCEOVZVKzXycxHyE7BNNPk6dEabqLw
+        O2gtkkut9XmlM9GbkzlBx526n25j5vYVeh4JbfMA=
+Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1684184339064954.6533982182539; Mon, 15 May 2023 13:58:59 -0700 (PDT)
+Message-ID: <276bf3a2-2518-60cb-a745-5778aa5d66a5@apertussolutions.com>
+Date:   Mon, 15 May 2023 16:58:50 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v8 1/8] drm/msm/dpu: add dsc blocks for remaining chipsets
- in catalog
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
 Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-2-git-send-email-quic_khsieh@quicinc.com>
- <4tmuqrz3du7pwwih3gzp6zveyfvwxj3meeksgxkbg2v5mdtyu3@e5xxuoe64rvv>
- <69538f77-ff08-c3ce-3d4a-9f7250ee2505@quicinc.com>
- <u47xthqfjxpbbzjbvnrz4qa2f2m3aip4iose7cwuhzg4raf7db@qxbos7u55wko>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <u47xthqfjxpbbzjbvnrz4qa2f2m3aip4iose7cwuhzg4raf7db@qxbos7u55wko>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-5-ross.philipson@oracle.com>
+ <CSIZ2DT5C4WQ.19ZUUIWKNAJY9@suppilovahvero>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+In-Reply-To: <CSIZ2DT5C4WQ.19ZUUIWKNAJY9@suppilovahvero>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: URn_Ij42Bf-gxD26DsWNA0FAOsRcqdsS
-X-Proofpoint-GUID: URn_Ij42Bf-gxD26DsWNA0FAOsRcqdsS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_18,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150173
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/15/2023 1:07 PM, Marijn Suijten wrote:
-> On 2023-05-15 11:20:02, Abhinav Kumar wrote:
+On 5/10/23 19:04, Jarkko Sakkinen wrote:
+> On Thu May 4, 2023 at 5:50 PM EEST, Ross Philipson wrote:
+>> Introduce the Secure Launch Resource Table which forms the formal
+>> interface between the pre and post launch code.
 >>
+>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+>> ---
+>>   include/linux/slr_table.h | 270 ++++++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 270 insertions(+)
+>>   create mode 100644 include/linux/slr_table.h
 >>
->>
->> On 5/14/2023 2:39 PM, Marijn Suijten wrote:
->>> DSC*, and mention 1.1 explicitly (since this skips the 1.2 blocks, while
->>> the series is clearly aimed at 1.1...).  This was done for the DSC 1.2
->>> HW block patch after all.
->>>
->>> in catalog -> to catalog
->>>
->>> But it's just two platforms, you can fit MSM8998 and SC8180X in the
->>> title.
->>>
->>> On 2023-05-12 11:00:16, Kuogee Hsieh wrote:
->>>>
->>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>
->>>> There are some platforms has DSC blocks but it is not declared at catalog.
->>>
->>> Some platforms have DSC blocks which have not yet been declared in the
->>> catalog.*
->>>
->>>> For completeness, this patch adds DSC blocks for platforms which missed
->>>> them.
->>>
->>> Drop "this patch":
->>>
->>>       Complete DSC 1.1 support for all platforms by adding the missing
->>>       blocks to MSM8998 and SC8180X.
->>>
->>>>
->>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>> ---
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
->>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
->>>
->>> How about SC7180, and any other DPU 6.x revision?
->>>
->>
->> Will let kuogee respond to the other nits. There is no DSC in sc7180 /
->> sm6115 / qcm2290. So this patch is complete.
+>> diff --git a/include/linux/slr_table.h b/include/linux/slr_table.h
+>> new file mode 100644
+>> index 0000000..d4b76e5
+>> --- /dev/null
+>> +++ b/include/linux/slr_table.h
+>> @@ -0,0 +1,270 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Secure Launch Resource Table
+>> + *
+>> + * Copyright (c) 2023, Oracle and/or its affiliates.
+>> + */
+>> +
+>> +#ifndef _LINUX_SLR_TABLE_H
+>> +#define _LINUX_SLR_TABLE_H
+>> +
+>> +/* Put this in efi.h if it becomes a standard */
+>> +#define SLR_TABLE_GUID				EFI_GUID(0x877a9b2a, 0x0385, 0x45d1, 0xa0, 0x34, 0x9d, 0xac, 0x9c, 0x9e, 0x56, 0x5f)
+>> +
+>> +/* SLR table header values */
+>> +#define SLR_TABLE_MAGIC		0x4452544d
+>> +#define SLR_TABLE_REVISION	1
+>> +
+>> +/* Current revisions for the policy and UEFI config */
+>> +#define SLR_POLICY_REVISION		1
+>> +#define SLR_UEFI_CONFIG_REVISION	1
+>> +
+>> +/* SLR defined architectures */
+>> +#define SLR_INTEL_TXT		1
+>> +#define SLR_AMD_SKINIT		2
+>> +
+>> +/* SLR defined bootloaders */
+>> +#define SLR_BOOTLOADER_INVALID	0
+>> +#define SLR_BOOTLOADER_GRUB	1
+>> +
+>> +/* Log formats */
+>> +#define SLR_DRTM_TPM12_LOG	1
+>> +#define SLR_DRTM_TPM20_LOG	2
+>> +
+>> +/* DRTM Policy Entry Flags */
+>> +#define SLR_POLICY_FLAG_MEASURED	0x1
+>> +#define SLR_POLICY_IMPLICIT_SIZE	0x2
+>> +
+>> +/* Array Lengths */
+>> +#define TPM_EVENT_INFO_LENGTH		32
+>> +#define TXT_VARIABLE_MTRRS_LENGTH	32
+>> +
+>> +/* Tags */
+>> +#define SLR_ENTRY_INVALID	0x0000
+>> +#define SLR_ENTRY_DL_INFO	0x0001
+>> +#define SLR_ENTRY_LOG_INFO	0x0002
+>> +#define SLR_ENTRY_ENTRY_POLICY	0x0003
+>> +#define SLR_ENTRY_INTEL_INFO	0x0004
+>> +#define SLR_ENTRY_AMD_INFO	0x0005
+>> +#define SLR_ENTRY_ARM_INFO	0x0006
+>> +#define SLR_ENTRY_UEFI_INFO	0x0007
+>> +#define SLR_ENTRY_UEFI_CONFIG	0x0008
+>> +#define SLR_ENTRY_END		0xffff
 > 
-> Thank you for checking as I didn't have the DTS close (and it seems
-> SC7180 would have supported this, but no).  I did check other SoCs in
-> the DPU 6.x range that are currently floating in my tree and on the
-> list, which do need their DSC 1.1 block added (both a single block at
-> 0x81000 downstream, 0x80000 upstream), if you can in a resend Konrad:
+> "Enums are preferred when defining several related constants."
 > 
-> DPU 6.4 in SM6350: https://lore.kernel.org/linux-arm-msm/20230411-topic-straitlagoon_mdss-v3-6-9837d6b3516d@linaro.org/
-> DPU 6.9 in SM6375: https://lore.kernel.org/linux-arm-msm/20230411-topic-straitlagoon_mdss-v3-8-9837d6b3516d@linaro.org/
+> See:
 > 
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enums-and-rtl
 
-If these are still on the list, can Konrad add them to his change as 
-that way his catalog change will be complete? Otherwise I would prefer 
-to add them in a follow up change because marking this change as 
-dependent on a catalog change which adds a new chipset is not right.
+These values are only used for a u16 field in a packed structure. 
+Correct me if I am mistaken, but if an enum is used this will result in 
+type/casting handling to/from the u16 which would negate some of the 
+main benefits of using an enum.
 
-> Thanks!
-> 
-> - Marijn
+v/r,
+dps
+
