@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AA8703490
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D140D7034BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243074AbjEOQt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S243065AbjEOQvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243064AbjEOQtb (ORCPT
+        with ESMTP id S243061AbjEOQvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:49:31 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EB759F7;
-        Mon, 15 May 2023 09:49:30 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FGmqCT058261;
-        Mon, 15 May 2023 11:48:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684169332;
-        bh=WYd+HVrvnZqOOIEZzprHDBIRRRbxOwfly0aIcgGcCPA=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=iiIiWjd7bc5jfMNHn2gZH4rUNBemTTyTqFNwW5TrplB4d93zNHJmg9L5XmOXrCSyB
-         NJM9CxisGQmSs98u5njB+dhQbgsMmfXUli6ppu4ekI/ToTedMgefrQg454VOhnzXJB
-         NlzUp9YAG6j2UzNXCS1p4gObu0QRHepNt121fSLk=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FGmq5t085842
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 11:48:52 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 11:48:52 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 May 2023 11:48:52 -0500
-Received: from [10.250.35.77] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FGmpJV101621;
-        Mon, 15 May 2023 11:48:51 -0500
-Message-ID: <1118291b-1137-6368-6202-e54151f01eb0@ti.com>
-Date:   Mon, 15 May 2023 11:48:51 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] kbuild: Disallow DTB overlays to built from .dts named
- source files
-Content-Language: en-US
-From:   Andrew Davis <afd@ti.com>
-To:     Nicolas Schier <nicolas@fjasle.eu>
-CC:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        <devicetree@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230306224752.8417-1-afd@ti.com> <ZAi+Qo1z2OkrqncP@fjasle.eu>
- <b3820dd3-83dd-278e-e9ad-814be0bc8cfa@ti.com>
-In-Reply-To: <b3820dd3-83dd-278e-e9ad-814be0bc8cfa@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 15 May 2023 12:51:33 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE16559D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:51:25 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-643fdfb437aso48587502b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684169485; x=1686761485;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2Zp9tRh+FO1zLUbEzGzOtScVTBYPqTpeZg2SlWORkVg=;
+        b=fUe8uIYoq6QXxQg5ptSRPuQW8LfC3SYChEv+rjCssHCMF4bjAoiYHSvo8Ukijxpt/j
+         RIs/zPmmbqVPinsh38wWKAXfG85D/dW/HUER8QIH9IHk/vMcMwOXB45y6r3pNaCgAXPA
+         jmDzq26FxdpZ8aVT2YX40wcTgiBB36wGz2MkbOSHpMnwsgQVlHjkhM6Eczi4o/EQgSVq
+         vwjzC3p7Z2bWwV09S8OAtHwrPpiIZouWtl3xbcrtnT875cqFbDl1+NSWu+7iGnroj0la
+         agV4lHtAZi21D+iaDF1PrLXifCcIVFVUUH43Cx+1VUbqwzghglYTckKI8huWfjsDc231
+         IqoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684169485; x=1686761485;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Zp9tRh+FO1zLUbEzGzOtScVTBYPqTpeZg2SlWORkVg=;
+        b=Ag4phfSEZtoR6WEpY1QfzZgZAX8B2h4eT5dJWmvakVhgbEixgbgY8I/84wMGN/XTJj
+         rcNJEalqNPUJ7vlvpkUjXmLkOTVn1IFC/K+t19FKLacQ4aaM+5lUuKAAW8XRnWZExzX0
+         jZrWGNlaL6E6QUYQlRW6JwFIeslSsygqXlgauZwxqNa6cKSLVe9MVWlqa3bnENF+XCoH
+         EXsVZ/YIzZdp71sFBsbgFKdPr5ZyGlGEoqBnvuBsv4PE58G6+XmhGjLIDrZ3Lv2AHrxM
+         Mb5juTn22NHfu1fcyV9v9Xmz/dwIm4g7e/hJbsYxbnCrHj1ItYbXSzC8/0CNCAm3rcFM
+         QpAA==
+X-Gm-Message-State: AC+VfDxn3Wkz8J5c//wSDipQiBWa6PEMmlU0lTcABedIZ2krO+rHgpc6
+        ofzcBh1Qx31PK65F2GuP0DlK5a7pYyPW
+X-Google-Smtp-Source: ACHHUZ6bdv2ATRwMm73jY39auKUdui6mQ8hUAXxgBhGFpkDDF32OO7DEtBhPDyO5O60jrvxsshXXx4SLysWm
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a38b:39c5:e0c6:e9f])
+ (user=irogers job=sendgmr) by 2002:a63:2ccf:0:b0:52c:4e3e:24ef with SMTP id
+ s198-20020a632ccf000000b0052c4e3e24efmr9462225pgs.2.1684169485265; Mon, 15
+ May 2023 09:51:25 -0700 (PDT)
+Date:   Mon, 15 May 2023 09:50:39 -0700
+Message-Id: <20230515165039.544045-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Subject: [PATCH v2] perf arm: Fix include path
+From:   Ian Rogers <irogers@google.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,48 +81,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 9:01 AM, Andrew Davis wrote:
-> On 3/8/23 10:56 AM, Nicolas Schier wrote:
->> On Mon, Mar 06, 2023 at 04:47:52PM -0600 Andrew Davis wrote:
->>> As a follow up to the series allowing DTB overlays to built from .dtso
->>> files. Now that all overlays have been renamed, remove the ability to
->>> build from overlays from .dts files to prevent any files with the old
->>          ^^^^
->>
->> The first "from" sounds superfluous to me.
->>
-> 
-> It is a typo, feel free to drop it locally whoever takes this patch.
-> 
+Change "../cs-etm.h" to just "../../../util/cs-etm.h" as ../cs-etm.h
+doesn't exist.
 
-Seems no one took this last cycle.. Still valid and applies for this one.
+Suggested-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+---
+ tools/perf/arch/arm/util/pmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Andrew
+diff --git a/tools/perf/arch/arm/util/pmu.c b/tools/perf/arch/arm/util/pmu.c
+index 860a8b42b4b5..a9623b128ece 100644
+--- a/tools/perf/arch/arm/util/pmu.c
++++ b/tools/perf/arch/arm/util/pmu.c
+@@ -12,7 +12,7 @@
+ #include "arm-spe.h"
+ #include "hisi-ptt.h"
+ #include "../../../util/pmu.h"
+-#include "../cs-etm.h"
++#include "../../../util/cs-etm.h"
+ 
+ struct perf_event_attr
+ *perf_pmu__get_default_config(struct perf_pmu *pmu __maybe_unused)
+-- 
+2.40.1.606.ga4b1b128d6-goog
 
-> Thanks,
-> Andrew
-> 
->> Kind regards,
->> Nicolas
->>> name from accidental being added.
->>>
->>> Signed-off-by: Andrew Davis <afd@ti.com>
->>> ---
->>>   scripts/Makefile.lib | 3 ---
->>>   1 file changed, 3 deletions(-)
->>>
->>> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
->>> index 100a386fcd71..68d0134bdbf9 100644
->>> --- a/scripts/Makefile.lib
->>> +++ b/scripts/Makefile.lib
->>> @@ -418,9 +418,6 @@ endif
->>>   $(obj)/%.dtb: $(src)/%.dts $(DTC) $(DT_TMP_SCHEMA) FORCE
->>>       $(call if_changed_dep,dtb)
->>> -$(obj)/%.dtbo: $(src)/%.dts $(DTC) FORCE
->>> -    $(call if_changed_dep,dtc)
->>> -
->>>   $(obj)/%.dtbo: $(src)/%.dtso $(DTC) FORCE
->>>       $(call if_changed_dep,dtc)
->>> -- 
->>> 2.39.2
->>
