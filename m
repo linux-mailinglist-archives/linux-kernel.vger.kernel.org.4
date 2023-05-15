@@ -2,102 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EA170308E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A663703096
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239826AbjEOOtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S239868AbjEOOwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234849AbjEOOtq (ORCPT
+        with ESMTP id S234849AbjEOOwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:49:46 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C89410E7;
-        Mon, 15 May 2023 07:49:42 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52caed90d17so8196477a12.0;
-        Mon, 15 May 2023 07:49:42 -0700 (PDT)
+        Mon, 15 May 2023 10:52:10 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043211706
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:52:08 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f450815d02so41001585e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:52:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684162182; x=1686754182;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=57VzcyPuA7BEKGnVhD0e6Z7x74rWRavME0frZ5YKs9Y=;
-        b=VRt7+CVjEumhGywZRHZ0Ii6ISVXYXyq3As5d7B2vOCTGTtG/5HKprnIWtad1TXxzt2
-         OG8IY9QmxYghmF/2RTF+ORBiF1HYXrjq7X/HIYlvvTs3xVegaH3jPFva/mUVbGYV4O9K
-         Sp+xYSBmr29fk1F/B84Y77rAvHIc/5Wtm0NeXX5bZJFxUjE+RqniTnDeIDLJAWqdr6Yn
-         w4dYOsdST7/WJX4BXbk0JRnHQwPT5gSkIc+/VI1sUTGB4lxxUtK4EHjZjUjJPtk3CqVc
-         VdLaq3QyROHjo9fFctQW4sYdiYe5BIYm15o9n4dlaly0qHmQX6LAwjMS1lNMJEndtu1q
-         gBwg==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684162326; x=1686754326;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I6PGsaxxe+r0/tgEPfoiZneEqJdU4NADxCmDaQhFL68=;
+        b=QBUPDu0mnTKpIi/wGbo9UgpiCqziYGcMj3hQWPNefHgGAfqJ8lVJErWsufoP7gVWl/
+         MuKN4tEX1pZzLr340OCucG7rs4ehSVdPZ56+kGhAkPSHTFEanh+UOGRKxl0frSuERoQi
+         znFDPcNKbBBfN9G+5GNepJLzQ0wZAO8nLN1JBJsH87VkOTZzGqNF3dV7QfkvbFQbWwzC
+         8JItnIfYJ0m+YlLGiaXwATFgD5y70Nki5rbnME2c/ITNCpP6jTEfV2/BTzQHtJXbr5Ix
+         ZLYZvkgxPg66jjZAKiLqfZ7H0BYHkg7RRJ+3Kpz8v/kkce6/YnkPjUmtUNTBVfQ11JjK
+         kiqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684162182; x=1686754182;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=57VzcyPuA7BEKGnVhD0e6Z7x74rWRavME0frZ5YKs9Y=;
-        b=Cu5wBWd1VcDPKG6FG+fK5HCQTm2VfU17wGp1/qinndNeekBHZID1Wylp7yRNa5EfHU
-         kc65Ja+3aNcUmcwEHfuoY2CUORG44JQ2EvToNrZKJy/ALa9lvVFP5Nrp7MR2621PPUeO
-         XGF0ph0vmZDiSi0bVS2OixwZ2Ywy8soMsy9mARfa8c71QNRBCe9Ygdwc43x0U1Btk7T5
-         7vZymZEVk9MaP/HjF0ZWfCzbeCGLBwueaEqAjUcKjeSecaelM6ZK14O0/GIbhHIalmDN
-         YPY9MBxs8zupXYHwbX+pVt8QSr+WqdSzJCMn6DkwnwbyIzcjOEXbAtaWRePe+bztIWQo
-         vvIg==
-X-Gm-Message-State: AC+VfDxYcugfOzRz3Iaqdyjvnq/aWTBj//cNtSRCoJULRNG4aRDzZla/
-        ze31ecWy9uwAztYQPFEav9o=
-X-Google-Smtp-Source: ACHHUZ5DEMRmMSpfNxApnb/08HztqIwNtkhEE5NDX/bKULOjvcovt2TsoSXkaF9iWZ0vFuLFACmcOw==
-X-Received: by 2002:a05:6a20:a113:b0:104:45df:42d8 with SMTP id q19-20020a056a20a11300b0010445df42d8mr14295089pzk.10.1684162181947;
-        Mon, 15 May 2023 07:49:41 -0700 (PDT)
-Received: from localhost.localdomain ([103.194.71.110])
-        by smtp.gmail.com with ESMTPSA id r19-20020a62e413000000b0062d859a33d1sm11854437pfh.84.2023.05.15.07.49.39
+        d=1e100.net; s=20221208; t=1684162326; x=1686754326;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I6PGsaxxe+r0/tgEPfoiZneEqJdU4NADxCmDaQhFL68=;
+        b=A1PzToNhgArTq+00rw0/5CLFUpc4GQm4RS2aqZlF4zc1Vp1Hd6iuZPG7QXv30Xiw+J
+         kMohWSXe3ccR8+woh/XbB6N4Ue+ODeBjy7v4gj3iRtHW9NXwji3GS6916EJ27GSjCxIO
+         BMawZDESLtlgqXKxGBJdupqBFStOIEJPxDPTc7LWh81IUK0ePgomgZFGMvMDNFBMYmNO
+         X4aIcXbeEJz2n82k7TRlnnA2wiD7ME/N0k01uulda/oRJDk1hZ8MNgrngMciKNK/KqXo
+         DIvQxj+U2VVwfyYcg6uU7cOAnt0OOH3HWLZOKgOlor04LihUYrPNyf/zdmpxzO6/TMEj
+         M0wg==
+X-Gm-Message-State: AC+VfDy7mXumQjzxsdube5SCuuBXXWPZ2+jDwoNzNo1JGN2v5e+rIfco
+        KMIArRHCSPM4D4prELB/Ad4skg==
+X-Google-Smtp-Source: ACHHUZ5PnVTE8/BjOvD4cpmnU1SfNcpaeP+ththsz81R4NjZ9b8l1B6aIXxY1tdG8cXWxh3+7kD4ow==
+X-Received: by 2002:a1c:f310:0:b0:3f1:74bd:bc22 with SMTP id q16-20020a1cf310000000b003f174bdbc22mr22887492wmq.6.1684162326437;
+        Mon, 15 May 2023 07:52:06 -0700 (PDT)
+Received: from localhost ([2a01:e0a:55f:21e0:fd3b:9fed:e621:cc8f])
+        by smtp.gmail.com with ESMTPSA id p1-20020a05600c204100b003f4e47c6504sm14774860wmg.21.2023.05.15.07.52.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 07:49:41 -0700 (PDT)
-From:   llyyr <llyyr.public@gmail.com>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D sensor chip on some MSI boards.
-Date:   Mon, 15 May 2023 20:19:10 +0530
-Message-Id: <20230515144910.13514-1-llyyr.public@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Mon, 15 May 2023 07:52:05 -0700 (PDT)
+Date:   Mon, 15 May 2023 16:52:05 +0200
+From:   Julien Stephan <jstephan@baylibre.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
+        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
+        Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:DRM DRIVERS FOR MEDIATEK" 
+        <dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH v2 2/2] phy: mtk-mipi-csi: add driver for CSI phy
+Message-ID: <jx2ndeoli3ozjiydygwclrpqmwftgf2gv4kfr6dyclf2cyh4hk@fnhvqeef5w4f>
+References: <20230515090551.1251389-1-jstephan@baylibre.com>
+ <20230515090551.1251389-3-jstephan@baylibre.com>
+ <cd6067b2-660a-8f2c-697d-26814a9dc131@collabora.com>
+ <ynrvqt24hjgng25r2xa3hxj35cvgotx7sdfrbqfjcvj3foegmr@4lqhen5yu6fh>
+ <85500bcc-c5e8-8ce2-edea-233de86c2d35@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <85500bcc-c5e8-8ce2-edea-233de86c2d35@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
+On Mon, May 15, 2023 at 04:22:38PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 15/05/23 15:36, Julien Stephan ha scritto:
+> > On Mon, May 15, 2023 at 02:22:52PM +0200, AngeloGioacchino Del Regno wrote:
+> > > Il 15/05/23 11:05, Julien Stephan ha scritto:
+> >   ..snip..
+> > > > +	port->is_cdphy = of_property_read_bool(dev->of_node, "mediatek,is_cdphy");
+> > >
+> > > This driver doesn't support C-PHY mode, so you either add support for that, or in
+> > > my opinion you should simply refuse to probe it, as it is *dysfunctional* for the
+> > > unsupported case (and might even introduce unstabilities).
+> > >
+> > > 	/* At the moment, only D-PHY mode is supported */
+> > > 	if (!port->is_cdphy)
+> > > 		return -EINVAL;
+> > >
+> > > Also, please don't use underscores for devicetree properties: "mediatek,is-cdphy"
+> > > is fine.
+> > >
+> > Hi Angelo,
+> > You are right this driver does not support C-PHY mode, but some of the
+> > PHYs themselves support BOTH C-PHY AND D-PHY. The idea of `is_cdphy` variable
+> > is to know if the CSI port supports BOTH C-PHY AND D-PHY or only DPHY.
+> > For example mt8365 has 2 PHYs: CSI0 and CSI1. CSI1 support only D-PHY,
+> > while CSI0 can be configured in C-PHY or D-PHY. Registers for CD-PHY and
+> > D-PHY are almost identical, except that CD-PHY compatible has some extra
+> > bitfields to configure properly the mode and the lanes (because supporting
+> > trios for CD-PHY).
+> > If C-PHY support is eventually added into the driver, I think we will need
+> > another variable such as `mode` to know the mode. I was also thinking
+> > of adding a phy argument to determine if the mode is C-PHY or D-PHY.
+> >
+> > So here, I don't want to stop the probe if `is_cdphy` variable is set to
+> > true. Does it make sense ?
+> >
+>
+> Comments in the code convinced me that the other PHYs providing only C or D PHY
+> support weren't compatible at all with this driver.
+>
+> I got it now - but at this point can you please add a comment in the code actually
+> clarifying that this driver supports both PHYs providing *only* D-PHY and ones
+> providing selectable C-or-D PHY?
+>
+> That clarified, it would not make sense to stop probing if it's not a CDPHY because
+> as you said there might be a D-only PHY that would be actually supported here.
+>
+> Regards,
+> Angelo
+>
+>
+Ok, I will add a comment in the code to make it more clear.
 
-Signed-off-by: llyyr <llyyr.public@gmail.com>
----
- drivers/hwmon/nct6683.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
-index a872f783e..f673f7d07 100644
---- a/drivers/hwmon/nct6683.c
-+++ b/drivers/hwmon/nct6683.c
-@@ -173,6 +173,7 @@ superio_exit(int ioreg)
- #define NCT6683_CUSTOMER_ID_INTEL	0x805
- #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
- #define NCT6683_CUSTOMER_ID_MSI		0x201
-+#define NCT6683_CUSTOMER_ID_MSI2	0x200
- #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
- #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
- 
-@@ -1220,6 +1221,8 @@ static int nct6683_probe(struct platform_device *pdev)
- 		break;
- 	case NCT6683_CUSTOMER_ID_MSI:
- 		break;
-+	case NCT6683_CUSTOMER_ID_MSI2:
-+		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK:
- 		break;
- 	case NCT6683_CUSTOMER_ID_ASROCK2:
--- 
-2.40.1
-
+Regards
+Julien
