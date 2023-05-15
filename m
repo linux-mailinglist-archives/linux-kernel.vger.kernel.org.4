@@ -2,68 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A40702D8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3C0702D91
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242286AbjEONHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
+        id S242271AbjEONI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242157AbjEONGo (ORCPT
+        with ESMTP id S242250AbjEONII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:06:44 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C4126B9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:06:15 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaf70676b6so90626265ad.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:06:15 -0700 (PDT)
+        Mon, 15 May 2023 09:08:08 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1432110
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:07:33 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-7590aa05af6so499270985a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684155966; x=1686747966;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oD0d2al7XFldRkjYP37ZWtTdhmPaRGV8lU2SKIN3qFc=;
-        b=Md2uy27iyG56QmAk/eMUrPY9FgIbjWQ34NOlHqHXzvq/n+f6KFeUNnAfHdTfIROgpr
-         i+HrFD3SDGN7cdg0bpeMPna+t3GxvzduQzy5yue646dWIIdgWqwFvGeyeP2WvGuBIaf9
-         lca9gTUHWxnlNULGlhCBRARLT0/pk0Uz/OAmw=
+        d=ziepe.ca; s=google; t=1684156049; x=1686748049;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r52VsGt7pCD5MqwU7Iz5hhf7etBKNWqtKNN+QQL4Wbs=;
+        b=c+5jOYw/nbV0ulxcZUPP/BwmGfGabE0GudFc4Pxot2MDSxnZOMjQBHanidAXv8AN4s
+         wCtL4vKPT/NQuQtyRosfY1v+Cc4PX94PKhH/K4vGQkh8BXrOSCykMzDtIWTaHdinMTlL
+         GTd1vPbd7jdhMb9Xp18vHEaSJ5oykF8Q18Co+JrFWfrSsGa06ytgp5MPhg2lAuMcBHY9
+         +cXuTSEKaaD6FCDHfVc+wlq2TFUxcMNkM8xdx//DfRqBb1wXlbXwUaZ0w2XcKKmJCXYm
+         rNhNdyMFvde5Wj2WqbjDnUEci9/JLzGroYUlyOEdGT2Q14DOTFUq69HjSZo3vkt1aQ7q
+         pxiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684155966; x=1686747966;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oD0d2al7XFldRkjYP37ZWtTdhmPaRGV8lU2SKIN3qFc=;
-        b=lbM5kQJ9bIst5e35TfuWN6cj0K6pizXJzTI7HWI9KK3ScppyV4dEovWbpU7rWRlp5k
-         eqHC3kUolb2VlQd7oM8Hmp+bX9JynjQum0lWXhWZB6cu9F79+KQlQPtAj6pOpgV2N+Xx
-         sxcGJXvcsHxsiJMskmeSiFNB8RB+IyrgTOAc7Ist5BHu2Z6RsOKIFy7tMZ7yEHlR4ygF
-         +B+awV8Ky0ge84hQuZ46TZ2Fq7Ah/82sQFhY2oh0Y6mNcdhz+1N4WGMUDqEneEfLOrfP
-         3PVIiV2rMQBgzS0vg5NykCfPSPe3ZBg4IWBPven+NXBpl8kuZQA0tTb++DT/Wd6Qh2zh
-         /zlA==
-X-Gm-Message-State: AC+VfDxy3o4TJMyY+fnRdH3m2pn4a8vNzoHdGdxXmEWhDNC2TzmEsfiy
-        69UuQJk/lmApL5nrrgcxLO8rNQ==
-X-Google-Smtp-Source: ACHHUZ7kRs6SmTa1z+RVcotvr+mhyGciDo5UlpdWfWoFRJZOmx9Unzfl0FpNuZrj13ngH72aAGPZ1g==
-X-Received: by 2002:a17:903:234f:b0:1ae:bf5:7b5 with SMTP id c15-20020a170903234f00b001ae0bf507b5mr6078985plh.34.1684155966087;
-        Mon, 15 May 2023 06:06:06 -0700 (PDT)
-Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
-        by smtp.gmail.com with UTF8SMTPSA id g13-20020a170902c38d00b0019f9fd10f62sm13454823plg.70.2023.05.15.06.06.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 06:06:05 -0700 (PDT)
-From:   jeffxu@chromium.org
-To:     dave.hansen@intel.com, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        sroettger@google.com
-Cc:     akpm@linux-foundation.org, jeffxu@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 6/6] PKEY:selftest pkey_enforce_api for munmap
-Date:   Mon, 15 May 2023 13:05:52 +0000
-Message-ID: <20230515130553.2311248-7-jeffxu@chromium.org>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-In-Reply-To: <20230515130553.2311248-1-jeffxu@chromium.org>
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
+        d=1e100.net; s=20221208; t=1684156049; x=1686748049;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r52VsGt7pCD5MqwU7Iz5hhf7etBKNWqtKNN+QQL4Wbs=;
+        b=B6imZNDF/Nf71gEvW3PqX7RhIxNyfOW6kGKRgg8F9DZN/3qIvMQMuKRj24gr0IH14l
+         giL5gGjMAThKLBz4U6yQCr4o+onbnDGAE24xvqnfGLf537Jru2MMLEHPt3O8pOHLFCB3
+         0SyjHGjvE/xHWsmaVeqMNGhtUhq/p9hf4ZAREhQgNLbRft+eonBt/b82IcOXv0sFZZwe
+         Mnr13LMO6r4keJ+8+S+CsHO5FB8NHFsRvA11ZPQM5VIXeV8AOazfd2jYlWCyI6ddcVz/
+         fmmEhF4cn1hjGc6QiXSs/Z4VeVzlATtxVQ07K4DHkpGD3qP6Cqvyxf195pzr1HlAusZH
+         MpAw==
+X-Gm-Message-State: AC+VfDx2WWqP13qg2L+7X2gKry1cVNb5gkFeASg7DPm9Mg6qg7/AjfoJ
+        UWjxKYn/KlDlfASxbiGwhJJ4BQ==
+X-Google-Smtp-Source: ACHHUZ6oq1rgsxAhha/L8rTgUYSyK7wV0xG3BSAlCLbWHRWP4j4vcs+gZ2cT74Vr/sFz2mlpsmeCpA==
+X-Received: by 2002:ac8:7f44:0:b0:3f3:928a:eae2 with SMTP id g4-20020ac87f44000000b003f3928aeae2mr42158943qtk.4.1684156049337;
+        Mon, 15 May 2023 06:07:29 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id n27-20020ac81e1b000000b003e388264753sm5328251qtl.65.2023.05.15.06.07.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 06:07:28 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pyXvD-000xlt-MR;
+        Mon, 15 May 2023 10:07:27 -0300
+Date:   Mon, 15 May 2023 10:07:27 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Julian Ruess <julianr@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krishna Reddy <vdumpa@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v9 5/6] iommu/dma: Allow a single FQ in addition to
+ per-CPU FQs
+Message-ID: <ZGIuj2pRjOPffqZZ@ziepe.ca>
+References: <20230310-dma_iommu-v9-0-65bb8edd2beb@linux.ibm.com>
+ <20230310-dma_iommu-v9-5-65bb8edd2beb@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310-dma_iommu-v9-5-65bb8edd2beb@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,471 +119,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Xu <jeffxu@google.com>
+On Mon, May 15, 2023 at 11:15:55AM +0200, Niklas Schnelle wrote:
 
-Add selftest for pkey_enforce_api for mprotect
+> +/**
+> + * struct dma_iommu_options - Options for dma-iommu
+> + *
+> + * @flags: Flag bits for enabling/disabling dma-iommu settings
+> + *
+> + * This structure is intended to provide IOMMU drivers a way to influence the
+> + * behavior of the dma-iommu DMA API implementation. This allows optimizing for
+> + * example for a virtualized environment with slow IOTLB flushes.
+> + */
+> +struct dma_iommu_options {
+> +#define IOMMU_DMA_OPTS_PER_CPU_QUEUE	(0L << 0)
+> +#define IOMMU_DMA_OPTS_SINGLE_QUEUE	(1L << 0)
+> +	u64	flags;
+> +};
 
-Signed-off-by: Jeff Xu<jeffxu@google.com>
----
- tools/testing/selftests/mm/pkey_enforce_api.c | 437 ++++++++++++++++++
- 1 file changed, 437 insertions(+)
+You need to hash it out with robin if we do something like this or use
+more untyped caps as he put in this series:
 
-diff --git a/tools/testing/selftests/mm/pkey_enforce_api.c b/tools/testing/selftests/mm/pkey_enforce_api.c
-index 23663c89bc9c..92aa29248e1f 100644
---- a/tools/testing/selftests/mm/pkey_enforce_api.c
-+++ b/tools/testing/selftests/mm/pkey_enforce_api.c
-@@ -833,6 +833,429 @@ void test_mprotect_child_thread(bool enforce)
- 	clean_single_address_with_pkey(pkey, ptr, size);
- }
- 
-+// mmap one address with one page.
-+// assign PKEY to the address.
-+// munmap on the address is protected.
-+void test_munmap_single_address(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_single_address_with_pkey(enforce, size, &pkey, &ptr);
-+
-+	// disable write access.
-+	pkey_write_deny(pkey);
-+
-+	ret = munmap(ptr, size);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr, size);
-+		assert(!ret);
-+	}
-+
-+	clean_single_address_with_pkey(pkey, ptr, size);
-+}
-+
-+// mmap two address (continuous two pages).
-+// assign PKEY to them with one mprotect_pkey call (merged address).
-+// munmap two address in one call (merged address).
-+void test_munmap_two_address_merge(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr;
-+	void *ptr2;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_two_continues_fixed_address_with_pkey(enforce, size, &pkey, &ptr,
-+						    &ptr2);
-+
-+	// disable write.
-+	pkey_write_deny(pkey);
-+
-+	// munmap on both addresses with one call (merged).
-+	ret = munmap(ptr, size * 2);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr, size * 2);
-+		assert(!ret);
-+	}
-+
-+	ret = sys_pkey_free(pkey);
-+	assert(ret == 0);
-+}
-+
-+// mmap two address (continuous two pages).
-+// assign PKEY to the second address.
-+// munmap on the second address is protected.
-+void test_munmap_two_address_deny_second(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr;
-+	void *ptr2;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_two_continues_fixed_address_protect_second_with_pkey(
-+		enforce, size, &pkey, &ptr, &ptr2);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	ret = munmap(ptr2, size);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	ret = munmap(ptr, size);
-+	assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr2, size);
-+		assert(!ret);
-+	}
-+
-+	ret = sys_pkey_free(pkey);
-+	assert(ret == 0);
-+}
-+
-+// mmap two address (continuous two pages).
-+// assign PKEY to the second address.
-+// munmap on the range that includes the second address.
-+void test_munmap_two_address_deny_range(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr;
-+	void *ptr2;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_two_continues_fixed_address_protect_second_with_pkey(
-+		enforce, size, &pkey, &ptr, &ptr2);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	ret = munmap(ptr, size * 2);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr, size * 2);
-+		assert(!ret);
-+	}
-+
-+	ret = sys_pkey_free(pkey);
-+	assert(ret == 0);
-+}
-+
-+// mmap one address with 4 pages.
-+// assign PKEY to the second page only.
-+// munmap on memory range that includes the second pages is protected.
-+void test_munmap_vma_middle_addr(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr, *ptr2, *ptr3;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_4pages_fixed_protect_second_page(enforce, size, &pkey, &ptr,
-+					       &ptr2, &ptr3);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	// munmap support merge, we are going to make sure we don't regress.
-+	ret = munmap(addr1, size * 4);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr, size * 4);
-+		assert(!ret);
-+	}
-+
-+	ret = sys_pkey_free(pkey);
-+	assert(ret == 0);
-+}
-+
-+// mmap one address with 4 pages.
-+// assign PKEY to the second page only.
-+// munmap from 2nd page.
-+void test_munmap_shrink(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr, *ptr2, *ptr3;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_4pages_fixed_protect_second_page(enforce, size, &pkey, &ptr,
-+					       &ptr2, &ptr3);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	// munmap support merge, we are going to make sure we don't regress.
-+	ret = munmap(ptr2, size * 3);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr2, size * 3);
-+		assert(!ret);
-+	}
-+
-+	ret = munmap(ptr, size);
-+	assert(!ret);
-+
-+	ret = sys_pkey_free(pkey);
-+	assert(ret == 0);
-+}
-+
-+// mmap one address with 4 pages.
-+// assign PKEY to the second page only.
-+// munmap from 2nd page but size is less than one page
-+void test_munmap_unaligned(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr, *ptr2, *ptr3;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_4pages_fixed_protect_second_page(enforce, size, &pkey, &ptr,
-+					       &ptr2, &ptr3);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	// munmap support merge, we are going to make sure we don't regress.
-+	ret = munmap(ptr2, size - 1);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr2, size - 1);
-+		assert(!ret);
-+	}
-+
-+	ret = munmap(ptr, size * 4);
-+	assert(!ret);
-+
-+	ret = sys_pkey_free(pkey);
-+	assert(ret == 0);
-+}
-+
-+// mmap one address with 4 pages.
-+// assign PKEY to the second page only.
-+// munmap from 2nd page but size is less than one page
-+void test_munmap_unaligned2(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr, *ptr2, *ptr3;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_4pages_fixed_protect_second_page(enforce, size, &pkey, &ptr,
-+					       &ptr2, &ptr3);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	// munmap support merge, we are going to make sure we don't regress.
-+	ret = munmap(ptr2, size + 1);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(ptr2, size + 1);
-+		assert(!ret);
-+	}
-+
-+	ret = munmap(ptr, size * 4);
-+	assert(!ret);
-+
-+	ret = sys_pkey_free(pkey);
-+	assert(ret == 0);
-+}
-+
-+// mmap one address with one page.
-+// assign PKEY to the address.
-+// munmap on the address but with size of 4 pages(should OK).
-+void test_munmap_outbound_addr(bool enforce)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_single_fixed_address_with_pkey(enforce, size, &pkey, &ptr);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	// Interesting enough, this is allowed, even the other 3 pages are not allocated.
-+	ret = munmap(addr1, size * 4);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey);
-+
-+	if (enforce) {
-+		ret = munmap(addr1, size * 4);
-+		assert(!ret);
-+	}
-+
-+	clean_single_address_with_pkey(pkey, ptr, size);
-+}
-+// mmap two addresses, with a page gap between two.
-+// assign pkeys on both address.
-+// disable access to the second address.
-+// munmap from start of address1 to the end of address 2,
-+// because there is a gap in the memory range, mprotect will fail.
-+void test_munmap_gapped_address_with_two_pkeys(bool enforce)
-+{
-+	int pkey, pkey2;
-+	int ret;
-+	void *ptr, *ptr2;
-+	int size = PAGE_SIZE;
-+
-+	LOG_TEST_ENTER(enforce);
-+
-+	setup_address_with_gap_two_pkeys(enforce, size, &pkey, &pkey2, &ptr,
-+					 &ptr2);
-+
-+	// disable write access.
-+	pkey_write_deny(pkey2);
-+
-+	// Interesting enough, this is allowed, even there is a gap beween address 1 and 2.
-+	ret = munmap(addr1, size * 3);
-+	if (enforce)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	pkey_write_allow(pkey2);
-+	if (enforce) {
-+		ret = munmap(addr1, size * 3);
-+		assert(!ret);
-+	}
-+}
-+
-+// use write-deny pkey and see if program can exit properly.
-+// This is manual test, run it at end if needed.
-+void test_exit_munmap_disable_write(void)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr;
-+	int size = PAGE_SIZE;
-+
-+	pkey = sys_pkey_alloc(PKEY_ENFORCE_API, 0);
-+	assert(pkey > 0);
-+
-+	// allocate 1 page.
-+	ptr = mmap(addr1, size, PROT_READ,
-+		   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-+	assert(ptr == addr1);
-+
-+	// assign pkey to the first address.
-+	ret = sys_mprotect_pkey(ptr, size, PROT_READ | PROT_WRITE | PROT_EXEC,
-+				pkey);
-+	assert(!ret);
-+
-+	// disable write through pkey.
-+	pkey_write_deny(pkey);
-+
-+	ret = munmap(ptr, size);
-+	assert(ret < 0);
-+}
-+
-+// use disable-all pkey and see if program can exit properly.
-+// This is manual test, run it at end if needed.
-+void test_exit_munmap_disable_all(void)
-+{
-+	int pkey;
-+	int ret;
-+	void *ptr;
-+	int size = PAGE_SIZE;
-+
-+	pkey = sys_pkey_alloc(PKEY_ENFORCE_API, 0);
-+	assert(pkey > 0);
-+
-+	// allocate 1 page.
-+	ptr = mmap(addr2, size, PROT_READ,
-+		   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-+	assert(ptr == addr2);
-+
-+	// assign pkey to the first address.
-+	ret = sys_mprotect_pkey(ptr, size, PROT_READ | PROT_WRITE | PROT_EXEC,
-+				pkey);
-+	assert(!ret);
-+
-+	// disable write through pkey.
-+	pkey_access_deny(pkey);
-+
-+	ret = munmap(addr1, size);
-+	assert(ret < 0);
-+}
-+
- void test_enforce_api(void)
- {
- 	for (int i = 0; i < 2; i++) {
-@@ -848,7 +1271,21 @@ void test_enforce_api(void)
- 		test_mprotect_unaligned2(enforce);
- 		test_mprotect_child_thread(enforce);
- 		test_mprotect_gapped_address_with_two_pkeys(enforce);
-+
-+		test_munmap_single_address(enforce);
-+		test_munmap_two_address_merge(enforce);
-+		test_munmap_two_address_deny_second(enforce);
-+		test_munmap_two_address_deny_range(enforce);
-+		test_munmap_vma_middle_addr(enforce);
-+		test_munmap_outbound_addr(enforce);
-+		test_munmap_shrink(enforce);
-+		test_munmap_unaligned(enforce);
-+		test_munmap_unaligned2(enforce);
-+		test_munmap_gapped_address_with_two_pkeys(enforce);
- 	}
-+
-+	test_exit_munmap_disable_write();
-+	test_exit_munmap_disable_all();
- }
- 
- int main(void)
--- 
-2.40.1.606.ga4b1b128d6-goog
+https://lore.kernel.org/linux-iommu/cover.1683233867.git.robin.murphy@arm.com/
 
+Jason
