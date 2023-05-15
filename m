@@ -2,126 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0A87021B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7F47021A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjEOC2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 22:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
+        id S238682AbjEOCYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 22:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237971AbjEOC2s (ORCPT
+        with ESMTP id S238944AbjEOCYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 22:28:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489BE19BE;
-        Sun, 14 May 2023 19:28:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B030661DAF;
-        Mon, 15 May 2023 02:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DDD7C433A0;
-        Mon, 15 May 2023 02:16:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684117009;
-        bh=4BY0lMs9sfv6UZLqV2INWTuZMr7qywgOSBpnpI+KUTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IpZcxfWw723lqm23ztb4WFTnvYT+IhL7AlF5GXQ6QI4ZjKL5o7lOj1KCDlTWJuAco
-         B8QLFpqXRR/CI2eMq8LAWdufdzAoAX24gUBaw6uZsCmZDSRcG6QR0OKvvO5vCdmwz4
-         fplQZmC5fB3gT+hs4IdAShG24dC+d01StjcRIVBnWRjHi/4OAQQxIf8fVosH2hyaOV
-         FZ8WuCJiMykUW6//oi06sub5ZVoXc8PFsoE0oyALEw0DaJz9HZ0rKxy0MGLBjwwDY7
-         6SOJHuDJyBCfSt8jFamX2rbXyrmjvUW55Mw1ESao4aszxmQI3bZ9A1KNzq5Hp8vDUl
-         AkYdxo6t/1INw==
-Date:   Sun, 14 May 2023 19:20:41 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Anjelique Melendez <quic_amelende@quicinc.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Luca Weiss <luca@z3ntu.xyz>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] leds: qcom-lpg: Fix PWM period limits
-Message-ID: <20230515022041.4i2w36vubzggpdt6@ripper>
-References: <20230512165524.3367443-1-quic_bjorande@quicinc.com>
- <cab829ec-5763-1352-618a-adad8c01227d@linaro.org>
+        Sun, 14 May 2023 22:24:09 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979B61BE3;
+        Sun, 14 May 2023 19:23:21 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52c30fbccd4so11189252a12.0;
+        Sun, 14 May 2023 19:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684117315; x=1686709315;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=niU+K5V3bpGotdNKpKxWKa4Y6tYufU19KgTr2VkMAOs=;
+        b=TzK1q0I0oFDYjnlEeRsc/RoZzCBtJzngsvHVhHS26gVUo+WtNoR51Fq2J0eVQ7V9JY
+         XX0str2BASSFHiaTZa1p20RDKWbCbOTBcVuekLzpi+JmZ4hAQLVVVB90JscQ/O6LCq1m
+         33xxZQotsk6xDNqaz6r/SXYBOFjKiK34BEgRgIf3SE8nx/vpkktc1z5RUd4lzSW7sJB2
+         P3RGZxJ3dl0sty4J4Jtsg1bY3TLj3M9bGjC0VJ+RR/8NDFZFpuj/779GgmLIhRQ1UThQ
+         qCYHhUs9gdv2JpOwsO6mZQe93pMNthS3PcHmjjjp2VFKGesJhteE0NfOKhrUYUfNqBgH
+         +zsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684117315; x=1686709315;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=niU+K5V3bpGotdNKpKxWKa4Y6tYufU19KgTr2VkMAOs=;
+        b=ZAdH1+YoAz9QQwVYthSx29MvakU3YSlXFmniNN5AzAtYvQN6W2SumJJtUgVY43x3wt
+         UojbrrnGfWcU0WxX1N8wApzZiZyc02BQYeJiI0mkaIcSJw+//eYvLT62i48kCm3bquJR
+         6uEjfIXE03HB10wNCoAo8yEJz2dyW0Z4jv/Q7TwFBNcdPBWMIq9ZebTAFXLIXNm48jjv
+         8r76ILE0o04y0p9HzjfJ24qLa3L+8djeVT8TAzV7POveTr1J2oZ+KnYS3CSnE8g+drY9
+         +dlFg29bstcIZrJEz+dlpIvS1mqJrsqClK5VEa+NsjJwsZXbODtwYf8ld+O1Fj/x0dOb
+         OWNg==
+X-Gm-Message-State: AC+VfDzFNXel8zdKgCYFAwBlpyfWkURMI61DeAfUY5yN/XsGWPkPJBjd
+        zbgnbb+CG6/Sd+OhQqvuWGqSqEPxB5A=
+X-Google-Smtp-Source: ACHHUZ6b0O29/SbNOOB1m/nfqjkm8TsYEwR4PWrH+ndWxFONqfoISHkRpOfAkfaFUYT1OsPN24E65Q==
+X-Received: by 2002:a17:902:f7c9:b0:1ad:eb62:f617 with SMTP id h9-20020a170902f7c900b001adeb62f617mr9893964plw.45.1684117314765;
+        Sun, 14 May 2023 19:21:54 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-25.three.co.id. [180.214.233.25])
+        by smtp.gmail.com with ESMTPSA id r4-20020a1709028bc400b001a95aef9728sm4568073plo.19.2023.05.14.19.21.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 May 2023 19:21:54 -0700 (PDT)
+Message-ID: <018f62d0-ee1d-9198-9c38-e45b10921e2e@gmail.com>
+Date:   Mon, 15 May 2023 09:21:38 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cab829ec-5763-1352-618a-adad8c01227d@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Linux Regressions <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Broadcom 80211 Devices <brcm80211-dev-list.pdl@broadcom.com>,
+        SHA cyfmac Subsystem <SHA-cyfmac-dev-list@infineon.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>
+Cc:     Hante Meuleman <hante.meuleman@broadcom.com>,
+        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>, julien.falque@gmail.com
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Freeze after resuming from hibernation (culprit is brcmfmac
+ change?)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13, 2023 at 10:09:49AM +0000, Caleb Connolly wrote:
-> 
-> 
-> On 12/05/2023 16:55, Bjorn Andersson wrote:
-> > The introduction of high resolution PWM support moved the parenthesis of
-> > the divisions in the calculation of min and max period. The result in
-> > both divisions is in most cases truncation to 0, which limits the period
-> > to the range of [0, 0].
-> 
-> Huh, TIL C gives multiplication and division the same precedence when
-> deciding order of operations.
+Hi,
 
-There where no explicit parenthesis in the original implementation. So
-I guess it would be more correct to state that parenthesis was
-introduced around part of the expression?
+I notice a regression report on bugzilla [1]. Quoting from it:
 
-Let me know if you think the wording matters and you would prefer me to
-rewrite it.
-
-Regards,
-Bjorn
-
-> > 
-> > Both numerators (and denominators) are within 64 bits, so the whole
-> > expression can be put directly into the div64_u64, instead of doing it
-> > partially.
-> > 
-> > Fixes: b00d2ed37617 ("leds: rgb: leds-qcom-lpg: Add support for high resolution PWM")
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>  julien.falque@gmail.com 2023-05-14 09:55:38 UTC
 > 
-> Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
-> > ---
-> > 
-> > This fixes the regression in v6.4-rc1.
-> > 
-> >  drivers/leds/rgb/leds-qcom-lpg.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
-> > index c9cea797a697..7287fadc00df 100644
-> > --- a/drivers/leds/rgb/leds-qcom-lpg.c
-> > +++ b/drivers/leds/rgb/leds-qcom-lpg.c
-> > @@ -312,14 +312,14 @@ static int lpg_calc_freq(struct lpg_channel *chan, uint64_t period)
-> >  		max_res = LPG_RESOLUTION_9BIT;
-> >  	}
-> >  
-> > -	min_period = (u64)NSEC_PER_SEC *
-> > -			div64_u64((1 << pwm_resolution_arr[0]), clk_rate_arr[clk_len - 1]);
-> > +	min_period = div64_u64((u64)NSEC_PER_SEC * (1 << pwm_resolution_arr[0]),
-> > +			       clk_rate_arr[clk_len - 1]);
-> >  	if (period <= min_period)
-> >  		return -EINVAL;
-> >  
-> >  	/* Limit period to largest possible value, to avoid overflows */
-> > -	max_period = (u64)NSEC_PER_SEC * max_res * LPG_MAX_PREDIV *
-> > -			div64_u64((1 << LPG_MAX_M), 1024);
-> > +	max_period = div64_u64((u64)NSEC_PER_SEC * max_res * LPG_MAX_PREDIV * (1 << LPG_MAX_M),
-> > +			       1024);
-> >  	if (period > max_period)
-> >  		period = max_period;
-> >  
+> Since a Kernel update a few weeks ago, my laptop freezes when resuming from hibernation. It seems to handle the resume process normally but at the moment I should see Gnome login screen, I either get a black screen with just a white underscore instead, or nothing displayed at all (no backlight). I can't do anything at that point and I have to hard reboot.
 > 
-> -- 
-> Kind Regards,
-> Caleb (they/them)
+> Steps to reproduce:
+> - hibernate
+> - resume
+> - wait until the resuming process should finish: black screen instead of e.g. Gnome's login screen
+> 
+> journalctl gives nothing between the beginning of the resume and the crash, as if it never happened.
+> 
+> I have a Dell XPS 15 (9550) with Arch Linux. The issue happens on linux (since v6.2.0 I think) but linux-lts (currently v6.1.28) is fine.
+> 
+> A bisect on linux-git gave commit da6d9c8ecd00 as the cause of the problem.
+
+See bugzilla for the full thread.
+
+Julien: I asked you to also provide dmesg log as I don't know
+what exactly happened, but you mentioned the culprit was
+da6d9c8ecd00e2 ("wifi: brcmfmac: add firmware vendor info in driver info"),
+which implies that the crash involves your wifi device. From my experience
+though, GDM crashes are usually caused by xwayland.
+
+Anyway, I'm adding this to regzbot:
+
+#regzbot introduced: da6d9c8ecd00e2 https://bugzilla.kernel.org/show_bug.cgi?id=217442
+#regzbot title: brcmfmac firmware vendor info addition triggers GDM crash on resuming from hibernation
+
+Thanks. 
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217442
+
+-- 
+An old man doll... just what I always wanted! - Clara
