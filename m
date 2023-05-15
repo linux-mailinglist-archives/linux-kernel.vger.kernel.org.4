@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592BB702D01
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0845702D0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241726AbjEOMqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S241915AbjEOMrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234222AbjEOMqh (ORCPT
+        with ESMTP id S234222AbjEOMrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:46:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E37A6
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:46:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E90BD61DC0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 12:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDEFC433EF;
-        Mon, 15 May 2023 12:46:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684154795;
-        bh=SDOeZrX4VpMn0ye2iffOvOcDXTWV8Cz8KoiAWyZ6oNI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M15SYvqECuUFz53cmXGWzDvLSnWO6jStcFASbkm64BqjNK1xR3ZaORVjfozYUrM9l
-         6azCMyGhDVZ0pf7P5xv968EnUFOgY2qjodeZqHcFhmfJgSbMz2pXSiPG8cbZj6WFTt
-         hvaK1gDKNFd4wbayZCS2De+ZgO5Cjk9BV+kHIS5daOmXp1ikCyHrUadWChCQsghEzz
-         iODhiKdPugpF4JRvYuBUryVQ8GT2/BNhKCTfi6tpcguEPtFzz66Dw1R4KBUxieOrs3
-         9/CQv68WjKSF7BT6d1wBdW9TxfeXtVAxL9s1a7maInkmpU6u5O/d7cKx8l8dYnoHAl
-         ELGzN27BmuRwg==
-Date:   Mon, 15 May 2023 13:46:31 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Sean Nyekjaer <sean@geanix.com>
-Cc:     p.paillet@st.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mfd: stpmic1: add pmic poweroff via sys-off handler
-Message-ID: <20230515124631.GF10825@google.com>
-References: <20230428112847.2146348-1-sean@geanix.com>
- <20230428112847.2146348-2-sean@geanix.com>
+        Mon, 15 May 2023 08:47:45 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3E2E75;
+        Mon, 15 May 2023 05:47:42 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 41255807C;
+        Mon, 15 May 2023 20:47:35 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 15 May
+ 2023 20:47:35 +0800
+Received: from [192.168.125.124] (113.72.146.187) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 15 May
+ 2023 20:47:34 +0800
+Message-ID: <d6dad1e0-59f7-e78c-cb9b-28342fbf0fac@starfivetech.com>
+Date:   Mon, 15 May 2023 20:47:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230428112847.2146348-2-sean@geanix.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 2/3] ASoC: starfive: Add JH7110 TDM driver
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+CC:     Liam Girdwood <lgirdwood@gmail.com>,
+        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230511091549.28003-1-walker.chen@starfivetech.com>
+ <20230511091549.28003-3-walker.chen@starfivetech.com>
+ <21bc5b06-3d3e-5a30-a90d-ea9f7abc6575@starfivetech.com>
+ <ZGIOmWyxPGOuWHx+@finisterre.sirena.org.uk>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <ZGIOmWyxPGOuWHx+@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.146.187]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,87 +64,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Apr 2023, Sean Nyekjaer wrote:
 
-> Use devm_register_sys_off_handler() that allows to register multiple
-> power-off handlers.
+
+On 2023/5/15 18:51, Mark Brown wrote:
+> On Mon, May 15, 2023 at 04:29:07PM +0800, Walker Chen wrote:
 > 
-> This can be enabled by adding "st,pmic-poweroff" to device-tree.
+>> I have submitted new version of patch for TDM driver. Could you please help to review and give your comments? 
 > 
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> ---
->  drivers/mfd/stpmic1.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
-
-You need to submit the Device Tree binding with this patch.
-
-> diff --git a/drivers/mfd/stpmic1.c b/drivers/mfd/stpmic1.c
-> index 4c9b18d9dec8..c628141eb03c 100644
-> --- a/drivers/mfd/stpmic1.c
-> +++ b/drivers/mfd/stpmic1.c
-> @@ -7,6 +7,7 @@
->  #include <linux/mfd/core.h>
->  #include <linux/mfd/stpmic1.h>
->  #include <linux/module.h>
-> +#include <linux/reboot.h>
->  #include <linux/of.h>
->  #include <linux/of_irq.h>
->  #include <linux/of_platform.h>
-> @@ -117,6 +118,33 @@ static const struct regmap_irq_chip stpmic1_regmap_irq_chip = {
->  	.num_irqs = ARRAY_SIZE(stpmic1_irqs),
->  };
->  
-> +static int stpmic1_power_off(struct sys_off_data *data)
-> +{
-> +	struct stpmic1 *ddata = data->cb_data;
-> +
-> +	regmap_update_bits(ddata->regmap, MAIN_CR,
-> +			   SOFTWARE_SWITCH_OFF, SOFTWARE_SWITCH_OFF);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int stpmic1_power_off_prepare_init(struct stpmic1 *ddata)
-
-This function looks superfluous.
-
-Why not just call devm_register_sys_off_handler() inside the if?
-
-> +{
-> +	int ret;
-> +
-> +	ret = devm_register_sys_off_handler(ddata->dev,
-> +					    SYS_OFF_MODE_POWER_OFF,
-> +					    SYS_OFF_PRIO_DEFAULT,
-> +					    stpmic1_power_off,
-> +					    ddata);
-> +	if (ret) {
-> +		dev_err(ddata->dev, "failed to register sys-off handler: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int stpmic1_probe(struct i2c_client *i2c)
->  {
->  	struct stpmic1 *ddata;
-> @@ -159,6 +187,12 @@ static int stpmic1_probe(struct i2c_client *i2c)
->  		return ret;
->  	}
->  
-> +	if (of_property_read_bool(i2c->dev.of_node,  "st,pmic-poweroff")) {
-> +		ret = stpmic1_power_off_prepare_init(ddata);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	return devm_of_platform_populate(dev);
->  }
->  
-> -- 
-> 2.40.0
+> Please don't send content free pings and please allow a reasonable time
+> for review.  People get busy, go on holiday, attend conferences and so 
+> on so unless there is some reason for urgency (like critical bug fixes)
+> please allow at least a couple of weeks for review.  If there have been
+> review comments then people may be waiting for those to be addressed.
 > 
+> Sending content free pings adds to the mail volume (if they are seen at
+> all) which is often the problem and since they can't be reviewed
+> directly if something has gone wrong you'll have to resend the patches
+> anyway, so sending again is generally a better approach though there are
+> some other maintainers who like them - if in doubt look at how patches
+> for the subsystem are normally handled.
 
--- 
-Lee Jones [李琼斯]
+Hi Mark,
+
+Sorry for that! Please forgive me for asking so eagerly.
+I will pay attention to this in the future.
+
+Best regards,
+Walker
