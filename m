@@ -2,124 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51452703F7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126F0703F82
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244356AbjEOVQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
+        id S245100AbjEOVTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245496AbjEOVQS (ORCPT
+        with ESMTP id S229558AbjEOVTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:16:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4934A5C1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:16:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684185372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DZHhrNE+lQbMd0iIV/PZ3+/ZDJKPK1+e6kKnPQuIdO4=;
-        b=mjIcxdOMt117Z/QHUdcxvAHXIzHvqhmCiIOD4xmpVwTwKEFP3bAbA4CeE0Rbf7q97sD5xa
-        XT5sPi25X90ACLaZuBUj533X3Gof2ZS+mkXZNl3+nGiDJy5Kxx71nsbfFeOn0UCx2gvHZr
-        bowCkjef4fchr61EnWxh1gz2NK8ot5IByR204y7wZY966ZtDpEx7jKYbsjeBUvhMLBL1B/
-        26Tr9LWuCQhQG06+xDS+u6Bn1jfRFhMeGO1F3R/QLLegky7enBvgqwzgRUqPCvLUdyozhT
-        MrX4wCGrt2CwEEh1vKnNwG+ytq9epy97LtAeaEXtw1fs2LPN4GYU/rRfO+cUHw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684185372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DZHhrNE+lQbMd0iIV/PZ3+/ZDJKPK1+e6kKnPQuIdO4=;
-        b=mIWjKwOGTdaUTvRCsI5Y8rW11BO2lZGkbtLM/DOu1MtM/HOODl+KJnMyb5AEdyu4eunqr4
-        QNdFSjbS7c4xzpCg==
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        Shanker Donthineni <sdonthineni@nvidia.com>
-Subject: Re: your mail
-In-Reply-To: <20230515192708.sypitem5hzycdois@revolver>
-References: <87mt2cxb7y.ffs@tglx> <20230515192708.sypitem5hzycdois@revolver>
-Date:   Mon, 15 May 2023 23:16:11 +0200
-Message-ID: <87wn198fdw.ffs@tglx>
+        Mon, 15 May 2023 17:19:34 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0100CD074
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:19:32 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso23977171a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684185571; x=1686777571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iCAGJRSZlOdbZk8TJO2+IV5B/w81wFfW9jtMkWpTH+M=;
+        b=Fvz8x0dNvAfi6vn1MsWVsrIVhI0JC8Py8rU64fVV7c1WYzdrPJSFY/nJ5/ha/SBSdW
+         O9Qrv+J04LkWY26V+6ISj9fbwtnonPqRY48vi74RSHlcYaXNOdDEzZhPQlpxhzKkIUJ0
+         9wiJslfn6dHpTu8YNli6Te99vlovWTdFmnEfc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684185571; x=1686777571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iCAGJRSZlOdbZk8TJO2+IV5B/w81wFfW9jtMkWpTH+M=;
+        b=GbKo6XEud64RIywR1FkTscND3SijGUQ6pC4+7S2brqKMJdfTO5hDHZITjJTfV14zPV
+         xNVh3yWKMWX73mdkXPBauEN5E+88aQS/UNEApcVikWBYcvtKjYKaCrCxM/S0KN3QJThp
+         GSzMtF0kwrzZkMVsGlYqmmcQlpPJ+gbhuv/Fy4iQWK+0ak35+Qv+YeDEjAkiNhed68+7
+         S93QUSXCvw8HWmEqsbct5TnZNCKwKZYIupU2Vsc4LX1o0sPRgWAsv0zVF48BGyUp1V3E
+         JpbRZbDBRYYLzz2Xg68mMAiP0R25Pgdz2QLa7waceD/DLVBO3KjhecVbsut9Oa/eVt7u
+         ycpQ==
+X-Gm-Message-State: AC+VfDyeZo3W7AeNTNCVHoxq3VqwCKyfKB/80r9nU8d9yY3/IaobfwTJ
+        HKpJh69AX5b7+EBXUOIaG6J2vR5N4eXojFH+5fXSvQ==
+X-Google-Smtp-Source: ACHHUZ4NVNi7naSU30mEHscyRmFftvi4fhFnmiYSDcSrg9y4ApnJuNxOMdtq7yH9l565H4qJkeCcSkHBc3YRcSzTMNU=
+X-Received: by 2002:a17:907:9485:b0:96a:b12d:2fdf with SMTP id
+ dm5-20020a170907948500b0096ab12d2fdfmr10487913ejc.12.1684185571480; Mon, 15
+ May 2023 14:19:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-1-sarthakkukreti@chromium.org> <20230506062909.74601-5-sarthakkukreti@chromium.org>
+ <ZF54OH8hZTTko4c3@redhat.com>
+In-Reply-To: <ZF54OH8hZTTko4c3@redhat.com>
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+Date:   Mon, 15 May 2023 14:19:20 -0700
+Message-ID: <CAG9=OMMj+xNNNFR6JJbsbzjb=9oVScg+BYdAq68hBRzw3q81ZA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/5] dm-thin: Add REQ_OP_PROVISION support
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Liam!
-
-On Mon, May 15 2023 at 15:27, Liam R. Howlett wrote:
-> * Thomas Gleixner <tglx@linutronix.de> [230510 15:01]:
->>Also the
->> documentation of index talks about a range, while in reality the index
->> is updated on a succesful search to the index of the found entry plus one.
+On Fri, May 12, 2023 at 10:32=E2=80=AFAM Mike Snitzer <snitzer@kernel.org> =
+wrote:
 >
-> This is a range based tree, so the index is incremented beyond the last
-> entry which would return the entry.  That is, if you search for 5 and
-> there is an entry at 4-100, the index would be 101 after the search -
-> or, one beyond the range.  If you have single entries at a specific
-> index, then index would be equal to last and it would be one beyond the
-> index you found - but only because index == last in this case.
-
-Thanks for the explanation
-
->> 
->> Fix similar issues for mt_find_after() and mt_prev().
->> 
->> Remove the completely confusing and pointless "Note: Will not return the
->> zero entry." comment from mt_for_each() and document @__index correctly.
+> On Sat, May 06 2023 at  2:29P -0400,
+> Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
 >
-> The zero entry concept is an advanced API concept which allows you to
-> store something that cannot be seen by the mt_* family of users, so it
-> will not be returned and, instead, it will return NULL.  Think of it as
-> a reservation for an entry that isn't fully initialized.  Perhaps it
-> should read "Will not return the XA_ZERO_ENTRY" ?
-
-That makes actually sense.
-
->> --- a/include/linux/maple_tree.h
->> +++ b/include/linux/maple_tree.h
->> @@ -659,10 +659,8 @@ void *mt_next(struct maple_tree *mt, uns
->>   * mt_for_each - Iterate over each entry starting at index until max.
->>   * @__tree: The Maple Tree
->>   * @__entry: The current entry
->> - * @__index: The index to update to track the location in the tree
->> + * @__index: The index to start the search from. Subsequently used as iterator.
->>   * @__max: The maximum limit for @index
->> - *
->> - * Note: Will not return the zero entry.
+> > dm-thinpool uses the provision request to provision
+> > blocks for a dm-thin device. dm-thinpool currently does not
+> > pass through REQ_OP_PROVISION to underlying devices.
+> >
+> > For shared blocks, provision requests will break sharing and copy the
+> > contents of the entire block. Additionally, if 'skip_block_zeroing'
+> > is not set, dm-thin will opt to zero out the entire range as a part
+> > of provisioning.
+> >
+> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > ---
+> >  drivers/md/dm-thin.c | 70 +++++++++++++++++++++++++++++++++++++++++---
+> >  1 file changed, 66 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
+> > index 2b13c949bd72..3f94f53ac956 100644
+> > --- a/drivers/md/dm-thin.c
+> > +++ b/drivers/md/dm-thin.c
+> ...
+> > @@ -4114,6 +4171,8 @@ static void pool_io_hints(struct dm_target *ti, s=
+truct queue_limits *limits)
+> >        * The pool uses the same discard limits as the underlying data
+> >        * device.  DM core has already set this up.
+> >        */
+> > +
+> > +     limits->max_provision_sectors =3D pool->sectors_per_block;
 >
-> This function "will not return the zero entry", meaning it will return
-> NULL if xa_is_zero(entry).
-
-Ack.
-
->> + * Takes RCU read lock internally to protect the search, which does not
->> + * protect the returned pointer after dropping RCU read lock.
->>   *
->> - * Handles locking.  @index will be incremented to one beyond the range.
->> + * In case that an entry is found @index contains the index of the found
->> + * entry plus one, so it can be used as iterator index to find the next
->> + * entry.
+> Just noticed that setting limits->max_provision_sectors needs to move
+> above pool_io_hints code that sets up discards -- otherwise the early
+> return from if (!pt->adjusted_pf.discard_enabled) will cause setting
+> max_provision_sectors to be skipped.
 >
-> What about:
-> "In case that an entry is found @index contains the last index of the
-> found entry plus one"
+> Here is a roll up of the fixes that need to be folded into this patch:
+>
+Ah right, thanks for pointing that out! I'll fold this into v7.
 
-Something like that, yes.
+Best
+Sarthak
 
-Let me try again.
-
-Thanks,
-
-        tglx
+> diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
+> index 3f94f53ac956..90c8e36cb327 100644
+> --- a/drivers/md/dm-thin.c
+> +++ b/drivers/md/dm-thin.c
+> @@ -4151,6 +4151,8 @@ static void pool_io_hints(struct dm_target *ti, str=
+uct queue_limits *limits)
+>                 blk_limits_io_opt(limits, pool->sectors_per_block << SECT=
+OR_SHIFT);
+>         }
+>
+> +       limits->max_provision_sectors =3D pool->sectors_per_block;
+> +
+>         /*
+>          * pt->adjusted_pf is a staging area for the actual features to u=
+se.
+>          * They get transferred to the live pool in bind_control_target()
+> @@ -4171,8 +4173,6 @@ static void pool_io_hints(struct dm_target *ti, str=
+uct queue_limits *limits)
+>          * The pool uses the same discard limits as the underlying data
+>          * device.  DM core has already set this up.
+>          */
+> -
+> -       limits->max_provision_sectors =3D pool->sectors_per_block;
+>  }
+>
+>  static struct target_type pool_target =3D {
+> @@ -4349,6 +4349,7 @@ static int thin_ctr(struct dm_target *ti, unsigned =
+int argc, char **argv)
+>
+>         ti->num_provision_bios =3D 1;
+>         ti->provision_supported =3D true;
+> +       ti->max_provision_granularity =3D true;
+>
+>         mutex_unlock(&dm_thin_pool_table.mutex);
+>
