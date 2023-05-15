@@ -2,113 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FAF7025FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4B3702601
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238853AbjEOHWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 03:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
+        id S239295AbjEOH0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 03:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235175AbjEOHWs (ORCPT
+        with ESMTP id S233775AbjEOH0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 03:22:48 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62951AB;
-        Mon, 15 May 2023 00:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684135367; x=1715671367;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v8Xgi03YncOZGRJJderrrJ4xjST8h4en5g7rhUUCfnw=;
-  b=1UOMSn79GlnCKV2d8BNOAG1eg6d3c9zhM59/py9K1hQc7iCxsX9ckNCN
-   gTEqTiDdXbJPoC2yoUC41DSETsOx/uXiCvGwBR2TYOAxX8OdTd/9/usjC
-   4+GX4/C8HvE2/zy+rzl54fN56LV3vkkaK1ifQWz3sxgJK7GvVVKv7oZZE
-   iOFKeazwpbbop7WMaTzlYRiSIETWGck9hXLlBmRVJIqn6Xoec+RVgGkD7
-   pyXjf1IW/qdajMSAO+BytMBLFS1cnWiu0VFaCPS6TnBcvVME/tKxtpEkt
-   4ZmYUUqyRPkhQv9afEnARz5XWqGmwHQg5HVUCKS/mZcwWWkEOkyT1UQx1
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,275,1677567600"; 
-   d="asc'?scan'208";a="215381233"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 May 2023 00:22:45 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 15 May 2023 00:22:45 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 15 May 2023 00:22:43 -0700
-Date:   Mon, 15 May 2023 08:22:22 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Walker Chen <walker.chen@starfivetech.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 2/2] riscv: dts: starfive: jh7110: Add watchdog node
-Message-ID: <20230515-quarrel-vocalize-930a189e719b@wendy>
-References: <20230509151723.84989-1-xingyu.wu@starfivetech.com>
- <20230509151723.84989-3-xingyu.wu@starfivetech.com>
- <20230512-barrack-catchable-1f4072b9355b@spud>
- <ec5693b7-1ace-2215-1115-971d8086a171@starfivetech.com>
+        Mon, 15 May 2023 03:26:07 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8FD1AB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:26:05 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-559debdedb5so184910817b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:26:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684135565; x=1686727565;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eurMz9NQAUmkORq8ZJu1AgnEBQF8a6B21GIn/UfxOEI=;
+        b=URaTzQG6g74E8biL/yJ5/3corUdz5kezIBq8rpkzGX9Lj4RGuyYIwzggM9i3yP/toH
+         TWT9U3hF7A5kDzqL7CrTnM/e7/2qSclroVT1O3JKPjx7eN4O5ztR9SOnKNGgBL5Cn4M6
+         720A5c4RLjqxkCe3SZVi5906Lc8023qjsuk5lOVoHtFJSXve5zsQJzmXLGyvan3hAPm1
+         G1al3fa/jAL177yGkpoqGNHpVi7sQU4O7k2+H27pTjFvlPdBZmpTazg3BgZ/CJZoeMDS
+         Fv7wmuUNmcTEF5WEpzg8QfroJgQjdjl4XCtW1xdXcM5sNDw2Go4KZqLhavnSlv4laa8W
+         iwug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684135565; x=1686727565;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eurMz9NQAUmkORq8ZJu1AgnEBQF8a6B21GIn/UfxOEI=;
+        b=PbFJhpFtsuXZHNvu+ed5QwwUZf4NYEdLDuiWeSPwoo57YDyYAjM9JlxdJzKlM50SgJ
+         hnBzirpXQbkAtmsEW6OU+qtUwvPPEWxR5AL5LLKaM45HncopnxXHvJlnmD/tU1WRiqdA
+         dzz2qx2Di7uT2CkMNjjSmGLnHGL+NXxv0ACOgdoRKtcQf+CROYmvtvPMSCPn0B4PRkuD
+         qpVY2Z5oZQZZYrKQtyesjzeiaFOMLncHpozoqwnl6Fe3Ctcipl9lnxccxlwmQ+hEFcjX
+         dbIn4YZCtUixFdU1CSUEaij3Qx0OAqQRPwWBSRK9auSxuCdwDjLuayB6rTNlM79mOu8i
+         1ztQ==
+X-Gm-Message-State: AC+VfDwx+JSTIzYnXYpbM6qa/F+2vM4ApE61Wmr+TFnURk/7FIU9vJwh
+        WV97tTIYfYt2ynKUEFW/Zpjk5+YCd0ajqFf1F4p7WQ==
+X-Google-Smtp-Source: ACHHUZ4rQ+YJh1EEoZTA+7CazQQ7vitOT3vS9R1tfo6aJWm4yep7gQisGdpXMJ5icbi8vBLCRVbW1YCcFJ4YkotuEMY=
+X-Received: by 2002:a0d:fc44:0:b0:555:d983:f4f0 with SMTP id
+ m65-20020a0dfc44000000b00555d983f4f0mr28247355ywf.24.1684135564884; Mon, 15
+ May 2023 00:26:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ujRRX7HonzNFd21D"
-Content-Disposition: inline
-In-Reply-To: <ec5693b7-1ace-2215-1115-971d8086a171@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <202304232146.7M89pwCz-lkp@intel.com> <KL1PR01MB5448327326B6EDA8001AF714E6669@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+In-Reply-To: <KL1PR01MB5448327326B6EDA8001AF714E6669@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 15 May 2023 09:25:53 +0200
+Message-ID: <CACRpkdbDNfrUZiVbDRx9EQWByfzXHtA3ZO+dUXvEK5RzYYYgUw@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: gpiolib: clear the array_info's memory space
+To:     Yan Wang <rk.code@outlook.com>
+Cc:     brgl@bgdev.pl,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---ujRRX7HonzNFd21D
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> @@ -4359,6 +4359,8 @@ struct gpio_descs *__must_check gpiod_get_array(struct device *dev,
 
-On Mon, May 15, 2023 at 09:47:44AM +0800, Walker Chen wrote:
->=20
->=20
-> On 2023/5/13 6:27, Conor Dooley wrote:
-> > On Tue, May 09, 2023 at 11:17:23PM +0800, Xingyu Wu wrote:
-> >> Add the watchdog node for the Starfive JH7110 SoC.
-> >=20
-> > Emil or Walker, could I get a review on this please?
-> > It's the only dts patch on the list right now for the jh7110 that I can
-> > actually apply, so it'd be nice to do so.
->=20
-> Of course, thank you for helping to review and apply.
+>                          * hardware number is different from its array index.
+>                          */
+>                         if (bitmap_full(array_info->get_mask, descs->ndescs)) {
+> +                               /*clear descs->info*/
+> +                               memset(array_info, 0, sizeof(struct gpio_array));
+>                                 array_info = NULL;
 
-I was hoping that you would reply with a "Reviewed-by", your thanks is
-nice to but I can't do anything with that!
+This is not the right solution.
 
-Cheers,
-Conor.
+The array_info points beyond descs and descs have be krealloc:ed
+to fit the array info.
 
---ujRRX7HonzNFd21D
-Content-Type: application/pgp-signature; name="signature.asc"
+The right solution is not to fill that memory with zeroes, but to krealloc
+back to the size that descs had before we did this resizing to begin
+with.
 
------BEGIN PGP SIGNATURE-----
+Possibly the condition should be detected *before* we start to krealloc()
+so we can avoid all the krealloc():ing.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGHdogAKCRB4tDGHoIJi
-0k4CAQD4BEwpPDxRdIPtEhcDK2WdnRhIn6XAPAXknR/EmUxJxQEAgDqhW5gWb+Qr
-YvI20G0S7y44BvGbGHd8JA9I4IontgY=
-=1VMT
------END PGP SIGNATURE-----
+If the actual issue cannot be fixed I think it is no better or worse to just
+leave the code as it is, we are just zeroing some unused memory.
 
---ujRRX7HonzNFd21D--
+Yours,
+Linus Walleij
