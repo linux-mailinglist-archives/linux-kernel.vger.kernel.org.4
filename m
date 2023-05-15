@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623DA703942
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F8E703986
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244553AbjEORke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S244526AbjEORnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242686AbjEORkH (ORCPT
+        with ESMTP id S244493AbjEORm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:40:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1FD17971;
-        Mon, 15 May 2023 10:37:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8581E62DD3;
-        Mon, 15 May 2023 17:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D87C4339C;
-        Mon, 15 May 2023 17:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684172226;
-        bh=98fQRjRbIONriWHlH0jkdaXZtrfJPS0ULJrgh04jqRg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cGyw1bkpr9f7GqhykoFj+LHG6LjTaTEaVHjneXE6Tce9OHVKXZuSNB3GPMRY1deRX
-         /QY0neJgSM8drcYk3Ryl7F4WHZlUs+wnV1uQXLLPPQCWBc76fdTOCXJipLPDPJmG9s
-         2X+AgkuBuLQgc3Ad5DnlQZS8Bhf8sWxakUSHE8iv5NvzLHwQGgRrJuZQhEtuDq/8/y
-         1AFd0gupvZh9LXPChv8hiEe9jVq5q/zOyMcWO8g5w52VdVBUk3ptLJsmzftZLUHPOo
-         f4KY6BbkjO+CzcHKS2winJbvp7HYnXILJ9F8nIWZxG26+PVRwAFdz73tdXfXCESXDm
-         8qQ4VTxZho5EQ==
-Date:   Mon, 15 May 2023 18:36:58 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Anusha Rao <quic_anusha@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        thara.gopinath@gmail.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_poovendh@quicinc.com
-Subject: Re: [PATCH V2 3/4] dt-bindings: qcom-qce: add SoC compatible string
- for ipq9574
-Message-ID: <20230515-hull-contented-48626dc36eb7@spud>
-References: <20230515150722.12196-1-quic_anusha@quicinc.com>
- <20230515150722.12196-4-quic_anusha@quicinc.com>
+        Mon, 15 May 2023 13:42:57 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0188B16902;
+        Mon, 15 May 2023 10:40:34 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FHeSwc069276;
+        Mon, 15 May 2023 12:40:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684172428;
+        bh=QFz3oTrA3pkyZzNa7g6DhNARu1SSRuQphy9OmLQk2ts=;
+        h=From:To:CC:Subject:Date;
+        b=xt1c9BRe1l1my7S1505Ze/JULJAqJG7MaJSz53kj9jC3miMxX4zXD5TFcMJZjXyRC
+         ncBYyU2xNLJfsDkBkcgGoHjCtehNl2oQPJ8VB80QMGOKYL421FnPAVNMMIGqu0mpNc
+         TETaF4sCTx9QsK6YLNTiBdU+u/vTFUHbizw/UQmE=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FHeSKw043913
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 15 May 2023 12:40:28 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
+ May 2023 12:40:27 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 15 May 2023 12:40:27 -0500
+Received: from lelv0327.itg.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FHeRu1019475;
+        Mon, 15 May 2023 12:40:27 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>
+Subject: [PATCH v3] gpio: twl4030: Use devm_gpiochip_add_data() to simplify remove path
+Date:   Mon, 15 May 2023 12:40:26 -0500
+Message-ID: <20230515174026.494496-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="1KmiYcElde803Ao3"
-Content-Disposition: inline
-In-Reply-To: <20230515150722.12196-4-quic_anusha@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,55 +65,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use devm version of gpiochip add function to handle removal for us.
 
---1KmiYcElde803Ao3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
 
-On Mon, May 15, 2023 at 08:37:21PM +0530, Anusha Rao wrote:
-> Document the compatible string for ipq9574.
+Changes from v2:
+ - Rebase on v6.4-rc2
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Changes from v1:
+ - Actually add the devm call
 
-Thanks,
-Conor.
+ drivers/gpio/gpio-twl4030.c | 23 +++--------------------
+ 1 file changed, 3 insertions(+), 20 deletions(-)
 
->=20
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> ---
->  Changes in V2:
-> 	- Added a new compatible for ipq9574 SoC.
->=20
->  Documentation/devicetree/bindings/crypto/qcom-qce.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Doc=
-umentation/devicetree/bindings/crypto/qcom-qce.yaml
-> index e375bd981300..0d1deae06e2d 100644
-> --- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> +++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
-> @@ -28,6 +28,7 @@ properties:
->            - enum:
->                - qcom,ipq6018-qce
->                - qcom,ipq8074-qce
-> +              - qcom,ipq9574-qce
->                - qcom,msm8996-qce
->                - qcom,sdm845-qce
->            - const: qcom,ipq4019-qce
-> --=20
-> 2.17.1
->=20
+diff --git a/drivers/gpio/gpio-twl4030.c b/drivers/gpio/gpio-twl4030.c
+index c1bb2c3ca6f2..3708ed2314e8 100644
+--- a/drivers/gpio/gpio-twl4030.c
++++ b/drivers/gpio/gpio-twl4030.c
+@@ -492,18 +492,6 @@ static struct twl4030_gpio_platform_data *of_gpio_twl4030(struct device *dev,
+ 	return omap_twl_info;
+ }
+ 
+-/* Cannot use as gpio_twl4030_probe() calls us */
+-static int gpio_twl4030_remove(struct platform_device *pdev)
+-{
+-	struct gpio_twl4030_priv *priv = platform_get_drvdata(pdev);
+-
+-	gpiochip_remove(&priv->gpio_chip);
+-
+-	/* REVISIT no support yet for deregistering all the IRQs */
+-	WARN_ON(!is_module());
+-	return 0;
+-}
+-
+ static int gpio_twl4030_probe(struct platform_device *pdev)
+ {
+ 	struct twl4030_gpio_platform_data *pdata = dev_get_platdata(&pdev->dev);
+@@ -577,16 +565,13 @@ static int gpio_twl4030_probe(struct platform_device *pdev)
+ 	if (pdata->use_leds)
+ 		priv->gpio_chip.ngpio += 2;
+ 
+-	ret = gpiochip_add_data(&priv->gpio_chip, priv);
++	ret = devm_gpiochip_add_data(&pdev->dev, &priv->gpio_chip, priv);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "could not register gpiochip, %d\n", ret);
+ 		priv->gpio_chip.ngpio = 0;
+-		gpio_twl4030_remove(pdev);
+-		goto out;
++		return ret;
+ 	}
+ 
+-	platform_set_drvdata(pdev, priv);
+-
+ 	if (pdata->setup) {
+ 		int status;
+ 
+@@ -596,8 +581,7 @@ static int gpio_twl4030_probe(struct platform_device *pdev)
+ 			dev_dbg(&pdev->dev, "setup --> %d\n", status);
+ 	}
+ 
+-out:
+-	return ret;
++	return 0;
+ }
+ 
+ static const struct of_device_id twl_gpio_match[] = {
+@@ -615,7 +599,6 @@ static struct platform_driver gpio_twl4030_driver = {
+ 		.of_match_table = twl_gpio_match,
+ 	},
+ 	.probe		= gpio_twl4030_probe,
+-	.remove		= gpio_twl4030_remove,
+ };
+ 
+ static int __init gpio_twl4030_init(void)
+-- 
+2.39.2
 
---1KmiYcElde803Ao3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGJtugAKCRB4tDGHoIJi
-0lTsAP98vINl5qwa4mwXN5MAy30GSKbEzxqH9j57jfS+ZRaVyQEAkAHcT7+n5aaj
-CSCU2+v6aAOTrxqZpWXlSzyJXNUAIwc=
-=AVb7
------END PGP SIGNATURE-----
-
---1KmiYcElde803Ao3--
