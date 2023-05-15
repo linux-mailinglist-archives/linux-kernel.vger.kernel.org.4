@@ -2,170 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605817021D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DED7021E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234481AbjEOCue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 22:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S232244AbjEOC4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 22:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjEOCuc (ORCPT
+        with ESMTP id S229672AbjEOC4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 22:50:32 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FCAE74;
-        Sun, 14 May 2023 19:50:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKP4J1gpVz4x1d;
-        Mon, 15 May 2023 12:50:24 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684119025;
-        bh=Jz3MRruVh3dU8KYalnJKGQ+MfSLuH1GZs3aqzlbyhH8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VFhhz0/MplnugKprTFl0M+sY83K9KoOEcl94S0A+kKBG+a3jdZqONiCwECbkqLkPA
-         Kt3scp3KkwnCFn3v7BCJeSWoJCkLSo07k/NjciMRBfEAll87HoeBbOYxyvjmvH+p2v
-         RISdpxlX5obiQXslcOIom89mPkeBKRr5KojGgBb6N9el2ue2gLk3dC3hx+QxJeJvqF
-         wJ9a8qLpWuOFNE7NidpQlB4CW5wINamiT+jr8R6Ue9DnJfohXvfOmbh4Q2gnjl08kY
-         cg/wZK8BxNq3hCkMs/JmULxQ6sN6K/3jULEXcupy7eKnK1qWw/gjrzS4tfAxrLvx+s
-         t2Z3d3Cii5WiA==
-Date:   Mon, 15 May 2023 12:50:23 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the usb.current tree
-Message-ID: <20230515125023.639f3ca3@canb.auug.org.au>
+        Sun, 14 May 2023 22:56:13 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87095E78;
+        Sun, 14 May 2023 19:56:12 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-528cdc9576cso8362373a12.0;
+        Sun, 14 May 2023 19:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684119371; x=1686711371;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X4xhz39Eaz6LAnCrMNzbKA/+Cn9J+aJWsPIquB3prFM=;
+        b=J6n5ChuF+lyefafB9qQpBzw//WZCeagGw0SDWgzNgpzkx+cSwJ84iAOI6xRf3DtKPC
+         Waeuj1yjyd/HG6zp6JPxGZJXNT/rVnRvzTExckiLUwJ5KTSDiyhfgNC6GP0/gFNtcihq
+         yboS8kIPV5N48ITOVKYpxq3Us/JOvBnvyCOXx5Zt1Gn/1h7+JX6+GG1RaK6BAiIr6IFD
+         +FfRfZRMXZYSW/d+sAQthDvM5JyNIAxBCkJDh2HmnHEoXPb0lbFBCPrQ8hPCpGHQa7ON
+         lYsgva/ASsKaRhcqn8xUm/V3G8urORLdtNKjPQCcn31noSGe1/luxc4lZaolaQUBiRxA
+         RUrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684119371; x=1686711371;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X4xhz39Eaz6LAnCrMNzbKA/+Cn9J+aJWsPIquB3prFM=;
+        b=MVF4jWY+R7Jsu8O5Th+RTk35lNXdEo4DLckijRW9kS6vss7N/ULf44XNecbXozGHty
+         2cfwax/X6r5wMGf7NU6wcbd0082jTBgSfkzHslz1rUYZiWBWlkTZi8m2Wids9/2yyrY8
+         Gcko0ABGOQyGWT9DN8XlN1FWqJY2fhEKRYJxk9rvNCLssdhTAe0DLYKh8jE5jn8QKLW4
+         6w+0y20PEH7Y/LrUiTe59mhKeW/A0SSzHVqErjpjjM2iQA+UhF+rh4cdaoGkOa0U2r03
+         Q6LuqT85VvKsLCuCzKbVppcHKOqGweXBsoaKOuNzf+mfLzNumE/n4s++UxLct+rWoGQX
+         OscA==
+X-Gm-Message-State: AC+VfDxGHShilZSZgZ1fovQkS+zoE1a4AyG0DREvg97Lx/3XzdllZ1ps
+        toG/UQ7ac1IyqA6hK6fONkT5vV8mxfc=
+X-Google-Smtp-Source: ACHHUZ55O7cwRUE3BGMWAH5ypbjwCv+kyOBAl6bmYRMzY5cz0vBaghfVaPejTXm/+3f1uk5QugTQTw==
+X-Received: by 2002:a17:902:ab5c:b0:1ae:1f8a:8a9c with SMTP id ij28-20020a170902ab5c00b001ae1f8a8a9cmr1091146plb.64.1684119371400;
+        Sun, 14 May 2023 19:56:11 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170902b94b00b00194d14d8e54sm12201194pls.96.2023.05.14.19.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 19:56:10 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net] net: bcmgenet: Restore phy_stop() depending upon suspend/close
+Date:   Sun, 14 May 2023 19:56:07 -0700
+Message-Id: <20230515025608.2587012-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NmrO53x+Us/b4UG.ATib=YK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NmrO53x+Us/b4UG.ATib=YK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Removing the phy_stop() from bcmgenet_netif_stop() ended up causing
+warnings from the PHY library that phy_start() is called from the
+RUNNING state since we are no longer stopping the PHY state machine
+during bcmgenet_suspend().
 
-Hi all,
+Restore the call to phy_stop() but make it conditional on being called
+from the close or suspend path.
 
-Today's linux-next merge of the usb tree got a conflict in:
+Fixes: c96e731c93ff ("net: bcmgenet: connect and disconnect from the PHY state machine")
+Fixes: 93e0401e0fc0 ("net: bcmgenet: Remove phy_stop() from bcmgenet_netif_stop()")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-  drivers/usb/gadget/udc/core.c
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+index f28ffc31df22..eca0c92c0c84 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+@@ -3450,7 +3450,7 @@ static int bcmgenet_open(struct net_device *dev)
+ 	return ret;
+ }
+ 
+-static void bcmgenet_netif_stop(struct net_device *dev)
++static void bcmgenet_netif_stop(struct net_device *dev, bool stop_phy)
+ {
+ 	struct bcmgenet_priv *priv = netdev_priv(dev);
+ 
+@@ -3465,6 +3465,8 @@ static void bcmgenet_netif_stop(struct net_device *dev)
+ 	/* Disable MAC transmit. TX DMA disabled must be done before this */
+ 	umac_enable_set(priv, CMD_TX_EN, false);
+ 
++	if (stop_phy)
++		phy_stop(dev->phydev);
+ 	bcmgenet_disable_rx_napi(priv);
+ 	bcmgenet_intr_disable(priv);
+ 
+@@ -3485,7 +3487,7 @@ static int bcmgenet_close(struct net_device *dev)
+ 
+ 	netif_dbg(priv, ifdown, dev, "bcmgenet_close\n");
+ 
+-	bcmgenet_netif_stop(dev);
++	bcmgenet_netif_stop(dev, false);
+ 
+ 	/* Really kill the PHY state machine and disconnect from it */
+ 	phy_disconnect(dev->phydev);
+@@ -4303,7 +4305,7 @@ static int bcmgenet_suspend(struct device *d)
+ 
+ 	netif_device_detach(dev);
+ 
+-	bcmgenet_netif_stop(dev);
++	bcmgenet_netif_stop(dev, true);
+ 
+ 	if (!device_may_wakeup(d))
+ 		phy_suspend(dev->phydev);
+-- 
+2.34.1
 
-between commit:
-
-  f22e9b67f19c ("Revert "usb: gadget: udc: core: Invoke usb_gadget_connect =
-only when started"")
-
-from the usb.current tree and commit:
-
-  d34f9bafa78d ("usb: gadget: udc: Handle gadget_connect failure during bin=
-d operation")
-
-from the usb tree.
-
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/usb/gadget/udc/core.c
-index 52e6d2e84e35,69041cca5d24..000000000000
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@@ -1078,12 -1121,17 +1078,16 @@@ EXPORT_SYMBOL_GPL(usb_gadget_set_state)
- =20
-  /* ----------------------------------------------------------------------=
---- */
- =20
-- static void usb_udc_connect_control(struct usb_udc *udc)
- -/* Acquire connect_lock before calling this function. */
- -static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hol=
-d(&udc->connect_lock)
-++static int usb_udc_connect_control(struct usb_udc *udc)
-  {
-+ 	int ret;
-+=20
- -	if (udc->vbus && udc->started)
- -		ret =3D usb_gadget_connect_locked(udc->gadget);
- +	if (udc->vbus)
-- 		usb_gadget_connect(udc->gadget);
-++		ret =3D usb_gadget_connect(udc->gadget);
-  	else
-- 		usb_gadget_disconnect(udc->gadget);
- -		ret =3D usb_gadget_disconnect_locked(udc->gadget);
-++		ret =3D usb_gadget_disconnect(udc->gadget);
-+=20
-+ 	return ret;
-  }
- =20
-  /**
-@@@ -1523,15 -1580,28 +1527,23 @@@ static int gadget_bind_driver(struct de
-  	if (ret)
-  		goto err_bind;
- =20
- -	mutex_lock(&udc->connect_lock);
- -	ret =3D usb_gadget_udc_start_locked(udc);
- -	if (ret) {
- -		mutex_unlock(&udc->connect_lock);
- +	ret =3D usb_gadget_udc_start(udc);
- +	if (ret)
-  		goto err_start;
- -	}
-  	usb_gadget_enable_async_callbacks(udc);
-- 	usb_udc_connect_control(udc);
- -	ret =3D usb_udc_connect_control_locked(udc);
-++	ret =3D usb_udc_connect_control(udc);
-+ 	if (ret)
-+ 		goto err_connect_control;
- =20
- -	mutex_unlock(&udc->connect_lock);
- -
-  	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
-  	return 0;
- =20
-+  err_connect_control:
-+ 	usb_gadget_disable_async_callbacks(udc);
-+ 	if (gadget->irq)
-+ 		synchronize_irq(gadget->irq);
- -	usb_gadget_udc_stop_locked(udc);
-++	usb_gadget_udc_stop(udc);
-+=20
-   err_start:
-  	driver->unbind(udc->gadget);
- =20
-
---Sig_/NmrO53x+Us/b4UG.ATib=YK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhne8ACgkQAVBC80lX
-0GwsRAf/dgKysVLWm6VlBzJoMt53MdsTCm99u4j1AyoLylnOGJgo5EZ2cGmeK4Pv
-VlcUXIIkMOZBezsF4H561deiA+wJzsXRr/XOFOWv6l0UYMBjWfftvD5qugkI2mQ4
-WDpdCEZ0y6k3Xgx+iO703rktRo8bPm1aPMFXmG/6yGceUcEPtPSXCRg76J90nMZb
-Q59gv4nDIjAZwFhAmOBWZ+sAos1r3SNK3kL2Pdtxfh9d3vFopglxv8DjxW7PN6UZ
-ZFcZvU8tuVgFlsWQW0P0l1GXyUhdAMInsYhwr52kpT5rhT/jLT3pintuEAk5tUZ8
-XQPJbvyl2lWpBKTzxNptPcpvrWH9fw==
-=dBXS
------END PGP SIGNATURE-----
-
---Sig_/NmrO53x+Us/b4UG.ATib=YK--
