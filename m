@@ -2,118 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64AC0702483
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7B7702489
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239271AbjEOGYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
+        id S239399AbjEOGY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238527AbjEOGX6 (ORCPT
+        with ESMTP id S229829AbjEOGY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:23:58 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40468210E
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:23:51 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96aadfb19d7so577482466b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:23:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684131830; x=1686723830;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aG3cuPsJbywJ2jZPWFDdB3wERfrKUjf/xc3vSM+XjiA=;
-        b=oAyA2+7weBfyce49Vcc0dHoW4JNj4/j1vZp9dYpY/Cz0nYTVubXvYyMUyZ63/T7E7c
-         UnuZTkeGxmBzU7tQkDtZFUzBJZWPWnvJXlQSPOjHDDHbroZOJ01TC8v06pbBMZR/9OtX
-         j9kN3aRB6zkq55ppjGAF/2YjdUuqLv3FKfzcAtvlFFuEnwES9vgWl753bQTHfqw5t463
-         FraBuoPqYo5ulrcxEtslTmYJEV4h89Ywgbc2FSovR8q6Q+83QkKe+7nNJKonCxvQOavg
-         ZRUA7hsnc8dQVn7WJQhZZX6S6q1TE0JYLEETmZSX1BnMCjLJ6DH62k8B0vpQPl42P8rp
-         ylxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684131830; x=1686723830;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aG3cuPsJbywJ2jZPWFDdB3wERfrKUjf/xc3vSM+XjiA=;
-        b=TW68fgqs1NHScjrDxLmzsb5uLnaLqI5HQplkS9p9hZRQmlzZ+buEXo0Yxhu26wVOnt
-         nezPvdlB5kZ5HuI1b2m/u0qsGK6OPlrC0jaM4EGZTmzwRWMdKWYkm7yvV9kaEjkmhNdm
-         9gh9lbmnHex5ARTrw2SKzBv0DiPjM2Nhppcs0iEdgFYrwl2QH6F/WGBPi5JVYJm14JRI
-         noi8yWG9uqqVeo5mlG4daY5wX9p3cH+XACqpsRI2s7Zagc/3szs8agIacBK9w9AaVgo0
-         PzmHi71i4zGsH+MV7ble5P0ijqioj5Jt5lATt497s8wPLCC0z6VblBLMbYIJea9qvQag
-         5K3w==
-X-Gm-Message-State: AC+VfDxp6QoUtqEcPlOgoA73WekBWV/SbXUJs1k9ykxBqIoFtzNaF/yB
-        O6tcr8sF31QH5pUUDa4hSD4eNA==
-X-Google-Smtp-Source: ACHHUZ5gCGS8/MNRHuJSz5Pca9SEJ6gjisklu2kr+9uwRmmyoigsefr6FNuCM7gRhYo9W4I3nGrfmA==
-X-Received: by 2002:a17:907:72cc:b0:969:9118:a98f with SMTP id du12-20020a17090772cc00b009699118a98fmr23725549ejc.10.1684131829753;
-        Sun, 14 May 2023 23:23:49 -0700 (PDT)
-Received: from krzk-bin ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
-        by smtp.gmail.com with ESMTPSA id hx16-20020a170906847000b0094e4eabb402sm8997368ejc.128.2023.05.14.23.23.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 23:23:49 -0700 (PDT)
-Date:   Mon, 15 May 2023 08:23:47 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Anup Sharma <anupnewsmail@gmail.com>
-Cc:     Peter Meerwald <pmeerw@pmeerw.net>, u.kleine-koenig@pengutronix.de,
-        devicetree@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        andriy.shevchenko@linux.intel.com,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: iio: temperature: Add support for tmp006
-Message-ID: <20230515062347.gwiarus7rlfywew4@krzk-bin>
-References: <cover.1684089997.git.anupnewsmail@gmail.com>
- <e6e56cd513625c76435f444f13c640f9556fb2bc.1684089997.git.anupnewsmail@gmail.com>
+        Mon, 15 May 2023 02:24:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24E4F12B;
+        Sun, 14 May 2023 23:24:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9495B4B3;
+        Sun, 14 May 2023 23:25:03 -0700 (PDT)
+Received: from [10.163.71.10] (unknown [10.163.71.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B4DD3F7BD;
+        Sun, 14 May 2023 23:24:10 -0700 (PDT)
+Message-ID: <2dafd371-173e-1592-23d2-939b8a81dcbe@arm.com>
+Date:   Mon, 15 May 2023 11:54:07 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e6e56cd513625c76435f444f13c640f9556fb2bc.1684089997.git.anupnewsmail@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V9 00/10] arm64/perf: Enable branch stack sampling
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        catalin.marinas@arm.com, mark.rutland@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+ <20230411130326.GA22736@willie-the-truck>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20230411130326.GA22736@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 00:31:59 +0530, Anup Sharma wrote:
-> Add devicetree binding document for TMP006, IR thermopile sensor.
+
+
+On 4/11/23 18:33, Will Deacon wrote:
+> Hi Anshuman
 > 
-> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> On Wed, Mar 15, 2023 at 10:44:34AM +0530, Anshuman Khandual wrote:
+>> This series enables perf branch stack sampling support on arm64 platform
+>> via a new arch feature called Branch Record Buffer Extension (BRBE). All
+>> relevant register definitions could be accessed here.
+>>
+>> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
+>>
+>> This series applies on 6.3-rc1 after applying the following patch from Mark
+>> which allows enums in SysregFields blocks in sysreg tools.
+>>
+>> https://lore.kernel.org/all/20230306114836.2575432-1-mark.rutland@arm.com/
 > 
-> Changes:
-> V1 -> V2: Removed redundant dt-binding from subject.
->           Added supply information.
->           Adhere to the generic node name.
-> ---
->  .../bindings/iio/temperature/ti,tmp006.yaml   | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
+> As mentioned by Mark at:
 > 
+> https://lore.kernel.org/r/ZB2sGrsbr58ttoWI@FVFF77S0Q05N
+> 
+> this conflicts with supporting PMUv3 on AArch32. Please can you rebase onto
+> for-next/perf, which will mean moving this driver back into drivers/perf/
+> now?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hi Will,
 
-yamllint warnings/errors:
+I am back from a long vacation, will go through the earlier discussions
+on this and rework the series as required.
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/iio/temperature/ti,tmp006.example.dts:25.13-14 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/iio/temperature/ti,tmp006.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-See https://patchwork.ozlabs.org/patch/1781058
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+- Anshuman
