@@ -2,68 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B6F703FFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1842C704000
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245605AbjEOVln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
+        id S245613AbjEOVnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245218AbjEOVll (ORCPT
+        with ESMTP id S233661AbjEOVnU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:41:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA3D618D;
-        Mon, 15 May 2023 14:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684186900; x=1715722900;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YT+jpmKKG29CORJ7DZIqHysBrg87OzibafnqwKC9Ue4=;
-  b=Q3yUqvqQJidAFvNpjgOWVZUoE6qc+cmObM04KPF0nivZzUM0qgGlRJwr
-   1zI1zdyCZM4GRVL/ME9hacVx6HIbsYFZvjcDZz4V+OBPwjUN+gS8jGx0o
-   +L13Esl12taOFBqj1IHQgO2Ao7FJj3435l85xycD3BY4Ev/K+xqXXtZq4
-   ykj+JVcJoZolUcW2MztFIegubmfl7p2cxaKWk38R/KmdwVnJRxKqJccOm
-   44NQsUMeIlsPJ+KDVfNmZxFUOJEKDFSYdbjvrFit720CEPz1z3t8X+WPx
-   umJyDKS8S/kbYK5fMtZ04CmWTNMudH3rFhOd6jKdnjLOX3TmpKc42vo1j
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="350155543"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="350155543"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 14:41:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="695184571"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="695184571"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 15 May 2023 14:41:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pyfwg-000753-2M;
-        Tue, 16 May 2023 00:41:30 +0300
-Date:   Tue, 16 May 2023 00:41:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] leds: simatic-ipc-leds-gpio: split up into
- multiple drivers
-Message-ID: <ZGKnCmPbAw17R+sn@smile.fi.intel.com>
-References: <20230515150352.30925-1-henning.schild@siemens.com>
- <20230515150352.30925-3-henning.schild@siemens.com>
+        Mon, 15 May 2023 17:43:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B0210EC;
+        Mon, 15 May 2023 14:43:19 -0700 (PDT)
+Date:   Mon, 15 May 2023 21:43:17 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684186998;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=d+8BDmnkH8cVYts5uM333ozeqBPiCdFJuGIcor3JssI=;
+        b=kwBfXuJ/9xWnUSImOI5lE8EtpjC8kd7fr5F6BbaDAmEZu4rJbCxOCwfhhURZaYQzoKoxk3
+        NI/Ja7VOz3d5veXx+br30A5pZX3El2/T9BPkWFDYyGJ/d+dy00Ly1QAj1u2q9vPw3bF/Xt
+        x/2fWuCbho7I4YXMlEW3vB48OoBeO1bk82weKHcrx6beQpMDwa9tHpRrTsYKj/boJklaIh
+        MUNALNvMKzWWMLyQ49GYzxKSMwn7WScHa4BRA48qP7EGx8vaqkt6FGmtay+pajN8wBe1aL
+        b/Yraucy7EUi8arUGwB+0iPQAhKJ4bucePcJt4c8AqTRrB2/OO229M5C+R4jNA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684186998;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=d+8BDmnkH8cVYts5uM333ozeqBPiCdFJuGIcor3JssI=;
+        b=c9JPzNS2+efNU3jG9lICsgLaY0aUXErh+x4XEGr6R/V/Uwgrc70NzsDlsERxDCSi9JK8bs
+        goHlAAezD+Z4xmCg==
+From:   "tip-bot2 for Lukas Bulwahn" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/Kconfig: Make X86_FEATURE_NAMES non-configurable in prompt
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515150352.30925-3-henning.schild@siemens.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Message-ID: <168418699788.404.11674060014687395413.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,15 +59,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 05:03:51PM +0200, Henning Schild wrote:
-> In order to clearly describe the dependencies between the GPIO
-> controller drivers and the users the driver is split up into a core,
-> two drivers and a common header.
+The following commit has been merged into the x86/cpu branch of tip:
 
-AFAIU the GPIO lookup tables need a terminator entry.
+Commit-ID:     424e23fd6c30ec204c1c77919066ae777577a4f9
+Gitweb:        https://git.kernel.org/tip/424e23fd6c30ec204c1c77919066ae777577a4f9
+Author:        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+AuthorDate:    Wed, 10 May 2023 08:57:12 +02:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Mon, 15 May 2023 19:56:19 +02:00
 
--- 
-With Best Regards,
-Andy Shevchenko
+x86/Kconfig: Make X86_FEATURE_NAMES non-configurable in prompt
 
+While discussing to change the visibility of X86_FEATURE_NAMES (see Link)
+in order to remove CONFIG_EMBEDDED, Boris suggested to simply make the
+X86_FEATURE_NAMES functionality unconditional.
 
+As a first step, make X86_FEATURE_NAMES disappear from Kconfig. So, as
+X86_FEATURE_NAMES defaults to yes, to disable it, one now needs to
+modify the .config file before compiling the kernel.
+
+Suggested-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/all/20230509084007.24373-1-lukas.bulwahn@gmail.com/
+---
+ arch/x86/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab12..a7db116 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -442,7 +442,7 @@ config SMP
+ 	  If you don't know what to do here, say N.
+ 
+ config X86_FEATURE_NAMES
+-	bool "Processor feature human-readable names" if EMBEDDED
++	bool
+ 	default y
+ 	help
+ 	  This option compiles in a table of x86 feature bits and corresponding
