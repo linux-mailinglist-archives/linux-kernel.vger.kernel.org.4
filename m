@@ -2,205 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31439703FEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE237703FEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244456AbjEOViC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S245609AbjEOVih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245437AbjEOVhx (ORCPT
+        with ESMTP id S245323AbjEOVie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:37:53 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A9F59FF;
-        Mon, 15 May 2023 14:37:52 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6ab032b33cdso8791433a34.0;
-        Mon, 15 May 2023 14:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684186672; x=1686778672;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FVMuxsS2AyLD1/V6++7XAV6yzgy8hSgIj+BDEQpjE54=;
-        b=W9HDZcGnI9+ek1B7bA8FaHB9lwyhGmNZ1EgymTz3gar98sh3Or8gWpjTUZc98Vvuxu
-         RLCv0qc+o81LEY28txxkm6OUX5ktmYkyrWoYejBEnUjE1FXTTECubtbB+xCc1wfchBho
-         YjtINtPiVfdbLFbnZyW8aqLfOcBlqmf7Vg/mcugnITYr5ttiwln0rsGs0SYqlimKhpYe
-         kvnh3BcyRJFam57GY671VH2x7ZcUq4kZWhA4fLrDKpjLKMHfhbkFm+CysfYuYtejBUi3
-         NNc/1943cCWeqscFO2U7Pgy7P3uk+7LuYKdtfhgT5cujuwq9lnBBRjAMXKCOD//R02r/
-         Rdyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684186672; x=1686778672;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FVMuxsS2AyLD1/V6++7XAV6yzgy8hSgIj+BDEQpjE54=;
-        b=SDCzH1A1kSwjrKLiWG7ZdUzPMbvEEA37Jk5xGs9ZfdajS3+CuoUR4FRedSfdKbe5li
-         bu6xiFoyi2ISwXIl1OWN7IPrDEquMlfYvLS824C52DDjxo0GwwMq6I2mO10K0k9yDdf+
-         GjUI9/AzOqc1IjUtU8L0kEV3kZ7QNJGH/qnCxviyiljZlFm8wT/5X57Xpbh9KWahY6sS
-         Ipe5mFhV581xTavE6pL8TNIRgV2wxxvM+/6y38BCrnK5Dv5Xd1jatFFEtWIZfMbNy2iH
-         6AhT2aOORFwVo6vKZjd3RNnPNwMI/M3qd6j6QI9aNUunG18K6AAfe0fAiKhIv2iLqQfy
-         IGEw==
-X-Gm-Message-State: AC+VfDwMn7wR0oFXak1ml2oKyH4oxWUD0Exd/lcvdHeBNtk2bG416sJr
-        kxzTTO0R7+iJmyjJb4p2iceph6u6IXkeFsI3NiCM0nEH
-X-Google-Smtp-Source: ACHHUZ5K6xhtdZFLWfE9KZFvociY3IW0kLIpPtgnTWZicz58dwr3NJLbILYSjo9mLv2/bBwnM3yBG58OdClHpPvuPN8=
-X-Received: by 2002:a05:6808:211f:b0:395:dd60:852c with SMTP id
- r31-20020a056808211f00b00395dd60852cmr5465165oiw.43.1684186671678; Mon, 15
- May 2023 14:37:51 -0700 (PDT)
+        Mon, 15 May 2023 17:38:34 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2044.outbound.protection.outlook.com [40.107.94.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE72B106CD;
+        Mon, 15 May 2023 14:38:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AzHFmA9r+AhPR6qYcSp9HTa/vN6rNAQbPUmHB+NWdPd9YpRP7IzHSWRSVQ5RHeyKbBd91ndZZNg/xDMfM7g0RsXO7pDWrVToYwyMAIxqUluLJDMHnRaTEwHy6wu55eVWQ5C5xAdrNsoprN3if42KXgfd2ZQj/JBZ+NCKzIXDs4GMZX2w6sESnLPf1n2eowW+Xht/B5bHEmf/zVUTVo6iVEbtte6wRru++E/R4gXWj/rKGnMxaHjpWPkFjXOCyzppRxG+12f1r0BGD+9eDuiw7yI1dX/kZc9pFhciPuZ8LQiMEcrXTIrom/FWw4UYoWUUsikiY7nUgpHmz2gR/pUdAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0aADnmxmEhPtbjYc4uOz1eZbW6ESSJQPiyNcopcba0k=;
+ b=Ys5+uvb0PrQwrGVw5Y3DSvoDeFZrCwXSMHogAXqhHCjiCN4U0Zys8U36kKc0ArQid59RJ2JhjPIUDDYoMI9CEirsqTIsX/FfJX/ijqnE2pnUNjUiNk03gMmnMLvUVB7HQG4DZPFLuH5ex8cSDRcFOCzi1d9vcZUczSvWDQHrJwVATDrsHjAjKeqFfVVamrhQC5IB4SWdFAEztPw9ZuOMO4ru+EVFpcNay6uO/2cGz6A9LzKwfGYV8SiQ2NRttNtvjSuh7AeRAAeQQmmmFGoBlnLcai1WCE2eL84XFk22noAwlDNdsyg5HGToMr5bcSSd0uW7UZgBvIsoaGouPuZNiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0aADnmxmEhPtbjYc4uOz1eZbW6ESSJQPiyNcopcba0k=;
+ b=mqTRa0NUv1GfTdIGQCW9vbeoQNalmKyk0dSOcUQ/1djFWitwO3JxpiyuJ+rZ5XMxxfXca1BglcM3g2BngioCqU270JmvmIrwVgUr/bfSts48a7H+dW2LQzEcz1nJYj/+VGtMgshXO9+raYrDho7a/XaK+khkhVh74aCeE44r+qg=
+Received: from BN0PR02CA0030.namprd02.prod.outlook.com (2603:10b6:408:e4::35)
+ by SJ2PR12MB9008.namprd12.prod.outlook.com (2603:10b6:a03:543::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 21:38:29 +0000
+Received: from BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e4:cafe::d9) by BN0PR02CA0030.outlook.office365.com
+ (2603:10b6:408:e4::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.31 via Frontend
+ Transport; Mon, 15 May 2023 21:38:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT077.mail.protection.outlook.com (10.13.177.232) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.15 via Frontend Transport; Mon, 15 May 2023 21:38:28 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 15 May
+ 2023 16:38:26 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <rafael@kernel.org>
+CC:     <gch981213@gmail.com>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <regressions@leemhuis.info>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        <ofenfisch@googlemail.com>, <wse@tuxedocomputers.com>,
+        <adam.niederer@gmail.com>, <adrian@freund.io>,
+        <jirislaby@kernel.org>, <Renjith.Pananchikkal@amd.com>,
+        <anson.tsao@amd.com>, <Richard.Gong@amd.com>, <evilsnoo@proton.me>,
+        <ruinairas1992@gmail.com>
+Subject: [PATCH] ACPI: resource: Remove "Zen" specific match and quirks
+Date:   Mon, 15 May 2023 16:38:22 -0500
+Message-ID: <20230515213822.1277-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230515013428.38798-1-suhui@nfschina.com>
-In-Reply-To: <20230515013428.38798-1-suhui@nfschina.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 15 May 2023 17:37:40 -0400
-Message-ID: <CADnq5_ND5fdXh0=HubG9xh9D30ZNQSQwVgQ9GasxmwB_mtWdMA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: remove unnecessary (void*) conversions
-To:     Su Hui <suhui@nfschina.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT077:EE_|SJ2PR12MB9008:EE_
+X-MS-Office365-Filtering-Correlation-Id: d95879fa-f7a2-4729-cedb-08db558cb8dd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i6e5jtgWa67245p8BkulsTXjIkWzMb/TH+b3zuvRGMv/7VX9v5WpwKHd0yHGtSgBdnGDwlGmD38CULkHWor2ADn4nRt8uUfiErVx71N02olElQHqSwhh8UGU4dHUYW9VxKg7Efoz+9H1wA4MXhJvurR9kPAkgFvyIMlkRReScKDVq0q5Ozm3p7/dpJlGKDBadWlTXejvVyhNuropA884tNYsI4pkdKkhzi5AA+es5bnd5lWoJpFfbwVw5eRRB85b6Q/DwOINaf+AShz/BmBre0Lwvi/nRc8NtSQ3TWR2QpSI0hLi+0FMNNZIFWGTGcOag5CPLcNH71y2a8apKnh9M7tq5rG/KKs4L03jfkAWz9qygeq1qc0pHS3dWUSxh9VDPJx11esbyBJucETYH1bij8DzNXvlFJR4nRn5lhwd1zjDAXNf6Qc9jszuI2L9/O9o8YukdEXwXnSgdCOY9mw35ljzntygxMndY65+6M2JkeV4ud7xekiAUTUK1GcAwQVIdJwL5IwZTLutE7cGjw0tATD/lvbBDdeGcKjcDVXFCF2EEYgRlG5cVuLrQBDINIqERykU3pd3dLVpBxphIk8trmyKimNrwlOpmz51zYOGVubgUBo7+8HSHUamxoLxsQysGOsmIgcvV8EbOQgI1DhqM0ZzRUThWqFgzW4dgnM29mTVFRPcV5PVqqKCh7nDGsVEpxaJwkTWCZTEC5b3Q4z3etFiYji7w+y4Va8igUl7o1/7QOkfPbpASarQHOgWJQqKBLhe5uBtOcUiy22RVXC1k6JWSzv9j3E3ueDLAN2+Rxo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(451199021)(40470700004)(46966006)(36840700001)(66899021)(26005)(478600001)(1076003)(40460700003)(966005)(7696005)(40480700001)(6916009)(6666004)(36756003)(82740400003)(4326008)(70206006)(70586007)(41300700001)(356005)(316002)(81166007)(36860700001)(426003)(336012)(86362001)(47076005)(2906002)(83380400001)(82310400005)(44832011)(8676002)(5660300002)(7416002)(8936002)(186003)(16526019)(2616005)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 21:38:28.8071
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d95879fa-f7a2-4729-cedb-08db558cb8dd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9008
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
+AMD Zen platforms") attempted to overhaul the override logic so it
+didn't apply on X86 AMD Zen systems.  This was intentional so that
+systems would prefer DSDT values instead of default MADT value for
+IRQ 1 on Ryzen 6000 systems which use ActiveLow for IRQ1.
 
-Alex
+This turned out to be a bad assumption because several vendors seem
+to add Interrupt Source Override but don't fix the DSDT. A pile of
+quirks was collecting that proved this wasn't sustaintable.
 
-On Mon, May 15, 2023 at 3:18=E2=80=AFAM Su Hui <suhui@nfschina.com> wrote:
->
-> No need cast (void*) to (struct amdgpu_device *).
->
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 4 ++--
->  drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c   | 2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c     | 2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c      | 2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c     | 2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c     | 2 +-
->  6 files changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/dr=
-m/amd/amdgpu/amdgpu_debugfs.c
-> index f60753f97ac5..c837e0bf2cfc 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-> @@ -1470,7 +1470,7 @@ int amdgpu_debugfs_regs_init(struct amdgpu_device *=
-adev)
->
->  static int amdgpu_debugfs_test_ib_show(struct seq_file *m, void *unused)
->  {
-> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
-;
-> +       struct amdgpu_device *adev =3D m->private;
->         struct drm_device *dev =3D adev_to_drm(adev);
->         int r =3D 0, i;
->
-> @@ -1581,7 +1581,7 @@ static int amdgpu_debugfs_benchmark(void *data, u64=
- val)
->
->  static int amdgpu_debugfs_vm_info_show(struct seq_file *m, void *unused)
->  {
-> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
-;
-> +       struct amdgpu_device *adev =3D m->private;
->         struct drm_device *dev =3D adev_to_drm(adev);
->         struct drm_file *file;
->         int r;
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/=
-amd/amdgpu/amdgpu_fence.c
-> index f52d0ba91a77..f0615a43b3cc 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-> @@ -835,7 +835,7 @@ static const struct dma_fence_ops amdgpu_job_fence_op=
-s =3D {
->  #if defined(CONFIG_DEBUG_FS)
->  static int amdgpu_debugfs_fence_info_show(struct seq_file *m, void *unus=
-ed)
->  {
-> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
-;
-> +       struct amdgpu_device *adev =3D m->private;
->         int i;
->
->         for (i =3D 0; i < AMDGPU_MAX_RINGS; ++i) {
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/am=
-d/amdgpu/amdgpu_gem.c
-> index 863cb668e000..28f79cf8c3fb 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> @@ -948,7 +948,7 @@ int amdgpu_mode_dumb_create(struct drm_file *file_pri=
-v,
->  #if defined(CONFIG_DEBUG_FS)
->  static int amdgpu_debugfs_gem_info_show(struct seq_file *m, void *unused=
-)
->  {
-> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
-;
-> +       struct amdgpu_device *adev =3D m->private;
->         struct drm_device *dev =3D adev_to_drm(adev);
->         struct drm_file *file;
->         int r;
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c b/drivers/gpu/drm/amd=
-/amdgpu/amdgpu_ib.c
-> index 4ff348e10e4d..49a4238a120e 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c
-> @@ -436,7 +436,7 @@ int amdgpu_ib_ring_tests(struct amdgpu_device *adev)
->
->  static int amdgpu_debugfs_sa_info_show(struct seq_file *m, void *unused)
->  {
-> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
-;
-> +       struct amdgpu_device *adev =3D m->private;
->
->         seq_printf(m, "--------------------- DELAYED --------------------=
-- \n");
->         amdgpu_sa_bo_dump_debug_info(&adev->ib_pools[AMDGPU_IB_POOL_DELAY=
-ED],
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c b/drivers/gpu/drm/am=
-d/amdgpu/amdgpu_kms.c
-> index 0efb38539d70..9f9274249b57 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
-> @@ -1441,7 +1441,7 @@ void amdgpu_disable_vblank_kms(struct drm_crtc *crt=
-c)
->
->  static int amdgpu_debugfs_firmware_info_show(struct seq_file *m, void *u=
-nused)
->  {
-> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
-;
-> +       struct amdgpu_device *adev =3D m->private;
->         struct drm_amdgpu_info_firmware fw_info;
->         struct drm_amdgpu_query_fw query_fw;
->         struct atom_context *ctx =3D adev->mode_info.atom_context;
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/am=
-d/amdgpu/amdgpu_ttm.c
-> index 2cd081cbf706..21f340ed4cca 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-> @@ -2164,7 +2164,7 @@ int amdgpu_ttm_evict_resources(struct amdgpu_device=
- *adev, int mem_type)
->
->  static int amdgpu_ttm_page_pool_show(struct seq_file *m, void *unused)
->  {
-> -       struct amdgpu_device *adev =3D (struct amdgpu_device *)m->private=
-;
-> +       struct amdgpu_device *adev =3D m->private;
->
->         return ttm_pool_debugfs(&adev->mman.bdev.pool, m);
->  }
-> --
-> 2.30.2
->
+Adjust the logic so that only IRQ1 is overridden in Ryzen 6000 case.
+
+This effectively reverts the following commits:
+commit 17bb7046e7ce ("ACPI: resource: Do IRQ override on all TongFang
+GMxRGxx")
+commit f3cb9b740869 ("ACPI: resource: do IRQ override on Lenovo 14ALC7")
+commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
+commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
+
+Cc: ofenfisch@googlemail.com
+Cc: gch981213@gmail.com
+Cc: wse@tuxedocomputers.com
+Cc: adam.niederer@gmail.com
+Cc: adrian@freund.io
+Cc: jirislaby@kernel.org
+Tested-by: Renjith.Pananchikkal@amd.com
+Tested-by: anson.tsao@amd.com
+Tested-by: Richard.Gong@amd.com
+Reported-by: evilsnoo@proton.me
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217394
+Reported-by: ruinairas1992@gmail.com
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217406
+Fixes: 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen platforms")
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/acpi/resource.c | 154 +++++++++++++++++-----------------------
+ 1 file changed, 65 insertions(+), 89 deletions(-)
+
+diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+index e8492b3a393a..828adb4be721 100644
+--- a/drivers/acpi/resource.c
++++ b/drivers/acpi/resource.c
+@@ -470,53 +470,7 @@ static const struct dmi_system_id asus_laptop[] = {
+ 	{ }
+ };
+ 
+-static const struct dmi_system_id lenovo_laptop[] = {
+-	{
+-		.ident = "LENOVO IdeaPad Flex 5 14ALC7",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
+-		},
+-	},
+-	{
+-		.ident = "LENOVO IdeaPad Flex 5 16ALC7",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "82RA"),
+-		},
+-	},
+-	{ }
+-};
+-
+-static const struct dmi_system_id tongfang_gm_rg[] = {
+-	{
+-		.ident = "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Stellaris 15 Gen4 AMD",
+-		.matches = {
+-			DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
+-		},
+-	},
+-	{ }
+-};
+-
+-static const struct dmi_system_id maingear_laptop[] = {
+-	{
+-		.ident = "MAINGEAR Vector Pro 2 15",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-15A3070T"),
+-		}
+-	},
+-	{
+-		.ident = "MAINGEAR Vector Pro 2 17",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-17A3070T"),
+-		},
+-	},
+-	{ }
+-};
+-
+-struct irq_override_cmp {
++struct irq_override_dmi_cmp {
+ 	const struct dmi_system_id *system;
+ 	unsigned char irq;
+ 	unsigned char triggering;
+@@ -525,49 +479,85 @@ struct irq_override_cmp {
+ 	bool override;
+ };
+ 
+-static const struct irq_override_cmp override_table[] = {
++struct irq_override_acpi_cmp {
++	const char *id;
++	unsigned char irq;
++	unsigned char triggering;
++	unsigned char polarity;
++};
++
++static const struct irq_override_dmi_cmp dmi_override_table[] = {
+ 	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+ 	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+-	{ lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+-	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+-	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+-	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+ };
+ 
+-static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
+-				  u8 shareable)
++/*
++ * Ryzen 6000 requires ActiveLow for keyboard, but a number of machines
++ * seem to get it wrong in DSDT or don't have an Interrupt Source
++ * Override.
++ */
++static const struct irq_override_acpi_cmp acpi_override_table[] = {
++	{ "AMDI0007", 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW },
++};
++
++static void acpi_dev_irq_override(u32 gsi, u8 *triggering, u8 *polarity,
++				  u8 *shareable)
+ {
+-	int i;
++	int i, p, t;
++	int check_override = true;
+ 
+-	for (i = 0; i < ARRAY_SIZE(override_table); i++) {
+-		const struct irq_override_cmp *entry = &override_table[i];
++	for (i = 0; i < ARRAY_SIZE(dmi_override_table); i++) {
++		const struct irq_override_dmi_cmp *entry = &dmi_override_table[i];
+ 
+ 		if (dmi_check_system(entry->system) &&
+ 		    entry->irq == gsi &&
+-		    entry->triggering == triggering &&
+-		    entry->polarity == polarity &&
+-		    entry->shareable == shareable)
+-			return entry->override;
++		    entry->triggering == *triggering &&
++		    entry->polarity == *polarity &&
++		    entry->shareable == *shareable)
++			check_override = entry->override;
+ 	}
+ 
+-#ifdef CONFIG_X86
+-	/*
+-	 * IRQ override isn't needed on modern AMD Zen systems and
+-	 * this override breaks active low IRQs on AMD Ryzen 6000 and
+-	 * newer systems. Skip it.
+-	 */
+-	if (boot_cpu_has(X86_FEATURE_ZEN))
+-		return false;
+-#endif
++	if (!check_override)
++		return;
+ 
+-	return true;
++	if (!acpi_get_override_irq(gsi, &t, &p)) {
++		u8 trig = t ? ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
++		u8 pol = p ? ACPI_ACTIVE_LOW : ACPI_ACTIVE_HIGH;
++
++		if (*triggering != trig || *polarity != pol) {
++			pr_warn("ACPI: IRQ %d override to %s%s, %s%s\n", gsi,
++				t ? "level" : "edge",
++				trig == *triggering ? "" : "(!)",
++				p ? "low" : "high",
++				pol == *polarity ? "" : "(!)");
++			*triggering = trig;
++			*polarity = pol;
++		}
++	}
++
++	for (i = 0; i < ARRAY_SIZE(acpi_override_table); i++) {
++		const struct irq_override_acpi_cmp *entry = &acpi_override_table[i];
++
++		if (acpi_dev_found(entry->id) && gsi == entry->irq &&
++		   (*polarity != entry->polarity || *triggering != entry->triggering)) {
++			pr_warn("ACPI: IRQ %d override to %s%s, %s%s due to %s\n",
++				gsi,
++				entry->triggering ? "level" : "edge",
++				entry->triggering == *triggering ? "" : "(!)",
++				entry->polarity ? "low" : "high",
++				entry->polarity == *polarity ? "" : "(!)",
++				entry->id);
++			*polarity = entry->polarity;
++			*triggering = entry->triggering;
++		}
++	}
+ }
+ 
+ static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
+ 				     u8 triggering, u8 polarity, u8 shareable,
+ 				     u8 wake_capable, bool check_override)
+ {
+-	int irq, p, t;
++	int irq;
+ 
+ 	if (!valid_IRQ(gsi)) {
+ 		irqresource_disabled(res, gsi);
+@@ -580,26 +570,12 @@ static void acpi_dev_get_irqresource(struct resource *res, u32 gsi,
+ 	 * 2. BIOS uses IO-APIC mode Interrupt Source Override
+ 	 *
+ 	 * We do this only if we are dealing with IRQ() or IRQNoFlags()
+-	 * resource (the legacy ISA resources). With modern ACPI 5 devices
++	 * resource (the legacy ISA resources). With ACPI devices
+ 	 * using extended IRQ descriptors we take the IRQ configuration
+ 	 * from _CRS directly.
+ 	 */
+-	if (check_override &&
+-	    acpi_dev_irq_override(gsi, triggering, polarity, shareable) &&
+-	    !acpi_get_override_irq(gsi, &t, &p)) {
+-		u8 trig = t ? ACPI_LEVEL_SENSITIVE : ACPI_EDGE_SENSITIVE;
+-		u8 pol = p ? ACPI_ACTIVE_LOW : ACPI_ACTIVE_HIGH;
+-
+-		if (triggering != trig || polarity != pol) {
+-			pr_warn("ACPI: IRQ %d override to %s%s, %s%s\n", gsi,
+-				t ? "level" : "edge",
+-				trig == triggering ? "" : "(!)",
+-				p ? "low" : "high",
+-				pol == polarity ? "" : "(!)");
+-			triggering = trig;
+-			polarity = pol;
+-		}
+-	}
++	if (check_override)
++		acpi_dev_irq_override(gsi, &triggering, &polarity, &shareable);
+ 
+ 	res->flags = acpi_dev_irq_flags(triggering, polarity, shareable, wake_capable);
+ 	irq = acpi_register_gsi(NULL, gsi, triggering, polarity);
+-- 
+2.34.1
+
