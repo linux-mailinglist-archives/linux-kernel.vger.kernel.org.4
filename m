@@ -2,141 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B61670382F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AD3703847
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244151AbjEOR2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        id S244180AbjEORbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244288AbjEOR1l (ORCPT
+        with ESMTP id S244175AbjEORad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:27:41 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A492214342
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:26:26 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba7831dfe95so4179676276.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:26:26 -0700 (PDT)
+        Mon, 15 May 2023 13:30:33 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED6510A2B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:27:48 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1aae46e62e9so93227625ad.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684171584; x=1686763584;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=y97BQ7sR2LBYQN45EWEO4FJ6RSEUfFrbQxSXtC1eEEg=;
-        b=lnrHEXI214x0JOHTaG19NvuKmqNZq8vfQFKdpU6IFL5CrGuJIGS18GJfVi7BwsHwLu
-         z/19S9vAZW30pNF09qix5IlZ31ZEXIfoGPrblHX6Enf6KFUoXTTZnWap+ULYaVY8vhtU
-         OkCdhS24qIkQeup6yuRZj7uh7CWNtThe5UGcraCNGfBBC5Hww348MxDxRagpAxcDVTgA
-         AZ7h+zuAXJzQAH2BNFM6Zv0fa/yUNkqKLh+ZXEOhgjyLaqTiXJhjvNH8l0R1RPrqwNd7
-         0RKoPgChapU4TerGr+ESr+HQzkCOntbXEi2Aj+4c6i7PG4f7i/oYDqbdgA2BE8qDfgLN
-         /7wQ==
+        d=linaro.org; s=google; t=1684171666; x=1686763666;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HV5hzOslSr/FLxQgkUOdAb0ubgv7oB3Gzqp0pqYMQsc=;
+        b=X/eq65FBsDIPDo2Wfb1iwHSoJisHGVKTWyP2n3KTfJga69cQVWysciK1ZDjhlavC7r
+         KF0RmdnEOogoZKah/bR6k20VbeKpwafYM9t8+/0zY0xRXIduYg5yKbZ9E6spflp3waIe
+         GHVj0DHBIfvPtm7rnej1OBje66kBLGnnF/lbmDHV3A0dDQxPl5+hmVEmPpmEDv9w3OHh
+         UdmxdlwCJkaUDXTY0670ar+7CIlGLDPLlRePUFxclSKX/9evlhDEUmIW0nfA20CB5udq
+         MKNhHPmvJbbF59DU9avkZkGi6z+FgiUYleHpVpaKex3BexNZMM6HvJcuYogUEAzL7LUs
+         da0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684171584; x=1686763584;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y97BQ7sR2LBYQN45EWEO4FJ6RSEUfFrbQxSXtC1eEEg=;
-        b=CdBiaWx1LxX3ezy+P4iV4RdOeOG7o8BYzmmSVmxcCey7i+JFbiqfwvPOSBffudXmG/
-         F6BSiiGGVmGZF2e+FY+mI2qHvLISEkE24OJN386WcpXNGf8kWn/69m2Jv599hopJe9yh
-         CTqmS3sQWkdIsICdxHoidpbaRIVlg68jqdIuKqvGKEXXTfmsNgQR16muNWUtCMkpD0R9
-         n6vFrv3oE+9vddW/J47MZTuiJYxcf93BvWP7DDNxEpfARklKJUuiubm7iDehOaH9y0f/
-         D1tH9C37zFsPQ66N47lovLFd4PFSRhmznIdGUn3oaaoyfYCgUmjJ+1wLWRVSGASwJOAk
-         Cpcw==
-X-Gm-Message-State: AC+VfDyS6QIXUKfBZCMOWnjP5lDttwvp+ZVbDY5N9wezD8q+Nt26wICl
-        9Mc5U9H1OvO/niyoHIamZYoMvJB+Rh/q
-X-Google-Smtp-Source: ACHHUZ5TeR03DncbFn2MDJZP9KzUWVPcJVpfEqM7CUznGNTSHd5/NHOxIZ8GKK9NiQzFZ/fPDVHY/iZDWiai
-X-Received: from yuanchu.bej.corp.google.com ([2401:fa00:44:10:166c:6ee8:fb91:4744])
- (user=yuanchu job=sendgmr) by 2002:a5b:750:0:b0:ba7:75a8:e37d with SMTP id
- s16-20020a5b0750000000b00ba775a8e37dmr3199880ybq.4.1684171584365; Mon, 15 May
- 2023 10:26:24 -0700 (PDT)
-Date:   Tue, 16 May 2023 01:26:08 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230515172608.3558391-1-yuanchu@google.com>
-Subject: [PATCH] mm: pagemap: restrict pagewalk to the requested range
-From:   Yuanchu Xie <yuanchu@google.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Zach O'Keefe" <zokeefe@google.com>, Peter Xu <peterx@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Yuanchu Xie <yuanchu@google.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684171666; x=1686763666;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HV5hzOslSr/FLxQgkUOdAb0ubgv7oB3Gzqp0pqYMQsc=;
+        b=YrQf+KauxHSO4N9IK8xQ/Q+JSED7vDi+0kradmg0pnC8JmvhBmY1cFftP3gXKwSF/l
+         tAb5p1SGSHmcuAgkeop961L0YZs2zCW24N/k8B+jAAloIT7orpKCYfI6KA1+zfv+mwFq
+         fyQ4Poo3uqi9gLE+ULpcpHhjMVMrUd+8VHBJQ5wAs2iF6ruOIJpQqrx6Mcbu6cUfIMDE
+         3wcC3OBdS9Sr6+bQafxKvwj4loJGopk+1mJKUamBysp9MG5Vvsq2hkkvDSoQrnE/rN86
+         f+CGd9E1TK8Cdd1+kzLFB5d76zfO470c40Qrlu+SmQ+M5B34UHcWnUpx5g9dLAFzly21
+         acgg==
+X-Gm-Message-State: AC+VfDyhDnRKkwy10ADm+V6jE5zkc6jF7G7f8ivp8VfCvHauZ1YHqQ6/
+        IaM0VplCWlaFr72hlcNknCU08A==
+X-Google-Smtp-Source: ACHHUZ7MrWABVtEdp/AF7fMlIN83m73eYhwUr7xcWs5Y2Ma+gMOWf1rxaW/Y38x6qhqzqMOLcvdB2A==
+X-Received: by 2002:a17:902:a516:b0:1ab:1355:1a45 with SMTP id s22-20020a170902a51600b001ab13551a45mr32579411plq.30.1684171665794;
+        Mon, 15 May 2023 10:27:45 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:d401:af78:6aa0:cf61])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170902aa8100b001aafb802efbsm13847316plr.12.2023.05.15.10.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 10:27:45 -0700 (PDT)
+Date:   Mon, 15 May 2023 11:27:43 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] stm32mp15: update remoteproc to support SCMI
+ Device tree
+Message-ID: <ZGJrj9Vu2H9NZdlH@p14s>
+References: <20230512093926.661509-1-arnaud.pouliquen@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512093926.661509-1-arnaud.pouliquen@foss.st.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pagewalk in pagemap_read reads one PTE past the end of the requested
-range, and stops when the buffer runs out of space. While it produces
-the right result, the extra read is unnecessary and less performant.
+On Fri, May 12, 2023 at 11:39:22AM +0200, Arnaud Pouliquen wrote:
+> Update vs V2[1]:
+> ---------------
+> - update yaml to remove label in examples
+> - fix error management for  devm_reset_control_get_optional(dev, "hold_boot")
+> - rebased on commit ac9a78681b92 ("Linux 6.4-rc1")
+> 
+> [1]https://lore.kernel.org/lkml/20230504094641.870378-1-arnaud.pouliquen@foss.st.com/T/
+> 
+> 
+> Description:
+> -----------
+> This series updates the stm32_rproc driver and associated DT node to
+> support device tree configuration with and without SCMI server. 
+> The impact is mainly on the MCU hold boot management.
+> 
+> Three configurations have to be supported:
+> 
+> 1) Configuration without OP-TEE SCMI (legacy): Trusted context not activated
+> - The MCU reset is controlled through the Linux RCC reset driver.
+> - The MCU HOLD BOOT is controlled through The RCC sysconf.
+> 
+> 2) Configuration with SCMI server: Trusted context activated
+> - The MCU reset is controlled through the SCMI reset service.
+> - The MCU HOLD BOOT is no more controlled through a SMC call service but
+>   through the SCMI reset service.
+> 
+> 3) Configuration with OP-TEE SMC call (deprecated): Trusted context activated
+> - The MCU reset is controlled through the Linux RCC reset driver.
+> - The MCU HOLD BOOT is controlled through The SMC call.
+> 
+> In consequence this series:
+> - adds the use of the SCMI reset service to manage the MCU hold boot,
+> - determines the configuration to use depending on the presence of the
+>   "reset-names" property
+>   if ( "reset-names" property contains "hold_boot")
+>   then use reset_control services
+>   else use regmap access based on "st,syscfg-holdboot" property.
+> - set the DT st,syscfg-tz property as deprecated
+> 
+> Arnaud Pouliquen (4):
+>   dt-bindings: remoteproc: st,stm32-rproc: Rework reset declarations
+>   remoteproc: stm32: Allow hold boot management by the SCMI reset
+>     controller
+>   ARM: dts: stm32: Update reset declarations
+>   ARM: dts: stm32: fix m4_rproc references to use SCMI
+> 
+>  .../bindings/remoteproc/st,stm32-rproc.yaml   | 44 +++++++++--
+>  arch/arm/boot/dts/stm32mp151.dtsi             |  2 +-
+>  arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts    |  6 +-
+>  arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts    |  6 +-
+>  arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts    |  6 +-
+>  arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts    |  6 +-
+>  drivers/remoteproc/stm32_rproc.c              | 76 ++++++++++++++-----
+>  7 files changed, 111 insertions(+), 35 deletions(-)
+> 
 
-I timed the following command before and after this patch:
-	dd count=100000 if=/proc/self/pagemap of=/dev/null
-The results are consistently within 0.001s across 5 runs.
+I have applied patch 1 and 2.  Unless Alexandre wants to proceed differently,
+patches 3 and 4 should go through his tree.
 
-Before:
-100000+0 records in
-100000+0 records out
-51200000 bytes (51 MB) copied, 0.0763159 s, 671 MB/s
+Thanks,
+Mathieu
 
-real    0m0.078s
-user    0m0.012s
-sys     0m0.065s
-
-After:
-100000+0 records in
-100000+0 records out
-51200000 bytes (51 MB) copied, 0.0487928 s, 1.0 GB/s
-
-real    0m0.050s
-user    0m0.011s
-sys     0m0.039s
-
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
- fs/proc/task_mmu.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 420510f6a545..6259dd432eeb 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1689,23 +1689,23 @@ static ssize_t pagemap_read(struct file *file, char __user *buf,
- 	/* watch out for wraparound */
- 	start_vaddr = end_vaddr;
- 	if (svpfn <= (ULONG_MAX >> PAGE_SHIFT)) {
-+		unsigned long end;
-+
- 		ret = mmap_read_lock_killable(mm);
- 		if (ret)
- 			goto out_free;
- 		start_vaddr = untagged_addr_remote(mm, svpfn << PAGE_SHIFT);
- 		mmap_read_unlock(mm);
-+
-+		end = start_vaddr + ((count / PM_ENTRY_BYTES) << PAGE_SHIFT);
-+		if (end >= start_vaddr && end < mm->task_size)
-+			end_vaddr = end;
- 	}
- 
- 	/* Ensure the address is inside the task */
- 	if (start_vaddr > mm->task_size)
- 		start_vaddr = end_vaddr;
- 
--	/*
--	 * The odds are that this will stop walking way
--	 * before end_vaddr, because the length of the
--	 * user buffer is tracked in "pm", and the walk
--	 * will stop when we hit the end of the buffer.
--	 */
- 	ret = 0;
- 	while (count && (start_vaddr < end_vaddr)) {
- 		int len;
--- 
-2.40.1.606.ga4b1b128d6-goog
-
+> -- 
+> 2.25.1
+> 
