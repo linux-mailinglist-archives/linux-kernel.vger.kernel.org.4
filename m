@@ -2,93 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D5C702C0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38864702C17
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241734AbjEOL5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S241483AbjEOL5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241667AbjEOL4N (ORCPT
+        with ESMTP id S238242AbjEOL53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:56:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3133AAE;
-        Mon, 15 May 2023 04:52:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 261DA62250;
-        Mon, 15 May 2023 11:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C9DC433EF;
-        Mon, 15 May 2023 11:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684151540;
-        bh=Cx0m8x2Mhqcbhl9YWvPjb4YVogzNRjcf/Utt/v0UfWU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LoYBJJXk7CZp5oKEZA5udpnT3rNMSbJEkfWCbjTyFmnhfNDxLxW1BX798rikxsA7u
-         EAF5eNYF5/DJDJg2mGnlECbFu3Gw1nf/d9nC1sOQE8I3AH4l1JG4lcvJssD7CeI680
-         fe7OEEb7KihZHIOihJLB7vh/bk3HFxJf5IVGcp9ZIQYNChgc3USc2CO3lWnCh6sA2q
-         +0K5V1oC1qQeFB0AdDs8Qgt6YMYG2W0WprbNA73gyzFcywkpn7ckJ6+XPl34tiRFOa
-         Kwf9j6lmHr8gQcBC/CjOSsh00XagIMC+Fsi1lISurYg15VbmR0s8WGt3mEV370jKIQ
-         6pXmOjd6RX5Rw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pyWkT-0003yW-2Y; Mon, 15 May 2023 13:52:17 +0200
-Date:   Mon, 15 May 2023 13:52:17 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Flush RSC sleep & wake votes
-Message-ID: <ZGIc8SPNy0oqCqjR@hovoldconsulting.com>
-References: <20230512150425.3171122-1-quic_bjorande@quicinc.com>
+        Mon, 15 May 2023 07:57:29 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762B526B6;
+        Mon, 15 May 2023 04:54:44 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D091B5C010F;
+        Mon, 15 May 2023 07:54:43 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 15 May 2023 07:54:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684151683; x=1684238083; bh=YN
+        2hehfhebmIswf1/JIgo//Dtk1KbSx4NssivhFQ048=; b=dkUb9tOVLQsK1ucevf
+        PxqBQ9/HL1CaFY8DERKLlLvBKWesFX3to23gFbHHn/PU2hCbKbUsGWGnovWK+sdO
+        mZTMnndEiGxt+KDOqwPtF4gu51pGo8iFmjsHragoMjW9Sw52DKTj6yXPVeR+uQY6
+        BuXIFC777I/xSBANw72S9AUmatINBBrPtw4BPhsksGBnezW7BDkxUuQ3iJzZuMs1
+        ew/ltpk44IYQDTEQxuAQppC1K+ejD+PfaPsWAswv49cx0mLvST7LeDyMc/lGSJKL
+        oi5j/NYbZgX2/4tWeEQtdVEkIhaanQIZkmRJFIbyRAUA34HZWhH0+2anhZfEvVRT
+        nPZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684151683; x=1684238083; bh=YN2hehfhebmIs
+        wf1/JIgo//Dtk1KbSx4NssivhFQ048=; b=DTiL8tEDchy/0FstCPucVIhziirSW
+        yO+pzo+dbqz7u35lHvfvktCJDhPnKbn/YOgJ5/tG+zHUye7C3t3Pt2TxcpQpn+VL
+        HNo+mcpzemSMyVU6f8bf6Iyq3JrVirlKDnlHDtilOoaIIAci3GZS4D2VhEgl94eX
+        Htn4XjGmXRa9sUxPS3r5Gzg/XH83AV9/BHI/SYkV6T0KxAmHuGWjOl/RC4ljEEGK
+        V8fXpxAH0rxHl69b99hly5vW1qjH/VpHqMdYZ3jSF7AfJCPDI9YnTcDpQDMjPIrg
+        Y0I9Wc8WdeFo+9ALMuxMlrzC+6hhHOGNtkGNOqe/7HfAAEIaspoGZdRtQ==
+X-ME-Sender: <xms:gx1iZF9En5sG5LkrrOiCKPNbCB9Hz7bpGredNE7j3ZP5y8vQdP0drA>
+    <xme:gx1iZJuSxwvB1bqp0yi3dsxfPvigvS4VJsahzndOe5W6qEj65kteXw2wcKfU5pyDo
+    fu3bJbGnZgfXn7cr1s>
+X-ME-Received: <xmr:gx1iZDAG9dkMp2Sl2_qOD6x-OG_XDWwdwD76nwYNeGquJs8jvxuj23SIDwEGslxctBead6w0m696ZVKyQR-Z6g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehjedggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:gx1iZJcuBoqTUTRg551tq_CoQwBJNHWl99GKruhtBlLuB4seTxaO8g>
+    <xmx:gx1iZKNE9XMXZTU1acdRHkBpH2HnRBQy94WfighePUtG77Wvav3KCw>
+    <xmx:gx1iZLlHQ9wB4S6h4qZhBskAiJt5F6zZLc-wAglyBVYcl1x3smwM3g>
+    <xmx:gx1iZHsBDIWUXjk5uflsw_7BiqdU9XlqMy7dUXeqYejdcb-1yPZGKg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 May 2023 07:54:42 -0400 (EDT)
+Date:   Mon, 15 May 2023 13:54:41 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ondrej Jirman <megous@megous.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2] thermal/drivers/sun8i: Fix some error handling paths
+ in sun8i_ths_probe()
+Message-ID: <ucnnixemxbpkjlbyenboydicslozt5jpyjjfbd4gjk4oye52et@fgyd3zqdqsh2>
+References: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="va3mhj5nkg6jbttn"
 Content-Disposition: inline
-In-Reply-To: <20230512150425.3171122-1-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 08:04:25AM -0700, Bjorn Andersson wrote:
-> The rpmh driver will cache sleep and wake votes until the cluster
-> power-domain is about to enter idle, to avoid unnecessary writes. So
-> associate the apps_rsc with the cluster pd, so that it can be notified
-> about this event.
-> 
-> Without this, only AMC votes are being commited.
 
-I'm sure I'm missing some details here, but from reading (and tracing)
-the code it looks like the cached votes are still being flushed albeit
-via rpmh_rsc_cpu_pm_callback() as the individual CPUs go down.
+--va3mhj5nkg6jbttn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There wasn't really any obvious motivation in the series adding support
-for the cluster domain as to why the new mechanism is preferred (e.g. if
-this is an actual fix or just an optimisation done to align with
-downstream):
+Hi,
 
-	https://lore.kernel.org/all/20221018152837.619426-1-ulf.hansson@linaro.org/
+On Sun, May 14, 2023 at 08:46:05PM +0200, Christophe JAILLET wrote:
+> Should an error occur after calling sun8i_ths_resource_init() in the probe
+> function, some resources need to be released, as already done in the
+> .remove() function.
+>=20
+> Switch to the devm_clk_get_enabled() helper and add a new devm_action to
+> turn sun8i_ths_resource_init() into a fully managed function.
+>=20
+> Move the place where reset_control_deassert() is called so that the
+> recommended order of reset release/clock enable steps is kept.
+> A64 manual states that:
+>=20
+> 	3.3.6.4. Gating and reset
+>=20
+> 	Make sure that the reset signal has been released before the release of
+> 	module clock gating;
+>=20
+> This fixes the issue and removes some LoC at the same time.
 
-Either way, this appears to work as intended even if it does not in
-itself have any significant effect on the X13s power consumption (in
-idle or suspend).
+It should really be three different patches:
+ - One to fix the resource release, that can be backported to stable
+   releases
+ - One to switch to devm_clk_get_enabled
+ - and one to change the order of clock enable vs reset deassertion
 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Maxime
 
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
+--va3mhj5nkg6jbttn
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Johan
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZGIdgQAKCRDj7w1vZxhR
+xdmkAP9r4P7s+lWbUxXVJ+/Zx6Wfdpi7/HSi+H/K9rivRGupwAD/VW72Kfz4XlEp
+oAzjFCvvawU+fc7nkk/gA4tjCfH5MQ0=
+=KQEQ
+-----END PGP SIGNATURE-----
+
+--va3mhj5nkg6jbttn--
