@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229C370255E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BBC70255F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235634AbjEOGwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
+        id S240461AbjEOGwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbjEOGvn (ORCPT
+        with ESMTP id S240275AbjEOGvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:51:43 -0400
+        Mon, 15 May 2023 02:51:47 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D05826A0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:51:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE031BC2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:51:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684133479; x=1715669479;
+  t=1684133484; x=1715669484;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kjKTx32w9YdnZJ7K83qEoOALY8hrbkCtcZcfoAY0U2Q=;
-  b=XOoAOqhASP1RI3fzose7GyGXWxHigv1+KNYVl6Q8/c7BR7ePF2dnbJHl
-   ySW1+Y8++rLTUsudUdTj8xRj6PmboT+KuDOZS6Swq0arFv8kJD5j/uewC
-   IBDdYMv1/REb69pLfjqOMeiG2K42Of94xvqMGsJHMqRHAXWe+HV81gYoB
-   QrZtK3S4xXCchER7OK/bJ2l8eR6y44djpt+Q3LdfX6bUdLehHMiwqN4zo
-   eI/Cf1vMXzlBiUqa/3KEXuWYnO8WSxeuAIfMujymvMcLkoH2nOOKIPa4u
-   Utt/EUkNDFFnD7vNjgtFOyGXX7bnS4f4AUMK0kpKCWBgQanyueOi+JkTU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966408"
+  bh=+NUsvy+Y8PVO2h/Op18ecWWhry3F8Mgpf7FkeQTkvn0=;
+  b=oARujuJ+JNIYigcwMM9TinWyrrchY4iTywsHA4KrBm4aIDoWLarJoJL8
+   1a/5vkkh6pg4i++D/eTSvah2MFVm9j9wciu4b9ZSmF/TQlW2YiFey+Nyy
+   N1fUzfEFcX2eEDL+zmQYO8iySB0Nk/j7dFk5qgVRBWH/sSciWHiQZkFQt
+   1amy+QAX9HYwJ6+Q2Ilc3AhiS+jOkSuXFagPQUm0qJoeGuF0mKnjyUIJp
+   Y8AudIgok3E6qQX1kon7MNNuNKzF+wS8BjtfQxLHWWOGKcsBUv8HVilr8
+   ArHL9GTYKZ3SfqYIIXr4W7IRDIu98FmebmZz/iagltB+QYRtZ/Tk+aDTw
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966431"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="349966408"
+   d="scan'208";a="349966431"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:52 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908716"
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908730"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="694908716"
+   d="scan'208";a="694908730"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:49 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:52 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org, broonie@kernel.org,
         tiwai@suse.de
 Cc:     linux-kernel@vger.kernel.org, vinod.koul@linaro.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH v2 13/26] soundwire: intel_ace2x: configure link PHY
-Date:   Mon, 15 May 2023 15:10:29 +0800
-Message-Id: <20230515071042.2038-14-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH v2 14/26] soundwire: intel_ace2x: add DAI registration
+Date:   Mon, 15 May 2023 15:10:30 +0800
+Message-Id: <20230515071042.2038-15-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
 References: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
@@ -65,12 +65,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Unlike previous hardware generations, the glue-to-master transition is
-not managed by software, instead the transitions are managed as part
-of the power-up/down sequences controlled by SPA/CPA bits.
+The code is similar to the previous implementation, the only
+difference is that the PDI descriptors are now in different areas.
 
-The only thing that's required is to configure the link PHY for
-'normal' operation instead of the PHY test mode.
+Using common helpers proves tricky with multiple changed registers,
+workarounds that are no longer necessary. It's simpler to duplicate
+the intel_register_dai() function rather than try to add multiple
+levels of abstraction and indirections.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
@@ -78,46 +79,185 @@ Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/intel_ace2x.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/soundwire/intel_ace2x.c | 161 ++++++++++++++++++++++++++++++++
+ 1 file changed, 161 insertions(+)
 
 diff --git a/drivers/soundwire/intel_ace2x.c b/drivers/soundwire/intel_ace2x.c
-index 01668246b7ba..5deff32976f1 100644
+index 5deff32976f1..d6d5e6e070f4 100644
 --- a/drivers/soundwire/intel_ace2x.c
 +++ b/drivers/soundwire/intel_ace2x.c
-@@ -15,6 +15,22 @@
- #include "bus.h"
- #include "intel.h"
+@@ -116,10 +116,171 @@ static int intel_link_power_down(struct sdw_intel *sdw)
+ 	return ret;
+ }
  
 +/*
-+ * shim vendor-specific (vs) ops
++ * DAI operations
 + */
++static const struct snd_soc_dai_ops intel_pcm_dai_ops = {
++};
 +
-+static void intel_shim_vs_init(struct sdw_intel *sdw)
++static const struct snd_soc_component_driver dai_component = {
++	.name			= "soundwire",
++};
++
++/*
++ * PDI routines
++ */
++static void intel_pdi_init(struct sdw_intel *sdw,
++			   struct sdw_cdns_stream_config *config)
 +{
-+	void __iomem *shim_vs = sdw->link_res->shim_vs;
-+	u16 act = 0;
++	void __iomem *shim = sdw->link_res->shim;
++	int pcm_cap;
 +
-+	u16p_replace_bits(&act, 0x1, SDW_SHIM2_INTEL_VS_ACTMCTL_DOAIS);
-+	act |= SDW_SHIM2_INTEL_VS_ACTMCTL_DACTQE;
-+	act |=  SDW_SHIM2_INTEL_VS_ACTMCTL_DODS;
-+	intel_writew(shim_vs, SDW_SHIM2_INTEL_VS_ACTMCTL, act);
-+	usleep_range(10, 15);
++	/* PCM Stream Capability */
++	pcm_cap = intel_readw(shim, SDW_SHIM2_PCMSCAP);
++
++	config->pcm_bd = FIELD_GET(SDW_SHIM2_PCMSCAP_BSS, pcm_cap);
++	config->pcm_in = FIELD_GET(SDW_SHIM2_PCMSCAP_ISS, pcm_cap);
++	config->pcm_out = FIELD_GET(SDW_SHIM2_PCMSCAP_ISS, pcm_cap);
++
++	dev_dbg(sdw->cdns.dev, "PCM cap bd:%d in:%d out:%d\n",
++		config->pcm_bd, config->pcm_in, config->pcm_out);
 +}
 +
- static int intel_link_power_up(struct sdw_intel *sdw)
- {
- 	struct sdw_bus *bus = &sdw->cdns.bus;
-@@ -63,6 +79,9 @@ static int intel_link_power_up(struct sdw_intel *sdw)
- 	*shim_mask |= BIT(link_id);
- 
- 	sdw->cdns.link_up = true;
++static int
++intel_pdi_get_ch_cap(struct sdw_intel *sdw, unsigned int pdi_num)
++{
++	void __iomem *shim = sdw->link_res->shim;
 +
-+	intel_shim_vs_init(sdw);
++	/* zero based values for channel count in register */
++	return intel_readw(shim, SDW_SHIM2_PCMSYCHC(pdi_num)) + 1;
++}
 +
- out:
- 	mutex_unlock(sdw->link_res->shim_lock);
++static void intel_pdi_get_ch_update(struct sdw_intel *sdw,
++				    struct sdw_cdns_pdi *pdi,
++				    unsigned int num_pdi,
++				    unsigned int *num_ch)
++{
++	int ch_count = 0;
++	int i;
++
++	for (i = 0; i < num_pdi; i++) {
++		pdi->ch_count = intel_pdi_get_ch_cap(sdw, pdi->num);
++		ch_count += pdi->ch_count;
++		pdi++;
++	}
++
++	*num_ch = ch_count;
++}
++
++static void intel_pdi_stream_ch_update(struct sdw_intel *sdw,
++				       struct sdw_cdns_streams *stream)
++{
++	intel_pdi_get_ch_update(sdw, stream->bd, stream->num_bd,
++				&stream->num_ch_bd);
++
++	intel_pdi_get_ch_update(sdw, stream->in, stream->num_in,
++				&stream->num_ch_in);
++
++	intel_pdi_get_ch_update(sdw, stream->out, stream->num_out,
++				&stream->num_ch_out);
++}
++
++static int intel_create_dai(struct sdw_cdns *cdns,
++			    struct snd_soc_dai_driver *dais,
++			    enum intel_pdi_type type,
++			    u32 num, u32 off, u32 max_ch)
++{
++	int i;
++
++	if (!num)
++		return 0;
++
++	for (i = off; i < (off + num); i++) {
++		dais[i].name = devm_kasprintf(cdns->dev, GFP_KERNEL,
++					      "SDW%d Pin%d",
++					      cdns->instance, i);
++		if (!dais[i].name)
++			return -ENOMEM;
++
++		if (type == INTEL_PDI_BD || type == INTEL_PDI_OUT) {
++			dais[i].playback.channels_min = 1;
++			dais[i].playback.channels_max = max_ch;
++		}
++
++		if (type == INTEL_PDI_BD || type == INTEL_PDI_IN) {
++			dais[i].capture.channels_min = 1;
++			dais[i].capture.channels_max = max_ch;
++		}
++
++		dais[i].ops = &intel_pcm_dai_ops;
++	}
++
++	return 0;
++}
++
++static int intel_register_dai(struct sdw_intel *sdw)
++{
++	struct sdw_cdns_dai_runtime **dai_runtime_array;
++	struct sdw_cdns_stream_config config;
++	struct sdw_cdns *cdns = &sdw->cdns;
++	struct sdw_cdns_streams *stream;
++	struct snd_soc_dai_driver *dais;
++	int num_dai;
++	int ret;
++	int off = 0;
++
++	/* Read the PDI config and initialize cadence PDI */
++	intel_pdi_init(sdw, &config);
++	ret = sdw_cdns_pdi_init(cdns, config);
++	if (ret)
++		return ret;
++
++	intel_pdi_stream_ch_update(sdw, &sdw->cdns.pcm);
++
++	/* DAIs are created based on total number of PDIs supported */
++	num_dai = cdns->pcm.num_pdi;
++
++	dai_runtime_array = devm_kcalloc(cdns->dev, num_dai,
++					 sizeof(struct sdw_cdns_dai_runtime *),
++					 GFP_KERNEL);
++	if (!dai_runtime_array)
++		return -ENOMEM;
++	cdns->dai_runtime_array = dai_runtime_array;
++
++	dais = devm_kcalloc(cdns->dev, num_dai, sizeof(*dais), GFP_KERNEL);
++	if (!dais)
++		return -ENOMEM;
++
++	/* Create PCM DAIs */
++	stream = &cdns->pcm;
++
++	ret = intel_create_dai(cdns, dais, INTEL_PDI_IN, cdns->pcm.num_in,
++			       off, stream->num_ch_in);
++	if (ret)
++		return ret;
++
++	off += cdns->pcm.num_in;
++	ret = intel_create_dai(cdns, dais, INTEL_PDI_OUT, cdns->pcm.num_out,
++			       off, stream->num_ch_out);
++	if (ret)
++		return ret;
++
++	off += cdns->pcm.num_out;
++	ret = intel_create_dai(cdns, dais, INTEL_PDI_BD, cdns->pcm.num_bd,
++			       off, stream->num_ch_bd);
++	if (ret)
++		return ret;
++
++	return devm_snd_soc_register_component(cdns->dev, &dai_component,
++					       dais, num_dai);
++}
++
+ const struct sdw_intel_hw_ops sdw_intel_lnl_hw_ops = {
+ 	.debugfs_init = intel_ace2x_debugfs_init,
+ 	.debugfs_exit = intel_ace2x_debugfs_exit,
  
++	.register_dai = intel_register_dai,
++
+ 	.link_power_up = intel_link_power_up,
+ 	.link_power_down = intel_link_power_down,
+ };
 -- 
 2.25.1
 
