@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D8A7021D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605817021D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237798AbjEOCp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 22:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+        id S234481AbjEOCue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 22:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjEOCp0 (ORCPT
+        with ESMTP id S229672AbjEOCuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 22:45:26 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B5ED9;
-        Sun, 14 May 2023 19:45:24 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QKNwz27qgzLmGM;
-        Mon, 15 May 2023 10:44:03 +0800 (CST)
-Received: from [10.174.178.66] (10.174.178.66) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 15 May 2023 10:45:21 +0800
-Message-ID: <ae4c68c8-e798-778f-f53c-9c455c6a9f6c@huawei.com>
-Date:   Mon, 15 May 2023 10:45:20 +0800
+        Sun, 14 May 2023 22:50:32 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FCAE74;
+        Sun, 14 May 2023 19:50:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKP4J1gpVz4x1d;
+        Mon, 15 May 2023 12:50:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684119025;
+        bh=Jz3MRruVh3dU8KYalnJKGQ+MfSLuH1GZs3aqzlbyhH8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VFhhz0/MplnugKprTFl0M+sY83K9KoOEcl94S0A+kKBG+a3jdZqONiCwECbkqLkPA
+         Kt3scp3KkwnCFn3v7BCJeSWoJCkLSo07k/NjciMRBfEAll87HoeBbOYxyvjmvH+p2v
+         RISdpxlX5obiQXslcOIom89mPkeBKRr5KojGgBb6N9el2ue2gLk3dC3hx+QxJeJvqF
+         wJ9a8qLpWuOFNE7NidpQlB4CW5wINamiT+jr8R6Ue9DnJfohXvfOmbh4Q2gnjl08kY
+         cg/wZK8BxNq3hCkMs/JmULxQ6sN6K/3jULEXcupy7eKnK1qWw/gjrzS4tfAxrLvx+s
+         t2Z3d3Cii5WiA==
+Date:   Mon, 15 May 2023 12:50:23 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the usb tree with the usb.current tree
+Message-ID: <20230515125023.639f3ca3@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [syzbot] [wireless?] memory leak in hwsim_new_radio_nl
-To:     syzbot <syzbot+904ce6fbb38532d9795c@syzkaller.appspotmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>,
-        <johannes@sipsolutions.net>, <kuba@kernel.org>, <kvalo@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <syzkaller-bugs@googlegroups.com>
-References: <000000000000383da505fb8509b7@google.com>
-From:   shaozhengchao <shaozhengchao@huawei.com>
-In-Reply-To: <000000000000383da505fb8509b7@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.66]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; boundary="Sig_/NmrO53x+Us/b4UG.ATib=YK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,122 +53,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/NmrO53x+Us/b4UG.ATib=YK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2023/5/13 4:34, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    105131df9c3b Merge tag 'dt-fixes-6.4' of git://git.kernel...
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1193dc92280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9562c0bfb72fa2
-> dashboard link: https://syzkaller.appspot.com/bug?extid=904ce6fbb38532d9795c
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b4577c280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a9e29e280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/029c9c553eb9/disk-105131df.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/c807843227d1/vmlinux-105131df.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/dfce3441d47b/bzImage-105131df.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+904ce6fbb38532d9795c@syzkaller.appspotmail.com
-> 
-> Warning: Permanently added '10.128.1.177' (ECDSA) to the list of known hosts.
-> executing program
-> executing program
-> BUG: memory leak
-> unreferenced object 0xffff88810e2ac920 (size 32):
->    comm "syz-executor238", pid 4983, jiffies 4294944120 (age 14.000s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<ffffffff815458a4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
->      [<ffffffff830fc4fb>] kmalloc include/linux/slab.h:559 [inline]
->      [<ffffffff830fc4fb>] hwsim_new_radio_nl+0x43b/0x660 drivers/net/wireless/virtual/mac80211_hwsim.c:5962
->      [<ffffffff83f4aa6e>] genl_family_rcv_msg_doit.isra.0+0xee/0x150 net/netlink/genetlink.c:968
->      [<ffffffff83f4ada7>] genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
->      [<ffffffff83f4ada7>] genl_rcv_msg+0x2d7/0x430 net/netlink/genetlink.c:1065
->      [<ffffffff83f49111>] netlink_rcv_skb+0x91/0x1e0 net/netlink/af_netlink.c:2546
->      [<ffffffff83f4a118>] genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
->      [<ffffffff83f4805b>] netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
->      [<ffffffff83f4805b>] netlink_unicast+0x39b/0x4d0 net/netlink/af_netlink.c:1365
->      [<ffffffff83f4852a>] netlink_sendmsg+0x39a/0x720 net/netlink/af_netlink.c:1913
->      [<ffffffff83db5258>] sock_sendmsg_nosec net/socket.c:724 [inline]
->      [<ffffffff83db5258>] sock_sendmsg+0x58/0xb0 net/socket.c:747
->      [<ffffffff83db5817>] ____sys_sendmsg+0x397/0x430 net/socket.c:2503
->      [<ffffffff83db9e08>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2557
->      [<ffffffff83db9fac>] __sys_sendmsg+0x8c/0x100 net/socket.c:2586
->      [<ffffffff84a127b9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff84a127b9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> BUG: memory leak
-> unreferenced object 0xffff88810e2ac800 (size 32):
->    comm "syz-executor238", pid 4984, jiffies 4294944700 (age 8.200s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      [<ffffffff815458a4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
->      [<ffffffff830fc4fb>] kmalloc include/linux/slab.h:559 [inline]
->      [<ffffffff830fc4fb>] hwsim_new_radio_nl+0x43b/0x660 drivers/net/wireless/virtual/mac80211_hwsim.c:5962
->      [<ffffffff83f4aa6e>] genl_family_rcv_msg_doit.isra.0+0xee/0x150 net/netlink/genetlink.c:968
->      [<ffffffff83f4ada7>] genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
->      [<ffffffff83f4ada7>] genl_rcv_msg+0x2d7/0x430 net/netlink/genetlink.c:1065
->      [<ffffffff83f49111>] netlink_rcv_skb+0x91/0x1e0 net/netlink/af_netlink.c:2546
->      [<ffffffff83f4a118>] genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
->      [<ffffffff83f4805b>] netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
->      [<ffffffff83f4805b>] netlink_unicast+0x39b/0x4d0 net/netlink/af_netlink.c:1365
->      [<ffffffff83f4852a>] netlink_sendmsg+0x39a/0x720 net/netlink/af_netlink.c:1913
->      [<ffffffff83db5258>] sock_sendmsg_nosec net/socket.c:724 [inline]
->      [<ffffffff83db5258>] sock_sendmsg+0x58/0xb0 net/socket.c:747
->      [<ffffffff83db5817>] ____sys_sendmsg+0x397/0x430 net/socket.c:2503
->      [<ffffffff83db9e08>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2557
->      [<ffffffff83db9fac>] __sys_sendmsg+0x8c/0x100 net/socket.c:2586
->      [<ffffffff84a127b9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->      [<ffffffff84a127b9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->      [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
-> 
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
-> 
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
-> 
-> If you want to undo deduplication, reply with:
-> #syz undup
-> 
-> 
+Today's linux-next merge of the usb tree got a conflict in:
 
-This issue is introduced by 92d13386ec55 ("mac80211_hwsim: add PMSR
-capability support")
-When parse_pmsr_capa failed in hwsim_new_radio_nl, the memory resources
-applied for by pmsr_capa are not released. It should replace
-param.pmsr_capa with pmsr_capa to release memory.
+  drivers/usb/gadget/udc/core.c
 
-I will fix it today.
+between commit:
 
-Zhengchao Shao
+  f22e9b67f19c ("Revert "usb: gadget: udc: core: Invoke usb_gadget_connect =
+only when started"")
+
+from the usb.current tree and commit:
+
+  d34f9bafa78d ("usb: gadget: udc: Handle gadget_connect failure during bin=
+d operation")
+
+from the usb tree.
+
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/usb/gadget/udc/core.c
+index 52e6d2e84e35,69041cca5d24..000000000000
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@@ -1078,12 -1121,17 +1078,16 @@@ EXPORT_SYMBOL_GPL(usb_gadget_set_state)
+ =20
+  /* ----------------------------------------------------------------------=
+--- */
+ =20
+- static void usb_udc_connect_control(struct usb_udc *udc)
+ -/* Acquire connect_lock before calling this function. */
+ -static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hol=
+d(&udc->connect_lock)
+++static int usb_udc_connect_control(struct usb_udc *udc)
+  {
++ 	int ret;
++=20
+ -	if (udc->vbus && udc->started)
+ -		ret =3D usb_gadget_connect_locked(udc->gadget);
+ +	if (udc->vbus)
+- 		usb_gadget_connect(udc->gadget);
+++		ret =3D usb_gadget_connect(udc->gadget);
+  	else
+- 		usb_gadget_disconnect(udc->gadget);
+ -		ret =3D usb_gadget_disconnect_locked(udc->gadget);
+++		ret =3D usb_gadget_disconnect(udc->gadget);
++=20
++ 	return ret;
+  }
+ =20
+  /**
+@@@ -1523,15 -1580,28 +1527,23 @@@ static int gadget_bind_driver(struct de
+  	if (ret)
+  		goto err_bind;
+ =20
+ -	mutex_lock(&udc->connect_lock);
+ -	ret =3D usb_gadget_udc_start_locked(udc);
+ -	if (ret) {
+ -		mutex_unlock(&udc->connect_lock);
+ +	ret =3D usb_gadget_udc_start(udc);
+ +	if (ret)
+  		goto err_start;
+ -	}
+  	usb_gadget_enable_async_callbacks(udc);
+- 	usb_udc_connect_control(udc);
+ -	ret =3D usb_udc_connect_control_locked(udc);
+++	ret =3D usb_udc_connect_control(udc);
++ 	if (ret)
++ 		goto err_connect_control;
+ =20
+ -	mutex_unlock(&udc->connect_lock);
+ -
+  	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+  	return 0;
+ =20
++  err_connect_control:
++ 	usb_gadget_disable_async_callbacks(udc);
++ 	if (gadget->irq)
++ 		synchronize_irq(gadget->irq);
+ -	usb_gadget_udc_stop_locked(udc);
+++	usb_gadget_udc_stop(udc);
++=20
+   err_start:
+  	driver->unbind(udc->gadget);
+ =20
+
+--Sig_/NmrO53x+Us/b4UG.ATib=YK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhne8ACgkQAVBC80lX
+0GwsRAf/dgKysVLWm6VlBzJoMt53MdsTCm99u4j1AyoLylnOGJgo5EZ2cGmeK4Pv
+VlcUXIIkMOZBezsF4H561deiA+wJzsXRr/XOFOWv6l0UYMBjWfftvD5qugkI2mQ4
+WDpdCEZ0y6k3Xgx+iO703rktRo8bPm1aPMFXmG/6yGceUcEPtPSXCRg76J90nMZb
+Q59gv4nDIjAZwFhAmOBWZ+sAos1r3SNK3kL2Pdtxfh9d3vFopglxv8DjxW7PN6UZ
+ZFcZvU8tuVgFlsWQW0P0l1GXyUhdAMInsYhwr52kpT5rhT/jLT3pintuEAk5tUZ8
+XQPJbvyl2lWpBKTzxNptPcpvrWH9fw==
+=dBXS
+-----END PGP SIGNATURE-----
+
+--Sig_/NmrO53x+Us/b4UG.ATib=YK--
