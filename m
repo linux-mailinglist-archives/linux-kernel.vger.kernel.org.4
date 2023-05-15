@@ -2,146 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5A57028A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1735702894
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbjEOJbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
+        id S240083AbjEOJ3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232353AbjEOJbA (ORCPT
+        with ESMTP id S238696AbjEOJ3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:31:00 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675DF10E5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=n5FX9O5NE2mJSX7EZnD0DzVAFi6zSBewbsr6jBc6kiw=; b=Z1Blh8OVDwtCEVdf75OxFiqKJ6
-        ug6o73IBdnyIBFJcz1w98pNFIDKs3bAI0JDs7nlUJVFXQSf5jmGROH6FwJk3lKG5yjPt877qThICc
-        lTTfY0mTwzBgt0zSuM2mQJUNR8xQ/FtLUjNDfKPNdrXnKEDc72T/j9QL54JSsxtRx8Jv2UWEmdupP
-        9eYou/dJ1vXlSpH9P8kQ1SfB6e6XcIe8pbNhPdeR4GLUdhREiXiiPgoBsLxQxwqW1Xg7FrDZY3b69
-        D75jQofF3Ghmi9bcRS0KvbVKv11bk11gQUJ2eR8cfj46CIIbfTD3YSXrXHHiu76sBPetsv4XY/cm6
-        vQP/jU8Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pyUXZ-00BRNr-2p;
-        Mon, 15 May 2023 09:30:50 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 70DA8300786;
-        Mon, 15 May 2023 11:30:48 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 42CAA202674A5; Mon, 15 May 2023 11:30:48 +0200 (CEST)
-Message-ID: <20230515093020.661756940@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 15 May 2023 11:28:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        mhiramat@kernel.org, Andrew.Cooper3@citrix.com, jpoimboe@redhat.com
-Subject: [PATCH 1/2] x86_64: Longer NOPs
-References: <20230515092804.120600032@infradead.org>
+        Mon, 15 May 2023 05:29:15 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8C31BEB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:28:38 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3062c1e7df8so8213612f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:28:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684142917; x=1686734917;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QRBaFlhf9sFFgjiQBXj3BZflOgpJ96Bb6sKHpf2Tstg=;
+        b=w51K1VOHufmt/cdo5w3wovdmoamaTl7lMVZxFXyP3ZWusdj94pYEGN60Mn9Ooj4rnE
+         5rMJTFoOJbcZ/of+KvbrkjcxABJz2X4nxpdNCceheEmAtlwojp7jcYk3O2kfo2xwLu1g
+         p0fUGqFltb7quYlp/4UbBp7s80AmcQXqO2kOS4edtOF/fod9dxWe+M3OhZ0Ko+E/P4Qa
+         Wq+LQ/DZq7Fdyn5cAvqbv+oQ5IRg+PuDkiyZsKOtEx9GW1Cc7I1qdZuPfnjVyVwlH+jB
+         jwtNmg33+8hGhnefPskKyhY3dXFUduJrjw3IJ6RKNtD/PKLmD9UEDdIcPgQh33GVQnyv
+         LjZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684142917; x=1686734917;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QRBaFlhf9sFFgjiQBXj3BZflOgpJ96Bb6sKHpf2Tstg=;
+        b=QDekxAcrCRvfRsfilPahHRQVayZIyzNu43ophwSt5XU6V814EgWlDp+IcO3aSmUxWL
+         4ItPi99v7fnfYUmKoEb74DdYvXV5jirPgftRcckgWubcipJP/sSfPSFF+UmHYvEBhT7r
+         C/ut01uVq8pGHrnB2FtMHZ1J+ocOibO5PPtfry5Jne2TR8XdHaOdjQsQGq37X9pQmH76
+         yocmQqoyQ4gagGtuFolkfAeTC2BGYGinvjeT94XjZo7ajJEFLKkYKkpSy0Kzr/qkzkg+
+         OULKWBSNipmS6/gsHZetQRK8vtKkPnuPfMZjMCMv2E22J1glx+lbFXTkPTrNfnKYx4u7
+         Afaw==
+X-Gm-Message-State: AC+VfDxi6O/dOWlX7eg34YGnZj2dIm6jWSfrdZPlWblS2wQKQneuCWBS
+        oyfDXSnaCp1GZShAnjM/RZQBoeenSiRC0vWum2g=
+X-Google-Smtp-Source: ACHHUZ7PbioezIsR65ywi6/2ShhPZZoflieboKI5tlTUmDknlGjBF0hRQiD/bbU3CrRMH0nAD1PH1w==
+X-Received: by 2002:a5d:58c1:0:b0:306:20eb:bedd with SMTP id o1-20020a5d58c1000000b0030620ebbeddmr21733882wrf.51.1684142916991;
+        Mon, 15 May 2023 02:28:36 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id s2-20020a5d4ec2000000b003063a92bbf5sm32022989wrv.70.2023.05.15.02.28.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 02:28:35 -0700 (PDT)
+Date:   Mon, 15 May 2023 12:28:19 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     wuych <yunchuan@nfschina.com>
+Cc:     dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net-next] net: liquidio: lio_core: Remove unnecessary
+ (void*) conversions
+Message-ID: <61522ef5-7c7a-4bee-bcf6-6905a3290e76@kili.mountain>
+References: <20230515084906.61491-1-yunchuan@nfschina.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515084906.61491-1-yunchuan@nfschina.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By adding support for longer NOPs there are a few more alternatives
-that can turn into a single instruction.
+On Mon, May 15, 2023 at 04:49:06PM +0800, wuych wrote:
+> Pointer variables of void * type do not require type cast.
+> 
+> Signed-off-by: wuych <yunchuan@nfschina.com>
+> ---
+>  drivers/net/ethernet/cavium/liquidio/lio_core.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/cavium/liquidio/lio_core.c b/drivers/net/ethernet/cavium/liquidio/lio_core.c
+> index 882b2be06ea0..10d9dab26c92 100644
+> --- a/drivers/net/ethernet/cavium/liquidio/lio_core.c
+> +++ b/drivers/net/ethernet/cavium/liquidio/lio_core.c
+> @@ -904,8 +904,7 @@ static
+>  int liquidio_schedule_msix_droq_pkt_handler(struct octeon_droq *droq, u64 ret)
+>  {
+>  	struct octeon_device *oct = droq->oct_dev;
+> -	struct octeon_device_priv *oct_priv =
+> -	    (struct octeon_device_priv *)oct->priv;
+> +	struct octeon_device_priv *oct_priv = oct->priv;
+>  
 
-Add up to NOP11, the same limit where GNU as .nops also stops
-generating longer nops. This is because a number of uarchs have severe
-decode penalties for more than 3 prefixes.
+Networking code needs to be in Reverse Christmas Tree order.  Longest
+lines first.  This code wasn't really in Reverse Christmas Tree order
+to begine with but now it's more obvious.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/asm/nops.h   |   16 ++++++++++++++--
- arch/x86/kernel/alternative.c |   10 ++++++++++
- 2 files changed, 24 insertions(+), 2 deletions(-)
-
---- a/arch/x86/include/asm/nops.h
-+++ b/arch/x86/include/asm/nops.h
-@@ -34,6 +34,8 @@
- #define BYTES_NOP7	0x8d,0xb4,0x26,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x3e,BYTES_NOP7
- 
-+#define ASM_NOP_MAX 8
-+
- #else
- 
- /*
-@@ -47,6 +49,9 @@
-  * 6: osp nopl 0x00(%eax,%eax,1)
-  * 7: nopl 0x00000000(%eax)
-  * 8: nopl 0x00000000(%eax,%eax,1)
-+ * 9: cs nopl 0x00000000(%eax,%eax,1)
-+ * 10: osp cs nopl 0x00000000(%eax,%eax,1)
-+ * 11: osp osp cs nopl 0x00000000(%eax,%eax,1)
-  */
- #define BYTES_NOP1	0x90
- #define BYTES_NOP2	0x66,BYTES_NOP1
-@@ -56,6 +61,15 @@
- #define BYTES_NOP6	0x66,BYTES_NOP5
- #define BYTES_NOP7	0x0f,0x1f,0x80,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00
-+#define BYTES_NOP9	0x2e,BYTES_NOP8
-+#define BYTES_NOP10	0x66,BYTES_NOP9
-+#define BYTES_NOP11	0x66,BYTES_NOP10
-+
-+#define ASM_NOP9  _ASM_BYTES(BYTES_NOP9)
-+#define ASM_NOP10 _ASM_BYTES(BYTES_NOP10)
-+#define ASM_NOP11 _ASM_BYTES(BYTES_NOP11)
-+
-+#define ASM_NOP_MAX 11
- 
- #endif /* CONFIG_64BIT */
- 
-@@ -68,8 +82,6 @@
- #define ASM_NOP7 _ASM_BYTES(BYTES_NOP7)
- #define ASM_NOP8 _ASM_BYTES(BYTES_NOP8)
- 
--#define ASM_NOP_MAX 8
--
- #ifndef __ASSEMBLY__
- extern const unsigned char * const x86_nops[];
- #endif
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -98,6 +98,11 @@ static const unsigned char x86nops[] =
- 	BYTES_NOP6,
- 	BYTES_NOP7,
- 	BYTES_NOP8,
-+#ifdef CONFIG_64BIT
-+	BYTES_NOP9,
-+	BYTES_NOP10,
-+	BYTES_NOP11,
-+#endif
- };
- 
- const unsigned char * const x86_nops[ASM_NOP_MAX+1] =
-@@ -111,6 +116,11 @@ const unsigned char * const x86_nops[ASM
- 	x86nops + 1 + 2 + 3 + 4 + 5,
- 	x86nops + 1 + 2 + 3 + 4 + 5 + 6,
- 	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7,
-+#ifdef CONFIG_64BIT
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8,
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9,
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10,
-+#endif
- };
- 
- /*
-
+regards,
+dan carpenter
 
