@@ -2,36 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE59702714
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A74702715
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233374AbjEOIYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46332 "EHLO
+        id S235698AbjEOIYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbjEOIWL (ORCPT
+        with ESMTP id S232048AbjEOIWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 May 2023 04:22:11 -0400
-Received: from out0-222.mail.aliyun.com (out0-222.mail.aliyun.com [140.205.0.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC2310D7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:20:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047194;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---.T2G7nz7_1684138818;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.T2G7nz7_1684138818)
+Received: from out0-194.mail.aliyun.com (out0-194.mail.aliyun.com [140.205.0.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAD410DF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:20:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047204;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---.T2GMf1Y_1684138824;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.T2GMf1Y_1684138824)
           by smtp.aliyun-inc.com;
-          Mon, 15 May 2023 16:20:19 +0800
+          Mon, 15 May 2023 16:20:25 +0800
 From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
         "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
-        "Juergen Gross" <jgross@suse.com>,
-        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
         "Thomas Gleixner" <tglx@linutronix.de>,
         "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
         "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <xen-devel@lists.xenproject.org>
-Subject: [PATCH RFC 2/4] x86/xen: Pin up to VSYSCALL_ADDR when vsyscall page is out of fixmap area
-Date:   Mon, 15 May 2023 16:19:33 +0800
-Message-Id: <a0e2bcde86150831cf8a0da0e94f182668c5cc5e.1684137557.git.houwenlong.hwl@antgroup.com>
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Suren Baghdasaryan" <surenb@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "=?UTF-8?B?TWlrZSBSYXBvcG9ydCAoSUJNKQ==?=" <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "David Woodhouse" <dwmw@amazon.co.uk>,
+        "Usama Arif" <usama.arif@bytedance.com>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        "Brian Gerst" <brgerst@gmail.com>
+Subject: [PATCH RFC 3/4] x86/fixmap: Move vsyscall page out of fixmap area
+Date:   Mon, 15 May 2023 16:19:34 +0800
+Message-Id: <1d982a2883cd807668fad9575ea1c285ae7c272b.1684137557.git.houwenlong.hwl@antgroup.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1684137557.git.houwenlong.hwl@antgroup.com>
 References: <cover.1684137557.git.houwenlong.hwl@antgroup.com>
@@ -46,60 +54,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the vsyscall page is moved out of the fixmap area, then FIXADDR_TOP
-would be below the vsyscall page. Therefore, it should be pinned up to
-VSYSCALL_ADDR if vsyscall is enabled.
+After mapping vsyscall page individually, the vsyscall page could be
+moved out of fixmap area.
 
 Suggested-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
 ---
- arch/x86/xen/mmu_pv.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ arch/x86/entry/vsyscall/vsyscall_64.c |  4 ----
+ arch/x86/include/asm/fixmap.h         | 17 +++++------------
+ arch/x86/kernel/head_64.S             |  6 +++---
+ arch/x86/mm/fault.c                   |  1 -
+ arch/x86/mm/init_64.c                 |  2 +-
+ 5 files changed, 9 insertions(+), 21 deletions(-)
 
-diff --git a/arch/x86/xen/mmu_pv.c b/arch/x86/xen/mmu_pv.c
-index c42c60faa3bb..c1f298c31e64 100644
---- a/arch/x86/xen/mmu_pv.c
-+++ b/arch/x86/xen/mmu_pv.c
-@@ -587,6 +587,12 @@ static void xen_p4d_walk(struct mm_struct *mm, p4d_t *p4d,
- 	xen_pud_walk(mm, pud, func, last, limit);
+diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
+index 4373460ebbde..f469f8dc36d4 100644
+--- a/arch/x86/entry/vsyscall/vsyscall_64.c
++++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+@@ -35,7 +35,6 @@
+ 
+ #include <asm/vsyscall.h>
+ #include <asm/unistd.h>
+-#include <asm/fixmap.h>
+ #include <asm/traps.h>
+ #include <asm/paravirt.h>
+ 
+@@ -391,7 +390,4 @@ void __init map_vsyscall(void)
+ 
+ 	if (vsyscall_mode == XONLY)
+ 		vm_flags_init(&gate_vma, VM_EXEC);
+-
+-	BUILD_BUG_ON((unsigned long)__fix_to_virt(VSYSCALL_PAGE) !=
+-		     (unsigned long)VSYSCALL_ADDR);
  }
- 
-+#ifdef CONFIG_X86_VSYSCALL_EMULATION
-+#define __KERNEL_MAP_TOP	(VSYSCALL_ADDR + PAGE_SIZE)
-+#else
-+#define __KERNEL_MAP_TOP	FIXADDR_TOP
-+#endif
-+
- /*
-  * (Yet another) pagetable walker.  This one is intended for pinning a
-  * pagetable.  This means that it walks a pagetable and calls the
-@@ -594,7 +600,7 @@ static void xen_p4d_walk(struct mm_struct *mm, p4d_t *p4d,
-  * at every level.  It walks the entire pagetable, but it only bothers
-  * pinning pte pages which are below limit.  In the normal case this
-  * will be STACK_TOP_MAX, but at boot we need to pin up to
-- * FIXADDR_TOP.
-+ * __KERNEL_MAP_TOP.
-  *
-  * We must skip the Xen hole in the middle of the address space, just after
-  * the big x86-64 virtual hole.
-@@ -609,7 +615,7 @@ static void __xen_pgd_walk(struct mm_struct *mm, pgd_t *pgd,
- 
- 	/* The limit is the last byte to be touched */
- 	limit--;
--	BUG_ON(limit >= FIXADDR_TOP);
-+	BUG_ON(limit >= __KERNEL_MAP_TOP);
- 
- 	/*
- 	 * 64-bit has a great big hole in the middle of the address
-@@ -797,7 +803,7 @@ static void __init xen_after_bootmem(void)
- #ifdef CONFIG_X86_VSYSCALL_EMULATION
- 	SetPagePinned(virt_to_page(level3_user_vsyscall));
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index d0dcefb5cc59..eeb152ad9682 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -23,13 +23,13 @@
+  * covered fully.
+  */
+ #ifndef CONFIG_DEBUG_KMAP_LOCAL_FORCE_MAP
+-# define FIXMAP_PMD_NUM	2
++# define FIXMAP_PMD_NUM	1
+ #else
+ # define KM_PMDS	(KM_MAX_IDX * ((CONFIG_NR_CPUS + 511) / 512))
+-# define FIXMAP_PMD_NUM (KM_PMDS + 2)
++# define FIXMAP_PMD_NUM (KM_PMDS + 1)
  #endif
--	xen_pgd_walk(&init_mm, xen_mark_pinned, FIXADDR_TOP);
-+	xen_pgd_walk(&init_mm, xen_mark_pinned, __KERNEL_MAP_TOP);
- }
+-/* fixmap starts downwards from the 507th entry in level2_fixmap_pgt */
+-#define FIXMAP_PMD_TOP	507
++/* fixmap starts downwards from the 506th entry in level2_fixmap_pgt */
++#define FIXMAP_PMD_TOP	506
  
- static void xen_unpin_page(struct mm_struct *mm, struct page *page,
+ #ifndef __ASSEMBLY__
+ #include <linux/kernel.h>
+@@ -38,8 +38,6 @@
+ #include <asm/pgtable_types.h>
+ #ifdef CONFIG_X86_32
+ #include <linux/threads.h>
+-#else
+-#include <uapi/asm/vsyscall.h>
+ #endif
+ 
+ /*
+@@ -55,8 +53,7 @@
+ extern unsigned long __FIXADDR_TOP;
+ #define FIXADDR_TOP	((unsigned long)__FIXADDR_TOP)
+ #else
+-#define FIXADDR_TOP	(round_up(VSYSCALL_ADDR + PAGE_SIZE, 1<<PMD_SHIFT) - \
+-			 PAGE_SIZE)
++#define FIXADDR_TOP	(0xffffffffff600000UL - PAGE_SIZE)
+ #endif
+ 
+ /*
+@@ -81,10 +78,6 @@ extern unsigned long __FIXADDR_TOP;
+ enum fixed_addresses {
+ #ifdef CONFIG_X86_32
+ 	FIX_HOLE,
+-#else
+-#ifdef CONFIG_X86_VSYSCALL_EMULATION
+-	VSYSCALL_PAGE = (FIXADDR_TOP - VSYSCALL_ADDR) >> PAGE_SHIFT,
+-#endif
+ #endif
+ 	FIX_DBGP_BASE,
+ 	FIX_EARLYCON_MEM_BASE,
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index a5df3e994f04..8a0714bc52db 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -639,15 +639,15 @@ SYM_DATA_START_PAGE_ALIGNED(level2_kernel_pgt)
+ SYM_DATA_END(level2_kernel_pgt)
+ 
+ SYM_DATA_START_PAGE_ALIGNED(level2_fixmap_pgt)
+-	.fill	(512 - 4 - FIXMAP_PMD_NUM),8,0
++	.fill	(512 - 5 - FIXMAP_PMD_NUM),8,0
+ 	pgtno = 0
+ 	.rept (FIXMAP_PMD_NUM)
+ 	.quad level1_fixmap_pgt + (pgtno << PAGE_SHIFT) - __START_KERNEL_map \
+ 		+ _PAGE_TABLE_NOENC;
+ 	pgtno = pgtno + 1
+ 	.endr
+-	/* 6 MB reserved space + a 2MB hole */
+-	.fill	4,8,0
++	/* 2MB (with 4KB vsyscall page inside) + 6 MB reserved space + a 2MB hole */
++	.fill	5,8,0
+ SYM_DATA_END(level2_fixmap_pgt)
+ 
+ SYM_DATA_START_PAGE_ALIGNED(level1_fixmap_pgt)
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index e4399983c50c..988478e7ef1f 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -23,7 +23,6 @@
+ 
+ #include <asm/cpufeature.h>		/* boot_cpu_has, ...		*/
+ #include <asm/traps.h>			/* dotraplinkage, ...		*/
+-#include <asm/fixmap.h>			/* VSYSCALL_ADDR		*/
+ #include <asm/vsyscall.h>		/* emulate_vsyscall		*/
+ #include <asm/vm86.h>			/* struct vm86			*/
+ #include <asm/mmu_context.h>		/* vma_pkey()			*/
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index a190aae8ceaf..b7fd05a1ba1d 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -40,7 +40,7 @@
+ #include <linux/uaccess.h>
+ #include <asm/pgalloc.h>
+ #include <asm/dma.h>
+-#include <asm/fixmap.h>
++#include <asm/vsyscall.h>
+ #include <asm/e820/api.h>
+ #include <asm/apic.h>
+ #include <asm/tlb.h>
 -- 
 2.31.1
 
