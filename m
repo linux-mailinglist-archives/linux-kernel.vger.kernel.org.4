@@ -2,112 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7461C7037FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B61670382F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244253AbjEOR0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
+        id S244151AbjEOR2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244084AbjEORZy (ORCPT
+        with ESMTP id S244288AbjEOR1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:25:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49ABC100F4;
-        Mon, 15 May 2023 10:24:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 293CB62CD7;
-        Mon, 15 May 2023 17:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A7CC4339B;
-        Mon, 15 May 2023 17:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684171484;
-        bh=2WihzjevgA/VftUyRW5cgW08ExyJfimZx9zxWsTB+Bo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eGk1ivJDCnlpT9Abm/hXbBUycqR9dUnSnLNFdUWJemevTNpFm1UPz9hFe9C0s6M1n
-         qXaPK1rSHR++txgXexCXWsVGs+FL6n5BkKZ+68M3WQWTh1TrdFtXMC8DTP5NNlsbwn
-         8aa9VELn5jfpfzPtoIDTjBppP2tGioOuRKovaKRjzZiEwFkkIAJWeC1aeNbijzmrra
-         Po0Ech39PbHFrJJEVD4QknC822WsHYDkn5jhd+7mShuUg0JJZ4xSubv5pjr0VMpjNl
-         9I5ENLj2gQhN/Et/CvsVzmLH2dpm7AsXNAtxeg5io6h+yc8qVAvLnFfzE+rl++O+Oq
-         /m8T/J8SdTKaQ==
-Date:   Mon, 15 May 2023 18:24:40 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andreas Kemnade <andreas@kemnade.info>
-Subject: Re: [PATCH] dt-bindings: vendor-prefixes: document TeeJet
-Message-ID: <20230515-cover-dallying-fb1599444827@spud>
-References: <20230515155747.499371-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f6Qn7+5fTTxrbIBt"
-Content-Disposition: inline
-In-Reply-To: <20230515155747.499371-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 15 May 2023 13:27:41 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A492214342
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:26:26 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba7831dfe95so4179676276.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684171584; x=1686763584;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=y97BQ7sR2LBYQN45EWEO4FJ6RSEUfFrbQxSXtC1eEEg=;
+        b=lnrHEXI214x0JOHTaG19NvuKmqNZq8vfQFKdpU6IFL5CrGuJIGS18GJfVi7BwsHwLu
+         z/19S9vAZW30pNF09qix5IlZ31ZEXIfoGPrblHX6Enf6KFUoXTTZnWap+ULYaVY8vhtU
+         OkCdhS24qIkQeup6yuRZj7uh7CWNtThe5UGcraCNGfBBC5Hww348MxDxRagpAxcDVTgA
+         AZ7h+zuAXJzQAH2BNFM6Zv0fa/yUNkqKLh+ZXEOhgjyLaqTiXJhjvNH8l0R1RPrqwNd7
+         0RKoPgChapU4TerGr+ESr+HQzkCOntbXEi2Aj+4c6i7PG4f7i/oYDqbdgA2BE8qDfgLN
+         /7wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684171584; x=1686763584;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y97BQ7sR2LBYQN45EWEO4FJ6RSEUfFrbQxSXtC1eEEg=;
+        b=CdBiaWx1LxX3ezy+P4iV4RdOeOG7o8BYzmmSVmxcCey7i+JFbiqfwvPOSBffudXmG/
+         F6BSiiGGVmGZF2e+FY+mI2qHvLISEkE24OJN386WcpXNGf8kWn/69m2Jv599hopJe9yh
+         CTqmS3sQWkdIsICdxHoidpbaRIVlg68jqdIuKqvGKEXXTfmsNgQR16muNWUtCMkpD0R9
+         n6vFrv3oE+9vddW/J47MZTuiJYxcf93BvWP7DDNxEpfARklKJUuiubm7iDehOaH9y0f/
+         D1tH9C37zFsPQ66N47lovLFd4PFSRhmznIdGUn3oaaoyfYCgUmjJ+1wLWRVSGASwJOAk
+         Cpcw==
+X-Gm-Message-State: AC+VfDyS6QIXUKfBZCMOWnjP5lDttwvp+ZVbDY5N9wezD8q+Nt26wICl
+        9Mc5U9H1OvO/niyoHIamZYoMvJB+Rh/q
+X-Google-Smtp-Source: ACHHUZ5TeR03DncbFn2MDJZP9KzUWVPcJVpfEqM7CUznGNTSHd5/NHOxIZ8GKK9NiQzFZ/fPDVHY/iZDWiai
+X-Received: from yuanchu.bej.corp.google.com ([2401:fa00:44:10:166c:6ee8:fb91:4744])
+ (user=yuanchu job=sendgmr) by 2002:a5b:750:0:b0:ba7:75a8:e37d with SMTP id
+ s16-20020a5b0750000000b00ba775a8e37dmr3199880ybq.4.1684171584365; Mon, 15 May
+ 2023 10:26:24 -0700 (PDT)
+Date:   Tue, 16 May 2023 01:26:08 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230515172608.3558391-1-yuanchu@google.com>
+Subject: [PATCH] mm: pagemap: restrict pagewalk to the requested range
+From:   Yuanchu Xie <yuanchu@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Zach O'Keefe" <zokeefe@google.com>, Peter Xu <peterx@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Yuanchu Xie <yuanchu@google.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pagewalk in pagemap_read reads one PTE past the end of the requested
+range, and stops when the buffer runs out of space. While it produces
+the right result, the extra read is unnecessary and less performant.
 
---f6Qn7+5fTTxrbIBt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I timed the following command before and after this patch:
+	dd count=100000 if=/proc/self/pagemap of=/dev/null
+The results are consistently within 0.001s across 5 runs.
 
-On Mon, May 15, 2023 at 05:57:47PM +0200, Krzysztof Kozlowski wrote:
-> Document TeeJet vendor prefix (used in am3517_mt_ventoux.dts board).
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Before:
+100000+0 records in
+100000+0 records out
+51200000 bytes (51 MB) copied, 0.0763159 s, 671 MB/s
 
-I tried to google what a mt ventoux was but there appears to be precious
-little information on it.
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+real    0m0.078s
+user    0m0.012s
+sys     0m0.065s
 
-Cheers,
-Conor.
+After:
+100000+0 records in
+100000+0 records out
+51200000 bytes (51 MB) copied, 0.0487928 s, 1.0 GB/s
 
-> Cc: Andreas Kemnade <andreas@kemnade.info>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Doc=
-umentation/devicetree/bindings/vendor-prefixes.yaml
-> index c3d426509e7e..5258090e2e02 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -1341,6 +1341,8 @@ patternProperties:
->      description: Technologic Systems
->    "^techstar,.*":
->      description: Shenzhen Techstar Electronics Co., Ltd.
-> +  "^teejet,.*":
-> +    description: TeeJet
->    "^teltonika,.*":
->      description: Teltonika Networks
->    "^tempo,.*":
-> --=20
-> 2.34.1
->=20
+real    0m0.050s
+user    0m0.011s
+sys     0m0.039s
 
---f6Qn7+5fTTxrbIBt
-Content-Type: application/pgp-signature; name="signature.asc"
+Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+---
+ fs/proc/task_mmu.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 420510f6a545..6259dd432eeb 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1689,23 +1689,23 @@ static ssize_t pagemap_read(struct file *file, char __user *buf,
+ 	/* watch out for wraparound */
+ 	start_vaddr = end_vaddr;
+ 	if (svpfn <= (ULONG_MAX >> PAGE_SHIFT)) {
++		unsigned long end;
++
+ 		ret = mmap_read_lock_killable(mm);
+ 		if (ret)
+ 			goto out_free;
+ 		start_vaddr = untagged_addr_remote(mm, svpfn << PAGE_SHIFT);
+ 		mmap_read_unlock(mm);
++
++		end = start_vaddr + ((count / PM_ENTRY_BYTES) << PAGE_SHIFT);
++		if (end >= start_vaddr && end < mm->task_size)
++			end_vaddr = end;
+ 	}
+ 
+ 	/* Ensure the address is inside the task */
+ 	if (start_vaddr > mm->task_size)
+ 		start_vaddr = end_vaddr;
+ 
+-	/*
+-	 * The odds are that this will stop walking way
+-	 * before end_vaddr, because the length of the
+-	 * user buffer is tracked in "pm", and the walk
+-	 * will stop when we hit the end of the buffer.
+-	 */
+ 	ret = 0;
+ 	while (count && (start_vaddr < end_vaddr)) {
+ 		int len;
+-- 
+2.40.1.606.ga4b1b128d6-goog
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGJq2AAKCRB4tDGHoIJi
-0qp7AP9m1NXo9WESblF1ux0++KWkRFk5T4b8CcRC7hoNS82MpgEAw/ZIuWXYPrLC
-7FV8RDjRiEi1eZn1KT44o2iPFz2urAk=
-=rQuS
------END PGP SIGNATURE-----
-
---f6Qn7+5fTTxrbIBt--
