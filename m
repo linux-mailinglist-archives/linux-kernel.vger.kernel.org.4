@@ -2,154 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7978D703E53
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E03703E67
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233873AbjEOUOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 16:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S245302AbjEOUQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 16:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244176AbjEOUOo (ORCPT
+        with ESMTP id S245295AbjEOUQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 16:14:44 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2113.outbound.protection.outlook.com [40.107.114.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DFA83;
-        Mon, 15 May 2023 13:14:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j3IEMmY8Gffr0267Lx59SIDgLRlSbbsuar2MOWGVPpC34gV5aflcz5sgRcVi6vFXfOoyEBQ8z3qKu3AoQyt9uNbY+uCXkQ6OJcjPxSbQ6GU1Jx9s6nMRWQ5nooGwjEuVCLpFRKjjU3wK+7haYonokmJ7DQLOcdCKm/FjLOVoFmRy5fHzQ1Pi2WmXquyY1WwQ/V1a1Yvpc7vgWC5sjQXvHmV9wivufrueFOqC8G2q0sIw9NWsoZutt+eJMqJ2vUwUGeAJjAj3XIMWcpEWt/f3qGkk65NRRu+tGSCDGzezjsR4zCx/xW0DDrlSh4X+ZXpAvIAp7ILUGvEASmLGlXwPGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Whglp1tGnAEEz+8X7R6Q8/KdxSKce02N5RC+ZDHCTSg=;
- b=mia4AE7mRZZb3g1HPJn2id3iSvK4m9Wa+ixb7p8Zcf4TG+Oga84IfP3apPhKw65utWy9Tn7q9htCrjQJG6mDYzR1DZrNB2f7T9RZ5ggeN13B6jEyBm7Tw2lhtKvBmtlW//E02vBd7lNVgcsto40UVeWF27YRNzKFUu/a6BOfastiv8tPVendyEJdLaO2tlWSfJNUfnfKk9skkaKUNpkSXCMQR75JBS16tB3k2s/01HJt+112niDHuMeZmkWDGZuYakG7AGZyHGxiHkHL9jkDvtKBA6UKwpWl6odN94gIbCYzC/bgw5zMT8ZZGHg+MSXoxivp3tSNwxtBNlETnuNbGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Whglp1tGnAEEz+8X7R6Q8/KdxSKce02N5RC+ZDHCTSg=;
- b=Wk8Z4dg4JznSWiUJgxMipKxxKcr6JVrUhJQs1KxsEodXVzRgFfbTD07PotRw6ktA7HWOxFPghb1aXUzcn/GX1/4xj8fSj+gX+wdGS2I3++GB+AokGiyGEk3hHYElQz8qFhsKAAladik8XPKHbjZTuhQirpJjRrBoDpld2M0y/M4=
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
- by OS0PR01MB5459.jpnprd01.prod.outlook.com (2603:1096:604:af::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.31; Mon, 15 May
- 2023 20:14:21 +0000
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a7d8:4c3a:9cfd:2e79]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a7d8:4c3a:9cfd:2e79%4]) with mapi id 15.20.6387.030; Mon, 15 May 2023
- 20:14:21 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: RE: [PATCH 6.3 000/246] 6.3.3-rc1 review
-Thread-Topic: [PATCH 6.3 000/246] 6.3.3-rc1 review
-Thread-Index: AQHZh00193qFVSadW0+FBixlm4mJ4q9bweLg
-Date:   Mon, 15 May 2023 20:14:21 +0000
-Message-ID: <TY2PR01MB3788CDE68B5CD0B8B1FA99D0B7789@TY2PR01MB3788.jpnprd01.prod.outlook.com>
-References: <20230515161722.610123835@linuxfoundation.org>
-In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|OS0PR01MB5459:EE_
-x-ms-office365-filtering-correlation-id: a001cdb7-b552-4887-4816-08db5580f886
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0T1Ue5MRsuIWI6wyUovR+Iv9JX35MbK9sCprLClBTCAYRlPsK0QN10260VKQzNgUkAzfBXBN4yWErGKEjN0CQ48NltaErTzPSTH4/yQmnXhwVEPxlXyT4yRZDvzmcxLyrEjnAOBdD4KaXO6wvtl356XN4IRQ9bV+PPAseku5dhKUdqVXhDFShIP9f2G8ZhvFrGy2Su0OTYUQwe22+CEoPQO6w9t8pCBGWvfrzm+Gdg+M4yarGbIaiyVRO7Xe6E/I6c1cnwimaX+BvNQrG3C7f6ghUwZjHHTDkjGe7rpeDF252rDnb2JLhE8U/n0uwwarL18y5pZ3+GAAEiiEYHJmglvrg2SgoRmX4lcFmai3rpGOPH3HICpd/Gs0MnItY/YpEi5Ux1XSsun4gt2tZZyPeb1/f3T5FoIOCkLjQbYfgCMNR2fMTftEyy6IPYPrbgy384noBFXaruIDvFbp4uAWqBgcQMsA7Qqs8I6jwmi+Wa41GFBnPk7AA2T9tcf50LnmZbOTrZ+UYKw1izM5XFAmDh3tAuGWBFm0owtD2gCXu/uLP9JjtMn+923M02vCfsP8EH27pk5MnFezg6owuykJ4yOjSai/BEPldCC54FgYuqg3NO+9lWBJjTMayEqFiauFe4uYkayyno17xfFybsD9EA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199021)(52536014)(8676002)(8936002)(5660300002)(7416002)(4744005)(4326008)(316002)(41300700001)(2906002)(478600001)(66946007)(66556008)(66446008)(64756008)(66476007)(76116006)(55016003)(54906003)(33656002)(110136005)(7696005)(966005)(26005)(186003)(9686003)(6506007)(38100700002)(38070700005)(71200400001)(122000001)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-3?Q?rW/VB6ByyDETk/dTLqhdhL+gMvsvWa6xiSIy2jD0tXo+aXp+lq7N/FC16p?=
- =?iso-8859-3?Q?YwB/5a0346lYzOiNdqU1Q+/w22GqbaxlW3MNaReQSH8ny4dTj4OZ063Prk?=
- =?iso-8859-3?Q?2kizqG2sPzIIf3iOdnjZu/h+wUQ6+NAzBj+csaJ8cuNqXVhPu7/AgVsM/8?=
- =?iso-8859-3?Q?NXBpMqCQZR15dyMt0GvOyxmLrnuokfQLRZU1EnqzQGsB7utcwR702HRpOb?=
- =?iso-8859-3?Q?pjCSB5XMVcC9mUr3o/mBqsR8dabsPFSQHvpCzmed/ZWEiI53AQfHxrv/ix?=
- =?iso-8859-3?Q?l2j8EOwYVeqWInzhGYgJi16bE6s3BJc+kJw5/Ob7tWUliXHXfvspi7btyH?=
- =?iso-8859-3?Q?XKscPIlG84j+NYrsqfERyJ3XQ7QSBONHu62nU+/SBRrz06y6eleSj9RnKk?=
- =?iso-8859-3?Q?c6QFT3VBKu14C2ZJptY8tjOHrEWX54Z5qMnEqta3NwnKIJ/wofnbssFpQK?=
- =?iso-8859-3?Q?lghHyeRLyBf2yesJdhlhxSlKfAi7yHCyUvj6ZTU/abxsGs95+YyydK8ls8?=
- =?iso-8859-3?Q?sVVrG9hwYBUohcTTQdglZyP2a9bmLk1PwJi4O7+cJ6WzeZVKWkbZP24Vdg?=
- =?iso-8859-3?Q?ukTH2nsP9KQT5wyI3PkAhb5S36odVCngy3lPJkwFNqxRA795jBoKto7y66?=
- =?iso-8859-3?Q?bNcX+g/xOvuWPHRGPacy4etjgVYRtIf19Ra+Wvxk5nyk6YhyOz34Vby+dv?=
- =?iso-8859-3?Q?CaWNbEiCbanI9eWnP2QwHfYiuoQjnraW280okQgxw8pLcNOAF9kJp7aHoH?=
- =?iso-8859-3?Q?6Og5H1Df9VQ4OdSLzCxmA2KZ8iOcLBRhEBqZ6C2MFONEPnT9WoK6gzuw7m?=
- =?iso-8859-3?Q?TldrzXZTsyB3WyQrSBJniPDHSWFBAL0Zrpa9PYg+2H2qlVmzDbjZ8+G1gX?=
- =?iso-8859-3?Q?b9AYWWwC8qLkBs2dgxFPDrHCD8s+cCProkOvuas7lkJe8xJ9nXif/Cuouw?=
- =?iso-8859-3?Q?K6OKzJW11/CIrjc3bsjEcBvr0LNL40os57uFD2nOMkeLbAW8vkDPEvHjdG?=
- =?iso-8859-3?Q?SHnVTYk4vRfDKL06str+wZVuvZts/Z5HiFdiDTFRlOKOODAii5ihhELK42?=
- =?iso-8859-3?Q?KQ3JWncMhiOvN9giWnen8Ecn5MhR4W8tP6xi0lSFWat7PxK6Rx+whCrTkP?=
- =?iso-8859-3?Q?SD7lgbq58OhKmlXWKgB0v3kfQVQ3Urg2f59n9ISoxlzq3EiJVZXZb1OIdD?=
- =?iso-8859-3?Q?evBYUAGssk51z2xoKLfudAIudiywJWbJmEJyRl0H5SOWeYC6Zzmchr657U?=
- =?iso-8859-3?Q?jLOffaiZmWB+YOA7BgbW66a+W+8Yp4BQZpvC86XanQAnxDIYtRiHAxID5m?=
- =?iso-8859-3?Q?qxcQhZDdl7/fDpE2N5UX8W2Hxa2bHCv1SIM05C1Hh5dX7zqJbh4jDk8pfN?=
- =?iso-8859-3?Q?CIo5m5giV/qOAiJ/iUm6zhUb2SsTE1tIzDzlJcxR/TAD+dR3pIlx48rmSL?=
- =?iso-8859-3?Q?Zm6kgz4QFTBHyZTznmr4Ofdw/zGSdvQbUuAbOyMOnSuVm7RHb/MCk2PdDQ?=
- =?iso-8859-3?Q?2NZ4JDKKvAh7KFw4KO0ekpD7VidxHI7iaNncMd89KDcpVDUJb2tPjU4BFo?=
- =?iso-8859-3?Q?hcL4Mn+aj0ec6Lxoa+5bs3v4VNW75aF/gPOowhrtQgpx1dVIellWqxXLTG?=
- =?iso-8859-3?Q?RQTs7+wNZdbYleFMiuq6Qj744tEzgmOPCNCa9IaJjuzQvUtI1rkwXcOQ?=
- =?iso-8859-3?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-3"
+        Mon, 15 May 2023 16:16:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D6A8682
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684181717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eZ4CwttkciK12M4XhwAUkpXG7e8nMod9VByDK+w92f4=;
+        b=HoD3fDx5Mn3p2acOflL+G8i13Q/ELw+Fs/ZeTeBxDqrjvnJ5XcFLZ6LrrA/UV0bHhgoOxJ
+        qkbr0tHbBMG7zV5SkiUfw0f+IOLP1l9sc0SYkepmbmaawStdZYFnVc/R5M+Hz5flHtBhKr
+        AA4viJv4TOSC2J8QD+DoMjbPVRGH2zY=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-628-IeQGzStaM9C7I4ftoZH1qw-1; Mon, 15 May 2023 16:15:15 -0400
+X-MC-Unique: IeQGzStaM9C7I4ftoZH1qw-1
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-6ab1f10384fso2437308a34.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:15:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684181715; x=1686773715;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eZ4CwttkciK12M4XhwAUkpXG7e8nMod9VByDK+w92f4=;
+        b=I5pPhD5jHcdeMU9YpLWSZC7aGvwIO+TaEDJ1JXOR4npxvO73Nada9+fn997+so+jc7
+         pOVN8KdSiRuKBJkFNC6Yrg+wY4ntMjeYqScVn41GEuje8qt9521Bz/xyfR6BcW9gH7MM
+         /u8ZhdktFrvRqaBWD8awU5drcNGAYHI+UIurBuuAe5G8l1yQyoWU7ISnTl+ELOFhbmiY
+         7cMYfjxJsF1/XU2548Dg9BnlEd2xej7tR7Mjw4NqNBppyBe6xPdrDW/I6mkXYYsHFcPs
+         aMJ9fNosyQyQV1z350wd+9pDR9arGh0gVTnXIQOUehrb7eeqsM5ZnLZVObB16Aw4c3o6
+         vxQQ==
+X-Gm-Message-State: AC+VfDxxj1EeqVm1qOH51rh+XSOU3krPSlVbixvI/H/ZtrauOO88YBRi
+        o26pAYozVSLZwi8JtkC7WyZZHIh0lDweutwBvDvPq8LgBR28CNO4qIk5rVSNYXX7Bqmvo7mJz9r
+        NwX0Cy4AVGhH7ADK4p76hMdzu
+X-Received: by 2002:a9d:6b11:0:b0:6aa:ecb5:f187 with SMTP id g17-20020a9d6b11000000b006aaecb5f187mr9880739otp.1.1684181714809;
+        Mon, 15 May 2023 13:15:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7n077BKvFR4kq4/OG5wnKyYPoneW7fmnYMMNIGg0ySmalDqNRCbhrdhmySfNAEXOKfbZEkzA==
+X-Received: by 2002:a9d:6b11:0:b0:6aa:ecb5:f187 with SMTP id g17-20020a9d6b11000000b006aaecb5f187mr9880729otp.1.1684181714550;
+        Mon, 15 May 2023 13:15:14 -0700 (PDT)
+Received: from ?IPv6:2804:1b3:a803:46cc:5b68:5c23:dd7a:8cb3? ([2804:1b3:a803:46cc:5b68:5c23:dd7a:8cb3])
+        by smtp.gmail.com with ESMTPSA id d20-20020a056830139400b006ab37d0b2e8sm5588697otq.74.2023.05.15.13.15.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 13:15:14 -0700 (PDT)
+Message-ID: <72b4a9b45f5aea876d4e5aff02534b75cc81e426.camel@redhat.com>
+Subject: Re: [RFC PATCH 1/2] blk-mq: Convert request->csd to
+ call_single_data_t and reposition it
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Juergen Gross <jgross@suse.com>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 15 May 2023 17:15:11 -0300
+In-Reply-To: <1c9a152e-fac1-ac9e-c871-bbec5f176bda@kernel.dk>
+References: <20230511085836.579679-1-leobras@redhat.com>
+         <1c9a152e-fac1-ac9e-c871-bbec5f176bda@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a001cdb7-b552-4887-4816-08db5580f886
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 20:14:21.6402
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wgSLIQwb58bOv/9XGUkmggFhx2UCIky/y0Si5LBsBzZwhe6FJ09gIut8OnjPnjMHhbOOZMdRqKNZOiQWEFBKuZ5QGVy+ROOLWEEk+Y3zstA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5459
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
-
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Monday, May 15, 2023 5:24 PM
+On Fri, 2023-05-12 at 09:01 -0600, Jens Axboe wrote:
+> On 5/11/23 2:58?AM, Leonardo Bras wrote:
+> > Currently, request->csd has type struct __call_single_data.
+> >=20
+> > call_single_data_t is defined in include/linux/smp.h :
+> >=20
+> > /* Use __aligned() to avoid to use 2 cache lines for 1 csd */
+> > typedef struct __call_single_data call_single_data_t
+> > 	__aligned(sizeof(struct __call_single_data));
+> >=20
+> > As the comment above the typedef suggests, having this struct split bet=
+ween
+> > 2 cachelines causes the need to fetch / invalidate / bounce 2 cacheline=
+s
+> > instead of 1 when the cpu receiving the request gets to run the request=
+ed
+> > function. This is usually bad for performance, due to one extra memory
+> > access and 1 extra cacheline usage.
+> >=20
+> > Changing request->csd was previously attempted in commit
+> > 966a967116e6 ("smp: Avoid using two cache lines for struct call_single_=
+data")
+> > but at the time the union that contains csd was positioned near the top=
+ of
+> > struct request, only below a struct list_head, and this caused the issu=
+e of
+> > holes summing up 24 extra bytes in struct request.
+> >=20
+> > The struct size was restored back to normal by
+> > commit 4ccafe032005 ("block: unalign call_single_data in struct request=
+")
+> > but it caused the csd to be possibly split in 2 cachelines again.
+> >=20
+> > As an example with a 64-bit machine with
+> > CONFIG_BLK_RQ_ALLOC_TIME=3Dy
+> > CONFIG_BLK_WBT=3Dy
+> > CONFIG_BLK_DEV_INTEGRITY=3Dy
+> > CONFIG_BLK_INLINE_ENCRYPTION=3Dy
+> >=20
+> > Will output pahole with:
+> > struct request {
+> > [...]
+> > 	union {
+> > 		struct __call_single_data csd;           /*   240    32 */
+> > 		u64                fifo_time;            /*   240     8 */
+> > 	};                                               /*   240    32 */
+> > [...]
+> > }
+> >=20
+> > At this config, and any cacheline size between 32 and 256, will cause c=
+sd
+> > to be split between 2 cachelines: csd->node (16 bytes) in the first
+> > cacheline, and csd->func (8 bytes) & csd->info (8 bytes) in the second.
+> >=20
+> > During blk_mq_complete_send_ipi(), csd->func and csd->info are getting
+> > changed, and when it calls __smp_call_single_queue() csd->node will get
+> > changed.
+> >=20
+> > On the cpu which got the request, csd->func and csd->info get read by
+> > __flush_smp_call_function_queue() and csd->node gets changed by
+> > csd_unlock(), meaning the two cachelines containing csd will get access=
+ed.
+> >=20
+> > To avoid this, it would be necessary to change request->csd back to
+> > csd_single_data_t, which may end up increasing the struct size.
+> > (In above example, it increased from 288 to 320 -> 32 bytes).
+> >=20
+> > In order to keep the csd_single_data_t and avoid the struct's size
+> > increase, move request->csd to the end of the struct.
+> > The rationale of this strategy is that for cachelines >=3D 32 bytes, th=
+ere
+> > will never be used an extra cacheline for struct request:
+> >=20
+> > - If request->csd is 32-byte aligned, there is no change in the object.
+> > - If request->csd is not 32-byte aligned, and part of it is in a differ=
+ent
+> >   cacheline, the whole csd is moved to that cacheline.
+> > - If request->csd is not 32-byte aligned, but it's all contained in the
+> >   same cacheline (> 32 bytes), aligning it to 32 will just put it a few
+> >   bytes forward in this cacheline.
+> >=20
+> > (In above example, the change kept the struct's size in 288 bytes).
+> >=20
+> > Convert request->csd to csd_single_data_t and move it to the end of
+> > struct request, so csd is never split between cachelines and don't use =
+any
+> > extra cachelines.
 >=20
-> This is the start of the stable review cycle for the 6.3.3 release.
-> There are 246 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> This is going the wrong way imho. It'd be nice to get struct request
+> down to 256 bytes at some point, and then this would get in the way.
+
+Hello Jens, thanks for reviewing!
+
+I understand the idea, and I think we could have a way of rearranging the s=
+truct
+in a way this variable would be always aligned, so no hole would be introdu=
+ced
+by the alignment requirement.
+
+>  The
+> patch is also attempting to do two things at once, which is a bad idea.
+
+By two things you mean rearranging the struct and switching the type to an
+aligned typedef? I would be glad to send 2 patches on that.
+
 >=20
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
+> Why not just rearrange it a bit so that we don't split a cacheline with
+> the csd?
+>=20
 
-CIP configurations built and booted with Linux 6.3.3-rc1 (5a952cfef67c):
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
-67957411
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
-ux-6.3.y
+Well, I thought that was exactly what I have done.
+I mean, I was not aware of this future desire of shrinking it back to 256 b=
+ytes,
+and so I added it to the end of the struct, but I could rearrange it in a
+different way so the change to the 32-byte aligned call_single_data_t would
+never introduce any size increase.
 
-Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+The thing with using call_single_data_t is that adding another struct field
+before csd would cause struct request to increase by 32 bytes, and possibly=
+ grow
+a hole, due to alignment.
+This is good on the keeping the csd data in the same cacheline, but
+this is bad because the struct would grow 32 bytes.
 
-Kind regards, Chris
+The other option, i.e. keeping 'struct __call_single_data', would cause the
+struct to grow less if anything is added before, but would cause csd being
+possibly shared between 2 cachelines.
+
+I think the 1st option is 'better' because we could easily detect the 32-by=
+te
+increase in the struct request, but the 2-cachelines thing would probably g=
+o
+undetected.
+
+What you think about this reorder: put the csd union after 'struct block_de=
+vice
+*part', but before any compile-time removable field ?
+
+This would cause the csd union to be 32-byte aligned with any CONFIG_* (as =
+it
+comes before any compile-time field in struct request), and in both 32-bit =
+and
+64-bit kernels
+
+The pahole for this on 64-bit kernels outputs:
+
+struct request {                                                           =
+   =20
+        [...]
+        struct block_device *      part;                 /*    88     8 */ =
+   =20
+        union {                                                            =
+   =20
+                call_single_data_t csd __attribute__((__aligned__(32)));=C2=
+=A0
+							 /*    96    32 */                                                  =
+   =20
+	[...]
+        /* size: 288, cachelines: 5, members: 33 */                        =
+   =20
+        /* sum members: 282, holes: 2, sum holes: 6 */                     =
+   =20
+        /* forced alignments: 2 */                                         =
+   =20
+        /* last cacheline: 32 bytes */                                     =
+   =20
+} __attribute__((__aligned__(32)));                                        =
+   =20
+
+And for 32-bit kernels:
+
+struct request {                                                           =
+    =C2=A0
+	[...]                                                                     =
+   =20
+        struct block_device *      part;                 /*    60     4 */ =
+   =20
+	union {                                                                   =
+   =20
+                call_single_data_t csd __attribute__((__aligned__(16)));=C2=
+=A0
+							 /*    64    16 */                                                  =
+   =20
+                u64                fifo_time;            /*    64     8 */ =
+   =20
+        } __attribute__((__aligned__(16)));              /*    64    16 */ =
+   =20
+	[...]                                                                     =
+   =20
+        /* size: 192, cachelines: 3, members: 33 */                        =
+   =20
+        /* sum members: 178, holes: 1, sum holes: 2 */                     =
+   =20
+        /* padding: 12 */                                                  =
+   =20
+        /* forced alignments: 2 */                                         =
+   =20
+} __attribute__((__aligned__(16))); =20
+
+What do you think?
+
+Thanks!
+Leo
+
+
+
+
+
