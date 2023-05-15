@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25BD703451
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629E7703457
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242964AbjEOQqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S243000AbjEOQrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242991AbjEOQqq (ORCPT
+        with ESMTP id S242954AbjEOQrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:46:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E21DB;
-        Mon, 15 May 2023 09:46:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08E3362914;
-        Mon, 15 May 2023 16:46:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4D8C433D2;
-        Mon, 15 May 2023 16:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684169204;
-        bh=eL6yi8hMio7duV0WcJ4yRmARZWgFYml5JEHbo9uWn+c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogeSGaFFFvjbPGqY4fxX+spkml9Sb//s1UTvN5ItUHwSUxdO19Y5JNiXhApeuaIVv
-         6Ah747zLCTDSMzxR5e4DFvTy9Ov3n6OqOlp1/n8d5LK5XLeX/mqqyhd60RXg+ICx/K
-         k2wMW9aREKv9ZfJyLnW84qtlqO/jQkDCdmamz0BPpCHkrFq8umU868A11jr3p2HO+i
-         6ak7XhVQk1Hp7/IZs6lqyoZjUsYg29t5Q/0WI9HoWZlxdSPVPqeHbNAAUr07AyEwl/
-         KTDKsaLAyD75obXfofZ3ZxAG00g+4tetgJSYhIaqN8cNq9gabfmYD4qCmd7osMDNFz
-         gf0A+oRXUzmmw==
-From:   Conor Dooley <conor@kernel.org>
-To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/2] Add watchdog nodes in StarFive JH7100/JH7110 DTS
-Date:   Mon, 15 May 2023 17:46:33 +0100
-Message-Id: <20230515-tribesman-sloppily-658f86d776ac@spud>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230509151723.84989-1-xingyu.wu@starfivetech.com>
-References: <20230509151723.84989-1-xingyu.wu@starfivetech.com>
+        Mon, 15 May 2023 12:47:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340DB55B2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:46:58 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684169216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kpj7N2DErNTzd5P5gqMYH/lDieuO5YjYWf4Tm/Z0Acw=;
+        b=eHzRUmq2Ncgpa1Nb1PBpLkTED7LFWDAiGxOmJc11skvE5B4zBkb1ST2pDZnqZAMud7kXr4
+        9leWcrmrZ5LIZmZBUN+IB8fgClErBNzAf3Ju87F9a+9HBtE+bOLJSPoZP5PL/1Rx0+vzgw
+        mGz15yyh6I5XzfGvYpbpUWfvYjvHdlNKpWEqPeIrfAsqJoE9jfOBr3+OQJ8oKHX8f2k6ar
+        MM7gIpXIx+BHzamLEcIx2KX3ayzkyQs4Vu5hszAlDoyavzplPdAV3mZkKb6YLV9T22lapl
+        v+SeGx6swJ+gPq76c6G+7yOlq+85+gIzOshOXHuAOroKAWqBfgWkwJFDWVQdXw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684169216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kpj7N2DErNTzd5P5gqMYH/lDieuO5YjYWf4Tm/Z0Acw=;
+        b=QDV9ivp7GhYU8ZSDJAetzk+NfDA8x+MCbiy2+tgvX6DeEGrKUJRu2VYbqdVXKztb8wV25I
+        TGfYPu5h5tmXwhDA==
+To:     Nipun Gupta <nipun.gupta@amd.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "maz@kernel.org" <maz@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "git (AMD-Xilinx)" <git@amd.com>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Gangurde, Abhijit" <abhijit.gangurde@amd.com>,
+        "Cascon, Pablo" <pablo.cascon@amd.com>
+Subject: Re: [PATCH] cdx: add MSI support for CDX bus
+In-Reply-To: <8efbbe8f-62f8-4711-d069-44905c841709@amd.com>
+References: <20230508140950.12717-1-nipun.gupta@amd.com>
+ <874jom2ash.ffs@tglx>
+ <CH3PR12MB83081FC5F89386EA9C54B4A7E8769@CH3PR12MB8308.namprd12.prod.outlook.com>
+ <87bkityxk3.ffs@tglx> <6dd142f8-5a8e-b62c-c629-a3a5859e73b3@amd.com>
+ <87ednnes6o.ffs@tglx> <182c4d7b-9e91-c00e-43ab-a2c0bd671828@amd.com>
+ <875y8xbemu.ffs@tglx> <8efbbe8f-62f8-4711-d069-44905c841709@amd.com>
+Date:   Mon, 15 May 2023 18:46:55 +0200
+Message-ID: <877ct9a6f4.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=610; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=q4UXWBBFSwrCUpZYR2X7bAvP0FrsLTRfFER3VBh/8+A=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDClJic8TON0778U8FM7zuXNtguXjL/w2Yc9frHt/4tObj RN+cDx61lHKwiDGwSArpsiSeLuvRWr9H5cdzj1vYeawMoEMYeDiFICJCLowMjx1+f/o2YmWU8IM bnd/X3b4XsazbNsawadR99e2h0u51MxmZLjSXnXh4eO8w5VLV6+qiSjkW35BJy612c95ukPdU83 z+9kA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Nipun!
 
-On Tue, 09 May 2023 23:17:21 +0800, Xingyu Wu wrote:
-> and JH7110 SoCs. Patch 1 adds the node in JH7100 dts and Patch 2 adds it
-> in JH7110 dts. This patch serises are based on Linux 6.4-rc1.
-> 
-> Xingyu Wu (2):
->   riscv: dts: starfive: jh7100: Add watchdog node
->   riscv: dts: starfive: jh7110: Add watchdog node
-> 
-> [...]
+On Mon, May 15 2023 at 18:39, Nipun Gupta wrote:
+> On 5/12/2023 11:45 PM, Thomas Gleixner wrote:
+>> On Fri, May 12 2023 at 19:50, Nipun Gupta wrote:
+>>>
+>>> As per your suggestion, we can add Firmware interaction code in the
+>>> irq_bus_sync_xx APIs. Another option is to change the
+>>> cdx_mcdi_rpc_async() API to atomic synchronous API.
+>> 
+>> I'm not a great fan of that. Depending on how long this update takes the
+>> CPU will busy wait for it to complete with interrupts disabled and locks
+>> held.
+>
+> Agree. we are also inclined towards using irq_bus_sync_xx APIs. This 
+> would definitely solve the issue (#1 and #2) for the setup_irq which you 
+> mentioned.
+>
+> For MSI affinity, since GIC-ITS always return IRQ_SET_MASK_OK_DONE, the 
+> irq_chip_write_msi_msg does not get called.
+>
+> msi_domain_set_affinity(...)
+>      ret = parent->chip->irq_set_affinity(...);
+>      // For GIC ITS it always return IRQ_SET_MASK_OK_DONE
+>      if (ret >= 0 && ret != IRQ_SET_MASK_OK_DONE) {
+>          irq_chip_write_msi_msg(...);
+>      }
+> Since CDX bus is specific to ARM and uses GIC ITS, it seems we do not 
+> need to do anything here. Can you please share your opinion on this?
 
-Applied to riscv-dt-for-next, thanks!
-
-[1/2] riscv: dts: starfive: jh7100: Add watchdog node
-      https://git.kernel.org/conor/c/435ac3fbfbc6
-[2/2] riscv: dts: starfive: jh7110: Add watchdog node
-      https://git.kernel.org/conor/c/6361b7de262a
+That makes sense.
 
 Thanks,
-Conor.
+
+        tglx
