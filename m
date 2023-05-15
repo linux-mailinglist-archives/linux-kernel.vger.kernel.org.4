@@ -2,362 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A4E703E82
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC36703E89
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 22:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245315AbjEOUTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 16:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40700 "EHLO
+        id S245300AbjEOUUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 16:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245312AbjEOUS6 (ORCPT
+        with ESMTP id S245275AbjEOUUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 16:18:58 -0400
-Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF53E711
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 13:18:51 -0700 (PDT)
-Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 20230515201848f930aa1f7b055764a4
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 15 May 2023 22:18:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=alexander.sverdlin@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=Qd4hyXtUtAFWGI1NtX0qnzunvWWBL8kJFEDK0PYGeX8=;
- b=XDX6YPOkAAHJ7oFR0xOkbhV0VYjs9Jv1pjWdTvI8AGdMPgoMfXSb9+WaUoD97kPKw/jBVg
- HuVqVmoITKO5riKtm39VwSlVVrTywpBcVBgnaswLdkLAl+02M6SmOnRME6PY6RvS1erZPXFx
- BbjJ612EoZHBeVPkT/poSV7+ZCdqE=;
-From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
-To:     NXP Linux Team <linux-imx@nxp.com>
-Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4] i2c: lpi2c: cache peripheral clock rate
-Date:   Mon, 15 May 2023 22:18:44 +0200
-Message-Id: <20230515201844.215253-1-alexander.sverdlin@siemens.com>
+        Mon, 15 May 2023 16:20:36 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8840C13C04;
+        Mon, 15 May 2023 13:19:58 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FJsMF3009845;
+        Mon, 15 May 2023 20:19:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=4wGI+ygV4ZrChr7WdeRxqwnXhpOfFlFMPPiaKAhupLk=;
+ b=GN1pOr5nF6oBSzGffklsNmevaGUOWMVsCoXpJ1wJYD2+iEXitMbMuxAs//7JhQ/QAngP
+ wIcSNIcarHIxIqgtR5ZiXAt1KR5yRiVAkYKqPD7VNnx6xNIGqhIZp38yysV403H5nS1Z
+ Ub3nBWRSWxJOkFkQuuWVXwCAcoxlMjCjIbUCqWtTm+fkagbL4nBvm5+Krg4lfAnqCPMu
+ xxN2EUTr28H7cqKUR9/o7e3iiVZeyzhxISHi4WD6QpjKFmHdzXBcoNy8KCCiydb8z3J0
+ ygCQ66YOY0PeNNq+qFQYYQK7wDVAnxk0Bks1hIrGZxdytqXoltKkYAqGX+4qETXkDe+0 dg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj2eb0skc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 May 2023 20:19:21 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34FK2GVf022184;
+        Mon, 15 May 2023 20:19:19 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qj109dv9c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 May 2023 20:19:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PXCN3kjYhRTq/JCJKrZmBOT4dcLcs9iRarLXmQr4jdXGJ8q1cHFaMccjP19r5NLSvHJqc9Ekc5hMjp2VDbyU8bmO2rlX09bu/d5MVgHcYDNs8Cjd19VTnjZ2mhHLkexah5jIgjtZjj4RGgDnOHroKZFOKPCPjmn4xMELqWAmSgNOMPLy77JkXffG+MRRs+ndiEE1N6XWGNTQGVF51uBbawkhOdwOdKarIzES14l8Ivz6cz+JMZQJiWh2TSraFSmupuuOh9+FsWehYuv3zvWiz7dA8ccSDoxM/SUTM652vuY+xN34iw1tBkq5RFdExsUfFGEN0piE9JIroMSkcUVZDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4wGI+ygV4ZrChr7WdeRxqwnXhpOfFlFMPPiaKAhupLk=;
+ b=e66bPPjxWmDRi2m+C0YhMP6ynX/3CqvOlVylIDCZFxN1poza9vDVjbxXcAw5MHrQ7R9DXLdPmZQd7qlUhWFuMQ7r+T+sQy+zXiZllifeu9ZboQOSriyUP5hJssrZ0Dqd0wECNbXpd2EtmrbmX8iIBg+kwboNKFX7qy9pLwEc+fY385TGVIDZUDvS1o1JqwJuztDSf6g46MCuAIs1Uu+tBATHpneeAmTaT7nq/fyDvSqhFdYMYi6bV5SSc1nBxDZiB7JuKYR2MiHzBKyDuqWr6+/nMu0zaGnhzmM2ivEIlWcmbp+1Ua+oCv3XYoShd4hbe9/x+hzSG8qW4laDlX7bcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4wGI+ygV4ZrChr7WdeRxqwnXhpOfFlFMPPiaKAhupLk=;
+ b=shuVZFPHht1L9ooPZbW0t7qWICH3F0MZKX/Id4t6qT2Qoy9K4zIC8q8h9P67Gb0Bq0VvlVf1Hdc9rOLdj7sAoeVBoQA3DEYYhTk3G96BZzD+Ntxrlo6YA2xybvUqYTHhbfz4mZp5T+RztQ4FXzhpviRrupyF9Ih6Cl0jTCY5UjU=
+Received: from BY5PR10MB3793.namprd10.prod.outlook.com (2603:10b6:a03:1f6::14)
+ by CH3PR10MB6835.namprd10.prod.outlook.com (2603:10b6:610:152::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 20:19:17 +0000
+Received: from BY5PR10MB3793.namprd10.prod.outlook.com
+ ([fe80::37d1:ec08:a280:1d91]) by BY5PR10MB3793.namprd10.prod.outlook.com
+ ([fe80::37d1:ec08:a280:1d91%4]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 20:19:17 +0000
+Message-ID: <78bc10b0-9376-0d21-4d66-0099376666bf@oracle.com>
+Date:   Mon, 15 May 2023 16:19:11 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 09/14] x86: Secure Launch SMP bringup support
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-integrity@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-crypto@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kexec@lists.infradead.org,
+        linux-efi@vger.kernel.org
+Cc:     dpsmith@apertussolutions.com, mingo@redhat.com, bp@alien8.de,
+        hpa@zytor.com, ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com,
+        Ross Philipson <ross.philipson@oracle.com>
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-10-ross.philipson@oracle.com> <87h6shbf76.ffs@tglx>
+From:   Ross Philipson <ross.philipson@oracle.com>
+In-Reply-To: <87h6shbf76.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN8PR04CA0012.namprd04.prod.outlook.com
+ (2603:10b6:408:70::25) To BY5PR10MB3793.namprd10.prod.outlook.com
+ (2603:10b6:a03:1f6::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-456497:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB3793:EE_|CH3PR10MB6835:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6190ff94-c445-4e19-3c77-08db5581a8a3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 96m1yDQaC9pUMNQ3u36IjAe4PHeiR97Ct3uar32WfUk/S9br7LJMoO+Lk0hSYqXlyjw3dU14iqZEzfjr8HSiBtxvv7DdXmtDDd7pU/gXRh5M7YF6R6qKyB5ndYtnfNVWQNbWrHJuoZ0M6ouIvDDHqYl9A9HWmKJqPvRjilFzPtkjpcRI0HBh7tpwGiXgOUU2A2vRb8BNw76HDGahojFXEidvw83gXauTf2D2XyNmA3Mm8BEGgkkQqYr4HXFIQSmawJxpc0D145fu92cHwYs1Inkxn3SLJXsDBoWRta5WVnLn7pK5Whux5tbb9lXfuFjhFHJvy+u4thnXfvkcutx7G1ZNGA+sOyRi95LHF/N5ooDRRNhLb6RNlILt03KXtJ37cQw3oe+Y0yFAFehAuDvdpVZbQsOCJwIjmckECi+f1HsJRwVx7OmOqEfiQdsgAj2ARNqEMnrpMSbuXl8meYe6ZO+AIvvQFyqDW2sWv+bfhr6pjfJaFInqIYSQBDwaZLLvNWDCUcpVFAchOTaibGR6JWTrfT2fEf2G3XIbuEWi6r1DHZyX0bisn7L+rzdQDE5EWD4rm6WU6FCSskPqZcX4sj0MothIoQvzfn7he4Yl/ZraJNt1aswNS+KwNJi5Rcf8aEc6z71xk4XVlGOTNdv2BQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3793.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(346002)(376002)(39860400002)(396003)(451199021)(31686004)(66556008)(66476007)(4326008)(478600001)(66946007)(6506007)(53546011)(186003)(6512007)(38100700002)(83380400001)(2616005)(36756003)(8936002)(8676002)(2906002)(6666004)(316002)(6486002)(44832011)(31696002)(86362001)(5660300002)(41300700001)(7416002)(107886003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UkJoNHlCUHZZNmFQbmNKWmFudU9PYVczNjkvY3hJVlBwY0hCVmZia0hsaVMz?=
+ =?utf-8?B?ajhncnkycDV2MkZwcTZLRmtHckx2Z25JS1c1a2hud2ZGY3MvUkhOWk1sTnRs?=
+ =?utf-8?B?MW5wYjBkZmk2TFRpVmlEejcrYndlcWl2M3JkazI3MFJpYk5SUzBmeDBVY3Zo?=
+ =?utf-8?B?RnMvZ1hXSFY1aTRycE5yTXRJUlV5clh1cUM5MmU1RzZKWkw2S1hpSklRaVhB?=
+ =?utf-8?B?UlhUYW1mUGtlT1FSYWdvTkRuZVZYYWZVMlZJdkdUaE1VSlpDcVBuV3pyNEdt?=
+ =?utf-8?B?UFUybkdLY0RQZDZtekhNeTNzN3pHeG9BZER1Vll3UkhqUlJmL0tHeDdpZFJv?=
+ =?utf-8?B?bjJpejdwMXVpL1ZxOTZYdVRzcUhWT1QyWE5RYSsyMnU2d01lampEVUtIYmM2?=
+ =?utf-8?B?TlNYeTdHdmpRdnVtSXRHNkhVbFBaVWsyYmdHa1Q5alRwbnVERzNXbGlUM2lL?=
+ =?utf-8?B?eHBKOEhZOFdLNTloSjdXMDhnSGtEeHJvK0VMMzdlVFNZeDZBaE9uTUhiamZu?=
+ =?utf-8?B?d1RuVjR1WWhwa2g3b3Q2aEl5dUV2RnIwdm51LzcwTlkvZ3c1blZ0NVVBVXFS?=
+ =?utf-8?B?NWhPcE52VFd3ZitwTWFBYnl6VmRSaExJa1JMTUt0VVlCU2lQMXRGTjIvcFV6?=
+ =?utf-8?B?ZTljbUgvdzB4U3NrUFZqUTNrU2poNURLSkEzME0waUdMTTh6UTVhbmpFclRr?=
+ =?utf-8?B?U2xRYUx3ek9SWkdKZngwVm15UmczL2JyWVhUTmMySEQ5WWZNYTJwTk9HY1Nq?=
+ =?utf-8?B?Q3JCQjJMTmNLbk5SRHZXczJLbktSK0dhK3FRdTBiK3VtZXd1NmxrNDc2Q0dI?=
+ =?utf-8?B?N09yenlOdlpLN1Rscjkzd1R3VXpGU1B6YXRGckV4MFlab0xhQ0tVaGFXbkdl?=
+ =?utf-8?B?ZU1KNHdlMEVnTnpEZVJVOFNQVDlCRXpsam44N3l5MXRVdEdJS3NHWkVnZlJP?=
+ =?utf-8?B?azllTTc2VGJqWEJyUUhmM0VhTFVjc0d4b25KYjFhSzQzQlRmWTVseUo0RE51?=
+ =?utf-8?B?VSticDR0ZUZvWHV3dTV2T1cvTmtvSGg0V3NOUDZ4QXBzL2lKdEloRlR0Njhq?=
+ =?utf-8?B?UjBLSHR2d280MW9wTDRWdWxSRWo0OVRoNjR2Rzl2TXFQQ0RublBFekJRc3hn?=
+ =?utf-8?B?ZWFLWk9oTTU5Z1FEU0dCZU42bUd6ZzVhZmRmdmRHWGR1RjB2eVdGR29kR1hW?=
+ =?utf-8?B?NURpR040aUNiVzhyaU1oZzR2UEs4VHZhS3RZdXBOT3dNWURyMnhjZlhNelpF?=
+ =?utf-8?B?S1dacDU0MnR6c2tyVTBGRFUzcWx6YVY2eHRkZzdLbHowYXEzRy8zdjRtS3BC?=
+ =?utf-8?B?N3ZGUnc2RGcyeFpablhEUVd6SWQvK0cxRm5BY3l0cWRDeEZkZXdkd3BVSEdU?=
+ =?utf-8?B?d3JNTlUzOVhpNVRSeDRsdHpZd285dXQvekd1VjRMWi9ZZUs0K3NhQ2M1cGJa?=
+ =?utf-8?B?dk9lbWtpYUo1MHdmeVJScUViMEhSS1c1cXlWSldJN2tSdzRIaXB5UVo5cEkr?=
+ =?utf-8?B?aEVERG9YZ0dYOXU5Tm1waTFsOW1oVE9BR3lJV242SHhUcDFiUEtLNFY3OXNx?=
+ =?utf-8?B?ZjJxZ2F1Y3V6Zkk3aTkzMW9NbmFYeXE4Wlh6ajJhRVl6N2h3WTl5dUZLdGJI?=
+ =?utf-8?B?SHl3OHJUSm5sNStLT3VGYW0yYUs4VjF5TEZ1ZmYycGxtNFh6enFBYnBpL09n?=
+ =?utf-8?B?QlQrV1JMNGxsOGhrRWtHaEo2aTJMbE4vNUdLdnVMK1pGcGsxR2VZdTZFTjRq?=
+ =?utf-8?B?aTE3UStXQ1lJdHVFT0JHcFdDK0lvNi9TbzF3K0ZQRjkvZWc2SXJERTVRYXdi?=
+ =?utf-8?B?Q1R3S2N4blRKTURoeDhnL3VDZUwvM2RlT0NpMkNKay9hYU5Qd2NPTnJ4Y0tx?=
+ =?utf-8?B?Q05TekZwdCs2YTBiUnB2N3lXbktxR2t4c1FvMEdreXRESkJWeEg3WXU4KzE4?=
+ =?utf-8?B?RmZ6V1Y1dlhWWEhrbmpwdDByTXppSHpzaUYwMHVnZTZJODh0bVVwLzBoeUpG?=
+ =?utf-8?B?dnRWSXQ5bUhXK2R4UzJEU0ZrY0NTVkpJUHlUelluVlZiVXpnK3Eva0hXdE4r?=
+ =?utf-8?B?NVVZekVxOG50UUJwdTFlV2ltMW01emdwanBSVk9nVGhaZWNaRTNPNlp1TEk2?=
+ =?utf-8?B?NGVsR2NrRjFGVGVHWjJnSkZ1VGp2bVVTWkRXOG5lZ3ZJR1pQSUc0U3NueDF5?=
+ =?utf-8?Q?2O6FJKjTZR/rHvNKJb20Dk8=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?QlpxMzFhdU9pZmdrcUZEdFkzN1dIR1NScEQyR1d3RW5WQTc3VTM4Uk80WHo2?=
+ =?utf-8?B?bXRyMSs2T2ZwOStKdzdYcHQ2ZG5Zc3ZmOEVyTEhPcU1FZ3E0dG5iQVZ0N2tC?=
+ =?utf-8?B?cFZLa0prbXZPaHRyRDRUbnZZOTZiNFcyV3ZkblAvZ3dTS2dIUWFmQlhTNkxx?=
+ =?utf-8?B?MkEwMndhOHV3UldZU3BXaWlQTWVSTnRXKzFVYkozaWNkVUdmNUVySThGNzFo?=
+ =?utf-8?B?MTdBSS91ZEIxeFFQR09nYUxGY0o0ZldCYzVnd0o2QWxzeTF3NUl4NXJXWmY0?=
+ =?utf-8?B?SFFsQWJYWllQSDNLcHlGYWxZT0RWQk0xNGJLZTRHUVZlK21lR2pQK29RTHlW?=
+ =?utf-8?B?S0JkdnY3ZlZSTlMwUmo4S2xBM1ZWYThqWGVGem01eTl1MWZibWRjUmVqY04y?=
+ =?utf-8?B?dHJPbHJldUFqZmdodEMxN3d6TXVqZDM1TFhSaDlNVHpSQ2hhUVcyNTJNVnVC?=
+ =?utf-8?B?a0N2SVQ2Vkl6d0lpRnB5b3NJY2tlTmlJM1JuejBMZ25ibjlDUm5WSFJEZGwy?=
+ =?utf-8?B?alJzRjhHcUN5d0lKOWVjaERvWmlHL3FMbG9waUE3akhSdmVrUnZ0dGYyekhT?=
+ =?utf-8?B?clF4b3d4K0NyT3hYVE8wVElzalJxb3UxNFoydzdydHlTLzhRZFpwK1pTUndx?=
+ =?utf-8?B?TnZOSjhGa1BNQlNZQm5mVlNZQnVxT3RMZm1CSlM0OTZYa2JRVUUzSHFWckJI?=
+ =?utf-8?B?QzhYRkltVHgveE9HTXh1NEdlQ2VhVk5rSDNFSzI5ZzZoZStrWnBvdlowWUc3?=
+ =?utf-8?B?V0dlZkVjVHRYNVlmZ0poU3NVb1h2cWMrWk1JTVFRMERVZWJoOS8yZjNhRlRS?=
+ =?utf-8?B?NTNUZEZjclZKTmhBa3dyb1dTV3lCK0czLzhCQ1BKcm1MMi9nMjEyUGY0cE92?=
+ =?utf-8?B?UDNsQkNqcVhQeUdCV1Zpc1lBMzBoVkdhTnFGOWNYVEU1dzRRMktPODRVQ2JQ?=
+ =?utf-8?B?MXlJNW5ybnNtelNWTFhxaXYxYlVoTGh5YmVIdWlGRUlOOG9ZTWFQN2dveThI?=
+ =?utf-8?B?bnFhQVpOZkVQaVhlQ2I5aXZocVVzWmwwQklmaHcrV3M0d2I2VFFnZXc3c3pC?=
+ =?utf-8?B?SFBYckpteVFyNEFQYkVBams3Q2ZyVUFjRFZJUDdTOVdxMXpGb0lJQkttUi9k?=
+ =?utf-8?B?ME5VcnI1Z243WUUrN3RHTmJ1U3BUREh4MUdJcFdtbmIzdmducldjSFNZQU1M?=
+ =?utf-8?B?c1F4eVRMa1VQVjVvMForMGdpYnNsWUxZbU4xUWlEa3NkTFpUdTBSUDllS3pE?=
+ =?utf-8?B?VC9WdVBhTlZzZ0s3NWp4aFlwTGN6eHludWE2RE83d1VPS0hDY01CT2dLNm5k?=
+ =?utf-8?B?Rms5TTUwcXR5T09QZXdsOUhIRGZmYnFLWWF2Y2Rxa2o0TTRFbzZRMEt0WkUz?=
+ =?utf-8?B?bVcwVng3UmZHSU04a1IzSDlGSEo4R2xBbzFQcDBUR01BQ0tpcXU5ckRkQnY2?=
+ =?utf-8?B?bEJXcDVlVDdJQWlsODFKN1dQQS94OStIRHdxb29uU0ZRZGJlL3VzWWhkRzZt?=
+ =?utf-8?B?dUJFaTVlWk5tdENWYTJmbnRnNS9kNzFhSk1ZSlYwQkxPbW9xN21VTThQM1I3?=
+ =?utf-8?B?ZFJxMkk3OHI3VHhBbGtMN0JNbytwTldDL1g1VHhOS3E0dlllaUlHTlp4eDJn?=
+ =?utf-8?B?YXZ1ODFpTVhXWnE2K2o0MFZIYnBQVWc3d2poaUpIYW1xaWxiWnVVSDVFM04w?=
+ =?utf-8?B?Z1JiYWRzWWZpemQ1K3NMMXRPVklYSUszZ2F4eUVyR1pxaUgrTGFLKzN1d1pp?=
+ =?utf-8?Q?keAAVwZX96Su7BS6iI=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6190ff94-c445-4e19-3c77-08db5581a8a3
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3793.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 20:19:17.3871
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SAOknoj6v9aypprD8Cyi3QmYjI1a1rherVH0E2+bfzLi+8BheGU396zyaEHVVagk6jcy22pfI9s7vyOHxyJfXpINfaKJGSnQZ+HrToXY7HI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6835
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_18,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305150168
+X-Proofpoint-GUID: ZsSsxPq5rAIZsFqkuvgEGkgFEdqGcH1q
+X-Proofpoint-ORIG-GUID: ZsSsxPq5rAIZsFqkuvgEGkgFEdqGcH1q
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+On 5/12/23 14:02, Thomas Gleixner wrote:
+> On Thu, May 04 2023 at 14:50, Ross Philipson wrote:
+>>   
+>> +#ifdef CONFIG_SECURE_LAUNCH
+>> +
+>> +static atomic_t first_ap_only = {1};
+> 
+> ATOMIC_INIT(1) if at all.
+> 
+>> +
+>> +/*
+>> + * Called to fix the long jump address for the waiting APs to vector to
+>> + * the correct startup location in the Secure Launch stub in the rmpiggy.
+>> + */
+>> +static int
+>> +slaunch_fixup_jump_vector(void)
+> 
+> One line please.
+> 
+>> +{
+>> +	struct sl_ap_wake_info *ap_wake_info;
+>> +	u32 *ap_jmp_ptr = NULL;
+>> +
+>> +	if (!atomic_dec_and_test(&first_ap_only))
+>> +		return 0;
+> 
+> Why does this need an atomic? CPU bringup is fully serialized and even
+> with the upcoming parallel bootup work, there is no concurrency on this
+> function.
+> 
+> Aside of that. Why isn't this initialized during boot in a __init function?
+> 
+>> +	ap_wake_info = slaunch_get_ap_wake_info();
+>> +
+>> +	ap_jmp_ptr = (u32 *)__va(ap_wake_info->ap_wake_block +
+>> +				 ap_wake_info->ap_jmp_offset);
+>> +
+>> +	*ap_jmp_ptr = real_mode_header->sl_trampoline_start32;
+>> +
+>> +	pr_debug("TXT AP long jump address updated\n");
+>> +
+>> +	return 0;
+> 
+> Why does this need a return code of all return paths return 0?
+> 
+>> +}
+>> +
+>> +/*
+>> + * TXT AP startup is quite different than normal. The APs cannot have #INIT
+>> + * asserted on them or receive SIPIs. The early Secure Launch code has parked
+>> + * the APs in a pause loop waiting to receive an NMI. This will wake the APs
+>> + * and have them jump to the protected mode code in the rmpiggy where the rest
+>> + * of the SMP boot of the AP will proceed normally.
+>> + */
+>> +static int
+>> +slaunch_wakeup_cpu_from_txt(int cpu, int apicid)
+>> +{
+>> +	unsigned long send_status = 0, accept_status = 0;
+>> +
+>> +	/* Only done once */
+> 
+> Yes. But not here.
+> 
+>> +	if (slaunch_fixup_jump_vector())
+>> +		return -1;
+>> +
+>> +	/* Send NMI IPI to idling AP and wake it up */
+>> +	apic_icr_write(APIC_DM_NMI, apicid);
+>> +
+>> +	if (init_udelay == 0)
+>> +		udelay(10);
+>> +	else
+>> +		udelay(300);
+> 
+> The wonders of copy & pasta. This condition is pointless because this
+> code only runs on systems which force init_udelay to 0.
+> 
+>> +	send_status = safe_apic_wait_icr_idle();
+> 
+> Moar copy & pasta. As this is guaranteed to be X2APIC mode, this
+> function is a nop and returns 0 unconditionally.
+> 
+>> +	if (init_udelay == 0)
+>> +		udelay(10);
+>> +	else
+>> +		udelay(300);
+>> +
+>> +	accept_status = (apic_read(APIC_ESR) & 0xEF);
+> 
+> The point of this is? Bit 0-3 are Pentium and P6 only.
+> 
+> Bit 4 Tried to send low prio IPI but not supported
+> Bit 5 Illegal Vector sent
+> Bit 6 Illegal Vector received
+> Bit 7 X2APIC illegal register access
+> 
+> IOW, there is no accept error here. That would be bit 2 which is never set
+> on anything modern
+> 
+> But aside of that the read is moot anyway because the CPU has the APIC
+> error vector enabled so if this would happen the APIC error interrupt
+> would have swallowed and cleared the error condition.
+> 
+> IOW. Everything except the apic_icr_write() here is completely useless.
+> 
+>> +#else
+>> +
+>> +#define slaunch_wakeup_cpu_from_txt(cpu, apicid)	0
+> 
+> inline stub please.
+> 
+>> +
+>> +#endif  /* !CONFIG_SECURE_LAUNCH */
+>> +
+>>   /*
+>>    * NOTE - on most systems this is a PHYSICAL apic ID, but on multiquad
+>>    * (ie clustered apic addressing mode), this is a LOGICAL apic ID.
+>> @@ -1132,6 +1210,13 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+>>   	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+>>   	smp_mb();
+>>   
+>> +	/* With Intel TXT, the AP startup is totally different */
+>> +	if ((slaunch_get_flags() & (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) ==
+>> +	   (SL_FLAG_ACTIVE|SL_FLAG_ARCH_TXT)) {
+> 
+> Stick this condition into a helper function please
+> 
+>> +		boot_error = slaunch_wakeup_cpu_from_txt(cpu, apicid);
+>> +		goto txt_wake;
+>> +	}
+>> +
+>>   	/*
+>>   	 * Wake up a CPU in difference cases:
+>>   	 * - Use a method from the APIC driver if one defined, with wakeup
+>> @@ -1147,6 +1232,7 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle,
+>>   		boot_error = wakeup_cpu_via_init_nmi(cpu, start_ip, apicid,
+>>   						     cpu0_nmi_registered);
+>>   
+>> +txt_wake:
+> 
+> Sorry, but what has this to do with TXT ? And why can't the above just
+> be yet another if clause in the existing if/else if maze?
+> 
+> Now that brings me to another question. How is this supposed to work
+> with CPU hotplug post boot?
+> 
+> It will simply not work at all because once a CPU is offlined it is
+> going to sit in an endless loop and wait for INIT/SIPI/SIPI. So it will
+> get that NMI and go back to wait.
+> 
+> So you need a TXT specific cpu_play_dead() implementation, which should
+> preferrably use monitor/mwait where each "offline" CPU sits and waits
+> until a condition becomes true. Then you don't need a NMI for wakeup at
+> all. Just writing the condition into that per CPU cache line should be
+> enough.
+> 
+> Thanks,
+> 
+>          tglx
+> 
+There is a lot here to think about. It sounds like you are suggesting we 
+design all of this differently and we can definitely do that. We need 
+time to go over this and your parallel startup series before we can 
+really get down to how best to approach this.
 
-One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
-under mutex. The second reason if the (false-positive) lockdep splat caused
-by the recursive feature of the "prepare_lock" (one clock instance is I2C
-peripheral clock and another is pcf85063 RTC as clock provider):
+I am going on vacation and will be back the first week of June. I will 
+get back to you then once I have had time to go over all of this and 
+your other patches.
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.15.71+... #1 Tainted: G           O
-------------------------------------------------------
-.../2332 is trying to acquire lock:
-ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0xb0
+Thank you for all your responses.
 
-but task is already holding lock:
-ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
-
-which lock already depends on the new lock.
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (i2c_register_adapter){+.+.}-{3:3}:
-       lock_acquire+0x68/0x8c
-       rt_mutex_lock_nested+0x88/0xe0
-       i2c_adapter_lock_bus+0x2c/0x3c
-       i2c_transfer+0x58/0x130
-       regmap_i2c_read+0x64/0xb0
-       _regmap_raw_read+0x114/0x440
-       _regmap_bus_read+0x4c/0x84
-       _regmap_read+0x6c/0x270
-       regmap_read+0x54/0x80
-       pcf85063_probe+0xec/0x4cc
-       i2c_device_probe+0x10c/0x350
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       device_add+0x398/0x8ac
-       device_register+0x28/0x40
-       i2c_new_client_device+0x144/0x290
-       of_i2c_register_devices+0x18c/0x230
-       i2c_register_adapter+0x1dc/0x6b0
-       __i2c_add_numbered_adapter+0x68/0xbc
-       i2c_add_adapter+0xb0/0xe0
-       lpi2c_imx_probe+0x354/0x5e0
-       platform_probe+0x70/0xec
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       deferred_probe_work_func+0xa0/0xfc
-       process_one_work+0x2ac/0x6f4
-       worker_thread+0x7c/0x47c
-       kthread+0x150/0x16c
-       ret_from_fork+0x10/0x20
-
--> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
-       lock_acquire+0x68/0x8c
-       __mutex_lock+0x9c/0x4d0
-       mutex_lock_nested+0x48/0x5c
-       regmap_lock_mutex+0x1c/0x30
-       regmap_read+0x44/0x80
-       pcf85063_clkout_recalc_rate+0x34/0x80
-       __clk_register+0x520/0x880
-       devm_clk_register+0x64/0xc4
-       pcf85063_probe+0x24c/0x4cc
-       i2c_device_probe+0x10c/0x350
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       device_add+0x398/0x8ac
-       device_register+0x28/0x40
-       i2c_new_client_device+0x144/0x290
-       of_i2c_register_devices+0x18c/0x230
-       i2c_register_adapter+0x1dc/0x6b0
-       __i2c_add_numbered_adapter+0x68/0xbc
-       i2c_add_adapter+0xb0/0xe0
-       lpi2c_imx_probe+0x354/0x5e0
-       platform_probe+0x70/0xec
-       really_probe+0xc4/0x470
-       __driver_probe_device+0x11c/0x190
-       driver_probe_device+0x48/0x110
-       __device_attach_driver+0xc4/0x160
-       bus_for_each_drv+0x80/0xe0
-       __device_attach+0xb0/0x1f0
-       device_initial_probe+0x1c/0x2c
-       bus_probe_device+0xa4/0xb0
-       deferred_probe_work_func+0xa0/0xfc
-       process_one_work+0x2ac/0x6f4
-       worker_thread+0x7c/0x47c
-       kthread+0x150/0x16c
-       ret_from_fork+0x10/0x20
-
--> #0 (prepare_lock){+.+.}-{3:3}:
-       __lock_acquire+0x1298/0x20d0
-       lock_acquire.part.0+0xf0/0x250
-       lock_acquire+0x68/0x8c
-       __mutex_lock+0x9c/0x4d0
-       mutex_lock_nested+0x48/0x5c
-       clk_prepare_lock+0x50/0xb0
-       clk_get_rate+0x28/0x80
-       lpi2c_imx_xfer+0xb0/0xa9c
-       __i2c_transfer+0x174/0xa80
-       i2c_transfer+0x68/0x130
-       regmap_i2c_read+0x64/0xb0
-       _regmap_raw_read+0x114/0x440
-       regmap_raw_read+0x19c/0x28c
-       regmap_bulk_read+0x1b8/0x244
-       at24_read+0x14c/0x2c4
-       nvmem_reg_read+0x2c/0x54
-       bin_attr_nvmem_read+0x8c/0xbc
-       sysfs_kf_bin_read+0x74/0x94
-       kernfs_fop_read_iter+0xb0/0x1d0
-       new_sync_read+0xf0/0x184
-       vfs_read+0x154/0x1f0
-       ksys_read+0x70/0x100
-       __arm64_sys_read+0x24/0x30
-       invoke_syscall+0x50/0x120
-       el0_svc_common.constprop.0+0x68/0x124
-       do_el0_svc+0x30/0x9c
-       el0_svc+0x54/0x110
-       el0t_64_sync_handler+0xa4/0x130
-       el0t_64_sync+0x1a0/0x1a4
-
-other info that might help us debug this:
-
-Chain exists of:
-  prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock --> i2c_register_adapter
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(i2c_register_adapter);
-                               lock(rtc_pcf85063:560:(&config->regmap)->lock);
-                               lock(i2c_register_adapter);
-  lock(prepare_lock);
-
- *** DEADLOCK ***
-
-4 locks held by .../2332:
- #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at: kernfs_fop_read_iter+0x74/0x1d0
- #1: ffff000010fe4400 (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0
- #2: ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4
- #3: ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at: i2c_adapter_lock_bus+0x2c/0x3c
-
-stack backtrace:
-CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
-Hardware name: ... (DT)
-Call trace:
- dump_backtrace+0x0/0x1d4
- show_stack+0x20/0x2c
- dump_stack_lvl+0x8c/0xb8
- dump_stack+0x18/0x34
- print_circular_bug+0x1f8/0x200
- check_noncircular+0x130/0x144
- __lock_acquire+0x1298/0x20d0
- lock_acquire.part.0+0xf0/0x250
- lock_acquire+0x68/0x8c
- __mutex_lock+0x9c/0x4d0
- mutex_lock_nested+0x48/0x5c
- clk_prepare_lock+0x50/0xb0
- clk_get_rate+0x28/0x80
- lpi2c_imx_xfer+0xb0/0xa9c
- __i2c_transfer+0x174/0xa80
- i2c_transfer+0x68/0x130
- regmap_i2c_read+0x64/0xb0
- _regmap_raw_read+0x114/0x440
- regmap_raw_read+0x19c/0x28c
- regmap_bulk_read+0x1b8/0x244
- at24_read+0x14c/0x2c4
- nvmem_reg_read+0x2c/0x54
- bin_attr_nvmem_read+0x8c/0xbc
- sysfs_kf_bin_read+0x74/0x94
- kernfs_fop_read_iter+0xb0/0x1d0
- new_sync_read+0xf0/0x184
- vfs_read+0x154/0x1f0
- ksys_read+0x70/0x100
- __arm64_sys_read+0x24/0x30
- invoke_syscall+0x50/0x120
- el0_svc_common.constprop.0+0x68/0x124
- do_el0_svc+0x30/0x9c
- el0_svc+0x54/0x110
- el0t_64_sync_handler+0xa4/0x130
- el0t_64_sync+0x1a0/0x1a4
-
-Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
----
-Changelog:
-v4: switched to atomic_t
-    included clk_rate_exclusive_get()/clk_rate_exclusive_put()
-v3: fixed build error reported by kernel test robot <lkp@intel.com>
-    https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
-v2: added clk_notifier as Alexander suggested
-
- drivers/i2c/busses/i2c-imx-lpi2c.c | 47 +++++++++++++++++++++++++++---
- 1 file changed, 43 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
-index 1af0a637d7f1..b31d29d684fa 100644
---- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-+++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-@@ -5,6 +5,7 @@
-  * Copyright 2016 Freescale Semiconductor, Inc.
-  */
- 
-+#include <linux/atomic.h>
- #include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/delay.h>
-@@ -100,6 +101,8 @@ struct lpi2c_imx_struct {
- 	__u8			*rx_buf;
- 	__u8			*tx_buf;
- 	struct completion	complete;
-+	struct notifier_block	clk_change_nb;
-+	atomic_t		rate_per;
- 	unsigned int		msglen;
- 	unsigned int		delivered;
- 	unsigned int		block_data;
-@@ -198,25 +201,39 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct *lpi2c_imx)
- 	} while (1);
- }
- 
-+static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-+				   unsigned long action, void *data)
-+{
-+	struct clk_notifier_data *ndata = data;
-+	struct lpi2c_imx_struct *lpi2c_imx = container_of(nb,
-+							  struct lpi2c_imx_struct,
-+							  clk_change_nb);
-+
-+	if (action & POST_RATE_CHANGE)
-+		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
-+
-+	return NOTIFY_OK;
-+}
-+
- /* CLKLO = I2C_CLK_RATIO * CLKHI, SETHOLD = CLKHI, DATAVD = CLKHI/2 */
- static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
- {
- 	u8 prescale, filt, sethold, clkhi, clklo, datavd;
--	unsigned int clk_rate, clk_cycle;
-+	unsigned int clk_cycle;
- 	enum lpi2c_imx_pincfg pincfg;
- 	unsigned int temp;
- 
- 	lpi2c_imx_set_mode(lpi2c_imx);
- 
--	clk_rate = clk_get_rate(lpi2c_imx->clks[0].clk);
- 	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
- 		filt = 0;
- 	else
- 		filt = 2;
- 
- 	for (prescale = 0; prescale <= 7; prescale++) {
--		clk_cycle = clk_rate / ((1 << prescale) * lpi2c_imx->bitrate)
--			    - 3 - (filt >> 1);
-+		clk_cycle = atomic_read(&lpi2c_imx->rate_per) /
-+			    ((1 << prescale) * lpi2c_imx->bitrate) - 3 -
-+			    (filt >> 1);
- 		clkhi = (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
- 		clklo = clk_cycle - clkhi;
- 		if (clklo < 64)
-@@ -594,6 +611,28 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	lpi2c_imx->clk_change_nb.notifier_call = lpi2c_imx_clk_change_cb;
-+	ret = devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-+					 &lpi2c_imx->clk_change_nb);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "can't register peripheral clock notifier\n");
-+	/*
-+	 * Lock the clock rate to avoid rate change between clk_get_rate() and
-+	 * atomic_set()
-+	 */
-+	ret = clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-+	if (ret) {
-+		dev_err(&pdev->dev, "can't lock I2C peripheral clock rate\n");
-+		return ret;
-+	}
-+	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx->clks[0].clk));
-+	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-+	if (!atomic_read(&lpi2c_imx->rate_per)) {
-+		dev_err(&pdev->dev, "can't get I2C peripheral clock rate\n");
-+		return -EINVAL;
-+	}
-+
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
- 	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
--- 
-2.40.1
-
+Ross
