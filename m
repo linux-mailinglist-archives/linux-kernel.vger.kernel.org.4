@@ -2,248 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF108703305
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76DC70330E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242430AbjEOQcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S242453AbjEOQci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242214AbjEOQcU (ORCPT
+        with ESMTP id S242723AbjEOQca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:32:20 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4CC199
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:32:18 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FGVmYO054911;
-        Mon, 15 May 2023 11:31:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684168308;
-        bh=RFkJBq8JGAaW8auA8QkIsfGBdt7C6TJA6FPA/7/+Jcc=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=y2GjJX+6gCsilco40EyyumPC0syDjnhUs1oSHDX2c1AKANzfa/3Myxl+z/VFnb5nb
-         NMPAm0ZFnmT1J3kXs6UicacDew01clh6JjiuE/361avcoqfsL9aW5Zo0MZ3REHdAHP
-         8TEeyotTjOh/9wZ3IX9ZXbMNzAVf0541LT55tDLQ=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FGVmKY008199
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 11:31:48 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 11:31:47 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 May 2023 11:31:47 -0500
-Received: from [10.250.35.77] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FGVlj1088299;
-        Mon, 15 May 2023 11:31:47 -0500
-Message-ID: <bb8cc8b2-8b59-8d25-da58-36cd2df92a71@ti.com>
-Date:   Mon, 15 May 2023 11:31:47 -0500
+        Mon, 15 May 2023 12:32:30 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48710213D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:32:28 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso2404592066b.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684168347; x=1686760347;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3v/Wb7rBhzrVb0azi8VEofeBQJDbLwQtTKKw6U3ZDgU=;
+        b=IQsT47xSa6tWwtSS4bpFB6i7IlU4UCWjoB2VM6EVgVr5RwUXSq3USycHcD4tbK/vCl
+         XKFNwbFQf/jruqOo/rvlMLjUuPCZycBQeUffWIkGgw5dBLDgAwgJsfn9sB2c1gpt/MWb
+         ZimOxt+//pU5CUmXwdB6oaX701pD1/lBK9C8i44PPeQrgsn9OEHGJWH/NYbcHEPFyLA7
+         Bsl/ZYBWcDioxjk2hHAzwoKjTcchrRCwPZ+4MkGwJt8hwBqHRsFf9J56AHJFmzCUvieH
+         SSmmFu0lLW2Mx6PmN0R2RGRyKeGfRuZzS/ydIrOHo83gK/ShptAv3j5ZJAky00BooIMT
+         CZzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684168347; x=1686760347;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3v/Wb7rBhzrVb0azi8VEofeBQJDbLwQtTKKw6U3ZDgU=;
+        b=geiDX6I8WwxolNOX+OIaHZnE5aMBYbZC8ceFHYuTY6FqmcYgm6gfRCy6rucR7oKeFE
+         5H9qW155p4cn0VgN+pJ2b1f2zT9nBnqRoHDFvxDZBSliscFvFs5VLUUsNzKAWOnMG9rd
+         j+TBa+9bRDwxEuQQEenlOaWCBjvvZLVbg9f0sg/4wLY3uzrKyeI7MyogJJAGQkXJClmv
+         KfqYCFe3rzoDtYJs3rP8brX+Lv/05fc0+eoe3YczHTpOIqv7u2PFiwTHIM9Yf0OY907o
+         f9wLZRrm/fvldpnjyFvVEoTH/p02KEfFaCPViBO7CB21JkL2h6FTG2Ubap9UyIfknrzr
+         /69w==
+X-Gm-Message-State: AC+VfDzvexLiLkj3U8SnsYWvJaVtZXp8ST2CEMA6bYFxUxcyEAYkxFSX
+        i1B1upazXDvqa3iLbf0xxpbdwUepSLSCb35HUyE=
+X-Google-Smtp-Source: ACHHUZ6gTLs+3cm2BhuQPDtT2O40r+PYINlcdVU5ENN0zj7TYzrHOXrFQdEsXBWgivvJve1UghmM7A==
+X-Received: by 2002:a17:907:7fa8:b0:96a:9b5b:5d80 with SMTP id qk40-20020a1709077fa800b0096a9b5b5d80mr11887393ejc.13.1684168346707;
+        Mon, 15 May 2023 09:32:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id s25-20020a170906285900b0096a5d341b50sm6679818ejc.111.2023.05.15.09.32.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 09:32:26 -0700 (PDT)
+Message-ID: <17bfc33b-029f-a0f1-564d-e8c8d0a8695c@linaro.org>
+Date:   Mon, 15 May 2023 18:32:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 01/10] ARM: Kconfig: move platform selection into its own
- Kconfig file
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 01/13] dt-bindings: clk: g12a-clkc: export VCLK2_SEL
+ and add CTS_ENCL clock ids
 Content-Language: en-US
-To:     Russell King <linux@armlinux.org.uk>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230515160234.289631-1-afd@ti.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20230515160234.289631-1-afd@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     neil.armstrong@linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Nicolas Belin <nbelin@baylibre.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-phy@lists.infradead.org, David Airlie <airlied@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org>
+ <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-1-2592c29ea263@linaro.org>
+ <5cb38be4-a27f-dc1a-cbb9-c195505a9e7c@linaro.org>
+ <9fa0662e-8854-05f9-da7f-ec8e08d2badf@linaro.org>
+ <d5c030f9-2f4d-25cc-b922-d00f5033ac37@linaro.org>
+ <6228670c-3e06-3061-f304-a2c641962ffa@linaro.org>
+ <9cba6384-123b-1cd1-ed02-08365a0ed529@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9cba6384-123b-1cd1-ed02-08365a0ed529@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 9:02 AM, Andrew Davis wrote:
-> Mostly just for better organization for now. This matches what is done on
-> some other platforms including ARM64. This also lets us start to reduce
-> the number of mach- directories that only exist to store the platform
-> selection.
+On 15/05/2023 18:22, neil.armstrong@linaro.org wrote:
+>>> Meson is the only or almost the only platform making such changes. I
+>>> don't get why, because the conflict could be easily avoided with using
+>>> different names for defines in bindings and local clock. Approach of
+>>> having bindings strictly tied with driver commit is never desired.
 > 
-> Start with "Platform selection" and ARCH_VIRT.
+> If we did it now, we would have make it differently and expose all the clock
+> IDs on the bindings like on Qcom, be sure of that.
+
+No, you just keep different names. The only problem here is that your
+clock name is the same thus you cannot split bindings into separate patch.
+
 > 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
-
-Oh, forgot to tag it but this is v2 posting of this series. No changes
-from v1, just rebased on v6.4-rc2.
-
-Andrew
-
->   arch/arm/Kconfig           | 67 +------------------------------------
->   arch/arm/Kconfig.platforms | 68 ++++++++++++++++++++++++++++++++++++++
->   2 files changed, 69 insertions(+), 66 deletions(-)
->   create mode 100644 arch/arm/Kconfig.platforms
+>>
+>> Also one more argument maybe not relevant here but for other cases -
+>> this makes literally impossible to include the clock ID in DTS in the
+>> same kernel revision, because you must not merge driver branch to DTS
+>> branch. SoC folks were complaining about this many times.
 > 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index 0fb4b218f665..23e3e344f9c0 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -336,72 +336,7 @@ config ARCH_MULTIPLATFORM
->   	  Selecting N here allows using those options, including
->   	  DEBUG_UNCOMPRESS, XIP_KERNEL and ZBOOT_ROM. If unsure, say Y.
->   
-> -menu "Platform selection"
-> -	depends on MMU
-> -
-> -comment "CPU Core family selection"
-> -
-> -config ARCH_MULTI_V4
-> -	bool "ARMv4 based platforms (FA526, StrongARM)"
-> -	depends on !ARCH_MULTI_V6_V7
-> -	# https://github.com/llvm/llvm-project/issues/50764
-> -	depends on !LD_IS_LLD || LLD_VERSION >= 160000
-> -	select ARCH_MULTI_V4_V5
-> -	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
-> -
-> -config ARCH_MULTI_V4T
-> -	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
-> -	depends on !ARCH_MULTI_V6_V7
-> -	# https://github.com/llvm/llvm-project/issues/50764
-> -	depends on !LD_IS_LLD || LLD_VERSION >= 160000
-> -	select ARCH_MULTI_V4_V5
-> -	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
-> -		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
-> -		CPU_ARM925T || CPU_ARM940T)
-> -
-> -config ARCH_MULTI_V5
-> -	bool "ARMv5 based platforms (ARM926T, XSCALE, PJ1, ...)"
-> -	depends on !ARCH_MULTI_V6_V7
-> -	select ARCH_MULTI_V4_V5
-> -	select CPU_ARM926T if !(CPU_ARM946E || CPU_ARM1020 || \
-> -		CPU_ARM1020E || CPU_ARM1022 || CPU_ARM1026 || \
-> -		CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_FEROCEON)
-> -
-> -config ARCH_MULTI_V4_V5
-> -	bool
-> -
-> -config ARCH_MULTI_V6
-> -	bool "ARMv6 based platforms (ARM11)"
-> -	select ARCH_MULTI_V6_V7
-> -	select CPU_V6K
-> -
-> -config ARCH_MULTI_V7
-> -	bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
-> -	default y
-> -	select ARCH_MULTI_V6_V7
-> -	select CPU_V7
-> -	select HAVE_SMP
-> -
-> -config ARCH_MULTI_V6_V7
-> -	bool
-> -	select MIGHT_HAVE_CACHE_L2X0
-> -
-> -config ARCH_MULTI_CPU_AUTO
-> -	def_bool !(ARCH_MULTI_V4 || ARCH_MULTI_V4T || ARCH_MULTI_V6_V7)
-> -	select ARCH_MULTI_V5
-> -
-> -endmenu
-> -
-> -config ARCH_VIRT
-> -	bool "Dummy Virtual Machine"
-> -	depends on ARCH_MULTI_V7
-> -	select ARM_AMBA
-> -	select ARM_GIC
-> -	select ARM_GIC_V2M if PCI
-> -	select ARM_GIC_V3
-> -	select ARM_GIC_V3_ITS if PCI
-> -	select ARM_PSCI
-> -	select HAVE_ARM_ARCH_TIMER
-> +source "arch/arm/Kconfig.platforms"
->   
->   config ARCH_AIROHA
->   	bool "Airoha SoC Support"
-> diff --git a/arch/arm/Kconfig.platforms b/arch/arm/Kconfig.platforms
-> new file mode 100644
-> index 000000000000..ed1f6da11e24
-> --- /dev/null
-> +++ b/arch/arm/Kconfig.platforms
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +
-> +menu "Platform selection"
-> +	depends on MMU
-> +
-> +comment "CPU Core family selection"
-> +
-> +config ARCH_MULTI_V4
-> +	bool "ARMv4 based platforms (FA526, StrongARM)"
-> +	depends on !ARCH_MULTI_V6_V7
-> +	# https://github.com/llvm/llvm-project/issues/50764
-> +	depends on !LD_IS_LLD || LLD_VERSION >= 160000
-> +	select ARCH_MULTI_V4_V5
-> +	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
-> +
-> +config ARCH_MULTI_V4T
-> +	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
-> +	depends on !ARCH_MULTI_V6_V7
-> +	# https://github.com/llvm/llvm-project/issues/50764
-> +	depends on !LD_IS_LLD || LLD_VERSION >= 160000
-> +	select ARCH_MULTI_V4_V5
-> +	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
-> +		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
-> +		CPU_ARM925T || CPU_ARM940T)
-> +
-> +config ARCH_MULTI_V5
-> +	bool "ARMv5 based platforms (ARM926T, XSCALE, PJ1, ...)"
-> +	depends on !ARCH_MULTI_V6_V7
-> +	select ARCH_MULTI_V4_V5
-> +	select CPU_ARM926T if !(CPU_ARM946E || CPU_ARM1020 || \
-> +		CPU_ARM1020E || CPU_ARM1022 || CPU_ARM1026 || \
-> +		CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_FEROCEON)
-> +
-> +config ARCH_MULTI_V4_V5
-> +	bool
-> +
-> +config ARCH_MULTI_V6
-> +	bool "ARMv6 based platforms (ARM11)"
-> +	select ARCH_MULTI_V6_V7
-> +	select CPU_V6K
-> +
-> +config ARCH_MULTI_V7
-> +	bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
-> +	default y
-> +	select ARCH_MULTI_V6_V7
-> +	select CPU_V7
-> +	select HAVE_SMP
-> +
-> +config ARCH_MULTI_V6_V7
-> +	bool
-> +	select MIGHT_HAVE_CACHE_L2X0
-> +
-> +config ARCH_MULTI_CPU_AUTO
-> +	def_bool !(ARCH_MULTI_V4 || ARCH_MULTI_V4T || ARCH_MULTI_V6_V7)
-> +	select ARCH_MULTI_V5
-> +
-> +endmenu
-> +
-> +config ARCH_VIRT
-> +	bool "Dummy Virtual Machine"
-> +	depends on ARCH_MULTI_V7
-> +	select ARM_AMBA
-> +	select ARM_GIC
-> +	select ARM_GIC_V2M if PCI
-> +	select ARM_GIC_V3
-> +	select ARM_GIC_V3_ITS if PCI
-> +	select ARM_PSCI
-> +	select HAVE_ARM_ARCH_TIMER
+> Actually we handle this very simply by having such patches merged in a immutable
+> branch merged in the clock and DT pull-requests, it worked perfectly so far
+> and neither Stephen or Arnd complained about that.
+
+Arnd, Olof,
+
+Any changes in the policies? Do you allow now driver branches (with
+driver code) to be merged into DT branch?
+
+Best regards,
+Krzysztof
+
