@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5597F702872
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06025702879
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbjEOJ1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
+        id S229701AbjEOJ1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235649AbjEOJ0w (ORCPT
+        with ESMTP id S239176AbjEOJ1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:26:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337861708;
-        Mon, 15 May 2023 02:25:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C572161474;
-        Mon, 15 May 2023 09:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB94AC433D2;
-        Mon, 15 May 2023 09:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684142732;
-        bh=I/JHQf4eIEsXKezsZsMd1fV+aRLmrENZDEW/GBeFnBM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IkcvM/nf4fogAbzM9g7VY/ONJN+bLvbZW8FynVvvFGqsI2oH7QiTGAHjnb5eil/qh
-         dobgamg0SCITkPm7wwLMoRmDqJQSOdcHdPgBjbrzotay8LF23muG+3uwHPve5beoP6
-         00pd35Y0AvLPKt/AP5P0FQVMYkiWN4mDQyDvhSiZV5YboHWJmNIR08ABvYK1OMsOHY
-         ZfYm1Ukq7iU6DRsmjg+gNVyj10kPpfQDoJlhdKLzL+zYFoCPPqRL7g5983Ym4k5HLh
-         g6a1tOm5UVQiafQAf3g58jh1NZSnXiFF/N8Z+Ycu9OqMjpCvqN5DQJeFZLlVjVCbtS
-         8jhSybGaVDI/Q==
-Date:   Mon, 15 May 2023 10:25:25 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
- i.MX8 ISI driver")
-Message-ID: <20230515102525.65150633@sal.lan>
-In-Reply-To: <CAMuHMdV=b8j=X3XEBWsAghsHrPT58xp7peaMiTZisqf7wRJf3w@mail.gmail.com>
-References: <ZElaVmxDsOkZj2DK@debian>
-        <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
-        <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
-        <20230510090527.25e26127@sal.lan>
-        <55d5ec29-f30f-4596-a3b9-7e5b8adf0582@kernel.org>
-        <CAMuHMdV=b8j=X3XEBWsAghsHrPT58xp7peaMiTZisqf7wRJf3w@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 15 May 2023 05:27:04 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392231BD;
+        Mon, 15 May 2023 02:26:51 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aafa41116fso84709345ad.1;
+        Mon, 15 May 2023 02:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684142810; x=1686734810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
+        b=R/z7crlS/lPhV3h3BFgkiLR/iJZliaUKgbrxk1eP748n7dGAtbCTPRVputyxufSEV+
+         9kJ3TK/qNPlrWi2p7duVwYOwUEGwba/ZScDo2KIlmRpCJv8TEOo5Ngwu67yJIDTdgurO
+         YBmY5p/gD6m5rDc7BtdXnt5PXFyCe78Z09QxmVGUWKiLyaNiGBtRU4PaJ05OSwm0YVba
+         wfYWjkL2Xlfp6wIuS4lJ2DTEICs0iFtbpaPW3aLasQPuYl5wqgB/Vtw5jFGZkgwZNTDc
+         MFjxVTQhiSZAN3rGvDILlQUOXiYnwk5ANFMi1eWRRekFKY9NGXpQeSZ2tViByDnc/g1h
+         3COQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684142810; x=1686734810;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
+        b=BQLSdREsBOaPJWDV3ysCAItNei+6UCyu7qdnsdmyH/1v16gLZYEQtzSC3cYUNPTRuK
+         VDDT73Je6b3Wbe645WC5T7hCvVjPmhDry5nPf810s+4svrzr9e9ANd1mLhTznwLdnANK
+         ikI1L+46OL0pBQsCWrsMY5sOXpiRhFkaHcjk46JfSwbk09cSzr6V9Y1oIUzUc/MJVS96
+         OtyhCEf8nCO95GbVRofZDB6qUPE5fyc2w0xVn5B9zMQMjccHKCactLIBblLfE+qJ/pBF
+         o7CNTUPA7ResoxVM1DNjCuM8DgVRWTkqKQUn31AGbpL/HLnuMsYdiC9prpaRV/53b0BM
+         9njg==
+X-Gm-Message-State: AC+VfDxre5lJ83pkfeeEWLSvwG5X1AM1ujAp2wmYfgQvFRU6bY+pBcGR
+        hwUCxPfNQ96UG2qFSpnhEAyLXzYqHe4X0g==
+X-Google-Smtp-Source: ACHHUZ63EuXr6T3H06Ba3BCMy3sIZXN0pFAkJlCz7cVT3s+tR6hJ5mXHiII/P8Nw2wIrMgseyTGSsg==
+X-Received: by 2002:a17:902:d2c6:b0:1ab:16e0:ef49 with SMTP id n6-20020a170902d2c600b001ab16e0ef49mr43599590plc.24.1684142810639;
+        Mon, 15 May 2023 02:26:50 -0700 (PDT)
+Received: from localhost.localdomain ([103.194.71.110])
+        by smtp.gmail.com with ESMTPSA id bd1-20020a170902830100b001aaecc0b6ffsm13015605plb.160.2023.05.15.02.26.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 02:26:50 -0700 (PDT)
+From:   llyyr <llyyr.public@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6683) Add another chip ID for NCT6687D sensor chip found on some MSI boards.
+Date:   Mon, 15 May 2023 14:55:46 +0530
+Message-Id: <20230515092546.21154-1-llyyr.public@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, 15 May 2023 09:46:41 +0200
-Geert Uytterhoeven <geert@linux-m68k.org> escreveu:
+This value was found on MSI Z690-A PRO DDR5, with a NCT6687D chip.
 
-> Hi Krzysztof,
->=20
-> On Sun, May 14, 2023 at 1:01=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.=
-org> wrote:
-> > On 10/05/2023 10:05, Mauro Carvalho Chehab wrote: =20
-> > > And another CI job testing bisect breakages as I receive pull request=
-s,
-> > > applying patch per patch and using both allyesconfig and allmodconfig,
-> > > also on x86_64 arch with W=3D1:
-> > >
-> > >       https://builder.linuxtv.org/job/patchwork/
-> > >
-> > > The rule is to not merge stuff on media tree if any of those jobs
-> > > fail. I also fast-forward merging patches whose subject states that
-> > > the build has failed.
-> > >
-> > > In order to help with that, on normal situation, I usually take one w=
-eek
-> > > to merge stuff from media_stage into media_tree, doing rebases at
-> > > media_stage if needed to avoid git bisect build breakages at media_tr=
-ee
-> > > (which is from where I send my update PRs to you).
-> > >
-> > > Unfortunately, currently we don't have resources to do multiple randc=
-onfig =20
-> >
-> > Is you media staging tree included in LKP (kernel test robot)? You would
-> > get huge build coverage after every push to your staging repo. =20
+Signed-off-by: llyyr <llyyr.public@gmail.com>
+---
+ drivers/hwmon/nct6683.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-No idea, as I don't know where LKP settings are stored, nor what frequency
-it is doing builds from git://linuxtv.org/media_stage.git, if any. Do you k=
-now
-where we can check such configuration?
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index a872f783e..5df9b9ce7 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -14,6 +14,7 @@
+  * nct6683d     21(1)   16      8       32(1) 0xc730
+  * nct6686d     21(1)   16      8       32(1) 0xd440
+  * nct6687d     21(1)   16      8       32(1) 0xd590
++ *                                           (0xd592)
+  *
+  * Notes:
+  *	(1) Total number of vin and temp inputs is 32.
+@@ -71,6 +72,7 @@ static const char * const nct6683_chip_names[] = {
+ #define SIO_NCT6683_ID		0xc730
+ #define SIO_NCT6686_ID		0xd440
+ #define SIO_NCT6687_ID		0xd590
++#define SIO_NCT6687_ID2		0xd592
+ #define SIO_ID_MASK		0xFFF0
+ 
+ static inline void
+@@ -1362,6 +1364,7 @@ static int __init nct6683_find(int sioaddr, struct nct6683_sio_data *sio_data)
+ 		sio_data->kind = nct6686;
+ 		break;
+ 	case SIO_NCT6687_ID:
++	case SIO_NCT6687_ID2:
+ 		sio_data->kind = nct6687;
+ 		break;
+ 	default:
+-- 
+2.40.1
 
-In the end, patches there will end going to linux-next, so at least some
-sort of coverage is there, but I'm not sure if LKP will always reply to
-linux-media if the patch causing build regressions is there.
-
-While being helpful, one problem with LKP is that it is hard to filter out=
-=20
-reports per git tree. The only way to check if the report is applicable to
-media trees seems to be looking inside the e-mail's body.
-
-> As (multiple[*[) fixes for the build issues were submitted before the
-> opening of the merge window, there must have been some build coverage,
-> with even some people acting upon it...
->=20
-> [*] General note, not limited to media: please apply build fixes and
->     regression fixes ASAP, to avoid multiple people running into the
->     same issues, and spending time on bisecting, investigating,
->     fixing, ...
->     Thanks a lot!
-
-Fully agreed. That's why we opted to have a CI instance focused on media:
-we should be able to program it to give feedback with the kernel build
-parameters we use (Like W=3D1) and set it up in a way that it we can
-customize to our needs (like testing for the architectures where media
-drivers are known to be used in practice), and setting up an e-mail subject
-that can be easily be filtered by our e-mail filters.
-
-Regards,
-Mauro
