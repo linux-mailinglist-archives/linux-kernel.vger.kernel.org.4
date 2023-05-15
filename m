@@ -2,117 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865B0702984
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804D2702989
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbjEOJum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S240598AbjEOJvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238788AbjEOJt6 (ORCPT
+        with ESMTP id S240112AbjEOJvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:49:58 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72075E56
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:49:51 -0700 (PDT)
-X-UUID: d0980c8ef30511edb20a276fd37b9834-20230515
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=h57jZNHQL2sJ49TfskDCqEYES50/wJ+p6Hr89+KIa9A=;
-        b=AYMv+Vu5T7HFVdNKn5oi+lQzUxsVw7tiUNkuvKEakcohja2ccT78cGxdmTVHZy1aWMAV2nVKQB7qmBVDTt47+cBEyVVCyBsf4y8Oftsk1FJK9c8BoVvosfX1KrbpV0alJV+vQ456LvG0KkZxAjrUnHBonY6zatHLIzRuRBxDGuo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.24,REQID:3e02afdb-3a39-439d-864b-b8abb403e06a,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:178d4d4,CLOUDID:ffacd96b-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: d0980c8ef30511edb20a276fd37b9834-20230515
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <shuijing.li@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 516129809; Mon, 15 May 2023 17:49:41 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 15 May 2023 17:49:41 +0800
-Received: from mszsdhlt06.gcn.mediatek.inc (10.16.6.206) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 15 May 2023 17:49:40 +0800
-From:   Shuijing Li <shuijing.li@mediatek.com>
-To:     <neil.armstrong@linaro.org>, <sam@ravnborg.org>,
-        <airlied@gmail.com>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jitao.shi@mediatek.com>, Shuijing Li <shuijing.li@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH v4 2/2] drm/panel: boe-tv101wum-nl6: Fine tune the panel power sequence
-Date:   Mon, 15 May 2023 17:49:55 +0800
-Message-ID: <20230515094955.15982-3-shuijing.li@mediatek.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230515094955.15982-1-shuijing.li@mediatek.com>
-References: <20230515094955.15982-1-shuijing.li@mediatek.com>
+        Mon, 15 May 2023 05:51:17 -0400
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B271FC2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:50:36 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+        id eea96ea3-f305-11ed-a9de-005056bdf889;
+        Mon, 15 May 2023 12:50:33 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Mon, 15 May 2023 12:50:32 +0300
+To:     Ryan.Wanner@microchip.com
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
+        Claudiu.Beznea@microchip.com
+Subject: Re: GPIO set config argument value difference in pinconf and gpiolib
+Message-ID: <ZGIAaPSycsmOq690@surfacebook>
+References: <120117b6-feda-e7aa-4f09-a126a0747388@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <120117b6-feda-e7aa-4f09-a126a0747388@microchip.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For "boe,tv105wum-nw0" this special panel, it is stipulated in
-the panel spec that MIPI needs to keep the LP11 state before
-the lcm_reset pin is pulled high.
+Mon, May 15, 2023 at 08:21:35AM +0000, Ryan.Wanner@microchip.com kirjoitti:
+> Hello,
+> 
+> I have a question about gpiochip_generic_config function. I noticed when
+> calling this function the pin configuration is incorrect for
+> push-pull/open-drain in pinctrl-at91-pio4. I traced this down to a
+> argument value that is incorrect, this is extracted from the config
+> using pinconf_to_config_argument. The pinctrl driver processes this
+> config argument value correctly but when gpiolib calls this function
+> that value is not passed causing the argument to be 0 in the function
+> atmel_conf_pin_config_group_set. I see this same structure in other
+> pinctrl drivers as well.
+> 
+> It seems that gpio_set_config is called which hard codes 0 into
+> gpio_set_config_with_arugment function call making the argument 0 when
+> passed into the pinctrl set config function.
 
-Signed-off-by: Shuijing Li <shuijing.li@mediatek.com>
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Correct.
 
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-index a5652d38acda..64e462f49c60 100644
---- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-@@ -36,6 +36,7 @@ struct panel_desc {
- 	const struct panel_init_cmd *init_cmds;
- 	unsigned int lanes;
- 	bool discharge_on_disable;
-+	bool lp11_before_reset;
- };
- 
- struct boe_panel {
-@@ -1365,6 +1366,10 @@ static int boe_panel_prepare(struct drm_panel *panel)
- 
- 	usleep_range(10000, 11000);
- 
-+	if (boe->desc->lp11_before_reset) {
-+		mipi_dsi_dcs_nop(boe->dsi);
-+		usleep_range(1000, 2000);
-+	}
- 	gpiod_set_value(boe->enable_gpio, 1);
- 	usleep_range(1000, 2000);
- 	gpiod_set_value(boe->enable_gpio, 0);
-@@ -1591,6 +1596,7 @@ static const struct panel_desc boe_tv105wum_nw0_desc = {
- 	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
- 		      MIPI_DSI_MODE_LPM,
- 	.init_cmds = boe_init_cmd,
-+	.lp11_before_reset = true,
- };
- 
- static const struct drm_display_mode starry_qfh032011_53g_default_mode = {
+> It seems that the correct
+> way would to mimic the gpio_set_bias function handling of this argument
+> value. Doing a small local test seems to confirm my suggestion.
+
+Nope. The driver developer(s) didn't get this correctly. The state
+configuration are booleans, hence argument is ignored. It can be anything.
+
+Seems they missed to add the switch to PUSH_PULL.
+
+TL;DR: I'm pretty sure this is the bug in the above mentioned driver.
+
 -- 
-2.40.1
+With Best Regards,
+Andy Shevchenko
+
 
