@@ -2,46 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFC67028F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A867028F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbjEOJjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S240515AbjEOJjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240503AbjEOJjP (ORCPT
+        with ESMTP id S240492AbjEOJio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:39:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30B423C06
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:36:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFC4A2F4;
-        Mon, 15 May 2023 02:36:56 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1016B3F67D;
-        Mon, 15 May 2023 02:36:10 -0700 (PDT)
-Date:   Mon, 15 May 2023 10:36:08 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     Radu Rendec <rrendec@redhat.com>, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
- initializer
-Message-ID: <20230515093608.etfprpqn3lmgybe6@bogus>
-References: <20230412185759.755408-1-rrendec@redhat.com>
- <20230412185759.755408-2-rrendec@redhat.com>
- <20230510191207.GA18514@ranerica-svr.sc.intel.com>
+        Mon, 15 May 2023 05:38:44 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E15359C
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:36:18 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2ac785015d6so131354011fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684143374; x=1686735374;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4imH+QKqyExRfuItA/L09H0HIV4Xd3BIqtl3lBoJ7/w=;
+        b=qgGy5RuG4cWM4hsOv3c3+R5wyP1RuIStQcRarr3mmPWsBksbvULFY2lhHm3PQvnrAh
+         OQBoc12S1HXXb2iiZzQdw2TQ3gg9eZuMhJaFYb8+4REwaJX6y3icxQJrNuj/OgK3HTl5
+         vksqIQiN21bfIodjNci7GOohHhz6RMDPSFLYXvZDRY77ki1mYOOQ5tbC0Oh2XzL+/Jf0
+         1OJA9g9b4IqDpD7f0QOLKvx4oHTzKnYJMvoO477V7UFZ38zpejVLfEm1w9Jp6PGWxEzr
+         KYmUbVEGj8x6g9pq1DA8ffEwk7yOFi+SfY6jgMoIRcv8k4JU34nzscfVOo1eVMEFL/+u
+         jhYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684143374; x=1686735374;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4imH+QKqyExRfuItA/L09H0HIV4Xd3BIqtl3lBoJ7/w=;
+        b=PlTsAGq4frzzJBSJiCBtmXeQQPWfGojhCYM/PcJwj6xbcTlhqhww/bDeZ4SxDA5upJ
+         6XsdIutkTu2y2WcMav3YLY+tudnBUFEJagBisBfe9f/0IT1qIUr77jpnImAx0H23Zm7L
+         WZipcMpkyp9LXTXStKLHO0b3D2Lz3LD++pPEQ7Y4Bxi4Fc7mqdWioBPGebChULrsSu02
+         8WbjWN5JPiXbm8zwXIh0YCWjFhcjzSCNO/AV2UXWgWpAKsgIK2T+f/496QW5uPjmMIeX
+         lbqpR4NGoXzlcSc8cH01Uvzggwr9hcU5Ri54SXwzYuOC9rW0eYrsIm6wVW5N05O5PmGr
+         4doQ==
+X-Gm-Message-State: AC+VfDwS6smHzOQsfGsr48iUMSIeKKJxbwFQo9XMIMPIu64Mbz9JMxWd
+        GF6F2hz/vJQdayy5XaC21SU+QQ==
+X-Google-Smtp-Source: ACHHUZ4E7xXXyCa9CZNxcMtbRVuPoMWzHuNIk6pR/Q95FYnG5BmjT9792nBXdG2kidVfZwFCfubQtw==
+X-Received: by 2002:a2e:93cd:0:b0:2ad:dd61:ff74 with SMTP id p13-20020a2e93cd000000b002addd61ff74mr2588284ljh.23.1684143374205;
+        Mon, 15 May 2023 02:36:14 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id n21-20020ac242d5000000b004ec8b638115sm2527560lfl.193.2023.05.15.02.36.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 02:36:13 -0700 (PDT)
+Message-ID: <c6bcbf6b-2fa0-a6bb-a44c-6b0bd84e194f@linaro.org>
+Date:   Mon, 15 May 2023 11:36:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510191207.GA18514@ranerica-svr.sc.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] soc: qcom: rpmh-rsc: drop redundant unsigned >=0
+ comparision
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230513112913.176009-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230513112913.176009-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,37 +77,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 12:12:07PM -0700, Ricardo Neri wrote:
-> Hi,
+
+
+On 13.05.2023 13:29, Krzysztof Kozlowski wrote:
+> Unsigned int "minor" is always >= 0 as reported by Smatch:
 > 
-> I had posted a patchset[1] for x86 that initializes
-> ci_cacheinfo(cpu)->num_leaves during SMP boot.
->
-
-It is entirely clear to me if this is just a clean up or a fix to some
-issue you faced ? Just wanted to let you know Prateek from AMD has couple
-of fixes [2]
-
-> This means that early_leaves and a late cache_leaves() are equal but
-> per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does not use
-> fetch_cache_info().
+>   drivers/soc/qcom/rpmh-rsc.c:1076 rpmh_rsc_probe() warn: always true condition '(drv->ver.minor >= 0) => (0-u32max >= 0)'
 > 
-> I think that we should check here that per_cpu_cacheinfo() has been allocated to
-> take care of the case in which early and late cache leaves remain the same:
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+I can see how it made sense from a human POV, but then it still
+does with the right hand side removed..
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  drivers/soc/qcom/rpmh-rsc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> -       if (cache_leaves(cpu) <= early_leaves)
-> +       if (cache_leaves(cpu) <= early_leaves && per_cpu_cacheinfo(cpu))
-> 
-> Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference from
-> last_level_cache_is_valid().
->
-
-I think this is different issue as Prateek was just observing wrong info
-after cpuhotplug operations. But the patches manage the cpumap_populated
-state better with the patches. Can you please look at that as weel ?
-
--- 
-Regards,
-Sudeep
-
-[2] https://lore.kernel.org/all/20230508084115.1157-1-kprateek.nayak@amd.com
+> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+> index f93544f6d796..0dd4363ebac8 100644
+> --- a/drivers/soc/qcom/rpmh-rsc.c
+> +++ b/drivers/soc/qcom/rpmh-rsc.c
+> @@ -1073,7 +1073,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+>  	drv->ver.minor = rsc_id & (MINOR_VER_MASK << MINOR_VER_SHIFT);
+>  	drv->ver.minor >>= MINOR_VER_SHIFT;
+>  
+> -	if (drv->ver.major == 3 && drv->ver.minor >= 0)
+> +	if (drv->ver.major == 3)
+>  		drv->regs = rpmh_rsc_reg_offset_ver_3_0;
+>  	else
+>  		drv->regs = rpmh_rsc_reg_offset_ver_2_7;
