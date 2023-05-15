@@ -2,113 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7880702A1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB862702A50
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239768AbjEOKLw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 06:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
+        id S241153AbjEOKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238353AbjEOKLu (ORCPT
+        with ESMTP id S241037AbjEOKQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:11:50 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8717B13A
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:11:49 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-ba7854ff5abso2635298276.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:11:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684145508; x=1686737508;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8RSc3ehTcfUtTwTGi8/DXlWstgHILWkp+xdTMczEuPw=;
-        b=ROlKWKsU7jw7wFBe5rkYyccyGWgKcnHgBRWPWTFCC3fPVkE6AeO0xEAfbROtRCpJfg
-         dhQv9VyVQDqacCRgRghA1hUh0kxh6u1rjySMFPuBLruIGp2wvRchwLe3CFTrOJ/QTpvw
-         Fxl+I5xGhxmHeIrwmNyoYudQxoe14KBF8D+s8rFgvqRoptS2DnDv9+1twNklQNm1s1mR
-         B6d99JqrIu5fZCX1BRw9sNhsCLQZ7zG1bJFU0Nw5DA9fYDE3ADyvfhQvlFkzcEr7B9Ga
-         pqCdjtspMug4AE6CHo0VYTxvPeZLTi0drGpeByTepOYEg+VR92f/ZDDTi/2fQIY8LEKl
-         8ixQ==
-X-Gm-Message-State: AC+VfDzt4x0NvaCWchb4/SpiJjeBWiSXFfefretcYVtKPnY0DFMWqm0k
-        h+zYDhYyMTLhgPAX+UoGq3EaNFPZdFhhkw==
-X-Google-Smtp-Source: ACHHUZ6eu3YZXJQ2FeGU/QDRPCK4ffJaDDr6mpIslYOpOt4krzYRP/1+n6oR23Zz4juW/xay2m0KRw==
-X-Received: by 2002:a81:8490:0:b0:560:e0ce:ac7c with SMTP id u138-20020a818490000000b00560e0ceac7cmr14043032ywf.43.1684145508511;
-        Mon, 15 May 2023 03:11:48 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id h123-20020a0df781000000b0055a382ae26fsm6807510ywf.49.2023.05.15.03.11.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 03:11:48 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-ba7bf25a010so1518507276.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:11:47 -0700 (PDT)
-X-Received: by 2002:a81:6689:0:b0:55a:8c02:bfea with SMTP id
- a131-20020a816689000000b0055a8c02bfeamr32799250ywc.19.1684145507540; Mon, 15
- May 2023 03:11:47 -0700 (PDT)
+        Mon, 15 May 2023 06:16:13 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5022E19A4;
+        Mon, 15 May 2023 03:15:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684145543; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=tkq67o77DSOOySalWTFkTuGf6/bIN0Ir8zF6vP9mkPpNAoqFAC0AbUvaN1UiVyeq5X
+    m59+lbX0YZ5Li9Py3kJ5yv3u0P0o2YKIQKW6L7CzSd9iAM3/paDE9ccrT06Z7UbEeyiP
+    LUc41qIXch8Ha9fEYE5k8aVOdjYI+mMdeP6xHsTMYSr0A7XUwO1F0l6D1eLJvaidnkqm
+    HqwN0LmfWr8JVqSRwGVYweVq5vyY72H+jv9b9jkkymT7XJ8rTqGYlLlhMuziSep/JqXO
+    a0+lhq2Xen28B6j2e6KWvLMeL+aCoYHkYxpJ4X0OC8sMpb6mB8PYdrv4wG7CyGYWs353
+    bYmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145543;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=zv1egBp4VF43Uy3k9TsxyBgv1FbKom8ab/az0E+stOE=;
+    b=m5KM5ma7u2oxMFenubqzXEFUOIsly0xnM+EAEzJInltm7jGhdSP/nVhOohPfHANop2
+    1q2Bvv5ee/7dhM3u65oTLgReJ/8T/tVW6VSiTFIqL6rAb3+Q6xeHICp33TJq+x3kS0Vo
+    7f83pTQFaSrIAwCZKzYSLPXm+8ntjpYv0M/OsE12xttETNWstg9jwSMHF/kG9CqyitwF
+    Vnh3HpvndrtVAolzcpnWehz+cGSWGl9lW16ETMcbHPbhqbbHn1YDjncUkEa5Uvs3m8dd
+    vgbvu/zH/miiku6yP3z7mjcrY/c0C0CzJOzL9vQHkRU1/0MelGkCMi+AskGR60S6rFQD
+    KzTA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145543;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=zv1egBp4VF43Uy3k9TsxyBgv1FbKom8ab/az0E+stOE=;
+    b=imfAJaU/zyCIj2aNmPHz+L0wMpozqF4Kf0qRiMUbyl6cxspTG6BvDfetN7+zUAcgar
+    uW3tBTZGlugGeFhFKTVTgLDoWghi+sGxtr8SmiS2lDvyM/jGJloI76G3+8gBCntHn/Lh
+    4rcSYau61EKSwfLu9NnrNAdb9uD3pHIHx4cbZvywF+tQyyyvGK0BSy+KLelwxxWDTJVY
+    CgznmnZnLpLoaH+Q1uYtdSRn5jlbRyeUWrsvlehe2ttumpSKCMIO+2xyJn9COB0YP2Eb
+    MRIaXIEOk0x5yavD6NNLecKG2Gd3sUFVUT+nlGoG8ptBFKOHk0pReUViYkMr9AX6+mfJ
+    0raA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684145543;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=zv1egBp4VF43Uy3k9TsxyBgv1FbKom8ab/az0E+stOE=;
+    b=73WOrUXfKDQ/beydx/HNIClkP/a39K12oD4b+YJigg6F4OLW1QjxVN6v7Z2a64biwI
+    4ukV4J9P0bsa2OXseuAg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4ly9TY="
+Received: from [192.168.244.3]
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4FACN1JF
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 15 May 2023 12:12:23 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH 0/5] of: reserved_mem: Provide more control about
+ allocation behavior
+Date:   Mon, 15 May 2023 12:12:15 +0200
+Message-Id: <20230510-dt-resv-bottom-up-v1-0-3bf68873dbed@gerhold.net>
 MIME-Version: 1.0
-References: <1296c4d691bba057291246f067c191ef8a88531c.1680667933.git.fthain@linux-m68k.org>
- <CAMuHMdXLsnfQ4XhJiuE54BjGaCMAxvzOR+GGB9iFD8pYXprfxQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdXLsnfQ4XhJiuE54BjGaCMAxvzOR+GGB9iFD8pYXprfxQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 15 May 2023 12:11:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWSYDUOy0CSrRcv5-R8rg6EdXMaG5SHiTcYuaNa7K5e1Q@mail.gmail.com>
-Message-ID: <CAMuHMdWSYDUOy0CSrRcv5-R8rg6EdXMaG5SHiTcYuaNa7K5e1Q@mail.gmail.com>
-Subject: Re: [PATCH v4] nubus: Don't list slot resources by default
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Brad Boyer <flar@allandria.com>, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH8FYmQC/x2NQQrDIBAAvxL23AW11IZ+pfSgcW32EA27NhRC/
+ l7T4zAMs4OSMCk8hh2ENlaupYO9DDDNobwJOXUGZ9zV3KzB1FBIN4y1tbrgZ0U/prvN2Xs3Zuh
+ dDEoYJZRpPsslaCM5xSqU+fufPV/H8QMeIu6gfAAAAA==
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, devicetree-spec@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Finn,
+Provide more control about the allocation behavior for dynamically 
+allocated reserved memory by adding a "alloc-bottom-up" and 
+"alloc-top-down" option and by making the allocation order 
+deterministic.
 
-On Mon, May 15, 2023 at 11:44 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> On Wed, Apr 5, 2023 at 6:19 AM Finn Thain <fthain@linux-m68k.org> wrote:
-> > Some Nubus card ROMs contain many slot resources. A single Radius video
-> > card produced well over a thousand entries under /proc/bus/nubus/.
-> > Populating /proc/bus/nubus/ on a slow machine with several such cards
-> > installed takes long enough that the user may think that the system is
-> > wedged. All those procfs entries also consume significant RAM though
-> > they are not normally needed (except by developers).
-> > Omit these resources from /proc/bus/nubus/ by default and add a kernel
-> > parameter to enable them when needed.
-> > On the test machine, this saved 300 kB and 10 seconds.
-> >
-> > Cc: Brad Boyer <flar@allandria.com>
-> > Tested-by: Stan Johnson <userm57@yahoo.com>
-> > Signed-off-by: Finn Thain <fthain@linux-m68k.org>
-> > ---
-> > Changed since v3:
-> >  - Better commentary.
-> > Changed since v2:
-> >  - Added commentary.
-> >  - Moved declaration to nubus.h.
-> > Changed since v1:
-> >  - Expanded to cover all slot resources in procfs.
->
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> i.e. will queue in the m68k for-v6.5 branch.
+The motivation for this patch series are the many different reserved 
+firmware regions on Qualcomm platforms. Currently it is often necessary 
+to duplicate them into each board DT, because minor differences for 
+some of the firmware regions (e.g. the firmware size) requires shifting
+the base address of all following firmware regions as well.
 
-Upon second look, "populate_procfs" is too generic for a global
-variable.  Please add a "nubus_"-prefix, and use module_param_named()
-instead.
+I propose describing the actual requirements (size, alignment, 
+alloc-ranges) instead and allocating the reserved regions at runtime. 
+This allows defining only the actual device-specific part in the board 
+DT and having everything else shared in the SoC.dtsi.
 
-Gr{oetje,eeting}s,
+The series starts with two minor additions to the of_reserved_mem code. 
+The last two patches are examples that are meant to show the motivation
+more clearly for the MSM8916 SoC. PATCH 4/5 shows the current (static) 
+approach, then PATCH 5/5 switches to the dynamic allocation based on
+the first 3 patches.
 
-                        Geert
+If the first 3 patches are accepted I would send the full MSM8916 DT
+changes in a separate series.
 
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+Stephan Gerhold (5):
+      dt-bindings: reserved-memory: Add alloc-{bottom-up,top-down}
+      of: reserved_mem: Implement alloc-{bottom-up,top-down}
+      of: reserved_mem: Use stable allocation order
+      [RFC] arm64: dts: qcom: msm8916: Enable modem on two phones
+      [RFC] arm64: dts: qcom: msm8916: Reserve firmware memory dynamically
+
+ .../bindings/reserved-memory/reserved-memory.yaml  | 39 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dts           | 13 +++++++
+ .../boot/dts/qcom/msm8916-longcheer-l8150.dts      | 31 ++++++++++++++--
+ .../boot/dts/qcom/msm8916-samsung-serranove.dts    | 21 +++++++++++
+ arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi          | 29 ++++++++-------
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              | 42 ++++++++++++++++------
+ drivers/of/of_reserved_mem.c                       | 14 +++++++-
+ 7 files changed, 163 insertions(+), 26 deletions(-)
+---
+base-commit: 715abedee4cd660ad390659aefa7482f05275bbd
+change-id: 20230510-dt-resv-bottom-up-68d71ff6628f
+
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Stephan Gerhold <stephan@gerhold.net>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
