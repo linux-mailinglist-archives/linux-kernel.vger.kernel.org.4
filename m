@@ -2,121 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C995702EA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC78702EAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjEONru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S233580AbjEONtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjEONrt (ORCPT
+        with ESMTP id S232128AbjEONtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:47:49 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD1119BA;
-        Mon, 15 May 2023 06:47:47 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id C49868475E;
-        Mon, 15 May 2023 15:47:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1684158466;
-        bh=WVwn+9dAXYd/CF585ou76WlhqyT9xY6kYSiNbeDUwAw=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=E2cjuQIl3TcpV7aPoE+0DBLy5UJf5S02FxX34f03IC2C2t0vq4Bw+6Uo8FgQdVb2E
-         RajAQMmRmQaCwzhJCTuwmCMFptE0eTYBmQ/XF9Sy4bvb3LUUgrULzwjIlk2AGRLgqM
-         5MOfV0p9mrLwS+1OBNV6lJ0PrgPelrVLeEqmM4othMsxrM99gY4Ll/MMDOmiD9mxDI
-         4czMV6IRjM7MFb+Lo47x2bXSnx/xRJhfB5elpNAoAGGgmeeQhIvHNpOk3HSTOwhJXs
-         8kasOsFLsBZqn6RpOLDD33SvmTR/yDpKMvOoysQVKEAgUW7NVRDh5TKb5EFax+RFIc
-         SU8y1ewbz+sxg==
-Message-ID: <601bd136-ddae-2889-0e63-5f62484ec849@denx.de>
-Date:   Mon, 15 May 2023 15:47:45 +0200
+        Mon, 15 May 2023 09:49:36 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF8A10F1;
+        Mon, 15 May 2023 06:49:34 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QKghn13qDz4f3nTp;
+        Mon, 15 May 2023 21:49:29 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgCnD7NoOGJkNcUBJg--.7104S4;
+        Mon, 15 May 2023 21:49:30 +0800 (CST)
+From:   linan666@huaweicloud.com
+To:     song@kernel.org, neilb@suse.de, Rob.Becker@riverbed.com
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
+        houtao1@huawei.com, yangerkun@huawei.com
+Subject: [PATCH OLK-5.10 v3 0/4] md: bugfix of writing raid sysfs
+Date:   Mon, 15 May 2023 21:48:04 +0800
+Message-Id: <20230515134808.3936750-1-linan666@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: usb: usb251xb: correct swap-dx-lanes type to
- uint32
-Content-Language: en-US
-To:     mike.looijmans@topic.nl,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Richard Leitner <richard.leitner@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230515103337.130607-1-krzysztof.kozlowski@linaro.org>
- <9b62a0db-1374-2c89-5ea3-286467bd1e4e@denx.de>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.ed9c8f5a-900b-42eb-a8c2-543ccf3145e3@emailsignatures365.codetwo.com>
- <da66656e-ddd6-99cf-41ee-d6b2d318bdff@topic.nl>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <da66656e-ddd6-99cf-41ee-d6b2d318bdff@topic.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgCnD7NoOGJkNcUBJg--.7104S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4kZF17WF4ktr1ktFWrKrg_yoWDXrcEqF
+        W0qa45tr1xXFW3JasrurnxArWUCa1jg3ZrJa1DtF4avw17Zry0qr40yrs5XF4rXrZ2vF15
+        AryxCr18ArnayjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        x4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14
+        v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02
+        628vn2kIc2xKxwAKzVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvf
+        C2KfnxnUUI43ZEXa7IU1kpnJUUUUU==
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 15:17, mike.looijmans@topic.nl wrote:
-> See below...
-> 
-> Met vriendelijke groet / kind regards,
-> 
-> Mike Looijmans
-> System Expert
-> 
-> 
-> TOPIC Embedded Products B.V.
-> Materiaalweg 4, 5681 RJ Best
-> The Netherlands
-> 
-> T: +31 (0) 499 33 69 69
-> E: mike.looijmans@topicproducts.com
-> W: www.topic.nl
+From: Li Nan <linan122@huawei.com>
 
-Can you please drop this part next time ?
+The patch series fix the bug of writing raid sysfs.
 
-> Please consider the environment before printing this e-mail
-> On 15-05-2023 14:55, Marek Vasut wrote:
->> On 5/15/23 12:33, Krzysztof Kozlowski wrote: diff --git 
->> a/Documentation/devicetree/bindings/usb/usb251xb.yaml 
->> b/Documentation/devicetree/bindings/usb/usb251xb.yaml
->>> index 4d1530816817..ac5b99710332 100644
->>> --- a/Documentation/devicetree/bindings/usb/usb251xb.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/usb251xb.yaml
->>> @@ -231,7 +231,7 @@ properties:
->>>         power-on sequence to a port until the port has adequate power.
->>>       swap-dx-lanes:
->>> -    $ref: /schemas/types.yaml#/definitions/uint8-array
->>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>>       description: |
->>>         Specifies the ports which will swap the differential-pair 
->>> (D+/D-),
->>>         default is not-swapped.
->>
->> Would it make more sense to update the driver instead ? I doubt you 
->> could have more than 256 ports on this device after all.
-> 
-> 
-> I guess there's a bunch of devicetrees already out there using the 
-> (misdocumented) 32-bit array binding, they'd break in a bad way...
+Changes in v2:
+ - in patch 1, move check out of md_bitmap_checkpage().
+ - in patch 2, use div64_u64() and DIV64_U64_ROUND_UP() instead of directly
+   '/', and chang old_delay/old_delay to unsigned int.
+ - in patch 4, use 'goto' to make changes more readable.
 
-I think it is the other way around -- if the binding was documented as 
-u8, then the existing DTs should use the u8 type if they are compliant 
-to the binding document.
+Changes in v2:
+ - add patch "md/raid10: optimize check_decay_read_errors()".
+ - in patch 2, return ret-value of strict_strtoul_scaled if error occurs.
+ - in patch 3, optimize format.
 
-I see one board in next which uses this property and sets it to 0 , so 
-this one is not affected either way:
-arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dts: 
-swap-dx-lanes = <0>;
+Li Nan (4):
+  md/raid10: fix slab-out-of-bounds in md_bitmap_get_counter
+  md/raid10: fix overflow in safe_delay_store
+  md/raid10: fix wrong setting of max_corr_read_errors
+  md/raid10: optimize check_decay_read_errors()
+
+ drivers/md/md-bitmap.c | 17 ++++-----
+ drivers/md/md.c        | 78 ++++++++++++++++++++++++++----------------
+ drivers/md/raid10.c    | 41 +++++++++++++---------
+ 3 files changed, 82 insertions(+), 54 deletions(-)
+
+-- 
+2.31.1
 
