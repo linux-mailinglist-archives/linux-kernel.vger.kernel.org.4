@@ -2,118 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50970702BE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DA1702BEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241093AbjEOLza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S240564AbjEOLzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241309AbjEOLzO (ORCPT
+        with ESMTP id S241151AbjEOLzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:55:14 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A35A2D63;
-        Mon, 15 May 2023 04:44:29 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E0C8D66031D7;
-        Mon, 15 May 2023 12:44:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684151067;
-        bh=rDyvSJh2ELejvMz6JJ1HfRpjB8o4ib0qqoQwRrpvqj4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WTYBOhcjSLYsGnY9G9lV204YnWZ8jpu0eh800cs4me6vSP5bLI5SHZt+66bdNDhOa
-         /affCIm0aFqN1v5KeAUt9br+lVC0fHsVVK4AS1KZOJ1wsEdjS3xVlBa+cyPQF1Fus4
-         atY6l+7mqaa0blZL/RCDQWN971SUaym5vYyITXCIbxU/QdwfoFeGNEIcrJSv0mJGKG
-         hUL18PnvqnezQRcOxHJhjJCuUf8W+r3uEhZoyJdgeSemWqtU4uGn77S7jHEWUQbk0+
-         4cbyOB9fP3OawQyvm3KKDRxz7ynNvmkqeN27ouDTE90RU5VxOKy4fquXFdu9qf58YZ
-         I50NfCyBgRTDg==
-Message-ID: <ff7292f0-9055-1787-2543-e219fe30dddf@collabora.com>
-Date:   Mon, 15 May 2023 13:44:24 +0200
+        Mon, 15 May 2023 07:55:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132472D78
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 04:46:25 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FBbsdi020591;
+        Mon, 15 May 2023 11:46:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=tlHLvQfS2Lw4oH6NbLNsIrYdEwhzwAdihNFnGyiErJ8=;
+ b=AXMAwOnfN+zQFkNi/DxJmPdiZfNknXmZmgqu07He/kJWsVkt0a+IiacCkya5zpYohpMA
+ MlkEcwoMv2/s9PB1Qv3SryztzSA+S11YibyzEeKDj/IyO2ZBfQEn3NjQ2nsFn4H3AtAK
+ 3EVaKkwD7NyBbu8th6TQ7nJ0Viplws1uyaoOkrpjxKJtn4EnDOsIOVM5W96nHRPQfMLC
+ RDeOSwxRADAGgsA7qYHIdyKjk2jN6BwKPkTYWqBpoJGRViXsvGbwGCvvKUoRYmhoKrGf
+ 789BTPcKX4Rr/TJO7HseLQO8dJNkthcHTh4rp8bP22ynOV2dUwd3XRhaqwANCauYXSje kw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkk9r1tp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 11:46:09 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34FBbotv020160;
+        Mon, 15 May 2023 11:46:09 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkk9r1tn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 11:46:08 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34F9cB68011878;
+        Mon, 15 May 2023 11:46:05 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3qj264rv97-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 11:46:05 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34FBk33U21365154
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 May 2023 11:46:03 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 290212004B;
+        Mon, 15 May 2023 11:46:03 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E29DC20040;
+        Mon, 15 May 2023 11:46:02 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.171.138.156])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 15 May 2023 11:46:02 +0000 (GMT)
+From:   Tobias Huschle <huschle@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [RFC 0/1] sched/fair: Consider asymmetric scheduler groups in load balancer
+Date:   Mon, 15 May 2023 13:46:00 +0200
+Message-Id: <20230515114601.12737-1-huschle@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v7 06/11] arm64: dts: mediatek: set vmc regulator as
- always on
-Content-Language: en-US
-To:     amergnat@baylibre.com, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-References: <20230203-evk-board-support-v7-0-98cbdfac656e@baylibre.com>
- <20230203-evk-board-support-v7-6-98cbdfac656e@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230203-evk-board-support-v7-6-98cbdfac656e@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: X6fKw2QlsyZYC5bDBABfUmopguXhi4Re
+X-Proofpoint-ORIG-GUID: QNgqIe5mT4XFrn3-NtQl1SQQj8dDGLG-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_09,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 mlxlogscore=736 bulkscore=0 mlxscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305150100
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/05/23 18:29, amergnat@baylibre.com ha scritto:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> On downstream, we observe that the MSDC IP (used by the emmc, the micro
-> SD card and the WiFi) isn't working properly if the VMC regulator is
-> shutdown.
-> 
-> Make sure it is always on.
+The current load balancer implementation implies that scheduler groups,
+within the same scheduler domain, all host the same number of CPUs. 
 
-I don't understand the power tree of this board: if your VQMMC is VIO18 and
-*not* VMC, why is that required?
+This appears to be valid for non-s390 architectures. Nevertheless, s390
+can actually have scheduler groups of unequal size.
+The current scheduler behavior causes some s390 configs to use SMT
+while some cores are still idle, leading to a performance degredation 
+under certain levels of workload.
 
-The real question is if we're facing one more supply as requirement for newer
-MediaTek SoCs and whether it would be a better idea to add that to the actual
-driver (and/or as a power domain supply!!!) to both better represent the power
-tree and to eventually allow deep power saving states.
+Please refer to the patch's commit message for more details and an
+example. This patch is a proposal on how to integrate the size of
+scheduler groups into the decision process.
 
-Regards,
-Angelo
+This patch is the most basic approach to address this issue and does 
+not claim to be perfect as-is.
 
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> index 752007d0598e..5d69b39c8746 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -137,6 +137,11 @@ &mt6357_pmic {
->   	#interrupt-cells = <2>;
->   };
->   
-> +/* Needed by MSDC IP */
-> +&mt6357_vmc_reg {
-> +	regulator-always-on;
-> +};
-> +
->   &pio {
->   	gpio_keys: gpio-keys-pins {
->   		pins {
-> 
+Other ideas that also proved to address the problem but are more 
+complex but also potentially more precise:
+  1. On scheduler group building, count the number of CPUs within each 
+     group that are first in their sibling mask. This represents the 
+     number of CPUs that can be used before running into SMT. This 
+     should be slightly more accurate than using the full group weight 
+     if the number of available SMT threads per core varies.
+  2. Introduce a new scheduler group classification (smt_busy) in
+     between of fully_busy and has_spare. This classification would  
+     indicate that a group still has spare capacity, but will run 
+     into SMT when using that capacity. This would make the load 
+     balancer prefer groups with fully idle CPUs over ones that are 
+     about to run into SMT.
 
+Feedback would be greatly appreciated.
+
+Tobias Huschle (1):
+  sched/fair: Consider asymmetric scheduler groups in load balancer
+
+ kernel/sched/fair.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
 
