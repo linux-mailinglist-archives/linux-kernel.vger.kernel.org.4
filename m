@@ -2,76 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C31702AED
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B408702AEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240957AbjEOKzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S240970AbjEOKzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240013AbjEOKzf (ORCPT
+        with ESMTP id S229582AbjEOKzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:55:35 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2C710FF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:55:33 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-434706ea450so3967016137.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684148132; x=1686740132;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zl70zTEBArfF6eM/itV88/Ihv7L5dJb+Bq1w/eYn/JY=;
-        b=ByQbNXpRcxoI1h14hMmzXNeum2EXAhJwRQbnuqx4gGgO8ioteDx3+Ww6YNcDfQ5XqG
-         7pQc/qmsjGKxVdySTRwNEF6CZXV0ZiaPVy2w8aiYdmW7DZT+C7GbUJVhPn+6YsuM5M+F
-         +HCPYhTFVhHSvkjpA3eh92zGAQ5R9qst6oELNUWsfc1v5+ErLH/RECy3SEWm+BOoi7DO
-         370C5Rh8WP/CNvQx1CAvq4bcQyLV4DkRKGtiUrysLu40NeWLRwOQokvdcLdZFYnOc60i
-         JzYyzpPJJ92GvNaFdpVKOttGEeQ951NV/Mhw9SWMpOg9E8iYHfMghajcKRpNXi08iVSI
-         eYkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684148132; x=1686740132;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zl70zTEBArfF6eM/itV88/Ihv7L5dJb+Bq1w/eYn/JY=;
-        b=jWv2BxuHjgoVO4f1iRZVWEDGQQCSOmecyD9u4Eg33x/qexZZmXFxh7SeHi+4Yjq11Z
-         qF52XiNkaCEAT2CxpqByXQTcUioqHZTP7Ad5OvLkUeTUCcb5hTlsWUr74TUYHc3YzXFU
-         hkHeBRe/9omUIP/AMeadcjDXCTsjqTZajYZ+vxvXb4+wIIRgOz813J//zvoZCpEQifNG
-         eYMC4N3XbP/iAWI/dU0Q9Ms+JNsNl0nlTYFf9LIAEFTapEq2lU2QblvoA4drN9K6lTBO
-         WD2NRGq51TWEJ4yD2/nfXQtdkCoXaLRxxU7UMUAFop+BpiqrMwbotXHBvtw5X5d2X8JE
-         rE/g==
-X-Gm-Message-State: AC+VfDzSs2LqYzqvnwjWw2Sf/zz4d1gNTRoc9azCq6bNjee2BQJOsjb6
-        OW+x3RVGzLtw4iwWBetonx15OGQchIkX2UqrqFq5zDjNiIOxejPP9VXB5Q==
-X-Google-Smtp-Source: ACHHUZ5Z43/jj5a+Wf14scaZq+2/R6j34GZRFRvk2a/6q0K+1bDEBMgS7mKwQa68VPhh7h4gpLlwNXJosQmtjXnjYL4=
-X-Received: by 2002:a67:f946:0:b0:436:4dda:ee63 with SMTP id
- u6-20020a67f946000000b004364ddaee63mr2369734vsq.0.1684148131970; Mon, 15 May
- 2023 03:55:31 -0700 (PDT)
+        Mon, 15 May 2023 06:55:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394F61727;
+        Mon, 15 May 2023 03:55:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A996662274;
+        Mon, 15 May 2023 10:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CC6C433D2;
+        Mon, 15 May 2023 10:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684148144;
+        bh=wSC2+LZnwvDDwhiHmsHccGqTZjRzjmoqPgnNaz158w0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fmu3fzbqM6t6EoLnisa+XFQxyWh7rmFpB94zXys0vWlqzNblrm5uCHKvkQ3nUoiQB
+         i+9KlUXPrWlBmdoYyFQ6YVPBG5xOGiLZ31ovEwKbIJZAYHQ7H4cw54DXoWDEQFStJk
+         I6VaC7FEm+BWFh6Cirt1N+VT7PnF6KOdTb0qlPdvVK+cUUpbDvYKLUh8Ak9w2y1h1A
+         Vdg/IjsZgWsxQpj867JjNbInfJ5f4afhWzQ9ov8gFI1hxOZEW3D353vfjjtmRYJAna
+         fd/DcuQ4CUbglCLdshJRtG+w5ZEZW59nReWnnHhBxCKkkdue5KajKp2k58glyQkOwY
+         /XJZt6l3K/GUw==
+Date:   Mon, 15 May 2023 11:55:38 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Shengyu Qu <wiagn233@outlook.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com,
+        Martin Botka <martin.botka@somainline.org>
+Subject: Re: [PATCH v3 2/3] mfd: axp20x: Add support for AXP15060 PMIC
+Message-ID: <20230515105538.GJ8963@google.com>
+References: <20230421150816.10513-1-wiagn233@outlook.com>
+ <TY3P286MB261162D57695AC8164ED50E298609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+ <20230426142740.GN50521@google.com>
+ <20230503120759.6fd6a7a9@donnerap.cambridge.arm.com>
+ <19bccb62-b7e0-855d-fb5f-4fd3dde4f6f0@linaro.org>
+ <20230515105229.GI8963@google.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 15 May 2023 16:25:20 +0530
-Message-ID: <CA+G9fYvcXKxGrMLDSS=BV=k+SN7h78+hVOxG5De47tbbXr1WYQ@mail.gmail.com>
-Subject: selftests: x86: mov_ss_trap_64 numbering_64 amx_64 lam_64 failed
-To:     open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Borislav Petkov <bp@alien8.de>,
-        Brian Gerst <brgerst@gmail.com>,
-        Denys Vlasenko <dvlasenk@redhat.com>,
-        Denys Vlasenko <vda.linux@googlemail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230515105229.GI8963@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,68 +65,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following selftests x86 test cases failing
-Unsupported feature can be marked as skipped instead of fail ?
+On Mon, 15 May 2023, Lee Jones wrote:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> On Thu, 04 May 2023, Krzysztof Kozlowski wrote:
+> 
+> > On 03/05/2023 13:07, Andre Przywara wrote:
+> > > On Wed, 26 Apr 2023 15:27:40 +0100
+> > > Lee Jones <lee@kernel.org> wrote:
+> > > 
+> > > Hi Lee,
+> > > 
+> > > I see this patch in Linus' tree, but something must have gone wrong here,
+> > > can you please check? See below ...
+> > > 
+> > >> On Fri, 21 Apr 2023, Shengyu Qu wrote:
+> > >>
+> > >>> The AXP15060 is a PMIC chip produced by X-Powers, and could be connected
+> > >>> via an I2C bus.
+> > >>>
+> > >>> Describe the regmap and the MFD bits, along with the registers exposed
+> > >>> via I2C. Eventually advertise the device using a new compatible string
+> > >>> and add support for power off the system.
+> > >>>
+> > >>> The driver would disable PEK function if IRQ is not configured in device
+> > >>> tree, since some boards (For example, Starfive Visionfive 2) didn't
+> > >>> connect IRQ line of PMIC to SOC.
+> > >>>
+> > >>> GPIO function isn't enabled in this commit, since its configuration
+> > >>> operation is different from any existing AXP PMICs and needs
+> > >>> logic modification on existing driver. GPIO support might come in later
+> > >>> patches.
+> > >>>
+> > >>> ---  
+> > >>
+> > >> You must not use these above the tags or Git will drop them.
+> > >>
+> > >>> Changes since v2:
+> > >>>  - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch
+> > > 
+> > > So this patch was based on the AXP313a series, but I don't see that in
+> > > Linus' tree (or in any of your trees, if I have checked correctly).
+> > > There must have been a conflict, as this [PATCH v3 2/3] diff actually lists
+> > > the axp313a entry in the context lines.
+> > > 
+> > >>>  - Add axp_regulator_only_cells rather than directly using axp806_cells
+> > >>>    for cases that IRQ line isn't connected.
+> > >>>
+> > >>> Changes since v1:
+> > >>>  - Nothing
+> > >>>
+> > >>> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
+> > >>>
+> > >>> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+> > >>> ---  
+> > >>
+> > >> Put change-logs here instead.
+> > >>
+> > >>>  drivers/mfd/axp20x-i2c.c   |   2 +
+> > >>>  drivers/mfd/axp20x.c       | 107 +++++++++++++++++++++++++++++++++++++
+> > >>>  include/linux/mfd/axp20x.h |  85 +++++++++++++++++++++++++++++
+> > >>>  3 files changed, 194 insertions(+)  
+> > >>
+> > >> I manually added the missing tags for this and the DT patch and applied.
+> > > 
+> > > So this patch doesn't list any tags aside from Shengyu's
+> > > Signed-off-by. The patch in Linus' tree list a Reviewed-by: from
+> > > Krzysztof, which I don't see anywhere in the thread, he just reviewed the
+> > > binding patch, AFAICT. 
+> > 
+> > Yep, I never reviewed this.
+> > 
+> > > I see your tentative R-b: on v2, but with the
+> > > request to rebase and resend, which he did with v3. The applied patch
+> > > looks like v3, but not on the base commit this was send against.
+> > > 
+> > > So I am slightly confused, and am also wondering what happened to the
+> > > AXP313a patches? I see the binding patch merged, but not the MFD part,
+> > > even though you replied saying so.
+> > 
+> > Because the patch #1 was broken, see:
+> > https://lore.kernel.org/all/TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+> > 
+> > The SoB and Reviewed-by were after --- and apparently b4 understood it
+> > as cover letter and applied everywhere.
+> > 
+> > Lee,
+> > Do you have the latest b4? If yes, this should be reported as b4 bug,
+> > assuming you used it.
+> 
+> I am using b4, although the version I'm using is quite old (0.9.0).
+> 
+> Also, this was quite some time ago - I have slept since applying this
+> and do not distinctly remember doing so.  Thus, the application of your
+> R-b may well have been a mistake on my part.  I'll keep an eye for such
+> things in the future and if I see (and remember) an issue, I'll report
+> it.
 
- - x86_mov_ss_trap_64 fail
- - x86_syscall_numbering_64 fail
- - x86_amx_64 fail
- - x86_lam_64 fail
+FYI, I just upgraded to 0.12.2.
 
-# selftests: x86: mov_ss_trap_64
-# SS = 0x2b, &SS = 0x0x404188
-# Set up a watchpoint
-# DR0 = 404188, DR1 = 401368, DR7 = 7000a
-# Segmentation fault
-not ok 10 selftests: x86: mov_ss_trap_64 # exit=139
-
-# selftests: x86: syscall_numbering_64
-...
-not ok 16 selftests: x86: syscall_numbering_64 # TIMEOUT 45 seconds
-
-## The default timeout after 45 seconds occurred due to slow qemu-x86_64
-## pass on x86 device and other fast qemu_x86_64.
-
-# selftests: x86: amx_64
-# amx_64: [FAIL] cpuid: no CPU xsave support: Success
-not ok 18 selftests: x86: amx_64 # exit=1
-
-# selftests: x86: lam_64
-# # Unsupported LAM feature!
-not ok 19 selftests: x86: lam_64 # exit=255
-
-
-links,
- - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4-rc2/testrun/16949493/suite/kselftest-x86/tests/
- - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4-rc2/testrun/16949493/suite/kselftest-x86/test/x86_syscall_numbering_64/history/?page=2
-
-
-Steps to reproduce:
-------------
-# To install tuxrun on your system globally:
-# sudo pip3 install -U tuxrun==0.42.0
-#
-# See https://tuxrun.org/ for complete documentation.
-
-tuxrun   \
- --runtime podman   \
- --device qemu-x86_64   \
- --boot-args rw   \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaPptGlD8AJHQHUvVnCbca522/bzImage
-  \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaPptGlD8AJHQHUvVnCbca522/modules.tar.xz
-  \
- --rootfs https://storage.tuxboot.com/debian/bookworm/amd64/rootfs.ext4.xz   \
- --parameters SKIPFILE=skipfile-lkft.yaml   \
- --parameters KSELFTEST=https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaPptGlD8AJHQHUvVnCbca522/kselftest.tar.xz
-  \
- --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
- --tests kselftest-x86   \
- --timeouts boot=15
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Lee Jones [李琼斯]
