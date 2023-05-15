@@ -2,239 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB32C702CC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE663702CC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241884AbjEOMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S241491AbjEOMcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241850AbjEOMbz (ORCPT
+        with ESMTP id S241895AbjEOMcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:31:55 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B6CA6;
-        Mon, 15 May 2023 05:31:45 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f26f437b30so5530778e87.1;
-        Mon, 15 May 2023 05:31:45 -0700 (PDT)
+        Mon, 15 May 2023 08:32:22 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1691719B5
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:31:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684153904; x=1686745904;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e88E9z7u+esby0zMYzqEuy5aHnDBMhH2Rhx6uZVB1BU=;
-        b=HFNUh8E/ySz5xTckxLXqpf19H/mq9XS+9NBz+jonl+N3WeC3BKInzn9v+umto1C2Si
-         g3V9WM7WB4ohFRUV3mLlEwFRaB/5k9/E4tkX7GYvQrqVrrUol5XkL4P0cyuiCbO7J55h
-         Bs4wkcEL6VfLZSmRxQ5RvecN+5yAPszD9u6pKaCjas1RUWCEz4xeY6GgFKu/tRA5WuWh
-         kuwaUxryQWq/sn/V6rXoemlA2ZHYwSXsh/ZuzDwCkMXpy+t6fEzJbmzA1XQU+mY1Tnx0
-         IaSsFG46o41ZUOHTdkvLQkjOMfBzM1E4cl9usXLtX2gNyIK/fNO3xgpxVWbOhbL2tLcR
-         /yMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684153904; x=1686745904;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e88E9z7u+esby0zMYzqEuy5aHnDBMhH2Rhx6uZVB1BU=;
-        b=U7eBGF93UY2vv7/kH6AzuUybtnf6hSyOMCOACDSaMEVY57orb2oU7N6eTHK90xU67V
-         FCgWPOiLQgLHsXAE9px3z+mGBxcdy7VLvuTnol2NbCJHako7O5JFVLCykRLHOakcRzrN
-         xK7Bv+FUxs0Lv/sPcekEEScez7HyfdQPrPQLZvRmVPg6VjIl7UJpDrKdKTZhp4sE+/tq
-         r6p1qOYGCMaiQAqRLlxOjAc9y4+hRyqOayS0N/04+niWv4NRxR0aP9Z5UIqj0Wpkuv0w
-         cIe9GfjFS7AMebmlM+CPRgDuvknqdSrQsK7R7s+B4bmXR1O0/RvTLCSXd/fZce3tqUnc
-         eDRQ==
-X-Gm-Message-State: AC+VfDx681/mEZTCY6dfUUIsYivnnq5WqpknhHFMABrp929fYww5znrw
-        ggk6umK67SogxXt74prOgfc=
-X-Google-Smtp-Source: ACHHUZ75Dxe3VOngy4VuOMLti1AxsaQd7EkVZ10evYoJgIs/cCTxcS6DHNXQi/PuBp9aVFsNA9eMsQ==
-X-Received: by 2002:ac2:4f84:0:b0:4dc:807a:d144 with SMTP id z4-20020ac24f84000000b004dc807ad144mr5288525lfs.39.1684153903501;
-        Mon, 15 May 2023 05:31:43 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id r13-20020ac25a4d000000b004f13f4ec267sm2579494lfn.186.2023.05.15.05.31.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 05:31:43 -0700 (PDT)
-Message-ID: <fbc29a8b-abf0-0021-8d07-d57b4b556ec6@gmail.com>
-Date:   Mon, 15 May 2023 15:31:42 +0300
+  d=axis.com; q=dns/txt; s=axis-central1; t=1684153918;
+  x=1715689918;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Q3j/vgaucZFux9IKrVNv4CGUuQljbpT/9XfdgYNxpIg=;
+  b=Y26Ys/HBP0PUpcy/eth+6vnWt2hIO1K2YnMA0oufV4/BopqWB2CN9A6z
+   k/I17f57tsU1NyUf86zp9RlYGWPQOlxDsZR/rUkwZrZNxoARbYK4PVVOp
+   q91NlaP8zi0gcqCopidFVWm7AlosM6FYY/L/QHp4NsRy2YgPT+Qz1i1to
+   2+oZhu7XLsh/2CJ0m3YjdSieavVwjJRpFDl7HKm8jDxUu6xZe5I7fugT6
+   /hg9sEMwjoBLU7LEadkB9ELc8JAH6h/JSux2fm4XARKxRZB4jNr88Ojgf
+   B/8PzW1+SsfqlpQ0WwRS/roGfo4jiaeSoaTQpiRWn9Z6HSCexMG/e4q/d
+   Q==;
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gO65inD617J+mVwUT2mXA1UkwlJcmpjiqTqoGauDOW/t6N2fojjQSJZRMOug6UowuBrzh6vEhTJ230GLH0cG/YFM710hX2UOyk4YrLztjtD4i28AcvyFTWAuBQQNdxHzbQQAUSlWV7UCZd65TJ9rwhrp7kiglD03c/U/bqoMxYgsx3Nj+Z3efLoWicuZBYvgmIE42dIi42AotN8ggLeK+qqrnCw0XdReyRZ2vBxlk2Ignv31aFtLC8A/OXmsiLz2lifa0rOhjC+NjjlORC0ziI0tE3iuZDt1PQGj0ifRsEV9l5ZzTIwGfcU4aYLuRp+4x/CkG6mq5ixEQhTatNKBcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q3j/vgaucZFux9IKrVNv4CGUuQljbpT/9XfdgYNxpIg=;
+ b=FuHLY9KdwqfIkGE6sorb16daHg0dOHjphqbq0DgRJ2v+OqifODAcMHvlU1auadIMYlLdzcJFYnFkq4LbmvufNTJihS7jqT/Hi05Ix+nMk5F3n1zaH50/VTtCk/CJYu3pT0oukKb8LVfBfnIlXlr5yg+j7dfMY6cpqOUdtl173LidVJ1/BLFWx7V5d2hl8iQkuZX+kxSq7Qwa1cG028BLVjr0kix125pTP3V2fyjOiCDQWzioCnwuITAhTzBq1E2h7GSiHUpgfeqK+Q4oblw9Mv4Xr7cQBGtyid7Ixph70ZQjogISbbJZxWCBXCMun5QoqDNWFHz54mQ54dCwUrjZRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=axis.com; dmarc=pass action=none header.from=axis.com;
+ dkim=pass header.d=axis.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=axis365.onmicrosoft.com; s=selector2-axis365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q3j/vgaucZFux9IKrVNv4CGUuQljbpT/9XfdgYNxpIg=;
+ b=a2PKx9J+gTEogdsQXYSLlRpzBDxz8Zj1e5mUw9SjpXUhhe9fggJVbzPsRFtrnRYUHdgr8CIJDKc1yRizQh7rGGpgsgfCPxMXtKZpDYRr9UP/89OndiZkU/n+GqxjzBHiaIrba8zxksqHUlcQIbwOjIDbrA8XfMkJX61yB4TVndc=
+From:   Vincent Whitchurch <Vincent.Whitchurch@axis.com>
+To:     "hch@lst.de" <hch@lst.de>
+CC:     kernel <kernel@axis.com>,
+        "squashfs-devel@lists.sourceforge.net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        "pliard@google.com" <pliard@google.com>,
+        "phillip@squashfs.org.uk" <phillip@squashfs.org.uk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] squashfs: cache partial compressed blocks
+Thread-Topic: [PATCH v2] squashfs: cache partial compressed blocks
+Thread-Index: AQHZhNRGfYgM+JB/2kmkByB5R8GoYq9bH3EAgAApVQA=
+Date:   Mon, 15 May 2023 12:31:49 +0000
+Message-ID: <031c4d99c2cd9870ca5ed0d7fef809d3f7c31381.camel@axis.com>
+References: <20230510-squashfs-cache-v2-1-42a501a17569@axis.com>
+         <20230515100352.GA24402@lst.de>
+In-Reply-To: <20230515100352.GA24402@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.38.3-1+deb11u1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=axis.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAWPR02MB10280:EE_|PAVPR02MB9306:EE_
+x-ms-office365-filtering-correlation-id: f931fbd7-0aae-4394-eed8-08db55405ac6
+x-ld-processed: 78703d3c-b907-432f-b066-88f7af9ca3af,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: K57n6TbZdqGQb/fgltnBlIg+7Eg+FFhgRW8B5Dfb3FqzdlvhpAsYnnsl5rbhtFB6M5siWYA7EmxaSYi0hZbrvJnBB50SCMI3+F7QudSu4bBoAojnjCQfiV39Y3fjqDdvfd4+0mUIOhADCpLSbJjqBEb7TY+Zj7HmlChWv/RkFnQyH5S9eddnNY0aqYY9sG1VDGUcavkP49Va7zu9Z/MXJLPAXELDYLyf3WgbDXvX2PMbDPjLBlC7+H3/kTaNdG0Ub5latxPwHSZt9MCZEpu7PmRhnS36Yd/PGfCNavhA7s+KsJ5T/9kgXPCp/tYsdYcLfgvhFVzeKRDDEpEGaq2waQpyPRxq0CBPCFkcPvwbqyERfRShukkMrakr8JxPLby6UKURTauwn0O/oApc4FmQ3ePUNteZuioN9cB5pGy7FnjpWnxlD8+fEN8I/zL5i3t1qyfpZIdowV1kmv21eg5ES7F++M/NcQgnBK3zLSknyw6Av/rmFoZfqBhPRl2ODY2+XeHi69zwHTEKYxsEBavu5EDhcRSYPA5tK/+nAPxtoTdL8Byp8yuJ65FPqEmZjvx9W6SaZp4ztHz0wiE6RsGYD8GzJOH5vhh1RM0lVnkmSZahbBOa8Fnk5uO9cH4dEdJo
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWPR02MB10280.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(376002)(136003)(39860400002)(451199021)(38070700005)(86362001)(122000001)(38100700002)(36756003)(6916009)(41300700001)(4326008)(316002)(5660300002)(71200400001)(8936002)(8676002)(54906003)(6512007)(26005)(186003)(6506007)(4744005)(2616005)(2906002)(6486002)(66556008)(66446008)(64756008)(66946007)(66476007)(76116006)(478600001)(91956017)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WTFpendUSnhyZVpNL1RuUFhMNHplWHVxMXk4NGk1UW9IQ3ZsUTNPbS9UbXhU?=
+ =?utf-8?B?Y0l3aXdzdDlpSWkvMkJTZDFHRWZzbEEvbkhTRUhQR2locFpIeStERzcwN1Bq?=
+ =?utf-8?B?dk5FTXBQRGVHRDdNV1hpYmkyRTBXOVVWaWE4VUNSVFF4TWoyRVJxdUlTYzVE?=
+ =?utf-8?B?S05PQUZmUzJlbit4QlZtM2ZlM1V3NW1TWVZtOC80bnN4dmlUdDRKcmRGdW00?=
+ =?utf-8?B?bFdpUmRTb25nQnZENnlCOFdybFplZjlWZWRhQjZsWm5PQ2FsRnRmR3kvNTBv?=
+ =?utf-8?B?N1NrT0RBQzlWSTNvcWlnTnpVVGU3cXVMWW1xQitubEV5Zk9TSFRnZmpzOU1P?=
+ =?utf-8?B?SDJoZEEyRWVDVlBBM1R4c1dNVmlQZjNnYnc5K25SdER4SHZ6UEdmUHNVaEV1?=
+ =?utf-8?B?MzFtcldnSjR4cGR5MFZCc1A5eDJnTkVha0taTXcxa1dFYkNqcWYyVzE2UGU3?=
+ =?utf-8?B?RGtOakZsUVBRNjNjRXRiSHRXRXBWTnlWNkF1K1Q0L1hmSFZJL0NnTEYrZ25s?=
+ =?utf-8?B?VVZ1aVBSMFhyWWp0bXBOUEFMTVV2M2hEVkJWV0djdzBUQjlZRkkvWEJyNVpj?=
+ =?utf-8?B?L08xamQ1S2tEbnhwbEFvMFNBNEx2VFdHTDdQWW0xNDJTUHZNcjQxYy9wdUg3?=
+ =?utf-8?B?aEhYRkVFZ29IOXJsZC9pRno2OTRSekc1R3RqRy9ZYkhyZ3VYY09pVUttL3J4?=
+ =?utf-8?B?ekxUOWk3QUovU3I4R2ZLbXpwOUdjdHg3NWVibFRCeUVxa2pUd3JtR3VndHJj?=
+ =?utf-8?B?MXBrNmMwMjhjYjdSZXNmNmszTW94L1htdVZ1bVdvMUtvcWFUOGt1bEdiV2RM?=
+ =?utf-8?B?ampIaGZ2OHJPLzBVdW5iTEhzNzEyRlNFNkFucFMvbHRET1MvK3E2MkVmWWVo?=
+ =?utf-8?B?TlJRU1RIR3ExMjJsb0o1eVhsVU9sNzhxS01UdHE5STNHU1JvQXVBOWg3Wjgv?=
+ =?utf-8?B?RVpta0V0V21lN3BLdFA0TzBnV2dDVnZrT3F4c1k1QzZtTXh2NEV2MDRCOW00?=
+ =?utf-8?B?ZXhpYmJmTHF2VWljWHBUeGtZb3ZBV2x6ZHRSUldaWnNrc2pLZUk1Y3o2VXdm?=
+ =?utf-8?B?OTNEU2ZZOU5jWDh1QVNMYU55NlVqUksyNmdhYStScVAvcEcyOVhHbmIrUHR1?=
+ =?utf-8?B?UHYwY3kxcHJIakRsY2FnSHQxSjVlM0VGTWpQbjFTMFIrZkRSUU5QQnVFOVJF?=
+ =?utf-8?B?UGpLU3pKTlZ1bktqQzhpMUpLdkdYekpZQTJHM0MxL0NXSUFQaTdMZmFhRkdE?=
+ =?utf-8?B?a04zNUtkREFiS1lBRjRnS3BZcmVCOGk0dnpGN2xIcDIwWkMzeVVvbEY1bmtS?=
+ =?utf-8?B?RDBVNlRkcUlsdDJ5TWhUOG5rU1JQOTArOHlKaVpqQTVmSEVoQUJ3OEhPRXQr?=
+ =?utf-8?B?cGdGRnZYVnFrYmV6NitmbkY3RkRCQUxWa3dlUkZnNGVSNGU2RmpXWGlUTmFv?=
+ =?utf-8?B?WnZkOEgvU2tsc0tXbVI0QmZJTGNxZkhXL1lwR2tkNGdCWDlLb2RSc3h5Q0JI?=
+ =?utf-8?B?REJMemRxODJKZ201WVJLQzVMZ0pyNlgvWVQ0elk3UUFIUTY1K1VOSWZDNG82?=
+ =?utf-8?B?TGUxeUhpZ2V3UTBPRDZCMEtDUnB6UlFqaDgzQzlXd3NsdG1IenlTcEZOUnZy?=
+ =?utf-8?B?c1J0MjdjWTRXUnJzMVEvdll5MitNeTFtTTg4V3ZtMHhVcUE5dUpCSXZmVWZq?=
+ =?utf-8?B?OGhrY3o5SFZLUm54cERaa3k5ajdiRC9GZmFZZEkvU280SzEzZ0VIdzk1bkhR?=
+ =?utf-8?B?djAyTmtLUDhBcm5hcGpGVldnMXAzM1NLYUV1bVNLNVVVNWJVMUZMU2xOaisz?=
+ =?utf-8?B?SnAzakRsRjdWQWFrY3YrTEk1eHVjZTdiUFdmeFFuM1VaYTNvZTNJRTdJTkdn?=
+ =?utf-8?B?UHkvWDdiSnpqaFNnL0ZIS2l2dUxWMmQ0R2ViMFZ1YmdEejZJRE1adFJOMldE?=
+ =?utf-8?B?UWxhUFU2dXdxVTQ5cDhMZE9WRW1YQlk4ZlcxZUpwdHFneUJReWVwRWRnbVd6?=
+ =?utf-8?B?Mzd1OGpON3d2T1YrdU9pRy93M0JDVTgzSUNuT3ArTFRiRzFVVzlmRTlVSlhV?=
+ =?utf-8?B?bUV5Wkc2R0dQWVcrZWo2aGluMVJ6ekxvdjdMWVpZQkx3Z3haUGdoWk1jb0JM?=
+ =?utf-8?Q?TFmiZg1yTkRLhJK5CHA1Gy3p1?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <863517A60DA9274093C082E62F598291@eurprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1683105758.git.mazziesaccount@gmail.com>
- <6d1e37f95dd039d9c96a992b1855fd193bdded40.1683105758.git.mazziesaccount@gmail.com>
- <20230507155434.3d05daa5@jic23-huawei>
- <dca5df2f-b7c0-b5af-f374-7cc5ef854cdb@gmail.com>
- <20230513185236.39bbface@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v4 4/5] iio: light: ROHM BU27008 color sensor
-In-Reply-To: <20230513185236.39bbface@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAWPR02MB10280.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f931fbd7-0aae-4394-eed8-08db55405ac6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 12:31:49.2304
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nM7+tBS02r7WB/T/9C1eIWdhel+1e1Nr6ipQshjFSDPK2V2T12K9y5KCACObZ/96
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR02MB9306
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/23 20:52, Jonathan Cameron wrote:
-> On Mon, 8 May 2023 09:32:28 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
->> Hi Jonathan,
->>
->> On 5/7/23 17:54, Jonathan Cameron wrote:
->>> On Wed, 3 May 2023 12:50:14 +0300
->>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->>>    
->>>> The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
->>>> and IR) with four configurable channels. Red and green being always
->>>> available and two out of the rest three (blue, clear, IR) can be
->>>> selected to be simultaneously measured. Typical application is adjusting
->>>> LCD backlight of TVs, mobile phones and tablet PCs.
->>>>
->>>> Add initial support for the ROHM BU27008 color sensor.
->>>>    - raw_read() of RGB and clear channels
->>>>    - triggered buffer w/ DRDY interrtupt
->>>>
->>>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>>>   
->>> Mostly stuff that you asked about in response to earlier version but
->>> which I hadn't replied to until today.
->>>
->>> Upshot, don't need the manual irq handling in here.
->>>
->>> Whilst you aren't setting IRQF_ONESHOT for the pollfunc side of the trigger
->>> (the downstream IRQ / IRQ thread) the IIO utility functions are.
->>
->> I tried doing:
->>
->> static int bu27008_setup_trigger(struct bu27008_data *data, struct
->> iio_dev *idev)
->> {
->> 	struct iio_trigger *itrig;
->> 	char *name;
->> 	int ret;
->>
->> 	ret = devm_iio_triggered_buffer_setup(data->dev, idev,
->> 					      &iio_pollfunc_store_time,
->> 					      bu27008_trigger_handler,
->> 					      &bu27008_buffer_ops);
->> 	if (ret)
->> 		return dev_err_probe(data->dev, ret,
->> 			     "iio_triggered_buffer_setup_ext FAIL\n");
->>
->> 	itrig = devm_iio_trigger_alloc(data->dev, "%sdata-rdy-dev%d",
->> 				       idev->name, iio_device_id(idev));
->> 	if (!itrig)
->> 		return -ENOMEM;
->>
->> 	data->trig = itrig;
->>
->> 	itrig->ops = &bu27008_trigger_ops;
->> 	iio_trigger_set_drvdata(itrig, data);
->>
->> 	name = devm_kasprintf(data->dev, GFP_KERNEL, "%s-bu27008",
->> 			      dev_name(data->dev));
->>
->> 	ret = devm_request_irq(data->dev, data->irq,
->> 				/* No IRQ disabling */
->> 			       &iio_trigger_generic_data_rdy_poll,
->> 			       0, name, itrig);
->> 	if (ret)
->> 		return dev_err_probe(data->dev, ret, "Could not request IRQ\n");
->>
->> 	ret = devm_iio_trigger_register(data->dev, itrig);
->> 	if (ret)
->> 		return dev_err_probe(data->dev, ret,
->> 				     "Trigger registration failed\n");
->>
->> 	/* set default trigger */
->> 	idev->trig = iio_trigger_get(itrig);
->>
->> 	return 0;
->> }
->>
->> It seems to me we get IRQ storm out of it, bu27008_trigger_handler never
->> being called. My assumption is that as soon as the IRQ handling code
->> exits the iio_trigger_generic_data_rdy_poll, it re-enables the IRQ - and
->> because we have level active IRQ and because the
->> bu27008_trigger_handler() has not yet had a chance to read the VALID bit
->> which restores the IRQ-line - we will immediately enter back to the IRQ
->> handling.
-> 
-> Ah. I'd miss understood what was going on here. I thought we were talking
-> race conditions only - not a level interrupt. Sorry for confusion / being
-> half asleep. If it has an Ack like this I'd argue this is really an edge
-> interrupt but that would require a guaranteed drop in the signal.
-
-Yes. A failure to detect the edge (and skip acking) would leave the IRQ 
-no longer working. I think we have both seen some examples of that in 
-the past ;)
-
-> I am assuming the sensor merrily carries on grabbing data, whether or
-> not anyone reads it
-
-This is also my understanding.
-
-> and so if we treated this as an edge interrupt then
-> the clear to set cycle could be very short (and hence not detected).
-> If it instead doesn't read new data until previous has been read, then things
-> are much simpler.
-
-I think this is not how BU27008 works.
-
-I think we could probably go on with edge IRQs and cook-up some "re-read 
-the VALID-bit again after the IRQ is for sure enabled to ensure the IRQ 
-does not go unasserted" - mechanism, which would work on 99.99% of the 
-cases. Problem is that some device always handles the 10000th 
-measurement ;) To tell the truth, I never really thought of that.
-
-> Hmm. How to make this work cleanly assuming it's case 1. It might be that your
-> current approach is the best though it would be nice to do something in the
-> IIO code (with risk of breaking everyone  :()
-
-I didn't check if this would be doable.
-
-   I don't think we can though
-> as we have no way from the trigger implementation side to know if we might
-> get threaded interrupt handling or not on the downstream side.
-> 
-> We have reference counting to reenable a trigger that actually has a hardware
-> mask at the device end when all consumers are done - that should be used for
-> the reenable, not do it in the pollfunc handler.  As it's a level interrupt
-> you avoid need to do a bonus read in there I think (sometimes that's necessary
-> because of an edge trigger and a slow read back on a possible unrelated device).
-> 
-> The subtle difference between IRQF_ONESHOT and irq_disable is one uses
-> the irq_mask / unmask callbacks on the irq chip and the other is using
-> the enable / disable ones.  That may make no practical difference - I'm not
-> entirely sure.  A quick glance at some drivers suggests masking is usually
-> lighter weight as less state is rewrite on reenable.
-> 
-> So in short, move the irq_enable() into the iio_trig->reenable() callback.
-> 
-
-This should be what I did at v5 :) Thanks for the help!
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+T24gTW9uLCAyMDIzLTA1LTE1IGF0IDEyOjAzICswMjAwLCBDaHJpc3RvcGggSGVsbHdpZyB3cm90
+ZToNCj4gT24gRnJpLCBNYXkgMTIsIDIwMjMgYXQgMDM6MTg6MDVQTSArMDIwMCwgVmluY2VudCBX
+aGl0Y2h1cmNoIHdyb3RlOg0KPiA+IMKgc3RhdGljIGludCBzcXVhc2hmc19iaW9fcmVhZChzdHJ1
+Y3Qgc3VwZXJfYmxvY2sgKnNiLCB1NjQgaW5kZXgsIGludCBsZW5ndGgsDQo+ID4gwqAJCQkgICAg
+IHN0cnVjdCBiaW8gKipiaW9wLCBpbnQgKmJsb2NrX29mZnNldCkNCj4gPiDCoHsNCj4gPiDCoAlz
+dHJ1Y3Qgc3F1YXNoZnNfc2JfaW5mbyAqbXNibGsgPSBzYi0+c19mc19pbmZvOw0KPiA+ICsJc3Ry
+dWN0IGlub2RlICpjYWNoZV9pbm9kZSA9IG1zYmxrLT5jYWNoZV9pbm9kZTsNCj4gPiArCXN0cnVj
+dCBhZGRyZXNzX3NwYWNlICpjYWNoZV9tYXBwaW5nID0gY2FjaGVfaW5vZGUgPyBjYWNoZV9pbm9k
+ZS0+aV9tYXBwaW5nIDogTlVMTDsNCj4gDQo+IFVubGVzcyBJJ20gYmFkbHkgbWlzcmVhZGluZyB0
+aGUgc3F1YXNoZnNfZmlsbF9zdXBlciBjaGFuZ2VzLA0KPiBjYWNoZV9pbm9kZSBjYW4ndCBldmVy
+IGJlIE5VTEwgaGVyZSBvciBhbnl3aGVyZSBlbHNlIGluIHRoZSBJL08NCj4gY29kZS4NCg0KSG1t
+LCBpbiB0aGlzIHBhdGNoLCBjYWNoZV9pbm9kZSBpcyBvbmx5IGNyZWF0ZWQgaWYgZGV2Ymxrc2l6
+ZSBpcw0KUEFHRV9TSVpFLCBzbyBpdCBjb3VsZCBiZSBOVUxMIGlmIENPTkZJR19TUVVBU0hGU180
+S19ERVZCTEtfU0laRSBpcyBub3QNCnNldCAob3IgaWYgUEFHRV9TSVpFIGlzIGdyZWF0ZXIgdGhh
+biA0IEtpQiksIHJpZ2h0Pw0KDQpJJ2xsIGZpeCB0aGUgcmVzdCBvZiB5b3VyIGNvbW1lbnRzIGlu
+IGFuIHVwY29taW5nIHYzLiAgVGhhbmsgeW91IGZvciB0aGUNCnJldmlldy4NCg0K
