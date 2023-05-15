@@ -2,174 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9BE7022FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 06:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954E6702305
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 06:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236152AbjEOEpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 00:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S229590AbjEOEq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 00:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjEOEpr (ORCPT
+        with ESMTP id S238231AbjEOEqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 00:45:47 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2074.outbound.protection.outlook.com [40.107.12.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76136213D;
-        Sun, 14 May 2023 21:45:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a7kR+N3GXqfmhte1hdOJDGJtUfihquU/A1JnAOpy5uRc6RY84wwR8MEIP20R9VgCkUEarZlwGKQgM4ytil7oVStXxYBRMhBk0LgbybQWwX9bj78zBYXZRbLTNS7ULhfm/rO7zYPkVK3LOyxq4lNri2QxYBr8WClz4ISyM+QEAvaJN09Gbxmlg4cwGcY1LhdxoKIwZM+QuAYke3+NUQs4pl0uDQN5H/Jqb6sBZD+ekDu8s9cVbRP3O/OmZrmnebwXGAO69GD1AfBC5FcstYwTlT6lr/BPNjC6HMV6lhEVh6tKjYSLltG/ifjl51YnG/am8bWWiEEePRU61/O7y9oelg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QgUk3IEYYsvp3eXY2tKFgzDR65XgteOF691S2mk/VVc=;
- b=e+aTgvEpcJlWRe6yry+QBVvUqL62GjVw1dswf9hXmmg6eoXc1KVYHa4rzotdOjZg6tuyze0YCF1ay8CEhjDOJoyW9jpb82Qt5/7hj7nT4CqbJAGvgMfkBnKpTXeEUGe3W5sHGV2gn8hO6bI0dmlqG1bgXgKC1gkxlaqMvZZ12Z7a9K4W84V82mzxxgn4aebF5D6fvTMNbnMkNmnn/P84pitCHJ0sup3yokCFmF4xf/GF8DwINbNY+8PX3mjCuEsWF7zQfqD8JQ6JCSMsVFjqRlJC/7/3GZUDCwmLiPxX3AbKhrNqEKLfKFyMzjaVLKL3RH9WCRGkJFnP5oDg5Bn/Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QgUk3IEYYsvp3eXY2tKFgzDR65XgteOF691S2mk/VVc=;
- b=emNgjpNKKNc6BPTyHrMOJ1FqpQDCMEJwiPUpyzw5Cg9F2krKm3KaX1uH/sn/CqEcPFy7j4zGv/n0eX0hpBxpuefyFU17zZXi33xQzx4OLATdT+SY2PS1Qs7NjCG3UoaqM8NEdQKzSddWW9tWLmOu2b6wtjV+klx0f0dUKfzPWlFDHQgrYAWSwoDzEojDnY1Jf1U1YO73TD+jjyBnvowKenoHdoF36WZL3pFT1Tb3lT52aGOWTxJaIJE7FywjbM6b2lF2R1tPBHI/BomaxuImtaVFnCGDvmHsGhnuGyvtvmaSHkUa4G0mIYgiJEEpYIW3JHGPRnn4iHKmsehY6HA45Q==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB2942.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
- 2023 04:45:42 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::447b:6135:3337:d243]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::447b:6135:3337:d243%3]) with mapi id 15.20.6387.030; Mon, 15 May 2023
- 04:45:42 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-CC:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Thread-Topic: [PATCH 07/32] mm: Bring back vmalloc_exec
-Thread-Index: AQHZgpdUsgx7flCbUE+3jXS45Hg7zK9SaWKAgAAHaoCABcbjAIAB6dOAgABVD4CAAFR0gA==
-Date:   Mon, 15 May 2023 04:45:42 +0000
-Message-ID: <6f049870-1684-1875-3cdc-73e1323ffdb0@csgroup.eu>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZFqxEWqD19eHe353@infradead.org> <ZFq3SdSBJ_LWsOgd@murray>
- <8f76b8c2-f59d-43fc-9613-bb094e53fb16@lucifer.local>
- <ce5125be-464e-44ad-8d9e-7c818f794db1@csgroup.eu>
- <ZGFyHY6pH9CU4fzf@moria.home.lan>
-In-Reply-To: <ZGFyHY6pH9CU4fzf@moria.home.lan>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAZP264MB2942:EE_
-x-ms-office365-filtering-correlation-id: 21d78b4d-01d8-4f93-5fcd-08db54ff3d29
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +lfKy2T2pH1+24qQcLF2y/FLUNR+YbuoZ+HD/ggpPd0jxLkKrMDLyLDbbnzDCmDg1BXx1LwTBOrcUw3HslJyTq0AqKPiSkn9QOb2En96VsxrW0udSAgqa/QfvBEKVMRyxZe7QZg8douDszFRnll1FPtb9LiVCMn1r/SC6fe46xme24NYO84h6HNnHtAhmBqeZzfCaD/AbKBlfBIwDFBWZJ9vu7iLsLnBt8nXD9KOkWFJqJY9dBWH2C27lN9iKVz5znGDi69YJab4k/mvrZJRX6HNYlbZzgAkXo4+1da3NEozf7kt251Y9tGn1E4jP2+fqyG1bixmE4b3ckoC7vf1bgVMOPeqNOdtt8AIJkHkfsynDU2iLw5UU3mmdkx8XFdGHbxZkk6DVx7g+QkbnD2pmGGX0bBJDHJU/9Xa40TspU8E0ROjkEKDJDjfYZVehluf0DMDMo3IcNpflIKgoFq8uOjCMpo6kgQh306tsJpHNWay4fD+8f38fISBWW4Q51A2vSU1SUOh7f+YgjUSbJRhlo1hTwIXhXN2ZsOS/Un5HB8BzbF6+pv90EUQwBXHbKrT6uZieqhafaUsbcQ4PBgEkMoYsTQxeS4wqWQ6PZCXCnYG6l+6fxrqqH1dIc73QhBggam6Y3uEMicwMD1N78lQjF0slGmOP7GHpjan8dVedXEia/5liOPew0aB5eU3KP5s
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(376002)(396003)(366004)(346002)(136003)(451199021)(31686004)(83380400001)(66574015)(4326008)(6916009)(36756003)(38100700002)(122000001)(41300700001)(38070700005)(316002)(6512007)(6506007)(6486002)(26005)(478600001)(66946007)(66446008)(66556008)(64756008)(66476007)(2616005)(91956017)(76116006)(8676002)(8936002)(7416002)(44832011)(31696002)(5660300002)(2906002)(54906003)(86362001)(186003)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bjllUHpQNXU0MWFMbUE3bHRjY3Bad3d4L0RNOVVjdk1FaUxvazB6L1ZSTG50?=
- =?utf-8?B?VnJwaEp3U2NVS1BLS0xFTWFlZHc2K3hKRy94b3BUSUUwM2NzajlTQzBncUFx?=
- =?utf-8?B?Z3cwOTg2S1ZFUXVaYnRDckN1MEtHeC9ocG1qZUltaDRpS2VHTFhjU1V1UUFM?=
- =?utf-8?B?WDlrTk5MamhPUWovMWJvY3pGWWxVeG1vcFhneDhCMmEwcFROM1YzSXpLaDNu?=
- =?utf-8?B?cENid2x4a2JoZlU5TVlwVm81UmRtcDBzYmVkbkpGUGxObWc3d0VTNGJFQjVD?=
- =?utf-8?B?Sm1mbkRnQU5zenFzZ2E0ZTlheGxYZjA3bW96YXhCR050eWhBa2tOdW5LSG0y?=
- =?utf-8?B?cmdodUxpWjBVT3Bqc0srd1c4bEtGcTMyRzZCN3h6Y21SVjZKem5JQlZxWmFS?=
- =?utf-8?B?RVdENFBzVWhxWXk2cSsvSlJlZFJ4WFpQNFY4WjV6eU1rdVJMcHJSY0lseU0x?=
- =?utf-8?B?OTBzNVBOTWxER1oxc0hPNG1uV2EzTnpCRS9wMi9mRzJwM3AvVHRRVCt2RTla?=
- =?utf-8?B?UzdoYVBLelp6MS9ldzdabDh0ODBTcEg5Y2ZGNVM4WjNHakVZeXc2QmZhL3BU?=
- =?utf-8?B?WnVEdzd6M0F5K0ErZlZidnVaRDNvVkYxVU8vQnFTMlhPdkFZN2xYNDBHMmtr?=
- =?utf-8?B?YzllYXFwaUpJWjJZQkFLeGx5RllBbEFqdWYydVFFTVg3T2txVStLY1hwODYw?=
- =?utf-8?B?QVhKcEtrbXIySnhlTld3R09CcEI2aGtzOTdxb0hqb3V5bW44b2VydEF0QVFy?=
- =?utf-8?B?R1N0MVJuQm5Tc2pHdDZjWDhnZXJFTTVacjRNcDlyNlNQNXU0OEU3ejlZenJi?=
- =?utf-8?B?K3lXR0ZRNEFyRUZwWHdZbllicEhJNmJFdEJYOEs3Q1F5TEdNd2tSVUk1bWZi?=
- =?utf-8?B?TGphMFc5Tm1LSE9mV2hIWG5nWVlKc2Zqc2crZWl5ZEU1RmlZSnpiUnJvbUpL?=
- =?utf-8?B?OFc5cDN0dzhXTlJSWTRwNFZUc01GYzRqdzZDaXdBK2FCTG1WMm05V2ZXcFIz?=
- =?utf-8?B?N0NOa3BkSUh6K3owckZ4QXRNcVR0UXFVMzdYdEd4Yno2YnM1UDRkUmtrQ043?=
- =?utf-8?B?R2lwcVhaRXA2MGs3bGFkNmtnakVKZlBneUh2bWNhbHdINGw3OHlsc0FKbnZM?=
- =?utf-8?B?K3RJTzZpOWEyS296SFl3L01LZzBvVXFMaUtYSE5hMVplUEF5Wk5yU2F2WG13?=
- =?utf-8?B?TnFsY1lPWU9GWGN5eHZST1hBQ0dYZFhZRDIzbFcra3FLMHVIdWFPdjhjaGVv?=
- =?utf-8?B?Q1pObXJlMlpwNGJjQktHanNtbVRVVzFScEVQdUk1YXQreXN2VjdBU1kwTTZD?=
- =?utf-8?B?OWRtcFlzS3RBaWlUWDV4WHRIeWxRdzRNSFQrVjJMbWh4MDF6c0w0NGJnVllD?=
- =?utf-8?B?K3ZxTzFXcHlkRGZDMDlMVGlDdzRMM0J3QVBKSmtoTEFiVjc3RGFxNFhaMDVW?=
- =?utf-8?B?dklNS3pkTXkxQzA4SkhkTzMwN3JCaFhJMmJyZXpQMW4rdDVaZDNyY0tmRXh2?=
- =?utf-8?B?Zm84RlFtRjRmbXBRa25MM3loZ0VBcVJrb1ZRWm1CaVRWRGdlbEdmT1MrWWRL?=
- =?utf-8?B?TlJkMktrblFqWGhSS0tOR09Ua21ZUGR5ZEFTSGdBMU8yblpNT0l0aS9LV3My?=
- =?utf-8?B?dmZNakxNZmJ4ZFczOUFnSWJnZ1pQRWV3MHZ4UGNCTEFvZThyemlzMVdGbVFQ?=
- =?utf-8?B?Z2xoQWM4V1NQU3VLdjZRMzNvbnhtMlNPMzQwbjFEZDllaWNxU2NzZndSdmha?=
- =?utf-8?B?QU9wcHF5UVRiK0kwdWZhUW9FNGpYU1BaMkxyY2tSODdjMlNtWlZuWHNIYXA3?=
- =?utf-8?B?Rk9nUzN6RVc0NGxFN1VjS09tU1BPa0JGK2xxNG0xeUIwK3lRVVlTckxvUmo4?=
- =?utf-8?B?NUFORG1jRjRXMEdvYTZqdkNsbUpGQklDelZJMTFaWkdFSzNiU2thbE1YT2p6?=
- =?utf-8?B?b0pVOTVaRUpYclpKNkNSSDUzdFJydFl1R0pxZ2lTNVBCbEhJZ1V3SjBwQkNl?=
- =?utf-8?B?UVB6ZHU5S2M1OUhENTFRWmtGN0Rwb0xsa3VpcDBaTHBDR0htZGJ3WENvTVUy?=
- =?utf-8?B?eHVTRzg3czRpNzJyMmZrUHhDYWEzSG1UZFJKL0s3bVpQUmoyUDFMN25hYUto?=
- =?utf-8?Q?XWx9iPydnK8JEbDy0aolGjdub?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7114471F58A50243B48B069A92668383@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 15 May 2023 00:46:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167362712
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 21:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684125956;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ryX5sovAmXV6c1qawtyVZ+Us+777l7mLCNx8VtBdO6Q=;
+        b=JHoQobCRcz+GtmHM2s7uPt7xiWzxaAp51Eag4HQcTiNKOzgDa3KjOKFW/IBMWUh7eKRC3I
+        uHWv0tnagHpT3wpJXSNSdBZ4nPMu0egSITBtkQhXZhhHLuu3SyP5I91kd5+90BFVWuCu+S
+        9zxc7DFlrXWqFSHSkJE9lYhpgFs0c/k=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-343-sr6QnoBhOgiUwj0zpIhntw-1; Mon, 15 May 2023 00:45:54 -0400
+X-MC-Unique: sr6QnoBhOgiUwj0zpIhntw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-306286b3573so7327540f8f.2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 21:45:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684125954; x=1686717954;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ryX5sovAmXV6c1qawtyVZ+Us+777l7mLCNx8VtBdO6Q=;
+        b=CFqXauBIKzyqJPaAWplqsJNoEjslVVEBFp1ObjNxa1Ji9T1PVHUo79I3TSi2hwKLmC
+         AnAqN67BPCpZ6F/1Itff8bS1BeAExyjuhMysqW5Hsomyegmzoenk5JswtPF6T2XMoDBT
+         UylQjMVLaT8p9vcBTnho5/CLhDhbD3e5WHauNYa5RRdmfppKRzHpFBj8d/LVAXFJvRLj
+         UXYZsAZURWrxYwDqBPBXyInBH5T7APPQOZaiEz0ZCCRe2fx3IqclrE6HbsJKqiltUSGQ
+         VFpCv6NFatNA1cGzu5Ss+1WjsNDxMfHyKQeKByMhclNw8T1Pb1EWcgwM2ZfKvQ/cfypR
+         0ZKA==
+X-Gm-Message-State: AC+VfDx0AEgl5PsnVjd0PPAROZtqvjcEmTuNQXjuP+toeotyOdUcoM2A
+        N8bMDTSt7usEvnJ9xxoA43mq29vwjVQ6AzCAwbrYHV4IehPiUpLcqJsIxw8ingv3KgmBI3t+1UK
+        rC0sp+q4rNn0fcCwxsE+aWnaU
+X-Received: by 2002:a5d:6683:0:b0:301:2452:e4d with SMTP id l3-20020a5d6683000000b0030124520e4dmr23428610wru.46.1684125953903;
+        Sun, 14 May 2023 21:45:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ42y5Y36NSzazTv8MjmNVkJslp/Zk6xu1eJXmwaycyOF+fLj/EzxbUv7iCGkEDR/oCPfHIFIw==
+X-Received: by 2002:a5d:6683:0:b0:301:2452:e4d with SMTP id l3-20020a5d6683000000b0030124520e4dmr23428600wru.46.1684125953545;
+        Sun, 14 May 2023 21:45:53 -0700 (PDT)
+Received: from redhat.com ([2.52.146.3])
+        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003f42bb3a5adsm17946718wmc.4.2023.05.14.21.45.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 21:45:52 -0700 (PDT)
+Date:   Mon, 15 May 2023 00:45:49 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Feng Liu <feliu@nvidia.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Bodong Wang <bodong@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        William Tu <witu@nvidia.com>
+Subject: Re: [PATCH net v6] virtio_net: Fix error unwinding of XDP
+ initialization
+Message-ID: <20230515004542-mutt-send-email-mst@kernel.org>
+References: <20230512151812.1806-1-feliu@nvidia.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21d78b4d-01d8-4f93-5fcd-08db54ff3d29
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 04:45:42.2353
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n9vnrwfNqBRBsVwD6pcf6EejBgogihyUEINxxaxnPdr3OZw1UZd2/OAtlAPJ/bcc2RZB56RlLoQPXu5vnGNBXcgSEiIS6GaJEB+lETML4WE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB2942
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512151812.1806-1-feliu@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE1LzA1LzIwMjMgw6AgMDE6NDMsIEtlbnQgT3ZlcnN0cmVldCBhIMOpY3JpdMKgOg0K
-PiBPbiBTdW4sIE1heSAxNCwgMjAyMyBhdCAwNjozOTowMFBNICswMDAwLCBDaHJpc3RvcGhlIExl
-cm95IHdyb3RlOg0KPj4gSSBhZGRpdGlvbiB0byB0aGF0LCBJIHN0aWxsIGRvbid0IHVuZGVyc3Rh
-bmQgd2h5IHlvdSBicmluZyBiYWNrDQo+PiB2bWFsbG9jX2V4ZWMoKSBpbnN0ZWFkIG9mIHVzaW5n
-IG1vZHVsZV9hbGxvYygpLg0KPj4NCj4+IEFzIHJlbWluZGVkIGluIGEgcHJldmlvdXMgcmVzcG9u
-c2UsIHNvbWUgYXJjaGl0ZWN0dXJlcyBsaWtlIHBvd2VycGMvMzJzDQo+PiBjYW5ub3QgYWxsb2Nh
-dGUgZXhlYyBtZW1vcnkgaW4gdm1hbGxvYyBzcGFjZS4gT24gcG93ZXJwYyB0aGlzIGlzIGJlY2F1
-c2UNCj4+IGV4ZWMgcHJvdGVjdGlvbiBpcyBwZXJmb3JtZWQgb24gMjU2TWJ5dGVzIHNlZ21lbnRz
-IGFuZCB2bWFsbG9jIHNwYWNlIGlzDQo+PiBmbGFnZ2VkIG5vbi1leGVjLiBTb21lIG90aGVyIGFy
-Y2hpdGVjdHVyZXMgaGF2ZSBhIGNvbnN0cmFpbnQgb24gZGlzdGFuY2UNCj4+IGJldHdlZW4ga2Vy
-bmVsIGNvcmUgdGV4dCBhbmQgb3RoZXIgdGV4dC4NCj4+DQo+PiBUb2RheSB5b3UgaGF2ZSBmb3Ig
-aW5zdGFuY2Uga3Byb2JlcyBpbiB0aGUga2VybmVsIHRoYXQgbmVlZCBkeW5hbWljIGV4ZWMNCj4+
-IG1lbW9yeS4gSXQgdXNlcyBtb2R1bGVfYWxsb2MoKSB0byBnZXQgaXQuIE9uIHNvbWUgYXJjaGl0
-ZWN0dXJlcyB5b3UgYWxzbw0KPj4gaGF2ZSBmdHJhY2UgdGhhdCBnZXRzIHNvbWUgZXhlYyBtZW1v
-cnkgd2l0aCBtb2R1bGVfYWxsb2MoKS4NCj4+DQo+PiBTbywgSSBzdGlsbCBkb24ndCB1bmRlcnN0
-YW5kIHdoeSB5b3UgY2Fubm90IHVzZSBtb2R1bGVfYWxsb2MoKSBhbmQgbmVlZA0KPj4gdm1hbGxv
-Y19leGVjKCkgaW5zdGVhZC4NCj4gDQo+IEJlY2F1c2UgSSBkaWRuJ3Qga25vdyBhYm91dCBpdCA6
-KQ0KPiANCj4gTG9va3MgbGlrZSB0aGF0IGlzIGluZGVlZCB0aGUgYXBwcm9wcmlhdGUgaW50ZXJm
-YWNlIChpZiBhIGJpdCBwb29ybHkNCj4gbmFtZWQpLCBJJ2xsIHN3aXRjaCB0byB1c2luZyB0aGF0
-LCB0aGFua3MuDQo+IA0KPiBJdCdsbCBzdGlsbCBuZWVkIHRvIGJlIGV4cG9ydGVkLCBidXQgaXQg
-bG9va3MgbGlrZSB0aGUgV3xYIGF0dHJpYnV0ZQ0KPiBkaXNjdXNzaW9uIGlzIG5vdCByZWFsbHkg
-Z2VybWFuZSBoZXJlIHNpbmNlIGl0J3Mgd2hhdCBvdGhlciBpbiBrZXJuZWwNCj4gdXNlcnMgYXJl
-IHVzaW5nLCBhbmQgdGhlcmUncyBub3RoaW5nIHBhcnRpY3VsYXJseSBzcGVjaWFsIGFib3V0IGhv
-dw0KPiBiY2FjaGVmcyBpcyB1c2luZyBpdCBjb21wYXJlZCB0byB0aGVtLg0KDQpUaGUgV3xYIHN1
-YmplY3QgaXMgYXBwbGljYWJsZS4NCg0KSWYgeW91IGxvb2sgaW50byBwb3dlcnBjJ3MgbW9kdWxl
-X2FsbG9jKCksIHlvdSdsbCBzZWUgdGhhdCB3aGVuIA0KQ09ORklHX1NUUklDVF9NT0RVTEVfUldY
-IGlzIHNlbGVjdGVkLCBtb2R1bGVfYWxsb2MoKSBhbGxvY2F0ZSANClBBR0VfS0VSTkVMIG1lbW9y
-eS4gSXQgaXMgdGhlbiB1cCB0byB0aGUgY29uc3VtZXIgdG8gY2hhbmdlIGl0IHRvIFJPLVguDQoN
-ClNlZSBmb3IgaW5zdGFuY2UgaW4gYXJjaC9wb3dlcnBjL2tlcm5lbC9rcHJvYmVzLmM6DQoNCnZv
-aWQgKmFsbG9jX2luc25fcGFnZSh2b2lkKQ0Kew0KCXZvaWQgKnBhZ2U7DQoNCglwYWdlID0gbW9k
-dWxlX2FsbG9jKFBBR0VfU0laRSk7DQoJaWYgKCFwYWdlKQ0KCQlyZXR1cm4gTlVMTDsNCg0KCWlm
-IChzdHJpY3RfbW9kdWxlX3J3eF9lbmFibGVkKCkpDQoJCXNldF9tZW1vcnlfcm94KCh1bnNpZ25l
-ZCBsb25nKXBhZ2UsIDEpOw0KDQoJcmV0dXJuIHBhZ2U7DQp9DQoNCg0KQ2hyaXN0b3BoZQ0K
+On Fri, May 12, 2023 at 11:18:12AM -0400, Feng Liu wrote:
+> When initializing XDP in virtnet_open(), some rq xdp initialization
+> may hit an error causing net device open failed. However, previous
+> rqs have already initialized XDP and enabled NAPI, which is not the
+> expected behavior. Need to roll back the previous rq initialization
+> to avoid leaks in error unwinding of init code.
+> 
+> Also extract helper functions of disable and enable queue pairs.
+> Use newly introduced disable helper function in error unwinding and
+> virtnet_close. Use enable helper function in virtnet_open.
+> 
+> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+> Signed-off-by: Feng Liu <feliu@nvidia.com>
+> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+> Reviewed-by: William Tu <witu@nvidia.com>
+
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+> ---
+> v5 -> v6
+> feedbacks from Xuan Zhuo
+> - add disable_delayed_refill and cancel_delayed_work_sync
+> 
+> v4 -> v5
+> feedbacks from Michael S. Tsirkin
+> - rename helper as virtnet_disable_queue_pair
+> - rename helper as virtnet_enable_queue_pair
+> 
+> v3 -> v4
+> feedbacks from Jiri Pirko
+> - Add symmetric helper function virtnet_enable_qp to enable queues.
+> - Error handle:  cleanup current queue pair in virtnet_enable_qp,
+>   and complete the reset queue pairs cleanup in virtnet_open.
+> - Fix coding style.
+> feedbacks from Parav Pandit
+> - Remove redundant debug message and white space.
+> 
+> v2 -> v3
+> feedbacks from Michael S. Tsirkin
+> - Remove redundant comment.
+> 
+> v1 -> v2
+> feedbacks from Michael S. Tsirkin
+> - squash two patches together.
+> 
+> ---
+>  drivers/net/virtio_net.c | 61 +++++++++++++++++++++++++++++-----------
+>  1 file changed, 44 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index a12ae26db0e2..56ca1d270304 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -1868,6 +1868,38 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
+>  	return received;
+>  }
+>  
+> +static void virtnet_disable_queue_pair(struct virtnet_info *vi, int qp_index)
+> +{
+> +	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
+> +	napi_disable(&vi->rq[qp_index].napi);
+> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
+> +}
+> +
+> +static int virtnet_enable_queue_pair(struct virtnet_info *vi, int qp_index)
+> +{
+> +	struct net_device *dev = vi->dev;
+> +	int err;
+> +
+> +	err = xdp_rxq_info_reg(&vi->rq[qp_index].xdp_rxq, dev, qp_index,
+> +			       vi->rq[qp_index].napi.napi_id);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	err = xdp_rxq_info_reg_mem_model(&vi->rq[qp_index].xdp_rxq,
+> +					 MEM_TYPE_PAGE_SHARED, NULL);
+> +	if (err < 0)
+> +		goto err_xdp_reg_mem_model;
+> +
+> +	virtnet_napi_enable(vi->rq[qp_index].vq, &vi->rq[qp_index].napi);
+> +	virtnet_napi_tx_enable(vi, vi->sq[qp_index].vq, &vi->sq[qp_index].napi);
+> +
+> +	return 0;
+> +
+> +err_xdp_reg_mem_model:
+> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
+> +	return err;
+> +}
+> +
+>  static int virtnet_open(struct net_device *dev)
+>  {
+>  	struct virtnet_info *vi = netdev_priv(dev);
+> @@ -1881,22 +1913,20 @@ static int virtnet_open(struct net_device *dev)
+>  			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
+>  				schedule_delayed_work(&vi->refill, 0);
+>  
+> -		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
+> +		err = virtnet_enable_queue_pair(vi, i);
+>  		if (err < 0)
+> -			return err;
+> -
+> -		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
+> -						 MEM_TYPE_PAGE_SHARED, NULL);
+> -		if (err < 0) {
+> -			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+> -			return err;
+> -		}
+> -
+> -		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+> -		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
+> +			goto err_enable_qp;
+>  	}
+>  
+>  	return 0;
+> +
+> +err_enable_qp:
+> +	disable_delayed_refill(vi);
+> +	cancel_delayed_work_sync(&vi->refill);
+> +
+> +	for (i--; i >= 0; i--)
+> +		virtnet_disable_queue_pair(vi, i);
+> +	return err;
+>  }
+>  
+>  static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+> @@ -2305,11 +2335,8 @@ static int virtnet_close(struct net_device *dev)
+>  	/* Make sure refill_work doesn't re-enable napi! */
+>  	cancel_delayed_work_sync(&vi->refill);
+>  
+> -	for (i = 0; i < vi->max_queue_pairs; i++) {
+> -		virtnet_napi_tx_disable(&vi->sq[i].napi);
+> -		napi_disable(&vi->rq[i].napi);
+> -		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+> -	}
+> +	for (i = 0; i < vi->max_queue_pairs; i++)
+> +		virtnet_disable_queue_pair(vi, i);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.37.1 (Apple Git-137.1)
+
