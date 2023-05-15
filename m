@@ -2,142 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930D9703445
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E742703217
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242965AbjEOQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S242498AbjEOQDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242990AbjEOQqg (ORCPT
+        with ESMTP id S242182AbjEOQDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:46:36 -0400
-X-Greylist: delayed 2622 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 May 2023 09:46:30 PDT
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8D25259;
-        Mon, 15 May 2023 09:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=XUIEpNRUXpJvYmFAKwBCCJfgCkzLAHM5z0DC/nHI13A=; b=C
-        OQJj6sqPxX1Q7FxQhjaUUWeXuw3XXan7JNUCzhueLTvMhc5UVRePxj/9FrhWq8xoK/PYs8Qz6OmsS
-        db1EVVcO8JeQ/mCL9KxlCEZB2ew42iYk5ZwNzStoIz1YTCn7Ah3Cchp3zITdcEILi/J9FYpyyEJXx
-        +bbtXKn9wrC1d8zM=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41230 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pyaeU-0003GD-Fw; Mon, 15 May 2023 12:02:23 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lech Perczak <l.perczak@camlintechnologies.com>,
-        =?UTF-8?q?Tomasz=20Mo=C5=84?= <tomasz.mon@camlingroup.com>
-Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 15 May 2023 12:02:07 -0400
-Message-Id: <20230515160206.2801991-1-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 15 May 2023 12:03:16 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999D3E4A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:03:12 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FG2adM005215;
+        Mon, 15 May 2023 11:02:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684166556;
+        bh=Oa6IBatsIaVeBtx9IqnQa720cOdZAC2k9zv9qk3N9Lk=;
+        h=From:To:CC:Subject:Date;
+        b=boe9RsqSyH737gaG1kMrwQlxo4AJG4qxTkrby/Dd2N4gNUiFT1xTNYt1Q9qi5eYO1
+         RbVs41jR0y1dH1ibQ0vHeZotxrAjEIAR5N+8YKEYxPdyhgbiYAzq2sdmpoPRfeSuyS
+         wr9rQqSKdofBI9CWXIdXVQp9nQdqJZHlewZerhH0=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FG2aUY034512
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 15 May 2023 11:02:36 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
+ May 2023 11:02:36 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 15 May 2023 11:02:35 -0500
+Received: from lelv0327.itg.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FG2ZR0029578;
+        Mon, 15 May 2023 11:02:35 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
+Subject: [PATCH 01/10] ARM: Kconfig: move platform selection into its own Kconfig file
+Date:   Mon, 15 May 2023 11:02:25 -0500
+Message-ID: <20230515160234.289631-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [RFC PATCH] Revert "sc16is7xx: Separate GPIOs from modem control lines"
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Mostly just for better organization for now. This matches what is done on
+some other platforms including ARM64. This also lets us start to reduce
+the number of mach- directories that only exist to store the platform
+selection.
 
-This reverts commit 679875d1d8802669590ef4d69b0e7d13207ebd61.
+Start with "Platform selection" and ARCH_VIRT.
 
-Because of this commit, it is no longer possible to use the 16 GPIO
-lines as dedicated GPIOs on the SC16IS752.
-
-Reverting it makes it work again.
-
-The log message of the original commit states:
-    "Export only the GPIOs that are not shared with hardware modem
-    control lines"
-
-But there is no explanation as to why this decision was taken to
-permanently set the function of the GPIO lines as modem control
-lines. AFAIK, there is no problem with using these lines as GPIO or modem
-control lines.
-
-Maybe after reverting this commit, we could define a new
-device-tree property named, for example,
-"use-modem-control-lines", so that both options can be supported.
-
-Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control
-lines")
-
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/tty/serial/sc16is7xx.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ arch/arm/Kconfig           | 67 +------------------------------------
+ arch/arm/Kconfig.platforms | 68 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 66 deletions(-)
+ create mode 100644 arch/arm/Kconfig.platforms
 
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 5bd98e4316f5..25f1b2f6ec51 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -306,7 +306,6 @@ struct sc16is7xx_devtype {
- 	char	name[10];
- 	int	nr_gpio;
- 	int	nr_uart;
--	int	has_mctrl;
- };
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 0fb4b218f665..23e3e344f9c0 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -336,72 +336,7 @@ config ARCH_MULTIPLATFORM
+ 	  Selecting N here allows using those options, including
+ 	  DEBUG_UNCOMPRESS, XIP_KERNEL and ZBOOT_ROM. If unsure, say Y.
  
- #define SC16IS7XX_RECONF_MD		(1 << 0)
-@@ -447,35 +446,30 @@ static const struct sc16is7xx_devtype sc16is74x_devtype = {
- 	.name		= "SC16IS74X",
- 	.nr_gpio	= 0,
- 	.nr_uart	= 1,
--	.has_mctrl	= 0,
- };
+-menu "Platform selection"
+-	depends on MMU
+-
+-comment "CPU Core family selection"
+-
+-config ARCH_MULTI_V4
+-	bool "ARMv4 based platforms (FA526, StrongARM)"
+-	depends on !ARCH_MULTI_V6_V7
+-	# https://github.com/llvm/llvm-project/issues/50764
+-	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+-	select ARCH_MULTI_V4_V5
+-	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
+-
+-config ARCH_MULTI_V4T
+-	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
+-	depends on !ARCH_MULTI_V6_V7
+-	# https://github.com/llvm/llvm-project/issues/50764
+-	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+-	select ARCH_MULTI_V4_V5
+-	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
+-		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
+-		CPU_ARM925T || CPU_ARM940T)
+-
+-config ARCH_MULTI_V5
+-	bool "ARMv5 based platforms (ARM926T, XSCALE, PJ1, ...)"
+-	depends on !ARCH_MULTI_V6_V7
+-	select ARCH_MULTI_V4_V5
+-	select CPU_ARM926T if !(CPU_ARM946E || CPU_ARM1020 || \
+-		CPU_ARM1020E || CPU_ARM1022 || CPU_ARM1026 || \
+-		CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_FEROCEON)
+-
+-config ARCH_MULTI_V4_V5
+-	bool
+-
+-config ARCH_MULTI_V6
+-	bool "ARMv6 based platforms (ARM11)"
+-	select ARCH_MULTI_V6_V7
+-	select CPU_V6K
+-
+-config ARCH_MULTI_V7
+-	bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
+-	default y
+-	select ARCH_MULTI_V6_V7
+-	select CPU_V7
+-	select HAVE_SMP
+-
+-config ARCH_MULTI_V6_V7
+-	bool
+-	select MIGHT_HAVE_CACHE_L2X0
+-
+-config ARCH_MULTI_CPU_AUTO
+-	def_bool !(ARCH_MULTI_V4 || ARCH_MULTI_V4T || ARCH_MULTI_V6_V7)
+-	select ARCH_MULTI_V5
+-
+-endmenu
+-
+-config ARCH_VIRT
+-	bool "Dummy Virtual Machine"
+-	depends on ARCH_MULTI_V7
+-	select ARM_AMBA
+-	select ARM_GIC
+-	select ARM_GIC_V2M if PCI
+-	select ARM_GIC_V3
+-	select ARM_GIC_V3_ITS if PCI
+-	select ARM_PSCI
+-	select HAVE_ARM_ARCH_TIMER
++source "arch/arm/Kconfig.platforms"
  
- static const struct sc16is7xx_devtype sc16is750_devtype = {
- 	.name		= "SC16IS750",
--	.nr_gpio	= 4,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 1,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is752_devtype = {
- 	.name		= "SC16IS752",
--	.nr_gpio	= 0,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 2,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is760_devtype = {
- 	.name		= "SC16IS760",
--	.nr_gpio	= 4,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 1,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is762_devtype = {
- 	.name		= "SC16IS762",
--	.nr_gpio	= 0,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 2,
--	.has_mctrl	= 1,
- };
- 
- static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
+ config ARCH_AIROHA
+ 	bool "Airoha SoC Support"
+diff --git a/arch/arm/Kconfig.platforms b/arch/arm/Kconfig.platforms
+new file mode 100644
+index 000000000000..ed1f6da11e24
+--- /dev/null
++++ b/arch/arm/Kconfig.platforms
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++menu "Platform selection"
++	depends on MMU
++
++comment "CPU Core family selection"
++
++config ARCH_MULTI_V4
++	bool "ARMv4 based platforms (FA526, StrongARM)"
++	depends on !ARCH_MULTI_V6_V7
++	# https://github.com/llvm/llvm-project/issues/50764
++	depends on !LD_IS_LLD || LLD_VERSION >= 160000
++	select ARCH_MULTI_V4_V5
++	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
++
++config ARCH_MULTI_V4T
++	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
++	depends on !ARCH_MULTI_V6_V7
++	# https://github.com/llvm/llvm-project/issues/50764
++	depends on !LD_IS_LLD || LLD_VERSION >= 160000
++	select ARCH_MULTI_V4_V5
++	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
++		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
++		CPU_ARM925T || CPU_ARM940T)
++
++config ARCH_MULTI_V5
++	bool "ARMv5 based platforms (ARM926T, XSCALE, PJ1, ...)"
++	depends on !ARCH_MULTI_V6_V7
++	select ARCH_MULTI_V4_V5
++	select CPU_ARM926T if !(CPU_ARM946E || CPU_ARM1020 || \
++		CPU_ARM1020E || CPU_ARM1022 || CPU_ARM1026 || \
++		CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_FEROCEON)
++
++config ARCH_MULTI_V4_V5
++	bool
++
++config ARCH_MULTI_V6
++	bool "ARMv6 based platforms (ARM11)"
++	select ARCH_MULTI_V6_V7
++	select CPU_V6K
++
++config ARCH_MULTI_V7
++	bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
++	default y
++	select ARCH_MULTI_V6_V7
++	select CPU_V7
++	select HAVE_SMP
++
++config ARCH_MULTI_V6_V7
++	bool
++	select MIGHT_HAVE_CACHE_L2X0
++
++config ARCH_MULTI_CPU_AUTO
++	def_bool !(ARCH_MULTI_V4 || ARCH_MULTI_V4T || ARCH_MULTI_V6_V7)
++	select ARCH_MULTI_V5
++
++endmenu
++
++config ARCH_VIRT
++	bool "Dummy Virtual Machine"
++	depends on ARCH_MULTI_V7
++	select ARM_AMBA
++	select ARM_GIC
++	select ARM_GIC_V2M if PCI
++	select ARM_GIC_V3
++	select ARM_GIC_V3_ITS if PCI
++	select ARM_PSCI
++	select HAVE_ARM_ARCH_TIMER
 -- 
-2.30.2
+2.39.2
 
