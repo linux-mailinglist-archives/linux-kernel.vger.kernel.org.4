@@ -2,126 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B30A70286E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5597F702872
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238900AbjEOJ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S238099AbjEOJ1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238441AbjEOJ0k (ORCPT
+        with ESMTP id S235649AbjEOJ0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:26:40 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B441FC3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:25:19 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f4c6c4b51eso54436135e9.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684142718; x=1686734718;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PVidKPM6B2z7ddqDY5aZH6ShVFOkPon+GZvhdRhyC+I=;
-        b=yvkH4Qgu/dwqliFP7mDhEJKWKKVgcEUkdrPtIxjen3Hd6A7Tu0RXeDdCtK0m7KJLKk
-         k7+FpDzBxJNRgbFpxWPtvBhFdowCcoibvxT7VFm2Kf/VmP8jA/2P/OLV6BbM4Fd6/7tt
-         cAWULVtEsc1vq0pvO8dbjFKVUbINxHOb985FoR4jB/g+Wm0qakdTe+ctmYWMBhqJz4mV
-         1MeH8UqbP71+F+OksoBcAfgEG3lGzlYtPZd8d7GQVU/d4g8svoB5wsBN7u6AvfV1tkZa
-         k8/VDCpPlPwbxQV4JAnlkw06255O/V92DgvrAkROh8LcXUAUjjEiiZQ+SEebQIh6YjSg
-         EbEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684142718; x=1686734718;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PVidKPM6B2z7ddqDY5aZH6ShVFOkPon+GZvhdRhyC+I=;
-        b=WfCHXWB8UaSNXSupETpEvAl3DSo8X9ZCh7r1zb/iDW7WwLQdJv7SuYbQJ9TiUX0g9K
-         2AYszsnYkeKmlZGjDA0Twgp4lZG9DkQeY9bLwNsE2jaeT2gkyoLBDeZZWI9sXpUf28UY
-         Ol1vhILMzbeIS/Kiuyit3fzfR4+bE4yik5AfKLDdrG2aG+w5koW9Cs4BLL6uB3X4u8/X
-         JAYgTPYlRIc19W/Zvl2iOpjTVJPtLSIytzchMdmlDJrmTyeFfMdnJZuYGgDrzfS+yVB/
-         IZfXbQl3ikSq8TXkEEWGwNJK/50nHVLU/DBbN7FlW01PNmF/P1qv5MYuzxiKa3pDn4wR
-         b4jA==
-X-Gm-Message-State: AC+VfDwhrFE1kFRZhVFuEMJPNrlbMufyC2ZH7O1h1DCbrAXY3Cbc+Srk
-        tD6uHuyF6D0wpR9f1H0L+WZUQA==
-X-Google-Smtp-Source: ACHHUZ62YhhyaBS2jVJvAuBbi9ScTBt4hk24OJHdQyaZCVpoDF+uyjZhhpE8DLxisuDUzjVVGH5xdQ==
-X-Received: by 2002:a05:600c:cf:b0:3f4:9bee:b9c with SMTP id u15-20020a05600c00cf00b003f49bee0b9cmr13459168wmm.18.1684142717849;
-        Mon, 15 May 2023 02:25:17 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1388:9f6:c7d9:3b77])
-        by smtp.gmail.com with ESMTPSA id s2-20020a5d4ec2000000b003063a92bbf5sm32013764wrv.70.2023.05.15.02.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 02:25:17 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Mon, 15 May 2023 05:26:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337861708;
+        Mon, 15 May 2023 02:25:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C572161474;
+        Mon, 15 May 2023 09:25:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB94AC433D2;
+        Mon, 15 May 2023 09:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684142732;
+        bh=I/JHQf4eIEsXKezsZsMd1fV+aRLmrENZDEW/GBeFnBM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IkcvM/nf4fogAbzM9g7VY/ONJN+bLvbZW8FynVvvFGqsI2oH7QiTGAHjnb5eil/qh
+         dobgamg0SCITkPm7wwLMoRmDqJQSOdcHdPgBjbrzotay8LF23muG+3uwHPve5beoP6
+         00pd35Y0AvLPKt/AP5P0FQVMYkiWN4mDQyDvhSiZV5YboHWJmNIR08ABvYK1OMsOHY
+         ZfYm1Ukq7iU6DRsmjg+gNVyj10kPpfQDoJlhdKLzL+zYFoCPPqRL7g5983Ym4k5HLh
+         g6a1tOm5UVQiafQAf3g58jh1NZSnXiFF/N8Z+Ycu9OqMjpCvqN5DQJeFZLlVjVCbtS
+         8jhSybGaVDI/Q==
+Date:   Mon, 15 May 2023 10:25:25 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2] pinctrl: qcom: sa8775p: add the wakeirq map
-Date:   Mon, 15 May 2023 11:25:15 +0200
-Message-Id: <20230515092515.180920-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
+ i.MX8 ISI driver")
+Message-ID: <20230515102525.65150633@sal.lan>
+In-Reply-To: <CAMuHMdV=b8j=X3XEBWsAghsHrPT58xp7peaMiTZisqf7wRJf3w@mail.gmail.com>
+References: <ZElaVmxDsOkZj2DK@debian>
+        <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
+        <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
+        <20230510090527.25e26127@sal.lan>
+        <55d5ec29-f30f-4596-a3b9-7e5b8adf0582@kernel.org>
+        <CAMuHMdV=b8j=X3XEBWsAghsHrPT58xp7peaMiTZisqf7wRJf3w@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Em Mon, 15 May 2023 09:46:41 +0200
+Geert Uytterhoeven <geert@linux-m68k.org> escreveu:
 
-The SA8775P TLMM driver is missing the GPIO-to-wakeup-pin mapping. This
-adds it.
+> Hi Krzysztof,
+>=20
+> On Sun, May 14, 2023 at 1:01=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.=
+org> wrote:
+> > On 10/05/2023 10:05, Mauro Carvalho Chehab wrote: =20
+> > > And another CI job testing bisect breakages as I receive pull request=
+s,
+> > > applying patch per patch and using both allyesconfig and allmodconfig,
+> > > also on x86_64 arch with W=3D1:
+> > >
+> > >       https://builder.linuxtv.org/job/patchwork/
+> > >
+> > > The rule is to not merge stuff on media tree if any of those jobs
+> > > fail. I also fast-forward merging patches whose subject states that
+> > > the build has failed.
+> > >
+> > > In order to help with that, on normal situation, I usually take one w=
+eek
+> > > to merge stuff from media_stage into media_tree, doing rebases at
+> > > media_stage if needed to avoid git bisect build breakages at media_tr=
+ee
+> > > (which is from where I send my update PRs to you).
+> > >
+> > > Unfortunately, currently we don't have resources to do multiple randc=
+onfig =20
+> >
+> > Is you media staging tree included in LKP (kernel test robot)? You would
+> > get huge build coverage after every push to your staging repo. =20
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-v1 -> v2:
-- fix the 30->200 mapping
+No idea, as I don't know where LKP settings are stored, nor what frequency
+it is doing builds from git://linuxtv.org/media_stage.git, if any. Do you k=
+now
+where we can check such configuration?
 
- drivers/pinctrl/qcom/pinctrl-sa8775p.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+In the end, patches there will end going to linux-next, so at least some
+sort of coverage is there, but I'm not sure if LKP will always reply to
+linux-media if the patch causing build regressions is there.
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-sa8775p.c b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-index 2ae7cdca65d3..6ea0197b36c6 100644
---- a/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-+++ b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-@@ -1491,6 +1491,23 @@ static const struct msm_pingroup sa8775p_groups[] = {
- 	[153] = SDC_QDSD_PINGROUP(sdc1_data, 0x199000, 9, 0),
- };
- 
-+static const struct msm_gpio_wakeirq_map sa8775p_pdc_map[] = {
-+	{ 0, 169 }, { 1, 174 }, { 2, 170 }, { 3, 175 }, { 4, 171 }, { 5, 173 },
-+	{ 6, 172 }, { 7, 182 }, { 10, 220 }, { 11, 213 }, { 12, 221 },
-+	{ 16, 230 }, { 19, 231 }, { 20, 232 }, { 23, 233 }, { 24, 234 },
-+	{ 26, 223 }, { 27, 235 }, { 28, 209 }, { 29, 176 }, { 30, 200 },
-+	{ 31, 201 }, { 32, 212 }, { 35, 177 }, { 36, 178 }, { 39, 184 },
-+	{ 40, 185 }, { 41, 227 }, { 42, 186 }, { 43, 228 }, { 45, 187 },
-+	{ 47, 188 }, { 48, 194 }, { 51, 195 }, { 52, 196 }, { 55, 197 },
-+	{ 56, 198 }, { 57, 236 }, { 58, 192 }, { 59, 193 }, { 72, 179 },
-+	{ 73, 180 }, { 74, 181 }, { 75, 202 }, { 76, 183 }, { 77, 189 },
-+	{ 78, 190 }, { 79, 191 }, { 80, 199 }, { 83, 204 }, { 84, 205 },
-+	{ 85, 229 }, { 86, 206 }, { 89, 207 }, { 91, 208 }, { 94, 214 },
-+	{ 95, 215 }, { 96, 237 }, { 97, 216 }, { 98, 238 }, { 99, 217 },
-+	{ 100, 239 }, { 105, 219 }, { 106, 210 }, { 107, 211 }, { 108, 222 },
-+	{ 109, 203 }, { 145, 225 }, { 146, 226 },
-+};
-+
- static const struct msm_pinctrl_soc_data sa8775p_pinctrl = {
- 	.pins = sa8775p_pins,
- 	.npins = ARRAY_SIZE(sa8775p_pins),
-@@ -1499,6 +1516,8 @@ static const struct msm_pinctrl_soc_data sa8775p_pinctrl = {
- 	.groups = sa8775p_groups,
- 	.ngroups = ARRAY_SIZE(sa8775p_groups),
- 	.ngpios = 150,
-+	.wakeirq_map = sa8775p_pdc_map,
-+	.nwakeirq_map = ARRAY_SIZE(sa8775p_pdc_map),
- };
- 
- static int sa8775p_pinctrl_probe(struct platform_device *pdev)
--- 
-2.39.2
+While being helpful, one problem with LKP is that it is hard to filter out=
+=20
+reports per git tree. The only way to check if the report is applicable to
+media trees seems to be looking inside the e-mail's body.
 
+> As (multiple[*[) fixes for the build issues were submitted before the
+> opening of the merge window, there must have been some build coverage,
+> with even some people acting upon it...
+>=20
+> [*] General note, not limited to media: please apply build fixes and
+>     regression fixes ASAP, to avoid multiple people running into the
+>     same issues, and spending time on bisecting, investigating,
+>     fixing, ...
+>     Thanks a lot!
+
+Fully agreed. That's why we opted to have a CI instance focused on media:
+we should be able to program it to give feedback with the kernel build
+parameters we use (Like W=3D1) and set it up in a way that it we can
+customize to our needs (like testing for the architectures where media
+drivers are known to be used in practice), and setting up an e-mail subject
+that can be easily be filtered by our e-mail filters.
+
+Regards,
+Mauro
