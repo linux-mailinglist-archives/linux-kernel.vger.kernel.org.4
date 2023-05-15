@@ -2,130 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA8C702767
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C4F702766
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbjEOIk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S234117AbjEOIk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjEOIk1 (ORCPT
+        with ESMTP id S229749AbjEOIkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:40:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2080E1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RD5vUeFE3A5d4FsldbQHnKJtFa6t2QWFhZv+yAemSbs=; b=ehBz+j3ahy4u5PW4uxa2uyGNJo
-        EBFe6Q34nuEaAcRCI+tbeXc7I14zzi5e0u0+qZG7aqXj1MNfOu4KRMISLXOGqwnA5hH2j2eNrTkHu
-        uQvvK793POjWSxg49Bbe9Huea69FbJY6OWwQVhEIhB0v3ZFTua6hfvAi2N1O7XtMkMCq+hB7KHr6a
-        zLmj5NVEqXqcruefol8Zh/0kdINTJ9d0alQEcO5jwfieZwAbmNJOHWUD/XWacF58y3JIL6BVpFfeF
-        KdBkyA4si0Bd8nM250rxBdgOPlkLy7SXTJXCnNvdpv+s8tyg9C137AV50ShsToAwqJmtGHX2cwYVL
-        kPUWVCgg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pyTkW-00BQwB-2q;
-        Mon, 15 May 2023 08:40:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9F4963001E4;
-        Mon, 15 May 2023 10:40:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 69766202FCE90; Mon, 15 May 2023 10:40:07 +0200 (CEST)
-Date:   Mon, 15 May 2023 10:40:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com,
-        aubrey.li@linux.intel.com, yu.c.chen@intel.com,
-        Aaron Lu <aaron.lu@intel.com>
-Subject: Re: [linus:master] [sched] af7f588d8f: will-it-scale.per_thread_ops
- -13.9% regression
-Message-ID: <20230515084007.GF4253@hirez.programming.kicks-ass.net>
-References: <202305151017.27581d75-yujie.liu@intel.com>
+        Mon, 15 May 2023 04:40:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14D1E1;
+        Mon, 15 May 2023 01:40:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6822760FE4;
+        Mon, 15 May 2023 08:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C9B8CC433EF;
+        Mon, 15 May 2023 08:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684140022;
+        bh=rkPYRVHYoFIq5x31MeyoOcvF2XsRlsAmrW6c/Ah20e4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=T0qutthaj7wTluNWt8wE446nIlbekz+lyFEG3t+q84meeZCY+MNxV8qmdbf2LZs65
+         lfPXz/m9LH2F7O97wL/kgUyR8jLdgNKr/JWT4S7XCIys4wNEhX6dkPi/74Aiu6IoqC
+         MQa6KWpiVDHXrkb+d4bvKWFxsFnP3vkbijB4ksplyXE24LTvA1cS95UboNCDNT2wGY
+         GQ6Dbtar5Q4Sfoh6sd8k5fixnUi79x15pSQOoV7rzqEa8yic9HrrE0c0XrF9+esg5u
+         mmM3/JszZLwEiv+N18QdUBmp3F+0YkYbtV6rIiGgS0eCEm0hWtTrgOhlZxgarsk5+i
+         /ccxQSz8XUC4g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AB959C41672;
+        Mon, 15 May 2023 08:40:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305151017.27581d75-yujie.liu@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net-next Patch v10 0/8] octeontx2-pf: HTB offload support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168414002269.19885.17289418600724460807.git-patchwork-notify@kernel.org>
+Date:   Mon, 15 May 2023 08:40:22 +0000
+References: <20230513085143.3289-1-hkelam@marvell.com>
+In-Reply-To: <20230513085143.3289-1-hkelam@marvell.com>
+To:     Hariprasad Kelam <hkelam@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net,
+        willemdebruijn.kernel@gmail.com, andrew@lunn.ch,
+        sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+        jerinj@marvell.com, sbhatta@marvell.com, naveenm@marvell.com,
+        edumazet@google.com, pabeni@redhat.com, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, maxtram95@gmail.com,
+        corbet@lwn.net, linux-doc@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 03:00:44PM +0800, kernel test robot wrote:
-> Hello,
-> 
-> kernel test robot noticed a -13.9% regression of will-it-scale.per_thread_ops on:
-> 
-> commit: af7f588d8f7355bc4298dd1962d7826358fc95f0 ("sched: Introduce per-memory-map concurrency ID")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> testcase: will-it-scale
-> test machine: 224 threads 2 sockets (Sapphire Rapids) with 256G memory
-> parameters:
-> 
-> 	test: context_switch1
-> 	cpufreq_governor: performance
-> 
-> test-description: Will It Scale takes a testcase and runs it from 1 through to n parallel copies to see if the testcase will scale. It builds both a process and threads based test in order to see any differences between the two.
-> test-url: https://github.com/antonblanchard/will-it-scale
-> 
-> In addition to that, the commit also has significant impact on the following tests:
-> 
-> +------------------+----------------------------------------------------------------------------------------------------+
-> | testcase: change | will-it-scale: will-it-scale.per_thread_ops -73.8% regression                                      |
-> | test machine     | 224 threads 2 sockets (Sapphire Rapids) with 256G memory                                           |
-> | test parameters  | cpufreq_governor=performance                                                                       |
-> |                  | mode=thread                                                                                        |
-> |                  | nr_task=16                                                                                         |
-> |                  | test=context_switch1                                                                               |
-> +------------------+----------------------------------------------------------------------------------------------------+
-> | testcase: change | will-it-scale: will-it-scale.per_thread_ops -57.9% regression                                      |
-> | test machine     | 104 threads 2 sockets (Skylake) with 192G memory                                                   |
-> | test parameters  | cpufreq_governor=performance                                                                       |
-> |                  | mode=thread                                                                                        |
-> |                  | nr_task=16                                                                                         |
-> |                  | test=context_switch1                                                                               |
-> +------------------+----------------------------------------------------------------------------------------------------+
-> | testcase: change | will-it-scale: will-it-scale.per_thread_ops -85.0% regression                                      |
-> | test machine     | 104 threads 2 sockets (Skylake) with 192G memory                                                   |
-> | test parameters  | cpufreq_governor=performance                                                                       |
-> |                  | mode=thread                                                                                        |
-> |                  | nr_task=50%                                                                                        |
-> |                  | test=context_switch1                                                                               |
-> +------------------+----------------------------------------------------------------------------------------------------+
-> | testcase: change | vm-scalability: vm-scalability.throughput -9.0% regression                                         |
-> | test machine     | 96 threads 2 sockets Intel(R) Xeon(R) Platinum 8260L CPU @ 2.40GHz (Cascade Lake) with 128G memory |
-> | test parameters  | cpufreq_governor=performance                                                                       |
-> |                  | runtime=300s                                                                                       |
-> |                  | size=2T                                                                                            |
-> |                  | test=shm-xread-seq-mt                                                                              |
-> +------------------+----------------------------------------------------------------------------------------------------+
-> 
-> FYI, we noticed that commit 223baf9d17f2 (sched: Fix performance
-> regression introduced by mm_cid) fixed a sysbench regression, but
-> will-it-scale context_switch1 benchmark still saw a regression on this
-> fix commit.
-> 
-> Furthermore, we applied the code diff in below link [1] on mainline, and
-> the will-it-scale score was restored to the original level before this
-> patch.
-> 
-> [1] https://lore.kernel.org/lkml/d96164a6-c522-1bfc-8b37-333726cdc573@efficios.com/
-> 
+Hello:
 
-Right; so I'm thinking we can do that patch -- I'll try and get the
-whole lazy TLB thing sorted, but I'm not sure I can find the piece and
-quiet to think that over in a hurry :/
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Sat, 13 May 2023 14:21:35 +0530 you wrote:
+> octeontx2 silicon and CN10K transmit interface consists of five
+> transmit levels starting from MDQ, TL4 to TL1. Once packets are
+> submitted to MDQ, hardware picks all active MDQs using strict
+> priority, and MDQs having the same priority level are chosen using
+> round robin. Each packet will traverse MDQ, TL4 to TL1 levels.
+> Each level contains an array of queues to support scheduling and
+> shaping.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v10,1/8] sch_htb: Allow HTB priority parameter in offload mode
+    https://git.kernel.org/netdev/net-next/c/12e7789ad5b4
+  - [net-next,v10,2/8] octeontx2-pf: Rename tot_tx_queues to non_qos_queues
+    https://git.kernel.org/netdev/net-next/c/508c58f76ca5
+  - [net-next,v10,3/8] octeontx2-pf: qos send queues management
+    https://git.kernel.org/netdev/net-next/c/ab6dddd2a669
+  - [net-next,v10,4/8] octeontx2-pf: Refactor schedular queue alloc/free calls
+    https://git.kernel.org/netdev/net-next/c/6b4b2ded9c42
+  - [net-next,v10,5/8] octeontx2-pf: Prepare for QOS offload
+    https://git.kernel.org/netdev/net-next/c/cb748a7ebad7
+  - [net-next,v10,6/8] octeontx2-pf: Add support for HTB offload
+    https://git.kernel.org/netdev/net-next/c/5e6808b4c68d
+  - [net-next,v10,7/8] octeontx2-pf: ethtool expose qos stats
+    https://git.kernel.org/netdev/net-next/c/6cebb6a4b114
+  - [net-next,v10,8/8] docs: octeontx2: Add Documentation for QOS
+    https://git.kernel.org/netdev/net-next/c/efe103065ccb
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
