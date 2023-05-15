@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBDB702D50
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6D6702D51
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242038AbjEONAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S242066AbjEONAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242067AbjEOM7q (ORCPT
+        with ESMTP id S242084AbjEOM75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:59:46 -0400
+        Mon, 15 May 2023 08:59:57 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E7E19BA
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A06E5
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:59:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684155531;
+        s=mimecast20190719; t=1684155545;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FWCSgHKgkfiwsZPIbDFMuCcNPnF6WGYEGag89qGrc3E=;
-        b=INbALebSyeFPuehk6FrrTKDeHsFn/UJXk4Dn0LlWpazMTjJl9748n+16rgFm5/FKhzw539
-        ODqC7qdBg7tOYZaCRBNERp4LPmVI/XoH2+WiM3Hhe2mF+PBGOVAKQlg87QuA0ZqyDAZ/AQ
-        DuESjuPk5w1HyQ1ITsnHlFSibi5J+cs=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=EU+jyy76OpL76hfSFfdqt6GtYdlVi8X+l+3db/Ak20c=;
+        b=GR3Jkigrg/6hmozFcarro1Wl3jBJ/9o4qOPgvqiwy22YyEYc0uyleqMfV5GLboKlJJ77jB
+        5SfX8VWm8ZFU/7/7qhVu3/YWclrc25NxIIyHqar1am555XKSr0tjhKyVDEYg0WH/len0ee
+        vELB44uqu8ei+h+LgyvqOXhu1zbzrNc=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-266-Bv4l8o1fNlK59ITGeSWcdg-1; Mon, 15 May 2023 08:58:49 -0400
-X-MC-Unique: Bv4l8o1fNlK59ITGeSWcdg-1
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-50bcc3ee913so11269478a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:49 -0700 (PDT)
+ us-mta-466-VW2kbYdeNqSDeDQ9U9Nvgg-1; Mon, 15 May 2023 08:59:03 -0400
+X-MC-Unique: VW2kbYdeNqSDeDQ9U9Nvgg-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5105d6d5756so1157022a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:59:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684155528; x=1686747528;
+        d=1e100.net; s=20221208; t=1684155542; x=1686747542;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FWCSgHKgkfiwsZPIbDFMuCcNPnF6WGYEGag89qGrc3E=;
-        b=BSrsLwBzXtzNw6cudhfnZF1zsTJAynxLVl3pfWeDcf0Bgyat8tD0Oe7jDEuZrds+GU
-         z6j1twSqASszdJ23Bi+G9qt2ZLGMlMTE2RVHXdryM9lpXfFox+J8+tSDKajrjxjyQL4X
-         tE185BAbAwoHlX02hiwOwLQVrkEBvTj959n9o7PStD5Dd/sWNxaqENwz7EwF9aBD82Dc
-         p3KGJRwpZMu9BjQsoIbWrI0VdTFugXKksz8Je3WYvjLsHFdclcP0718HA6Q1GM6t5dSW
-         LrvxLwBxoZ7cExB9Z/50dvrr3aRzcj4fgYP8g3sWf4SSGvS0pJAnO8EyNvxjHAiVjB8p
-         PkDQ==
-X-Gm-Message-State: AC+VfDzEhGgBSM+4vzVXJZylIRx0QWghboDG7/NSHDxUD5+AzbhJL3fN
-        AdvniS/lyHlhfdv9RS48IldgntFHarLWjshCIE4P3c/z1YuScpNSXUp+Ig6Op3OuTymNysw9Vsh
-        wJyMJ5F/aZA90nY74eg1u0QIy
-X-Received: by 2002:a17:907:31ca:b0:960:d28d:3368 with SMTP id xf10-20020a17090731ca00b00960d28d3368mr29751364ejb.60.1684155528690;
-        Mon, 15 May 2023 05:58:48 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6xkL6WGxU1o9yYr/28OLbSJCo+7UtLQGQNg33hogDZC56D+3LydUsY1jPyQc5CP9a5ic0ZGw==
-X-Received: by 2002:a17:907:31ca:b0:960:d28d:3368 with SMTP id xf10-20020a17090731ca00b00960d28d3368mr29751349ejb.60.1684155528335;
-        Mon, 15 May 2023 05:58:48 -0700 (PDT)
+        bh=EU+jyy76OpL76hfSFfdqt6GtYdlVi8X+l+3db/Ak20c=;
+        b=alEI4VLZP/W4/GBccFtTJLV9kGRDf9MpsrMz6/fUvCORsRbVBkrfGxfD5pzjkG+iJg
+         drlooZtBDrTDS8Dy7yOBDUPfBtRDVKlQezVCASrdkh485rSF8Hd/S2lhjM+HyvcEM/Rm
+         r/u/cz8YnVVUj0isQqBErZ+qacztpqDG3MOWf1Fcb9l3o7ASOp5WNqgBahIkjYl0Jaqe
+         wb5PFvfitzpQxoTJtn3Go87vPFXjNfZMhSJJKH6Hba0+laMmaQkN+lnKQ8fo6n01EMKA
+         fpllrLywHQU3HdUcz+Qfq9VKYqLdLnLiy+0UcUiZ3k8eKS2poiUu0jP8dVE7g0CX6tYu
+         UPNA==
+X-Gm-Message-State: AC+VfDynGZuuCb/7RJmDXkuwyZs0hJs7w/lP1oLQophbMtIYkrLb2LRV
+        T7FEwhJ/cMm8mqT760EHvQiCo1gn1LDGhnHg0Je/CcgxAqYFwqyTKx2ZrfOagtI3GGmw+aT0/ue
+        gMjJEvHU78f1YtseJ1E7PfBoR
+X-Received: by 2002:aa7:df11:0:b0:505:4f7:8a50 with SMTP id c17-20020aa7df11000000b0050504f78a50mr24996507edy.5.1684155542271;
+        Mon, 15 May 2023 05:59:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6j0ketmGZXip/XZj7GOC3Vz8V7KmOq4GJCNCQqS+CJf5Q3VtBVCE/4Qufc/wg0JVIrOhgqIA==
+X-Received: by 2002:aa7:df11:0:b0:505:4f7:8a50 with SMTP id c17-20020aa7df11000000b0050504f78a50mr24996495edy.5.1684155541929;
+        Mon, 15 May 2023 05:59:01 -0700 (PDT)
 Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id l19-20020a170906939300b0094e7d196aa4sm9298799ejx.160.2023.05.15.05.58.47
+        by smtp.gmail.com with ESMTPSA id k23-20020a05640212d700b0050c0b9d31a7sm7323068edx.22.2023.05.15.05.59.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 05:58:47 -0700 (PDT)
-Message-ID: <ffe8f013-b666-0e8b-af19-4eda14fbe928@redhat.com>
-Date:   Mon, 15 May 2023 14:58:46 +0200
+        Mon, 15 May 2023 05:59:01 -0700 (PDT)
+Message-ID: <247af7d9-f6b1-def5-a138-780f567f48cb@redhat.com>
+Date:   Mon, 15 May 2023 14:59:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] platform/x86: asus-wmi: Ignore WMI events with codes
- 0x7B, 0xC0
+Subject: Re: [PATCH] platform/x86/amd/pmf: Fix CnQF and auto-mode after resume
 Content-Language: en-US
-To:     Alexandru Sorodoc <ealex95@gmail.com>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230512101517.47416-1-ealex95@gmail.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Shyam-sundar.S-k@amd.com
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230513011408.958-1-mario.limonciello@amd.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230512101517.47416-1-ealex95@gmail.com>
+In-Reply-To: <20230513011408.958-1-mario.limonciello@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -86,17 +83,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 5/12/23 12:15, Alexandru Sorodoc wrote:
-> On ASUS GU604V the key 0x7B is issued when the charger is connected or
-> disconnected, and key 0xC0 is issued when an external display is
-> connected or disconnected.
+On 5/13/23 03:14, Mario Limonciello wrote:
+> After suspend/resume cycle there is an error message and auto-mode
+> or CnQF stops working.
 > 
-> This commit maps them to KE_IGNORE to slience kernel messages about
-> unknown keys, such as:
+> [ 5741.447511] amd-pmf AMDI0100:00: SMU cmd failed. err: 0xff
+> [ 5741.447523] amd-pmf AMDI0100:00: AMD_PMF_REGISTER_RESPONSE:ff
+> [ 5741.447527] amd-pmf AMDI0100:00: AMD_PMF_REGISTER_ARGUMENT:7
+> [ 5741.447531] amd-pmf AMDI0100:00: AMD_PMF_REGISTER_MESSAGE:16
+> [ 5741.447540] amd-pmf AMDI0100:00: [AUTO_MODE] avg power: 0 mW mode: QUIET
 > 
->     kernel: asus_wmi: Unknown key code 0x7b
+> This is because the DRAM address used for accessing metrics table
+> needs to be refreshed after a suspend resume cycle. Add a resume
+> callback to reset this again.
 > 
-> Signed-off-by: Alexandru Sorodoc <ealex95@gmail.com>
+> Fixes: 1a409b35c995 ("platform/x86/amd/pmf: Get performance metrics from PMFW")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
 Thank you for your patch, I've applied this patch to my fixes
 branch:
@@ -113,37 +115,77 @@ Regards,
 Hans
 
 
+
 > ---
-> I'm not sure what those keys events actually mean. I assume they are
-> some redundant notifications because no laptop functionality seems to
-> depend on them.
+>  drivers/platform/x86/amd/pmf/core.c | 32 ++++++++++++++++++++++-------
+>  1 file changed, 25 insertions(+), 7 deletions(-)
 > 
-> If there is anything I can check or investigate please let me know.
-> 
-> Thanks,
-> Alex
-> 
->  drivers/platform/x86/asus-nb-wmi.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
-> index e2c9a68d12df..fdf7da06af30 100644
-> --- a/drivers/platform/x86/asus-nb-wmi.c
-> +++ b/drivers/platform/x86/asus-nb-wmi.c
-> @@ -555,6 +555,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
->  	{ KE_KEY, 0x71, { KEY_F13 } }, /* General-purpose button */
->  	{ KE_IGNORE, 0x79, },  /* Charger type dectection notification */
->  	{ KE_KEY, 0x7a, { KEY_ALS_TOGGLE } }, /* Ambient Light Sensor Toggle */
-> +	{ KE_IGNORE, 0x7B, }, /* Charger connect/disconnect notification */
->  	{ KE_KEY, 0x7c, { KEY_MICMUTE } },
->  	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
->  	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
-> @@ -584,6 +585,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
->  	{ KE_KEY, 0xAE, { KEY_FN_F5 } }, /* Fn+F5 fan mode on 2020+ */
->  	{ KE_KEY, 0xB3, { KEY_PROG4 } }, /* AURA */
->  	{ KE_KEY, 0xB5, { KEY_CALC } },
-> +	{ KE_IGNORE, 0xC0, }, /* External display connect/disconnect notification */
->  	{ KE_KEY, 0xC4, { KEY_KBDILLUMUP } },
->  	{ KE_KEY, 0xC5, { KEY_KBDILLUMDOWN } },
->  	{ KE_IGNORE, 0xC6, },  /* Ambient Light Sensor notification */
+> diff --git a/drivers/platform/x86/amd/pmf/core.c b/drivers/platform/x86/amd/pmf/core.c
+> index d5bb775dadcf..ee5f124f78b6 100644
+> --- a/drivers/platform/x86/amd/pmf/core.c
+> +++ b/drivers/platform/x86/amd/pmf/core.c
+> @@ -245,24 +245,29 @@ static const struct pci_device_id pmf_pci_ids[] = {
+>  	{ }
+>  };
+>  
+> -int amd_pmf_init_metrics_table(struct amd_pmf_dev *dev)
+> +static void amd_pmf_set_dram_addr(struct amd_pmf_dev *dev)
+>  {
+>  	u64 phys_addr;
+>  	u32 hi, low;
+>  
+> -	INIT_DELAYED_WORK(&dev->work_buffer, amd_pmf_get_metrics);
+> +	phys_addr = virt_to_phys(dev->buf);
+> +	hi = phys_addr >> 32;
+> +	low = phys_addr & GENMASK(31, 0);
+> +
+> +	amd_pmf_send_cmd(dev, SET_DRAM_ADDR_HIGH, 0, hi, NULL);
+> +	amd_pmf_send_cmd(dev, SET_DRAM_ADDR_LOW, 0, low, NULL);
+> +}
+>  
+> +int amd_pmf_init_metrics_table(struct amd_pmf_dev *dev)
+> +{
+>  	/* Get Metrics Table Address */
+>  	dev->buf = kzalloc(sizeof(dev->m_table), GFP_KERNEL);
+>  	if (!dev->buf)
+>  		return -ENOMEM;
+>  
+> -	phys_addr = virt_to_phys(dev->buf);
+> -	hi = phys_addr >> 32;
+> -	low = phys_addr & GENMASK(31, 0);
+> +	INIT_DELAYED_WORK(&dev->work_buffer, amd_pmf_get_metrics);
+>  
+> -	amd_pmf_send_cmd(dev, SET_DRAM_ADDR_HIGH, 0, hi, NULL);
+> -	amd_pmf_send_cmd(dev, SET_DRAM_ADDR_LOW, 0, low, NULL);
+> +	amd_pmf_set_dram_addr(dev);
+>  
+>  	/*
+>  	 * Start collecting the metrics data after a small delay
+> @@ -273,6 +278,18 @@ int amd_pmf_init_metrics_table(struct amd_pmf_dev *dev)
+>  	return 0;
+>  }
+>  
+> +static int amd_pmf_resume_handler(struct device *dev)
+> +{
+> +	struct amd_pmf_dev *pdev = dev_get_drvdata(dev);
+> +
+> +	if (pdev->buf)
+> +		amd_pmf_set_dram_addr(pdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(amd_pmf_pm, NULL, amd_pmf_resume_handler);
+> +
+>  static void amd_pmf_init_features(struct amd_pmf_dev *dev)
+>  {
+>  	int ret;
+> @@ -413,6 +430,7 @@ static struct platform_driver amd_pmf_driver = {
+>  		.name = "amd-pmf",
+>  		.acpi_match_table = amd_pmf_acpi_ids,
+>  		.dev_groups = amd_pmf_driver_groups,
+> +		.pm = pm_sleep_ptr(&amd_pmf_pm),
+>  	},
+>  	.probe = amd_pmf_probe,
+>  	.remove_new = amd_pmf_remove,
 
