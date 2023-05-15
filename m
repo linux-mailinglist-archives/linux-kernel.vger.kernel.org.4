@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D60702F28
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF05702D0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240274AbjEOOCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S241955AbjEOMsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239569AbjEOOCM (ORCPT
+        with ESMTP id S230116AbjEOMsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:02:12 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8051BCC;
-        Mon, 15 May 2023 07:01:54 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52c759b7d45so11783741a12.3;
-        Mon, 15 May 2023 07:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684159293; x=1686751293;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oRoP5jqWCAmzc8rrXSIbsnSWE9zHZOIDm3FBRH44e6w=;
-        b=ZQP6vE+hbTxer4jaN+LsDydMZJljPw2h2se0UxdcQjRWqtvaP+XqGe0xpe8wRnl9iO
-         JubtBnEWNYA8OVFpdAhgPez1EQv9Ru58utaAE/TWDKsmCzHTUK4uclMNHUfGNJp3OajH
-         VICUCI7EFKcOTN0JpfxFzP9tgiivWsofnDVJsqxKRQh94B4kFDFSsZipA45+6Cavs7c5
-         lIsf59Bq9+WwOzorYWRvs0Pxvff4IN9wevK/2ODx3NelFItZNyQ4NfNajm/GYg8n+lhF
-         B3sz3W+znF8PWfxcwnkL/b9cyu41sHAnkUTCshDsvYAu6XEt69rlB8M9Rb/re8VsezUs
-         ssYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684159293; x=1686751293;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oRoP5jqWCAmzc8rrXSIbsnSWE9zHZOIDm3FBRH44e6w=;
-        b=VjILtQYJ35YBRkRZaGj2xlnynJY2hWodgRl3KJ5H34M1Usq+YGT8s5zSRgUEpDUnbh
-         jc6o4/HZ7WBT7GXyOtMs75V0yxPoXpNXvf0IaCiumSlOzXSkZPGkdJE4vkppA2GtAMcj
-         MGW7PTTGxxv00Wha5Bc2cPN+p1N1auEmR+TnUQLMsk5PgvYPz6GPK6hrgh2HCpGHkXIN
-         2ISBLOoYErEvUwLFi5XV/lZwL/thIJ4GuXteOvCBKf3z/pN6uZQP35sT5FQO9UsJdyRY
-         e13bxdOQEdjWOHCF0ZWZWfMe7mmDdiS2b/YychdbpVWrA3S/8kBlFcVPFKy7Jsv9ErGK
-         dQSg==
-X-Gm-Message-State: AC+VfDybUWQZry3S3TB4MXk6Imt0ZZE4RLCcXjrcWg63YSWBdPqI9TQq
-        puzQuVaFA1qX2rpRY5X9Y2s=
-X-Google-Smtp-Source: ACHHUZ57WwbmwA3T0tT0zJT+1UICvdFrCcL//NUBElSjAV0S/whbsEqDHbZ6xe8MohJTk3oyKNaDrA==
-X-Received: by 2002:a17:902:a604:b0:1ac:b363:83b3 with SMTP id u4-20020a170902a60400b001acb36383b3mr18322825plq.41.1684159291950;
-        Mon, 15 May 2023 07:01:31 -0700 (PDT)
-Received: from localhost.localdomain ([103.133.201.162])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170903120800b001a674fb0dd8sm13520949plh.247.2023.05.15.07.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 07:01:31 -0700 (PDT)
-From:   Mubashshir <ahmubashshir@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     huseyinbiyik@hotmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5] staging: HID: Add ShanWan USB WirelessGamepad driver
-Date:   Mon, 15 May 2023 20:01:22 +0600
-Message-Id: <c213f2100e8f99b422b3014f1d5419d06cc61d00.1684159036.git.ahmubashshir@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <39b44678dc54b519fa469b69d80757b36ab3cf25.1681118245.git.ahmubashshir@gmail.com>
-References: <39b44678dc54b519fa469b69d80757b36ab3cf25.1681118245.git.ahmubashshir@gmail.com>
+        Mon, 15 May 2023 08:48:41 -0400
+Received: from forward502a.mail.yandex.net (forward502a.mail.yandex.net [178.154.239.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE05E61;
+        Mon, 15 May 2023 05:48:33 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net [IPv6:2a02:6b8:c15:2f8a:0:640:b50b:0])
+        by forward502a.mail.yandex.net (Yandex) with ESMTP id D8B225E760;
+        Mon, 15 May 2023 15:48:31 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UmZpAmsWpeA0-jIilLbUc;
+        Mon, 15 May 2023 15:48:31 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1684154911;
+        bh=VPLW2FeB4P4oqrQH+SA+K09MXHahJVX3Qt+tVJ0HPgM=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=rTpsKBaUYNrDMqgZCzLo+rwpffAx4rwp/78vMHKSMBcXFL97/r+qXEFutrlS14p+b
+         N9nHSir63pkmLnLwQrG3WImQ0FBxl7jeeKkDEOfQZ65h5uMvMnGVnAXZuYrvbTErYJ
+         D+Or/YXVjjel4iP4+1vGSHhehg2xFB46eJHxymes=
+Authentication-Results: mail-nwsmtp-smtp-production-main-52.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <783af132a3eab7c79c95de5113c6bdb0adce19b5.camel@maquefel.me>
+Subject: Re: [PATCH 22/43] dt-bindings: mtd: add DT bindings for ts7250 nand
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lukasz Majewski <lukma@denx.de>, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 15 May 2023 18:48:31 +0300
+In-Reply-To: <20230502114858.7152572a@xps-13>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230424123522.18302-23-nikita.shubin@maquefel.me>
+         <20230502114858.7152572a@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,236 +59,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This device has a quirky initialization process.
-Depending on how it was initialized, behaves completely differently.
-In default mode, it behaves as expected, but in fallback it disables
-force-feedback, analog stick configurations and L3/R3.
+Hello Miquel!
 
-Different OEMs manufactures joypads with same vid:pid but different
-axis/button mapping[1], and I don't know which one has which layout,
-so, we'll let hid-core figure that out, and handle only FF here.
+Thank you for looking into it.
 
- * The one I have has different axis layout than the one of Huseyin.
+On Tue, 2023-05-02 at 11:48 +0200, Miquel Raynal wrote:
+> Hi Nikita,
+>=20
+> nikita.shubin@maquefel.me=C2=A0wrote on Mon, 24 Apr 2023 15:34:38 +0300:
+>=20
+> > Add YAML bindings for ts7250 NAND.
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> > ---
+> > =C2=A0.../bindings/mtd/technologic,nand.yaml=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 | 56
+> > +++++++++++++++++++
+> > =C2=A01 file changed, 56 insertions(+)
+> > =C2=A0create mode 100644
+> > Documentation/devicetree/bindings/mtd/technologic,nand.yaml
+> >=20
+> > diff --git
+> > a/Documentation/devicetree/bindings/mtd/technologic,nand.yaml
+> > b/Documentation/devicetree/bindings/mtd/technologic,nand.yaml
+> > new file mode 100644
+> > index 000000000000..3234d93a1c21
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mtd/technologic,nand.yaml
+> > @@ -0,0 +1,56 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mtd/technologic,nand.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Technologic Systems NAND controller
+> > +
+> > +maintainers:
+> > +=C2=A0 - Lukasz Majewski <lukma@denx.de>
+> > +
+> > +properties:
+> > +=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: technologic,ts7200-nand
+>=20
+> would -nand-controller instead of -nand work as a suffix here?
+>=20
+> You mention ts7250 in the title, should we have a more specific
+> compatible than ts7200 as well?
+>=20
+> I see by looking at the mtd patch that you actually try to match
+> both,
+> so they should both be defined in the bindings.
+>=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: gen_nand
+>=20
+> This is a old hack for very simple controllers (converted to DT
+> probing
+> 12 years ago). The logic used by this driver has been deprecated for
+> like 10 years and does not really apply to modern APIs. I would
+> really
+> like to keep this driver contained with platform data coming from
+> arch/
+> data only.
+>=20
+> I suggest you create a real NAND controller driver based on the
+> generic one (should not be very complex, just duplicate the code so
+> the
+> migration to the up-to-date API is eased) and you flag it as "must be
+> updated to ->exec_op() somehow. This way if someone starts the
+> conversion, it does not need to cope with the 5 other users of the
+> generic driver which anyway share nothing in common besides the
+> deprecated ->cmd_ctrl() backbone.
+>=20
+> I read the comments on the cover letter, people are kind of pushing
+> on
+> having this merged quickly. I am fine accepting a legacy controller
+> driver and migrating it to ->exec_op() later, but the current driver
+> conversion does not fit the approach taken years ago towards a
+> cleaner
+> mtd tree.
 
-Signed-off-by: Huseyin BIYIK <huseyinbiyik@hotmail.com>
-Signed-off-by: Mubashshir <ahmubashshir@gmail.com>
----
-v5: Use hid_{get,set}_drvdata to pass data to `->play()`
+Did you mean that i should at least implement legacy nand controller,
+like, for example, Xway (xway_nand.c) ?:
 
- drivers/hid/Kconfig       |  19 +++++
- drivers/hid/Makefile      |   1 +
- drivers/hid/hid-ids.h     |   3 +
- drivers/hid/hid-shanwan.c | 145 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 168 insertions(+)
- create mode 100644 drivers/hid/hid-shanwan.c
+        data->chip.legacy.cmd_ctrl =3D xway_cmd_ctrl;
+        data->chip.legacy.dev_ready =3D xway_dev_ready;
+        data->chip.legacy.select_chip =3D xway_select_chip;
+        data->chip.legacy.write_buf =3D xway_write_buf;
+        data->chip.legacy.read_buf =3D xway_read_buf;
+        data->chip.legacy.read_byte =3D xway_read_byte;
+        data->chip.legacy.chip_delay =3D 30;
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 4ce012f83253..e6c8aa855252 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -990,6 +990,25 @@ config HID_SEMITEK
- 	- Woo-dy
- 	- X-Bows Nature/Knight
- 
-+config HID_SHANWAN
-+	tristate "ShanWan USB WirelessGamepad"
-+	depends on USB_HID
-+	help
-+	Support for Shanwan USB WirelessGamepad (and clones).
-+
-+	This device has a quirky initialization process.
-+	Depending on how it was initialized, it behaves completely differently.
-+	In default mode, it behaves as expected, but in fallback it disables
-+	force-feedback, analog stick configurations and L3/R3.
-+
-+config SHANWAN_FF
-+	bool "ShanWan USB WirelessGamepad force feedback support"
-+	depends on HID_SHANWAN
-+	select INPUT_FF_MEMLESS
-+	help
-+	Say Y here if you have a ShanWan USB WirelessGamepad and want to enable
-+	force feedback support for it.
-+
- config HID_SIGMAMICRO
- 	tristate "SiGma Micro-based keyboards"
- 	depends on USB_HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 5d37cacbde33..52878455fc10 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -116,6 +116,7 @@ obj-$(CONFIG_HID_RMI)		+= hid-rmi.o
- obj-$(CONFIG_HID_SAITEK)	+= hid-saitek.o
- obj-$(CONFIG_HID_SAMSUNG)	+= hid-samsung.o
- obj-$(CONFIG_HID_SEMITEK)	+= hid-semitek.o
-+obj-$(CONFIG_HID_SHANWAN)	+= hid-shanwan.o
- obj-$(CONFIG_HID_SIGMAMICRO)	+= hid-sigmamicro.o
- obj-$(CONFIG_HID_SMARTJOYPLUS)	+= hid-sjoy.o
- obj-$(CONFIG_HID_SONY)		+= hid-sony.o
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index d79e946acdcb..04c3324dc453 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -627,6 +627,9 @@
- #define USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_0641	0x0641
- #define USB_PRODUCT_ID_HP_PIXART_OEM_USB_OPTICAL_MOUSE_1f4a	0x1f4a
- 
-+#define USB_VENDOR_ID_SHANWAN 0x2563
-+#define USB_PRODUCT_ID_SHANWAN_USB_WIRELESSGAMEPAD 0x0575
-+
- #define USB_VENDOR_ID_HUION		0x256c
- #define USB_DEVICE_ID_HUION_TABLET	0x006e
- #define USB_DEVICE_ID_HUION_TABLET2	0x006d
-diff --git a/drivers/hid/hid-shanwan.c b/drivers/hid/hid-shanwan.c
-new file mode 100644
-index 000000000000..c80bfcac5dc7
---- /dev/null
-+++ b/drivers/hid/hid-shanwan.c
-@@ -0,0 +1,145 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Force feedback support for Shanwan USB WirelessGamepad
-+ *
-+ * Copyright (c) 2022-2023	Huseyin BIYIK	<huseyinbiyik@hotmail.com>
-+ * Copyright (c) 2023	Ahmad Hasan Mubashshir	<ahmubashshir@gmail.com>
-+ *
-+ */
-+
-+#include <linux/input.h>
-+#include <linux/slab.h>
-+#include <linux/hid.h>
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/string.h>
-+
-+#include "hid-ids.h"
-+
-+static bool swap_motors;
-+module_param_named(swap, swap_motors, bool, 0);
-+MODULE_PARM_DESC(swap, "Swap Weak/Strong Feedback motors");
-+
-+#ifdef CONFIG_SHANWAN_FF
-+static int shanwan_play_effect(struct input_dev *dev, void *data, struct ff_effect *effect)
-+{
-+	struct hid_device *hid    = input_get_drvdata(dev);
-+	struct hid_report *report = hid_get_drvdata(hid);
-+	struct hid_field  *field0 = report->field[0];
-+	s32 payload_template[] = {
-+		0x02,  // 2 = rumble effect message
-+		0x08, // reserved value, always 8
-+		0x00, // rumble value
-+		0x00, // rumble value
-+		0xff  // duration 0-254 (255 = nonstop)
-+	};
-+
-+	if (effect->type != FF_RUMBLE)
-+		return 0;
-+
-+	memcpy_and_pad(field0->value,
-+		       (sizeof(s32) * 8),
-+		       payload_template,
-+		       (sizeof(s32) * 4),
-+		       0x00);
-+
-+	if (swap_motors) {
-+		/* weak rumble / strong rumble */
-+		field0->value[2] = effect->u.rumble.strong_magnitude / 256;
-+		field0->value[3] = effect->u.rumble.weak_magnitude / 256;
-+	} else {
-+		/* strong rumble / weak rumble */
-+		field0->value[2] = effect->u.rumble.weak_magnitude / 256;
-+		field0->value[3] = effect->u.rumble.strong_magnitude / 256;
-+	}
-+
-+	hid_hw_request(hid, report, HID_REQ_SET_REPORT);
-+
-+	return 0;
-+}
-+
-+static int shanwan_init_ff(struct hid_device *hid)
-+{
-+	struct hid_report *report;
-+	struct hid_input *hidinput;
-+	struct list_head *report_list = &hid->report_enum[HID_OUTPUT_REPORT].report_list;
-+	struct input_dev *dev;
-+
-+	if (list_empty(&hid->inputs)) {
-+		hid_err(hid, "no inputs found\n");
-+		return -ENODEV;
-+	}
-+	hidinput = list_first_entry(&hid->inputs, struct hid_input, list);
-+	dev = hidinput->input;
-+
-+	if (list_empty(report_list)) {
-+		hid_err(hid, "no output reports found\n");
-+		return -ENODEV;
-+	}
-+
-+	report = list_first_entry(report_list, struct hid_report, list);
-+	hid_set_drvdata(hid, report);
-+
-+	set_bit(FF_RUMBLE, dev->ffbit);
-+	if (input_ff_create_memless(dev, NULL, shanwan_play_effect))
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+#else
-+static int shanwan_init_ff(struct hid_device *hid)
-+{
-+	return 0;
-+}
-+#endif
-+
-+static int shanwan_probe(struct hid_device *hdev, const struct hid_device_id *id)
-+{
-+	int ret;
-+
-+	ret = hid_parse(hdev);
-+	if (ret) {
-+		hid_err(hdev, "parse failed\n");
-+		return ret;
-+	}
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
-+	if (ret) {
-+		hid_err(hdev, "hw start failed\n");
-+		return ret;
-+	}
-+
-+	ret = shanwan_init_ff(hdev);
-+	if (ret)
-+		hid_warn(hdev, "Failed to enable force feedback support, error: %d\n", ret);
-+
-+	ret = hid_hw_open(hdev);
-+	if (ret) {
-+		dev_err(&hdev->dev, "hw open failed\n");
-+		hid_hw_stop(hdev);
-+		return ret;
-+	}
-+
-+	hid_hw_close(hdev);
-+	return ret;
-+}
-+
-+static const struct hid_device_id shanwan_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_SHANWAN, USB_PRODUCT_ID_SHANWAN_USB_WIRELESSGAMEPAD) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, shanwan_devices);
-+
-+static struct hid_driver shanwan_driver = {
-+	.name			= "shanwan",
-+	.id_table		= shanwan_devices,
-+	.probe			= shanwan_probe,
-+};
-+module_hid_driver(shanwan_driver);
-+
-+MODULE_AUTHOR("Huseyin BIYIK <huseyinbiyik@hotmail.com>");
-+MODULE_AUTHOR("Ahmad Hasan Mubashshir <ahmubashshir@gmail.com>");
-+MODULE_DESCRIPTION("Force feedback support for Shanwan USB WirelessGamepad");
-+MODULE_LICENSE("GPL");
-+
-+// vim: ts=8:noet
--- 
-2.40.1
+And the best solution would be switching to exec_op completely ?
+
+>=20
+> > +
+> > +=C2=A0 reg:
+> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
+> > +
+> > +=C2=A0 '#address-cells': true
+> > +=C2=A0 '#size-cells': true
+> > +
+> > +required:
+> > +=C2=A0 - compatible
+> > +=C2=A0 - reg
+> > +
+> > +unevaluatedProperties: true
+> > +
+> > +examples:
+> > +=C2=A0 - |
+> > +=C2=A0=C2=A0=C2=A0 nand-parts@0 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "technologic,ts7200-nand=
+", "gen_nand";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x60000000 0x8000000>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <1>;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 partition@0 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 label =3D "TS-BOOTROM";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x00000000 0x00020=
+000>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 read-only;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+>=20
+> Partitions are not useful here, but if you want them, use the
+> partitions container instead, please.
+>=20
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 partition@20000 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 label =3D "Linux";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x00020000 0x07d00=
+000>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 partition@7d20000 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 label =3D "RedBoot";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x07d20000 0x002e0=
+000>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 read-only;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+> > +=C2=A0=C2=A0=C2=A0 };
+> > +
+> > +...
+>=20
+>=20
+> Thanks,
+> Miqu=C3=A8l
 
