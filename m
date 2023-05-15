@@ -2,147 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C155E703040
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7CF703034
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241913AbjEOOnP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 10:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S239982AbjEOOmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241759AbjEOOnG (ORCPT
+        with ESMTP id S234853AbjEOOmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:43:06 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41229270D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:50 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:41028)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pyZPT-000HU2-Ep; Mon, 15 May 2023 08:42:47 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:48662 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pyZPR-003Kxl-OI; Mon, 15 May 2023 08:42:47 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <CAAhV-H79bUF396+dWaafanzcMq41VtcOsfa_3SYSUftyNDOyvw@mail.gmail.com>
-        (Huacai Chen's message of "Sat, 13 May 2023 11:18:37 +0800")
-References: <20230509104127.1997562-1-chenhuacai@loongson.cn>
-        <87ild0w5qs.fsf@email.froward.int.ebiederm.org>
-        <CAAhV-H79bUF396+dWaafanzcMq41VtcOsfa_3SYSUftyNDOyvw@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Mon, 15 May 2023 09:41:50 -0500
-Message-ID: <87ttwdu05t.fsf@email.froward.int.ebiederm.org>
+        Mon, 15 May 2023 10:42:18 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26066E58
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:13 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f396606ab0so1482911cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684161732; x=1686753732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xivJhdpQaweyzm6nbX3Ea6ei977VI1nEaj15dJjfUJY=;
+        b=LfuJOEaIB58sGTFfv23yzuCJolheVTJXvLkYJ1qK1oPHaLr1UvzuZuRtTRvqpID3N6
+         jL5AV5D0cs/N9+U8AOpCLdWjAWZHCLaPvfYJcggpTqRZAEtz1N6nejos4oP2mwv74SUc
+         KCO0kiKYYL2d7MZqUZYVw0fepdUctVAE6/x7j0VnOVU7atm1aGQDKvK59K3fTJHLf+Nk
+         z98Pt572j6TiPVUf4g1nc0dOxUeUBrLF9i7xjR8TUPNTbkApLSQqFbmRINRkWHbGHqDJ
+         hVKMCCqHmM0LkmqjyWa+vIrmukdOJHQNq5oP1ZonuU2lRL5V4enNf44uWTocN9vr1lna
+         Y6yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684161732; x=1686753732;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xivJhdpQaweyzm6nbX3Ea6ei977VI1nEaj15dJjfUJY=;
+        b=OXYrTx3qoRpKojL33x1levIkiuQbYFMg6P8UO36z/TRFSrO9Fu3iK7T2aJE6aNF8J7
+         AtCy1pwnU38qBTWyemGVdM5eSp49Toj80DuXt/k3TeSlCCP13k//6LFtclvL23XRPnjf
+         0Hrf/YLh09CtaTw5cpCzMjgJ1nA2nrUgGKtEX9+FNmsQ264EsY5MYue44OrzMghysCSL
+         9fCwawulVVTRVQqEGa/9Ia2fY3Rc4I7N0/T4zpUqX8dw4neGWZEPxPtxeafae0/rBvzT
+         YkuBhr97Zetl6GlkIpk/03Ue3nVxRVlWSTWwLU9qCXNizGR0HUwk8dUh158/MQ81xjTU
+         i1LA==
+X-Gm-Message-State: AC+VfDyyO9fmvZpWdIOYGmbcpJ23P9nsMGaZLSaE0MDuiJ0WzvWNOwco
+        uc5PnqToSt4RrYuv7DL8heWYqbWU7rmI05VChaX6YQ==
+X-Google-Smtp-Source: ACHHUZ6afn6VrL2MCyAGl7ShdiUs37uFwI48FL1gg0fFLy7/ADtJp4aFqUMoAc4tT7/DiotY9KrN8q9Cy9n517Cb7KY=
+X-Received: by 2002:a05:622a:d5:b0:3f2:2c89:f1ef with SMTP id
+ p21-20020a05622a00d500b003f22c89f1efmr7073qtw.5.1684161732039; Mon, 15 May
+ 2023 07:42:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1pyZPR-003Kxl-OI;;;mid=<87ttwdu05t.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX18kmDAXAFN2evKbBlpraJSCti1ihQ0mM6I=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20230421141723.2405942-1-peternewman@google.com>
+ <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
+ <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com> <31993ea8-97e5-b8d5-b344-48db212bc9cf@intel.com>
+In-Reply-To: <31993ea8-97e5-b8d5-b344-48db212bc9cf@intel.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Mon, 15 May 2023 16:42:01 +0200
+Message-ID: <CALPaoCiPCxUeGKjZytxmse2oNs=qDBbRY9kH7AZGG6iXf1qtJw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
+ collect CPUs' MBM events
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stephane Eranian <eranian@google.com>,
+        James Morse <james.morse@arm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Huacai Chen <chenhuacai@kernel.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1032 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.9 (0.4%), b_tie_ro: 2.8 (0.3%), parse: 0.71
-        (0.1%), extract_message_metadata: 12 (1.1%), get_uri_detail_list: 1.56
-        (0.2%), tests_pri_-2000: 19 (1.8%), tests_pri_-1000: 1.88 (0.2%),
-        tests_pri_-950: 1.10 (0.1%), tests_pri_-900: 0.80 (0.1%),
-        tests_pri_-200: 0.67 (0.1%), tests_pri_-100: 3.0 (0.3%),
-        tests_pri_-90: 240 (23.2%), check_bayes: 227 (22.0%), b_tokenize: 6
-        (0.6%), b_tok_get_all: 7 (0.7%), b_comp_prob: 1.81 (0.2%),
-        b_tok_touch_all: 208 (20.2%), b_finish: 0.89 (0.1%), tests_pri_0: 299
-        (29.0%), check_dkim_signature: 0.55 (0.1%), check_dkim_adsp: 2.6
-        (0.3%), poll_dns_idle: 436 (42.2%), tests_pri_10: 2.6 (0.2%),
-        tests_pri_500: 445 (43.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH RFC] kthread: Unify kernel_thread() and user_mode_thread()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Huacai Chen <chenhuacai@kernel.org> writes:
+Hi Reinette,
 
-> Hi, Eric,
+On Fri, May 12, 2023 at 5:26=E2=80=AFPM Reinette Chatre
+<reinette.chatre@intel.com> wrote:
+> On 5/12/2023 6:25 AM, Peter Newman wrote:
+> > On Thu, May 11, 2023 at 11:37=E2=80=AFPM Reinette Chatre
+> > <reinette.chatre@intel.com> wrote:
+> >> On 4/21/2023 7:17 AM, Peter Newman wrote:
+> >>> Implement resctrl_mbm_flush_cpu(), which collects a domain's current =
+MBM
+> >>> event counts into its current software RMID. The delta for each CPU i=
+s
+> >>> determined by tracking the previous event counts in per-CPU data.  Th=
+e
+> >>> software byte counts reside in the arch-independent mbm_state
+> >>> structures.
+> >>
+> >> Could you elaborate why the arch-independent mbm_state was chosen?
+> >
+> > It largely had to do with how many soft RMIDs to implement. For our
+> > own needs, we were mainly concerned with getting back to the number of
+> > monitoring groups the hardware claimed to support, so there wasn't
+> > much internal motivation to support an unbounded number of soft RMIDs.
 >
-> On Wed, May 10, 2023 at 11:45 PM Eric W. Biederman
-> <ebiederm@xmission.com> wrote:
->>
->> Huacai Chen <chenhuacai@loongson.cn> writes:
->>
->> > Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
->> > and umh") introduces a new function user_mode_thread() for init and umh.
->> > But the name is a bit confusing because init and umh are indeed kernel
->> > threads at creation time, the real difference is "they will become user
->> > processes".
->>
->> No they are not "kernel threads" at creation time.  At creation time
->> init and umh are threads running in the kernel.
->>
->> It is a very important distinction and you are loosing it.
->>
->> Because they don't have a kthread_struct such tasks in the kernel
->> are not allowed to depend on anything that is ``kthread''.
-> Hmm, traditionally, we call a "task" without userland address space
-> (i.e., the task_struct has no mm, it shares kernel's address space) as
-> a kernel thread, so init and umh are kernel threads until they call
-> kernel_execve().
+> Apologies for not being explicit, I was actually curious why the
+> arch-independent mbm_state, as opposed to the arch-dependent state, was
+> chosen.
+>
+> I think the lines are getting a bit blurry here with the software RMID
+> feature added as a resctrl filesystem feature (and thus non architectural=
+),
+> but it is specific to AMD architecture.
 
-No.
+The soft RMID solution applies conceptually to any system where the
+number of hardware counters is smaller than the number of desired
+monitoring groups, but at least as large as the number of CPUs. It's a
+solution we may need to rely on more in the future as it's easier for
+monitoring hardware to scale to the number of CPUs than (CPUs *
+mbm_domains). I believed the counts in bytes would apply to the user
+interface universally.
 
-The important distinction is not the userland address space.
+However, I did recently rebase these changes onto one of James's MPAM
+snapshot branches and __mbm_flush() did end up fitting better on the
+arch-dependent side, so I was forced to move the counters over to
+arch_mbm_state because on the snapshot branch the arch-dependent code
+cannot see the arch-independent mbm_state structure. I then created
+resctrl_arch-() helpers for __mon_event_count() to read the counts
+from the arch_mbm_state.
 
-The important distinction is how such tasks interact with the rest of
-the system.
+In hindsight, despite generic-looking code being able to retrieve the
+CPU counts with resctrl_arch_rmid_read(), the permanent assignment of
+a HW RMID to a CPU is an implementation-detail specific to the
+RDT/PQoS interface and would probably not align to a theoretical MPAM
+implementation.
 
-It is true the mm does not initially have userspace content but
-that does not change the fact that it is a valid userspace mm.
+>
+> > However, breaking this artificial connection between supported HW and
+> > SW RMIDs to support arbitrarily-many monitoring groups could make the
+> > implementation conceptually cleaner. If you agree,  I would be happy
+> > to give it a try in the next series.
+>
+> I have not actually considered this. At first glance I think this would
+> add more tentacles into the core where currently the number of RMIDs
+> supported are queried from the device and supporting an arbitrary number
+> would impact that. At this time the RMID state is also pre-allocated
+> and thus not possible to support an "arbitrarily-many".
 
-For scheduling, for signal delivery, and for everything else
-these tasks are userspace tasks.
+Yes, this was the part that made me want to just leave the RMID count alone=
+.
 
-The very important detail is that it is not at kernel_execve time that
-the distinction is made, but that it is made earlier when the thread
-is created.
 
-This is a subtle change from the way things used to work once upon a
-time.  But the way things used to work was buggy and racy.  Deciding at
-thread creation time what the thread will be used for, what limitations
-etc is much less error prone.
+>
+> >>> +/*
+> >>> + * Called from context switch code __resctrl_sched_in() when the cur=
+rent soft
+> >>> + * RMID is changing or before reporting event counts to user space.
+> >>> + */
+> >>> +void resctrl_mbm_flush_cpu(void)
+> >>> +{
+> >>> +     struct rdt_resource *r =3D &rdt_resources_all[RDT_RESOURCE_L3].=
+r_resctrl;
+> >>> +     int cpu =3D smp_processor_id();
+> >>> +     struct rdt_domain *d;
+> >>> +
+> >>> +     d =3D get_domain_from_cpu(cpu, r);
+> >>> +     if (!d)
+> >>> +             return;
+> >>> +
+> >>> +     if (is_mbm_local_enabled())
+> >>> +             __mbm_flush(QOS_L3_MBM_LOCAL_EVENT_ID, r, d);
+> >>> +     if (is_mbm_total_enabled())
+> >>> +             __mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
+> >>> +}
+> >>
+> >> This (potentially) adds two MSR writes and two MSR reads to what could=
+ possibly
+> >> be quite slow MSRs if it was not designed to be used in context switch=
+. Do you
+> >> perhaps have data on how long these MSR reads/writes take on these sys=
+tems to get
+> >> an idea about the impact on context switch? I think this data should f=
+eature
+> >> prominently in the changelog.
+> >
+> > I can probably use ftrace to determine the cost of an __rmid_read()
+> > call on a few implementations.
+>
+> On a lower level I think it may be interesting to measure more closely
+> just how long a wrmsr and rdmsr take on these registers. It may be intere=
+sting
+> if you, for example, use rdtsc_ordered() before and after these calls, an=
+d then
+> compare it to how long it takes to write the PQR register that has been
+> designed to be used in context switch.
+>
+> > To understand the overall impact to context switch, I can put together
+> > a scenario where I can control whether the context switches being
+> > measured result in change of soft RMID to prevent the data from being
+> > diluted by non-flushing switches.
+>
+> This sounds great. Thank you very much.
 
-We had this concept of kthread_create that used to create a special
-class of tasks.  What was special, and what extra could be done with
-those tasks was defined by the presence "struct kthread" (my apologies
-I mispoke when I said kthread_struct earlier).
+I used a simple parent-child pipe loop benchmark with the parent in
+one monitoring group and the child in another to trigger 2M
+context-switches on the same CPU and compared the sample-based
+profiles on an AMD and Intel implementation. I used perf diff to
+compare the samples between hard and soft RMID switches.
 
-Then because that specialness was needed on other tasks struct kthread
-started to be added to tasks at run-time.  That runtime addition of
-struct kthread introduced races that complicated the code, and had
-bugs.
+Intel(R) Xeon(R) Platinum 8173M CPU @ 2.00GHz:
 
-> Of course in your patch a kernel thread should have a
-> "kthread" struct (I can't grep "kthread_struct" so I suppose you are
-> saying "kthread"), but I think the traditional definition is more
-> natural for most people?
+              +44.80%  [kernel.kallsyms]  [k] __rmid_read
+    10.43%     -9.52%  [kernel.kallsyms]  [k] __switch_to
 
-Natural and traditional is a silly argument.  The fact is those are
-tasks that ultimately run userspace code.  That ability needs to
-be decided upon at creation time to make them race free.
+AMD EPYC 7B12 64-Core Processor:
 
-Therefore the old code and definition are wrong.
+              +28.27%  [kernel.kallsyms]  [k] __rmid_read
+    13.45%    -13.44%  [kernel.kallsyms]  [k] __switch_to
 
-Eric
+Note that a soft RMID switch that doesn't change CLOSID skips the
+PQR_ASSOC write completely, so from this data I can roughly say that
+__rmid_read() is a little over 2x the length of a PQR_ASSOC write that
+changes the current RMID on the AMD implementation and about 4.5x
+longer on Intel.
+
+Let me know if this clarifies the cost enough or if you'd like to also
+see instrumented measurements on the individual WRMSR/RDMSR
+instructions.
+
+Thanks!
+-Peter
