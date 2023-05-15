@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E24E703D97
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08E2703D98
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244809AbjEOTTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 15:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S243447AbjEOTUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 15:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242789AbjEOTTT (ORCPT
+        with ESMTP id S236004AbjEOTUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 15:19:19 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCFD10C6;
-        Mon, 15 May 2023 12:19:18 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FJJB4W045695;
-        Mon, 15 May 2023 14:19:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684178351;
-        bh=nJ7qevk+C4BYIH4h8NNDIO9iDNa/BpFJKBXbdR/B8pM=;
-        h=From:To:CC:Subject:Date;
-        b=QE+WudY+/6rFlxWzxHJnzi/yDfo5cgKI8GHnTZOURmoiVa85SeWPzHeOjwr9vFXBb
-         IJnoGZPH1RY/LiG2hz6ju19ZRO8C6FwBVXz3gql5J4hgK5d2ElakFPgYV3s84ihQqE
-         brAMYtTOiBHAVi15WkhEpM4jSyhSZL73aQ5evuR0=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FJJB1o045054
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 14:19:11 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 14:19:10 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 May 2023 14:19:10 -0500
-Received: from fllv0039.itg.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FJJAsP104430;
-        Mon, 15 May 2023 14:19:10 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Peter Rosin <peda@axentia.se>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [PATCH] mux: mmio: use reg property when parent device is not a syscon
-Date:   Mon, 15 May 2023 14:19:09 -0500
-Message-ID: <20230515191909.611241-1-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 15 May 2023 15:20:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5000EB8
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 12:20:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DDF62324
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 19:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 14312C4339B;
+        Mon, 15 May 2023 19:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684178420;
+        bh=LyOJi/qVgBu0+z0V1xOl962sFcB/Su9DjQmlE4QBRNE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AyyEcuF/IS+wc6DeMZRZrgihgsbzGj6FAxQ2m2WEgXt2VeG83lsZG1YocmTtX30lm
+         I9j78XBptRV9G7xoU8ymS5lery2toYEYr1bgpyNgbkGhlYYz8527EhfpFmKQ8Ic6jK
+         LBQgwzePQy/MBX3RmSGidkXf1fCnC2h2svUJ3kfOAyAkI5slraeIlJHVNrw1659cwU
+         BwA1N9fQtLRvCdgRIXrPKlL8jKPXLw1uKR7oXagNlvwGzx6wRNhOl20EFNGBKypCCT
+         BTw1DtjIr+cp4x50kEecpmJn2uccWIRInciojeeSf3K3xk7H4A9qz7nbndP/Y7owjJ
+         rKdm4V6+RdW/w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DCF01E49FAB;
+        Mon, 15 May 2023 19:20:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Re: [PATCH bpf-next v2] arm64,bpf: Support struct arguments in the BPF
+ trampoline
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168417841990.1340.9887886289072485201.git-patchwork-notify@kernel.org>
+Date:   Mon, 15 May 2023 19:20:19 +0000
+References: <20230511140507.514888-1-revest@chromium.org>
+In-Reply-To: <20230511140507.514888-1-revest@chromium.org>
+To:     Florent Revest <revest@chromium.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        mark.rutland@arm.com, xukuohai@huaweicloud.com, zlim.lnx@gmail.com,
+        yhs@meta.com, yhs@fb.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,38 +61,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT binding for the reg-mux compatible states it can be used when the
-"parent device of mux controller is not syscon device". It also allows
-for a reg property. When the parent device is indeed not a syscon device,
-nor is it a regmap provider, we should fallback to using that reg
-property to identify the address space to use for this mux.
+Hello:
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/mux/mmio.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-diff --git a/drivers/mux/mmio.c b/drivers/mux/mmio.c
-index 44a7a0e885b8..42e00b9fd0a9 100644
---- a/drivers/mux/mmio.c
-+++ b/drivers/mux/mmio.c
-@@ -44,10 +44,13 @@ static int mux_mmio_probe(struct platform_device *pdev)
- 	int ret;
- 	int i;
- 
--	if (of_device_is_compatible(np, "mmio-mux"))
-+	if (of_device_is_compatible(np, "mmio-mux")) {
- 		regmap = syscon_node_to_regmap(np->parent);
--	else
--		regmap = dev_get_regmap(dev->parent, NULL) ?: ERR_PTR(-ENODEV);
-+	} else {
-+		regmap = dev_get_regmap(dev->parent, NULL);
-+		if (!regmap)
-+			regmap = device_node_to_regmap(np) ?: ERR_PTR(-ENODEV);
-+	}
- 	if (IS_ERR(regmap)) {
- 		ret = PTR_ERR(regmap);
- 		dev_err(dev, "failed to get regmap: %d\n", ret);
+On Thu, 11 May 2023 16:05:07 +0200 you wrote:
+> This extends the BPF trampoline JIT to support attachment to functions
+> that take small structures (up to 128bit) as argument. This is trivially
+> achieved by saving/restoring a number of "argument registers" rather
+> than a number of arguments.
+> 
+> The AAPCS64 section 6.8.2 describes the parameter passing ABI.
+> "Composite types" (like C structs) below 16 bytes (as enforced by the
+> BPF verifier) are provided as part of the 8 argument registers as
+> explained in the section C.12.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2] arm64,bpf: Support struct arguments in the BPF trampoline
+    https://git.kernel.org/bpf/bpf-next/c/90564f1e3dd6
+
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
