@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3AE702201
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E37B702203
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234278AbjEODIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 23:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        id S235707AbjEODJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 23:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjEODHz (ORCPT
+        with ESMTP id S234828AbjEODJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 23:07:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B645BE78
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 20:07:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B9D36121E
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:07:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31FF8C433EF;
-        Mon, 15 May 2023 03:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684120073;
-        bh=G7DedWUvd2Ek8z4UQYFYC7W6+CKbIg4FT6sWJitIhS4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tsc60lt7ra8ySXOoViw7PWORQ1NyxYIof4X//ctW2N42xyV0OeJ4GhKXLeVsjuncI
-         AsIF3wzbd3HdkNG5MyG3Z0/A1lQrSEqYppCPeEWCc6L4nRBZiO1qCZxEzZdF5q61h1
-         miKG5aA1j2kr+0xZW8Hxj39wxbvVeELA58T9RBrdIG24A+825ps2KueTjAiNJdmUNt
-         X5PerN8+o6Ek+6OFpvuVyyaxBRlBje4J2QJt39uj1H95pfiM/0hVFDhG3EEysslh0f
-         PCE5qNGDO+xlo0vBtb1Q992wzai7AX0t/unVbRopkb3LUa2PyZvympsAMzfaiknH2S
-         m7G3YLC96BRBw==
-Date:   Mon, 15 May 2023 11:07:41 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V2] soc: imx: support i.MX93 soc device
-Message-ID: <20230515030741.GC767028@dragon>
-References: <20230509091942.2923330-1-peng.fan@oss.nxp.com>
+        Sun, 14 May 2023 23:09:52 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56021707
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 20:09:50 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-331a812aa1eso76358465ab.3
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 20:09:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684120190; x=1686712190;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RRU0rjb8JefBTmoDMF+g1dYQsfw2AxmnXJwd6Giu3tg=;
+        b=FsYqV+/JZVcil5EyeN2brnzfoM6F9+xZAydBqrEmVHGi0cJXkgF6+/zsv+gKeUi/U1
+         GJjawUCDQ8PwLxY9C/BYRaDNkBGukzrCKLOyAnpZbQMn1gv25mMkAm57GGwFHk8vdot0
+         kUN9kB5OFSMj/Xteimr22hY8efxJFeQfPeKxRV4X/RoAIGb/3PugtJULcA31nDu7GZZ0
+         O7Z8N/4JTeCIrCswvU8xp7AONoCaiMRGKb/SdQ/hzz6+xATT53Qc8m4FfAw8HHIP3Qbl
+         9XkxTUtSKUIdHMnrUUKFcjka+/Z1jvB7XcAQBEmnoKZYjDfeEIhPlnVs4ByOYtFaTpkN
+         bLmw==
+X-Gm-Message-State: AC+VfDxsqXOaomINVO5IaI7RNAekUbHwzbNs4zE+YS54iZJNKGBUo+n7
+        8dHODZr+XMYnEdGa+FtBgfpS7cXi/jfBsha7iu/FEILKh2ZG
+X-Google-Smtp-Source: ACHHUZ6vyiRKV66BJe2HM3So05t4s7Hvx7UV1Jc2piMsLNRNTvjOSAfEWvK0yNwAu0RWtZKgh2M2jkXd0OQElpHK3DCYUR1DSjWp
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509091942.2923330-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:687:b0:333:74f7:a7ff with SMTP id
+ o7-20020a056e02068700b0033374f7a7ffmr15178579ils.6.1684120190239; Sun, 14 May
+ 2023 20:09:50 -0700 (PDT)
+Date:   Sun, 14 May 2023 20:09:50 -0700
+In-Reply-To: <0000000000007fa2d705fb29f046@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b2cbe305fbb2c9d9@google.com>
+Subject: Re: [syzbot] [crypto?] general protection fault in __aria_aesni_avx_gfni_crypt_16way
+From:   syzbot <syzbot+a6abcf08bad8b18fd198@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, davem@davemloft.net,
+        herbert@gondor.apana.org.au, hpa@zytor.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,154 +58,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 05:19:42PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Similar to i.MX8M, add i.MX93 soc device support
+syzbot has found a reproducer for the following issue on:
 
-This commit log doesn't provide too much helpful information.  You may
-want to briefly introduce i.MX93 UID, which looks something new?
+HEAD commit:    31f4104e392a Merge tag 'locking_urgent_for_v6.4_rc2' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11768616280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
+dashboard link: https://syzkaller.appspot.com/bug?extid=a6abcf08bad8b18fd198
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1737e3be280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149d4c06280000
 
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
-> 
-> V2:
->  The ocotp yaml has got R-b from DT maintainer:
->  https://lore.kernel.org/all/01be24b3-aaf2-e27b-d00e-f8649a497463@linaro.org/
-> 
->  Remove uid_length from V1 which is unused.
-> 
->  drivers/soc/imx/Makefile    |  2 +-
->  drivers/soc/imx/soc-imx8m.c | 64 ++++++++++++++++++++++++++++++++++++-
->  2 files changed, 64 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/imx/Makefile b/drivers/soc/imx/Makefile
-> index a28c44a1f16a..83aff181ae51 100644
-> --- a/drivers/soc/imx/Makefile
-> +++ b/drivers/soc/imx/Makefile
-> @@ -7,5 +7,5 @@ obj-$(CONFIG_IMX_GPCV2_PM_DOMAINS) += gpcv2.o
->  obj-$(CONFIG_SOC_IMX8M) += soc-imx8m.o
->  obj-$(CONFIG_IMX8M_BLK_CTRL) += imx8m-blk-ctrl.o
->  obj-$(CONFIG_IMX8M_BLK_CTRL) += imx8mp-blk-ctrl.o
-> -obj-$(CONFIG_SOC_IMX9) += imx93-src.o imx93-pd.o
-> +obj-$(CONFIG_SOC_IMX9) += soc-imx8m.o imx93-src.o imx93-pd.o
->  obj-$(CONFIG_IMX9_BLK_CTRL) += imx93-blk-ctrl.o
-> diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
-> index 1dcd243df567..0e69b8b48183 100644
-> --- a/drivers/soc/imx/soc-imx8m.c
-> +++ b/drivers/soc/imx/soc-imx8m.c
-> @@ -25,8 +25,11 @@
->  
->  #define IMX8MP_OCOTP_UID_OFFSET		0x10
->  
-> +#define IMX93_OCOTP_UID_OFFSET		0x80c0
-> +
->  /* Same as ANADIG_DIGPROG_IMX7D */
->  #define ANADIG_DIGPROG_IMX8MM	0x800
-> +#define ANADIG_DIGPROG_IMX93	0x800
->  
->  struct imx8_soc_data {
->  	char *name;
-> @@ -34,6 +37,7 @@ struct imx8_soc_data {
->  };
->  
->  static u64 soc_uid;
-> +static u64 soc_uid_h;
->  
->  #ifdef CONFIG_HAVE_ARM_SMCCC
->  static u32 imx8mq_soc_revision_from_atf(void)
-> @@ -141,6 +145,53 @@ static u32 __init imx8mm_soc_revision(void)
->  	return rev;
->  }
->  
-> +static void __init imx93_soc_uid(void)
-> +{
-> +	void __iomem *ocotp_base;
-> +	struct device_node *np;
-> +
-> +	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-ocotp");
-> +	if (!np)
-> +		return;
-> +
-> +	ocotp_base = of_iomap(np, 0);
-> +	WARN_ON(!ocotp_base);
-> +
-> +	soc_uid = readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0x8);
-> +	soc_uid <<= 32;
-> +	soc_uid |= readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0xC);
-> +
-> +	soc_uid_h = readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0x0);
-> +	soc_uid_h <<= 32;
-> +	soc_uid_h |= readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0x4);
-> +
-> +	iounmap(ocotp_base);
-> +	of_node_put(np);
-> +}
-> +
-> +static u32 __init imx93_soc_revision(void)
-> +{
-> +	struct device_node *np;
-> +	void __iomem *anatop_base;
-> +	u32 rev;
-> +
-> +	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-anatop");
-> +	if (!np)
-> +		return 0;
-> +
-> +	anatop_base = of_iomap(np, 0);
-> +	WARN_ON(!anatop_base);
-> +
-> +	rev = readl_relaxed(anatop_base + ANADIG_DIGPROG_IMX93);
-> +
-> +	iounmap(anatop_base);
-> +	of_node_put(np);
-> +
-> +	imx93_soc_uid();
-> +
-> +	return rev;
-> +}
-> +
->  static const struct imx8_soc_data imx8mq_soc_data = {
->  	.name = "i.MX8MQ",
->  	.soc_revision = imx8mq_soc_revision,
-> @@ -161,11 +212,17 @@ static const struct imx8_soc_data imx8mp_soc_data = {
->  	.soc_revision = imx8mm_soc_revision,
->  };
->  
-> +static const struct imx8_soc_data imx93_soc_data = {
-> +	.name = "i.MX93",
-> +	.soc_revision = imx93_soc_revision,
-> +};
-> +
->  static __maybe_unused const struct of_device_id imx8_soc_match[] = {
->  	{ .compatible = "fsl,imx8mq", .data = &imx8mq_soc_data, },
->  	{ .compatible = "fsl,imx8mm", .data = &imx8mm_soc_data, },
->  	{ .compatible = "fsl,imx8mn", .data = &imx8mn_soc_data, },
->  	{ .compatible = "fsl,imx8mp", .data = &imx8mp_soc_data, },
-> +	{ .compatible = "fsl,imx93", .data = &imx93_soc_data, },
->  	{ }
->  };
->  
-> @@ -212,7 +269,12 @@ static int __init imx8_soc_init(void)
->  		goto free_soc;
->  	}
->  
-> -	soc_dev_attr->serial_number = kasprintf(GFP_KERNEL, "%016llX", soc_uid);
-> +	if (soc_uid_h) {
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-31f4104e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/967f88e07e18/vmlinux-31f4104e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b4e92e4df24e/bzImage-31f4104e.xz
 
-Unnecessary parentheses.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a6abcf08bad8b18fd198@syzkaller.appspotmail.com
 
-Shawn
+general protection fault, maybe for address 0xffffffff8c12a198: 0000 [#1] PREEMPT SMP KASAN
+CPU: 2 PID: 5136 Comm: syz-executor269 Not tainted 6.4.0-rc1-syzkaller-00190-g31f4104e392a #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:__aria_aesni_avx_gfni_crypt_16way+0x2a6/0x4f40 arch/x86/crypto/aria-aesni-avx-asm_64.S:1164
+Code: d0 10 c4 e2 69 00 d7 c5 11 ef ea c5 e9 72 d0 08 c4 e2 69 00 d7 c5 09 ef f2 c4 e2 79 00 d7 c5 01 ef fa c5 f9 6f 05 7a 15 c9 0a <c5> f9 6f 0d 6a 15 c9 0a c5 f9 6f 15 7a 15 c9 0a c5 f9 6f 1d 52 15
+RSP: 0018:ffffc9000384f210 EFLAGS: 00010286
+RAX: ffff888026364890 RBX: 0000000000000000 RCX: ffff888026364890
+RDX: ffff888026364890 RSI: ffff888026364890 RDI: ffff888023c79028
+RBP: ffff88801fb3c900 R08: ffff888026364910 R09: ffff888023c79028
+R10: ffff88801fb3c800 R11: ffff88801fb3c800 R12: ffff88801fb3c900
+R13: ffff888023c79028 R14: dffffc0000000000 R15: ffff888026364890
+FS:  0000000000000000(0000) GS:ffff88802c800000(0063) knlGS:0000000056fc72c0
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00007f29a06956a8 CR3: 000000001f222000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ aria_aesni_avx_gfni_ctr_crypt_16way+0x1d/0x110 arch/x86/crypto/aria-aesni-avx-asm_64.S:1339
+ aria_avx_ctr_encrypt+0x180/0x680 arch/x86/crypto/aria_aesni_avx_glue.c:103
+ crypto_skcipher_encrypt+0xbc/0x100 crypto/skcipher.c:653
+ crypto_skcipher_encrypt+0xbc/0x100 crypto/skcipher.c:653
+ crypto_gcm_encrypt+0x393/0x4b0 crypto/gcm.c:459
+ crypto_aead_encrypt+0xbc/0x100 crypto/aead.c:121
+ tls_do_encryption net/tls/tls_sw.c:544 [inline]
+ tls_push_record+0x12d8/0x30f0 net/tls/tls_sw.c:777
+ bpf_exec_tx_verdict+0xdf0/0x1210 net/tls/tls_sw.c:817
+ tls_sw_sendmsg+0x100b/0x1850 net/tls/tls_sw.c:1033
+ inet6_sendmsg+0x9d/0xe0 net/ipv6/af_inet6.c:651
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ sock_write_iter+0x295/0x3d0 net/socket.c:1140
+ call_write_iter include/linux/fs.h:1868 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x945/0xd50 fs/read_write.c:584
+ ksys_write+0x1ec/0x250 fs/read_write.c:637
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+RIP: 0023:0xf7f45579
+Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000ff8f022c EFLAGS: 00000246 ORIG_RAX: 0000000000000004
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000020000580
+RDX: 0000000000000278 RSI: 00000000f7fe8000 RDI: 0000000000000000
+RBP: 00000000ff8f0290 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__aria_aesni_avx_gfni_crypt_16way+0x2a6/0x4f40 arch/x86/crypto/aria-aesni-avx-asm_64.S:1164
+Code: d0 10 c4 e2 69 00 d7 c5 11 ef ea c5 e9 72 d0 08 c4 e2 69 00 d7 c5 09 ef f2 c4 e2 79 00 d7 c5 01 ef fa c5 f9 6f 05 7a 15 c9 0a <c5> f9 6f 0d 6a 15 c9 0a c5 f9 6f 15 7a 15 c9 0a c5 f9 6f 1d 52 15
+RSP: 0018:ffffc9000384f210 EFLAGS: 00010286
+RAX: ffff888026364890 RBX: 0000000000000000 RCX: ffff888026364890
+RDX: ffff888026364890 RSI: ffff888026364890 RDI: ffff888023c79028
+RBP: ffff88801fb3c900 R08: ffff888026364910 R09: ffff888023c79028
+R10: ffff88801fb3c800 R11: ffff88801fb3c800 R12: ffff88801fb3c900
+R13: ffff888023c79028 R14: dffffc0000000000 R15: ffff888026364890
+FS:  0000000000000000(0000) GS:ffff88802c800000(0063) knlGS:0000000056fc72c0
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 00007f29a06956a8 CR3: 000000001f222000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	d0 10                	rclb   (%rax)
+   2:	c4 e2 69 00 d7       	vpshufb %xmm7,%xmm2,%xmm2
+   7:	c5 11 ef ea          	vpxor  %xmm2,%xmm13,%xmm13
+   b:	c5 e9 72 d0 08       	vpsrld $0x8,%xmm0,%xmm2
+  10:	c4 e2 69 00 d7       	vpshufb %xmm7,%xmm2,%xmm2
+  15:	c5 09 ef f2          	vpxor  %xmm2,%xmm14,%xmm14
+  19:	c4 e2 79 00 d7       	vpshufb %xmm7,%xmm0,%xmm2
+  1e:	c5 01 ef fa          	vpxor  %xmm2,%xmm15,%xmm15
+  22:	c5 f9 6f 05 7a 15 c9 	vmovdqa 0xac9157a(%rip),%xmm0        # 0xac915a4
+  29:	0a
+* 2a:	c5 f9 6f 0d 6a 15 c9 	vmovdqa 0xac9156a(%rip),%xmm1        # 0xac9159c <-- trapping instruction
+  31:	0a
+  32:	c5 f9 6f 15 7a 15 c9 	vmovdqa 0xac9157a(%rip),%xmm2        # 0xac915b4
+  39:	0a
+  3a:	c5                   	.byte 0xc5
+  3b:	f9                   	stc
+  3c:	6f                   	outsl  %ds:(%rsi),(%dx)
+  3d:	1d                   	.byte 0x1d
+  3e:	52                   	push   %rdx
+  3f:	15                   	.byte 0x15
 
-> +		soc_dev_attr->serial_number = kasprintf(GFP_KERNEL, "%016llX%016llX",
-> +							soc_uid_h, soc_uid);
-> +	} else {
-> +		soc_dev_attr->serial_number = kasprintf(GFP_KERNEL, "%016llX", soc_uid);
-> +	}
->  	if (!soc_dev_attr->serial_number) {
->  		ret = -ENOMEM;
->  		goto free_rev;
-> -- 
-> 2.37.1
-> 
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
