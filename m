@@ -2,91 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41761703CD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C4F703CED
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242830AbjEOSiq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 14:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S243732AbjEOSoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 14:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243631AbjEOSio (ORCPT
+        with ESMTP id S234375AbjEOSoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 14:38:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86F82709;
-        Mon, 15 May 2023 11:38:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C08F6210F;
-        Mon, 15 May 2023 18:38:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C95C433EF;
-        Mon, 15 May 2023 18:38:41 +0000 (UTC)
-Date:   Mon, 15 May 2023 14:38:39 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, mhiramat@kernel.org, mark.rutland@arm.com,
-        guoren@kernel.org, jszhang@kernel.org, e.shatokhin@yadro.com,
-        bjorn@rivosinc.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH V10 4/4] samples: ftrace: Add riscv support for
- SAMPLE_FTRACE_DIRECT[_MULTI]
-Message-ID: <20230515143839.692f9ab3@gandalf.local.home>
-In-Reply-To: <20230515143700.26beeacf@gandalf.local.home>
-References: <20230511093234.3123181-1-suagrfillet@gmail.com>
-        <20230511093234.3123181-5-suagrfillet@gmail.com>
-        <20230515143700.26beeacf@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 15 May 2023 14:44:18 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091F61550D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:44:14 -0700 (PDT)
+Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id E633120629;
+        Mon, 15 May 2023 20:44:11 +0200 (CEST)
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v1] drm/bridge: tc358768: remove unneeded semicolon
+Date:   Mon, 15 May 2023 20:44:08 +0200
+Message-Id: <20230515184408.9421-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 14:37:00 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-> On Thu, 11 May 2023 17:32:34 +0800
-> Song Shuai <suagrfillet@gmail.com> wrote:
-> 
-> > select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
-> > for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
-> > the ftrace-direct*.c files in samples/ftrace/.
-> > 
-> > Link: https://lore.kernel.org/linux-riscv/c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com/T/#ma13012560331c66b051b580b3ab4a04ba44455ec
-> > Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > Tested-by: Guo Ren <guoren@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Acked-by: Björn Töpel <bjorn@rivosinc.com>
-> > ---
-> >  arch/riscv/Kconfig                          |  2 ++
-> >  samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
-> >  samples/ftrace/ftrace-direct-multi-modify.c | 40 +++++++++++++++++++++
-> >  samples/ftrace/ftrace-direct-multi.c        | 24 +++++++++++++
-> >  samples/ftrace/ftrace-direct-too.c          | 27 ++++++++++++++
-> >  samples/ftrace/ftrace-direct.c              | 23 ++++++++++++
-> >  6 files changed, 150 insertions(+)  
-> 
-> I acked v8 (which you will need my ack to get these in). Unless this patch
-> changed since v8, you should include my ack in further versions.
-> 
-> Or you may be waiting longer for its acceptance.
-> 
-> If the patch did change, please acknowledge that in the next version (or
-> this one if it did change), asking me to ack it again.
-> 
+Remove unneeded stray semicolon.
 
-Nevermind, I'm an idiot (and my inbox is not in date order). You sent this
-*after* I acked v8, when I should have been acking this one. ;-)
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305152341.oiSjRpv6-lkp@intel.com/
+Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+---
+ drivers/gpu/drm/bridge/tc358768.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry about that! I've been traveling and my inbox is a mess :-p
+diff --git a/drivers/gpu/drm/bridge/tc358768.c b/drivers/gpu/drm/bridge/tc358768.c
+index 03c7e82e4109..97ae3a9c90da 100644
+--- a/drivers/gpu/drm/bridge/tc358768.c
++++ b/drivers/gpu/drm/bridge/tc358768.c
+@@ -952,7 +952,7 @@ tc358768_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+ 	case 24:
+ 		input_fmts[0] = MEDIA_BUS_FMT_RGB888_1X24;
+ 		break;
+-	};
++	}
+ 
+ 	*num_input_fmts = MAX_INPUT_SEL_FORMATS;
+ 
+-- 
+2.25.1
 
--- Steve
