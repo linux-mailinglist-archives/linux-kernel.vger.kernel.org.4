@@ -2,190 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3457029D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92E57029DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbjEOKBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
+        id S240939AbjEOKBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240519AbjEOKAj (ORCPT
+        with ESMTP id S240784AbjEOKBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:00:39 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D39198C
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:00:38 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-61b6101a166so58910656d6.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684144837; x=1686736837;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SmOMWPo18vGFDtTuraejpVVU9tOcfMjTbcnb/sRrPI8=;
-        b=IZeLFC15oPqxEGdYJHzx4HmxTfBqxd8j+LKyVXLZn5EORmXMF23ESuLRHbhr53Pdgc
-         +749Y8OWBrXIGmxIYIdQgxJxv50F1QtQojUg/2sJpaV6pKUCsTiKiN2Os6OYE73LPR0a
-         4Qa5M1pOmLKLjwdk9g2KY63Y3/aGdi0nCFVuH9UFxK8lrpD8WPDTYx+9Bmjr55Pi7n/n
-         XWGnV71Vdx/pzv9mHgTPDCnu69IFDvoX5H7Ks0140HsLmaVv7hojjwBSkvKsbDjmUbFL
-         QY/62CMl1SNf4v3I+/E++w4hJ3YHu2OtpMcEg1V4MIAcyyhEuyMrG1hyq7JPUvO1Dci/
-         nd/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684144837; x=1686736837;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SmOMWPo18vGFDtTuraejpVVU9tOcfMjTbcnb/sRrPI8=;
-        b=Wu2uBuFXEOeuIXo7yrFvWIJT7nKcbnPFIhi6ESFdeYlUaIFh+PttAho/MsrhbNP+4G
-         JFHvcyxj6Ee0A7MkpCMU1OZsNyTkat3HAs8urgmDj2Ch0Q/b1LfKTKJyZbU1R4lmOFe1
-         S5EJWiL4mJr+chDHrej7NBndZ+ux1icl9YLfu8Ch4Js1wmKRgvrNF9Spav9qkhA4VoI8
-         RihmSv+eJEMkC7zH82DkOkwObosnt60dQa2/8SisBvqAXgmC3cGLu/dwMVGgBbB/zf3F
-         rVRF1qACkTpw2/r2Trhk0tYP1hiPg47cpmdZzCTjiRM22P0RS5FkoolSi4YT5yf0OcMq
-         0aog==
-X-Gm-Message-State: AC+VfDzbWdSj6AvjBZ3k/nUCNz/6+d/JM1gpjvVN3Zvn5FfcNp40jmwi
-        kqEj/au1mqa1aq8iIm731UTK0prm9z4ADjEPW8Sp4w==
-X-Google-Smtp-Source: ACHHUZ67CVh5Hzsksx47EDC4a6Xy4GO4KXQRZ/T0I3OXGD/qt6qZ+VpJMnseXs+OlzVAshIxwy5FS/auAdTpYgGsM2E=
-X-Received: by 2002:ad4:5ecf:0:b0:619:152a:b99b with SMTP id
- jm15-20020ad45ecf000000b00619152ab99bmr53895082qvb.6.1684144836989; Mon, 15
- May 2023 03:00:36 -0700 (PDT)
+        Mon, 15 May 2023 06:01:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8000C1BE9;
+        Mon, 15 May 2023 03:01:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0548161195;
+        Mon, 15 May 2023 10:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36FC1C433EF;
+        Mon, 15 May 2023 10:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684144863;
+        bh=fMhblgCX0MmlqsV6DKGBf8/4TTWFE8GRs/BIGufIOwE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bKYTew/pzJ3IeA051ltdl8Z7lwsBHUwI3WXkGXCnKwcB6qqzI70rpHK3CRoGUz/AO
+         KUuDfTbc1kC465S2hgmqviWLzpkn29dWTojB0qKXbBNWwYLLr1+QKhnO5P68U//Emg
+         reqeCPiArZcbW6mRXe3u1d/Bv/uMF1h6Zu5I4IWT2e3/XeQencNLZWF/9+kkxDVGm+
+         Z6cLgiVyYQP/aSLSMTYV+2PlZoxYwZ1rhporspRlLWKM9RgkpQuauS1fNpYRLci4/9
+         YvBBguevoUUXmf/dSBuksSlG+l1wAmdd6aYa49VqnKX/z9pFBTXCqPRG/k3pa7pLQv
+         5p+prnFrMmoeg==
+Message-ID: <d12b3e4d-2edf-8451-2f2c-9cd171a830f2@kernel.org>
+Date:   Mon, 15 May 2023 12:00:36 +0200
 MIME-Version: 1.0
-References: <cover.1683688960.git.nicolinc@nvidia.com>
-In-Reply-To: <cover.1683688960.git.nicolinc@nvidia.com>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Date:   Mon, 15 May 2023 18:00:26 +0800
-Message-ID: <CABQgh9FL4ssQjBJM52_kb0aBVVPb_9Wc0Q+NL1PaQO=2LYBHCA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] Add Nested Translation Support for SMMUv3
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     jgg@nvidia.com, robin.murphy@arm.com, will@kernel.org,
-        eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        alex.williamson@redhat.com, yi.l.liu@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
+ i.MX8 ISI driver")
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+References: <ZElaVmxDsOkZj2DK@debian>
+ <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
+ <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
+ <20230510090527.25e26127@sal.lan>
+ <55d5ec29-f30f-4596-a3b9-7e5b8adf0582@kernel.org>
+ <CAMuHMdV=b8j=X3XEBWsAghsHrPT58xp7peaMiTZisqf7wRJf3w@mail.gmail.com>
+ <20230515102525.65150633@sal.lan>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230515102525.65150633@sal.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Nico
+On 15/05/2023 11:25, Mauro Carvalho Chehab wrote:
+> Em Mon, 15 May 2023 09:46:41 +0200
+> Geert Uytterhoeven <geert@linux-m68k.org> escreveu:
+> 
+>> Hi Krzysztof,
+>>
+>> On Sun, May 14, 2023 at 1:01 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>> On 10/05/2023 10:05, Mauro Carvalho Chehab wrote:  
+>>>> And another CI job testing bisect breakages as I receive pull requests,
+>>>> applying patch per patch and using both allyesconfig and allmodconfig,
+>>>> also on x86_64 arch with W=1:
+>>>>
+>>>>       https://builder.linuxtv.org/job/patchwork/
+>>>>
+>>>> The rule is to not merge stuff on media tree if any of those jobs
+>>>> fail. I also fast-forward merging patches whose subject states that
+>>>> the build has failed.
+>>>>
+>>>> In order to help with that, on normal situation, I usually take one week
+>>>> to merge stuff from media_stage into media_tree, doing rebases at
+>>>> media_stage if needed to avoid git bisect build breakages at media_tree
+>>>> (which is from where I send my update PRs to you).
+>>>>
+>>>> Unfortunately, currently we don't have resources to do multiple randconfig  
+>>>
+>>> Is you media staging tree included in LKP (kernel test robot)? You would
+>>> get huge build coverage after every push to your staging repo.  
+> 
+> No idea, as I don't know where LKP settings are stored, nor what frequency
+> it is doing builds from git://linuxtv.org/media_stage.git, if any. Do you know
+> where we can check such configuration?
 
-On Wed, 10 May 2023 at 11:34, Nicolin Chen <nicolinc@nvidia.com> wrote:
->
-> [ This series is rebased on top of v6.4-rc1 merging Jason's iommu_hwpt
->   branch and Yi's vfio cdev v11 branch, then the replace v7 series and
->   the nesting v2 (candidate) series and Intel VT-d series. Note that
->   some of them are still getting finalized. So, there can be potential
->   minor API changes that would not be reflected in this series. Yet, we
->   can start the review at the SMMU driver specific things.
->
->   @robin, the hw_info patch still requires the errata patch that you
->   mentioned. Perhaps we can merge that separately or include it in v3.
->
->   Thanks! ]
->
-> Changelog
-> v2:
->  * Added arm_smmu_set_dev_data after the set_dev_data series.
->  * Added Jason's patch "vfio: Remove VFIO_TYPE1_NESTING_IOMMU"
->  * Replaced the iommu_get_unmanaged_domain() helper with Robin's patch.
->  * Reworked the code in arm_smmu_cmdq_build_cmd() to make NH_VA to be
->    a superset of NH_VAA.
->  * Added inline comments and a bug-report link to the patch unsetting
->    dst[2] and dst[3] of STE.
->  * Dropped the to_s2_cfg helper since only one place really needs it.
->  * Dropped the VMID (override) flag and s2vmid in iommu_hwpt_arm_smmuv3
->    structure, because it's expected for user space to use a shared S2
->    domain/hwpt for all devices, i.e. the VMID (allocated with the S2
->    domain is already unified. If there's some special case that still
->    needs a VMID unification, we should probably add it incrementally.
->  * Move the introduction of the "struct arm_smmu_domain *s2" function
->    parameter to the proper patch.
->  * Redefined "struct iommu_hwpt_arm_smmuv3" by adding ste_uptr/len and
->    out_event_uptr/len. Then added an arm_smmu_domain_finalise_nested()
->    function to read guest Stream Table Entry with a proper sanity.
->  * Reworked arm_smmu_cache_invalidate_user() by reading the guest CMDQ
->    directly, to support batching. Also, added return value feedback of
->    -ETIMEDOUT at CMD_SYNC, and reported CERROR_ILL errors via the CONS
->    in the user_data structure.
->  * Updated data/functions following the nesting infrastructure updates.
->  * Added/fixed multiple comments per v1 review inputs.
-> v1:
->  https://lore.kernel.org/all/cover.1678348754.git.nicolinc@nvidia.com/
->
-> --------------------------------------------------------------------------
->
-> Hi all,
->
-> This series of patches add nested translation support for ARM SMMUv3.
->
-> Eric Auger made a huge effort previously with the VFIO uAPIs, and sent
-> his v16 a year ago. Now, the nested translation should follow the new
-> IOMMUFD uAPIs design. So, most of the key features are ported from the
-> privous VFIO solution, and then rebuilt on top of the IOMMUFD nesting
-> infrastructure.
->
-> The essential parts in the driver to support a nested translation are
-> ->hw_info, ->domain_alloc_user and ->cache_invalidate_user ops. So this
-> series fundamentally adds these three functions in the SMMUv3 driver,
-> along with several preparations and cleanups for them.
->
-> One unique requirement for SMMUv3 nested translation support is the MSI
-> doorbell address translation, which is a 2-stage translation too. And,
-> to working with the ITS driver, an msi_cookie needs to be setup on the
-> kernel-managed domain, the stage-2 domain of the nesting setup. And the
-> same msi_cookie will be fetched, via iommu_dma_get_msi_mapping_domain(),
-> in the iommu core to allocate and creates IOVA mappings for MSI doorbell
-> page(s). However, with the nesting design, the device is attached to a
-> user-managed domain, the stage-1 domain. So both the setup and fetching
-> of the msi_cookie would not work at the level of stage-2 domain. Thus,
-> on both sides, the msi_cookie setup and fetching require a redirection
-> of the domain pointer. It's easy to do so in iommufd core, but needs a
-> new op in the iommu core and driver.
->
-> You can also find this series on the Github:
-> https://github.com/nicolinc/iommufd/commits/iommufd_nesting-v2
->
-> The kernel branch is tested with this QEMU branch:
-> https://github.com/nicolinc/qemu/commits/wip/iommufd_rfcv4+nesting+smmuv3-v2
->
+AFAIR, it checks all kernel.org repos, but anything outside should be
+manually added. See:
+https://github.com/intel/lkp-tests/pull/271
 
-I rebased on these two branches and did some basic tests.
+I actually proposed a talk around this for LPC, so it seems it might be
+useful.
 
-The basic functions work after backport
-iommufd: Add IOMMU_PAGE_RESPONSE
-iommufd: Add device fault handler support
+> 
+> In the end, patches there will end going to linux-next, so at least some
+> sort of coverage is there, but I'm not sure if LKP will always reply to
+> linux-media if the patch causing build regressions is there.
+> 
+> While being helpful, one problem with LKP is that it is hard to filter out 
+> reports per git tree. The only way to check if the report is applicable to
+> media trees seems to be looking inside the e-mail's body.
 
-https://github.com/Linaro/linux-kernel-warpdrive/tree/uacce-devel-6.4
-https://github.com/Linaro/qemu/tree/iommufd-6.4-nesting-smmuv3-v2
+If you setup specific repo entry in LKP, you will get a quite specific
+email, e.g. with subject:
 
-However when debugging hotplug PCI device, it still does not work,
-Segmentation fault same as 6.2.
+[krzk:for-next] BUILD SUCCESS 5b248db78d1aa679009efa4763794890572e63fb
+[krzk-github:n/of-device-id-of-match-ptr-rebase] BUILD SUCCESS ce0964f4
 
-guest kernel
-CONFIG_HOTPLUG_PCI_PCIE=y
+(where krzk/krzk-github are the names of repos in LKP)
 
-boot guest (this info does not appear in 6.2)
-qemu-system-aarch64: -device
-vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
-Failed to set data -1
-qemu-system-aarch64: -device
-vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
-failed to set device data
 
-$ sudo nc -U /tmp/qmpm_1.socket
-(qemu) info pci
-(qemu) device_del acc1
+Best regards,
+Krzysztof
 
-guest:
-qemu-system-aarch64: IOMMU_IOAS_UNMAP failed: No such file or directory
-qemu-system-aarch64: vfio_container_dma_unmap(0xaaaae1fc0380,
-0x8000000000, 0x10000) = -2 (No such file or directory)
-qemu-system-aarch64: Failed to unset data -1
-Segmentation fault (core dumped).  // also happened in 6.2
-
-Thanks
