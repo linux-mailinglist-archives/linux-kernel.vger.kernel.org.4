@@ -2,189 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED63702137
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 03:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B88702142
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 03:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238088AbjEOBkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 21:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44676 "EHLO
+        id S238149AbjEOBoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 21:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEOBkv (ORCPT
+        with ESMTP id S229708AbjEOBoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 21:40:51 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59591E5B;
-        Sun, 14 May 2023 18:40:45 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0ViYo7ai_1684114841;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0ViYo7ai_1684114841)
-          by smtp.aliyun-inc.com;
-          Mon, 15 May 2023 09:40:42 +0800
-Message-ID: <1684114830.5565894-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net v6] virtio_net: Fix error unwinding of XDP initialization
-Date:   Mon, 15 May 2023 09:40:30 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Feng Liu <feliu@nvidia.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Bodong Wang <bodong@nvidia.com>, Feng Liu <feliu@nvidia.com>,
-        Jiri Pirko <jiri@nvidia.com>, William Tu <witu@nvidia.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-References: <20230512151812.1806-1-feliu@nvidia.com>
-In-Reply-To: <20230512151812.1806-1-feliu@nvidia.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 14 May 2023 21:44:04 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB159170B;
+        Sun, 14 May 2023 18:44:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKMbj3Qynz4x4G;
+        Mon, 15 May 2023 11:44:01 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684115041;
+        bh=KWZ5J3oaKA06cGONfeJWEtOE5wG3To69U0OGW1xKIDA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ok3v+60sAjiI+70htKHFxlzcnwsobCrQthlnHQ3/t0tNtK5IFSie9CXsGirX7sgqF
+         UphhFrusUDpHBjzYut3PRDmJJ8Xv2M2i+/HQVQ8JzWU2iAv8xLovWgIq+CbifiQVdO
+         9GLh95fvZaz3nOPX4P2mZyF/Iul/+sI3JyJWiv7kEgsHdmi33AYIUGyyQeXZ1bBd9q
+         qYOMWf2tHBiWE8Exew4e5tG2tooBvrKD4tTcK+86cZPaZ+Jfu/m1uWjcaWnsQYiJHb
+         Oe4+mfqxIlTPUNqlzT6Q4Wii21ht6qq7/Oheotw9F5ffv+1PPQ1i46nny4MfemLSNU
+         7EbTGMyhaobTw==
+Date:   Mon, 15 May 2023 11:43:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20230515114359.3a2aac25@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/50hsj/pBY4R=HTcFPlrPaUG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 11:18:12 -0400, Feng Liu <feliu@nvidia.com> wrote:
-> When initializing XDP in virtnet_open(), some rq xdp initialization
-> may hit an error causing net device open failed. However, previous
-> rqs have already initialized XDP and enabled NAPI, which is not the
-> expected behavior. Need to roll back the previous rq initialization
-> to avoid leaks in error unwinding of init code.
->
-> Also extract helper functions of disable and enable queue pairs.
-> Use newly introduced disable helper function in error unwinding and
-> virtnet_close. Use enable helper function in virtnet_open.
->
-> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-> Signed-off-by: Feng Liu <feliu@nvidia.com>
-> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-> Reviewed-by: William Tu <witu@nvidia.com>
+--Sig_/50hsj/pBY4R=HTcFPlrPaUG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Hi all,
 
-Thanks.
+After merging the sound-asoc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-> ---
-> v5 -> v6
-> feedbacks from Xuan Zhuo
-> - add disable_delayed_refill and cancel_delayed_work_sync
->
-> v4 -> v5
-> feedbacks from Michael S. Tsirkin
-> - rename helper as virtnet_disable_queue_pair
-> - rename helper as virtnet_enable_queue_pair
->
-> v3 -> v4
-> feedbacks from Jiri Pirko
-> - Add symmetric helper function virtnet_enable_qp to enable queues.
-> - Error handle:  cleanup current queue pair in virtnet_enable_qp,
->   and complete the reset queue pairs cleanup in virtnet_open.
-> - Fix coding style.
-> feedbacks from Parav Pandit
-> - Remove redundant debug message and white space.
->
-> v2 -> v3
-> feedbacks from Michael S. Tsirkin
-> - Remove redundant comment.
->
-> v1 -> v2
-> feedbacks from Michael S. Tsirkin
-> - squash two patches together.
->
-> ---
->  drivers/net/virtio_net.c | 61 +++++++++++++++++++++++++++++-----------
->  1 file changed, 44 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index a12ae26db0e2..56ca1d270304 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -1868,6 +1868,38 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
->  	return received;
->  }
->
-> +static void virtnet_disable_queue_pair(struct virtnet_info *vi, int qp_index)
-> +{
-> +	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
-> +	napi_disable(&vi->rq[qp_index].napi);
-> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
-> +}
-> +
-> +static int virtnet_enable_queue_pair(struct virtnet_info *vi, int qp_index)
-> +{
-> +	struct net_device *dev = vi->dev;
-> +	int err;
-> +
-> +	err = xdp_rxq_info_reg(&vi->rq[qp_index].xdp_rxq, dev, qp_index,
-> +			       vi->rq[qp_index].napi.napi_id);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	err = xdp_rxq_info_reg_mem_model(&vi->rq[qp_index].xdp_rxq,
-> +					 MEM_TYPE_PAGE_SHARED, NULL);
-> +	if (err < 0)
-> +		goto err_xdp_reg_mem_model;
-> +
-> +	virtnet_napi_enable(vi->rq[qp_index].vq, &vi->rq[qp_index].napi);
-> +	virtnet_napi_tx_enable(vi, vi->sq[qp_index].vq, &vi->sq[qp_index].napi);
-> +
-> +	return 0;
-> +
-> +err_xdp_reg_mem_model:
-> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
-> +	return err;
-> +}
-> +
->  static int virtnet_open(struct net_device *dev)
->  {
->  	struct virtnet_info *vi = netdev_priv(dev);
-> @@ -1881,22 +1913,20 @@ static int virtnet_open(struct net_device *dev)
->  			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
->  				schedule_delayed_work(&vi->refill, 0);
->
-> -		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
-> +		err = virtnet_enable_queue_pair(vi, i);
->  		if (err < 0)
-> -			return err;
-> -
-> -		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
-> -						 MEM_TYPE_PAGE_SHARED, NULL);
-> -		if (err < 0) {
-> -			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> -			return err;
-> -		}
-> -
-> -		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
-> -		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
-> +			goto err_enable_qp;
->  	}
->
->  	return 0;
-> +
-> +err_enable_qp:
-> +	disable_delayed_refill(vi);
-> +	cancel_delayed_work_sync(&vi->refill);
-> +
-> +	for (i--; i >= 0; i--)
-> +		virtnet_disable_queue_pair(vi, i);
-> +	return err;
->  }
->
->  static int virtnet_poll_tx(struct napi_struct *napi, int budget)
-> @@ -2305,11 +2335,8 @@ static int virtnet_close(struct net_device *dev)
->  	/* Make sure refill_work doesn't re-enable napi! */
->  	cancel_delayed_work_sync(&vi->refill);
->
-> -	for (i = 0; i < vi->max_queue_pairs; i++) {
-> -		virtnet_napi_tx_disable(&vi->sq[i].napi);
-> -		napi_disable(&vi->rq[i].napi);
-> -		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
-> -	}
-> +	for (i = 0; i < vi->max_queue_pairs; i++)
-> +		virtnet_disable_queue_pair(vi, i);
->
->  	return 0;
->  }
-> --
-> 2.37.1 (Apple Git-137.1)
->
+sound/soc/amd/yc/acp6x-mach.c:320:9: error: braces around scalar initialize=
+r [-Werror]
+  320 |         {
+      |         ^
+sound/soc/amd/yc/acp6x-mach.c:320:9: note: (near initialization for 'yc_acp=
+_quirk_table[38].driver_data')
+sound/soc/amd/yc/acp6x-mach.c:321:17: error: field name not in record or un=
+ion initializer
+  321 |                 .driver_data =3D &acp6x_card,
+      |                 ^
+sound/soc/amd/yc/acp6x-mach.c:321:17: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+sound/soc/amd/yc/acp6x-mach.c:322:17: error: field name not in record or un=
+ion initializer
+  322 |                 .matches =3D {
+      |                 ^
+sound/soc/amd/yc/acp6x-mach.c:322:17: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+sound/soc/amd/yc/acp6x-mach.c:322:17: error: braces around scalar initializ=
+er [-Werror]
+sound/soc/amd/yc/acp6x-mach.c:322:17: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+sound/soc/amd/yc/acp6x-mach.c:323:25: error: braces around scalar initializ=
+er [-Werror]
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                         ^~~~~~~~~
+sound/soc/amd/yc/acp6x-mach.c:323:25: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+In file included from include/linux/of.h:18,
+                 from include/sound/soc.h:13,
+                 from sound/soc/amd/yc/acp6x-mach.c:8:
+include/linux/mod_devicetable.h:588:27: error: field name not in record or =
+union initializer
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                           ^
+sound/soc/amd/yc/acp6x-mach.c:323:25: note: in expansion of macro 'DMI_MATC=
+H'
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                         ^~~~~~~~~
+include/linux/mod_devicetable.h:588:27: note: (near initialization for 'yc_=
+acp_quirk_table[38].driver_data')
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                           ^
+sound/soc/amd/yc/acp6x-mach.c:323:25: note: in expansion of macro 'DMI_MATC=
+H'
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                         ^~~~~~~~~
+sound/soc/amd/yc/acp6x-mach.c:323:35: error: initialization of 'void *' fro=
+m 'int' makes pointer from integer without a cast [-Werror=3Dint-conversion]
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                                   ^~~~~~~~~~~~~~~~
+include/linux/mod_devicetable.h:588:35: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                   ^
+sound/soc/amd/yc/acp6x-mach.c:323:35: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                                   ^~~~~~~~~~~~~~~~
+include/linux/mod_devicetable.h:588:35: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                   ^
+include/linux/mod_devicetable.h:588:38: error: field name not in record or =
+union initializer
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                      ^
+sound/soc/amd/yc/acp6x-mach.c:323:25: note: in expansion of macro 'DMI_MATC=
+H'
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                         ^~~~~~~~~
+include/linux/mod_devicetable.h:588:38: note: (near initialization for 'yc_=
+acp_quirk_table[38].driver_data')
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                      ^
+sound/soc/amd/yc/acp6x-mach.c:323:25: note: in expansion of macro 'DMI_MATC=
+H'
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                         ^~~~~~~~~
+sound/soc/amd/yc/acp6x-mach.c:323:53: error: excess elements in scalar init=
+ializer [-Werror]
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                                                     ^~~~~~~~~~
+include/linux/mod_devicetable.h:588:48: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                                ^
+sound/soc/amd/yc/acp6x-mach.c:323:53: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+  323 |                         DMI_MATCH(DMI_BOARD_VENDOR, "System76"),
+      |                                                     ^~~~~~~~~~
+include/linux/mod_devicetable.h:588:48: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                                ^
+sound/soc/amd/yc/acp6x-mach.c:324:25: error: braces around scalar initializ=
+er [-Werror]
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                         ^~~~~~~~~
+sound/soc/amd/yc/acp6x-mach.c:324:25: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+include/linux/mod_devicetable.h:588:27: error: field name not in record or =
+union initializer
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                           ^
+sound/soc/amd/yc/acp6x-mach.c:324:25: note: in expansion of macro 'DMI_MATC=
+H'
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                         ^~~~~~~~~
+include/linux/mod_devicetable.h:588:27: note: (near initialization for 'yc_=
+acp_quirk_table[38].driver_data')
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                           ^
+sound/soc/amd/yc/acp6x-mach.c:324:25: note: in expansion of macro 'DMI_MATC=
+H'
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                         ^~~~~~~~~
+sound/soc/amd/yc/acp6x-mach.c:324:35: error: initialization of 'void *' fro=
+m 'int' makes pointer from integer without a cast [-Werror=3Dint-conversion]
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                                   ^~~~~~~~~~~~~~~~~~~
+include/linux/mod_devicetable.h:588:35: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                   ^
+sound/soc/amd/yc/acp6x-mach.c:324:35: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                                   ^~~~~~~~~~~~~~~~~~~
+include/linux/mod_devicetable.h:588:35: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                   ^
+include/linux/mod_devicetable.h:588:38: error: field name not in record or =
+union initializer
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                      ^
+sound/soc/amd/yc/acp6x-mach.c:324:25: note: in expansion of macro 'DMI_MATC=
+H'
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                         ^~~~~~~~~
+include/linux/mod_devicetable.h:588:38: note: (near initialization for 'yc_=
+acp_quirk_table[38].driver_data')
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                      ^
+sound/soc/amd/yc/acp6x-mach.c:324:25: note: in expansion of macro 'DMI_MATC=
+H'
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                         ^~~~~~~~~
+sound/soc/amd/yc/acp6x-mach.c:324:56: error: excess elements in scalar init=
+ializer [-Werror]
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                                                        ^~~~~~~~
+include/linux/mod_devicetable.h:588:48: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                                ^
+sound/soc/amd/yc/acp6x-mach.c:324:56: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                                                        ^~~~~~~~
+include/linux/mod_devicetable.h:588:48: note: in definition of macro 'DMI_M=
+ATCH'
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                                                ^
+include/linux/mod_devicetable.h:588:25: error: excess elements in scalar in=
+itializer [-Werror]
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                         ^
+sound/soc/amd/yc/acp6x-mach.c:324:25: note: in expansion of macro 'DMI_MATC=
+H'
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                         ^~~~~~~~~
+include/linux/mod_devicetable.h:588:25: note: (near initialization for 'yc_=
+acp_quirk_table[38].driver_data')
+  588 | #define DMI_MATCH(a, b) { .slot =3D a, .substr =3D b }
+      |                         ^
+sound/soc/amd/yc/acp6x-mach.c:324:25: note: in expansion of macro 'DMI_MATC=
+H'
+  324 |                         DMI_MATCH(DMI_PRODUCT_VERSION, "pang12"),
+      |                         ^~~~~~~~~
+sound/soc/amd/yc/acp6x-mach.c:322:28: error: excess elements in scalar init=
+ializer [-Werror]
+  322 |                 .matches =3D {
+      |                            ^
+sound/soc/amd/yc/acp6x-mach.c:322:28: note: (near initialization for 'yc_ac=
+p_quirk_table[38].driver_data')
+sound/soc/amd/yc/acp6x-mach.c:327:9: error: extra brace group at end of ini=
+tializer
+  327 |         {}
+      |         ^
+sound/soc/amd/yc/acp6x-mach.c:327:9: note: (near initialization for 'yc_acp=
+_quirk_table[38]')
+sound/soc/amd/yc/acp6x-mach.c:327:9: error: excess elements in struct initi=
+alizer [-Werror]
+sound/soc/amd/yc/acp6x-mach.c:327:9: note: (near initialization for 'yc_acp=
+_quirk_table[38]')
+sound/soc/amd/yc/acp6x-mach.c:328:2: error: expected '}' before ';' token
+  328 | };
+      |  ^
+sound/soc/amd/yc/acp6x-mach.c:47:58: note: to match this '{'
+   47 | static const struct dmi_system_id yc_acp_quirk_table[] =3D {
+      |                                                          ^
+
+Caused by commit
+
+  af233bd2931b ("ASoC: Merge up fixes for CI")
+
+I have used the sound-asoc tree from next-20230512 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/50hsj/pBY4R=HTcFPlrPaUG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhjl8ACgkQAVBC80lX
+0Gz+xQf+MYoIb574PqqqEL37XePn9w0Srmrwt/Ig64+wSvgt4Py32Jida1nf/QV/
+55ToFSBZr5C2ky59y+EpgmrmZqMtVg1ha6LMMa5ReaahBYvdweNi5rNbbaRlupe1
+0vG8M+AyM1h4axU9GQ8ZkG0DErXhxqqYJxClEMFMhZ4GNzrdraapiw/Zo+8GDfaK
+XVbboVoYkHV5h3w/2ufOxKBpGSfNqVMS/pmnJT9gyLn34DBEtOV7zpPIWBEW1C3Y
+Ezzuzct7ZM06O4WIE7729A1fmsRa1bupBSJQD5eVxhjtDh9feOeZUgpU/lG3RGDz
+k48rokwtQ+uuTxS0coDxnVoAWu56rw==
+=4Egb
+-----END PGP SIGNATURE-----
+
+--Sig_/50hsj/pBY4R=HTcFPlrPaUG--
