@@ -2,168 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD8B702C8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BD0702CBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241609AbjEOMT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S241835AbjEOMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241798AbjEOMTW (ORCPT
+        with ESMTP id S240917AbjEOMam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:19:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94065E55;
-        Mon, 15 May 2023 05:19:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30861616F1;
-        Mon, 15 May 2023 12:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62827C433D2;
-        Mon, 15 May 2023 12:19:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684153159;
-        bh=lJYX593ezg8Jg0Lmvi2e++axev1sq+IYiRfXvVn7TfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dp27vT5hIoFnezmC0EE7XmNQw06mriBQ1e+F1uQjMr8+D2tdoqAtKoIwku9aQYnQh
-         DrpOfy1wcVDstW8ElQJfxnmWiDEg0/+PZtZ0F/EYQrRcr/2km/N+EbI+z8XZZItC23
-         l2BQvLkGul8TF6jEJUwaDvPQa8th1kiKQ+Aucyt9lDCGegh3DqcdXa9figbrrF/Ska
-         R7g0ndR6I0o9hQkdSoeutg/VL1WXJIXOx7hCch2U2FHsfJt2i5bQWuZLYZ2jJ9tbY8
-         cBiyAEgBeKIckR1i8wBBfy3fV98iCZK6d9MgPsZ6KAv6eJWeAyl15DfuXVvC20fP2O
-         faW26bG0d2Qeg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5BB06403B5; Mon, 15 May 2023 09:19:17 -0300 (-03)
-Date:   Mon, 15 May 2023 09:19:17 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] perf test: Add cputype testing to perf stat
-Message-ID: <ZGIjRWdxDkBBpMdA@kernel.org>
-References: <20230513063447.464691-1-irogers@google.com>
+        Mon, 15 May 2023 08:30:42 -0400
+X-Greylist: delayed 642 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 May 2023 05:30:40 PDT
+Received: from mail-m2836.qiye.163.com (mail-m2836.qiye.163.com [103.74.28.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D0E19C
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:30:40 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [36.170.45.137])
+        by mail-m2836.qiye.163.com (Hmail) with ESMTPA id 796BFC0237;
+        Mon, 15 May 2023 20:19:54 +0800 (CST)
+From:   Yu Chen <chen.yu@easystack.cn>
+To:     minyard@acm.org
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, chen.yu@easystack.cn
+Subject: [PATCH] watchdog: Avoid 100% CPU usage during reading watchdog when a task get signal
+Date:   Mon, 15 May 2023 05:19:41 -0700
+Message-Id: <20230515121941.59859-1-chen.yu@easystack.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230513063447.464691-1-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJQjdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHRkeVhpIQk0YS0xNTU5KSlUZERMWGhIXJBQOD1
+        lXWRgSC1lBWUhNVUpMS1VPTlVKSExZV1kWGg8SFR0UWUFZT0tIVUpKS0hKQ1VKS0tVS1kG
+X-HM-Tid: 0a881f5a58b1841ekuqw796bfc0237
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MC46EBw6SzJPNxxIDz0MARYR
+        NRUaCi5VSlVKTUNPSk5ISkJOSU9LVTMWGhIXVRgTHhVVAg47HhoIAggPGhgQVRgVRVlXWRILWUFZ
+        SE1VSkxLVU9OVUpITFlXWQgBWUFIS0pKNwY+
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, May 12, 2023 at 11:34:47PM -0700, Ian Rogers escreveu:
-> Check a bogus PMU fails and that a known PMU succeeds. Limit to PMUs
-> known cpu, cpu_atom and armv8_pmuv3_0 ones.
+A simple reproducer demonstrating the problem: (use ipmi_watchdog.ko)
 
-Thanks, applied.
+In one terminal:
 
-- Arnaldo
+$ cat /dev/watchdog
+...
 
+In another terminal:
+
+$ ps -aux | grep cat
+14755 pts/1    R+    43:00 cat /dev/watchdog
+51943 pts/2    S+     0:00 grep --color=auto cat
+
+$ kill -9 14755
+$
+$ cat /proc/14755/status | grep SigPnd
+SigPnd: 0000000000000100
+$
+$ top
+
+Tasks: 1049 total,   2 running, 1047 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 0.0 us, 1.0 sy, 0.0 ni, 98.9 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st
+MiB Mem : 522594.8 total, 517241.4 free,  2922.1 used,   2431.2 buff/cache
+MiB Swap:      0.0 total,      0.0 free,     0.0 used. 516589.2 avail Mem
+
+PID USER    PR  NI    VIRT    RES    SHR S  %CPU  %MEM  TIME+ COMMAND
+14755 root  20   0  215552   1024    576 R 100.0  0.0  0:15.12 cat
+53417 root  20   0  224960   7040   3648 R   0.7  0.0  0:00.10 top
+11 root     20   0       0      0      0 I   0.3  0.0  0:02.85 rcu_sched
+1772 root   20   0  512256 387776 380800 S   0.3  0.1  0:32.05 python
+
+We can see that when the cat process gets the signal, the CPU usage
+is 100%, Since signal_pending is true, the pick_next_task function
+in schedule always returns itself, it retries schedule indefinitely.
+ipmi_read() will busyloop.
+
+Signed-off-by: Yu Chen <chen.yu@easystack.cn>
+---
+ drivers/char/ipmi/ipmi_watchdog.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
+index 0d4a8dcac..173ed4266 100644
+--- a/drivers/char/ipmi/ipmi_watchdog.c
++++ b/drivers/char/ipmi/ipmi_watchdog.c
+@@ -803,6 +803,11 @@ static ssize_t ipmi_read(struct file *file,
+ 		init_waitqueue_entry(&wait, current);
+ 		add_wait_queue(&read_q, &wait);
+ 		while (!data_to_read) {
++			if (signal_pending(current)) {
++				remove_wait_queue(&read_q, &wait);
++				rv = -ERESTARTSYS;
++				goto out;
++			}
+ 			set_current_state(TASK_INTERRUPTIBLE);
+ 			spin_unlock_irq(&ipmi_read_lock);
+ 			schedule();
+@@ -810,10 +815,6 @@ static ssize_t ipmi_read(struct file *file,
+ 		}
+ 		remove_wait_queue(&read_q, &wait);
  
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/shell/stat.sh | 44 ++++++++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
-> index b154fbb15d54..3f1e67795490 100755
-> --- a/tools/perf/tests/shell/stat.sh
-> +++ b/tools/perf/tests/shell/stat.sh
-> @@ -103,10 +103,54 @@ test_topdown_weak_groups() {
->    echo "Topdown weak groups test [Success]"
->  }
->  
-> +test_cputype() {
-> +  # Test --cputype argument.
-> +  echo "cputype test"
-> +
-> +  # Bogus PMU should fail.
-> +  if perf stat --cputype="123" -e instructions true > /dev/null 2>&1
-> +  then
-> +    echo "cputype test [Bogus PMU didn't fail]"
-> +    err=1
-> +    return
-> +  fi
-> +
-> +  # Find a known PMU for cputype.
-> +  pmu=""
-> +  for i in cpu cpu_atom armv8_pmuv3_0
-> +  do
-> +    if test -d "/sys/devices/$i"
-> +    then
-> +      pmu="$i"
-> +      break
-> +    fi
-> +    if perf stat -e "$i/instructions/" true > /dev/null 2>&1
-> +    then
-> +      pmu="$i"
-> +      break
-> +    fi
-> +  done
-> +  if test "x$pmu" = "x"
-> +  then
-> +    echo "cputype test [Skipped known PMU not found]"
-> +    return
-> +  fi
-> +
-> +  # Test running with cputype produces output.
-> +  if ! perf stat --cputype="$pmu" -e instructions true 2>&1 | grep -E -q "instructions"
-> +  then
-> +    echo "cputype test [Failed count missed with given filter]"
-> +    err=1
-> +    return
-> +  fi
-> +  echo "cputype test [Success]"
-> +}
-> +
->  test_default_stat
->  test_stat_record_report
->  test_stat_record_script
->  test_stat_repeat_weak_groups
->  test_topdown_groups
->  test_topdown_weak_groups
-> +test_cputype
->  exit $err
-> -- 
-> 2.40.1.606.ga4b1b128d6-goog
-> 
-
+-		if (signal_pending(current)) {
+-			rv = -ERESTARTSYS;
+-			goto out;
+-		}
+ 	}
+ 	data_to_read = 0;
+ 
 -- 
+2.27.0
 
-- Arnaldo
