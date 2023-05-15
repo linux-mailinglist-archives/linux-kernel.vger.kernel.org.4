@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD701702D0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D75702D1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241927AbjEOMry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37178 "EHLO
+        id S241976AbjEOMxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241853AbjEOMrp (ORCPT
+        with ESMTP id S240871AbjEOMxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:47:45 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62431988;
-        Mon, 15 May 2023 05:47:44 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4QKfKS5SbSzyPb;
-        Mon, 15 May 2023 15:47:40 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1684154861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sSA3913DuCO0/eMlMUnC+nc7ji/ix7/NNOwKqmCuNPQ=;
-        b=b6iW/CemkILtaAUVqZlsi++gn+TQdLcs/pfSA732LIiLHXBkAOJjp7O4qy3qEEuM1+m3gb
-        nWvFPvEyidOBenNH2QvNQyeR50bjJxuhsppZ43lTZWLTzZLepvRFgPbdcj3CQ+ZD6iY6vz
-        xmbi/MuFZQ+pUhQUQTUb66+geejF3YA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1684154861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sSA3913DuCO0/eMlMUnC+nc7ji/ix7/NNOwKqmCuNPQ=;
-        b=idIF0JVUo8XxpqArRKS5CeV962mnP1yBd73pJwZtCHz4wdQ19ERQy4daQ+Rn5pl6DmBXJ9
-        hYNhC0CWvnI7FgvbmYzsXQF0naz5rvt0OEhry2/pXDZaqtEWcdbMBb9XJXCcFjDyNZhJmp
-        uhCQsodg3UuhpchsRw9LV8xKkyLkoN0=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684154861; a=rsa-sha256; cv=none;
-        b=kFbxI8+smJ4oMXFh4AOFMYWFViaNQ2VXG6FbGB65xs2vwhUgfhD+D6tkIwAP3wEVVkbu0a
-        2KzQcDyK1fM4WNtmp/Neg062Iv2yMmbOAB1x/cm5nOI7f9QxJDNEOqpdtF2mOYO1bIjt3v
-        ai/PtVm39vxOaYtFGKXDFSXOhbCG3Fo=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 3FAB9634C94;
-        Mon, 15 May 2023 15:47:40 +0300 (EEST)
-Date:   Mon, 15 May 2023 15:47:40 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Dmitry Perchanov <dmitry.perchanov@intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        evgeni.raikhel@intel.com, demisrael@gmail.com
-Subject: Re: [PATCH v3] media: uapi: v4l: Intel metadata format update
-Message-ID: <ZGIp7E94eAW7UFSP@valkosipuli.retiisi.eu>
-References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
+        Mon, 15 May 2023 08:53:01 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11BC199F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:53:00 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3078c092056so6629859f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684155179; x=1686747179;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t0kKvU8VcjZDCawm1uzpgifPJsmcOM7ycSUxGftpKlg=;
+        b=kQQkiCuyGeHXbQ20FCvkY01rdbA3aktukV5cOjcESX8wfW/rZ9oJjouqt5mIKEhqsI
+         PJV3ds2mEk2TUyI7S7xOG+4APL9bxRIQGGDfOGHCLXx/wbQf0HbDlF4S51t0R8rChBKH
+         d9m6yO0N+aWBZYSJAaCBUHqxbji+yORNy6AVsQtBcQpb+YkgtPu2jfzEWkUOw2bUgvcH
+         tc+1OBd1m8fNLUxTv9Hddv/qCLeu3pccjYlVoWzSnTAexzFijNJoVYW7XikJU+pQFyvj
+         GAkyslBQvJrnQrtJNWwZOusXwsr4qvsZjC3TYxdXi/XFnD4nCcxvchRnqQeamGQFp3Oz
+         HO0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684155179; x=1686747179;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t0kKvU8VcjZDCawm1uzpgifPJsmcOM7ycSUxGftpKlg=;
+        b=ZO2TCymYERYk7SCD006jWKde14gVFw+t3u1rvS1dtY0P2gES1nb3GvO7oFhC8qoBma
+         ODDYg8/4Ou6ZU8hAeFHRtnBBn/P0s0jCkrzWeb0Q7HzV8vAGWux9Ebhc3QxwPEHyKgGq
+         f9s7jbp9DXHQmPg5x1dwayU2B+K1HDiP5iuEEwnReAq0pAnoanacrujReBL//MLrRdYf
+         WBiJ5jJ7hUWjZjzNNj0vKGZcPmF5oP0ZsJ0Ol1HGtUyZGVjwUk7PcSkC87eqYM7CZXPM
+         k/DVJA6uKXPK1B3DvB6cjsKYt79Xj7mfJZQ2UrBSnpEclISHll0ejbNk4pzMTIa1G4Hf
+         flmQ==
+X-Gm-Message-State: AC+VfDy0iBQjxIR1kSYbgTpb8+v8FMwLub57AkJdSZiBx8f8JoY8iCZa
+        lfSyNnVyxMGYBQABlbLBbBsqAQ==
+X-Google-Smtp-Source: ACHHUZ4pr0OZs/JDMmps+IUMP9qKK49qZJW95shiWiZOKkfFhc5PHKAymSNXqXTfWXrzamNqen0KYQ==
+X-Received: by 2002:a05:6000:1b8f:b0:306:2b31:5935 with SMTP id r15-20020a0560001b8f00b003062b315935mr19376409wru.55.1684155179018;
+        Mon, 15 May 2023 05:52:59 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id f16-20020a5d6650000000b003062c0ef959sm32197342wrw.69.2023.05.15.05.52.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 05:52:58 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        Shuijing Li <shuijing.li@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        jitao.shi@mediatek.com
+In-Reply-To: <20230515094955.15982-1-shuijing.li@mediatek.com>
+References: <20230515094955.15982-1-shuijing.li@mediatek.com>
+Subject: Re: [PATCH v4 0/2] Reduce lcm_reset to DSI LP11 send cmd time
+Message-Id: <168415517821.3264861.11690266641021902230.b4-ty@linaro.org>
+Date:   Mon, 15 May 2023 14:52:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+Hi,
 
-On Sun, May 14, 2023 at 12:36:50PM +0300, Dmitry Perchanov wrote:
-> Update metadata structure for Intel RealSense UVC/MIPI cameras.
-> Compliant to Intel Configuration version 3.
+On Mon, 15 May 2023 17:49:53 +0800, Shuijing Li wrote:
+> The panel spec stipulates that after lcm_reset is pulled high, cmd
+> should be sent to initialize the panel. Within the allowable range of
+> the DSI spec, this time needs to be reduced to avoid panel exceptions.
 > 
-> Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
+> Base on the branch of linus/master v6.3.
+> 
+> Change since v3:
+> 1. Rebase.
+> 
+> [...]
 
-Could you reply my comments on v2 and use my @intel.com address going
-forward?
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-Thanks.
+[1/2] drm/panel: boe-tv101wum-nl6: Remove extra delay
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=fe7f4e8d496552f880d7368b482d2ccac33780b7
+[2/2] drm/panel: boe-tv101wum-nl6: Fine tune the panel power sequence
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=812562b8d881ce6d33fed8052b3a10b718430fb5
 
 -- 
-Kind regards,
+Neil
 
-Sakari Ailus
