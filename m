@@ -2,153 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D407027A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834337027A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbjEOIz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S238406AbjEOI4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238258AbjEOIzY (ORCPT
+        with ESMTP id S229530AbjEOI4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:55:24 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891021A4;
-        Mon, 15 May 2023 01:55:22 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34F8t6Zh037669;
-        Mon, 15 May 2023 03:55:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684140906;
-        bh=y+NNSJg8r4OtaVTPe2llKWpVnqCF9wqUlXweNfQ+J3Y=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=uRu2QeKDkbqaQquDMGnvFBUO+ImA8YxP470CmW1V+nW7FkGA8WIfzwL6Z0XW2jEOJ
-         UCCJVm81nvpMkyMmZAU6rxFYpfI4DK/qu0AS77f3we6M6ZBHXw5Q3XkkYWXx8+rWHD
-         akpS409ZlFzEXK4Dxe0D5MEQ6XTKY0Ok3dSuXac4=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34F8t5DL113835
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 03:55:05 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 03:55:05 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 May 2023 03:55:05 -0500
-Received: from [172.24.216.170] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34F8t1SO092988;
-        Mon, 15 May 2023 03:55:02 -0500
-Message-ID: <da5b4576-fa6e-4134-236a-4054644dc8a8@ti.com>
-Date:   Mon, 15 May 2023 14:25:01 +0530
+        Mon, 15 May 2023 04:56:25 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1177FD
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:56:23 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f427118644so80473995e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linbit-com.20221208.gappssmtp.com; s=20221208; t=1684140982; x=1686732982;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RIIUctl1bRw1HpPNpep3ud00oldyhc4jZQaYE88JU2w=;
+        b=AnVH/q8mwdjUB48br4+XKQZhQjKQbgNYSstHOvj2e3WeVlatZYBIVBfOHaBvjDENC1
+         TJml1+sFf6+CtIzSrmfXqsLZJDS1OE4aTvDkKCnw1TO2UTKzEcW6wZB95U+Cbvqd4od0
+         LrWFzo1i2ItrbWY+lyKP/mw+jaA5nqh/TQQhmUZKWUceiaQ4FmrxTa/kKw+6e45SCSJb
+         YPeejohM0NMDtIoI8dQVnLRX6rxDT0RTPaxNq6y89LSilDHmC6/TGynFTuOHrCgX2vzW
+         cRS+xGHoK0NfkPD3bqeOqTBEsDbMMo1SzPngAjOAQS8Yp2YFNn8WGb4OnGlfzbuoCC8l
+         As+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684140982; x=1686732982;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RIIUctl1bRw1HpPNpep3ud00oldyhc4jZQaYE88JU2w=;
+        b=YZwqh1IOX0AzUgxGff5tOwybhen0Tbqg75MGcZLtHdJxS3XYOnNTsu24U7c+MSFdmE
+         iQN7Bv3iTg7ioOL0qZMh409n9QZhmxQRzccT9HW4CaFLXcBUEU+52IMDTvJBwpSgstUk
+         HeBhk6+t1c/7ZPFLgQgvCcGX6L57FvOFHUTennJV1RPF9nq1Ia2x8IS5Ive3sLaIiEDb
+         buLz6Q3NZCvlGR6Ma+AfZDo6/9LQcck26JWZAnbgDMBiQegPs+/WgqL4jnKbxBd8WflG
+         ryytx9sOAIQv8W+iwOyy1sIthFdQc4giO29bGJ4RbMevmjnRyggDm2LMT3M4DnpqP1mD
+         Ua5g==
+X-Gm-Message-State: AC+VfDxUNCxaet5tvzkvS9Y4B4bF7MwBDgrGVf8hy3fWmE+BIJ6drtsk
+        8WtIHCmD53pFRPxwRxkzRnqsqQ==
+X-Google-Smtp-Source: ACHHUZ7g13ecAkip6L71Cbnmd6HuFKLHUoFfhXcrcFhVn5Igf53uR9sVnUnT/BWKQcOuILeas2FNmg==
+X-Received: by 2002:a05:600c:3797:b0:3f4:20ec:7601 with SMTP id o23-20020a05600c379700b003f420ec7601mr23758879wmr.34.1684140982066;
+        Mon, 15 May 2023 01:56:22 -0700 (PDT)
+Received: from [192.168.178.55] (h082218028181.host.wavenet.at. [82.218.28.181])
+        by smtp.gmail.com with ESMTPSA id m21-20020a7bca55000000b003f4285629casm20862789wml.42.2023.05.15.01.56.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 01:56:21 -0700 (PDT)
+Message-ID: <2ec28ec3-1e22-e772-fc9a-d59c6d176b7d@linbit.com>
+Date:   Mon, 15 May 2023 10:56:20 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 1/5] arm64: dts: ti: k3-j784s4-main: Add system
- controller and SERDES lane mux
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2] drdb: fix debugfs_create_dir and
+ debugfs_create_symlink error handling
+To:     mirimmad@outlook.com
+Cc:     axboe@kernel.dk, drbd-dev@lists.linbit.com,
+        lars.ellenberg@linbit.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mirimmad17@gmail.com,
+        philipp.reisner@linbit.com, skhan@linuxfoundation.org
+References: <CY5PR12MB64555F99E4FEF60569050F1FC67B9@CY5PR12MB6455.namprd12.prod.outlook.com>
+ <CY5PR12MB64558DB2E8ACBD592F26E61AC67B9@CY5PR12MB6455.namprd12.prod.outlook.com>
 Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-CC:     Jayesh Choudhary <j-choudhary@ti.com>, <nm@ti.com>,
-        <vigneshr@ti.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <afd@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Achal Verma <a-verma1@ti.com>
-References: <20230425131607.290707-1-j-choudhary@ti.com>
- <20230425131607.290707-2-j-choudhary@ti.com>
- <a033cec5-0272-186e-d53e-d101835cc9eb@ti.com>
- <65c6a354-434b-4e50-81ec-8ce705df2888@ti.com>
-From:   "Verma, Achal" <a-verma1@ti.com>
-In-Reply-To: <65c6a354-434b-4e50-81ec-8ce705df2888@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+In-Reply-To: <CY5PR12MB64558DB2E8ACBD592F26E61AC67B9@CY5PR12MB6455.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am 14.05.23 um 16:10 schrieb mirimmad@outlook.com:
+> From: Immad Mir <mirimmad17@gmail.com>
+> 
+> debugfs_create_dir and debugfs_create_symlink return ERR_PTR incase of
+> a failure which must be checked with the inline function IS_ERR. This
+> patch attempts to do the same.
+> 
+> Signed-off-by: Immad Mir <mirimmad17@gmail.com>
+> ---
+> Changes in v2:
+>     - Fix indentation
+>     - Fix potential memory leak
+> 
+>  drivers/block/drbd/drbd_debugfs.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/block/drbd/drbd_debugfs.c b/drivers/block/drbd/drbd_debugfs.c
+> index 12460b584..ab431a3f2 100644
+> --- a/drivers/block/drbd/drbd_debugfs.c
+> +++ b/drivers/block/drbd/drbd_debugfs.c
+> @@ -781,6 +781,7 @@ void drbd_debugfs_device_add(struct drbd_device *device)
+> 
+>  	snprintf(vnr_buf, sizeof(vnr_buf), "%u", device->vnr);
+>  	dentry = debugfs_create_dir(vnr_buf, vols_dir);
+> +    if (IS_ERR(dentry)) goto fail;
+>  	device->debugfs_vol = dentry;
+> 
+>  	snprintf(minor_buf, sizeof(minor_buf), "%u", device->minor);
+> @@ -789,9 +790,15 @@ void drbd_debugfs_device_add(struct drbd_device *device)
+>  	if (!slink_name)
+>  		goto fail;
+>  	dentry = debugfs_create_symlink(minor_buf, drbd_debugfs_minors, slink_name);
+> -	device->debugfs_minor = dentry;
+> -	kfree(slink_name);
+> -	slink_name = NULL;
+> +    if (!IS_ERR(dentry)) {
+> +        device->debugfs_minor = dentry;
+> +        kfree(slink_name);
+> +        slink_name = NULL;
+> +    } else {
+> +        kfree(slink_name);
+> +        slink_name = NULL;
+> +        goto fail;
+> +    }
+> 
+>  #define DCF(name)	do {					\
+>  	dentry = debugfs_create_file(#name, 0440,	\
+> --
+> 2.40.0
+> 
+> 
 
+Hi, thanks for the patch.
 
-On 5/15/2023 1:06 PM, Siddharth Vadapalli wrote:
-> Achal,
-> 
-> On 15/05/23 11:25, Verma, Achal wrote:
->> Hi,
->>
->> On 4/25/2023 6:46 PM, Jayesh Choudhary wrote:
->>> From: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>
->>> The system controller node manages the CTRL_MMR0 region.
->>> Add serdes_ln_ctrl node which is used for controlling the SERDES lane mux.
->>>
->>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>> [j-choudhary@ti.com: Add reg property to fix dtc warning]
->>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
->>> ---
->>>    arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 23 ++++++++++++++++++++++
->>>    1 file changed, 23 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
->>> b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
->>> index e9169eb358c1..29be6d28ee31 100644
->>> --- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
->>> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
->>> @@ -5,6 +5,9 @@
->>>     * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
->>>     */
->>>    +#include <dt-bindings/mux/mux.h>
->>> +#include <dt-bindings/mux/ti-serdes.h>
->>> +
->>>    &cbass_main {
->>>        msmc_ram: sram@70000000 {
->>>            compatible = "mmio-sram";
->>> @@ -26,6 +29,26 @@ l3cache-sram@200000 {
->>>            };
->>>        };
->>>    +    scm_conf: syscon@100000 {
->> Please check syscon address.
-> 
-> 0x100000 is the base address of the CTRL_MMR module. Could you please clarify
-> why the address is incorrect? The registers for J784S4 SoC can be viewed at:
-> https://www.ti.com/lit/zip/spruj52
-I got the doubt because of the address used in this [1] series was 
-different. Now I realized that it was wrong and it got corrected in this 
-patch. So yeah its clear now, 0x100000 is indeed the correct base address.
+Please see this commit:
 
-[1] 
-https://serenity.dal.design.ti.com/patchwork/project/linux-patch-review/patch/20220927202534.17148-3-mranostay@ti.com/
-> 
->>
->> Thanks,
->> Achal Verma
->>> +        compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
->>> +        reg = <0x00 0x00100000 0x00 0x1c000>;
->>> +        #address-cells = <1>;
->>> +        #size-cells = <1>;
->>> +        ranges = <0x00 0x00 0x00100000 0x1c000>;
->>> +
->>> +        serdes_ln_ctrl: mux-controller@4080 {
->>> +            compatible = "mmio-mux";
->>> +            reg = <0x00004080 0x30>;
->>> +            #mux-control-cells = <1>;
->>> +            mux-reg-masks = <0x4080 0x3>, <0x4084 0x3>, /* SERDES0 lane0/1
->>> select */
->>> +                    <0x4088 0x3>, <0x408c 0x3>, /* SERDES0 lane2/3 select */
->>> +                    <0x4090 0x3>, <0x4094 0x3>, /* SERDES1 lane0/1 select */
->>> +                    <0x4098 0x3>, <0x409c 0x3>, /* SERDES1 lane2/3 select */
->>> +                    <0x40a0 0x3>, <0x40a4 0x3>, /* SERDES2 lane0/1 select */
->>> +                    <0x40a8 0x3>, <0x40ac 0x3>; /* SERDES2 lane2/3 select */
->>> +        };
->>> +    };
->>> +
->>>        gic500: interrupt-controller@1800000 {
->>>            compatible = "arm,gic-v3";
->>>            #address-cells = <2>;
-> 
+commit d27e84a305980ac61df0a6841059d0eb09b8283d
+Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Tue Jun 18 17:45:49 2019 +0200
+
+    block: drbd: no need to check return value of debugfs_create functions
+
+    When calling debugfs functions, there is no need to ever check the
+    return value.  The function can work or not, but the code logic should
+    never do something different based on this.
+
+Also, it still looks like that whitespace is garbled.
+
+NAK.
+
+-- 
+Christoph Böhmwalder
+LINBIT | Keeping the Digital World Running
+DRBD HA —  Disaster Recovery — Software defined Storage
