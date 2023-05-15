@@ -2,62 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508827039F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255F6703A30
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244736AbjEORq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S244820AbjEORtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242536AbjEORqk (ORCPT
+        with ESMTP id S243405AbjEORtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:46:40 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AAB16EBD;
-        Mon, 15 May 2023 10:45:24 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FHjKHo009760;
-        Mon, 15 May 2023 12:45:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684172720;
-        bh=V9tiruoX9ztjEFpmdpDyiAFpY7IRTPlA8j2mNpdmPkU=;
-        h=From:To:CC:Subject:Date;
-        b=CYL4s58w8JTFaCB/8ZtAFJ3BSdSPv2Wn5OQDk0q7SiC6GFJJ+t0d0A3YV3p+Qn4Qg
-         oh6I+OwbPfC+ncW+FhY03wew/yPFTrT+r4FK3O//D37kog/87IJeH3RQlVIKNwMsWf
-         GYA8agU5k9Js5Q7WUkyfQQ9FV+eF/UISvSc/9+J0=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FHjKpa121378
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 12:45:20 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 12:45:19 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 May 2023 12:45:19 -0500
-Received: from lelv0326.itg.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FHjJxR098698;
-        Mon, 15 May 2023 12:45:19 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [PATCH v3] gpio: tps65086: Use devm_gpiochip_add_data() to simplify remove path
-Date:   Mon, 15 May 2023 12:45:18 -0500
-Message-ID: <20230515174518.494907-1-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 15 May 2023 13:49:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13016088;
+        Mon, 15 May 2023 10:47:19 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FHCnhK010977;
+        Mon, 15 May 2023 17:46:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=AKq3OA68Xdh2Pwr0i6y5rLL9DOMYklqjB584l2l1Ee8=;
+ b=otVEz15wmw2pcJ2YRHfZi7mxB5/+FXPTsgzER9jF21mPskXshj6McZFJgMbv8e6qfW9m
+ z4oktvKsbVHSsG3Yl3y7wsbR/LrskDhbieu+dwcf18IykeZyAogxTCWX26cnJ5kmTZor
+ 6BIgpqsXL+xcpS0UYeV39S0ZbACqY6ZC5YTFzi33MeyecdD2Hzx1H4v4ysk+w+lIsptw
+ t/mRxLFH9ye8sHt7Z92gGfDelUCPro4gz/QYculUZ7MDyATD7ImQlRfqxlHZQmvXbM4P
+ VcpGWaoHGwDdXqGYvHTpDnq5uwQoWDF8Pvr8si6N8p1FrJufjf/O3SS47VpiHt3bGCuv Uw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkjwds83k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 17:46:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FHksn8021026
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 17:46:54 GMT
+Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
+ 2023 10:46:53 -0700
+Message-ID: <1fd8fd48-9a0a-774c-1366-ea4c893f3b25@quicinc.com>
+Date:   Mon, 15 May 2023 10:46:48 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8 5/8] drm/msm/dpu: add support for DSC encoder v1.2
+ engine
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683914423-17612-6-git-send-email-quic_khsieh@quicinc.com>
+ <41243dc6-eb9d-dea6-f945-cb1f6594a2a4@linaro.org>
+ <w6uswjuf7fiorrplqzhrpg3vrjbbdd3bgaxej5l6ez3pebn3d5@ytuxhim25j6q>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <w6uswjuf7fiorrplqzhrpg3vrjbbdd3bgaxej5l6ez3pebn3d5@ytuxhim25j6q>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: PigQ09qt6WdvzSy-Qk0yH7QxqHjPzdTp
+X-Proofpoint-GUID: PigQ09qt6WdvzSy-Qk0yH7QxqHjPzdTp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_16,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 mlxscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305150149
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,82 +89,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm version of gpiochip add function to handle removal for us.
 
-While here update copyright and module author.
+On 5/14/2023 2:46 PM, Marijn Suijten wrote:
+> On 2023-05-12 21:19:19, Dmitry Baryshkov wrote:
+> <snip.
+>>> +static inline void dpu_hw_dsc_bind_pingpong_blk_1_2(struct dpu_hw_dsc *hw_dsc,
+>>> +						    const enum dpu_pingpong pp)
+>>> +{
+>>> +	struct dpu_hw_blk_reg_map *hw;
+>>> +	const struct dpu_dsc_sub_blks *sblk;
+>>> +	int mux_cfg = 0xf; /* Disabled */
+>>> +
+>>> +	hw = &hw_dsc->hw;
+>>> +
+>>> +	sblk = hw_dsc->caps->sblk;
+>>> +
+>>> +	if (pp)
+>>> +		mux_cfg = (pp - PINGPONG_0) & 0x7;
+>> Do we need an unbind support here like we do for the DSC 1.1?
+>>
+>>> +
+>>> +	DPU_REG_WRITE(hw, sblk->ctl.base + DSC_CTL, mux_cfg);
+>>> +}
+> <snip>
+>
+> Friendly request to strip/snip unneeded context (as done in this reply)
+> to make it easier to spot the conversation, and replies to it.
+>
+> - Marijn
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
+Thanks for suggestion.
 
-Changes from v2:
- - Remove unused var "ret"
+How can I do that?
 
- drivers/gpio/gpio-tps65086.c | 27 ++++-----------------------
- 1 file changed, 4 insertions(+), 23 deletions(-)
+just manually delete unneeded context?
 
-diff --git a/drivers/gpio/gpio-tps65086.c b/drivers/gpio/gpio-tps65086.c
-index 1e9d8262d0ff..8f5827554e1e 100644
---- a/drivers/gpio/gpio-tps65086.c
-+++ b/drivers/gpio/gpio-tps65086.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (C) 2015 Texas Instruments Incorporated - http://www.ti.com/
-- *	Andrew F. Davis <afd@ti.com>
-+ * Copyright (C) 2015-2023 Texas Instruments Incorporated - https://www.ti.com/
-+ *	Andrew Davis <afd@ti.com>
-  *
-  * Based on the TPS65912 driver
-  */
-@@ -80,34 +80,16 @@ static const struct gpio_chip template_chip = {
- static int tps65086_gpio_probe(struct platform_device *pdev)
- {
- 	struct tps65086_gpio *gpio;
--	int ret;
- 
- 	gpio = devm_kzalloc(&pdev->dev, sizeof(*gpio), GFP_KERNEL);
- 	if (!gpio)
- 		return -ENOMEM;
- 
--	platform_set_drvdata(pdev, gpio);
--
- 	gpio->tps = dev_get_drvdata(pdev->dev.parent);
- 	gpio->chip = template_chip;
- 	gpio->chip.parent = gpio->tps->dev;
- 
--	ret = gpiochip_add_data(&gpio->chip, gpio);
--	if (ret < 0) {
--		dev_err(&pdev->dev, "Could not register gpiochip, %d\n", ret);
--		return ret;
--	}
--
--	return 0;
--}
--
--static int tps65086_gpio_remove(struct platform_device *pdev)
--{
--	struct tps65086_gpio *gpio = platform_get_drvdata(pdev);
--
--	gpiochip_remove(&gpio->chip);
--
--	return 0;
-+	return devm_gpiochip_add_data(&pdev->dev, &gpio->chip, gpio);
- }
- 
- static const struct platform_device_id tps65086_gpio_id_table[] = {
-@@ -121,11 +103,10 @@ static struct platform_driver tps65086_gpio_driver = {
- 		.name = "tps65086-gpio",
- 	},
- 	.probe = tps65086_gpio_probe,
--	.remove = tps65086_gpio_remove,
- 	.id_table = tps65086_gpio_id_table,
- };
- module_platform_driver(tps65086_gpio_driver);
- 
--MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
-+MODULE_AUTHOR("Andrew Davis <afd@ti.com>");
- MODULE_DESCRIPTION("TPS65086 GPIO driver");
- MODULE_LICENSE("GPL v2");
--- 
-2.39.2
+Or are they other way (tricks) to do it automatically?
+
 
