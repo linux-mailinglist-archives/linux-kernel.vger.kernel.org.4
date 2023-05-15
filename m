@@ -2,186 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B267020B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 02:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6556E7020BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 02:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235618AbjEOAIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 20:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S235830AbjEOAPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 20:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjEOAIh (ORCPT
+        with ESMTP id S229929AbjEOAPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 20:08:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2B710F5
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 17:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684109316; x=1715645316;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=LUc7qyT0ZVQNiqAJkB4L40QOFfF15BR6h24flfzpKlc=;
-  b=inu0tu/U9iViN4gMgzyXAyIkLKmI+TZ1pvlMcHgI9PO3hv+543x/cty2
-   OpUkJwRxDkWl9x93spvTNieKCkOlaPWmjRM4TOaTxTKlTkKby3YjT04p5
-   WKWhbZl4dDLaDY6A1odyvLpXUKt6S7qgN63jjOX+V/OeozKW1TankYDXa
-   uX2KoeKOesu+O7gHWRo47x/LJy8NvxgOf52dt80azEeb3u/0aib85SXVj
-   IsQohoMKFzejMruyiUnpOPTe49Gvff82AX1ArzWLIMYs2aCjDKsVkEdxz
-   zLp9MlheFeGXZEx8n69d2TOrSj6oGTi/Y4x8bRG4GybA90aUJeTMwmAFW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349922465"
-X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="349922465"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 17:08:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="1030705208"
-X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="1030705208"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga005.fm.intel.com with ESMTP; 14 May 2023 17:08:35 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 14 May 2023 17:08:35 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Sun, 14 May 2023 17:08:35 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sun, 14 May 2023 17:08:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fcTusmID/93yDD+8Yfy7H+qTmmLpmGYCX72UbBtYkr70+T61Pkuaa8pNuW2jL6yqp+PgjaIpEBi5DfSyqflI5hg9EQ9Oc0co/GqPb9kJhG/mgIidrGg0QXQaJMxyjz36f1lBEqv+r8U1dRQy2QP1HTsnb3a3kCRPlMXNTNsZH1jqE9mA7yf+Au9N30F3i4OUTzIKK70FN4xSHzHMnbgWsXfzYm0NzVAx3ZpvHFSjaot0aib2Bf9LxTu8RPIO23/V+MUK0PRxGphPPY0IBGsc4X/vTJtimN+3ol+zelXr+xmqvMYblKTvoNW1jV0SLqoOaBp8VeFotvqQmBWuPv5AQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LUc7qyT0ZVQNiqAJkB4L40QOFfF15BR6h24flfzpKlc=;
- b=cqDdhlR6qh/Zb4RzUN3/a1rjVZ8utNP0fIZQj34Sik+Z3MillU8Sxv8iFFZvkl4HuxQvcjH1nq7NmJV4irrhDOeTRhms2TTNFhJt5XfBva12IIQI+VN53taUCudda6DIgSAvJd66RCDfQwE12qZZFa81rrkJ+vyFnoO9BQneLKBFtpAy5KsDpn7ZX8IZjn0aGwYWNo9w5DJQxNb7d48prn4fQvzHcFU66gVTk0pTcVs6jEc1ypHxrjpzaBBBiKul+eC5D+cBDA5HXLz5WpnEuihCd1l0w8ZjuhvNc7ASbInx9eZfcBas1F+AxbW5NawgmgFSLFD/CZqEUuqXFgfwCA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5370.namprd11.prod.outlook.com (2603:10b6:408:11b::8)
- by MW3PR11MB4633.namprd11.prod.outlook.com (2603:10b6:303:5b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
- 2023 00:08:31 +0000
-Received: from BN9PR11MB5370.namprd11.prod.outlook.com
- ([fe80::5462:3495:2a92:72a2]) by BN9PR11MB5370.namprd11.prod.outlook.com
- ([fe80::5462:3495:2a92:72a2%6]) with mapi id 15.20.6387.030; Mon, 15 May 2023
- 00:08:30 +0000
-From:   "Chang, Junxiao" <junxiao.chang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Hocko, Michal" <mhocko@suse.com>,
-        "jmarchan@redhat.com" <jmarchan@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>
-Subject: RE: [PATCH] mm: fix hugetlb page unmap count balance issue
-Thread-Topic: [PATCH] mm: fix hugetlb page unmap count balance issue
-Thread-Index: AQHZhKJKazzbSBIjB0GWoh8AQ8c7Qa9XIT+AgANWVFA=
-Date:   Mon, 15 May 2023 00:08:30 +0000
-Message-ID: <BN9PR11MB53701B3F2930540D2704E230EC789@BN9PR11MB5370.namprd11.prod.outlook.com>
-References: <20230512072036.1027784-1-junxiao.chang@intel.com>
- <20230512140353.8b95e8cb024c8e7a1a3b03c1@linux-foundation.org>
-In-Reply-To: <20230512140353.8b95e8cb024c8e7a1a3b03c1@linux-foundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5370:EE_|MW3PR11MB4633:EE_
-x-ms-office365-filtering-correlation-id: 4afac1f1-2ec8-47a1-33cc-08db54d883b0
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: U7JX1z/i84jUHC8xgzvv30T0o5HL+HObpe5VgFB9M3UHZw9mU8Sd7hiGJ0VtZc4s8Yrltb7HlCFQ2EL/SBUYxajMvbRV3o1cA8qadFHx7bLATEXinjSrXKmTUxpAFNnqOlu01whsYAPPA9lDZxWDl/LD/bIX3eeq95/Qt8aQihL2EJ5jaHZ7v2AJM9bM9xljU+02TlFa8iGH1ULrvuABPZDQJ4fyfLsixKcO7qZWMxIpLBkeEDqV4DITQpc921KrnJQHzdLckTTil36FYpdZ8cyLs/R4CqUqcaxzy+jHas4w6V02HCP5awZJ0EtTEFr3R6Ju0W5w99q4l+ZzSvnUpZ23/uTkMcrsiUhHpUrqMj2rFE2uw+im63cfnQnfQhwl5Q2yjSPioG3cr2MV2WznBg1VPYvzK+sDXzfzM5uc9C+jVhOXK6POV3apdq3GTzXcFsf8ewBQc2pE8RNgE4FLMGoLTKf5xBR7sGL5j4CsS5Ifc3Tea9O95uDHg/Bwu6qndb79JkyV9FA7uzfMPwrMOYIlm5P8C/3fAfncCmp9vaEYvlamEqGlT925vr1rBj/y2Y9mrCnwuvtBIcgY0MwJCyWTj4KZm0pYOkD/zoEmhspC6wwF0p01EjhcdhFWHBO1
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5370.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(39860400002)(136003)(376002)(346002)(451199021)(33656002)(86362001)(54906003)(316002)(76116006)(66556008)(66476007)(66446008)(64756008)(6916009)(66946007)(4326008)(478600001)(7696005)(71200400001)(55016003)(8936002)(8676002)(5660300002)(52536014)(41300700001)(2906002)(38070700005)(82960400001)(122000001)(38100700002)(26005)(186003)(53546011)(9686003)(6506007)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?KzlrQTZVNGNVWk1ESUlEYURQYTRWZnkzYVZuUU9ZdHJ4YUg3eE9wN0k3Tlp3?=
- =?utf-8?B?eEFadExyRVZueFlFcDViK0IzKzBNMzRkU3g3WmVtKzBGeTIxY1JvMng4QnVX?=
- =?utf-8?B?UmpiWFpIUG5SbWdMMGNGbllkZStJTlR1VUkzdHVYU3crc2xzWU03VUdBK1FF?=
- =?utf-8?B?dXVFWUpObG5YYXIyZS8rMWVxM3JFdlZhaTFjZ2lNa2w1MWt5WldocE56YmpK?=
- =?utf-8?B?a2hnN2tKamtGQ0xYbWcyWkJGNGlZR1ZPRFJUSW84ZGRWM2Q2RjdoQndYYjhx?=
- =?utf-8?B?MDltczlIclBTT1l2dncrdGZWVHVUTWtZTUNzWUFLWkdzSm8rUXU1TjQ1bVo3?=
- =?utf-8?B?UDZ0TkRPeUc5L3FzUG1FcXBtUUlMVGMyVkF0dlVKenhRU215ZldKWWw4VlBZ?=
- =?utf-8?B?MFdOb0hUZnVYTzlhanY0ZnUvcXhxNTQ3cWFzcU90SkF0dUprRHl2TGkxS0RF?=
- =?utf-8?B?TXdvMGw4c0kzcmI2OGpLTjV2Q29neHR6OTZXVktnMkZsLy9rNW5KMlV5UFNZ?=
- =?utf-8?B?VEw2c3hIR3V0b2YrNmpmaHBWcXpIdWQ5NHZEYkdWdGpMYzkwazhZdWRHSGdh?=
- =?utf-8?B?YkpHcmYzWVlwMGFrVEYvK25zZitnSFFaMm84Z1dMZXZiZDdnU2pSQXJzUG1O?=
- =?utf-8?B?RCt3N3BZQnhIa3BKYkpLaVF5dWxNM1M0TGY1Qnk3M3gwRUlrNDBCT0FxYkRQ?=
- =?utf-8?B?ZFVxZTg0RTY5QkR0L0dmSWk2dzdHcjZmcU5yVkt1Z1Q1NzJERHFXV3FNQzl6?=
- =?utf-8?B?dGdPTVJ5ZitqT3ByNWlUamUvQ016Z2JBQWgrK3hyalVHVjdzaVY2RnlHd3VM?=
- =?utf-8?B?bjVaU2xlYTkvbDBnQmpxVXdQVnozeTF1bFlQWmJuWWZmMmE2NGUzY1NXRFIz?=
- =?utf-8?B?elFwamVaWDg3em5QenZySkVtTmlrU09lNlY1dVVWWk5wTlloeXNuaVp2ZlRp?=
- =?utf-8?B?L3djV0IzRWFwWGJVOVdzZFNNZEtZM0lyVFBYeGZyMFJKbGNVNzlOeWk0WHgx?=
- =?utf-8?B?Q0hKakt1VTFCdlc1UHV4MjJhVHJLV2w5T0NjSHRMaGdQc1p1ZTNTcHpzbHI5?=
- =?utf-8?B?cHp5OC9NSVlwR0gveGsyOElOK2VsaXBOMlpZaVJGYVVSVUdLTTF0dUx5QUdY?=
- =?utf-8?B?RHN5VG4zV08wMHhSNC9iT0xPMUVab3FuckdLTHJqd2hhNzZmZEFOSVJwOFFT?=
- =?utf-8?B?a3hTcWEvM01jMWo2eUhEL2l1OW85U3VJK2JjS1QwWEVyVFp3eWMrcXpJM0sy?=
- =?utf-8?B?Mk5JemtVS2YzRzhwUWdYY3ZudG54cXFkd0EvSkdoakRLNGptcExVVENsbjl3?=
- =?utf-8?B?VWFBUVlnRFRNZmJ1ZjY5SEZGMXNUelJBdFFGL2Z4UE8rRXRTK1RsZHJCdzlQ?=
- =?utf-8?B?MGNKWG9jWWxIQWZsLzNYVTVLd3VGdDUxSzdsVlZVSnIxREVEMVlUbXB2MGps?=
- =?utf-8?B?K01pMkFFTThyM2tSSG5JMGh4VzhiM2Vsay9QMlJQUGVLNk9hRENraXpCYis0?=
- =?utf-8?B?cmVqakRRVVNzYm9lUENDa1ExZUZYVWtTeTdyd1orcEhvZ3Q5MVJTUWFBbEFj?=
- =?utf-8?B?NmQzb0VZQ3VWWU04QTBTTUZldkpyYnJraXRSZTZLVkh1T2VrbGwvT3RvNzZO?=
- =?utf-8?B?Q3R1M3RNZ1NYRTl3T3BQOS9Gby8ydWU0YTJzQzZVb25wSnMycHI1VkdrYXZH?=
- =?utf-8?B?MENxNFlDdDJRUG9TWkpQdGVRYk9YU0owc0FzZ0trWENOKzFaK2t0OEhtNVRQ?=
- =?utf-8?B?ek8vYURNcUhZMmNNeUZHcHdDZjZoV1RpbXpldUtkWmJ0Wnp1QkZicXF4UXlJ?=
- =?utf-8?B?VlpLazduM1FYN0xBcGIzTXFyeXJ0bDBZNlZzSnZuV0kwd3BlS2ZmbUFoTUFh?=
- =?utf-8?B?TGp3VzZ1SWlZejlOTm9NWER5dU16cVJSZG04UTNTQ21OMVRFakJkODdlYVM5?=
- =?utf-8?B?VDJsS3RBbTRqRjlxeVhSNUM4bWJBTXR5Ym5RSEkzV2tNRVhxT25SSXJVT0lE?=
- =?utf-8?B?eXhWSjdYOVlhb25QNGdXSWsrcDcrRUZhMmFaS3M0UXlrQVluU0lkZXlISStG?=
- =?utf-8?B?K1RySjJ5Tmpaa0p4c2JSRDVMWTkraVQ5VVFGWHZKMmRpNGlEWm1JZDdHcXNY?=
- =?utf-8?Q?IBc4NoAxzGCGVTjA3YrK7Yr/X?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 14 May 2023 20:15:10 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB67AE6C;
+        Sun, 14 May 2023 17:15:08 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so22079136a12.3;
+        Sun, 14 May 2023 17:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684109707; x=1686701707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YZYkWxyeoGcMPPZjWMJ8tL0VIfezGs1FZL2C/Wu5QG0=;
+        b=SRnzom0jUM6DK4bUTf7F1c/m0bHbdtEIZRGTzF2k2awjYh/hGnqnUnpMNJVFDHqlm7
+         MHH3WpAoUyyqw8mtqUVrrF8z2EVFkdEEBP9VN28Se5OQx73bd2NmvWOObbFhrbTkp1xW
+         sqK2eNkuccUA+cxk1qjweN2qoBiv3np+QmuIx5oGy70+ylOHCid7i2U3dEm1ow5ogpVK
+         Cf9jjcqp74ZMrX5bUT9HK2kH0xAIpgjT1obvg/VZBjDGLANoRT5bzECtj3YlL26DCLcg
+         hKjx1f3OctGsXo3BFXDoZDFJqt5XWCPsc0G4Im5Y7jAErUm6zBFzhzSKtl1tH3UJUSLr
+         hqRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684109707; x=1686701707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YZYkWxyeoGcMPPZjWMJ8tL0VIfezGs1FZL2C/Wu5QG0=;
+        b=d2t87lt2po4t4DPrVGJB1zTuG/7Q4PkWQ/eBSUMht6FC5XYh1qPUu+gOPf9ojgUum9
+         IiigVQwCx8g8JlxpXfvbQ48no2CmCz4Gn7dRCECq1Y0WufdZiX0w1CQord2aD+POg8ee
+         lOaWsAxoFiQHO56dSNJDTwjrrhW9gHlRPae/xmCdndr2zyvhYsXPeRahvQqPSScqgmHU
+         MDaiuJgKkch6Uk+XwuwXcOdQP5q5MjlSeADU1WZL4ihxdjFQ29CJb3didAHoauKsGsH8
+         LKgrRgTBWAui68QKfejrXWpOwPjjT1m9VWERa7VcHTdeuRKcYQ4w+nK62HV/EsujLvbt
+         2BKg==
+X-Gm-Message-State: AC+VfDzAXGbMwMFq3nXdBNHmy0jPm13wVmMy3qqy8VEexi/LdoVVmDCy
+        V1cnPHyNiACEbIHOkp2s6OUwE44w+X2oheUJjL0XQp2gcZE=
+X-Google-Smtp-Source: ACHHUZ5p1MZC4WIGFCsPKqqprki9AzgfFhVWheLJTrNF9ZFSEqi5eFqDvAjrJelVPDqy5e6m10+hBD2kaoZcNDq0FcU=
+X-Received: by 2002:a50:eb47:0:b0:50d:f9b3:444c with SMTP id
+ z7-20020a50eb47000000b0050df9b3444cmr8292900edp.17.1684109707143; Sun, 14 May
+ 2023 17:15:07 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5370.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4afac1f1-2ec8-47a1-33cc-08db54d883b0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 00:08:30.2064
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GmnWD4HOZftS63Aw2Tpi2qx7breWQp+mYJgMMJGeADttSD5ZTWKzpSYk0fm480X+Lyqe6hE/uZcKDAHZRNJ1pg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4633
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230512104559.11218-1-victor.shih@genesyslogic.com.tw> <20230512104559.11218-4-victor.shih@genesyslogic.com.tw>
+In-Reply-To: <20230512104559.11218-4-victor.shih@genesyslogic.com.tw>
+From:   Ben Chuang <benchuanggli@gmail.com>
+Date:   Mon, 15 May 2023 08:14:55 +0800
+Message-ID: <CACT4zj8EXyizQLnb837pzg8kEURWrO4BkVeRmtDUmTo6yh9E+g@mail.gmail.com>
+Subject: Re: [PATCH V1 3/3] mmc: sdhci-pci-gli: Add support SD Express card
+ for GL9767
+To:     Victor Shih <victorshihgli@gmail.com>
+Cc:     ulf.hansson@linaro.org, adrian.hunter@intel.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
+        takahiro.akashi@linaro.org, dlunev@chromium.org,
+        Victor Shih <victor.shih@genesyslogic.com.tw>,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhhbmsgeW91IGZvciByZXZpZXcgaXQhIFdlIG9ubHkgcmVwcm9kdWNlZCB0aGlzIGh1Z2V0bGIg
-bWFwcGluZyBpc3N1ZSB3aXRoIFFFTVUgY29tbWFuZCB3aGljaCBvcGVucyB1ZG1hYnVmIGRyaXZl
-cihkcml2ZXJzL2RtYS1idWYvdWRtYWJ1Zi5jKS4NCkkgYWdyZWUgd2l0aCB5b3UsIGl0IGlzIGJl
-dHRlciB0byBtYXAgaHVnZSBwYWdlIHdpdGggYSBwbWQgaW5zdGVhZCBvZiBhIHB0ZS4g8J+Yig0K
-DQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogQW5kcmV3IE1vcnRvbiA8YWtwbUBs
-aW51eC1mb3VuZGF0aW9uLm9yZz4gDQpTZW50OiBTYXR1cmRheSwgTWF5IDEzLCAyMDIzIDU6MDQg
-QU0NClRvOiBDaGFuZywgSnVueGlhbyA8anVueGlhby5jaGFuZ0BpbnRlbC5jb20+DQpDYzoga2ly
-aWxsLnNodXRlbW92QGxpbnV4LmludGVsLmNvbTsgSG9ja28sIE1pY2hhbCA8bWhvY2tvQHN1c2Uu
-Y29tPjsgam1hcmNoYW5AcmVkaGF0LmNvbTsgbGludXgtbW1Aa3ZhY2sub3JnOyBsaW51eC1rZXJu
-ZWxAdmdlci5rZXJuZWwub3JnOyBtaWtlLmtyYXZldHpAb3JhY2xlLmNvbTsgbXVjaHVuLnNvbmdA
-bGludXguZGV2DQpTdWJqZWN0OiBSZTogW1BBVENIXSBtbTogZml4IGh1Z2V0bGIgcGFnZSB1bm1h
-cCBjb3VudCBiYWxhbmNlIGlzc3VlDQoNCk9uIEZyaSwgMTIgTWF5IDIwMjMgMTU6MjA6MzYgKzA4
-MDAgSnVueGlhbyBDaGFuZyA8anVueGlhby5jaGFuZ0BpbnRlbC5jb20+IHdyb3RlOg0KDQo+IGh1
-Z2V0bGIgcGFnZSB1c3VhbGx5IGlzIG1hcHBlZCB3aXRoIHBtZCwgYnV0IG9jY2FzaW9uYWxseSBp
-dCBtaWdodCBiZSANCj4gbWFwcGVkIHdpdGggcHRlLiBRRU1VIGNhbiB1c2UgdWRtYS1idWYgdG8g
-Y3JlYXRlIGhvc3QgZG1hYnVmcyBmb3IgDQo+IGd1ZXN0IGZyYW1lYnVmZmVycy4gV2hlbiBRRU1V
-IGlzIGxhdW5jaGVkIHdpdGggcGFyYW1ldGVyICJodWdldGxiPW9uIiwgDQo+IHVkbWFidWZmZXIg
-ZHJpdmVyIG1hcHMgaHVnZXRsYiBwYWdlIHdpdGggcHRlIGluIHBhZ2UgZmF1bHQgaGFuZGxlci4N
-Cg0KQXJlIHRoZXJlIGFueSBvdGhlciBzaXR1YXRpb25zIGluIHdoaWNoIGEgaHVnZXRsYiBwYWdl
-IGlzIG1hcHBlZCBpbiB0aGlzIGZhc2hpb24/DQoNCklmIG5vdCwgY2FuIFFFTVUgYmUgY2hhbmdl
-ZCB0byBtYXAgd2l0aCBhIHBtZD8NCg0KU28gd2UgZ2V0IG9uZSBsZXNzIHdlaXJkIHNwZWNpYWwg
-Y2FzZSBpbiBNTS4NCg==
+Hi Victor,
+
+On Fri, May 12, 2023 at 6:47=E2=80=AFPM Victor Shih <victorshihgli@gmail.co=
+m> wrote:
+>
+> Add support SD Express card for GL9767. The workflow of the
+> SD Express card in GL9767 is as below.
+> 1. GL9767 operates in SD mode and set MMC_CAP2_SD_EXP flag.
+> 2. If card is inserted, Host send CMD8 to ask the capabilities
+>    of the card.
+> 3. If the card has PCIe capability and write protect is not
+>    enable, then init_sd_express() will be invoked.
+> 4. GL9767 switch from SD mode to PCIe/NVMe mode and mmc driver
+>    handover control to NVMe driver.
+> 5. If card is removed, GL9767 will return to SD mode.
+>
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+> ---
+>  drivers/mmc/host/sdhci-pci-gli.c | 115 +++++++++++++++++++++++++++++++
+>  1 file changed, 115 insertions(+)
+>
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pc=
+i-gli.c
+> index 300512740cb0..a0f9c24439be 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -158,6 +158,13 @@
+>  #define   GLI_9767_VHS_REV_M     0x1
+>  #define   GLI_9767_VHS_REV_W     0x2
+>
+> +#define PCIE_GLI_9767_CFG              0x8A0
+> +#define   PCIE_GLI_9767_CFG_LOW_PWR_OFF          BIT(12)
+> +
+> +#define PCIE_GLI_9767_COMBO_MUX_CTL                    0x8C8
+> +#define   PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN             BIT(6)
+> +#define   PCIE_GLI_9767_COMBO_MUX_CTL_WAIT_PERST_EN      BIT(10)
+> +
+>  #define PCIE_GLI_9767_PWR_MACRO_CTL                                    0=
+x8D0
+>  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LOW_VOLTAGE                       =
+ GENMASK(3, 0)
+>  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LD0_LOW_OUTPUT_VOLTAGE            =
+ GENMASK(15, 12)
+> @@ -175,6 +182,27 @@
+>  #define   PCIE_GLI_9767_SCR_CORE_PWR_D3_OFF              BIT(21)
+>  #define   PCIE_GLI_9767_SCR_CFG_RST_DATA_LINK_DOWN       BIT(30)
+>
+> +#define PCIE_GLI_9767_SDHC_CAP                 0x91C
+> +#define   PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT     BIT(5)
+> +
+> +#define PCIE_GLI_9767_SD_EXPRESS_CTL                   0x940
+> +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE                  BIT(0)
+> +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE   BIT(1)
+> +
+> +#define PCIE_GLI_9767_SD_DATA_MULTI_CTL                                0=
+x944
+> +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME        GENMASK=
+(23, 16)
+> +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME_VALUE         =
+ 0x64
+> +
+> +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2                       0=
+x950
+> +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE        =
+ BIT(0)
+> +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_GEN_TIMER       =
+ GENMASK(1, 0)
+> +
+> +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2                     =
+       0x954
+> +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPLETE_STAT=
+US_EN    GENMASK(1, 0)
+> +
+> +#define PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2                     =
+       0x958
+> +#define   PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPLETE_SIGN=
+AL_EN    GENMASK(1, 0)
+> +
+>  #define GLI_MAX_TUNING_LOOP 40
+>
+>  /* Genesys Logic chipset */
+> @@ -774,6 +802,91 @@ static void sdhci_gl9767_reset(struct sdhci_host *ho=
+st, u8 mask)
+>         gli_set_9767(host);
+>  }
+>
+> +static int gl9767_init_sd_express(struct mmc_host *mmc, struct mmc_ios *=
+ios)
+> +{
+> +       struct sdhci_host *host =3D mmc_priv(mmc);
+> +       struct sdhci_pci_slot *slot =3D sdhci_priv(host);
+> +       struct pci_dev *pdev;
+> +       u32 value;
+> +       int i;
+> +
+> +       pdev =3D slot->chip->pdev;
+> +
+> +       if (sdhci_check_ro(host)) {
+> +               mmc->ios.timing &=3D ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_=
+EXP_1_2V);
+> +               return 0;
+> +       }
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_VHS, &value);
+> +       value &=3D ~GLI_9767_VHS_REV;
+> +       value |=3D FIELD_PREP(GLI_9767_VHS_REV, GLI_9767_VHS_REV_W);
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_VHS, value);
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, &value);
+> +       value &=3D ~(PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN | PCIE_GLI_9767_C=
+OMBO_MUX_CTL_WAIT_PERST_EN);
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, value);
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, &val=
+ue);
+> +       value &=3D ~PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME;
+> +       value |=3D FIELD_PREP(PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_=
+TIME,
+> +                           PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TI=
+ME_VALUE);
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, val=
+ue);
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_R=
+EG2, &value);
+> +       value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_GEN_TIME=
+R;
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_=
+REG2, value);
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_E=
+N_REG2, &value);
+> +       value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPL=
+ETE_STATUS_EN;
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_=
+EN_REG2, value);
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_E=
+N_REG2, &value);
+> +       value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPL=
+ETE_SIGNAL_EN;
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_=
+EN_REG2, value);
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
+> +       value |=3D PCIE_GLI_9767_CFG_LOW_PWR_OFF;
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
+> +
+> +       value =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> +       value &=3D ~(SDHCI_CLOCK_CARD_EN | SDHCI_CLOCK_PLL_EN);
+> +       sdhci_writew(host, value, SDHCI_CLOCK_CONTROL);
+> +
+> +       value =3D sdhci_readb(host, SDHCI_POWER_CONTROL);
+> +       value |=3D ((SDHCI_POWER_180 | SDHCI_POWER_ON) << 4);
+> +       sdhci_writeb(host, value, SDHCI_POWER_CONTROL);
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, &value)=
+;
+> +       value |=3D PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE;
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, value)=
+;
+> +
+> +       for (i =3D 0; i < 10; i++) {
+> +               mdelay(10);
+
+A little question.
+Can you explain or comment on the reason for up to 10 loops (max. 100 ms wa=
+it),
+For example "because of asic specs..." or "hardware measurements".
+
+Best regards,
+Ben
+
+> +               pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_=
+STATUS_REG2, &value);
+> +               if (value & PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI=
+_COMPLETE) {
+> +                       pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL=
+_ERR_INT_STATUS_REG2,
+> +                                              value);
+> +                       break;
+> +               }
+> +       }
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_SDHC_CAP, &value);
+> +       if ((value & PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT) =3D=3D PCIE_GLI_=
+9767_SDHC_CAP_SDEI_RESULT) {
+> +               pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL,=
+ &value);
+> +               value |=3D PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE;
+> +               pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL=
+, value);
+> +       } else {
+> +               mmc->ios.timing &=3D ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_=
+EXP_1_2V);
+> +       }
+> +
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_VHS, &value);
+> +       value &=3D ~GLI_9767_VHS_REV;
+> +       value |=3D FIELD_PREP(GLI_9767_VHS_REV, GLI_9767_VHS_REV_R);
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_VHS, value);
+> +
+> +       return 0;
+> +}
+> +
+>  static int gli_probe_slot_gl9750(struct sdhci_pci_slot *slot)
+>  {
+>         struct sdhci_host *host =3D slot->host;
+> @@ -806,6 +919,8 @@ static int gli_probe_slot_gl9767(struct sdhci_pci_slo=
+t *slot)
+>         gl9767_hw_setting(slot);
+>         gli_pcie_enable_msi(slot);
+>         slot->host->mmc->caps2 |=3D MMC_CAP2_NO_SDIO;
+> +       host->mmc->caps2 |=3D MMC_CAP2_SD_EXP;
+> +       host->mmc_host_ops.init_sd_express =3D gl9767_init_sd_express;
+>         sdhci_enable_v4_mode(host);
+>
+>         return 0;
+> --
+> 2.25.1
+>
