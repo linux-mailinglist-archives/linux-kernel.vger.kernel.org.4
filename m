@@ -2,74 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C5670267E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0A2702687
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239817AbjEOH6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 03:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S239804AbjEOH6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 03:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239355AbjEOH4f (ORCPT
+        with ESMTP id S239693AbjEOH63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 03:56:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E87E5E;
-        Mon, 15 May 2023 00:55:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B02776136A;
-        Mon, 15 May 2023 07:55:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4D3C433D2;
-        Mon, 15 May 2023 07:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684137305;
-        bh=GGdXABU/W294z2dz02XJk9M2U2KkDKc5eHvI9rMuB34=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IicAj9RdI3pzCJbc+9esIPILMu3vFaLdLbJ3i4KInRUfgshHs1466v4vgWYlmxQ1e
-         DZu2ksv86KSQAOtGc7wUsjeZUd7ktER7/alCxD49YRLFIyNA2UWoxFru+KrgZQuayG
-         MZGqQFUC9ku81RPTauWqA2iZpvwd5DvvuTEEvDCsyxfBBFVq7TlWDJ2Hkdc7qw3tJG
-         W/yd6nbF9CLO9Df9i5lw1plJuRqQynvNJI7K3+yZ67vDo0O4NX22MXbAQGbR7hQOo4
-         lF0DYoVPDuGH+R6e2SVtr91laXvyZKBYUs5fGdaM4xln7vy5bUZLwnMOrrOC+pSlhr
-         lAaDMBNuD02mw==
-Date:   Mon, 15 May 2023 09:54:53 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 7/9] kernel: use new capable_any functionality
-Message-ID: <20230515-anhalten-begleichen-b85fa6b38195@brauner>
-References: <20230511142535.732324-1-cgzones@googlemail.com>
- <20230511142535.732324-7-cgzones@googlemail.com>
+        Mon, 15 May 2023 03:58:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8B20171F;
+        Mon, 15 May 2023 00:55:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CCC472F4;
+        Mon, 15 May 2023 00:56:22 -0700 (PDT)
+Received: from [10.57.83.208] (unknown [10.57.83.208])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 830B33F67D;
+        Mon, 15 May 2023 00:55:35 -0700 (PDT)
+Message-ID: <89ad5070-db72-7bf1-5d86-a89fea54e789@arm.com>
+Date:   Mon, 15 May 2023 08:55:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511142535.732324-7-cgzones@googlemail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/4] devres: Provide krealloc_array
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        michal.simek@amd.com, Jonathan.Cameron@huawei.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20230509094942.396150-1-james.clark@arm.com>
+ <20230509094942.396150-2-james.clark@arm.com>
+ <2023051340-sinuous-darkroom-2497@gregkh>
+Content-Language: en-US
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <2023051340-sinuous-darkroom-2497@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 04:25:30PM +0200, Christian Göttsche wrote:
-> Use the new added capable_any function in appropriate cases, where a
-> task is required to have any of two capabilities.
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
 
-Looks good to me,
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+
+On 13/05/2023 12:04, Greg KH wrote:
+> On Tue, May 09, 2023 at 10:49:38AM +0100, James Clark wrote:
+>> There is no krealloc_array equivalent in devres. Users would have to
+>> do their own multiplication overflow check so provide one.
+>>
+>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  Documentation/driver-api/driver-model/devres.rst |  1 +
+>>  include/linux/device.h                           | 11 +++++++++++
+>>  2 files changed, 12 insertions(+)
+>>
+>> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+>> index 4249eb4239e0..8be086b3f829 100644
+>> --- a/Documentation/driver-api/driver-model/devres.rst
+>> +++ b/Documentation/driver-api/driver-model/devres.rst
+>> @@ -364,6 +364,7 @@ MEM
+>>    devm_kmalloc_array()
+>>    devm_kmemdup()
+>>    devm_krealloc()
+>> +  devm_krealloc_array()
+>>    devm_kstrdup()
+>>    devm_kstrdup_const()
+>>    devm_kvasprintf()
+>> diff --git a/include/linux/device.h b/include/linux/device.h
+>> index 472dd24d4823..58f4f5948edb 100644
+>> --- a/include/linux/device.h
+>> +++ b/include/linux/device.h
+>> @@ -223,6 +223,17 @@ static inline void *devm_kcalloc(struct device *dev,
+>>  {
+>>  	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
+>>  }
+>> +static inline __realloc_size(3, 4) void * __must_check
+> 
+> Shouldn't you have a blank line before this one?
+
+I was going for consistency with the rest of this section which doesn't
+have newlines between the functions for some reason. I can add one and
+resubmit but it might look a bit out of place?
+
+> 
+>> +devm_krealloc_array(struct device *dev, void *p, size_t new_n, size_t new_size, gfp_t flags)
+>> +{
+>> +	size_t bytes;
+>> +
+>> +	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
+>> +		return NULL;
+>> +
+>> +	return devm_krealloc(dev, p, bytes, flags);
+>> +}
+> 
+> I dislike how we have to keep copying the "real" functions (i.e.
+> krealloc_array) into something like this, but I can't think of a better
+> way to do it.
+> 
+
+Maybe something could be done with some macro magic, but it would
+probably end up being worse than just copying them and would affect the
+real ones as well. So yeah I can't think of any easy gains either.
+
+Thanks
+James
+
+> thanks,
+> 
+> greg k-h
