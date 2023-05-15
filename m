@@ -2,430 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613B07040B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27A47040B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245611AbjEOWIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 18:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S1343499AbjEOWHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 18:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245670AbjEOWHw (ORCPT
+        with ESMTP id S245757AbjEOWGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 18:07:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA4383CB;
-        Mon, 15 May 2023 15:07:14 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FLNIkc024142;
-        Mon, 15 May 2023 22:03:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gHFQKDYzxfoEE7Fzp+rzSljSkjBizmvxb00wNLmrzBY=;
- b=ITvaILqCtHEmdIWSJFXcdykG358FLqVgSv2YC6q6ngSd2h1ip8ZLUwVZQJN2Y3EQdUWu
- SzAPuiT2PkM7F6y4UVTtRzxbLvqOtd+/VLUid8jvIaRTzGjgh3y9/N1Jk+3DeC+6KAGP
- 8bcrPgwP693q+uVgJc0BwKN9BctgYJPUTsKkHjr7djvgHM3JvD3vVMTqZu/qtVm+I+J0
- CTpeluI+uHSAG0aqFVSJK3UfcCF4WzjFlypdf2DEJZNTdJShh3LK4DkKY9UEeLpek2GZ
- mTCl+l2mCXt21D09kNzxcWthPkpo1DsdrSTWOHRzKUiMMPbs3EsCDsyoDYVLQzrUzjeA FA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj3qw4w2g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 22:03:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FM3lXX020342
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 22:03:47 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
- 2023 15:03:46 -0700
-Message-ID: <ccef1e88-5c38-0759-523a-c957854697ef@quicinc.com>
-Date:   Mon, 15 May 2023 15:03:46 -0700
+        Mon, 15 May 2023 18:06:45 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710AD14343
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 15:05:59 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so4486575e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 15:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684188270; x=1686780270;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSvPVoiCn57nMsLWzPvcPZUA4BS16HWMDqe9J36ZX7E=;
+        b=EcIdARgDpRT19hPj2649Ozz+EIo53L3HBq475wpPPO0sAqX6K7urmGJ7Vddaw8loQZ
+         tdk2xFKp/+mZ4fOqxLD3i8rsxRqrbZYPmM9yDZgy/wQ9V5igAUCqVK6pELt1HJi+kPGZ
+         Wc/M7np7cF3qAPg0kpLDMt2Y/1fZGj/MLR8gVW0Fs+KuHxf25PWZWP02EBrKquIOt4ub
+         q/GExDLqFFKRbORDh/Bzfh01L+br8CTlJRi+Bw4cHfHotX9OGADSGh3AEMUxzbGpAVHe
+         s9y/6xKsRQgGLKDAdD6ywTlGt2tFALBbR36UGd61l/VDtH0+3ZepH/jYpCS8B8s+UC3I
+         eEsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684188270; x=1686780270;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cSvPVoiCn57nMsLWzPvcPZUA4BS16HWMDqe9J36ZX7E=;
+        b=WedA8rLeZ6szH6cDIzhRmOygKHXpcLvjmVezGrbLe4sqel1AIYHweBnk/p/pfCjeYS
+         q8hLdCtR6S6G1BoxGKnFoHFMVC4ZRf9k66/3dqe5EMUj4aL2Mpb2lsS+IfvZ9VKdT1AG
+         Ik/j13HciCytVOWcirNFBmTpmtQ5ihTZ6fWM8Y3JkDs/pJhhxd1modpDbr+z8Fo571EA
+         FWZXa/WQ/YRAAtkOmpHuPz8ZSY9dAd4aHLNbe+7+p0e//WllfpN7HpjCRmAWM9ycokCs
+         AAbOHufNWu1p4tZoZMYFRrHOKQh2m4xLELHHOert/qER5zd3gcIXJ8PD7Q97F2D1sHzz
+         0Ing==
+X-Gm-Message-State: AC+VfDy1jsz7jGyAuALA0mye91c+SB7ctY4/RwClNApjnV2SnaA98mle
+        lzZYKfyRXKkRfJJ/2lOUboU=
+X-Google-Smtp-Source: ACHHUZ4HQVJ7rpyJAny7K16ChneTORoAUS58g1bFlXJC/ClNMdCF1AlbsQl0SIKy49NG2tlUVOKRnA==
+X-Received: by 2002:a5d:4085:0:b0:307:f75:f581 with SMTP id o5-20020a5d4085000000b003070f75f581mr27321983wrp.18.1684188269337;
+        Mon, 15 May 2023 15:04:29 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id c9-20020a056000104900b00306c5900c10sm428193wrx.9.2023.05.15.15.04.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 15:04:28 -0700 (PDT)
+Date:   Mon, 15 May 2023 23:04:27 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v2] mm: userfaultfd: avoid passing an invalid range to
+ vma_merge()
+Message-ID: <bcfb0376-ccf4-4467-9da5-8ae6f1c86876@lucifer.local>
+References: <20230515193232.67552-1-lstoakes@gmail.com>
+ <ZGKjvceDfpKMxtfb@x1n>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v8 7/8] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
- chipsets
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-8-git-send-email-quic_khsieh@quicinc.com>
- <cmoqfe5nunreajdvu2vk3ztwkbjesivgejjoi2wmsxske5gq3q@lr25iuwmuevb>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <cmoqfe5nunreajdvu2vk3ztwkbjesivgejjoi2wmsxske5gq3q@lr25iuwmuevb>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hhKCIRjv6QU2RfAXZNP0vYKlNANnrDaP
-X-Proofpoint-GUID: hhKCIRjv6QU2RfAXZNP0vYKlNANnrDaP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_19,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- adultscore=0 impostorscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- mlxscore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305150181
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGKjvceDfpKMxtfb@x1n>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 15, 2023 at 05:27:25PM -0400, Peter Xu wrote:
+> On Mon, May 15, 2023 at 08:32:32PM +0100, Lorenzo Stoakes wrote:
+> > The userfaultfd_[un]register() functions will knowingly pass an invalid
+> > address range to vma_merge(), then rely on it failing to merge to indicate
+> > that the VMA should be split into a valid one.
+> >
+> > This is not something that should be relied upon,
+>
+> Is there any real issue pop up to show that it's something that we cannot
+> rely upon before b0729ae0ae67?  Because normally if something broke with a
+> commit I'll say "commit xxx breaks yyy" unless there's more valid reason.. :)
+
+I mean firstly this is triggering warnings in the kernel as referenced in thread
+[1], this is reason enough :)
+
+However, vma_merge() assumes that you won't give it an invalid input range (in
+this instance, because you provide start that occurs prior to the beginning of
+the VMA).
+
+Giving an invalid input range like this is disasterous, as it could result in a
+situation such as e.g.:-
+
+- addr == prev->vm_end
+- addr != vma->vm_start (i.e. there is a gap)
+- prev and vma are otherwise compatible
+
+This would then trigger the merge_prev cases and you'll end up with something
+very broken.
+
+I expect this is simply not possible because the input will never be like this
+(it's clamped to be _within_ a VMA anyway and if the prev was compatible it'd
+already have been merged), but that is relying on an implementation detail.
 
 
-On 5/15/2023 2:21 PM, Marijn Suijten wrote:
-> On 2023-05-12 11:00:22, Kuogee Hsieh wrote:
->>
->> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>
->> Add DSC 1.2 hardware blocks to the catalog with necessary sub-block and
->> feature flag information.  Each display compression engine (DCE) contains
->> dual hard slice DSC encoders so both share same base address but with
->> its own different sub block address.
-> 
-> Can we have an explanation of hard vs soft slices in some commit message
-> and/or code documentation?
-> 
+>
+> > as vma_merge() implicitly assumes in cases 5-8 that curr->vm_start ==
+> > addr. This is now enforced since commit b0729ae0ae67 ("mm/mmap/vma_merge:
+> > explicitly assign res, vma, extend invariants") with an explicit
+> > VM_WARN_ON() check.
+>
+> Doing vma_merge() before vma_split() makes some sense to me (and I noticed
+> that mostly all vma_merge() paths are doing so), because if a merge
+> happened, we 100% doesn't need a split (vma_merge took care of everything).
+> It's not the other way round, since if we split, we could still need a
+> merge.
+>
 
-Not in this one. It wont look appropriate. I would rather remove "hard" 
-to avoid confusion.
+You only split if start/end are not clamped to the VMA, and in cases where you'd
+need to split, you could not merge. So I don't think this is true.
 
->>
->> changes in v4:
->> -- delete DPU_DSC_HW_REV_1_1
->> -- re arrange sc8280xp_dsc[]
->>
->> changes in v4:
->> -- fix checkpatch warning
->>
->> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h | 14 ++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  7 ++++++
->>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   | 16 ++++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h | 14 ++++++++++++
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 14 ++++++++++++
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 25 +++++++++++++++++++++-
->>   6 files changed, 89 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
->> index 500cfd0..c4c93c8 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
->> @@ -153,6 +153,18 @@ static const struct dpu_merge_3d_cfg sm8350_merge_3d[] = {
->>   	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
->>   };
->>   
->> +/*
->> + * NOTE: Each display compression engine (DCE) contains dual hard
->> + * slice DSC encoders so both share same base address but with
->> + * its own different sub block address.
->> + */
->> +static const struct dpu_dsc_cfg sm8350_dsc[] = {
->> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
-> 
-> Downstream says that the size is 0x10 (and 0x100 for the enc sblk, 0x10
-> for the ctl sblk).  This simply fills it up to the start of the enc sblk
-> so that we can see all registers in the dump?  After all only
-> DSC_CMN_MAIN_CNF is defined in the main register space, so 0x10 is
-> adequate.
-> 
+> So it fundamentally avoids unnecessary calls to split, it seems, if we
+> always call merge before splits.
 
-.len today is always only for the dump. and yes even here we have only 
-0x100 for the enc and 0x10 for the ctl.
+No, because for the case of splitting the beginning of the VMA, you would have
+given invalid input to vma_merge() and returned NULL, then had to split anyway.
 
-+static const struct dpu_dsc_sub_blks dsc_sblk_0 = {
-+	.enc = {.base = 0x100, .len = 0x100},
-+	.ctl = {.base = 0xF00, .len = 0x10},
-+};
+For the case of splitting the end of the VMA, that part would have to be split
+in any case, this just changes the ordering.
 
-The issue here is that, the dpu snapshot does not handle sub_blk parsing 
-today. Its a to-do item. So for that reason, 0x100 was used here to 
-atleast get the full encoder dumps.
+So I disagree that this adds work, it does the same thing only this time using
+vma_merge() correctly.
 
->> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
-> 
-> Should we add an extra suffix to the name to indicate which hard-slice
-> DSC encoder it is?  i.e. "dce_0_0" and "dce_0_1" etc?
+(update after seeing below bit) - vma_merge() is not meant to do 'partial'
+merges over a non-prev VMA, and relying on it to do so is broken.
 
-Ok, that should be fine. We can add it.
+>
+> >
+> > Since commit 29417d292bd0 ("mm/mmap/vma_merge: always check invariants")
+> > this check is performed unconditionally, which caused this assert to arise
+> > in tests performed by Mark [1].
+> >
+> > This patch fixes the issue by performing the split operations before
+> > attempting to merge VMAs in both instances. The problematic operation is
+> > splitting the start of the VMA since we were clamping to the end of the VMA
+> > in any case, however it is useful to group both of the split operations
+> > together to avoid egregious goto's and to abstract the code between the
+> > functions.
+> >
+> > As well as fixing the repro described in [1] this also continues to pass
+> > uffd unit tests.
+> >
+> > [1]:https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com
+> >
+> > Reported-by: Mark Rutland <mark.rutland@arm.com>
+> > Closes: https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > ---
+> >  fs/userfaultfd.c | 108 ++++++++++++++++++++++++++---------------------
+> >  1 file changed, 60 insertions(+), 48 deletions(-)
+> >
+> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > index 0fd96d6e39ce..ef5d667ea804 100644
+> > --- a/fs/userfaultfd.c
+> > +++ b/fs/userfaultfd.c
+> > @@ -1319,6 +1319,32 @@ static __always_inline int validate_range(struct mm_struct *mm,
+> >  	return 0;
+> >  }
+> >
+> > +static int clamp_range(struct vma_iterator *vmi, struct vm_area_struct *vma,
+> > +		       unsigned long start, unsigned long end, bool *can_merge)
+> > +{
+> > +	int ret;
+> > +	bool merge = true;
+> > +
+> > +	/* The range must always be clamped to the start of a VMA. */
+> > +	if (vma->vm_start < start) {
+> > +		ret = split_vma(vmi, vma, start, 1);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		merge = false;
+>
+> Could you explain a bit why we don't need to merge in this case?
+>
+> I'm considering, for example, when we have:
+>
+>   vma1(range 0-9, with uffd), vma2(range 10-19, no uffd)
+>
+> Then someone unregisters uffd on range (5-9), iiuc it should become:
+>
+>   vma1(range 0-4, with uffd), vma2(range 5-19, no uffd)
+>
+> But if no merge here it's:
+>
+>   vma1(range 0-4, with uffd), vma3(range 5-9, no uffd), vma2(range 10-19, no uffd)
+>
+> Maybe I missed something?
+>
 
-> 
->> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
-> 
+There's something really, really wrong with this. It simply isn't valid to
+invoke vma_merge() over an existing VMA that != prev where you're not
+specifying addr = vma->vm_start, end == vma->vm_end.
 
-> See comment below about loose BIT() in features.
+This seems like you're relying on:-
 
-Responded below.
-> 
->> +};
->> +
->>   static const struct dpu_intf_cfg sm8350_intf[] = {
->>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
->>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
->> @@ -215,6 +227,8 @@ const struct dpu_mdss_cfg dpu_sm8350_cfg = {
->>   	.dspp = sm8350_dspp,
->>   	.pingpong_count = ARRAY_SIZE(sm8350_pp),
->>   	.pingpong = sm8350_pp,
->> +	.dsc = sm8350_dsc,
->> +	.dsc_count = ARRAY_SIZE(sm8350_dsc),
-> 
-> Count goes first **everywhere else**, let's not break consistency here.
-> 
+  ***
+CCCCCNNNNN -> CCNNNNNNNN
 
-the order of DSC entries is swapped for all chipsets. Please refer to 
-dpu_sc8180x_cfg, dpu_sm8250_cfg etc.
+By specifying parameters that are compatible with N even though you're only
+partially spanning C?
 
-So if you are talking about consistency, this is actually consistent 
-with whats present in other chipsets.
+This is crazy, and isn't how this should be used. vma_merge() is not
+supposed to do partial merges. If it works (presumably it does) this is not
+by design unless I've lost my mind and I (and others) have somehow not
+noticed this??
 
-If you are very particular about this, then once this lands, you can 
-change the order for all of them in another change.
+I think you're right that now we'll end up with more fragmentation, but
+what you're suggesting is not how vma_merge() is supposed to work.
 
-Same answer for all swap comments.
+As I said above, giving vma_merge() invalid parameters is very dangerous as
+you could end up merging over empty ranges in theory (and could otherwise
+have corruption).
 
->>   	.merge_3d_count = ARRAY_SIZE(sm8350_merge_3d),
->>   	.merge_3d = sm8350_merge_3d,
->>   	.intf_count = ARRAY_SIZE(sm8350_intf),
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
->> index 5646713..42c66fe 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
->> @@ -93,6 +93,11 @@ static const struct dpu_pingpong_cfg sc7280_pp[] = {
->>   	PP_BLK_DITHER("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
->>   };
->>   
->> +/* NOTE: sc7280 only has one dsc hard slice encoder */
-> 
-> DSC
-> 
->> +static const struct dpu_dsc_cfg sc7280_dsc[] = {
->> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
->> +};
->> +
->>   static const struct dpu_intf_cfg sc7280_intf[] = {
->>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
->>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
->> @@ -149,6 +154,8 @@ const struct dpu_mdss_cfg dpu_sc7280_cfg = {
->>   	.mixer = sc7280_lm,
->>   	.pingpong_count = ARRAY_SIZE(sc7280_pp),
->>   	.pingpong = sc7280_pp,
->> +	.dsc_count = ARRAY_SIZE(sc7280_dsc),
->> +	.dsc = sc7280_dsc,
->>   	.intf_count = ARRAY_SIZE(sc7280_intf),
->>   	.intf = sc7280_intf,
->>   	.vbif_count = ARRAY_SIZE(sdm845_vbif),
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
->> index 808aacd..1901fff 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
->> @@ -141,6 +141,20 @@ static const struct dpu_merge_3d_cfg sc8280xp_merge_3d[] = {
->>   	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
->>   };
->>   
->> +/*
->> + * NOTE: Each display compression engine (DCE) contains dual hard
->> + * slice DSC encoders so both share same base address but with
->> + * its own different sub block address.
->> + */
->> +static const struct dpu_dsc_cfg sc8280xp_dsc[] = {
->> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
->> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
->> +	DSC_BLK_1_2("dce_2", DSC_4, 0x82000, 0x100, 0, dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_2", DSC_5, 0x82000, 0x100, 0, dsc_sblk_1),
->> +};
->> +
->>   /* TODO: INTF 3, 8 and 7 are used for MST, marked as INTF_NONE for now */
->>   static const struct dpu_intf_cfg sc8280xp_intf[] = {
->>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
->> @@ -216,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8280xp_cfg = {
->>   	.dspp = sc8280xp_dspp,
->>   	.pingpong_count = ARRAY_SIZE(sc8280xp_pp),
->>   	.pingpong = sc8280xp_pp,
->> +	.dsc = sc8280xp_dsc,
->> +	.dsc_count = ARRAY_SIZE(sc8280xp_dsc),
-> 
-> Swap the two lines.
-> 
->>   	.merge_3d_count = ARRAY_SIZE(sc8280xp_merge_3d),
->>   	.merge_3d = sc8280xp_merge_3d,
->>   	.intf_count = ARRAY_SIZE(sc8280xp_intf),
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
->> index 1a89ff9..741d03f 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
->> @@ -161,6 +161,18 @@ static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
->>   	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
->>   };
->>   
->> +/*
->> + * NOTE: Each display compression engine (DCE) contains dual hard
->> + * slice DSC encoders so both share same base address but with
->> + * its own different sub block address.
->> + */
->> +static const struct dpu_dsc_cfg sm8450_dsc[] = {
->> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
->> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
->> +};
->> +
->>   static const struct dpu_intf_cfg sm8450_intf[] = {
->>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
->>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
->> @@ -223,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8450_cfg = {
->>   	.dspp = sm8450_dspp,
->>   	.pingpong_count = ARRAY_SIZE(sm8450_pp),
->>   	.pingpong = sm8450_pp,
->> +	.dsc = sm8450_dsc,
->> +	.dsc_count = ARRAY_SIZE(sm8450_dsc),
-> 
-> Another swap.
-> 
->>   	.merge_3d_count = ARRAY_SIZE(sm8450_merge_3d),
->>   	.merge_3d = sm8450_merge_3d,
->>   	.intf_count = ARRAY_SIZE(sm8450_intf),
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->> index 497b34c..3ee6dc8 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
->> @@ -165,6 +165,18 @@ static const struct dpu_merge_3d_cfg sm8550_merge_3d[] = {
->>   	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
->>   };
->>   
->> +/*
->> + * NOTE: Each display compression engine (DCE) contains dual hard
->> + * slice DSC encoders so both share same base address but with
->> + * its own different sub block address.
->> + */
->> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
->> +	DSC_BLK_1_2("dce_0", DSC_0, 0x80000, 0x100, 0, dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_0", DSC_1, 0x80000, 0x100, 0, dsc_sblk_1),
->> +	DSC_BLK_1_2("dce_1", DSC_2, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_0),
->> +	DSC_BLK_1_2("dce_1", DSC_3, 0x81000, 0x100, BIT(DPU_DSC_NATIVE_422_EN), dsc_sblk_1),
->> +};
->> +
->>   static const struct dpu_intf_cfg sm8550_intf[] = {
->>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
->>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
->> @@ -227,6 +239,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
->>   	.dspp = sm8550_dspp,
->>   	.pingpong_count = ARRAY_SIZE(sm8550_pp),
->>   	.pingpong = sm8550_pp,
->> +	.dsc = sm8550_dsc,
->> +	.dsc_count = ARRAY_SIZE(sm8550_dsc),
-> 
-> Swap.
-> 
->>   	.merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
->>   	.merge_3d = sm8550_merge_3d,
->>   	.intf_count = ARRAY_SIZE(sm8550_intf),
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 78e4bf6..c1d7338 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -1,6 +1,6 @@
->>   // SPDX-License-Identifier: GPL-2.0-only
->>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
->> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
->> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
->>    */
->>   
->>   #define pr_fmt(fmt)	"[drm:%s:%d] " fmt, __func__, __LINE__
->> @@ -522,6 +522,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
->>   /*************************************************************
->>    * DSC sub blocks config
->>    *************************************************************/
->> +static const struct dpu_dsc_sub_blks dsc_sblk_0 = {
->> +	.enc = {.base = 0x100, .len = 0x100},
->> +	.ctl = {.base = 0xF00, .len = 0x10},
->> +};
->> +
->> +static const struct dpu_dsc_sub_blks dsc_sblk_1 = {
->> +	.enc = {.base = 0x200, .len = 0x100},
->> +	.ctl = {.base = 0xF80, .len = 0x10},
->> +};
->> +
->>   #define DSC_BLK(_name, _id, _base, _features) \
->>   	{\
->>   	.name = _name, .id = _id, \
->> @@ -529,6 +539,19 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
->>   	.features = _features, \
->>   	}
->>   
->> +/*
->> + * NOTE: Each display compression engine (DCE) contains dual hard
->> + * slice DSC encoders so both share same base address but with
->> + * its own different sub block address.
->> + */
->> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
-> 
-> There are no address values here so this comment doesn't seem very
-> useful, and it is already duplicated on every DSC block array, where the
-> duplication is more visible.  Drop the comment here?
-> 
+I guess we should probably be passing 0 to the last parameter in
+split_vma() here then to ensure we do a merge pass too. Will experiment
+with this.
 
-_base is the address. So base address. Does that clarify things?
+I'm confused as to how the remove from case 8 is not proceeding. I'll look
+into this some more...
 
->> +	{\
->> +	.name = _name, .id = _id, \
->> +	.base = _base, .len = _len, \
-> 
-> The len is always 0x100 (downstream says 0x10), should we hardcode it
-> here and drop _len?  We can always add it back if a future revision
-> starts changing it, but that's not the case currently.
-> 
->> +	.features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
-> 
-> We don't willy-nilly append bits like that: should there be global
-> feature flags?
+Happy to be corrected if I'm misconstruing this!
 
-So this approach is actually better. This macro is a DSC_1_2 macro so it 
-will have the 1.2 feature flag and other features like native_422 
-support of that encoder are ORed on top of it. Nothing wrong with this.
-
-> 
-> Or is this the start of a new era where we expand those defines in-line
-> and drop them altogether?  I'd much prefer that but we should first
-> align on this direction (and then also make the switch globally in a
-> followup).
-> 
-
-Its case by case. No need to generalize.
-
-In this the feature flag ORed with the base feature flag of DSC_1_2 
-makes it more clear.
-
-> - Marijn
-> 
->> +	.sblk = &_sblk, \
->> +	}
->> +
->>   /*************************************************************
->>    * INTF sub blocks config
->>    *************************************************************/
->> -- 
->> 2.7.4
->>
+> > +	}
+> > +
+> > +	/* It must also be clamped to the end of a VMA. */
+> > +	if (vma->vm_end > end) {
+> > +		ret = split_vma(vmi, vma, end, 0);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> > +	*can_merge = merge;
+> > +	return 0;
+> > +}
+> > +
+> >  static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+> >  				unsigned long arg)
+> >  {
+> > @@ -1330,7 +1356,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+> >  	unsigned long vm_flags, new_flags;
+> >  	bool found;
+> >  	bool basic_ioctls;
+> > -	unsigned long start, end, vma_end;
+> > +	unsigned long start, end;
+> >  	struct vma_iterator vmi;
+> >
+> >  	user_uffdio_register = (struct uffdio_register __user *) arg;
+> > @@ -1462,6 +1488,8 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+> >
+> >  	ret = 0;
+> >  	for_each_vma_range(vmi, vma, end) {
+> > +		bool can_merge;
+> > +
+> >  		cond_resched();
+> >
+> >  		BUG_ON(!vma_can_userfault(vma, vm_flags));
+> > @@ -1477,32 +1505,22 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+> >  		    (vma->vm_flags & vm_flags) == vm_flags)
+> >  			goto skip;
+> >
+> > -		if (vma->vm_start > start)
+> > -			start = vma->vm_start;
+> > -		vma_end = min(end, vma->vm_end);
+> > +		ret = clamp_range(&vmi, vma, start, end, &can_merge);
+> > +		if (ret)
+> > +			break;
+> >
+> >  		new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
+> > -		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
+> > -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
+> > -				 vma_policy(vma),
+> > -				 ((struct vm_userfaultfd_ctx){ ctx }),
+> > -				 anon_vma_name(vma));
+> > -		if (prev) {
+> > +		if (can_merge) {
+> > +			prev = vma_merge(&vmi, mm, prev, vma->vm_start, vma->vm_end, new_flags,
+> > +					 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
+> > +					 vma_policy(vma),
+> > +					 ((struct vm_userfaultfd_ctx){ ctx }),
+> > +					 anon_vma_name(vma));
+> > +
+> >  			/* vma_merge() invalidated the mas */
+> > -			vma = prev;
+> > -			goto next;
+> > -		}
+> > -		if (vma->vm_start < start) {
+> > -			ret = split_vma(&vmi, vma, start, 1);
+> > -			if (ret)
+> > -				break;
+> > -		}
+> > -		if (vma->vm_end > end) {
+> > -			ret = split_vma(&vmi, vma, end, 0);
+> > -			if (ret)
+> > -				break;
+> > +			if (prev)
+> > +				vma = prev;
+> >  		}
+> > -	next:
+> >  		/*
+> >  		 * In the vma_merge() successful mprotect-like case 8:
+> >  		 * the next vma was merged into the current one and
+> > @@ -1560,7 +1578,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+> >  	struct uffdio_range uffdio_unregister;
+> >  	unsigned long new_flags;
+> >  	bool found;
+> > -	unsigned long start, end, vma_end;
+> > +	unsigned long start, end;
+> >  	const void __user *buf = (void __user *)arg;
+> >  	struct vma_iterator vmi;
+> >
+> > @@ -1627,6 +1645,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+> >  	prev = vma_prev(&vmi);
+> >  	ret = 0;
+> >  	for_each_vma_range(vmi, vma, end) {
+> > +		bool can_merge;
+> > +
+> >  		cond_resched();
+> >
+> >  		BUG_ON(!vma_can_userfault(vma, vma->vm_flags));
+> > @@ -1640,9 +1660,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+> >
+> >  		WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
+> >
+> > -		if (vma->vm_start > start)
+> > -			start = vma->vm_start;
+> > -		vma_end = min(end, vma->vm_end);
+> > +		ret = clamp_range(&vmi, vma, start, end, &can_merge);
+> > +		if (ret)
+> > +			break;
+> >
+> >  		if (userfaultfd_missing(vma)) {
+> >  			/*
+> > @@ -1652,35 +1672,27 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+> >  			 * UFFDIO_WAKE explicitly.
+> >  			 */
+> >  			struct userfaultfd_wake_range range;
+> > -			range.start = start;
+> > -			range.len = vma_end - start;
+> > +			range.start = vma->vm_start;
+> > +			range.len = vma->vm_end - vma->vm_start;
+> >  			wake_userfault(vma->vm_userfaultfd_ctx.ctx, &range);
+> >  		}
+> >
+> >  		/* Reset ptes for the whole vma range if wr-protected */
+> >  		if (userfaultfd_wp(vma))
+> > -			uffd_wp_range(vma, start, vma_end - start, false);
+> > +			uffd_wp_range(vma, vma->vm_start,
+> > +				      vma->vm_end - vma->vm_start, false);
+> >
+> >  		new_flags = vma->vm_flags & ~__VM_UFFD_FLAGS;
+> > -		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
+> > -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
+> > -				 vma_policy(vma),
+> > -				 NULL_VM_UFFD_CTX, anon_vma_name(vma));
+> > -		if (prev) {
+> > -			vma = prev;
+> > -			goto next;
+> > -		}
+> > -		if (vma->vm_start < start) {
+> > -			ret = split_vma(&vmi, vma, start, 1);
+> > -			if (ret)
+> > -				break;
+> > -		}
+> > -		if (vma->vm_end > end) {
+> > -			ret = split_vma(&vmi, vma, end, 0);
+> > -			if (ret)
+> > -				break;
+> > +		if (can_merge) {
+> > +			prev = vma_merge(&vmi, mm, prev, vma->vm_start,
+> > +					 vma->vm_end, new_flags, vma->anon_vma,
+> > +					 vma->vm_file, vma->vm_pgoff,
+> > +					 vma_policy(vma),
+> > +					 NULL_VM_UFFD_CTX, anon_vma_name(vma));
+> > +			/* vma_merge() invalidated the mas */
+> > +			if (prev)
+> > +				vma = prev;
+> >  		}
+> > -	next:
+> >  		/*
+> >  		 * In the vma_merge() successful mprotect-like case 8:
+> >  		 * the next vma was merged into the current one and
+> > --
+> > 2.40.1
+> >
+>
+> --
+> Peter Xu
+>
