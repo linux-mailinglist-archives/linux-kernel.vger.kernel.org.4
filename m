@@ -2,71 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B527170336A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F527033DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242791AbjEOQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S242880AbjEOQmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242787AbjEOQgj (ORCPT
+        with ESMTP id S242612AbjEOQmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:36:39 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C919B3C1F
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:36:37 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f4e01eb845so31943931cf.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:36:37 -0700 (PDT)
+        Mon, 15 May 2023 12:42:13 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FD144AE
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:42:10 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso23070612a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1684168597; x=1686760597;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jaWs609h278hxFtHrMxQjhQdyGWOwBk4bpNIGwrfmdg=;
-        b=cq9cTG3qyLQFvczSvJoUBw6AY3gAFHjaTW0KAzeml6qS0sd8nd4pDZ4JJtAfL8JlDw
-         mDWuujb/eLtEToJsmgkuXqNWPr2HCnn3oLQn1oub1ctbPMSmfJMCAtSk9mqZJFt2vubd
-         iMDL93B6bECyWjC9QgrOriWkYIIEVeUnKyG8qNwt8alajFy360nFXrHhmns5GLzJPkCC
-         eynKnsQ3C35PwTGlrWyO2ZUgF7a/MMACBlMWErQA6Mi5B+Yc0VrleVV6HRYWsrbZM3PU
-         YjqaxKBwux6gFVH1IcpGscqIqy0mu0GetnkqdTRtEPWm0W5HptZhkcxfVH4K2iUvz6MG
-         6b6Q==
+        d=linaro.org; s=google; t=1684168929; x=1686760929;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pGn8HAuIocxoHajMCSRRfoguprnK9ZSWlAhG7ClLNxU=;
+        b=ntSUivjlQsSveCo7qvqN4hvYLt8/4YSecdN3T8kf9zGq+Yc6ZGkxC3iSAbw7l0ol/J
+         p8Y3Fv1b/fXPs8S6bWHfgdBVHc+6f8dC3qXxlEjweK0Dr+BbPMgnTtPsoWsd+7sigaz6
+         P2tI2n8ChAvwCCsm8Ih3MzBzbdX8dufLrMLfasxGZCKS6GwB8edWSB3kMyPnEZvffz38
+         yZuSueXFekNmMyd606fbEUpjGYy/eIEPkIZQfBquwUJNOhU+qXiTycmEaIVG6xV0A25g
+         UhM09eopARPRGIzugkU1Rh6GCT6oy2f+VufN3WG0Ln7+XJHuZ5hlikXTl0kYRaS864d1
+         tuwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684168597; x=1686760597;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jaWs609h278hxFtHrMxQjhQdyGWOwBk4bpNIGwrfmdg=;
-        b=ActyrxIbfgw/e4cOLOdaS2EfCrfhId9q9kHYVxfQWFJhapMh3nYAeTodhAVSLRsBJ3
-         sutFeu6fzxgvfhbhl9UFAeh6F09Gdeqd9Efqw465WjE7F5dRwrs7cisi8qy7Tkpmu3VF
-         Y+xKMakbDiSv4Op09ZPW0rUtp551vR316O1LwYwTtle1z3vY4gyV2aRcKJBK4KqNDRd8
-         gLLfaN5qOslcw9wJSMjAafduxrJxOIxZN8VBaa91Fs2oIzKaKzFRd5HdtxnniiMYgMKC
-         Yb1mCq9X4dltFJ7EXrQ4IGjaYlY2IdL3wCDHtr3XLaukd/orH9sEhcsS3KSTFHRycnSy
-         ayMA==
-X-Gm-Message-State: AC+VfDywj+FG9UODYX2/CAV0WHsTJFvmZpNfemx4/01h21thpSA0h+TY
-        W6mNNgzOmht6Yok5e+Uzpmbz+gtYueMJC+1PYmTH2w==
-X-Google-Smtp-Source: ACHHUZ73aTS7DD+7SikId1FQqfx11mLr5Cl6ZQGecy1x2/k3sl+BocACmnJrZ3gvB7JW68/QoP/OA6pO7ouozzgG3Ys=
-X-Received: by 2002:a05:622a:15c4:b0:3f2:34e:4ccf with SMTP id
- d4-20020a05622a15c400b003f2034e4ccfmr54604057qty.15.1684168596782; Mon, 15
- May 2023 09:36:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684168929; x=1686760929;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pGn8HAuIocxoHajMCSRRfoguprnK9ZSWlAhG7ClLNxU=;
+        b=i6/oBsiz70NtEpWekI66jzly5FUTJn2qb5Gnasml/OzNWX7v/w3CSwQMXG8dUu8pC1
+         +7MczZ+MUY1UgT2HOOgP1YnNl7SnBrvIR/JicxRtX1r66dX/2J+6yhF8VgU9D+8gLWNz
+         ANEALzLLEfboQxLoTxXuFbZcTn5/gonvbqJqvrjZPSGWGzkOADoOx5zeFKOW+S95cZAs
+         XvsKAZiKJEyjkcMn2bR2GsD1MpZMSyquGgR4ccLMOOIfnfK1ttpfqqiGiWcReWHts083
+         RvbPyaHjId6SkPRGcnpbObNKquNeIsDH54zbL8E9UjRThfHToYVFTfa5nr8VwwLwQUZl
+         Fz1A==
+X-Gm-Message-State: AC+VfDxo8uE3+akUiy/RhQLZSxq4Ceq3G8rSyFzEA8UWHX3JtWptu83m
+        LEjkHVfp4rvX/blPFCWIuynJ5Q==
+X-Google-Smtp-Source: ACHHUZ7QficGch3Sl9q7M8rHIXIEkBIuRgf/Sni/Jw1SxXmU9/+Vxw6610XGNRBN7zoz6cqyNfYj6A==
+X-Received: by 2002:a17:907:d86:b0:94a:9c4e:d2e9 with SMTP id go6-20020a1709070d8600b0094a9c4ed2e9mr31118316ejc.0.1684168928739;
+        Mon, 15 May 2023 09:42:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id n8-20020a056402514800b0050d8aac0a1esm7408463edd.19.2023.05.15.09.42.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 09:42:08 -0700 (PDT)
+Message-ID: <5f41d497-8b3c-42b4-22ba-b24772abb3a5@linaro.org>
+Date:   Mon, 15 May 2023 18:42:06 +0200
 MIME-Version: 1.0
-References: <20230515130958.32471-1-lrh2000@pku.edu.cn> <20230515130958.32471-4-lrh2000@pku.edu.cn>
-In-Reply-To: <20230515130958.32471-4-lrh2000@pku.edu.cn>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Mon, 15 May 2023 12:36:00 -0400
-Message-ID: <CA+CK2bAWg0JejRjzn4e2K7+PgGPE3rXP0qjFwuKOEC-PNPrEPg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] mm: page_table_check: Make it dependent on EXCLUSIVE_SYSTEM_RAM
-To:     Ruihan Li <lrh2000@pku.edu.cn>
-Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 04/13] dt-bindings: display: add Amlogic MIPI DSI Host
+ Controller bindings
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Nicolas Belin <nbelin@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-phy@lists.infradead.org
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org>
+ <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-4-2592c29ea263@linaro.org>
+ <fe2f22c7-8c39-faf3-bc65-a7c089200134@linaro.org>
+ <eaa3ecd0-dcf0-01d8-b3ea-9dd900215839@linaro.org>
+ <80da6b9e-ba82-d2c9-2854-b444635150fd@linaro.org>
+ <14405799-9b56-6767-4a35-51ab8ae636a9@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <14405799-9b56-6767-4a35-51ab8ae636a9@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,29 +97,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 9:10=E2=80=AFAM Ruihan Li <lrh2000@pku.edu.cn> wrot=
-e:
->
-> Without EXCLUSIVE_SYSTEM_RAM, users are allowed to map arbitrary
-> physical memory regions into the userspace via /dev/mem. At the same
-> time, pages may change their properties (e.g., from anonymous pages to
-> named pages) while they are still being mapped in the userspace, leading
-> to "corruption" detected by the page table check.
->
-> To avoid these false positives, this patch makes PAGE_TABLE_CHECK
-> depends on EXCLUSIVE_SYSTEM_RAM. This dependency is understandable
-> because PAGE_TABLE_CHECK is a hardening technique but /dev/mem without
-> STRICT_DEVMEM (i.e., !EXCLUSIVE_SYSTEM_RAM) is itself a security
-> problem.
->
-> Even with EXCLUSIVE_SYSTEM_RAM, I/O pages may be still allowed to be
-> mapped via /dev/mem. However, these pages are always considered as named
-> pages, so they won't break the logic used in the page table check.
->
-> Cc: <stable@vger.kernel.org> # 5.17
-> Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
+On 15/05/2023 18:28, neil.armstrong@linaro.org wrote:
+>> It's just a link stored in automated responses, what's here childish?
+>> It's still valid in current cycle! Look:
+>>
+>> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+>>
+>> What's the difference? Srsly, I can point you to submitting patches
+>> without reference to specific line if you wish... Or you can check by
+>> yourself.
+>>
+>> I give the same reviews to so many people that have templates and Elixir
+>> happens to be the only place allowing bookmarking specific line. Which
+>> is helpful for beginners because the entire doc is huge.
+>>
+>> I can make an exception for you and never paste direct links.
+> 
+> I value those kind of links for beginners and newcomers, really, it's a good
+> thing to do and we should all do the same.
 
-Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Hm, if I understand correctly, you felt being patronized by my link? I
+apologize for that. It was not my intention and there is really no need
+to feel like that. Look, I have many, many templates so I can speed up
+review. This one I gave to many:
 
-Thank you,
-Pasha
+https://lore.kernel.org/all/?q=f%3Akrzysztof+%22Please+wrap+commit+message+according+to+Linux+coding+style%22
+
+Writing same review every damn time is a boring, absolutely huge waste
+of time. People just make too many same mistakes. Better to hit key
+shortcut.
+
+Over the time most of my templates grew a bit, because when I wrote
+"Please wrap to 75" submitter did not know what to wrap or why. To save
+myself work I extend the template to something more. The entire text and
+link is for the beginner, not for you.
+
+Best regards,
+Krzysztof
+
