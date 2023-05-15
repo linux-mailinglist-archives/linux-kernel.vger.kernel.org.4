@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126F0703F82
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E79703F74
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245100AbjEOVTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S245467AbjEOVPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjEOVTe (ORCPT
+        with ESMTP id S245308AbjEOVPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:19:34 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0100CD074
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:19:32 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso23977171a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684185571; x=1686777571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iCAGJRSZlOdbZk8TJO2+IV5B/w81wFfW9jtMkWpTH+M=;
-        b=Fvz8x0dNvAfi6vn1MsWVsrIVhI0JC8Py8rU64fVV7c1WYzdrPJSFY/nJ5/ha/SBSdW
-         O9Qrv+J04LkWY26V+6ISj9fbwtnonPqRY48vi74RSHlcYaXNOdDEzZhPQlpxhzKkIUJ0
-         9wiJslfn6dHpTu8YNli6Te99vlovWTdFmnEfc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684185571; x=1686777571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iCAGJRSZlOdbZk8TJO2+IV5B/w81wFfW9jtMkWpTH+M=;
-        b=GbKo6XEud64RIywR1FkTscND3SijGUQ6pC4+7S2brqKMJdfTO5hDHZITjJTfV14zPV
-         xNVh3yWKMWX73mdkXPBauEN5E+88aQS/UNEApcVikWBYcvtKjYKaCrCxM/S0KN3QJThp
-         GSzMtF0kwrzZkMVsGlYqmmcQlpPJ+gbhuv/Fy4iQWK+0ak35+Qv+YeDEjAkiNhed68+7
-         S93QUSXCvw8HWmEqsbct5TnZNCKwKZYIupU2Vsc4LX1o0sPRgWAsv0zVF48BGyUp1V3E
-         JpbRZbDBRYYLzz2Xg68mMAiP0R25Pgdz2QLa7waceD/DLVBO3KjhecVbsut9Oa/eVt7u
-         ycpQ==
-X-Gm-Message-State: AC+VfDyeZo3W7AeNTNCVHoxq3VqwCKyfKB/80r9nU8d9yY3/IaobfwTJ
-        HKpJh69AX5b7+EBXUOIaG6J2vR5N4eXojFH+5fXSvQ==
-X-Google-Smtp-Source: ACHHUZ4NVNi7naSU30mEHscyRmFftvi4fhFnmiYSDcSrg9y4ApnJuNxOMdtq7yH9l565H4qJkeCcSkHBc3YRcSzTMNU=
-X-Received: by 2002:a17:907:9485:b0:96a:b12d:2fdf with SMTP id
- dm5-20020a170907948500b0096ab12d2fdfmr10487913ejc.12.1684185571480; Mon, 15
- May 2023 14:19:31 -0700 (PDT)
+        Mon, 15 May 2023 17:15:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AD8A27C;
+        Mon, 15 May 2023 14:15:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D96A6621BA;
+        Mon, 15 May 2023 21:15:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F193FC433EF;
+        Mon, 15 May 2023 21:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684185336;
+        bh=enJwNWaLT/meCbucP4lqULVPUm7Z2anbwiRCF5jSvnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H3zjzNo6kWA6B9UFM9EqS17kkmQTU5sYbi9N6m1jY7ALNqKsyxrcVmkMM9xGvwNdW
+         8t9TDkZDXpLshYYxrnACwUAqmfzaqSWi6xOGE///W8CnbmsoIconzPKo1uMAeMdn0a
+         RM9P44Tr0g3plnCh8jE4vclyEnauJ34MkGPeVtlz9M1NU0KSRGk0BkjQ3tm2KdEMua
+         XDKqoRao70IL3M2fbp6ldjniomCdKteN79SiTDM3dIlbkbTTkmppbNrriSXL5Hm7hr
+         qUyIu9NbpHHZTrIim5JxeKGtVZ86Lh0sgA68Sjc5NOJRa3klD7F6wYyPC3A+4wmcVG
+         xTzyYGSrtyoNg==
+Date:   Mon, 15 May 2023 14:19:27 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v8 4/9] usb: dwc3: core: Skip setting event buffers for
+ host only controllers
+Message-ID: <20230515211927.bcartfqerpcgmp5w@ripper>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-5-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
- <20230506062909.74601-1-sarthakkukreti@chromium.org> <20230506062909.74601-5-sarthakkukreti@chromium.org>
- <ZF54OH8hZTTko4c3@redhat.com>
-In-Reply-To: <ZF54OH8hZTTko4c3@redhat.com>
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-Date:   Mon, 15 May 2023 14:19:20 -0700
-Message-ID: <CAG9=OMMj+xNNNFR6JJbsbzjb=9oVScg+BYdAq68hBRzw3q81ZA@mail.gmail.com>
-Subject: Re: [PATCH v6 4/5] dm-thin: Add REQ_OP_PROVISION support
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230514054917.21318-5-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,83 +67,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:32=E2=80=AFAM Mike Snitzer <snitzer@kernel.org> =
-wrote:
->
-> On Sat, May 06 2023 at  2:29P -0400,
-> Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
->
-> > dm-thinpool uses the provision request to provision
-> > blocks for a dm-thin device. dm-thinpool currently does not
-> > pass through REQ_OP_PROVISION to underlying devices.
-> >
-> > For shared blocks, provision requests will break sharing and copy the
-> > contents of the entire block. Additionally, if 'skip_block_zeroing'
-> > is not set, dm-thin will opt to zero out the entire range as a part
-> > of provisioning.
-> >
-> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> > ---
-> >  drivers/md/dm-thin.c | 70 +++++++++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 66 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
-> > index 2b13c949bd72..3f94f53ac956 100644
-> > --- a/drivers/md/dm-thin.c
-> > +++ b/drivers/md/dm-thin.c
-> ...
-> > @@ -4114,6 +4171,8 @@ static void pool_io_hints(struct dm_target *ti, s=
-truct queue_limits *limits)
-> >        * The pool uses the same discard limits as the underlying data
-> >        * device.  DM core has already set this up.
-> >        */
-> > +
-> > +     limits->max_provision_sectors =3D pool->sectors_per_block;
->
-> Just noticed that setting limits->max_provision_sectors needs to move
-> above pool_io_hints code that sets up discards -- otherwise the early
-> return from if (!pt->adjusted_pf.discard_enabled) will cause setting
-> max_provision_sectors to be skipped.
->
-> Here is a roll up of the fixes that need to be folded into this patch:
->
-Ah right, thanks for pointing that out! I'll fold this into v7.
+On Sun, May 14, 2023 at 11:19:12AM +0530, Krishna Kurapati wrote:
+> On some SoC's like SA8295P where the tertiary controller is host-only
 
-Best
-Sarthak
+Please add "Qualcomm" before SA8295P.
 
-> diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
-> index 3f94f53ac956..90c8e36cb327 100644
-> --- a/drivers/md/dm-thin.c
-> +++ b/drivers/md/dm-thin.c
-> @@ -4151,6 +4151,8 @@ static void pool_io_hints(struct dm_target *ti, str=
-uct queue_limits *limits)
->                 blk_limits_io_opt(limits, pool->sectors_per_block << SECT=
-OR_SHIFT);
->         }
->
-> +       limits->max_provision_sectors =3D pool->sectors_per_block;
+> capable, GEVTADDRHI/LO, GEVTSIZ, GEVTCOUNT registers are not accessible.
+> Trying to setup them up during core_init leads to a crash.
+
+s/setup/access/ (or "write to"?) and presumably this is a problem beyond
+core_init, so I would suggest dropping "up during core_init" from the
+sentence.
+
+> 
+> For DRD/Peripheral supported controllers, event buffer setup is done
+> again in gadget_pullup. Skip setup or cleanup of event buffers if
+> controller is host-only capable.
+> 
+
+With that, this looks reasonable to me.
+
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+
+Regards,
+Bjorn
+
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index e983aef1fb93..46192d08d1b6 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -505,6 +505,11 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
+>  int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>  {
+>  	struct dwc3_event_buffer	*evt;
+> +	unsigned int			hw_mode;
 > +
->         /*
->          * pt->adjusted_pf is a staging area for the actual features to u=
-se.
->          * They get transferred to the live pool in bind_control_target()
-> @@ -4171,8 +4173,6 @@ static void pool_io_hints(struct dm_target *ti, str=
-uct queue_limits *limits)
->          * The pool uses the same discard limits as the underlying data
->          * device.  DM core has already set this up.
->          */
-> -
-> -       limits->max_provision_sectors =3D pool->sectors_per_block;
->  }
->
->  static struct target_type pool_target =3D {
-> @@ -4349,6 +4349,7 @@ static int thin_ctr(struct dm_target *ti, unsigned =
-int argc, char **argv)
->
->         ti->num_provision_bios =3D 1;
->         ti->provision_supported =3D true;
-> +       ti->max_provision_granularity =3D true;
->
->         mutex_unlock(&dm_thin_pool_table.mutex);
->
+> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
+> +		return 0;
+>  
+>  	evt = dwc->ev_buf;
+>  	evt->lpos = 0;
+> @@ -522,6 +527,11 @@ int dwc3_event_buffers_setup(struct dwc3 *dwc)
+>  void dwc3_event_buffers_cleanup(struct dwc3 *dwc)
+>  {
+>  	struct dwc3_event_buffer	*evt;
+> +	unsigned int			hw_mode;
+> +
+> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
+> +		return;
+>  
+>  	evt = dwc->ev_buf;
+>  
+> -- 
+> 2.40.0
+> 
