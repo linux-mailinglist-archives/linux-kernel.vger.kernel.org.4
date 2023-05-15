@@ -2,176 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17027021FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3AE702201
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237616AbjEODDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 23:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S234278AbjEODIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 23:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjEODDO (ORCPT
+        with ESMTP id S229708AbjEODHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 23:03:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CC710C8;
-        Sun, 14 May 2023 20:03:09 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F2u0Hg012814;
-        Mon, 15 May 2023 03:03:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=2PieqsEAV4sxv39i1McboDZR6TpeKwDnoJxMYkJ2cIw=;
- b=CbXNuhiscsWVSeC/jxPNK8L9bekJj6vl/H7E6C+ibc5qlO8mFNcJPPyaE5XnlQMPtbs8
- +JPmyxQgJAmnDC4zBTcOoanGKOg20CP8rRFkBfGaPN4IUExeTuixs4KtNNRioyuexOTf
- v2LwqfqPWysZ5HYXgXFUal6+WmMUkAcAcVg9QMoowxVgHNdoseGdo40RiSNBFmQejGZQ
- gZOwHhTFGFC0QrklNl3tbx61XZSDKUIwPInDEtpcolJSqDYDWVhDf4HXr/aLKJF/aLKK
- L6pQV3vvX1apqBINOJJ9h0k3kxDFTtYg3HxgEvhPh6xytVXYBuk6LZjR6WhCQTklwNnJ mA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj1gxtnn7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 03:03:03 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34F3337V030193
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 03:03:03 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sun, 14 May 2023 20:03:02 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-CC:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Polimera <quic_vpolimer@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>
-Subject: [PATCH 3/3] drm/msm/dp: Clean up pdev/dev duplication in dp_power
-Date:   Sun, 14 May 2023 20:02:56 -0700
-Message-ID: <20230515030256.300104-3-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230515030256.300104-1-quic_bjorande@quicinc.com>
-References: <20230515030256.300104-1-quic_bjorande@quicinc.com>
+        Sun, 14 May 2023 23:07:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B645BE78
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 20:07:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B9D36121E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31FF8C433EF;
+        Mon, 15 May 2023 03:07:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684120073;
+        bh=G7DedWUvd2Ek8z4UQYFYC7W6+CKbIg4FT6sWJitIhS4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tsc60lt7ra8ySXOoViw7PWORQ1NyxYIof4X//ctW2N42xyV0OeJ4GhKXLeVsjuncI
+         AsIF3wzbd3HdkNG5MyG3Z0/A1lQrSEqYppCPeEWCc6L4nRBZiO1qCZxEzZdF5q61h1
+         miKG5aA1j2kr+0xZW8Hxj39wxbvVeELA58T9RBrdIG24A+825ps2KueTjAiNJdmUNt
+         X5PerN8+o6Ek+6OFpvuVyyaxBRlBje4J2QJt39uj1H95pfiM/0hVFDhG3EEysslh0f
+         PCE5qNGDO+xlo0vBtb1Q992wzai7AX0t/unVbRopkb3LUa2PyZvympsAMzfaiknH2S
+         m7G3YLC96BRBw==
+Date:   Mon, 15 May 2023 11:07:41 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V2] soc: imx: support i.MX93 soc device
+Message-ID: <20230515030741.GC767028@dragon>
+References: <20230509091942.2923330-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IH7g2MK2smO5TxVH9_N9SXfw7d4BmASx
-X-Proofpoint-ORIG-GUID: IH7g2MK2smO5TxVH9_N9SXfw7d4BmASx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-14_18,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0 spamscore=0
- clxscore=1015 mlxlogscore=999 priorityscore=1501 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150024
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509091942.2923330-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dp_power module keeps track of both the DP controller's struct
-platform_device and struct device - with the prior pulled out of the
-dp_parser module.
+On Tue, May 09, 2023 at 05:19:42PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Similar to i.MX8M, add i.MX93 soc device support
 
-Clean up the duplication by dropping the platform_device reference and
-just track the passed struct device.
+This commit log doesn't provide too much helpful information.  You may
+want to briefly introduce i.MX93 UID, which looks something new?
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_power.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V2:
+>  The ocotp yaml has got R-b from DT maintainer:
+>  https://lore.kernel.org/all/01be24b3-aaf2-e27b-d00e-f8649a497463@linaro.org/
+> 
+>  Remove uid_length from V1 which is unused.
+> 
+>  drivers/soc/imx/Makefile    |  2 +-
+>  drivers/soc/imx/soc-imx8m.c | 64 ++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 64 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/imx/Makefile b/drivers/soc/imx/Makefile
+> index a28c44a1f16a..83aff181ae51 100644
+> --- a/drivers/soc/imx/Makefile
+> +++ b/drivers/soc/imx/Makefile
+> @@ -7,5 +7,5 @@ obj-$(CONFIG_IMX_GPCV2_PM_DOMAINS) += gpcv2.o
+>  obj-$(CONFIG_SOC_IMX8M) += soc-imx8m.o
+>  obj-$(CONFIG_IMX8M_BLK_CTRL) += imx8m-blk-ctrl.o
+>  obj-$(CONFIG_IMX8M_BLK_CTRL) += imx8mp-blk-ctrl.o
+> -obj-$(CONFIG_SOC_IMX9) += imx93-src.o imx93-pd.o
+> +obj-$(CONFIG_SOC_IMX9) += soc-imx8m.o imx93-src.o imx93-pd.o
+>  obj-$(CONFIG_IMX9_BLK_CTRL) += imx93-blk-ctrl.o
+> diff --git a/drivers/soc/imx/soc-imx8m.c b/drivers/soc/imx/soc-imx8m.c
+> index 1dcd243df567..0e69b8b48183 100644
+> --- a/drivers/soc/imx/soc-imx8m.c
+> +++ b/drivers/soc/imx/soc-imx8m.c
+> @@ -25,8 +25,11 @@
+>  
+>  #define IMX8MP_OCOTP_UID_OFFSET		0x10
+>  
+> +#define IMX93_OCOTP_UID_OFFSET		0x80c0
+> +
+>  /* Same as ANADIG_DIGPROG_IMX7D */
+>  #define ANADIG_DIGPROG_IMX8MM	0x800
+> +#define ANADIG_DIGPROG_IMX93	0x800
+>  
+>  struct imx8_soc_data {
+>  	char *name;
+> @@ -34,6 +37,7 @@ struct imx8_soc_data {
+>  };
+>  
+>  static u64 soc_uid;
+> +static u64 soc_uid_h;
+>  
+>  #ifdef CONFIG_HAVE_ARM_SMCCC
+>  static u32 imx8mq_soc_revision_from_atf(void)
+> @@ -141,6 +145,53 @@ static u32 __init imx8mm_soc_revision(void)
+>  	return rev;
+>  }
+>  
+> +static void __init imx93_soc_uid(void)
+> +{
+> +	void __iomem *ocotp_base;
+> +	struct device_node *np;
+> +
+> +	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-ocotp");
+> +	if (!np)
+> +		return;
+> +
+> +	ocotp_base = of_iomap(np, 0);
+> +	WARN_ON(!ocotp_base);
+> +
+> +	soc_uid = readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0x8);
+> +	soc_uid <<= 32;
+> +	soc_uid |= readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0xC);
+> +
+> +	soc_uid_h = readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0x0);
+> +	soc_uid_h <<= 32;
+> +	soc_uid_h |= readl_relaxed(ocotp_base + IMX93_OCOTP_UID_OFFSET + 0x4);
+> +
+> +	iounmap(ocotp_base);
+> +	of_node_put(np);
+> +}
+> +
+> +static u32 __init imx93_soc_revision(void)
+> +{
+> +	struct device_node *np;
+> +	void __iomem *anatop_base;
+> +	u32 rev;
+> +
+> +	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-anatop");
+> +	if (!np)
+> +		return 0;
+> +
+> +	anatop_base = of_iomap(np, 0);
+> +	WARN_ON(!anatop_base);
+> +
+> +	rev = readl_relaxed(anatop_base + ANADIG_DIGPROG_IMX93);
+> +
+> +	iounmap(anatop_base);
+> +	of_node_put(np);
+> +
+> +	imx93_soc_uid();
+> +
+> +	return rev;
+> +}
+> +
+>  static const struct imx8_soc_data imx8mq_soc_data = {
+>  	.name = "i.MX8MQ",
+>  	.soc_revision = imx8mq_soc_revision,
+> @@ -161,11 +212,17 @@ static const struct imx8_soc_data imx8mp_soc_data = {
+>  	.soc_revision = imx8mm_soc_revision,
+>  };
+>  
+> +static const struct imx8_soc_data imx93_soc_data = {
+> +	.name = "i.MX93",
+> +	.soc_revision = imx93_soc_revision,
+> +};
+> +
+>  static __maybe_unused const struct of_device_id imx8_soc_match[] = {
+>  	{ .compatible = "fsl,imx8mq", .data = &imx8mq_soc_data, },
+>  	{ .compatible = "fsl,imx8mm", .data = &imx8mm_soc_data, },
+>  	{ .compatible = "fsl,imx8mn", .data = &imx8mn_soc_data, },
+>  	{ .compatible = "fsl,imx8mp", .data = &imx8mp_soc_data, },
+> +	{ .compatible = "fsl,imx93", .data = &imx93_soc_data, },
+>  	{ }
+>  };
+>  
+> @@ -212,7 +269,12 @@ static int __init imx8_soc_init(void)
+>  		goto free_soc;
+>  	}
+>  
+> -	soc_dev_attr->serial_number = kasprintf(GFP_KERNEL, "%016llX", soc_uid);
+> +	if (soc_uid_h) {
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
-index 031d2eefef07..9be645f91211 100644
---- a/drivers/gpu/drm/msm/dp/dp_power.c
-+++ b/drivers/gpu/drm/msm/dp/dp_power.c
-@@ -14,7 +14,6 @@
- 
- struct dp_power_private {
- 	struct dp_parser *parser;
--	struct platform_device *pdev;
- 	struct device *dev;
- 	struct drm_device *drm_dev;
- 	struct clk *link_clk_src;
-@@ -28,7 +27,7 @@ static int dp_power_clk_init(struct dp_power_private *power)
- {
- 	int rc = 0;
- 	struct dss_module_power *core, *ctrl, *stream;
--	struct device *dev = &power->pdev->dev;
-+	struct device *dev = power->dev;
- 
- 	core = &power->parser->mp[DP_CORE_PM];
- 	ctrl = &power->parser->mp[DP_CTRL_PM];
-@@ -153,7 +152,7 @@ int dp_power_client_init(struct dp_power *dp_power)
- 
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
--	pm_runtime_enable(&power->pdev->dev);
-+	pm_runtime_enable(power->dev);
- 
- 	return dp_power_clk_init(power);
- }
-@@ -164,7 +163,7 @@ void dp_power_client_deinit(struct dp_power *dp_power)
- 
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
--	pm_runtime_disable(&power->pdev->dev);
-+	pm_runtime_disable(power->dev);
- }
- 
- int dp_power_init(struct dp_power *dp_power, bool flip)
-@@ -174,11 +173,11 @@ int dp_power_init(struct dp_power *dp_power, bool flip)
- 
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
--	pm_runtime_get_sync(&power->pdev->dev);
-+	pm_runtime_get_sync(power->dev);
- 
- 	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
- 	if (rc)
--		pm_runtime_put_sync(&power->pdev->dev);
-+		pm_runtime_put_sync(power->dev);
- 
- 	return rc;
- }
-@@ -190,7 +189,7 @@ int dp_power_deinit(struct dp_power *dp_power)
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
- 	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
--	pm_runtime_put_sync(&power->pdev->dev);
-+	pm_runtime_put_sync(power->dev);
- 	return 0;
- }
- 
-@@ -199,12 +198,11 @@ struct dp_power *dp_power_get(struct device *dev, struct dp_parser *parser)
- 	struct dp_power_private *power;
- 	struct dp_power *dp_power;
- 
--	power = devm_kzalloc(&parser->pdev->dev, sizeof(*power), GFP_KERNEL);
-+	power = devm_kzalloc(dev, sizeof(*power), GFP_KERNEL);
- 	if (!power)
- 		return ERR_PTR(-ENOMEM);
- 
- 	power->parser = parser;
--	power->pdev = parser->pdev;
- 	power->dev = dev;
- 
- 	dp_power = &power->dp_power;
--- 
-2.39.2
+Unnecessary parentheses.
 
+Shawn
+
+> +		soc_dev_attr->serial_number = kasprintf(GFP_KERNEL, "%016llX%016llX",
+> +							soc_uid_h, soc_uid);
+> +	} else {
+> +		soc_dev_attr->serial_number = kasprintf(GFP_KERNEL, "%016llX", soc_uid);
+> +	}
+>  	if (!soc_dev_attr->serial_number) {
+>  		ret = -ENOMEM;
+>  		goto free_rev;
+> -- 
+> 2.37.1
+> 
