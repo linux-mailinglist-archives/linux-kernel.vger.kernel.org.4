@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BC1703C28
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77DB703C32
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbjEOSMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 14:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
+        id S238810AbjEOSOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 14:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245092AbjEOSLy (ORCPT
+        with ESMTP id S245007AbjEOSNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 14:11:54 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACF627FA7
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:09:09 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-55c939fb24dso120941327b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684174111; x=1686766111;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ro8tmlMGAw+gcvacmTcSTaJjQF8eWJk6fA6Unv/Jk28=;
-        b=ZiF16qVzHpH1+nrMbvksLWNYUu/EwpDqaweGBrTdItutk6MJ5koNhu/n4KBpJirsY7
-         rr0nYXeQ8KqGCeAraXCDpI4H93jRoRFQpUbBsT8ksrSR1DsM/YfA4OVtZFgdHHnOMIad
-         53STU/PWwGPnCyeRBcCTiFltMl66f3ZLZ+6PTBYeEKm+cYrApG4APn60WgzDta0YH18r
-         ZsOPXMNazF/kFRifnVHszo3CqDy3V7XRyFP9LYAO0DWznx1qTon9/9DC+i/r/VDh2XSF
-         yg/gKWEB6oDusL/SNmU5T+wqJYQHau//BzlYUXr3xFyxoMF+MclXrfNqQNUgTTvEK10x
-         KcUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684174111; x=1686766111;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ro8tmlMGAw+gcvacmTcSTaJjQF8eWJk6fA6Unv/Jk28=;
-        b=TTw3zcLQTxtUcn1qFJDOR310+OcL/gusHwKRSGhLuAyzHja5Om5gwI7jhHFDfIINgc
-         ja/kz5BIOQCaO9kLqPyJ8luJgwmiSUqe+n8v4JwSG+iKSma7Xd5WL10SJblISq6tBv0s
-         WcjJYidJQ9td9swP4Or9qCT14fzsc1V+ioQWYfCKwQE0EgemfLY3c76C4HGGrMPrvaKL
-         T7Mu9No++Z/DkcaxzaDkuP+pGIUG3Xjs3SFgInBNDpQXi/mlldzhOapZ1COqxvoTez8k
-         8PRpw9JHxmqj7XuBN5c9ZRvOArtG0KdUutrX1+/lBcVVcRCf5NPcci9rluqE41GBaMPN
-         KORA==
-X-Gm-Message-State: AC+VfDwxVFuqjiQIUObZbo523WYFTW6t0gA0HmXP/hD1eWOuCxJNhkma
-        H09K9rVEiFUdHn0599QndN/Umv15Rvz/gIEhhebU3Q==
-X-Google-Smtp-Source: ACHHUZ6Z4HjdtsvLUTBfEEJpcucb/2KcKAXw85OfHM0Szwvs5toBGa3MOzyeUX7rMhZxYpj5F9J4fR4ysvAAMC1yXxQ=
-X-Received: by 2002:a81:8a05:0:b0:55a:30f3:119 with SMTP id
- a5-20020a818a05000000b0055a30f30119mr32369437ywg.35.1684174111398; Mon, 15
- May 2023 11:08:31 -0700 (PDT)
+        Mon, 15 May 2023 14:13:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFED2225A4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684174153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZtZtSSbwWjXLXKy/6LQdhCrrwRELJrN07bazT1pYPAc=;
+        b=eXXNX+hev1jpK1t7ErGihwI7up/v9darH60WzHAgT8cX4u/gDV3vaNJ9IRRP5SIjbvFjJQ
+        cAizzKrLEmcXuDzyIm/nXj1dBK8V0xxnSaFWLJ/eQ1BNnnnO6bJq/FN56UmRHJe/IAVjg0
+        ALORCFvzS+woeFB1InUuwTxK3+V4h9I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-133-y5vLRCE1NyywcTxvRONQ0Q-1; Mon, 15 May 2023 14:09:12 -0400
+X-MC-Unique: y5vLRCE1NyywcTxvRONQ0Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34850380665F;
+        Mon, 15 May 2023 18:09:11 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.147])
+        by smtp.corp.redhat.com (Postfix) with SMTP id CCB3235453;
+        Mon, 15 May 2023 18:09:06 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 15 May 2023 20:08:57 +0200 (CEST)
+Date:   Mon, 15 May 2023 20:08:52 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Guo Ren <guoren@kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Paul McKenney <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v8] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <20230515180851.GD10759@redhat.com>
+References: <20230515162249.709839-1-wander@redhat.com>
+ <20230515164311.GC10759@redhat.com>
+ <CAAq0SUkHDf6Tnhrc5ys4rOGWtepFfdv3=d6GiA=BB7yvDUj8vw@mail.gmail.com>
 MIME-Version: 1.0
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-6-git-send-email-quic_khsieh@quicinc.com>
- <41243dc6-eb9d-dea6-f945-cb1f6594a2a4@linaro.org> <w6uswjuf7fiorrplqzhrpg3vrjbbdd3bgaxej5l6ez3pebn3d5@ytuxhim25j6q>
- <1fd8fd48-9a0a-774c-1366-ea4c893f3b25@quicinc.com>
-In-Reply-To: <1fd8fd48-9a0a-774c-1366-ea4c893f3b25@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 15 May 2023 21:08:20 +0300
-Message-ID: <CAA8EJpqKRJ0nqQMDXdcSYEZapsKfxAsevcKnWPcsEVv+9P05fg@mail.gmail.com>
-Subject: Re: [PATCH v8 5/8] drm/msm/dpu: add support for DSC encoder v1.2 engine
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAq0SUkHDf6Tnhrc5ys4rOGWtepFfdv3=d6GiA=BB7yvDUj8vw@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +84,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 at 20:47, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
->
-> On 5/14/2023 2:46 PM, Marijn Suijten wrote:
-> > On 2023-05-12 21:19:19, Dmitry Baryshkov wrote:
-> > <snip.
-> >>> +static inline void dpu_hw_dsc_bind_pingpong_blk_1_2(struct dpu_hw_dsc *hw_dsc,
-> >>> +                                               const enum dpu_pingpong pp)
-> >>> +{
-> >>> +   struct dpu_hw_blk_reg_map *hw;
-> >>> +   const struct dpu_dsc_sub_blks *sblk;
-> >>> +   int mux_cfg = 0xf; /* Disabled */
-> >>> +
-> >>> +   hw = &hw_dsc->hw;
-> >>> +
-> >>> +   sblk = hw_dsc->caps->sblk;
-> >>> +
-> >>> +   if (pp)
-> >>> +           mux_cfg = (pp - PINGPONG_0) & 0x7;
-> >> Do we need an unbind support here like we do for the DSC 1.1?
-> >>
-> >>> +
-> >>> +   DPU_REG_WRITE(hw, sblk->ctl.base + DSC_CTL, mux_cfg);
-> >>> +}
-> > <snip>
+On 05/15, Wander Lairson Costa wrote:
+> On Mon, May 15, 2023 at 1:43 PM Oleg Nesterov <oleg@redhat.com> wrote:
 > >
-> > Friendly request to strip/snip unneeded context (as done in this reply)
-> > to make it easier to spot the conversation, and replies to it.
+> > Certainly I have missed something...
 > >
-> > - Marijn
+> > but,
+> >
+> > On 05/15, Wander Lairson Costa wrote:
+> > >
+> > > -extern void __put_task_struct(struct task_struct *t);
+> > > +extern void ___put_task_struct(struct task_struct *t);
+> > > +extern void __put_task_struct_rcu_cb(struct rcu_head *rhp);
+> >
+> > I don't understand these renames, why can't you simply put this fix
+> > into put_task_struct() ?
+> >
 >
-> Thanks for suggestion.
->
-> How can I do that?
->
-> just manually delete unneeded context?
->
-> Or are they other way (tricks) to do it automatically?
+> No particular reason, it was just a matter of style and keep the parts simple.
 
-No automation can deduce what is irrelevant to the mail. So we do this manually.
+Well, to me a single/simple change in put_task_struct() makes more
+sense, but I won't argue.
 
--- 
-With best wishes
-Dmitry
+	static inline void put_task_struct(struct task_struct *t)
+	{
+		if (!refcount_dec_and_test(...))
+			return;
+
+		if (IS_ENABLED(PREEMPT_RT) && ...)
+			return call_rcu(...);
+
+		...
+		__put_task_struct();
+		...
+	}
+
+> > > +static inline void __put_task_struct(struct task_struct *tsk)
+> > > +{
+> > ...
+> > > +     if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
+> > > +             call_rcu(&tsk->rcu, __put_task_struct_rcu_cb);
+> > > +     else
+> > > +             ___put_task_struct(tsk);
+> > > +}
+> >
+> > did you see the emails from Peter? In particular, this one:
+> >
+> >         https://lore.kernel.org/lkml/20230505133902.GC38236@hirez.programming.kicks-ass.net/
+> >
+>
+> I didn't notice the lock_acquire/lock_release part. However, I tested
+> the patch with CONFIG_PROVE_RAW_LOCK_NESTING and there was no warning.
+
+Hmm. I tend to trust the Sebastian's analysis in
+
+	https://lore.kernel.org/all/Y+zFNrCjBn53%2F+Q2@linutronix.de/
+
+I'll try to look at it later, although I hope Sebastian or Peter
+can explain this before I try ;)
+
+Oleg.
+
