@@ -2,53 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FD6702155
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126EA702165
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbjEOCCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 22:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
+        id S233811AbjEOCNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 22:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjEOCCV (ORCPT
+        with ESMTP id S229645AbjEOCNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 22:02:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547401712;
-        Sun, 14 May 2023 19:02:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1669612CE;
-        Mon, 15 May 2023 02:02:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A953EC433EF;
-        Mon, 15 May 2023 02:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684116139;
-        bh=470fg0q4D5l5QNjkmRtxrTZcLO4hXnPzfSgt/4ivIys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VTK06w2OktkUrbd2ZPfQR+xgFpM2DwmpYkOJXxAEKGp/yT7jWweLbS6O49PlIylUi
-         +921FesY9ScyHPS1CCBCQfDft3VfFl+yIQ9NQ+ZCO0Q7hxa0dfFdPV9hizq2GsAdki
-         1gcqQMEQ/xewIazTFbHuRG7XjCKzKroT4jEJMRD0oL6JjRJpEqcpvaE+LT7VU7KN6W
-         Mk7Lf2lUnhjH3FcWWQ8kQZ3SSfxazCTKlR88HU4oTIN1TNBxCZ+ONNHhoIc2zPdNIi
-         /oRJ+dcBRu5sVsTSYc0CyhkjG6mHroEo3Oy2CiL17Hs+jTWMT9nXoLQZ+whxO2P1QX
-         m+BfOdA+tXUtA==
-Date:   Sun, 14 May 2023 19:06:11 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: qcom: restrict drivers per ARM/ARM64
-Message-ID: <20230515020611.bahv3hk5jma7fwzi@ripper>
-References: <20230514114711.18258-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230514114711.18258-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Sun, 14 May 2023 22:13:51 -0400
+Received: from mail-m127104.qiye.163.com (mail-m127104.qiye.163.com [115.236.127.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B392110DB;
+        Sun, 14 May 2023 19:13:48 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:3270:1980:719c:500e:9fa7:6718])
+        by mail-m127104.qiye.163.com (Hmail) with ESMTPA id 83E3DA40111;
+        Mon, 15 May 2023 10:13:44 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     chuck.lever@oracle.com, jlayton@kernel.org,
+        trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-nfs@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dinghui@sangfor.com.cn, stable@vger.kernel.org
+Subject: [PATCH] SUNRPC: Fix UAF in svc_tcp_listen_data_ready()
+Date:   Mon, 15 May 2023 10:13:07 +0800
+Message-Id: <20230515021307.3072-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCThkYVksYGkIeTkwYS0xLGFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTEtBSkJDS0FMSkIYQU5LSx5BQh0aTEFNTEpDWVdZFhoPEhUdFF
+        lBWU9LSFVKSktISkxVSktLVUtZBg++
+X-HM-Tid: 0a881d2f6370b282kuuu83e3da40111
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MT46Hio5Mj0XNxksMEIOHR8U
+        TD4wCSpVSlVKTUNPSkpNQ0lOSEJIVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUxLQUpCQ0tBTEpCGEFOS0seQUIdGkxBTUxKQ1lXWQgBWUFOT01NNwY+
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,18 +47,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 01:47:11PM +0200, Krzysztof Kozlowski wrote:
-> There is no point to allow selecting clock controller drivers for
-> Qualcomm ARMv7 SoCs when building ARM64 kernel, and vice versa.  This
-> makes kernel configuration more difficult as many do not remember the
-> Qualcomm SoCs model names/numbers.  No features should be lost because:
-> 1. There won't be a single image for ARMv7 and ARMv8/9 SoCs.
-> 2. Newer ARMv8/9 SoCs won't be running in arm32 emulation mode.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+After the listener svc_sock be freed, and before invoking svc_tcp_accept()
+for the established child sock, there is a window that the newsock
+retaining a freed listener svc_sock in sk_user_data which cloning from
+parent. In the race windows if data is received on the newsock, we will
+observe use-after-free report in svc_tcp_listen_data_ready().
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Reproduce by two tasks:
 
-Regards,
-Bjorn
+1. while :; do rpc.nfsd 0 ; rpc.nfsd; done
+2. while :; do echo "" | ncat -4 127.0.0.1 2049 ; done
+
+KASAN report:
+
+  ==================================================================
+  BUG: KASAN: slab-use-after-free in svc_tcp_listen_data_ready+0x1cf/0x1f0 [sunrpc]
+  Read of size 8 at addr ffff888139d96228 by task nc/102553
+  CPU: 7 PID: 102553 Comm: nc Not tainted 6.3.0+ #18
+  Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+  Call Trace:
+   <IRQ>
+   dump_stack_lvl+0x33/0x50
+   print_address_description.constprop.0+0x27/0x310
+   print_report+0x3e/0x70
+   kasan_report+0xae/0xe0
+   svc_tcp_listen_data_ready+0x1cf/0x1f0 [sunrpc]
+   tcp_data_queue+0x9f4/0x20e0
+   tcp_rcv_established+0x666/0x1f60
+   tcp_v4_do_rcv+0x51c/0x850
+   tcp_v4_rcv+0x23fc/0x2e80
+   ip_protocol_deliver_rcu+0x62/0x300
+   ip_local_deliver_finish+0x267/0x350
+   ip_local_deliver+0x18b/0x2d0
+   ip_rcv+0x2fb/0x370
+   __netif_receive_skb_one_core+0x166/0x1b0
+   process_backlog+0x24c/0x5e0
+   __napi_poll+0xa2/0x500
+   net_rx_action+0x854/0xc90
+   __do_softirq+0x1bb/0x5de
+   do_softirq+0xcb/0x100
+   </IRQ>
+   <TASK>
+   ...
+   </TASK>
+
+  Allocated by task 102371:
+   kasan_save_stack+0x1e/0x40
+   kasan_set_track+0x21/0x30
+   __kasan_kmalloc+0x7b/0x90
+   svc_setup_socket+0x52/0x4f0 [sunrpc]
+   svc_addsock+0x20d/0x400 [sunrpc]
+   __write_ports_addfd+0x209/0x390 [nfsd]
+   write_ports+0x239/0x2c0 [nfsd]
+   nfsctl_transaction_write+0xac/0x110 [nfsd]
+   vfs_write+0x1c3/0xae0
+   ksys_write+0xed/0x1c0
+   do_syscall_64+0x38/0x90
+   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+  Freed by task 102551:
+   kasan_save_stack+0x1e/0x40
+   kasan_set_track+0x21/0x30
+   kasan_save_free_info+0x2a/0x50
+   __kasan_slab_free+0x106/0x190
+   __kmem_cache_free+0x133/0x270
+   svc_xprt_free+0x1e2/0x350 [sunrpc]
+   svc_xprt_destroy_all+0x25a/0x440 [sunrpc]
+   nfsd_put+0x125/0x240 [nfsd]
+   nfsd_svc+0x2cb/0x3c0 [nfsd]
+   write_threads+0x1ac/0x2a0 [nfsd]
+   nfsctl_transaction_write+0xac/0x110 [nfsd]
+   vfs_write+0x1c3/0xae0
+   ksys_write+0xed/0x1c0
+   do_syscall_64+0x38/0x90
+   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+Fix the UAF by simply doing nothing in svc_tcp_listen_data_ready()
+if state != TCP_LISTEN, that will avoid dereferencing svsk for all
+child socket.
+
+Link: https://lore.kernel.org/lkml/20230507091131.23540-1-dinghui@sangfor.com.cn/
+Fixes: fa9251afc33c ("SUNRPC: Call the default socket callbacks instead of open coding")
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+Cc: <stable@vger.kernel.org>
+---
+ net/sunrpc/svcsock.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
+index a51c9b989d58..9aca6e1e78e4 100644
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@ -825,12 +825,6 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
+ 
+ 	trace_sk_data_ready(sk);
+ 
+-	if (svsk) {
+-		/* Refer to svc_setup_socket() for details. */
+-		rmb();
+-		svsk->sk_odata(sk);
+-	}
+-
+ 	/*
+ 	 * This callback may called twice when a new connection
+ 	 * is established as a child socket inherits everything
+@@ -839,13 +833,18 @@ static void svc_tcp_listen_data_ready(struct sock *sk)
+ 	 *    when one of child sockets become ESTABLISHED.
+ 	 * 2) data_ready method of the child socket may be called
+ 	 *    when it receives data before the socket is accepted.
+-	 * In case of 2, we should ignore it silently.
++	 * In case of 2, we should ignore it silently and DO NOT
++	 * dereference svsk.
+ 	 */
+-	if (sk->sk_state == TCP_LISTEN) {
+-		if (svsk) {
+-			set_bit(XPT_CONN, &svsk->sk_xprt.xpt_flags);
+-			svc_xprt_enqueue(&svsk->sk_xprt);
+-		}
++	if (sk->sk_state != TCP_LISTEN)
++		return;
++
++	if (svsk) {
++		/* Refer to svc_setup_socket() for details. */
++		rmb();
++		svsk->sk_odata(sk);
++		set_bit(XPT_CONN, &svsk->sk_xprt.xpt_flags);
++		svc_xprt_enqueue(&svsk->sk_xprt);
+ 	}
+ }
+ 
+-- 
+2.17.1
+
