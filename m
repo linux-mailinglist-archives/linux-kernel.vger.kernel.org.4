@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDFD702242
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F55702246
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238984AbjEOD3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 23:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S239000AbjEOD3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 23:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238336AbjEOD23 (ORCPT
+        with ESMTP id S231948AbjEOD22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 23:28:29 -0400
+        Sun, 14 May 2023 23:28:28 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3BE1BF8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E601BE5;
         Sun, 14 May 2023 20:27:59 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F2rj7K000901;
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F3Lait028110;
         Mon, 15 May 2023 03:27:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=4SirNCBuCga9+B7l7p460elPYFjZs/qJNA13GSD3Dy0=;
- b=gfBJlpIFei3QlkXIQTvZq6iR2euiXOpQdqnkLaS8UdjqHdORbdOPbWa0QgDxsFPD6qL5
- 9xZDijylBKzlmsOvGzlwWjMs39zxykW/uaXl2LuBISLfw09XbPxKUqUfk3W7eKAGlJ+z
- shCnIY6bevqOWQqc8RA9sdgLbThiqXQ0vsphBkDet0uiykFff0HYKYgPOjMhLioaNXWF
- 3u03+yblM/fucCqKA+r9FHlGPw3K1+RVGN+nQ7oMh4Q9PcxB1ExQ5A9/rwn1gbds8hW5
- kVrQnn9lt6CzLwP7uPz7VFfzUVdHAmKK+e4EKsyxWddMEqW42rBL/A0SOCs4COdkGwZY vQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj08mjtqe-1
+ bh=N+6dirc7aPN6nWzVb9ZiUSWp9CNiwUTaboOjEyAp9nA=;
+ b=czFaxEOKKuvYx1GlIplg7sW5+zsOvlkBCE4uavD19Wt0ZfQHwftEftKe5E1+Yw262xrP
+ vgHG7g8CpXpoPC7keRXRJlQc+lWJVcEQr/pJkMmhnY+aVxw2my7zQDwcCxd+ejUf/+j6
+ G/H78wCG1s53qMCctmjvDnQ7u6i+FkpDzuxay0vilmPVcT+6P+EzpkjubB/EUPEzDGh7
+ N2MtgMAao3B2zPIDcg8iTY5g/ElyN2V9Ggv4gOD939KK2Rp+Izu1UML+xajlnm07UTVp
+ KoMjmMyfTUoDI3i/sh6a0otm0UJbXvt3tu9S+lPqGvhB5b7fta2NsEyqJC3FR3lwUsTi pw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj1gxtpjt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 03:27:50 +0000
+        Mon, 15 May 2023 03:27:51 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34F3Rohs004946
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34F3RooA026645
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 15 May 2023 03:27:50 GMT
 Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
@@ -49,10 +49,13 @@ CC:     Bjorn Andersson <andersson@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v3 3/8] phy: qcom-qmp-combo: Extend phy_mutex to all phy_ops
-Date:   Sun, 14 May 2023 20:27:38 -0700
-Message-ID: <20230515032743.400170-4-quic_bjorande@quicinc.com>
+Subject: [PATCH v3 4/8] phy: qcom-qmp-combo: Introduce orientation variable
+Date:   Sun, 14 May 2023 20:27:39 -0700
+Message-ID: <20230515032743.400170-5-quic_bjorande@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230515032743.400170-1-quic_bjorande@quicinc.com>
 References: <20230515032743.400170-1-quic_bjorande@quicinc.com>
@@ -64,15 +67,15 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _76B2N_t0ZQUrZN6-8mbc6nV-NzRTSOg
-X-Proofpoint-GUID: _76B2N_t0ZQUrZN6-8mbc6nV-NzRTSOg
+X-Proofpoint-GUID: UHH2qEfpKGfVzcYrEGNAF1O4EUY4s0nZ
+X-Proofpoint-ORIG-GUID: UHH2qEfpKGfVzcYrEGNAF1O4EUY4s0nZ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-15_01,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- mlxlogscore=999 suspectscore=0 spamscore=0 mlxscore=0 adultscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ clxscore=1015 mlxlogscore=999 priorityscore=1501 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305150028
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -84,98 +87,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The phy core ensures mutual exclusion across the ops for a given phy,
-but the upcoming introduction of USB Type-C orientation switching might
-race with the DisplayPort phy operations. So extend the mutual exclusion
-to cover the remaining ops as well, to avoid concurrent reconfiguration
-of the hardware.
+In multiple places throughout the driver code has been written in
+prepration for handling of orientation switching.
 
-Reported-by: Johan Hovold <johan@kernel.org>
+Introduce a typec_orientation in qmp_combo and fill out the various
+"placeholders" with the associated logic. By initializing the
+orientation to "normal" this change has no functional impact, but
+reduces the size of the upcoming introduction of dynamic orientation
+switching.
+
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Tested-by: Abel Vesa <abel.vesa@linaro.org>
+Tested-by: Steev Klimaszewski <steev@kali.org>
+Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on HDK8450
+Tested-by: Johan Hovold <johan+linaro@kernel.org>	# X13s
 Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 ---
 
 Changes since v2:
-- None
+- Parenthesis around equality check
+- Reordered all reverse-checks in X-mas style
 
 Changes since v1:
-- New patch
+- X-mas in qmp_combo_configure_dp_mode()
 
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 54 +++++++++++++----------
+ 1 file changed, 30 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 8918ba2b18a4..6baacdf3a4cb 100644
+index 6baacdf3a4cb..b44c029ef23f 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -2437,12 +2437,16 @@ static int qmp_combo_dp_configure(struct phy *phy, union phy_configure_opts *opt
- 	struct qmp_combo *qmp = phy_get_drvdata(phy);
- 	const struct qmp_phy_cfg *cfg = qmp->cfg;
+@@ -19,6 +19,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/reset.h>
+ #include <linux/slab.h>
++#include <linux/usb/typec.h>
  
-+	mutex_lock(&qmp->phy_mutex);
+ #include <dt-bindings/phy/phy-qcom-qmp.h>
+ 
+@@ -63,6 +64,10 @@
+ /* QPHY_V3_PCS_MISC_CLAMP_ENABLE register bits */
+ #define CLAMP_EN				BIT(0) /* enables i/o clamp_n */
+ 
++/* QPHY_V3_DP_COM_TYPEC_CTRL register bits */
++#define SW_PORTSELECT_VAL			BIT(0)
++#define SW_PORTSELECT_MUX			BIT(1)
 +
- 	memcpy(&qmp->dp_opts, dp_opts, sizeof(*dp_opts));
- 	if (qmp->dp_opts.set_voltages) {
- 		cfg->configure_dp_tx(qmp);
- 		qmp->dp_opts.set_voltages = 0;
- 	}
+ #define PHY_INIT_COMPLETE_TIMEOUT		10000
  
-+	mutex_unlock(&qmp->phy_mutex);
+ struct qmp_phy_init_tbl {
+@@ -1323,6 +1328,8 @@ struct qmp_combo {
+ 	struct clk_fixed_rate pipe_clk_fixed;
+ 	struct clk_hw dp_link_hw;
+ 	struct clk_hw dp_pixel_hw;
 +
- 	return 0;
- }
++	enum typec_orientation orientation;
+ };
  
-@@ -2450,11 +2454,16 @@ static int qmp_combo_dp_calibrate(struct phy *phy)
+ static void qmp_v3_dp_aux_init(struct qmp_combo *qmp);
+@@ -1954,30 +1961,24 @@ static void qmp_v3_configure_dp_tx(struct qmp_combo *qmp)
+ 
+ static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
  {
- 	struct qmp_combo *qmp = phy_get_drvdata(phy);
- 	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	int ret = 0;
-+
-+	mutex_lock(&qmp->phy_mutex);
++	bool reverse = (qmp->orientation == TYPEC_ORIENTATION_REVERSE);
++	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+ 	u32 val;
+-	bool reverse = false;
  
- 	if (cfg->calibrate_dp_phy)
--		return cfg->calibrate_dp_phy(qmp);
-+		ret = cfg->calibrate_dp_phy(qmp);
+ 	val = DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
+ 	      DP_PHY_PD_CTL_PLL_PWRDN | DP_PHY_PD_CTL_DP_CLAMP_EN;
  
--	return 0;
-+	mutex_unlock(&qmp->phy_mutex);
+-	/*
+-	 * TODO: Assume orientation is CC1 for now and two lanes, need to
+-	 * use type-c connector to understand orientation and lanes.
+-	 *
+-	 * Otherwise val changes to be like below if this code understood
+-	 * the orientation of the type-c cable.
+-	 *
+-	 * if (lane_cnt == 4 || orientation == ORIENTATION_CC2)
+-	 *	val |= DP_PHY_PD_CTL_LANE_0_1_PWRDN;
+-	 * if (lane_cnt == 4 || orientation == ORIENTATION_CC1)
+-	 *	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
+-	 * if (orientation == ORIENTATION_CC2)
+-	 *	writel(0x4c, qmp->dp_dp_phy + QSERDES_V3_DP_PHY_MODE);
+-	 */
+-	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
++	if (dp_opts->lanes == 4 || reverse)
++		val |= DP_PHY_PD_CTL_LANE_0_1_PWRDN;
++	if (dp_opts->lanes == 4 || !reverse)
++		val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
 +
-+	return ret;
+ 	writel(val, qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
+ 
+-	writel(0x5c, qmp->dp_dp_phy + QSERDES_DP_PHY_MODE);
++	if (reverse)
++		writel(0x4c, qmp->pcs + QSERDES_DP_PHY_MODE);
++	else
++		writel(0x5c, qmp->pcs + QSERDES_DP_PHY_MODE);
+ 
+ 	return reverse;
  }
+@@ -2233,9 +2234,9 @@ static int qmp_v456_configure_dp_phy(struct qmp_combo *qmp,
  
- static int qmp_combo_com_init(struct qmp_combo *qmp)
-@@ -2578,6 +2587,8 @@ static int qmp_combo_dp_power_on(struct phy *phy)
- 	void __iomem *tx = qmp->dp_tx;
- 	void __iomem *tx2 = qmp->dp_tx2;
- 
-+	mutex_lock(&qmp->phy_mutex);
-+
- 	qmp_combo_dp_serdes_init(qmp);
- 
- 	qmp_combo_configure_lane(tx, cfg->dp_tx_tbl, cfg->dp_tx_tbl_num, 1);
-@@ -2589,6 +2600,8 @@ static int qmp_combo_dp_power_on(struct phy *phy)
- 	/* Configure link rate, swing, etc. */
- 	cfg->configure_dp_phy(qmp);
- 
-+	mutex_unlock(&qmp->phy_mutex);
-+
- 	return 0;
- }
- 
-@@ -2596,9 +2609,13 @@ static int qmp_combo_dp_power_off(struct phy *phy)
+ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
  {
- 	struct qmp_combo *qmp = phy_get_drvdata(phy);
++	bool reverse = (qmp->orientation == TYPEC_ORIENTATION_REVERSE);
+ 	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+ 	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+-	bool reverse = false;
+ 	u32 status;
+ 	int ret;
  
-+	mutex_lock(&qmp->phy_mutex);
+@@ -2297,9 +2298,9 @@ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
+ 
+ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
+ {
++	bool reverse = (qmp->orientation == TYPEC_ORIENTATION_REVERSE);
+ 	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+ 	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+-	bool reverse = false;
+ 	u32 status;
+ 	int ret;
+ 
+@@ -2356,9 +2357,9 @@ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
+ 
+ static int qmp_v6_configure_dp_phy(struct qmp_combo *qmp)
+ {
++	bool reverse = (qmp->orientation == TYPEC_ORIENTATION_REVERSE);
+ 	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+ 	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+-	bool reverse = false;
+ 	u32 status;
+ 	int ret;
+ 
+@@ -2471,6 +2472,7 @@ static int qmp_combo_com_init(struct qmp_combo *qmp)
+ 	const struct qmp_phy_cfg *cfg = qmp->cfg;
+ 	void __iomem *com = qmp->com;
+ 	int ret;
++	u32 val;
+ 
+ 	if (qmp->init_count++)
+ 		return 0;
+@@ -2504,10 +2506,12 @@ static int qmp_combo_com_init(struct qmp_combo *qmp)
+ 			SW_DPPHY_RESET_MUX | SW_DPPHY_RESET |
+ 			SW_USB3PHY_RESET_MUX | SW_USB3PHY_RESET);
+ 
+-	/* Default type-c orientation, i.e CC1 */
+-	qphy_setbits(com, QPHY_V3_DP_COM_TYPEC_CTRL, 0x02);
+-
+-	qphy_setbits(com, QPHY_V3_DP_COM_PHY_MODE_CTRL, USB3_MODE | DP_MODE);
++	/* Use software based port select and switch on typec orientation */
++	val = SW_PORTSELECT_MUX;
++	if (qmp->orientation == TYPEC_ORIENTATION_REVERSE)
++		val |= SW_PORTSELECT_VAL;
++	writel(val, com + QPHY_V3_DP_COM_TYPEC_CTRL);
++	writel(USB3_MODE | DP_MODE, com + QPHY_V3_DP_COM_PHY_MODE_CTRL);
+ 
+ 	/* bring both QMP USB and QMP DP PHYs PCS block out of reset */
+ 	qphy_clrbits(com, QPHY_V3_DP_COM_RESET_OVRD_CTRL,
+@@ -3379,6 +3383,8 @@ static int qmp_combo_probe(struct platform_device *pdev)
+ 
+ 	qmp->dev = dev;
+ 
++	qmp->orientation = TYPEC_ORIENTATION_NORMAL;
 +
- 	/* Assert DP PHY power down */
- 	writel(DP_PHY_PD_CTL_PSR_PWRDN, qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
- 
-+	mutex_unlock(&qmp->phy_mutex);
-+
- 	return 0;
- }
- 
+ 	qmp->cfg = of_device_get_match_data(dev);
+ 	if (!qmp->cfg)
+ 		return -EINVAL;
 -- 
 2.25.1
 
