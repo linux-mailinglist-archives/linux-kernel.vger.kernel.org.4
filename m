@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F17A702553
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1403702554
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240164AbjEOGu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
+        id S240266AbjEOGu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240241AbjEOGur (ORCPT
+        with ESMTP id S240170AbjEOGus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:50:47 -0400
+        Mon, 15 May 2023 02:50:48 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5728E1BE4
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:50:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDE72699
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:50:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684133436; x=1715669436;
+  t=1684133438; x=1715669438;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aAq1nEu0w9jquwDbM8Ql9Dgc92dfowXErHtU9iHqtg8=;
-  b=TxaZ0l8wg/g2jE/7zo9RI6M0iFjVo5bXlw3Hveecx4e3ZlwzGMXyZQJ0
-   47JjznsyZTyoE1doqL5agoWLlfRVrBnZyDGCwfaHMW+b4lhb2w2iZuubM
-   dVztqYchRLcEMcYwgFbQPJ47C6nuwx6zESnyTKCz4XAxzQYBskrIX8RT0
-   SnHOtlkaG1obMLVDny7hDjP/gkFEK2CvsFw1Lo4Rsv0NzatosQeX6oMAU
-   C7Y/RS4y8Lu4Di6kht2Iid0RKRCEPUKJ65+w/muv6oT2boGhVrsOj6Mg4
-   Jx3HmQ65monnG3E6nA5h+L/mrgmfvvgNiKYP1ghy9O0U4Iil0z41IAS5u
+  bh=xKsOmGgpfRTaoYi/C0Rex9lD4JYFMvLzVqkjtEvqo9k=;
+  b=G9lxGxSw372a26MCw7DfcNPWonstBGIqWG1Rvv0liJ+h1tginpiDrVKY
+   YVbasQqng62u0zT33XIEtAB/KoJdN1goq3YFListrqGYT/EXNoVOUXSd7
+   h5dtdFVl2wETI1ymY1yQZdmFlf9OZ7XejBMVJzQIUXzWWuHN7HxIeNbsE
+   ZkU0Fh/z3/OAjzSZZGfaxxLkC0X4uaXMGwjdaDZYbQb/wn0qbIANCRzif
+   3Br/5IVqnsF+fZkoHINikTUfsLZg1n/yACQmO5PPvT/lToI1/NIZHfnA2
+   LuLlKa0jj/LGI8Q3s7DeOg98iBh0o1s3cLbmR32f37Xq14AV3qMytz13a
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966321"
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="349966331"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="349966321"
+   d="scan'208";a="349966331"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:35 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908635"
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="694908641"
 X-IronPort-AV: E=Sophos;i="5.99,275,1677571200"; 
-   d="scan'208";a="694908635"
+   d="scan'208";a="694908641"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:33 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 23:50:35 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org, broonie@kernel.org,
         tiwai@suse.de
 Cc:     linux-kernel@vger.kernel.org, vinod.koul@linaro.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH v2 06/26] ASoC/soundwire: intel: pass hdac_bus pointer for link management
-Date:   Mon, 15 May 2023 15:10:22 +0800
-Message-Id: <20230515071042.2038-7-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH v2 07/26] soundwire: intel: add eml_lock in the interface for new platforms
+Date:   Mon, 15 May 2023 15:10:23 +0800
+Message-Id: <20230515071042.2038-8-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
 References: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
@@ -65,106 +65,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-The hdac_bus pointer is used to access the extended link information
-and handle power management. Pass it from the SOF driver down to the
-auxiliary devices.
+In existing Intel/SoundWire systems, all the SoundWire configuration
+is 'self-contained', with the 'shim_lock' mutex used to protect access
+to shared registers in multi-link configurations.
+
+With the move of part of the SoundWire registers to the HDaudio
+multi-link structure, we need a unified lock. The hda-mlink
+implementation provides an 'eml_lock' that is used to protect shared
+registers such as LCTL and LSYNC, we can pass it to the SoundWire
+side. There is no issue with possible dangling pointers since the
+SoundWire auxiliary devices are children of the PCI device, so the
+'eml_lock' cannot be removed while the SoundWire side is in use.
+
+This patch only adds the interface for now.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Acked-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/soundwire/intel.h           | 4 ++++
- drivers/soundwire/intel_init.c      | 2 ++
- include/linux/soundwire/sdw_intel.h | 4 ++++
- sound/soc/sof/intel/hda.c           | 1 +
- 4 files changed, 11 insertions(+)
+ include/linux/soundwire/sdw_intel.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/soundwire/intel.h b/drivers/soundwire/intel.h
-index 1b23292bb8be..cf9db4906de4 100644
---- a/drivers/soundwire/intel.h
-+++ b/drivers/soundwire/intel.h
-@@ -4,6 +4,8 @@
- #ifndef __SDW_INTEL_LOCAL_H
- #define __SDW_INTEL_LOCAL_H
- 
-+struct hdac_bus;
-+
- /**
-  * struct sdw_intel_link_res - Soundwire Intel link resource structure,
-  * typically populated by the controller driver.
-@@ -23,6 +25,7 @@
-  * @link_mask: global mask needed for power-up/down sequences
-  * @cdns: Cadence master descriptor
-  * @list: used to walk-through all masters exposed by the same controller
-+ * @hbus: hdac_bus pointer, needed for power management
-  */
- struct sdw_intel_link_res {
- 	const struct sdw_intel_hw_ops *hw_ops;
-@@ -42,6 +45,7 @@ struct sdw_intel_link_res {
- 	u32 link_mask;
- 	struct sdw_cdns *cdns;
- 	struct list_head list;
-+	struct hdac_bus *hbus;
- };
- 
- struct sdw_intel {
-diff --git a/drivers/soundwire/intel_init.c b/drivers/soundwire/intel_init.c
-index 43d339c6bcee..c918d2b81cc3 100644
---- a/drivers/soundwire/intel_init.c
-+++ b/drivers/soundwire/intel_init.c
-@@ -84,6 +84,8 @@ static struct sdw_intel_link_dev *intel_link_dev_register(struct sdw_intel_res *
- 	link->shim_mask = &ctx->shim_mask;
- 	link->link_mask = ctx->link_mask;
- 
-+	link->hbus = res->hbus;
-+
- 	/* now follow the two-step init/add sequence */
- 	ret = auxiliary_device_init(auxdev);
- 	if (ret < 0) {
 diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
-index 88eb5bf98140..c4281aa06e2e 100644
+index c4281aa06e2e..bafc6f2554b0 100644
 --- a/include/linux/soundwire/sdw_intel.h
 +++ b/include/linux/soundwire/sdw_intel.h
-@@ -269,6 +269,8 @@ struct sdw_intel_slave_id {
- 	struct sdw_slave_id id;
- };
- 
-+struct hdac_bus;
-+
- /**
-  * struct sdw_intel_ctx - context allocated by the controller
-  * driver probe
-@@ -324,6 +326,7 @@ struct sdw_intel_ctx {
-  * @shim_base: sdw shim base.
+@@ -327,6 +327,8 @@ struct sdw_intel_ctx {
   * @alh_base: sdw alh base.
   * @ext: extended HDaudio link support
-+ * @hbus: hdac_bus pointer, needed for power management
+  * @hbus: hdac_bus pointer, needed for power management
++ * @eml_lock: mutex protecting shared registers in the HDaudio multi-link
++ * space
   */
  struct sdw_intel_res {
  	const struct sdw_intel_hw_ops *hw_ops;
-@@ -339,6 +342,7 @@ struct sdw_intel_res {
- 	u32 shim_base;
+@@ -343,6 +345,7 @@ struct sdw_intel_res {
  	u32 alh_base;
  	bool ext;
-+	struct hdac_bus *hbus;
+ 	struct hdac_bus *hbus;
++	struct mutex *eml_lock;
  };
  
  /*
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index 793baf60c78b..4d48f4018617 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -189,6 +189,7 @@ static int hda_sdw_probe(struct snd_sof_dev *sdev)
- 	res.ops = &sdw_callback;
- 	res.dev = sdev->dev;
- 	res.clock_stop_quirks = sdw_clock_stop_quirks;
-+	res.hbus = sof_to_bus(sdev);
- 
- 	/*
- 	 * ops and arg fields are not populated for now,
 -- 
 2.25.1
 
