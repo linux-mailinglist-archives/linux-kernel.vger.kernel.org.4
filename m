@@ -2,100 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E714F702AB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E7C702AB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238450AbjEOKjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
+        id S238984AbjEOKjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbjEOKi7 (ORCPT
+        with ESMTP id S231546AbjEOKjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:38:59 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023A71A4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:38:58 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso22308928a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684147136; x=1686739136;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b/nTx9hmlUL6TU23fREGfCZtuapdJOL4NbbNwFkln+A=;
-        b=LlwnNEWPWSEmn/2Z7lso1y40/VcXYnHPU9MP890uFAX/YJYJwp8QlCLgcY6+rng33Q
-         Coi3dr9rihZsvfvod5uw0wpY4XgRPVZm+TVqXgmW9jstBBSr3CGeZzYy2lg/AI2oVDCs
-         6jJBpUW5hIrcxwkEcd8sj3Ve7MtSQ1W0gaojjAb756Ju7PoH3kvlwU54ch+nogsypPYh
-         z0DSVCmz8TuRgN13EBNtUm7irfAmUCACShNJZPxj6nkFR8sNQVQyHUOPbDiNYtSqQC9y
-         ehj302MqCMtIeIix5XAoIWn585DZqh7NQZpz5zFi/lPez8T+2fJX7XR5QbhBOy1bvYLl
-         l6dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684147136; x=1686739136;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b/nTx9hmlUL6TU23fREGfCZtuapdJOL4NbbNwFkln+A=;
-        b=CI+FCmrWaR80iOALhB1nHU57GDJcTFA8PUk7BmGSdYx//prfXLvj6HHtSnQNkSSRR2
-         SSXr5j4wtql309fubTBHPu5a4fmTUCa8CdR9gw1rP2ByCExs5iFNSxK2gvmFDKRQKzts
-         95E71j+mZzdRNPOVXQrNhYwyv93UzO4Uzjwwss7cvM2sqc2VI0B4CFyNEqVeHQRKA0YT
-         Z+8UjSwAc2KRw7o/BrEyGysz7XuZeAn6f7oScxEos745j+xYXUp30N/FjK6EcaU0/QYQ
-         Usw5ETGHS3Zv+RsEr1qwCuOMGjP1zw1j5jfSZ83t9x+fFvUSjByio2/nkcEJVYcXAYB/
-         v+Ug==
-X-Gm-Message-State: AC+VfDx30eDCWVEXRzfv0JjfFqTFQzFdh/6QAy8xSrPcGqZiAT51liTs
-        WeHh+vnQS7FaPj6pCTiIN3uE4A==
-X-Google-Smtp-Source: ACHHUZ4ZZP7nQe2gpC8ZBs9Np+KlkaFn0KYAak4TZdTfhaVfQhMaofuij5JjMlCuyHXuwsegqY7bAg==
-X-Received: by 2002:a17:907:1b06:b0:94e:cefc:8df0 with SMTP id mp6-20020a1709071b0600b0094ecefc8df0mr31469529ejc.61.1684147136355;
-        Mon, 15 May 2023 03:38:56 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
-        by smtp.gmail.com with ESMTPSA id hb38-20020a170907162600b009661cf921b4sm9107205ejc.202.2023.05.15.03.38.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 03:38:55 -0700 (PDT)
-Message-ID: <d880d18d-5a2c-ad69-fe9f-56f98056b9c6@linaro.org>
-Date:   Mon, 15 May 2023 12:38:54 +0200
+        Mon, 15 May 2023 06:39:39 -0400
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2062.outbound.protection.outlook.com [40.107.249.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43441A4;
+        Mon, 15 May 2023 03:39:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F/m1DkyyVwX7H0Xc8DoXqBvdnghDLyCzdMkJvEtdz8795IKh/LgYz6PGAlvpCx2TDmcH3Zx9+Kn1swpsATF2E8gQO9DpyGsDGEpfdz8tPsAwKVZ4a53pWtxauYnqb2efehTiqL7kaeBdJ91d/Et3f5+H2XZ2cBJAHy2W4eL/piJDH1Y0+y+uYj/eFBOfX8CYkDNRUxlCDvG3azJC6RpML8uOJRmlpSTL6XZtCKQuGq5pD9cryMMs0uk9rU7bxU1tTNkNroogTwm+LSuKHikZAyXB8QOCdxLO+8T/Jhax3K1yhDlxjZaPQUSHGKnTvkpiaomOuRcbUrdFkY8q+gNDJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BOPKUIVgYcSEsWbuL0nygWhEARJn0r6hmuKY9XfMPFc=;
+ b=eRRH76YURYSuMfaDOPsJToo0MB6vLHVFeaDd3NHEwnDeLN55m4C9+G+337F7g2RCf7mvNFyxmpq5yeEzSR0PnJveEmRFnzEgP8JReytVzKw3WG4nlRJ/FfraxEayhUkL6Q6jdb3DWEM83RtrS2ixdr1sL/ZfBNlcR4EErGKz5aBpGslHa+4hfehQWMqVtO+VWq9i5BI3FZ0Qa/LFkXsBM65/mpkmhEvwOxYSf05te21f9snnMA3yzsq2Wc8i/N/ZU0BR5xDZH41PpnUgK0p4tLZgCXUfc+aNALuh175e4NhTfptYifnncSZh6IDV2mEIzYv7mXcYwKN1vagSPAGo9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BOPKUIVgYcSEsWbuL0nygWhEARJn0r6hmuKY9XfMPFc=;
+ b=Ema3ZoDN5iCPddWqn3iW78SGCoQ/Wh3Hxs57JFJmH9UStXlT5Xl64D0z0X1fwsAyglMTOohxYqnT9anPUzVnBFtpNzkXFZxEZBPk90hM7/Nsh41jP0rUzltunGceYI0he9E6avi4V5yM+HgF18OQgWt5/z6FzmH7IjkWeT5JrqmicpjteA1R025WHEnmGtzws51aC7jgVLRNO0wrEkRc0y2Mm19blHpQfx4Wc0d2EO55vcFvfeVxPVMPTO96hyhoTt4pdjH6KbKNwxZ+dFVA8v/ypk4waJC5KOLZeiEDSpUrg5KMM2oBl3wZ7gIqfNR6VcJQViNB7luhoF87IhKaiQ==
+Received: from DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:395::21)
+ by PR3PR10MB4047.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:a4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 10:39:35 +0000
+Received: from DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d737:1f7c:45cd:b05e]) by DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d737:1f7c:45cd:b05e%6]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 10:39:35 +0000
+From:   "Starke, Daniel" <daniel.starke@siemens.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 1/8] tty: n_gsm: add restart flag to DLC specific ioctl
+ config
+Thread-Topic: [PATCH v4 1/8] tty: n_gsm: add restart flag to DLC specific
+ ioctl config
+Thread-Index: AQHZhYYPo9fVByIlJ0uLpD0lsXq4IK9bKAiw
+Date:   Mon, 15 May 2023 10:39:35 +0000
+Message-ID: <DB9PR10MB5881B63FBBA7912DF5A7A6A8E0789@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+References: <20230426080315.7595-1-daniel.starke@siemens.com>
+ <2023051316-flatly-spookily-5a0a@gregkh>
+In-Reply-To: <2023051316-flatly-spookily-5a0a@gregkh>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Enabled=true;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SetDate=2023-05-15T10:39:34Z;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Method=Privileged;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Name=restricted;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ActionId=52ddf114-7147-4ee1-9406-2422f0cc31f6;
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ContentBits=0
+document_confidentiality: Restricted
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB9PR10MB5881:EE_|PR3PR10MB4047:EE_
+x-ms-office365-filtering-correlation-id: c22fce7c-d610-4cc7-3800-08db5530ad54
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +KKRMDMwwWRCFu00R37+rhyhmHQtvcGxEeLWjvsCkIc+aZdcuaSyBXN8sd8rZgzSEfLur3RqggKfwo4oFxuQ5MJ2l/Dv0zwh0xUE7GY+Q5tzawZw0iN/ImxAgORksXJRp7U5JXXfoxTumBQKnbT56sJ6/I8VDFAvDYkth8MnCQZkNlB7fYkei/XR8svgQb8ALvvbWqpsc7kExjOqZha+5Do2TRu7UCCybLXZ6MlnOZANXmnsiHU9QC+Z30ZX/HmNlI3TSc9EHsJYTHOInfdu7Q9TOV3drVC9ybv9U6ZsrinTgYt1+bfX8Ikvr5amkX9/n/1GC5l/1smHbcMVC7WHqLJDRwRRypLupcCzfi8C4tu/5nRIbVepb1tZrSlGSmW0ZaxZrGUpL53jCMmQrUwaKvq+kBY36iY/2lnXEwD4/+Ro5od6T+BQYuhEbAxrUR4p+Cpq3kLQ0u8wztVaXZ7IZwo+e7B6JP/JK7iwrskzA4HcMuVWmKvnkdvfGeC75IEZitWY0af7DuFjqkSk8RwCoaNqaQolizaFVJrY9Me3dJUlY7fd95mAQZ2zO/4W8eb1LyqTOa9kKw1x0B+75rYMa2nnO4WIwKGB1B9bheh6G9i+rCixiM45tIkn+SJbZTLw
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199021)(64756008)(66446008)(6916009)(4326008)(8936002)(71200400001)(8676002)(66476007)(82960400001)(66556008)(316002)(76116006)(41300700001)(55016003)(478600001)(66946007)(122000001)(54906003)(38100700002)(186003)(9686003)(38070700005)(6506007)(4744005)(2906002)(26005)(33656002)(86362001)(7696005)(5660300002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Gp7Pt9ogXbAKjG1kq47ES916D4+BnvuiJiZZXAWfJkgRsqpVi+Q4F8X8FTYc?=
+ =?us-ascii?Q?egxYHDpaPXnqhdaTxpk9xrhbhE7RUVuhFwVMBCVad+1C7d/tGGjgdETCCD4k?=
+ =?us-ascii?Q?gnfKz43uivn//djV5sJ2ZjvGGkSu1QvZAE67bqf4UHmlk0C0cHQ6/jpj/qLq?=
+ =?us-ascii?Q?ukkR3JFrECd61TJT2x6+gnDss+1Zt6QskxGvKVi8NM1+ouHZLRaxVc3pTO+/?=
+ =?us-ascii?Q?5wZNLhK0ncNjgKkByQQH3/wrvV1wXrrQihpQXXg4Sc2phES74BDYqUE8ip0l?=
+ =?us-ascii?Q?eBfMffJrPlXwP06kXWKhh3/+leAQCByr328APOfMybM5CX6uq9ESZ4lcKiGb?=
+ =?us-ascii?Q?393S3z3MeyiI94XJEYexEAOZ1HqYm80XCwoP69nzcUPcs+l4KWmKpacRXu7A?=
+ =?us-ascii?Q?PmJvYH5c3Rl7VrHsctlEWxJQxcjx45Nf/oc7Uv0tHmRxZCALyIipcoDM72jK?=
+ =?us-ascii?Q?pL/KB9Q4zRVOBmssw3pgCzY7oYYMXxrN4XDYJHhPRbnuTJEEmFQpT07tHfOB?=
+ =?us-ascii?Q?3BsfvLr0V6Gt9//b5Ov7027WeyMM9NPcYn4hZaNDj/HBFCVwgXrbmM92WVx2?=
+ =?us-ascii?Q?22++p74dbyWazKGZ5bPcsQBlUgZf2tH+FUbhYkrdK+ErJbPQfdkAKvvKl1R1?=
+ =?us-ascii?Q?IjNEUrkZWjrVe0rg2yZSwEg6XQO6PPwQ49Za/G7PLXsCn4C+Ue3YbJYJmGhJ?=
+ =?us-ascii?Q?pon88t9AH6ABvnT/GJFqqAx39hDrJn/MYu/NN7SAOKN6E66BjFd0iMROLHpE?=
+ =?us-ascii?Q?TPSwmBPKwkHNP9geXJkv9GMG1njm86SrULpKrNT9PWXXQFHdvJA72m0XyoQM?=
+ =?us-ascii?Q?uVgR9klcmR6MvCKqHBX8k1+f709U/lC97bPAuTBK1K21yAOyX72TjLm7vbOx?=
+ =?us-ascii?Q?d34IKpEmEm0sF81GhhVblwtXZM4NuNUTRGzeErrsTt5/efsqT8JEqO5JBC+L?=
+ =?us-ascii?Q?9aw7sN1jhjQIg9EbeWkXMJU6yBcUSH9buw2j/QbQivKfFMpl/5EKPBio7ZE/?=
+ =?us-ascii?Q?AXn7V5J/2KSX83/7MoWn3pOcEb+Cv5dydZLrWjOvpL+dnVBssKD9CKdXdUa9?=
+ =?us-ascii?Q?ROlZinzW7WDl1qllviQ+NtnYdVFv/DCeLCF8GdH8O+OJ8qRDHtr9PV4AqoMB?=
+ =?us-ascii?Q?ABLgvetMpCMbuJDMtwDWD9rC3BJPRpiCzxmYjRSe+wXQPmo1hUoxIBeTcP5X?=
+ =?us-ascii?Q?QZfTaOJ7RzEMd8U53PvdU084SjdqAV9MiTqFT1Fw98rYYZY5j/zV+VvlqE/K?=
+ =?us-ascii?Q?jodDtxs/Y7GNJgrcf70HAiYlWHD9nyoNPOlAdRR5ZqGFcEi/QZK1Y5OJKZGy?=
+ =?us-ascii?Q?LZw3q9RktvdOyvXJ+TUuv1n9DRHTdYRp0vYEowLG8u4+dmNaNTyH/Ng5zCQj?=
+ =?us-ascii?Q?y3QPnZNG5fHAp8Gq96U2a/NQnuCHDjNb/2idNW+lFWXjS2kyLa1AKmRMGVbp?=
+ =?us-ascii?Q?D4YQFabLnTGpUEwyAThNaK05vsdDqkJn4/UfM8TwVZiDcNt/bpkLmsIuKmeU?=
+ =?us-ascii?Q?ZG3LOJzDUsIZllHY06EHp+fP7JspG0L755LZpFoXXKh+tLG4ytqXdOtNmhVx?=
+ =?us-ascii?Q?MM3xYIgDE+wnMej1yZCSBa8iWm7Sp7Pxsunsp4xK?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add microchip USB5807 HUB
-Content-Language: en-US
-To:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.f4f6ec47-9e6b-4978-b229-53520227ed28@emailsignatures365.codetwo.com>
- <20230515062502.29273-1-mike.looijmans@topic.nl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230515062502.29273-1-mike.looijmans@topic.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c22fce7c-d610-4cc7-3800-08db5530ad54
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 10:39:35.7327
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: X9UJCvNnx2kMrjnSxtdL+rsTAw8QgIYJPYBL17EqW9rVgBXboh5Ubgm1njVlwidhwVW/+lla/bTNqRfklXR8kJO7ecnWO/4CVa7wRgcgJaI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR10MB4047
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 08:25, Mike Looijmans wrote:
-> The USB5807 is a 7-port USB 3.1 hub that can be configured by I2C.
+> > +/* Force DLCI channel reset? Always cleared on retrieval. */
+>=20
+> I do not understand this comment, sorry.  What question are you asking?
+> What happens if it is set?  What happens if it is not set?  More
+> documentation is always good, especially for new user/kernel apis that
+> are not documented anywhere else.
 
-
-Thank you for your patch. There is something to discuss/improve.
-
-> +
-> +  swap-dx-lanes:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    maxItems: 8
-
-Missing minItems. Bug in the other binding caused this one to be hidden.
-
-> +    description:
-> +      Specifies the ports which will swap the differential-pair (D+/D-),
-> +      default is not-swapped.
-
+Ok, I will rephrase it to be more explicit about it.
 
 Best regards,
-Krzysztof
-
+Daniel Starke
