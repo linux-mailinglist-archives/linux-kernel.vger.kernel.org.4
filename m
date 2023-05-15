@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B408702AEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878A9702AF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240970AbjEOKzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S240807AbjEOK4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjEOKzr (ORCPT
+        with ESMTP id S232580AbjEOK4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:55:47 -0400
+        Mon, 15 May 2023 06:56:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394F61727;
-        Mon, 15 May 2023 03:55:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746841700
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:56:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A996662274;
-        Mon, 15 May 2023 10:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CC6C433D2;
-        Mon, 15 May 2023 10:55:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07915621AF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:56:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59524C433D2;
+        Mon, 15 May 2023 10:56:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684148144;
-        bh=wSC2+LZnwvDDwhiHmsHccGqTZjRzjmoqPgnNaz158w0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fmu3fzbqM6t6EoLnisa+XFQxyWh7rmFpB94zXys0vWlqzNblrm5uCHKvkQ3nUoiQB
-         i+9KlUXPrWlBmdoYyFQ6YVPBG5xOGiLZ31ovEwKbIJZAYHQ7H4cw54DXoWDEQFStJk
-         I6VaC7FEm+BWFh6Cirt1N+VT7PnF6KOdTb0qlPdvVK+cUUpbDvYKLUh8Ak9w2y1h1A
-         Vdg/IjsZgWsxQpj867JjNbInfJ5f4afhWzQ9ov8gFI1hxOZEW3D353vfjjtmRYJAna
-         fd/DcuQ4CUbglCLdshJRtG+w5ZEZW59nReWnnHhBxCKkkdue5KajKp2k58glyQkOwY
-         /XJZt6l3K/GUw==
-Date:   Mon, 15 May 2023 11:55:38 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Shengyu Qu <wiagn233@outlook.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        lgirdwood@gmail.com, broonie@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        conor.dooley@microchip.com,
-        Martin Botka <martin.botka@somainline.org>
-Subject: Re: [PATCH v3 2/3] mfd: axp20x: Add support for AXP15060 PMIC
-Message-ID: <20230515105538.GJ8963@google.com>
-References: <20230421150816.10513-1-wiagn233@outlook.com>
- <TY3P286MB261162D57695AC8164ED50E298609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
- <20230426142740.GN50521@google.com>
- <20230503120759.6fd6a7a9@donnerap.cambridge.arm.com>
- <19bccb62-b7e0-855d-fb5f-4fd3dde4f6f0@linaro.org>
- <20230515105229.GI8963@google.com>
+        s=k20201202; t=1684148201;
+        bh=fHK5dCug2gPUdjZmNcsYJ0DykkUO4j6fA7ZtXoQYB9o=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=dwCNgK4DNFBc16YYaHiZ9cxuT2eSxJyUF/GJpADAqKZ0IS+xJn/+XAC6LUI+Fjhlx
+         qGHopfpH1Uij/CEMfKb+hFJVoi5G0eI44SltJq7OOBCQW5PnDO25IWo2k0dT7CIj9S
+         xGkuXRk9e6LbbkUe8Sy6ohXUJJ+FVgMKZDJ5pZAAm/xypWWPs26ldm1ze3RjdkOJlZ
+         VtssLEKnQ6Og3qMNEWYRuGIlYf/Boc7L+E5ZFwfrh00Yvn7rjACHggy0SY4oDWr2yu
+         bAld+92gQBGnglOZEudp69P5kBx6s7aRSKfuObgnckQJZrZ6fOcq/0vocErEvEqf+n
+         JnNhCYm3mbkhA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Robin Gong <yibin.gong@nxp.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <20230510135718.2268529-1-alexander.stein@ew.tq-group.com>
+References: <20230510135718.2268529-1-alexander.stein@ew.tq-group.com>
+Subject: Re: [PATCH v2 1/1] regulator: pca9450: Fix BUCK2 enable_mask
+Message-Id: <168414819991.387159.6799893722514840038.b4-ty@kernel.org>
+Date:   Mon, 15 May 2023 19:56:39 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230515105229.GI8963@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,103 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023, Lee Jones wrote:
-
-> On Thu, 04 May 2023, Krzysztof Kozlowski wrote:
+On Wed, 10 May 2023 15:57:18 +0200, Alexander Stein wrote:
+> This fixes a copy & paste error.
+> No functional change intended, BUCK1_ENMODE_MASK equals BUCK2_ENMODE_MASK.
 > 
-> > On 03/05/2023 13:07, Andre Przywara wrote:
-> > > On Wed, 26 Apr 2023 15:27:40 +0100
-> > > Lee Jones <lee@kernel.org> wrote:
-> > > 
-> > > Hi Lee,
-> > > 
-> > > I see this patch in Linus' tree, but something must have gone wrong here,
-> > > can you please check? See below ...
-> > > 
-> > >> On Fri, 21 Apr 2023, Shengyu Qu wrote:
-> > >>
-> > >>> The AXP15060 is a PMIC chip produced by X-Powers, and could be connected
-> > >>> via an I2C bus.
-> > >>>
-> > >>> Describe the regmap and the MFD bits, along with the registers exposed
-> > >>> via I2C. Eventually advertise the device using a new compatible string
-> > >>> and add support for power off the system.
-> > >>>
-> > >>> The driver would disable PEK function if IRQ is not configured in device
-> > >>> tree, since some boards (For example, Starfive Visionfive 2) didn't
-> > >>> connect IRQ line of PMIC to SOC.
-> > >>>
-> > >>> GPIO function isn't enabled in this commit, since its configuration
-> > >>> operation is different from any existing AXP PMICs and needs
-> > >>> logic modification on existing driver. GPIO support might come in later
-> > >>> patches.
-> > >>>
-> > >>> ---  
-> > >>
-> > >> You must not use these above the tags or Git will drop them.
-> > >>
-> > >>> Changes since v2:
-> > >>>  - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch
-> > > 
-> > > So this patch was based on the AXP313a series, but I don't see that in
-> > > Linus' tree (or in any of your trees, if I have checked correctly).
-> > > There must have been a conflict, as this [PATCH v3 2/3] diff actually lists
-> > > the axp313a entry in the context lines.
-> > > 
-> > >>>  - Add axp_regulator_only_cells rather than directly using axp806_cells
-> > >>>    for cases that IRQ line isn't connected.
-> > >>>
-> > >>> Changes since v1:
-> > >>>  - Nothing
-> > >>>
-> > >>> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
-> > >>>
-> > >>> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
-> > >>> ---  
-> > >>
-> > >> Put change-logs here instead.
-> > >>
-> > >>>  drivers/mfd/axp20x-i2c.c   |   2 +
-> > >>>  drivers/mfd/axp20x.c       | 107 +++++++++++++++++++++++++++++++++++++
-> > >>>  include/linux/mfd/axp20x.h |  85 +++++++++++++++++++++++++++++
-> > >>>  3 files changed, 194 insertions(+)  
-> > >>
-> > >> I manually added the missing tags for this and the DT patch and applied.
-> > > 
-> > > So this patch doesn't list any tags aside from Shengyu's
-> > > Signed-off-by. The patch in Linus' tree list a Reviewed-by: from
-> > > Krzysztof, which I don't see anywhere in the thread, he just reviewed the
-> > > binding patch, AFAICT. 
-> > 
-> > Yep, I never reviewed this.
-> > 
-> > > I see your tentative R-b: on v2, but with the
-> > > request to rebase and resend, which he did with v3. The applied patch
-> > > looks like v3, but not on the base commit this was send against.
-> > > 
-> > > So I am slightly confused, and am also wondering what happened to the
-> > > AXP313a patches? I see the binding patch merged, but not the MFD part,
-> > > even though you replied saying so.
-> > 
-> > Because the patch #1 was broken, see:
-> > https://lore.kernel.org/all/TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
-> > 
-> > The SoB and Reviewed-by were after --- and apparently b4 understood it
-> > as cover letter and applied everywhere.
-> > 
-> > Lee,
-> > Do you have the latest b4? If yes, this should be reported as b4 bug,
-> > assuming you used it.
 > 
-> I am using b4, although the version I'm using is quite old (0.9.0).
-> 
-> Also, this was quite some time ago - I have slept since applying this
-> and do not distinctly remember doing so.  Thus, the application of your
-> R-b may well have been a mistake on my part.  I'll keep an eye for such
-> things in the future and if I see (and remember) an issue, I'll report
-> it.
 
-FYI, I just upgraded to 0.12.2.
+Applied to
 
--- 
-Lee Jones [李琼斯]
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[1/1] regulator: pca9450: Fix BUCK2 enable_mask
+      commit: d67dada3e2524514b09496b9ee1df22d4507a280
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
