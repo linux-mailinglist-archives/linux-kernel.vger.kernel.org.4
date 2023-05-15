@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB862702A50
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BCF702A4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241153AbjEOKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S241146AbjEOKQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241037AbjEOKQN (ORCPT
+        with ESMTP id S240832AbjEOKQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:16:13 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5022E19A4;
-        Mon, 15 May 2023 03:15:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684145543; cv=none;
+        Mon, 15 May 2023 06:16:12 -0400
+X-Greylist: delayed 179 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 May 2023 03:15:35 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02BC2106;
+        Mon, 15 May 2023 03:15:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684145544; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=tkq67o77DSOOySalWTFkTuGf6/bIN0Ir8zF6vP9mkPpNAoqFAC0AbUvaN1UiVyeq5X
-    m59+lbX0YZ5Li9Py3kJ5yv3u0P0o2YKIQKW6L7CzSd9iAM3/paDE9ccrT06Z7UbEeyiP
-    LUc41qIXch8Ha9fEYE5k8aVOdjYI+mMdeP6xHsTMYSr0A7XUwO1F0l6D1eLJvaidnkqm
-    HqwN0LmfWr8JVqSRwGVYweVq5vyY72H+jv9b9jkkymT7XJ8rTqGYlLlhMuziSep/JqXO
-    a0+lhq2Xen28B6j2e6KWvLMeL+aCoYHkYxpJ4X0OC8sMpb6mB8PYdrv4wG7CyGYWs353
-    bYmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145543;
+    b=qDTIIAzqDyNFmO0GjIMWdlTAsPfxoi9c54XrSPnPIBCD+/Ac0NqjPIo6RX6ZXYFA/v
+    XfSRhLCFFqaZY+hM+ieOq8rjSYgktwQ/tfFSeaZAmb+l7MHOBSN4ag8OibJxs/nNzGuJ
+    yqHI9U60zAdGQoDotldrbSoLHJ3sxR3Qfu9o4COGYCqhsQq6l6N9z7Kw7UQS2+hRBwIR
+    ftSNtfx19eFQlt3El2cFRuG67B9/TXphBjO+Sjj2KW4jf6hH/KJ9cnxjcR4SGfqgcLPZ
+    RArsEHlfPp6fstmF4Zj5Agy2rxlSMF7RV1jvuhngOzoXFykStQDrUs8J8MweXQjExpqD
+    ybsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145544;
     s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=zv1egBp4VF43Uy3k9TsxyBgv1FbKom8ab/az0E+stOE=;
-    b=m5KM5ma7u2oxMFenubqzXEFUOIsly0xnM+EAEzJInltm7jGhdSP/nVhOohPfHANop2
-    1q2Bvv5ee/7dhM3u65oTLgReJ/8T/tVW6VSiTFIqL6rAb3+Q6xeHICp33TJq+x3kS0Vo
-    7f83pTQFaSrIAwCZKzYSLPXm+8ntjpYv0M/OsE12xttETNWstg9jwSMHF/kG9CqyitwF
-    Vnh3HpvndrtVAolzcpnWehz+cGSWGl9lW16ETMcbHPbhqbbHn1YDjncUkEa5Uvs3m8dd
-    vgbvu/zH/miiku6yP3z7mjcrY/c0C0CzJOzL9vQHkRU1/0MelGkCMi+AskGR60S6rFQD
-    KzTA==
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=olVuiJZGfA/LHV3YVLMLjpbt55lnzWTZbOuO9FJhuMI=;
+    b=V6mauyZYvxwo5w3sMUAKskAbdeyyXVMqzWDRWwTuyaCbU9/14gd3OZUCy4fSob6NBl
+    +pP2fjAi05cVDIRS9WVjjmdDh4HOuGTqMstUiaOGL+XIs9QGySlmIgEiCO4M1q/1iGSu
+    MWPKD5uWoPvJ8KS524PAe+iZXzdMYRXYiM20K4LDW40/PHJ2AMGETzRzF5TxMXQxXVGa
+    u3uIVWYGvYN4z1wyYRYEN69RSAS6OQjxcWqlhYXj9so/o/hJH0q/I11WFB7yU5AJ5Ta0
+    q9xTCt4ceGjb82ozounPElMKglNLribywWcnBbr5wYmG7TgOygKjw0qkUhK+O4y4CM4Z
+    xfyg==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145543;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684145544;
     s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=zv1egBp4VF43Uy3k9TsxyBgv1FbKom8ab/az0E+stOE=;
-    b=imfAJaU/zyCIj2aNmPHz+L0wMpozqF4Kf0qRiMUbyl6cxspTG6BvDfetN7+zUAcgar
-    uW3tBTZGlugGeFhFKTVTgLDoWghi+sGxtr8SmiS2lDvyM/jGJloI76G3+8gBCntHn/Lh
-    4rcSYau61EKSwfLu9NnrNAdb9uD3pHIHx4cbZvywF+tQyyyvGK0BSy+KLelwxxWDTJVY
-    CgznmnZnLpLoaH+Q1uYtdSRn5jlbRyeUWrsvlehe2ttumpSKCMIO+2xyJn9COB0YP2Eb
-    MRIaXIEOk0x5yavD6NNLecKG2Gd3sUFVUT+nlGoG8ptBFKOHk0pReUViYkMr9AX6+mfJ
-    0raA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684145543;
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=olVuiJZGfA/LHV3YVLMLjpbt55lnzWTZbOuO9FJhuMI=;
+    b=CY+o6P9VjlLTzgmoC0ukNBftxBPWTp+7p5Sf63HXc0kUdrbe51QDEhkdp9Wtei8gCx
+    36mkGqS1MxlBxUd2aUZm8VSzzNvMDQ+iEyrYqhhDomIXlgCGy0lYIQlTuJVh/7vTZXjH
+    LZk02fO22jf3tEZDtUtM/hEzd/CoSxwcSfng63j1v3SMB17uUs5bzuub7PAMNgvhSk5h
+    fVs9gKoT23x5tolvWfYrBeCcMwEdRGVXI+f17rwhgYErxVvZpiA+WYm8KF5vlZFlNfSK
+    JKBYgV4xLhWiG84cXENjPysczqq8CwbFkGjrxDqLv8EBWXhxPuxZ28E+Od8VshjfWQ3m
+    NQpA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684145544;
     s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=zv1egBp4VF43Uy3k9TsxyBgv1FbKom8ab/az0E+stOE=;
-    b=73WOrUXfKDQ/beydx/HNIClkP/a39K12oD4b+YJigg6F4OLW1QjxVN6v7Z2a64biwI
-    4ukV4J9P0bsa2OXseuAg==
+    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
+    From:Subject:Sender;
+    bh=olVuiJZGfA/LHV3YVLMLjpbt55lnzWTZbOuO9FJhuMI=;
+    b=NpzOsiBC7Df5KrzmYokWRVug7C5LvTnshPFSpfjZg+SXou+lgjK2J8KTa7xrsVuGtr
+    lptCIGHXxBH9BsowsSBg==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4ly9TY="
 Received: from [192.168.244.3]
     by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4FACN1JF
+    with ESMTPSA id j6420az4FACO1JG
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Mon, 15 May 2023 12:12:23 +0200 (CEST)
+    Mon, 15 May 2023 12:12:24 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH 0/5] of: reserved_mem: Provide more control about
- allocation behavior
-Date:   Mon, 15 May 2023 12:12:15 +0200
-Message-Id: <20230510-dt-resv-bottom-up-v1-0-3bf68873dbed@gerhold.net>
+Date:   Mon, 15 May 2023 12:12:16 +0200
+Subject: [PATCH 1/5] dt-bindings: reserved-memory: Add
+ alloc-{bottom-up,top-down}
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAH8FYmQC/x2NQQrDIBAAvxL23AW11IZ+pfSgcW32EA27NhRC/
- l7T4zAMs4OSMCk8hh2ENlaupYO9DDDNobwJOXUGZ9zV3KzB1FBIN4y1tbrgZ0U/prvN2Xs3Zuh
- dDEoYJZRpPsslaCM5xSqU+fufPV/H8QMeIu6gfAAAAA==
+Message-Id: <20230510-dt-resv-bottom-up-v1-1-3bf68873dbed@gerhold.net>
+References: <20230510-dt-resv-bottom-up-v1-0-3bf68873dbed@gerhold.net>
+In-Reply-To: <20230510-dt-resv-bottom-up-v1-0-3bf68873dbed@gerhold.net>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -92,53 +95,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide more control about the allocation behavior for dynamically 
-allocated reserved memory by adding a "alloc-bottom-up" and 
-"alloc-top-down" option and by making the allocation order 
-deterministic.
+Right now the allocation behavior for dynamic reserved memory is
+implementation-defined. On Linux it is dependent on the architecture.
+This is usually fine if the address is completely arbitrary.
 
-The motivation for this patch series are the many different reserved 
-firmware regions on Qualcomm platforms. Currently it is often necessary 
-to duplicate them into each board DT, because minor differences for 
-some of the firmware regions (e.g. the firmware size) requires shifting
-the base address of all following firmware regions as well.
-
-I propose describing the actual requirements (size, alignment, 
-alloc-ranges) instead and allocating the reserved regions at runtime. 
-This allows defining only the actual device-specific part in the board 
-DT and having everything else shared in the SoC.dtsi.
-
-The series starts with two minor additions to the of_reserved_mem code. 
-The last two patches are examples that are meant to show the motivation
-more clearly for the MSM8916 SoC. PATCH 4/5 shows the current (static) 
-approach, then PATCH 5/5 switches to the dynamic allocation based on
-the first 3 patches.
-
-If the first 3 patches are accepted I would send the full MSM8916 DT
-changes in a separate series.
+However, when using "alloc-ranges" it is helpful to allow controlling
+this. That way you can make sure that the reservations are placed next
+to other (static) allocations to keep the free memory contiguous if
+possible.
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
-Stephan Gerhold (5):
-      dt-bindings: reserved-memory: Add alloc-{bottom-up,top-down}
-      of: reserved_mem: Implement alloc-{bottom-up,top-down}
-      of: reserved_mem: Use stable allocation order
-      [RFC] arm64: dts: qcom: msm8916: Enable modem on two phones
-      [RFC] arm64: dts: qcom: msm8916: Reserve firmware memory dynamically
+ .../bindings/reserved-memory/reserved-memory.yaml  | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
- .../bindings/reserved-memory/reserved-memory.yaml  | 39 ++++++++++++++++++++
- arch/arm64/boot/dts/qcom/apq8016-sbc.dts           | 13 +++++++
- .../boot/dts/qcom/msm8916-longcheer-l8150.dts      | 31 ++++++++++++++--
- .../boot/dts/qcom/msm8916-samsung-serranove.dts    | 21 +++++++++++
- arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi          | 29 ++++++++-------
- arch/arm64/boot/dts/qcom/msm8916.dtsi              | 42 ++++++++++++++++------
- drivers/of/of_reserved_mem.c                       | 14 +++++++-
- 7 files changed, 163 insertions(+), 26 deletions(-)
----
-base-commit: 715abedee4cd660ad390659aefa7482f05275bbd
-change-id: 20230510-dt-resv-bottom-up-68d71ff6628f
+diff --git a/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml b/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
+index c680e397cfd2..56f4bc6137e7 100644
+--- a/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
++++ b/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
+@@ -52,6 +52,18 @@ properties:
+       Address and Length pairs. Specifies regions of memory that are
+       acceptable to allocate from.
+ 
++  alloc-bottom-up:
++    type: boolean
++    description: >
++      Specifies that the memory region should be preferably allocated
++      at the lowest available address within the "alloc-ranges" region.
++
++  alloc-top-down:
++    type: boolean
++    description: >
++      Specifies that the memory region should be preferably allocated
++      at the highest available address within the "alloc-ranges" region.
++
+   iommu-addresses:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+     description: >
+@@ -93,6 +105,10 @@ properties:
+       system can use that region to store volatile or cached data that
+       can be otherwise regenerated or migrated elsewhere.
+ 
++dependencies:
++  alloc-bottom-up: [alloc-ranges]
++  alloc-top-down: [alloc-ranges]
++
+ allOf:
+   - if:
+       required:
+@@ -178,4 +194,27 @@ examples:
+         };
+       };
+     };
++
++  - |
++    / {
++      compatible = "foo";
++      model = "foo";
++
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      reserved-memory {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        ranges;
++
++        adsp_mem: adsp {
++          size = <0x0 0x600000>;
++          alignment = <0x0 0x100000>;
++          alloc-ranges = <0x0 0x86800000 0x0 0x10000000>;
++          alloc-bottom-up;
++          no-map;
++        };
++      };
++    };
+ ...
 
-Best regards,
 -- 
-Stephan Gerhold <stephan@gerhold.net>
+2.40.1
 
