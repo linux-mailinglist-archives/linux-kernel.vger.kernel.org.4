@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DED7021E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B57E7021E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbjEOC4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 22:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
+        id S230201AbjEOC5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 22:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjEOC4N (ORCPT
+        with ESMTP id S230094AbjEOC5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 22:56:13 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87095E78;
-        Sun, 14 May 2023 19:56:12 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-528cdc9576cso8362373a12.0;
-        Sun, 14 May 2023 19:56:12 -0700 (PDT)
+        Sun, 14 May 2023 22:57:08 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31AC110C2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 19:57:07 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6ab0c70801dso3192109a34.0
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 19:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684119371; x=1686711371;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X4xhz39Eaz6LAnCrMNzbKA/+Cn9J+aJWsPIquB3prFM=;
-        b=J6n5ChuF+lyefafB9qQpBzw//WZCeagGw0SDWgzNgpzkx+cSwJ84iAOI6xRf3DtKPC
-         Waeuj1yjyd/HG6zp6JPxGZJXNT/rVnRvzTExckiLUwJ5KTSDiyhfgNC6GP0/gFNtcihq
-         yboS8kIPV5N48ITOVKYpxq3Us/JOvBnvyCOXx5Zt1Gn/1h7+JX6+GG1RaK6BAiIr6IFD
-         +FfRfZRMXZYSW/d+sAQthDvM5JyNIAxBCkJDh2HmnHEoXPb0lbFBCPrQ8hPCpGHQa7ON
-         lYsgva/ASsKaRhcqn8xUm/V3G8urORLdtNKjPQCcn31noSGe1/luxc4lZaolaQUBiRxA
-         RUrQ==
+        d=bitbyteword.org; s=google; t=1684119426; x=1686711426;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=orD9+oAEHsYM3eHNPXXQ3Z9IvnqViMkDMQitrNknu9k=;
+        b=KEOoMxyN2r7qh+SqHJBbCgGFMX1J9rNNC/fls/UUAjXuPD5Qd3aBDFg1vgWVd3xu9w
+         biTcYLhFLwk25jhEHZm/aDgyT4kmcaNuykhy4TZZBGlRQHZJ/APbi02ogF3/o7EdyWD+
+         Khhy9KWyuKBCqMbCbD9OhC8CePlo8B9bmb7Lz1dr+6ze1Q/6n6FPUyorsQe81nmVt8xc
+         2LmDvtp21rDxzpFCMhzQrjE9vg/7ckVoa1QRy79zDTNEKAmSh5VNJzUR8x/SC10hPJex
+         15HLKXNMNMIDQacG/rOLyw5sOFJOCmz+Ah/3/dVmXV4iiAohF2v0z+y54spHUL9lDdE5
+         0PaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684119371; x=1686711371;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1684119426; x=1686711426;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=X4xhz39Eaz6LAnCrMNzbKA/+Cn9J+aJWsPIquB3prFM=;
-        b=MVF4jWY+R7Jsu8O5Th+RTk35lNXdEo4DLckijRW9kS6vss7N/ULf44XNecbXozGHty
-         2cfwax/X6r5wMGf7NU6wcbd0082jTBgSfkzHslz1rUYZiWBWlkTZi8m2Wids9/2yyrY8
-         Gcko0ABGOQyGWT9DN8XlN1FWqJY2fhEKRYJxk9rvNCLssdhTAe0DLYKh8jE5jn8QKLW4
-         6w+0y20PEH7Y/LrUiTe59mhKeW/A0SSzHVqErjpjjM2iQA+UhF+rh4cdaoGkOa0U2r03
-         Q6LuqT85VvKsLCuCzKbVppcHKOqGweXBsoaKOuNzf+mfLzNumE/n4s++UxLct+rWoGQX
-         OscA==
-X-Gm-Message-State: AC+VfDxGHShilZSZgZ1fovQkS+zoE1a4AyG0DREvg97Lx/3XzdllZ1ps
-        toG/UQ7ac1IyqA6hK6fONkT5vV8mxfc=
-X-Google-Smtp-Source: ACHHUZ55O7cwRUE3BGMWAH5ypbjwCv+kyOBAl6bmYRMzY5cz0vBaghfVaPejTXm/+3f1uk5QugTQTw==
-X-Received: by 2002:a17:902:ab5c:b0:1ae:1f8a:8a9c with SMTP id ij28-20020a170902ab5c00b001ae1f8a8a9cmr1091146plb.64.1684119371400;
-        Sun, 14 May 2023 19:56:11 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170902b94b00b00194d14d8e54sm12201194pls.96.2023.05.14.19.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 19:56:10 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] net: bcmgenet: Restore phy_stop() depending upon suspend/close
-Date:   Sun, 14 May 2023 19:56:07 -0700
-Message-Id: <20230515025608.2587012-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=orD9+oAEHsYM3eHNPXXQ3Z9IvnqViMkDMQitrNknu9k=;
+        b=ejYMBncKgpCWR1CAVhHLUiPhHS5v+VF5Vk94FjN/+Xsu6xdzMfQL0cqA0jhybXs+gE
+         qM1hY0VuTyJFJ26mGcMpL4zG/gD7TpV5y0Ch8mi2dUb0E9xEXEkC4Xv3AzbVVx/dEad8
+         rkx7XyVJ/6g+4opvPHGpl04okrKeLxbZIYUac5fgrduIHXKYpimXcxiCr7XjTEVJqQHH
+         zsAhbchDpV+lGuw99TlYsNWGEDfUTAA78IP5YDIK1QYl6HQ5Tu292FpszLVrgXERxOQw
+         zHYupzZTfYsB7D26bOaPXmknK1bhrlIBNryVu/7F2qtNMySvz7teYSQwBrXB6eelS0W6
+         peWA==
+X-Gm-Message-State: AC+VfDzDtqdPf20bkKd0xuZBn8yf7nLN3O0yDIsGqiopQm5AVIebMLRD
+        n+IRPc5YZWtxcFtcYrW0w4BExzbhY9UrI+dE6uIa/A==
+X-Google-Smtp-Source: ACHHUZ7UR8QzvAdf8bGWfhZR0PDTE58Gd2NNGQFrlqPBckkTMdzBn5HKgBIy0ak7Sy9K9O+x2secKxbxkCA1OnoPayc=
+X-Received: by 2002:a9d:6a0d:0:b0:6ab:15c9:b46c with SMTP id
+ g13-20020a9d6a0d000000b006ab15c9b46cmr9970194otn.4.1684119426518; Sun, 14 May
+ 2023 19:57:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
+ <20230509132534.09098acc@luca64> <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
+ <20230509224829.2fb547fd@nowhere> <20230509225417.61d36733@nowhere>
+ <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com>
+ <20230510090735.68f62cd4@nowhere> <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
+ <20230511093711.2be82409@nowhere> <CAO7JXPiKLFLVpqDKoRdu8c2Yd4AJ_2B2UyXJxD3kJAyiJ=n0_Q@mail.gmail.com>
+ <20230511220336.05866e80@nowhere> <CAO7JXPg9K4MA7H63Num8-BHBT-Y=GQ3BnEEvaEMVKmYsXCY7Sg@mail.gmail.com>
+In-Reply-To: <CAO7JXPg9K4MA7H63Num8-BHBT-Y=GQ3BnEEvaEMVKmYsXCY7Sg@mail.gmail.com>
+From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date:   Sun, 14 May 2023 22:56:55 -0400
+Message-ID: <CAO7JXPiYL_1ePxcoH=mvGq05S75jmA3SLjDf=oe0wU4Ozm4hrA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
+To:     luca abeni <luca.abeni@santannapisa.it>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removing the phy_stop() from bcmgenet_netif_stop() ended up causing
-warnings from the PHY library that phy_start() is called from the
-RUNNING state since we are no longer stopping the PHY state machine
-during bcmgenet_suspend().
+Hi Luca,
 
-Restore the call to phy_stop() but make it conditional on being called
-from the close or suspend path.
+> Sure, I shall split the patch. Joel also suggested splitting the patch
+> and I was probably wrong to think that the patch was simple to be a
+> single patch :-).
+>
+> Since equation (3) has theoretical backing, I am perfectly fine with
+> using it for our fix. Will have 2 patches as you suggested.
+>
+> Will get the v3 out soon..
+>
+Sorry for the delay. I was testing the fixes and noticed one other
+issue and was working on a fix.
 
-Fixes: c96e731c93ff ("net: bcmgenet: connect and disconnect from the PHY state machine")
-Fixes: 93e0401e0fc0 ("net: bcmgenet: Remove phy_stop() from bcmgenet_netif_stop()")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+This is with the extra_bw for tracking the unused bandwidth in the
+system. As you have shown me:
+ "extra_bw = Umax - ((Sum of bw of all tasks) / #cpus)"
+But I noticed that tracking the extra_bw globally while rest of the
+values as per-cpu causes issues with reclaiming especially when we
+have tasks with small bandwidth. This is because GRUB tries to
+proportionately divide unused bandwidth based on running bw on a cpu.
+So even if there is only a single task in a cpu, it reclaims less if
+its bandwidth is less.
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index f28ffc31df22..eca0c92c0c84 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -3450,7 +3450,7 @@ static int bcmgenet_open(struct net_device *dev)
- 	return ret;
- }
- 
--static void bcmgenet_netif_stop(struct net_device *dev)
-+static void bcmgenet_netif_stop(struct net_device *dev, bool stop_phy)
- {
- 	struct bcmgenet_priv *priv = netdev_priv(dev);
- 
-@@ -3465,6 +3465,8 @@ static void bcmgenet_netif_stop(struct net_device *dev)
- 	/* Disable MAC transmit. TX DMA disabled must be done before this */
- 	umac_enable_set(priv, CMD_TX_EN, false);
- 
-+	if (stop_phy)
-+		phy_stop(dev->phydev);
- 	bcmgenet_disable_rx_napi(priv);
- 	bcmgenet_intr_disable(priv);
- 
-@@ -3485,7 +3487,7 @@ static int bcmgenet_close(struct net_device *dev)
- 
- 	netif_dbg(priv, ifdown, dev, "bcmgenet_close\n");
- 
--	bcmgenet_netif_stop(dev);
-+	bcmgenet_netif_stop(dev, false);
- 
- 	/* Really kill the PHY state machine and disconnect from it */
- 	phy_disconnect(dev->phydev);
-@@ -4303,7 +4305,7 @@ static int bcmgenet_suspend(struct device *d)
- 
- 	netif_device_detach(dev);
- 
--	bcmgenet_netif_stop(dev);
-+	bcmgenet_netif_stop(dev, true);
- 
- 	if (!device_may_wakeup(d))
- 		phy_suspend(dev->phydev);
--- 
-2.34.1
+I think removing the extra_bw and tracking unused bandwidth using
+"max_bw - this_bw" should be okay. Since admission control will
+guarantee that we don't admit more than the capacity, we should be
+good with allowing tasks on a cpu to use max_bw while reclaiming.
 
+With the above theory, the code becomes simpler and is the same as the
+v2 patch.
+ max{u_i, (max_bw - Uinact - Uextra)}
+ = max {u_i, (max_bw - (this_bw - running_bw) - (max_bw - this_bw))}
+ = max {u_i, running_bw} = running_bw
+So, "dq = -(running_bw / max_bw) dt"
+
+v2 had passed all my tests. But having Uextra broke couple of those
+when it came to multiprocessors and after identifying the root cause
+and re-writing the equation, everything works now and passes all
+my tests. I have more confidence in the above equation as its derived
+from the SMP GRUB rule using our max_bw.
+
+Please have a look and let me know what you think about this.
+
+I have the v3 ready with patches split into 5(including doc patch).
+I shall post v3 soon after this so that you can see the code changes
+as well to have a better look.
+
+Thanks,
+Vineeth
