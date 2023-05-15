@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F297020E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 02:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE947020E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 02:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237950AbjEOAye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 20:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
+        id S234711AbjEOA5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 20:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbjEOAyc (ORCPT
+        with ESMTP id S229980AbjEOA5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 20:54:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0FA10DF;
-        Sun, 14 May 2023 17:54:31 -0700 (PDT)
+        Sun, 14 May 2023 20:57:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04D810F1;
+        Sun, 14 May 2023 17:57:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAE19618A8;
-        Mon, 15 May 2023 00:54:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE70C433D2;
-        Mon, 15 May 2023 00:54:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44924618A8;
+        Mon, 15 May 2023 00:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC775C433D2;
+        Mon, 15 May 2023 00:57:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684112070;
-        bh=dK+m8ExSLg1/Xdbg8Lkb6eK8yh4H4j645K0PpXqtwRk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hf+Ww+p1WClDZHI/4UF0izLlInAGTiBLQg6t55k4T8s2QZU/eoHVGA59yJeUXjCyC
-         +VU33v2wcqQP4xAsit+Cp7iqbYNhiz8BIR+BFyVRTAhhTlvGJ9z1yzTi0eg3Cgv0Fy
-         uSjaOLP1RArGWfy7jBmkh2N6wD9zO1Fl5FhCH9e68fopxHysNjp3UEQ0uF15saOBk9
-         50wsr5/SmYp9dyIgH0UDRrfvvPWcuHMX9tkVzGZK6eA4FgmxzeA20RvkYX16uGifY/
-         MK2lpygFxAgoQoSGswijS26kqwXYrrV6rQqEyAaswRRrVGtXQWHqZ0a7eOm3pPuMAb
-         yIOfI5JPL0RDg==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: [PATCH] modpost: fix section mismatch message for R_ARM_ABS32
-Date:   Mon, 15 May 2023 09:54:19 +0900
-Message-Id: <20230515005419.1293357-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        s=k20201202; t=1684112261;
+        bh=ZlJ0oVkgI0zlprQ/KHy+1dFyoFMssfZ33Pdw+Ts3G5A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NazBCmbOxlej/wvIz8qbl8Vl8u1N4E+MVuDyllmzUCkJBHkRKtjOpeTrtuHS+9U6U
+         sKkDVuCzNZ9wYbF1PU96UaKmk9B6bo8SdwABM/sT59ASkK2uw8dK9kr8l1G58RMkEq
+         BOdUUGbcla9igZeBjsD52hXm405Vf+npEz1abrw2RHSlePy5WhVJw9/x2Fg1b+ODkw
+         u/cp8GeQiFIpqKQDBwpe/MsAWOzSR5yxaUxck3cXDNDfkBzg9E+fY1DnGd0+hHj9vR
+         VntNfymGXOFd9EypCsX5qoGw+BME3kmeqP+Qf21k+Qhda5ZXiklRQA075Z6zc2t5M3
+         qutCYEtL1P9yw==
+Date:   Mon, 15 May 2023 08:57:30 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     imx@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        coresight@lists.linaro.org
+Subject: Re: [PATCH 1/1] arm64: dts: imx8mp: Add coresight trace components
+Message-ID: <20230515005730.GB727834@dragon>
+References: <20230505195151.1874071-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230505195151.1874071-1-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,72 +65,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The section mismatch check does not show proper warning messages for ARM.
+On Fri, May 05, 2023 at 03:51:51PM -0400, Frank Li wrote:
+> Add coresight trace components (ETM, ETF, ETB and Funnel).
+> 
+> ┌───────┐  ┌───────┐  ┌───────┐
+> │ CPU0  ├─►│ ETM0  ├─►│       │
+> └───────┘  └───────┘  │       │
+>                       │       │
+> ┌───────┐  ┌───────┐  │  ATP  │
+> │ CPU1  ├─►│ ETM1  ├─►│       │
+> └───────┘  └───────┘  │       │
+>                       │ FUNNEL│
+> ┌───────┐  ┌───────┐  │       │
+> │ CPU2  ├─►│ ETM2  ├─►│       │
+> └───────┘  └───────┘  │       │   ┌─────┐  ┌─────┐
+>                       │       │   │     │  │     │
+> ┌───────┐  ┌───────┐  │       │   │ M7  │  │ DSP │
+> │ CPU3  ├─►│ ETM3  ├─►│       │   │     │  │     │
+> └───────┘  └───────┘  └───┬───┘   └──┬──┘  └──┬──┘               AXI
+>                           │          │        │                   ▲
+>                           ▼          ▼        ▼                   │
+>                       ┌───────────────────────────┐   ┌─────┐   ┌─┴──┐
+>                       │          ATP FUNNEL       ├──►│ETF  ├─► │ETR │
+>                       └───────────────────────────┘   └─────┘   └────┘
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 179 ++++++++++++++++++++++
+>  1 file changed, 179 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> index a19224fe1a6a..0fa74477b9e1 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> @@ -304,6 +304,185 @@ soc: soc@0 {
+>  		nvmem-cells = <&imx8mp_uid>;
+>  		nvmem-cell-names = "soc_unique_id";
+>  
+> +		etm0: etm@28440000 {
+> +			compatible = "arm,coresight-etm4x", "arm,primecell";
+> +			reg = <0x28440000 0x10000>;
+> +			arm,primecell-periphid = <0xbb95d>;
+> +			cpu = <&A53_0>;
+> +			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> +			clock-names = "apb_pclk";
 
-Here, very simple test code.
+Have a newline between properties and child node.
 
-    #include <linux/init.h>
+> +			out-ports {
+> +				port {
+> +					etm0_out_port: endpoint {
+> +						remote-endpoint = <&ca_funnel_in_port0>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		etm1: etm@28540000 {
+> +			compatible = "arm,coresight-etm4x", "arm,primecell";
+> +			reg = <0x28540000 0x10000>;
+> +			arm,primecell-periphid = <0xbb95d>;
+> +			cpu = <&A53_1>;
+> +			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> +			clock-names = "apb_pclk";
+> +			out-ports {
+> +				port {
+> +					etm1_out_port: endpoint {
+> +						remote-endpoint = <&ca_funnel_in_port1>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		etm2: etm@28640000 {
+> +			compatible = "arm,coresight-etm4x", "arm,primecell";
+> +			reg = <0x28640000 0x10000>;
+> +			arm,primecell-periphid = <0xbb95d>;
+> +			cpu = <&A53_2>;
+> +			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> +			clock-names = "apb_pclk";
+> +			out-ports {
+> +				port {
+> +					etm2_out_port: endpoint {
+> +						remote-endpoint = <&ca_funnel_in_port2>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		etm3: etm@28740000 {
+> +			compatible = "arm,coresight-etm4x", "arm,primecell";
+> +			reg = <0x28740000 0x10000>;
+> +			arm,primecell-periphid = <0xbb95d>;
+> +			cpu = <&A53_3>;
+> +			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> +			clock-names = "apb_pclk";
+> +			out-ports {
+> +				port {
+> +					etm3_out_port: endpoint {
+> +						remote-endpoint = <&ca_funnel_in_port3>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		funnel {
+> +			/*
+> +			 * non-configurable funnel don't show up on the AMBA
+> +			 * bus.  As such no need to add "arm,primecell".
+> +			 */
+> +			compatible = "arm,coresight-static-funnel";
 
-    static int __initdata foo;
+Ditto
 
-    void set_foo(int x)
-    {
-            foo = x;
-    }
+> +			in-ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
 
-    int get_foo(int x)
-    {
-            return foo;
-    }
+Ditto
 
-If I compile it for ARM, modpost does not show the symbol name.
+> +				port@0 {
+> +					reg = <0>;
 
-  WARNING: modpost: vmlinux.o: section mismatch in reference: set_foo (section: .text) -> (unknown) (section: .init.data)
-  WARNING: modpost: vmlinux.o: section mismatch in reference: get_foo (section: .text) -> (unknown) (section: .init.data)
+Ditto
 
-If I compile it for other architectures, modpost shows the correct symbol name.
+> +					ca_funnel_in_port0: endpoint {
+> +						remote-endpoint = <&etm0_out_port>;
+> +					};
+> +				};
+> +				port@1 {
 
-  WARNING: modpost: vmlinux.o: section mismatch in reference: set_foo (section: .text) -> foo (section: .init.data)
-  WARNING: modpost: vmlinux.o: section mismatch in reference: get_foo (section: .text) -> foo (section: .init.data)
+Have a newline between nodes.
 
-For R_ARM_ABS32, addend_arm_rel() sets r->r_addend to a wrong value.
+Shawn
 
-arch/arm/kernel/module.c handles R_ARM_ABS32 as follows:
-
-        case R_ARM_ABS32:
-        case R_ARM_TARGET1:
-                *(u32 *)loc += sym->st_value;
-
-I just mimicked it in modpost.
-
-Fixes: 56a974fa2d59 ("kbuild: make better section mismatch reports on arm")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/mod/modpost.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index d4531d09984d..c93780d93caf 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1460,12 +1460,13 @@ static int addend_386_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
- static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
- {
- 	unsigned int r_typ = ELF_R_TYPE(r->r_info);
-+	unsigned int *location = reloc_location(elf, sechdr, r);
-+	Elf_Sym *sym;
- 
- 	switch (r_typ) {
- 	case R_ARM_ABS32:
--		/* From ARM ABI: (S + A) | T */
--		r->r_addend = (int)(long)
--			      (elf->symtab_start + ELF_R_SYM(r->r_info));
-+		sym = elf->symtab_start + ELF_R_SYM(r->r_info);
-+		r->r_addend = TO_NATIVE(*location) + sym->st_value;
- 		break;
- 	case R_ARM_PC24:
- 	case R_ARM_CALL:
--- 
-2.39.2
-
+> +					reg = <1>;
+> +					ca_funnel_in_port1: endpoint {
+> +						remote-endpoint = <&etm1_out_port>;
+> +					};
+> +				};
+> +				port@2 {
+> +					reg = <2>;
+> +					ca_funnel_in_port2: endpoint {
+> +						remote-endpoint = <&etm2_out_port>;
+> +					};
+> +				};
+> +				port@3 {
+> +					reg = <3>;
+> +					ca_funnel_in_port3: endpoint {
+> +						remote-endpoint = <&etm3_out_port>;
+> +					};
+> +				};
+> +			};
+> +			out-ports {
+> +				port {
+> +					ca_funnel_out_port0: endpoint {
+> +						remote-endpoint = <&hugo_funnel_in_port0>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		funnel@28c03000 {
+> +			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> +			reg = <0x28c03000 0x1000>;
+> +			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> +			clock-names = "apb_pclk";
+> +			in-ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +				port@0 {
+> +					reg = <0>;
+> +					hugo_funnel_in_port0: endpoint {
+> +						remote-endpoint = <&ca_funnel_out_port0>;
+> +					};
+> +				};
+> +				port@1 {
+> +					reg = <1>;
+> +					hugo_funnel_in_port1: endpoint {
+> +					/* M7 input */
+> +					};
+> +				};
+> +				port@2 {
+> +					reg = <2>;
+> +					hugo_funnel_in_port2: endpoint {
+> +					/* DSP input */
+> +					};
+> +				};
+> +				/* the other input ports are not connect to anything */
+> +			};
+> +			out-ports {
+> +				port {
+> +					hugo_funnel_out_port0: endpoint {
+> +						remote-endpoint = <&etf_in_port>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		etf@28c04000 {
+> +			compatible = "arm,coresight-tmc", "arm,primecell";
+> +			reg = <0x28c04000 0x1000>;
+> +			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> +			clock-names = "apb_pclk";
+> +			in-ports {
+> +				port {
+> +					etf_in_port: endpoint {
+> +						remote-endpoint = <&hugo_funnel_out_port0>;
+> +					};
+> +				};
+> +			};
+> +			out-ports {
+> +				port {
+> +					etf_out_port: endpoint {
+> +						remote-endpoint = <&etr_in_port>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		etr@28c06000 {
+> +			compatible = "arm,coresight-tmc", "arm,primecell";
+> +			reg = <0x28c06000 0x1000>;
+> +			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
+> +			clock-names = "apb_pclk";
+> +			in-ports {
+> +				port {
+> +					etr_in_port: endpoint {
+> +						remote-endpoint = <&etf_out_port>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>  		aips1: bus@30000000 {
+>  			compatible = "fsl,aips-bus", "simple-bus";
+>  			reg = <0x30000000 0x400000>;
+> -- 
+> 2.34.1
+> 
