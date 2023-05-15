@@ -2,103 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E08702B56
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFBB702B5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241090AbjEOLVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S231566AbjEOLXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241238AbjEOLVW (ORCPT
+        with ESMTP id S230225AbjEOLXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:21:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88899189;
-        Mon, 15 May 2023 04:21:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7A1A622A2;
-        Mon, 15 May 2023 11:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29F6C433EF;
-        Mon, 15 May 2023 11:21:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684149676;
-        bh=i8R4ZHlQNtjYj8yfNoBTP4YCAmQ9Q1y7fL64MkEt668=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=essTLvsZbf+9I99/Sz/ANCYPD1SvFqzuHuxe4Bp+km8E47gAhoPQgmE4NYTXsDByS
-         2+Cy9XvSVERsN8iXM/NHeFXPxMiYzx0GHItjVreqyd/1dymaxMeEzlBLaYrg2m/pZ9
-         B3Ja09Sb34qOMEg4uPOWDAof7ZJC0PXNLYlJb0STfrA3Hjep/nWKdljpFx3jPTftJZ
-         paowHtVBgw6rUL07k9y2UCKIFWLWVd3vmbOaV3f6+H0Q8yN1i5AF+NddWKtMNf+x41
-         D+B/OaNIhiP7Nc0SamjltMMsIcw0ZwbED5aBixk0LQ10pOqO9DLv7YKSsaTdD354xf
-         aAJbrfwmPV0Tg==
-Message-ID: <338aa895e02c795329c980cee67463faef0fc57e.camel@kernel.org>
-Subject: Re: [PATCH v3] NFSD: Remove open coding of string copy
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     linux-hardening@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 15 May 2023 07:21:14 -0400
-In-Reply-To: <20230515024044.2677124-1-azeemshaikh38@gmail.com>
-References: <20230515024044.2677124-1-azeemshaikh38@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Mon, 15 May 2023 07:23:33 -0400
+Received: from out-15.mta1.migadu.com (out-15.mta1.migadu.com [95.215.58.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1128F1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 04:23:32 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684149808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M6Ilqn7gAfhO8uMRZGXX1Jq1gxLBqE6k0MyZNiV0LaA=;
+        b=IkAcFrSDAqg/cSC/BtURjOLFbWSORRUcdYYTXMvp8T614UEs35Swwlf/Ky+P/IL9OdWIUC
+        ufrXtwzVTG87dBVJEFxTQEb58TUKGzMmX0Q+PrKCLUjKR7fTtCijqkb/b8oUyqh5Vdk8WZ
+        7Ng5Grf+u4JJmJ3d++e+El29FbP5uHM=
+Date:   Mon, 15 May 2023 11:23:27 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <055f964384a2bb4ba51c64a0be6072c9@linux.dev>
+Subject: Re: [PATCH] dma-contiguous: support per-numa CMA for all
+ architectures
+To:     "Christoph Hellwig" <hch@lst.de>
+Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com, paulmck@kernel.org,
+        bp@suse.de, akpm@linux-foundation.org, peterz@infradead.org,
+        rdunlap@infradead.org, kim.phillips@amd.com, rostedt@goodmis.org,
+        thunder.leizhen@huawei.com, ardb@kernel.org, bhe@redhat.com,
+        anshuman.khandual@arm.com, song.bao.hua@hisilicon.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
+In-Reply-To: <20230515094955.GB23880@lst.de>
+References: <20230515094955.GB23880@lst.de>
+ <20230512094210.141540-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-15 at 02:40 +0000, Azeem Shaikh wrote:
-> Instead of open coding a __dynamic_array(), use the __string() and
-> __assign_str() helper macros that exist for this kind of use case.
->=20
-> Part of an effort to remove deprecated strlcpy() [1] completely from the
-> kernel[2].
->=20
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcp=
-y
-> [2] https://github.com/KSPP/linux/issues/89
->=20
-> Fixes: 3c92fba557c6 ("NFSD: Enhance the nfsd_cb_setup tracepoint")
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> ---
->  fs/nfsd/trace.h |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/fs/nfsd/trace.h b/fs/nfsd/trace.h
-> index 4183819ea082..72a906a053dc 100644
-> --- a/fs/nfsd/trace.h
-> +++ b/fs/nfsd/trace.h
-> @@ -1365,19 +1365,19 @@ TRACE_EVENT(nfsd_cb_setup,
->  		__field(u32, cl_id)
->  		__field(unsigned long, authflavor)
->  		__sockaddr(addr, clp->cl_cb_conn.cb_addrlen)
-> -		__array(unsigned char, netid, 8)
-> +		__string(netid, netid)
->  	),
->  	TP_fast_assign(
->  		__entry->cl_boot =3D clp->cl_clientid.cl_boot;
->  		__entry->cl_id =3D clp->cl_clientid.cl_id;
-> -		strlcpy(__entry->netid, netid, sizeof(__entry->netid));
-> +		__assign_str(netid, netid);
->  		__entry->authflavor =3D authflavor;
->  		__assign_sockaddr(addr, &clp->cl_cb_conn.cb_addr,
->  				  clp->cl_cb_conn.cb_addrlen)
->  	),
->  	TP_printk("addr=3D%pISpc client %08x:%08x proto=3D%s flavor=3D%s",
->  		__get_sockaddr(addr), __entry->cl_boot, __entry->cl_id,
-> -		__entry->netid, show_nfsd_authflavor(__entry->authflavor))
-> +		__get_str(netid), show_nfsd_authflavor(__entry->authflavor))
->  );
-> =20
->  TRACE_EVENT(nfsd_cb_setup_err,
-
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+May 15, 2023 5:49 PM, "Christoph Hellwig" <hch@lst.de> wrote:=0A=0A> This=
+ looks fine to me. Can you please work with Barry to make sure=0A> the sl=
+ight different place of the initcall doesn't break anything=0A> for his s=
+etup? I doubt it would, but I'd rather have a Tested-by:=0A> tag.=0A=0ABa=
+rry's email is no longer in use. I can't reach him.
