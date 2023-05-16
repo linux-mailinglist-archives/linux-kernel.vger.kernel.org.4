@@ -2,141 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D5E7043F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5655A7043FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjEPDcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 23:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S229834AbjEPDdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 23:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjEPDce (ORCPT
+        with ESMTP id S229460AbjEPDdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 23:32:34 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553CC1732;
-        Mon, 15 May 2023 20:32:30 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 1608F41202;
-        Tue, 16 May 2023 03:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684207946;
-        bh=92q1PLUKc0SfASvf/P3OXVFQ0dTuTKcCi5d/Xu7OF+4=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=pC5sjxArJ3TluBRly9STHhWHkxbjaH2d64KQL7gj0qEj08FgwvrvgQz0z5x/N0c15
-         9o5eHTsMkf4xt4pSqW9i/FaRcHGTySOS8zSVvE2uRJC5uAuaA1KFingu2n4LwKQY7n
-         EPq8/FsDFv1w3f53gVErcQfRTkpFpRUG4Hs74g5W78gVlyCaxJq+n36ktQ8/LKoVAH
-         5DgJBqTdDJb3GXPx2PtrXCn1xea/cJVxmlmc+/lNOvRJWgwPVhdNnp/K7HLwt4eVR5
-         QIhV4ken2dpeKbOSEIK1xyK8do+d4GR0acfCZulltgX6QVfv5rSg5C3hKisbuo6NDj
-         2TC8oJrj2kq+w==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     tony.luck@intel.com
-Cc:     acelan.kao@canonical.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM is absent
-Date:   Tue, 16 May 2023 11:31:33 +0800
-Message-Id: <20230516033133.340936-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 15 May 2023 23:33:36 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948B01732
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:33:33 -0700 (PDT)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 34A0410047C28
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:33:33 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id ylRNpKUxToWVUylRNpYEGc; Tue, 16 May 2023 03:33:33 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=aeOkITkt c=1 sm=1 tr=0 ts=6462f98d
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=P0xRbXHiH_UA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=h/tK2v/1MFviao6VL+xeDTCM617+EXo2+kdWN5I3PvQ=; b=42Q9iyr7ufzKsN7RFafn+3cvIO
+        0nqu1nzkHQx736vGHSY5LPaBhenqQy1h3eIubXHAvG2NQ7GcUdQULVqDvxyjl6saGtvIQDKIw0KqX
+        0b342otRNPssZNbtlTEK7DFNZzLziSVF9QSynx5GoVw1hR9r5axX/RBbIQZHYh4T8MT+iLSH9ckK6
+        CUxF6nQY/LX7uy2avXz7xx6b10/TQA/z3YeU/HiGwWXGYXf4gSLKwnTYd3lVO2Pxn2SfU/uuZ9hW3
+        Qn2XOHAs1/qL2fe+pfGK5ohSl80PhOdXk3JApktCXxLW34k+Axnk9bmxcNhl3/XRWcoHDny4k6MaH
+        E0eXe5mA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:38850 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pylRM-002ErI-FF;
+        Mon, 15 May 2023 21:33:32 -0600
+Subject: Re: [PATCH 6.3 000/246] 6.3.3-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230515161722.610123835@linuxfoundation.org>
+In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <202ca5f3-da32-3e3f-23cd-3d322b8dbd5a@w6rz.net>
+Date:   Mon, 15 May 2023 20:33:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pylRM-002ErI-FF
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:38850
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following splat can be found on many systems equipped with EDAC:
-[   13.875276] UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
-[   13.875279] shift exponent -66 is negative
-[   13.875280] CPU: 11 PID: 519 Comm: systemd-udevd Not tainted 6.4.0-rc1+ #1
-[   13.875282] Hardware name: HP HP Z4 G5 Workstation Desktop PC/8962, BIOS U61 Ver. 01.01.15 04/19/2023
-[   13.875283] Call Trace:
-[   13.875285]  <TASK>
-[   13.875287]  dump_stack_lvl+0x48/0x70
-[   13.875295]  dump_stack+0x10/0x20
-[   13.875297]  __ubsan_handle_shift_out_of_bounds+0x156/0x310
-[   13.875302]  ? __kmem_cache_alloc_node+0x196/0x300
-[   13.875307]  skx_get_dimm_info.cold+0xac/0x15d [i10nm_edac]
-[   13.875312]  i10nm_get_dimm_config+0x240/0x360 [i10nm_edac]
-[   13.875316]  ? kasprintf+0x4e/0x80
-[   13.875321]  skx_register_mci+0x12b/0x1d0 [i10nm_edac]
-[   13.875324]  ? __pfx_i10nm_get_dimm_config+0x10/0x10 [i10nm_edac]
-[   13.875329]  i10nm_init+0x89f/0x1d10 [i10nm_edac]
-[   13.875333]  ? __pfx_i10nm_init+0x10/0x10 [i10nm_edac]
-[   13.875337]  do_one_initcall+0x46/0x240
-[   13.875342]  ? kmalloc_trace+0x2a/0xb0
-[   13.875346]  do_init_module+0x6a/0x280
-[   13.875350]  load_module+0x2419/0x2500
-[   13.875353]  ? security_kernel_post_read_file+0x5c/0x80
-[   13.875358]  __do_sys_finit_module+0xcc/0x150
-[   13.875360]  ? __do_sys_finit_module+0xcc/0x150
-[   13.875363]  __x64_sys_finit_module+0x18/0x30
-[   13.875365]  do_syscall_64+0x59/0x90
-[   13.875368]  ? syscall_exit_to_user_mode+0x2a/0x50
-[   13.875371]  ? do_syscall_64+0x69/0x90
-[   13.875372]  ? do_syscall_64+0x69/0x90
-[   13.875373]  ? do_syscall_64+0x69/0x90
-[   13.875374]  ? do_syscall_64+0x69/0x90
-[   13.875375]  ? syscall_exit_to_user_mode+0x2a/0x50
-[   13.875376]  ? do_syscall_64+0x69/0x90
-[   13.875377]  ? do_syscall_64+0x69/0x90
-[   13.875378]  ? do_syscall_64+0x69/0x90
-[   13.875379]  ? sysvec_call_function+0x4e/0xb0
-[   13.875381]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+On 5/15/23 9:23 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.3 release.
+> There are 246 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-When a DIMM slot is empty, the read value of mtr can be 0xffffffff,
-therefore the wrong "ranks" value creates shift-out-of-bounds error. The
-same issue can be found on NVDIMM too.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-So only consider DIMM/NVDIMM is present when the value of mtr/mcddrtcfg
-is not ~0.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/edac/sb_edac.c    | 2 +-
- drivers/edac/skx_common.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
-index 0c779a0326b6..bc5155e84514 100644
---- a/drivers/edac/sb_edac.c
-+++ b/drivers/edac/sb_edac.c
-@@ -211,7 +211,7 @@ static const int mtr_regs[] = {
- static const int knl_mtr_reg = 0xb60;
- 
- #define RANK_DISABLE(mtr)		GET_BITFIELD(mtr, 16, 19)
--#define IS_DIMM_PRESENT(mtr)		GET_BITFIELD(mtr, 14, 14)
-+#define IS_DIMM_PRESENT(mtr)		((mtr != ~0) && GET_BITFIELD(mtr, 14, 14))
- #define RANK_CNT_BITS(mtr)		GET_BITFIELD(mtr, 12, 13)
- #define RANK_WIDTH_BITS(mtr)		GET_BITFIELD(mtr, 2, 4)
- #define COL_WIDTH_BITS(mtr)		GET_BITFIELD(mtr, 0, 1)
-diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
-index b6d3607dffe2..2f975ffeaac9 100644
---- a/drivers/edac/skx_common.h
-+++ b/drivers/edac/skx_common.h
-@@ -50,8 +50,8 @@
- #define NUM_CHANNELS	MAX(SKX_NUM_CHANNELS, I10NM_NUM_CHANNELS)
- #define NUM_DIMMS	MAX(SKX_NUM_DIMMS, I10NM_NUM_DIMMS)
- 
--#define IS_DIMM_PRESENT(r)		GET_BITFIELD(r, 15, 15)
--#define IS_NVDIMM_PRESENT(r, i)		GET_BITFIELD(r, i, i)
-+#define IS_DIMM_PRESENT(r)		((r != ~0) && GET_BITFIELD(r, 15, 15))
-+#define IS_NVDIMM_PRESENT(r, i)		((r != ~0) && GET_BITFIELD(r, i, i))
- 
- #define MCI_MISC_ECC_MODE(m)	(((m) >> 59) & 15)
- #define MCI_MISC_ECC_DDRT	8	/* read from DDRT */
--- 
-2.34.1
+Tested-by: Ron Economos <re@w6rz.net>
 
