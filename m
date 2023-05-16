@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3F3705927
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DA970592C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjEPUzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        id S229939AbjEPU73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjEPUz2 (ORCPT
+        with ESMTP id S229566AbjEPU72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:55:28 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34065B83
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:55:23 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-528dd896165so10550356a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:55:23 -0700 (PDT)
+        Tue, 16 May 2023 16:59:28 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E3E59FB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:59:27 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64ab2a37812so8518013b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:59:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684270523; x=1686862523;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ej71yRmPRu8z2W7e0T8QvzS/1x48yctizGgEV8AzVJw=;
-        b=N1gLcB0OyN5P/6560cO03tcoXuunorDDRv8/T4ScocezDogLnisXjQRFXeEWIPaZNE
-         stvLqWsvqikUbOXMJQGdbb3NxGCGiZHtczbS/auERzUjSFl53q5J/HNhyLHJpxCM2BXz
-         KK9sMEAK94ZcYKUw4QSDoQUSsGVywLhBFCyDw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684270523; x=1686862523;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1684270767; x=1686862767;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ej71yRmPRu8z2W7e0T8QvzS/1x48yctizGgEV8AzVJw=;
-        b=Gu/j7FpRKXXQB1vPM0krJp/yxNOu16Z4wSy8Qvt42KBZgZiY03yycqPyacaIGRtalp
-         O3eAb2cZy9eIyx0o4pFwRQGFrcUuUzTm7FMz36Q1yhRV9ROXK3hu+u1d09Eb7wXE8G7S
-         MS4ZrAcWPFChFqn3PWDy6GP+U2nblJ0TX3Ti8B7nNrSKuo9Q770XQALnzo3oKFXRkZV1
-         XQ7sWNEIZ4/nZMbqs4FmbbGMxt2d96ZrN/l1JrQfVeRERR6q/FH/l+P3SCtV4oaT+sSI
-         Lyv5JozwPsMFE2w5Xkn1kboZnlqZFxsAj9PwxjPjV1KoFj2IY0qRRgIc5abHjX50Hag1
-         x8Fg==
-X-Gm-Message-State: AC+VfDzKzIpkLngoXVZv2zJ7cIjCRCnuw0KPNdEqDvtqJoSL8QTB/z6U
-        Gx2lGNd56fiwl+Zc/lPFr445mg==
-X-Google-Smtp-Source: ACHHUZ6w9wbKEGcdydgn0Ey6n7k6IZJ4OF5ycSXaYOoNrr5tDJZEyh1wKJB0NUIZQbaSs10wq8HRmQ==
-X-Received: by 2002:a05:6a20:9184:b0:100:d4ee:ba80 with SMTP id v4-20020a056a20918400b00100d4eeba80mr29367876pzd.27.1684270523147;
-        Tue, 16 May 2023 13:55:23 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u17-20020a62ed11000000b00649ac17779csm9633763pfh.160.2023.05.16.13.55.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 13:55:22 -0700 (PDT)
-Date:   Tue, 16 May 2023 13:55:21 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     gregkh@linuxfoundation.org, tony.luck@intel.com,
-        gpiccoli@igalia.com, johannes@sipsolutions.net, rafael@kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_shashim@quicinc.com, quic_pkondeti@quicinc.com
-Subject: Re: RFC design of device coredump collection on panic in Pstore
-Message-ID: <202305161353.0F771E0@keescook>
-References: <1683561060-2197-1-git-send-email-quic_mojha@quicinc.com>
+        bh=SM660rXSVcN9oWH/JkR/2dCwZ/0PPpeUcJ1TWBxalsE=;
+        b=qle+mMpD5mXwWmxOqRodWKMv/YfMpubGTtXVp2JF0NbGOFRBw2zJWfhe6D6GGITTi8
+         7v5SLXHMup7GpcU85gunOv2mT8flrnkSru94QJE7m1KlIkE4S0MaCNFefSdExv4DQYr9
+         O0PdGfKuo3yVUE0BuwIJDXWWhS915VGzAQj8npsSHOnGD7KNCdQRJbaCarXC4rmVfNsd
+         NT0YJTuBegyDPWU7B9ImsVhR65V4cy7CvyZojlL7bvH7zgDk5WhVlxmVAC3wmZE9awOL
+         o+exMTXltftfyIgXB8n8FTlh+zVLR9TxwJVXZcmXssRgFBjr8X/qfZWwjdyTy1bFV5/l
+         oOag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684270767; x=1686862767;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SM660rXSVcN9oWH/JkR/2dCwZ/0PPpeUcJ1TWBxalsE=;
+        b=G7I3sSz1Ux5LC4/oWd7fTn2a+NEH8WeteXOh+mWJKwm16IECjFoP0mlE0p8ijJLTqj
+         BhFSLOAFuN7cTvITG/wD6rPeVcdCdDuXv/rO+8x2eeBaqBVhQykFiMdhMHjY+sea6Un1
+         X+Upx9ozBy/Nt4mSfyowi/Wik8DkNDrdW7J3p1v66CgXvO4RhklliQPkgrcjST1n9JvC
+         1ja7+iQX6AcSE5PUcA4rxc5J0AE4gmgXKkH6XrJ/ZFgILXNi9B9NOBXWdWn9Xk3MGFNM
+         EkGHEhr7HDB92yFw42I2/v07z7/md/XI9Mun9TD9nt7CKlVguTbgMbSo6KpihHzhqfut
+         RZsg==
+X-Gm-Message-State: AC+VfDyhYp20JuFXa6Hs3O9J6RYIdzWfLMLgB5uIm7EiehuLqkxDS4l2
+        0iYhrgQ60TNdzdMvNF8F+TLG5RwCtGyZ6jKztZho9Q==
+X-Google-Smtp-Source: ACHHUZ5QkAsHl45WNADB6PJJGmiglZLzPlT8zMnVvlWVAVBBfHt0gSxR11NdcCPUNt8VdKG+KDumJRUxNyGMGXksKY0=
+X-Received: by 2002:a05:6a20:3c9e:b0:104:873:c3be with SMTP id
+ b30-20020a056a203c9e00b001040873c3bemr75149pzj.12.1684270766882; Tue, 16 May
+ 2023 13:59:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683561060-2197-1-git-send-email-quic_mojha@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230426203256.237116-1-pandoh@google.com>
+In-Reply-To: <20230426203256.237116-1-pandoh@google.com>
+From:   Jon Pan-Doh <pandoh@google.com>
+Date:   Tue, 16 May 2023 13:59:16 -0700
+Message-ID: <CAMC_AXXgBoRZOaDpCex+g_YeOdPQpKD3moQ8VMsqVEm2nqSrjg@mail.gmail.com>
+Subject: Re: [PATCH] iommu/amd: Fix domain flush size when syncing iotlb
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Nadav Amit <namit@vmware.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Sudheer Dantuluri <dantuluris@google.com>,
+        Gary Zibrat <gzibrat@google.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,28 +75,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 09:21:00PM +0530, Mukesh Ojha wrote:
-> 1. Device_coredump allocates some configurable contigous memory that can be controlled
->    via CONFIG or bootargs and later registers for panic notifiers.
-> 2. Notifier gets added.
-> 3. Pstore adds device_coredump as its front-end via dumper registration similar
->    to kmsg being dump today.
-> 4. Successful registration of dumper.
-> 5. A device driver(A-Z) can register their buffer to be dumped as part of panic.
-> 6. buffer gets added to the dump list.
-> 7. Panic occurs.
-> 8. iterate over registered drivers and copy their dump list to its own memory and if
->    it crosses device core dump memory log an error stop iterating.
-> 9. Similar to devcore_dump() inline with kmsg_dump()
-> 10.Copy the content to pstore region and this could be elf or raw binary that can be
->    discussed.
+Hi Joerg,
 
-Yeah, I think having something like the panic dump handlers for
-driver-specific data sounds like a fine idea (as long as we have actual
-users of such an interface).
+[Cc'ing stable@vger.kernel.org per Nadav's suggestion]
 
-I think it would be easy to add another front-end to pstore (via the
-enums, etc), and expose it via a new template filename in the pstorefs.
+This bug fix seems to have gotten the necessary reviews (AMD and
+previous commit author). Is it eligible to be applied?
 
--- 
-Kees Cook
+Thanks,
+Jon
+
+On Wed, Apr 26, 2023 at 1:32=E2=80=AFPM Jon Pan-Doh <pandoh@google.com> wro=
+te:
+>
+> When running on an AMD vIOMMU, we observed multiple invalidations (of
+> decreasing power of 2 aligned sizes) when unmapping a single page.
+>
+> Domain flush takes gather bounds (end-start) as size param. However,
+> gather->end is defined as the last inclusive address (start + size - 1).
+> This leads to an off by 1 error.
+>
+> With this patch, verified that 1 invalidation occurs when unmapping a
+> single page.
+>
+> Fixes: a270be1b3fdf ("iommu/amd: Use only natural aligned flushes in a VM=
+")
+> Signed-off-by: Jon Pan-Doh <pandoh@google.com>
+> Tested-by: Sudheer Dantuluri <dantuluris@google.com>
+> Suggested-by: Gary Zibrat <gzibrat@google.com>
+> ---
+>  drivers/iommu/amd/iommu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index 5a505ba5467e..da45b1ab042d 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -2378,7 +2378,7 @@ static void amd_iommu_iotlb_sync(struct iommu_domai=
+n *domain,
+>         unsigned long flags;
+>
+>         spin_lock_irqsave(&dom->lock, flags);
+> -       domain_flush_pages(dom, gather->start, gather->end - gather->star=
+t, 1);
+> +       domain_flush_pages(dom, gather->start, gather->end - gather->star=
+t + 1, 1);
+>         amd_iommu_domain_flush_complete(dom);
+>         spin_unlock_irqrestore(&dom->lock, flags);
+>  }
+> --
+> 2.40.0.634.g4ca3ef3211-goog
+>
