@@ -2,460 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28BD70594A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E370970594D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjEPVKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S230328AbjEPVKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjEPVKI (ORCPT
+        with ESMTP id S230222AbjEPVKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:10:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10C16A7C
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684271359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=643fYsQZ1fDNY6BVUTHGfYuSL8yeWpaf18fS6acrZro=;
-        b=RpdXJa7qGJAq0Vs5zMySB/PSIr+e6Ob80CIG/A8Z8Us/1CP2S0kUwEzf5LLCcGXo8FaKyT
-        x/olfXZlHSjIYSAl56SocuFFXUD/TJzlWq508bbWYe3AzfiQj4Zi6ALxw43Mh7olmWG1Ne
-        LSkwL2tOnVis7puKdFLFCocqB36akoM=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-490-qzLiPb35NpWmcsF5egwYsA-1; Tue, 16 May 2023 17:09:18 -0400
-X-MC-Unique: qzLiPb35NpWmcsF5egwYsA-1
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33389ee5c78so454885ab.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:09:18 -0700 (PDT)
+        Tue, 16 May 2023 17:10:38 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA0B72A0;
+        Tue, 16 May 2023 14:10:32 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-965e4be7541so2568146866b.1;
+        Tue, 16 May 2023 14:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1684271430; x=1686863430;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n73A5ikyqINLnlDhqbTvCi+0kCGqHkJ94IeKapmahoE=;
+        b=LhJ8iLFLtcCAuCR6l9IHP15t2tujl1me7wzUyl/h2h7LaxKrnYgA/fP7z/ZChEWxKV
+         muDNAeYJLCcJUTWrEAdbD2N1cckJQYPGjbomLonDRrjLb6NM96Jete/RDYf9GTTuCHiS
+         dsl/R57+DKVsFpO9vEyYvLuqOqg5yWG+dWO6zo6szGMQHCMtAKSadHIolidfi0tsnqym
+         S1c0kRMJDMbTdc4FS0MnIM2kHgksv1XdXMQxFJKLo0h3zFGzbCChpkxYgMCNGtPwR4Sp
+         ZF+NrCw7aD1zrsB7KJfpe+l4QcB1yZ1BfCIAQ/NSSU6T+1HG7dyzSVdf8jQvKGVWkN56
+         dL1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684271357; x=1686863357;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684271430; x=1686863430;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=643fYsQZ1fDNY6BVUTHGfYuSL8yeWpaf18fS6acrZro=;
-        b=LO0ZLxonh+yeTxRa4bSLaisK9oqZnp0DRhabafXkDvSdyOW7X75uNTuPRGunC4m5j2
-         T1viSRboflEqJQRoWbqtDFdFjS+pP5CUCcvdGD7xv+6fyMjVyU3FBLPIo/hDYEx+lIDJ
-         YBR3yjFTe90yI7En7RTbWiUCde2qbim6O3wuxkQePARmAH7gwHYVyxAF5xMgNvxdv1Po
-         po1rEdhNZM7xxh/U/79fQlbDhpl8Hb1X8htlX1TVB6H245mPBKRS4+H7e+FTxz3YcyvO
-         ceXdrRtQQWce1z5vzKYccmzWo11MvRDegLMZt6qoNAQ6QA+X5PtXNEi2RG4MDVkkTpJh
-         0Uug==
-X-Gm-Message-State: AC+VfDzjF364sZ7G7MIYLukoY9SgRit9eZaZDbNwpGXn1XEL5l/cw0tX
-        OoVwPwoMDwZ1P1gvZj69pOwfW2fca/di97Tisgdf9519fNQwDdsOS7lo0BNxww/fMUVqqjp1bm7
-        8oyn8vs3PQmtA6mQm33JYLtKv
-X-Received: by 2002:a92:b0e:0:b0:32a:f852:318a with SMTP id b14-20020a920b0e000000b0032af852318amr365528ilf.24.1684271357583;
-        Tue, 16 May 2023 14:09:17 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4KbImBC7NwUAl9CkIRFvUIfuuUaKWuqrlVRUgAc/QE3QoCsvFOiDWSJ7m1M/W/qt2VrM78ig==
-X-Received: by 2002:a92:b0e:0:b0:32a:f852:318a with SMTP id b14-20020a920b0e000000b0032af852318amr365508ilf.24.1684271357220;
-        Tue, 16 May 2023 14:09:17 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id b6-20020a92dcc6000000b003350c8ae201sm7019640ilr.29.2023.05.16.14.09.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 14:09:16 -0700 (PDT)
-Date:   Tue, 16 May 2023 15:09:14 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     <ankita@nvidia.com>
-Cc:     <jgg@nvidia.com>, <aniketa@nvidia.com>, <cjia@nvidia.com>,
-        <kwankhede@nvidia.com>, <targupta@nvidia.com>, <vsethi@nvidia.com>,
-        <acurrid@nvidia.com>, <apopple@nvidia.com>, <jhubbard@nvidia.com>,
-        <danw@nvidia.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com
-Subject: Re: [PATCH v2 1/1] vfio/nvgpu: Add vfio pci variant module for
- grace hopper
-Message-ID: <20230516150914.26ae99c3.alex.williamson@redhat.com>
-In-Reply-To: <20230509040734.24392-1-ankita@nvidia.com>
-References: <20230509040734.24392-1-ankita@nvidia.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        bh=n73A5ikyqINLnlDhqbTvCi+0kCGqHkJ94IeKapmahoE=;
+        b=JfkkL0dWxOC2Pw9pvlMP3JLa2Q860NB3i1mVL49WH1zflB1guRveKK2zgN1V54UmKh
+         nM+d7QDbiZjhbZd6PtNqMDcj8QbtP3MJGdY1r2C1P7CY+ssDPTxH99vRxn9GwGpwd8uE
+         tpBWvil4qOXXYojMz8VUjcwdNLxCQd6FQTjfJydsBKERMcAESegdvTOpfvMpdulGUL7K
+         BPSJbhaq2sanvb/7/GrhIid8Z9EqkbdofUO/2tHy4fPr7lzF1wayc9f4Z+GChM5cmxBk
+         Qr9ZjOhU8DD6ZOFoS8CxGffCTZeAoeOKJZw+EuQtuV5PXlb/3en+3qT/K1FfBn+IQC1i
+         hV+w==
+X-Gm-Message-State: AC+VfDxJxVWdT+6dhXiD4XuY9f/Z9vUTKLiRiR1XVYXcEVtPewc28bud
+        4U0E7DCOnBdIPxwtI87pJVs9FYMe0fr5YMjMI8Q=
+X-Google-Smtp-Source: ACHHUZ7VwJQ7m6uMhLM8YPBx9yE/to5sr9FgMcI7tXUUErTzps4roK4BFliZIW0ptbv7CVPU+2WGGuadwAU5jqQGePs=
+X-Received: by 2002:a17:907:9694:b0:96a:1ec1:2c9f with SMTP id
+ hd20-20020a170907969400b0096a1ec12c9fmr23981423ejc.12.1684271430372; Tue, 16
+ May 2023 14:10:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
+ <20230426095805.15338-7-ddrokosov@sberdevices.ru> <CAFBinCA2OhtVaCJDi8ZfAFLSE4oUgxYBDScaP_WW63curEK8Mg@mail.gmail.com>
+ <20230512140630.qd33rwzaalmadpmk@CAB-WSD-L081021>
+In-Reply-To: <20230512140630.qd33rwzaalmadpmk@CAB-WSD-L081021>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 16 May 2023 23:10:19 +0200
+Message-ID: <CAFBinCA8e9evk+9hTEgoNOD_+3DBst6vYDcradmr2c996jdUmw@mail.gmail.com>
+Subject: Re: [PATCH v14 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
+ controller driver
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Copying additional vfio-pci variant driver reviewers]
+Hello Dmitry,
 
-On Mon, 8 May 2023 21:07:34 -0700
-<ankita@nvidia.com> wrote:
+On Fri, May 12, 2023 at 4:06=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+es.ru> wrote:
+[...]
+> > > +static struct clk_regmap pwm_a_sel =3D {
+> > > +       .data =3D &(struct clk_regmap_mux_data){
+> > > +               .offset =3D PWM_CLK_AB_CTRL,
+> > > +               .mask =3D 0x1,
+> > > +               .shift =3D 9,
+> > > +       },
+> > > +       .hw.init =3D &(struct clk_init_data){
+> > > +               .name =3D "pwm_a_sel",
+> > > +               .ops =3D &clk_regmap_mux_ops,
+> > > +               .parent_data =3D pwm_abcd_parents,
+> > > +               .num_parents =3D ARRAY_SIZE(pwm_abcd_parents),
+> > > +               /* For more information, please refer to rtc clock */
+> > > +               .flags =3D CLK_SET_RATE_NO_REPARENT,
+> > Heiner is working on a series that adds common clock support to the
+> > PWM driver [0].
+> > I think his plans for a next step are adding support for SoCs where
+> > the PWM clocks are part of the peripheral clock controller (instead of
+> > being part of the PWM controller registers).
+> >
+>
+> Yes, I'm keeping up with this review and staying informed. It's worth
+> noting that the peripheral clock driver already includes PWM clocks,
+> with an important remark about reparenting being switched off. It's
+> described below.
+Indeed, this is why this question came to my mind
 
-> From: Ankit Agrawal <ankita@nvidia.com>
-> 
-> NVIDIA's upcoming Grace Hopper Superchip provides a PCI-like device
-> for the on-chip GPU that is the logical OS representation of the
-> internal propritary cache coherent interconnect.
-> 
-> This representation has a number of limitations compared to a real PCI
-> device, in particular, it does not model the coherent GPU memory
-> aperture as a PCI config space BAR, and PCI doesn't know anything
-> about cacheable memory types.
-> 
-> Provide a VFIO PCI variant driver that adapts the unique PCI
-> representation into a more standard PCI representation facing
-> userspace. The GPU memory aperture is obtained from ACPI using
-> device_property_read_u64(), according to the FW specification,
-> and exported to userspace as the VFIO_REGION that covers the first
-> PCI BAR. qemu will naturally generate a PCI device in the VM where the
-> cacheable aperture is reported in BAR1.
-> 
-> Since this memory region is actually cache coherent with the CPU, the
-> VFIO variant driver will mmap it into VMA using a cacheable mapping. The
-> mapping is done using remap_pfn_range().
-> 
-> This goes along with a qemu series to provides the necessary
-> implementation of the Grace Hopper Superchip firmware specification so
-> that the guest operating system can see the correct ACPI modeling for
-> the coherent GPU device.
-> https://github.com/qemu/qemu/compare/master...ankita-nv:qemu:dev-ankit/cohmem-0330
+> > Have you considered removing CLK_SET_RATE_PARENT from the &rtc clock
+> > so downstream clocks won't change the rtc clock rate by accident?
+> > Then we could drop the CLK_SET_RATE_NO_REPARENT flag from the PWM
+> > clocks to allow them to pick the best available parent (whether that's
+> > the rtc clock, xtal or sys_pll).
+> > That said, it would require managing the CLKID_RTC_32K_SEL clock (or
+> > it's parents) using assigned-clocks instead of doing so with the PWM
+> > (and other) clocks. Whether this would cause problems: I'm not sure,
+> > so I'm hoping that you can share some insights.
+> >
+> >
+>
+> Allow me to share my thoughts on this matter. From my understanding,
+> Amlogic provides an RTC clock that is both accurate and power-effective
+> in achieving a 32KHz signal from an internal xtal of 24MHz. However,
+> this requires a complex RTC divider with four parameters (m1, m2, n1,
+> n2), as it cannot be accomplished with a single divider. Our team has
+> measured the RTC clock using an oscilloscope on the GEN CLK pin and
+> found that it provides a stable 32KHz signal with acceptable jitter. On
+> the other hand, other approaches, such as the PWM way, yield less stable
+> and less accurate 32KHz signals with greater jitter.
+This part is clear to me (we may have even chatted on IRC how to use
+the GEN CLK output previously)
 
-This doesn't seem like a very stable link, a lore link to an RFC
-posting would be preferred.
+> Additionally, the CCF determines the best ancestor based on how close
+> its rate is to the given one, based on arithmetic calculations. However,
+> we have independent knowledge that a certain clock would be better, with
+> less jitter and fewer intermediaries, which will likely improve energy
+> efficiency. Sadly, the CCF cannot take this into account.
+I agree that the implementation in CCF is fairly simple. There's ways
+to trick it though: IIRC if there are multiple equally suitable clocks
+it picks the first one. For me all of this has worked so far which is
+what makes me curious in this case (not saying that anything is wrong
+with your approach).
 
-> This patch is split from a patch series being pursued separately:
-> https://lore.kernel.org/lkml/20230405180134.16932-1-ankita@nvidia.com/
-> 
-> Applied and tested over v6.3-rc7.
-> 
-> v1 -> v2
+Do you have a (real world) example where the RTC clock should be
+preferred over another clock?
 
-Patch version changes can go below the '---' below to keep them out of
-the committed change log.
+I'm thinking about the following scenario.
+PWM parents:
+- XTAL: 24MHz
+- sys: not sure - let's say 166.67MHz
+- RTC: 32kHz
 
-> - Updated the wording of reference to BAR offset and replaced with
->   index.
-> - The GPU memory is exposed at the fixed BAR2_REGION_INDEX.
+Then after that there's a divider and a gate.
 
-Nit, the commit log above still refers to BAR1.
+Let's say the PWM controller needs a 1MHz clock: it can take that from
+XTAL or sys. Since XTAL is evenly divisible to 1MHz CCF will pick that
+and use the divider.
+But let's say the PWM controller needs a 32kHz clock: CCF would
+automatically pick the RTC clock.
+So is your implementation there to cover let's say 1kHz where
+mathematically 24MHz can be divided evenly to 1kHz (and thus should
+not result in any jitter) but RTC gives better precision in the real
+world (even though it's off by 24Hz)?
 
-> - Code cleanup based on feedback comments.
-> 
-> Signed-off-by: Ankit Agrawal <ankita@nvidia.com>
-> ---
->  MAINTAINERS                     |   6 +
->  drivers/vfio/pci/Kconfig        |   2 +
->  drivers/vfio/pci/Makefile       |   2 +
->  drivers/vfio/pci/nvgpu/Kconfig  |  10 ++
->  drivers/vfio/pci/nvgpu/Makefile |   3 +
->  drivers/vfio/pci/nvgpu/main.c   | 217 ++++++++++++++++++++++++++++++++
->  6 files changed, 240 insertions(+)
->  create mode 100644 drivers/vfio/pci/nvgpu/Kconfig
->  create mode 100644 drivers/vfio/pci/nvgpu/Makefile
->  create mode 100644 drivers/vfio/pci/nvgpu/main.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0e64787aace8..6b55861bbfbe 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21949,6 +21949,12 @@ L:	kvm@vger.kernel.org
->  S:	Maintained
->  F:	drivers/vfio/pci/mlx5/
->  
-> +VFIO NVIDIA PCI DRIVER
-> +M:	Ankit Agrawal <ankita@nvidia.com>
-> +L:	kvm@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/vfio/pci/nvgpu/
-> +
->  VGA_SWITCHEROO
->  R:	Lukas Wunner <lukas@wunner.de>
->  S:	Maintained
-> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> index f9d0c908e738..ade18b0ffb7b 100644
-> --- a/drivers/vfio/pci/Kconfig
-> +++ b/drivers/vfio/pci/Kconfig
-> @@ -59,4 +59,6 @@ source "drivers/vfio/pci/mlx5/Kconfig"
->  
->  source "drivers/vfio/pci/hisilicon/Kconfig"
->  
-> +source "drivers/vfio/pci/nvgpu/Kconfig"
-> +
->  endif
-> diff --git a/drivers/vfio/pci/Makefile b/drivers/vfio/pci/Makefile
-> index 24c524224da5..0c93d452d0da 100644
-> --- a/drivers/vfio/pci/Makefile
-> +++ b/drivers/vfio/pci/Makefile
-> @@ -11,3 +11,5 @@ obj-$(CONFIG_VFIO_PCI) += vfio-pci.o
->  obj-$(CONFIG_MLX5_VFIO_PCI)           += mlx5/
->  
->  obj-$(CONFIG_HISI_ACC_VFIO_PCI) += hisilicon/
-> +
-> +obj-$(CONFIG_NVGPU_VFIO_PCI) += nvgpu/
-> diff --git a/drivers/vfio/pci/nvgpu/Kconfig b/drivers/vfio/pci/nvgpu/Kconfig
-> new file mode 100644
-> index 000000000000..066f764f7c5f
-> --- /dev/null
-> +++ b/drivers/vfio/pci/nvgpu/Kconfig
-> @@ -0,0 +1,10 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config NVGPU_VFIO_PCI
-> +	tristate "VFIO support for the GPU in the NVIDIA Grace Hopper Superchip"
-> +	depends on ARM64 || (COMPILE_TEST && 64BIT)
-> +	select VFIO_PCI_CORE
+> Given the advantages of the RTC clock, we wish to be able to control the
+> RTC as a parent for specific leaf clocks. This is achievable with the
+> 'assigned-clocks' feature of CCF OF, but it poses a significant
+> architectural problem. The 'assigned-clocks' node does not lock/pin the
+> parent, and a simple clk_set_rate() call can change the parent during
+> rate propagation.
+Are you aware of clk_set_rate_exclusive() and clk_rate_exclusive_{get,put}(=
+)?
+It locks a clock and all of its parents to a certain rate. Other
+consumers are unable to change the rate unless the lock is released
+again.
 
-I think this should be a 'depends on' as well, that's what we have for
-the other vfio-pci variant drivers.
+> In my opinion, an ideal solution to this problem would
+> be an additional patch to the CCF core that provides this locking
+> capability.As a board DTS developer, I know which clock I want to use
+> as the parent and have a strong reason for doing so, and I do not wish
+> to open up my parent muxing to other drivers. But until the behavior of
+> 'assigned-clocks' is not available, we will simply label all RTC
+> children with the CLK_SET_RATE_NO_REPARENT flag.
 
-> +	help
-> +	  VFIO support for the GPU in the NVIDIA Grace Hopper Superchip is
-> +	  required to assign the GPU device to a VM using KVM/qemu/etc.
-> +
-> +	  If you don't know what to do here, say N.
-> diff --git a/drivers/vfio/pci/nvgpu/Makefile b/drivers/vfio/pci/nvgpu/Makefile
-> new file mode 100644
-> index 000000000000..00fd3a078218
-> --- /dev/null
-> +++ b/drivers/vfio/pci/nvgpu/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_NVGPU_VFIO_PCI) += nvgpu-vfio-pci.o
-> +nvgpu-vfio-pci-y := main.o
-> diff --git a/drivers/vfio/pci/nvgpu/main.c b/drivers/vfio/pci/nvgpu/main.c
-> new file mode 100644
-> index 000000000000..bb09dada9907
-> --- /dev/null
-> +++ b/drivers/vfio/pci/nvgpu/main.c
-> @@ -0,0 +1,217 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved
-> + */
-> +
-> +#include <linux/pci.h>
-> +#include <linux/vfio_pci_core.h>
-> +
-> +struct dev_mem_properties {
-> +	uint64_t hpa;
-> +	uint64_t mem_length;
-> +};
-> +
-> +struct nvgpu_vfio_pci_core_device {
-> +	struct vfio_pci_core_device core_device;
-> +	struct dev_mem_properties mem_prop;
-> +};
-> +
-> +static int nvgpu_vfio_pci_open_device(struct vfio_device *core_vdev)
-> +{
-> +	struct vfio_pci_core_device *vdev =
-> +		container_of(core_vdev, struct vfio_pci_core_device, vdev);
-> +	int ret;
-> +
-> +	ret = vfio_pci_core_enable(vdev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vfio_pci_core_finish_enable(vdev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int nvgpu_vfio_pci_mmap(struct vfio_device *core_vdev,
-> +			struct vm_area_struct *vma)
-> +{
-> +	struct nvgpu_vfio_pci_core_device *nvdev = container_of(
-> +		core_vdev, struct nvgpu_vfio_pci_core_device, core_device.vdev);
-> +
-> +	unsigned long start_pfn;
-> +	unsigned int index;
-> +	u64 req_len, pgoff;
-> +	int ret = 0;
-> +
-> +	index = vma->vm_pgoff >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
-> +	if (index != VFIO_PCI_BAR2_REGION_INDEX)
-> +		return vfio_pci_core_mmap(core_vdev, vma);
-> +
-> +	/*
-> +	 * Request to mmap the BAR. Map to the CPU accessible memory on the
-> +	 * GPU using the memory information gathered from the system ACPI
-> +	 * tables.
-> +	 */
-> +	start_pfn = nvdev->mem_prop.hpa >> PAGE_SHIFT;
-> +	req_len = vma->vm_end - vma->vm_start;
-> +	pgoff = vma->vm_pgoff &
-> +		((1U << (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
-> +	if (pgoff >= (nvdev->mem_prop.mem_length >> PAGE_SHIFT))
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * Perform a PFN map to the memory. The device BAR is backed by the
-> +	 * GPU memory now. Check that the mapping does not overflow out of
-> +	 * the GPU memory size.
+PS: while writing this reply I found
+drivers/clk/sunxi-ng/ccu-sun6i-rtc.c which implements
+clk_ops.recalc_accuracy
+I'm not sure I understand this correctly but it seems that CCF is not
+using that information when making the decision which parent to use.
 
-vfio-pci-core return -EINVAL if the mapping length exceeds the resource
-length whereas this silently resizes the requested length.  IMO it
-should fail like vfio-pci-core does.
 
-Is our test for vm_end < vm_start in vfio-pci-core just paranoia?  I
-don't see an equivalent here.
-
-Can we also get a comment in the code outlining the various reasons
-that this "BAR" doesn't need the disabled access protections that
-vfio-pci-core implements?  For example outlining the behavior relative
-to BAR access while the memory enable bit is disabled, the bus being in
-reset, or the device being in a low-power state.  Thanks,
-
-Alex
-
-> +	 */
-> +	ret = remap_pfn_range(vma, vma->vm_start, start_pfn + pgoff,
-> +			      min(req_len, nvdev->mem_prop.mem_length - pgoff),
-> +			      vma->vm_page_prot);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vma->vm_pgoff = start_pfn + pgoff;
-> +
-> +	return 0;
-> +}
-> +
-> +static long nvgpu_vfio_pci_ioctl(struct vfio_device *core_vdev,
-> +			unsigned int cmd, unsigned long arg)
-> +{
-> +	struct nvgpu_vfio_pci_core_device *nvdev = container_of(
-> +		core_vdev, struct nvgpu_vfio_pci_core_device, core_device.vdev);
-> +
-> +	unsigned long minsz = offsetofend(struct vfio_region_info, offset);
-> +	struct vfio_region_info info;
-> +
-> +	if (cmd == VFIO_DEVICE_GET_REGION_INFO) {
-> +		if (copy_from_user(&info, (void __user *)arg, minsz))
-> +			return -EFAULT;
-> +
-> +		if (info.argsz < minsz)
-> +			return -EINVAL;
-> +
-> +		if (info.index == VFIO_PCI_BAR2_REGION_INDEX) {
-> +			/*
-> +			 * Request to determine the BAR region information. Send the
-> +			 * GPU memory information.
-> +			 */
-> +			info.offset = VFIO_PCI_INDEX_TO_OFFSET(info.index);
-> +			info.size = nvdev->mem_prop.mem_length;
-> +			info.flags = VFIO_REGION_INFO_FLAG_READ |
-> +				     VFIO_REGION_INFO_FLAG_WRITE |
-> +				     VFIO_REGION_INFO_FLAG_MMAP;
-> +			return copy_to_user((void __user *)arg, &info, minsz) ?
-> +				       -EFAULT : 0;
-> +		}
-> +	}
-> +
-> +	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
-> +}
-> +
-> +static const struct vfio_device_ops nvgpu_vfio_pci_ops = {
-> +	.name = "nvgpu-vfio-pci",
-> +	.init = vfio_pci_core_init_dev,
-> +	.release = vfio_pci_core_release_dev,
-> +	.open_device = nvgpu_vfio_pci_open_device,
-> +	.close_device = vfio_pci_core_close_device,
-> +	.ioctl = nvgpu_vfio_pci_ioctl,
-> +	.read = vfio_pci_core_read,
-> +	.write = vfio_pci_core_write,
-> +	.mmap = nvgpu_vfio_pci_mmap,
-> +	.request = vfio_pci_core_request,
-> +	.match = vfio_pci_core_match,
-> +	.bind_iommufd = vfio_iommufd_physical_bind,
-> +	.unbind_iommufd = vfio_iommufd_physical_unbind,
-> +	.attach_ioas = vfio_iommufd_physical_attach_ioas,
-> +};
-> +
-> +static struct nvgpu_vfio_pci_core_device *nvgpu_drvdata(struct pci_dev *pdev)
-> +{
-> +	struct vfio_pci_core_device *core_device = dev_get_drvdata(&pdev->dev);
-> +
-> +	return container_of(core_device, struct nvgpu_vfio_pci_core_device,
-> +			    core_device);
-> +}
-> +
-> +static int
-> +nvgpu_vfio_pci_fetch_memory_property(struct pci_dev *pdev,
-> +				     struct nvgpu_vfio_pci_core_device *nvdev)
-> +{
-> +	int ret;
-> +
-> +	/*
-> +	 * The memory information is present in the system ACPI tables as DSD
-> +	 * properties nvidia,gpu-mem-base-pa and nvidia,gpu-mem-size.
-> +	 */
-> +	ret = device_property_read_u64(&(pdev->dev), "nvidia,gpu-mem-base-pa",
-> +				       &(nvdev->mem_prop.hpa));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = device_property_read_u64(&(pdev->dev), "nvidia,gpu-mem-size",
-> +				       &(nvdev->mem_prop.mem_length));
-> +	return ret;
-> +}
-> +
-> +static int nvgpu_vfio_pci_probe(struct pci_dev *pdev,
-> +				const struct pci_device_id *id)
-> +{
-> +	struct nvgpu_vfio_pci_core_device *nvdev;
-> +	int ret;
-> +
-> +	nvdev = vfio_alloc_device(nvgpu_vfio_pci_core_device, core_device.vdev,
-> +				  &pdev->dev, &nvgpu_vfio_pci_ops);
-> +	if (IS_ERR(nvdev))
-> +		return PTR_ERR(nvdev);
-> +
-> +	dev_set_drvdata(&pdev->dev, nvdev);
-> +
-> +	ret = nvgpu_vfio_pci_fetch_memory_property(pdev, nvdev);
-> +	if (ret)
-> +		goto out_put_vdev;
-> +
-> +	ret = vfio_pci_core_register_device(&nvdev->core_device);
-> +	if (ret)
-> +		goto out_put_vdev;
-> +
-> +	return ret;
-> +
-> +out_put_vdev:
-> +	vfio_put_device(&nvdev->core_device.vdev);
-> +	return ret;
-> +}
-> +
-> +static void nvgpu_vfio_pci_remove(struct pci_dev *pdev)
-> +{
-> +	struct nvgpu_vfio_pci_core_device *nvdev = nvgpu_drvdata(pdev);
-> +	struct vfio_pci_core_device *vdev = &nvdev->core_device;
-> +
-> +	vfio_pci_core_unregister_device(vdev);
-> +	vfio_put_device(&vdev->vdev);
-> +}
-> +
-> +static const struct pci_device_id nvgpu_vfio_pci_table[] = {
-> +	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_NVIDIA, 0x2342) },
-> +	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_NVIDIA, 0x2343) },
-> +	{ PCI_DRIVER_OVERRIDE_DEVICE_VFIO(PCI_VENDOR_ID_NVIDIA, 0x2345) },
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(pci, nvgpu_vfio_pci_table);
-> +
-> +static struct pci_driver nvgpu_vfio_pci_driver = {
-> +	.name = KBUILD_MODNAME,
-> +	.id_table = nvgpu_vfio_pci_table,
-> +	.probe = nvgpu_vfio_pci_probe,
-> +	.remove = nvgpu_vfio_pci_remove,
-> +	.err_handler = &vfio_pci_core_err_handlers,
-> +	.driver_managed_dma = true,
-> +};
-> +
-> +module_pci_driver(nvgpu_vfio_pci_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_AUTHOR("Ankit Agrawal <ankita@nvidia.com>");
-> +MODULE_AUTHOR("Aniket Agashe <aniketa@nvidia.com>");
-> +MODULE_DESCRIPTION(
-> +	"VFIO NVGPU PF - User Level driver for NVIDIA devices with CPU coherently accessible device memory");
-
+Best regards,
+Martin
