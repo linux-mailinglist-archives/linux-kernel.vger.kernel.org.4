@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EEF70544A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470ED705450
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbjEPQpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50078 "EHLO
+        id S230521AbjEPQrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjEPQo7 (ORCPT
+        with ESMTP id S230203AbjEPQra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:44:59 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB52D3;
-        Tue, 16 May 2023 09:44:56 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id AEB205C0136;
-        Tue, 16 May 2023 12:44:55 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 16 May 2023 12:44:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684255495; x=1684341895; bh=a0
-        QSMgquVJjLt26wFDwRdzjQ08JBNc2KBuKLI/+RjAM=; b=N0PpyXwbn81UNs0mTk
-        CK8vcJ+Ya3baLHBAwmINm2QXQwnvtL+ef3tXk9/d7LSS9V4jgE9g32pqFVFz9jCT
-        VFFBs8v0y1FR1QktCwT29TJhsav97PVdzK4+jBqPQEOF3TtOCpsz8ViwOhTq3fqW
-        zA0IlPPoGbXJAbHP25oxqfhfWrL7ri7GTLAQeQFgCJGJIr+mDKKlrsN2APYSLlnT
-        KchPQ3F4BhgAU8IXZhkQp6aAisZkgvdEn4CwuwWyNHoxOIehtxzh/QeQGCEVHGuI
-        KHacOtsTQYfB0mvoneFX8Nc7mJFrUEbVXPpterpGRDXRBE6fMdEEiwUTgmMH71Qc
-        Em2w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684255495; x=1684341895; bh=a0QSMgquVJjLt
-        26wFDwRdzjQ08JBNc2KBuKLI/+RjAM=; b=YxffI1XPwbqKDUwGtvFhGU2qnv9ch
-        1Vj0yHy8syP3p/peaebGufl83mFvuO9Si2On2q1vEgiPXLvur3b0nI+uWg5byPSf
-        JfHpFDgzT+6Wau0o9DWX12V23xXM7WTLRB+qVo6Gesz6dnfNXLmQrLQ0EEJlJQ9E
-        44fJwhQUtApdchK8Eph6dJHtkH1peBSpisPuEkGO6A6lu71M8LOHTzmgiIr8HfRc
-        3yZhJXmn5QtqLoqxD2V4PuYYtgd0tlsq87ZPfjt/iUrWIUJfyvGUdc1adugh/Fwd
-        NVheyAj1rOUTs3PE4sRIRizbGx2Eew+sO32fDi0+fawvsHLDlS8zKUZVA==
-X-ME-Sender: <xms:BrNjZCSrrZwYMCL0d-loGJaPfBk9H2ag4M-K8es56hxd8mDchUBhiA>
-    <xme:BrNjZHxS2gIf40mYzmi7Qwne77oIN9Ch_iqTXR7Ni7WHv2LOx7OorEmeK5_YKcc26
-    YkEHV9eod_0eHY82jU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:BrNjZP3ewObr83PLNkLP5EtAMz0Izu8Pr-GihzRz19WLhZ7WukCeEA>
-    <xmx:BrNjZOCrlcQqOXKLSgIWE2nLEbUG_UlR_IjnRGCGJvMwQBt1-pdmbg>
-    <xmx:BrNjZLgy6RqjNRC7t-XNuhh7wHuxW6FOljx_h3rFe0VJWuZ6zohlhw>
-    <xmx:B7NjZGQB2OZD895s6d8jbrk3FyDUpdpGfLC1zeCxJqvOiLOcNppgew>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7EA51B60086; Tue, 16 May 2023 12:44:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
-In-Reply-To: <2023051643-overtime-unbridle-7cdd@gregkh>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-36-schnelle@linux.ibm.com>
- <2023051643-overtime-unbridle-7cdd@gregkh>
-Date:   Tue, 16 May 2023 18:44:34 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>
-Cc:     "Alan Stern" <stern@rowland.harvard.edu>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 12:47:30 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD9F3A9C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:47:26 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-32c83c66b1cso100472045ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684255646; x=1686847646;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4kqAFNzMiB3ZwK/e/ItswkNJsgBlTz31zqehRMdz+Ac=;
+        b=XgquwqvLNbDkiRPVfnqU1n76gnw4qQo6lUMlezqCtFltOedMPmcnAvkXvPdCFuhylm
+         mclF0gih61PAmtXrLslY7axZG74QEeWuxP6yd+uBQ9qpJ3TcBrCgQEUGRtruX3Z6NyYF
+         QeubN5hMQlbLVmVTqFEZ3V9Vn3hUIwcTtEkLw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684255646; x=1686847646;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4kqAFNzMiB3ZwK/e/ItswkNJsgBlTz31zqehRMdz+Ac=;
+        b=hxiBAkFIwxaoeW9PVqBi7CzEPUf9CCNRvlcswe2lSV/tDx2jL5WXWXTjrSRJon1mYA
+         uXTZ+p4s23lqY/m1EyS5vi5jdNcwvZh3M8apzJGlxsdOiN44WxZxkF5gdgggV8F5Wfcs
+         0vkiHxQDNcn96/gM1+p1Imzh74Ato/nqTnxCwaXggOn607SuNcHQfDz/bBsYy+rZ1/XI
+         kHPwP/gvIgQJN6Q1njP3cUQISUgGGt9c6diys210vM/bRYSLX19zy58v5EluiYAMPh/1
+         CjQYJtk8GnTbXGZ5t+C1WDonuzvv6tgkq5WH2lQnz/kZpYlDdQh7tXWhLqmWt1k2z/yg
+         r03w==
+X-Gm-Message-State: AC+VfDxEzYM/eFHE+AjTiKN0vaml67I1DQgWH9BlAg2/UC7pXsBZVvp1
+        Qc7QgBpsHiWkTdaAECmcW3z/bg==
+X-Google-Smtp-Source: ACHHUZ5PMmHS1ZQAfxj/ZSE8EJBw2wv392wyIBpq74SBz2GLLGdQUWCTJBVp7LJdjI9cHzN8lRkBbQ==
+X-Received: by 2002:a92:ca91:0:b0:335:ebb8:1138 with SMTP id t17-20020a92ca91000000b00335ebb81138mr12869924ilo.22.1684255646089;
+        Tue, 16 May 2023 09:47:26 -0700 (PDT)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id c41-20020a023f69000000b004141e72be1asm7771265jaf.175.2023.05.16.09.47.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 09:47:25 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>, stable@kernel.org
+Subject: [PATCH] SoC: rt5682: Disable jack detection interrupt during suspend
+Date:   Tue, 16 May 2023 16:46:30 +0000
+Message-ID: <20230516164629.1.Ibf79e94b3442eecc0054d2b478779cc512d967fc@changeid>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
-> On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
+The rt5682 driver switches its regmap to cache-only when the
+device suspends and back to regular mode on resume. When the
+jack detect interrupt fires rt5682_irq() schedules the jack
+detect work. This can result in invalid reads from the regmap
+in cache-only mode if the work runs before the device has
+resumed:
 
->>  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
->>  /* Support PCI only */
->>  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
->>  {
->> -	return inl(uhci->io_addr + reg);
->> +	return UHCI_IN(inl(uhci->io_addr + reg));
->>  }
->>  
->>  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
->>  {
->> -	outl(val, uhci->io_addr + reg);
->> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
->
-> I'm confused now.
->
-> So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
->
-> But if it isn't, then these are just no-ops that do nothing?  So then
-> the driver will fail to work?  Why have these stubs at all?
->
-> Why not just not build the driver at all if this option is not enabled?
+[   56.245502] rt5682 9-001a: ASoC: error at soc_component_read_no_lock on rt5682.9-001a for register: [0x000000f0] -16
 
-If I remember correctly, the problem here is the lack of
-abstractions in the uhci driver, it instead supports all
-combinations of on-chip non-PCI devices using readb()/writeb()
-and PCI devices using inb()/outb() in a shared codebase.
+Disable the jack detection interrupt during suspend and
+re-enable it on resume. The driver already schedules the
+jack detection work on resume, so any state change during
+suspend is still handled.
 
-A particularly tricky combination is a kernel that supports on-chip
-UHCI as well as CONFIG_USB_PCI (for EHCI/XHCI) but does not support
-I/O ports because of platform limitations. The trick is to come up
-with a set of changes that doesn't have to rewrite the entire logic
-but also doesn't add an obscene number of #ifdef checks.
+This is essentially the same as commit f7d00a9be147 ("SoC:
+rt5682s: Disable jack detection interrupt during suspend")
+for the rt5682s.
 
-That said, there is a minor problem with the empty definition
+Cc: stable@kernel.org
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-+#define UHCI_OUT(x)
+ sound/soc/codecs/rt5682-i2c.c | 4 +++-
+ sound/soc/codecs/rt5682.c     | 6 ++++++
+ sound/soc/codecs/rt5682.h     | 1 +
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-I think this should be "do { } while (0)" to avoid warnings
-about empty if/else blocks.
+diff --git a/sound/soc/codecs/rt5682-i2c.c b/sound/soc/codecs/rt5682-i2c.c
+index 2935c1bb81f3..5bc46b041786 100644
+--- a/sound/soc/codecs/rt5682-i2c.c
++++ b/sound/soc/codecs/rt5682-i2c.c
+@@ -267,7 +267,9 @@ static int rt5682_i2c_probe(struct i2c_client *i2c)
+ 		ret = devm_request_threaded_irq(&i2c->dev, i2c->irq, NULL,
+ 			rt5682_irq, IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING
+ 			| IRQF_ONESHOT, "rt5682", rt5682);
+-		if (ret)
++		if (!ret)
++			rt5682->irq = i2c->irq;
++		else
+ 			dev_err(&i2c->dev, "Failed to reguest IRQ: %d\n", ret);
+ 	}
+ 
+diff --git a/sound/soc/codecs/rt5682.c b/sound/soc/codecs/rt5682.c
+index f6c798b65c08..5d992543b791 100644
+--- a/sound/soc/codecs/rt5682.c
++++ b/sound/soc/codecs/rt5682.c
+@@ -2959,6 +2959,9 @@ static int rt5682_suspend(struct snd_soc_component *component)
+ 	if (rt5682->is_sdw)
+ 		return 0;
+ 
++	if (rt5682->irq)
++		disable_irq(rt5682->irq);
++
+ 	cancel_delayed_work_sync(&rt5682->jack_detect_work);
+ 	cancel_delayed_work_sync(&rt5682->jd_check_work);
+ 	if (rt5682->hs_jack && (rt5682->jack_type & SND_JACK_HEADSET) == SND_JACK_HEADSET) {
+@@ -3027,6 +3030,9 @@ static int rt5682_resume(struct snd_soc_component *component)
+ 	mod_delayed_work(system_power_efficient_wq,
+ 		&rt5682->jack_detect_work, msecs_to_jiffies(0));
+ 
++	if (rt5682->irq)
++		enable_irq(rt5682->irq);
++
+ 	return 0;
+ }
+ #else
+diff --git a/sound/soc/codecs/rt5682.h b/sound/soc/codecs/rt5682.h
+index d568c6993c33..e8efd8a84a6c 100644
+--- a/sound/soc/codecs/rt5682.h
++++ b/sound/soc/codecs/rt5682.h
+@@ -1462,6 +1462,7 @@ struct rt5682_priv {
+ 	int pll_out[RT5682_PLLS];
+ 
+ 	int jack_type;
++	int irq;
+ 	int irq_work_delay_time;
+ };
+ 
+-- 
+2.40.1.606.ga4b1b128d6-goog
 
-    Arnd
