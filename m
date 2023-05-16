@@ -2,135 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D00704C81
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590E1704C88
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjEPLkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
+        id S232734AbjEPLlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231401AbjEPLkQ (ORCPT
+        with ESMTP id S231401AbjEPLlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:40:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9891F2D4C;
-        Tue, 16 May 2023 04:40:15 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GBcXVQ020880;
-        Tue, 16 May 2023 11:39:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=YkhRQbWj+jTt2Ue3u9TW20D+7Bv+YjDbhfGt4q6glLc=;
- b=cdIxkgcMMZS1xBXzAgbxJRLIs/g6eEN/67NggdAKbmFAU7k6/CYtGXCfmRZS/rZSkG5p
- 4MGVz2Qfp1JqT4pL4zBGVEsPODLwNux4CQcUYGkHl555az82/pIpzupitbws8z6fMO8o
- bINaR6tJFhaymVnIWqSnrH5Z9y3L9UwN13xzHrjK3b0I82BN0X7mXDaFFfJZWBLp8VDI
- FX/vH9Xc4oq5I7W0u+T3rNxRPBIjSPBkHvyVJL0yLKYZni34JjPKyvvq2tDe8Ix9IqQ6
- 449JNsG95QlxspP308eUDEKPk9hp2E/Isw+FEabZUpuSoSh5l3auzzVrfrREKb4BBRq5 9Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7jp2tu6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:39:32 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GBcmcb021497;
-        Tue, 16 May 2023 11:39:31 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7jp2tr9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:39:31 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G9c7Zi031636;
-        Tue, 16 May 2023 11:39:28 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qj2651b5b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:39:28 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GBdQWU57934228
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:39:26 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A07B20040;
-        Tue, 16 May 2023 11:39:26 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C8A32004B;
-        Tue, 16 May 2023 11:39:25 +0000 (GMT)
-Received: from [9.152.212.232] (unknown [9.152.212.232])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:39:25 +0000 (GMT)
-Message-ID: <97b01d4cefb0310c6956bac198e564b212fb93ca.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 03/41] char: impi, tpm: depend on HAS_IOPORT
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Corey Minyard <minyard@acm.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org
-Date:   Tue, 16 May 2023 13:39:25 +0200
-In-Reply-To: <60e9d000-0793-1421-3045-fdb74976373c@molgen.mpg.de>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-         <20230516110038.2413224-4-schnelle@linux.ibm.com>
-         <60e9d000-0793-1421-3045-fdb74976373c@molgen.mpg.de>
+        Tue, 16 May 2023 07:41:05 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81773588;
+        Tue, 16 May 2023 04:41:04 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-435f36ad948so3575835137.3;
+        Tue, 16 May 2023 04:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684237264; x=1686829264;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xhhn1bylguQnKhsvPVu6RzK7RBkZkZ704VD0zWcdraI=;
+        b=BLJuzFJeS+HtLZZwrc3bJint/tA9JolAcI0fBET7eXQAHR59u3OX3hbZNXYZkagwPG
+         LTruz+CyOTxzCQtTmb0R+G4PHrNItCtcQHxbngrGvYvdkZg27Ng6gx/XWT/SS2nHvagk
+         vTIUb+02Shb5REDow7XFGQFYHb6mEFnCmQVrmp04KYdTWZ55Sae5ewBv6GKharHhCpp4
+         SK/hO+TrijfV/Jv/n+R/S346JeOqgKuo4uZd2B9oVQoc8Bo3Ueli2MybCav/hOMfJmXA
+         EEMGNRSdf+R6tIV3rYrfwEzTaM17CgDGe9XK4QcgvOyZ5ghL89VbuVLcBYYTmUnc2QyD
+         H8Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684237264; x=1686829264;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xhhn1bylguQnKhsvPVu6RzK7RBkZkZ704VD0zWcdraI=;
+        b=aU7VudFxpkuv2s3jfzhbQanDySYF9TYHfZkCB+jqE54agyHEkzcrf0G3dIlqbVqX4l
+         TYPWnC/qIVwNwQyFHelO3neSorz50FWthznx9f9FOjG2o4M49lI0fcWCv34xP4+//BHS
+         TzTY0iyER01zf/KIDtnfjuS6HbERuyX2Qrx/FjKyWGXpJ6re+07eGy3+xnxpTUnJ8yCA
+         w7t5DNOT7K9h6x5DTJjA2G2LXelavQQBSwPhosc+OecCHrbySklCcucOksaQGOmwovv2
+         GaSKVkjuB01Duk0lgu7ifvrin6tWlw59kF9CMNYc/nJfRMzT+pxeMhYsWJBmlYSxkfRQ
+         +gfQ==
+X-Gm-Message-State: AC+VfDwuU0sblAHq2YmNu53MBzcL5sMH83GjTPNaDJ8YI9oqaqnRTG3E
+        HjEbscbzbFRujs2A2ZebHu3qQWWv3kViwL3KdN0=
+X-Google-Smtp-Source: ACHHUZ6cgEwBFxo7272nFrkM4cDS/VvQFcB7BNEP8xuZ4EOSXtL+E/RNSDQs0SRE3y7RGOTk3jRY49s4IK29doaiXoo=
+X-Received: by 2002:a67:ee4b:0:b0:435:5148:b0e4 with SMTP id
+ g11-20020a67ee4b000000b004355148b0e4mr14019615vsp.7.1684237263874; Tue, 16
+ May 2023 04:41:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230515133629.1974610-1-chengzhihao1@huawei.com> <20230515133629.1974610-3-chengzhihao1@huawei.com>
+In-Reply-To: <20230515133629.1974610-3-chengzhihao1@huawei.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 16 May 2023 14:40:52 +0300
+Message-ID: <CAOQ4uxj-j-ugHrvvfS+XF=rzE3NH_NaZgf4_rWBxvaGYO3iN-w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ovl: get_acl: Fix null pointer dereference at
+ realinode in rcu-walk mode
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     miklos@szeredi.hu, brauner@kernel.org,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NkBegRieKaiZe8tSrIXbhLD0l1pYOvlA
-X-Proofpoint-GUID: 8VH3GLGz6RvnThNaF42HrH7TLEJAxoth
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 mlxlogscore=990
- adultscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160098
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-16 at 13:06 +0200, Paul Menzel wrote:
-> Dear Niklas,
->=20
->=20
-> Am 16.05.23 um 12:59 schrieb Niklas Schnelle:
->=20
-> [=E2=80=A6]
->=20
-> There is a small typo in the commit message summary/title: impi =E2=86=92=
- ipmi.
->=20
->=20
-> Kind regards
->=20
-> Paul
->=20
+On Mon, May 15, 2023 at 4:39=E2=80=AFPM Zhihao Cheng <chengzhihao1@huawei.c=
+om> wrote:
+>
+> Following process:
+>          P1                     P2
+>  path_openat
+>   link_path_walk
+>    may_lookup
+>     inode_permission(rcu)
+>      ovl_permission
+>       acl_permission_check
+>        check_acl
+>         get_cached_acl_rcu
+>          ovl_get_inode_acl
+>           realinode =3D ovl_inode_real(ovl_inode)
+>                               drop_cache
+>                                __dentry_kill(ovl_dentry)
+>                                 iput(ovl_inode)
+>                                  ovl_destroy_inode(ovl_inode)
+>                                   dput(oi->__upperdentry)
+>                                    dentry_kill(upperdentry)
+>                                     dentry_unlink_inode
+>                                      upperdentry->d_inode =3D NULL
+>             ovl_inode_upper
+>              upperdentry =3D ovl_i_dentry_upper(ovl_inode)
+>              d_inode(upperdentry) // returns NULL
+>           IS_POSIXACL(realinode) // NULL pointer dereference
+> , will trigger an null pointer dereference at realinode:
+>   [  205.472797] BUG: kernel NULL pointer dereference, address:
+>                  0000000000000028
+>   [  205.476701] CPU: 2 PID: 2713 Comm: ls Not tainted
+>                  6.3.0-12064-g2edfa098e750-dirty #1216
+>   [  205.478754] RIP: 0010:do_ovl_get_acl+0x5d/0x300
+>   [  205.489584] Call Trace:
+>   [  205.489812]  <TASK>
+>   [  205.490014]  ovl_get_inode_acl+0x26/0x30
+>   [  205.490466]  get_cached_acl_rcu+0x61/0xa0
+>   [  205.490908]  generic_permission+0x1bf/0x4e0
+>   [  205.491447]  ovl_permission+0x79/0x1b0
+>   [  205.491917]  inode_permission+0x15e/0x2c0
+>   [  205.492425]  link_path_walk+0x115/0x550
+>   [  205.493311]  path_lookupat.isra.0+0xb2/0x200
+>   [  205.493803]  filename_lookup+0xda/0x240
+>   [  205.495747]  vfs_fstatat+0x7b/0xb0
+>
+> Fetch a reproducer in [Link].
+>
+> Fix it by using helper ovl_i_path_realinode() to get realpath and real
+> inode after non-nullptr checking.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217404
+> Fixes: 332f606b32b6 ("ovl: enable RCU'd ->get_acl()")
 
-Good catch. I fixed it locally now. Let's see if we need a v5 anyway or
-if this can be changed on applying the patch.
+Note that this bug is also in 5.15.y, in method ovl_get_acl().
+I hope you will be able to follow up with a simple backport for 5.15 -
+i.e. only need to add a check for NULL realinode at the beginning.
+There was no realpath back then.
+
+AFAICT, both your patches should apply cleanly to 6.1.y, so should
+be picked up automatically by stable kernel bots.
 
 Thanks,
-Niklas
+Amir.
+
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Suggested-by: Christian Brauner <brauner@kernel.org>
+> ---
+>  fs/overlayfs/inode.c | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
+>
+> diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+> index cc3ef5a6666a..b2021eada8be 100644
+> --- a/fs/overlayfs/inode.c
+> +++ b/fs/overlayfs/inode.c
+> @@ -576,20 +576,18 @@ struct posix_acl *do_ovl_get_acl(struct mnt_idmap *=
+idmap,
+>                                  struct inode *inode, int type,
+>                                  bool rcu, bool noperm)
+>  {
+> -       struct inode *realinode =3D ovl_inode_real(inode);
+> +       struct inode *realinode;
+>         struct posix_acl *acl;
+>         struct path realpath;
+> +       int err;
+> +
+> +       err =3D ovl_i_path_realinode(inode, &realpath, &realinode, rcu);
+> +       if (err)
+> +               return ERR_PTR(err);
+>
+>         if (!IS_POSIXACL(realinode))
+>                 return NULL;
+>
+> -       /* Careful in RCU walk mode */
+> -       ovl_i_path_real(inode, &realpath);
+> -       if (!realpath.dentry) {
+> -               WARN_ON(!rcu);
+> -               return ERR_PTR(-ECHILD);
+> -       }
+> -
+>         if (rcu) {
+>                 /*
+>                  * If the layer is idmapped drop out of RCU path walk
+> --
+> 2.39.2
+>
