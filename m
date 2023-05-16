@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C7E7057EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEF47057EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjEPTu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
+        id S229956AbjEPTvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjEPTuz (ORCPT
+        with ESMTP id S229862AbjEPTvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:50:55 -0400
+        Tue, 16 May 2023 15:51:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6715913E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:50:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2E7421D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:51:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A6262D8A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:50:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167C8C433D2;
-        Tue, 16 May 2023 19:50:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98BD863E87
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD352C4339E;
+        Tue, 16 May 2023 19:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684266653;
-        bh=vrJbb+thE3XsnqrA0f75v2in+7O7pevNPGynZ++e5hM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nh1LnlD0t0THNvDVMhBt7li9Log+fQWxVGvdJw/NtuM/fsAVOhoizufYtKFp70Mv6
-         OoME9qlmwvFOZfroTn2r4GWypEvnRlAwMgEH/meA+3CNQl5CD9kubIgjl6K+GqRlBF
-         JJCVNjIVvtPOMwOKQ+mHHu7XBX27qnk3gYqKoODkd2tsXwAA5NWSqn5Ya9RSEXCS2f
-         tRKQ1aYIduQQmX9VKVJfy5wxQz0gthaWwe0PgijCmxmMNiT6+9zp4bIYroh/NF/z/R
-         RHbaUT1SsDDr1M9OM0HbRx01n1wFvhmGyVEjiPJlITKOYHhj/buYg6FCbFMO3KlDMt
-         nEog8AHZhFr3Q==
+        s=k20201202; t=1684266660;
+        bh=rGDLa8XkgnE/YkvzsK/nYCgrTLKkwXQsOq22+QTAt04=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m1IpgRBBLrcl0WFodQf64TNhrUk59kE3r4bNQjvPn87giLfVs19v4wJGZfYcT3C0S
+         qr/twKpbjzTxb3VqgZiwZNHaf1oUEoRgMHtW1cRZORyOtS4ChBGAc+h6jG5IFptuRB
+         e3/UKJk74C5zz+CfQCPZW4oXXHftpPkahKs53p+0KmVYcT+ZwBEWySlrQba/GWyHzC
+         12PBOkJYLi8u8hEivmgWd/Dunf4/9CCazNePcOvvNv9RdqzUdtk+OTBQ6LOin1txIU
+         DXgKMz6CS/nntkXuMiQ+WXLzFM2DxC5C1AoE5PZxAjQLPU3zHaBO9D9Pmx2KeVDPHd
+         0OddKsQDbL2sQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] ALSA: cs46xx: mark snd_cs46xx_download_image as static
-Date:   Tue, 16 May 2023 21:50:41 +0200
-Message-Id: <20230516195046.550584-1-arnd@kernel.org>
+Subject: [PATCH 2/2] ALSA: oss: avoid missing-prototype warnings
+Date:   Tue, 16 May 2023 21:50:42 +0200
+Message-Id: <20230516195046.550584-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230516195046.550584-1-arnd@kernel.org>
+References: <20230516195046.550584-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -54,32 +56,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-snd_cs46xx_download_image() was originally called from dsp_spos.c, but
-is now local to cs46xx_lib.c. Mark it as 'static' to avoid a warning
-about it lacking a declaration, and '__maybe_unused' to avoid a warning
-about it being unused when CONFIG_SND_CS46XX_NEW_DSP is disabled:
+Two functions are defined and used in pcm_oss.c but also optionally
+used from io.c, with an optional prototype. If CONFIG_SND_PCM_OSS_PLUGINS
+is disabled, this causes a warning as the functions are not static
+and have no prototype:
 
-sound/pci/cs46xx/cs46xx_lib.c:534:5: error: no previous prototype for 'snd_cs46xx_download_image'
+sound/core/oss/pcm_oss.c:1235:19: error: no previous prototype for 'snd_pcm_oss_write3' [-Werror=missing-prototypes]
+sound/core/oss/pcm_oss.c:1266:19: error: no previous prototype for 'snd_pcm_oss_read3' [-Werror=missing-prototypes]
 
-Fixes: 89f157d9e6bf ("[ALSA] cs46xx - Fix PM resume")
+Avoid this by making the prototypes unconditional.
+
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- sound/pci/cs46xx/cs46xx_lib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/oss/pcm_plugin.h | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/sound/pci/cs46xx/cs46xx_lib.c b/sound/pci/cs46xx/cs46xx_lib.c
-index 62f45847b351..7d882b33d45e 100644
---- a/sound/pci/cs46xx/cs46xx_lib.c
-+++ b/sound/pci/cs46xx/cs46xx_lib.c
-@@ -531,7 +531,7 @@ static int load_firmware(struct snd_cs46xx *chip)
- 	return err;
- }
+diff --git a/sound/core/oss/pcm_plugin.h b/sound/core/oss/pcm_plugin.h
+index 46e273bd4a78..50a6b50f5db4 100644
+--- a/sound/core/oss/pcm_plugin.h
++++ b/sound/core/oss/pcm_plugin.h
+@@ -141,6 +141,14 @@ int snd_pcm_area_copy(const struct snd_pcm_channel_area *src_channel,
  
--int snd_cs46xx_download_image(struct snd_cs46xx *chip)
-+static __maybe_unused int snd_cs46xx_download_image(struct snd_cs46xx *chip)
- {
- 	int idx, err;
- 	unsigned int offset = 0;
+ void *snd_pcm_plug_buf_alloc(struct snd_pcm_substream *plug, snd_pcm_uframes_t size);
+ void snd_pcm_plug_buf_unlock(struct snd_pcm_substream *plug, void *ptr);
++#else
++
++static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
++static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
++static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
++
++#endif
++
+ snd_pcm_sframes_t snd_pcm_oss_write3(struct snd_pcm_substream *substream,
+ 				     const char *ptr, snd_pcm_uframes_t size,
+ 				     int in_kernel);
+@@ -151,14 +159,6 @@ snd_pcm_sframes_t snd_pcm_oss_writev3(struct snd_pcm_substream *substream,
+ snd_pcm_sframes_t snd_pcm_oss_readv3(struct snd_pcm_substream *substream,
+ 				     void **bufs, snd_pcm_uframes_t frames);
+ 
+-#else
+-
+-static inline snd_pcm_sframes_t snd_pcm_plug_client_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t drv_size) { return drv_size; }
+-static inline snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *handle, snd_pcm_uframes_t clt_size) { return clt_size; }
+-static inline int snd_pcm_plug_slave_format(int format, const struct snd_mask *format_mask) { return format; }
+-
+-#endif
+-
+ #ifdef PLUGIN_DEBUG
+ #define pdprintf(fmt, args...) printk(KERN_DEBUG "plugin: " fmt, ##args)
+ #else
 -- 
 2.39.2
 
