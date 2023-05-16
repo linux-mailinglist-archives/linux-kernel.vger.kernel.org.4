@@ -2,169 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2457055A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121CA70559C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjEPSFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S231586AbjEPSEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjEPSFx (ORCPT
+        with ESMTP id S229454AbjEPSEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:05:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D135B9A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684260305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y5EOypxgbZDRGvVwT5KvydBJmWedm0p4xvCj98nOYvY=;
-        b=b88OzNZXTHp+y6uuB23Jr4W8x5jlYfQ2OO6+I4S40YqCVxG5aQGYU5LiR6Cmw7FSVfKpXU
-        0JWiMRvNyGbnepTx5PqRsxFVcXzsx87wovUC9WXHzK7wPIlD8WG5t9lmL9P9/ARg64991X
-        +RPdRbqvEjz/RlSjYLUuf7LuS1o8NQI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-C0cacgM5PRuPUxecaQIZTw-1; Tue, 16 May 2023 14:05:02 -0400
-X-MC-Unique: C0cacgM5PRuPUxecaQIZTw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 080E3101A557;
-        Tue, 16 May 2023 18:05:01 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6B1C435453;
-        Tue, 16 May 2023 18:05:00 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 53BA84013A22A; Tue, 16 May 2023 15:02:21 -0300 (-03)
-Date:   Tue, 16 May 2023 15:02:21 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Christoph Lameter <cl@gentwo.de>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v8 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZGPFLSa8Xt23oMSo@tpad>
-References: <20230515180015.016409657@redhat.com>
- <b1f75dca-5d86-125f-bbba-7b575b62d21@gentwo.de>
+        Tue, 16 May 2023 14:04:10 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D83D5FCF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:04:08 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-43604f20944so7246613137.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684260247; x=1686852247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vvzg25v2oIEfNdNdkr9ntW85A+SET9yRI5a0pRi7L/0=;
+        b=sEdkWnYfz1zslsG4WM18jSxyezgQrNq463fZoa8yCdWUxYbfMTl0vdCbxMmpaTSNub
+         u6qn2ZO84qSn6oRYdupCOT6b2cNJSzhwxup1lB4OIFwpwUJPfgXrRwQa32vpPgTPpDSH
+         bH6XrJinPH8xYTT8EW6qgBaCo2RYV+gQ1es7P6Xn6mgUZpK6fAAoqDlqe0IeCd4Ty8C1
+         kdIDNyMqLmVdhvImg8TMZNqpDQozc1sma2EyiW2XUpcxH65NLDr6+GHP8ZKFYyWEricc
+         FnH1efXODtqTImOEADh97BKcJvJlJPNw3+eMqQwWeCuAME/rHjTZ9QSJ06rBndqllLn7
+         3TKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684260247; x=1686852247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vvzg25v2oIEfNdNdkr9ntW85A+SET9yRI5a0pRi7L/0=;
+        b=P/mCYFB1I59IJyk7rJvqe4xhNbFHzr3t2VClhHE9JVmJJa/dT79r+4E/8b4wjZkzmv
+         t5hDcs0gqsn/ISUYFObDQJ7RXEMHKIYeASUav8aMiTzbirQ0aCAvz0mjn7lkw7j3HpJA
+         IeJUt4OXtSZiq+bbL9vre//J1N2lRtW6k+cnGkE7cUMmdQ0IPWk/ujn6gTOBnPiSXAr0
+         J4jWRRfO2AbAa3IpNtofTO4ifwG2AnxjTFGSayex3PCDCv/tgm8dMW0Sz1bwBeEnCMJo
+         Z4iZhw3m7Zkp7gpaRjYVxC5jub95GllsMPs4MYf4lUmh9plgNw9oi+vXpcdJqY0zJ13h
+         a1Lg==
+X-Gm-Message-State: AC+VfDzcMt7zIZc22HUXha+oK3aqDQL2ZObYMKnIngbWMUeuaZjows0H
+        0RE2sFZKl+Zdy8CjbX8O9C7DUyZzkIRR/BCRUMkXiA==
+X-Google-Smtp-Source: ACHHUZ4dCOV4LauCVxAwh+D6cPCaNzdjf9tHbKfIBWRaLaT+SOP3CuFj1esRSO97triBxPPZXU/cNH8fWdGrpVBvIVQ=
+X-Received: by 2002:a05:6102:3cd:b0:42e:63a5:b711 with SMTP id
+ n13-20020a05610203cd00b0042e63a5b711mr16338138vsq.10.1684260247144; Tue, 16
+ May 2023 11:04:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1f75dca-5d86-125f-bbba-7b575b62d21@gentwo.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230515161736.775969473@linuxfoundation.org>
+In-Reply-To: <20230515161736.775969473@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 16 May 2023 23:33:55 +0530
+Message-ID: <CA+G9fYsCjQPQxde3-vw6SKmPPr16Gy4-P4uOCh7r6iEDwDpf9w@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/381] 5.10.180-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+On Mon, 15 May 2023 at 23:03, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.180 release.
+> There are 381 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.180-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Tue, May 16, 2023 at 10:09:02AM +0200, Christoph Lameter wrote:
-> The patchset still modifies the semantics of this_cpu operations semantics
-> replacing the lockless RMV operations with locked ones. 
 
-It does that to follow the pre-existing kernel convention:
+Results from Linaro=E2=80=99s test farm.
+Regressions on arm64, arm, x86_64 and i386.
 
-function-name			LOCK prefix
-cmpxchg				YES
-cmpxchg_local			NO
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-So the patchset introduces:
+We have recently upgraded our selftest sources to stable-rc 6.3 and
+running on stable rc 6.1, 5.15, 5.10, 5.4, 4.19 and 4.14 kernels.
 
-function-name			LOCK prefix
-this_cpu_cmpxchg		YES
-this_cpu_cmpxchg_local		NO
+List of test regressions:
+=3D=3D=3D=3D=3D=3D=3D=3D
+kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
 
-> One of the
-> rationales for the use  this_cpu operations is their efficiency since
-> locked RMV atomics are avoided. 
+kselftest-memfd
+  - memfd_memfd_test
 
-And there is the freedom to choose between this_cpu_cmpxchg and
-this_cpu_cmpxchg_local (depending on intended usage).
+kselftest-rseq
+  - rseq_basic_test
 
-> This patchset destroys that functionality.
+ kselftest-kvm
+  - kvm_xapic_state_test
 
-Patch 6 is
 
-Subject: [PATCH v8 06/13] add this_cpu_cmpxchg_local and asm-generic definitions
+NOTE:
+The logs are the same as reported on other email reports.
+link,
+ - https://lore.kernel.org/stable/CA+G9fYu6ZOu_We2GMP0sFnSovOsqd6waW7oKS-Y1=
+VPrjdibu5Q@mail.gmail.com/
 
-Which adds this_cpu_cmpxchg_local
+## Build
+* kernel: 5.10.180-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 065b6901e6dab7dcc7c8884779b96269724c7201
+* git describe: v5.10.179-382-g065b6901e6da
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.179-382-g065b6901e6da
 
-Patch 7 converts all other this_cmpxchg users
-(except the vmstat ones)
+## Test Regressions (compared to v5.10.176-363-g1ef2000b94cb)
+* bcm2711-rpi-4-b, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
 
-[PATCH v8 07/13] convert this_cpu_cmpxchg users to this_cpu_cmpxchg_local
+* bcm2711-rpi-4-b, kselftest-memfd
+  - memfd_memfd_test
 
-So the non-LOCK'ed behaviour is maintained for existing users.
+* bcm2711-rpi-4-b, kselftest-rseq
+  - rseq_basic_test
 
-> If you want locked RMV semantics then use them through cmpxchg() and
-> friends. Do not modify this_cpu operations by changing the implementation
-> in the arch code.
+* dragonboard-410c, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
 
-But then it would be necessary to disable preemption here:
+* dragonboard-410c, kselftest-memfd
+  - memfd_memfd_test
 
-static inline void mod_zone_state(struct zone *zone, enum zone_stat_item item,
-                                  long delta, int overstep_mode)
-{
-        struct per_cpu_zonestat __percpu *pcp = zone->per_cpu_zonestats;
-        s32 __percpu *p = pcp->vm_stat_diff + item;
-        long o, n, t, z;
+* i386, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
 
-        do {
-                z = 0;  /* overflow to zone counters */
+* i386, kselftest-memfd
+  - memfd_memfd_test
 
-                /*
-                 * The fetching of the stat_threshold is racy. We may apply
-                 * a counter threshold to the wrong the cpu if we get
-                 * rescheduled while executing here. However, the next
-                 * counter update will apply the threshold again and
-                 * therefore bring the counter under the threshold again.
-                 *
-                 * Most of the time the thresholds are the same anyways
-                 * for all cpus in a zone.
-                 */
-                t = this_cpu_read(pcp->stat_threshold);
+* i386, kselftest-rseq
+  - rseq_basic_test
+  - rseq_run_param_test_sh
 
-                o = this_cpu_read(*p);
-                n = delta + o;
+* juno-r2, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
 
-                if (abs(n) > t) {
-                        int os = overstep_mode * (t >> 1);
+* juno-r2, kselftest-memfd
+  - memfd_memfd_test
 
-                        /* Overflow must be added to zone counters */
-                        z = n + os;
-                        n = -os;
-                }
-        } while (this_cpu_cmpxchg(*p, o, n) != o);
-		 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* juno-r2, kselftest-rseq
+  - rseq_basic_test
 
-        if (z)
-                zone_page_state_add(z, zone, item);
-}
+* qemu_i386, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
 
-Earlier you objected to disabling preemption on this codepath
-(which is what led to this patchset in the first place):
+* qemu_i386, kselftest-memfd
+  - memfd_memfd_test
 
-"Using preemption is a way to make this work correctly. However, 
-doing so would sacrifice the performance, low impact and the
-scalability of the vm counters."
+* qemu_i386, kselftest-rseq
+  - rseq_basic_test
+  - rseq_run_param_test_sh
 
-So it seems a locked, this_cpu function which does lock cmxpchg
-is desired.
+* qemu_x86_64, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
 
-Perhaps you disagree with the this_cpu_cmpxchg_local/this_cpu_cmpxchg
-naming?
+* qemu_x86_64, kselftest-memfd
+  - memfd_memfd_test
 
+* qemu_x86_64, kselftest-rseq
+  - rseq_basic_test
+  - rseq_run_param_test_sh
+
+* x15, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
+
+* x15, kselftest-rseq
+  - rseq_basic_test
+
+* x86, kselftest-kvm
+  - kvm_xapic_state_test
+
+* x86, kselftest-membarrier
+  - membarrier_membarrier_test_multi_thread
+  - membarrier_membarrier_test_single_thread
+
+* x86, kselftest-memfd
+  - memfd_memfd_test
+
+* x86, kselftest-rseq
+  - rseq_basic_test
+  - rseq_run_param_test_sh
+
+## Metric Regressions (compared to v5.10.176-363-g1ef2000b94cb)
+
+## Test Fixes (compared to v5.10.176-363-g1ef2000b94cb)
+
+## Metric Fixes (compared to v5.10.176-363-g1ef2000b94cb)
+
+## Test result summary
+total: 126856, pass: 105919, fail: 3576, skip: 17174, xfail: 187
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 117 total, 116 passed, 1 failed
+* arm64: 45 total, 42 passed, 3 failed
+* i386: 35 total, 33 passed, 2 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 26 total, 20 passed, 6 failed
+* riscv: 12 total, 11 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 38 total, 36 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
