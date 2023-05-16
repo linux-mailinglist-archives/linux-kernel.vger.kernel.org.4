@@ -2,199 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C12705292
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D610705296
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbjEPPqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S234171AbjEPPqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbjEPPp6 (ORCPT
+        with ESMTP id S234181AbjEPPqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:45:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F9393C2;
-        Tue, 16 May 2023 08:45:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF645634FA;
-        Tue, 16 May 2023 15:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E05C433EF;
-        Tue, 16 May 2023 15:45:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684251924;
-        bh=jsW/op+oisDWGtcdd1S1pr3jXJMa5TQFW/rAifvBppI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EiRSOJ3SRuh+vsAwxWSGiGyBXFFFKTLR3y3UOY7zHFwsOFtz2hnQq4O4WlbHq9y19
-         sFd8XCFBAj2k7SXb5lYZTZJHbHBNmLmfOdq0ayniF8MMv9XVZVYqnkYOSFfK8jD6nE
-         gwgXDmAM08S88sbePBSplgI1ga/BBbxcw8iW5Jx014fVDSzxNLzcVhCWbYFMB5C+ZJ
-         D+hKy1Ut7ocGpt9qwMOEdxw5RBZcwAcMcjfbV7XUo4c9HaB7tiMZ5T3JLozq/ISLG4
-         90T16ke67Ek8bhVdims/hD8Inr05JMIRFK6TN50jcziLOr+LzxMoTuZRvx8bIOH/lE
-         wDCgKtmqBP0dw==
-Date:   Tue, 16 May 2023 17:45:19 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 22/32] vfs: inode cache conversion to hash-bl
-Message-ID: <20230516-brand-hocken-a7b5b07e406c@brauner>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-23-kent.overstreet@linux.dev>
- <20230510044557.GF2651828@dread.disaster.area>
+        Tue, 16 May 2023 11:46:18 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F015F902B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:45:47 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso21523174a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684251942; x=1686843942;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xVvw51M3oghXEdU4QbKnqMa7gMGVZBvLOUaDcEfxIYI=;
+        b=ytE8rV5ZI+aian4Sl6AOp0vjREMjTnZr37rOcYU3sN+b7EWSWmJeZ5/Fo8/C4tleIZ
+         KBhEudhex1I/pmUtbrpWrYlOUzbD//JJUrUpO/duk5LKUFn33dhd7OJC6xNvsGpp7nL5
+         bbCndVK1npIiwHEMiMIh4OSdMjDyGoWbvf6hTbH+aM/2h7L4gg1gf33cuh96+KDd5NlZ
+         oZATg5uyuCf0075tV72481F8wJsPOEVIVgkTs02z90DoTUlmg841IqwcBIRGSWAe6Zwn
+         Nmg5BWdJt+3LnJImr+cpsalGx+IpeMKppjY4H7tPo30Xrl/Efk9D3Z4IbiJIp6gaN47l
+         yWVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684251942; x=1686843942;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xVvw51M3oghXEdU4QbKnqMa7gMGVZBvLOUaDcEfxIYI=;
+        b=jDnPOetCQl/Epb27y9kJ6zM2XZ291uM0gKyKQ1LioJYzDRL+VMqFfgxCTuSEiRPBGY
+         l6Fdl8AV3zchvlqoh99PPkzmiK1qAyLwhOsisM98r9lwzD+n4Tgvcfxf5eQWg1OSX2pJ
+         TP7diSo+4WHkIcwnXlQ32In/QGtYVfHe/qMolq5FjEWpi2QOIF49MLTKXvP6TqmUfp9O
+         I8sznK+b4OW1C8OKQhHPue3pjlNLKGbXjhh7X7sRUic7OSQTztdcdTtmzd1HT5FC5kmD
+         8fZ/WkuBWEEITwNl0hAxxuXY6qfQe2gx62zM+Ec9jHmtMKxwU4ws3URkJlno0XuUFSap
+         zq3Q==
+X-Gm-Message-State: AC+VfDxR6QCCA70C+cRPD7QCVgHHG4L3wPLmf8CXe1jURVSTCSMYdwFm
+        L84TkzmJWB8KLxhtWgmIX2fRtQ==
+X-Google-Smtp-Source: ACHHUZ7DxXQjN+1+QCOknN6+ey/UP+0j03lKz8nbMqa+um3HYnxt9AF7TvKHKTfKDQJ7Wn/ZN4gVlA==
+X-Received: by 2002:a17:907:2d12:b0:969:98eb:3fdd with SMTP id gs18-20020a1709072d1200b0096998eb3fddmr29573166ejc.3.1684251941993;
+        Tue, 16 May 2023 08:45:41 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id z25-20020a17090674d900b0096ac3e01a35sm5787587ejl.130.2023.05.16.08.45.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 08:45:41 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] arm64: dts: qcom: sm8550: enable DISPCC by default
+Date:   Tue, 16 May 2023 17:45:37 +0200
+Message-Id: <20230516154539.238655-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230510044557.GF2651828@dread.disaster.area>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 02:45:57PM +1000, Dave Chinner wrote:
-> On Tue, May 09, 2023 at 12:56:47PM -0400, Kent Overstreet wrote:
-> > From: Dave Chinner <dchinner@redhat.com>
-> > 
-> > Because scalability of the global inode_hash_lock really, really
-> > sucks.
-> > 
-> > 32-way concurrent create on a couple of different filesystems
-> > before:
-> > 
-> > -   52.13%     0.04%  [kernel]            [k] ext4_create
-> >    - 52.09% ext4_create
-> >       - 41.03% __ext4_new_inode
-> >          - 29.92% insert_inode_locked
-> >             - 25.35% _raw_spin_lock
-> >                - do_raw_spin_lock
-> >                   - 24.97% __pv_queued_spin_lock_slowpath
-> > 
-> > -   72.33%     0.02%  [kernel]            [k] do_filp_open
-> >    - 72.31% do_filp_open
-> >       - 72.28% path_openat
-> >          - 57.03% bch2_create
-> >             - 56.46% __bch2_create
-> >                - 40.43% inode_insert5
-> >                   - 36.07% _raw_spin_lock
-> >                      - do_raw_spin_lock
-> >                           35.86% __pv_queued_spin_lock_slowpath
-> >                     4.02% find_inode
-> > 
-> > Convert the inode hash table to a RCU-aware hash-bl table just like
-> > the dentry cache. Note that we need to store a pointer to the
-> > hlist_bl_head the inode has been added to in the inode so that when
-> > it comes to unhash the inode we know what list to lock. We need to
-> > do this because the hash value that is used to hash the inode is
-> > generated from the inode itself - filesystems can provide this
-> > themselves so we have to either store the hash or the head pointer
-> > in the inode to be able to find the right list head for removal...
-> > 
-> > Same workload after:
-> > 
-> > Signed-off-by: Dave Chinner <dchinner@redhat.com>
-> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: linux-fsdevel@vger.kernel.org
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> 
-> I have been maintaining this patchset uptodate in my own local trees
-> and the code in this patch looks the same. The commit message above,
-> however, has been mangled. The full commit message should be:
-> 
-> vfs: inode cache conversion to hash-bl
-> 
-> Because scalability of the global inode_hash_lock really, really
-> sucks and prevents me from doing scalability characterisation and
-> analysis of bcachefs algorithms.
-> 
-> Profiles of a 32-way concurrent create of 51.2m inodes with fsmark
-> on a couple of different filesystems on a 5.10 kernel:
-> 
-> -   52.13%     0.04%  [kernel]            [k] ext4_create
->    - 52.09% ext4_create
->       - 41.03% __ext4_new_inode
->          - 29.92% insert_inode_locked
->             - 25.35% _raw_spin_lock
->                - do_raw_spin_lock
->                   - 24.97% __pv_queued_spin_lock_slowpath
-> 
-> 
-> -   72.33%     0.02%  [kernel]            [k] do_filp_open
->    - 72.31% do_filp_open
->       - 72.28% path_openat
->          - 57.03% bch2_create
->             - 56.46% __bch2_create
->                - 40.43% inode_insert5
->                   - 36.07% _raw_spin_lock
->                      - do_raw_spin_lock
->                           35.86% __pv_queued_spin_lock_slowpath
->                     4.02% find_inode
-> 
-> btrfs was tested but it is limited by internal lock contention at
-> >=2 threads on this workload, so never hammers the inode cache lock
-> hard enough for this change to matter to it's performance.
-> 
-> However, both bcachefs and ext4 demonstrate poor scaling at >=8
-> threads on concurrent lookup or create workloads.
-> 
-> Hence convert the inode hash table to a RCU-aware hash-bl table just
-> like the dentry cache. Note that we need to store a pointer to the
-> hlist_bl_head the inode has been added to in the inode so that when
-> it comes to unhash the inode we know what list to lock. We need to
-> do this because, unlike the dentry cache, the hash value that is
-> used to hash the inode is not generated from the inode itself. i.e.
-> filesystems can provide this themselves so we have to either store
-> the hashval or the hlist head pointer in the inode to be able to
-> find the right list head for removal...
-> 
-> Concurrent create with variying thread count (files/s):
-> 
->                 ext4                    bcachefs
-> threads         vanilla  patched        vanilla patched
-> 2               117k     112k            80k     85k
-> 4               185k     190k           133k    145k
-> 8               303k     346k           185k    255k
-> 16              389k     465k           190k    420k
-> 32              360k     437k           142k    481k
-> 
-> CPU usage for both bcachefs and ext4 at 16 and 32 threads has been
-> halved on the patched kernel, while performance has increased
-> marginally on ext4 and massively on bcachefs. Internal filesystem
-> algorithms now limit performance on these workloads, not the global
-> inode_hash_lock.
-> 
-> Profile of the workloads on the patched kernels:
-> 
-> -   35.94%     0.07%  [kernel]                  [k] ext4_create
->    - 35.87% ext4_create
->       - 20.45% __ext4_new_inode
-> ...
->            3.36% insert_inode_locked
-> 
->    - 78.43% do_filp_open
->       - 78.36% path_openat
->          - 53.95% bch2_create
->             - 47.99% __bch2_create
-> ....
->               - 7.57% inode_insert5
->                     6.94% find_inode
-> 
-> Spinlock contention is largely gone from the inode hash operations
-> and the filesystems are limited by contention in their internal
-> algorithms.
-> 
-> Signed-off-by: Dave Chinner <dchinner@redhat.com>
-> ---
-> 
-> Other than that, the diffstat is the same and I don't see any obvious
-> differences in the code comapred to what I've been running locally.
+Enable the Display Clock Controller by default in SoC DTSI so unused
+clocks can be turned off.  It does not require any external resources,
+so as core SoC component should be always available to boards.
 
-There's a bit of a backlog before I get around to looking at this but
-it'd be great if we'd have a few reviewers for this change.
+Suggested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+---
+
+Changes in v2:
+1. New patch
+---
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 4 ----
+ arch/arm64/boot/dts/qcom/sm8550.dtsi    | 1 -
+ 2 files changed, 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+index 785889450e8a..f27d5c657f44 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+@@ -419,10 +419,6 @@ vreg_l3g_1p2: ldo3 {
+ 	};
+ };
+ 
+-&dispcc {
+-	status = "okay";
+-};
+-
+ &mdss {
+ 	status = "okay";
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+index 6e9bad8f6f33..0a3a08336b46 100644
+--- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+@@ -2684,7 +2684,6 @@ dispcc: clock-controller@af00000 {
+ 			#clock-cells = <1>;
+ 			#reset-cells = <1>;
+ 			#power-domain-cells = <1>;
+-			status = "disabled";
+ 		};
+ 
+ 		usb_1_hsphy: phy@88e3000 {
+-- 
+2.34.1
+
