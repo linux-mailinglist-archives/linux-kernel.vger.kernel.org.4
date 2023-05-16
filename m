@@ -2,98 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443D9704D49
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2716704D4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbjEPMEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
+        id S232280AbjEPMEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjEPMEa (ORCPT
+        with ESMTP id S232894AbjEPMEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:04:30 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7081A5FD6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:04:27 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-199bcf78252so2332285fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1684238667; x=1686830667;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kJosZkuHbiv9aC0zid4KAAbdE5AYoHy0os35a+6yEh4=;
-        b=Hcjeuhev/jBUZbhhXSUbEKHdp1VBSFZN5JNVv5uUtxT099arEEawMJcrkMjcuzn6/5
-         xjtNCsEK4UxMhhGHiO0vk04bpev1//ZxPGcPUTUvWVtMShJE2H7X4Y//7mGc+pCLmaYa
-         WDiRJKeeXeGbNi2tR8PKFFd4nC7Y7p4FVwlUA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684238667; x=1686830667;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kJosZkuHbiv9aC0zid4KAAbdE5AYoHy0os35a+6yEh4=;
-        b=jCqoQwmbMrKXoSnTdzCAtcFCSzMqP6dkohZW1theV9MQbgLGT/hf7pxTnat6Cp3VYq
-         k/NjRwxW9iTfZvlYBnfSgb0LpdS2eIBic33RjwpZdR8GPAU4gFVNo7JJbap7dE1WNnjO
-         SNPRrN/yLkXAexscVIalY4+mcM9RuO+1NllmHbYETo24/lJMQ/zy8dd4N3QEjiSri5uA
-         zGxg+aLEEDQRctqgiwzS+rnxV17othXg0b232IsvLtWxQFCkrWCuE67aYUQf4TiU3kb8
-         SzUp4u7hkl+eh1N17koFTEhIih3rTCVPXH8h37uvonQoEbpfS82UJnFQSgXNgcQyxSKB
-         QrrQ==
-X-Gm-Message-State: AC+VfDx1EF+ZyY3t8Jahp/mEzHggu8qRdM5J9NULr2a0vw/HCWjlZ3co
-        e1BxoY1lEkrAOaoawRlm9Gi9cQ==
-X-Google-Smtp-Source: ACHHUZ7H25k9zBFLAifLfWin8oqXETP7UGnj9dxYlhdJA5TKaEpBbP9ob2KBM3FhI0weuJw9l8GF4Q==
-X-Received: by 2002:aca:2301:0:b0:38d:ed4a:52eb with SMTP id e1-20020aca2301000000b0038ded4a52ebmr12456332oie.38.1684238665298;
-        Tue, 16 May 2023 05:04:25 -0700 (PDT)
-Received: from fedora64.linuxtx.org ([99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id u14-20020a4ad0ce000000b0054f9f229bddsm8082829oor.15.2023.05.16.05.04.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 05:04:24 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Tue, 16 May 2023 07:04:23 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/246] 6.3.3-rc1 review
-Message-ID: <ZGNxR9S9pNU2+BiP@fedora64.linuxtx.org>
-References: <20230515161722.610123835@linuxfoundation.org>
+        Tue, 16 May 2023 08:04:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4897C30FE;
+        Tue, 16 May 2023 05:04:42 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAcDsi015268;
+        Tue, 16 May 2023 12:04:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=pY0yj58hPlHBY9cauW2Ttf8YI3LqWC5Y7iGKqTrGPuU=;
+ b=BylNkX9FKHmH26cNJix/WlUwnlCWc5DAh+nqIc7L0WEXGW65JeEBHNUqCEZ2Z1P+dVEq
+ ekmVVvF2QR5Yygq4ieKZBVRq3bcc5kP2q26ZHG040fXw/rG76eUIh3yHPydE4dmv3+md
+ ay0qCNEIfMp+iHXdjmMr+vV23Mfbyqo/7eNq1wocN/46l+rn7yvGLbo3C03LFkJsN2iK
+ ud3Afr+mTeAg3QckPLZGNgLeT8RFVL11qdkpmRoTPUhxuRPF+AavwnvYkUrIYeoRDJff
+ /5fodlAGA4HvfDdoPm05NohySdsOQiRDwd5YZT5BJuviUpsfqeGe72DMMHlmQEObkidK Gg== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkkde2xfc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:04:37 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GC4a7o003529
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:04:36 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 16 May 2023 05:04:31 -0700
+Date:   Tue, 16 May 2023 17:34:27 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+Message-ID: <20230516120426.GA1679@varda-linux.qualcomm.com>
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
+ <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QvkZWJduGUlbTGZSluXhlCVCd_QCTVML
+X-Proofpoint-ORIG-GUID: QvkZWJduGUlbTGZSluXhlCVCd_QCTVML
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_05,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160103
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 06:23:32PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.3 release.
-> There are 246 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.3-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, May 15, 2023 at 06:10:29PM +0200, Krzysztof Kozlowski wrote:
+> On 15/05/2023 12:13, Varadarajan Narayanan wrote:
+> > From: Praveenkumar I <quic_ipkumar@quicinc.com>
+> >
+> > Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
+> >
+> > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> > [v3]:
+> > 	Fix dt_binding_check & dtbs_check errors (Used
+> > 	Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> > 	as reference/example)
+> >
+> > 	Drop 'Acked-by: Rob Herring' as suggested in review
+> >
+> > [v2]:
+> > 	Thanks to Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 	for the tip to make qcom,ipq8074-tsens as fallback.
+> > ---
+> >  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 13 +++++++++++--
+> >  1 file changed, 11 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > index d9aa54c..57e3908 100644
+> > --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > @@ -19,6 +19,11 @@ description: |
+> >  properties:
+> >    compatible:
+> >      oneOf:
+> > +      - const: qcom,tsens-v0_1
+> > +      - const: qcom,tsens-v1
+> > +      - const: qcom,tsens-v2
+>
+> Nope, these are not correct.
+>
+> > +      - const: qcom,ipq8074-tsens
+>
+> Also nope, this is already there.
+>
+> > +
+> >        - description: msm8960 TSENS based
+> >          items:
+> >            - enum:
+> > @@ -66,8 +71,10 @@ properties:
+> >            - const: qcom,tsens-v2
+> >
+> >        - description: v2 of TSENS with combined interrupt
+> > -        enum:
+> > -          - qcom,ipq8074-tsens
+>
+> Why?
+>
+> > +        items:
+> > +          - enum:
+> > +              - qcom,ipq9574-tsens
+> > +          - const: qcom,ipq8074-tsens
 
-Tested rc1 against the Fedora build system (aarch64, ppc64le, s390x,
-x86_64), and boot tested x86_64. No regressions noted.
+Without changing it like this either dtbs_check or
+dt_binding_check kept failing.
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+	- description: v2 of TSENS with combined interrupt
+	  enum:
+	    - qcom,ipq8074-tsens
+	    - qcom,ipq9574-tsens
+
+dtbs_check gave this kind of error
+	['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
+
+After changing it like in https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
+
+	- description: v2 of TSENS with combined interrupt
+	  const: qcom,ipq8074-tsens
+	  - enum:
+	      - qcom,ipq9574-tsens
+	  - const: qcom,ipq8074-tsens
+
+dt_binding_check gives the following error
+
+	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: did not find expected key
+
+and dtbs_check gives
+
+	./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: [error] syntax error: expected <block end>, but found '-' (syntax)
+	  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+	./Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+	./Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+	./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: did not find expected key
+	  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+	/local/mnt/workspace/varada/v3/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml: ignoring, error parsing file
+
+If i change it like below,
+
+	- description: v2 of TSENS with combined interrupt
+	  enum:
+	    - qcom,ipq9574-tsens
+	  - const: qcom,ipq8074-tsens
+
+dt_binding_check and dtbs_check gives same error as above.
+
+Looked around and found Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+which seemed to do something similar to what is wanted in this
+case. Hence changed qcom-tsens.yaml similar to the allwinner yaml
+file. After which dt_binding_check and dtbs_check passed. Please
+let me know if there is a better way to solve this. Will go with
+that.
+
+Thanks
+Varada
+
+> >
+> >    reg:
+> >      items:
+> > @@ -279,6 +286,7 @@ allOf:
+> >            contains:
+> >              enum:
+> >                - qcom,ipq8074-tsens
+> > +              - qcom,ipq9574-tsens
+>
+> Not needed, drop.
+>
+> >      then:
+> >        properties:
+> >          interrupts:
+> > @@ -294,6 +302,7 @@ allOf:
+> >            contains:
+> >              enum:
+> >                - qcom,ipq8074-tsens
+> > +              - qcom,ipq9574-tsens
+>
+> Ditto.
+>
+>
+> Best regards,
+> Krzysztof
+>
