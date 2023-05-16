@@ -2,96 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A33705B34
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3019D705B36
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjEPXTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54650 "EHLO
+        id S231373AbjEPXTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjEPXSu (ORCPT
+        with ESMTP id S231426AbjEPXTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:18:50 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E9E448C;
-        Tue, 16 May 2023 16:18:34 -0700 (PDT)
-Received: from darkstar.musicnaut.iki.fi (85-76-146-199-nat.elisa-mobile.fi [85.76.146.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: aaro.koskinen)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4QLXGl0L5SzyTW;
-        Wed, 17 May 2023 02:18:22 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1684279111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vb+A9iOTP02ZCkPAmsVAR/eDZMRXA1HmPW5ybHLeMc8=;
-        b=Qa5s19H7fFpuhyAC8+miaNUHlba2D2tpjilO4QmL4HYjVqfUI0okebT3wi0qPuggZNTcW6
-        VnAEMLATAwxar7iQCdFuj8kZi01pjmYNoQtPmZdvi/y2bxyYSvFrj9dwBZHekYljCVsTb6
-        FoPv1AaGVsdRx/6Ivm4cLEmsNnJBgEI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1684279111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vb+A9iOTP02ZCkPAmsVAR/eDZMRXA1HmPW5ybHLeMc8=;
-        b=Nn7Fxr7Ro53/rvPYt9zz7x9TFrN5D8hfPm2b5Ft9Rhr31I9DSBEWOxSC2RFbxZJlzsb1Uc
-        L1HgrAwOMRMsU1t95rcdSC0ZwEcFEGutRdY89NPXyiq6DqqlEzusRMn8/x14HSQaGzzgqq
-        BMZ0rU5UCrfNI7tIqcWYNaP7Np8dGF0=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684279111; a=rsa-sha256; cv=none;
-        b=RwleUqzehTz3HbZ6b/VMpIjDVaA4Nsc3fu72IsL4voTcCasHIU6DOx1Zq3B8wMDP8f0eUm
-        FMf8D7ammM6DWaYXL7QPxvOBaYxhOV+0KR4TMm2j0WoL/gYYHMsjIqyJ4r2a+GDsqVGsg7
-        eHViMsarDjur2uv7AYiYWail8NqVmOU=
-Date:   Wed, 17 May 2023 02:18:21 +0300
-From:   Aaro Koskinen <aaro.koskinen@iki.fi>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 07/13] ARM: omap1: add missing include
-Message-ID: <20230516231821.GC271152@darkstar.musicnaut.iki.fi>
-References: <20230516153109.514251-1-arnd@kernel.org>
- <20230516153109.514251-8-arnd@kernel.org>
+        Tue, 16 May 2023 19:19:12 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D96749CC;
+        Tue, 16 May 2023 16:18:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684279138; x=1715815138;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aTTXi21fx3EQBbKsXrlszRhCxMf11Htc3j/PZEduJLo=;
+  b=GZXmWHOIkZF+X7U4QaVswU1y/ExSRLC0cMxKDjJRQZW6uyKXW8fT95Gm
+   bgBH04q2HQKwbndbpskD68U88bonOPbG3Ve34S6zaLpF5qcjQ0g7S1JhD
+   OESu5wL2+y1BscJPJlzmbLgHHylf9x2pptVtK86frajI7mVudWaCeq90Z
+   8eOT1rVOkXQzLOu0g8qTf2ELPL6bwZILpAZ6XtbGTxo7Q1xbOkUCCbwij
+   ty0gn8ZBrOGtXs1GTVoGAVKlRA79lrNJ0s0+G7MWy6rJZEnubq3RF5RDa
+   nFbInCWsApPlIyg91q0UChFOrtIDcNmKdBlUccMcSggLF5cOUgxh/kSfg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="417270309"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="417270309"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 16:18:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="791257808"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="791257808"
+Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 16:18:57 -0700
+Message-ID: <78bb0097-7dca-254f-45a6-5cea6baec0c4@intel.com>
+Date:   Tue, 16 May 2023 16:18:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516153109.514251-8-arnd@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/6] PKEY: Apply PKEY_ENFORCE_API to mprotect
+Content-Language: en-US
+To:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        sroettger@google.com
+Cc:     akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+ <20230515130553.2311248-4-jeffxu@chromium.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230515130553.2311248-4-jeffxu@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,36 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 05:31:03PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The omap_serial_wakeup_init() declaration is not visible where it is
-> defined, so make sure "common.h" is included here, avoiding:
-> 
-> arch/arm/mach-omap1/serial.c:221:12: error: no previous prototype for 'omap_serial_wakeup_init' [-Werror=missing-prototypes]
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 5/15/23 06:05, jeffxu@chromium.org wrote:
+>  /*
+>   * pkey==-1 when doing a legacy mprotect()
+> + * syscall==true if this is called by syscall from userspace.
+> + * Note: this is always true for now, added as a reminder in case that
+> + * do_mprotect_pkey is called directly by kernel in the future.
+> + * Also it is consistent with __do_munmap().
+>   */
+>  static int do_mprotect_pkey(unsigned long start, size_t len,
+> -		unsigned long prot, int pkey)
+> +		unsigned long prot, int pkey, bool syscall)
+>  {
 
-Acked-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+The 'syscall' seems kinda silly (and a bit confusing).  It's easy to
+check if the caller is a kthread or has a current->mm==NULL.  If you
+*really* want a warning, I'd check for those rather than plumb a
+apparently unused argument in here.
 
-A.
-
-> ---
->  arch/arm/mach-omap1/serial.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/mach-omap1/serial.c b/arch/arm/mach-omap1/serial.c
-> index 96f59110d649..f25b94c86aec 100644
-> --- a/arch/arm/mach-omap1/serial.c
-> +++ b/arch/arm/mach-omap1/serial.c
-> @@ -19,6 +19,7 @@
->  
->  #include <asm/mach-types.h>
->  
-> +#include "common.h"
->  #include "serial.h"
->  #include "mux.h"
->  #include "pm.h"
-> -- 
-> 2.39.2
-> 
+BTW, this warning is one of those things that will probably cause some
+amount of angst.  I'd move it to the end of the series or just axe it
+completely.
