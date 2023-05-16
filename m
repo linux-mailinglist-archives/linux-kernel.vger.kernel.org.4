@@ -2,109 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC4F7048F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D127048F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbjEPJTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S231612AbjEPJTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbjEPJSb (ORCPT
+        with ESMTP id S231978AbjEPJTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:18:31 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64165264;
-        Tue, 16 May 2023 02:18:06 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so3221081f8f.2;
-        Tue, 16 May 2023 02:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684228682; x=1686820682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7C9HShPKwn8h1fUg0l7Pz8YXH+XNLX9Yv4wxCqkHcAc=;
-        b=Png6P3fgMfxfssVCej+KqOaJ1EANCqSziEoKlHUZpz7WG3OiRvQSJrn2iOW2Pao/Vw
-         vKypo5Ybk/aTbUN23TEfT7qSpVchi0McYwxu6cIirZSkxb7BE4h6cNriHaOy/nhc33Xr
-         559/6kQMGduAkgnhOOncbg9WlK1evK675Qjt9IqWbtDh/Ew4VgFvnO+E5+1YU56gk8oq
-         RuM4raoxPhm9+OtjTnR6SxZFpBjBFL415k5JJz6Mk9pfS25ylXk1M7ePH/eolVtYz3g7
-         pMfMlWBl0poA60rbrHKaXkRlJR0nS4wadQ1n4zWA/xA63iapr0diNaLrjisEARvYaUjS
-         0d8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684228682; x=1686820682;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7C9HShPKwn8h1fUg0l7Pz8YXH+XNLX9Yv4wxCqkHcAc=;
-        b=jNBqX9tEFOJlgpDD6A7yzU6EQIae4+651wXA1YGP4M0zALil2EpZZeMymDa3QlxyS/
-         ftg3oJHqEr6ln4LIzyWfTBftxW5/ZBNBqvyehA00gsPMYhRC+kR3rz4WGLnKVInTscr3
-         DcHQLdyNMhRADDN/kGdPzxnMcR2cT3ZOGDRtSRxCoQVcTRYZuwG1CUVCGqcF0x51XKYa
-         C/NiX6KP6OMu2bXzNUe+4U/VhWbh5Vlg5EamO1erZZVKFRw3ZUOCFNUBscAhgxR9GRft
-         Rvem+MQTCdiaVCn9Yc4BlnMNMd5RA0DNunOnNvZftTL2/K+sebudK5i/2WhnXJn7kCrf
-         8fEQ==
-X-Gm-Message-State: AC+VfDyC7mhHgv5Cho4EDbXtye1iZ8F5gcBx6X75wnkUE9OHbr3QWRXP
-        Osf3SWHfUv9drBzhCb8XnxY=
-X-Google-Smtp-Source: ACHHUZ5XxE7qkMmTY2Ehr4lBCAHIRMo7+Pum83kyN9HK6pUBwpPFdqnjef/S9r0pjX2Zm5CLJgxu1g==
-X-Received: by 2002:adf:e948:0:b0:306:2aac:4b84 with SMTP id m8-20020adfe948000000b003062aac4b84mr27823524wrn.30.1684228682000;
-        Tue, 16 May 2023 02:18:02 -0700 (PDT)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id q12-20020adfea0c000000b003078354f774sm1901829wrm.36.2023.05.16.02.18.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 02:18:01 -0700 (PDT)
-Date:   Tue, 16 May 2023 10:17:59 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/239] 6.1.29-rc1 review
-Message-ID: <ZGNKRxgT8wj/CO1e@debian>
-References: <20230515161721.545370111@linuxfoundation.org>
+        Tue, 16 May 2023 05:19:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF9C3588;
+        Tue, 16 May 2023 02:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=T4Sl1ooBMpb0KanF1wJIqGZiESG+DyDGWDVl3K8WeZc=; b=thpq6ZmH4G9fdo7dFMIuaCShJn
+        vKgsEXcb3N7S96cxM34TNZ0/2ZeXZ+/8JQ+/2rYIVRdvI3/0EAMO3H14GOFLlVQBmFluRR0qCrYtd
+        sO9vJz5Ibq0vbeWMngbnNu/YT13I0sIvRpOcrHkDIzsB18UYTCFt7ZC03H2ly1MDx98Y76sbEgkAb
+        +badUdO52UmI9I7EB4CdAY3MgGbok5FHWffCtRCGhWICUEeA4njesY3PqrW5UKvhU5b1FQ7Z2MAqK
+        a1eW3FfI/q+76vBbtLDD6a8befQtUWBPfkxkUtPTLm9+pTABNLs8p5nxOeE+ruY1IWLV2YKdyrZtC
+        vgDNLtaQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pyqp2-0048AC-U4; Tue, 16 May 2023 09:18:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7BE8330008D;
+        Tue, 16 May 2023 11:18:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 60A632011856F; Tue, 16 May 2023 11:18:20 +0200 (CEST)
+Date:   Tue, 16 May 2023 11:18:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Ze Gao <zegao@tencent.com>
+Subject: Re: [PATCH v2 2/4] fprobe: make fprobe_kprobe_handler recursion free
+Message-ID: <20230516091820.GB2587705@hirez.programming.kicks-ass.net>
+References: <20230516071830.8190-1-zegao@tencent.com>
+ <20230516071830.8190-3-zegao@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230515161721.545370111@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230516071830.8190-3-zegao@tencent.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, May 16, 2023 at 03:18:28PM +0800, Ze Gao wrote:
+> Current implementation calls kprobe related functions before doing
+> ftrace recursion check in fprobe_kprobe_handler, which opens door
+> to kernel crash due to stack recursion if preempt_count_{add, sub}
+> is traceable.
 
-On Mon, May 15, 2023 at 06:24:23PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.29 release.
-> There are 239 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-Build test (gcc version 12.2.1 20230511):
-mips: 52 configs -> no failure
-arm: 100 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/3535
-[2]. https://openqa.qa.codethink.co.uk/tests/3536
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
+Which preempt_count*() are you referring to? The ones you just made
+_notrace in the previous patch?
