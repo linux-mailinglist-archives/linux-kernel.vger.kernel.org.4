@@ -2,189 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14A47055DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D7F7055DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjEPSTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
+        id S232107AbjEPSTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjEPSTh (ORCPT
+        with ESMTP id S232182AbjEPSTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:19:37 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEA8A26F
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:19:32 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aaf702c3ccso11265ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:19:32 -0700 (PDT)
+        Tue, 16 May 2023 14:19:46 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941E1729B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:19:37 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae4e264e03so1226765ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:19:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684261171; x=1686853171;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KP1jO/M+Q+XA59TkLd38dFwTlZWhAVoZVr2OOCZtzo4=;
-        b=Lg3FNaJSm0M2goIDCcRn6df7eOI1vPvZjotgzQbg3hZY0AFugQ5Wvg6RmE4R1m1dA3
-         5/YjJaoTp1pHHoKg4SRe6iuIJaalCKGKhOqby2dyU8fM3bJaLmJofSlm41Z9w8bikszA
-         THr6hSuC80UYe/BWcv2YG15cdNgL+5H9kdSdvGRbWqPgLqNUBXKwyaV3U7FsYbyovLtF
-         q3dbZrHRilv3/VqacFR+iB/Bc9jQkz/gxZJ+9leb5OtN0hbAH94DNy0GVC7QAJRJGgaF
-         ywgiQj+35/sOaxA0MEPLQP60DQK/LQJAYIUpIMKNsK47cRQ7FzCm+dmLQS/9ojTqqRXm
-         AQFw==
+        d=chromium.org; s=google; t=1684261177; x=1686853177;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=alPm1FkLfJCzAk9pEVOJArmhF62w6dqf91iv/i5ryBk=;
+        b=GfVb7bP9VkgyQIpD6rmCEdxEa2h4o48x0FB0TnkzXoe0SUE9nRrwUQ0Qx4s+FJPmUN
+         o+GTZGH33myPwTlPd14fYLgg3Dbpev6hLXs3CIuI+C+mXv0lsQGdfzbsgR4KXgYJwRlL
+         o5om+MRUpKCRVwbB+6dHjMS696gCKLhrt9p4M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684261171; x=1686853171;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KP1jO/M+Q+XA59TkLd38dFwTlZWhAVoZVr2OOCZtzo4=;
-        b=FdQONNm/D6EXM1yUrDnLzzzslBoTKg0hCHxaOHvTSy+ep+pe2+wbK+1jTjI38bsaer
-         oi/6gi74stxDvF2Bz0LHt6NUrV/y9tquarcMyMXiQpFC8lv6a6dbJX7TpJ3Q6370+kAF
-         sKfstt0ShMyO//HKl0zzvuvfy9eNb6rDwtHfAv5pNH2wJUXX7S5keEMCdhJY2GgPQBoS
-         HexvcCG7RaRwbpW+Bf1/fn3vbPCcRmlFzHNAA6mu9XkKJqbYX2fYaUTCSoBjK/jm6sHo
-         eAEifJ5duf1Gt2YJ5ZcbLf9xyWtR/f7MPbM4aHb2K8k+QsRAKx8R+KDL+BfpVw+pR/Dj
-         Sy7Q==
-X-Gm-Message-State: AC+VfDyJmowT8Uu0kyRWdjDM1dV9tGHRGpOGWZ/VISTHsEQOndM91ygO
-        /3Z+myO7wsleL4dQ5zSHDXn+25THvFsv7Jjxch/NCw==
-X-Google-Smtp-Source: ACHHUZ5pjJZIWqIH5OviGXHIPX+7bVbg4gG/m8HBeKJgp3nGx/juYH/JjzZGnA94EplG1ImGGWcq7/fBJrbT+wcZvxM=
-X-Received: by 2002:a17:902:f542:b0:198:af4f:de07 with SMTP id
- h2-20020a170902f54200b00198af4fde07mr927plf.7.1684261171004; Tue, 16 May 2023
- 11:19:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684261177; x=1686853177;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=alPm1FkLfJCzAk9pEVOJArmhF62w6dqf91iv/i5ryBk=;
+        b=XgXT7LAlfH1lNl6df+qwLtOOKMWcFCDDla24yBXNKQG5bB50KYgmuLp63WcBrPR90A
+         f13lHEdlUexJ/coER9PkTpq9bkDo0ownNE1SphS5FE/EcG4UmhTyqJToxOfq6nArFlOu
+         sRqRYQklfbEqCksmbPZcxR7xLM6B6GXquGcayRwlng/6Or5Z8GKv32BN9kB7npSzj7vj
+         YyUWVP62BZAFZGaE+tFKxKn3/hzOug3vE9bGMKpuCNFgoBaX3Lo6Mf24DhLuAB4TpeZz
+         p+vEZJHuRg8rbhTsfUBeuLumZ12jjOYZgnGWVj8vvnjPfxdFtx78tYTXLZfE41le3myU
+         PHiw==
+X-Gm-Message-State: AC+VfDx96F9uoOpQi4O8XPmcjSuDBDfTWV86fCQ9zNSewbKQnhrJqgMv
+        +RwI11FoCsAT9KKzLmjF09ofQg==
+X-Google-Smtp-Source: ACHHUZ6uVa+nfzK9d6+UKGJYTR7xfDV6f0n91uwgaR0OIfF6UxU7TS/xzV7gJVCr5GhfD4qejQviBQ==
+X-Received: by 2002:a17:902:db02:b0:1ac:815e:320b with SMTP id m2-20020a170902db0200b001ac815e320bmr36577912plx.17.1684261177044;
+        Tue, 16 May 2023 11:19:37 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b001ac68a87255sm15831519plq.93.2023.05.16.11.19.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 11:19:36 -0700 (PDT)
+Date:   Tue, 16 May 2023 11:19:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] wifi: wil6210: fw: Replace zero-length arrays with
+ DECLARE_FLEX_ARRAY() helper
+Message-ID: <202305161119.2158E464CF@keescook>
+References: <ZGKHByxujJoygK+l@work>
 MIME-Version: 1.0
-References: <20230515215844.653610-1-irogers@google.com> <20230515215844.653610-16-irogers@google.com>
- <4f1e2e31-4efd-ba94-18e5-e53189429d9b@linux.intel.com>
-In-Reply-To: <4f1e2e31-4efd-ba94-18e5-e53189429d9b@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 16 May 2023 11:19:19 -0700
-Message-ID: <CAP-5=fWO6uPwdkuDMiHSJL53nQ_o6cXt9LG+vngiZtm=8zFbNA@mail.gmail.com>
-Subject: Re: [PATCH v1 15/15] perf vendor events intel: Add metricgroup
- descriptions for all models
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGKHByxujJoygK+l@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 10:54=E2=80=AFAM Liang, Kan <kan.liang@linux.intel.=
-com> wrote:
->
->
->
-> On 2023-05-15 5:58 p.m., Ian Rogers wrote:
-> > Add metric group descriptions created by:
-> > https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
-> > The descriptions add some additional detail in perf list.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  .../arch/x86/alderlake/metricgroups.json      | 122 ++++++++++++++++++
-> >  .../arch/x86/alderlaken/metricgroups.json     |  26 ++++
-> >  .../arch/x86/broadwell/metricgroups.json      | 107 +++++++++++++++
-> >  .../arch/x86/broadwellde/metricgroups.json    | 107 +++++++++++++++
-> >  .../arch/x86/broadwellx/metricgroups.json     | 107 +++++++++++++++
-> >  .../arch/x86/cascadelakex/metricgroups.json   | 114 ++++++++++++++++
-> >  .../arch/x86/haswell/metricgroups.json        | 107 +++++++++++++++
-> >  .../arch/x86/haswellx/metricgroups.json       | 107 +++++++++++++++
-> >  .../arch/x86/icelake/metricgroups.json        | 113 ++++++++++++++++
-> >  .../arch/x86/icelakex/metricgroups.json       | 114 ++++++++++++++++
-> >  .../arch/x86/ivybridge/metricgroups.json      | 107 +++++++++++++++
-> >  .../arch/x86/ivytown/metricgroups.json        | 107 +++++++++++++++
-> >  .../arch/x86/jaketown/metricgroups.json       | 100 ++++++++++++++
-> >  .../arch/x86/sandybridge/metricgroups.json    | 100 ++++++++++++++
-> >  .../arch/x86/sapphirerapids/metricgroups.json | 118 +++++++++++++++++
-> >  .../arch/x86/skylake/metricgroups.json        | 113 ++++++++++++++++
-> >  .../arch/x86/skylakex/metricgroups.json       | 114 ++++++++++++++++
-> >  .../arch/x86/tigerlake/metricgroups.json      | 113 ++++++++++++++++
-> >  18 files changed, 1896 insertions(+)
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/metricgrou=
-ps.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/metricgro=
-ups.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/broadwell/metricgrou=
-ps.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellde/metricgr=
-oups.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellx/metricgro=
-ups.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/metricg=
-roups.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/haswell/metricgroups=
-.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/haswellx/metricgroup=
-s.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/icelake/metricgroups=
-.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/icelakex/metricgroup=
-s.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/ivybridge/metricgrou=
-ps.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/ivytown/metricgroups=
-.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/jaketown/metricgroup=
-s.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/sandybridge/metricgr=
-oups.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/metri=
-cgroups.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/skylake/metricgroups=
-.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/skylakex/metricgroup=
-s.json
-> >  create mode 100644 tools/perf/pmu-events/arch/x86/tigerlake/metricgrou=
-ps.json
-> >
-> > diff --git a/tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json=
- b/tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json
-> > new file mode 100644
-> > index 000000000000..273ccfb0ed6f
-> > --- /dev/null
-> > +++ b/tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json
-> > @@ -0,0 +1,122 @@
-> > +{
-> > +    "Backend": "Grouping from metrics spreadsheet",
-> > +    "Bad": "Grouping from metrics spreadsheet",
-> > +    "BadSpec": "Grouping from metrics spreadsheet",
-> > +    "BigFoot": "Grouping from metrics spreadsheet",
-> > +    "BrMispredicts": "Grouping from metrics spreadsheet",
-> > +    "Branches": "Grouping from metrics spreadsheet",
->
-> The description "Grouping from metrics spreadsheet" seems meaningless,
-> and may bring confusion information, e.g., what is metrics spreadsheet?
-> I think it may be better to leave it empty if we don't have a proper
-> description for the metricgroup.
+On Mon, May 15, 2023 at 01:24:55PM -0600, Gustavo A. R. Silva wrote:
+> Zero-length arrays are deprecated, and we are moving towards adopting
+> C99 flexible-array members, instead. So, replace zero-length arrays
+> declarations alone in structs with the new DECLARE_FLEX_ARRAY()
+> helper macro.
+> 
+> This helper allows for flexible-array members alone in structs.
+> 
+> Link: https://github.com/KSPP/linux/issues/193
+> Link: https://github.com/KSPP/linux/issues/287
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Thanks Kan, the TMA spreadsheet has a column (AG in version 4.5-full)
-called Metric Group. For the level 3 ICache_Misses metric the value of
-the cell is "BigFoot;FetchLat;IcMiss". The converter will put these
-groups alongside the groups derived by level, parent/child
-relationship. A group like "BigFoot" could use some explanation. The
-intent with saying "Grouping from metrics spreadsheet" is to at least
-give the origin of the metric group which I think is at least a little
-bit better than saying nothing and not knowing the origin of where the
-grouping comes from. I'd like to do more, so I think we can iterate
-and improve, but I think this first step has some value.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks,
-Ian
-
-> Other descriptions look good to me.
->
-> Thanks,
-> Kan
+-- 
+Kees Cook
