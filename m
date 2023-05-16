@@ -2,120 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2135E705A7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43ABE705A7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjEPWT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
+        id S230106AbjEPWUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjEPWT0 (ORCPT
+        with ESMTP id S229534AbjEPWUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:19:26 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D15759D2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:19:24 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 047C02C04E1;
-        Wed, 17 May 2023 10:19:15 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1684275555;
-        bh=arElUNBLxYP/oS8PzLnuVnQ8MmR2mLGZDAgu2O2gSP0=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=HPFIGvXnhVHJyEKGFnxyaxSijIvhEllmsTmbBGp+8Qqb35g1/YKCDZq1dzTp/zGdp
-         MXO8b3wk0ogBOt3D7T01o0EGsIT6bnIyt4Jw66MetNrL71J1GWgdz2qk+gVyCaBrnP
-         lur/J26PiuQlUlw/DoQV7mxuscX3d5cBg5wO6kh0InNO8zat9PEJ/AwkJlnxA2/SHb
-         g/R8eaZOyN1+rp9+Jkf419hgcKUkcYwN8dVrvFumOgt1dQH7eB64AoEzBFsXlqvhlF
-         sxl5asI2MU3uLmd5ubSc9/+TTCWzas5K8fMRuZcG+0An4HO2E64k59/eqrFmcasVt8
-         eoMAfK1L2DdJw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B646401620001>; Wed, 17 May 2023 10:19:14 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 17 May 2023 10:19:14 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Wed, 17 May 2023 10:19:14 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "johan@kernel.org" <johan@kernel.org>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
-Thread-Topic: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
-Thread-Index: AQHZhIoofApft8Zm8kuYZtpxH+f53K9VfDeAgAQYHQCAApZDgIAAjA4A
-Date:   Tue, 16 May 2023 22:19:14 +0000
-Message-ID: <31a23398-9b0e-4a19-3576-84fcfd3ce4b5@alliedtelesis.co.nz>
-References: <20230512042806.3438373-1-chris.packham@alliedtelesis.co.nz>
- <CACRpkdYz9ipNTo2ORXKWy5Q4uCpKL=9Gd+kK76pestX7Onuz-Q@mail.gmail.com>
- <b36fcdf1-45ab-0c06-efe4-237df0612466@alliedtelesis.co.nz>
- <CACRpkdbiSAFoJP_JB1d_6gQ+Xx7Y+mLAh=C6Za+fpyWuRe6Gbw@mail.gmail.com>
-In-Reply-To: <CACRpkdbiSAFoJP_JB1d_6gQ+Xx7Y+mLAh=C6Za+fpyWuRe6Gbw@mail.gmail.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0E08B0DD9C4BAB49AB098DDA8173E7C0@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 16 May 2023 18:20:45 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A6B59E0;
+        Tue, 16 May 2023 15:20:44 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1ae408f4d1aso1593895ad.0;
+        Tue, 16 May 2023 15:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684275644; x=1686867644;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IeZwhtVSqAG6iHIQ8IUXqbVYn2+osulTFj6IZpAkURA=;
+        b=Hgdp6nAntZmrpqBDhdk7E0rc6dat30noUIDD+YKei7fPL4Wo6aL9d0ZJpZbplRH5N6
+         Pd7nyDkiAo9c4HmdojDLo6C+h3ssKd+H97R4Shk70DuWn6qCC/JqGqERqIsIhZgG23YQ
+         guqdrq5wh2D6b+wK3N+eL9YA33on0DesQXmZ1LEnnlSJBp0CrkHvw1Y4TYEZzAXxcU7h
+         ETVFJz0nm9KmvFzWpWutpUJGvgZHYvhqKbaYzQZCTWo00i8Of7FqL7mBHftk8Eto6BxW
+         OjomwIOY4wf1RqIORCghEwEbOBe/DOcw+fZPfFVg2kiAh/WbjNNeYB1RHy62EqfQiACx
+         6HsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684275644; x=1686867644;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IeZwhtVSqAG6iHIQ8IUXqbVYn2+osulTFj6IZpAkURA=;
+        b=lUDDTBntQJmp4REt2H8QByoDaD7YSJuISplVFU+8gZH27e4dnas9Pe9PPhzC1FIt/E
+         MewOMcsSWMZcSy2NGc40YFby+wlhCLhMUwNQcArbjCKqxiwkRIVEpHX4m66/hHeH6j+N
+         dN5Zj9+LrQIynNygb4NBpyW1Au2FoBlp+wAKLMirAxFQw6h8eFVPTn7JdcQBZUkQNYMo
+         BBhPZjrsOj3iMDaYvpj6tPq4Y4iW1Se8ozy0z5qJKmaNETXhBtxEt+0KQ+D93MgUBRL7
+         0gPAS8VpbAeEzMWkQei3VqAITDU0wpIIyaeZR6XRTERxhgv6VdUp5w2ELTLkAbeBGYS7
+         2u3Q==
+X-Gm-Message-State: AC+VfDzAwR7KczJXE0rJSLWJbeXFiMlWx9SlQ6TuygxBE2SY76Fao0Ck
+        lnTd3tHuJ/fM6wmnYqErE4o=
+X-Google-Smtp-Source: ACHHUZ4nzvdM64wv1Iwhf7a6uwcd+WXdrvGPTYoGMcH7eUawy/TgM0s5yLdILJA8XRWrw1sQeBpvfg==
+X-Received: by 2002:a17:902:9005:b0:1ad:eb16:35e2 with SMTP id a5-20020a170902900500b001adeb1635e2mr12415779plp.66.1684275643949;
+        Tue, 16 May 2023 15:20:43 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
+        by smtp.gmail.com with ESMTPSA id bf12-20020a170902b90c00b001ac95be5081sm15963062plb.307.2023.05.16.15.20.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 15:20:43 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Clark <robdclark@chromium.org>, stable@vger.kernel.org,
+        Lepton Wu <lepton@chromium.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
+        iommu@lists.linux.dev (open list:IOMMU SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4 1/2] iommu/arm-smmu-qcom: Fix missing adreno_smmu's
+Date:   Tue, 16 May 2023 15:20:36 -0700
+Message-Id: <20230516222039.907690-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=3N-_S7HmHMGHqhwlQE4A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxNy8wNS8yMyAwMTo1NywgTGludXMgV2FsbGVpaiB3cm90ZToNCj4gT24gTW9uLCBNYXkg
-MTUsIDIwMjMgYXQgMTI6MjfigK9BTSBDaHJpcyBQYWNraGFtDQo+IDxDaHJpcy5QYWNraGFtQGFs
-bGllZHRlbGVzaXMuY28ubno+IHdyb3RlOg0KPg0KPj4gSW4gbXkgb3JpZ2luYWwgY2FzZSB3aGlj
-aCBpcyBhIGtlcm5lbCBtb2R1bGUgdGhhdCBleHBvcnRzIGEgR1BJTyBmb3INCj4+IHVzZXJzcGFj
-ZSB1c2luZyBncGlvZF9leHBvcnQoKQ0KPiBXZSBzaG91bGQgbm90IGFkZCBuZXcgdXNlcnMgZm9y
-IHRoYXQgQVBJIGFzIGl0IGluY3JlYXNlIHRoZSB1c2FnZQ0KPiBvZiB0aGUgc3lzZnMgQUJJIGJ1
-dCBpZiBpdCdzIGFuIGV4aXN0aW5nIGluLXRyZWUgdXNlY2FzZSBJIGJ1eSBpdC4NCj4NCj4+IFRo
-ZSBjcnV4IG9mIHRoZSBwcm9ibGVtIGlzIHRoYXQgdGhlIGlycV9kZXNjIGlzIGNyZWF0ZWQgd2hl
-biBpdCBoYXNuJ3QNCj4+IGJlZW4gcmVxdWVzdGVkLg0KPiBUaGUgcmlnaHQgc29sdXRpb24gdG8g
-bWUgc2VlbXMgdG8gYmUgdG8gbm90IHVzZSBncGlvZF9leHBvcnQoKQ0KPiBhbmQgbm90IHVzZSBz
-eXNmcyBUQkguDQoNClRoYXQncyBub3QgcmVhbGx5IGEgZmVhc2libGUgc29sdXRpb24uIEknbSBk
-ZWFsaW5nIHdpdGggYXBwbGljYXRpb24gY29kZSANCnRoYXQgaGFzIGJlZW4gaGFwcGlseSB1c2lu
-ZyB0aGUgc3lzZnMgaW50ZXJmYWNlIGZvciBtYW55IHllYXJzLg0KDQpJIGFjdHVhbGx5IGRpZCBs
-b29rIGF0IGdldHRpbmcgdGhhdCBjb2RlIHVwZGF0ZWQgdG8gdXNlIGxpYmdwaW8gZWFybGllciAN
-CnRoaXMgeWVhciBidXQgZm91bmQgdGhlIEFQSSB3YXMgaW4gYSBzdGF0ZSBvZiBmbHV4IGFuZCBJ
-IHdhc24ndCBnb2luZyB0byANCnJlY29tbWVuZCByZS13cml0aW5nIHRoZSBhcHBsaWNhdGlvbiBj
-b2RlIHRvIHVzZSBsaWJncGlvIGlmIEkga25ldyB0aGUgDQpBUEkgd2FzIGdvaW5nIHRvIGNoYW5n
-ZSBhbmQgd2UnZCBoYXZlIHRvIHJlLXdyaXRlIGl0IGFnYWluLg0KDQpFdmVuIG5vdyB3aXRoIHRo
-ZSAyLjAuMSBsaWJncGlvIHRoZXJlIGRvZXNuJ3Qgc2VlbSB0byBiZSBhIHdheSBvZiBhc2tpbmcg
-DQphYm91dCBqdXN0IEdQSU8gbGluZXMgaW4gdGhlIHN5c3RlbSwgYXBwbGljYXRpb24gY29kZSB3
-b3VsZCBzdGlsbCBuZWVkIA0KdG8gb3BlbiBldmVyeSAvZGV2L2dwaW9jaGlwTiBkZXZpY2UgYW5k
-IGFzayB3aGF0IGxpbmVzIGFyZSBvbiB0aGUgY2hpcCANCmFuZCBrZWVwIHRoZSBmZHMgb3BlbiBm
-b3IgdGhlIGNoaXBzIHRoYXQgaGF2ZSBsaW5lcyB0aGUgYXBwbGljYXRpb24gDQpjYXJlcyBhYm91
-dCBidXQgbWFrZSBzdXJlIHRvIGNsb3NlIHRoZSBmZCBmb3IgdGhlIG9uZXMgdGhhdCBkb24ndC4g
-U28gDQpub3cgdGhlIGFwcGxpY2F0aW9uIGNvZGUgaGFzIHRvIGNhcmUgYWJvdXQgR1BJTyBjaGlw
-cyBpbiBhZGRpdGlvbiB0byB0aGUgDQpHUElPIGxpbmVzLg0KDQo+PiBJbiBzb21lIGNhc2VzIHdl
-IGtub3cgdGhlIEdQSU8gcGluIGlzIGFuIG91dHB1dCBzbyB3ZQ0KPj4gY291bGQgYXZvaWQgaXQs
-IGluIG90aGVycyB3ZSBjb3VsZCBkZWxheSB0aGUgY3JlYXRpb24gdW50aWwgYW4gaW50ZXJydXB0
-DQo+PiBpcyBhY3R1YWxseSByZXF1ZXN0ZWQgKHdoaWNoIGlzIHdoYXQgSSdtIGF0dGVtcHRpbmcg
-dG8gZG8pLg0KPiBZZWFoIEkgZ3Vlc3MuIElmIHdlIHdhbm5hIGtlZXAgcGFwZXJpbmcgb3ZlciBp
-c3N1ZXMgY3JlYXRlZA0KPiBieSB0aGUgc3lzZnMgQUJJLg0KDQpTbyB0aGF0IGFzaWRlLiBJcyBp
-cyByZWFzb25hYmxlIHRvIGV4cGVjdCB0aGF0IGdwaW9faXNfdmlzaWJsZSgpIHNob3VsZCANCm5v
-dCBoYXZlIGFueSBzaWRlIGVmZmVjdHM/DQoNCkkgc3RpbGwgYmVsaWV2ZSB0aGF0IHRoaXMgY2hh
-bmdlIGlzIGluIHRoZSByaWdodCBkaXJlY3Rpb24gYWx0aG91Z2ggDQpjbGVhcmx5IEkgbmVlZCB0
-byBwcm92aWRlIGEgYmV0dGVyIGV4cGxhbmF0aW9uIG9mIHdoeSBJIHRoaW5rIHRoYXQgaXMgDQp0
-aGUgY2FzZS4gQW5kIHRoZXJlIG1pZ2h0IGJlIGEgYmV0dGVyIHdheSBvZiBhY2hpZXZpbmcgbXkg
-Z29hbCBvZiBub3QgDQp0cmlnZ2VyaW5nIHRoZSB3YXJuaW5nIG9uIGtleGVjIChjZXJ0YWlubHkg
-bXkgaW5pdGlhbCBlZmZvcnQgd2FzIHdheSBvZmYgDQp0aGUgbWFyaykuDQoNCj4NCj4gWW91cnMs
-DQo+IExpbnVzIFdhbGxlaWo=
+From: Rob Clark <robdclark@chromium.org>
+
+When the special handling of qcom,adreno-smmu was moved into
+qcom_smmu_create(), it was overlooked that we didn't have all the
+required entries in qcom_smmu_impl_of_match.  So we stopped getting
+adreno_smmu_priv on sc7180, breaking per-process pgtables.
+
+Fixes: 30b912a03d91 ("iommu/arm-smmu-qcom: Move the qcom,adreno-smmu check into qcom_smmu_create")
+Cc: <stable@vger.kernel.org>
+Suggested-by: Lepton Wu <lepton@chromium.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+index d1b296b95c86..ec743a9ec67a 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+@@ -496,20 +496,21 @@ static const struct qcom_smmu_match_data qcom_smmu_500_impl0_data = {
+ /*
+  * Do not add any more qcom,SOC-smmu-500 entries to this list, unless they need
+  * special handling and can not be covered by the qcom,smmu-500 entry.
+  */
+ static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
+ 	{ .compatible = "qcom,msm8996-smmu-v2", .data = &msm8996_smmu_data },
+ 	{ .compatible = "qcom,msm8998-smmu-v2", .data = &qcom_smmu_v2_data },
+ 	{ .compatible = "qcom,qcm2290-smmu-500", .data = &qcom_smmu_500_impl0_data },
+ 	{ .compatible = "qcom,qdu1000-smmu-500", .data = &qcom_smmu_500_impl0_data  },
+ 	{ .compatible = "qcom,sc7180-smmu-500", .data = &qcom_smmu_500_impl0_data },
++	{ .compatible = "qcom,sc7180-smmu-v2", .data = &qcom_smmu_v2_data },
+ 	{ .compatible = "qcom,sc7280-smmu-500", .data = &qcom_smmu_500_impl0_data },
+ 	{ .compatible = "qcom,sc8180x-smmu-500", .data = &qcom_smmu_500_impl0_data },
+ 	{ .compatible = "qcom,sc8280xp-smmu-500", .data = &qcom_smmu_500_impl0_data },
+ 	{ .compatible = "qcom,sdm630-smmu-v2", .data = &qcom_smmu_v2_data },
+ 	{ .compatible = "qcom,sdm845-smmu-v2", .data = &qcom_smmu_v2_data },
+ 	{ .compatible = "qcom,sdm845-smmu-500", .data = &sdm845_smmu_500_data },
+ 	{ .compatible = "qcom,sm6115-smmu-500", .data = &qcom_smmu_500_impl0_data},
+ 	{ .compatible = "qcom,sm6125-smmu-500", .data = &qcom_smmu_500_impl0_data },
+ 	{ .compatible = "qcom,sm6350-smmu-v2", .data = &qcom_smmu_v2_data },
+ 	{ .compatible = "qcom,sm6350-smmu-500", .data = &qcom_smmu_500_impl0_data },
+@@ -540,12 +541,21 @@ struct arm_smmu_device *qcom_smmu_impl_init(struct arm_smmu_device *smmu)
+ 		/* Match platform for ACPI boot */
+ 		if (acpi_match_platform_list(qcom_acpi_platlist) >= 0)
+ 			return qcom_smmu_create(smmu, &qcom_smmu_500_impl0_data);
+ 	}
+ #endif
+ 
+ 	match = of_match_node(qcom_smmu_impl_of_match, np);
+ 	if (match)
+ 		return qcom_smmu_create(smmu, match->data);
+ 
++	/*
++	 * If you hit this WARN_ON() you are missing an entry in the
++	 * qcom_smmu_impl_of_match[] table, and GPU per-process page-
++	 * tables will be broken.
++	 */
++	WARN(of_device_is_compatible(np, "qcom,adreno-smmu"),
++	     "Missing qcom_smmu_impl_of_match entry for: %s",
++	     dev_name(smmu->dev));
++
+ 	return smmu;
+ }
+-- 
+2.40.1
+
