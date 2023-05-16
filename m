@@ -2,104 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0DF705B11
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FA3705B15
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjEPXOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
+        id S230167AbjEPXPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbjEPXOJ (ORCPT
+        with ESMTP id S229644AbjEPXPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:14:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D0776B7;
-        Tue, 16 May 2023 16:14:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 779596353D;
-        Tue, 16 May 2023 23:14:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E049C433D2;
-        Tue, 16 May 2023 23:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684278840;
-        bh=qaUrBJYyxwwKBd2OY03a0I58URs2kzWjK7mA8MAbaNs=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=We6kEj/iS+wYQuFQ6YbadjiFGSz9PNkVtATeks2aNWZ4b/s0nHpOeYGVdeB+QoMv/
-         ZEgm8y7BP/0iYJeGUlWyGq9RkwgpL2eyi/1Pzd6+Q5g+AQIZRV77yQCv+kibn+wEFo
-         YOYe6qZacSRxylsteDg3/DS5GFbuoUFdVjl9x9ptW44T1yxoSuJaKXnViTFzJq4sTP
-         vcC5B/qvpuUMLdEPw4rgt8YyRuzN2I2hxgbwseyaoU1XpgMYO5FJaqsWF0BzDiljXp
-         kK77kxVG0irXdy1iDpoKix2jzzE8awrzLmQM2o9nvVVZXL5htSBVBr2RKhwcqnOk4Q
-         G4zGPIQHjJdnw==
-Date:   Tue, 16 May 2023 17:14:49 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 2/2][next] media: venus: hfi_cmds: Use struct_size() helper
-Message-ID: <fd52d6ddce285474615e4bd96931ab12a0da8199.1684278538.git.gustavoars@kernel.org>
-References: <cover.1684278538.git.gustavoars@kernel.org>
+        Tue, 16 May 2023 19:15:42 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB1B4EE0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:15:39 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64ab2a37812so9104177b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:15:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684278939; x=1686870939;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ComBD5cVSZXxb8CF1oU6ofe5UBMPl0+rt3cWiD9Tacg=;
+        b=nQDi6NYrzWKrK0bA4GjAg3dfl3oHSpMlCxu4FLE1nnFNWHCjuRLMFhBS9Nqwu8kjjn
+         1Cl5BHAOoCd5zi7pqEenAcLKhi8pm72XFABs6sCcMumuOF52ZsWEZ8gjFp/qcKgkHe/t
+         OuWN2+FkrNqC1e+TUc0aTRu4ojycowYVSnRuMA0XNS3ZbgOnKaE2SjNZJx3J/D/8NBgU
+         arE7TsWhDx5uCTWpuNMzDwYmSGQXfjQ/5y2YrYDo9TzLOk5QoIjGoezXygUQiRKNlinI
+         sRBGrWIzZmfKupV+Ufgs9EskGsOUt5Ti6pfL3Jl4Wsc3n8rUbs9HvypBXUOFyzfux9Li
+         ooDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684278939; x=1686870939;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ComBD5cVSZXxb8CF1oU6ofe5UBMPl0+rt3cWiD9Tacg=;
+        b=HItSe8sEBg2znh5w6tUyFBHrAlUoxg7aEIeNokXU6wMY9lWfBzzf94KkulvkylNIWR
+         +9DMr/+XViQulJqncR18Wkn3Ibh7pEvmc8gjlJNvozVLmNySgDKhnH+MW7zSt/w5HrXg
+         Q1FR10Hwm7ItUfYakIFJc/rHczfiqXAjGgR1OA/4HxI9B+fRONdL8/L7btbu9nZhytYd
+         MrcZYMHP7Tvk1GArSUn5Td0lMf3apM4DR40l1ORj9UalYF8TU5C5SeBYObObp23j8KFh
+         qEyuVQl+8ns2hHJCylZvBJ9vfGBlQPuXwTc/8uvO0iPvoNyyrBEfCoJbdvtnsXqfopm2
+         rtog==
+X-Gm-Message-State: AC+VfDwkZTDN3sp9qu7JEc9ZCSZpJn0/OeqcNqbbWiJdbmoWzW+hEr4J
+        mPsoZLfn8PJnuYPiDympUU+qnw==
+X-Google-Smtp-Source: ACHHUZ4gosaB6ODsKvk2XDn1AJsJpl9jEWJVUpQm58NAxF/3RNS7MtlM6w4/fMxX3zUVwJKoPCNW6A==
+X-Received: by 2002:a05:6a00:238c:b0:64b:e8:24ff with SMTP id f12-20020a056a00238c00b0064b00e824ffmr367750pfc.17.1684278939473;
+        Tue, 16 May 2023 16:15:39 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id g26-20020aa7819a000000b0063799398eaesm13840532pfi.51.2023.05.16.16.15.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 16:15:38 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1pz3tG-000KiC-28;
+        Wed, 17 May 2023 09:15:34 +1000
+Date:   Wed, 17 May 2023 09:15:34 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 22/32] vfs: inode cache conversion to hash-bl
+Message-ID: <ZGQOlrcvLplTfZmf@dread.disaster.area>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-23-kent.overstreet@linux.dev>
+ <20230510044557.GF2651828@dread.disaster.area>
+ <20230516-brand-hocken-a7b5b07e406c@brauner>
+ <ZGOsgI7a68mWYVQH@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1684278538.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZGOsgI7a68mWYVQH@moria.home.lan>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prefer struct_size() over open-coded versions of idiom:
+On Tue, May 16, 2023 at 12:17:04PM -0400, Kent Overstreet wrote:
+> On Tue, May 16, 2023 at 05:45:19PM +0200, Christian Brauner wrote:
+> > On Wed, May 10, 2023 at 02:45:57PM +1000, Dave Chinner wrote:
+> > There's a bit of a backlog before I get around to looking at this but
+> > it'd be great if we'd have a few reviewers for this change.
+> 
+> It is well tested - it's been in the bcachefs tree for ages with zero
+> issues. I'm pulling it out of the bcachefs-prerequisites series though
+> since Dave's still got it in his tree, he's got a newer version with
+> better commit messages.
+> 
+> It's a significant performance boost on metadata heavy workloads for any
+> non-XFS filesystem, we should definitely get it in.
 
-sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
+I've got an up to date vfs-scale tree here (6.4-rc1) but I have not
+been able to test it effectively right now because my local
+performance test server is broken. I'll do what I can on the old
+small machine that I have to validate it when I get time, but that
+might be a few weeks away....
 
-where count is the max number of items the flexible array is supposed to
-contain.
+git://git.kernel.org/pub/scm/linux/kernel/git/dgc/linux-xfs.git vfs-scale
 
-Link: https://github.com/KSPP/linux/issues/160
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/media/platform/qcom/venus/hfi_cmds.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+As it is, the inode hash-bl changes have zero impact on XFS because
+it has it's own highly scalable lockless, sharded inode cache. So
+unless I'm explicitly testing ext4 or btrfs scalability (rare) it's
+not getting a lot of scalability exercise. It is being used by the
+root filesytsems on all those test VMs, but that's about it...
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-index 21d1b3c90dc0..3f74d518ad08 100644
---- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-+++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-@@ -209,8 +209,8 @@ int pkt_session_set_buffers(struct hfi_session_set_buffers_pkt *pkt,
- 		}
- 	} else {
- 		pkt->extradata_size = 0;
--		pkt->shdr.hdr.size = sizeof(*pkt) +
--			bd->num_buffers * sizeof(u32);
-+		pkt->shdr.hdr.size = struct_size(pkt, buffer_info,
-+						 bd->num_buffers);
- 		for (i = 0; i < pkt->num_buffers; i++)
- 			pkt->buffer_info[i] = bd->device_addr;
- 	}
-@@ -251,8 +251,8 @@ int pkt_session_unset_buffers(struct hfi_session_release_buffer_pkt *pkt,
- 
- 		pkt->extradata_size = 0;
- 		pkt->shdr.hdr.size =
--				sizeof(struct hfi_session_set_buffers_pkt) +
--				bd->num_buffers * sizeof(u32);
-+			struct_size((struct hfi_session_set_buffers_pkt *)0,
-+				    buffer_info, bd->num_buffers);
- 	}
- 
- 	pkt->response_req = bd->response_required;
+That said, my vfs-scale tree also has Waiman Long's old dlist code
+(per cpu linked list) which converts the sb inode list and removes
+the global lock there. This does make a huge impact for XFS - the
+current code limits inode cache cycling to about 600,000 inodes/sec
+on >=16p machines. With dlists, however:
+
+| 5.17.0 on a XFS filesystem with 50 million inodes in it on a 32p
+| machine with a 1.6MIOPS/6.5GB/s block device.
+| 
+| Fully concurrent full filesystem bulkstat:
+| 
+| 		wall time	sys time	IOPS	BW	rate
+| unpatched:	1m56.035s	56m12.234s	 8k     200MB/s	0.4M/s
+| patched:	0m15.710s	 3m45.164s	70k	1.9GB/s 3.4M/s
+| 
+| Unpatched flat kernel profile:
+| 
+|   81.97%  [kernel]  [k] __pv_queued_spin_lock_slowpath
+|    1.84%  [kernel]  [k] do_raw_spin_lock
+|    1.33%  [kernel]  [k] __raw_callee_save___pv_queued_spin_unlock
+|    0.50%  [kernel]  [k] memset_erms
+|    0.42%  [kernel]  [k] do_raw_spin_unlock
+|    0.42%  [kernel]  [k] xfs_perag_get
+|    0.40%  [kernel]  [k] xfs_buf_find
+|    0.39%  [kernel]  [k] __raw_spin_lock_init
+| 
+| Patched flat kernel profile:
+| 
+|   10.90%  [kernel]  [k] do_raw_spin_lock
+|    7.21%  [kernel]  [k] __raw_callee_save___pv_queued_spin_unlock
+|    3.16%  [kernel]  [k] xfs_buf_find
+|    3.06%  [kernel]  [k] rcu_segcblist_enqueue
+|    2.73%  [kernel]  [k] memset_erms
+|    2.31%  [kernel]  [k] __pv_queued_spin_lock_slowpath
+|    2.15%  [kernel]  [k] __raw_spin_lock_init
+|    2.15%  [kernel]  [k] do_raw_spin_unlock
+|    2.12%  [kernel]  [k] xfs_perag_get
+|    1.93%  [kernel]  [k] xfs_btree_lookup
+
+Cheers,
+
+Dave.
 -- 
-2.34.1
-
+Dave Chinner
+david@fromorbit.com
