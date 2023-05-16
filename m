@@ -2,164 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BDA705597
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2457055A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjEPSB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S232065AbjEPSFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjEPSBy (ORCPT
+        with ESMTP id S229655AbjEPSFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:01:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9AC3A81;
-        Tue, 16 May 2023 11:01:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 16 May 2023 14:05:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D135B9A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684260305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y5EOypxgbZDRGvVwT5KvydBJmWedm0p4xvCj98nOYvY=;
+        b=b88OzNZXTHp+y6uuB23Jr4W8x5jlYfQ2OO6+I4S40YqCVxG5aQGYU5LiR6Cmw7FSVfKpXU
+        0JWiMRvNyGbnepTx5PqRsxFVcXzsx87wovUC9WXHzK7wPIlD8WG5t9lmL9P9/ARg64991X
+        +RPdRbqvEjz/RlSjYLUuf7LuS1o8NQI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-450-C0cacgM5PRuPUxecaQIZTw-1; Tue, 16 May 2023 14:05:02 -0400
+X-MC-Unique: C0cacgM5PRuPUxecaQIZTw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C21963D7A;
-        Tue, 16 May 2023 18:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 008BFC433AE;
-        Tue, 16 May 2023 18:01:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684260112;
-        bh=fTMeSN7AzVHCiTkT+f9pmwZrYPpPz9puMnicx/1cTkI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RlotsGFNhRhoLtH8XEDeUgZi0A9QysXGzNW8uROo+1oL6hMQNZvWQDrnhux+u4kuL
-         rBR59dmF/PkfieVlBNIH1U1SIcpn0efnUOGY3QnJJtnJ4UrDjHDcH5D9BhjF4kBaZ8
-         bBRiBA/tSfue4MAsveruziEiuKBZXaGVBbBHbJo7QB4ByWcpqPORiEgRXW3lfSlaZe
-         vhxpodHCgI5iUhqpiYlCygt5y6dfBbI0TX3fSEyE2Fu1uRkyevrX1u4p12epe/aDh2
-         E8lkieM74b5CRgpImmOljoSHYCgGLLGVIGkWnZfUVCItCqyIIOLcoTGf6Igll8FGOP
-         HDcxizFz2RvQQ==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f00d41df22so5965380e87.1;
-        Tue, 16 May 2023 11:01:51 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz/3ocs2lhoWG4IBLPTMn6f5yEqLPkKQgzdX/Gxdj9OVZkKOae8
-        V7p1ulzO7YeX0vvdhGgyZL5TC5RoqUXb8m3ZXi8=
-X-Google-Smtp-Source: ACHHUZ5mkGKvbS8jLvIh+c+5mkY/if/pIGe5q1s0NkvzsdFe2AoncbM41M63JlAbaP+eAQpipVwoyg4qvgPfbmTVI+I=
-X-Received: by 2002:a05:651c:1728:b0:2a9:f9e0:a820 with SMTP id
- be40-20020a05651c172800b002a9f9e0a820mr7846949ljb.11.1684260109821; Tue, 16
- May 2023 11:01:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <20230513220418.19357-4-kirill.shutemov@linux.intel.com> <9549d984-e581-048d-95a3-7c54acd70fb8@redhat.com>
- <20230514211324.fymzoa263wx2hs2p@box.shutemov.name>
-In-Reply-To: <20230514211324.fymzoa263wx2hs2p@box.shutemov.name>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 16 May 2023 20:01:38 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGzqfHVcg2EAeXqnHG0mmg3ykOBVEa8OpJHc-+k2Xx2Aw@mail.gmail.com>
-Message-ID: <CAMj1kXGzqfHVcg2EAeXqnHG0mmg3ykOBVEa8OpJHc-+k2Xx2Aw@mail.gmail.com>
-Subject: Re: [PATCHv11 3/9] efi/libstub: Implement support for unaccepted memory
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     =?UTF-8?Q?Mika_Penttil=C3=A4?= <mpenttil@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 080E3101A557;
+        Tue, 16 May 2023 18:05:01 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6B1C435453;
+        Tue, 16 May 2023 18:05:00 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 53BA84013A22A; Tue, 16 May 2023 15:02:21 -0300 (-03)
+Date:   Tue, 16 May 2023 15:02:21 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@gentwo.de>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
         Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v8 00/13] fold per-CPU vmstats remotely
+Message-ID: <ZGPFLSa8Xt23oMSo@tpad>
+References: <20230515180015.016409657@redhat.com>
+ <b1f75dca-5d86-125f-bbba-7b575b62d21@gentwo.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1f75dca-5d86-125f-bbba-7b575b62d21@gentwo.de>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 14 May 2023 at 23:13, Kirill A. Shutemov <kirill@shutemov.name> wro=
-te:
->
-> On Sun, May 14, 2023 at 08:08:07AM +0300, Mika Penttil=C3=A4 wrote:
-> > > +   status =3D efi_bs_call(allocate_pool, EFI_LOADER_DATA,
-> > > +                        sizeof(*unaccepted_table) + bitmap_size,
-> > > +                        (void **)&unaccepted_table);
-> >
-> >
-> > Wonder if EFI_LOADER_DATA guarantees bitmap not to be freed, or should =
-some
-> > more persistent type be used. If EFI_LOADER_DATA is enough, maybe a com=
-ment
-> > why it is safe could be added.
->
-> Ughh.. I've lost the hunk that reserves the memory explicitly while
-> folding in the patch we discussed with Ard. See below.
->
-> But the question is solid.
->
-> Ard, do we want to allocate the memory as EFI_RUNTIME_SERVICES_DATA (or
-> something else?) that got reserved automatically without additional steps=
-?
->
+Hi Christoph,
 
+On Tue, May 16, 2023 at 10:09:02AM +0200, Christoph Lameter wrote:
+> The patchset still modifies the semantics of this_cpu operations semantics
+> replacing the lockless RMV operations with locked ones. 
 
-EFI loader data should be fine here, as long as we reserve it.
+It does that to follow the pre-existing kernel convention:
 
-EFI runtime services data is intended for allocations that have
-significance to the firmware itself, so it gets mapped into the EFI
-runtime page tables and on some architectures, it gets removed from
-the direct map as well.
+function-name			LOCK prefix
+cmpxchg				YES
+cmpxchg_local			NO
 
-The unaccepted bitmap is only accessed by the OS itself, so runtime
-services data is really not the right choice. We just have to ensure
-the bitmap gets reserved in memblock sufficiently early.
+So the patchset introduces:
 
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index e15a2005ed93..d817e7afd266 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -765,6 +765,25 @@ int __init efi_config_parse_tables(const efi_config_=
-table_t *config_tables,
->                 }
->         }
->
-> +       if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
-> +           efi.unaccepted !=3D EFI_INVALID_TABLE_ADDR) {
-> +               struct efi_unaccepted_memory *unaccepted;
-> +
-> +               unaccepted =3D early_memremap(efi.unaccepted, sizeof(*una=
-ccepted));
-> +               if (unaccepted) {
-> +                       unsigned long size;
-> +
-> +                       if (unaccepted->version =3D=3D 1) {
-> +                               size =3D sizeof(*unaccepted) + unaccepted=
-->size;
-> +                               memblock_reserve(efi.unaccepted, size);
-> +                       } else {
-> +                               efi.unaccepted =3D EFI_INVALID_TABLE_ADDR=
-;
-> +                       }
-> +
-> +                       early_memunmap(unaccepted, sizeof(*unaccepted));
-> +               }
-> +       }
-> +
->         return 0;
->  }
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
+function-name			LOCK prefix
+this_cpu_cmpxchg		YES
+this_cpu_cmpxchg_local		NO
+
+> One of the
+> rationales for the use  this_cpu operations is their efficiency since
+> locked RMV atomics are avoided. 
+
+And there is the freedom to choose between this_cpu_cmpxchg and
+this_cpu_cmpxchg_local (depending on intended usage).
+
+> This patchset destroys that functionality.
+
+Patch 6 is
+
+Subject: [PATCH v8 06/13] add this_cpu_cmpxchg_local and asm-generic definitions
+
+Which adds this_cpu_cmpxchg_local
+
+Patch 7 converts all other this_cmpxchg users
+(except the vmstat ones)
+
+[PATCH v8 07/13] convert this_cpu_cmpxchg users to this_cpu_cmpxchg_local
+
+So the non-LOCK'ed behaviour is maintained for existing users.
+
+> If you want locked RMV semantics then use them through cmpxchg() and
+> friends. Do not modify this_cpu operations by changing the implementation
+> in the arch code.
+
+But then it would be necessary to disable preemption here:
+
+static inline void mod_zone_state(struct zone *zone, enum zone_stat_item item,
+                                  long delta, int overstep_mode)
+{
+        struct per_cpu_zonestat __percpu *pcp = zone->per_cpu_zonestats;
+        s32 __percpu *p = pcp->vm_stat_diff + item;
+        long o, n, t, z;
+
+        do {
+                z = 0;  /* overflow to zone counters */
+
+                /*
+                 * The fetching of the stat_threshold is racy. We may apply
+                 * a counter threshold to the wrong the cpu if we get
+                 * rescheduled while executing here. However, the next
+                 * counter update will apply the threshold again and
+                 * therefore bring the counter under the threshold again.
+                 *
+                 * Most of the time the thresholds are the same anyways
+                 * for all cpus in a zone.
+                 */
+                t = this_cpu_read(pcp->stat_threshold);
+
+                o = this_cpu_read(*p);
+                n = delta + o;
+
+                if (abs(n) > t) {
+                        int os = overstep_mode * (t >> 1);
+
+                        /* Overflow must be added to zone counters */
+                        z = n + os;
+                        n = -os;
+                }
+        } while (this_cpu_cmpxchg(*p, o, n) != o);
+		 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        if (z)
+                zone_page_state_add(z, zone, item);
+}
+
+Earlier you objected to disabling preemption on this codepath
+(which is what led to this patchset in the first place):
+
+"Using preemption is a way to make this work correctly. However, 
+doing so would sacrifice the performance, low impact and the
+scalability of the vm counters."
+
+So it seems a locked, this_cpu function which does lock cmxpchg
+is desired.
+
+Perhaps you disagree with the this_cpu_cmpxchg_local/this_cpu_cmpxchg
+naming?
+
