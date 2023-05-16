@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D2C704513
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7D170455D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjEPGS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S230056AbjEPGgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjEPGS4 (ORCPT
+        with ESMTP id S230422AbjEPGe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:18:56 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9383B2D42;
-        Mon, 15 May 2023 23:18:53 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0FBEDE0005;
-        Tue, 16 May 2023 06:18:47 +0000 (UTC)
-Message-ID: <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
-Date:   Tue, 16 May 2023 08:18:47 +0200
+        Tue, 16 May 2023 02:34:57 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4F52D5E;
+        Mon, 15 May 2023 23:34:54 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34G6MFXK039720;
+        Tue, 16 May 2023 01:22:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684218135;
+        bh=i7fEb4N6KWiGRKO+nezi8I99sx9V79zEmtA2DmI4a00=;
+        h=From:To:CC:Subject:Date;
+        b=dedb1BX2M1d6lPcgQsqImJpnqrIPVfdqeMn5y/mwJ9W7w3u1hn+bN07oTH4CuL+Rx
+         65f/m+ampwW44D9lCAEHmYCf200VQh9qQKkNsifCqS7g2LJta4Lp1IoWyZkLbUuZVZ
+         zei3M0edmrkEJvSdj/9EYvokJCquWBA0iGmafNiw=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34G6MFxO020034
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 May 2023 01:22:15 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
+ May 2023 01:22:13 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 16 May 2023 01:22:13 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34G6MC0v039783;
+        Tue, 16 May 2023 01:22:13 -0500
+From:   Achal Verma <a-verma1@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Achal Verma <a-verma1@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-j7200: correct num-lanes requested for PCIe
+Date:   Tue, 16 May 2023 11:52:12 +0530
+Message-ID: <20230516062212.2635948-1-a-verma1@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor@kernel.org>
-References: <20230515141235.0777c631@canb.auug.org.au>
- <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
-Content-Language: en-US
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 04:45, Randy Dunlap wrote:
->
-> On 5/14/23 21:12, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20230512:
->>
-> ../arch/riscv/mm/init.c: In function 'create_fdt_early_page_table':
-> ../arch/riscv/mm/init.c:925:19: warning: unused variable 'pa' [-Wunused-variable]
->    925 |         uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
->        |                   ^~
+From: Matt Ranostay <mranostay@ti.com>
 
+J7200 has a limited 2x support for PCIe, and the properties should be
+updated as such.
 
-This one slipped through, I'm adding !BUILTIN_DTB to our internal CI, 
-I'll send a fix today.
+Signed-off-by: Matt Ranostay <mranostay@ti.com>
+Signed-off-by: Achal Verma <a-verma1@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+index ef352e32f19d..5e62b431d6e8 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+@@ -729,7 +729,7 @@ pcie1_rc: pcie@2910000 {
+ 		device_type = "pci";
+ 		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
+ 		max-link-speed = <3>;
+-		num-lanes = <4>;
++		num-lanes = <2>;
+ 		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 240 6>;
+ 		clock-names = "fck";
+@@ -757,7 +757,7 @@ pcie1_ep: pcie-ep@2910000 {
+ 		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
+ 		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
+ 		max-link-speed = <3>;
+-		num-lanes = <4>;
++		num-lanes = <2>;
+ 		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
+ 		clocks = <&k3_clks 240 6>;
+ 		clock-names = "fck";
+-- 
+2.25.1
 
->
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
-
-
-I'll check this one too which seems to be related to kernel/pi introduction.
-
-
->
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L227':
-> io-pgtable-arm.c:(.init.text+0x444): undefined reference to `alloc_io_pgtable_ops'
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L0 ':
-> io-pgtable-arm.c:(.init.text+0xc4c): undefined reference to `free_io_pgtable_ops'
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L690':
-> ipmmu-vmsa.c:(.text+0x2260): undefined reference to `free_io_pgtable_ops'
-> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L1309':
-> ipmmu-vmsa.c:(.text+0x3f24): undefined reference to `alloc_io_pgtable_ops'
-
-
-Ok, those ones too....
-
-
-Thanks for the report,
-
-
-Alex
-
-
->
->
-> Full randconfig file is attached.
->
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
