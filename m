@@ -2,260 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384CD7047DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298867047DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjEPIb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
+        id S231605AbjEPIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjEPIbY (ORCPT
+        with ESMTP id S230203AbjEPIcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:31:24 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBED43C01
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:31:22 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96598a7c5e0so2239927966b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684225881; x=1686817881;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fJrRHHvdn9cIcQfp0JPPRbNPTEcfrFzeUxPf9kkkHTc=;
-        b=j1beuBeSZe+UVyYZ1MAbv7wmEP7xdrMTg51dDEQpKh2/gBAdLrSbBP25YsjGg7fUwx
-         5dAc1QLzct73WWzImcB3xUOppxKsN3TXMOweIgwnF0CVq3E1aPFxrrTA8i1AruavKaQL
-         RnMlLhaAkwmHo1COZlGCZaWKGMm//PUwhqGQzCXKrYk0s0R4PrUjtFik+qPoGNwTOv++
-         XiNyCfeoFdKAPZ9aMCDmtmaVCkYVQf5i2X04s2mxP8m+j3xATIF7Pii4WVzQhNSdJCwp
-         5CEwN7I/9XyY1sEUHdA1fH4Lhnkj18IWSyKWSJ+QH4xWJYLrG+fHXM8r3ghz8iw3FBy/
-         +YGw==
+        Tue, 16 May 2023 04:32:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C9F10F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684225923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CC1+LnWioCnymTFuT2N5MqSF3mYASkgMJBth5jnttMc=;
+        b=Kl1YnPMg8OvUr6cdkbwx03EOfMrRpqD3ujxle8E7PbLUfzx/f/Bxfud6zGGGcleE5blZwz
+        kwNjwX4Z2S8pnNy5xQ5zP9H6tUOAMuI6Mktrh1K/9+l136A+qK4R8sA67J1r6/6kcO16/2
+        KwYNrQkf73Iq1OZ2Iii31z4j8m+OMTA=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-643-vhLOnRASPtKQtGjt2y-GJQ-1; Tue, 16 May 2023 04:32:02 -0400
+X-MC-Unique: vhLOnRASPtKQtGjt2y-GJQ-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5104a3f0a45so2675436a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:32:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684225881; x=1686817881;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684225920; x=1686817920;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJrRHHvdn9cIcQfp0JPPRbNPTEcfrFzeUxPf9kkkHTc=;
-        b=C7eYmhK9As56LvveBP/1V72zkGcq+3a9j7yDrT6Z0h5B+5lz8Pkcg8LrTSiT5kebfp
-         pmwsGqCf1MlAS2MSTHjNAb38eAQbQDrrP8EsG8kiyr0Dxo13yhL3QmR91RHScjk4YAcx
-         EgiZHGrKku4JBg8Y5m7fN/aG25tdhwthA2RyOgDhYIbZd1uQP3721OAsuZ/GCUapaC0A
-         jLkIQkHjVgxE775eP2FJiJ0yEUsxZa/8xVDK/41r8/glYpmiMvzUj2jXmqqpGwDn7IZT
-         2sa21h3M8ya+mcZkXhwGGbmWpVnSMUcbhOwn2JgU8aOJNL17VpqJX6OQvy4yd3N9jRRs
-         k+eQ==
-X-Gm-Message-State: AC+VfDyeHd+G4ynNgPxmUL1w5gQJ1JoKeBUvQj9Y9UHQIvKoAG/MkCPs
-        348cSoUFJ6sfQ3DmaRrAM24u2A==
-X-Google-Smtp-Source: ACHHUZ6+jDG0i1U9Fqrfgt+X3qixvbCY3aIL6zYlY6ZsMgZKf0AGcygYOPl1aNEA7rNzqVUDd2Sw+Q==
-X-Received: by 2002:a17:907:3609:b0:94f:4102:25c8 with SMTP id bk9-20020a170907360900b0094f410225c8mr34220660ejc.61.1684225881006;
-        Tue, 16 May 2023 01:31:21 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4d4a:9b97:62e:1439? ([2a02:810d:15c0:828:4d4a:9b97:62e:1439])
-        by smtp.gmail.com with ESMTPSA id jz14-20020a17090775ee00b00969cbd5718asm10298198ejc.48.2023.05.16.01.31.19
+        bh=CC1+LnWioCnymTFuT2N5MqSF3mYASkgMJBth5jnttMc=;
+        b=bVak5UfbQvK03kqtvjAp/8mW9c0mp8sBE+DVwPaSEZhhl46BVQHnQwpGM6ONZ7yaEH
+         +BDiXvYhfpNTO+UaBr3HJjBKYmlbEDZNdDNISLSqjKCiiFPUqAn1k0kw+n/mrmQvxxOz
+         rBdjSgNZOivwMQAJf03J9tXROF3I3aQ5yNFpKlwectnD0eGYzJ8d++C3LaGUQMZqlVZZ
+         6t5HWqhrW9KeqpzJEQybsI0lE/+tja+aToXoqoxD1Yp3SF3CG0XZg34I6ZPjDp52snhF
+         C2HPMCvumqN9d8e5hp/LYxW6huGIXqQ6x7vkZslSxjidbb1Y/CieEwvwcRumfUWUrR0l
+         kUNg==
+X-Gm-Message-State: AC+VfDzjwCdHI8DTnocsa6agL56hA6dmXBvu/eDe0S7ltZq1oSuzzK2c
+        A64+3cGA8HZNRp+bIZXh9FrkmB1id8vthEKRGH39lwCpW9xIINKPx8s7djWjdR7ud6gWXt+HsBm
+        obQTlQ7xRihlZlYttF1T6c2ZxIczlLrUz
+X-Received: by 2002:aa7:c546:0:b0:50b:d4e8:3173 with SMTP id s6-20020aa7c546000000b0050bd4e83173mr30245714edr.8.1684225920416;
+        Tue, 16 May 2023 01:32:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5k5QzvaE25vkNdDIHzpYPG2zuP0QWC8FKdmCrqUMe5TtheYmqT2Gm/bx+ZTnQHNHjHQBl+xQ==
+X-Received: by 2002:aa7:c546:0:b0:50b:d4e8:3173 with SMTP id s6-20020aa7c546000000b0050bd4e83173mr30245703edr.8.1684225920071;
+        Tue, 16 May 2023 01:32:00 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id i12-20020aa7c70c000000b0050bd7267a5csm7905686edq.58.2023.05.16.01.31.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 01:31:20 -0700 (PDT)
-Message-ID: <cf1c6b8c-8a3f-eca1-948f-e41946d4c34c@linaro.org>
-Date:   Tue, 16 May 2023 10:31:19 +0200
+        Tue, 16 May 2023 01:31:59 -0700 (PDT)
+Message-ID: <b2082cef-2e23-253d-4833-542c3460972a@redhat.com>
+Date:   Tue, 16 May 2023 10:31:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1] Documentation/process: add soc maintainer handbook
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>, soc@kernel.org
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Olof Johansson <olof@lixom.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org
-References: <20230515-geometry-olympics-b0556ff8a5f7@spud>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230515-geometry-olympics-b0556ff8a5f7@spud>
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] ACPI: scan: Reduce overhead related to devices with
+ dependencies
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <2694293.mvXUDI8C0e@kreacher>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <2694293.mvXUDI8C0e@kreacher>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 21:20, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+Hi Rafael,
+
+On 5/15/23 18:30, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Arnd suggested that adding maintainer handbook for the SoC "subsystem"
-> would be helpful in trying to bring on board maintainers for the various
-> new platforms cropping up in RISC-V land.
+> Notice that all of the objects for which the acpi_scan_check_dep()
+> return value is greater than 0 are present in acpi_dep_list as consumers
+> (there may be multiple entries for one object, but that is not a
+> problem), so after carrying out the initial ACPI namespace walk in which
+> devices with dependencies are skipped, acpi_bus_scan() can simply walk
+> acpi_dep_list and enumerate all of the unique consumer objects from
+> there and their descendants instead of walking the entire target branch
+> of the ACPI namespace and looking for device objects that have not been
+> enumerated yet in it.
 > 
-> Add a document briefly describing the role of the SoC subsystem and some
-> basic advice for (new) platform maintainers.
+> Because walking acpi_dep_list is generally less overhead than walking
+> the entire ACPI namespace, use the observation above to reduce the
+> system initialization overhead related to ACPI, which is particularly
+> important on large systems.
 > 
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-
-
-> +
-> +What the SoC tree is not, however, is a location for architecture specific code
-> +changes.  Each architecture has it's own maintainers that are responsible for
-> +architectural details, cpu errata and the like.
-> +
-> +Information for (new) Sub-maintainers
-> +-------------------------------------
-> +
-> +As new platforms spring up, they often bring with them new submaintainers,
-> +many of whom work for the silicon vendor, and may not be familiar with the
-> +process.
-> +
-> +devicetree ABI stability
-> +~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Perhaps one of the most important things to highlight is that dt-bindings
-> +document the ABI between the devicetree and the kernel.  Once dt-bindings have
-> +been merged (and appear in a release of the kernel) they are set in stone, and
-> +any changes made must be compatible with existing devicetrees.  This means that,
-> +when changing properties, a "new" kernel must still be able to handle an old
-> +devicetree.  For many systems the devicetree is provided by firmware, and
-> +upgrading to a newer kernel cannot cause regressions.  Ideally, the inverse is
-> +also true, and a new devicetree will also be compatible with an old kernel,
-> +although this is often not possible.
-
-I would prefer to skip it and instead: enhance
-Documentation/devicetree/bindings/ABI.rst and then reference it here.
-
-> +
-> +If changes are being made to a devicetree that are incompatible with old
-> +kernels, the devicetree patch should not be applied until the driver is, or an
-> +appropriate time later.  Most importantly, any incompatible changes should be
-> +clearly pointed out in the patch description and pull request, along with the
-> +expected impact on existing users.
-
-
-> +
-> +Driver branch dependencies
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +A common problem is synchronizing changes between device drivers and devicetree
-> +files, even if a change is compatible in both directions, this may require
-> +coordinating how the changes get merged through different maintainer trees.
-> +
-> +Usually the branch that includes a driver change will also include the
-> +corresponding change to the devicetree binding description, to ensure they are
-> +in fact compatible.  This means that the devicetree branch can end up causing
-> +warnings in the "make dtbs_check" step.  If a devicetree change depends on
-> +missing additions to a header file in include/dt-bindings/, it will fail the
-> +"make dtbs" step and not get merged.
-> +
-> +There are multiple ways to deal with this:
-> +
-> + - Avoid defining custom macros in include/dt-bindings/ for hardware constants
-> +   that can be derived from a datasheet -- binding macros in header file should
-> +   only be used as a last resort if there is no natural way to define a binding
-> +
-> + - Use literal values in the devicetree file in place of macros even when a
-> +   header is required, and change them to the named representation in a
-> +   following release
-
-I actually prefer such solution:
-
- - Duplicate defines in the devicetree file hidden by #ifndef section
-and remove them later in a following release
-
-We can keep both, but mine above leads to cleaner changes in DTS file.
-
-> +
-> + - Defer the devicetree changes to a release after the binding and driver have
-> +   already been merged
-> +
-> + - Change the bindings in a shared immutable branch that is used as the base for
-> +   both the driver change and the devicetree changes
-
-The policy told to me some time ago was that no merges from driver
-branch or tree are allowed towards DTS branch, even if they come only
-with binding header change. There are exceptions for this, e.g. [1], but
-that would mean we need to express here rules for cross-tree merges.
-
-[1]
-https://lore.kernel.org/linux-samsung-soc/cced7901-a855-c733-e716-f4a7f822b213@canonical.com/T/#m6430408367e942ac28d01e447be84fcf34407743
-
-> +
-> +devicetree naming convention
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +The general naming scheme for devicetree files are as follows.  The aspects of a
-> +platform that are set at the SoC level, like cpu cores, are contained in a file
-> +named $soc.dtsi, for example, jh7100.dtsi.  Integration details, that will vary
-> +from board to board, are described in $soc-$board.dtsi.  An example of this is
-> +jh7100-beaglev-starlight.dts.  Often many boards are variations on a theme, and
-> +frequently there are intermediate files, such as jh7100-common.dtsi, which sit
-> +between the $soc.dtsi and $soc-$board.dts files, containing the descriptions of
-> +common hardware.
-> +
-> +Some platforms also have System on Modules, containing an SoC, which are then
-> +integrated into several different boards. For these platforms, $soc-$som.dtsi
-> +and $soc-$som-$board.dts are typical.
-> +
-> +Directories are usually named after the vendor of the SoC at the time of it's
-> +inclusion, leading to some historical directory names in the tree.
-> +
-> +dtbs_check
-> +~~~~~~~~~~
-> +
-> +``make dtbs_check`` can be used to validate that devicetree files are compliant
-> +with the dt-bindings that describe the ABI.  Please see :ref:`running-checks`
-> +for more information on the validation of devicetrees.
-> +
-> +For new platforms, or additions to existing ones, ``make dtbs_check`` should not
-> +add any new warnings.  For RISC-V, as it has the advantage of being a newer
-> +architecture, ``make dtbs_check W=1`` is required to not add any new warnings.
-> +If in any doubt about a devicetree change, reach out to the devicetree
-> +maintainers.
-> +
-> +
-> +Branches and Pull Requests
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +Just as the main SoC tree has several branches, it is expected that
-> +submaintainers will do the same. Driver, defconfig and devicetree changes should
-> +all be split into separate branches and appear in separate pull requests to the
-> +SoC maintainers.  Each branch should be usable by itself and avoid
-> +regressions that originate from dependencies on other branches.
-> +
-> +Small sets of patches can also be sent as separate emails to soc@kernel.org,
-> +grouped into the same categories.
-> +
-> +If changes do not fit into the normal patterns, there can be additional
-> +top-level branches, e.g. for a treewide rework, or the addition of new SoC
-> +platforms including dts files and drivers.
-> +
-> +Branches with a lot of changes can benefit from getting split up into separate
-> +topics branches, even if they end up getting merged into the same branch of the
-> +SoC tree.  An example here would be one branch for devicetree warning fixes, one
-> +for a rework and one for newly added boards.
-> +
-> +Another common way to split up changes is to send an early pull request with the
-> +majority of the changes at some point between rc1 and rc4, following up with one
-> +or more smaller pull requests towards the end of the cycle that can add late
-> +changes or address problems idenfied while testing the first set.
-> +
-> +While there is no cut-off time for late pull requests, it helps to only send
-> +small branches as time gets closer to the merge window.
-> +
-> +Pull requests for bugfixes for the current release can be sent at any time, but
-> +again having multiple smaller branches is better than trying to combine too many
-> +patches into one pull request.
-> +
-> +The subject line of a pull request should begin with "[GIT PULL]" and made using
-> +a tag, rather than a branch.  This tag should contain a short description
-
-a signed tag
-
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/acpi/scan.c     |   79 +++++++++++++++++++++++++++++++++++-------------
+>  include/acpi/acpi_bus.h |    2 +
+>  2 files changed, 61 insertions(+), 20 deletions(-)
+> 
+> Index: linux-pm/include/acpi/acpi_bus.h
+> ===================================================================
+> --- linux-pm.orig/include/acpi/acpi_bus.h
+> +++ linux-pm/include/acpi/acpi_bus.h
+> @@ -289,6 +289,8 @@ struct acpi_dep_data {
+>  	acpi_handle supplier;
+>  	acpi_handle consumer;
+>  	bool honor_dep;
+> +	bool met;
+> +	bool free_when_met;
+>  };
 >  
+>  /* Performance Management */
+> Index: linux-pm/drivers/acpi/scan.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/scan.c
+> +++ linux-pm/drivers/acpi/scan.c
+> @@ -2029,8 +2029,6 @@ static u32 acpi_scan_check_dep(acpi_hand
+>  	return count;
+>  }
+>  
+> -static bool acpi_bus_scan_second_pass;
+> -
+>  static acpi_status acpi_bus_check_add(acpi_handle handle, bool check_dep,
+>  				      struct acpi_device **adev_p)
+>  {
+> @@ -2050,10 +2048,8 @@ static acpi_status acpi_bus_check_add(ac
+>  			return AE_OK;
+>  
+>  		/* Bail out if there are dependencies. */
+> -		if (acpi_scan_check_dep(handle, check_dep) > 0) {
+> -			acpi_bus_scan_second_pass = true;
+> +		if (acpi_scan_check_dep(handle, check_dep) > 0)
+>  			return AE_CTRL_DEPTH;
+> -		}
+>  
+>  		fallthrough;
+>  	case ACPI_TYPE_ANY:	/* for ACPI_ROOT_OBJECT */
+> @@ -2301,6 +2297,12 @@ static bool acpi_scan_clear_dep_queue(st
+>  	return true;
+>  }
+>  
+> +static void acpi_scan_delete_dep_data(struct acpi_dep_data *dep)
+> +{
+> +	list_del(&dep->node);
+> +	kfree(dep);
+> +}
+> +
+>  static int acpi_scan_clear_dep(struct acpi_dep_data *dep, void *data)
+>  {
+>  	struct acpi_device *adev = acpi_get_acpi_dev(dep->consumer);
+> @@ -2311,8 +2313,10 @@ static int acpi_scan_clear_dep(struct ac
+>  			acpi_dev_put(adev);
+>  	}
+>  
+> -	list_del(&dep->node);
+> -	kfree(dep);
+> +	if (dep->free_when_met)
+> +		acpi_scan_delete_dep_data(dep);
+> +	else
+> +		dep->met = true;
+>  
+>  	return 0;
+>  }
+> @@ -2406,6 +2410,53 @@ struct acpi_device *acpi_dev_get_next_co
+>  }
+>  EXPORT_SYMBOL_GPL(acpi_dev_get_next_consumer_dev);
+>  
+> +static void acpi_scan_postponed_branch(acpi_handle handle)
+> +{
+> +	struct acpi_device *adev = NULL;
+> +
+> +	if (ACPI_FAILURE(acpi_bus_check_add(handle, false, &adev)))
+> +		return;
+> +
+> +	acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
+> +			    acpi_bus_check_add_2, NULL, NULL, (void **)&adev);
+> +	acpi_bus_attach(adev, NULL);
+> +}
+> +
+> +static void acpi_scan_postponed(void)
+> +{
+> +	struct acpi_dep_data *dep, *tmp;
+> +
+> +	mutex_lock(&acpi_dep_list_lock);
+> +
+> +	list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
+> +		acpi_handle handle = dep->consumer;
+> +
+> +		/*
+> +		 * Even though the lock is released here, tmp is guaranteed to
+> +		 * be valid, because none of the list entries following dep is
+> +		 * marked as "free when met" and so they cannot be deleted.
+> +		 */
+> +		mutex_unlock(&acpi_dep_list_lock);
+> +
+> +		/*
+> +		 * In case there are multiple acpi_dep_list entries with the
+> +		 * same consumer, skip the current entry if the consumer device
+> +		 * object corresponding to it is present already.
+> +		 */
+> +		if (!acpi_fetch_acpi_dev(handle))
+> +			acpi_scan_postponed_branch(handle);
 
-Best regards,
-Krzysztof
+acpi_fetch_acpi_dev(handle) does not need/take the acpi_dep_list_lock,
+so you can avoid a needless unlock/lock in case acpi_fetch_acpi_dev(handle)
+finds a device already, which will happen quite regular since devices
+with _DEP lists regularly have more then 1 dep so they will be present
+as consumer on the _DEP list more then once.
+
+So maybe:
+
+	list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
+		acpi_handle handle = dep->consumer;
+		struct acpi_device *device = acpi_fetch_acpi_dev(handle);
+
+		/*
+		 * In case there are multiple acpi_dep_list entries with the
+		 * same consumer, skip scanning the current entry if the consumer
+		 * device object corresponding to it is present already.
+		 */
+		if (device)
+			goto check_dep;
+
+		/*
+		 * Even though the lock is released here, tmp is guaranteed to
+		 * be valid, because none of the list entries following dep is
+		 * marked as "free when met" and so they cannot be deleted.
+		 */
+		mutex_unlock(&acpi_dep_list_lock);
+		acpi_scan_postponed_branch(handle);
+		mutex_lock(&acpi_dep_list_lock);
+
+check_dep:
+		if (dep->met)
+			acpi_scan_delete_dep_data(dep);
+		else
+			dep->free_when_met = true;
+	}
+
+?
+
+Regards,
+
+Hans
+
+
+
+> +
+> +	mutex_unlock(&acpi_dep_list_lock);
+> +}
+> +
+>  /**
+>   * acpi_bus_scan - Add ACPI device node objects in a given namespace scope.
+>   * @handle: Root of the namespace scope to scan.
+> @@ -2424,8 +2475,6 @@ int acpi_bus_scan(acpi_handle handle)
+>  {
+>  	struct acpi_device *device = NULL;
+>  
+> -	acpi_bus_scan_second_pass = false;
+> -
+>  	/* Pass 1: Avoid enumerating devices with missing dependencies. */
+>  
+>  	if (ACPI_SUCCESS(acpi_bus_check_add(handle, true, &device)))
+> @@ -2438,19 +2487,9 @@ int acpi_bus_scan(acpi_handle handle)
+>  
+>  	acpi_bus_attach(device, (void *)true);
+>  
+> -	if (!acpi_bus_scan_second_pass)
+> -		return 0;
+> -
+>  	/* Pass 2: Enumerate all of the remaining devices. */
+>  
+> -	device = NULL;
+> -
+> -	if (ACPI_SUCCESS(acpi_bus_check_add(handle, false, &device)))
+> -		acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
+> -				    acpi_bus_check_add_2, NULL, NULL,
+> -				    (void **)&device);
+> -
+> -	acpi_bus_attach(device, NULL);
+> +	acpi_scan_postponed();
+>  
+>  	return 0;
+>  }
+> 
+> 
+> 
 
