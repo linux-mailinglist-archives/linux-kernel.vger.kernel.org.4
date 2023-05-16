@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E872A704D1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EBA704D21
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjEPLy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S233104AbjEPLym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbjEPLyP (ORCPT
+        with ESMTP id S230313AbjEPLyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:54:15 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9CB619B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:54:08 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4eff4ea8e39so16092301e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:54:08 -0700 (PDT)
+        Tue, 16 May 2023 07:54:31 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66985591
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:54:24 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so1818805266b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684238047; x=1686830047;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U/U9AOMWIVpnC8ZJ/nG62G/TxmeU88Cq42ECjWaNDuc=;
-        b=xxzf+tcELx3E0yLhL1kMvPFLIC9HxKkT2Dz6mG5MDFEj/jmjFgawVW19wfGBEFzvLY
-         /dtS1p2p80akvBQaXa44MvhYXUpLzqRagcWuWz75tXe0fzZBrBmUyJNM7oRW4k3V3Dg7
-         bv33zY88jiVdSGIal1dcSoDLQHxCEpCUy9HXb/2lzjT29N3RrPNLFLyNDmE44vpQFIzR
-         M6HTlTdK155eFsjZMoQhe6JY4T5bFqgjIZZ0N1k78clJGdvZRhieBQsCEGaWn2H5+p3L
-         p8rE6oSZ1f8+Nun8CTg0+RK2qH0g3NemkWTzlAAiOWWBGBSUI1mcmFcNiLh0lNBum4n7
-         /7Ng==
+        d=linaro.org; s=google; t=1684238063; x=1686830063;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=01pGuLaNPZiP/h7oP1bbANfkWz5JoL6SoLLTkcSWbjk=;
+        b=bmOLq/tFxzqJqEwncNw3euD1ztQZuQkH0b/jpx/KbSESUxaVfgpydgf3NLLHaxyxcM
+         FsI6gC+4OGbNTFz6Wh3mWcPCB9wR/3SBXG9Q+9fBJ1PAI3JbK/sFR2WbUlJOEfpBaO6+
+         4gzUSkN4cqYGTA8yMPdnI6TtpFLvRJjoBweKA74crxikW2zdSKPGZ56G5p1vs95CPT95
+         KyG7Bc8Fu+wlZadUyfHCLbRXrKaWsqMVGAERcTr+0VU5iU+TVwD8qfVKSgGKAWcTY2y0
+         79QcBexBKhZ1kYp35VSkNfWoPSO6Z6gZAaatVfJv6hcVLPEnl2AAX5wWoMr/lkMfMwSV
+         SphQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684238047; x=1686830047;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U/U9AOMWIVpnC8ZJ/nG62G/TxmeU88Cq42ECjWaNDuc=;
-        b=VwjLv1U8qTAEuNkGI4mv4UMHQc8m4Zg4IkqiKhwpe3s64VT3LWXFddiamv0Qkuj6/D
-         cb5K2c4aPjjZ+kIuErTJGMCm8SGFfiUYkGKc71ZdqEJ4chpL3ONDD0wLcYBGWjcpCJgi
-         q6B+1SzKQweNN+HU3d05oUYrgkFM4rZpMHOWFtXTpTjEVVcKUA4JNKZ5HYDyILbftOy2
-         3rL5S8l0mVPYGG9kfZuRufHgYDQU1TxkmkMxA4nfPPAdJWqpINHev3iwsjWZ6fqP/Ys9
-         34526l1tyaIuT6z0Lw8MouICZfmiH30u8LaqhrG3qhufhFKLfDkYsQOWHnftP8lkdN9+
-         sBRg==
-X-Gm-Message-State: AC+VfDwiF9KuFn72L97uSAMGhVN159/Hl+wLnxuaj5k5NLS5RuCzMUc3
-        T5gXl70Ymi133IHgzmm0dPTE1Q==
-X-Google-Smtp-Source: ACHHUZ7al8ZSgMAfnhYMhVtIW3R1XeM4K9+1jw+RmmTpUlYvv6Iej0HkqaAvyKF4li93f6eg81YRVQ==
-X-Received: by 2002:ac2:5d26:0:b0:4dd:afd7:8f1 with SMTP id i6-20020ac25d26000000b004ddafd708f1mr6589759lfb.52.1684238047178;
-        Tue, 16 May 2023 04:54:07 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056512376d00b004f019d3eab4sm2951410lft.23.2023.05.16.04.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 04:54:06 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 16 May 2023 13:53:59 +0200
-Subject: [PATCH RESEND 2/2] dt-bindings: thermal: tsens: Add compatible for
- SM6375
+        d=1e100.net; s=20221208; t=1684238063; x=1686830063;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=01pGuLaNPZiP/h7oP1bbANfkWz5JoL6SoLLTkcSWbjk=;
+        b=i4PU0Dq0ZxBWfrUrjMMM9yPPiX3/lXSh3L34YNiGPDYtiPWprKeR9rd6N9NSq/lfj1
+         AaL26OzIeKEzn2GEkeFZknXL19jXgc0Od2sJF3j+ptL7DmMi/WZdXIit/O9OsgJ9eoJz
+         Rk7X9u8V4IeidXdaoq+ncSqxLKZ2tIt7UlJ2rhB8cuQrO+owVKGKk4mGzy8ejqyS+NrL
+         KZDCOr5M8O22j64+ZOrcBcvHmXmDV+HVq/gVVlQCmHJ8agyVJ0VH+cV4EQfyGLXB0Ghk
+         npT+XOSyvmpbcCSIdrEMUHzfNxlPtvd0ivWjfKwg7Fua5px9ENAK1AjeoyvBmaJjpJZT
+         ar1w==
+X-Gm-Message-State: AC+VfDw4VA6OXLYqNz52k631QbEccM1otHNmZtiKx1mrTdTsJcWUjIF6
+        lqOKfVXTFNanFGPUS7gGnUey9g==
+X-Google-Smtp-Source: ACHHUZ5GO02CbtyRzS64jRe4YwxdoaRpG3D956slM1Mli1XvIZZ9t2Vx85yPErLITgu+TH8VYXXrdg==
+X-Received: by 2002:a17:907:5c6:b0:939:e870:2b37 with SMTP id wg6-20020a17090705c600b00939e8702b37mr34031591ejb.70.1684238063075;
+        Tue, 16 May 2023 04:54:23 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id e28-20020a170906845c00b0094e84314762sm10878333ejy.187.2023.05.16.04.54.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 04:54:22 -0700 (PDT)
+Message-ID: <a370f2af-a894-b102-1836-8964c39d7a86@linaro.org>
+Date:   Tue, 16 May 2023 13:54:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
+ system watchdog driver
+Content-Language: en-US
+To:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230508131515.19403-1-bbhushan2@marvell.com>
+ <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
+ <DM5PR1801MB1883175A2538B85FEF571B7AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
+ <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
+ <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
+ <8b540cc2-bc0d-9d8b-45e6-98410322b3f6@linaro.org>
+ <BY3PR18MB4737947E20CB44CE6DAB940DC6799@BY3PR18MB4737.namprd18.prod.outlook.com>
+ <578a743e-dee4-59b7-2f4e-290b551211e0@linaro.org>
+ <BY3PR18MB47373D22B01071D5DC2B5F5DC6799@BY3PR18MB4737.namprd18.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <BY3PR18MB47373D22B01071D5DC2B5F5DC6799@BY3PR18MB4737.namprd18.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230516-topic-lost_tsens_bindings-v1-2-99715746ddb1@linaro.org>
-References: <20230516-topic-lost_tsens_bindings-v1-0-99715746ddb1@linaro.org>
-In-Reply-To: <20230516-topic-lost_tsens_bindings-v1-0-99715746ddb1@linaro.org>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684238042; l=944;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=I+wiNgFNMuppuk+Q4In4BSan/9TRWGs892V/JtEHGx0=;
- b=wy7N//zkdjcEG/NypauPBu9XBdEQ0ByzG+WNhTP55JUZcGBwa7+tfKQ+/VPfUSeWWzOTiEnvE
- azlPvtSZHC4DAcNvhLJZrf6c8HK5EYBGT2QEVoOJ8Tv9EJVBxgyesgq
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,28 +91,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm SM6375 platform has two instances of the tsens v2.8.0 block,
-add a compatible for these instances.
+On 16/05/2023 13:24, Sunil Kovvuri Goutham wrote:
+> 
+> Also this is the same naming we have been using in other drivers as well.
+> drivers/net/ethernet/marvell/octeontx2
+> drivers/net/ethernet/marvell/octeontx2/af/rvu_cn10k.c
+> 
+> drivers/perf/marvell_cn10k_ddr_pmu.c
+> static const struct of_device_id cn10k_ddr_pmu_of_match[] = {
+>         { .compatible = "marvell,cn10k-ddr-pmu", },
+>         { },
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
- 1 file changed, 1 insertion(+)
+BTW, I don't understand this part. We do not talk about fallback
+compatible, so what does it prove? Of course driver will look like that,
+but we established it some time ago, didn't we?
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index 2739b2bead7b..d9aa54c11663 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -57,6 +57,7 @@ properties:
-               - qcom,sdm845-tsens
-               - qcom,sm6115-tsens
-               - qcom,sm6350-tsens
-+              - qcom,sm6375-tsens
-               - qcom,sm8150-tsens
-               - qcom,sm8250-tsens
-               - qcom,sm8350-tsens
-
--- 
-2.40.1
+Best regards,
+Krzysztof
 
