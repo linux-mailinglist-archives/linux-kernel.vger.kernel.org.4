@@ -2,102 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2998B705813
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5300705811
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjEPT4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
+        id S229846AbjEPT4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjEPT4h (ORCPT
+        with ESMTP id S229611AbjEPT4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:56:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA8B7ABE;
-        Tue, 16 May 2023 12:56:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 334E4633A0;
-        Tue, 16 May 2023 19:56:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283ACC4339B;
-        Tue, 16 May 2023 19:56:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684266994;
-        bh=ZU2Zyf0H03rXKE9YvXFofcikO93Ns0RFs8ZYRp3OsaA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tf3mGJYbfXDUuKzpYVC5dBWll5p0S5N9WMNdtJ2iqua20Z0hH2+at4Hys1CA5/sxb
-         7P4NZQIaQd3ePO75ufKBX/LinFDNMXdX8hgScHPgH6wtoglVscXDYpsLMUs2cO882L
-         AK7P/lDH6t2IwAltA04Ffi/oUidP9yht9vqPFrwZ4/dSSqsrov48xn++4QuyMBWnHw
-         jHVCAyLwdl0nFMEn5hWEMzeh4huCRcYId+bahUgj2UidiWqva7Db8/9DA3LxdjPpre
-         2GsLHhTSqOIrwMQB21Ym2n8cFLla0kRyfAWrC2kJmTZGAZlsqFg+pRq8aAcmcfXXSf
-         u/d0gVkvAGV4Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     viro@zeniv.linux.org.uk, brauner@kernel.org,
-        David Howells <dhowells@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Tue, 16 May 2023 15:56:31 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FAEBF;
+        Tue, 16 May 2023 12:56:23 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-52cbd7d0c37so8632422a12.3;
+        Tue, 16 May 2023 12:56:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684266983; x=1686858983;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ECtJdgJfH2s001rdU3aqL8iJMS6YphxwR2iWhytmgc=;
+        b=F5MtMCsdGttgWNrYF01YFVXc7FQQ6JrkXRzxq66obxeH6kttagpKDHcvalKH9ig08l
+         BZWQ9Nb6h2d3kgf7ubeSnewQUtidG5xeD+fTh3c3k5DtjOgJV5PRPaSz4lpbfIR4kTXg
+         zvfpLOz0FBHJ4KbtI6uYZdMsF8lxsorwN8cwmbxSGmjunwSNzcOf5nXl4FUZ1GQvO0V5
+         drx7+khwbPFZfGcxb/uC+pT7BTXFg9y/LtEsENZsDvLk6tAwnMKnxvXthaHrBCx1Go3T
+         EchUyhhx0KmgrPpVaJwl4qboAAahXXxBmccuBk5l6ZaygMN6qlRjjd2zO4M1kuSkNLyp
+         vRaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684266983; x=1686858983;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2ECtJdgJfH2s001rdU3aqL8iJMS6YphxwR2iWhytmgc=;
+        b=asD2tOMwXC2wBqc5onwDaavfo7JSq7Rnl1tGBvlRpkqNtowLWV597FgLsJ31ieyf3Q
+         M+Rzgo+Zem8p7ShSDjYu2+p1PnKps0P/pJQCdX341OxvARMuIcMZRtttDgeqk2EP1b5q
+         Z/ugJXrlJ8ch6frvECo56QQn5bQ8QcJDVsEbUZnB9HLXr3y5yxpcJ6vWmAyX05o8Oizb
+         j5kYG0ZeEtNLra1kb3flX6/3rMqioHjS2zng/gNq2LmIspvWHOnaY+IzF7zaOzXU//8m
+         9WaVpSh9rYb0SHz3fKmykDG43Xe+hrFcZc1eg6r0iE3yyH5iV/l9rBPzrHUHMniuz2b8
+         u73A==
+X-Gm-Message-State: AC+VfDxMlg/azAp+eT7cvsGHKxDisrUEaTEHZR8qIoY2Yy1wn2Nq4lWe
+        ZqAkd2sjBP1LOWKwY0kXW3o=
+X-Google-Smtp-Source: ACHHUZ6xsXmRm4VZmKh7AOS5xctPG/BSjfiWPphLJnS6kQn43K3wIy8xv0ATtZSNeqAHgX87GY48rg==
+X-Received: by 2002:a05:6a20:840a:b0:f1:8f7:eeb6 with SMTP id c10-20020a056a20840a00b000f108f7eeb6mr51589883pzd.59.1684266982734;
+        Tue, 16 May 2023 12:56:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x13-20020aa7918d000000b0064858e255d1sm11405964pfa.65.2023.05.16.12.56.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 12:56:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 16 May 2023 12:56:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     llyyr <llyyr.public@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] fs: pipe: reveal missing function protoypes
-Date:   Tue, 16 May 2023 21:56:12 +0200
-Message-Id: <20230516195629.551602-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516195444.551461-1-arnd@kernel.org>
-References: <20230516195444.551461-1-arnd@kernel.org>
+Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D
+ sensor chip on some MSI boards.
+Message-ID: <b1ab3a54-2dc3-4e21-bb64-6db82736d682@roeck-us.net>
+References: <20230515144910.13514-1-llyyr.public@gmail.com>
+ <54471eb9-3cd0-429d-b652-07fd380f359d@roeck-us.net>
+ <b9999e76-357f-44c3-23a0-f1554ceb11af@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9999e76-357f-44c3-23a0-f1554ceb11af@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, May 16, 2023 at 02:22:55AM +0530, llyyr wrote:
+> On 5/16/23 00:29, Guenter Roeck wrote:
+> > On Mon, May 15, 2023 at 08:19:10PM +0530, llyyr wrote:
+> > > This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
+> > > 
+> > > Signed-off-by: llyyr <llyyr.public@gmail.com>
+> > 
+> > This needs to be a real name.
+> > 
+> > Guenter
+> > 
+> 
+> Do I need to resubmit the patch, or can you change it to Gopal Prasad then?
+> 
 
-A couple of functions from fs/pipe.c are used both internally
-and for the watch queue code, but the declaration is only
-visible when the latter is enabled:
+Please resubmit.
 
-fs/pipe.c:1254:5: error: no previous prototype for 'pipe_resize_ring'
-fs/pipe.c:758:15: error: no previous prototype for 'account_pipe_buffers'
-fs/pipe.c:764:6: error: no previous prototype for 'too_many_pipe_buffers_soft'
-fs/pipe.c:771:6: error: no previous prototype for 'too_many_pipe_buffers_hard'
-fs/pipe.c:777:6: error: no previous prototype for 'pipe_is_unprivileged_user'
-
-Make the visible unconditionally to avoid these warnings.
-
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- include/linux/pipe_fs_i.h | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
-index d2c3f16cf6b1..02e0086b10f6 100644
---- a/include/linux/pipe_fs_i.h
-+++ b/include/linux/pipe_fs_i.h
-@@ -261,18 +261,14 @@ void generic_pipe_buf_release(struct pipe_inode_info *, struct pipe_buffer *);
- 
- extern const struct pipe_buf_operations nosteal_pipe_buf_ops;
- 
--#ifdef CONFIG_WATCH_QUEUE
- unsigned long account_pipe_buffers(struct user_struct *user,
- 				   unsigned long old, unsigned long new);
- bool too_many_pipe_buffers_soft(unsigned long user_bufs);
- bool too_many_pipe_buffers_hard(unsigned long user_bufs);
- bool pipe_is_unprivileged_user(void);
--#endif
- 
- /* for F_SETPIPE_SZ and F_GETPIPE_SZ */
--#ifdef CONFIG_WATCH_QUEUE
- int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots);
--#endif
- long pipe_fcntl(struct file *, unsigned int, unsigned long arg);
- struct pipe_inode_info *get_pipe_info(struct file *file, bool for_splice);
- 
--- 
-2.39.2
-
+Guenter
