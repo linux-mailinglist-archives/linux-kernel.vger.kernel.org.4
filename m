@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC65D705A07
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930A6705A0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjEPVzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
+        id S230021AbjEPV5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjEPVzl (ORCPT
+        with ESMTP id S229529AbjEPV5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:55:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514267687;
-        Tue, 16 May 2023 14:55:17 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6EAFE66058F7;
-        Tue, 16 May 2023 22:54:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684274094;
-        bh=TYATkcZpn+WF2fVP6g3L/fkTDnNdYXbfzcSxHe1/ToE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYdOwjbrip9BGlXm6HZ+l0C94cXRf0My31K76qbu4K62GaU/xXohQ66lGxxSDL0PK
-         GPV4i/RC1LZbiVRm92vsQy7p16K4jIpiLeMly3Lx9WBoODHsUar/W/rUSyNV3+YJ7s
-         ALDtoDy42HA7P+VYSHIMMDWQaGLgKI1Bdn2Irp82PmXMdBwxYPgyhSqgkGFXNgw+Rd
-         3SOToyy/z7jA1E7M5pWVq18JE6XQwH2JxzHEZj2ewENTnZJa9NK+dtw1sZXDA7c6Sq
-         4xyjdKDNehoBdcvgT+4MDHNXev4mfhWT6WcYX7Yjwb9PKZyYXpCHwHTbeLttmcGEpa
-         rzSHuFiCfw4fw==
-Received: by mercury (Postfix, from userid 1000)
-        id 4A65710620FE; Tue, 16 May 2023 23:54:52 +0200 (CEST)
-Date:   Tue, 16 May 2023 23:54:52 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     "Limonciello, Mario" <mlimonci@amd.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        heikki.krogerus@linux.intel.com, rafael@kernel.org,
-        ajayg@nvidia.com, andriy.shevchenko@linux.intel.com,
-        linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Evan.Quan@amd.com, Lijo.Lazar@amd.com, Sanket.Goswami@amd.com
-Subject: Re: [PATCH 1/2] power: supply: Use the scope of power supplies to
- tell if power is system supplied
-Message-ID: <20230516215452.icwx6vb2763hybxs@mercury.elektranox.org>
-References: <20230516182541.5836-1-mario.limonciello@amd.com>
- <20230516182541.5836-2-mario.limonciello@amd.com>
- <20230516204114.vv5w2vmcyulmhmm4@mercury.elektranox.org>
- <8cd8d02f-f4b2-3ad3-a3e5-f9857d8519e2@amd.com>
+        Tue, 16 May 2023 17:57:41 -0400
+Received: from out-38.mta1.migadu.com (out-38.mta1.migadu.com [IPv6:2001:41d0:203:375::26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED40D170E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:57:39 -0700 (PDT)
+Date:   Tue, 16 May 2023 17:57:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684274258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rg+4VYgNan6dQhp4G+ztNtHxMTIHL0gkWBPXAeaTX8c=;
+        b=jJSE6AXlg0mKNpZ3QsGHLfN984zv1y3ihtZM67UQucdGqvaeKISoBqjvubCygEtZOjn63P
+        CgtKcnIJRmvE8tN4JU0oQdw66873QmANJIugqZktPXHNnkHuR8oAA0U6N1F3eeJ2Y1sGo5
+        envgWXp+n4uKqfyotbMjEdRM/d9ymyg=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <ZGP8TYbpOdJilvD2@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+ <202305111525.67001E5C4@keescook>
+ <ZF6Ibvi8U9B+mV1d@moria.home.lan>
+ <202305161401.F1E3ACFAC@keescook>
+ <ZGPzocRpSlg+4vgN@moria.home.lan>
+ <ZGP54T0d89TMySsf@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x7qrij76ovy2qfiw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8cd8d02f-f4b2-3ad3-a3e5-f9857d8519e2@amd.com>
+In-Reply-To: <ZGP54T0d89TMySsf@casper.infradead.org>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -65,117 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 16, 2023 at 10:47:13PM +0100, Matthew Wilcox wrote:
+> On Tue, May 16, 2023 at 05:20:33PM -0400, Kent Overstreet wrote:
+> > On Tue, May 16, 2023 at 02:02:11PM -0700, Kees Cook wrote:
+> > > For something that small, why not use the text_poke API?
+> > 
+> > This looks like it's meant for patching existing kernel text, which
+> > isn't what I want - I'm generating new functions on the fly, one per
+> > btree node.
+> > 
+> > I'm working up a new allocator - a (very simple) slab allocator where
+> > you pass a buffer, and it gives you a copy of that buffer mapped
+> > executable, but not writeable.
+> > 
+> > It looks like we'll be able to convert bpf, kprobes, and ftrace
+> > trampolines to it; it'll consolidate a fair amount of code (particularly
+> > in bpf), and they won't have to burn a full page per allocation anymore.
+> > 
+> > bpf has a neat trick where it maps the same page in two different
+> > locations, one is the executable location and the other is the writeable
+> > location - I'm stealing that.
+> 
+> How does that avoid the problem of being able to construct an arbitrary
+> gadget that somebody else will then execute?  IOW, what bpf has done
+> seems like it's working around & undoing the security improvements.
+> 
+> I suppose it's an improvement that only the executable address is
+> passed back to the caller, and not the writable address.
 
---x7qrij76ovy2qfiw
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Tue, May 16, 2023 at 03:44:17PM -0500, Limonciello, Mario wrote:
-> On 5/16/2023 3:41 PM, Sebastian Reichel wrote:
-> > Hi,
-> >=20
-> > On Tue, May 16, 2023 at 01:25:40PM -0500, Mario Limonciello wrote:
-> > > The logic used for power_supply_is_system_supplied() counts all power
-> > > supplies and:
-> > > * If no power supplies found assumes AC
-> > > * If non-battery power supplies found uses online to determine AC/DC.
-> > >    - If any are onlined, assumes AC
-> > >    - Othewise DC.
-> > >=20
-> > > This logic makes sense for desktop systems that don't export an ACPI
-> > > battery, but it fails once you include a dGPU that provides a UCSI
-> > > power supply on a desktop system without any other power supplies.
-> > >=20
-> > > The dGPU by default doesn't have anything plugged in so it's 'offline=
-'.
-> > > This makes power_supply_is_system_supplied() return 0 with a count of
-> > > 1 meaning all drivers that use this get a wrong judgement.
-> > >=20
-> > > To fix this case adjust the logic to also examine the scope of the
-> > > power supply. If the power supply is deemed a device power supply,
-> > > then don't count it.
-> > >=20
-> > > Cc: Evan Quan <Evan.Quan@amd.com>
-> > > Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > Good find; the current logic should also break with a desktop PC
-> > once a POWER_SUPPLY_SCOPE_DEVICE battery device is attached (e.g.
-> > a HID device), because it increases the counter.
->=20
-> Yup!
->=20
-> > I suppose I can just apply this to my fixes branch since there is
-> > no compile time dependency to the second patch?
->=20
-> Yes, that's correct.=A0 I don't see a problem with the other patch going
-> through another tree.
-
-Ok, I modified the commit message to also mention the HID issue and
-applied it to power-supply's fixes branch.
-
-Thanks,
-
--- Sebastian
-
->=20
-> > -- Sebastian
-> >=20
-> > >   drivers/power/supply/power_supply_core.c | 8 ++++++--
-> > >   1 file changed, 6 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power=
-/supply/power_supply_core.c
-> > > index ab986dbace16..d57f420ba8c3 100644
-> > > --- a/drivers/power/supply/power_supply_core.c
-> > > +++ b/drivers/power/supply/power_supply_core.c
-> > > @@ -348,6 +348,10 @@ static int __power_supply_is_system_supplied(str=
-uct device *dev, void *data)
-> > >   	struct power_supply *psy =3D dev_get_drvdata(dev);
-> > >   	unsigned int *count =3D data;
-> > > +	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
-> > > +		if (ret.intval =3D=3D POWER_SUPPLY_SCOPE_DEVICE)
-> > > +			return 0;
-> > > +
-> > >   	(*count)++;
-> > >   	if (psy->desc->type !=3D POWER_SUPPLY_TYPE_BATTERY)
-> > >   		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
-> > > @@ -366,8 +370,8 @@ int power_supply_is_system_supplied(void)
-> > >   				      __power_supply_is_system_supplied);
-> > >   	/*
-> > > -	 * If no power class device was found at all, most probably we are
-> > > -	 * running on a desktop system, so assume we are on mains power.
-> > > +	 * If no system scope power class device was found at all, most pro=
-bably we
-> > > +	 * are running on a desktop system, so assume we are on mains power.
-> > >   	 */
-> > >   	if (count =3D=3D 0)
-> > >   		return 1;
-> > > --=20
-> > > 2.34.1
-> > >=20
-
---x7qrij76ovy2qfiw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj+6kACgkQ2O7X88g7
-+pqvTg/+LiE+XBlOO714ueWEP/EpOGvtW5I4kA2i49P+zyNLuHehWNy35sG7kJDE
-mUkzN0tpGQmnvGbRLkQr/GCMwcIsz3C5TJV40zbX7zTz/5ItbgCV19JP+BYu9n1Q
-9CYT57ya7NawRZgitSMxbcbl1+vo07sUf49JsT4aXkO68oWAYWBwF+h7QrZoWyjr
-VI246w/BYFcR6kcEt6s6tXERflLNbqFbcQpGKOBvPP/DgkSWs9LygC/roMqWH+Q5
-0FoTBIuOg5KcVHPys9fLZ3491Gf+9be+vq+3tksOAH4JTGBRHhh4rlUjMO8FEaJo
-1NKa5whdnEIrzBweXJsInH6NccubeLrCAvmEygWHwY2URPWGwV2G5zmxhXwg/JDY
-UdgFu9Xzz1u1tIUMPR/3Ztuj8ZFut8zeOR9XRlt1ddsFh6Kq5AKq3PvM4ZKiFbDw
-9QMYIqNAiku9mZvSBnOQM6Uamvy+cMp8fCReyvEoj/QO4/B9WSFN7P1eAroe4nta
-rusGx/mFqTjq2jV4vhCFWyPg2EpsrRwR54xt9h8HuLiJJGFltK0VvpRQXmy8lTtY
-/wMffGG0LbfAIxyKIGtoe84NRLg3yvfxkNqJWKnAhPqbWOKbqXIvT2J0hCWMDmwF
-Fnvu2RonE8kd31YDRs6bL8lhHS9vOYb6719RhCq0dW2hj1kNpjU=
-=ksLZ
------END PGP SIGNATURE-----
-
---x7qrij76ovy2qfiw--
+That's my thinking; grepping around finds several uses of module_alloc()
+that are all doing different variations on the page permissions dance.
+Let's just do it once and do it right...
