@@ -2,181 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A66B70431E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B75704327
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjEPBuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S229641AbjEPBzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjEPBtz (ORCPT
+        with ESMTP id S229586AbjEPBzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:49:55 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F511BD0;
-        Mon, 15 May 2023 18:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684201794; x=1715737794;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=yoBH6vhYXirTJn4ngLQetM+EEw/EqS96eNcX9cDbZ/o=;
-  b=BR04lS4lP/ELMB8tQoS067kbCPNy39tya0lNKYcdtOBpA4roEG1G1Aeg
-   YKmAxRUCqlkp2q2j0JyBzgTQiNJ1dEl9N6D9TmHAXQ5sarZxgrrMEnLe5
-   X4E0cHVpBEepw1U5mB/YC1Cwg0cVf6TfE3ec8l4qb0aLbPd/nB4ckSYZg
-   qxq7/QjOBWaHSCrJh51nIX4JfsQuspI9Cbsea1wFqsZBobY8LThLt4ywt
-   lRPUw2Etu408HkPLbjRrmiNcnWQrOJw8ScCkqiaf5h6Niu3ki4Z6HTqEA
-   xjNug+iSQY8UxovqRQ/rDYrhsHiWnnovzBF6F0Qb+r/l6nu6ku6S+TstG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="340716246"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="340716246"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 18:49:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="790880836"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="790880836"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 May 2023 18:49:48 -0700
-Message-ID: <57101685-35c3-8a71-9a39-a6d9fd58414c@linux.intel.com>
-Date:   Tue, 16 May 2023 09:49:13 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
-Content-Language: en-US
-To:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-References: <20230511143024.19542-1-yi.l.liu@intel.com>
- <20230511143024.19542-4-yi.l.liu@intel.com>
- <6ab2d63e-4dcc-6562-9698-d23300c7d1ae@linux.intel.com>
- <DS0PR11MB752940450312B2E0529C3DC6C3789@DS0PR11MB7529.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <DS0PR11MB752940450312B2E0529C3DC6C3789@DS0PR11MB7529.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Mon, 15 May 2023 21:55:07 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7371046B4;
+        Mon, 15 May 2023 18:55:06 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ab0c697c84so103306165ad.3;
+        Mon, 15 May 2023 18:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684202106; x=1686794106;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wxSehBADHNPhx1W9pJzpHY1/CLDnBeaup/WY8YXLQz0=;
+        b=UnVB3Om+UEpNsJEXkhGqtIr7WPAHXTeSVomHQPVUUSdGWOHYkyz1HXvzU1pOlW3g/z
+         hGkHIjP1kB5ylXrnRixtRImun9EDqnRvMfAtIxFwvw0Vz5EBJpny/rG3+lg0PXgocthH
+         hiONJkgjuLgA7267qSjw0Y7ohHvHDCeJEHhFAXjn5D1vL1YLN4m02p7GZrQ74ksQ0uOZ
+         /bR3W2qsSxvj6r0fKjaRitne/1ksSqaQO2mvDbVcYjov6NOMTUVaY+aL9P+kFxqIGZCp
+         Zcrg+dst63B4ZSLX3SKGzYMqwu04Ym1gZ52qaSiPNLbeKBup6JFyX/vq33yW3Ms6cvfU
+         auQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684202106; x=1686794106;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wxSehBADHNPhx1W9pJzpHY1/CLDnBeaup/WY8YXLQz0=;
+        b=Fx5QskQt9BGSyTMRwkMRkTaKoSizKTQ5VbD7mUTIfQIpWg4HXZrDoj/K1hD9gWPJTZ
+         uCUFNnlTLPljzZd8fVgXeCoAKJiUTbdroaJkHY8KfmdlLlDYfiCJejqLcWfOr3yXqu0d
+         l3UJksWLow3Ey6mAfZ/g+b+QSCpBshmYpUUyfyFBI2kTEfFT/EFOW/tc0YE28q+PBB8p
+         KJAJ41tn4xtOY1TtQfMEnZPnfSt13qR0jROgm2dLo1Xz50pdwB2czk8+rNYuuCTnmt8J
+         pi5rVfPzB9TlzXQI3I5GfSHZD//pTi7OLuBnv/zzPNM6z8oc4aIIPwwtr6MUJQve6t09
+         dP7w==
+X-Gm-Message-State: AC+VfDyy8P9pW+FYczwZ2JE6WjLZIVe03iLtvSyapdSimjfW+ULMIBo1
+        +1ZmeDmVUPRrdKRZoHIEdCM=
+X-Google-Smtp-Source: ACHHUZ5iUJoeNqFdzwtKs2iHh/nsgoPBMUjDybE5RLp83g11bptUS/jtDfP+OEBlCELskbNhGZdnNg==
+X-Received: by 2002:a17:903:247:b0:1ae:32db:d6c3 with SMTP id j7-20020a170903024700b001ae32dbd6c3mr1144834plh.41.1684202105848;
+        Mon, 15 May 2023 18:55:05 -0700 (PDT)
+Received: from localhost ([2605:59c8:148:ba10:3424:f8d7:c03b:2a7a])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170903234600b001a527761c31sm14234232plh.79.2023.05.15.18.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 18:55:04 -0700 (PDT)
+Date:   Mon, 15 May 2023 18:55:03 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        syzbot <syzbot+78bac731178aabdb6307@syzkaller.appspotmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Network Development <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Song Liu <song@kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>
+Message-ID: <6462e2779d365_250b420850@john.notmuch>
+In-Reply-To: <CAADnVQJ-afnNmXhUQspXZR3EgzKinPXVwJROYx7jHJ6tUOc54g@mail.gmail.com>
+References: <00000000000048abb105fb5604c1@google.com>
+ <CAADnVQJ-afnNmXhUQspXZR3EgzKinPXVwJROYx7jHJ6tUOc54g@mail.gmail.com>
+Subject: Re: [syzbot] [bpf?] [net?] kernel BUG in pskb_expand_head (2)
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 2:14 PM, Liu, Yi L wrote:
->> -----Original Message-----
->> From: Baolu Lu<baolu.lu@linux.intel.com>
->> Sent: Friday, May 12, 2023 1:39 PM
->> To: Liu, Yi L<yi.l.liu@intel.com>;joro@8bytes.org;alex.williamson@redhat.com;
->> jgg@nvidia.com; Tian, Kevin<kevin.tian@intel.com>;robin.murphy@arm.com
->> Cc:baolu.lu@linux.intel.com;cohuck@redhat.com;eric.auger@redhat.com;
->> nicolinc@nvidia.com;kvm@vger.kernel.org;mjrosato@linux.ibm.com;
->> chao.p.peng@linux.intel.com;yi.y.sun@linux.intel.com;peterx@redhat.com;
->> jasowang@redhat.com;shameerali.kolothum.thodi@huawei.com;lulu@redhat.com;
->> suravee.suthikulpanit@amd.com;iommu@lists.linux.dev;linux-kernel@vger.kernel.org;
->> linux-kselftest@vger.kernel.org; Duan, Zhenzhong<zhenzhong.duan@intel.com>
->> Subject: Re: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
->>
->> On 5/11/23 10:30 PM, Yi Liu wrote:
->>> Under nested IOMMU translation, userspace owns the stage-1 translation
->>> table (e.g. the stage-1 page table of Intel VT-d or the context table
->>> of ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific,
->>> and needs to be compatiable with the underlying IOMMU hardware. Hence,
->>> userspace should know the IOMMU hardware capability before creating and
->>> configuring the stage-1 translation table to kernel.
->>>
->>> This adds IOMMU_DEVICE_GET_HW_INFO to query the IOMMU hardware
->> information
->>> for a given device. The returned data is vendor specific, userspace needs
->>> to decode it with the structure mapped by the @out_data_type field.
->>>
->>> As only physical devices have IOMMU hardware, so this will return error
->>> if the given device is not a physical device.
->>>
->>> Co-developed-by: Nicolin Chen<nicolinc@nvidia.com>
->>> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
->>> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
->>> ---
->>>    drivers/iommu/iommufd/device.c          | 72 +++++++++++++++++++++++++
->>>    drivers/iommu/iommufd/iommufd_private.h |  1 +
->>>    drivers/iommu/iommufd/main.c            |  3 ++
->>>    include/uapi/linux/iommufd.h            | 37 +++++++++++++
->>>    4 files changed, 113 insertions(+)
->>>
->>> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
->>> index 051bd8e99858..bc99d092de8f 100644
->>> --- a/drivers/iommu/iommufd/device.c
->>> +++ b/drivers/iommu/iommufd/device.c
->>> @@ -263,6 +263,78 @@ u32 iommufd_device_to_id(struct iommufd_device *idev)
->>>    }
->>>    EXPORT_SYMBOL_NS_GPL(iommufd_device_to_id, IOMMUFD);
->>>
->>> +static int iommufd_zero_fill_user(u64 ptr, int bytes)
->>> +{
->>> +	int index = 0;
->>> +
->>> +	for (; index < bytes; index++) {
->>> +		if (put_user(0, (uint8_t __user *)u64_to_user_ptr(ptr + index)))
->>> +			return -EFAULT;
->>> +	}
->>> +	return 0;
->>> +}
->>> +
->>> +int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
->>> +{
->>> +	struct iommu_hw_info *cmd = ucmd->cmd;
->>> +	unsigned int length = 0, data_len;
->>> +	struct iommufd_device *idev;
->>> +	const struct iommu_ops *ops;
->>> +	void *data = NULL;
->>> +	int rc = 0;
->>> +
->>> +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
->>> +		return -EOPNOTSUPP;
->>> +
->>> +	idev = iommufd_get_device(ucmd, cmd->dev_id);
->>> +	if (IS_ERR(idev))
->>> +		return PTR_ERR(idev);
->>> +
->>> +	ops = dev_iommu_ops(idev->dev);
->>> +	if (!ops->hw_info)
->>> +		goto done;
->> If the iommu driver doesn't provide a hw_info callback, it still
->> returns success?
-> Yes, as noted in the cover letter. It's for a remark from Jason. In such
-> case, the out_data_type is NULL, it means no specific data is filled
-> in the buffer pointed by cmd->data_ptr.
+Alexei Starovoitov wrote:
+> John,
 > 
-> - Let IOMMU_DEVICE_GET_HW_INFO succeed even the underlying iommu driver
->     does not have driver-specific data to report per below remark.
->     https://lore.kernel.org/kvm/ZAcwJSK%2F9UVI9LXu@nvidia.com/
+> could you please check whether your pending sockmap patches
+> address this issue as well or it's a new one?
+> 
 
-Oh, I overlooked that. Thanks for the explanation. It's fair enough.
-
-Best regards,
-baolu
+Will check although it looks like one we found earlier, spinning
+new series here soon.
