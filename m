@@ -2,153 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9A27054E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758337054EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjEPRXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
+        id S231672AbjEPRZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjEPRXn (ORCPT
+        with ESMTP id S229571AbjEPRZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:23:43 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21231195
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:23:42 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-335d6260e9bso10685ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:23:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684257821; x=1686849821;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KtLDMIe167B85U/+GfK+jGRGZasQjZejfPs58zT2nPo=;
-        b=wTc2x7001d8gBrfDrm+5jQkRDAjYgsBFeRgu1lN7P4Sox5fk/y11Wdh/ge45c1aAXt
-         DpGFODbpp3VrBb64VCHyh5e2EKkjsBEDGuqkseD+j5BZhmyOlsPNb7JEy1vi0bKX8ByO
-         twedDomMdgmcHRS0hoF49Zq3ZHAvcs0JW7Ga07dt/rF2VsoFkR0fJPFssK68PBERL5jJ
-         nTdJov1eSvobo3/f2b24SqBV+NZz+KyPsuJyF1PuU+g5XP/ZzSAp2jPUIZJ6RFHZXQtH
-         jOi6n7ZBsRSuJqY0cMwdHRSZXCokCiGVvWYcf0G2XTB24EpE38gWg8OU4vdzc4yeijhd
-         Ae8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684257821; x=1686849821;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtLDMIe167B85U/+GfK+jGRGZasQjZejfPs58zT2nPo=;
-        b=WO4Diyk4IV0jQeKlHwyFnhG4K/fcKLeGlfyfXBW+Qs5fJC1o8/EPvgfHun2tS9W845
-         eRDeHinOYh2AQ5vsXfOxdP7Dm7SCRFaUStivYGZ7lEx4p5Kc0emNXeCT+6w8YSeZ8mML
-         VOzX57QKpYo6MBGrxoBAwEv3vUI2xhTQP3vRmlmMyOtOSVvQxqKMZ1Fm094nACPEr1I3
-         5KHt1LrXv2D+DAorzqRoFpWuA+OzFBczvxWNPPlpIQRuUF8ApYNW3xBCrBQMaE6uyx5v
-         YFrCqKFK+MVoOBsf//HQ2yPJRv+tTKEVS3G1q+TGDR1EoThedTBFvHkWAiHSdV0vxXJb
-         Q+7w==
-X-Gm-Message-State: AC+VfDxaUaoDWB1zgS+vXj7OXiSl5rp6MogLm7dMmN0GZ8kxVWXP7Mtd
-        AIodNGRBbd3WoM4/CTc6H6ILng3bqWTCOazjVnTJ1g==
-X-Google-Smtp-Source: ACHHUZ7+MXQY9FJvb+Jjv5Z5fAz6w/bKyOgU/LvgEVB1XBAqnx5OkYRYC0MW/bS6u9VrrsaWcBpvYyxo7Ernz9EYzmU=
-X-Received: by 2002:a05:6e02:1bc3:b0:335:5c4b:2f8a with SMTP id
- x3-20020a056e021bc300b003355c4b2f8amr246921ilv.5.1684257821269; Tue, 16 May
- 2023 10:23:41 -0700 (PDT)
+        Tue, 16 May 2023 13:25:46 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7A7E7A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:25:42 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C69CB1C0003;
+        Tue, 16 May 2023 17:25:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684257941;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aFevxj/rrkp09WHDPC8r1cjBszhyMx/0fchc8f659C8=;
+        b=ah0R2drhxSyAsYICQwRvoJcC+ZAwy8OXWfWdXbNqkI7uilswu7AT4Ot1GJ/Ab2D11Owqhl
+        ttM8vNs01fx7pam7U/I+/+hqueWpKfsCW+VXTUmx24gVOlYSSVpVElVYKLhXD0YttVol8d
+        CkGYLe/Oisveabg+7id3ZwDEqbjsbBWcUs2aGiBsNTqvYZXPuPBvCgwXY/N3GbOqA5YSqX
+        jfVWACoboMNH/sDI2sUXzSP5pH6+d1WMq0BlWk4ml4qWy5dq27+IGY+PCe6AbjCHaZZ4oL
+        qt8JxscjZICxycfQmByooMkkTZkEfs0IXSkOEda9EaycprL0Bormxjc15jLzBw==
+Date:   Tue, 16 May 2023 19:25:38 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: Marvell NFC timings on CN9130
+Message-ID: <20230516192538.45b35b6b@xps-13>
+In-Reply-To: <17a9eee2-d84f-549d-a5ff-da88d43393c1@alliedtelesis.co.nz>
+References: <17a9eee2-d84f-549d-a5ff-da88d43393c1@alliedtelesis.co.nz>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <000000000000bff72505fbcd1f74@google.com> <000000000000bc152005fbcd1fa2@google.com>
- <20230516-saftig-einbog-ef2981f0dec2@brauner>
-In-Reply-To: <20230516-saftig-einbog-ef2981f0dec2@brauner>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Tue, 16 May 2023 19:23:30 +0200
-Message-ID: <CANp29Y7ktmz=W5F+uavDa1KzSnUnBHtrH2abHRqAjuWZkJdgxw@mail.gmail.com>
-Subject: Re: [syzbot] [kernel?] Internal error in should_fail_ex
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     syzbot <syzbot+c84b326736ee471158dc@syzkaller.appspotmail.com>,
-        syzbot <syzbot+729f1325904c82acd601@syzkaller.appspotmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 2:32=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Tue, May 16, 2023 at 03:35:03AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    457391b03803 Linux 6.3
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D15671fa2280=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D385e197a58c=
-a4afe
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dc84b326736ee4=
-71158dc
-> > compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110=
-, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > Downloadable assets:
-> > disk image (non-bootable): https://storage.googleapis.com/syzbot-assets=
-/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmli=
-nux-457391b0.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9=
-/zImage-457391b0.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+c84b326736ee471158dc@syzkaller.appspotmail.com
->
-> On Tue, May 16, 2023 at 03:35:02AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    457391b03803 Linux 6.3
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D134e0b01280=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D385e197a58c=
-a4afe
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D729f1325904c8=
-2acd601
-> > compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110=
-, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D118f964e2=
-80000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D16f6e776280=
-000
-> >
-> > Downloadable assets:
-> > disk image (non-bootable): https://storage.googleapis.com/syzbot-assets=
-/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmli=
-nux-457391b0.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9=
-/zImage-457391b0.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+729f1325904c82acd601@syzkaller.appspotmail.com
->
-> Not complaining but why am I blessed with an explicit Cc on this?
->
+Hi Chris!
 
-You were Cc'd because syzbot incorrectly identified the guilty file
-for the bug, I've sent a fix [1].
-Sorry for the noise.
+Chris.Packham@alliedtelesis.co.nz wrote on Tue, 16 May 2023 04:46:38
++0000:
 
-[1] https://github.com/google/syzkaller/pull/3905
+> Hi Miquel, Thomas,
+>=20
+> A hardware colleague reported a concern to me about a new design we have=
+=20
+> using the Marvell CN9130 SoC (which I think was called Armada-8K before=20
+> they rebranded).
+>=20
+> Basically their concern is that the tWC timing they observe is faster=20
+> (~18ns) than the documented minimum in the hardware datasheet for the=20
+> CN9130 (25ns). Aside from not meeting the datasheet spec we've not=20
+> observed any other issue (yet).
 
---=20
-Aleksandr
+I would have expected the controller to support almost any kind of
+timings, including SDR EDO mode 5. tWC is 25ns with mode 4, but 20 on
+mode 5 (ONFI). So I believe you're running a system with a chip that is
+not compatible with the fastest mode. If that is the case, it may
+explain why you don't see errors with this chip: it may support
+slightly faster timings than it advertises.
+
+Anyway, if your findings are true, it means the current implementation
+is slightly out of spec and the timing calculation might require to be
+tweaked a little bit to reduce tWC.
+
+> I notice in the marvell_nand.c driver that marvell_nfc_init() sets the=20
+> NAND Clock Frequency Select bit (0xF2440700:0) to 1 which runs according=
+=20
+> to the datasheet the NAND flash at 400MHz . But the calculations in=20
+> marvell_nfc_setup_interface() use the value from=20
+> clk_get_rate(nfc->core_clk) which is still 250MHz so I'm wondering if=20
+> maybe the fact that the NAND flash is being run faster is having an=20
+> impact on timings that are calculated around the core_clk frequency.
+
+What if you reset this bit? Do you observe different timings? I hope
+you do, otherwise this is a dead-end.
+
+The timings are derived from this clock but I remember seeing different
+rates than the ones I expected with no obvious explanation (see the "*
+2" in the calculation of period_ns and the comment right below). So
+maybe this is due to the 400MHz vs. 250MHz issue you are reporting, or
+there is an undocumented pre-scaler in-between (this is my original
+guess).
+
+> Do you think that the timings calculations should take the NAND Clock=20
+> Frequency Select setting into account?
+
+There is not much about this clock in the manual, so if the clock is
+feeding the logic of the controller generating the signals on the bus,
+then yes. You can verify this with the test mentioned above.
+
+Could you check the values set to tWP and tWH with and without the bit
+and probe the signals in both cases? Maybe the "* 2" in the
+period_ns calculation will vanish if we use 400MHz as input clock rather
+than clk_get_rate() (or better, expose the bit as a mux-clock and use
+it to tell the CCF the right frequency) and you'll get a sharper tWC in
+the end, which hopefully should match the spec this time.
+
+Thanks,
+Miqu=C3=A8l
