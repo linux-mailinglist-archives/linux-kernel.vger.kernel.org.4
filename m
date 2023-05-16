@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CAF7052B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E077D7052C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234230AbjEPPsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41690 "EHLO
+        id S234334AbjEPPtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbjEPPsC (ORCPT
+        with ESMTP id S234291AbjEPPsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:48:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A84A24D;
-        Tue, 16 May 2023 08:47:37 -0700 (PDT)
+        Tue, 16 May 2023 11:48:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508AA279
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:48:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDB6663B93;
-        Tue, 16 May 2023 15:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0070AC433A1;
-        Tue, 16 May 2023 15:47:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37E0B63BB4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:47:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 968C1C433EF;
+        Tue, 16 May 2023 15:47:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684252035;
-        bh=bjHzaX1S/XmMHS+pzx/BBsDEPRhhS8ndqsq/8qSoq9A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f2bOGMmanyE84V2/AE41WTMs80qf9pTZsHsD9F+/Ran0Loq1XnTWD9T1Xe/lEKv2Y
-         26KXijopJ1VoF2HSPy2rDYc4XU/QPS+Zund7IVhGRxHNHw9vNTL86eH4s8XWVe+esJ
-         GHxnqexAf5xknWy4Yonsml33IdsEstRyKq9sdNqaIejoDb1g5MSmONOYCsanOthNKJ
-         D+QslLecnNSqmq1ph9lvme/E4S0LiZmiQg9qzXyrdadHTL+NCJjLLu6zxCWjXyvqVt
-         4V5sahVD0mThIJeYsb2Qctrjw2FfeAYZ7OWb+ewqVNJiWbDv2ZF8YlLIH2bOXWAWg3
-         rAlpSAzcEWEKg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Russell King <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 16/16] ARM: xip-kernel: add __inflate_kernel_data prototype
-Date:   Tue, 16 May 2023 17:46:05 +0200
-Message-Id: <20230516154605.517690-17-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516154605.517690-1-arnd@kernel.org>
-References: <20230516154605.517690-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        s=k20201202; t=1684252033;
+        bh=0+bt4Jtbt/lY8GWM6lmju26paMyG+7OAx1IOIm4pGBY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UPdagahqFGsct/IwUnGhgKDBUiKTJzwh2T+ZCOvrRfJlFOL/dPFjxJ5EnmWhOA2NB
+         PO1q6DMg6jsfWS1K2s8gHFN2LD7QdK7Tmhpzl6fhXAoYHVBr1H6DOOPqF0JvVV3eLM
+         KQ+qQCfyh5P/V78QJKBGGMqbn7cCtDY4XFYKewsiHC5ndkIHevhqRJfTFRj7X0gl/1
+         bE+e14b8yRCVTSJWaKgGyHf4fxOI/bBrarbJVz0Yr7FAIua4gMpPDdHBAy8vU3ZVVS
+         cGwXHKcQgOJQlb49Is99A4is+FzrsWbW5JrP8ZbnBNSKRS7sf3uV6BBjn+78YQzhBH
+         LQ8FbUIcaI9mA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pywtK-00Faph-RT;
+        Tue, 16 May 2023 16:47:11 +0100
+Date:   Tue, 16 May 2023 16:47:10 +0100
+Message-ID: <864jocmg75.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mostafa Saleh <smostafa@google.com>
+Cc:     oliver.upton@linux.dev, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com
+Subject: Re: [PATCH] KVM: arm64: Use BTI for pKVM
+In-Reply-To: <20230516141846.792193-1-smostafa@google.com>
+References: <20230516141846.792193-1-smostafa@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: smostafa@google.com, oliver.upton@linux.dev, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com, will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com, suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com, gshan@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,59 +70,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, 16 May 2023 15:18:46 +0100,
+Mostafa Saleh <smostafa@google.com> wrote:
+> 
+> CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+> However, the nvhe code doesn't make use of it as it doesn't map any
+> pages with Guarded Page(GP) bit.
+> 
+> This patch maps pKVM .text section with GP bit which matches the
+> kernel handling for BTI.
 
-The kernel .data decompression is called from assembler, so it does
-not need a prototype, but adding one avoids this W=1 warning:
+Why pKVM only? Surely we can benefit from it all over the nvhe code,
+right?
 
-arch/arm/kernel/head-inflate-data.c:35:12: error: no previous prototype for '__inflate_kernel_data' [-Werror=missing-prototypes]
+> 
+> A new flag is added to enum kvm_pgtable_prot: KVM_PGTABLE_PROT_GP_S1,
+> which represents BTI guarded page in hypervisor stage-1 page table.
+> 
+> Signed-off-by: Mostafa Saleh <smostafa@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_pgtable.h | 3 +++
+>  arch/arm64/kvm/hyp/nvhe/setup.c      | 8 ++++++--
+>  arch/arm64/kvm/hyp/pgtable.c         | 6 ++++--
+>  3 files changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> index 4cd6762bda80..5bcd06d664d3 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -151,6 +151,7 @@ enum kvm_pgtable_stage2_flags {
+>   * @KVM_PGTABLE_PROT_W:		Write permission.
+>   * @KVM_PGTABLE_PROT_R:		Read permission.
+>   * @KVM_PGTABLE_PROT_DEVICE:	Device attributes.
+> + * @KVM_PGTABLE_PROT_GP_S1:	GP(guarded page) used for BTI in stage-1 only
+>   * @KVM_PGTABLE_PROT_SW0:	Software bit 0.
+>   * @KVM_PGTABLE_PROT_SW1:	Software bit 1.
+>   * @KVM_PGTABLE_PROT_SW2:	Software bit 2.
+> @@ -163,6 +164,8 @@ enum kvm_pgtable_prot {
+>  
+>  	KVM_PGTABLE_PROT_DEVICE			= BIT(3),
+>  
+> +	KVM_PGTABLE_PROT_GP_S1			= BIT(50),
+> +
+>  	KVM_PGTABLE_PROT_SW0			= BIT(55),
+>  	KVM_PGTABLE_PROT_SW1			= BIT(56),
+>  	KVM_PGTABLE_PROT_SW2			= BIT(57),
+> diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+> index 110f04627785..95f80e2b2946 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/setup.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+> @@ -66,7 +66,7 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+>  {
+>  	void *start, *end, *virt = hyp_phys_to_virt(phys);
+>  	unsigned long pgt_size = hyp_s1_pgtable_pages() << PAGE_SHIFT;
+> -	enum kvm_pgtable_prot prot;
+> +	enum kvm_pgtable_prot prot = PAGE_HYP_EXEC;
+>  	int ret, i;
+>  
+>  	/* Recreate the hyp page-table using the early page allocator */
+> @@ -88,7 +88,11 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, PAGE_HYP_EXEC);
+> +	/* Hypervisor text is mapped as guarded pages(GP). */
+> +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && cpus_have_const_cap(ARM64_BTI))
+> +		prot |= KVM_PGTABLE_PROT_GP_S1;
 
-The same file contains a few extern declarations for assembler
-symbols, move those into the header as well for consistency.
+Is there any reason why this isn't a final cap? I also dislike the
+IS_ENABLED(), but I can see that we don't have separate caps for
+in-kernel BTI and userspace visible BTI...
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/kernel/head-inflate-data.c | 5 +----
- arch/arm/kernel/head.h              | 8 ++++++++
- 2 files changed, 9 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm/kernel/head.h
+> +
+> +	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, prot);
+>  	if (ret)
+>  		return ret;
+>  
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index 3d61bd3e591d..028e198acd48 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -145,7 +145,8 @@ static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+>  	u64 type = (level == KVM_PGTABLE_MAX_LEVELS - 1) ? KVM_PTE_TYPE_PAGE :
+>  							   KVM_PTE_TYPE_BLOCK;
+>  
+> -	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI);
+> +	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI |
+> +		       KVM_PGTABLE_PROT_GP_S1);
+>  	pte |= FIELD_PREP(KVM_PTE_TYPE, type);
+>  	pte |= KVM_PTE_VALID;
+>  
+> @@ -378,7 +379,8 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot, kvm_pte_t *ptep)
+>  	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_AP, ap);
+>  	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_SH, sh);
+>  	attr |= KVM_PTE_LEAF_ATTR_LO_S1_AF;
+> -	attr |= prot & KVM_PTE_LEAF_ATTR_HI_SW;
+> +	attr |= prot & (KVM_PTE_LEAF_ATTR_HI_SW | KVM_PGTABLE_PROT_GP_S1);
+> +
 
-diff --git a/arch/arm/kernel/head-inflate-data.c b/arch/arm/kernel/head-inflate-data.c
-index 89a52104d32a..225c0699a12c 100644
---- a/arch/arm/kernel/head-inflate-data.c
-+++ b/arch/arm/kernel/head-inflate-data.c
-@@ -8,16 +8,13 @@
- 
- #include <linux/init.h>
- #include <linux/zutil.h>
-+#include "head.h"
- 
- /* for struct inflate_state */
- #include "../../../lib/zlib_inflate/inftrees.h"
- #include "../../../lib/zlib_inflate/inflate.h"
- #include "../../../lib/zlib_inflate/infutil.h"
- 
--extern char __data_loc[];
--extern char _edata_loc[];
--extern char _sdata[];
--
- /*
-  * This code is called very early during the boot process to decompress
-  * the .data segment stored compressed in ROM. Therefore none of the global
-diff --git a/arch/arm/kernel/head.h b/arch/arm/kernel/head.h
-new file mode 100644
-index 000000000000..6eccf98fc2cc
---- /dev/null
-+++ b/arch/arm/kernel/head.h
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+extern char __data_loc[];
-+extern char _edata_loc[];
-+extern char _sdata[];
-+
-+int __init __inflate_kernel_data(void);
-+
+You should probably check that the page is executable before blindly
+accepting to set the GP bit (don't accept it for non-exec pages).
+
+Another thing to check would be the state of SCTLR_EL2.BT, which I
+think we clear by construction, but it be worth having a look.
+
+Thanks,
+
+	M.
+
 -- 
-2.39.2
-
+Without deviation from the norm, progress is not possible.
