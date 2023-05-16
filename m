@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69051704780
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E93704784
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbjEPIMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S231574AbjEPIND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjEPIMu (ORCPT
+        with ESMTP id S231579AbjEPINA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:12:50 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C4B40C1;
-        Tue, 16 May 2023 01:12:48 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9C68D5C0199;
-        Tue, 16 May 2023 04:12:46 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 16 May 2023 04:12:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684224766; x=1684311166; bh=zJFhqzNVhoR5l
-        m67xTo7+8wzlRuT2gv3QZpUUtl4vAk=; b=kL9k898xjep0Tp0/oJBfkJH/wHpG2
-        mykreL0o7AnLiO1vuWsemCE7FvmFA2tMFUxkE0RWC10d/9EqRzoVruXM1JqQqMT4
-        UTZu0p4soAC2RdwYeUbwHBhJcDHIVJlC+oHLlgCld00SVhKZBwBPsZyZEXy28380
-        NATyCxCz+CwXg8WQ8Hkt2omSPpoJmmHWb9x3Eh9BurgmNRD4aXPB3DF0xhg/m1nz
-        FEIP73RpeFmM0XP/i6YPTKh+/Uh0JWquLj6gDacubRJca4Z/La2bdyryU+SfHVs2
-        ESZJAXCTJUW01+D+iw8FVUBz4Topz4W/38aTA9ZMQzj3WEv1Ssf6HRfYQ==
-X-ME-Sender: <xms:_jpjZC5LirHSlK2kKkJi8AaxKjDfs75zwQ7aO3-fa1zVFq-Ki6akWA>
-    <xme:_jpjZL5yy1FcoRN_kRoswaw6-zRlkreaqqhqL5_ISCEbuxh2SGZBkTwrtKaoXr9IO
-    O1qltp27cxg3TQ>
-X-ME-Received: <xmr:_jpjZBfnPh_auZCM6Em6XtbbMEMxkuQXtPmj0tePBcFPOLyYM8gnkD3ZM7-DfwrJu3sw2XVKCSKbRV0uR3tXADhKOvg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
-    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:_jpjZPJ6fhEbsnWPazme88GnEzfa_kTTodoc5_VGXShe1hSnK0k32w>
-    <xmx:_jpjZGKJq4TS4Ps4rwbcf4-1UJT0UfGVidTlltRKLWuLwl5RhNKMdQ>
-    <xmx:_jpjZAwntr38fpIHjxwqmeSMQR2t9Vs6oydib71ayWgTiLDRTW4bwA>
-    <xmx:_jpjZIiZoeviI0qQuL35POudnpiE44l151vcJ6fvIMarFu0rrm4vzg>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 May 2023 04:12:45 -0400 (EDT)
-Date:   Tue, 16 May 2023 11:12:42 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Angus Chen <angus.chen@jaguarmicro.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "dsahern@kernel.org" <dsahern@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] net: Remove low_thresh in ip defrag
-Message-ID: <ZGM6+oaSOXNlf8u2@shredder>
-References: <20230512010152.1602-1-angus.chen@jaguarmicro.com>
- <ZGIRWjNcfqI8yY8W@shredder>
- <TY2PR06MB34243E08982541B8371E913085789@TY2PR06MB3424.apcprd06.prod.outlook.com>
+        Tue, 16 May 2023 04:13:00 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820DF49DC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:12:58 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so15740415e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684224777; x=1686816777;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D9WQpX8umTNZT1uMb2NpjGwQWrLstlpv7/gcs4042jo=;
+        b=bnfuz3FzUAPekyOCUVPSBs2VQGQNvFw2wLjvtwYrqBOE7GHXzarHw9sqLweKgCApYh
+         AYbgyvBoeSd2q+POJlyCU32HL4NdVq4dvoKq4N2cE9eh321INKsHD0cMl+gB0IBcMDEB
+         hho3cw8B7TPI/RjkMbkdAR1VIHLFOmw+wRkFWWqNTaGo9Ca5tkH2OuC8nVBeZG62O2EO
+         B5KLFzlOyHaRT2shV7N0nlKY7UYAP/b8lfLF56VPvfPjxvjigPvsHNL6+HGHl2lY2WHS
+         Z1SDZ87cxINgY/CQ05WKOPsWL/5CiP/Rptu0yyZhr31buWpwjwnvzBjP9dZM+BMbmQIj
+         YRyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684224777; x=1686816777;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D9WQpX8umTNZT1uMb2NpjGwQWrLstlpv7/gcs4042jo=;
+        b=fqoedW/zXlUb4MM95984bGqs3QgOYykxN81+vUvqdHj3NsXq5yXh70Gbmd7AVx4Qjh
+         In7MFXXLLIoOndGs3QbCi/1m6bdfAG0oUQe2pKweIWvHy7FOIJgnhQ0BIHqDbCT49BBl
+         Z03iubbyIDhNLWl3vlk683RNrDLmvFKLFUB50mMxbO6H7QLTylgq+OYpYDUy1I8i9l04
+         zAaOLfPMy4oTELDFFUmEqA4eHgTpHoj+viIRe79JNiqqZBVr7r0lIxKEjvwk6UZVspUr
+         eBAAfw7IUkyDI9RD/irG00Y50N5hUL2yZErz0ho7JWPXGOMVkini7lPSndls3EMNVjWg
+         YwLw==
+X-Gm-Message-State: AC+VfDyKTkDoJxy4spPM/qAqeDd1ifO17RHA5v4VNM27EVpYdah02rXR
+        /dnQgIh5S6yv21lJWpKYrrXajw==
+X-Google-Smtp-Source: ACHHUZ6DoBmPoL+uBvO+KMfO5nAi5sGfthknTsmZHJArkDkYOxvL1fpBdJ623ALeF5qQXCX+e26eKA==
+X-Received: by 2002:a5d:604b:0:b0:2fb:b869:bc08 with SMTP id j11-20020a5d604b000000b002fbb869bc08mr26741990wrt.23.1684224776867;
+        Tue, 16 May 2023 01:12:56 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id v14-20020a1cf70e000000b003eddc6aa5fasm1418188wmh.39.2023.05.16.01.12.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 01:12:55 -0700 (PDT)
+Date:   Tue, 16 May 2023 11:12:51 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] firmware_loader: Fix a NULL vs IS_ERR() check
+Message-ID: <36ef6042-ce74-4e8e-9e2c-5b5c28940610@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TY2PR06MB34243E08982541B8371E913085789@TY2PR06MB3424.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Mailer: git-send-email haha only kidding
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +74,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 12:06:45PM +0000, Angus Chen wrote:
-> > -----Original Message-----
-> > From: Ido Schimmel <idosch@idosch.org>
-> > Sent: Monday, May 15, 2023 7:03 PM
-> > To: Angus Chen <angus.chen@jaguarmicro.com>
-> > Cc: davem@davemloft.net; dsahern@kernel.org; edumazet@google.com;
-> > kuba@kernel.org; pabeni@redhat.com; netdev@vger.kernel.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH v2] net: Remove low_thresh in ip defrag
-> > 
-> > On Fri, May 12, 2023 at 09:01:52AM +0800, Angus Chen wrote:
-> > > As low_thresh has no work in fragment reassembles,del it.
-> > > And Mark it deprecated in sysctl Document.
-> > >
-> > > Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
-> > 
-> > Getting the following traces with this patch when creating a netns:
-> Sorry for test miss because I tested it in card and didn't test it with multi net.
-> Should I create a pernet struct for it?
-> It may looks too complicated.
+The crypto_alloc_shash() function doesn't return NULL, it returns
+error pointers.  Update the check accordingly.
 
-Sorry but I don't understand the motivation behind this patch. IIUC, the
-sysctl is deprecated and has no use in the kernel, yet it cannot be
-removed because user space may rely on it being present. If so, what is
-the significance of the code changes in this patch? Why not just update
-the documentation?
+Fixes: 02fe26f25325 ("firmware_loader: Add debug message with checksum for FW file")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+ drivers/base/firmware_loader/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+index 9d79d5ad9102..b58c42f1b1ce 100644
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -812,7 +812,7 @@ static void fw_log_firmware_info(const struct firmware *fw, const char *name, st
+ 	char *outbuf;
+ 
+ 	alg = crypto_alloc_shash("sha256", 0, 0);
+-	if (!alg)
++	if (IS_ERR(alg))
+ 		return;
+ 
+ 	sha256buf = kmalloc(SHA256_DIGEST_SIZE, GFP_KERNEL);
+-- 
+2.39.2
+
