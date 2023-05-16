@@ -2,165 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B612A705052
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35926705054
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjEPOPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S233437AbjEPOQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbjEPOPH (ORCPT
+        with ESMTP id S232404AbjEPOQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:15:07 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEBC6E85;
-        Tue, 16 May 2023 07:15:05 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so5951007b3a.0;
-        Tue, 16 May 2023 07:15:05 -0700 (PDT)
+        Tue, 16 May 2023 10:16:00 -0400
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974EFAB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:15:59 -0700 (PDT)
+Received: by mail-wm1-x349.google.com with SMTP id 5b1f17b1804b1-3f433a2308bso21198075e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:15:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684246505; x=1686838505;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Alx4r0aar3zIInvSYgRnPVJwOWq1H/zXlc1OuInK7Cs=;
-        b=Wjc/lQ+Tw57nKz6pQH3IfjqMr9dO8VhAZNvyhZaooYuL1mHcQzyyOX/JpD9p+1lFyk
-         tkJk3B/6I/4M80xDDhM2arf7NqvKM4ANppGtrlY9bg36wRjaThty+JLw0V+UM5jcXH2n
-         S/sbzvGbbcATpe7Cg6amo2WJ1WfTlYkDBmqH5n26AYH7SQexpiCEIWDgsft3OLRehtdP
-         a3tjGiMyBTmDn+4+JBPuT0YV5dxEW4GBXGnhXo/HIRSjDm8mPvjmWByWO4bAX/GvXaGg
-         2BnIxtafWi1F95PyCK60EwZpbWPmTKLgd5dAfIxF061MJGtsfm+ERHB/nC9fsuZD2dkY
-         YuDA==
+        d=google.com; s=20221208; t=1684246558; x=1686838558;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=B8N8PO1EikxzfdoHKZo5krI5/XOld4YdAWQeBGx5Jjk=;
+        b=Wjo2awxanNESfU3T9n6puAeXqkMRNhZcXHTT6lsKWKqEZypv39qXzz0uLJr+HAgoZp
+         SQelJrcAgx6xycEt86ZmfxjKaKldVb0NQ93xNCBM0qL8DubtX2CQCtpV+s+3Gl+z8ZKY
+         +0E5yRWGqGmX7eQrA2HNLEumgmK5wYPh0BP26DqviRYDH7j9MyaQJbx1FUsBQLRXKdDn
+         V2Nj1RjtPTCKkD3YK3sUFNcVQcKEdhbwUwo2pwyPaP/pYHq0LZnWwVOMaHyLebHA87J8
+         lY0VjsC4Nd/4qDmL9l4g6cAh74FJkapsw+G3vHztTDBPun+NpxlWiHqEBuxmlxmaN1gO
+         asYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684246505; x=1686838505;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Alx4r0aar3zIInvSYgRnPVJwOWq1H/zXlc1OuInK7Cs=;
-        b=GmKlJ/11EWjGUetHzPtIK7KlL2JV1eBg6vpk8fqpQ8KvGjgXvPfkkl2EXfzm68RXDs
-         0qwE8BeHN36hgSk2mSkhLQOD+Z8n2pXnCG4udne8HPJUQDv87tOZERMcD73fI2AZ+L0W
-         G8G1xTdOHfkC5CaCSl6Tj4R9AvygR42hhcs+o/GQkcDCiBiTE/zfy+oZsk3KMFAMstGg
-         iYey8BozRWagyjIbbvRG9usSslupdexrrSjL2xJvlfTdhqdxnU9rXEm8KsJ7ZzSnIdYI
-         dOgo2syKgNFdMYexNIlHKJFGWUlZR6EXPE8nOpYhPfv0CpZDWye+O0/3gc4BMjHkcF+F
-         mCpw==
-X-Gm-Message-State: AC+VfDx04yKfEaOVgh8s4QFtaPmCBqJW+96pHxZBUlIcgrT2zwEhDbaX
-        sGOwI/2HWzksaKdDibMBZ/Q=
-X-Google-Smtp-Source: ACHHUZ4JDejRYofnysy2u4vG7LTphPKtRcw2RPCnHZ1MkwjL1Lh+gw67lM200t5K6kln93tcewd1Ug==
-X-Received: by 2002:a05:6a20:7494:b0:102:19b9:25c7 with SMTP id p20-20020a056a20749400b0010219b925c7mr25274346pzd.6.1684246505338;
-        Tue, 16 May 2023 07:15:05 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-11.three.co.id. [180.214.232.11])
-        by smtp.gmail.com with ESMTPSA id p38-20020a631e66000000b0052c766b2f52sm13669054pgm.4.2023.05.16.07.15.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 07:15:04 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 2BA8F1069B3; Tue, 16 May 2023 21:15:00 +0700 (WIB)
-Date:   Tue, 16 May 2023 21:14:59 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Keith Busch <kbusch@kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Stefan Roese <sr@denx.de>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pengyu Ma <mapengyu@gmail.com>
-Subject: Re: [PATCH] PCI/portdrv: Avoid enabling AER on Thunderbolt devices
-Message-ID: <ZGOP4wd3ZFkGb31e@debian.me>
-References: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="swGwUbbeTl4fTlQh"
-Content-Disposition: inline
-In-Reply-To: <20221226153048.1208359-1-kai.heng.feng@canonical.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684246558; x=1686838558;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B8N8PO1EikxzfdoHKZo5krI5/XOld4YdAWQeBGx5Jjk=;
+        b=cCG7wb7mSmD9JDntoBMUQSZ9avKGRdYd0tSGIg6BrEs700UQBo0Xpjv4nuHYY/YK1E
+         FUuF+JpXK3GVmtcPA8Y+Yl4ipx89WNVyVwH06xd6EKMDvw6EO9Bj13OcTGx/rrCb7kQa
+         tG9MgZz4N8xPn88vlklXvRz5mnConbS00XBFu5hEgtv/fJAEXgcZ8M33/0n5f9egBAxd
+         Xb0AWQ/Yb+SKvVY3eaLdqXpePO9TzvnXRz6Mdzo5+K7VkmDiCGumOQqTNlh1Z8gJ7x8v
+         fnW0gedsO8erQtWM8ehaqIz6GTOOQdBIUPXS+zbbkW5S2DpuGA1RnCuVD224U6KOE0VK
+         oQzw==
+X-Gm-Message-State: AC+VfDxFQuKqZjTp0YanoHcBLijSMtzef4nCCuSkGkRPUZh+Yo7EQ8jt
+        KRKQzIaks83JbvOL+yb9o134rnyTcHsMWA==
+X-Google-Smtp-Source: ACHHUZ4a8q5ljWXSfSaXs6ygqngOKLgwefkY5eVCtNF1uxBI+dX0LpgsHH1oWB+dpxEG2zYT08nY+GLkIYjHoA==
+X-Received: from mostafa.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:333c])
+ (user=smostafa job=sendgmr) by 2002:a05:6000:1b01:b0:306:880c:c7f5 with SMTP
+ id f1-20020a0560001b0100b00306880cc7f5mr6493164wrz.7.1684246558004; Tue, 16
+ May 2023 07:15:58 -0700 (PDT)
+Date:   Tue, 16 May 2023 14:15:31 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230516141531.791492-1-smostafa@google.com>
+Subject: [PATCH] KVM: arm64: Use different pointer authentication keys for pKVM
+From:   Mostafa Saleh <smostafa@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     tabba@google.com, kaleshsingh@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com,
+        Mostafa Saleh <smostafa@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the kernel is compiled with CONFIG_ARM64_PTR_AUTH_KERNEL, it
+uses Armv8.3-Pauth for return address protection for the kernel code
+including nvhe code in EL2.
 
---swGwUbbeTl4fTlQh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Same keys are used in both kernel(EL1) and nvhe code(EL2), this is
+fine for nvhe but not when running in protected mode(pKVM) as the host
+can't be trusted.
 
-On Mon, Dec 26, 2022 at 11:30:31PM +0800, Kai-Heng Feng wrote:
-> We are seeing igc ethernet device on Thunderbolt dock stops working
-> after S3 resume because of AER error, or even make S3 resume freeze:
-> pcieport 0000:00:1d.0: AER: Multiple Corrected error received: 0000:00:1d=
-=2E0
-> pcieport 0000:00:1d.0: PCIe Bus Error: severity=3DCorrected, type=3DTrans=
-action Layer, (Receiver ID)
-> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=3D00008000/=
-00002000
-> pcieport 0000:00:1d.0:    [15] HeaderOF
-> pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fatal) error receiv=
-ed: 0000:00:1d.0
-> pcieport 0000:00:1d.0: PCIe Bus Error: severity=3DUncorrected (Non-Fatal)=
-, type=3DTransaction Layer, (Requester ID)
-> pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=3D00100000/=
-00004000
-> pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
-> pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a000052 00000000 0000=
-0000
-> pcieport 0000:00:1d.0: AER:   Error of this Agent is reported first
-> pcieport 0000:04:01.0: PCIe Bus Error: severity=3DUncorrected (Non-Fatal)=
-, type=3DTransaction Layer, (Requester ID)
-> pcieport 0000:04:01.0:   device [8086:1136] error status/mask=3D00300000/=
-00000000
-> pcieport 0000:04:01.0:    [20] UnsupReq               (First)
-> pcieport 0000:04:01.0:    [21] ACSViol
-> pcieport 0000:04:01.0: AER:   TLP Header: 34000000 04000052 00000000 0000=
-0000
-> thunderbolt 0000:05:00.0: AER: can't recover (no error_detected callback)
->=20
-> This supposedly should be fixed by commit c01163dbd1b8 ("PCI/PM: Always d=
-isable
-> PTM for all devices during suspend"), but somehow it doesn't work for
-> this case.
->=20
-> By dumping the PCI_PTM_CTRL register on resume, it turns out PTM is
-> already flipped on by either the Thunderbolt dock firmware or the host
-> BIOS. Writing 0 to PCI_PTM_CTRL yields the same result.
->=20
-> Windows is however not affected by this issue, by using WinDbg's !pci
-> command, it shows that AER is not enabled for devices connected via
-> Thunderbolt port, and that's the reason why Windows doesn't exhibit the
-> issue.
->=20
-> So turn a blind eye on external Thunderbolt devices like Windows does by
-> disabling AER.
->=20
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D216850
-> Cc: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+The keys for the hypervisor are generated from the kernel before it
+de-privileges, each cpu has different keys, this relies on nvhe code
+not being migratable while running.
 
-Hi,
+This patch adds host/hyp save/restore for the keys.
+For guest/hyp, they are already handled in common kvm code in
+__guest_enter, where they are saved/restored if they are not
+trapped.
 
-I noticed a similar regression on bugzilla [1] where I asked the
-reporter to test your patch, and his regression still occured. For
-full details, see bugzilla.
+Signed-off-by: Mostafa Saleh <smostafa@google.com>
+---
+ arch/arm64/kvm/arm.c           | 26 +++++++++++++++++++++++++
+ arch/arm64/kvm/hyp/nvhe/host.S | 35 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
 
-Thanks.
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 14391826241c..dd03b52f035d 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -51,6 +51,8 @@ DECLARE_KVM_HYP_PER_CPU(unsigned long, kvm_hyp_vector);
+ DEFINE_PER_CPU(unsigned long, kvm_arm_hyp_stack_page);
+ DECLARE_KVM_NVHE_PER_CPU(struct kvm_nvhe_init_params, kvm_init_params);
+ 
++DECLARE_KVM_NVHE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
++
+ static bool vgic_present;
+ 
+ static DEFINE_PER_CPU(unsigned char, kvm_arm_hardware_enabled);
+@@ -2067,6 +2069,26 @@ static int __init kvm_hyp_init_protection(u32 hyp_va_bits)
+ 	return 0;
+ }
+ 
++static void pkvm_hyp_init_ptrauth(void)
++{
++	struct kvm_cpu_context *hyp_ctxt;
++	int cpu;
++
++	for_each_possible_cpu(cpu) {
++		hyp_ctxt = per_cpu_ptr_nvhe_sym(kvm_hyp_ctxt, cpu);
++		hyp_ctxt->sys_regs[APIAKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APIAKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APIBKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APIBKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDAKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDAKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDBKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APDBKEYHI_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APGAKEYLO_EL1] = get_random_long();
++		hyp_ctxt->sys_regs[APGAKEYHI_EL1] = get_random_long();
++	}
++}
++
+ /* Inits Hyp-mode on all online CPUs */
+ static int __init init_hyp_mode(void)
+ {
+@@ -2228,6 +2250,10 @@ static int __init init_hyp_mode(void)
+ 	kvm_hyp_init_symbols();
+ 
+ 	if (is_protected_kvm_enabled()) {
++		if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL) &&
++		    cpus_have_const_cap(ARM64_HAS_ADDRESS_AUTH))
++			pkvm_hyp_init_ptrauth();
++
+ 		init_cpu_logical_map();
+ 
+ 		if (!init_psci_relay()) {
+diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+index b6c0188c4b35..255ba4af911b 100644
+--- a/arch/arm64/kvm/hyp/nvhe/host.S
++++ b/arch/arm64/kvm/hyp/nvhe/host.S
+@@ -10,6 +10,7 @@
+ #include <asm/kvm_arm.h>
+ #include <asm/kvm_asm.h>
+ #include <asm/kvm_mmu.h>
++#include <asm/kvm_ptrauth.h>
+ 
+ 	.text
+ 
+@@ -37,10 +38,42 @@ SYM_FUNC_START(__host_exit)
+ 
+ 	/* Save the host context pointer in x29 across the function call */
+ 	mov	x29, x0
++
++#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
++alternative_if_not ARM64_HAS_ADDRESS_AUTH
++b __skip_pauth_save
++alternative_else_nop_endif
++
++alternative_if ARM64_KVM_PROTECTED_MODE
++	/* Save kernel ptrauth keys. */
++	add x18, x29, #CPU_APIAKEYLO_EL1
++	ptrauth_save_state x18, x19, x20
++
++	/* Use hyp keys. */
++	adr_this_cpu x18, kvm_hyp_ctxt, x19
++	add x18, x18, #CPU_APIAKEYLO_EL1
++	ptrauth_restore_state x18, x19, x20
++alternative_else_nop_endif
++__skip_pauth_save:
++#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
++
+ 	bl	handle_trap
+ 
+-	/* Restore host regs x0-x17 */
+ __host_enter_restore_full:
++	/* Restore kernel keys. */
++#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
++alternative_if_not ARM64_HAS_ADDRESS_AUTH
++b __skip_pauth_restore
++alternative_else_nop_endif
++
++alternative_if ARM64_KVM_PROTECTED_MODE
++	add x18, x29, #CPU_APIAKEYLO_EL1
++	ptrauth_restore_state x18, x19, x20
++alternative_else_nop_endif
++__skip_pauth_restore:
++#endif /* CONFIG_ARM64_PTR_AUTH_KERNEL */
++
++	/* Restore host regs x0-x17 */
+ 	ldp	x0, x1,   [x29, #CPU_XREG_OFFSET(0)]
+ 	ldp	x2, x3,   [x29, #CPU_XREG_OFFSET(2)]
+ 	ldp	x4, x5,   [x29, #CPU_XREG_OFFSET(4)]
+-- 
+2.40.1.606.ga4b1b128d6-goog
 
-Reported-by: Pengyu Ma <mapengyu@gmail.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217446 [1]
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---swGwUbbeTl4fTlQh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGOP3AAKCRD2uYlJVVFO
-o55WAQDiz4AxHaMzxpfSq/YrLOTQ/UbRNX9S9CPp4N3fJWDYewD/bJqyDv6mWPX/
-qgKDqtaJs5+6j6Frsnkqel2RqU6dbg4=
-=IdSW
------END PGP SIGNATURE-----
-
---swGwUbbeTl4fTlQh--
