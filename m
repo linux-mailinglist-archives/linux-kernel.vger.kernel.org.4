@@ -2,125 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A5C70557B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2361A7053B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjEPRx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
+        id S229988AbjEPQ01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjEPRxx (ORCPT
+        with ESMTP id S230060AbjEPQ0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:53:53 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC259023;
-        Tue, 16 May 2023 10:53:50 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34GGO7Rj071804;
-        Tue, 16 May 2023 11:24:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684254247;
-        bh=Jblb0PC4fH1cGMHpT0SSQ/Z4qJufjm+kpEpZep59/is=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=SrYhEZsWRUVN+Fc6EXfN0fbbcqUPEveajCAJsQHaRlb2O7WQvGb7YaLCuisPSQox+
-         QJyH4gfxEjZVx3F8GsOU+xvZwzcmpngDqQUTeLtLoSDRXstUvBqjzGbIYqyWorLHMD
-         2MlU7Qfbj3ewrZPiU/JAGSBcTCHMUwRmAx2RtuY4=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34GGO75W009875
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 May 2023 11:24:07 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
- May 2023 11:24:07 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 16 May 2023 11:24:07 -0500
-Received: from [10.249.131.60] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34GGO3QF061504;
-        Tue, 16 May 2023 11:24:04 -0500
-Message-ID: <aad0e90c-bc5f-a6d0-3114-570d990cffbc@ti.com>
-Date:   Tue, 16 May 2023 21:54:03 +0530
+        Tue, 16 May 2023 12:26:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D9A1FD8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:25:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684254285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=a3FIsBwvLJd8bGvVv7dnr0FhAmLIXHj6zTtEadqChU4=;
+        b=ESy4CMLQ4vc9r3t4fhjdjc4GqngI/20bXEBcVN2mIK/xG+SezrqQvhRKTl01PzHy+GV4VE
+        xnnMGMX2I/i+5+fpVVb9BZzEZfeZ8/le1Yt+tGJu4OUTNjjR+U0TTbKYmW1E+aegkGDy62
+        Lp3zvp9biavgNeKQ79E87oV+gzImVEo=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-225-2SbFuMN8NBa2JKDDVivjfw-1; Tue, 16 May 2023 12:24:44 -0400
+X-MC-Unique: 2SbFuMN8NBa2JKDDVivjfw-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-506a7b4f141so15845099a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:24:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684254283; x=1686846283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a3FIsBwvLJd8bGvVv7dnr0FhAmLIXHj6zTtEadqChU4=;
+        b=RG1ViOVP+hsVm1IcX8eXCixEmTwEoFBKYDdM2XieJM+5TaTq2PTaTlcWngUpGgvktR
+         cQ/atGGgPGJGYK9ZorTSrArRhYjBXs6Go7J66Ikbj7OxsURY93kbPzkUyDePLKrh01E4
+         rZe9SOEmuAUDei7i8eJmoP6fHoqKnCu4i0RANeqdRlYfycAir9KOdYZT5HvlpQ2yUPp2
+         JTo4Nn7YNX2YwWStZsYfnQ/CQN6n6YsMcZglok+pl4uWtCy84SI6ym5V469rMTFsau8v
+         zGcMoaEboCw0HTSWjz79alRgcOQG2qEbe/BRzqgMnH70LKGvw22h7kZCLAs5vamW81xN
+         VSIA==
+X-Gm-Message-State: AC+VfDzktbquG3ptwYp1ZV7SRapVwYcXRXlqrGJhVIzfGub/65omowdM
+        ZQnrgOOZ3SAIpZ7qcMdLUAR3v9NeEOdwJpkoeCQ6WdcFHKEGHPVEya6tY9F0U0wNW9FovCEci/R
+        ssdNlFFjCJvVeFVMThU8HPB7X
+X-Received: by 2002:a17:907:ea1:b0:96a:7cc9:d038 with SMTP id ho33-20020a1709070ea100b0096a7cc9d038mr20985625ejc.37.1684254283176;
+        Tue, 16 May 2023 09:24:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5VJEFkuiXqs1L2y9Byop/2x0Fk2/VbMoPdJeW2FbwCObi+PgEHAQ+KfKHQZOE6KJh5Qxl6Ww==
+X-Received: by 2002:a17:907:ea1:b0:96a:7cc9:d038 with SMTP id ho33-20020a1709070ea100b0096a7cc9d038mr20985598ejc.37.1684254282819;
+        Tue, 16 May 2023 09:24:42 -0700 (PDT)
+Received: from fedora.redhat.com ([2a06:c701:476e:4300:fe29:2a5c:9188:df81])
+        by smtp.gmail.com with ESMTPSA id ks16-20020a170906f85000b00947740a4373sm10953098ejb.81.2023.05.16.09.24.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 09:24:41 -0700 (PDT)
+From:   Dana Elfassy <delfassy@redhat.com>
+X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
+To:     eballetb@redhat.com, dmitry.torokhov@gmail.com, javierm@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dana Elfassy <dangel101@gmail.com>
+Subject: [PATCH] Input: tests: add test to cover all input_grab_device() function
+Date:   Tue, 16 May 2023 19:24:12 +0300
+Message-Id: <20230516162412.461066-1-dangel101@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] arm64: dts: ti: k3-j7200: correct num-lanes requested for
- PCIe
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Achal Verma <a-verma1@ti.com>
-References: <20230516062212.2635948-1-a-verma1@ti.com>
- <20230516131323.3empqp5btdzfarjx@curliness>
-From:   "Verma, Achal" <a-verma1@ti.com>
-In-Reply-To: <20230516131323.3empqp5btdzfarjx@curliness>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently input_grab_device() isn't covered by any tests
+Thus, adding a test to cover the cases:
+1. The device is grabbed successfully
+2. Trying to grab a device that is already grabbed by another input
+   handle
 
+Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+---
+ drivers/input/tests/input_test.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-On 5/16/2023 6:43 PM, Nishanth Menon wrote:
-> On 11:52-20230516, Achal Verma wrote:
->> From: Matt Ranostay <mranostay@ti.com>
->>
->> J7200 has a limited 2x support for PCIe, and the properties should be
->> updated as such.
->>
-> 
-> What commit does this fix?
-This patch is a mistake.
-J7200 PCIe has 4 lanes, and this patch should be dropped.
+diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
+index 25bbf51b5c87..cd4db365e9fa 100644
+--- a/drivers/input/tests/input_test.c
++++ b/drivers/input/tests/input_test.c
+@@ -124,10 +124,38 @@ static void input_test_match_device_id(struct kunit *test)
+ 	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
+ }
+ 
++
++static void input_test_grab(struct kunit *test)
++{
++	struct input_dev *input_dev = test->priv;
++	struct input_handle test_handle;
++	struct input_handler handler;
++	struct input_handle handle;
++	struct input_device_id id;
++	int res;
++
++	handler.name = "handler";
++	handler.id_table = &id;
++
++	handle.dev = input_get_device(input_dev);
++	handle.name = dev_name(&input_dev->dev);
++	handle.handler = &handler;
++	res = input_grab_device(&handle);
++	KUNIT_ASSERT_TRUE(test, input_grab_device(&handle));
++
++	test_handle.dev = input_get_device(input_dev);
++	test_handle.name = dev_name(&input_dev->dev);
++	test_handle.handler = &handler;
++
++	res = input_grab_device(&test_handle);
++	KUNIT_ASSERT_EQ(test, res, -EBUSY);
++}
++
+ static struct kunit_case input_tests[] = {
+ 	KUNIT_CASE(input_test_polling),
+ 	KUNIT_CASE(input_test_timestamp),
+ 	KUNIT_CASE(input_test_match_device_id),
++	KUNIT_CASE(input_test_grab),
+ 	{ /* sentinel */ }
+ };
+ 
+-- 
+2.40.1
 
-Regards,
-Achal Verma
-> 
->> Signed-off-by: Matt Ranostay <mranostay@ti.com>
->> Signed-off-by: Achal Verma <a-verma1@ti.com>
->> ---
->>   arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
->> index ef352e32f19d..5e62b431d6e8 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
->> @@ -729,7 +729,7 @@ pcie1_rc: pcie@2910000 {
->>   		device_type = "pci";
->>   		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
->>   		max-link-speed = <3>;
->> -		num-lanes = <4>;
->> +		num-lanes = <2>;
->>   		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
->>   		clocks = <&k3_clks 240 6>;
->>   		clock-names = "fck";
->> @@ -757,7 +757,7 @@ pcie1_ep: pcie-ep@2910000 {
->>   		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
->>   		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
->>   		max-link-speed = <3>;
->> -		num-lanes = <4>;
->> +		num-lanes = <2>;
->>   		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
->>   		clocks = <&k3_clks 240 6>;
->>   		clock-names = "fck";
->> -- 
->> 2.25.1
->>
-> 
-> 
