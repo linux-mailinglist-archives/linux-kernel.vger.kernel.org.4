@@ -2,257 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09774704924
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2194704908
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjEPJ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S231200AbjEPJV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjEPJZk (ORCPT
+        with ESMTP id S231994AbjEPJVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:25:40 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::60b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C3C3AAC
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:25:11 -0700 (PDT)
+        Tue, 16 May 2023 05:21:35 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13BA2D5F;
+        Tue, 16 May 2023 02:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684228860; x=1715764860;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=EF5jkN+/AwxDLD03N1q4v5imfO1bLM0tDolKY7KSTqc=;
+  b=RhHb07TJL1jTpd/1SSSxvPvnlonVlYyHFL2m9AJSYsnfIhSaOpAYfESv
+   81PaxZYKBveGWom8dEocBYgfp4nAT/nrIUgxwYGNcT4jxSnFGYYC2x7e3
+   Qb5digGl0Hdno53rcD03bUZiPgRquutFdsT0gwgJWtt14GS+xvzcRX43j
+   Q/F3+08SiGlOEkNohrUrx4s6glHUGNQCU4n1gqClEqcPKsfyNBczSv9E/
+   C3fIzFERKZimM+FhDwdymxuWy5JMVXfzlgioshGgh3Qxa9KMY3D3+yGQg
+   86LSNxF1xJVSScc1e/2p3cg1ADLdzJ0W2nx2SBMPyHlB+J90FrMfXt6h5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="414836088"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="414836088"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:20:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="701275535"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="701275535"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga002.jf.intel.com with ESMTP; 16 May 2023 02:20:46 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 02:20:44 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 02:20:44 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 02:20:44 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.106)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 16 May 2023 02:20:43 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mhIAI5bUCkTBw1ybremaU6ZU7UYpPy2zJWVEK6AzRjX1eNufj24FWdaDNEcBqvBe7pIMepknKqUl4Rf1lLkAAlkmIb+ScuiJZe8Lq7s1DgohV9RO8X+I/RbPupXhKBQwrH0NLpl4NWx58/wFtr9jAA2Ww29EsLaQ2MoGx0E34UJOFF4AIf7E8lYS1u04Faf/TA9yLrLw34/7ap/OrFfQlsOqRaMsIVEx49RW28MXP2Z5Minh9BpWuNXF1qib6dc8FyN3IxkV+fOb2plx8GJxqeKoVfsiGLi13ttuAysCL9oG+9C40o6FwoAIPCrOCbNdaF9S3y4xTTH8RpF4rFTsPA==
+ b=lDqyCjjvE+Yr5VNhaUu0Nq6AX7G5E/LaKHLlD+wQSLTU/HvnsVjBDDjGHi0t23SKSNKqkROctsXI7ZPdykOrgtiaGtFKxWE/3+w2rGakma8f1v6YbPASeQjbdVaACVDQkN3+neZ+ffmenF+7lSRm9wPLjjjtJRd163xhS5eqI5YmuhmBR98KyDz6G5K2VcFloNAVVHveE4zfwt0jrw+F0mEfVZFdNY7xulUbcUFBva/0tI4G96jJJ1mkXaIBAi+KOcl/Qk0PtMboE8vXNwl84q+bq68K3w3gcWmar7Vt7qSo+vTli1T/24m7y++nnkkmR3qeOETMyscBJVwgP2y2yQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pnEOg9KENk6RkcHXE75v3hu62NI4b/tyL+3+8m1Exbc=;
- b=VaOLpAiNKYHw6MyP72dJ6jTB+wTySXNQqvtJWDk3Q4ajeXeBXQh7GasyPhc2o8iJnC0+llQV/rAoOZoz00sw/q9HXcYage/pNFKxN3FC08vakk1GkCkEhnWJVh7mn0TogTSxrLsZGI18Z0iWJPFRegSbOlNujfBzldeR3n8nNpzrGO9SIBtCtq5bZB2n/P6gTxo8SRXLJSpzjOW8JBGPVTsRUY98Yg1/Dm1kOPbU8Q3wuKtZPQ8oh4nxsqU9wutUCPaOQ1zn+S9xoGHqmeWdV4fekJ+mf6jngAMDI15mUFyealzp8P/MXV9mDZWnUr+PtG8fgOcmcEo3hyqZ4ERIUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pnEOg9KENk6RkcHXE75v3hu62NI4b/tyL+3+8m1Exbc=;
- b=yg54mvsUuYtfwqtZS28NxuX9Jt9wXG9RK3BqIrCn/yjZEwyYaWsW2h5Zv27dUvkQja1L9XGJe0JnfhBDPVzBdElK7B8/zCIQ/pO2lyNGB3b9lF+SjuMHLhX9x1nOlbeUzAkpd5Lp1TNMLCH+6UxVF9ckGEXb9e2qQluBPlVA6k8=
-Received: from BN9P220CA0021.NAMP220.PROD.OUTLOOK.COM (2603:10b6:408:13e::26)
- by PH7PR12MB5619.namprd12.prod.outlook.com (2603:10b6:510:136::7) with
+ bh=eASZr+HnEh9IGlIazMScsaNHVntMqFL2LoSFeaJtO2Q=;
+ b=JtGRX20CJTuIDVqIw3F1XrCEJNddy5snluuzczAGfJtRyt3xb6pg9je9w8YXZiMdQE1lIhexyc6pvKQcuFDEmGkkKX7bE0gSFtiXnqCZRWoVjYgBLHVQVZs6yjU+n2tYTxXzfkYGU8oCKm9BbBsHQ7e2WW0yV1Jeag3ONkhr0CuB9EtPyytHvsmY5GM87DS1Alq8AW8i1PV8dsdxbZ7YpsOReR8fyo0UM91Xcva79C6tNw/LADu8Ixp1+d+wBOCh9JsOew52xjasVIv/SjJxwVEuDLnlS5F9lWAM2sLAoAsKDNKrzBna/3UNUDvHUMRwWyJ0fuYrfml4ZNJ2iXjXdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
+ by CH0PR11MB5564.namprd11.prod.outlook.com (2603:10b6:610:d7::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 09:19:29 +0000
-Received: from BN8NAM11FT114.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13e:cafe::5) by BN9P220CA0021.outlook.office365.com
- (2603:10b6:408:13e::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30 via Frontend
- Transport; Tue, 16 May 2023 09:19:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT114.mail.protection.outlook.com (10.13.177.46) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.15 via Frontend Transport; Tue, 16 May 2023 09:19:29 +0000
-Received: from BLR-L-RKODSARA.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
- 2023 04:19:24 -0500
-From:   Raghavendra K T <raghavendra.kt@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David Hildenbrand" <david@redhat.com>, <rppt@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Bharata B Rao <bharata@amd.com>,
-        Aithal Srikanth <sraithal@amd.com>,
-        "kernel test robot" <oliver.sang@intel.com>,
-        Raghavendra K T <raghavendra.kt@amd.com>
-Subject: [RFC PATCH V2 1/1] sched/numa: Fix disjoint set vma scan regression
-Date:   Tue, 16 May 2023 14:49:32 +0530
-Message-ID: <b0a8f3490b491d4fd003c3e0493e940afaea5f2c.1684228065.git.raghavendra.kt@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1684228065.git.raghavendra.kt@amd.com>
-References: <cover.1684228065.git.raghavendra.kt@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
+ 2023 09:20:41 +0000
+Received: from PH8PR11MB6780.namprd11.prod.outlook.com
+ ([fe80::b4cb:1f70:7e2a:c4f5]) by PH8PR11MB6780.namprd11.prod.outlook.com
+ ([fe80::b4cb:1f70:7e2a:c4f5%2]) with mapi id 15.20.6387.030; Tue, 16 May 2023
+ 09:20:41 +0000
+Date:   Tue, 16 May 2023 17:20:30 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+CC:     <kvm@vger.kernel.org>, Jiaan Lu <jiaan.lu@intel.com>,
+        Zhang Chen <chen.zhang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 04/11] KVM: VMX: Add IA32_SPEC_CTRL virtualization
+ support
+Message-ID: <ZGNK3hHhCHU6l7h+@chao-email>
+References: <20230414062545.270178-1-chao.gao@intel.com>
+ <20230414062545.270178-5-chao.gao@intel.com>
+ <6b861c8d-9b93-74f2-6073-6f1284e72fd2@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6b861c8d-9b93-74f2-6073-6f1284e72fd2@intel.com>
+X-ClientProxiedBy: SG2PR06CA0248.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::32) To PH8PR11MB6780.namprd11.prod.outlook.com
+ (2603:10b6:510:1cb::11)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT114:EE_|PH7PR12MB5619:EE_
-X-MS-Office365-Filtering-Correlation-Id: a26a456e-ec64-4550-f6ec-08db55eea6c7
+X-MS-TrafficTypeDiagnostic: PH8PR11MB6780:EE_|CH0PR11MB5564:EE_
+X-MS-Office365-Filtering-Correlation-Id: b2ef9a02-ddf4-4e10-dec2-08db55eed1a5
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vTh+DEUX1dy5eEwoKhFAvgf+r7zW9KQpX7a6/X+SU3wF72y4sMStxXA/8cOl9EX4tyRB84GiZCsroR4rDUEAIYANbSIC3lHFjYFJFkGsZ2xP7k9zb58HvYtsT6bsCDfgOVeMiTjtslzGeDisPZLb1LGOb+m14kiMACxbGE7ERCjZqdXrX0OZLg9CIqCLWVeS3GKJlnqOfCfRZHl+utwqFcMyNQQNTw4GHr7n4D4JE8dT7xRTO+gwcG/FKabb53kCwIzLgsR9onhtc5K2SaMs684Aha1PUGz3+hYavZNDL4C8DsO7dxHDWI7hoD31PNlVQc4nI7uBFt7z8ervVJlOelV3+8Yn78szMcTYduPGc96O8jTxPmCgi8sfniXnd0YoCpim5KjYCn+tqSMrfPKKmgBgfVW/dSG5ALVxshV0R5+h4rSfScfQlqrjo7G2rWhdmG4sMA79iUYdWjdALGKfYIQWi0h8uR4xjcRUs1iABdMzF8FvSg0/TzSEUZzyfZBcGWVfAykxpmdSxRxcQOI0kCHKhX9wCu1tvGLC7qAc8gougW6MwNA/QZomg5v+OkxA64QbwuKd8v00323igKAMrhkPUJxsQoscT/3DXa7rVvK7q9UOYmH6xcJ9TVuDaxf6pG4L5nqqjSfpP/PVpscgFjaimmociThE7pCXqnKYXRHbU5J7QfTXeyc96sZ+ui++Hm3YEJqTlv2AhrxRBL5GUiFE7Vr74w+kFtCT+4BwTJwsge55SnHYkC2maEwsoABeZY+5rwbUgOeFZajwyTEkFLTu4/6W2g6Alf5fS8/CdU4EDwRxw2h7NabXxqov010W
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(36840700001)(40470700004)(46966006)(40460700003)(426003)(4326008)(70586007)(478600001)(70206006)(7696005)(316002)(110136005)(966005)(54906003)(36756003)(83380400001)(336012)(47076005)(186003)(36860700001)(26005)(7416002)(8936002)(8676002)(5660300002)(6666004)(2906002)(81166007)(2616005)(40480700001)(82740400003)(82310400005)(16526019)(356005)(41300700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 09:19:29.1288
+X-Microsoft-Antispam-Message-Info: li/Fa8zHs5ZSbmTTXC2Pw8uEYGYeluEtaWfusBie4kKPp6m/38Ho30UWxYOjA2RzycR7zLVw4lHlAcIwBa/Eayl33i/YXM8M+usYLQ7aG94i6YBTI3UJ+rX8n2sGUOEnCozrPZv+jN/OP2lgXMDeRGHl431svekBHQxnk2TlWBnFb+aC2NQhdupLMNvQ1XZ1W9pAIO03KwfXMIHES64NxCigQJOs6E+JtPgjTKyWMjuTqXgDR015imBYnguzL5TeQ+chcH8x5sYHP7cz6DEJpoysRirHfHMWWjuNILMcOoGOSOrgWhOoRoBjOpaIclwNHYjmeWL/NVkxX/GbyVbLcNuwGWM58D08B/9jbyKXrVuBovHAjS2C+5aBQpfxtaG+J7EOGilOBhZGa+2pRk2Qdpnt53jiwgQc3tLFlm3rWIyK8WOStS+zZIqbifDr/f6Jv7KF09Ko3r41NwH7lfIm5fUt+nmRveyOkP1+zdiOC3ZTbXdNasP/rQsOCwnDHa8X2WGG4Cc6fiBcBnK1/uRi6/TXUZJKlx/f/Iip27EYtPw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6780.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(136003)(396003)(39860400002)(346002)(376002)(451199021)(2906002)(478600001)(41300700001)(316002)(54906003)(44832011)(7416002)(6486002)(8936002)(4326008)(6862004)(6636002)(8676002)(5660300002)(66946007)(6666004)(66556008)(66476007)(966005)(26005)(9686003)(6506007)(6512007)(82960400001)(186003)(83380400001)(38100700002)(86362001)(33716001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ExKNJLRQE/0V2T+yWOsbqEealvZz+ihZXY8kE04RyJyOTYbi/7eb1DGui/i0?=
+ =?us-ascii?Q?MlLJkmdGXk0KToLh3rityWaq4BpYh8TIHuyAQpoEBcONqpU2Oi9yZ5xb1Cqz?=
+ =?us-ascii?Q?VJtY5npXU876uIhGkURbaWJ1C9Co6JADmNwnNKZIdkW4crc8/d5MA+KYLS0v?=
+ =?us-ascii?Q?6VYDpzOxrDaGQ3w80TPMY6Gmacw/dv35+hGVlJfiqz6Zz6Ew1/E5HLqjRgQ+?=
+ =?us-ascii?Q?JbZNAGEg7UQUpZF+mZAkAf7jNDNhiNEcONoAu1tZeHv6UP8onzPqha/+CFoa?=
+ =?us-ascii?Q?aLuxIWt5h09ssBPpNTMykHzPA0vSjmsMsVWMlhQjo0jxPQndGxzZ+hVdMz4B?=
+ =?us-ascii?Q?mikMXYphO5MNvPXUN1Id5j75m++R5McWX+3WMFU3v9lqzF9fAbkrb71VyAFN?=
+ =?us-ascii?Q?V87BbyesC/5ZGdmNzDTbIvhT2bwPzLEy7pz33A1dC4a3s8evf8kWsFFi/b9v?=
+ =?us-ascii?Q?JNtC02JW8vhZf8EOQTb1bmWwgJ7Ky7KaAWlVAEw5scFkLp31LqMZ44l4RDry?=
+ =?us-ascii?Q?2IEMD954SylsiU3oskqGdmptinboh7RgaEGLiK1s6iJmz1dGdnvOHPdRT11H?=
+ =?us-ascii?Q?ywfw649aI7kqvUHggEpeeHZUSLQzaqSj5e2ymdUmBONH8MOIcl0VrmpA15uA?=
+ =?us-ascii?Q?Zvga7biYpFkkJwvUiNRtX0iW1byAc7TMpU/Ot/8+JNPqVOL/T8Gf4AEKZ+0Z?=
+ =?us-ascii?Q?0yqjYpz+LtVNZ/Xz6Rz+MirLDTGmGwW8xACKTzMbVDbR9sH0t+L20NcXeeJX?=
+ =?us-ascii?Q?FCXRz1aGAupCy/DBBeCNip/29eCS97va5Dqv6cslfR8JwLNs5r9I0p4+otzY?=
+ =?us-ascii?Q?1m1w8HxV2LIjyjw+D8G/YP2dFAjrThldZ++wCCpDaJNmPhNo+zEqKZVpO1Rc?=
+ =?us-ascii?Q?1IK3A4RDk25XdZ8brZwzZkweuh/Od3XeOdfjVm59gBIUxOif1h+26H/EGqov?=
+ =?us-ascii?Q?3mSs43j/g40zl7orkiGBPvq/m1C8XZjfmS4WH1Z++NhhhBetQCdqnjJ/sfwD?=
+ =?us-ascii?Q?o4r72yBDNKg/diCjLZCkbfr4nGvtpRzC7C8RepHw/i0B7FiMctIm8InRCe8u?=
+ =?us-ascii?Q?HR7HMa4oENV/1MN+20hQOSramfs91WCiJIpw7ucXdorLgWE/VpZoQRhmIiPn?=
+ =?us-ascii?Q?ZZ0OI0cWRqJyHwYrmchKv+9pXp04xgqHx9lcNh1eo61Cw/UId1aSWDAdo+rW?=
+ =?us-ascii?Q?H8R3ukvquYira8A0SbiYYnLOCPv1/SoLWMmVieHawhy4XCxuqb5GZraM5R2i?=
+ =?us-ascii?Q?mkmWclJoIBq3HM/0vVPhQGBro2eTXweiiuSZa1Dvbo1J2UJYwXjVmFIBhU2n?=
+ =?us-ascii?Q?dpzxUinjpgZ9pEs+DrdAJhVAwnB21vT5ysX3s6+r3xmsEYYiltWuZuDqDaGX?=
+ =?us-ascii?Q?o8Kn+1eSsAPJ5NYiaenZzD+y97fh9WXfriex7fhC3kBJEYdDzppoo1H/dIxL?=
+ =?us-ascii?Q?gbxgpun11/f5K/KtVxmarsRapVVdgmvLO1mvqEFddAHDRo98dX0DIHNRz+O6?=
+ =?us-ascii?Q?2kLkA462iyhZr5DP641fVZIOq8TsclsYQa95WmePbEsOx7mYM5PMPC0tu9gJ?=
+ =?us-ascii?Q?ovxRTBS5jDZy7I9At0SNUW18aWxkBSjSNKXG81BV?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2ef9a02-ddf4-4e10-dec2-08db55eed1a5
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6780.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 09:20:41.3717
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a26a456e-ec64-4550-f6ec-08db55eea6c7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT114.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5619
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bB+Ld4E074X6ENqEcKo2SPNgqNPFX9nQ0G+rmhf8aU+A1XygLtipUmX2dvu1VhNZgShwBQ+H1h9dhJNqklcWKg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5564
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- With the numa scan enhancements [1], only the threads which had previously
-accessed vma are allowed to scan.
+On Tue, May 16, 2023 at 03:16:59PM +0800, Xiaoyao Li wrote:
+>On 4/14/2023 2:25 PM, Chao Gao wrote:
+>
+>...
+>
+>> +static inline void vmx_set_guest_spec_ctrl(struct vcpu_vmx *vmx, u64 val)
+>> +{
+>> +	vmx->guest_spec_ctrl = val;
+>> +
+>> +	/*
+>> +	 * For simplicity, always keep IA32_SPEC_CTRL_SHADOW up-to-date,
+>> +	 * regardless of the MSR intercept state.
+>> +	 */
+>> +	if (cpu_has_spec_ctrl_virt())
+>> +		vmcs_write64(IA32_SPEC_CTRL_SHADOW, val);
+>> +
+>> +	/*
+>> +	 * Update the effective value of IA32_SPEC_CTRL to reflect changes to
+>> +	 * guest's IA32_SPEC_CTRL. Bits in the mask should always be set.
+>> +	 */
+>
+>Why bits in the mask should always be set?
+>
+>The bits set in the mask only means them cannot be modified by guest. KVM can
+>use the mask to force the bits to 0 as well.
 
-While this had improved significant system time overhead, there were corner
-cases, which genuinely need some relaxation. For e.g.,
+Yes.
 
-1) Concern raised by PeterZ, where if there are N partition sets of vmas
-belonging to tasks, then unfairness in allowing these threads to scan could
-potentially amplify the side effect of some of the vmas being left
-unscanned.
+Because there is no use case for VMMs to lock some bits to 0 behind guests, this
+isn't used in series. There was a note in v1's changelog [1]:
 
-2) Below reports of LKP numa01 benchmark regression.
+	Note "virtual IA32_SPEC_CTRL" is now used by VMM to enforce some bits
+	of IA32_SPEC_CTRL to 1 (i.e., enabled some HW mitigations transparently
+	for guests). In theory, VMM can disable some HW mitigations behind guests.
+	But to keep this series simple, we leave that for future work.
 
-Currently this was handled by allowing first two scanning unconditional
-as indicated by mm->numa_scan_seq. This is imprecise since for some
-benchmark vma scanning might itself start at numa_scan_seq > 2.
 
-Solution:
-Allow unconditional scanning of vmas of tasks depending on vma size. This
-is achieved by maintaining a per vma scan counter, where
+But somehow I dropped it (when I tried to slim down the changelog). Will add it
+back and add a comment above the definition of spec_ctrl_mask.
 
-f(allowed_to_scan) = f(scan_counter <  vma_size / scan_size)
+[1]: https://lore.kernel.org/lkml/20221210160046.2608762-5-chen.zhang@intel.com/
 
-Fixes: fc137c0ddab2 ("sched/numa: enhance vma scanning logic")
-regression.
-
-Result:
-numa01_THREAD_ALLOC result on 6.4.0-rc1 (that has w/ numascan enhancement)
-                base-numascan           base                    base+fix
-real            1m3.025s                1m24.163s               1m3.551s
-user            213m44.232s             251m3.638s              219m55.662s
-sys             6m26.598s               0m13.056s               2m35.767s
-
-numa_hit                5478165         4395752         4907431
-numa_local              5478103         4395366         4907044
-numa_other                   62             386             387
-numa_pte_updates        1989274           11606         1265014
-numa_hint_faults        1756059             515         1135804
-numa_hint_faults_local   971500             486          558076
-numa_pages_migrated      784211              29          577728
-
-Summary: Regression in base is recovered by allowing scanning as required.
-
-[1] https://lore.kernel.org/lkml/cover.1677672277.git.raghavendra.kt@amd.com/T/#t
-
-Reported-by: Aithal Srikanth <sraithal@amd.com>
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/lkml/db995c11-08ba-9abf-812f-01407f70a5d4@amd.com/T/
-Signed-off-by: Raghavendra K T <raghavendra.kt@amd.com>
----
- include/linux/mm_types.h |  1 +
- kernel/sched/fair.c      | 41 ++++++++++++++++++++++++++++++++--------
- 2 files changed, 34 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 306a3d1a0fa6..992e460a713e 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -479,6 +479,7 @@ struct vma_numab_state {
- 	unsigned long next_scan;
- 	unsigned long next_pid_reset;
- 	unsigned long access_pids[2];
-+	unsigned int scan_counter;
- };
- 
- /*
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f55884..2c3e17e7fc2f 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -2931,20 +2931,34 @@ static void reset_ptenuma_scan(struct task_struct *p)
- static bool vma_is_accessed(struct vm_area_struct *vma)
- {
- 	unsigned long pids;
-+	unsigned int vma_size;
-+	unsigned int scan_threshold;
-+	unsigned int scan_size;
-+
-+	pids = vma->numab_state->access_pids[0] | vma->numab_state->access_pids[1];
-+
-+	if (test_bit(hash_32(current->pid, ilog2(BITS_PER_LONG)), &pids))
-+		return true;
-+
-+	scan_size = READ_ONCE(sysctl_numa_balancing_scan_size);
-+	/* vma size in MB */
-+	vma_size = (vma->vm_end - vma->vm_start) >> 20;
-+
-+	/* Total scans needed to cover VMA */
-+	scan_threshold = (vma_size / scan_size);
-+
- 	/*
--	 * Allow unconditional access first two times, so that all the (pages)
--	 * of VMAs get prot_none fault introduced irrespective of accesses.
-+	 * Allow the scanning of half of disjoint set's VMA to induce
-+	 * prot_none fault irrespective of accesses.
- 	 * This is also done to avoid any side effect of task scanning
- 	 * amplifying the unfairness of disjoint set of VMAs' access.
- 	 */
--	if (READ_ONCE(current->mm->numa_scan_seq) < 2)
--		return true;
--
--	pids = vma->numab_state->access_pids[0] | vma->numab_state->access_pids[1];
--	return test_bit(hash_32(current->pid, ilog2(BITS_PER_LONG)), &pids);
-+	scan_threshold = 1 + (scan_threshold >> 1);
-+	return (READ_ONCE(vma->numab_state->scan_counter) <= scan_threshold);
- }
- 
--#define VMA_PID_RESET_PERIOD (4 * sysctl_numa_balancing_scan_delay)
-+#define VMA_PID_RESET_PERIOD		(4 * sysctl_numa_balancing_scan_delay)
-+#define DISJOINT_VMA_SCAN_RENEW_THRESH	16
- 
- /*
-  * The expensive part of numa migration is done from task_work context.
-@@ -3058,6 +3072,8 @@ static void task_numa_work(struct callback_head *work)
- 			/* Reset happens after 4 times scan delay of scan start */
- 			vma->numab_state->next_pid_reset =  vma->numab_state->next_scan +
- 				msecs_to_jiffies(VMA_PID_RESET_PERIOD);
-+
-+			WRITE_ONCE(vma->numab_state->scan_counter, 0);
- 		}
- 
- 		/*
-@@ -3068,6 +3084,13 @@ static void task_numa_work(struct callback_head *work)
- 						vma->numab_state->next_scan))
- 			continue;
- 
-+		/*
-+		 * For long running tasks, renew the disjoint vma scanning
-+		 * periodically.
-+		 */
-+		if (mm->numa_scan_seq && !(mm->numa_scan_seq % DISJOINT_VMA_SCAN_RENEW_THRESH))
-+			WRITE_ONCE(vma->numab_state->scan_counter, 0);
-+
- 		/* Do not scan the VMA if task has not accessed */
- 		if (!vma_is_accessed(vma))
- 			continue;
-@@ -3083,6 +3106,8 @@ static void task_numa_work(struct callback_head *work)
- 			vma->numab_state->access_pids[0] = READ_ONCE(vma->numab_state->access_pids[1]);
- 			vma->numab_state->access_pids[1] = 0;
- 		}
-+		WRITE_ONCE(vma->numab_state->scan_counter,
-+				READ_ONCE(vma->numab_state->scan_counter) + 1);
- 
- 		do {
- 			start = max(start, vma->vm_start);
--- 
-2.34.1
-
+>
+>> +	vmx->spec_ctrl = val | vmx_get_spec_ctrl_mask(vmx);
+>> +}
+>>   #endif /* __KVM_X86_VMX_H */
+>
