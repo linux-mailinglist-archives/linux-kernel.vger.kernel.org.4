@@ -2,142 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BF37049E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62391704821
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbjEPJ6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        id S231481AbjEPIrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjEPJ6a (ORCPT
+        with ESMTP id S231236AbjEPIrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:58:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C77FC0;
-        Tue, 16 May 2023 02:58:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C71396374F;
-        Tue, 16 May 2023 09:58:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25618C433D2;
-        Tue, 16 May 2023 09:58:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684231108;
-        bh=0JLTG2Li8PG49+9IlKqTZkMJijzI0L6DUEsV5TZGNU0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kNZzqvm2N+ME5VpzfirrvTTWqlFxeUsBqC1EZNijP2dNem8CSY75XJX7oy2UWoxPe
-         ldI7Ncnyz6Nwy38BrjpLpQGlT5tPvvXatHT4T5xZE+M75ATCjCryS7C+R6Me1fTHzj
-         Hm8AFU821OuXFKqN7fg95WSq/83veBUWJhmy06vdpqmlxeAcnNXB0D7t9RNgmqOGLk
-         SlNjAWF5XXz5eE0I8FnvIx381EoRJNrLayS3UqtWnJcERB2pr1quQkjNF+eSEwLdp5
-         C9pgXlQuqSqBTRyTJX9XU9Ft0fx8XXvBjWqOYe8wdYhusDfouKAf3RrxJ9Z5laWQx/
-         qJTmK8kMijSFg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pyrRp-00FUTg-H6;
-        Tue, 16 May 2023 10:58:25 +0100
-Date:   Tue, 16 May 2023 10:58:24 +0100
-Message-ID: <86edngmwcf.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Tue, 16 May 2023 04:47:23 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2999019BD;
+        Tue, 16 May 2023 01:47:22 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f13bfe257aso15868515e87.3;
+        Tue, 16 May 2023 01:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684226840; x=1686818840;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pIs7xrpXMUe39rrvrGOq+duHo9PtLlvjA/J+15gmNUM=;
+        b=c/mlcl+sDW2dCiuSBhRV0vh1HdyD/q5u+7JcwUfC0prnFCZGvu5XVOY2kFCgPiE1TP
+         n3l9jjx/CLiwAWkj4jW7uFKBurZ2Gu01FfclJZiRMjmkwqtEvpUDjtyfWC2dvFznQRJK
+         fciX6lJxS8kmKV/vCgNSWsUNVnpytxqGFFVQADkFmcROFhYI2gnlNeMtsBtTEiickae2
+         4867l05/oQWrOEFFMXFRgDwfuRDwxKavpYtVtsaOAOlkxO3LYmYuHu/TywKnGSOvosJq
+         Rj03H2JL8srZbQPLf5V2LAoUPRMPjcVf+uogFqQkVZOO2XOz6tzazhKNMlg0MsvSa3d6
+         /XTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684226840; x=1686818840;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pIs7xrpXMUe39rrvrGOq+duHo9PtLlvjA/J+15gmNUM=;
+        b=bKoUq5p+2+WJQAiOhfwUBxPVieRfjPCTrvkkmwZ7PPpImxEJJb9Q/VRY0zPA1nQ1lh
+         +TxGIhOeGyGFgnIO1C3of/dPrPe0Pks/gwRm9MT7k9WGl+jM/aK1cnDCRcqTa3Nl7Vsa
+         W22hJXTooITq7cENRXgsZ7i292fvos5ArMDdajbzEjjgRtqbmPmAVHCKP53ypvIXsMEL
+         g8K1KoUtZvQD/0w+dBhMJLbUzLsZnxjvEaODGgjcdTomJk3TTj/I/vjk9SQpzHdS5iwq
+         Xmtwvplas9nC4TQMrVCcnvqkJbmHA9ydKEZRhSwtKTB4iGUyDyFUFHRFsm10ZhQYNCgb
+         5YVw==
+X-Gm-Message-State: AC+VfDxGFPrU+MsMNUrKkMHheEiycW0eQEN/efrdG+fCDUIqqoZ1kO3H
+        0bJPCLY4fG5h6NkH1RhHZTwrAiTLg0Loqg==
+X-Google-Smtp-Source: ACHHUZ6eGlsrqTErXAX7ikC8ZXUz16DB7kO0+AP6R4MKOd88jLadIORj03U/3MHBGIl2VpjKYVG4yQ==
+X-Received: by 2002:ac2:5a03:0:b0:4ed:c7cc:6f12 with SMTP id q3-20020ac25a03000000b004edc7cc6f12mr6675761lfn.34.1684226840062;
+        Tue, 16 May 2023 01:47:20 -0700 (PDT)
+Received: from [100.119.125.242] (93-80-67-66.broadband.corbina.ru. [93.80.67.66])
+        by smtp.gmail.com with ESMTPSA id o8-20020ac24348000000b004d5a6dcb94fsm2900210lfl.33.2023.05.16.01.47.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 01:47:19 -0700 (PDT)
+Message-ID: <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
+Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment
+ option
+From:   Ivan Mikhaylov <fr0st61te@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, wenst@chromium.org,
-        yidilin@chromium.org, Tinghan Shen <tinghan.shen@mediatek.com>,
-        jwerner@chromium.org, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Ben Ho <Ben.Ho@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        =?UTF-8?B?Ik7DrWNvbGFzIEYuIFIuIEEuIFByYWRvIg==?= 
-        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] irqchip/gic-v3: Disable pseudo NMIs on Mediatek Chromebooks w/ bad FW
-In-Reply-To: <20230515131353.v2.cover@dianders>
-References: <20230515131353.v2.cover@dianders>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: dianders@chromium.org, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, allen-kh.cheng@mediatek.com, linux-mediatek@lists.infradead.org, eddie.huang@mediatek.com, hsin-hsiung.wang@mediatek.com, angelogioacchino.delregno@collabora.com, wenst@chromium.org, yidilin@chromium.org, tinghan.shen@mediatek.com, jwerner@chromium.org, weiyi.lu@mediatek.com, Ben.Ho@mediatek.com, seiya.wang@mediatek.com, conor+dt@kernel.org, eballetbo@kernel.org, nfraprado@collabora.com, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Paul Fertser <fercerpav@gmail.com>
+Date:   Tue, 16 May 2023 11:47:17 +0000
+In-Reply-To: <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
+References: <20230509143504.30382-1-fr0st61te@gmail.com>
+         <20230509143504.30382-4-fr0st61te@gmail.com>
+         <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
+         <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
+         <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
+         <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
+         <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 21:13:49 +0100,
-Douglas Anderson <dianders@chromium.org> wrote:
-> 
-> As talked about in the bindings patch included in this series
-> ("dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for
-> Mediatek SoCs w/ broken FW"), many Mediatek-based Chromebooks shipped
-> with firmware that doesn't properly save/restore some GICR
-> registers. This causes the system to crash if "pseudo NMIs" are turned
-> on.
-> 
-> This series makes sure that we never allow turning on "pseudo NMIs" if
-> we are running with the problematic firmware.
-> 
-> The patches in this series can land in any order and can go through
-> entirely different trees. None of the patches are harmful on their
-> own, but to get things fixed we need all of them.
-> 
-> v2 fixes the quirk name and also moves the quirk out of the SoC.dtsi
-> file and into the Chromebook file. This, unfortunately, means that
-> mt8186-based Chromebooks are no longer handled since they don't appear
-> to be upstream yet. :(
-> 
-> Changes in v2:
-> - "when CPUs are powered" => "when the GIC redistributors are..."
-> - Changed "Fixes" tag.
-> - Moved from mt8183.dtsi to mt8183-kukui.dtsi
-> - Moved from mt8192.dtsi to mt8192-asurada.dtsi
-> - Moved from mt8195.dtsi to mt8195-cherry.dtsi
-> - mediatek,gicr-save-quirk => mediatek,broken-save-restore-fw
-> 
-> Douglas Anderson (5):
->   dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for Mediatek
->     SoCs w/ broken FW
->   irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware
->     issues
->   arm64: dts: mediatek: mt8183: Add mediatek,broken-save-restore-fw to
->     kukui
->   arm64: dts: mediatek: mt8192: Add mediatek,broken-save-restore-fw to
->     asurada
->   arm64: dts: mediatek: mt8195: Add mediatek,broken-save-restore-fw to
->     cherry
-> 
->  .../interrupt-controller/arm,gic-v3.yaml      |  6 ++++++
->  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  4 ++++
->  .../boot/dts/mediatek/mt8192-asurada.dtsi     |  4 ++++
->  .../boot/dts/mediatek/mt8195-cherry.dtsi      |  4 ++++
->  drivers/irqchip/irq-gic-common.c              |  8 ++++++--
->  drivers/irqchip/irq-gic-common.h              |  1 +
->  drivers/irqchip/irq-gic-v3.c                  | 20 +++++++++++++++++++
->  7 files changed, 45 insertions(+), 2 deletions(-)
+On Fri, 2023-05-12 at 11:24 +0200, Krzysztof Kozlowski wrote:
+> On 12/05/2023 13:28, Ivan Mikhaylov wrote:
+> > On Fri, 2023-05-12 at 08:22 +0200, Krzysztof Kozlowski wrote:
+> > > On 11/05/2023 01:31, Ivan Mikhaylov wrote:
+> > > > On Wed, 2023-05-10 at 16:48 +0200, Krzysztof Kozlowski wrote:
+> > > > > On 09/05/2023 16:35, Ivan Mikhaylov wrote:
+> > > > > > Add the mac-address-increment option for specify MAC
+> > > > > > address
+> > > > > > taken
+> > > > > > by
+> > > > > > any other sources.
+> > > > > >=20
+> > > > > > Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+> > > > > > Signed-off-by: Ivan Mikhaylov <fr0st61te@gmail.com>
+> > > > > > ---
+> > > > > > =C2=A0.../devicetree/bindings/net/ethernet-controller.yaml=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> > > > > > | 8
+> > > > > > ++++++++
+> > > > > > =C2=A01 file changed, 8 insertions(+)
+> > > > > >=20
+> > > > > > diff --git
+> > > > > > a/Documentation/devicetree/bindings/net/ethernet-
+> > > > > > controller.yaml
+> > > > > > b/Documentation/devicetree/bindings/net/ethernet-
+> > > > > > controller.yaml
+> > > > > > index 00be387984ac..6900098c5105 100644
+> > > > > > --- a/Documentation/devicetree/bindings/net/ethernet-
+> > > > > > controller.yaml
+> > > > > > +++ b/Documentation/devicetree/bindings/net/ethernet-
+> > > > > > controller.yaml
+> > > > > > @@ -34,6 +34,14 @@ properties:
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 minItems: 6
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 6
+> > > > > > =C2=A0
+> > > > > > +=C2=A0 mac-address-increment:
+> > > > > > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/int3=
+2
+> > > > > > +=C2=A0=C2=A0=C2=A0 description:
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Specifies the MAC address incre=
+ment to be added to
+> > > > > > the
+> > > > > > MAC
+> > > > > > address.
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Should be used in cases when th=
+ere is a need to use
+> > > > > > MAC
+> > > > > > address
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 different from one obtained by =
+any other level, like
+> > > > > > u-
+> > > > > > boot
+> > > > > > or the
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NC-SI stack.
+> > > > >=20
+> > > > > We don't store MAC addresses in DT, but provide simple
+> > > > > placeholder
+> > > > > for
+> > > > > firmware or bootloader. Why shall we store static "increment"
+> > > > > part of
+> > > > > MAC address? Can't the firmware give you proper MAC address?
+> > > > >=20
+> > > > > Best regards,
+> > > > > Krzysztof
+> > > > >=20
+> > > >=20
+> > > > Krzysztof, maybe that's a point to make commit message with
+> > > > better
+> > > > explanation from my side. At current time there is at least two
+> > > > cases
+> > > > where I see it's possible to be used:
+> > > >=20
+> > > > 1. NC-SI
+> > > > 2. embedded
+> > > >=20
+> > > > At NC-SI level there is Get Mac Address command which provides
+> > > > to
+> > > > BMC
+> > > > mac address from the host which is same as host mac address, it
+> > > > happens
+> > > > at runtime and overrides old one.
+> > > >=20
+> > > > Also, this part was also to be discussed 2 years ago in this
+> > > > thread:
+> > > > https://lore.kernel.org/all/OF8E108F72.39D22E89-ON00258765.001E46EB=
+-00258765.00251157@ibm.com/
+> > >=20
+> > > Which was not sent to Rob though...
+> > >=20
+> > >=20
+> > > >=20
+> > > > Where Milton provided this information:
+> > > >=20
+> > > > DTMF spec DSP0222 NC-SI (network controller sideband interface)
+> > > > is a method to provide a BMC (Baseboard management controller)
+> > > > shared
+> > > > access to an external ethernet port for comunication to the
+> > > > management
+> > > > network in the outside world.=C2=A0 The protocol describes ethernet
+> > > > packets=20
+> > > > that control selective bridging implemented in a host network
+> > > > controller
+> > > > to share its phy.=C2=A0 Various NIC OEMs have added a query to find
+> > > > out
+> > > > the=20
+> > > > address the host is using, and some vendors have added code to
+> > > > query
+> > > > host
+> > > > nic and set the BMC mac to a fixed offset (current hard coded
+> > > > +1
+> > > > from
+> > > > the host value).=C2=A0 If this is compiled in the kernel, the NIC
+> > > > OEM is
+> > > > recognised and the BMC doesn't miss the NIC response the
+> > > > address is
+> > > > set
+> > > > once each time the NCSI stack reinitializes.=C2=A0 This mechanism
+> > > > overrides
+> > > > any mac-address or local-mac-address or other assignment.
+> > > >=20
+> > > > DSP0222
+> > > > https://www.dmtf.org/documents/pmci/network-controller-sideband-int=
+erface-nc-si-specification-110
+> > > >=20
+> > > >=20
+> > > > In embedded case, sometimes you have different multiple
+> > > > ethernet
+> > > > interfaces which using one mac address which increments or
+> > > > decrements
+> > > > for particular interface, just for better explanation, there is
+> > > > patch
+> > > > with explanation which providing them such way of work:
+> > > > https://github.com/openwrt/openwrt/blob/master/target/linux/generic=
+/pending-5.15/682-of_net-add-mac-address-increment-support.patch
+> > > >=20
+> > > > In their rep a lot of dts using such option.
+> > >=20
+> > > None of these explain why this is property of the hardware. I
+> > > understand
+> > > that this is something you want Linux to do, but DT is not for
+> > > that
+> > > purpose. Do not encode system policies into DT and what above
+> > > commit
+> > > says is a policy.
+> > >=20
+> >=20
+> > Krzysztof, okay then to which DT subsystem it should belong? To
+> > ftgmac100 after conversion?
+>=20
+> To my understanding, decision to add some numbers to MAC address does
+> not look like DT property at all. Otherwise please help me to
+> understand
+> - why different boards with same device should have different
+> offset/value?
+>=20
+> Anyway, commit msg also lacks any justification for this.
+>=20
+> Best regards,
+> Krzysztof
+>=20
 
-I'll take the first two patches as fixes. The rest can be merged via
-the soc tree as required.
+Krzysztof, essentially some PCIe network cards have like an additional
+*MII interface which connects directly to a BMC (separate SoC for
+managing a motherboard) and by sending special ethernet type frames
+over that connection (called NC-SI) the BMC can obtain MAC, get link
+parameters etc. So it's natural for a vendor to allocate two MACs per
+such a board with PCIe card intergrated, with one MAC "flashed into"
+the network card, under the assumption that the BMC should
+automatically use the next MAC. So it's the property of the hardware as
+the vendor designs it, not a matter of usage policy.
 
-	M.
+Also at the nvmem binding tree is "nvmem-cell-cells" which is literally
+the same as what was proposed but on different level.
 
--- 
-Without deviation from the norm, progress is not possible.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/D=
+ocumentation/devicetree/bindings/nvmem?id=3D7e2805c203a6c8dc85c1cfda205161e=
+d39ae82d5
+
+
+Thanks.
