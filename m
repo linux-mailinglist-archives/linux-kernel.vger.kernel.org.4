@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E53A70599E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159A8705994
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjEPVdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S229578AbjEPVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbjEPVdr (ORCPT
+        with ESMTP id S229595AbjEPVde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:33:47 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FFB8690
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:33:39 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aaea3909d1so1365315ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:33:39 -0700 (PDT)
+        Tue, 16 May 2023 17:33:34 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288597DAA
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:33:31 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-644d9bf05b7so8645256b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:33:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684272819; x=1686864819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
-        b=ZZAtXnRcvSPrSEfi+gIeXts/W17mQkTypLqlqCgL3DrfBC4wWWrre1Cm9zxo6reLik
-         mwSrMoqKdOMAbB81imJh0BP4jvGzTg4b4hKoU3sGXdzoJw1Obj3pmx6lcuuqPzX+7kfq
-         pnu9jsIeAXEig2PqEb2RM5mfJBwWSP40sZUP6sDI0lGT5Q1VSSuMbEOKLO8LaKWIlwAE
-         SL6AX1YrZqbXOgLxtsc6b388WKqTAY97QaOvteb1bWvWxJnQTWSuLEGKiN1GKCO18fUO
-         6+PhNh1sNC/1VhsgS087Uo1KrfvAlGWq/xZlQqLUma10dE98gsBemkwScMoFODZKFpK2
-         iURA==
+        d=chromium.org; s=google; t=1684272810; x=1686864810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U6hLWOpZXVAPYMdSJJ2ItQN0RBkBNzkcQkwsr4O8qt8=;
+        b=i+4YyHlZDcjlkeuWsEXE5awTcv8wCA7UxR1ayg1q4HYWieG0uIijMS0Gn/sofbDPBj
+         5RE7Gm3NnZYZaraVIyOUyN5jpLVdP/LxV4E05sIi4sl51TCPajYkqbzDJtO3B22yyi6Z
+         Cx4t4oVt+tyX8DxSX3WFaLM2jCHD/zJe27Yu8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684272819; x=1686864819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
-        b=d4jLfjmf6FDrtZMx5+Mkq0oeSnNh4HjFQJNlFQci5q/KTkdEyN9feSTBqQH8FSnDo5
-         xXxxeoc2JEsJiY797ZHfWGiWNgK8Psq4e9SesUeF0c8DyQMmxfi5YNSKgpVqlc9WOmwg
-         XoL6v2JRpz6JG96oP3SPUFTriVLWwNAI1AUoF+mp1Qen57sKO0PDrz+mYfRGXv4bUz2z
-         ygycYQwcfXWhZPnADOwKa2RC+CA+aWYPjHpJ5VhVrYEFS/jNl7m+U2UpeBPcLDjtCsi+
-         vE1ojkbMZWXKlWWp1CXR2BEHDOuJo6nuZ0AUPW+pOHlB9MZJ10Y5WQTYw+PFrnCPQd9M
-         ia/Q==
-X-Gm-Message-State: AC+VfDwRCPIAcbzLgKRm+XXVMMoae0s17OITFFchIzbyDePOB4+8pRQL
-        U45koyN2YkOr5GXYeHPAGSgViQ==
-X-Google-Smtp-Source: ACHHUZ69C7YAPTQyIbUMSWPhfb0m0H1P8wr47rkB8sFXjt1r68NoVWqFIhwsKTO9qahORlFircF6Vg==
-X-Received: by 2002:a17:902:cec9:b0:19a:a9d8:e47f with SMTP id d9-20020a170902cec900b0019aa9d8e47fmr54913536plg.36.1684272819027;
-        Tue, 16 May 2023 14:33:39 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:6bed:7a51:340a:a439:1b87])
-        by smtp.gmail.com with ESMTPSA id jh19-20020a170903329300b001ac7af57fd4sm16027676plb.86.2023.05.16.14.33.35
+        d=1e100.net; s=20221208; t=1684272810; x=1686864810;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U6hLWOpZXVAPYMdSJJ2ItQN0RBkBNzkcQkwsr4O8qt8=;
+        b=Ma5syxyFGfuj2fRJ9j8xt2Kup+xeHbPQh5wnwPECv/YzMMHmZq9zvuQCyWsiYTF8Hp
+         CzKmyiHnxWRmIpSJ6oSpH9q8KxSYzlhZES3CsHVv4b2pOFIEmZQh+PSamTFo1aPsGcP6
+         mEN29c1KkJAfUzBDj/9fpFSX6A6KwuB8RuEaDmKzn/ilJbFlwimsdNT0kg1IALX7bpt0
+         hE1E9SyBJdclwiijxdAnrfNRFWzkqlZ2FtRRA9QMGQZIjLDiNrXt6QimAh+2FzOpneYb
+         Tr+ObIl6rdfPCfOpKJmco/gOTz3RHmqI5tTFt4jsZ9SnM9Fh03R5YEDqh6Vyub8G+5Jt
+         5kXw==
+X-Gm-Message-State: AC+VfDyqNDJmPj7csY5ELYleJu2ARGBS964mDJ+RMHfrJjcAD2pmIPAH
+        XZLlIODTrk9liqcCrXGfIfSPSw==
+X-Google-Smtp-Source: ACHHUZ5U4ZGbw3JlLZ91DeGnxEGGQ0ONw3/x9vvE0RHGGprBODEjQn/CFkOYL+QWOmfO7dyZdPCR5g==
+X-Received: by 2002:a05:6a00:1950:b0:647:2ce5:57c4 with SMTP id s16-20020a056a00195000b006472ce557c4mr34302149pfk.5.1684272810661;
+        Tue, 16 May 2023 14:33:30 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h11-20020aa786cb000000b00646ec752fedsm13603713pfo.199.2023.05.16.14.33.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 14:33:38 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
-Subject: [PATCH v5 5/5] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
-Date:   Wed, 17 May 2023 03:03:08 +0530
-Message-Id: <20230516213308.2432018-6-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
-References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
+        Tue, 16 May 2023 14:33:30 -0700 (PDT)
+Date:   Tue, 16 May 2023 14:33:29 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, akiyks@gmail.com,
+        linux-doc@vger.kernel.org, kernel-team@meta.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH locking/atomic 19/19] docs: Add atomic operations to the
+ driver basic API documentation
+Message-ID: <202305161433.C015F9E@keescook>
+References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
+ <20230510181717.2200934-19-paulmck@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510181717.2200934-19-paulmck@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,66 +75,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the USB-C type port on the Qualcomm QRB4210-RB2 board
-can be set primarily in a 'device' configuration (with the default
-DIP switch settings), it makes sense to enable the EUD debug
-peripheral on the board by default by setting the USB 'dr_mode' property
-as 'otg'.
+On Wed, May 10, 2023 at 11:17:17AM -0700, Paul E. McKenney wrote:
+> Add the include/linux/atomic/atomic-arch-fallback.h file to the
+> driver-api/basics.rst in order to provide documentation for the Linux
+> kernel's atomic operations.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-Now, the EUD debug peripheral can be enabled by executing:
- $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 1a0776a0cfd0..0ce72f1ebc10 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
- 	};
- };
- 
-+&eud {
-+	status = "okay";
-+};
-+
- &qupv3_id_0 {
- 	status = "okay";
- };
-@@ -253,7 +257,28 @@ &usb {
- 
- &usb_dwc3 {
- 	maximum-speed = "super-speed";
--	dr_mode = "peripheral";
-+
-+	/*
-+	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
-+	 * via a DIP Switch:
-+	 * - to either an USB - C type connector or an USB - A type connector
-+	 *   (via a GL3590-S hub), and
-+	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
-+	 *   for further connection with a mezzanine board.
-+	 *
-+	 * All of the above hardware muxes would allow us to hook things up in
-+	 * different ways to some potential benefit for static configurations (for e.g.
-+	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
-+	 * connection available and on the other we can use the USB - C type in
-+	 * peripheral mode).
-+	 *
-+	 * Note that since the USB - C type can be used only in peripehral mode,
-+	 * so hardcoding the mode to 'peripheral' here makes sense.
-+	 *
-+	 * However since we want to use the EUD debug device, we set the mode as
-+	 * 'otg' here.
-+	 */
-+	dr_mode = "otg";
- };
- 
- &usb_hsphy {
 -- 
-2.38.1
-
+Kees Cook
