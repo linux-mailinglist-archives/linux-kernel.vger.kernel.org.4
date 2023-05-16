@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036197042EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065A77042ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjEPBbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        id S229675AbjEPBcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEPBbt (ORCPT
+        with ESMTP id S229543AbjEPBcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:31:49 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D25E76
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:31:47 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f24d4900bbso11924498e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:31:47 -0700 (PDT)
+        Mon, 15 May 2023 21:32:09 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B42844BB
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:32:08 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-334d0f0d537so3964155ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:32:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684200706; x=1686792706;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=linuxfoundation.org; s=google; t=1684200727; x=1686792727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OcXwAN+isoQ/mFzkihbW/wozjleZFihqA4ZCS2Bjuo4=;
-        b=zKnXAmMfvexSrZm7W8TMgsPtCn5QEHM5aBJoXPKD4qrX72JMnv2T9AOFwf0aFc7K9C
-         gSEauFpNJFoWR6hXeYqQVacHaOLQ4+tFoqQJIasrEvmRJQoWPfRlsJ6afyGsQ8XSPcK/
-         /0UuoIlcekhAY6kKVnoQoOKTsJdVXPpcKQ4snBB6RZfk+rkgDKzK4Fga5rCSybB+8G0P
-         TOIA+n+O39JO67Dpj5gqEUbMWxeOsFGnrat1jWpKTZiDC5n+LUgME8qDR2SZSuld/ouh
-         pdTFhqNhErSuXg8yvjcalR2iKOLHNPQkaExdz6F5InCuETDVtqQt+082+N9hjT+YAD+H
-         HyQg==
+        bh=WxAuCAPbFp9ImZfMRV40TuMDQw2xswagc+lrSeMYOZw=;
+        b=WtaQSJ8OTZ9/ZK6MoOV91CJMwdT7yRyP8PP1fjRZNWwklcJNHgxsOzhXYuCqLQUSzc
+         qCU8ynMIPeSmK9Cqjwvg8aIiizqAwu3jexJCykVSL0WenYDu3eYsz0hDQUKehToa59cL
+         vgUgJFqt83Imgc0jiDz//aS5TgVwZrd5qbqQ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684200706; x=1686792706;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20221208; t=1684200727; x=1686792727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OcXwAN+isoQ/mFzkihbW/wozjleZFihqA4ZCS2Bjuo4=;
-        b=L3cTNzeqPRdCx3u8bsI8PjhjPYIFpo8x5t97kqufGvhHDRUQMV5yVv79ue2ElpEixO
-         7mYo8yVka1J2YsdPuHbzu5i1CubrtKAaRHmQPhWze/V0A89Va/U14KSl3FX+fEoDc7Gp
-         Ymtz0ak+X1wbz01/DGaaVnQeufjTPtKxkALmG2oW+9RjR35S5334mQwBRS+FS4Zmd+va
-         TRhV/cMHbkX45u1l9Br+qbILYFEmLLojdn8Y49I294Y1wF1qvOfNwHqeyfPtJy8HueiF
-         FHj3LbCY40Lj3FpKsivKlRMJ4w91cNYohhRqG2Ly4JFZjImJdL/VYFcI4kM3vTBTeqlA
-         ataA==
-X-Gm-Message-State: AC+VfDxipqGTHzQE7k6/2nFJcMj6QsSOgdwWeOarZXdbfIOq1KyxeZof
-        YWkx+X0qjJuQNavRswqgBJKnTo0g9QW93ZwzoGI=
-X-Google-Smtp-Source: ACHHUZ4yNX4QWy0thWooKiccgAyqi3lrT98efHiZrzU8iVjPCnQrM5Xx71XXDYz3DeXa5St6j6kQJg==
-X-Received: by 2002:a19:550d:0:b0:4ec:a4b4:4731 with SMTP id n13-20020a19550d000000b004eca4b44731mr6949601lfe.68.1684200705829;
-        Mon, 15 May 2023 18:31:45 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id b7-20020ac24107000000b004f253f6d4d0sm2813502lfi.223.2023.05.15.18.31.44
+        bh=WxAuCAPbFp9ImZfMRV40TuMDQw2xswagc+lrSeMYOZw=;
+        b=OBSoDtHiT/aK11pfbDIgFnspMhnUJmZdBBkxdDlDum4Jc9LSvOJLWhoHyWF7z0EQbE
+         4TRMKJbC6LaYujEy5cx/0FX6idR5bisr4OGB02UGbdaFddJrDz+4t7+4KkF+M7zp6ymI
+         hQdPwdKU13BJyygYmNXT2Vl4l7aAhsZdi//b6cNSmrewmnPaYR6ZXDTdw9bqd4MKWp8r
+         +r55ay9j6BEjdtykCUB2s6iKyMCI+vN8MJX+P7s1iN8LP644ILITYaJiVzZU0HAVAIP9
+         c0RcLAs3fNqLOkIYJmwfbiwLF86Q3kQ8f2obAj3bc8mEUTCNSIIC5/n5NKPzMn64lN84
+         cpEQ==
+X-Gm-Message-State: AC+VfDw9r8BB0clokZNFIA4W7dCqm5OoJpaYGvEfXBnBpRLAgl4lzHu8
+        EEPApDZQ7xjaugz+38tknDJxuQ==
+X-Google-Smtp-Source: ACHHUZ4e+UJb59KuKDpjrZ4jheJdHLUsGADTus4l4moTjBngVNMYCjuMO7KHnT0PwYt978kaMbyS1Q==
+X-Received: by 2002:a05:6602:3806:b0:76c:67bb:11d1 with SMTP id bb6-20020a056602380600b0076c67bb11d1mr986402iob.1.1684200727739;
+        Mon, 15 May 2023 18:32:07 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b23-20020a5d8057000000b00763da065395sm7303195ior.3.2023.05.15.18.32.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 18:31:45 -0700 (PDT)
-Message-ID: <de735250-5661-0011-0650-a925b528463b@linaro.org>
-Date:   Tue, 16 May 2023 03:31:44 +0200
+        Mon, 15 May 2023 18:32:07 -0700 (PDT)
+Message-ID: <9d8f2c28-653d-16e7-bdc1-3044ea7cab0a@linuxfoundation.org>
+Date:   Mon, 15 May 2023 19:32:06 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH] soundwire: qcom: drop unused struct qcom_swrm_ctrl
- members
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5.4 000/282] 5.4.243-rc1 review
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20230515132000.399745-1-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230515132000.399745-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230515161722.146344674@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230515161722.146344674@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 15.05.2023 15:20, Krzysztof Kozlowski wrote:
-> Drop unused members from the driver state container: struct qcom_swrm_ctrl.
+On 5/15/23 10:26, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.243 release.
+> There are 282 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/soundwire/qcom.c | 3 ---
->  1 file changed, 3 deletions(-)
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index aad5942e5980..ab1098ec56e6 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -187,12 +187,9 @@ struct qcom_swrm_ctrl {
->  #endif
->  	struct completion broadcast;
->  	struct completion enumeration;
-> -	struct work_struct slave_work;
->  	/* Port alloc/free lock */
->  	struct mutex port_lock;
->  	struct clk *hclk;
-> -	u8 wr_cmd_id;
-> -	u8 rd_cmd_id;
->  	int irq;
->  	unsigned int version;
->  	int wake_irq;
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.243-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
+
+Compiled and booted on my test system. No dmesg regressions.
+
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
+
+
