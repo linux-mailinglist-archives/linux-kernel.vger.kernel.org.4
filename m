@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C62705022
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B57705023
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbjEPOEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S233738AbjEPOED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233324AbjEPOD7 (ORCPT
+        with ESMTP id S233373AbjEPOEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:03:59 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54A5525D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:03:57 -0700 (PDT)
+        Tue, 16 May 2023 10:04:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043855587
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:03:58 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6EC601FEB0;
-        Tue, 16 May 2023 14:03:56 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 445E721D62;
+        Tue, 16 May 2023 14:03:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684245836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=va2PlQ9fTKLDOkUDFaD7bMLHV5h0Zea9LBMRTULprJM=;
-        b=HtFvvTVEKv+y8AupTOrwFvnRCRrmdg0yXIP3Chj0aJpdMgAnv2N2q4E1/Lholg9C1lfQ25
-        3YaItb2drBftDrrjpGryEa57dMoVqVPrcGSHGVh4SQVcH3RN4wfJkDUI9Fsd0+IY1VO5Nn
-        eiN5s+Yb2XMuO7+CfI1Jg1gzzcygk6Y=
+        t=1684245837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vt8ryzJLAJAkyYIx+u2ECoH5bKy4mjk0v0F629AfpSI=;
+        b=ccKvfKittKkN6HxHLGL+QpSjw8rFAf8Ux7eVB2jtADA5UWHlHnNY+DcJ/DUxmfIabaQc28
+        QRbvwfKylYNVGR70zJ60nFOLf+se5GHFth39+OTWqJ/qCc9rLjzBHtccZlbAN4Em88Ovav
+        xMS8SDgr0hBSDI8mtyLBKU3HjuNyibs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684245836;
+        s=susede2_ed25519; t=1684245837;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=va2PlQ9fTKLDOkUDFaD7bMLHV5h0Zea9LBMRTULprJM=;
-        b=HPyHgRvU4Y6A8lFPt+FVrllqQrjupKckDCcBdfzN/44ua4G0Gm+KGjcZuqE5uW3hlzNg2S
-        ct9c/O/y+TmRvbDQ==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vt8ryzJLAJAkyYIx+u2ECoH5bKy4mjk0v0F629AfpSI=;
+        b=2al6RYQtoKbv33PDjcGSAWxdTzLcomXAEwnqFj+pB1LCx3w8fezoD2ANY7NzJ5C7rInHjm
+        xZnvz+NLm3jM6YCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E4FC138F5;
-        Tue, 16 May 2023 14:03:55 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7DCE5138F5;
+        Tue, 16 May 2023 14:03:56 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id SXTLIkuNY2SeWwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 16 May 2023 14:03:55 +0000
+        id kLudG0yNY2SeWwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 16 May 2023 14:03:56 +0000
 From:   Oscar Salvador <osalvador@suse.de>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
@@ -57,10 +61,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrey Konovalov <andreyknvl@gmail.com>,
         Alexander Potapenko <glider@google.com>,
         Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH v5 0/3] page_owner: print stacks and their counter
-Date:   Tue, 16 May 2023 16:03:30 +0200
-Message-Id: <20230516140333.3776-1-osalvador@suse.de>
+Subject: [PATCH v5 1/3] lib/stackdepot: Add a refcount field in stack_record
+Date:   Tue, 16 May 2023 16:03:31 +0200
+Message-Id: <20230516140333.3776-2-osalvador@suse.de>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230516140333.3776-1-osalvador@suse.de>
+References: <20230516140333.3776-1-osalvador@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,159 +79,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes v4 -> v5:
-     - Move page_owner_stack_threshold to page_owner file (suggested
-       by Alexander Potapenko)
-     - Make the stack refcount more generic, and do not
-       assume it will be only used for page_owner (suggested by
-       Alexander Potapenko)
+We want to filter out page_owner output and print only those
+stacks that have been repeated beyond a certain threshold.
+This gives us the chance to get rid of a lot of noise.
+In order to do that, we need to keep track of how many repeated stacks
+(for allocation) do we have, so we add a new refcount_t field
+in the stack_record struct.
 
-Changes v3 -> v4:
-     - Rebase (long time has passed)
-     - Use boolean instead of enum for action by Alexander Potapenko
-     - (I left some feedback untouched because it's been long and
-        would like to discuss it here now instead of re-vamping
-        and old thread)
+Note that this might increase the size of the struct for some
+architectures.
+E.g: x86_64 is not affected due to alignment, but x86 32bits might.
 
-Changes v2 -> v3:
-     - Replace interface in favor of seq operations (suggested by Vlastimil)
-     - Use debugfs interface to store/read valued (suggested by Ammar)
+The alternative would be to have some kind of struct like this:
 
-Hi,
+struct track_stacks {
+	struct stack_record *stack;
+	struct track_stacks *next;
+	refcount_t stack_count;
 
-page_owner is a great debug functionality tool that gets us to know
-about all pages that have been allocated/freed and their stacktrace.
-This comes very handy when e.g: debugging leaks, as with some scripting
-we might be able to see those stacktraces that are allocating pages
-but not freeing theme.
+But ithat would imply to perform more allocations and glue everything
+together, which would make the code more complex, so I think that
+going with a new field in the struct stack_record is good enough.
 
-In my experience, that is one of the most useful cases, but it can get
-really tedious to screen through all pages aand try to reconstruct the
-stack <-> allocated/freed relationship. There is a lot of noise
-to cancel off.
+Note that on __set_page_owner_handle(), page_owner->handle is set,
+and on __reset_page_owner(), page_owner->free_handle is set.
 
-This patch aims to fix that by adding a new functionality into page_owner.
-What this does is to create a new read-only file "page_owner_stacks",
-which prints only the allocating stacktraces and their counting, being that
-the times the stacktrace has allocated - the times it has freed.
+We are interested in page_owner->handle, so when __set_page_owner()
+gets called, we derive the stack_record struct from page_owner->handle,
+and we increment its refcount_t field; and when __reset_page_owner()
+gets called, we derive its stack_record from page_owner->handle()
+and we decrement its refcount_t field.
 
-So we have a clear overview of stacks <-> allocated/freed relationship
-without the need to fiddle with pages and trying to match free stacktraces
-with allocated stacktraces.
+Signed-off-by: Oscar Salvador <osalvador@suse.de>
+---
+ include/linux/stackdepot.h |  2 ++
+ lib/stackdepot.c           | 53 +++++++++++++++++++++++++++++++-------
+ mm/page_owner.c            |  6 +++++
+ 3 files changed, 51 insertions(+), 10 deletions(-)
 
-This is achieved by adding a new refcount_t field in the stack_record struct,
-incrementing that refcount_t everytime the same stacktrace allocates,
-and decrementing it when it frees a page. Details can be seen in the
-respective patches.
-
-We also create another file called "page_owner_threshold", which let us
-specify a threshold, so when when reading from "page_owner_stacks",
-we will only see those stacktraces which counting goes beyond the
-threshold we specified.
-
-One thing I am not completely happy about is to polute lib/stackdepot.c file
-with the stack_* functions.
-We could sort that out if the stack_record struct definitions were in a header
-file instead of stackdepot.c.
-But I am not sure about that trade-off, so suggestions are accepted.
-
-A PoC can be found below:
-
-# cat /sys/kernel/debug/page_owner_threshold
- 0
-# cat /sys/kernel/debug/page_owner_stacks > stacks_full.txt
-# head -32 stacks_full.txt
- prep_new_page+0x10d/0x180
- get_page_from_freelist+0x1bd6/0x1e10
- __alloc_pages+0x194/0x360
- alloc_page_interleave+0x13/0x90
- new_slab+0x31d/0x530
- ___slab_alloc+0x5d7/0x720
- __slab_alloc.isra.85+0x4a/0x90
- kmem_cache_alloc+0x455/0x4a0
- acpi_ps_alloc_op+0x57/0x8f
- acpi_ps_create_scope_op+0x12/0x23
- acpi_ps_execute_method+0x102/0x2c1
- acpi_ns_evaluate+0x343/0x4da
- acpi_evaluate_object+0x1cb/0x392
- acpi_run_osc+0x135/0x260
- acpi_init+0x165/0x4ed
- do_one_initcall+0x3e/0x200
-stack count: 2
-
- free_pcp_prepare+0x287/0x5c0
- free_unref_page+0x1c/0xd0
- __mmdrop+0x50/0x160
- finish_task_switch+0x249/0x2b0
- __schedule+0x2c3/0x960
- schedule+0x44/0xb0
- futex_wait_queue+0x70/0xd0
- futex_wait+0x160/0x250
- do_futex+0x11c/0x1b0
- __x64_sys_futex+0x5e/0x1d0
- do_syscall_64+0x37/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-stack count: 1
-
+diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+index e58306783d8e..6ba4fcdb0c5f 100644
+--- a/include/linux/stackdepot.h
++++ b/include/linux/stackdepot.h
+@@ -94,6 +94,8 @@ static inline int stack_depot_early_init(void)	{ return 0; }
+ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+ 					unsigned int nr_entries,
+ 					gfp_t gfp_flags, bool can_alloc);
++void stack_depot_inc_count(depot_stack_handle_t handle);
++void stack_depot_dec_count(depot_stack_handle_t handle);
  
-
-# echo 10000 > /sys/kernel/debug/page_owner_threshold
-# cat /sys/kernel/debug/page_owner_stacks > stacks_10000.txt
-# cat stacks_10000.txt 
- prep_new_page+0x10d/0x180
- get_page_from_freelist+0x1bd6/0x1e10
- __alloc_pages+0x194/0x360
- folio_alloc+0x17/0x40
- page_cache_ra_unbounded+0x96/0x170
- filemap_get_pages+0x23d/0x5e0
- filemap_read+0xbf/0x3a0
- __kernel_read+0x136/0x2f0
- kernel_read_file+0x197/0x2d0
- kernel_read_file_from_fd+0x54/0x90
- __do_sys_finit_module+0x89/0x120
- do_syscall_64+0x37/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-stack count: 36195
-
- prep_new_page+0x10d/0x180
- get_page_from_freelist+0x1bd6/0x1e10
- __alloc_pages+0x194/0x360
- folio_alloc+0x17/0x40
- page_cache_ra_unbounded+0x96/0x170
- filemap_get_pages+0x23d/0x5e0
- filemap_read+0xbf/0x3a0
- new_sync_read+0x106/0x180
- vfs_read+0x16f/0x190
- ksys_read+0xa5/0xe0
- do_syscall_64+0x37/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-stack count: 44484
-
- prep_new_page+0x10d/0x180
- get_page_from_freelist+0x1bd6/0x1e10
- __alloc_pages+0x194/0x360
- folio_alloc+0x17/0x40
- page_cache_ra_unbounded+0x96/0x170
- filemap_get_pages+0xdd/0x5e0
- filemap_read+0xbf/0x3a0
- new_sync_read+0x106/0x180
- vfs_read+0x16f/0x190
- ksys_read+0xa5/0xe0
- do_syscall_64+0x37/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-stack count: 17874
-
-Oscar Salvador (3):
-  lib/stackdepot: Add a refcount field in stack_record
-  mm, page_owner: Add page_owner_stacks file to print out only stacks
-    and their counte
-  mm,page_owner: Filter out stacks by a threshold counter
-
- include/linux/stackdepot.h |   8 +++
- lib/stackdepot.c           | 128 ++++++++++++++++++++++++++++++++++---
- mm/page_owner.c            |  54 ++++++++++++++++
- 3 files changed, 180 insertions(+), 10 deletions(-)
-
+ /**
+  * stack_depot_save - Save a stack trace to stack depot
+diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+index 2f5aa851834e..bc4a9cd25834 100644
+--- a/lib/stackdepot.c
++++ b/lib/stackdepot.c
+@@ -60,6 +60,7 @@ struct stack_record {
+ 	u32 hash;			/* Hash in the hash table */
+ 	u32 size;			/* Number of stored frames */
+ 	union handle_parts handle;
++	refcount_t count;		/* Number of the same repeated stacks */
+ 	unsigned long entries[];	/* Variable-sized array of frames */
+ };
+ 
+@@ -305,6 +306,7 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
+ 	stack->handle.offset = pool_offset >> DEPOT_STACK_ALIGN;
+ 	stack->handle.valid = 1;
+ 	stack->handle.extra = 0;
++	refcount_set(&stack->count, 1);
+ 	memcpy(stack->entries, entries, flex_array_size(stack, entries, size));
+ 	pool_offset += required_size;
+ 	/*
+@@ -457,8 +459,7 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+ }
+ EXPORT_SYMBOL_GPL(stack_depot_save);
+ 
+-unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+-			       unsigned long **entries)
++static struct stack_record *stack_depot_getstack(depot_stack_handle_t handle)
+ {
+ 	union handle_parts parts = { .handle = handle };
+ 	/*
+@@ -470,6 +471,26 @@ unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+ 	size_t offset = parts.offset << DEPOT_STACK_ALIGN;
+ 	struct stack_record *stack;
+ 
++	if (!handle)
++		return NULL;
++
++	if (parts.pool_index > pool_index_cached) {
++		WARN(1, "pool index %d out of bounds (%d) for stack id %08x\n",
++			parts.pool_index, pool_index_cached, handle);
++		return NULL;
++	}
++	pool = stack_pools[parts.pool_index];
++	if (!pool)
++		return NULL;
++	stack = pool + offset;
++	return stack;
++}
++
++unsigned int stack_depot_fetch(depot_stack_handle_t handle,
++			       unsigned long **entries)
++{
++	struct stack_record *stack;
++
+ 	*entries = NULL;
+ 	/*
+ 	 * Let KMSAN know *entries is initialized. This shall prevent false
+@@ -480,21 +501,33 @@ unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+ 	if (!handle)
+ 		return 0;
+ 
+-	if (parts.pool_index > pool_index_cached) {
+-		WARN(1, "pool index %d out of bounds (%d) for stack id %08x\n",
+-			parts.pool_index, pool_index_cached, handle);
+-		return 0;
+-	}
+-	pool = stack_pools[parts.pool_index];
+-	if (!pool)
++	stack = stack_depot_getstack(handle);
++	if (!stack)
+ 		return 0;
+-	stack = pool + offset;
+ 
+ 	*entries = stack->entries;
+ 	return stack->size;
+ }
+ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+ 
++void stack_depot_inc_count(depot_stack_handle_t handle)
++{
++	struct stack_record *stack = NULL;
++
++	stack = stack_depot_getstack(handle);
++	if (stack)
++		refcount_inc(&stack->count);
++}
++
++void stack_depot_dec_count(depot_stack_handle_t handle)
++{
++	struct stack_record *stack = NULL;
++
++	stack = stack_depot_getstack(handle);
++	if (stack)
++		refcount_dec(&stack->count);
++}
++
+ void stack_depot_print(depot_stack_handle_t stack)
+ {
+ 	unsigned long *entries;
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 31169b3e7f06..2d5d07013e4e 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -139,6 +139,7 @@ void __reset_page_owner(struct page *page, unsigned short order)
+ 	int i;
+ 	struct page_ext *page_ext;
+ 	depot_stack_handle_t handle;
++	depot_stack_handle_t alloc_handle;
+ 	struct page_owner *page_owner;
+ 	u64 free_ts_nsec = local_clock();
+ 
+@@ -146,6 +147,9 @@ void __reset_page_owner(struct page *page, unsigned short order)
+ 	if (unlikely(!page_ext))
+ 		return;
+ 
++	page_owner = get_page_owner(page_ext);
++	alloc_handle = page_owner->handle;
++
+ 	handle = save_stack(GFP_NOWAIT | __GFP_NOWARN);
+ 	for (i = 0; i < (1 << order); i++) {
+ 		__clear_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
+@@ -155,6 +159,7 @@ void __reset_page_owner(struct page *page, unsigned short order)
+ 		page_ext = page_ext_next(page_ext);
+ 	}
+ 	page_ext_put(page_ext);
++	stack_depot_dec_count(alloc_handle);
+ }
+ 
+ static inline void __set_page_owner_handle(struct page_ext *page_ext,
+@@ -196,6 +201,7 @@ noinline void __set_page_owner(struct page *page, unsigned short order,
+ 		return;
+ 	__set_page_owner_handle(page_ext, handle, order, gfp_mask);
+ 	page_ext_put(page_ext);
++	stack_depot_inc_count(handle);
+ }
+ 
+ void __set_page_owner_migrate_reason(struct page *page, int reason)
 -- 
 2.35.3
 
