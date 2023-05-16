@@ -2,197 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED5F705720
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB214705728
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjEPTbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S229533AbjEPTeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjEPTbR (ORCPT
+        with ESMTP id S229458AbjEPTeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:31:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763EE7DA7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684265388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t9UrkqIYKxvK9jQQrJXRaqEAIFWUC38gkJPtkDfF+s0=;
-        b=jQZjHrKEyMPpO6wAVJSc1C7EYXzJoJ6UlA376aMGkAoDVuWL2E2FbMFQ9i3YwseWSGzKRt
-        E44RxffD8JEoM9cJM7fj5Y9h4Z+Ub0hDhygKoW2HZqf/vDf7onXP8BA6f4ZfqDuDw1GqOf
-        460pOshDbwQrrHzg1l7HMsQtkPV+gik=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-214-HRbxlmLfNyiEuW1eSNyeCw-1; Tue, 16 May 2023 15:29:46 -0400
-X-MC-Unique: HRbxlmLfNyiEuW1eSNyeCw-1
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2533e0cd8f2so8997a91.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:29:46 -0700 (PDT)
+        Tue, 16 May 2023 15:34:15 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C743C14
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:34:13 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64384274895so10362525b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684265653; x=1686857653;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NjomB45/tUXiCEV6Zx/tTP1f+pkWwWrPq8cCPi1RJqc=;
+        b=bNHc1U0CtPLI3FNYS2/3S7VOUmvNc8ETG2uTFHiP/LSmRcJAmNmEa1HQKz+0QsyCYV
+         3LJuktipJLdpM/MdCXUc32xdnPqgSUNSmKg5rGOpcm325DRNUYPUPtaRhkMspnvwt+oR
+         bB+y6nAPpHmohxYRaYqX0u/i97y1iy2CyL9sQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684265386; x=1686857386;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t9UrkqIYKxvK9jQQrJXRaqEAIFWUC38gkJPtkDfF+s0=;
-        b=O4kP6Qkd7JwAbV17nfNK+LiiqcNAaJa2KxEMH9yja8cM39vX0pydqdokRSM2QvNS7U
-         6TSWNjCvnLJAmYwaaW7FevGfkCqQPbZ/J2pRE9tbp4lr1MXP8BlD3UEdXg7hKwveoYEu
-         TDn7E88fwcq/xYUbrCjqu6Ntqcoxp0PgoQ87hARx686bSpVwDUK5h7z1hdcwa+z7VyA+
-         nXDsA4m3R9owidznSYl5MBmAMmA75PMfwfeFPOC2gOosZA2E1uMTYe9MXFRKo3jKs5TF
-         6I+SljkoG+RvyYoleqfCcOXoFBsy+P/oNwf+kjDKIydeCElzCmF5dqiqrA6z7+D7VXUb
-         yF1w==
-X-Gm-Message-State: AC+VfDx7UVsz5+PQw5qCX7gHi5cAnDHuKWr5fHTOSCK6CHYaDJp0m6w7
-        1wKK2kWs+1nL7zHouqW5mS9In6G2+u2Cs0FAeH9nyc+k1vn+ORe1F3foWiruwHe7+UMCXrZfWjq
-        q5ZjWW1+dDCeyaiVkqgEVkj7f+MvkDsdrwGEFBj02
-X-Received: by 2002:a17:90a:8049:b0:24d:e929:56cf with SMTP id e9-20020a17090a804900b0024de92956cfmr37452319pjw.39.1684265385699;
-        Tue, 16 May 2023 12:29:45 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5gBFGff4dAZMhxmbGkiocJy63rZyONMUQ6rm3VRtZFYy02jZIS98cu+nLLPRraC5I03lzcx85+v3rvPJQsVd4=
-X-Received: by 2002:a17:90a:8049:b0:24d:e929:56cf with SMTP id
- e9-20020a17090a804900b0024de92956cfmr37452303pjw.39.1684265385415; Tue, 16
- May 2023 12:29:45 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684265653; x=1686857653;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NjomB45/tUXiCEV6Zx/tTP1f+pkWwWrPq8cCPi1RJqc=;
+        b=d5bIoDBzRHj65KBojGhbBD0ArRHAMKH7HcIjAQt6Hk9vxBexw5CXc2EWdfAutxbdna
+         xy1uGNmhFGwDZZLHJYkSBfN7eBEzos6CXdF6MzrAoZcQR2QRwY8vTv+0rF8kw7KbWvUQ
+         IjtDJ8ViBNiXMLoDM/GS3bhkGLG9jqJf/VscmwGKqn+T6rmOiQSdrVe7wKV2wQ16fBDb
+         g2vpVoVaegFScVIDamfe8VL4mBg04kqswq/+Z/lbKzF/Pdh+eux3XqfYItCIB2Y4JeFV
+         rqGmtcce67Md72uRqEFDaOHwAhUsXB5Jm++wtdBd6w4dl4vcamOQqFkY9oNKAQgEtQRD
+         NYeQ==
+X-Gm-Message-State: AC+VfDxL+IxPCxKgOiV/YkpPFroalFMmDt4QMR8a6nb5uncgVH6iP+O+
+        kCchQNmTbwMP/uAJrGDd1OyKXQ==
+X-Google-Smtp-Source: ACHHUZ58B7WESNKne+9oMKYnTHer8L35nMXOvyVf4ZrSBq07pY0pLhMKLIfNUzXFqoCSIzJ7rgsnDw==
+X-Received: by 2002:a05:6a00:1141:b0:64a:ff32:7349 with SMTP id b1-20020a056a00114100b0064aff327349mr16158832pfm.32.1684265652878;
+        Tue, 16 May 2023 12:34:12 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g19-20020aa78753000000b00634b91326a9sm14259716pfo.143.2023.05.16.12.34.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 12:34:12 -0700 (PDT)
+Date:   Tue, 16 May 2023 12:34:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "GONG, Ruiqi" <gongruiqi1@huawei.com>, Jann Horn <jannh@google.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        kasan-dev@googlegroups.com, Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+Subject: Re: [PATCH RFC v2] Randomized slab caches for kmalloc()
+Message-ID: <202305161204.CB4A87C13@keescook>
+References: <20230508075507.1720950-1-gongruiqi1@huawei.com>
 MIME-Version: 1.0
-References: <20230216150701.3654894-1-dhowells@redhat.com>
-In-Reply-To: <20230216150701.3654894-1-dhowells@redhat.com>
-From:   David Wysochanski <dwysocha@redhat.com>
-Date:   Tue, 16 May 2023 15:29:09 -0400
-Message-ID: <CALF+zO=w2Gyz6JtzEoFgTVjH67-_CuTaK7e+2yoHEwXZ8bPx_A@mail.gmail.com>
-Subject: Re: [Linux-cachefs] [PATCH v6 0/2] mm, netfs, fscache: Stop read
- optimisation when folio removed from pagecache
-To:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@infradead.org>, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508075507.1720950-1-gongruiqi1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 10:07=E2=80=AFAM David Howells <dhowells@redhat.com=
-> wrote:
->
-> Hi Willy,
->
-> Is this okay by you?  You said you wanted to look at the remaining uses o=
-f
-> page_has_private(), of which there are then three after these patches, no=
-t
-> counting folio_has_private():
->
->         arch/s390/kernel/uv.c:          if (page_has_private(page))
->         mm/khugepaged.c:                    1 + page_mapcount(page) + pag=
-e_has_private(page)) {
->         mm/migrate_device.c:            extra +=3D 1 + page_has_private(p=
-age);
->
-> --
-> I've split the folio_has_private()/filemap_release_folio() call pair
-> merging into its own patch, separate from the actual bugfix and pulled ou=
-t
-> the folio_needs_release() function into mm/internal.h and made
-> filemap_release_folio() use it.  I've also got rid of the bit clearances
-> from the network filesystem evict_inode functions as they doesn't seem to
-> be necessary.
->
-> Note that the last vestiges of try_to_release_page() got swept away, so I
-> rebased and dealt with that.  One comment remained, which is removed by t=
-he
-> first patch.
->
-> David
->
-> Changes:
-> =3D=3D=3D=3D=3D=3D=3D=3D
-> ver #6)
->  - Drop the third patch which removes a duplicate check in vmscan().
->
-> ver #5)
->  - Rebased on linus/master.  try_to_release_page() has now been entirely
->    replaced by filemap_release_folio(), barring one comment.
->  - Cleaned up some pairs in ext4.
->
-> ver #4)
->  - Split has_private/release call pairs into own patch.
->  - Moved folio_needs_release() to mm/internal.h and removed open-coded
->    version from filemap_release_folio().
->  - Don't need to clear AS_RELEASE_ALWAYS in ->evict_inode().
->  - Added experimental patch to reduce shrink_folio_list().
->
-> ver #3)
->  - Fixed mapping_clear_release_always() to use clear_bit() not set_bit().
->  - Moved a '&&' to the correct line.
->
-> ver #2)
->  - Rewrote entirely according to Willy's suggestion[1].
->
-> Link: https://lore.kernel.org/r/Yk9V/03wgdYi65Lb@casper.infradead.org/ [1=
-]
-> Link: https://lore.kernel.org/r/164928630577.457102.8519251179327601178.s=
-tgit@warthog.procyon.org.uk/ # v1
-> Link: https://lore.kernel.org/r/166844174069.1124521.10890506360974169994=
-.stgit@warthog.procyon.org.uk/ # v2
-> Link: https://lore.kernel.org/r/166869495238.3720468.4878151409085146764.=
-stgit@warthog.procyon.org.uk/ # v3
-> Link: https://lore.kernel.org/r/1459152.1669208550@warthog.procyon.org.uk=
-/ # v3 also
-> Link: https://lore.kernel.org/r/166924370539.1772793.13730698360771821317=
-.stgit@warthog.procyon.org.uk/ # v4
-> Link: https://lore.kernel.org/r/167172131368.2334525.8569808925687731937.=
-stgit@warthog.procyon.org.uk/ # v5
+For new CCs, the start of this thread is here[0].
+
+On Mon, May 08, 2023 at 03:55:07PM +0800, GONG, Ruiqi wrote:
+> When exploiting memory vulnerabilities, "heap spraying" is a common
+> technique targeting those related to dynamic memory allocation (i.e. the
+> "heap"), and it plays an important role in a successful exploitation.
+> Basically, it is to overwrite the memory area of vulnerable object by
+> triggering allocation in other subsystems or modules and therefore
+> getting a reference to the targeted memory location. It's usable on
+> various types of vulnerablity including use after free (UAF), heap out-
+> of-bound write and etc.
+
+I heartily agree we need some better approaches to deal with UAF, and
+by extension, heap spraying.
+
+> There are (at least) two reasons why the heap can be sprayed: 1) generic
+> slab caches are shared among different subsystems and modules, and
+> 2) dedicated slab caches could be merged with the generic ones.
+> Currently these two factors cannot be prevented at a low cost: the first
+> one is a widely used memory allocation mechanism, and shutting down slab
+> merging completely via `slub_nomerge` would be overkill.
+> 
+> To efficiently prevent heap spraying, we propose the following approach:
+> to create multiple copies of generic slab caches that will never be
+> merged, and random one of them will be used at allocation. The random
+> selection is based on the address of code that calls `kmalloc()`, which
+> means it is static at runtime (rather than dynamically determined at
+> each time of allocation, which could be bypassed by repeatedly spraying
+> in brute force). In this way, the vulnerable object and memory allocated
+> in other subsystems and modules will (most probably) be on different
+> slab caches, which prevents the object from being sprayed.
+
+This is a nice balance between the best option we have now
+("slub_nomerge") and most invasive changes (type-based allocation
+segregation, which requires at least extensive compiler support),
+forcing some caches to be "out of reach".
+
+> 
+> The overhead of performance has been tested on a 40-core x86 server by
+> comparing the results of `perf bench all` between the kernels with and
+> without this patch based on the latest linux-next kernel, which shows
+> minor difference. A subset of benchmarks are listed below:
+> 
+> 			control		experiment (avg of 3 samples)
+> sched/messaging (sec)	0.019		0.019
+> sched/pipe (sec)	5.253		5.340
+> syscall/basic (sec)	0.741		0.742
+> mem/memcpy (GB/sec)	15.258789	14.860495
+> mem/memset (GB/sec)	48.828125	50.431069
+> 
+> The overhead of memory usage was measured by executing `free` after boot
+> on a QEMU VM with 1GB total memory, and as expected, it's positively
+> correlated with # of cache copies:
+> 
+> 		control		4 copies	8 copies	16 copies
+> total		969.8M		968.2M		968.2M		968.2M
+> used		20.0M		21.9M		24.1M		26.7M
+> free		936.9M		933.6M		931.4M		928.6M
+> available	932.2M		928.8M		926.6M		923.9M
+
+Great to see the impact: it's relatively tiny. Nice!
+
+Back when we looked at cache quarantines, Jann pointed out that it
+was still possible to perform heap spraying -- it just needed more
+allocations. In this case, I think that's addressed (probabilistically)
+by making it less likely that a cache where a UAF is reachable is merged
+with something with strong exploitation primitives (e.g. msgsnd).
+
+In light of all the UAF attack/defense breakdowns in Jann's blog
+post[1], I'm curious where this defense lands. It seems like it would
+keep the primitives described there (i.e. "upgrading" the heap spray
+into a page table "type confusion") would be addressed probabilistically
+just like any other style of attack. Jann, what do you think, and how
+does it compare to the KCTF work[2] you've been doing?
+
+In addition to this work, I'd like to see something like the kmalloc
+caches, but for kmem_cache_alloc(), where a dedicated cache of
+variably-sized allocations can be managed. With that, we can split off
+_dedicated_ caches where we know there are strong exploitation
+primitives (i.e. msgsnd, etc). Then we can carve off known weak heap
+allocation caches as well as make merging probabilistically harder.
+
+I imagine it would be possible to then split this series into two
+halves: one that creates the "make arbitrary-sized caches" API, and the
+second that applies that to kmalloc globally (as done here).
+
+> 
+> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
 > ---
-> %(shortlog)s
-> %(diffstat)s
->
-> David Howells (2):
->   mm: Merge folio_has_private()/filemap_release_folio() call pairs
->   mm, netfs, fscache: Stop read optimisation when folio removed from
->     pagecache
->
->  fs/9p/cache.c           |  2 ++
->  fs/afs/internal.h       |  2 ++
->  fs/cachefiles/namei.c   |  2 ++
->  fs/ceph/cache.c         |  2 ++
->  fs/cifs/fscache.c       |  2 ++
->  fs/ext4/move_extent.c   | 12 ++++--------
->  fs/splice.c             |  3 +--
->  include/linux/pagemap.h | 16 ++++++++++++++++
->  mm/filemap.c            |  2 ++
->  mm/huge_memory.c        |  3 +--
->  mm/internal.h           | 11 +++++++++++
->  mm/khugepaged.c         |  3 +--
->  mm/memory-failure.c     |  8 +++-----
->  mm/migrate.c            |  3 +--
->  mm/truncate.c           |  6 ++----
->  mm/vmscan.c             |  8 ++++----
->  16 files changed, 56 insertions(+), 29 deletions(-)
->
-> --
-> Linux-cachefs mailing list
-> Linux-cachefs@redhat.com
-> https://listman.redhat.com/mailman/listinfo/linux-cachefs
->
+> 
+> v2:
+>   - Use hash_64() and a per-boot random seed to select kmalloc() caches.
 
-Willy, and David,
+This is good: I was hoping there would be something to make it per-boot
+randomized beyond just compile-time.
 
-Can this series move forward?
-This just got mentioned again [1] after Chris tested the NFS netfs
-patches that were merged in 6.4-rc1
+So, yes, I think this is worth it, but I'd like to see what design holes
+Jann can poke in it first. :)
 
-[1] https://lore.kernel.org/linux-nfs/CAAmbk-f_U8CPcTQM866L572uUHdK4p5iWKnU=
-Qs4r8fkW=3D6RW9g@mail.gmail.com/
+-Kees
 
+[0] https://lore.kernel.org/lkml/20230508075507.1720950-1-gongruiqi1@huawei.com/
+[1] https://googleprojectzero.blogspot.com/2021/10/how-simple-linux-kernel-memory.html
+[2] https://github.com/thejh/linux/commit/a87ad16046f6f7fd61080ebfb93753366466b761
+
+-- 
+Kees Cook
