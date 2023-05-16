@@ -2,56 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F25A704747
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E93704745
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjEPIE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S231309AbjEPIDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjEPIEX (ORCPT
+        with ESMTP id S230372AbjEPIDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:04:23 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590194492;
-        Tue, 16 May 2023 01:04:21 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 1118540203;
-        Tue, 16 May 2023 08:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684224259;
-        bh=HM165daVVQlgsXpSYpBed1TlG1Fivc1kTbICBUtM1fY=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=tLYBale+26PODPoS1VF+h6hLhTA1nVg0JrdCtmmL0KuYEfVG6PAheebGbw7kjPzbN
-         6i5C/D2P9pFO4pkk1xROlDyRyEKLOGk3UHkO1tdo6l7c/SkQTXC11ukItYbKlE0BkC
-         VShaetH7mco8w9HFAppmHL/PXPQhnvPcWhRGWZd69EFPhr2KUYNPVz0spC5xfXSm9v
-         ReoJSrYFMJMX/OKYMyJovKxwvo1XsYhfLFLeGCuetAn26ytB2kw6Q5gPwDFzV19ERs
-         sLXVAHIoLr2YfVNC1b7+i01xqgr6hZSwtZ6sRvbqnqvr/sWNhbs8KdGfOOBdtVjSIV
-         9nNA24Z5mbJZA==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     chandrashekar.devegowda@intel.com, linuxwwan@intel.com,
-        chiranjeevi.rapolu@linux.intel.com, haijun.liu@mediatek.com,
-        m.chetan.kumar@linux.intel.com, ricardo.martinez@linux.intel.com
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: wwan: t7xx: Ensure init is completed before system sleep
-Date:   Tue, 16 May 2023 16:03:27 +0800
-Message-Id: <20230516080327.359825-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 16 May 2023 04:03:51 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382DD448D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:03:49 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso20680286a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684224227; x=1686816227;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hSFJbsVN3DzfivTTA40X/LpIY5LL5oqiGpzUJW2oCQU=;
+        b=frm8m7g/MFs+OEOtXs4P99E4ju10KlP06200F8b2De0IfFdGl/ihiWNL/fcaQwMepM
+         UIjDSSN/DcioZ0ujG1ABF3zRSuQABothlEx3YzRRLd0G3RnQCZ+FQz1b6eSQiHIhwl1k
+         0E2NL/A5ZdBqXHCMf0Q/g0Vb8GsatTqQqjXGk13OEmCvulAx8Nxm80zA+5XTAyy8/caA
+         WW05/Su3AS2US86XvXgG1tDSdzTBouQxVR2Fm0O76RelYddrCX3MN3Vy43cTmiVqKf23
+         +gcnKpPSpHx/N7j2gInElH9FyBBUE6tvSLOc2YEIRXQUzlCxcZcRKtVaMDXByKSspZ8e
+         7evw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684224227; x=1686816227;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hSFJbsVN3DzfivTTA40X/LpIY5LL5oqiGpzUJW2oCQU=;
+        b=DQEIwp+QqSOeoJS8jzbMCBHUyTmmx4R1zWzVdK2U2M+1ZGEQkzmkCz7dadRO0EkL2a
+         DvbjWOPLde2ncFiIgDxh/yTwQVNrJ7afF7gdlIAlwnvFZTruNNvOPnXQ879pK0QN5yFW
+         KYprkiJkgJaFIwBB83nbmWkIy+tfBV+Zm06217opCL5isXonVy3VLcZjAuLThkEL8Kky
+         XLdVssodoFZTLUvBkJ6fR92Rvv+zQguj4ryFttx9tBTva5kb0JD7K/qzBOHG5ASPo+o7
+         fH7ayjSj+BPbHe460ZRQTKxdd7ErXRsAZrdHvndAa4jqS1gl3jNTeRbHPjaXFQCFIVD0
+         4+6A==
+X-Gm-Message-State: AC+VfDywxnKOIu01+hhNgWKMTsIoplNnOEbp+Lsh34QDTTzeMe0z7tV2
+        GMOKrwlMz3a2a7N77sxlrNMGtg==
+X-Google-Smtp-Source: ACHHUZ5bvHxcHnitKexpHPgAaiebbarZn+Vk1DrCsRjyDEoNSRIouSQTtBivyhNXirfmJ5NopDK+sg==
+X-Received: by 2002:a05:6402:b13:b0:50c:a8ca:3240 with SMTP id bm19-20020a0564020b1300b0050ca8ca3240mr28742318edb.24.1684224227652;
+        Tue, 16 May 2023 01:03:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4d4a:9b97:62e:1439? ([2a02:810d:15c0:828:4d4a:9b97:62e:1439])
+        by smtp.gmail.com with ESMTPSA id v3-20020aa7d803000000b0050d83a39e6fsm8021841edq.4.2023.05.16.01.03.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 01:03:47 -0700 (PDT)
+Message-ID: <4529262a-59c2-1610-2d7f-d2e3529bf867@linaro.org>
+Date:   Tue, 16 May 2023 10:03:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 1/2] dt-bindings: arm: optee: add interrupt controller
+ properties
+Content-Language: en-US
+To:     Etienne Carriere <etienne.carriere@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Pascal Paillet <p.paillet@foss.st.com>
+References: <20230506073235.2770292-1-etienne.carriere@linaro.org>
+ <CAN5uoS-U1h_Fx1K4PtnK3vHmyfUUS6wqCcSfhoaV=idgEOC04Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAN5uoS-U1h_Fx1K4PtnK3vHmyfUUS6wqCcSfhoaV=idgEOC04Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,82 +85,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the system attempts to sleep while mtk_t7xx is not ready, the driver
-cannot put the device to sleep:
-[   12.472918] mtk_t7xx 0000:57:00.0: [PM] Exiting suspend, modem in invalid state
-[   12.472936] mtk_t7xx 0000:57:00.0: PM: pci_pm_suspend(): t7xx_pci_pm_suspend+0x0/0x20 [mtk_t7xx] returns -14
-[   12.473678] mtk_t7xx 0000:57:00.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1b0 returns -14
-[   12.473711] mtk_t7xx 0000:57:00.0: PM: failed to suspend async: error -14
-[   12.764776] PM: Some devices failed to suspend, or early wake event detected
+On 16/05/2023 08:02, Etienne Carriere wrote:
+> Dear all,
+> 
+> On Sat, 6 May 2023 at 09:33, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+>>
+>> Adds an optional interrupt controller property to optee firmware node
+>> in the DT bindings. Optee driver may embeds an irqchip exposing
+>> OP-TEE interrupt events notified by the TEE world. Optee registers up
+>> to 1 interrupt controller and identifies each line with a line
+>> number from 0 to UINT16_MAX.
+>>
+>> The identifiers and meaning of the interrupt line number are specific
+>> to the platform and shall be found in the OP-TEE platform documentation.
+>>
+>> In the example shown in optee DT binding documentation, the platform SCMI
+>> device controlled by Linux scmi driver uses optee interrupt irq 5 as
+>> signal to trigger processing of an asynchronous incoming SCMI message
+>> in the scope of a CPU DVFS control. A platform can have several SCMI
+>> channels driven this way. Optee irqs also permit small embedded devices
+>> to share e.g. a gpio expander, a group of wakeup sources, etc... between
+>> OP-TEE world (for sensitive services) and Linux world (for non-sensitive
+>> services). The physical controller is driven from the TEE which exposes
+>> some controls to Linux kernel.
+>>
+>> Cc: Jens Wiklander <jens.wiklander@linaro.org>
+>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>> Cc: Marc Zyngier <maz@kernel.org>
+>> Cc: Rob Herring <robh+dt@kernel.org>
+>> Cc: Sumit Garg <sumit.garg@linaro.org>
+>> Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
+>> Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+>> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+>> ---
+> 
+> Any feedback on this change proposal?
 
-Mediatek confirmed the device can take a rather long time to complete
-its initialization, so wait for up to 20 seconds until init is done.
+Rob had here several comments, so I will defer it to him.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/net/wwan/t7xx/t7xx_pci.c | 15 +++++++++++++++
- drivers/net/wwan/t7xx/t7xx_pci.h |  1 +
- 2 files changed, 16 insertions(+)
+I don't get why this is not part of linaro,scmi-optee driver directly. I
+think it's the only valid use case because the others like GPIO
+expanders seem  a stretch.
 
-diff --git a/drivers/net/wwan/t7xx/t7xx_pci.c b/drivers/net/wwan/t7xx/t7xx_pci.c
-index 226fc1703e90..7ae85f09cdbf 100644
---- a/drivers/net/wwan/t7xx/t7xx_pci.c
-+++ b/drivers/net/wwan/t7xx/t7xx_pci.c
-@@ -96,6 +96,7 @@ static int t7xx_pci_pm_init(struct t7xx_pci_dev *t7xx_dev)
- 	spin_lock_init(&t7xx_dev->md_pm_lock);
- 	init_completion(&t7xx_dev->sleep_lock_acquire);
- 	init_completion(&t7xx_dev->pm_sr_ack);
-+	init_completion(&t7xx_dev->init_done);
- 	atomic_set(&t7xx_dev->md_pm_state, MTK_PM_INIT);
- 
- 	device_init_wakeup(&pdev->dev, true);
-@@ -124,6 +125,7 @@ void t7xx_pci_pm_init_late(struct t7xx_pci_dev *t7xx_dev)
- 	pm_runtime_mark_last_busy(&t7xx_dev->pdev->dev);
- 	pm_runtime_allow(&t7xx_dev->pdev->dev);
- 	pm_runtime_put_noidle(&t7xx_dev->pdev->dev);
-+	complete_all(&t7xx_dev->init_done);
- }
- 
- static int t7xx_pci_pm_reinit(struct t7xx_pci_dev *t7xx_dev)
-@@ -529,6 +531,18 @@ static void t7xx_pci_shutdown(struct pci_dev *pdev)
- 	__t7xx_pci_pm_suspend(pdev);
- }
- 
-+static int t7xx_pci_pm_prepare(struct device *dev)
-+{
-+	struct pci_dev *pdev = to_pci_dev(dev);
-+	struct t7xx_pci_dev *t7xx_dev;
-+
-+	t7xx_dev = pci_get_drvdata(pdev);
-+	if (!wait_for_completion_timeout(&t7xx_dev->init_done, 20 * HZ))
-+		dev_warn(dev, "Not ready for system sleep.\n");
-+
-+	return 0;
-+}
-+
- static int t7xx_pci_pm_suspend(struct device *dev)
- {
- 	return __t7xx_pci_pm_suspend(to_pci_dev(dev));
-@@ -555,6 +569,7 @@ static int t7xx_pci_pm_runtime_resume(struct device *dev)
- }
- 
- static const struct dev_pm_ops t7xx_pci_pm_ops = {
-+	.prepare = t7xx_pci_pm_prepare,
- 	.suspend = t7xx_pci_pm_suspend,
- 	.resume = t7xx_pci_pm_resume,
- 	.resume_noirq = t7xx_pci_pm_resume_noirq,
-diff --git a/drivers/net/wwan/t7xx/t7xx_pci.h b/drivers/net/wwan/t7xx/t7xx_pci.h
-index 112efa534eac..f08f1ab74469 100644
---- a/drivers/net/wwan/t7xx/t7xx_pci.h
-+++ b/drivers/net/wwan/t7xx/t7xx_pci.h
-@@ -69,6 +69,7 @@ struct t7xx_pci_dev {
- 	struct t7xx_modem	*md;
- 	struct t7xx_ccmni_ctrl	*ccmni_ctlb;
- 	bool			rgu_pci_irq_en;
-+	struct completion	init_done;
- 
- 	/* Low Power Items */
- 	struct list_head	md_pm_entities;
--- 
-2.34.1
+
+Best regards,
+Krzysztof
 
