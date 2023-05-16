@@ -2,217 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAE27048B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6ED7048C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbjEPJMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S231918AbjEPJNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjEPJKN (ORCPT
+        with ESMTP id S231823AbjEPJM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:10:13 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF244ECE;
-        Tue, 16 May 2023 02:10:06 -0700 (PDT)
-Date:   Tue, 16 May 2023 09:10:03 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684228203;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uhyYjOdL9Xh+igEdWlJzgDl6PmeFAtVERSEQAfxWd+8=;
-        b=pELWHZ9IZJ7PzmsbKdmftWxpU++vvpP7FfZE64oZerMZ/Tppj83FwX0R4dyQrsA2lrHoVn
-        TwID5y2GkQ5HymADOonc7WMmhEBiBRLawF4AE6DcAnaq0vnfavy5y2u4kWxKBzIMXhnACL
-        b7Q5DUsvrAK7fPv3JEwMONrkm+w0/kIy8Q7fgzySZcvQYbXub89oq6Zm8jypmWYVHlXtNa
-        0PD8eyRsC63h1trVqFHMNmKaeA/IZOmCLz5U/ZSEwH+K2wTROxSBThXDMyBTBC2hXD29L5
-        sckzEQz2v2vb0nJLfTBcfklgryvpaOT9HpC5zOTFQdg3q+EfytviZNYVszLqXA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684228203;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uhyYjOdL9Xh+igEdWlJzgDl6PmeFAtVERSEQAfxWd+8=;
-        b=SyZIdwshXo9RJgHXV9tyOdgZGJPJBHwiUFJNm79sE22gQZPRAG0gqXtrV7pfC/y6iQyJlL
-        lLLnAaYtxGfIhaAg==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] x86/smpboot: Avoid pointless delay calibration if TSC
- is synchronized
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Helge Deller <deller@gmx.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230512205255.608773568@linutronix.de>
-References: <20230512205255.608773568@linutronix.de>
+        Tue, 16 May 2023 05:12:59 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A155FDD;
+        Tue, 16 May 2023 02:10:47 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f415a90215so113132745e9.0;
+        Tue, 16 May 2023 02:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684228244; x=1686820244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E3WrC4UijnYG96Kov01kzkQuuInDDpJVntlVXwo/6hA=;
+        b=Ostie82+eea/bStS2f/B7xC02Hn0Bq8os2kFsYXwx7eYnHni65/Wef6GcUWdkWcL2K
+         uoURmp1GjKLISQ8j5Q+EigxL1KyZeq5m3bhOOMjQIuU5oF0nCOWuuCl+EgoSzNpQfyOD
+         6KyaBn78Mw0hKWcGtJmuL8ID0KdoS8EbYfZjM5/aeOwVmfWr/oe9xpFlsa5zqu1ubvyG
+         d0vIx1MwAuvejni2h1IPCwDmJ5q7AxLM7Ap4RhJRzSQrffxgebg4Ojik6HmNREk6U1fV
+         4PrzbJaH/SYV2acQ3EMP93ToPtXmmWXCEd1OPt2LemzNErM+21/iWc2u8BwL0kn4vBGy
+         4K2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684228244; x=1686820244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E3WrC4UijnYG96Kov01kzkQuuInDDpJVntlVXwo/6hA=;
+        b=R+wEWRzLRfYErTfM4JkjE+h1BwxUYhnk9aNfmJ38be5XxVwkVx8a+XmOsViHpFC54t
+         02wwUFXkLmKTVmqoR28agZ1tVynoPSpW+W4dS1E7K7BXD5W/QUh5g/8xH3jELZLMmTYC
+         ljgScDWWloHvLKaiCeHyuGB+YVuN8zBp2L/ozLo4VA4iEzEEGORvZ8ZFPdCV74e/HwdC
+         Prv/g5VkJf84muXKx63YlWCbO2VQqMSPQyICrfQleE1qgyd+0CtJNR8tIAM0IpKAoz4K
+         XFPOPkKMSi0HpEIHjY9oOXeOP63WvEGNgAX2LvWZ/zDjJJUGYgIN19HvfmoLQ8osgc7p
+         HBLg==
+X-Gm-Message-State: AC+VfDymAYb05n7Vio5BRTZ5Ap8pwVIT0yM/ENcGX0WK3skwCp7N1ddv
+        DCddh2tvGW5TVbklRVNKNajlyHhkeaQ=
+X-Google-Smtp-Source: ACHHUZ7kjXJzpiS4OttX1ykp7R4nHgdaGWWYljgv/ZxeWcC6TV3lT1cWq7MSPB1cxzUxU6uEXeqySw==
+X-Received: by 2002:adf:f946:0:b0:306:32fa:6750 with SMTP id q6-20020adff946000000b0030632fa6750mr23213600wrr.33.1684228243591;
+        Tue, 16 May 2023 02:10:43 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id i18-20020a5d5592000000b00307acec258esm1927828wrv.3.2023.05.16.02.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 02:10:43 -0700 (PDT)
+Date:   Tue, 16 May 2023 10:10:41 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 000/191] 4.19.283-rc1 review
+Message-ID: <ZGNIkVKpO2/uddsq@debian>
+References: <20230515161707.203549282@linuxfoundation.org>
 MIME-Version: 1.0
-Message-ID: <168422820317.404.12739124536640523554.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515161707.203549282@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the smp/core branch of tip:
+Hi Greg,
 
-Commit-ID:     134a12827bc59484c4d4a3ceabf178c831febbb8
-Gitweb:        https://git.kernel.org/tip/134a12827bc59484c4d4a3ceabf178c831febbb8
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 12 May 2023 23:07:01 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 15 May 2023 13:44:48 +02:00
+On Mon, May 15, 2023 at 06:23:57PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.283 release.
+> There are 191 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-x86/smpboot: Avoid pointless delay calibration if TSC is synchronized
+Build test (gcc version 11.3.1 20230511):
+mips: 63 configs -> no  failure
+arm: 115 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-When TSC is synchronized across sockets then there is no reason to
-calibrate the delay for the first CPU which comes up on a socket.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-Just reuse the existing calibration value.
+[1]. https://openqa.qa.codethink.co.uk/tests/3527
 
-This removes 100ms pointlessly wasted time from CPU hotplug per socket.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Tested-by: Helge Deller <deller@gmx.de> # parisc
-Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
-Link: https://lore.kernel.org/r/20230512205255.608773568@linutronix.de
----
- arch/x86/kernel/smpboot.c | 40 +++++++++++++++++++++++---------------
- arch/x86/kernel/tsc.c     | 20 +++++++++++++++----
- 2 files changed, 41 insertions(+), 19 deletions(-)
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 8eb7721..0ad902a 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -178,28 +178,17 @@ static void smp_callin(void)
- 	 */
- 	apic_ap_setup();
- 
--	/*
--	 * Save our processor parameters. Note: this information
--	 * is needed for clock calibration.
--	 */
-+	/* Save our processor parameters. */
- 	smp_store_cpu_info(cpuid);
- 
- 	/*
- 	 * The topology information must be up to date before
--	 * calibrate_delay() and notify_cpu_starting().
-+	 * notify_cpu_starting().
- 	 */
- 	set_cpu_sibling_map(raw_smp_processor_id());
- 
- 	ap_init_aperfmperf();
- 
--	/*
--	 * Get our bogomips.
--	 * Update loops_per_jiffy in cpu_data. Previous call to
--	 * smp_store_cpu_info() stored a value that is close but not as
--	 * accurate as the value just calculated.
--	 */
--	calibrate_delay();
--	cpu_data(cpuid).loops_per_jiffy = loops_per_jiffy;
- 	pr_debug("Stack at about %p\n", &cpuid);
- 
- 	wmb();
-@@ -212,8 +201,24 @@ static void smp_callin(void)
- 	cpumask_set_cpu(cpuid, cpu_callin_mask);
- }
- 
-+static void ap_calibrate_delay(void)
-+{
-+	/*
-+	 * Calibrate the delay loop and update loops_per_jiffy in cpu_data.
-+	 * smp_store_cpu_info() stored a value that is close but not as
-+	 * accurate as the value just calculated.
-+	 *
-+	 * As this is invoked after the TSC synchronization check,
-+	 * calibrate_delay_is_known() will skip the calibration routine
-+	 * when TSC is synchronized across sockets.
-+	 */
-+	calibrate_delay();
-+	cpu_data(smp_processor_id()).loops_per_jiffy = loops_per_jiffy;
-+}
-+
- static int cpu0_logical_apicid;
- static int enable_start_cpu0;
-+
- /*
-  * Activate a secondary processor.
-  */
-@@ -240,10 +245,15 @@ static void notrace start_secondary(void *unused)
- 
- 	/* otherwise gcc will move up smp_processor_id before the cpu_init */
- 	barrier();
-+	/* Check TSC synchronization with the control CPU: */
-+	check_tsc_sync_target();
-+
- 	/*
--	 * Check TSC synchronization with the boot CPU:
-+	 * Calibrate the delay loop after the TSC synchronization check.
-+	 * This allows to skip the calibration when TSC is synchronized
-+	 * across sockets.
- 	 */
--	check_tsc_sync_target();
-+	ap_calibrate_delay();
- 
- 	speculative_store_bypass_ht_init();
- 
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index 3446988..1412b77 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -1598,10 +1598,7 @@ void __init tsc_init(void)
- 
- #ifdef CONFIG_SMP
- /*
-- * If we have a constant TSC and are using the TSC for the delay loop,
-- * we can skip clock calibration if another cpu in the same socket has already
-- * been calibrated. This assumes that CONSTANT_TSC applies to all
-- * cpus in the socket - this should be a safe assumption.
-+ * Check whether existing calibration data can be reused.
-  */
- unsigned long calibrate_delay_is_known(void)
- {
-@@ -1609,6 +1606,21 @@ unsigned long calibrate_delay_is_known(void)
- 	int constant_tsc = cpu_has(&cpu_data(cpu), X86_FEATURE_CONSTANT_TSC);
- 	const struct cpumask *mask = topology_core_cpumask(cpu);
- 
-+	/*
-+	 * If TSC has constant frequency and TSC is synchronized across
-+	 * sockets then reuse CPU0 calibration.
-+	 */
-+	if (constant_tsc && !tsc_unstable)
-+		return cpu_data(0).loops_per_jiffy;
-+
-+	/*
-+	 * If TSC has constant frequency and TSC is not synchronized across
-+	 * sockets and this is not the first CPU in the socket, then reuse
-+	 * the calibration value of an already online CPU on that socket.
-+	 *
-+	 * This assumes that CONSTANT_TSC is consistent for all CPUs in a
-+	 * socket.
-+	 */
- 	if (!constant_tsc || !mask)
- 		return 0;
- 
+-- 
+Regards
+Sudip
