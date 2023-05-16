@@ -2,331 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89D37053A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF067053A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjEPQX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S229631AbjEPQZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEPQXz (ORCPT
+        with ESMTP id S229915AbjEPQZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:23:55 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5EE272C;
-        Tue, 16 May 2023 09:23:27 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34GGMGcj048632;
-        Tue, 16 May 2023 11:22:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684254136;
-        bh=9EpdkQR1iPC6BV6HcxuYcoerE86oUOuNwBRTxXYy6CQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=l1PKH0O0CCexlaJHJvmWqtBFBUtPDK7/YXUe8mFkl9s81W+/VxHSgee8uUvLGmuZx
-         WGUGRTAwGq2yl9uyXHcnFBLkDDDY0k9YPYNo3telRcrqKUsN22KhSwWC5GgeiVWK+d
-         MV3d/icheMfqup3uXGC4vcD3l0V3H/MRjHMZpPZs=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34GGMGlG008896
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 May 2023 11:22:16 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
- May 2023 11:22:14 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 16 May 2023 11:22:14 -0500
-Received: from [10.249.131.60] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34GGMAS0012799;
-        Tue, 16 May 2023 11:22:11 -0500
-Message-ID: <1de1328a-cfc9-d77c-eb11-3c341b46623b@ti.com>
-Date:   Tue, 16 May 2023 21:52:09 +0530
+        Tue, 16 May 2023 12:25:09 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5365B9EEA
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:24:46 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-510b6a249a8so154194a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684254235; x=1686846235;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YUikb9CiBvwIkQSA68+r5AMXjqRggL7xlVoG0Lr7Dlw=;
+        b=zdHgs1uhk9j9Fvzet/xg1PnShN9nZLOXcBd5FBheGTgp9TlWjxTJU14JCV0NbL5iWB
+         kz9xu5cj2TSFOM9HEqmCTtf9wh3TMGXd5cYS0xScf3yu/WHN91uj+EjBGqKfiodtFVP/
+         w4BnYXhQ7RPXHJd3c6jPXd5is4H0oycDa09CiHjpkFj8sizx0idRlBgAc5eSIzR6ER7X
+         4fr8siO4cffBArmjQxPR2AANjU2RoQGfZXCVdRJH96uF6nmnMaXpM1kCy97Rdp5KPbbB
+         ilF9vVtaz07RRBeiWd4mh1Hdh3hVczEWyXuLhSMblBtPWJE/s75/UDTK4hdIJTcSRa8d
+         zGaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684254235; x=1686846235;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YUikb9CiBvwIkQSA68+r5AMXjqRggL7xlVoG0Lr7Dlw=;
+        b=l46D6j24uZUYFN7YI9Jb4NHrNN0NSkAwv9KwHsJNTjjzD4/VoJwd6Rg++EHNdNwdtS
+         Op5CqrGN1GbuxiyXwoBYUk4pGN1PjYpovG4C/Gfc0tlVyVpxloTmGiTeYRyU9JkX3k5L
+         H/i9NiP3lFoBn+XZNi5z5qTfcTpOreMa/alXl8zc5z5pRXt5bRehZK4smQRbjPZD/gqw
+         pG7bek86YMyeMChdOakxpuPLAHGMmCO8npvwV5+Ou0Lv1+yPvunIij17vh8owNQ9b5DO
+         duv7kxBeoOqznPDVf7ZmyOx4sioQpU4aIDek2+9ouGX8pdkHrxi6J8/cPdX788QJ8vlQ
+         +hjg==
+X-Gm-Message-State: AC+VfDxkbGmAnU3BN8InpPqp8M9bn+C+CUdsqDJuNX70LdkMdCPeT0YK
+        dkEi4LM4we7Y09iJUiY5zBsSAQ==
+X-Google-Smtp-Source: ACHHUZ4ciV6/qSxcU8jgXk2c5v9kXV6rVKisuEt1ztrBycY+7PN5s1cdFG7yNt69mDvGaQR9JvYSkw==
+X-Received: by 2002:a17:907:9617:b0:94a:6de2:ba9 with SMTP id gb23-20020a170907961700b0094a6de20ba9mr40789193ejc.68.1684254235712;
+        Tue, 16 May 2023 09:23:55 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id m26-20020a17090677da00b0096ae4451c65sm5101707ejn.157.2023.05.16.09.23.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 09:23:55 -0700 (PDT)
+Message-ID: <138ba3a3-0f89-e612-4e29-0e4d2838489b@linaro.org>
+Date:   Tue, 16 May 2023 18:23:54 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/5] arm64: dts: ti: k3-j721e: Remove PCIe endpoint nodes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document AL02-C6 board based
+ on IPQ9574 family
 Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Nelson <robertcnelson@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Achal Verma <a-verma1@ti.com>
-References: <20230515172137.474626-1-afd@ti.com>
- <20230515172137.474626-2-afd@ti.com>
-From:   "Verma, Achal" <a-verma1@ti.com>
-In-Reply-To: <20230515172137.474626-2-afd@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com
+References: <20230516135013.3547-1-quic_devipriy@quicinc.com>
+ <20230516135013.3547-2-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230516135013.3547-2-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/15/2023 10:51 PM, Andrew Davis wrote:
-> These nodes are example nodes for the PCIe controller in "endpoint" mode.
-> By default the controller is in "root complex" mode and there is already a
-> DT node for the same.
+On 16/05/2023 15:50, Devi Priya wrote:
+> Document AL02-C6 (Reference Design Platform 449) board based on IPQ9574
+> family of SoCs.
 > 
-> Examples should go in the bindings or other documentation.
-> 
-> Remove this node.
-How we will support EP from now onwards, using overlays ?
-
-Regards,
-Achal Verma
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 > ---
->   .../boot/dts/ti/k3-j721e-beagleboneai64.dts   | 24 ------
->   .../dts/ti/k3-j721e-common-proc-board.dts     | 25 ------
->   arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 82 -------------------
->   arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 24 ------
->   4 files changed, 155 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
-> index 8a62ac263b89..d77eeff0d81d 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dts
-> @@ -892,35 +892,11 @@ &pcie2_rc {
->   	status = "disabled";
->   };
->   
-> -&pcie0_ep {
-> -	status = "disabled";
-> -	phys = <&serdes0_pcie_link>;
-> -	phy-names = "pcie-phy";
-> -	num-lanes = <1>;
-> -};
-> -
-> -&pcie1_ep {
-> -	status = "disabled";
-> -	phys = <&serdes1_pcie_link>;
-> -	phy-names = "pcie-phy";
-> -	num-lanes = <2>;
-> -};
-> -
-> -&pcie2_ep {
-> -	/* Unused */
-> -	status = "disabled";
-> -};
-> -
->   &pcie3_rc {
->   	/* Unused */
->   	status = "disabled";
->   };
->   
-> -&pcie3_ep {
-> -	/* Unused */
-> -	status = "disabled";
-> -};
-> -
->   &icssg0_mdio {
->   	/* Unused */
->   	status = "disabled";
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> index 7db0603125aa..87b7263f6547 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
-> @@ -840,35 +840,10 @@ &pcie2_rc {
->   	num-lanes = <2>;
->   };
->   
-> -&pcie0_ep {
-> -	phys = <&serdes0_pcie_link>;
-> -	phy-names = "pcie-phy";
-> -	num-lanes = <1>;
-> -	status = "disabled";
-> -};
-> -
-> -&pcie1_ep {
-> -	phys = <&serdes1_pcie_link>;
-> -	phy-names = "pcie-phy";
-> -	num-lanes = <2>;
-> -	status = "disabled";
-> -};
-> -
-> -&pcie2_ep {
-> -	phys = <&serdes2_pcie_link>;
-> -	phy-names = "pcie-phy";
-> -	num-lanes = <2>;
-> -	status = "disabled";
-> -};
-> -
->   &pcie3_rc {
->   	status = "disabled";
->   };
->   
-> -&pcie3_ep {
-> -	status = "disabled";
-> -};
-> -
->   &icssg0_mdio {
->   	status = "disabled";
->   };
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> index 10c8a5fb4ee2..e39f6d1e8d40 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> @@ -816,26 +816,6 @@ pcie0_rc: pcie@2900000 {
->   		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
->   	};
->   
-> -	pcie0_ep: pcie-ep@2900000 {
-> -		compatible = "ti,j721e-pcie-ep";
-> -		reg = <0x00 0x02900000 0x00 0x1000>,
-> -		      <0x00 0x02907000 0x00 0x400>,
-> -		      <0x00 0x0d000000 0x00 0x00800000>,
-> -		      <0x00 0x10000000 0x00 0x08000000>;
-> -		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-> -		interrupt-names = "link_state";
-> -		interrupts = <GIC_SPI 318 IRQ_TYPE_EDGE_RISING>;
-> -		ti,syscon-pcie-ctrl = <&scm_conf 0x4070>;
-> -		max-link-speed = <3>;
-> -		num-lanes = <2>;
-> -		power-domains = <&k3_pds 239 TI_SCI_PD_EXCLUSIVE>;
-> -		clocks = <&k3_clks 239 1>;
-> -		clock-names = "fck";
-> -		max-functions = /bits/ 8 <6>;
-> -		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-> -		dma-coherent;
-> -	};
-> -
->   	pcie1_rc: pcie@2910000 {
->   		compatible = "ti,j721e-pcie-host";
->   		reg = <0x00 0x02910000 0x00 0x1000>,
-> @@ -864,26 +844,6 @@ pcie1_rc: pcie@2910000 {
->   		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
->   	};
->   
-> -	pcie1_ep: pcie-ep@2910000 {
-> -		compatible = "ti,j721e-pcie-ep";
-> -		reg = <0x00 0x02910000 0x00 0x1000>,
-> -		      <0x00 0x02917000 0x00 0x400>,
-> -		      <0x00 0x0d800000 0x00 0x00800000>,
-> -		      <0x00 0x18000000 0x00 0x08000000>;
-> -		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-> -		interrupt-names = "link_state";
-> -		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
-> -		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
-> -		max-link-speed = <3>;
-> -		num-lanes = <2>;
-> -		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
-> -		clocks = <&k3_clks 240 1>;
-> -		clock-names = "fck";
-> -		max-functions = /bits/ 8 <6>;
-> -		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-> -		dma-coherent;
-> -	};
-> -
->   	pcie2_rc: pcie@2920000 {
->   		compatible = "ti,j721e-pcie-host";
->   		reg = <0x00 0x02920000 0x00 0x1000>,
-> @@ -912,26 +872,6 @@ pcie2_rc: pcie@2920000 {
->   		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
->   	};
->   
-> -	pcie2_ep: pcie-ep@2920000 {
-> -		compatible = "ti,j721e-pcie-ep";
-> -		reg = <0x00 0x02920000 0x00 0x1000>,
-> -		      <0x00 0x02927000 0x00 0x400>,
-> -		      <0x00 0x0e000000 0x00 0x00800000>,
-> -		      <0x44 0x00000000 0x00 0x08000000>;
-> -		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-> -		interrupt-names = "link_state";
-> -		interrupts = <GIC_SPI 342 IRQ_TYPE_EDGE_RISING>;
-> -		ti,syscon-pcie-ctrl = <&scm_conf 0x4078>;
-> -		max-link-speed = <3>;
-> -		num-lanes = <2>;
-> -		power-domains = <&k3_pds 241 TI_SCI_PD_EXCLUSIVE>;
-> -		clocks = <&k3_clks 241 1>;
-> -		clock-names = "fck";
-> -		max-functions = /bits/ 8 <6>;
-> -		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-> -		dma-coherent;
-> -	};
-> -
->   	pcie3_rc: pcie@2930000 {
->   		compatible = "ti,j721e-pcie-host";
->   		reg = <0x00 0x02930000 0x00 0x1000>,
-> @@ -960,28 +900,6 @@ pcie3_rc: pcie@2930000 {
->   		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
->   	};
->   
-> -	pcie3_ep: pcie-ep@2930000 {
-> -		compatible = "ti,j721e-pcie-ep";
-> -		reg = <0x00 0x02930000 0x00 0x1000>,
-> -		      <0x00 0x02937000 0x00 0x400>,
-> -		      <0x00 0x0e800000 0x00 0x00800000>,
-> -		      <0x44 0x10000000 0x00 0x08000000>;
-> -		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-> -		interrupt-names = "link_state";
-> -		interrupts = <GIC_SPI 354 IRQ_TYPE_EDGE_RISING>;
-> -		ti,syscon-pcie-ctrl = <&scm_conf 0x407c>;
-> -		max-link-speed = <3>;
-> -		num-lanes = <2>;
-> -		power-domains = <&k3_pds 242 TI_SCI_PD_EXCLUSIVE>;
-> -		clocks = <&k3_clks 242 1>;
-> -		clock-names = "fck";
-> -		max-functions = /bits/ 8 <6>;
-> -		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-> -		dma-coherent;
-> -		#address-cells = <2>;
-> -		#size-cells = <2>;
-> -	};
-> -
->   	serdes_wiz4: wiz@5050000 {
->   		compatible = "ti,am64-wiz-10g";
->   		#address-cells = <1>;
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> index f650a7fd66b4..07d3282a583b 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> @@ -896,35 +896,11 @@ &pcie2_rc {
->   	status = "disabled";
->   };
->   
-> -&pcie0_ep {
-> -	status = "disabled";
-> -	phys = <&serdes0_pcie_link>;
-> -	phy-names = "pcie-phy";
-> -	num-lanes = <1>;
-> -};
-> -
-> -&pcie1_ep {
-> -	status = "disabled";
-> -	phys = <&serdes1_pcie_link>;
-> -	phy-names = "pcie-phy";
-> -	num-lanes = <2>;
-> -};
-> -
-> -&pcie2_ep {
-> -	/* Unused */
-> -	status = "disabled";
-> -};
-> -
->   &pcie3_rc {
->   	/* Unused */
->   	status = "disabled";
->   };
->   
-> -&pcie3_ep {
-> -	/* Unused */
-> -	status = "disabled";
-> -};
-> -
->   &icssg0_mdio {
->   	status = "disabled";
->   };
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
