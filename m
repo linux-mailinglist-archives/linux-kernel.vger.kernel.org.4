@@ -2,163 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1350570562E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EACE705634
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjEPSmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S229889AbjEPSnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjEPSma (ORCPT
+        with ESMTP id S229749AbjEPSnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:42:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290997EDA;
-        Tue, 16 May 2023 11:42:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D91D63DCB;
-        Tue, 16 May 2023 18:42:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECBFBC433EF;
-        Tue, 16 May 2023 18:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684262548;
-        bh=ocRl6YcheJFZTePbv3N2oTCU0SpLREIkqBXPg6L/Erk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ndK1xJgusTHFqtzPdamixfsF3HltCMxcsDOnor2USLnWLZV3D+fwtkO4CQ9vgnDv8
-         LXAhsYPUn5wteOmfgYtfyqnkb4gMIaII2iRjCxiznk0KmB/fuxUsHzMd1bx4nm+hPO
-         W5beKMcrtJgRyAMV9q+ASmnheDDIEfTFhLRifrJ/aPxObpmW8eb2Sp6NoPUvfoqlj1
-         XT3g8M/q1xj+zREaBfeE3h3P7p5DJaFH1YtPGqkXPy9SwtsQzZ6v0hn0ingi9xFkSv
-         bddARkKOq8VMcio0ikfWDp+v5tKs0Igdy+vKOhHlHoZxP5vmx2GFKnb5BUKrQcFhYV
-         8FG4Km4d+HC/A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7AEEACE105A; Tue, 16 May 2023 11:42:27 -0700 (PDT)
-Date:   Tue, 16 May 2023 11:42:27 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Akira Yokosawa <akiyks@gmail.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-doc@vger.kernel.org, kernel-team@meta.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
- generating duplicate fallback kernel-doc
-Message-ID: <9035e2e1-7091-4b8a-94d9-7508c9b5cd7e@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZF0haDfyL3At3Ijw@FVFF77S0Q05N.cambridge.arm.com>
- <2a8b310c-3145-462b-a4c4-a130939da862@paulmck-laptop>
- <ZF48uBYKczItubrU@FVFF77S0Q05N>
- <b5498819-c2d4-414d-ba01-5373e749dc52@paulmck-laptop>
- <ZF5xXuPsrZEgAEEE@FVFF77S0Q05N>
- <e767dcc6-ea63-4ed8-9a15-9e5bb133fafc@paulmck-laptop>
- <b3956719-d478-4dc6-95fd-ec0744acc662@paulmck-laptop>
- <23195f15-7024-6fde-84f2-4cdd45c9abfc@gmail.com>
- <551c7820-1748-433b-8c42-daf777e202df@paulmck-laptop>
- <ZGO0s1FDGn/pzCPg@FVFF77S0Q05N>
+        Tue, 16 May 2023 14:43:09 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DE88699;
+        Tue, 16 May 2023 11:43:01 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-965f7bdab6bso2591916466b.3;
+        Tue, 16 May 2023 11:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684262579; x=1686854579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZVglkrRn4KtUXyMZNafVQZU+oIXi6ViD3yp4abRe5us=;
+        b=IA/OenOHU9PgFrxQAXYsdghkYdGIy43feL3FTATpObUDFEYrj6xlyIBNW00RSu6ldZ
+         +D5KHsBd4VD1hVbTKtkn8IwHQVpbpKQ/9KyavuDYuG+fQQ2jELHR8LaPPLTMtug717ta
+         T/yQP6GUgym3x7/Y5OAbHwew6bo/Q7suLGQ1aCAu01aRI0+duy8aGAAl5g6vCt8mY6NS
+         WSkf392GY+b+2IVFOGKjXQjtH++pbzaksICihue4V911EBtbbHIUxb4lYLROXpOMPMtx
+         ngdZ//qR17N1Id7PxPd9TfdJ45elklIEc3OJkVl8/fge/fJDO3LcYh/xpuuchVEe7yTh
+         Aj7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684262579; x=1686854579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZVglkrRn4KtUXyMZNafVQZU+oIXi6ViD3yp4abRe5us=;
+        b=F1MhrkrpJE4iYgA+xBwf0jYzMp4kv13xAfjOyhCORE7P5yp7f4HZmXisAMqwAv3QN9
+         5WWeYMUwoIPZNPkQN/j6XudfJfZixb08FqaF/dywp9X89ADIPBnygnQ5FdNM6jCFxfun
+         89uZ0NzM6kWUtMM7c+Zld0VtvsW+kwzQ6+pMPedAUXG7V/aOqgxWOiSBHm4EBFkOCELf
+         hHgGIlU/cRyWWAFPrV/dCBGCe/kfNn6PQdpSxgyLX9r0AZOqWBAEd/J5uCRBwsxqfcRy
+         X/jY7sv0Gu6dIc+8zS4Yr19UllOwGIdzWYhyZIbOyOUcxIt5rm9GViyu90+1Myuu8bBA
+         xApA==
+X-Gm-Message-State: AC+VfDyRk1bKAy5+hJl4a+PSvi/uYi9qt9JKseWD0iLtgPNKxIFKPrct
+        JKw1AR8jYsedtWsbbE8h0QY9QJnAyBCR/09A50k=
+X-Google-Smtp-Source: ACHHUZ7DQoLVJ0vKmRsE9LB84jy1OteAEcWOk3C+hTAT+8orW2PcZyhZmqQFbx1mnEZjp37ySMq8vFPj3Fxp71KOilg=
+X-Received: by 2002:a17:907:701:b0:96a:26d2:53db with SMTP id
+ xb1-20020a170907070100b0096a26d253dbmr19418703ejb.15.1684262579111; Tue, 16
+ May 2023 11:42:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGO0s1FDGn/pzCPg@FVFF77S0Q05N>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230511142535.732324-1-cgzones@googlemail.com> <20230511142535.732324-8-cgzones@googlemail.com>
+In-Reply-To: <20230511142535.732324-8-cgzones@googlemail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 16 May 2023 11:42:47 -0700
+Message-ID: <CAEf4BzbykOarEf9DWJLks-=bYdOAUvkLKrYvVt1GvJUs=08ojw@mail.gmail.com>
+Subject: Re: [PATCH v4 8/9] bpf: use new capable_any functionality
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     selinux@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 05:52:03PM +0100, Mark Rutland wrote:
-> Hi Paul,
-> 
-> On Sat, May 13, 2023 at 06:14:36PM -0700, Paul E. McKenney wrote:
-> > On Sun, May 14, 2023 at 08:58:00AM +0900, Akira Yokosawa wrote:
-> > > Running "./scripts/kernel-doc -none include/linux/atomic/atomic-arch-fallback.h"
-> > > on the tag emits a lot of warnings.
-> > > 
-> > > Looks like there are kernel-doc comments who don't have a corresponding
-> > > function signature next to them.
-> > > 
-> > >     /**
-> > >      * function_name() - Brief description of function.
-> > >      * @arg1: Describe the first argument.
-> > >      * @arg2: Describe the second argument.
-> > >      *        One can provide multiple line descriptions
-> > >      *        for arguments.
-> > >      *
-> > >      * A longer description, with more discussion of the function function_name()
-> > >      * that might be useful to those using or modifying it. Begins with an
-> > >      * empty comment line, and may include additional embedded empty
-> > >      * comment lines.
-> > >      */
-> > >     int function_name(int arg1, int arg2)  <---
-> > > 
-> > > Note that the kernel-doc script ignores #ifdef -- #else.
-> > 
-> > Me, I was thinking in terms of making this diagnostic ignore
-> > include/linux/atomic/atomic-arch-fallback.h.  ;-)
-> > 
-> > The actual definitions are off in architecture-specific files, and
-> > the kernel-doc headers could be left there.  But there are benefits to
-> > automatically generating all of them.
-> > 
-> > Another approach might be to put a "it is OK for the definition to
-> > be elsewhere" comment following those kernel-doc headers.
-> > 
-> > Any other ways to make this work?
-> 
-> I've spent the last day or so playing with this, and I think we can do this by
-> relegating the arch_atomic*() functions to an implementation detail (and not
-> documenting those with kerneldoc), and having a raw_atomic*() layer where we
-> flesh out the API, where each can have a mandatory function definition as
-> below:
-> 
-> /**
->  * raw_atomic_fetch_inc_release() - does a thing atomically
->  *
->  * TODO: fill this in
->  *
->  * This is a version of atomic_fetch_inc_release() which is safe to use in
->  * noinstr code. Unless instrumentation needs to be avoided,
->  * atomic_fetch_inc_release() should be used in preference.
->  */
-> static __always_inline int
-> raw_atomic_fetch_inc_release(atomic_t *v)
-> {
-> #if defined(arch_atomic_fetch_inc_release)
->         return arch_atomic_fetch_inc_release(v)
-> #elif defined(arch_atomic_fetch_inc_relaxed)
->         __atomic_release_fence();
->         return arch_atomic_fetch_inc_relaxed(v);
-> #elif defined(arch_atomic_fetch_inc)
->         return arch_atomic_fetch_inc(v)
-> #else   
->         return raw_atomic_fetch_add_release(1, v);
-> #endif
-> }
-> 
-> ... and likewise we can add comments for the regular instrumented atomics.
+On Thu, May 11, 2023 at 7:26=E2=80=AFAM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> Use the new added capable_any function in appropriate cases, where a
+> task is required to have any of two capabilities.
+>
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+> v3:
+>    rename to capable_any()
+> ---
+>  kernel/bpf/syscall.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-I do like that approach!  It should be easy to adapt the kernel-doc
-scripting to this.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-> I've pushed out the WIP patches to my atomics/fallback-rework branch; if you're
-> happy to give me another day or two I can get a bit further.
 
-An RCU issue currently has me by the ankle, so I am quite happy to give
-you a day or two.  ;-)
-
-Just FYI, I will be in the air this coming Friday, your time.
-
-> > For me, the option of making this
-> > diagnostic ignore include/linux/atomic/atomic-arch-fallback.h has
-> > considerable attraction.
-> 
-> It's certainly appealing...
-
-But I do like your approach of simply always having the function prototype
-available.  ;-)
-
-							Thanx, Paul
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 14f39c1e573e..1bd50da05a22 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -2539,7 +2539,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfp=
+tr_t uattr, u32 uattr_size)
+>             !bpf_capable())
+>                 return -EPERM;
+>
+> -       if (is_net_admin_prog_type(type) && !capable(CAP_NET_ADMIN) && !c=
+apable(CAP_SYS_ADMIN))
+> +       if (is_net_admin_prog_type(type) && !capable_any(CAP_NET_ADMIN, C=
+AP_SYS_ADMIN))
+>                 return -EPERM;
+>         if (is_perfmon_prog_type(type) && !perfmon_capable())
+>                 return -EPERM;
+> --
+> 2.40.1
+>
