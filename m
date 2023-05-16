@@ -2,149 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D4A705893
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141B5705897
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjEPURw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S229803AbjEPUSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjEPURs (ORCPT
+        with ESMTP id S229502AbjEPUSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:17:48 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 81D486590
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:17:46 -0700 (PDT)
-Received: (qmail 846405 invoked by uid 1000); 16 May 2023 16:17:45 -0400
-Date:   Tue, 16 May 2023 16:17:45 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
+        Tue, 16 May 2023 16:18:42 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4697E1AE
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:18:41 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ab01bf474aso703235ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684268321; x=1686860321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UB7KvHTOxdYfuutEcEFffzDOEyewDG4/NgY1Y/mO/ec=;
+        b=XrLcPWx5b85VDO/HHZMuFNnlnUMFjEXRW0HwKQZICuO3bA5WerPDkglr/BQN5QvtNL
+         kml5bpuuCw1FkYr36nh1HvrAbs32v8ps1Nxeii7M3fMLWvoQwNxlKwOOYj0Z7WUiejjJ
+         UKWVsHICNCX5carltaQmlG+V4G9z+EZdMm+YA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684268321; x=1686860321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UB7KvHTOxdYfuutEcEFffzDOEyewDG4/NgY1Y/mO/ec=;
+        b=b9uvN6ld/Ll98agOspZTfL8biY0Tpc+rwS8cqrk4Ba2z+du+RYboYJklVeYfDaTixl
+         7QisQEiX7t2clH3UkIjfdXD13cNfWClKrLAK6BaC7zBSbwksWvRV+Pn0Jv5n1X4lGkRU
+         PvctaKSyOGxN7D7LtbppA1Tj4RxK2ozuaJEobP1WsiiAKDWrGqMcJwUQMiPaieL9o2NQ
+         aTcMhpevPasHapfw0wkSGYrvmromN6XE4OIrNUOQhCtdqu7t4kPsXfwSGyoANOsxZ39y
+         LfG7w7thfJflPLGZQ62jshy6kvUiVqlDg9qqWyL5cIzzfFQI252KjGOm0bchtVJpk1LG
+         v58g==
+X-Gm-Message-State: AC+VfDwmtadWeUG5TGAB0nQyYiuym21LS/YYAMMryX140WBtwquvqpZK
+        Yrp4biYWgl7FDL3AwpwWGdINqA==
+X-Google-Smtp-Source: ACHHUZ7Hgj6TTvcI0iIqmt1f84LzDIuAzkvPnhjlnmX8NdGMsa7uAUyLiVJBpwoTf6Fj3DCOClH6og==
+X-Received: by 2002:a17:902:bd06:b0:1ad:fc06:d7c0 with SMTP id p6-20020a170902bd0600b001adfc06d7c0mr13376083pls.1.1684268320847;
+        Tue, 16 May 2023 13:18:40 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u11-20020a17090adb4b00b0024dee5cbe29sm96260pjx.27.2023.05.16.13.18.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 13:18:39 -0700 (PDT)
+Date:   Tue, 16 May 2023 13:18:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
-Message-ID: <2c03973e-0635-4dbb-a1df-bfda8cbee161@rowland.harvard.edu>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-36-schnelle@linux.ibm.com>
- <2023051643-overtime-unbridle-7cdd@gregkh>
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] media: venus: Replace one-element arrays with
+ flexible-array members
+Message-ID: <202305161318.4AF9203EB@keescook>
+References: <ZGPk3PpvYzjD1+0/@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023051643-overtime-unbridle-7cdd@gregkh>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <ZGPk3PpvYzjD1+0/@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 06:29:56PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. We thus need to guard sections of code calling them
-> > as alternative access methods with CONFIG_HAS_IOPORT checks. For
-> > uhci-hcd there are a lot of I/O port uses that do have MMIO alternatives
-> > all selected by uhci_has_pci_registers() so this can be handled by
-> > UHCI_IN/OUT macros and making uhci_has_pci_registers() constant 0 if
-> > CONFIG_HAS_IOPORT is unset.
-> > 
-> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > ---
-> > Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
-> >       per-subsystem patches may be applied independently
-> > 
-> >  drivers/usb/host/uhci-hcd.c |  2 +-
-> >  drivers/usb/host/uhci-hcd.h | 36 +++++++++++++++++++++++-------------
-> >  2 files changed, 24 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/drivers/usb/host/uhci-hcd.c b/drivers/usb/host/uhci-hcd.c
-> > index 7cdc2fa7c28f..fd2408b553cf 100644
-> > --- a/drivers/usb/host/uhci-hcd.c
-> > +++ b/drivers/usb/host/uhci-hcd.c
-> > @@ -841,7 +841,7 @@ static int uhci_count_ports(struct usb_hcd *hcd)
-> >  
-> >  static const char hcd_name[] = "uhci_hcd";
-> >  
-> > -#ifdef CONFIG_USB_PCI
-> > +#if defined(CONFIG_USB_PCI) && defined(CONFIG_HAS_IOPORT)
-> >  #include "uhci-pci.c"
-> >  #define	PCI_DRIVER		uhci_pci_driver
-> >  #endif
-> > diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-> > index 0688c3e5bfe2..c77705d03ed0 100644
-> > --- a/drivers/usb/host/uhci-hcd.h
-> > +++ b/drivers/usb/host/uhci-hcd.h
-> > @@ -505,41 +505,49 @@ static inline bool uhci_is_aspeed(const struct uhci_hcd *uhci)
-> >   * we use memory mapped registers.
-> >   */
-> >  
-> > +#ifdef CONFIG_HAS_IOPORT
-> > +#define UHCI_IN(x)	x
-> > +#define UHCI_OUT(x)	x
-> > +#else
-> > +#define UHCI_IN(x)	0
-> > +#define UHCI_OUT(x)
-> > +#endif
-> > +
-> >  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
-> >  /* Support PCI only */
-> >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
-> >  {
-> > -	return inl(uhci->io_addr + reg);
-> > +	return UHCI_IN(inl(uhci->io_addr + reg));
-> >  }
-> >  
-> >  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
-> >  {
-> > -	outl(val, uhci->io_addr + reg);
-> > +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+On Tue, May 16, 2023 at 02:17:32PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in multiple structures, and refactor the rest of the code,
+> accordingly.
 > 
-> I'm confused now.
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
 > 
-> So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
+> This results in no differences in binary output.
 > 
-> But if it isn't, then these are just no-ops that do nothing?  So then
-> the driver will fail to work?  Why have these stubs at all?
-> 
-> Why not just not build the driver at all if this option is not enabled?
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/291
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-I should add something to my previous email.  This particular section of 
-code is protected by:
+Oh fun, a subtraction variant! :)
 
-#ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
-/* Support PCI only */
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-So it gets used only in cases where the driver supports just a PCI bus 
--- no other sorts of non-PCI on-chip devices.  But the preceding patch 
-in this series changes the Kconfig file to say:
-
- config USB_UHCI_HCD
-	tristate "UHCI HCD (most Intel and VIA) support"
-	depends on (USB_PCI && HAS_IOPORT) || USB_UHCI_SUPPORT_NON_PCI_HC
-
-As a result, when the configuration includes support only for PCI 
-controllers the driver won't get built unless HAS_IOPORT is set.  Thus 
-the no-op case (in this part of the code) can't arise.
-
-Which is a long-winded way of saying that you're right; the UHCI_IN() 
-and UHCI_OUT() wrappers aren't needed in this part of the driver.  I 
-guess Niklas put them in either for consistency with the rest of the 
-code or because it didn't occur to him that they could be omitted.  (And 
-I didn't spot it either.)
-
-Alan Stern
+-- 
+Kees Cook
