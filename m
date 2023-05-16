@@ -2,101 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038C07045D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB317045D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjEPHLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S230512AbjEPHMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjEPHLd (ORCPT
+        with ESMTP id S230262AbjEPHMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:11:33 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA44B2685
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:11:31 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50db7f0a1b4so12964631a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:11:31 -0700 (PDT)
+        Tue, 16 May 2023 03:12:14 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212D41AE;
+        Tue, 16 May 2023 00:12:13 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f13bfe257aso15778066e87.3;
+        Tue, 16 May 2023 00:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684221090; x=1686813090;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1684221131; x=1686813131;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/+Auv8E+HskKPatCeQ4Zy3AM+1pg6Bk2PDh6BtnaU6U=;
-        b=SCPVjEzshhV3FWaN8VjTqRZmBFVk7/SXDJi0/XS7eIhOOjr6GOTF+DQ3PoiKzeVJTC
-         pb/gqyVniiVXi/1JzEsZGRcicHJSiXir3zv2ufalTNcPjBKF2EUo5adMAtWQAfVS7j5k
-         S/+d587qRNuuCNXT93+n8NkUmOEHDI0+phuaX7NtsIeROVDxqD+ZRaqJyqSUJEVAFcfa
-         vTctnwLNEPeEDH6UjVooeQ98FyNyssf0UAIyhSyC+21On2P3wvDgV7hc3dQWwhrl1KX/
-         p1ow3eOT6H6u+ZFK9xTzFL7f5icVAvci4Byh5gjS2zLtrkbc+N8hzLOD3wnuIF20Dw1i
-         0+tw==
+        bh=GPjYHqvh0wAbW7+EmboW//QApPov+nEWDCvpi+IrMFE=;
+        b=lvBWM/nKFobeJG+7xSVWzJCNApstZM0n0FmuI9OAwm5iB3uF/deR6kLocGUk3v+Roa
+         g4Qsq6FgZ1ukQXoAbVUE98vR4OWxQbWdENeCPPiEUOTqbNUGrWJf72DRgh1Qcisn7GL+
+         19ja10CoEgneWavU+4eXIYkAln2KsqBq7uD8PJHN7exfiiFncb/TvTMqQ+D30CkwQkCf
+         Bn4dLQsdCKjrjIKaRBXcFwtUSvFBnlsa4w5MZkWxP6y+NbeIYm7W2t5MwitO5eVqGcV3
+         CQXKlCiQRWpt+7VK/hon+ocVc6ClOSG00MJe0gcCrsZVNMUC3Ng+d+0dZ8jpfQdkueNQ
+         Vyeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684221090; x=1686813090;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684221131; x=1686813131;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/+Auv8E+HskKPatCeQ4Zy3AM+1pg6Bk2PDh6BtnaU6U=;
-        b=EHSvGwxn/kAdHTmXl+xI8Ht/jC41KJP1DzsoMIRbQ+kUlqW+vYkDrZm791UaI3e2i2
-         a9FWzrA2Y8i0h+Z+JDuBO1lbEUgIiKhUBun5sKx+ugFdpei1rPOW63OO7TuLc2uNp09/
-         O1L1R1tLB0DbhE9Gtpsxvnnc26cQoYpefelZRPvHUz2RAjLu689vny0MqOzI3rlznuAO
-         lp2N3EsrG/fhn13080MTCllLiieZwyZlRq994mHhh/hOLrwqLLIQjyoUpUu3i0Y5OPla
-         8cHaRH/XHS7LUIelmoMeAZ9PuSWQuTEAySyT6plKQ8ckLctp2D55URJw3v4yl1Mqcp7e
-         GXPA==
-X-Gm-Message-State: AC+VfDy+KJYNgaEKimvM3vtJlJbGl3Ig+F2D3kI4CAsvs/mP5T8OJV4Y
-        j7OFLypkv0dNxW8JlGlD90oDEA==
-X-Google-Smtp-Source: ACHHUZ5iEkrsHZJprV/AzC4QvLvL4pCIUA/UCBmK4RG2h99c9sQDrSGl6W3y3HjmBqVGAGhoZsdN5A==
-X-Received: by 2002:aa7:c60c:0:b0:50b:d755:8acc with SMTP id h12-20020aa7c60c000000b0050bd7558accmr27268407edq.34.1684221090288;
-        Tue, 16 May 2023 00:11:30 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4d4a:9b97:62e:1439? ([2a02:810d:15c0:828:4d4a:9b97:62e:1439])
-        by smtp.gmail.com with ESMTPSA id c11-20020aa7c98b000000b0050bce352dc5sm7802047edt.85.2023.05.16.00.11.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 00:11:29 -0700 (PDT)
-Message-ID: <95f257ae-0b9d-a002-7074-a476fbc5bc98@linaro.org>
-Date:   Tue, 16 May 2023 09:11:28 +0200
+        bh=GPjYHqvh0wAbW7+EmboW//QApPov+nEWDCvpi+IrMFE=;
+        b=Ddz40gnLiDUZsgnAUZQWTZYcReRLzn/dXvtdiaVAQPecgK1Kb+q3jSrk+u940f+UqP
+         kofB8cgs/nanQX8/iVU/WEjZm+A2q30jidKt3lv+phdY/75cK+etg5m19+NL/cz2VwGi
+         sBqTHna8gVfR10t4Lh83dat9CimNjZ+Ye71b6PT8oUn8ltyRtipMlLmiTXmmMNYppqus
+         AdMJ40ZmsYKiuMILYPJIYXi3QLBthXPRHUGm8k0R0m9XrpuyGeQUNPXHBi7cMeWaXk/F
+         TzrKR1gJUtPrupomsSgLP2kcIhljGayDrsl6FRkHH6KofkS42HsIlVb0BJ/brTdQCaK6
+         TmAQ==
+X-Gm-Message-State: AC+VfDwX9sRS6GxH1Ru5LfrvSrkG5WRaQ34l6opl9M8L02hu4PqwXsW0
+        ungNqi11+jNMUccqfnVY8mM=
+X-Google-Smtp-Source: ACHHUZ7E2RcDHhJ+/RI1O+0KKgNoTKtjrh7XnzYgDLitGQcQE1DPRlD/HktRWxggPXxFAWORRbIdww==
+X-Received: by 2002:ac2:4156:0:b0:4eb:1294:983d with SMTP id c22-20020ac24156000000b004eb1294983dmr6992358lfi.7.1684221131041;
+        Tue, 16 May 2023 00:12:11 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id o4-20020ac24944000000b004eeda2caa3fsm2863433lfi.55.2023.05.16.00.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 00:12:10 -0700 (PDT)
+Date:   Tue, 16 May 2023 10:12:03 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v4 0/7] fix fwnode_irq_get[_byname()] returnvalue
+Message-ID: <cover.1684220962.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND,PATCH 3/3] arm64: dts: qcom: sm8250-xiaomi-elish: remove
- redundant empty line
-Content-Language: en-US
-To:     Jianhua Lu <lujianhua000@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230516062657.28616-1-lujianhua000@gmail.com>
- <20230516062657.28616-3-lujianhua000@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516062657.28616-3-lujianhua000@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="WelOJ0Zn8BeyKL7K"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 08:26, Jianhua Lu wrote:
-> Remove a redundant empty line introduced by
->   commit 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
 
-So you resent my patches just to add a comment? Not even as a dependency
-of something? Please, no.
+--WelOJ0Zn8BeyKL7K
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Fixes: 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
+The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
+zero if mapping the IRQ fails. This contradicts the
+fwnode_irq_get_byname() documentation. Furthermore, returning zero or
+errno on error is unepected and can easily lead to problems
+like:
 
-It's not a bug. Drop fixes tag.
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret < 0)
+		return ret;
+=2E..
+}
+
+or
+
+int probe(foo)
+{
+=2E..
+	ret =3D fwnode_irq_get_byname(...);
+	if (ret <=3D 0)
+		return ret;
+=2E..
+}
+
+which are both likely to be wrong. First treats zero as successful call and
+misses the IRQ mapping failure. Second returns zero from probe even though
+it detects the IRQ mapping failure correvtly.
+
+Here we change the fwnode_irq_get() and the fwnode_irq_get_byname() to
+always return a negative errno upon failure.
+
+I have audited following callers (v6.4-rc2):
+
+fwnode_irq_get_byname():
+drivers/i2c/i2c-smbus.c
+drivers/iio/accel/adxl355_core.c
+drivers/iio/accel/kionix-kx022a.c
+drivers/iio/adc/ad4130.c
+drivers/iio/adc/max11410.c
+drivers/iio/addac/ad74115.c
+drivers/iio/gyro/fxas21002c_core.c
+drivers/iio/imu/adis16480.c
+drivers/iio/imu/bmi160/bmi160_core.c
+drivers/iio/imu/bmi160/bmi160_core.c
+
+fwnode_irq_get():
+drivers/gpio/gpio-dwapb.c
+drivers/iio/chemical/scd30_serial.c
+drivers/iio/proximity/mb1232.c
+drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+drivers/net/mdio/fwnode_mdio.c
+drivers/pinctrl/pinctrl-ingenic.c
+drivers/pinctrl/pinctrl-microchip-sgpio.c
+drivers/pinctrl/pinctrl-pistachio.c
+
+and it seems to me these calls will be Ok after the change. The
+i2c-smbus.c and kionix-kx022a.c will gain a functional change (bugfix?) as
+after this patch the probe will return -EINVAL should the IRQ mapping fail.
+The series will also adjust the return value check for zero to be omitted.
+
+NOTES:
+
+Changes are compile-tested only.
+
+drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
+will also gain a functional change. The pinctrl-wpcm450.c change is easy
+to see - after this series the device-tree mapping failures will be
+handled as any other errors - probe will be aborted with -EINVAL. Other
+feasible option could be treating other errors in IRQ getting same way
+as the DT mapping failures - just silently skip the IRQ. Please see
+comment in the respective patch.
+
+drivers/iio/cdc/ad7150.c
+will gain functional change as well. Here the logic is less
+straightforward but boils down to the same question as with the
+pinctrl-wpcm450.c. Should all the IRQ getting errors jump to same
+'no-IRQ' branch as the DT mapping error, or should the DT mapping error
+abort the probe with error same way as other IRQ getting failures do?
+
+Revision history:
+v3 =3D> v4:
+ - Change also the fwnode_irq_get() as was suggested by Jonathan.
+Changelog v2 =3D> v3:
+ - rebase/resend/add kx022a fix.
+Changelog v1 =3D> v2:
+ - minor styling
+
+---
 
 
-Best regards,
-Krzysztof
+Matti Vaittinen (7):
+  drivers: fwnode: fix fwnode_irq_get[_byname]()
+  iio: mb1232: relax return value check for IRQ get
+  net-next: mb1232: relax return value check for IRQ get
+  pinctrl: wpcm450: elax return value check for IRQ get
+  pinctrl: ingenic: relax return value check for IRQ get
+  pinctrl: pistachio: relax return value check for IRQ get
+  iio: cdc: ad7150: Functional change
 
+ drivers/base/property.c                         | 12 +++++++++---
+ drivers/iio/cdc/ad7150.c                        |  3 +--
+ drivers/iio/proximity/mb1232.c                  |  4 ++--
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c |  4 ++--
+ drivers/pinctrl/nuvoton/pinctrl-wpcm450.c       |  2 --
+ drivers/pinctrl/pinctrl-ingenic.c               |  2 --
+ drivers/pinctrl/pinctrl-pistachio.c             |  6 ------
+ 7 files changed, 14 insertions(+), 19 deletions(-)
+
+
+base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+--=20
+2.40.1
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--WelOJ0Zn8BeyKL7K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRjLL8ACgkQeFA3/03a
+ocW+eAf/eAorxcixdqdH6BPQNoS+5HpacF913piG5+0o3MHumPFHIGlWj1+KvBbg
+ztw8jdSk2HV3DRNaXkbhxAoKFuuyvY2c5qdWWiHgfMFqBA/Bzhcu4sqAZMPXrRCC
+XqZbVwQsvipUvCJI9MV2yr49vcHtm1Cvqb6Lrltt8S8myw/XCWVL8d4/TTH97xEp
+E0Udc+Xa93MVanQ0VznV2tWaKN2FTuSfRWFs1jGcryqGHuJyk5EkttPFBp70x/Gb
+kxLc/BWy4Q2fque6JFRCgCpo0B9RwwLuOyHMqX3kd1XTWV7XlZeO7hD/V5x7gCOA
+CFaxXr0pUx/mCJ/QjYW6/gHnRMarQQ==
+=o9VC
+-----END PGP SIGNATURE-----
+
+--WelOJ0Zn8BeyKL7K--
