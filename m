@@ -2,195 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1447044F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35C37044FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbjEPGCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
+        id S230000AbjEPGLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjEPGCn (ORCPT
+        with ESMTP id S229619AbjEPGLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:02:43 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1B11717
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:02:41 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94a342f7c4cso2501861366b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684216960; x=1686808960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sfjhG+Ne7Y5TLnloHP6begQ4lwb2hq072sAiG6jl4gM=;
-        b=OQEsvb8JiGlepasDiNuylV4qnMPpUV8gqo2rMegkqs2o9I8OBWGGVrsnseIxbtrI8X
-         YF17D26RCQfBtupjcQ/eh0tP4e38mFDSAcIpI+q10t8DAhjoV1aiV75BBmFSEFIXIJt7
-         VtVofM4sLNh5bxUmSZbgJfANJl+qFagdEB5Ziq8Tv5rKNvDk9sDRICbGDdMgDwgphSdX
-         wVma5+QLSINTVrqzgiqtZtr0/UhZr1WIXDJecf1AytvmV2pz7NXfbNDjqBpcNNlgRcL2
-         ylXrJ+12OeWnxWN+u3s4PJrwmwktCA0NKyJ2ZSjJO3PICjQujVpCKpBKz19R4AYfWgZk
-         ICcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684216960; x=1686808960;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sfjhG+Ne7Y5TLnloHP6begQ4lwb2hq072sAiG6jl4gM=;
-        b=AhhUdrjjnLxLaTtU5//1KH0miR+97pcDmqaEOOMkwdWhKD2eXrtn04LoRyktJSBr6N
-         cn0PFXBdW/dsELLdtmegoP5gEhiQ+A5U4jpi2pcYSqDM74Z5aOLJ7iJjPY4O7F9dbL8O
-         G3wXBJaRbCBDoPtb//kswtT4QJqD7ZvjS5jZK+mNXTe86xYef/PQ/pNLHAKqVRStgnTt
-         pg0CWPLrdwB1ZvNvxtcFBPE0NuM2gVW1tdod+bFI35ZLQcYINfcfNO16iq0meY6Q67IR
-         rPpXue8+uzJF3gmKktWZ0IsheTzWXAaegCqyJ5QnsoZI1x292ByGt7tYxeky2aVy5rNt
-         ryUA==
-X-Gm-Message-State: AC+VfDyR+q4qavL1dvqi3XrGTMlB8GFSdI2f++vGIwIVyCRImEhIlDkB
-        byg/lzP8YUHeL99xRDFf56vbaTRcvMFpSjWe66dmKXzLmCaMsuDH
-X-Google-Smtp-Source: ACHHUZ5Q6xDdVHcpyb3P9WZksfe8mkak5mY3QWZFWD2eqsA2nsYV3lw4TEnUErqsWhEAIyAW6mL+ipdtjdYwAjka6QA=
-X-Received: by 2002:a17:906:ef0d:b0:94e:e9c1:1932 with SMTP id
- f13-20020a170906ef0d00b0094ee9c11932mr36406209ejs.43.1684216959675; Mon, 15
- May 2023 23:02:39 -0700 (PDT)
+        Tue, 16 May 2023 02:11:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CB92723
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:11:38 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G3PGRM004195;
+        Tue, 16 May 2023 06:11:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Svy4l+hzxpnZMWtHXBn/4YWN6BCTRpwMkrrJw/0D6dc=;
+ b=DzWE6jWaYYkEHal2H1iSz0z0TffpYwbpGnHVrW5TvxPfOAKCfgcFnBiEz3WazGvnC21n
+ QlpeyMTU16SjuDdKjlC8VwuLcQLhl+P5dzdQlXG4XN1wRLCRzcalppB1ib0lUAPHujXJ
+ dDa3WtCAjwLlbKHo03gtgXokPURZ3gWZ8cqvzMmllgvsOsmb7dejj5pX9arLh2GbgSWm
+ ljSihiX261szHZiUtHbTlhtVAT8+WEdSt3Ba3D1nPbunY868G864JZGS9OV8/PeJE43p
+ ICGGH5fxaBquUCgrbcjgRqs5Ncv/mPJTmaXqA6TV8q6bMXCUa6lRHaknnXCTh+oLbWtQ wg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkjsctf21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 06:11:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34G6BN3Y003611
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 06:11:23 GMT
+Received: from [10.214.66.119] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
+ 2023 23:11:20 -0700
+Message-ID: <0a754ebc-dad5-d300-0239-892b74786764@quicinc.com>
+Date:   Tue, 16 May 2023 11:41:17 +0530
 MIME-Version: 1.0
-References: <20230506073235.2770292-1-etienne.carriere@linaro.org>
-In-Reply-To: <20230506073235.2770292-1-etienne.carriere@linaro.org>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Tue, 16 May 2023 08:02:28 +0200
-Message-ID: <CAN5uoS-U1h_Fx1K4PtnK3vHmyfUUS6wqCcSfhoaV=idgEOC04Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: arm: optee: add interrupt controller properties
-To:     linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Pascal Paillet <p.paillet@foss.st.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V8 0/2] mm: shmem: support POSIX_FADV_[WILL|DONT]NEED for
+ shmem files
+Content-Language: en-US
+To:     <akpm@linux-foundation.org>, <hughd@google.com>,
+        <willy@infradead.org>, <markhemm@googlemail.com>,
+        <rientjes@google.com>, <surenb@google.com>, <shakeelb@google.com>,
+        <fvdl@google.com>, <quic_pkondeti@quicinc.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <cover.1682598808.git.quic_charante@quicinc.com>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <cover.1682598808.git.quic_charante@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9z1wTRIrGOf1WGGS2FCQQDQwjJum_CCB
+X-Proofpoint-ORIG-GUID: 9z1wTRIrGOf1WGGS2FCQQDQwjJum_CCB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_01,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1011 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 spamscore=0 impostorscore=0 suspectscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160052
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear all,
+Just a ping to have your valuable inputs here.
 
-On Sat, 6 May 2023 at 09:33, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Adds an optional interrupt controller property to optee firmware node
-> in the DT bindings. Optee driver may embeds an irqchip exposing
-> OP-TEE interrupt events notified by the TEE world. Optee registers up
-> to 1 interrupt controller and identifies each line with a line
-> number from 0 to UINT16_MAX.
->
-> The identifiers and meaning of the interrupt line number are specific
-> to the platform and shall be found in the OP-TEE platform documentation.
->
-> In the example shown in optee DT binding documentation, the platform SCMI
-> device controlled by Linux scmi driver uses optee interrupt irq 5 as
-> signal to trigger processing of an asynchronous incoming SCMI message
-> in the scope of a CPU DVFS control. A platform can have several SCMI
-> channels driven this way. Optee irqs also permit small embedded devices
-> to share e.g. a gpio expander, a group of wakeup sources, etc... between
-> OP-TEE world (for sensitive services) and Linux world (for non-sensitive
-> services). The physical controller is driven from the TEE which exposes
-> some controls to Linux kernel.
->
-> Cc: Jens Wiklander <jens.wiklander@linaro.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Sumit Garg <sumit.garg@linaro.org>
-> Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
-> Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
-
-Any feedback on this change proposal?
-
-Regards,
-Etienne
-
-> Changes since v4:
-> - Removed empty line between Cc: tags and S-o-b tags.
->
-> No changes since v3
->
-> Changes since v2:
-> - Added a sentence on optee irq line number values and meaning, in
->   DT binding doc and commit message.
-> - Updated example in DT binding doc from comment, fixed misplaced
->   interrupt-parent property and removed gic and sram shm nodes.
->
-> Changes since v1:
-> - Added a description to #interrupt-cells property.
-> - Changed of example. Linux wakeup event was subject to discussion and
->   i don't know much about input events in Linux. So move to SCMI.
->   In the example, an SCMI server in OP-TEE world raises optee irq 5
->   so that Linux scmi optee channel &scmi_cpu_dvfs pushed in the incoming
->   SCMI message in the scmi device for liekly later processing in threaded
->   context. The example includes all parties: optee, scmi, sram, gic.
-> - Obviously rephrased the commit message.
-> ---
->  .../arm/firmware/linaro,optee-tz.yaml         | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> index 5d033570b57b..9d9a797a6b2f 100644
-> --- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> +++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
-> @@ -41,6 +41,16 @@ properties:
->        HVC #0, register assignments
->        register assignments are specified in drivers/tee/optee/optee_smc.h
->
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 1
-> +    description: |
-> +      OP-TEE exposes irq for irp chip controllers from OP-TEE world. Each
-> +      irq is assigned a single line number identifier used as first argument.
-> +      Line number identifiers and their meaning shall be found in the OP-TEE
-> +      firmware platform documentation.
-> +
->  required:
->    - compatible
->    - method
-> @@ -65,3 +75,31 @@ examples:
->              method = "hvc";
->          };
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    firmware  {
-> +        optee: optee {
-> +            compatible = "linaro,optee-tz";
-> +            method = "smc";
-> +            interrupt-parent = <&gic>;
-> +            interrupts = <GIC_SPI 187 IRQ_TYPE_EDGE_RISING>;
-> +            interrupt-controller;
-> +            #interrupt-cells = <1>;
-> +        };
-> +
-> +        scmi {
-> +            compatible = "linaro,scmi-optee";
-> +            linaro,optee-channel-id = <0>;
-> +            shmem = <&scmi_shm_tx>, <&scmi_shm_rx>;
-> +            interrupts-extended = <&optee 5>;
-> +            interrupt-names = "a2p";
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            scmi_cpu_dvfs: protocol@13 {
-> +                reg = <0x13>;
-> +                #clock-cells = <1>;
-> +            };
-> +        };
-> +    };
-> --
-> 2.25.1
->
+On 4/28/2023 8:32 PM, Charan Teja Kalla wrote:
+> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
+> advices to shmem files which can be helpful for the drivers who may want
+> to manage the pages of shmem files on their own, like, that are created
+> through shmem_file_setup[_with_mnt]().
+> 
+> This patchset is unit tested with the below:
+> (a) Qemu x86_64 with 4 smp cores, 2GB ram, 1Gb swap mounted
+>     on zram block device.
+> (b) A tmpfs file of size 100MB is created.
+> (c) Initially this file is filled with a poison value of 0xAA. 
+> (d) POSIX_FADV_[WILL|DONT]NEED is called on this file for a range that
+>     gets generated randomn. This is called for 10K iterations.
+> (e) Check the poison value at the end of the test. Exit the program if it
+>     is changed.
+> 
+> use the below script:
+> val1=$(cat /proc/vmstat | grep pswpout | awk '{print $2}')
+> str=$(./a.out <tmpfs file>)
+> res=$(echo $str | awk '{print $1}')
+> val2=$(cat /proc/vmstat | grep pswpout | awk '{print $2}')
+> 
+> if [[ $res == "FAIL" ]]; then echo $str;
+> else
+> 	if [[ $val1 == $val2 ]]; then echo "FAIL. Does the swap setup is done?"; 
+>         else echo $res;
+>         fi
+> fi
+> ------------------------------------------------------------------------
+> #include <stdio.h>
+> #include <fcntl.h>
+> #include <unistd.h>
+> #include <stdlib.h>
+> #include <string.h>
+> #include <sys/mman.h>
+> #include <sys/types.h>
+> #include <sys/stat.h>
+> #include <unistd.h>
+> #include <fcntl.h>
+> #include <sys/stat.h>
+> 
+> #define NR_ITER   (10000)
+> unsigned int fd;
+> 
+> void run_tests(int fd, loff_t start, loff_t end)
+> {
+> 
+> 	if (posix_fadvise(fd, start, end, POSIX_FADV_DONTNEED)) {
+> 		perror("FAIL : fadvise():dont_need_thread\n");
+> 		exit(6);
+> 	}
+> 
+> 	if (posix_fadvise(fd, start, end, POSIX_FADV_WILLNEED)) {
+> 		perror("FAIL : fadvise():will_need_thread\n");
+> 		exit(6);
+> 	}
+> }
+> 
+> void get_rand_range(long size, loff_t *start, loff_t *end)
+> {
+> 	*start = rand() % (size >> 1);
+> 	*end = *start + (rand() % size);
+> 
+> 	if (*end > size)
+> 		*start = *end = 0;
+> }
+> 
+> void fill_pattern(int fd, long size)
+> {
+> 	char *data;
+> 
+> 	data = mmap(0, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+> 	if (data == MAP_FAILED) {
+> 		perror("FAIL : mmap()\n");
+> 		exit(5);
+> 	}
+> 	memset(data, 0xAA, size);
+> 	munmap(data, size);
+> }
+> 
+> int check_pattern(int fd, long size)
+> {
+> 	unsigned char *data;
+> 	long i;
+> 
+> 	data = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0);
+> 	if (data == MAP_FAILED) {
+> 		perror("FAIL : mmap()\n");
+> 		exit(4);
+> 	}
+> 
+> 	for (i = 0; i < size; ++i) {
+> 		if (data[i] != 0xAA) {
+> 			printf("FAIL : Testcase is failed. Seeing %x rather than 0xAA\n", data[i]);
+> 			exit(4);
+> 		}
+> 	}
+> 	munmap(data, size);
+> }
+> 
+> int main(int argc, char **argv)
+> {
+> 	struct stat buf = {0};
+> 	loff_t start, end, i;
+> 
+> 	if (argc < 2) { 
+> 		printf("FAIL : usage: a.out <tmpfs filename>\n");
+> 		exit(1);
+> 	}
+> 
+> 
+> 	if (stat(argv[1], &buf)) {
+> 		perror("FAIL : stat()\n");
+> 		exit(2);
+> 	}
+> 
+> 	fd = open(argv[1], O_RDWR);
+> 	if (fd < 0) {
+> 		perror("FAIL : open()\n");
+> 		exit(3);
+> 	}
+> 
+> 	fill_pattern(fd, buf.st_size);
+> 	for (i = NR_ITER; i > 0; --i) {
+> 		get_rand_range(buf.st_size, &start, &end);
+> 		run_tests(fd, start, end);
+> 	}
+> 	check_pattern(fd, buf.st_size);
+> 	
+> 	close(fd);
+> 
+> 	printf("PASS \n");
+> 
+> 	return 0;
+> }
+> ------------------------------------------------------------------------
+> 
+> Changes in V8:
+>  -- Addressed the comments and fixed the bug caught by Hugh.
+>  -- Updated the commit message for POSIX_FADV_WILLNEED asked by Minchan.
+> 
+> Changes in V7:
+>  -- Use folio based interface, shmem_read_folio(), for FADV_WILLNEED.
+>  -- Don't swap the SHM_LOCK'ed pages.
+>  -- https://lore.kernel.org/all/cover.1676378702.git.quic_charante@quicinc.com/
+> 
+> Changes in V6:
+>  -- Replaced the pages with folio's for shmem changes.
+>  -- https://lore.kernel.org/all/cover.1675690847.git.quic_charante@quicinc.com/
+> 
+> Changes in V5:
+>  -- Moved the 'endbyte' calculations to a header function for use by shmem_fadvise().
+>  -- Addressed comments from suren.
+>  -- No changes in resend. Retested on the latest tip.
+>  -- https://lore.kernel.org/all/cover.1648706231.git.quic_charante@quicinc.com/
+> 
+> Changes in V4:
+>   -- Changed the code to use reclaim_pages() to writeout the shmem pages to swap and then reclaim.
+>   -- Addressed comments from Mark Hemment and Matthew.
+>   -- fadvise() on shmem file may even unmap a page.
+>   -- https://patchwork.kernel.org/project/linux-mm/patch/1644572051-24091-1-git-send-email-quic_charante@quicinc.com/
+> 
+> Changes in V3:
+>   -- Considered THP pages while doing FADVISE_[DONT|WILL]NEED, identified by Matthew.
+>   -- xarray used properly, as identified by Matthew.
+>   -- Excluded mapped pages as it requires unmapping and the man pages of fadvise don't talk about them.
+>   -- RESEND: Fixed the compilation issue when CONFIG_TMPFS is not defined.
+>   -- https://patchwork.kernel.org/project/linux-mm/patch/1641488717-13865-1-git-send-email-quic_charante@quicinc.com/
+> 
+> Changes in V2:
+>   -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
+>   -- Addressed the comments from Suren.
+>   -- https://patchwork.kernel.org/project/linux-mm/patch/1638442253-1591-1-git-send-email-quic_charante@quicinc.com/
+> 
+> changes in V1:
+>   -- Created the interface for fadvise(2) to work on shmem files.
+>   -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
+> 
+> 
+> Charan Teja Kalla (2):
+>   mm: fadvise: move 'endbyte' calculations to helper function
+>   mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
+> 
+>  mm/fadvise.c  |  11 +----
+>  mm/internal.h |  21 ++++++++++
+>  mm/shmem.c    | 127 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 149 insertions(+), 10 deletions(-)
+> 
