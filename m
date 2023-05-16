@@ -2,139 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C884704633
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3C1704634
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjEPHUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
+        id S231267AbjEPHUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjEPHTn (ORCPT
+        with ESMTP id S231428AbjEPHUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:19:43 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85254C0A;
-        Tue, 16 May 2023 00:19:36 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-643b7b8f8ceso7937981b3a.1;
-        Tue, 16 May 2023 00:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684221576; x=1686813576;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6U/vkmAUFZZcdBk+KokFbNf1ZvkKNw6bCUwh7L5Br9E=;
-        b=MFxu44NHbkQCaNnciSPrfna7rqyLC2dxpiPT8iIxN4YMSmvNT5WNxmBHJuu8yUW1J5
-         EynI7VMJwAZLG3DgUCgj7G+xrxpokr5IS3ZRrGAJGBkw+eW2iHCYr1OVfGHC2+2dVCeC
-         7t2aGksNm18G+S2p1Kymzqk15eMpkxaiyb0tE34Y+/zfabMobsqav4iB5A1iXlLrKhDK
-         lEZMaL3xbrp8jePUEgNVtpLBTg/oRqWZojM+xWwnnz4TUFn3Lq/fkYXul2S9MFpzPdEN
-         BPO4ZOcnazHWeen45gEA8Cdk2tUC2dGTEKbnZkzL+XRjjJnaFOo+R/RMKJjlV4ho0L/6
-         Nv4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684221576; x=1686813576;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6U/vkmAUFZZcdBk+KokFbNf1ZvkKNw6bCUwh7L5Br9E=;
-        b=HyIsLtuvUWgtq0+8nHvr71xltk9UpBFwBbCg+KcEMKFMJ+6VmJumYW4ambOnlwOWUm
-         86PljMJjXM5ispv66pdSn9ASMpd+6RtU2K86Cu68HmAOUxQj5FYRdx4TOOTVTGnUbCvM
-         yMiu3Z+V1vIAfI813iLFqiKI+K9UjzFbgnlVZpImIhX3R9FIC7Ebd8K/4IC+o3KQJQds
-         jnPRHBFu6ZyNOVt/bInLA6Hps+mFWMfkD/P3tcFf0jit0jhJzLY4MFqNxm9ghZB2ZyGE
-         B5y0vhu5+fhihcRDTB251fsyzpcKFD3t3iw8aF59LYdOWQSUBC1EkP74jp3ecYPZIa9P
-         UcVQ==
-X-Gm-Message-State: AC+VfDxwi9529cQCRBqw6WEeJSNFidVBigeAd7OdkRu+A0g9XfTBmPeb
-        tAmyE2GSGzjZ8rvjviIELqI=
-X-Google-Smtp-Source: ACHHUZ4nXjQYnByDI6oida9jX5iVkTZZXuNHP++wV9HBdBJ3e54nyEcPN/xLIHFq7HmESmFZpkuHGw==
-X-Received: by 2002:aa7:88c8:0:b0:64a:2dd6:4f18 with SMTP id k8-20020aa788c8000000b0064a2dd64f18mr23142160pff.13.1684221575773;
-        Tue, 16 May 2023 00:19:35 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.15])
-        by smtp.googlemail.com with ESMTPSA id 17-20020aa79251000000b006468222af91sm12849830pfp.48.2023.05.16.00.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 00:19:35 -0700 (PDT)
-From:   Ze Gao <zegao2021@gmail.com>
-X-Google-Original-From: Ze Gao <zegao@tencent.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Ze Gao <zegao@tencent.com>
-Subject: [PATCH v2 4/4] rehook, fprobe: do not trace rethook related functions
-Date:   Tue, 16 May 2023 15:18:30 +0800
-Message-Id: <20230516071830.8190-5-zegao@tencent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230516071830.8190-1-zegao@tencent.com>
-References: <20230516071830.8190-1-zegao@tencent.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 03:20:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688AF18E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:20:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEA5C615F6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:20:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58500C433EF;
+        Tue, 16 May 2023 07:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684221608;
+        bh=G6W4gAaiotYAbVHprBxvdN6E0N9T8QsCSHK8E+42gFw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AEb4aluCzaMUCmWPJJ8FQWfUVf1NqE9UA8AiRiHgFznv3jdvKKE0piD6BTYDKWaa4
+         wtvU8zucqtRKpDtTLFh6qOZWOrE80EvJhj29I+yvipKANuElrfL1p+z8vGrrSeCARZ
+         o1zeV4G0Ctl5MgspifyUmoSOwB8IunC2Fba5xYzPw+bq70RD80E8jkfeYjwbHxouoj
+         rxNaOGPsHC0qq4ldXddVSGA8p3UGzBiTHGhcJYcoUbWHzpbL+t3sw0R0y1uXcTLzpY
+         h8ZP4Z9IdYVDxqlfJhoONt2FbXEo5GbTDz34kd5ymthcO9Sk+mUflq34g5v3pGjQPU
+         TqdkEmUHgjApQ==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pyoyb-00FRqS-Og;
+        Tue, 16 May 2023 08:20:06 +0100
+Date:   Tue, 16 May 2023 08:18:54 +0100
+Message-ID: <87bkikwxpd.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] arm64: Disable EL2 traps for BRBE instructions executed in EL1
+In-Reply-To: <b9a15953-ad88-7ca6-f485-116ac0217aae@arm.com>
+References: <20230515105328.239204-1-anshuman.khandual@arm.com>
+        <86ilctn233.wl-maz@kernel.org>
+        <b9a15953-ad88-7ca6-f485-116ac0217aae@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: anshuman.khandual@arm.com, linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These functions are already marked as NOKPROBE to prevent recursion and
-we have the same reason to blacklist them if rethook is used with fprobe,
-since they are beyond the recursion-free region ftrace can guard.
+On Tue, 16 May 2023 03:43:27 +0100,
+Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> 
+> 
+> 
+> On 5/15/23 19:12, Marc Zyngier wrote:
+> > On Mon, 15 May 2023 11:53:28 +0100,
+> > Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> >>
 
-Signed-off-by: Ze Gao <zegao@tencent.com>
----
- arch/riscv/kernel/probes/Makefile | 2 ++
- arch/s390/kernel/Makefile         | 1 +
- arch/x86/kernel/Makefile          | 1 +
- 3 files changed, 4 insertions(+)
+[...]
 
-diff --git a/arch/riscv/kernel/probes/Makefile b/arch/riscv/kernel/probes/Makefile
-index c40139e9ca47..8265ff497977 100644
---- a/arch/riscv/kernel/probes/Makefile
-+++ b/arch/riscv/kernel/probes/Makefile
-@@ -4,3 +4,5 @@ obj-$(CONFIG_RETHOOK)		+= rethook.o rethook_trampoline.o
- obj-$(CONFIG_KPROBES_ON_FTRACE)	+= ftrace.o
- obj-$(CONFIG_UPROBES)		+= uprobes.o decode-insn.o simulate-insn.o
- CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_rethook.o = $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_rethook_trampoline.o = $(CC_FLAGS_FTRACE)
-diff --git a/arch/s390/kernel/Makefile b/arch/s390/kernel/Makefile
-index 8983837b3565..6b2a051e1f8a 100644
---- a/arch/s390/kernel/Makefile
-+++ b/arch/s390/kernel/Makefile
-@@ -10,6 +10,7 @@ CFLAGS_REMOVE_ftrace.o		= $(CC_FLAGS_FTRACE)
- 
- # Do not trace early setup code
- CFLAGS_REMOVE_early.o		= $(CC_FLAGS_FTRACE)
-+CFLAGS_REMOVE_rethook.o		= $(CC_FLAGS_FTRACE)
- 
- endif
- 
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index dd61752f4c96..4070a01c11b7 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -17,6 +17,7 @@ CFLAGS_REMOVE_ftrace.o = -pg
- CFLAGS_REMOVE_early_printk.o = -pg
- CFLAGS_REMOVE_head64.o = -pg
- CFLAGS_REMOVE_sev.o = -pg
-+CFLAGS_REMOVE_rethook.o = -pg
- endif
- 
- KASAN_SANITIZE_head$(BITS).o				:= n
+> >> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> >> index 037724b19c5c..06bf321a17be 100644
+> >> --- a/arch/arm64/include/asm/el2_setup.h
+> >> +++ b/arch/arm64/include/asm/el2_setup.h
+> >> @@ -161,6 +161,16 @@
+> >>  	msr_s	SYS_HFGWTR_EL2, x0
+> >>  	msr_s	SYS_HFGITR_EL2, xzr
+> >>  
+> >> +	mrs	x1, id_aa64dfr0_el1
+> >> +	ubfx	x1, x1, #ID_AA64DFR0_EL1_BRBE_SHIFT, #4
+> >> +	cbz	x1, .Lskip_brbe_\@
+> >> +
+> >> +	mov	x0, xzr
+> >> +	orr	x0, x0, #HFGITR_EL2_nBRBIALL
+> >> +	orr	x0, x0, #HFGITR_EL2_nBRBINJ
+> >> +	msr_s	SYS_HFGITR_EL2, x0
+> > 
+> > This will break badly if someone inserts something between this hunk
+> > and the initial setting of HFGITR_EL2. I'd really prefer a RMW
+> > approach.  It's not that this code has to be optimised anyway.
+> 
+> Something like this instead ? So that even if there are more changes
+> before this hunk, it will be fetched correctly with first mrs_s and
+> only additional bits related to BRBE will be set there after.
+> 
+> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> index 037724b19c5c..bfaf41ad9c4e 100644
+> --- a/arch/arm64/include/asm/el2_setup.h
+> +++ b/arch/arm64/include/asm/el2_setup.h
+> @@ -161,6 +161,16 @@
+>         msr_s   SYS_HFGWTR_EL2, x0
+>         msr_s   SYS_HFGITR_EL2, xzr
+>  
+> +       mrs     x1, id_aa64dfr0_el1
+> +       ubfx    x1, x1, #ID_AA64DFR0_EL1_BRBE_SHIFT, #4
+> +       cbz     x1, .Lskip_brbe_\@
+> +
+> +       mrs_s   x0, SYS_HFGITR_EL2
+> +       orr     x0, x0, #HFGITR_EL2_nBRBIALL
+> +       orr     x0, x0, #HFGITR_EL2_nBRBINJ
+> +       msr_s   SYS_HFGITR_EL2, x0
+> +
+> +.Lskip_brbe_\@:
+>         mrs     x1, id_aa64pfr0_el1             // AMU traps UNDEF without AMU
+>         ubfx    x1, x1, #ID_AA64PFR0_EL1_AMU_SHIFT, #4
+>         cbz     x1, .Lskip_fgt_\@
+
+Yes, this is much better.
+
+	M.
+
 -- 
-2.40.1
-
+Without deviation from the norm, progress is not possible.
