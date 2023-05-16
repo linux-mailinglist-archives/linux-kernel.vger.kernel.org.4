@@ -2,43 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6B0705126
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68879705129
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbjEPOpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S234032AbjEPOpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbjEPOpX (ORCPT
+        with ESMTP id S232526AbjEPOpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:45:23 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E1030E6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:45:20 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (p7097156-ipoefx.ipoe.ocn.ne.jp [153.231.19.155])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CCBBC4A9;
-        Tue, 16 May 2023 16:45:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1684248307;
-        bh=4kgPpp8sYDiUYX8Gm/m6Tot8dUsJ+Xl/5YYIFuROs7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cryflzdhTVIjE2MobT15qyKMzJ8Zr8Tl7hIi7eQk6DIofsLYU4a7C3OVnWvppTHjF
-         2G/QWQD6aVGke21kUfjHJa21hUPS1N/khjfiVGVghrR5E2XGJIEfO3sVNFH9eQdmHo
-         FWfX/OCGuJUdsCsZsZycLsuYBW8diEgbis4jTAAk=
-Date:   Tue, 16 May 2023 17:45:16 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Remove Hyun and Anurag from maintainer list
-Message-ID: <20230516144516.GC30231@pendragon.ideasonboard.com>
-References: <18700dda117076510baf87a090acbb29cb3ba3ba.1684244832.git.michal.simek@amd.com>
+        Tue, 16 May 2023 10:45:38 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F079E7EDD
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:45:31 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-77d049b9040so3938273241.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684248331; x=1686840331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xgs1T+D3BnF9rZPvYtr/6djf/K6Fti2h/uEggWBDOQ8=;
+        b=Ao3ee+hO+FQ/lXtOVQhIqKzbCJ+HwLYtVgALF4JWBCWHsS3WnL2fjmjkgKYSs6gcGb
+         3L8SobB2/kujgBt6bQOVY07F47JbMU2pzlqYiQ2XFw24q/PigIki8gOM3O4nAmjtNLXk
+         7ae3Xsn9eYkoR175qcRTb+rZ1PmXlwNA/jhdbsioE80zD7wzTh4Pb+VlRwr5ykvwxs2X
+         +wexPTgtLXN9ohq0+/3VVq5WXvXpURKXPgL9G6aTGc0Vjk60QDt8Yznuic2RCotMTTnq
+         JhafM6N4F+jrC9C0bnIq8nMoWaOfd/IfVOsOWWFfLS6T5fCeAmGK9phqkuPR5utJ1M1G
+         VFMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684248331; x=1686840331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xgs1T+D3BnF9rZPvYtr/6djf/K6Fti2h/uEggWBDOQ8=;
+        b=KuEc6TFvGxN6nnNh+Xojse5K5BJxOpzOuNGKjGNQ/ftMIA6YKc+nIsVRfAOH9odq72
+         aUMMehi+U4Yqy+bmaq2njEKTjmOlrkvjFiMcNAFnr/GTg/J7IxxgJ5TjPjpo2yPYph1c
+         eiq+E/EEsn+G4fYxAa2Xp6U/8Rf3nifT6qzU7mentyxr6fe5dbpYLh6OAOKUTtI4yggB
+         FmZ/PSWjXmFfSIxDXgjEtdBT4eTrTgktPAmut+btCdrB3aUyIwtlyzggV18igRA9Wsvn
+         8EfTH/abk/ihUPuUwXN8484dXH8bKdB6JGzzDJk24YrOJOr6ZU01huXxQATtDOYjsq52
+         xigg==
+X-Gm-Message-State: AC+VfDwr3MLCBWwdELX3QlZhZ0R2D3K5ZIjbGtA0VPDXzoTEu5dPLQhI
+        LJDGSUUhalJgyY3fMtNPjzNzPKfuo1b1oqw8hI9fMA==
+X-Google-Smtp-Source: ACHHUZ7UvB3gGkR/gXbTH+tV0SF/LTDo36CC79S91T6F0Bvv86zcSFQDACSeKk6C0uNZ/nO+t7oxtTUTGCRD0TE4baY=
+X-Received: by 2002:a05:6102:3ec1:b0:430:13cb:8156 with SMTP id
+ n1-20020a0561023ec100b0043013cb8156mr16365539vsv.13.1684248331119; Tue, 16
+ May 2023 07:45:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <18700dda117076510baf87a090acbb29cb3ba3ba.1684244832.git.michal.simek@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+References: <20230515175042.495377-1-afd@ti.com> <20230515175042.495377-2-afd@ti.com>
+In-Reply-To: <20230515175042.495377-2-afd@ti.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 16 May 2023 16:45:20 +0200
+Message-ID: <CAMRc=McpFw+4=Vb2aL98Fba1x=bvtxX=VOjNCC5puhxkh+MF5g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] i2c: davinci: Use struct name not type with devm_kzalloc()
+To:     Andrew Davis <afd@ti.com>
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,64 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
-
-Thank you for the patch.
-
-On Tue, May 16, 2023 at 03:47:15PM +0200, Michal Simek wrote:
-> There is no activity from them for these drivers. All of them have Laurent
-> as active maintainer and their emails no longer works that's why remove
-> them from the list.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Will you merge this yourself ?
-
+On Mon, May 15, 2023 at 7:50=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
+>
+> This reduces chance of error if the type of "dev" changes. While here
+> remove extra error print out, this is not usually done for memory
+> allocation failures.
+>
+> Signed-off-by: Andrew Davis <afd@ti.com>
 > ---
-> 
->  MAINTAINERS | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7e0b87d5aa2e..60f6effb168c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7077,7 +7077,6 @@ F:	Documentation/gpu/xen-front.rst
->  F:	drivers/gpu/drm/xen/
->  
->  DRM DRIVERS FOR XILINX
-> -M:	Hyun Kwon <hyun.kwon@xilinx.com>
->  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  L:	dri-devel@lists.freedesktop.org
->  S:	Maintained
-> @@ -23162,7 +23161,6 @@ S:	Maintained
->  F:	drivers/tty/serial/uartlite.c
->  
->  XILINX VIDEO IP CORES
-> -M:	Hyun Kwon <hyun.kwon@xilinx.com>
->  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  L:	linux-media@vger.kernel.org
->  S:	Supported
-> @@ -23191,7 +23189,6 @@ F:	include/linux/dma/amd_xdma.h
->  F:	include/linux/platform_data/amd_xdma.h
->  
->  XILINX ZYNQMP DPDMA DRIVER
-> -M:	Hyun Kwon <hyun.kwon@xilinx.com>
->  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  L:	dmaengine@vger.kernel.org
->  S:	Supported
-> @@ -23207,7 +23204,6 @@ F:	Documentation/devicetree/bindings/memory-controllers/xlnx,zynqmp-ocmc-1.0.yam
->  F:	drivers/edac/zynqmp_edac.c
->  
->  XILINX ZYNQMP PSGTR PHY DRIVER
-> -M:	Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
->  M:	Laurent Pinchart <laurent.pinchart@ideasonboard.com>
->  L:	linux-kernel@vger.kernel.org
->  S:	Supported
+>  drivers/i2c/busses/i2c-davinci.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-da=
+vinci.c
+> index c55bd937def7..135f76593e6f 100644
+> --- a/drivers/i2c/busses/i2c-davinci.c
+> +++ b/drivers/i2c/busses/i2c-davinci.c
+> @@ -767,12 +767,9 @@ static int davinci_i2c_probe(struct platform_device =
+*pdev)
+>         if (irq < 0)
+>                 return dev_err_probe(&pdev->dev, irq, "can't get irq reso=
+urce\n");
+>
+> -       dev =3D devm_kzalloc(&pdev->dev, sizeof(struct davinci_i2c_dev),
+> -                       GFP_KERNEL);
+> -       if (!dev) {
+> -               dev_err(&pdev->dev, "Memory allocation failed\n");
+> +       dev =3D devm_kzalloc(&pdev->dev, sizeof(*dev), GFP_KERNEL);
+> +       if (!dev)
+>                 return -ENOMEM;
+> -       }
+>
+>         init_completion(&dev->cmd_complete);
+>
+> --
+> 2.39.2
+>
 
--- 
-Regards,
-
-Laurent Pinchart
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
