@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FF770587A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607C4705885
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjEPUPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
+        id S229852AbjEPUQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjEPUO4 (ORCPT
+        with ESMTP id S230091AbjEPUQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:14:56 -0400
+        Tue, 16 May 2023 16:16:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA97D9C
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:14:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3C783D7;
+        Tue, 16 May 2023 13:16:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5174E63D91
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:14:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FCBDC433A0;
-        Tue, 16 May 2023 20:14:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 889B963392;
+        Tue, 16 May 2023 20:16:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A333CC433EF;
+        Tue, 16 May 2023 20:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684268076;
-        bh=6CLuxrIav2439MrPgOxLsybmU0ZxykMENHio5PB5Xks=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PuJ537HFxfcwhdqwCP8FY0Iz+JnIIEcw+QdKeU4PnmNDYL/WVfrqMMCxzuIZ6eXCs
-         3f9dFRNu/A3vXHLgWDe5fvmcRFazgvPMJo+AD0Agor6XUqgoQaPRbLe+Gy3Mvodwvq
-         yZWJh8hpJ2gWwW6Y/LeKSuaYs/6IsH6gxZFhKZnr6dp4c4qK3YEmwu9aymaHj/B9NX
-         p1TIc26HTglrtf9u5RrYB3Fwv9sY0cYNgsigJyLYbqpNN6Wnyjkxo6MFKtzk3Ednsx
-         DWOVIRLCVNHJesogc+ASjuUbKgnQW1B874rgEDwlKV8PWSdMWeLKtBBRwbtmC4Qm99
-         uhmZKCIs1NFeA==
+        s=k20201202; t=1684268171;
+        bh=N+1VABhJvTi16EIISsnGXu9W13DA9iY+3UrCLsFbrYY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=t19K1nVXAx9OpeFXlSmZsQDdECWADsocz3wrgG8N9x6Wz0NAMiB7fzeURdmRxqiVC
+         FE07TPRZZcZAPdvPFhoTWSzINBENNhKzBzB6Xq7FKG8jIaFY6g3hy4tL5oLOfdeTHT
+         7z8CANiro6EyUa/5l116M79aITVKsu59d8uRuPY4LU42GnbOsuFeh7zo6K7b6seC/L
+         GMZxjfUZoUNcRnj3VvN811MURLbXR/EK+lXIRxmhYJspg5W8LM9Y3imPIQVelufs4w
+         cQIjA6Bkdsi6bkRjcf7xerYlb95bhphxg0UsRIAlbbqHYisiiuK8M7FkvxSnyRuieu
+         jfLdta26ci6tw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] libnvdimm: mark 'security_show' static again
-Date:   Tue, 16 May 2023 22:14:09 +0200
-Message-Id: <20230516201415.556858-3-arnd@kernel.org>
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] efi: fix missing prototype warnings
+Date:   Tue, 16 May 2023 22:15:43 +0200
+Message-Id: <20230516201606.557548-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516201415.556858-1-arnd@kernel.org>
-References: <20230516201415.556858-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,35 +55,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The security_show() function was made global and __weak at some
-point to allow overriding it. The override was removed later, but
-it remains global, which causes a warning about the missing
-declaration:
+The cper.c file needs to include an extra header, and
+efi_zboot_entry needs an extern declaration to avoid these
+'make W=1' warnings:
 
-drivers/nvdimm/dimm_devs.c:352:9: error: no previous prototype for 'security_show'
+drivers/firmware/efi/libstub/zboot.c:65:1: error: no previous prototype for 'efi_zboot_entry' [-Werror=missing-prototypes]
+drivers/firmware/efi/efi.c:176:16: error: no previous prototype for 'efi_attr_is_visible' [-Werror=missing-prototypes]
+drivers/firmware/efi/cper.c:626:6: error: no previous prototype for 'cper_estatus_print' [-Werror=missing-prototypes]
+drivers/firmware/efi/cper.c:649:5: error: no previous prototype for 'cper_estatus_check_header' [-Werror=missing-prototypes]
+drivers/firmware/efi/cper.c:662:5: error: no previous prototype for 'cper_estatus_check' [-Werror=missing-prototypes]
 
-This is also not an appropriate name for a global symbol in the
-kernel, so just make it static again.
-
-Fixes: 15a8348707ff ("libnvdimm: Introduce CONFIG_NVDIMM_SECURITY_TEST flag")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/nvdimm/dimm_devs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/firmware/efi/cper.c            | 1 +
+ drivers/firmware/efi/libstub/efistub.h | 3 +++
+ include/linux/efi.h                    | 2 ++
+ 3 files changed, 6 insertions(+)
 
-diff --git a/drivers/nvdimm/dimm_devs.c b/drivers/nvdimm/dimm_devs.c
-index 957f7c3d17ba..10c3cb6a574a 100644
---- a/drivers/nvdimm/dimm_devs.c
-+++ b/drivers/nvdimm/dimm_devs.c
-@@ -349,7 +349,7 @@ static ssize_t available_slots_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(available_slots);
+diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+index 35c37f667781..75715c7be34a 100644
+--- a/drivers/firmware/efi/cper.c
++++ b/drivers/firmware/efi/cper.c
+@@ -25,6 +25,7 @@
+ #include <acpi/ghes.h>
+ #include <ras/ras_event.h>
+ #include "cper_cxl.h"
++#include "../../acpi/apei/apei-internal.h"
  
--ssize_t security_show(struct device *dev,
-+static ssize_t security_show(struct device *dev,
- 		struct device_attribute *attr, char *buf)
- {
- 	struct nvdimm *nvdimm = to_nvdimm(dev);
+ /*
+  * CPER record ID need to be unique even after reboot, because record
+diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+index 67d5a20802e0..54a2822cae77 100644
+--- a/drivers/firmware/efi/libstub/efistub.h
++++ b/drivers/firmware/efi/libstub/efistub.h
+@@ -1133,4 +1133,7 @@ const u8 *__efi_get_smbios_string(const struct efi_smbios_record *record,
+ void efi_remap_image(unsigned long image_base, unsigned alloc_size,
+ 		     unsigned long code_size);
+ 
++asmlinkage efi_status_t __efiapi
++efi_zboot_entry(efi_handle_t handle, efi_system_table_t *systab);
++
+ #endif
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index 7aa62c92185f..571d1a6e1b74 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -1338,4 +1338,6 @@ bool efi_config_table_is_usable(const efi_guid_t *guid, unsigned long table)
+ 	return xen_efi_config_table_is_usable(guid, table);
+ }
+ 
++umode_t efi_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n);
++
+ #endif /* _LINUX_EFI_H */
 -- 
 2.39.2
 
