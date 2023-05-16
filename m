@@ -2,63 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46CF7042F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDC2704304
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjEPBh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S229736AbjEPBmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjEPBhZ (ORCPT
+        with ESMTP id S229733AbjEPBmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:37:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588172715
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:37:24 -0700 (PDT)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QKzMH4q0RzsS6B;
-        Tue, 16 May 2023 09:35:23 +0800 (CST)
-Received: from [10.67.110.89] (10.67.110.89) by kwepemi500009.china.huawei.com
- (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 16 May
- 2023 09:37:21 +0800
-Message-ID: <de1eb4f4-2b5f-35e5-0c91-949df5f7411c@huawei.com>
-Date:   Tue, 16 May 2023 09:37:21 +0800
+        Mon, 15 May 2023 21:42:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010D155A7;
+        Mon, 15 May 2023 18:42:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91F3A62137;
+        Tue, 16 May 2023 01:42:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011F9C4339C;
+        Tue, 16 May 2023 01:42:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684201328;
+        bh=kYEe3XumnoPUiN8iCq2tISRpzeCXAw5lfoRaIeeBeZw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=H0+yennWzqtTXBnuTwnMNwgQ7IERyYqQMcHlLEnaEyGkImfsnnzsXvYLjytObrBwY
+         ysuxOjRgLs2sxJX8tPRmuClLadkLMdvDcC8i5AiO/RnVxfXaD/oBvcZD0viMmKKmjF
+         3VbC7wj8u5VH+B+6CBnQdjmnwVVLj9MLvzhMOsnOOOxsl+Tul7Vi4fgHT8HDjNw8cK
+         DKdRnt+jyIx3M/QQS3nY5AxJOrXQLm8DyxU5BAbNwtAlWs5pECMT8a5+6qmfPXwzz1
+         lgK9p1XOK56ueKR6lyelBx3X5b7Qpl6cbj2wHXesC5yZQY/+cjjKPnio0zhqs6CwgQ
+         5DPkZ4J4Kemgw==
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6ab1a20aa12so5393268a34.1;
+        Mon, 15 May 2023 18:42:07 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyjTmqd+h+kGeAhkYvSTdfB/mA3TwOI9w5Kr3lFZmFVepS9Zr3Z
+        8hZdtoBXmdG7oqWGB+79fUA27MXJoLUjfjZOL0Y=
+X-Google-Smtp-Source: ACHHUZ7n7PRAM0WHFfiawrwlXUQxz+lEeVtontpnCMU2OU/KK1WDeQQ4sj+lwmugHWqN+AGwvw13mT8+fMxTymnHHLs=
+X-Received: by 2002:a05:6870:e493:b0:187:d229:2781 with SMTP id
+ v19-20020a056870e49300b00187d2292781mr22671508oag.6.1684201327265; Mon, 15
+ May 2023 18:42:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4] kobject: Fix global-out-of-bounds in
- kobject_action_type()
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <prajnoha@redhat.com>, <linux-kernel@vger.kernel.org>
-References: <20230512103029.183852-1-xiafukun@huawei.com>
- <2023051308-line-curable-6d76@gregkh>
-From:   Xia Fukun <xiafukun@huawei.com>
-In-Reply-To: <2023051308-line-curable-6d76@gregkh>
+References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-22-masahiroy@kernel.org>
+In-Reply-To: <20230514152739.962109-22-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 16 May 2023 10:41:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASK1kptksxaOh5sKiE=COBusJ2d3F6PE-0vptz91217_g@mail.gmail.com>
+Message-ID: <CAK7LNASK1kptksxaOh5sKiE=COBusJ2d3F6PE-0vptz91217_g@mail.gmail.com>
+Subject: Re: [PATCH v5 21/21] kbuild: implement CONFIG_TRIM_UNUSED_KSYMS
+ without recursion
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.89]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500009.china.huawei.com (7.221.188.199)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/13 17:33, Greg KH wrote:
+On Mon, May 15, 2023 at 12:28=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
+org> wrote:
+>
+> When CONFIG_TRIM_UNUSED_KSYMS is enabled, Kbuild recursively traverses
+> the directory tree to determine which EXPORT_SYMBOL to trim. If an
+> EXPORT_SYMBOL turns out to be unused by anyone, Kbuild begins the
+> second traverse, where some source files are recompiled with their
+> EXPORT_SYMBOL() tuned into a no-op.
+>
+> Linus stated negative opinions about this slowness in commits:
+>
+>  - 5cf0fd591f2e ("Kbuild: disable TRIM_UNUSED_KSYMS option")
+>  - a555bdd0c58c ("Kbuild: enable TRIM_UNUSED_KSYMS again, with some guard=
+ing")
+>
+> We can do this better now. The final data structures of EXPORT_SYMBOL
+> are generated by the modpost stage, so modpost can selectively emit
+> KSYMTAB entries that are really used by modules.
+>
+> Commit 2cce989f8461 ("kbuild: unify two modpost invocations") is another
 
-> 
-> How did you test this as it does not even build?
-> 
-> confused,
-> 
-> greg k-h
+The commit hash is wrong.
 
-I am very sorry for my negligence.
+Commit f73edc8951b2 ("kbuild: unify two modpost invocations") is correct.
 
-I will fix the build error and conduct thorough testing before submitting the next version of the patch.
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
