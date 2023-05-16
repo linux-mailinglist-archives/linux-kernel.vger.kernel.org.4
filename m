@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0867047CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24627047D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjEPI3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
+        id S231641AbjEPIac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbjEPI3P (ORCPT
+        with ESMTP id S231490AbjEPIa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:29:15 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286644C28
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:29:12 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3062b101ae1so9016498f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684225751; x=1686817751;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/ypdlKoJzYeteQaEdxqwC+GyLlhFe9AxiId8OT+9jg=;
-        b=YoNqViKvzNmMhhCH+oiB1FQOuMBnr7xP9dkHfITqVLJhPuTk8wF33B+IztamIVkSvU
-         Q3LTK+D69ddlGKbpvp0il8KfEZ7gqicQ1Kh2egq9NRsJ79Os9hLhAW0j3Gxyf/fFOHtt
-         uXvbOphhHb6KPi2UyRK6JbyvclPKlXZt/PF/RKHEIVRpsRgB1sW8Js+fF0aUCOrLeTYc
-         zcDM0O+Yjmyp0GiJJYwagRsLsDdpW1fnblN7ZPl0fWRQ+Z0rKxM0rMd8bodnIfwmfqUh
-         4TscFK/rft71kUGBul9IRuWwpy28QVyTW+JNaNy7j/gC8/W1WIJ1BDMhGSEZBmwTvYod
-         KCFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684225751; x=1686817751;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B/ypdlKoJzYeteQaEdxqwC+GyLlhFe9AxiId8OT+9jg=;
-        b=EWWfc2r3nRq2qqm0NCDUzQrbBc35rdkdf1rG9Y5orlsE+G38I+VTBxpf2yL9PWcOwU
-         U2IrQhtU4rC99+iIQe5JQc4qf6v9r7ssw6R0iuJkQPRQLPXclj+9+Cybh2zEow07eAx9
-         IKrMMHD7ag/HpwzGH1BgmOje5He+7JC3ew7u1Z/ffi4e6EOrdSULEGedGyr0YeYiUL/Q
-         GrZZkD0i8pVpt3sUuo9TUwKXW0Ne5eQl9u76g3mYPDn9rZXipbs0V8ibeqxp8V8vPxjL
-         1jq2/7qMrSL2J0/oBay+PwsHOHPIdDopfscrZW4TI5BKnxF2/TirteVxH/buy+vMl0FB
-         8L+Q==
-X-Gm-Message-State: AC+VfDwuZeblA+zMDN4vo4fGIKZbAkWGhV4NVAD4/HxhEz6iFOm6oewU
-        4lq6k8IZjWXqkv9/O1CNM7WPwGVegFq5XTjEWz8=
-X-Google-Smtp-Source: ACHHUZ4kkNBHq5+iZvTyaGaWiUJOUodv3eeLzUx/XoBAYWzqs3SUMm8Wabmz8Ntc7R9E6MxfLazK2g==
-X-Received: by 2002:adf:e4c8:0:b0:304:8888:87ad with SMTP id v8-20020adfe4c8000000b00304888887admr28523576wrm.12.1684225751120;
-        Tue, 16 May 2023 01:29:11 -0700 (PDT)
-Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id h16-20020a5d4fd0000000b00306344eaebfsm1753300wrw.28.2023.05.16.01.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 01:29:10 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        manivannan.sadhasivam@linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v3] soc: qcom: Rename ice to qcom_ice to avoid module name conflict
-Date:   Tue, 16 May 2023 11:28:56 +0300
-Message-Id: <20230516082856.150214-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 16 May 2023 04:30:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1C041BFD
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:30:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 355C22F4;
+        Tue, 16 May 2023 01:31:11 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.70.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 99DE63F7BD;
+        Tue, 16 May 2023 01:30:23 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH V3] arm64: Disable EL2 traps for BRBE instructions executed in EL1
+Date:   Tue, 16 May 2023 14:00:15 +0530
+Message-Id: <20230516083015.569248-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following error was reported when building x86_64 allmodconfig:
+This disables EL2 traps for BRBE instructions executed in EL1. This would
+enable BRBE to be configured and used successfully in the guest kernel.
+While here, this updates Documentation/arm64/booting.rst as well.
 
-error: the following would cause module name conflict:
-  drivers/soc/qcom/ice.ko
-  drivers/net/ethernet/intel/ice/ice.ko
-
-Seems the 'ice' module name is already used by some Intel ethernet
-driver, so lets rename the Qualcomm Inline Crypto Engine (ICE) module
-from 'ice' to 'qcom_ice' to avoid any kind of errors/confusions.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 2afbf43a4aec ("soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver")
-Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
+This patch applies on v6.4-rc2
 
-Changes since v2:
- * kept the filename as 'ice.c' while renaming the modules to 'qcom_ice'
+Changes in V3:
 
- drivers/soc/qcom/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+- Updated with RMW pattern as per Marc
 
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index 0f43a88b4894..89b775512bef 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -32,4 +32,5 @@ obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
- obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
- obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
- obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
--obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
-+qcom_ice-objs			+= ice.o
-+obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= qcom_ice.o
+Changes in V2:
+
+https://lore.kernel.org/all/20230515105328.239204-1-anshuman.khandual@arm.com/
+
+- Updated Documentation/arm64/booting.rst
+
+Changes in V1:
+
+https://lore.kernel.org/all/20230324055127.2228330-1-anshuman.khandual@arm.com/
+
+ Documentation/arm64/booting.rst    |  8 ++++++++
+ arch/arm64/include/asm/el2_setup.h | 10 ++++++++++
+ 2 files changed, 18 insertions(+)
+
+diff --git a/Documentation/arm64/booting.rst b/Documentation/arm64/booting.rst
+index ffeccdd6bdac..cb9e151f6928 100644
+--- a/Documentation/arm64/booting.rst
++++ b/Documentation/arm64/booting.rst
+@@ -379,6 +379,14 @@ Before jumping into the kernel, the following conditions must be met:
+ 
+     - SMCR_EL2.EZT0 (bit 30) must be initialised to 0b1.
+ 
++  For CPUs with the Branch Record Buffer Extension (FEAT_BRBE):
++
++ - If the kernel is entered at EL1 and EL2 is present:
++
++    - HFGITR_EL2.nBRBINJ (bit 55) must be initialised to 0b1.
++
++    - HFGITR_EL2.nBRBIALL (bit 56) must be initialised to 0b1.
++
+ The requirements described above for CPU mode, caches, MMUs, architected
+ timers, coherency and system registers apply to all CPUs.  All CPUs must
+ enter the kernel in the same exception level.  Where the values documented
+diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+index 037724b19c5c..bfaf41ad9c4e 100644
+--- a/arch/arm64/include/asm/el2_setup.h
++++ b/arch/arm64/include/asm/el2_setup.h
+@@ -161,6 +161,16 @@
+ 	msr_s	SYS_HFGWTR_EL2, x0
+ 	msr_s	SYS_HFGITR_EL2, xzr
+ 
++	mrs	x1, id_aa64dfr0_el1
++	ubfx	x1, x1, #ID_AA64DFR0_EL1_BRBE_SHIFT, #4
++	cbz	x1, .Lskip_brbe_\@
++
++	mrs_s	x0, SYS_HFGITR_EL2
++	orr	x0, x0, #HFGITR_EL2_nBRBIALL
++	orr	x0, x0, #HFGITR_EL2_nBRBINJ
++	msr_s	SYS_HFGITR_EL2, x0
++
++.Lskip_brbe_\@:
+ 	mrs	x1, id_aa64pfr0_el1		// AMU traps UNDEF without AMU
+ 	ubfx	x1, x1, #ID_AA64PFR0_EL1_AMU_SHIFT, #4
+ 	cbz	x1, .Lskip_fgt_\@
 -- 
-2.34.1
+2.25.1
 
