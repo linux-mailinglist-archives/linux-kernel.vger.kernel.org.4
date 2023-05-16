@@ -2,178 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC75704C5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04FF704C64
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbjEPLbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
+        id S232159AbjEPLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbjEPLbb (ORCPT
+        with ESMTP id S232952AbjEPLcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:31:31 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C71D1991
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:31:30 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-643b60855c8so12099374b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684236689; x=1686828689;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f8TUSfB//uZ1XbD3kWB/ksx9maJk04w48+oSOx5pWns=;
-        b=YXPudcoEnaIuqLR9oLD+E6YMvpFsyH9ZonQ9qjuaIlnN+I8k82aGuZhpdTg2LQBMik
-         jlW1pbd7vWhARto46cVuarQnoBIelTcRoGuoQHmt5szTKBYXxh3fasgpdL/al7f75R5k
-         ytPbezXxBlKtshokgXzGMf4ZGcOshdGipfteUPncL0RhhbeXzbh3Ij9qGt4bbOeS82ct
-         AfFwAqzLmDib6/eft6pzF/T9xcaWtuJA5Ne7Y7XVg5cBBKnjoXC2Rjp9j70N4MkHPkY+
-         erfjt7grl8WzDKmEVYWBtrX2Y2IxuEZfRsmVvP8TS83PtduLoJJipNYBzW4gFtEOm+gB
-         CjKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684236689; x=1686828689;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f8TUSfB//uZ1XbD3kWB/ksx9maJk04w48+oSOx5pWns=;
-        b=b3sNkKqBifONt76kiDFg20/nzKC3f+27P8n9k3P+uY9eBeNBgDH4xkibiEO390CNS9
-         TWWouRjI+7vtNr/BoQwPcWuzPA3Q/3Pvql43asn/WbpCS+BmGKjNYYEdhtB29WcbRYaL
-         gkyxp/E+zmAOUsMUaYEehOwvWDPOpPI+EBCx/4jTk1RvhAWJX15vsJ5W3Bb2G8siMfYT
-         oHijrB5okDaj8rd1KGsKxh1uNqa3UHdcvXsm6Sd5+RqEJbeLN1a5kftrEo/6fSumlbJ8
-         39nrmO5BBKvsA8xQiX8OX/nkTo3zcLmEN5l03kPXOVb8yIRz88Lsm6ahmXw5iRQOjSTv
-         z0SQ==
-X-Gm-Message-State: AC+VfDzvKXra/vWxDqNgLKY7uSFC/Nyngz/RtBjqI6xlcNdNlpv399pI
-        EZ+e/HXfbYEw9zUcOyrh4ic=
-X-Google-Smtp-Source: ACHHUZ7ixXKxfkDoBbRda0hUU7DawudKYghZqKxSvd9v66SwfBpxLon0QQK+DKL+aGEhjxePEqQ/yg==
-X-Received: by 2002:a05:6a20:8f13:b0:101:2160:ff89 with SMTP id b19-20020a056a208f1300b001012160ff89mr34991239pzk.38.1684236689424;
-        Tue, 16 May 2023 04:31:29 -0700 (PDT)
-Received: from smtpclient.apple ([220.253.28.180])
-        by smtp.gmail.com with ESMTPSA id c19-20020aa781d3000000b0064ca1fa8442sm3957252pfn.178.2023.05.16.04.31.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 04:31:28 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: drivers/platform/x86/apple-gmux.c:276:15: sparse: sparse: cast to restricted __be32
-Date:   Tue, 16 May 2023 21:31:16 +1000
-Message-Id: <D62B0A4F-6A2E-495D-B3AE-4CEAEE172E39@gmail.com>
-References: <56f2f65b-150d-3cf6-95f9-2dd8232d2717@redhat.com>
-Cc:     kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+        Tue, 16 May 2023 07:32:32 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BBD18E;
+        Tue, 16 May 2023 04:32:31 -0700 (PDT)
+Received: from localhost ([31.220.116.19]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1M3D3N-1q1u790aZ3-003hzl; Tue, 16 May 2023 13:32:14 +0200
+Date:   Tue, 16 May 2023 13:32:13 +0200
+From:   Andreas Klinger <ak@it-klinger.de>
+To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <56f2f65b-150d-3cf6-95f9-2dd8232d2717@redhat.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-X-Mailer: iPhone Mail (20E252)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v5 1/3] dt-bindings: iio: pressure: Support Honeywell
+ mprls0025pa sensor
+Message-ID: <ZGNpve4ux5KJ3BNQ@arbad>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGNpZM137jF5yzie@arbad>
+X-Provags-ID: V03:K1:Vffq3MgGOTKI+sFsILoLHDUpq9prObFOT0t+R8yOKq5742j+KHO
+ EIkiZUpSIvrsjHV2t0fC2XYNTD2p1mFd1KL0Nl0hAB2fbulRJIOYGAVdMMcCK2wBiklvcfT
+ 4ASWPPj+XWiDyjEOaI2YeMO6ReGGS14IDYS1MdtjqUGtbmG6ohpT126S2hCsp7mTS015+pu
+ zD6xbvwz408IAHfh51BxQ==
+UI-OutboundReport: notjunk:1;M01:P0:4XDL6aAvKGc=;mzMEevf4c7Z2YKmN6nQ7iH4T1ec
+ KO7GyrZvVweVQUvrqDSSsYgRO64OPgMmybEJ7Ne31k73uzetcBWZBn8jpKpsIePqBVhyUDjuG
+ Y1S7SXkMmymI15HDhRFbhjOVHKModLUGHQ9eCg0bdHvGy/H9A3AF+ODgMLavwvJz1YMKQmm5/
+ srCmWYxdiKlKj6aGtPAcaUbu8oPuertkz4Nbm87dFqdbLJaB0GL9SGdoNB17rZUvq00YLiss+
+ jmYbnODO6BNOnhP/UR86912PQaAUV9loyy7j/HHL0PXc6WkszDD9SPvCXIsmYmT8//w6ikScK
+ jQIPTF0k+S6AltqYLC2tYDCEtMNJzLoYDuzDli+Dys68zREOVc20IOOK9UfBnA0EmRkPjjtLy
+ 6fIrxbFUXA9Ej23of7mYgm9E7WcQ66OVsRCgR9KPuXDlFAMvatF9pnxvKpy4mWiH5Mwjg/DES
+ 5pVmEpQxUIbNKrjNQ7Y8MdFRnaDDq8RvWbcisRUwmCUDPSLPk5m4ZoJ0oPnh88BLYMJwO38zh
+ qLLiEAgwxSD9tcDTvFDDuTgSQBX/2lDgK3zVJn9vd/jMU5dF9Zv/DQ5Imnc/gtHkWL/JpeLk4
+ 1ZOgmmOCyLdIzv9JJtbBM831abRui39MNxOY+aF1LpyFLFCGxeVDpjB9wLm7PxdKJM3xahRxE
+ vG/mQ88yFJerizl0F2mVsL201u1QeNargBf7jwJlVA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Honeywell mprls0025pa is a pressure sensor series. There are many
+different models with different pressure ranges, units and transfer
+functions.
 
-> On 16 May 2023, at 8:27 pm, Hans de Goede <hdegoede@redhat.com> wrote:
->=20
-> =EF=BB=BFHi,
->=20
->> On 5/16/23 12:16, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
->> head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
->> commit: 0c18184de990e63f708b090bcb9fc6c0fbc427cd platform/x86: apple-gmux=
-: support MMIO gmux on T2 Macs
->> date:   9 weeks ago
->> config: i386-randconfig-s001-20230515
->> compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
->> reproduce:
->>        # apt-get install sparse
->>        # sparse version: v0.6.4-39-gce1a6720-dirty
->>        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.g=
-it/commit/?id=3D0c18184de990e63f708b090bcb9fc6c0fbc427cd
->>        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/g=
-it/torvalds/linux.git
->>        git fetch --no-tags linus master
->>        git checkout 0c18184de990e63f708b090bcb9fc6c0fbc427cd
->>        # save the config file
->>        mkdir build_dir && cp config build_dir/.config
->>        make W=3D1 C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=3D=
-build_dir ARCH=3Di386 olddefconfig
->>        make W=3D1 C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=3D=
-build_dir ARCH=3Di386 SHELL=3D/bin/bash drivers/platform/x86/
->>=20
->> If you fix the issue, kindly add following tag where applicable
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Link: https://lore.kernel.org/oe-kbuild-all/202305161712.5l3f4iI4-lkp@i=
-ntel.com/
->=20
-> <snip>
->=20
->> vim +276 drivers/platform/x86/apple-gmux.c
->>=20
->>   265   =20
->>   266    static u32 gmux_mmio_read32(struct apple_gmux_data *gmux_data, i=
-nt port)
->>   267    {
->>   268        u32 val;
->>   269   =20
->>   270        mutex_lock(&gmux_data->index_lock);
->>   271        gmux_mmio_wait(gmux_data);
->>   272        iowrite8((port & 0xff), gmux_data->iomem_base + GMUX_MMIO_PO=
-RT_SELECT);
->>   273        iowrite8(GMUX_MMIO_READ | sizeof(val),
->>   274            gmux_data->iomem_base + GMUX_MMIO_COMMAND_SEND);
->>   275        gmux_mmio_wait(gmux_data);
->>> 276        val =3D be32_to_cpu(ioread32(gmux_data->iomem_base));
->=20
-> Ok, so sparse does not like this line.
->=20
->>   277        mutex_unlock(&gmux_data->index_lock);
->>   278   =20
->>   279        return val;
->>   280    }
->>   281   =20
->>   282    static void gmux_mmio_write32(struct apple_gmux_data *gmux_data,=
- int port,
->>   283                       u32 val)
->>   284    {
->>   285        mutex_lock(&gmux_data->index_lock);
->>> 286        iowrite32(cpu_to_be32(val), gmux_data->iomem_base);
->=20
-> Nor this line. But this is what we want (convert to/from be32 to CPU
-> when reading/writing).
->=20
-> There is iowrite32be() but that always unconditionally swabs
-> the byte order independent of the CPU byte-order.
->=20
-> Now this is an x86 driver so always swapping is fine, still
-> I wonder if there is a better option here then using
-> iowrite32be() and ioread32be() ?
+The range and transfer function need to be set up in the dt. Therefore
+new properties honeywell,pmin-pascal, honeywell,pmax-pascal,
+honeywell,transfer-function are introduced.
 
-Thanks for finding those functions. I can't think of anything better unless t=
-here's a simple way to change sparse's rules so that it will be happy with c=
-ode like this.
+Add dt-bindings.
 
-Regards,
-Orlando
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+---
+ .../iio/pressure/honeywell,mprls0025pa.yaml   | 104 ++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
 
->=20
-> Regards,
->=20
-> Hans
->=20
->=20
->=20
->=20
->>   287        iowrite8(port & 0xff, gmux_data->iomem_base + GMUX_MMIO_PORT=
-_SELECT);
->>   288        iowrite8(GMUX_MMIO_WRITE | sizeof(val),
->>   289            gmux_data->iomem_base + GMUX_MMIO_COMMAND_SEND);
->>   290        gmux_mmio_wait(gmux_data);
->>   291        mutex_unlock(&gmux_data->index_lock);
->>   292    }
->>   293   =20
->>=20
->=20
+diff --git a/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml b/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+new file mode 100644
+index 000000000000..c0a923febf13
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+@@ -0,0 +1,104 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/pressure/honeywell,mprls0025pa.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Honeywell mprls0025pa pressure sensor
++
++maintainers:
++  - Andreas Klinger <ak@it-klinger.de>
++
++description: |
++  Honeywell pressure sensor of model mprls0025pa.
++
++  This sensor has an I2C and SPI interface. Only the I2C interface is
++  implemented.
++
++  There are many models with different pressure ranges available. The vendor
++  calls them "mpr series". All of them have the identical programming model and
++  differ in the pressure range, unit and transfer function.
++
++  To support different models one need to specify the pressure range as well as
++  the transfer function. Pressure range needs to be converted from its unit to
++  pascal.
++
++  The transfer function defines the ranges of numerical values delivered by the
++  sensor. The minimal range value stands for the minimum pressure and the
++  maximum value also for the maximum pressure with linear relation inside the
++  range.
++
++  Specifications about the devices can be found at:
++    https://prod-edam.honeywell.com/content/dam/honeywell-edam/sps/siot/en-us/
++      products/sensors/pressure-sensors/board-mount-pressure-sensors/
++      micropressure-mpr-series/documents/
++      sps-siot-mpr-series-datasheet-32332628-ciid-172626.pdf
++
++properties:
++  compatible:
++    const: honeywell,mprls0025pa
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  reset-gpios:
++    description:
++      Optional GPIO for resetting the device.
++      If not present the device is not resetted during the probe.
++    maxItems: 1
++
++  honeywell,pmin-pascal:
++    description:
++      Minimum pressure value the sensor can measure in pascal.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  honeywell,pmax-pascal:
++    description:
++      Maximum pressure value the sensor can measure in pascal.
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  honeywell,transfer-function:
++    description: |
++      Transfer function which defines the range of valid values delivered by the
++      sensor.
++      1 - A, 10% to 90% of 2^24 (1677722 .. 15099494)
++      2 - B, 2.5% to 22.5% of 2^24 (419430 .. 3774874)
++      3 - C, 20% to 80% of 2^24 (3355443 .. 13421773)
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++  vdd-supply:
++    description: provide VDD power to the sensor.
++
++required:
++  - compatible
++  - reg
++  - honeywell,pmin-pascal
++  - honeywell,pmax-pascal
++  - honeywell,transfer-function
++  - vdd-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pressure@18 {
++            compatible = "honeywell,mprls0025pa";
++            reg = <0x18>;
++            reset-gpios = <&gpio3 19 GPIO_ACTIVE_HIGH>;
++            interrupt-parent = <&gpio3>;
++            interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
++            honeywell,pmin-pascal = <0>;
++            honeywell,pmax-pascal = <172369>;
++            honeywell,transfer-function = <1>;
++            vdd-supply = <&vcc_3v3>;
++        };
++    };
+-- 
+2.30.2
+
+
+-- 
+Andreas Klinger
+Grabenreith 27
+84508 Burgkirchen
++49 8623 919966
+ak@it-klinger.de
+www.it-klinger.de
+www.grabenreith.de
