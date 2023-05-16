@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB74C7043F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D5E7043F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjEPDbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 23:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42968 "EHLO
+        id S229946AbjEPDcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 23:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjEPDbL (ORCPT
+        with ESMTP id S229468AbjEPDce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 23:31:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1A249DF;
-        Mon, 15 May 2023 20:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684207869; x=1715743869;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=B0do+1g3vcTblxJFOMtHG8mJfWB+a64BWZw/WqEvlRA=;
-  b=dYDs5jVTM5gM7/lCc0F2fYJiWAZvrrgv4uQiBxaxCea9IjmnbMFVqriW
-   8Fl9auMNDbaNsu7x+j+TrxrbEBAKth8PnxmRnQneeCX/dP1qlrUHO6AzW
-   qcFdiTXV9X0FuCYMgw9DpCJzOkfccPRbLutK7hGFbZQPQQ3f3yEfbH7wi
-   yOJlhBMeHI+ZqGTDuErWKgYMj5rgQNv+iBiQb3KiB2ex6D9BasjeLHuUN
-   j+lmPVNb4fTfEhfUPY5YS3QaS79cDI5bFis3kEN9C7t79qZV4O1KguVQB
-   ce2XVdyBis/HfkRn0R1YsQ2OEErr5ZOYtIGjPG/q0wJfrjYsgVBuityt3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="351403263"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="351403263"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 20:31:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="695278786"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="695278786"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.172.231]) ([10.249.172.231])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 20:30:58 -0700
-Message-ID: <edad36c5-e718-a54e-596a-b086cf486b55@linux.intel.com>
-Date:   Tue, 16 May 2023 11:30:56 +0800
+        Mon, 15 May 2023 23:32:34 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553CC1732;
+        Mon, 15 May 2023 20:32:30 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 1608F41202;
+        Tue, 16 May 2023 03:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684207946;
+        bh=92q1PLUKc0SfASvf/P3OXVFQ0dTuTKcCi5d/Xu7OF+4=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=pC5sjxArJ3TluBRly9STHhWHkxbjaH2d64KQL7gj0qEj08FgwvrvgQz0z5x/N0c15
+         9o5eHTsMkf4xt4pSqW9i/FaRcHGTySOS8zSVvE2uRJC5uAuaA1KFingu2n4LwKQY7n
+         EPq8/FsDFv1w3f53gVErcQfRTkpFpRUG4Hs74g5W78gVlyCaxJq+n36ktQ8/LKoVAH
+         5DgJBqTdDJb3GXPx2PtrXCn1xea/cJVxmlmc+/lNOvRJWgwPVhdNnp/K7HLwt4eVR5
+         QIhV4ken2dpeKbOSEIK1xyK8do+d4GR0acfCZulltgX6QVfv5rSg5C3hKisbuo6NDj
+         2TC8oJrj2kq+w==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     tony.luck@intel.com
+Cc:     acelan.kao@canonical.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM is absent
+Date:   Tue, 16 May 2023 11:31:33 +0800
+Message-Id: <20230516033133.340936-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 6/6] KVM: x86: Expose LAM feature to userspace VMM
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "robert.hu@linux.intel.com" <robert.hu@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-References: <20230510060611.12950-1-binbin.wu@linux.intel.com>
- <20230510060611.12950-7-binbin.wu@linux.intel.com>
- <cee713c15a4d9c4b8dabe6cfd8b9e689a8bdf375.camel@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <cee713c15a4d9c4b8dabe6cfd8b9e689a8bdf375.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,70 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following splat can be found on many systems equipped with EDAC:
+[   13.875276] UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
+[   13.875279] shift exponent -66 is negative
+[   13.875280] CPU: 11 PID: 519 Comm: systemd-udevd Not tainted 6.4.0-rc1+ #1
+[   13.875282] Hardware name: HP HP Z4 G5 Workstation Desktop PC/8962, BIOS U61 Ver. 01.01.15 04/19/2023
+[   13.875283] Call Trace:
+[   13.875285]  <TASK>
+[   13.875287]  dump_stack_lvl+0x48/0x70
+[   13.875295]  dump_stack+0x10/0x20
+[   13.875297]  __ubsan_handle_shift_out_of_bounds+0x156/0x310
+[   13.875302]  ? __kmem_cache_alloc_node+0x196/0x300
+[   13.875307]  skx_get_dimm_info.cold+0xac/0x15d [i10nm_edac]
+[   13.875312]  i10nm_get_dimm_config+0x240/0x360 [i10nm_edac]
+[   13.875316]  ? kasprintf+0x4e/0x80
+[   13.875321]  skx_register_mci+0x12b/0x1d0 [i10nm_edac]
+[   13.875324]  ? __pfx_i10nm_get_dimm_config+0x10/0x10 [i10nm_edac]
+[   13.875329]  i10nm_init+0x89f/0x1d10 [i10nm_edac]
+[   13.875333]  ? __pfx_i10nm_init+0x10/0x10 [i10nm_edac]
+[   13.875337]  do_one_initcall+0x46/0x240
+[   13.875342]  ? kmalloc_trace+0x2a/0xb0
+[   13.875346]  do_init_module+0x6a/0x280
+[   13.875350]  load_module+0x2419/0x2500
+[   13.875353]  ? security_kernel_post_read_file+0x5c/0x80
+[   13.875358]  __do_sys_finit_module+0xcc/0x150
+[   13.875360]  ? __do_sys_finit_module+0xcc/0x150
+[   13.875363]  __x64_sys_finit_module+0x18/0x30
+[   13.875365]  do_syscall_64+0x59/0x90
+[   13.875368]  ? syscall_exit_to_user_mode+0x2a/0x50
+[   13.875371]  ? do_syscall_64+0x69/0x90
+[   13.875372]  ? do_syscall_64+0x69/0x90
+[   13.875373]  ? do_syscall_64+0x69/0x90
+[   13.875374]  ? do_syscall_64+0x69/0x90
+[   13.875375]  ? syscall_exit_to_user_mode+0x2a/0x50
+[   13.875376]  ? do_syscall_64+0x69/0x90
+[   13.875377]  ? do_syscall_64+0x69/0x90
+[   13.875378]  ? do_syscall_64+0x69/0x90
+[   13.875379]  ? sysvec_call_function+0x4e/0xb0
+[   13.875381]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
 
+When a DIMM slot is empty, the read value of mtr can be 0xffffffff,
+therefore the wrong "ranks" value creates shift-out-of-bounds error. The
+same issue can be found on NVDIMM too.
 
-On 5/12/2023 8:49 PM, Huang, Kai wrote:
-> On Wed, 2023-05-10 at 14:06 +0800, Binbin Wu wrote:
->> From: Robert Hoo <robert.hu@linux.intel.com>
->>
->> LAM feature is enumerated by CPUID.7.1:EAX.LAM[bit 26].
->> Expose the feature to userspace as the final step after the following
->> supports:
->> - CR4.LAM_SUP virtualization
->> - CR3.LAM_U48 and CR3.LAM_U57 virtualization
->> - Check and untag 64-bit linear address when LAM applies in instruction
->>    emulations and VMExit handlers.
->>
->> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
->> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
->> Reviewed-by: Jingqi Liu <jingqi.liu@intel.com>
->> Reviewed-by: Chao Gao <chao.gao@intel.com>
->> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
->> ---
->>   arch/x86/kvm/cpuid.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
->> index 123bf8b97a4b..fc8286f747ac 100644
->> --- a/arch/x86/kvm/cpuid.c
->> +++ b/arch/x86/kvm/cpuid.c
->> @@ -664,7 +664,7 @@ void kvm_set_cpu_caps(void)
->>   	kvm_cpu_cap_mask(CPUID_7_1_EAX,
->>   		F(AVX_VNNI) | F(AVX512_BF16) | F(CMPCCXADD) |
->>   		F(FZRM) | F(FSRS) | F(FSRC) |
->> -		F(AMX_FP16) | F(AVX_IFMA)
->> +		F(AMX_FP16) | F(AVX_IFMA) | F(LAM)
->>   	);
->>   
->>   	kvm_cpu_cap_init_kvm_defined(CPUID_7_1_EDX,
-> Per spec LAM supports SGX enclave mode too (chapter 6.8 INTEL SGX INTERACTIONS).
->
-> Per my read, whether you can enable LAM57 or LAM48 can be determined by bit 8
-> and 9 of CPUID.(EAX=12H, ECX=01H):EAX.  There are some special rule of whether
-> LAM is applied to certain linear address too, i.e. per my read SECS.BASEADDR
-> isn't subject to LAM in ECREATE.
-This is considered when implement patch 5, but you remind me that I 
-should add the materials to describe the handling of SGX system leaf 
-functions in the chagelog.
+So only consider DIMM/NVDIMM is present when the value of mtr/mcddrtcfg
+is not ~0.
 
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/edac/sb_edac.c    | 2 +-
+ drivers/edac/skx_common.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->
-> My first glance to expose LAM to guest's SGX enclave is just as simple as what
-> you did here -- we just need to expose the two new bits to userspace in
-> KVM_GET_SUPPORTED_CPUID.
->
-> But I think this can be done in a separate series,
-Yes, support LAM inside SGX enclave is not included in the inital 
-enabling patch series.
-
->   especially as the spec
-> doesn't say when LAM is available in CPUID(0x7, 0x1):EAX, it will be always
-> available in CPUID(0x12, 0x1).EAX.
->
-> But could you help to check the hardware hehaviour whether they will always
-> appear together in CPUID?
-For this part, I need furtuer investigation.
-Will get back to you when I get the answer.
-
-
+diff --git a/drivers/edac/sb_edac.c b/drivers/edac/sb_edac.c
+index 0c779a0326b6..bc5155e84514 100644
+--- a/drivers/edac/sb_edac.c
++++ b/drivers/edac/sb_edac.c
+@@ -211,7 +211,7 @@ static const int mtr_regs[] = {
+ static const int knl_mtr_reg = 0xb60;
+ 
+ #define RANK_DISABLE(mtr)		GET_BITFIELD(mtr, 16, 19)
+-#define IS_DIMM_PRESENT(mtr)		GET_BITFIELD(mtr, 14, 14)
++#define IS_DIMM_PRESENT(mtr)		((mtr != ~0) && GET_BITFIELD(mtr, 14, 14))
+ #define RANK_CNT_BITS(mtr)		GET_BITFIELD(mtr, 12, 13)
+ #define RANK_WIDTH_BITS(mtr)		GET_BITFIELD(mtr, 2, 4)
+ #define COL_WIDTH_BITS(mtr)		GET_BITFIELD(mtr, 0, 1)
+diff --git a/drivers/edac/skx_common.h b/drivers/edac/skx_common.h
+index b6d3607dffe2..2f975ffeaac9 100644
+--- a/drivers/edac/skx_common.h
++++ b/drivers/edac/skx_common.h
+@@ -50,8 +50,8 @@
+ #define NUM_CHANNELS	MAX(SKX_NUM_CHANNELS, I10NM_NUM_CHANNELS)
+ #define NUM_DIMMS	MAX(SKX_NUM_DIMMS, I10NM_NUM_DIMMS)
+ 
+-#define IS_DIMM_PRESENT(r)		GET_BITFIELD(r, 15, 15)
+-#define IS_NVDIMM_PRESENT(r, i)		GET_BITFIELD(r, i, i)
++#define IS_DIMM_PRESENT(r)		((r != ~0) && GET_BITFIELD(r, 15, 15))
++#define IS_NVDIMM_PRESENT(r, i)		((r != ~0) && GET_BITFIELD(r, i, i))
+ 
+ #define MCI_MISC_ECC_MODE(m)	(((m) >> 59) & 15)
+ #define MCI_MISC_ECC_DDRT	8	/* read from DDRT */
+-- 
+2.34.1
 
