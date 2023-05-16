@@ -2,159 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAC770528C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C12705292
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbjEPPpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S234158AbjEPPqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbjEPPp1 (ORCPT
+        with ESMTP id S234124AbjEPPp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:45:27 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2055.outbound.protection.outlook.com [40.107.20.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8728A78;
-        Tue, 16 May 2023 08:44:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mWYK3MyVA8z5KABk/qCXm9AFHF0mQl9RLl8my/T3RBbeMXutTgLTvQZDS5N2RUG+6pJNxEkysgKOHQcToCWlJKMW12psM8eTjfL7iZNHeZPD+R2G1oixB5KtLSzDwkq2XoXkpQLYdklVj6Zk2zVijQjE3YVZtGUGR6SY8MMfdBZ166R7vYX7svhgo7yTQVvtTPn53uC1dnRvKT3J4jOOZKAvlfC3ZacA/CsekO9fqVlBpKShz0hD7+y9nHkyBxGobdg2QXlbF9MxBrUJ1BokzH71AqN7WMl/qUu44XIiwWFwSfD9oTbIw5fbjXj9fOBBQvZEyOWuk1K6UlxvH4f1ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UgItz6+LGBXMCLOpx3et6fGh8NUdfYz93TvZYNwvjtY=;
- b=hnvjUGOPe259o4/h4M58ZxeFO0OtTnH6rTLEVELo92wt/CCs2SzrJoK5d23WfJNo8cJ8UhmEvbDUr9MG2Iua2L9Rb2m+2KMcb9TeOJDQScD0rNYgdWxMPgssJ/eQ/Nj5ZmyGxWtxICCvl67xhztUAVVVY/jRYUGf22Jok8s7KrqMHjIaLNx7WcTdJnd4q+C+6lQV2ADYiuHwoYBfOuBlypwI7wY79EV1TjrThjktwCh1C9+FmM2uZqS08Mlme0GlVt5WqQppH/6Iur0P/SVDLl/70DFKdbsJtlnqLrdBTlEcNFU8x1cL3ftIV5O/88U8Zm1j6YY/Hn5tF/N6FqKKwg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UgItz6+LGBXMCLOpx3et6fGh8NUdfYz93TvZYNwvjtY=;
- b=L2dX28ox252ERCHKMEsAH3Ni34Syxvcoamvn/yXDDD8VRiOw+UfUFXKumXH1v+tlejmvTQpmi0+NBWVayMK0inUprOlOsJWkrmvN9q6b6g6Agy6uzf7BAgjIjvIhKerxg5hcMQWJhc08f+9Rmj/UUx64QwbYngOaRbT2F/b9Gas=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AM9PR04MB7668.eurprd04.prod.outlook.com (2603:10a6:20b:2dd::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24; Tue, 16 May
- 2023 15:44:30 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::b027:17aa:e5f5:4fea]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::b027:17aa:e5f5:4fea%5]) with mapi id 15.20.6387.032; Tue, 16 May 2023
- 15:44:30 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     Jose Abreu <Jose.Abreu@synopsys.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: pcs: xpcs: fix C73 AN not getting enabled
-Date:   Tue, 16 May 2023 18:44:10 +0300
-Message-Id: <20230516154410.4012337-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0502CA0014.eurprd05.prod.outlook.com
- (2603:10a6:803:1::27) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Tue, 16 May 2023 11:45:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F9393C2;
+        Tue, 16 May 2023 08:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF645634FA;
+        Tue, 16 May 2023 15:45:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E05C433EF;
+        Tue, 16 May 2023 15:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684251924;
+        bh=jsW/op+oisDWGtcdd1S1pr3jXJMa5TQFW/rAifvBppI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EiRSOJ3SRuh+vsAwxWSGiGyBXFFFKTLR3y3UOY7zHFwsOFtz2hnQq4O4WlbHq9y19
+         sFd8XCFBAj2k7SXb5lYZTZJHbHBNmLmfOdq0ayniF8MMv9XVZVYqnkYOSFfK8jD6nE
+         gwgXDmAM08S88sbePBSplgI1ga/BBbxcw8iW5Jx014fVDSzxNLzcVhCWbYFMB5C+ZJ
+         D+hKy1Ut7ocGpt9qwMOEdxw5RBZcwAcMcjfbV7XUo4c9HaB7tiMZ5T3JLozq/ISLG4
+         90T16ke67Ek8bhVdims/hD8Inr05JMIRFK6TN50jcziLOr+LzxMoTuZRvx8bIOH/lE
+         wDCgKtmqBP0dw==
+Date:   Tue, 16 May 2023 17:45:19 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 22/32] vfs: inode cache conversion to hash-bl
+Message-ID: <20230516-brand-hocken-a7b5b07e406c@brauner>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-23-kent.overstreet@linux.dev>
+ <20230510044557.GF2651828@dread.disaster.area>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM9PR04MB7668:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82b9b869-79d2-4d3e-b78e-08db56247002
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zOif2akDFrKMcrysjGJmvThZwZ6Jo5G82q223vLMZfezK84xcTPL9HuyGg/vDSPlPaRKW+tpYiGlZC389bTzuA4T6+3tsxNnpvRKxPKlmzp/hl4L18VyK8ysXUATn9VypNPcjxkBgjnjekrbV2x/sY/o3XpogFb1izcJ9Z+jd/bPiiXUpjR66cRPXTG/GHXfxnGBjlhbLabWLQNtMsZIt3zWG2oFRakT/DFW3iUhQw4HLCjdmrFTxQmu0SpLPqpCxgTO1y/pr2aywL2pLTA7HzcLOIAHmWts8oYobATKEUMH+lZWsbENjyGirOlGL8hzDXxy87iIk5S707Qo6VUd5qIkUgEAmhPPpFYjcE4ethEoeO6Ln5WZMQhGOAdm8SLqNTFNN2QvsJMF8Uo9DIRRefotYOW01HkkPrgwQU1t7lx/BkmfdNItyP3PGSVMcw/2Rn7RiP5cOnnvoF2QhR69yf3HG5EVJzOM3k5wDdZNac+JO8UmNfOuuHzQH5kAuVfKTIbBiRcPgKP6VS2hiJBP2UQwfaNFoZg5Tht3lPZaGegBKZdfFSiq8NNsk7aiTa2dwd8TgEdz8p4KHAp6slTRbeGU77sveGKHJIuRO+G97h4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(396003)(136003)(39860400002)(451199021)(36756003)(8676002)(44832011)(5660300002)(8936002)(2906002)(7416002)(2616005)(66556008)(66476007)(41300700001)(66946007)(4326008)(83380400001)(6916009)(316002)(86362001)(6506007)(186003)(478600001)(1076003)(6512007)(54906003)(38100700002)(26005)(38350700002)(52116002)(966005)(6666004)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FFyd9+RcXWYi5hDU43BTRVBXDgaCiHI4RmdqH3QNHmVg6IbgKcrToiSF/mg5?=
- =?us-ascii?Q?D1VzHvup+ggOX03KDjM35e0ysdduW3PVjoxWw5YSNjCOMHI5uCRJI17AMVhs?=
- =?us-ascii?Q?zrwT8RmUYwRU0d8FDhH7wMlNyqk0bHPEpEsBeoqLZaJ9hPRiKUu8fLV1AWEk?=
- =?us-ascii?Q?3g2AHES3LZFjMsDOH+wiHmkWJeM2/XJ0UBsbrk8IRVbopH98G9I6qhNgfYgn?=
- =?us-ascii?Q?pFl/QdUAQbaaE79aQN3Nl+ATeizq9bTuvWWT8MBCW0SOpqJQaxjrDNZBsWwP?=
- =?us-ascii?Q?zphvsFBbtCey5+ArsxyitW1BjhH8NN3ecRYDWhqTfaF9he3strPHR5WJE1fF?=
- =?us-ascii?Q?BqnjmrmHyxdqzfXIIS7CXMVRRPLdQWBjP6/1Xl1aeBnoGPrZ/K0t5aQTmiyT?=
- =?us-ascii?Q?VgdwrtmBUAVmp/HmWH4WGixuryRfn1+Z8PwPAjBwB46m4fhCQAnNcNZaSxAY?=
- =?us-ascii?Q?4KaaTBtsNTGO2jP5K8SmYJBjTx0lBG+JiJ4tSryx56Lz7Y8HnutuwPaA8+SP?=
- =?us-ascii?Q?L4kM/MUHozlmuJC7tMA5QudaYxvSgjMe0MBLqgDXgHvd2oefdu2ZOwlbEQxb?=
- =?us-ascii?Q?UUVxP7esyD6PlN5jCRsAtfkWf6kUoGG+dPdNSkPJg6zdTko8FSKjHOqWAwN2?=
- =?us-ascii?Q?sT++b5wxboLl7zEdSUm/rWXqJZOA3UaRiUbLe+Fm4vcKoAgEavSLHyDneZfe?=
- =?us-ascii?Q?JOGs5QEnELhqbpwRlUdl/ChxPCVavPjRuK8k02OhLZ1wtNBWeVZvCPhz5zvt?=
- =?us-ascii?Q?I6wp4bJgx64ct8MAf97N5WrwQFNZWVlPaIbkNqSZp/Lus9Do2II/F8CltD6I?=
- =?us-ascii?Q?BHmi2krywb30QbAK4iDEy04AW+0WkzzFuDQEapdiLYP0lo9zRT3NsLI/oVb/?=
- =?us-ascii?Q?/tfsTiqUSxLir8dZPIPfo8MZNa+xQfYa/72dgITx8aoHASIiSET1NOlevD4n?=
- =?us-ascii?Q?AhA/An4PE5F/Yv9D+6HHBJtnue3w8968PX9nPHrH0Jiquc7i6gzVGCPtPe8j?=
- =?us-ascii?Q?9UEimDW8n1H54GVArvr3KWy8418dzqYYZ2hGmc1gxa7RlEjUGO7PTm108Z92?=
- =?us-ascii?Q?WEGk+UFTTw3eijeZKe/CXJ/WGmsBLj7//uE2neLb6nYqcAWZk4bjbTSSqjiO?=
- =?us-ascii?Q?ZhihVBY0Lxbifnwq51LIqmniEOaoT5eVm5W2D+P5rOBwnK0SeHEnwc2evem+?=
- =?us-ascii?Q?o5LDGJfZy2XuAlurFtAsprp3MO6/7IeLhaZ8PM6Zn+bbCpgVQDiFjofx4FmI?=
- =?us-ascii?Q?KAqbd3/4l2gWpt0dMZqaV3uoaXZb65SERI/9bJp0jSu+b9/0dFU21T0rGkGs?=
- =?us-ascii?Q?nhyVfYLLlGu0uYS13yAP0iCZBn765aWkxgOyp63xw6MOwsr5zu61y36+frtU?=
- =?us-ascii?Q?0FixeSrb5EcgDoK+TUREdCZgbIBmwCBPTk0m7XYkMtD/VEYlOTS+VS12Pe5p?=
- =?us-ascii?Q?DxQvAu70dGptv2WP6pXpjxnf3GF74YCcfVVERHtCQtIcl5aZtBzNkN5OCLC1?=
- =?us-ascii?Q?GNRPnx0gNT9spzJshBPQOgCZfw1FG9l0aocmyDmnRuu1Z2/WAZIlyNWpkBp7?=
- =?us-ascii?Q?vEM8J5jR4V95eOcIQncZheAtq3Ej3HPAsyt837VzoZfcGVY+XYFjUrOipp0L?=
- =?us-ascii?Q?3A=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82b9b869-79d2-4d3e-b78e-08db56247002
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 15:44:30.2736
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 32zkwaswPEIJB80nJcFWEuhqbrzAN9ijVQt1ZfJRUqWH0XSXUhfRrGJ5peLXFaFgc1orlTCHogJ9DzLymWmUIg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7668
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230510044557.GF2651828@dread.disaster.area>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The XPCS expects clause 73 (copper backplane) autoneg to follow the
-ethtool autoneg bit. It actually did that until the blamed
-commit inaptly replaced state->an_enabled (coming from ethtool) with
-phylink_autoneg_inband() (coming from the device tree or struct
-phylink_config), as part of an unrelated phylink_pcs API conversion.
+On Wed, May 10, 2023 at 02:45:57PM +1000, Dave Chinner wrote:
+> On Tue, May 09, 2023 at 12:56:47PM -0400, Kent Overstreet wrote:
+> > From: Dave Chinner <dchinner@redhat.com>
+> > 
+> > Because scalability of the global inode_hash_lock really, really
+> > sucks.
+> > 
+> > 32-way concurrent create on a couple of different filesystems
+> > before:
+> > 
+> > -   52.13%     0.04%  [kernel]            [k] ext4_create
+> >    - 52.09% ext4_create
+> >       - 41.03% __ext4_new_inode
+> >          - 29.92% insert_inode_locked
+> >             - 25.35% _raw_spin_lock
+> >                - do_raw_spin_lock
+> >                   - 24.97% __pv_queued_spin_lock_slowpath
+> > 
+> > -   72.33%     0.02%  [kernel]            [k] do_filp_open
+> >    - 72.31% do_filp_open
+> >       - 72.28% path_openat
+> >          - 57.03% bch2_create
+> >             - 56.46% __bch2_create
+> >                - 40.43% inode_insert5
+> >                   - 36.07% _raw_spin_lock
+> >                      - do_raw_spin_lock
+> >                           35.86% __pv_queued_spin_lock_slowpath
+> >                     4.02% find_inode
+> > 
+> > Convert the inode hash table to a RCU-aware hash-bl table just like
+> > the dentry cache. Note that we need to store a pointer to the
+> > hlist_bl_head the inode has been added to in the inode so that when
+> > it comes to unhash the inode we know what list to lock. We need to
+> > do this because the hash value that is used to hash the inode is
+> > generated from the inode itself - filesystems can provide this
+> > themselves so we have to either store the hash or the head pointer
+> > in the inode to be able to find the right list head for removal...
+> > 
+> > Same workload after:
+> > 
+> > Signed-off-by: Dave Chinner <dchinner@redhat.com>
+> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: linux-fsdevel@vger.kernel.org
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> 
+> I have been maintaining this patchset uptodate in my own local trees
+> and the code in this patch looks the same. The commit message above,
+> however, has been mangled. The full commit message should be:
+> 
+> vfs: inode cache conversion to hash-bl
+> 
+> Because scalability of the global inode_hash_lock really, really
+> sucks and prevents me from doing scalability characterisation and
+> analysis of bcachefs algorithms.
+> 
+> Profiles of a 32-way concurrent create of 51.2m inodes with fsmark
+> on a couple of different filesystems on a 5.10 kernel:
+> 
+> -   52.13%     0.04%  [kernel]            [k] ext4_create
+>    - 52.09% ext4_create
+>       - 41.03% __ext4_new_inode
+>          - 29.92% insert_inode_locked
+>             - 25.35% _raw_spin_lock
+>                - do_raw_spin_lock
+>                   - 24.97% __pv_queued_spin_lock_slowpath
+> 
+> 
+> -   72.33%     0.02%  [kernel]            [k] do_filp_open
+>    - 72.31% do_filp_open
+>       - 72.28% path_openat
+>          - 57.03% bch2_create
+>             - 56.46% __bch2_create
+>                - 40.43% inode_insert5
+>                   - 36.07% _raw_spin_lock
+>                      - do_raw_spin_lock
+>                           35.86% __pv_queued_spin_lock_slowpath
+>                     4.02% find_inode
+> 
+> btrfs was tested but it is limited by internal lock contention at
+> >=2 threads on this workload, so never hammers the inode cache lock
+> hard enough for this change to matter to it's performance.
+> 
+> However, both bcachefs and ext4 demonstrate poor scaling at >=8
+> threads on concurrent lookup or create workloads.
+> 
+> Hence convert the inode hash table to a RCU-aware hash-bl table just
+> like the dentry cache. Note that we need to store a pointer to the
+> hlist_bl_head the inode has been added to in the inode so that when
+> it comes to unhash the inode we know what list to lock. We need to
+> do this because, unlike the dentry cache, the hash value that is
+> used to hash the inode is not generated from the inode itself. i.e.
+> filesystems can provide this themselves so we have to either store
+> the hashval or the hlist head pointer in the inode to be able to
+> find the right list head for removal...
+> 
+> Concurrent create with variying thread count (files/s):
+> 
+>                 ext4                    bcachefs
+> threads         vanilla  patched        vanilla patched
+> 2               117k     112k            80k     85k
+> 4               185k     190k           133k    145k
+> 8               303k     346k           185k    255k
+> 16              389k     465k           190k    420k
+> 32              360k     437k           142k    481k
+> 
+> CPU usage for both bcachefs and ext4 at 16 and 32 threads has been
+> halved on the patched kernel, while performance has increased
+> marginally on ext4 and massively on bcachefs. Internal filesystem
+> algorithms now limit performance on these workloads, not the global
+> inode_hash_lock.
+> 
+> Profile of the workloads on the patched kernels:
+> 
+> -   35.94%     0.07%  [kernel]                  [k] ext4_create
+>    - 35.87% ext4_create
+>       - 20.45% __ext4_new_inode
+> ...
+>            3.36% insert_inode_locked
+> 
+>    - 78.43% do_filp_open
+>       - 78.36% path_openat
+>          - 53.95% bch2_create
+>             - 47.99% __bch2_create
+> ....
+>               - 7.57% inode_insert5
+>                     6.94% find_inode
+> 
+> Spinlock contention is largely gone from the inode hash operations
+> and the filesystems are limited by contention in their internal
+> algorithms.
+> 
+> Signed-off-by: Dave Chinner <dchinner@redhat.com>
+> ---
+> 
+> Other than that, the diffstat is the same and I don't see any obvious
+> differences in the code comapred to what I've been running locally.
 
-Russell King suggests that state->an_enabled from the original code was
-just a proxy for the ethtool Autoneg bit, and that the correct way of
-restoring the functionality is to check for this bit in the advertising
-mask.
-
-Fixes: 11059740e616 ("net: pcs: xpcs: convert to phylink_pcs_ops")
-Link: https://lore.kernel.org/netdev/ZGNt2MFeRolKGFck@shell.armlinux.org.uk/
-Suggested-by: Russell King (Oracle) <linux@armlinux.org.uk>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
-The only (paranoid) test I've done is that the sja1105 driver (which
-also calls xpcs_do_config() outside of phylink, and provides a NULL
-pointer for "advertising") does not crash. Which was completely to be
-expected, since none of the nxp_sja1105 XPCS compatible modes uses
-DW_AN_C73.
-
- drivers/net/pcs/pcs-xpcs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/pcs/pcs-xpcs.c b/drivers/net/pcs/pcs-xpcs.c
-index 539cd43eae8d..f680d03863ff 100644
---- a/drivers/net/pcs/pcs-xpcs.c
-+++ b/drivers/net/pcs/pcs-xpcs.c
-@@ -873,7 +873,7 @@ int xpcs_do_config(struct dw_xpcs *xpcs, phy_interface_t interface,
- 
- 	switch (compat->an_mode) {
- 	case DW_AN_C73:
--		if (phylink_autoneg_inband(mode)) {
-+		if (test_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, advertising)) {
- 			ret = xpcs_config_aneg_c73(xpcs, compat);
- 			if (ret)
- 				return ret;
--- 
-2.34.1
-
+There's a bit of a backlog before I get around to looking at this but
+it'd be great if we'd have a few reviewers for this change.
