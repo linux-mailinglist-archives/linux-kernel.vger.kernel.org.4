@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E51704D0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB5D704D0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbjEPLwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S232154AbjEPLxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjEPLwd (ORCPT
+        with ESMTP id S232135AbjEPLxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:52:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 027425BBC
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:51:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F6B32F4;
-        Tue, 16 May 2023 04:52:38 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.59.123])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D4B83F663;
-        Tue, 16 May 2023 04:51:51 -0700 (PDT)
-Date:   Tue, 16 May 2023 12:51:46 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Gang Li <ligang.bdlg@bytedance.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [QUESTION FOR ARM64 TLB] performance issue and implementation
- difference of TLB flush
-Message-ID: <ZGNuUjG9cnzSkXEN@FVFF77S0Q05N>
-References: <2eb026b8-9e13-2b60-9e14-06417b142ac9@bytedance.com>
- <ZEokfJSM9a4ZZvQv@FVFF77S0Q05N>
- <369d1be2-d418-1bfb-bfc2-b25e4e542d76@bytedance.com>
- <9d976db8-b800-ad84-9c67-0afb942934d9@bytedance.com>
- <ZFpZAGeEXomG/eKS@FVFF77S0Q05N.cambridge.arm.com>
- <fd8bda4b-32ee-d06d-af77-12e30e70c0bf@bytedance.com>
+        Tue, 16 May 2023 07:53:08 -0400
+Received: from pku.edu.cn (mx18.pku.edu.cn [162.105.129.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDC275592;
+        Tue, 16 May 2023 04:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        Message-ID:References:MIME-Version:Content-Type:
+        Content-Disposition:Content-Transfer-Encoding:In-Reply-To; bh=VS
+        +nfB/HDB6UiMWHB0tfrnL0IzjksWjCC8c/qPgjfM4=; b=YCK/QyFJMV6H+G9ugE
+        SEE3gVFxOfyVQLaOzVc8LR0n2JMo/osesjt9jeW2N3jLc+8rPhlpCR/cVF4GuiE8
+        YO+q830PIIxaOLROE83jHcUu0uQscdxxuZ4XClq4hbZEcMQIAgWkcrbkVTKddX+/
+        8pXiiXPFFe7efNBgL9qgZuKGo=
+Received: from localhost (unknown [10.7.98.243])
+        by front01 (Coremail) with SMTP id 5oFpogBnYrxdbmNk7jBtAw--.4402S2;
+        Tue, 16 May 2023 19:52:02 +0800 (CST)
+Date:   Tue, 16 May 2023 19:51:57 +0800
+From:   Ruihan Li <lrh2000@pku.edu.cn>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Ruihan Li <lrh2000@pku.edu.cn>
+Subject: Re: [PATCH v2 4/4] mm: page_table_check: Ensure user pages are not
+ slab pages
+Message-ID: <mgnjfbklr6ew7p4utamdidrvdtchaazovfuduaabplwtpq3se2@uamamaee3rlk>
+References: <20230515130958.32471-1-lrh2000@pku.edu.cn>
+ <20230515130958.32471-5-lrh2000@pku.edu.cn>
+ <CA+CK2bBD_fdmz1fFjB8MXBGMHf4jzRWeBRirH3HdWRLqY7cmtw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fd8bda4b-32ee-d06d-af77-12e30e70c0bf@bytedance.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CA+CK2bBD_fdmz1fFjB8MXBGMHf4jzRWeBRirH3HdWRLqY7cmtw@mail.gmail.com>
+X-CM-TRANSID: 5oFpogBnYrxdbmNk7jBtAw--.4402S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1xur45Gr17XFyfCFyDZFb_yoW8Wr45p3
+        ykC3Z2kFs5KF92k3ZFqwsI9w1FyayDAay5Zrn5tF1vv3ZIyryxCr1UZwsa9rnI9rZFk34j
+        vF4Yqry0vayDZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
+        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
+        McIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
+        v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w
+        4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
+        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbZmitUUUUU==
+X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEMBVPy7743xAAWsf
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:47:16PM +0800, Gang Li wrote:
-> Hi,
+On Mon, May 15, 2023 at 12:28:54PM -0400, Pasha Tatashin wrote:
 > 
-> On 2023/5/9 22:30, Mark Rutland wrote:
-> > For example, early in D8.13 we have the rule:
-> > 
-> > | R_SQBCS
-> > |
-> > |   When address translation is enabled, a translation table entry for an
-> > |   in-context translation regime that does not cause a Translation fault, an
-> > |   Address size fault, or an Access flag fault is permitted to be cached in a
-> > |   TLB or intermediate TLB caching structure as the result of an explicit or
-> > |   speculative access.
-> > 
+> On Mon, May 15, 2023 at 9:10 AM Ruihan Li <lrh2000@pku.edu.cn> wrote:
+> >
+> > The current uses of PageAnon in page table check functions can lead to
+> > type confusion bugs between struct page and slab [1], if slab pages are
+> > accidentally mapped into the user space. This is because slab reuses the
+> > bits in struct page to store its internal states, which renders PageAnon
+> > ineffective on slab pages.
+> >
+> > Since slab pages are not expected to be mapped into the user space, this
+> > patch adds BUG_ON(PageSlab(page)) checks to make sure that slab pages
+> > are not inadvertently mapped. Otherwise, there must be some bugs in the
+> > kernel.
+> >
+> > Reported-by: syzbot+fcf1a817ceb50935ce99@syzkaller.appspotmail.com
+> > Closes: https://lore.kernel.org/lkml/000000000000258e5e05fae79fc1@google.com/ [1]
+> > Fixes: df4e817b7108 ("mm: page table check")
+> > Cc: <stable@vger.kernel.org> # 5.17
+> > Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
 > 
-> Thanks a lot!
+> Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > 
-> I looked up the x86 manual and found that the x86 TLB cache mechanism is
-> similar to arm64 (but the x86 guys haven't reply me yet):
+> I would also update order in mm/memory.c
+> static int validate_page_before_insert(struct page *page)
+> {
+> if (PageAnon(page) || PageSlab(page) || page_has_type(page))
 > 
-> Intel® 64 and IA-32 Architectures Software Developer Manuals:
-> > 4.10.2.3 Details of TLB Use
-> > Subject to the limitations given in the previous paragraph, the
-> > processor may cache a translation for any linear address, even if that
-> > address is not used to access memory. For example, the processor may
-> > cache translations required for prefetches and for accesses that result
-> > from speculative execution that would never actually occur in the
-> > executed code path.
-> 
-> Both architectures have similar TLB cache policies, why arm64 flush all
-> and x86 flush local in ghes_map and ghes_unmap?
-> 
-> I think flush all may be unnecessary.
-> 
-> 1. Before accessing ghes data. Each CPU needs to call ghes_map, which
-> will create the mapping and flush their own TLb to make sure the current
-> CPU is using the latest mapping.
-> 
-> 2. And there is no need to flush all in ghes_unmap, because the ghes_map
-> of other CPUs will flush their own TLBs before accessing the memory.
+> It is not strictly a bug there, as it works by accident, but
+> PageSlab() should go before PageAnon(), because without checking if
+> this is PageSlab() we should not be testing for PageAnon().
 
-This is not sufficient. Regardless of whether CPUs *explicitly* access the VA
-range, any CPU which can reach the live translation table entry is allowed to
-fetch that and allocate it into a TLB at any time.
+Right. Perhaps it would be better to send another patch for this
+separately.
 
-When a Break-Before-Make sequence isn't followed, the architecture permits a
-number of resulting behaviours, including "amalgamation", where the TLB entries
-are combined in some arbitrary IMPLEMENTATION DEFINED way. The architecture
-isn't very clear here, but doesn't rule out two entries being combined such
-that it generates an atbirary physical address and/or such tha the MMU thinks
-the entry is from an intermediate walk. In either of those cases, the CPU might
-speculative access device memory (which could change the state of the system,
-or cause fatal SErrors), and/or allocate further junk into TLBs.
-
-So per the architecture, broadcast maintenance is necessary on arm64.  The only
-way to avoid it would be to have a local set of translation tables which are
-not shared with other CPUs.
-
-I suspect x86 might not have the same issue with amalgamation.
+> 
+> Thanks you,
+> Pasha
 
 Thanks,
-Mark.
+Ruihan Li
+
