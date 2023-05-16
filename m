@@ -2,75 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A6570438D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18899704396
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjEPCpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 22:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
+        id S229735AbjEPCrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 22:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjEPCpE (ORCPT
+        with ESMTP id S229607AbjEPCrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 22:45:04 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7DE35BD;
-        Mon, 15 May 2023 19:45:02 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aaf70676b6so97115955ad.3;
-        Mon, 15 May 2023 19:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684205102; x=1686797102;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GNrwrxEXioPVU1CHB+NMHjC+VIIUqcxI7JMhaUrSWzw=;
-        b=dJ4Hmy3CaKT4Ee1HiDj2nV6ZHGbgYqFpv1QMLVSDrBv9JqTkLbQz53HqcyS+5uUPeH
-         V9WN9IhbsnBidl+LVUjFgIqmrNiXQY1iaY4erbQh+4eYQ6IPKBEd9aC7L0B73fUDaQns
-         9T9LR9fkb2XR5U0H7lGo+8nAPBCwPBJrOClmJHCXA8ZF0af9Ow4Ty7Rd3D2T0DohIuk3
-         uLQdexWGJond3609bpwpYbm7PBpjFZ+vmuGyLb9TyJm/1XNqiO6Dpbf4UQIoU322U6vU
-         0WLZymNq0eGGZCMHyxYJsqazgZ8cZzKpLA1Fguh9H/lRO+gvA54Geq2jgcgzE3SjJWJL
-         Qgew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684205102; x=1686797102;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GNrwrxEXioPVU1CHB+NMHjC+VIIUqcxI7JMhaUrSWzw=;
-        b=HbZ7sMqSLZtuK+8OGRYa9GAHpomZFgaYFVdo7AUiN4dNmuuF2uDKGs0yxt+ZvrUjZu
-         fRaOCd68c8AsiIk2sgZlVzzPaWGlnW58MOh6iXMdlq2k59ohqcvygFNJe6x2U4H5o2Ry
-         ioZiGALUBC4AksfhPRSRvJbYeuSGjbbwGylpeYiPmSqE3CXTdqVV56v6nDA+SFs9PJgs
-         9VQTxlkBvgc0il7MpzXFIaua3zjUlzbr4lMQdadgJPagSzTwUV+Czfl4rnjRI1pLZPGg
-         rlr0Jg4kKNnSZKe95AZ2Gp3JOEqnM4UB+fyEYx8g/aq7MgiFL4DjY8wjYLj7NCCKhi9I
-         g2aA==
-X-Gm-Message-State: AC+VfDwX62XyBtA8eGUSJmtBpH7j8FNCbBs9UeV2+dfYTUOw/vTb+E1Y
-        zdcOxFFpZVm7suMUCEZMiUO16SBRvg8=
-X-Google-Smtp-Source: ACHHUZ4aAjo16mYYVJw56/Ey7MpV0voqIMFvFyHGqu/Q9QHjMqsHSp1BSS1zWi4rVF3Rn9w3xV3BVA==
-X-Received: by 2002:a17:903:234f:b0:1ae:bf5:7b5 with SMTP id c15-20020a170903234f00b001ae0bf507b5mr8733272plh.34.1684205101918;
-        Mon, 15 May 2023 19:45:01 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-4.three.co.id. [116.206.28.4])
-        by smtp.gmail.com with ESMTPSA id j10-20020a170902690a00b001ac7c6fd12asm14168055plk.104.2023.05.15.19.44.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 19:45:01 -0700 (PDT)
-Message-ID: <24fb92c2-27e1-e98b-c163-74b530d613fa@gmail.com>
-Date:   Tue, 16 May 2023 09:44:52 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Mon, 15 May 2023 22:47:14 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2065.outbound.protection.outlook.com [40.107.92.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D864B61B8;
+        Mon, 15 May 2023 19:46:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=coq/FrplMQqxQkWRsScVr37qs6u/BJZL854QRBv51cryAXdLJH/yh1qe1H4s9qVNccXeLn8PaOm1OE1+D5yWntLxt/9w2mJLRuOupLOkxNxV0BoZsSgFaVRDKB/YTBJsYQ744ZHrPF1Xl3X5UkcQ9v3vvBgzswuuyppyNaBPRyFHLacPSTo/JIFXNhKZK0CeT2zEkXRitBX+I/S9xJikVk3uEejYbpRc2/112B0zATv2Qq1OQzaeC8cNZY2KQp/9KD6C5rBaqi9VD3yHf2lf4T2XonMAfT0b8sq9/U6cIzPG7PRRoh2MffMte9caqirp4UpsJXxkASddy7O5ufPsPg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kVU8en4DwbOAXrS1CcTACrpNerZebMGtrjVlTqUaaLQ=;
+ b=nZQBmYsrk2c+hJyuJ2HjSSCaqh/ZYi57Kb2NIzH0Ue78zqImQbqWCFO2Xbooay9HKxouecLot4u/RMhYfzOkoj84/wNB7Auyx7fIOTYuclcf/yToYB6G2G/KLBgdyyiyAWHC/sMnPigih3QLnbEfzuJ/ZuDSi7YQN2qfGQ7MB46qRJTb/LMcFnY3xw66zfXTha9dHivlI7oNkI6BAGrmiVPA8SqAxPZVbEg/3LP7zZTi/vheE7Iw/N+hUKuLR4s8Nez/+MArARaUJSITyuAyXpIjmw8DKRiPFfZBfF1QkusOHb+fJKzUoCUnNEVvzJkggAHSVX1hq9yJXJ+b6GMN3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kVU8en4DwbOAXrS1CcTACrpNerZebMGtrjVlTqUaaLQ=;
+ b=UyyVMoBJnT/arzpnQMe4wdHIG+Iltsc4YMjZ6t/X7p4m9VF1bIgO8qmUd4RiGCsXC5eHnKpbtX97+ktNXyk8jLR8gDkajL+SbDfiMjdTqvVHOA2F39rsAaxU93V4/BP+WMp8T8N+2QANZJYWM0uhDFl/vxiX271R7q3ngpUcVss=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by MN2PR12MB4237.namprd12.prod.outlook.com (2603:10b6:208:1d6::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
+ 2023 02:46:49 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645%7]) with mapi id 15.20.6387.030; Tue, 16 May 2023
+ 02:46:49 +0000
+Message-ID: <bd4f84ff-640d-02bf-1abd-58bc8362edb8@amd.com>
+Date:   Tue, 16 May 2023 08:15:05 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
+Subject: Re: [PATCH v3 0/9] perf/mem: AMD IBS and generic tools improvements
+To:     peterz@infradead.org
+Cc:     mingo@kernel.org, eranian@google.com, kan.liang@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        leo.yan@linaro.org, kjain@linux.ibm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, Namhyung Kim <namhyung@kernel.org>,
+        acme@kernel.org, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230407112459.548-1-ravi.bangoria@amd.com>
+ <CAM9d7cijvZBsaXTMm8d=sxUWy6s+umCCnWhunD3KVhKbpVp_-A@mail.gmail.com>
+ <631876a2-5946-82d5-6f70-bf7734db3992@amd.com>
 Content-Language: en-US
-To:     Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Filesystems <linux-fsdevel@vger.kernel.org>,
-        Linux x86 <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-Cc:     Vladimir Lomov <lomov.vl@bkoty.ru>,
-        Matthew Wilcox <willy@infradead.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: _filemap_get_folio and NULL pointer dereference
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <631876a2-5946-82d5-6f70-bf7734db3992@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BM1PR01CA0164.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:68::34) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|MN2PR12MB4237:EE_
+X-MS-Office365-Filtering-Correlation-Id: a85f68ca-7ec6-4702-7a65-08db55b7cbcf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hy6DHZjqCQuTufPyY1c8pzqmRSaCz4mrpELLR5KUhthJ8FYV5vsb9yEAu6nCaO5wIcU6p/sVmmSy9fiyIhyK5VABs2LHP/BLX5BV0Gg/LhNpZQD7xFa1IwridptP7FOwB+AwOp9UlJZN9Grny0opSlE8az4HGyPz/8pGFlKLLfDGrFZl0I4taMbTqUnlFw73Xxhhk8bz32aGbzBDCQmzGvpQCWhfiKiew7Xy/8IXZwPEyQ5MRuXz5kAguWRZwtdALMJhQeNAGtGiGyLvHSpNgwAiKgDcl/BKyIlqENmbVCRznXPaLqaiEJm+1ri8bxoj+0mcSiy2qm3+CGixvgz7WvpoHXehIzmKnhnDhMbF9k0LSY7ydMMnKstktqMx1bqlAVYgbturY6frLXjqRyJQs/2WTmQuyps2gcWplypidLXD/HoX+uAAyjZdupbpAak3eedlWIpDKTG2xSqQi8gTHYdC35G/Un/th5YfPEQh+MImrDC4T7ki3ZSKHTet2/wtprriCTXtnnyMJnna0kNk09rI+dIEsor/Q5dFV60Af9yT6dOpJcP911XcTzbnxPWVlky/WDEQpVTg7J2WPpYko4jD5Ol3S1O9UKgPnqV+/BOXXOkYUTv8RyYKzdNjV/NxreaF7mAzke/s12lJO52FJU05qW4qjh3m5SZMKqMwFqA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(346002)(136003)(396003)(451199021)(478600001)(6666004)(8676002)(41300700001)(66476007)(66946007)(4326008)(66556008)(6916009)(316002)(54906003)(8936002)(38100700002)(36756003)(186003)(31686004)(6506007)(2616005)(6512007)(53546011)(2906002)(26005)(83380400001)(31696002)(86362001)(7416002)(44832011)(5660300002)(6486002)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T3I0VnNXeGhrNFNHeklnRnQ5bUtKbHZ1Z2VoaFI5Ym94ZFFZbjRqSnhwWGNY?=
+ =?utf-8?B?enNXOGl1a0VJM2ZJc29laDlIZ09URTBLUmlSRk5jQ3RlYWFlbEJZaHFGVWFH?=
+ =?utf-8?B?QXpwYm5XSFpjYTJHTUprY0FZVWVlYVFQZmNyZUdCbXAvT0ZUU1ovVDFZNWty?=
+ =?utf-8?B?QjJWZ2pHYzh6TVhjK0xnTnowU2NFeC82Y05FRHptUzNBWDJmSmVFU2g2b2ov?=
+ =?utf-8?B?WW5kNW9YckJZYkhTUktrRkJmb1daNkZSK3NHTld0OHZqbG9oVklvdnkydENw?=
+ =?utf-8?B?RDBGN0tGdEE5NjRXdmxPRldSWTRtdFFBUnI3WWdUTDlXSzdid1R1TlZRMENP?=
+ =?utf-8?B?WDNaNE1QdllwWEtLZjF4M0xSK1ZHSTBBMWIyNFN2MVhsWEpEL3hoYjVuaUF2?=
+ =?utf-8?B?YVhtTDcrNkhoeDBBWjNRYWxSWDRTMjA1OG5lSlZPZjZJVG5rTkVPaEpEQkxL?=
+ =?utf-8?B?bHFaYzQ0bHdQclh5emJQMjBNWjFqRFNVQ3I0Mzhkby91ZDlINUl2U0VRNDAr?=
+ =?utf-8?B?SzJSZWZScTkrL1YxaHdNS1o0dTRBbUV4VzdWaytpM1VlVG1PYm5STnFMeFM0?=
+ =?utf-8?B?dXduVjFCWWh4SXp1MDhzZFFPUFBkVU1vL1BYRmErRFM0UkFYYXE4V3drenlY?=
+ =?utf-8?B?R09uTW1mNXFqOTU5TUlUaXFMZitlaXFYRXB2SEU3UG1odEFrMFkyelFVcWkx?=
+ =?utf-8?B?YmFGeWJiNy9aeU9MUkxXR3VTSWNEUGh0QXpLZ0pVenpnVHlSQWs0amtjVm1M?=
+ =?utf-8?B?NHpIM1ZWSXRCSjFjdkZCOSs5R0Y2ME1jcmlEOHNxUWVtbW5oaE11bzIwTm5J?=
+ =?utf-8?B?TzVUcjRrcFl3d3hjOURkb1dJQjYvb1NsMzlGYjlLS2ZjVTUzdStiRGlWMTA1?=
+ =?utf-8?B?czFJKzlMWjVSZWJaSXNqK2pZMWM5T1RKbWtqckVpMFgrSmk2ZSs4ektiU215?=
+ =?utf-8?B?QlZhYXhYNGdsNHR4eUx2TDE3YVltWGhiaTYyWnVmMW9yMDNYVnNRSHdPbG5v?=
+ =?utf-8?B?cFY2eUN4M01EQy9QdzlKTVIyRUtzY3preDlOWXU2aDdPZzJGQ1NHY2pMek1n?=
+ =?utf-8?B?bG41VngwSFVSUEY4MGdTKzBrT1kwZHdzR2p4dDhjUlFTdmsvMytJRFI2VmVw?=
+ =?utf-8?B?blJCT2EzWU9PSWFZdk51eW5nSmxUMy8zQlhhajR1bVVTeFR0Z3lIV0RUT2g2?=
+ =?utf-8?B?NEN1NURBMytxQk5Dbk1kcmJwUGFiUjg3UVFWbGhQR0JXd3M1Q21RQnNLKy9l?=
+ =?utf-8?B?eFlKZFNSR29uSm9lOC9yek9tQW1FY0RXOUVONndaQk02WUxGMjNRUlB3bVNw?=
+ =?utf-8?B?T3RVWGR5OTdQT29OczFtTGxJajFmRjQ0L0cyOWYyNnhXUVowaG43UnJyV3cy?=
+ =?utf-8?B?KysrMFlVbmJNZk9zYkRJNHlDb2FRTEVuWW82YVdySGtjMnFXd3R1MGZjdk1J?=
+ =?utf-8?B?T1lTby9QYVZyZmN4VXlERzlUbStMbTNLMWhQUDhyTk5oUmdsUVFZaUpFUFVt?=
+ =?utf-8?B?TnFNNElpcWloUFY1Tm5oNzNPSVkybm1vWDdkYllsM1BwT1lHbWRzMnZQM2pw?=
+ =?utf-8?B?eG5KZjdEVC9uK0RJZHp5UlNva2FzS29IUVF1bUh6RkR3cE0rWmpXUk5PcjZx?=
+ =?utf-8?B?dXp0UXJmc3c1WmFrTXNGNzhISkJPUXExclFRTGF5WHdyTzY1czZuUUNXN29D?=
+ =?utf-8?B?TXZ3TVJNd2x6Y3hpKzc3c0RVdlJ0aE1JTHdEcy83RzMxWnFsSTM1WmhzVnhL?=
+ =?utf-8?B?Um1LQ1hBcm1RejlBTkY1MkZ4L0hpU2oxNWsrMUx1UzAxYi9obzZIZEhOUW8x?=
+ =?utf-8?B?ZS9WOWFpUnVSUXNJRUcxLzZpZ2NubkFQQTMzdjl2bmxzUmgwMmVncW1FcXZs?=
+ =?utf-8?B?QnJ2TS9LdFoyNUUvQkZEcXpoVlVxZjVHRGpsSndWeDdzeWhadEJHODRhRUVC?=
+ =?utf-8?B?eFFWWDIwTmN6eERsQmxwaFlGWWtNdVdlQ2RTblhZUHRPNkhrdmZ0WkNnSldL?=
+ =?utf-8?B?ZGo2ejhTTHNndGlybytCbzF0K2FKUG9rZGdKNnRZZnJ4K0FucmQwbTNPaTVm?=
+ =?utf-8?B?SjUwSGVpUUlHNGlsUGY5RjJTdi9zRGxIK3NhQ0gzcFBWUWlzUUpGaXlvdHdK?=
+ =?utf-8?Q?jUuCXvtN0lywh4+KMHzlea9Xw?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a85f68ca-7ec6-4702-7a65-08db55b7cbcf
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 02:46:49.4295
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kahN1tfeRZ1XkfwdW7PMOKKPcZzxeEh+dJBz2okUW8HgP6lZdM7+d+AvSJj3oIl1fEwZZ/CjHzgwYizG4acRHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4237
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,84 +132,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I notice a regression report on bugzilla [1]. Quoting from it:
-
-> Hello.
+On 10-Apr-23 7:53 AM, Ravi Bangoria wrote:
+> On 08-Apr-23 3:14 AM, Namhyung Kim wrote:
+>> Hi Ravi,
+>>
+>> On Fri, Apr 7, 2023 at 4:25 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+>>>
+>>> Kernel IBS driver wasn't using new PERF_MEM_* APIs due to some of its
+>>> limitations. Mainly:
+>>>
+>>> 1. mem_lvl_num doesn't allow setting multiple sources whereas old API
+>>>    allows it. Setting multiple data sources is useful because IBS on
+>>>    pre-zen4 uarch doesn't provide fine granular DataSrc details (there
+>>>    is only one such DataSrc(2h) though).
+>>> 2. perf mem sorting logic (sort__lvl_cmp()) ignores mem_lvl_num. perf
+>>>    c2c (c2c_decode_stats()) does not use mem_lvl_num at all. perf mem
+>>>    prints mem_lvl and mem_lvl_num both if both are set, which is ugly.
+>>>
+>>> Set mem_lvl_num, mem_remote and mem_hops for data_src via IBS. Handle
+>>> first issue using mem_lvl_num = ANY_CACHE | HOPS_0. In addition to
+>>> setting new API fields, convert all individual field assignments to
+>>> compile time wrapper macros built using PERF_MEM_S(). Also convert
+>>> DataSrc conditional code to array lookups.
+>>>
+>>> Interpretation of perf_mem_data_src by perf_mem__lvl_scnprintf() was
+>>> non-intuitive. Make it sane.
+>>
+>> Looks good, but I think you need to split kernel and user patches.
 > 
-> (I apologize if I chose the wrong "Product" and "Component".)
-> 
-> On two of my systems, I see strange "bug" when running 6+ kernels (below is a recent one):
-> 
-> ```
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RIP: 0010:__filemap_get_folio+0xbf/0x6a0
-> May 14 14:48:07 smoon7.bkoty.ru kernel: Code: ef e8 c5 60 c3 00 48 89 c7 48 3d 02 04 00 00 74 e4 48 3d 06 04 00 00 74 dc 48 85 c0 0f 84 6a 04 00 00 a8 01 0f 85 6c 04 00 00 <8b> 40 34 85 c0 74 c4 8d 50 01 4c 8d 47 34 f0 0f b1 57 34 75 ee 48
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RSP: 0000:ffffa7800b1dfbf8 EFLAGS: 00010246
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000004
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RDX: ffffa7800b1dfc50 RSI: ffff9a2413646910 RDI: 0000000000000002
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 00007f862b600000
-> May 14 14:48:07 smoon7.bkoty.ru kernel: R10: 00007f8659246f48 R11: ffff9a21c1494a0c R12: 000000000002dc46
-> May 14 14:48:07 smoon7.bkoty.ru kernel: R13: ffffa7800b1dfc50 R14: ffff9a21e2cb82b0 R15: 00007f8659246f48
-> May 14 14:48:07 smoon7.bkoty.ru kernel: FS:  00007f87fcff96c0(0000) GS:ffff9a295e280000(0000) knlGS:0000000000000000
-> May 14 14:48:07 smoon7.bkoty.ru kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> May 14 14:48:07 smoon7.bkoty.ru kernel: CR2: 0000000000000036 CR3: 0000000105b2c003 CR4: 00000000003706e0
-> May 14 14:48:07 smoon7.bkoty.ru kernel: Call Trace:
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  <TASK>
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  ? psi_group_change+0x274/0x430
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  filemap_fault+0x6f/0xfd0
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  ? filemap_map_pages+0x15f/0x640
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  __do_fault+0x30/0x130
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  do_fault+0x1d7/0x400
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  handle_mm_fault+0xb48/0x1450
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  do_user_addr_fault+0x1c7/0x740
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  exc_page_fault+0x7c/0x180
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  asm_exc_page_fault+0x26/0x30
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RIP: 0033:0x7f881a56cb0d
-> May 14 14:48:07 smoon7.bkoty.ru kernel: Code: 00 00 00 00 00 66 66 2e 0f 1f 84 00 00 00 00 00 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 83 fa 20 72 23 <c5> fe 6f 06 48 83 fa 40 0f 87 a5 00 00 00 c5 fe 6f 4c 16 e0 c5 fe
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RSP: 002b:00007f87fcff72c8 EFLAGS: 00010202
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RAX: 00007f87dc02a700 RBX: 00007f87fcff8308 RCX: 00007f87fcff7500
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RDX: 0000000000004000 RSI: 00007f8659246f48 RDI: 00007f87dc02a700
-> May 14 14:48:07 smoon7.bkoty.ru kernel: RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> May 14 14:48:07 smoon7.bkoty.ru kernel: R10: 0000000000000008 R11: 0000000000000246 R12: 0000000000000000
-> May 14 14:48:07 smoon7.bkoty.ru kernel: R13: 00007f87dc001370 R14: 0000000000000009 R15: 00005645d0719a70
-> May 14 14:48:07 smoon7.bkoty.ru kernel:  </TASK>
-> ```
-> 
-> I've seen these errors since the very first kernel of the 6 series, while I see no problem with 5.15 on the same hardware.
-> 
-> These two systems have the same CPU (Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz) but slightly different motherboards, same amount of memory (same  manufacturer, I tested it when plugged in).
-> 
-> The hosts in question don't show this "bug" immediately, but after some time while having "heavy" disk load (torrents). The "bug" shows up whether I use `mitigations=off` or not (at first I thought the "bug" might be related to `mitigations=off`, but I got the above output when I removed that setting from the kernel command line).
-> 
-> What puzzles me is that I don't see these errors on the other hosts (but they don't have "heavy" disk loads), they work just fine. On the other hand, they have different CPUs (not i5-10500). Sometimes (less often than this error) I saw the following in the kernel log (dmesg):
-> 
-> ```
-> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: Machine check events logged
-> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: CPU 0: Machine Check: 0 Bank 0: 9000004000010005
-> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: TSC 95596a63008b
-> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: PROCESSOR 0:a0653 TIME 1684022949 SOCKET 0 APIC 0 microcode f6
-> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: Machine check events logged
-> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: CPU 5: Machine Check: 0 Bank 0: 9000004000010005
-> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: TSC 95c56b82abf0
-> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: PROCESSOR 0:a0653 TIME 1684023099 SOCKET 0 APIC a microcode f6
-> ```
-> 
-> So now I'm thinking of buying a new CPU (same socket) and see if I will see the same error.
+> Patch #1 to #3 are kernel changes. Patch #4 to #9 are userspace changes.
+> Arnaldo, Peter, please let me know if you wants to split the series and
+> resend.
 
-For the full thread, see bugzilla.
+Hi Peter, tools/ patches are already upstream. Can you please pick up
+kernel changes.
 
-FYI, filemap_get_folio() is introduced in 3f0c6a07fee6a1 ("mm/filemap:
-Add filemap_get_folio").
-
-Anyway, I'm adding this to regzbot:
-
-#regzbot introduced: v5.15..v6.0 https://bugzilla.kernel.org/show_bug.cgi?id=217441
-#regzbot title: NULL pointer dereference on filemap_get_folio() on Intel Core i5-10500
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217441
-
--- 
-An old man doll... just what I always wanted! - Clara
+Thanks,
+Ravi
