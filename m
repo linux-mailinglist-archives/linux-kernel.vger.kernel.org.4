@@ -2,137 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A7D705020
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C62705022
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233121AbjEPODf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S233627AbjEPOEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjEPODd (ORCPT
+        with ESMTP id S233324AbjEPOD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:03:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0208525D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684245766;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=twS5ahFzaWXt7vJAdMtEbWdDWzby14zvPLkx6kO9lrM=;
-        b=EA8sdwwR/4REOfMAWhhQnD53eFBvL6o2t7W1iBdo/l2xc/EzPRkyXxO1uIB1i8bWbvsdN2
-        Cj8XgLzwaRCRMQoK73oM9b5iuOYEEyMxBwQxwJzhk3E+7Du+LBqxQ7ETlpaNRFtE8LLU6U
-        M2dS0R37FpF3htRAPUd8zWryOnq7Cyg=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-196-8YVGO-ovO0iTzm63bW9moQ-1; Tue, 16 May 2023 10:02:38 -0400
-X-MC-Unique: 8YVGO-ovO0iTzm63bW9moQ-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-965cd056598so1697971766b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:02:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684245748; x=1686837748;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=twS5ahFzaWXt7vJAdMtEbWdDWzby14zvPLkx6kO9lrM=;
-        b=J0/Na7IKRO3MpeMWfOgf+xH570CRpZ10aeIm33d3L9I9onAKuHGqzHKH5lVD0c3Woq
-         qpXOWQPJDC3m93cRvAADiDUAguoYEVgGFgfTw72nE1oz5Rp9quI8JD9PD/tKAgRARfWV
-         qbPOUnvhbSY/aMTtigE3e1mCrTZQxGL4Kap/iUkiV6nNURtVqxpv6j8UwE54lkRwbmoT
-         fj7SxJvGR2eu053Ju5ZfEYz7rtR5aK+GbNXxlzkhdPvjcLiNGQcZLGvcr9aODrZNveF6
-         9ccPfK7zRfdylDUsPkCeg9E+I3WBQVswaGwv+KwmzPMrVETPOsxBa55+CcIEODEEeL4t
-         +uHQ==
-X-Gm-Message-State: AC+VfDzpCFM06bQzG+9VcOqB1boHxMhnfFgmmy4PClo/XZ6GiZLN1720
-        7dVfsGArY3lWnMRgSGeFM9ClfYgJBOainaviRAS/uwB7vuCI4HLiIWW0Wc7FkVULzb9nsK/YDj4
-        5F8kkhHiabSTXeNZ1Kb3cqOPU
-X-Received: by 2002:a17:907:1687:b0:94e:1764:b0b5 with SMTP id hc7-20020a170907168700b0094e1764b0b5mr40844287ejc.69.1684245748329;
-        Tue, 16 May 2023 07:02:28 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6Sv1L/mzfQuA3G4ODXv4iuBZ6M5UPWTIXaWAD5Nho4S5et/zpSXci+58Lm9EsOc+R+UavaDA==
-X-Received: by 2002:a17:907:1687:b0:94e:1764:b0b5 with SMTP id hc7-20020a170907168700b0094e1764b0b5mr40844264ejc.69.1684245748028;
-        Tue, 16 May 2023 07:02:28 -0700 (PDT)
-Received: from [192.168.0.5] ([85.13.73.241])
-        by smtp.gmail.com with ESMTPSA id e17-20020a170906845100b0095844605bb8sm11139221ejy.10.2023.05.16.07.02.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 07:02:27 -0700 (PDT)
-Message-ID: <24c413e6-75a5-254c-b776-1459da83f86f@redhat.com>
-Date:   Tue, 16 May 2023 16:02:26 +0200
+        Tue, 16 May 2023 10:03:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54A5525D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:03:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6EC601FEB0;
+        Tue, 16 May 2023 14:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684245836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=va2PlQ9fTKLDOkUDFaD7bMLHV5h0Zea9LBMRTULprJM=;
+        b=HtFvvTVEKv+y8AupTOrwFvnRCRrmdg0yXIP3Chj0aJpdMgAnv2N2q4E1/Lholg9C1lfQ25
+        3YaItb2drBftDrrjpGryEa57dMoVqVPrcGSHGVh4SQVcH3RN4wfJkDUI9Fsd0+IY1VO5Nn
+        eiN5s+Yb2XMuO7+CfI1Jg1gzzcygk6Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684245836;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=va2PlQ9fTKLDOkUDFaD7bMLHV5h0Zea9LBMRTULprJM=;
+        b=HPyHgRvU4Y6A8lFPt+FVrllqQrjupKckDCcBdfzN/44ua4G0Gm+KGjcZuqE5uW3hlzNg2S
+        ct9c/O/y+TmRvbDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E4FC138F5;
+        Tue, 16 May 2023 14:03:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SXTLIkuNY2SeWwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Tue, 16 May 2023 14:03:55 +0000
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH v5 0/3] page_owner: print stacks and their counter
+Date:   Tue, 16 May 2023 16:03:30 +0200
+Message-Id: <20230516140333.3776-1-osalvador@suse.de>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Language: en-MW
-To:     Xia Fukun <xiafukun@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
-References: <20230516123719.117137-1-xiafukun@huawei.com>
-From:   Peter Rajnoha <prajnoha@redhat.com>
-Subject: Re: [PATCH v5] kobject: Fix global-out-of-bounds in
- kobject_action_type()
-In-Reply-To: <20230516123719.117137-1-xiafukun@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 14:37, Xia Fukun wrote:
-> The following c language code can trigger KASAN's global variable
-> out-of-bounds access error in kobject_action_type():
-> 
-> int main() {
->     int fd;
->     char *filename = "/sys/block/ram12/uevent";
->     char str[86] = "offline";
->     int len = 86;
-> 
->     fd = open(filename, O_WRONLY);
->     if (fd == -1) {
->         printf("open");
->         exit(1);
->     }
-> 
->     if (write(fd, str, len) == -1) {
->         printf("write");
->         exit(1);
->     }
-> 
->     close(fd);
->     return 0;
-> }
-> 
-> Function kobject_action_type() receives the input parameters buf and count,
-> where count is the length of the string buf.
-> 
-> In the use case we provided, count is 86, the count_first is 85.
-> Buf points to a string with a length of 86, and its first seven
-> characters are "offline".
-> In line 87 of the code, kobject_actions[action] is the string "offline"
-> with the length of 7,an out-of-boundary access will appear:
-> 
-> kobject_actions[action][85].
-> 
-> Use sysfs_match_string() to replace the fragile and convoluted loop.
-> This function is well-tested for parsing sysfs inputs. Moreover, this
-> modification will not cause any functional changes.
-> 
-> Fixes: f36776fafbaa ("kobject: support passing in variables for synthetic uevents")
-> Signed-off-by: Xia Fukun <xiafukun@huawei.com>
-> ---
-> v4 -> v5:
-> - Fixed build errors and warnings, and retested the patch.
-> 
+Changes v4 -> v5:
+     - Move page_owner_stack_threshold to page_owner file (suggested
+       by Alexander Potapenko)
+     - Make the stack refcount more generic, and do not
+       assume it will be only used for page_owner (suggested by
+       Alexander Potapenko)
 
-Please, also check this is still working:
-https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-uevent
+Changes v3 -> v4:
+     - Rebase (long time has passed)
+     - Use boolean instead of enum for action by Alexander Potapenko
+     - (I left some feedback untouched because it's been long and
+        would like to discuss it here now instead of re-vamping
+        and old thread)
 
-When I try passing the example line "add
-fe4d7c9d-b8c6-4a70-9ef1-3d8a58d18eed A=1 B=abc", it doesn't recognize
-such input anymore and it incorrectly considers it as erroneous.
+Changes v2 -> v3:
+     - Replace interface in favor of seq operations (suggested by Vlastimil)
+     - Use debugfs interface to store/read valued (suggested by Ammar)
+
+Hi,
+
+page_owner is a great debug functionality tool that gets us to know
+about all pages that have been allocated/freed and their stacktrace.
+This comes very handy when e.g: debugging leaks, as with some scripting
+we might be able to see those stacktraces that are allocating pages
+but not freeing theme.
+
+In my experience, that is one of the most useful cases, but it can get
+really tedious to screen through all pages aand try to reconstruct the
+stack <-> allocated/freed relationship. There is a lot of noise
+to cancel off.
+
+This patch aims to fix that by adding a new functionality into page_owner.
+What this does is to create a new read-only file "page_owner_stacks",
+which prints only the allocating stacktraces and their counting, being that
+the times the stacktrace has allocated - the times it has freed.
+
+So we have a clear overview of stacks <-> allocated/freed relationship
+without the need to fiddle with pages and trying to match free stacktraces
+with allocated stacktraces.
+
+This is achieved by adding a new refcount_t field in the stack_record struct,
+incrementing that refcount_t everytime the same stacktrace allocates,
+and decrementing it when it frees a page. Details can be seen in the
+respective patches.
+
+We also create another file called "page_owner_threshold", which let us
+specify a threshold, so when when reading from "page_owner_stacks",
+we will only see those stacktraces which counting goes beyond the
+threshold we specified.
+
+One thing I am not completely happy about is to polute lib/stackdepot.c file
+with the stack_* functions.
+We could sort that out if the stack_record struct definitions were in a header
+file instead of stackdepot.c.
+But I am not sure about that trade-off, so suggestions are accepted.
+
+A PoC can be found below:
+
+# cat /sys/kernel/debug/page_owner_threshold
+ 0
+# cat /sys/kernel/debug/page_owner_stacks > stacks_full.txt
+# head -32 stacks_full.txt
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ alloc_page_interleave+0x13/0x90
+ new_slab+0x31d/0x530
+ ___slab_alloc+0x5d7/0x720
+ __slab_alloc.isra.85+0x4a/0x90
+ kmem_cache_alloc+0x455/0x4a0
+ acpi_ps_alloc_op+0x57/0x8f
+ acpi_ps_create_scope_op+0x12/0x23
+ acpi_ps_execute_method+0x102/0x2c1
+ acpi_ns_evaluate+0x343/0x4da
+ acpi_evaluate_object+0x1cb/0x392
+ acpi_run_osc+0x135/0x260
+ acpi_init+0x165/0x4ed
+ do_one_initcall+0x3e/0x200
+stack count: 2
+
+ free_pcp_prepare+0x287/0x5c0
+ free_unref_page+0x1c/0xd0
+ __mmdrop+0x50/0x160
+ finish_task_switch+0x249/0x2b0
+ __schedule+0x2c3/0x960
+ schedule+0x44/0xb0
+ futex_wait_queue+0x70/0xd0
+ futex_wait+0x160/0x250
+ do_futex+0x11c/0x1b0
+ __x64_sys_futex+0x5e/0x1d0
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 1
+
+ 
+
+# echo 10000 > /sys/kernel/debug/page_owner_threshold
+# cat /sys/kernel/debug/page_owner_stacks > stacks_10000.txt
+# cat stacks_10000.txt 
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ folio_alloc+0x17/0x40
+ page_cache_ra_unbounded+0x96/0x170
+ filemap_get_pages+0x23d/0x5e0
+ filemap_read+0xbf/0x3a0
+ __kernel_read+0x136/0x2f0
+ kernel_read_file+0x197/0x2d0
+ kernel_read_file_from_fd+0x54/0x90
+ __do_sys_finit_module+0x89/0x120
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 36195
+
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ folio_alloc+0x17/0x40
+ page_cache_ra_unbounded+0x96/0x170
+ filemap_get_pages+0x23d/0x5e0
+ filemap_read+0xbf/0x3a0
+ new_sync_read+0x106/0x180
+ vfs_read+0x16f/0x190
+ ksys_read+0xa5/0xe0
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 44484
+
+ prep_new_page+0x10d/0x180
+ get_page_from_freelist+0x1bd6/0x1e10
+ __alloc_pages+0x194/0x360
+ folio_alloc+0x17/0x40
+ page_cache_ra_unbounded+0x96/0x170
+ filemap_get_pages+0xdd/0x5e0
+ filemap_read+0xbf/0x3a0
+ new_sync_read+0x106/0x180
+ vfs_read+0x16f/0x190
+ ksys_read+0xa5/0xe0
+ do_syscall_64+0x37/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+stack count: 17874
+
+Oscar Salvador (3):
+  lib/stackdepot: Add a refcount field in stack_record
+  mm, page_owner: Add page_owner_stacks file to print out only stacks
+    and their counte
+  mm,page_owner: Filter out stacks by a threshold counter
+
+ include/linux/stackdepot.h |   8 +++
+ lib/stackdepot.c           | 128 ++++++++++++++++++++++++++++++++++---
+ mm/page_owner.c            |  54 ++++++++++++++++
+ 3 files changed, 180 insertions(+), 10 deletions(-)
 
 -- 
-Peter
+2.35.3
 
