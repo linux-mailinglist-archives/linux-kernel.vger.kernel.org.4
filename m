@@ -2,92 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129E170446D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1577704477
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjEPFBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 01:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S229923AbjEPFKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 01:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjEPFBB (ORCPT
+        with ESMTP id S229538AbjEPFKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 01:01:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FBC273D;
-        Mon, 15 May 2023 22:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=wihNROgq+zlSDzTWmMP9dqi1SJvNx63H4aBgy1GMpNA=; b=eyoSXZiHHHuSOouLtPM248GNxA
-        drIabQFrWdqk81FEunIAYAOGTB3q7Qx9yiPxILsdXC+OGBAEf+9+WJATvH0dhRaRRBJhv3pbZLPXS
-        1WMWDuS5IvFYSpqBmY50qEq/GAB97tuulcpJYfKnCRslRpD4OhJmEK6T76JgrEMb/3ZUAZIu1ZLv2
-        /m/Cka7jfi+x8u3uP7Om7dZkQ85lPKrpB9BPFVrBW7xlxRrPEzj8m4eOb5EenD/mGtopb802wR0v7
-        qaAWTn7Y2UdgrSo6QKub8tyrgkm4Qm/9GdXqV2Jw7tXP/ckSqiSN4FOYRROq/6hTE50oVVhbVHahu
-        qzw8m9/Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pymnw-004NS2-32;
-        Tue, 16 May 2023 05:00:56 +0000
-Date:   Mon, 15 May 2023 22:00:56 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Kelvin.Cao@microchip.com
-Cc:     hch@infradead.org, dmaengine@vger.kernel.org, vkoul@kernel.org,
-        George.Ge@microchip.com, linux-kernel@vger.kernel.org,
-        logang@deltatee.com, tglx@linutronix.de,
-        christophe.jaillet@wanadoo.fr
-Subject: Re: [PATCH v4 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
- engine PCI driver
-Message-ID: <ZGMOCBAVvAxMa/lb@infradead.org>
-References: <20230423213717.318655-1-kelvin.cao@microchip.com>
- <20230423213717.318655-2-kelvin.cao@microchip.com>
- <ZFH/xhyjm9VTZolE@infradead.org>
- <50e111a3cfecd0f232508d1b03e02d1e25d9d4a9.camel@microchip.com>
- <ZGJMKFrLfU2zc/2P@infradead.org>
- <0ee5aa616475cc39b04c6b9e84db119bc8fc4d53.camel@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0ee5aa616475cc39b04c6b9e84db119bc8fc4d53.camel@microchip.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 01:10:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1779173A;
+        Mon, 15 May 2023 22:10:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 735406298D;
+        Tue, 16 May 2023 05:10:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7F8C433EF;
+        Tue, 16 May 2023 05:10:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684213832;
+        bh=u8Y2f4n10KnprdRg9KnWZid4H6uSUjozETMEXBKEsbY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y2iQpsFIET1oRKmwR8Jo+fs/oUtNa1g3ar6V/YM9cpNrB3twVL8Vn4xNBd0JN0aVs
+         53vqNLhRsiFc8EI6xwZuTZzJqmwJQ8XG20/K7ZfPnncSaORAND10oAcO8I9oRu1qeg
+         kwQXLVgZRRwRfGNJXBY+xMLY2mZ0LWZnCFIF7BvOBy/duUaJx4KPpLdf1Gnd9foN0T
+         pl5X+7mfqNzx+GgKP0n6h/O4rnBdyFMV04iJLaHSrUM5LDTnhI7IoTNue4nPlLjfEO
+         2NkAt6bV6sb+ujrfQmBI51PVh3UGMJP2XbIav1KiXHZAT4WvF9UlS2MxzNBn3rPi+f
+         5wqtxb/KTjSkA==
+Date:   Tue, 16 May 2023 14:10:28 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, Yonghong Song <yhs@meta.com>,
+        Ze Gao <zegao2021@gmail.com>, Jiri Olsa <olsajiri@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Ze Gao <zegao@tencent.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to
+ avoid recursive trap
+Message-Id: <20230516141028.d3a9cb541bf1b7ef0deb79c3@kernel.org>
+In-Reply-To: <20230516133153.9627751457e0050159f077ab@kernel.org>
+References: <20230510122045.2259-1-zegao@tencent.com>
+        <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
+        <ZFvUH+p0ebcgnwEg@krava>
+        <CAD8CoPC_=d+Aocp8pnSi9cbU6HWBNc697bKUS1UydtB-4DFzrA@mail.gmail.com>
+        <ee28e791-b3ab-3dfd-161b-4e7ec055c6ff@meta.com>
+        <20230513001757.75ae0d1b@rorschach.local.home>
+        <20230516133153.9627751457e0050159f077ab@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 06:18:07PM +0000, Kelvin.Cao@microchip.com wrote:
-> > I find this rather confusing, especially as some code literally
-> > switches on the op to fill in either set.
+On Tue, 16 May 2023 13:31:53 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+
+> On Sat, 13 May 2023 00:17:57 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> It's a hardware interface, and not possible to change it at the point.
-> I guess I can make it look slightly better by grouping the related
-> names together:
+> > On Fri, 12 May 2023 07:29:02 -0700
+> > Yonghong Song <yhs@meta.com> wrote:
+> > 
+> > > A fprobe_blacklist might make sense indeed as fprobe and kprobe are 
+> > > quite different... Thanks for working on this.
+> > 
+> > Hmm, I think I see the problem:
+> > 
+> > fprobe_kprobe_handler() {
+> >    kprobe_busy_begin() {
+> >       preempt_disable() {
+> >          preempt_count_add() {  <-- trace
+> >             fprobe_kprobe_handler() {
+> > 		[ wash, rinse, repeat, CRASH!!! ]
+> > 
+> > Either the kprobe_busy_begin() needs to use preempt_disable_notrace()
+> > versions, or fprobe_kprobe_handle() needs a
+> > ftrace_test_recursion_trylock() call.
 > 
-> union {
->         struct {
->                 __le32 saddr_lo;
->                 __le32 saddr_hi;
->         };
->         struct {
->                 __le32 widata_lo;
->                 __le32 widata_hi;
->         };
-> };
+> Oops, I got it. Is preempt_count_add() tracable? If so, kprobe_busy_begin()
+> should be updated.
 
-The hardware interface is simply:
+OK, preempt_count_add() is NOKPROBE_SYMBOL() so kprobe_busy_begin() should
+be safe. The problem is in fprobe_kprobe_handler() then.
 
-	__le32 field_lo;
-	__le32 field_hi;
+Thanks!
 
-hardware documentation might decide to give those fields two different
-names just to confuse you :)
+> 
+> Thanks,
+> 
+> > 
+> > -- Steve
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-I think everyone else would be served better by:
-	
-	__le32 addr_lo; /* SADDR_LO/WIADDR_LO */
-	__le32 addr_hi; /* SADDR_HI/WIADDR_HI */
 
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
