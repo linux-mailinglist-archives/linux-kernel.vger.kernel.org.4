@@ -2,57 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C99C704511
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D2C704513
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjEPGSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S230035AbjEPGS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjEPGSD (ORCPT
+        with ESMTP id S229572AbjEPGS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:18:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7C02D42;
-        Mon, 15 May 2023 23:18:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5D29634E8;
-        Tue, 16 May 2023 06:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB929C433D2;
-        Tue, 16 May 2023 06:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684217879;
-        bh=KGg4vNFKC0FHIdj1tqnZudinSZ5tBcJNQhXldA3DVwM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tucX/9Zxs0lVyiGplSICMROFhdeDetrKuUXJMpSR2R+9RV28i4yXXv3AMOD2Eexor
-         y8PucAdUocbnJ9rFAAN8JOPT7FVfyKxNdfm9Tjh9DGB2RybETdbMSW8irHElPlLLtQ
-         IgT9un164z+io7Mbe6pQLxYZ35jaA7rw0CeHTalN5vY+vVCfpYPY5IVuywb8W9KBKL
-         smL2zzlSrPXxAcoEVAhrjcJeyUbM4Y2YB9ykBCzBcTTAAzybu9gGy22J1qFQmu7eL4
-         BhGPqUQqg+XNH4Njk2xk7X+y4T9dcs/85/GuMO/VTBfvCF/MQwO7y58lfPUdQGQKb+
-         wMRqU04Rs72Gw==
-Date:   Tue, 16 May 2023 09:17:51 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de
-Subject: Re: [PATCH v5 RESEND 04/17] mm/ioremap: Define
- generic_ioremap_prot() and generic_iounmap()
-Message-ID: <ZGMgD178fqCF2fZf@kernel.org>
-References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-5-bhe@redhat.com>
+        Tue, 16 May 2023 02:18:56 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9383B2D42;
+        Mon, 15 May 2023 23:18:53 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0FBEDE0005;
+        Tue, 16 May 2023 06:18:47 +0000 (UTC)
+Message-ID: <5d894e71-25ad-8ba0-f632-2eec6e017f46@ghiti.fr>
+Date:   Tue, 16 May 2023 08:18:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515090848.833045-5-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: linux-next: Tree for May 15 (several RV64 build errors)
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor@kernel.org>
+References: <20230515141235.0777c631@canb.auug.org.au>
+ <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
+Content-Language: en-US
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <54244db6-ff69-4cf8-894c-c3dd2f12df9c@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,106 +50,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 05:08:35PM +0800, Baoquan He wrote:
-> From: Christophe Leroy <christophe.leroy@csgroup.eu>
-> 
-> Define a generic version of ioremap_prot() and iounmap() that
-> architectures can call after they have performed the necessary
-> alteration to parameters and/or necessary verifications.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Signed-off-by: Baoquan He <bhe@redhat.com>
+On 5/16/23 04:45, Randy Dunlap wrote:
+>
+> On 5/14/23 21:12, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20230512:
+>>
+> ../arch/riscv/mm/init.c: In function 'create_fdt_early_page_table':
+> ../arch/riscv/mm/init.c:925:19: warning: unused variable 'pa' [-Wunused-variable]
+>    925 |         uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
+>        |                   ^~
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-> ---
->  include/asm-generic/io.h |  4 ++++
->  mm/ioremap.c             | 22 ++++++++++++++++------
->  2 files changed, 20 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index 587e7e9b9a37..a7ca2099ba19 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1073,9 +1073,13 @@ static inline bool iounmap_allowed(void *addr)
->  }
->  #endif
->  
-> +void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +				   pgprot_t prot);
-> +
->  void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
->  			   unsigned long prot);
->  void iounmap(volatile void __iomem *addr);
-> +void generic_iounmap(volatile void __iomem *addr);
->  
->  static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
->  {
-> diff --git a/mm/ioremap.c b/mm/ioremap.c
-> index 8652426282cc..db6234b9db59 100644
-> --- a/mm/ioremap.c
-> +++ b/mm/ioremap.c
-> @@ -11,8 +11,8 @@
->  #include <linux/io.h>
->  #include <linux/export.h>
->  
-> -void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> -			   unsigned long prot)
-> +void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +				   pgprot_t prot)
->  {
->  	unsigned long offset, vaddr;
->  	phys_addr_t last_addr;
-> @@ -28,7 +28,7 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
->  	phys_addr -= offset;
->  	size = PAGE_ALIGN(size + offset);
->  
-> -	if (!ioremap_allowed(phys_addr, size, prot))
-> +	if (!ioremap_allowed(phys_addr, size, pgprot_val(prot)))
->  		return NULL;
->  
->  	area = get_vm_area_caller(size, VM_IOREMAP,
-> @@ -38,17 +38,22 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
->  	vaddr = (unsigned long)area->addr;
->  	area->phys_addr = phys_addr;
->  
-> -	if (ioremap_page_range(vaddr, vaddr + size, phys_addr,
-> -			       __pgprot(prot))) {
-> +	if (ioremap_page_range(vaddr, vaddr + size, phys_addr, prot)) {
->  		free_vm_area(area);
->  		return NULL;
->  	}
->  
->  	return (void __iomem *)(vaddr + offset);
->  }
-> +
-> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +			   unsigned long prot)
-> +{
-> +	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
-> +}
->  EXPORT_SYMBOL(ioremap_prot);
->  
-> -void iounmap(volatile void __iomem *addr)
-> +void generic_iounmap(volatile void __iomem *addr)
->  {
->  	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
->  
-> @@ -58,4 +63,9 @@ void iounmap(volatile void __iomem *addr)
->  	if (is_vmalloc_addr(vaddr))
->  		vunmap(vaddr);
->  }
-> +
-> +void iounmap(volatile void __iomem *addr)
-> +{
-> +	generic_iounmap(addr);
-> +}
->  EXPORT_SYMBOL(iounmap);
-> -- 
-> 2.34.1
-> 
-> 
+This one slipped through, I'm adding !BUILTIN_DTB to our internal CI, 
+I'll send a fix today.
 
--- 
-Sincerely yours,
-Mike.
+
+>
+> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .data LMA [000000000041a000,00000000075bffd7] overlaps section .text LMA [00000000000f09d4,00000000033562ab]
+> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: section .init.pi.text LMA [00000000033562ac,0000000003359137] overlaps section .data LMA [000000000041a000,00000000075bffd7]
+
+
+I'll check this one too which seems to be related to kernel/pi introduction.
+
+
+>
+> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L227':
+> io-pgtable-arm.c:(.init.text+0x444): undefined reference to `alloc_io_pgtable_ops'
+> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L0 ':
+> io-pgtable-arm.c:(.init.text+0xc4c): undefined reference to `free_io_pgtable_ops'
+> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L690':
+> ipmmu-vmsa.c:(.text+0x2260): undefined reference to `free_io_pgtable_ops'
+> /opt/crosstool/gcc-12.2.0-nolibc/riscv64-linux/bin/riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L1309':
+> ipmmu-vmsa.c:(.text+0x3f24): undefined reference to `alloc_io_pgtable_ops'
+
+
+Ok, those ones too....
+
+
+Thanks for the report,
+
+
+Alex
+
+
+>
+>
+> Full randconfig file is attached.
+>
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
