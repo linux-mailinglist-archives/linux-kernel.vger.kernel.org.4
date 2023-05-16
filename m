@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874CB704905
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E869170490B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjEPJV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S231251AbjEPJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbjEPJVK (ORCPT
+        with ESMTP id S231558AbjEPJV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:21:10 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5E11997;
-        Tue, 16 May 2023 02:20:37 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so17627175e9.1;
-        Tue, 16 May 2023 02:20:37 -0700 (PDT)
+        Tue, 16 May 2023 05:21:58 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D573E30CB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:21:20 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so21174404a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684228833; x=1686820833;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bf8niA9dFNqb8/6zqk0cfY1upregS7xh6PWdNGORQhM=;
-        b=mUot4xoBX4iGmqkstjP8aDJ3zBNwYhA2G4z426kWrguLoC0BitUwFzUzMQnxxEIgHA
-         FtbopgdIm35fJX5ntP5FINCK308Gd6qTfq/m+efAJUTNYfLeflcddgt016YnNIE4VnOM
-         YI5ocNCinhb7Sf9b2UDZFacTlcZsSt48XAz48AtqZnvfgrGRpJbYtTR1gKvxMLpCBAcu
-         oQ0ZVyQQWStLf8S430aUj42YpUpaFWHaMQGWuYJUSw22k0qpkfAuT5LPwvUYSIhix61o
-         lfoHB3/7Gobohxx4bSogCvdsogiyVX1VbtH4RHigNT3CsH3gPHHfXbJJZaXv/zUw/K5r
-         dfxg==
+        d=linaro.org; s=google; t=1684228877; x=1686820877;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GIxKr3aX2BYjnoWfUPAEf66ji9uTTT0hy2kkalP7tEo=;
+        b=z2ocyro2qH97P1SExYDO0aZUDuVW2RYJH99+aT0lMGrRSNCAAMT7aH47X6trbdCej+
+         0/gvFtvV3lw8YzkvRKgrtmvxrvbCh868VlGHvRMVzdlHNZ5/x/lGHZvK04XR7C+BbrRv
+         VESyB/VVG2qES+iiv9YWTiDEHTA4N15GpS9K7eTCLR+1WSAflIJtqwtgqicnMt7Y0faF
+         rsDxU3AZiGxmBtYal+wqdUHvxqe8YjkrbHR0gYqXcouIECcDhRkZtXt3Gwz9L63CpF6C
+         eIOGQOhIw02s2mlM3xzQd+etEMvLEdXyu+QdAoYPfKYQ+aCyIuBnR04uWUI/hS8M5bfO
+         jEgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684228833; x=1686820833;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bf8niA9dFNqb8/6zqk0cfY1upregS7xh6PWdNGORQhM=;
-        b=Y/DrMUY8TitrLqXMxLlxQ25QtcsdaQ+Rmf+zvJhVmWMtcny8/vjX2K+NTcRiey51i4
-         yctr9GtjlUA8vhizu9ckBOxp3tyh9JCP40y0ioHbA2WvHaV3NHbjEYrBYSkB2aVJEr//
-         TlRfWJzj8aj153U9vAMimPPE+I3KWmDJVhr1QxDH17cz8APH7lnOih/X6Jvv33xzM3Yr
-         GaoMpbU6JtL52CidPmUQmyaPRrOBF5+2/FtwMJKIckS9jpPsyeeM3bYdYPhRxqC8Sk9k
-         7TgumqT/xid5JeXMP7FDKObjzWZsF++iqvCVmTGCyzavyiEhbDIq/g6G46uLs1TN3AZj
-         3wzA==
-X-Gm-Message-State: AC+VfDzhXNLXLwQIf+QL38nt3iJvopqJEIZiHSfuPaeFxX3UG2Mje9Nc
-        OBdENQHdJiD1hxcZq6zvrw4=
-X-Google-Smtp-Source: ACHHUZ5eDj7Yehs023857OsvA5mGGLmTFEZC+rtL63WQL5IwzfcHatKOCLG6ZMbny3CyAgPXBC80PA==
-X-Received: by 2002:adf:f2ca:0:b0:307:8b6f:dcf1 with SMTP id d10-20020adff2ca000000b003078b6fdcf1mr24326445wrp.25.1684228833127;
-        Tue, 16 May 2023 02:20:33 -0700 (PDT)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id r14-20020a5d494e000000b003063a92bbf5sm1904018wrs.70.2023.05.16.02.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 02:20:32 -0700 (PDT)
-Date:   Tue, 16 May 2023 10:20:30 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/246] 6.3.3-rc1 review
-Message-ID: <ZGNK3vxOsQXf3d9K@debian>
-References: <20230515161722.610123835@linuxfoundation.org>
+        d=1e100.net; s=20221208; t=1684228877; x=1686820877;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GIxKr3aX2BYjnoWfUPAEf66ji9uTTT0hy2kkalP7tEo=;
+        b=J4QinzkBDFPO1Fivl8P1kTJRuR532xWoxAGPRxfBluXhSJygzNAZ2npG3WfBdb0PmO
+         bBnKN0UR4ir0asfD3wPgMwRKu0OjrrVX1aeXq5T7jg8rWpX0Rj++sHjjCfDcPPocCO01
+         TwDA3E8OvKm59AWnhowTqmFO4vzgxzqiPrVC2Q/6wdpaspZDWQxqunNS7esRX/q1wxiM
+         +zojbTdMlihtr86mi+2KEeyiZKy0v0ptWCyOD4kBWWxMo5JTqA0lnuNEs3j8RnfGjE5y
+         rjWOamaleeY21rwz5JcZlJkcfQ2dfS0AhmKT9V4ll4D16oYVZUHuJxpdmthBO5GKbN4s
+         8LgA==
+X-Gm-Message-State: AC+VfDwsP3csqzHBnr/oyLX2asovvDRDfZdtu7ChMMWOsKfh6QWU2Jym
+        p6hAfiQ3ckg/frahkrpYKBqC3Q==
+X-Google-Smtp-Source: ACHHUZ7dzFmPjJCKif5jB1+N0nHY21kGqLzOZEPILSuue896Kpc4Nn7f7bqfkz3TWcmxSoNINxsYNw==
+X-Received: by 2002:a17:907:7251:b0:96a:1ab:b4a2 with SMTP id ds17-20020a170907725100b0096a01abb4a2mr26409591ejc.25.1684228877779;
+        Tue, 16 May 2023 02:21:17 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id tl14-20020a170907c30e00b00961277a426dsm10532335ejc.205.2023.05.16.02.21.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 02:21:17 -0700 (PDT)
+Message-ID: <0efd549a-6caf-aa92-f78d-3dd0dbb12b0f@linaro.org>
+Date:   Tue, 16 May 2023 11:21:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V8 RESEND 1/4] dt-bindings: clock: document Amlogic S4 SoC
+ PLL clock controller
+Content-Language: en-US
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
+References: <20230516064736.10270-1-yu.tu@amlogic.com>
+ <20230516064736.10270-2-yu.tu@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230516064736.10270-2-yu.tu@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On 16/05/2023 08:47, Yu Tu wrote:
+> Add the S4 PLL clock controller dt-bindings in the s4 SoC family.
+> 
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> ---
 
-On Mon, May 15, 2023 at 06:23:32PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.3 release.
-> There are 246 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+This is a friendly reminder during the review process.
 
-Build test (gcc version 12.2.1 20230511):
-mips: 52 configs -> no failure
-arm: 71 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+It looks like you received a tag and forgot to add it.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/3539
-[2]. https://openqa.qa.codethink.co.uk/tests/3540
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+If a tag was not added on purpose, please state why and what changed.
 
--- 
-Regards
-Sudip
+Best regards,
+Krzysztof
+
