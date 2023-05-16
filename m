@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682B2704E42
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F32704E46
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbjEPM4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S233284AbjEPM4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjEPM4K (ORCPT
+        with ESMTP id S232763AbjEPM4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:56:10 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC73E65B2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:55:43 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2ac836f4447so144786871fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:55:43 -0700 (PDT)
+        Tue, 16 May 2023 08:56:11 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBE519AA
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:55:45 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2ad819ab8a9so119697361fa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:55:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684241739; x=1686833739;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ySTH1isvoYm6bPo8CerpAG+A4TnY2jdotYQJPV96/VE=;
-        b=mDQUgzDbNyQGULqtfTRmDwXdZI64hyc5FDwTI0sSdZXeaRAwrWWRr/wcseR+fM/GXf
-         ZTHJQobW0izs6ISDcDyI4tJ2NwTh2pDbeDKYdPLuq5jyhwcEi70XNGPXkGyW3Evo1LPB
-         QHn/H77zwX7K7aWBISAD1Xa1UloaZwHSJ1h8ip5HXg3V8DCxjJxqiJ3Ki90wUC9AvqH9
-         9KVOyj7G7Muf0VR48pykZnti36NYwbSZKTQSJ7DKbnAtbsqCS2xMwKQnLY0lpGqGEWm5
-         cdHpGGLGSmGrpRI9aWWpOI3N8vB3XYKB+bpj94NFvw11Hx/BNRZSyFCQCHXnidXdAYy1
-         IKBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684241739; x=1686833739;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1684241740; x=1686833740;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ySTH1isvoYm6bPo8CerpAG+A4TnY2jdotYQJPV96/VE=;
-        b=QURRL8ATztEIL0K1XpWiIz3PDkVOXFWiB0Z2a5Ts0QpHvGWeTrxSOiBGPL566vLFJ4
-         pq4cEneHV+JreOBXjhheQZZzXCvD4CkryuS7ZLkyy+BeQUpdC6jXJZLFkQVb7gecCA4L
-         k6TMYP30/6kpVZrD5OmTS5LRbubpMskARL/saKiGZJpmEQCFKFO3K81/J3acBWq8xQhz
-         5ON6rC9nYIpw2EomIqMrZ9rxO1TbzYdEEUPD3E7vDuj3TeUM+JdLhB26F01swALMMxOp
-         8aQiOLvlIL44T9LVh+pClrlArdKgm1d3oGKy9G912W3UKZvAvOBsCTXVrsSQMYZWpe6K
-         6TfQ==
-X-Gm-Message-State: AC+VfDyTGYPBqb3fpggWVJPEoy3bQNxJDnYw6poLZXwOtNbTyH3oAOy1
-        qZIWWSQZ5BxfW4LsGvHIKFtxqA==
-X-Google-Smtp-Source: ACHHUZ6hUDE9Y4NbCWu1WSvCWcAoILmE+WZ2SbeKiA0SfB5vevizVoq/0xGHaW2oqQB7ybnXxlenvQ==
-X-Received: by 2002:a2e:9dca:0:b0:2ad:7943:4c15 with SMTP id x10-20020a2e9dca000000b002ad79434c15mr8235405ljj.14.1684241738790;
-        Tue, 16 May 2023 05:55:38 -0700 (PDT)
+        bh=xYIvv3rYmRWOYRNLYvtYel4ibJsZWh4O4oNdMBTy29c=;
+        b=RjsBicnmpolKlYVetZhU3EWldBJY1nHZbNCR0FaY8EKZIlLI8rtgidTMKwlqGM1T4g
+         BWggZAC8K6ZiQaPHvU/M1WYWcf/sxV62Cn6VE+nOaQQAAIbfxLS6ATaODh+7Dg0toJn+
+         R1SItm3vjtQs3j8LuaByFdui9DkyitLOh+CrXel33+JANKQM82h+KooNCDSh2xU6z0Np
+         kzVzHTEIjxu0d8a6wH7CiX4ToIzEJzZNE1tlj0qjBGWx9SGmuFg9jB+gAdJ9j0trawU7
+         v3Hm8Ur4xb5/kMORzHniqMCoery5vVKM7f1na/sPQDj5KnX2K3UALZWXVqR3ToPgRsdX
+         FE1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684241740; x=1686833740;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xYIvv3rYmRWOYRNLYvtYel4ibJsZWh4O4oNdMBTy29c=;
+        b=auEu1FjqZv0nzafu9bfK3JixXP03OFK+HjpcwnUbXKUnhDysDYDZyXZe4L2SOhoknY
+         NtHC3qE0QfK/Xyd7twMNYZSg0VjBdhJQzz7mfVornxFOEucXDKTYUDfLbwaEurEmHBDR
+         gZkB1JKUDUf/zteUp2ecCwyE9MSmt7JShb+W6O/++MZL+Rxcta+3oU84XzQKNj/iG70T
+         KAzAjodnu1VuWER8gDmETph2xgZW74a8hM0eBVzeFNuZ+0+dS+xtVNA1LxTSGXVU5TAI
+         ucg2DCaHlC27/Zh4/SmEZevPjtYd/GGOoYhswXAbchBedBMIz45aK/4ChJveht2NJear
+         zYbw==
+X-Gm-Message-State: AC+VfDzHaFjUZPqrW2GoqeiJtBibIAjHHVtYmtyfIwuobT3QBM56cVq7
+        7cugRNTgKsBbwfSj8fIeFYZ+RQ==
+X-Google-Smtp-Source: ACHHUZ4iIiIQJHnnQUggOOGmToYU8u9Bnn384mjwwjAiIYp0QrppKoJh32ZZGhOs+er8PD4McOys+Q==
+X-Received: by 2002:a2e:6812:0:b0:298:aad9:e377 with SMTP id c18-20020a2e6812000000b00298aad9e377mr8354304lja.14.1684241740282;
+        Tue, 16 May 2023 05:55:40 -0700 (PDT)
 Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id o23-20020a2e7317000000b002add1f4a92asm1647789ljc.113.2023.05.16.05.55.37
+        by smtp.gmail.com with ESMTPSA id o23-20020a2e7317000000b002add1f4a92asm1647789ljc.113.2023.05.16.05.55.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 05:55:38 -0700 (PDT)
+        Tue, 16 May 2023 05:55:39 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v3 0/7] DMA40 SRAM refactoring and cleanup
-Date:   Tue, 16 May 2023 14:55:30 +0200
-Message-Id: <20230417-ux500-dma40-cleanup-v3-0-60bfa6785968@linaro.org>
+Date:   Tue, 16 May 2023 14:55:31 +0200
+Subject: [PATCH v3 1/7] dt-bindings: dma: dma40: Prefer to pass sram
+ through phandle
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEJ9Y2QC/42NzQ6DIBAGX8VwLg0i/vXU92h6WGBVEgsG1NgY3
- 73grZemx9nNN7OTgN5gILdsJx5XE4yzEYpLRtQAtkdqdGTCGS+YyGu6bCVjVL9AMKpGBLtMtEP
- RNbqVeatKEpcSAlLpwaohbV8QZvTpMXnszHbmHs/Igwmz8++zvubp+ju05pRRyauCi7asUNT30
- Vjw7up8T5Jw5X9IeJQoDVA1IGRTFV+S4zg+9Me/uxUBAAA=
+Message-Id: <20230417-ux500-dma40-cleanup-v3-1-60bfa6785968@linaro.org>
+References: <20230417-ux500-dma40-cleanup-v3-0-60bfa6785968@linaro.org>
+In-Reply-To: <20230417-ux500-dma40-cleanup-v3-0-60bfa6785968@linaro.org>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
@@ -77,45 +77,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I started out by augmenting the STE DMA40 driver to get
-its LCPA SRAM memory from a proper SRAM handle in the
-device tree instead of as a reg cell, and then I saw
-that the driver was in a bit of sad state so I did a bit
-of cleanups on top.
+Extend the DMA40 bindings so that we can pass two SRAM
+segments as phandles instead of directly referring to the
+memory address in the second reg cell. This enables more
+granular control over the SRAM, and adds the optiona LCLA
+SRAM segment as well.
 
+Deprecate the old way of passing LCPA as a second reg cell,
+make sram compulsory.
+
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-Changes in v3:
-- Rebased on v6.4-rc1
-- Fixed a cast for a complaining print in probe()
-- Collected ACKs on the DT bindings.
-- Link to v2: https://lore.kernel.org/r/20230417-ux500-dma40-cleanup-v2-0-cdaa68a4b863@linaro.org
-
-Changes in v2:
-- Amendments to the bindings after review.
-- Link to v1: https://lore.kernel.org/r/20230417-ux500-dma40-cleanup-v1-0-b26324956e47@linaro.org
-
+ChangeLog v1->v2:
+- Enumerate phandles using inner and outer maxItems as specified
+  by Rob.
+- Drop quotes around reference.
 ---
-Linus Walleij (7):
-      dt-bindings: dma: dma40: Prefer to pass sram through phandle
-      dmaengine: ste_dma40: Get LCPA SRAM from SRAM node
-      dmaengine: ste_dma40: Add dev helper variable
-      dmaengine: ste_dma40: Remove platform data
-      dmaengine: ste_dma40: Pass dev to OF function
-      dmaengine: ste_dma40: Use managed resources
-      dmaengine: ste_dma40: Return error codes properly
+ .../devicetree/bindings/dma/stericsson,dma40.yaml  | 36 +++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 8 deletions(-)
 
- .../devicetree/bindings/dma/stericsson,dma40.yaml  |  36 ++-
- drivers/dma/Kconfig                                |   1 +
- drivers/dma/ste_dma40.c                            | 336 +++++++++------------
- .../dma-ste-dma40.h => drivers/dma/ste_dma40.h     | 101 +------
- drivers/dma/ste_dma40_ll.c                         |   3 +-
- 5 files changed, 183 insertions(+), 294 deletions(-)
----
-base-commit: a2f15a1753d590f30c07d439a04ec7e839cd2305
-change-id: 20230417-ux500-dma40-cleanup-fe4f8d9b19c5
+diff --git a/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml b/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml
+index 64845347f44d..1e5752b19a49 100644
+--- a/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml
++++ b/Documentation/devicetree/bindings/dma/stericsson,dma40.yaml
+@@ -112,14 +112,23 @@ properties:
+       - const: stericsson,dma40
+ 
+   reg:
+-    items:
+-      - description: DMA40 memory base
+-      - description: LCPA memory base
++    oneOf:
++      - items:
++          - description: DMA40 memory base
++      - items:
++          - description: DMA40 memory base
++          - description: LCPA memory base, deprecated, use eSRAM pool instead
++        deprecated: true
++
+ 
+   reg-names:
+-    items:
+-      - const: base
+-      - const: lcpa
++    oneOf:
++      - items:
++          - const: base
++      - items:
++          - const: base
++          - const: lcpa
++        deprecated: true
+ 
+   interrupts:
+     maxItems: 1
+@@ -127,6 +136,15 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  sram:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    description: A phandle array with inner size 1 (no arg cells).
++      First phandle is the LCPA (Logical Channel Parameter Address) memory.
++      Second phandle is the  LCLA (Logical Channel Link base Address) memory.
++    maxItems: 2
++    items:
++      maxItems: 1
++
+   memcpy-channels:
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     description: Array of u32 elements indicating which channels on the DMA
+@@ -138,6 +156,7 @@ required:
+   - reg
+   - interrupts
+   - clocks
++  - sram
+   - memcpy-channels
+ 
+ additionalProperties: false
+@@ -149,8 +168,9 @@ examples:
+     #include <dt-bindings/mfd/dbx500-prcmu.h>
+     dma-controller@801c0000 {
+         compatible = "stericsson,db8500-dma40", "stericsson,dma40";
+-        reg = <0x801c0000 0x1000>, <0x40010000 0x800>;
+-        reg-names = "base", "lcpa";
++        reg = <0x801c0000 0x1000>;
++        reg-names = "base";
++        sram = <&lcpa>, <&lcla>;
+         interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+         #dma-cells = <3>;
+         memcpy-channels = <56 57 58 59 60>;
 
-Best regards,
 -- 
-Linus Walleij <linus.walleij@linaro.org>
+2.40.1
 
