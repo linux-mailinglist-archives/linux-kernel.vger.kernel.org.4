@@ -2,143 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5D87050EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A548A7050EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbjEPOgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S232958AbjEPOgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbjEPOgs (ORCPT
+        with ESMTP id S233001AbjEPOga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:36:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9657FA8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684247763;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HDtlWQaTJft8O2op6owZ91p6/RHXC3pnklg9iA3D7Gs=;
-        b=clY8y2JdvJussDMqGzd+NG0jvmQpmNLGrzYUXVIwXOsMSunrcailfjLYVBbhGgpjnUCQ2q
-        Fndb0SblLIJKvzzU5wlk/c6ZI1D9OmJo3+zktxNd7IF181Yx/yy7PQwBAsuLkBYJJGhaM3
-        17yNeUjieTh6cvpvxoDyvabAw7tNBPs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-448-xqEiwh52M22pyl7gyasrEw-1; Tue, 16 May 2023 10:36:01 -0400
-X-MC-Unique: xqEiwh52M22pyl7gyasrEw-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30643d4a430so5106610f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:36:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684247760; x=1686839760;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HDtlWQaTJft8O2op6owZ91p6/RHXC3pnklg9iA3D7Gs=;
-        b=RHBPYchmMfzyrr2BbwUjP7edIZDDHppZ2tBoWW1Rfz4Vqkw+dCuFP620hzxTwhYenf
-         5U/3evfn1gDlhvKWTTbtZlHSpgESJNCNj3XQRzuaavRiQVl6jXG05sTSUP1rmN41xDk6
-         9cqIn4W26gP+VENQd3JXfgB+5ynQxOAR4rLa2f8PKPlygzSg25/AI2VfsLIf7Vs6qXCh
-         h7m5pjEsECt5hgeO0KiT+7a+3M+O6KaaUPyHyoqMSgpQYfxMsH2Ki7+g/VsKwBWFcJ16
-         w4k72kyPme4Z5Xzgh5cFle4ErWMrhtJ6DtI52YsSS7D/3yhPH8LVD3fnhPBgSyaLeViO
-         z4cg==
-X-Gm-Message-State: AC+VfDzzCQYr8wi4226xPwkVut2ida1m21UZA03tEhY+KBO/bJdlQuoy
-        VY6FTxbP0q5XmV8Qkt3XAOADm+x9UE5sbwQplMB+aB8fgeXclduAbromFrpFECfsDGLhk+73cJz
-        Mk0/UxtYouaDZOTnMTQUsaNnw
-X-Received: by 2002:adf:f58f:0:b0:306:b3f9:e2c9 with SMTP id f15-20020adff58f000000b00306b3f9e2c9mr28308369wro.6.1684247760145;
-        Tue, 16 May 2023 07:36:00 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ43W1M/r+a9sBvXVLNjQ1rWzK4b+y6axsJM1bg4sF6/pP33gd7tOg3iz5gfyS0T7ZUiF6igvw==
-X-Received: by 2002:adf:f58f:0:b0:306:b3f9:e2c9 with SMTP id f15-20020adff58f000000b00306b3f9e2c9mr28308347wro.6.1684247759798;
-        Tue, 16 May 2023 07:35:59 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74f:2500:1e3a:9ee0:5180:cc13? (p200300cbc74f25001e3a9ee05180cc13.dip0.t-ipconnect.de. [2003:cb:c74f:2500:1e3a:9ee0:5180:cc13])
-        by smtp.gmail.com with ESMTPSA id x2-20020a05600c21c200b003f508777e33sm2586081wmj.3.2023.05.16.07.35.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 07:35:59 -0700 (PDT)
-Message-ID: <7e9651d6-382a-287c-cd08-03762ccce1f7@redhat.com>
-Date:   Tue, 16 May 2023 16:35:57 +0200
+        Tue, 16 May 2023 10:36:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932BA1727;
+        Tue, 16 May 2023 07:36:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0760F63AC7;
+        Tue, 16 May 2023 14:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018FBC433A0;
+        Tue, 16 May 2023 14:36:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684247787;
+        bh=r6JAwP6Pz+WCzQtwpDS1+M+LcczOKC1Grmy2k4WGPLA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OZUC2Ag4lecUVpTvOmfIaPw7mD2lArk9uNl+d058xJVP/LoZ25quK7ursJvu2Pxld
+         fEF9Muqq185nPtAX2qqx6eVjWkOZ4fQdsnUMnG2ZemI2jX8rV+EN8U6ikkjy0Wo7CK
+         dWCNVU2BWlyv0KalfgPZUz60xUwPhJXx9a9wk2lY=
+Date:   Tue, 16 May 2023 16:36:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Subject: Re: [BUG][NEW DATA] Kmemleak, possibly hiddev_connect(), in 6.3.0+
+ torvalds tree commit gfc4354c6e5c2
+Message-ID: <2023051607-sturdy-jiffy-ca99@gregkh>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+ <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+ <2023050958-precut-vividly-94bf@gregkh>
+ <987f9008-7eac-e2a4-31f6-8479f0e4a626@alu.unizg.hr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 1/6] mm/gup: remove unused vmas parameter from
- get_user_pages()
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, x86@kernel.org,
-        linux-sgx@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Xinhui Pan <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <cover.1684097001.git.lstoakes@gmail.com>
- <b61d5999a4fc6d50b7e073cc3c3efa8fe79bbd94.1684097002.git.lstoakes@gmail.com>
- <ZGKC9fHoE+kDs0ar@google.com>
- <b97e8c2a-b629-f597-d011-395071011f1b@redhat.com>
- <ZGOTadDG/b0904YI@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZGOTadDG/b0904YI@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <987f9008-7eac-e2a4-31f6-8479f0e4a626@alu.unizg.hr>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.05.23 16:30, Sean Christopherson wrote:
-> On Tue, May 16, 2023, David Hildenbrand wrote:
->> On 15.05.23 21:07, Sean Christopherson wrote:
->>> On Sun, May 14, 2023, Lorenzo Stoakes wrote:
->>>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
->>>> index cb5c13eee193..eaa5bb8dbadc 100644
->>>> --- a/virt/kvm/kvm_main.c
->>>> +++ b/virt/kvm/kvm_main.c
->>>> @@ -2477,7 +2477,7 @@ static inline int check_user_page_hwpoison(unsigned long addr)
->>>>    {
->>>>    	int rc, flags = FOLL_HWPOISON | FOLL_WRITE;
->>>> -	rc = get_user_pages(addr, 1, flags, NULL, NULL);
->>>> +	rc = get_user_pages(addr, 1, flags, NULL);
->>>>    	return rc == -EHWPOISON;
->>>
->>> Unrelated to this patch, I think there's a pre-existing bug here.  If gup() returns
->>> a valid page, KVM will leak the refcount and unintentionally pin the page.  That's
->>
->> When passing NULL as "pages" to get_user_pages(), __get_user_pages_locked()
->> won't set FOLL_GET. As FOLL_PIN is also not set, we won't be messing with
->> the mapcount of the page.
-
-For completeness: s/mapcount/refcount/ :)
-
+On Fri, May 12, 2023 at 11:33:31PM +0200, Mirsad Goran Todorovac wrote:
+> Hi,
 > 
-> Ah, that's what I'm missing.
+> On 5/9/23 04:59, Greg Kroah-Hartman wrote:
+> > On Tue, May 09, 2023 at 01:51:35AM +0200, Mirsad Goran Todorovac wrote:
+> > > 
+> > > 
+> > > On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
+> > > > On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+> > > > > On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+> > > > > > Hi,
+> > > > > > 
+> > > > > > There seems to be a kernel memory leak in the USB keyboard driver.
+> > > > > > 
+> > > > > > The leaked memory allocs are 96 and 512 bytes.
+> > > > > > 
+> > > > > > The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+> > > > > > Lightning mobo,
+> > > > > > and Genius SlimStar i220 GK-080012 keyboard.
+> > > > > > 
+> > > > > > (Logitech M100 HID mouse is not affected by the bug.)
+> > > > > > 
+> > > > > > BIOS is:
+> > > > > > 
+> > > > > >        *-firmware
+> > > > > >             description: BIOS
+> > > > > >             vendor: American Megatrends International, LLC.
+> > > > > >             physical id: 0
+> > > > > >             version: 1.21
+> > > > > >             date: 04/26/2023
+> > > > > >             size: 64KiB
+> > > > > > 
+> > > > > > The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+> > > > > > 
+> > > > > > The keyboard is recognised as Chicony:
+> > > > > > 
+> > > > > >                    *-usb
+> > > > > >                         description: Keyboard
+> > > > > >                         product: CHICONY USB Keyboard
+> > > > > >                         vendor: CHICONY
+> > > > > >                         physical id: 2
+> > > > > >                         bus info: usb@5:2
+> > > > > >                         logical name: input35
+> > > > > >                         logical name: /dev/input/event4
+> > > > > >                         logical name: input35::capslock
+> > > > > >                         logical name: input35::numlock
+> > > > > >                         logical name: input35::scrolllock
+> > > > > >                         logical name: input36
+> > > > > >                         logical name: /dev/input/event5
+> > > > > >                         logical name: input37
+> > > > > >                         logical name: /dev/input/event6
+> > > > > >                         logical name: input38
+> > > > > >                         logical name: /dev/input/event8
+> > > > > >                         version: 2.30
+> > > > > >                         capabilities: usb-2.00 usb
+> > > > > >                         configuration: driver=usbhid maxpower=100mA
+> > > > > > speed=1Mbit/s
+> > > > > > 
+> > > > > > The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+> > > > > > couple of seconds,
+> > > > > > and then reconnect and scan for memory leaks twice.
+> > > > > > 
+> > > > > > The kmemleak log is as follows [edited privacy info]:
+> > > > > > 
+> > > > > > root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+> > > > > > unreferenced object 0xffff8dd020037c00 (size 96):
+> > > > > >     comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+> > > > > >     hex dump (first 32 bytes):
+> > > > > >       5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+> > > > > >       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+> > > > > >     backtrace:
+> > > > > >       [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+> > > > > >       [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+> > > > > >       [<ffffffffb87543d9>] class_create+0x29/0x80
+> > > > > >       [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
+> > > > > 
+> > > > > As the call to class_create() in this path is now gone in 6.4-rc1, can
+> > > > > you retry that release to see if this is still there or not?
+> > > > 
+> > > > No, wait, it's still there, I was looking at a development branch of
+> > > > mine that isn't sent upstream yet.  And syzbot just reported the same
+> > > > thing:
+> > > > 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
+> > > > 
+> > > > So something's wrong here, let me dig into it tomorrow when I get a
+> > > > chance...
+> > > 
+> > > If this could help, here is the bisect of the bug (I could not discern what
+> > > could possibly be wrong):
+> > > 
+> > > user@host:~/linux/kernel/linux_torvalds$ git bisect log
+> > > git bisect start
+> > > # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
+> > > git bisect bad ac9a78681b921877518763ba0e89202254349d1b
+> > > # good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
+> > > git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+> > > # good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch
+> > > 'net-remove-some-rcu_bh-cruft'
+> > > git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
+> > > # good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> > > git bisect good b68ee1c6131c540a62ecd443be89c406401df091
+> > > # bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1'
+> > > of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+> > > git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+> > > # good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag
+> > > 'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
+> > > git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
+> > > # good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag
+> > > 'for-linus-2023042601' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
+> > > git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
+> > > # good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag
+> > > 'staging-6.4-rc1' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+> > > git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
+> > > # good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate
+> > > memory region to avoid memory overlapping
+> > > git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
+> > > # bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure due
+> > > to sysfs 'bus_type' argument needing to be const
+> > > git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+> > > # good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: use
+> > > lock_class_key already present in struct subsys_private
+> > > git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
+> > > # bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create
+> > > class_is_registered()
+> > > git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
+> > > # good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a
+> > > comment to set_primary_fwnode() on nullifying
+> > > git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
+> > > # bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add debug
+> > > message with checksum for FW file
+> > > git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
+> > > # good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class:
+> > > implement class_get/put without the private pointer.
+> > > git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
+> > > # bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate
+> > > machine name in soc_device_register if empty
+> > > git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
+> > > # bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c:
+> > > convert to only use class_to_subsys
+> > > git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
+> > > # first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core:
+> > > class.c: convert to only use class_to_subsys
+> > > user@host:~/linux/kernel/linux_torvalds$
+> > 
+> > This helps a lot, thanks.  I got the reference counting wrong somewhere
+> > in here, I thought I tested this better, odd it shows up now...
+> > 
+> > I'll try to work on it this week.
+> 
+> I have figured out that the leak occurs on keyboard unplugging only, one
+> or two leaks (maybe a race condition?).
+> 
+> Please NOTE that the number of leaks is now odd:
+> 
+> root@defiant:/home/marvin# cat /sys/kernel/debug/kmemleak | grep comm
+>   comm "systemd-udevd", pid 330, jiffies 4294892588 (age 715.772s)
+>   comm "systemd-udevd", pid 330, jiffies 4294892588 (age 715.772s)
+>   comm "kworker/6:0", pid 54, jiffies 4294907989 (age 654.224s)
+>   comm "kworker/6:0", pid 54, jiffies 4294907989 (age 654.272s)
+>   comm "kworker/6:3", pid 3046, jiffies 4294935362 (age 544.780s)
+>   comm "kworker/6:0", pid 54, jiffies 4294964122 (age 429.740s)
+>   comm "kworker/6:0", pid 54, jiffies 4294964122 (age 429.784s)
+> root@defiant:/home/marvin#
+> 
+> At one time unplugging keyboard generated only one leak, but only at one
+> time. As it requires manually unplugging keyboard, I didn't seem to find a
+> way to automate it, but it doesn't seem to require root access.
+> 
+> BTW, I've seen in syzbot output that kmemleak output has debug source file
+> names and line numbers. I couldn't make that work with the dbg .deb.
+> 
+> I will do some more homework, but this was a rough week.
 
+I made up a patch based on code inspection alone, as I couldn't
+reproduce this locally at all:
+	https://lore.kernel.org/r/2023051628-thumb-boaster-5680@gregkh
+and it seemed to pass syzbot's tests.
 
+I've included it here below, can you test it as well?
 
--- 
-Thanks,
+Hm, I only tested with a USB mouse unplug/plug cycle, maybe the issue is
+a keyboard?
 
-David / dhildenb
+thanks,
 
+greg k-h
+
+-------------
+
+diff --git a/drivers/base/class.c b/drivers/base/class.c
+index ac1808d1a2e8..9b44edc8416f 100644
+--- a/drivers/base/class.c
++++ b/drivers/base/class.c
+@@ -320,6 +322,7 @@ void class_dev_iter_init(struct class_dev_iter *iter, const struct class *class,
+ 		start_knode = &start->p->knode_class;
+ 	klist_iter_init_node(&sp->klist_devices, &iter->ki, start_knode);
+ 	iter->type = type;
++	iter->sp = sp;
+ }
+ EXPORT_SYMBOL_GPL(class_dev_iter_init);
+ 
+@@ -361,6 +364,7 @@ EXPORT_SYMBOL_GPL(class_dev_iter_next);
+ void class_dev_iter_exit(struct class_dev_iter *iter)
+ {
+ 	klist_iter_exit(&iter->ki);
++	subsys_put(iter->sp);
+ }
+ EXPORT_SYMBOL_GPL(class_dev_iter_exit);
+ 
+diff --git a/include/linux/device/class.h b/include/linux/device/class.h
+index 9deeaeb457bb..abf3d3bfb6fe 100644
+--- a/include/linux/device/class.h
++++ b/include/linux/device/class.h
+@@ -74,6 +74,7 @@ struct class {
+ struct class_dev_iter {
+ 	struct klist_iter		ki;
+ 	const struct device_type	*type;
++	struct subsys_private		*sp;
+ };
+ 
+ int __must_check class_register(const struct class *class);
