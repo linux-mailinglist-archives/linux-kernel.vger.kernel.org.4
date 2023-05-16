@@ -2,48 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686457042B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921247042B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjEPBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S229501AbjEPBQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjEPBOJ (ORCPT
+        with ESMTP id S229475AbjEPBQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:14:09 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32A810EA;
-        Mon, 15 May 2023 18:14:06 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QKyrL6wxqzsRhT;
-        Tue, 16 May 2023 09:12:02 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 16 May
- 2023 09:14:01 +0800
-Subject: Re: [PATCH net-next] octeontx2-pf: Add support for page pool
-To:     Ratheesh Kannoth <rkannoth@marvell.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-References: <20230515055607.651799-1-rkannoth@marvell.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <c50a0969-4b17-f2c2-6ad6-b085b8ac4043@huawei.com>
-Date:   Tue, 16 May 2023 09:14:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Mon, 15 May 2023 21:16:31 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37465FF9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:16:29 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ac79d4858dso141032901fa.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:16:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684199788; x=1686791788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HhKJ9K8sXPUHNu8qgCXbMx2ph04nrQv3JOCNnJ3r0tc=;
+        b=Zin4aDiiD4dr5lMMf7axMkePl2KMRXRtEnqdqfxlifKpRjXquUxHpqqEL814lrzSYs
+         7Pg+/C1a1TOGSIgSbEavUT9A/qURTYxy98faWggMB1v77BiQv9cReT3igi6XZviir7NO
+         bPyV4MvvzMqIeqa/cy7d0IipDRz9Nb9iZ6XSwQ62gWdis8nipTDQgat4LCLmhbmlUsYU
+         RjML3cBiFSb25Qcpcqye1jWvh4b8ngCTPvb15CmVSuNGH3wFznjQ70tYL7q39Dk5AOjM
+         H89CS17IysRyxxB3TE268OPO/7sKnr8GJZR56JgGGoFMVDJ3aBZGo0yIrj8nhbUUo4mM
+         YxOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684199788; x=1686791788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HhKJ9K8sXPUHNu8qgCXbMx2ph04nrQv3JOCNnJ3r0tc=;
+        b=FKWw+WpKLm9w3kd4xSot8HajeEwsUo6FRjwyPc0VeRtyqfKYOrQJbBvCNtH2g0t5vR
+         qAIGyekVuTFHYDaNKtTOps067XAUJBi5BG3csoEw9EnnHNFuEeEBW8JI1S4eF/BuCNe1
+         coMFTMAetqISvgonwNNMqnbHhQBs/mArOYoUZkEiqHtTc4zqRLjLGNkEXSQrkOaihlze
+         20X6+E9zmoovI3txQ95Op++aolCYkYPOCKJDw/3ScMrqvJT/km1fFNS685KklAOCJFUR
+         YtTWY2ZYBWG+y85NCx+0lIMO8I641/k7K2AAwVr0JtErr0JijCEcurkUVzaZpF/VyKcy
+         Bu3g==
+X-Gm-Message-State: AC+VfDxf2D0qJINf1TuhKofJpoiFyXK4zFXEEZ2AROW3rhWNaQDWw5zC
+        um/Soaw+fjEDmSpM6JnSJSYmTQ==
+X-Google-Smtp-Source: ACHHUZ7FF4CwV/cjiS18zH9a4OjJ2CQEvHfXtMS7xd3A0Bop7xeqC+uSDo35dCJW1pJ+xQThi+u7Sg==
+X-Received: by 2002:a05:651c:212:b0:2ac:8c5e:e151 with SMTP id y18-20020a05651c021200b002ac8c5ee151mr7562822ljn.31.1684199787856;
+        Mon, 15 May 2023 18:16:27 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id h4-20020a2e9ec4000000b002a8c32fd2f3sm3989061ljk.89.2023.05.15.18.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 18:16:27 -0700 (PDT)
+Message-ID: <4e62a790-192c-90b6-76dc-193dc52cc996@linaro.org>
+Date:   Tue, 16 May 2023 03:16:25 +0200
 MIME-Version: 1.0
-In-Reply-To: <20230515055607.651799-1-rkannoth@marvell.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/2] iommu/arm-smmu-qcom: Fix missing adreno_smmu's
 Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Lepton Wu <lepton@chromium.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        "moderated list:ARM SMMU DRIVERS" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU SUBSYSTEM" <iommu@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230511145908.597683-1-robdclark@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230511145908.597683-1-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,195 +89,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/15 13:56, Ratheesh Kannoth wrote:
-> Page pool for each rx queue enhance rx side performance
-> by reclaiming buffers back to each queue specific pool. DMA
-> mapping is done only for first allocation of buffers.
-> As subsequent buffers allocation avoid DMA mapping,
-> it results in performance improvement.
-
-Any performance data to share here?
-
-....
-> @@ -1170,15 +1199,24 @@ void otx2_free_aura_ptr(struct otx2_nic *pfvf, int type)
->  	/* Free SQB and RQB pointers from the aura pool */
->  	for (pool_id = pool_start; pool_id < pool_end; pool_id++) {
->  		iova = otx2_aura_allocptr(pfvf, pool_id);
-> +		pool = &pfvf->qset.pool[pool_id];
->  		while (iova) {
->  			if (type == AURA_NIX_RQ)
->  				iova -= OTX2_HEAD_ROOM;
->  
->  			pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
-> -			dma_unmap_page_attrs(pfvf->dev, iova, size,
-> -					     DMA_FROM_DEVICE,
-> -					     DMA_ATTR_SKIP_CPU_SYNC);
-> -			put_page(virt_to_page(phys_to_virt(pa)));
-> +			page = virt_to_page(phys_to_virt(pa));
-
-virt_to_page() seems ok for order-0 page allocated from page
-pool as it does now, but it may break for order-1+ page as
-page_pool_put_page() expects head page of compound page or base
-page. Maybe add a comment for that or use virt_to_head_page()
-explicitly.
-
-> +
-> +			if (pool->page_pool) {
-> +				page_pool_put_page(pool->page_pool, page, size, true);
-
-page_pool_put_full_page() seems more appropriate here, as the
-PP_FLAG_DMA_SYNC_DEV flag is not set, even if it is set, it seems
-the whole page need to be synced instead of a frag.
 
 
-> +			} else {
-> +				dma_unmap_page_attrs(pfvf->dev, iova, size,
-> +						     DMA_FROM_DEVICE,
-> +						     DMA_ATTR_SKIP_CPU_SYNC);
-> +
-> +				put_page(page);
-> +			}
-> +
->  			iova = otx2_aura_allocptr(pfvf, pool_id);
->  		}
->  	}
-> @@ -1196,6 +1234,8 @@ void otx2_aura_pool_free(struct otx2_nic *pfvf)
->  		pool = &pfvf->qset.pool[pool_id];
->  		qmem_free(pfvf->dev, pool->stack);
->  		qmem_free(pfvf->dev, pool->fc_addr);
-> +		page_pool_destroy(pool->page_pool);
-> +		pool->page_pool = NULL;
->  	}
->  	devm_kfree(pfvf->dev, pfvf->qset.pool);
->  	pfvf->qset.pool = NULL;
-> @@ -1279,8 +1319,10 @@ static int otx2_aura_init(struct otx2_nic *pfvf, int aura_id,
->  }
->  
->  static int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
-> -			  int stack_pages, int numptrs, int buf_size)
-> +			  int stack_pages, int numptrs, int buf_size,
-> +			  int type)
->  {
-> +	struct page_pool_params pp_params = { 0 };
->  	struct npa_aq_enq_req *aq;
->  	struct otx2_pool *pool;
->  	int err;
-> @@ -1324,6 +1366,22 @@ static int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
->  	aq->ctype = NPA_AQ_CTYPE_POOL;
->  	aq->op = NPA_AQ_INSTOP_INIT;
->  
-> +	if (type != AURA_NIX_RQ) {
-> +		pool->page_pool = NULL;
-> +		return 0;
-> +	}
-> +
-> +	pp_params.flags = PP_FLAG_PAGE_FRAG | PP_FLAG_DMA_MAP;
-> +	pp_params.pool_size = numptrs;
-> +	pp_params.nid = NUMA_NO_NODE;
-> +	pp_params.dev = pfvf->dev;
-> +	pp_params.dma_dir = DMA_FROM_DEVICE;
-> +	pool->page_pool = page_pool_create(&pp_params);
-> +	if (!pool->page_pool) {
-> +		netdev_err(pfvf->netdev, "Creation of page pool failed\n");
-> +		return -EFAULT;
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -1358,7 +1416,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
->  
->  		/* Initialize pool context */
->  		err = otx2_pool_init(pfvf, pool_id, stack_pages,
-> -				     num_sqbs, hw->sqb_size);
-> +				     num_sqbs, hw->sqb_size, AURA_NIX_SQ);
->  		if (err)
->  			goto fail;
->  	}
-> @@ -1421,7 +1479,7 @@ int otx2_rq_aura_pool_init(struct otx2_nic *pfvf)
->  	}
->  	for (pool_id = 0; pool_id < hw->rqpool_cnt; pool_id++) {
->  		err = otx2_pool_init(pfvf, pool_id, stack_pages,
-> -				     num_ptrs, pfvf->rbsize);
-> +				     num_ptrs, pfvf->rbsize, AURA_NIX_RQ);
->  		if (err)
->  			goto fail;
->  	}
-
-...
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> index 7045fedfd73a..df5f45aa6980 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> @@ -217,9 +217,10 @@ static bool otx2_skb_add_frag(struct otx2_nic *pfvf, struct sk_buff *skb,
->  		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
->  				va - page_address(page) + off,
->  				len - off, pfvf->rbsize);
-> -
-> +#ifndef CONFIG_PAGE_POOL
-
-Most driver does 'select PAGE_POOL' in config when adding page
-pool support, is there any reason it does not do it here?
-
->  		otx2_dma_unmap_page(pfvf, iova - OTX2_HEAD_ROOM,
->  				    pfvf->rbsize, DMA_FROM_DEVICE);
-> +#endif
->  		return true;
->  	}
->  
-> @@ -382,6 +383,8 @@ static void otx2_rcv_pkt_handler(struct otx2_nic *pfvf,
->  	if (pfvf->netdev->features & NETIF_F_RXCSUM)
->  		skb->ip_summed = CHECKSUM_UNNECESSARY;
->  
-> +	skb_mark_for_recycle(skb);
-> +
->  	napi_gro_frags(napi);
->  }
->  
-> @@ -1180,11 +1183,14 @@ bool otx2_sq_append_skb(struct net_device *netdev, struct otx2_snd_queue *sq,
->  }
->  EXPORT_SYMBOL(otx2_sq_append_skb);
->  
-> -void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
-> +void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq, int qidx)
->  {
->  	struct nix_cqe_rx_s *cqe;
->  	int processed_cqe = 0;
-> +	struct otx2_pool *pool;
-> +	struct page *page;
->  	u64 iova, pa;
-> +	u16 pool_id;
->  
->  	if (pfvf->xdp_prog)
->  		xdp_rxq_info_unreg(&cq->xdp_rxq);
-> @@ -1192,6 +1198,9 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
->  	if (otx2_nix_cq_op_status(pfvf, cq) || !cq->pend_cqe)
->  		return;
->  
-> +	pool_id = otx2_get_pool_idx(pfvf, AURA_NIX_RQ, qidx);
-> +	pool = &pfvf->qset.pool[pool_id];
-> +
->  	while (cq->pend_cqe) {
->  		cqe = (struct nix_cqe_rx_s *)otx2_get_next_cqe(cq);
->  		processed_cqe++;
-> @@ -1205,8 +1214,14 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
->  		}
->  		iova = cqe->sg.seg_addr - OTX2_HEAD_ROOM;
->  		pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
-> -		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize, DMA_FROM_DEVICE);
-> -		put_page(virt_to_page(phys_to_virt(pa)));
-> +		page = virt_to_page(phys_to_virt(pa));
-> +
-> +		if (pool->page_pool) {
-> +			page_pool_put_page(pool->page_pool, page, pfvf->rbsize, true);
-> +		} else {
-> +			otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize, DMA_FROM_DEVICE);
-> +			put_page(page);
-> +		}
-
-Maybe add a helper for the above as there is a similiar code block
-in the otx2_free_aura_ptr()
-
-
+On 11.05.2023 16:59, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
 > 
+> When the special handling of qcom,adreno-smmu was moved into
+> qcom_smmu_create(), it was overlooked that we didn't have all the
+> required entries in qcom_smmu_impl_of_match.  So we stopped getting
+> adreno_smmu_priv on sc7180, breaking per-process pgtables.
+> 
+> Fixes: 30b912a03d91 ("iommu/arm-smmu-qcom: Move the qcom,adreno-smmu check into qcom_smmu_create")
+> Suggested-by: Lepton Wu <lepton@chromium.org>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> index d1b296b95c86..66e191773099 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+> @@ -496,20 +496,21 @@ static const struct qcom_smmu_match_data qcom_smmu_500_impl0_data = {
+>  /*
+>   * Do not add any more qcom,SOC-smmu-500 entries to this list, unless they need
+>   * special handling and can not be covered by the qcom,smmu-500 entry.
+>   */
+>  static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
+>  	{ .compatible = "qcom,msm8996-smmu-v2", .data = &msm8996_smmu_data },
+>  	{ .compatible = "qcom,msm8998-smmu-v2", .data = &qcom_smmu_v2_data },
+>  	{ .compatible = "qcom,qcm2290-smmu-500", .data = &qcom_smmu_500_impl0_data },
+>  	{ .compatible = "qcom,qdu1000-smmu-500", .data = &qcom_smmu_500_impl0_data  },
+>  	{ .compatible = "qcom,sc7180-smmu-500", .data = &qcom_smmu_500_impl0_data },
+> +	{ .compatible = "qcom,sc7180-smmu-v2", .data = &qcom_smmu_v2_data },
+>  	{ .compatible = "qcom,sc7280-smmu-500", .data = &qcom_smmu_500_impl0_data },
+>  	{ .compatible = "qcom,sc8180x-smmu-500", .data = &qcom_smmu_500_impl0_data },
+>  	{ .compatible = "qcom,sc8280xp-smmu-500", .data = &qcom_smmu_500_impl0_data },
+>  	{ .compatible = "qcom,sdm630-smmu-v2", .data = &qcom_smmu_v2_data },
+>  	{ .compatible = "qcom,sdm845-smmu-v2", .data = &qcom_smmu_v2_data },
+>  	{ .compatible = "qcom,sdm845-smmu-500", .data = &sdm845_smmu_500_data },
+>  	{ .compatible = "qcom,sm6115-smmu-500", .data = &qcom_smmu_500_impl0_data},
+>  	{ .compatible = "qcom,sm6125-smmu-500", .data = &qcom_smmu_500_impl0_data },
+>  	{ .compatible = "qcom,sm6350-smmu-v2", .data = &qcom_smmu_v2_data },
+>  	{ .compatible = "qcom,sm6350-smmu-500", .data = &qcom_smmu_500_impl0_data },
+> @@ -540,12 +541,18 @@ struct arm_smmu_device *qcom_smmu_impl_init(struct arm_smmu_device *smmu)
+>  		/* Match platform for ACPI boot */
+>  		if (acpi_match_platform_list(qcom_acpi_platlist) >= 0)
+>  			return qcom_smmu_create(smmu, &qcom_smmu_500_impl0_data);
+>  	}
+>  #endif
+>  
+>  	match = of_match_node(qcom_smmu_impl_of_match, np);
+>  	if (match)
+>  		return qcom_smmu_create(smmu, match->data);
+>  
+> +	/* If you hit this WARN_ON() you are missing an entry in the
+> +	 * qcom_smmu_impl_of_match[] table, and GPU per-process page-
+> +	 * tables will be broken.
+> +	 */
+Nit: I think people generally do
+/*
+ * 
+
+but I'm not the maintainer
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: <stable@vger.kernel.org>
+
+Konrad
+> +	WARN_ON(of_device_is_compatible(np, "qcom,adreno-smmu"));
+> +
+>  	return smmu;
+>  }
