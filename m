@@ -2,81 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0492705264
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1855705267
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbjEPPit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S233946AbjEPPjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbjEPPio (ORCPT
+        with ESMTP id S233916AbjEPPjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:38:44 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BE97A94
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:38:40 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f51ea3a062so594011cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:38:40 -0700 (PDT)
+        Tue, 16 May 2023 11:39:35 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D76903E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:39:22 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96b0235c10bso612704066b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:39:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684251520; x=1686843520;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N2CRyxNmsdznR8/fBUCCYBNG767y6htOcJe+Dq978O0=;
-        b=ky99+SCHVfnCmAJnGMGv+XVy+Y/5w5Oriop+D60VXZbCJ46gh+BY4W/UCSx8Jw6A1Y
-         WeM0aEvIRgrM2jDStmfPFfmthOHniHIbD6BBAkMqS2rRLZbeZZIgdXCCOoRBUnvSevIu
-         mGuNBL4Mr3wXiwPb659vYj/tqLRCY8VqO+w/QgMqd5eX9Uw6OGg4SA2MO9aKFK9RIRvU
-         tNCGIHM+6q9QmYMsDDHzkOg7i/4XX2pKHtb2C+hHmMlevY63HKwLMDWrQseSHQPXXPBX
-         PZhvWIyZ0rkWNQ7lzVI/RMghiVJsnssJd/v656xW56cjCjuc8HUMmcZXCCBDdfbZ3RxZ
-         SnvA==
+        d=linaro.org; s=google; t=1684251558; x=1686843558;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G37gzrMu4TqK3kGvjNsx+P6G+3xLLe+mvP0p2BsUJuc=;
+        b=UM7HBXtYHBlkNTuMj+HwCqBEVIyYYw2iT0ZXMJPPtDZ4GC1nYgOwmR5hE4JfQHT4aW
+         LM3O/XRIzhTxU03zYp91oljWmDr+e6TktfwkvH2QwtRrSzj671cRJgloCRm2zwVynyEH
+         MQuspYnJC5C5RdUCduxTS+GzOnq6TIN9y+NAJY8gdhGUbQnbWz8GLNomXL+g0pamOzLO
+         a2q3kJZuiTNqlHtfcPURNK/IVTFWKuXDYWNqmvMw7yOWasfCHXM2qnz0q3ixkxsBkACj
+         o3+pFhC/S53Dh06C7TYzmZGclLU7z6G/0D58FGQxByubjEY6Dcwfti4mLAKhcOIncd2a
+         gpbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684251520; x=1686843520;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N2CRyxNmsdznR8/fBUCCYBNG767y6htOcJe+Dq978O0=;
-        b=RUJTbGmrGV5Zr2MLhuxJhveU5ihIFsVz9Q27IEpSQR08wUw2trYA6hB6IBxsTUjdf5
-         iwmtQx6s+qHV/nZ0OUBEHjmH92Bi/mYid4NdLCXAEa4POLvuSWCXGp61Fqxtja4yhc1y
-         DR+1hAVHTD7Qjtts/uEPYGBHGjMCZZDnpuJaB++FR8660psQJi28ULsY0Nt9VxorAlpy
-         iuwBOfX5ERCW8qWWcoo6Ebqqc3/Mful93IR4nJNVaTPm/RmEmTW7GD0K6q9UHlw3gW7I
-         kwIQK2bI+ERrVD9P2x/uZw0oduwhS87C0fz0pV0v037dvAlSgosNb46Tf1r/h74YwJXF
-         kQgA==
-X-Gm-Message-State: AC+VfDzUuh3n3VufGetgU598l7R8EEBNMJ/D4T9hou/AgJ1MHtBBjV7s
-        gqIJbixr3uuaETO2Fpwtd77YI1KPCK3rkFDmHQqy1w==
-X-Google-Smtp-Source: ACHHUZ6fQp/lKGz1+t36Q6XsaElEPIWiVg1TuKslqyo6sEc8QdbtTlLU6AEW4d5yZVI5PwZB9goyJxoyJD4Dogeldhw=
-X-Received: by 2002:ac8:4e86:0:b0:3f5:4eb4:414f with SMTP id
- 6-20020ac84e86000000b003f54eb4414fmr44516qtp.13.1684251519819; Tue, 16 May
- 2023 08:38:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684251558; x=1686843558;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G37gzrMu4TqK3kGvjNsx+P6G+3xLLe+mvP0p2BsUJuc=;
+        b=R8ku0zQzkpnVUnx3UNanznkO2pQyC1ScaiJSymncBL9IgGS9tZYR91++lBB8lrVCLM
+         Vd71B4paSD4U9vWfDguTQVUXFjM1CMUjxMK4Defam7KaRsD0plMW563Tyhtsi9sGfzqi
+         oH4IcIXSL0NyL0naSljm4lC3drw5WqyoOgDxprAYWnOwwkzoL7yQ/AHl5+rrXD2dckmP
+         pNEYmOiIgZFUncd25UVn2gmoFCexYkIwH1jX0fatjdAwTQxz8UxJRtG+0VueEKmgEL9O
+         DkQk4mUGeY3mw8MdlnLVmueTeh5jFr56hDT3vfpwhc20FDC3CaXl0EXRcdRqS8XsNm3h
+         Sh9Q==
+X-Gm-Message-State: AC+VfDxiZ8utMqll/GTQO3sKmaQsmVeB1Mwktj1ahxYDxgdtZ5l6+ECg
+        Yhl52/8ou4E41/jzdOigJAI6lA==
+X-Google-Smtp-Source: ACHHUZ6trXVDo9j17RfS2X15UIE+hBBVGAWrNQuzSGoEqtYQTusV9ZiU/sOkVMj+eabrQgFBtQNjiA==
+X-Received: by 2002:a17:906:974e:b0:96a:4c61:3c87 with SMTP id o14-20020a170906974e00b0096a4c613c87mr18849630ejy.71.1684251558104;
+        Tue, 16 May 2023 08:39:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id gv15-20020a1709072bcf00b0095337c5da35sm11348656ejc.15.2023.05.16.08.39.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 08:39:17 -0700 (PDT)
+Message-ID: <c01536f1-0efc-da3c-5465-bee120b62bdb@linaro.org>
+Date:   Tue, 16 May 2023 17:39:16 +0200
 MIME-Version: 1.0
-References: <20230515165917.1306922-1-ltykernel@gmail.com> <20230515165917.1306922-4-ltykernel@gmail.com>
- <20230516094048.GE2587705@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230516094048.GE2587705@hirez.programming.kicks-ass.net>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Tue, 16 May 2023 08:38:28 -0700
-Message-ID: <CAAH4kHZvSDNeRsiCCJ-DyBEj2MxGdmGuZeuofL0y=RP19cqfVw@mail.gmail.com>
-Subject: Re: [RFC PATCH V6 03/14] x86/sev: Add AMD sev-snp enlightened guest
- support on hyperv
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
-        srutherford@google.com, akpm@linux-foundation.org,
-        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
-        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
-        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
-        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
-        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
-        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
-        fenghua.yu@intel.com, pangupta@amd.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550-qrd: add display and panel
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        "Signed-off-by : Abel Vesa" <abel.vesa@linaro.org>
+References: <20230516151708.213744-1-krzysztof.kozlowski@linaro.org>
+ <ecfe4f62-9c54-df5e-cd5d-e7a956510696@linaro.org>
+ <8b670310-47b3-c301-99ae-84ccb704d733@linaro.org>
+ <2bc16f9a-e150-b3d0-6d72-a2ff0a4d05ae@linaro.org>
+ <f790b655-4192-bcad-07af-814a359a351a@linaro.org>
+ <894282af-fdfa-d476-fe9a-677db6483501@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <894282af-fdfa-d476-fe9a-677db6483501@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,16 +87,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> WTF is this supposed to do and why is this the right way to achieve the
-> desired result?
->
-> Your changelog gives me 0 clues -- guess how much I then care about your
-> patches?
+On 16/05/2023 17:36, Konrad Dybcio wrote:
+>>>> But don't we want to disable both when display is not used (not connected)?
+>>> The MDSS bus device only has a 0x1000 slice of the 0x90000-long "full MDSS",
+>>> the rest is probed with MDP/DPU. It also calls of_something_populate that
+>>> make DSI, DSIPHY and DP/HDMI probe. But all of them ultimately need a graph
+>>> handle to MDP.
+>>>
+>>> If we have a display (of any kind), MDP has to be enabled (or the display
+>>> engine will not have a way to be programmed).
+>>>
+>>> If we don't, enabling MDSS makes no sense as all of the hardware will be
+>>> shut down right after probing.
+>>>
+>>> So I'd say either both or none.
+>>
+>> Yes, so the current state - both disabled - is matching it.
+> Right, but what i was trying to say is that if we leave MDP without
+> any status properties, it will follow MDSS.
 
-Excuse me? No. This is incredibly rude and violates the community code
-of conduct. Please review examples of creating a positive environment
-here https://docs.kernel.org/process/code-of-conduct.html
+Ah, I missed that it is MDSS child, so indeed there is no point to have
+it explicitly disabled. I'll fix it.
 
--- 
--Dionna Glaze, PhD (she/her)
+Best regards,
+Krzysztof
+
