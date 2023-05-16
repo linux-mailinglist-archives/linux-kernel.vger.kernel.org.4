@@ -2,102 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486C370503D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D481F705042
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233869AbjEPOLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S233874AbjEPOMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbjEPOLh (ORCPT
+        with ESMTP id S233193AbjEPOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:11:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E99525D;
-        Tue, 16 May 2023 07:11:34 -0700 (PDT)
-Date:   Tue, 16 May 2023 16:11:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684246292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p2kJoaiY6sFc2XexA1NSIp8tkp+KMAr9FWBhMM10K8M=;
-        b=riLXV+N5V8BdO+sfICU58zzviuCKe9WJxAYet3PjRWtiPOwFtgliU3sHxUi6l3baLUDeQA
-        d2VLsy7KtIBhvNWVKC6KeYkpY1ApsJvTS49MTG3ler7Bcl/5uxUwZsXOlCSCbZdBwtXsYJ
-        we3NjLMA59WE5KLa2Sj6G6vNMDt8DEfJH22mqdT239W8G+cmmBpeKhkppny1ol55kILooa
-        M1m6NbgnsAjROIDn3M92M3fU3Ue2wKS+f2ht+lgTaGnowZ7TVuHwY6u/IUI2Zf/8vJUyyG
-        5N06JKGdvT0wg613LkTa/3qHQjSnq8LAPKPyowbyqMeX2mYIBGE3PVojvwP9bw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684246292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=p2kJoaiY6sFc2XexA1NSIp8tkp+KMAr9FWBhMM10K8M=;
-        b=GsSf85KlemRQc6no2AW5TCBPerki9GVIsRc+w9rsP2YAjhc78yfxiGKJXD8NJVD9LCL9Ev
-        FziApyZgVfUG2cAg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [ANNOUNCE] v6.3.1-rt13
-Message-ID: <20230516141131.fScCnP3q@linutronix.de>
-References: <20230509164640.-aaZNrjH@linutronix.de>
- <xhsmhy1lwifi1.mognet@vschneid.remote.csb>
+        Tue, 16 May 2023 10:12:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104BB1FEB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684246356; x=1715782356;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=p//Oi8KFWV3p8tmVzK6hfruBSMZpioVqrybuO9EZXrg=;
+  b=DCORlTABvjmxNvwjaD1Fr2jgsbU1MvxWZRvL4n4O1Ab0Mhe/o1s8Y42v
+   kM9LDsWenPASumdBGS4Ws0vcT+sxRLkGtMmlJcRNGJuYP3plUX5ZtWh7i
+   3oJHUicSi7iRPVVpce/OxZngu1YFDeYBLMK6Y9mPZu0GyUqH7pKc5g4jd
+   14gWtoGQbn5c8Sa2glfbEaINylYlzvE4kcTviwLcn89xHKCFjzcq9+jHR
+   Jm9VqIlvSQUTbXXRvAZ8zHul17B/MW5Sguup6lNUQsW4ayWC+pYwLJBuh
+   piZqwH1QzyESQYNVZeQYSZT9K3o4ch157fkHSG6MfXkZ0P0mge7fui3xn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="331849541"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="331849541"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 07:12:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="813446641"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="813446641"
+Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 07:12:35 -0700
+Message-ID: <56ea846e-bce8-2508-e485-1dada8c39643@intel.com>
+Date:   Tue, 16 May 2023 07:12:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <xhsmhy1lwifi1.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] x86/vdso: Use non-serializing instruction rdtsc
+Content-Language: en-US
+To:     Rong Tao <rtoax@foxmail.com>, tglx@linutronix.de
+Cc:     Rong Tao <rongtao@cestc.cn>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+References: <tencent_4DC4468312A1CB2CA34B0215FAD797D11F07@qq.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <tencent_4DC4468312A1CB2CA34B0215FAD797D11F07@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-10 12:37:42 [+0100], Valentin Schneider wrote:
-> The ktimersd threads solved some priority inversion problem we were seeing,
-> IIRC it looked something like so:
-> - GP kthread is waiting on swait_event_idle_timeout_exclusive(...)
-> - p0 (CFS NICE0) did spin_lock(L) then got throttled by CFS bandwidth
-> - p1 (CFS NICE0) did local_bh_disable() + did spin_lock(L)
-> 
-> So p0 owns L, but cannot get bandwidth replenished since local softirqs are
-> disabled, and the GP kthread can't be woken up by timeout to initiate
-> boosting either.
-> 
-> Even if ksoftirqd has its priority tuned to ensure timers can be expired,
-> the above never wakes ksoftirqd due to:
-> 
-> static inline bool should_wake_ksoftirqd(void)
-> {
->         return !this_cpu_read(softirq_ctrl.cnt);
-> }
-> 
-> on the other hand, ktimersd are woken up unconditionally, so in this
-> scenario it gets to run and donate its priority via
-> 
->   ksoftirqd_run_begin()
->   `\
->     local_lock(&softirq_ctrl.lock)
-> 
-> (note that this only solves the CFS bandwidth issue if ktimersd are FIFO or
-> above, but they are spawned as FIFO1)
-> 
-> 
-> TL;DR: for RT, I think we should also kill should_wake_ksoftirqd()
+On 5/15/23 23:52, Rong Tao wrote:
+> Replacing rdtscp or 'lfence;rdtsc' with the non-serializable instruction
+> rdtsc can achieve a 40% performance improvement with only a small loss of
+> precision.
 
-If I remember correctly this check was to avoid waking ksoftirqd because
-softirqs are already handled. In this case the systems stalls until p0/1
-makes some progress. Waking ksoftirqd makes sense if its scheduling
-policy is elevated.
+I think the minimum that can be done in a changelog like this is to
+figure out _why_ a RDTSCP was in use.  There are a ton of things that
+can make the kernel go faster, but not all of them are a good idea.
 
-Now we need overloading strategy since the current idea is to solve it
-by moving everything to ksoftirqd and letting it run at SCHED_OTHER.
-
-Sebastian
+I assume that the folks that wrote this had good reason for not using
+plain RSTSC.  What were those reasons?
