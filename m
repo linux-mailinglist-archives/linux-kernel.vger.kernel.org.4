@@ -2,173 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD40704C21
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A30704C29
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbjEPLRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
+        id S232693AbjEPLTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbjEPLRR (ORCPT
+        with ESMTP id S232513AbjEPLTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:17:17 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20702.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::702])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE80E3C01;
-        Tue, 16 May 2023 04:16:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hOr53oxvh4cGjtHHaqg+I9tN+BJl3z1b1RlyCkaqmKeacRC7cAZEXCG/CZvCaaySwXqgE3BOkgyKZ29Jp3CbfZl3guIRjaJHGrrqeGwQOQDum/JlavHaKckwHrrLtdHX5+/GmF4/UFiuIzVhalFsCVLKbJG12pLkD7ApdzreDyy2M4O/beUsoVARUc32Wz9V/4qXvuOEqbwEtludBEqVY53g/fVvlzcCxXsrLpq2FNg0h/VBoaZujMvAWAe+uwlwbGdn+yJOKXxvKAG2vfu+/10D2eYB9dgqg2uncvzGEsCXiGVdCE7a7+84GqH7PCMkJ0tGCw1+YDqUaToChq745g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+zSFJm5ug3bRNM9R2WUmbQ2kwPwaTBJ4/9ab59qgA0E=;
- b=ZG2C9NjRDEV87a4hhjTxdhZszdJQBBcguR0gQFDijVXcFbN6vwEkC2JWSH6m1HpjfRqXXSYoLfc52ftDteh1lBZGEbJ/ZeVcAbAVjV489azb0GBPbHlhtlLeR2nQ/bZCOPkIxcsJXicGdhZAj1vbOK/5WCUg/0SRsa6JPx5k5XlyFO3ZFOQnCuV99k43Dm7LtCDBPcefAr2XjWj/35ubGiFU1NMvGvrTwa7TYJYWD3nhmzxUBXlACbPxcYBqhLSbxq0GRFXUKosvCk9Y4/iNKp7nMXByqIuI7aYgkF579yFx0MMMKyGhBo1/v9rI2MfDPU1hmwcQjVtWAhuBUjjLhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 16 May 2023 07:19:02 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC255BBF;
+        Tue, 16 May 2023 04:18:32 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ab1ce53ca6so99879295ad.0;
+        Tue, 16 May 2023 04:18:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+zSFJm5ug3bRNM9R2WUmbQ2kwPwaTBJ4/9ab59qgA0E=;
- b=M9TbBnrRLzg8TnVM0aJPcCBjOOl/ls41cO6qxUSQRE1KijKOZm9y0tkJuFVDmIJA0zIsmWO2C+5Fc+SNoc5Wp93lzxssxwLNGbX4h4X+zzks8wnixAJeB/jFLmEldekmKmy/Qq6SEL5LteZnS81pNSrN7yXg1iw6J83QQ5ZzX/0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM4PR13MB5836.namprd13.prod.outlook.com (2603:10b6:8:43::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
- 2023 11:16:10 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.033; Tue, 16 May 2023
- 11:16:10 +0000
-Date:   Tue, 16 May 2023 13:16:03 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Baozhu Ni <nibaozhu@yeah.net>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Outreachy <outreachy@lists.linux.dev>
-Subject: Re: [PATCH] e1000e: Add desc after trailing whitespace
-Message-ID: <ZGNl8yHEko7LpCBr@corigine.com>
-References: <20230516071509.GA3550@john-VirtualBox>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516071509.GA3550@john-VirtualBox>
-X-ClientProxiedBy: AM0PR04CA0126.eurprd04.prod.outlook.com
- (2603:10a6:208:55::31) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1684235911; x=1686827911;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mPg0ep6G8/5e19PZD/WE6OkgyECU4hB9NkOdRxOFcvg=;
+        b=B9yH26LwTE3zxqdgFANeBqWDb7Z3umtlY8ntgnC9EqhKQ2qR+dlh39USmAbpW2lWOA
+         jHnG52/gUYbddZEWI9zcb553NxTFiWz0Fs228ASt3/2hNuoShjYdtCY1UYAd67j7ainK
+         VorhP+3T2fx//k3Tb8PhvoGwioPAaw1LyAOOtnPU72MbiBlwBcy1FfalirROQlyUjbCG
+         6Chw5z9HcA8boJzajPS4wf1I7L7qB6OXHmspq/twUlCml0/cPL9TDGISnYNpKtsGqBqk
+         h0T2fLATtD4ZL+B+OUhj+ctQOGQqukIVX3Q4FO5w58Vtz6ShDrLd6SJ0RvfNHemXsGAF
+         2AOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684235911; x=1686827911;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mPg0ep6G8/5e19PZD/WE6OkgyECU4hB9NkOdRxOFcvg=;
+        b=itv1vWdLiaQgXWbxIP3nH+/SS/0iR6Ce3xmM611PMuTLJDtaMrWVKcMbIVdVb9oMkI
+         POIXnnFCLzkoPsk+71XZO30XEWUxsOXfTlnrqhmC3m3D78i16BkuKcwJCqz9+u69rIv7
+         s5zM4D+CjNDAPb7k/Hqsay2vWmDYcvUC0sQXCauFdCWO3KTEpCmdjN1alXASwfuwyifV
+         Yv4u4lIAOyyQMVCGCnseH0dtTedIQarZr1rC0V/V3lLbBVgNVTt+81KDG5GUQ9DHNCSz
+         vR0gspjoXMp43cAs47qjaPc44ZgOJCdmlXD6N+zPNBEYUjvdopgQeCrQJw+8BckaWO1o
+         +owQ==
+X-Gm-Message-State: AC+VfDyoUPI6bYL8j3khbiHQRzhLOLtsOIbVgwb0aqE/svy4I3bBAAyJ
+        U9M2pWtxb29EAzXvVs59Png=
+X-Google-Smtp-Source: ACHHUZ6IdEkzdFsx2MXAlbq7sWRdsYHgB4BklRNwbqrrX/U7FV/xiwpCz6FdE6Zv26rppBqWSgR8Nw==
+X-Received: by 2002:a17:902:bf0b:b0:1ac:3780:3a76 with SMTP id bi11-20020a170902bf0b00b001ac37803a76mr32015321plb.4.1684235910863;
+        Tue, 16 May 2023 04:18:30 -0700 (PDT)
+Received: from localhost.localdomain ([106.39.42.1])
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm15207821plt.290.2023.05.16.04.18.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 04:18:30 -0700 (PDT)
+From:   starmiku1207184332@gmail.com
+To:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Teng Qi <starmiku1207184332@gmail.com>
+Subject: [bug] kernel: bpf: syscall: a possible sleep-in-atomic bug in __bpf_prog_put()
+Date:   Tue, 16 May 2023 11:18:23 +0000
+Message-Id: <20230516111823.2103536-1-starmiku1207184332@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM4PR13MB5836:EE_
-X-MS-Office365-Filtering-Correlation-Id: e5e36bda-93e2-4c5b-b0e5-08db55fef393
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DEBJCv6tbaIZ2OXxXTtKB1uuJXFlJdWLBnPFlug/HUiqaPWy8Pca/vpOYcWHBT0QKA8CgprhpzbvHlmwaFWXluGPD+NQC0LAkT25AEu5rVOnilrW+Q8aQkyz1EOsgauePV63IRIciOVFputhJP0AkneGZxpkumMg+jc2yV2Lye4+oNljQm/F4Eu2IZyDATk4lusagMR0npkv09d3hlgpX4uy5evZDiV+erW4E0jY0WtUKN+BA+UDwqGNmMoXV/6AtftAPtMd7PUGOohI8Mm6x5XSbKwxNt6stvQBVO4EMt18T7cQIoN6uVCYuIQsPsW+fHBcdYKB4Er6xOUKjrd8Du40VIk+GqwW9Nr1FuN+frlceK1AZeGlkiuoHmY/5uUsF8ZVe05waFRHoi1+ZTe1ZbBKKWTmsWKVE+8uH9/jSSOGAs49Lr6/0GhDl3VIRZN3nBPxdx0Pxtzyqz1nxP5T8qiVH0Hdjt7gxGFrmdvdki4BeXbLvOlaTR7wgevIJTQChh490MANwAkOxDSkIqs8H3LALkm7Q7o0BKj4oKYBYtk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(376002)(39840400004)(136003)(451199021)(36756003)(6666004)(6486002)(966005)(2616005)(83380400001)(6506007)(6512007)(186003)(5660300002)(44832011)(7416002)(38100700002)(54906003)(86362001)(41300700001)(316002)(66946007)(66476007)(66556008)(6916009)(8676002)(8936002)(4326008)(478600001)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dxbDRzlY4DsmUl/qQOCHfUtKQW9/kXFApIQ5Ri9cvI5DgZbLfowmQ9nyNLCo?=
- =?us-ascii?Q?agdpEwz76U1avuerVJQ+th/omQG0/mga5pmV7kMnFHNG4IDwjmZWOJt0YHrd?=
- =?us-ascii?Q?IHHRwXs3LHh+Z38cRYbPKc0HbTqAMGB1BWh7v8xy0w77KUM4s0X/WFifdF0O?=
- =?us-ascii?Q?oGC+1/7BuJT+mFL7hHH2ACDwmjiD3zFL2Hcvs5gBa6xH03lyDUgsePhAs2Fv?=
- =?us-ascii?Q?BjWBcw5S1zET3+ZQWwyWN0+dH7U/qsl5cp0o1O5J3MlBVPNIP8uK+7uWElaG?=
- =?us-ascii?Q?JS0hNkRHVKH8bV4FoRxzawDswLJ4ewRhxt7Qrh0qUyB8QfNQfMLVldouky7Y?=
- =?us-ascii?Q?tN/h4IWi7nPNqMA2iflcKmfJxVgZHBTe4q+DFN0Qs/rqHivxtJOhiRdtDTFR?=
- =?us-ascii?Q?CzqtgB65d/tkZqEfI5veXJTYVH0uE3AGDI7FMAx8UDTqLtn2DvCHtgzr22mn?=
- =?us-ascii?Q?w0VbbXFk5n8N3d9n9+4Ohes32UdrcTPqgUZa1BWJSSwVEWtTtjXq9NcWte5U?=
- =?us-ascii?Q?RlpY+EQ/I+3wPpcmnj4GqmAMm92Ki/LcBtZVCKpXUEHIj2I383j8YO9eYPDL?=
- =?us-ascii?Q?SnvXLiMMSoQH3fP3d9qwcE66EnoNg8GwY+D7LNALJiQfByZp9uMY47dX21HA?=
- =?us-ascii?Q?hswB5HYGOyPAKYN2Cr+z23EZF9prmOgWrw6F5IpUvV+W32OoClxsdODIezoU?=
- =?us-ascii?Q?/zRx2l3bk88vwcLaV0/pDgkcXbGaZUssFizxJyV7o5ccadWftDnHw5hUncbA?=
- =?us-ascii?Q?tq5I90DygXIyxALEckAE1IiHOZAPrQG0mJTvHElDwnef4GVI58J3lS0NawU9?=
- =?us-ascii?Q?pzf5RXjaKvO514K/KzVZxWrpV4/EAUHg1hb7lARVUeesLjJKoEcHMArSAcSH?=
- =?us-ascii?Q?pCLoxo4v6oztvCHz+2sc/zrigo4Vv3+a7tnxgdjl9C9P0HTseNC07KxEhg3A?=
- =?us-ascii?Q?nqbK2vPFj89ENrEmCAQ8djJ2huBMEYjH61iL2yRsuOCaoJdLd3prya2rTLpi?=
- =?us-ascii?Q?lZcQs7UC0Ucer4UtRPqTTRlBTHuUsYUYpfNAeF2HPTKmHZYIwIxVo0n1SkbZ?=
- =?us-ascii?Q?xia2WeKcQOgJCk8wRfyCBFeUU0jiuGr3oW1E4xXf7d6isvgWm6Rhdkgk3Run?=
- =?us-ascii?Q?l29ks926bFK/YNuHvOXryAwBbTYLemL7ZAA/tjEvCN3HsaAzUBytfsM3sK77?=
- =?us-ascii?Q?Vb1igQIy/2uc8uALb56b8Aa8Z+kklHy/I6/jivLpBPIHdmyVQ/6tgJhcExpF?=
- =?us-ascii?Q?xgpCWIxUZpk5wecsIT+2xKdaf97WDKXxEB0TjX6Puh9aOOMzlfjcIB7wBLd+?=
- =?us-ascii?Q?VZoAe92Qz4NpZtwEDFiPOUQuScm/B01ibgMHqvDIUn12BXRNIt+cCyXWr1Yx?=
- =?us-ascii?Q?dae3TcCHahoaX1rrS5o6Q/S7qZmF+4G3kBt50XcpLqv7nFEo1ibbYqYeRWa4?=
- =?us-ascii?Q?C24hkb/TiOFI0NbP2njAJ1RElYETitG0lKVqaMLGwaiBA+MTQRpRPlgxltU8?=
- =?us-ascii?Q?8y7G3FyP+Pt8wGrsg2Q24oG0eBV1X/3t4oSfGHs0raMQHviI4vwIS5ZvV4ud?=
- =?us-ascii?Q?aalExd68+BIBN5iU42xhPZeIx4FBjb0oOH0P3yCYtHtjhzFBySY9NaZ1FKPw?=
- =?us-ascii?Q?sp12ZBwLTqN8+9ytBYHn6Pspygg8xGgvgxEAQcZqlH271pMsCwMZKhANlosb?=
- =?us-ascii?Q?0eWREw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5e36bda-93e2-4c5b-b0e5-08db55fef393
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 11:16:10.2798
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Wo6vUU6qRMi5LR5ffeqXIBGTxatjrMSfskh0oQg+NPb9dfBxNkZpyqpbIdzCowDFk2opdesnxrdJgMGDU+elI3JFUinQpJfJkgdD338eQ1A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR13MB5836
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:15:09PM +0800, Baozhu Ni wrote:
-> ./scripts/checkpatch.pl check error, so add description.
-> 
-> Signed-off-by: Baozhu Ni <nibaozhu@yeah.net>
+From: Teng Qi <starmiku1207184332@gmail.com>
 
-Hi,
+Hi, bpf developers,
 
-this patch looks good.
-But I think the subject and description could be a little clearer.
+We are developing a static tool to check the matching between helpers and the
+context of hooks. During our analysis, we have discovered some important
+findings that we would like to report.
 
-In my view the key is that, the adapter parameter is being documented
-in the kernel doc for the function.
+‘kernel/bpf/syscall.c: 2097 __bpf_prog_put()’ shows that function
+bpf_prog_put_deferred() won`t be called in the condition of
+‘in_irq() || irqs_disabled()’.
+if (in_irq() || irqs_disabled()) {
+    INIT_WORK(&aux->work, bpf_prog_put_deferred);
+    schedule_work(&aux->work);
+} else {
 
-Also, the target-tree, 'net-next' should be noted.
+    bpf_prog_put_deferred(&aux->work);
+}
 
-So perhaps:
+We suspect this condition exists because there might be sleepable operations
+in the callees of the bpf_prog_put_deferred() function:
+kernel/bpf/syscall.c: 2097 __bpf_prog_put()
+kernel/bpf/syscall.c: 2084 bpf_prog_put_deferred()
+kernel/bpf/syscall.c: 2063 __bpf_prog_put_noref()
+kvfree(prog->aux->jited_linfo);
+kvfree(prog->aux->linfo);
 
-Subject: [PATCH v2 net-next] e1000e: Add @adapter description to kdoc
+Additionally, we found that array prog->aux->jited_linfo is initialized in
+‘kernel/bpf/core.c: 157 bpf_prog_alloc_jited_linfo()’:
+prog->aux->jited_linfo = kvcalloc(prog->aux->nr_linfo,
+  sizeof(*prog->aux->jited_linfo), bpf_memcg_flags(GFP_KERNEL | __GFP_NOWARN));
 
-Provide a description for the kernel doc of the @adapter parameter
-of e1000e_trigger_lsc().
+Our question is whether the condition 'in_irq() || irqs_disabled() == false' is
+sufficient for calling 'kvfree'. We are aware that calling 'kvfree' within the
+context of a spin lock or an RCU lock is unsafe.
 
-Flagged by checkpatch.pl
+Therefore, we propose modifying the condition to include in_atomic(). Could we
+update the condition as follows: "in_irq() || irqs_disabled() || in_atomic()"?
 
-Signed-off-by: ...
+Thank you! We look forward to your feedback.
 
-When posting a v2, please wait 24h, as per the guidance here.
-Link: https://kernel.org/doc/html/latest/process/maintainer-netdev.html
-
-> ---
->  drivers/net/ethernet/intel/e1000e/netdev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
-> index 6f5c16aebcbf..cadeb5bc5e16 100644
-> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
-> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-> @@ -4198,7 +4198,7 @@ void e1000e_reset(struct e1000_adapter *adapter)
->  
->  /**
->   * e1000e_trigger_lsc - trigger an LSC interrupt
-> - * @adapter: 
-> + * @adapter: board private structure
->   *
->   * Fire a link status change interrupt to start the watchdog.
->   **/
-
---
-pw-bot: cr
+Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
