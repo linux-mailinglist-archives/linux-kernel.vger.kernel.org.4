@@ -2,166 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E403704AA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137A8704ADB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjEPKdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59872 "EHLO
+        id S232255AbjEPKiB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 16 May 2023 06:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjEPKcm (ORCPT
+        with ESMTP id S232068AbjEPKh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:32:42 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2046.outbound.protection.outlook.com [40.107.92.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50775FF1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:32:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YG1ul2EBNq74IryWeLvkczNc5lOSXN0uXX4GFagBQTuH4wzJyWmBlP64h2YqzzIwqznQ/7O/tjj4uum/synUFWSwlYjGD4oIYD4DrzyO8PFNJMghSQ1BP8lzM7CUNHs+i3jwGyKN24/SwFtlOjcsy9kdvZVUFaPdsQQPWOeHMR3eBeGMOK68O6hoZl1UsynFsmSGfcIYbETxtRoGDO6AoW+58uQwRdZygHqTq3uD+f9y26l5HRktzRm6k2rv2ZGHBh2/kudSVYH15+rnFULcrKVt67vqAfdHyF2obvVlFOK5sp62u3NROc6rYtAQNK4bR887pEgNXaiUm8x8Hu9adA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8HivbUaM1Uo0KUDrQX+KQZ7hl13PDZNmdXUW6SAdFYo=;
- b=oD2KG2HGT7vm7lVX7PX0ZVeW+VPPkMebGYiFsKpFWVt0ps+5AGWik7yi0xvoHFWXym0dPC+Z/Vkp7xrQuBapCR0SOENt2fpYtKBm/ksxIjPVBejUGnHvvI6vOblTj0xauBoOxxGd4gxuE5pSsNiSrDGsgMP1B28c5XU39z7uPOElzyUtH0xideZe9FZqQwxdGadVq9gHRw4s8FnR3KPsip1lyKtqbSXOfocWFQl2YnlbZufKcIKumIf6sjEoHawl7C8rZeYqoIGIVRBGcBh4dmaoDOZNGuIm29mLuN5J6lEp705QUJ41+6iBH+0k2zOtjCo/iK0/yGZv2IPRzIEYeA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8HivbUaM1Uo0KUDrQX+KQZ7hl13PDZNmdXUW6SAdFYo=;
- b=dh/QNK8rINy2NVXETRVXdP5bYiW45kB5vOCe2Y2WplAZV3PxJcRA9yKnzsELIXergDGa5wnD4xYt/k4VMWqBuhGMEYxoW0pWc0OpY4pTKNZlaVdfFqShU5IVmjPpINTdUR4l16bJbwh7LhldcC6DiS+JVkWPfzO/KnP9AREdcKs=
-Received: from DS7PR05CA0093.namprd05.prod.outlook.com (2603:10b6:8:56::17) by
- SA1PR12MB7368.namprd12.prod.outlook.com (2603:10b6:806:2b7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 10:32:13 +0000
-Received: from DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:56:cafe::15) by DS7PR05CA0093.outlook.office365.com
- (2603:10b6:8:56::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.16 via Frontend
- Transport; Tue, 16 May 2023 10:32:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT040.mail.protection.outlook.com (10.13.173.133) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.15 via Frontend Transport; Tue, 16 May 2023 10:32:13 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
- 2023 05:32:10 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
- 2023 03:31:41 -0700
-Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
- SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34
- via Frontend Transport; Tue, 16 May 2023 05:31:38 -0500
-From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-To:     <--to=broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <Basavaraj.Hiregoudar@amd.com>,
-        <Sunil-kumar.Dommati@amd.com>, <Mastan.Katragadda@amd.com>,
-        <Arungopal.kondaveeti@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "Syed Saba Kareem" <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH 9/9] ASoC: amd: ps: Add soundwire specific checks in pci driver in pm ops.
-Date:   Tue, 16 May 2023 16:05:43 +0530
-Message-ID: <20230516103543.2515097-10-Vijendar.Mukunda@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230516103543.2515097-1-Vijendar.Mukunda@amd.com>
-References: <20230516103543.2515097-1-Vijendar.Mukunda@amd.com>
+        Tue, 16 May 2023 06:37:58 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ED6213A;
+        Tue, 16 May 2023 03:37:52 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-94a342f4c8eso355435066b.0;
+        Tue, 16 May 2023 03:37:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684233471; x=1686825471;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aZvG9EwxbAkTIUCb+ia3g2SAb5ao369dYmZpB1L75vM=;
+        b=jW+7dxsscE9FYigkF8o5v8o5XGtHiAt4GanywSyeOo19Rs5lmTgT9I5vsyma3DbXCO
+         jYg+BQz9kPXr9my20V3vJZtMHBMSdt02xZFaqV4DcAUpoMRZi5RSVqyb75M3E9k5wNjt
+         c5/k/4xk6Gc7U7Cwi5XWHN4xay9CLfaqLR/5nvoteeA/k43hN+XWPR+6voauSHJdilbQ
+         Z6e9GNiGZafEtBcgzGQKe1Q416/q/rkrJMJ4hbvyi1w5wWOGafDi5VApFSe6Khbgi5tq
+         zjWTGUi50E5gqWkN2MR1kIGWcTdjsX0JHpcqAhgNQu14QTUsQ8bjabCb4mVkTgjBuCkY
+         ELvg==
+X-Gm-Message-State: AC+VfDwIW47nyhqlwCHpFE6j/Hd8N1in0lg1QXOoIAV5YENvm4oSr+XM
+        UfM56eXTU4DHn4rsiyB+RPFPKPIOlFl36R4ZFGp+TKqY
+X-Google-Smtp-Source: ACHHUZ4XAIHLNhqsjB3xkqymaxap0VVLgEqJosjP7KKpP9ZI6U0MBT02pTufAM2NO1jDA8rTrOcbDb2ntpCgvbLEiMQ=
+X-Received: by 2002:a17:906:51cb:b0:94e:d688:fca6 with SMTP id
+ v11-20020a17090651cb00b0094ed688fca6mr9001606ejk.0.1684233471153; Tue, 16 May
+ 2023 03:37:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT040:EE_|SA1PR12MB7368:EE_
-X-MS-Office365-Filtering-Correlation-Id: a5dfcd07-c23c-4f51-0293-08db55f8d011
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2pk2VsHOxmDPKEYp8gtPSa2aONIRXq3KuatvCGwcV+4BJ0j1fI4Fh1GBmKSbFrCp3S8QkjvyEd32BpVw0fsV794kvRBdPxBXfSfpxzwiK2GIRAppRxoI4HAUH3VIsrT+6+ZdQUC3YsBNKTKfEBO3TQKxEDuUCum3lM+RoX0I2mc/407PVIMNlbmjJVM34N279HiBsXV1Mo1VaAkn6fPZC3lhcW6Rp1M2b6S0zMKtVRn3RgfT3IUVKnEwtX5uQTZF6D31uz2YVRD3oN9aQN4b2hw1sbp7ucFBB09d3yp/l8MLre6kjDNt/XpgUhPTp45M/WaFFyP/J9+/sGlSEo/HwPPLGiQd7LGhZIkmk7u4E7BBIhc9blzuu8+7qJCzIrY7ntC0ATkeG3h1ogohvZeWM7QL/g8vpnkmFVQTiTXrjzjpIs3vCdLLUALUbFkilbftioLnd/As9qv+fIzfSVEGE4ZHsbpARI9pp9a/aCAdLORXh5XOEkh9AS5cz/tUduplfzWnCpYcqRIDqdeXOYIGeEBww5F62hxN3aXIvhzLvhi3gnefQr7qy20vWoH7BGatj+c5304DqVJz7WrtnXAk5gUEnMA/IodMG+BdG0CPE93L4UG2so29JQNDSkZ0d9GeTSwde915ZqiVIu9wth2Hu01jIyyUq5S2XziQ9Pf2J4vmfpveQrLN+Y/7RqDKffoqzZt5dXePaB6T70h4cX+ii5VUp9UiR3nv0oiPDjQhB+SPaKvvJMWLO8dyehIcSqSvwcI9Mv1MrGWNV8f3y8Dcog==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(36860700001)(70586007)(41300700001)(70206006)(4326008)(47076005)(82740400003)(8676002)(6666004)(7696005)(82310400005)(1076003)(26005)(356005)(336012)(426003)(81166007)(316002)(2616005)(5660300002)(83380400001)(8936002)(2906002)(54906003)(86362001)(478600001)(40460700003)(186003)(40480700001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 10:32:13.3302
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5dfcd07-c23c-4f51-0293-08db55f8d011
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT040.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7368
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <12223415.O9o76ZdvQC@kreacher> <f665b082-6114-d132-915b-e5b45f52af99@redhat.com>
+In-Reply-To: <f665b082-6114-d132-915b-e5b45f52af99@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 16 May 2023 12:37:37 +0200
+Message-ID: <CAJZ5v0hRzeq201Wt98TdPp6k90Z4J5+eMmibsCXXugGKXzAknA@mail.gmail.com>
+Subject: Re: [PATCH v2] ACPI: scan: Reduce overhead related to devices with dependencies
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AMD Soundwire manager supports different power modes.
-In case of Soundwire Power off Mode, ACP pci parent driver
-should invoke acp de-init and init sequence during suspend/resume
-callbacks.
+Hi Hans,
 
-Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
----
- sound/soc/amd/ps/pci-ps.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+On Tue, May 16, 2023 at 12:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi Rafael,
+>
+> On 5/16/23 12:25, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Subject: [PATCH] ACPI: scan: Reduce overhead related to devices with dependencies
+> >
+> > Notice that all of the objects for which the acpi_scan_check_dep()
+> > return value is greater than 0 are present in acpi_dep_list as consumers
+> > (there may be multiple entries for one object, but that is not a
+> > problem), so after carrying out the initial ACPI namespace walk in which
+> > devices with dependencies are skipped, acpi_bus_scan() can simply walk
+> > acpi_dep_list and enumerate all of the unique consumer objects from
+> > there and their descendants instead of walking the entire target branch
+> > of the ACPI namespace and looking for device objects that have not been
+> > enumerated yet in it.
+> >
+> > Because walking acpi_dep_list is generally less overhead than walking
+> > the entire ACPI namespace, use the observation above to reduce the
+> > system initialization overhead related to ACPI, which is particularly
+> > important on large systems.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > -> v2: Hold acpi_dep_list_lock around the acpi_fetch_acpi_dev() invocation in
+> >        acpi_scan_postponed() (Hans).
+>
+> This looks good to me now:
+>
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>
+> with the remark that this obviously is going to need a lot
+> of testing in case this somehow breaks some weird corner case.
+>
+> I'll add it to my personal git kernel tree with all my
+> pending work right away, so that it will get tested on
+> various devices as I test other patches on those devices.
+>
+> I'll let you know if I hit any problems which seem to be
+> caused by this.
 
-diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-index ba8ec8442a6e..6d688821b3c4 100644
---- a/sound/soc/amd/ps/pci-ps.c
-+++ b/sound/soc/amd/ps/pci-ps.c
-@@ -656,10 +656,15 @@ static int snd_acp63_probe(struct pci_dev *pci,
- static int __maybe_unused snd_acp63_suspend(struct device *dev)
- {
- 	struct acp63_dev_data *adata;
--	int ret;
-+	int ret = 0;
- 
- 	adata = dev_get_drvdata(dev);
--	ret = acp63_deinit(adata->acp63_base, dev);
-+	if (adata->pdev_mask & ACP63_SDW_DEV_MASK) {
-+		if (adata->acp_reset)
-+			ret = acp63_deinit(adata->acp63_base, dev);
-+	} else {
-+		ret = acp63_deinit(adata->acp63_base, dev);
-+	}
- 	if (ret)
- 		dev_err(dev, "ACP de-init failed\n");
- 	return ret;
-@@ -668,10 +673,15 @@ static int __maybe_unused snd_acp63_suspend(struct device *dev)
- static int __maybe_unused snd_acp63_resume(struct device *dev)
- {
- 	struct acp63_dev_data *adata;
--	int ret;
-+	int ret = 0;
- 
- 	adata = dev_get_drvdata(dev);
--	ret = acp63_init(adata->acp63_base, dev);
-+	if (adata->pdev_mask & ACP63_SDW_DEV_MASK) {
-+		if (adata->acp_reset)
-+			ret = acp63_init(adata->acp63_base, dev);
-+	} else {
-+		ret = acp63_init(adata->acp63_base, dev);
-+	}
- 	if (ret)
- 		dev_err(dev, "ACP init failed\n");
- 	return ret;
--- 
-2.34.1
+Awesome, thanks!
 
+
+> >
+> > ---
+> >  drivers/acpi/scan.c     |   81 ++++++++++++++++++++++++++++++++++++------------
+> >  include/acpi/acpi_bus.h |    2 +
+> >  2 files changed, 63 insertions(+), 20 deletions(-)
+> >
+> > Index: linux-pm/include/acpi/acpi_bus.h
+> > ===================================================================
+> > --- linux-pm.orig/include/acpi/acpi_bus.h
+> > +++ linux-pm/include/acpi/acpi_bus.h
+> > @@ -289,6 +289,8 @@ struct acpi_dep_data {
+> >       acpi_handle supplier;
+> >       acpi_handle consumer;
+> >       bool honor_dep;
+> > +     bool met;
+> > +     bool free_when_met;
+> >  };
+> >
+> >  /* Performance Management */
+> > Index: linux-pm/drivers/acpi/scan.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/acpi/scan.c
+> > +++ linux-pm/drivers/acpi/scan.c
+> > @@ -2029,8 +2029,6 @@ static u32 acpi_scan_check_dep(acpi_hand
+> >       return count;
+> >  }
+> >
+> > -static bool acpi_bus_scan_second_pass;
+> > -
+> >  static acpi_status acpi_bus_check_add(acpi_handle handle, bool check_dep,
+> >                                     struct acpi_device **adev_p)
+> >  {
+> > @@ -2050,10 +2048,8 @@ static acpi_status acpi_bus_check_add(ac
+> >                       return AE_OK;
+> >
+> >               /* Bail out if there are dependencies. */
+> > -             if (acpi_scan_check_dep(handle, check_dep) > 0) {
+> > -                     acpi_bus_scan_second_pass = true;
+> > +             if (acpi_scan_check_dep(handle, check_dep) > 0)
+> >                       return AE_CTRL_DEPTH;
+> > -             }
+> >
+> >               fallthrough;
+> >       case ACPI_TYPE_ANY:     /* for ACPI_ROOT_OBJECT */
+> > @@ -2301,6 +2297,12 @@ static bool acpi_scan_clear_dep_queue(st
+> >       return true;
+> >  }
+> >
+> > +static void acpi_scan_delete_dep_data(struct acpi_dep_data *dep)
+> > +{
+> > +     list_del(&dep->node);
+> > +     kfree(dep);
+> > +}
+> > +
+> >  static int acpi_scan_clear_dep(struct acpi_dep_data *dep, void *data)
+> >  {
+> >       struct acpi_device *adev = acpi_get_acpi_dev(dep->consumer);
+> > @@ -2311,8 +2313,10 @@ static int acpi_scan_clear_dep(struct ac
+> >                       acpi_dev_put(adev);
+> >       }
+> >
+> > -     list_del(&dep->node);
+> > -     kfree(dep);
+> > +     if (dep->free_when_met)
+> > +             acpi_scan_delete_dep_data(dep);
+> > +     else
+> > +             dep->met = true;
+> >
+> >       return 0;
+> >  }
+> > @@ -2406,6 +2410,55 @@ struct acpi_device *acpi_dev_get_next_co
+> >  }
+> >  EXPORT_SYMBOL_GPL(acpi_dev_get_next_consumer_dev);
+> >
+> > +static void acpi_scan_postponed_branch(acpi_handle handle)
+> > +{
+> > +     struct acpi_device *adev = NULL;
+> > +
+> > +     if (ACPI_FAILURE(acpi_bus_check_add(handle, false, &adev)))
+> > +             return;
+> > +
+> > +     acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
+> > +                         acpi_bus_check_add_2, NULL, NULL, (void **)&adev);
+> > +     acpi_bus_attach(adev, NULL);
+> > +}
+> > +
+> > +static void acpi_scan_postponed(void)
+> > +{
+> > +     struct acpi_dep_data *dep, *tmp;
+> > +
+> > +     mutex_lock(&acpi_dep_list_lock);
+> > +
+> > +     list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
+> > +             acpi_handle handle = dep->consumer;
+> > +
+> > +             /*
+> > +              * In case there are multiple acpi_dep_list entries with the
+> > +              * same consumer, skip the current entry if the consumer device
+> > +              * object corresponding to it is present already.
+> > +              */
+> > +             if (!acpi_fetch_acpi_dev(handle)) {
+> > +                     /*
+> > +                      * Even though the lock is released here, tmp is
+> > +                      * guaranteed to be valid, because none of the list
+> > +                      * entries following dep is marked as "free when met"
+> > +                      * and so they cannot be deleted.
+> > +                      */
+> > +                     mutex_unlock(&acpi_dep_list_lock);
+> > +
+> > +                     acpi_scan_postponed_branch(handle);
+> > +
+> > +                     mutex_lock(&acpi_dep_list_lock);
+> > +             }
+> > +
+> > +             if (dep->met)
+> > +                     acpi_scan_delete_dep_data(dep);
+> > +             else
+> > +                     dep->free_when_met = true;
+> > +     }
+> > +
+> > +     mutex_unlock(&acpi_dep_list_lock);
+> > +}
+> > +
+> >  /**
+> >   * acpi_bus_scan - Add ACPI device node objects in a given namespace scope.
+> >   * @handle: Root of the namespace scope to scan.
+> > @@ -2424,8 +2477,6 @@ int acpi_bus_scan(acpi_handle handle)
+> >  {
+> >       struct acpi_device *device = NULL;
+> >
+> > -     acpi_bus_scan_second_pass = false;
+> > -
+> >       /* Pass 1: Avoid enumerating devices with missing dependencies. */
+> >
+> >       if (ACPI_SUCCESS(acpi_bus_check_add(handle, true, &device)))
+> > @@ -2438,19 +2489,9 @@ int acpi_bus_scan(acpi_handle handle)
+> >
+> >       acpi_bus_attach(device, (void *)true);
+> >
+> > -     if (!acpi_bus_scan_second_pass)
+> > -             return 0;
+> > -
+> >       /* Pass 2: Enumerate all of the remaining devices. */
+> >
+> > -     device = NULL;
+> > -
+> > -     if (ACPI_SUCCESS(acpi_bus_check_add(handle, false, &device)))
+> > -             acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
+> > -                                 acpi_bus_check_add_2, NULL, NULL,
+> > -                                 (void **)&device);
+> > -
+> > -     acpi_bus_attach(device, NULL);
+> > +     acpi_scan_postponed();
+> >
+> >       return 0;
+> >  }
+> >
+> >
+> >
+>
