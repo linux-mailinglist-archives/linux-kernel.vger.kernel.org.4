@@ -2,242 +2,568 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2CD704C66
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B2B704C6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbjEPLdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S232991AbjEPLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbjEPLc6 (ORCPT
+        with ESMTP id S232979AbjEPLdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:32:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0EE26A2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:32:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684236777; x=1715772777;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=aTO2BLPyWwWmzTSSGVxSCW4tnFrsw63Mq+eVjzSugt8=;
-  b=cbxWQ3oGmcquDXujTetk8NYi8mNNgioQOFgOHNcmQmsuJrVAdL9o3wVX
-   Fu5jw/1oWIxJGN3Gmx9aJQGNknDjCHL2AdZfh9WulDLHoX1EyrNBw65CW
-   R0Lq6jGvgwvNTaYUzmh0N5ih9PPKV3NCoS4joRo3pfN9f+51YUWHIpUGf
-   Q2qgTURD9jyZwmhEuvdwB4caDfQND5rAsgxeUKnt2VY6q7Ys1ie0TZpJs
-   wSPJ9AENvtvJw6ZsERbz0+EQae0H+kFGWcZ2bHnbqI0frjZy5AF/dNUEk
-   RllStaNsFLcIDMsLA3J5CSl1pWSeDFzvctszcdEtuJQHkRPch3al5FxA0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="331814700"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="331814700"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 04:32:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="701313495"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="701313495"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga002.jf.intel.com with ESMTP; 16 May 2023 04:32:57 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 04:32:56 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 04:32:56 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 04:32:56 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 16 May 2023 04:32:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KHagt4S+MPKQaTAlHqtiacj58OByhIhkf4A/rnQP4DUCHPPhxREOksORhgx8YQ4DAjDoLU/xpacN7sMTnJDKEoMj2khjJvJU1ZEAoqB6R9u4qSrz2IUn+R5f40J/nSMQASkzOGy+lVHOTHPPG4KxljPt6Wpm6nQIR1LQtexcG6iUR0oIHTwHfynUAQbRllV43+dz0o6lwlohhITu2wGJd4IZWYyaeyGY+YQvxWLG8apYCiXQCG9HmrLQJ9Vw883EpLHHxchsRe74qUDnlWNyGru7LjRjbu/kAg4MLkvMs6WiCnmExJ2W0wzYuhweEVnoCUw15LXhdBmGKyw4HPbeOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CE8xVAyaSSTELwt5b3vUI3Vx04l+rkY6wjIAEb7985Y=;
- b=AIJ/kGkj5JXIhelSPMYteRH0AHFKXq8HpByL0F9qXTWQ0nJVlZ4MDz7jF0sbv47JvreL288LPWlnlpgWk7sh0/bE4WUfbH+JcLSmVRv8GbSHtDi4tbwEhfXUhbkzxvtUFgDjW17Zyb2yNaTUG3pbnLmz0eYvTvTgsTeHBneud1IU3WY3zPhoszORY46nFgIkr874v6RFiCXwQEAdXqWNG5kgGytF/u4ZQ3DnfgoyLDG0pV1OhwNe2TK2b92GqmhabeKAtHQdJG26Fdm58abRsHybAFgiCXxAhpcbSCRjuSB/xMbjf7KpaGhIVsUqAqFoyg+Dfti8NAshGCE1ERs8xw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
- by PH7PR11MB7449.namprd11.prod.outlook.com (2603:10b6:510:27a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 11:32:49 +0000
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::eebf:2b53:89e9:4a09]) by BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::eebf:2b53:89e9:4a09%3]) with mapi id 15.20.6387.030; Tue, 16 May 2023
- 11:32:49 +0000
-Date:   Tue, 16 May 2023 19:32:37 +0800
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     Chen Yu <yu.c.chen@intel.com>
-CC:     Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Vincent Guittot" <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Nitin Tekchandani <nitin.tekchandani@intel.com>,
-        Waiman Long <longman@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] sched/fair: Make tg->load_avg per node
-Message-ID: <20230516113237.GA1943@ziqianlu-desk2>
-References: <76939bf6-1d9d-5f8f-f15c-f03b2322d684@arm.com>
- <20230329135455.GA108864@ziqianlu-desk2>
- <20230330174557.m6jsgb6hsni4mxwq@parnassus.localdomain>
- <20230412120736.GD628377@hirez.programming.kicks-ass.net>
- <20230420205201.36fphk5g3aolryjh@parnassus.localdomain>
- <20230421150559.GA162558@ziqianlu-desk2>
- <dfkllxtzchrxeqykzyk24ppgwxbztk6rbbb6xyizpbhg7ctibi@fhk77qxo7yia>
- <20230504102746.GA137823@ziqianlu-desk2>
- <20230516075011.GA780@ziqianlu-desk2>
- <ZGNFkDkyipat5J8v@chenyu5-mobl1>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZGNFkDkyipat5J8v@chenyu5-mobl1>
-X-ClientProxiedBy: SG2PR01CA0171.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::27) To BYAPR11MB3062.namprd11.prod.outlook.com
- (2603:10b6:a03:92::18)
+        Tue, 16 May 2023 07:33:08 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631FE40E6;
+        Tue, 16 May 2023 04:33:03 -0700 (PDT)
+Received: from localhost ([31.220.116.19]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MvavG-1qH6l93hg6-00scnr; Tue, 16 May 2023 13:32:45 +0200
+Date:   Tue, 16 May 2023 13:32:45 +0200
+From:   Andreas Klinger <ak@it-klinger.de>
+To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 2/3] iio: pressure: Honeywell mprls0025pa pressure sensor
+Message-ID: <ZGNp3SqyOJeEcLsj@arbad>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|PH7PR11MB7449:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6cacc16b-5ff4-4df8-cdac-08db5601470e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iGHbK9+67mxE49zDjwELijiE2FB3VUHJiJYowhtkhtGLN6NofO5JG35AmqtiYUlGlRUsSpEnVGvyXqeFmk73frCaqBb71FkkbU44GcCq8h6qfolaK8hlBWjj01HoDnxRLuivzP7+ldlP9Xqs9aWU4qHLVjLOYYKyOID1tHtcXFGvcHNN/Hc6COiV4k/hdzfsRFqSaIuYjeC7pHfrtz7uRz6HVm6nItRmI6kU/uDh1OxgqcKZBAo/+S4oglEwx25wgutVvmS+kOdMu9MzY2aiUXb3rCyUQ0vYeaKlgUri9s6iLNfEDxQV5P7CNE/6USTLyF7H03wMb4RtGLfLWABlmTpBxLpYlonhNfoOjHe+Mss5TC6HptQubREdowi5UN0wEWgNiercIqpSjGqoAvGe8eAE6CdnymTpQJ4IJntSjh9v7w1Jf4mYOVD4lcv8NitK9FIvXbt7ZvsT0ihPvsQIkJS1Sos1iS+OmQMXzVSDhT7TprW54kSZSlJ0/nuck/gDKVhoZInDDZE/mXdQL3Ao1d7kvF3Az/w5tIH22fqjPt2ZxP3xGbKv4JYnsDH27fuw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(396003)(39860400002)(366004)(136003)(346002)(451199021)(54906003)(86362001)(478600001)(186003)(33716001)(9686003)(6512007)(6862004)(1076003)(6506007)(6486002)(26005)(6666004)(33656002)(316002)(38100700002)(41300700001)(66476007)(66556008)(66946007)(4326008)(6636002)(82960400001)(5660300002)(7416002)(8936002)(2906002)(53546011)(83380400001)(8676002)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+TBd0Uv6PHzOGm1wGRSo38e0jpbJ3aqMWeTj8MeQ2MY7fhnEenVXJzweOONc?=
- =?us-ascii?Q?VttXrSVy97jiQQ7UbJ/odXcGGmUCkBQ+2F2iAwVHpXNIlAiNWYUA1a45O2PU?=
- =?us-ascii?Q?almx7RtzZ8czX4DO6KVSLYSziikJqG3eyvtWVCr8Qexx7fgTh8xJSBrQIOaW?=
- =?us-ascii?Q?k1b8JkGPK3jZfS8k8GKqsbwxo8JkdYLlM+9pm+1o9wNpsz4suSqmQeCBljIq?=
- =?us-ascii?Q?CA3eiEwFwkY8LW19pNAHAf1uJTjBBdZLzHeYiXp3MCuYJy+K/lGcnXzis7sI?=
- =?us-ascii?Q?9HwJdMct2Zd805okLxDjcfVtXiwz7+6spN5kLFC0a3DLzmwAc4qHMTRNwPL5?=
- =?us-ascii?Q?pjrhce8w+pQEz4xkYlmec0cehvCz9szr2Gr+zeISh+IA28fajjDkgyR0QIYL?=
- =?us-ascii?Q?zSgj/rYgG/BKEZh4iSaWQr3d2xYhqPz4SW0X/PGv9LevLAneN7rYy+cbc6f+?=
- =?us-ascii?Q?M5jx2GCUJQ3XazSq3O4rZ1HacU+aT+m22aUFmv1+JauwvU+8HyWTVPrFJymI?=
- =?us-ascii?Q?385FByyrk5buc0P7hXE6j/cZ3uSjOS75MsN7I77RrbwjjCrNmhYmwUEADMis?=
- =?us-ascii?Q?7yATI7vqof7T1ET0+VlCeRuTJwTHlKh4T5QGPnFTI8syLpBKb7/UYP4W6msU?=
- =?us-ascii?Q?ubAuLcBdpItABHrSmBoE7v6DSQQfcVvTlXaSx2wRH3wd3NPNqTJV4DCAEfMD?=
- =?us-ascii?Q?/PCBNTfmz/sJJAwPt8yFnPzO4uQp525T3xxk8AsguHKANNRR8kc84OYQz7fP?=
- =?us-ascii?Q?Zf56x4bh7uGD1r6f0pwSDELdqLjdNsnGVryHPc/BW/F2YBz5uQh3cqkwB30o?=
- =?us-ascii?Q?UYezbRYDQFYsQE11DXUnbi1TPS/s1EkiB3b6syVQ4qF9HhGTEXezcIJ1YGU0?=
- =?us-ascii?Q?IwJgKhrQTfq7So7zkEPJhjJ2SDDJUAOcZQT/BScPf+MqRCw2Q1nRnVV33bJa?=
- =?us-ascii?Q?ijGunI/HGVkYMJfQXYVcTT8iUcd0aW1uXvzIlZm0/5vgP1fq1r6asLQjybwn?=
- =?us-ascii?Q?WpMuyQP4jeRktjr8Sfz54cPu8b/IdtmVfkQL1alCmKE0f6N/+qFiCCkOSvph?=
- =?us-ascii?Q?nGJcJUuiCpXV4T5XVq586s9eWTG6lkqQkaXW8Rat1UxGdVfuePFbNu3uQSIc?=
- =?us-ascii?Q?ysUPNJVw0V2H1GLY/nL4AUP5PBlMj4b0lmVB6bsmwt2W6DDx0taa7eoBthK3?=
- =?us-ascii?Q?oow2rJhcmrZwzMEyEiQbECpigbdXqUpp68MQOLEEYyOO96Bcc6ZQWyLvT9ub?=
- =?us-ascii?Q?gOBMJQFrGeSxf4M4hgTASGf6dg2JGJIY2yfHR3y2rAgHNZqujt48fRfxBCeH?=
- =?us-ascii?Q?1RUhm2vEJ9LYVl09vtEgFqHYXtttdg5jQryj9AWd3MGSlzA+MELiMuoXsOE6?=
- =?us-ascii?Q?DhGPyNnAAw1pho/emuxMkgyF0R+HO6MWRpcgdw16CBKSYnIKZejEegegcJ0w?=
- =?us-ascii?Q?mjIjHmbVvXkgT7pmBlBh4sImvNcBkzxrFAbBR1UtzbqBxiTR5Tv7shmnYV4U?=
- =?us-ascii?Q?0Ezm6rXcp301zqAOu/2P9bCZqyi8ooC17kX9FgWmZWyKZPCs5liuYWv/INu4?=
- =?us-ascii?Q?tp440WtNasecGQyNyzQ4FWoyINwT6dowgQuuUP9C?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6cacc16b-5ff4-4df8-cdac-08db5601470e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 11:32:49.1926
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7LQIu1Iybs3pA3QzlAqHvDkIdJGzMrolVf1tGtp6ADoeYKoqOmEHh1s0CIa6+v05633E0gF4eduxKYYoILeojQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7449
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGNpZM137jF5yzie@arbad>
+X-Provags-ID: V03:K1:odsbCmwJfem77pCBNnwyDEVY92NPK6fQdIR60C/kJqVolCKDeZj
+ lyeA9CHFWjnLCRAO8pxW7psC++xan4GHFFht464CJHtm5vqh28jG9I5ly3fQd4zS9DWwaX5
+ 361+bt4v5Xhm2ikSHUmg9bc+Zb1k+30FAw8xciCZNEdfhSIipcjcrA6QSAqj9HXAfgLIfFc
+ rdKywaYjnK8qJ+xu8IDTw==
+UI-OutboundReport: notjunk:1;M01:P0:onoy9+0gZN8=;YsqUphqSoxGv+mTC9bpY4vZg/aj
+ qEgfW6bhVIJCh0Lq6xWPhfqmyX50iRY8sO76k4TTwkl5dmDyveao//uicrNRLL1EUxQo0L5nW
+ P6H0gYEFd2Cyyy6O3YHeYbXcF2FEk8JFRSu8VbS+HQ273EkNCLeO/UkeQg6MDyUvEZr9IHXYh
+ 0jW+O12UO7M67VabjBYlpagq+Trrz/Ot6dRaDF940zt3ZAhYqLlTspq4PLENbMoYC0JTlp5tr
+ TSYybOpOWG5OHdeQKQQhNzEIqSKnD+KFgiuQfH8DaZ0OFm8ccVgtOwu4QZ0H82C5MMVb3g8sG
+ FDBNJmQMSgQeBwxH1V/9r/fFHaJ34eZs2ZuzhoMP4LQtCjzb9yiji5OjpkENP1UMBSxztiuvw
+ xHfo6dulfWCI6xlqaajHoVFpyPHMcgj/q/tTaEx4cz8cjZfBndLsMS86aDneR7nByp9m91d3J
+ wyyvw/iVIwfGN/FEDdL06OTQa4KHFcEa5Te294pmv6PoteHnAckFw2qAQ7k2aBiab5F/NH++i
+ AWR3SZlIbZm4paJp57qDwf1S0W9HfU63j/gHPMneQc2ozUb9ROSgAJXEPZyWWYnZl/QU9xrfp
+ 1f35JOqDY7Hd6JacqrZm7+kOSXOSDKmyMa1MeIrTlQjkxPtwpAB7rqjiYuZj6u3xf2EdfW6KU
+ YkPTx5UdWCSt96WknrI3/Zb+i3JXa1F0AQitl+Oh1w==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 04:57:52PM +0800, Chen Yu wrote:
-> On 2023-05-16 at 15:50:11 +0800, Aaron Lu wrote:
-> > On Thu, May 04, 2023 at 06:27:46PM +0800, Aaron Lu wrote:
-> > > Base on my current understanding, the summary is:
-> > > - Running this workload with nr_thread=224 on SPR, the ingress queue
-> > >   will overflow and that will slow things down. This patch helps
-> > >   performance mainly because it transform the "many cpus accessing the
-> > >   same cacheline" scenario to "many cpus accessing two cachelines" and
-> > >   that can reduce the likelyhood of ingress queue overflow and thus,
-> > >   helps performance;
-> > > - On Icelake with high nr_threads but not too high that would cause
-> > >   100% cpu utilization, the two functions' cost will drop a little but
-> > >   performance did not improve(it actually regressed a little);
-> > > - On SPR when there is no ingress queue overflow, it's similar to
-> > >   Icelake: the two functions' cost will drop but performance did not
-> > >   improve.
-> > 
-> > More results when running hackbench and netperf on Sapphire Rapids as
-> > well as on 2 sockets Icelake and 2 sockets Cascade Lake.
-> > 
-> > The summary is:
-> > - on SPR, hackbench time reduced ~8% and netperf(UDP_RR/nr_thread=100%)
-> >   performance increased ~50%;
-> > - on Icelake, performance regressed about 1%-2% for postgres_sysbench
-> >   and hackbench, netperf has no performance change;
-> > - on Cascade Lake, netperf/UDP_RR/nr_thread=50% sees performance drop
-> >   ~3%; others have no performance change.
-> > 
-> > Together with results kindly collected by Daniel, it looks this patch
-> > helps most for SPR while for other machines, it either is flat or
-> > regressed 1%-3% for some workloads. With these results, I'm thinking an
-> > alternative solution to reduce the cost of accessing tg->load_avg.
-> > 
-> > There are two main reasons to access tg->load_avg. One is driven by
-> > pelt decay, which has a fixed frequency and is not a concern; the other
-> > is by enqueue_entity/dequeue_entity triggered by task migration. The
-> > number of migrations can be unbound so the access to tg->load_avg can
-> > be huge due to this. This frequent task migration is the problem for
-> > tg->load_avg. One thing I noticed is, on task migration, the load is
-> > carried from the old per-cpu cfs_rq to the new per-cpu cfs_rq. While
-> > the cfs_rq's load_avg and tg_load_avg_contrib should change accordingly
-> > to reflect this so that its corresponding sched entity can get a correct
-> > weight, the task group's load_avg should stay unchanged. So instead of
-> > removing a delta to tg->load_avg by src cfs_rq and then increasing the
-> > same delta to tg->load_avg by target cfs_rq, the two updates to tg's
-> > load_avg could be avoided. With this change, the update to tg->load_avg
-> > will be greatly reduced and the problem should be solved and it is
-> > likely to be a win for most machines/workloads. Not sure if I understand
-> > this correctly? I'm going to persue a solution based on this, feel free
-> > to let me know if you see anything wrong here, thanks.
-> Sound good, but maybe I understand it incorrectly, if the task has been dequeued
-> for a long time, and not enqueued yet, since we do not update
-> the tg->load_avg, will it be out-of-date? Or do you mean the task migration
-> is a frequent sleep-wakeup sequence?
+Honeywell mprls0025pa is a series of pressure sensors.
 
-When a task is dequeued due to it's blocked, then its load will not be
-subtracted from its cfs_rq. That part of the load on cfs_rq will decay
-and tg->load_avg will be updated when needed. Because decay happens in a
-fixed frequency, that's not a concern.
+Add initial I2C support.
 
-When the task finally woke and was appointed a new cpu, then its load
-will have to be removed from its original cfs_rq and added to its
-new cfs_rq and that may trigger two updates to tg->load_avg depending on
-how large the task's load is and the cfs_rq's current load contrib to
-tg etc. and that is where I'm looking for some optimization, like the
-migration will affect corresponding cfs_rq's load_avg but it shouldn't
-affect tg->load_avg so there is no need to subtract task's load_avg from
-tg->load_avg by original cfs_rq and then add it back by new cfs_rq. But
-I suppose there are some details to sort out.
+Note:
+- IIO buffered mode is supported
+- SPI mode is not supported
 
-Thanks,
-Aaron
+Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+---
+ drivers/iio/pressure/Kconfig       |  13 +
+ drivers/iio/pressure/Makefile      |   1 +
+ drivers/iio/pressure/mprls0025pa.c | 450 +++++++++++++++++++++++++++++
+ 3 files changed, 464 insertions(+)
+ create mode 100644 drivers/iio/pressure/mprls0025pa.c
+
+diff --git a/drivers/iio/pressure/Kconfig b/drivers/iio/pressure/Kconfig
+index c9453389e4f7..43aef35ce778 100644
+--- a/drivers/iio/pressure/Kconfig
++++ b/drivers/iio/pressure/Kconfig
+@@ -148,6 +148,19 @@ config MPL3115
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called mpl3115.
+ 
++config MPRLS0025PA
++	tristate "Honeywell MPRLS0025PA (MicroPressure sensors series)"
++	depends on I2C
++	select IIO_BUFFER
++	select IIO_TRIGGERED_BUFFER
++	help
++	  Say Y here to build support for the Honeywell MicroPressure pressure
++	  sensor series. There are many different types with different pressure
++	  range. These ranges can be set up in the device tree.
++
++	  To compile this driver as a module, choose M here: the module will be
++	  called mprls0025pa.
++
+ config MS5611
+ 	tristate "Measurement Specialties MS5611 pressure sensor driver"
+ 	select IIO_BUFFER
+diff --git a/drivers/iio/pressure/Makefile b/drivers/iio/pressure/Makefile
+index 083ae87ff48f..c90f77210e94 100644
+--- a/drivers/iio/pressure/Makefile
++++ b/drivers/iio/pressure/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_MPL115) += mpl115.o
+ obj-$(CONFIG_MPL115_I2C) += mpl115_i2c.o
+ obj-$(CONFIG_MPL115_SPI) += mpl115_spi.o
+ obj-$(CONFIG_MPL3115) += mpl3115.o
++obj-$(CONFIG_MPRLS0025PA) += mprls0025pa.o
+ obj-$(CONFIG_MS5611) += ms5611_core.o
+ obj-$(CONFIG_MS5611_I2C) += ms5611_i2c.o
+ obj-$(CONFIG_MS5611_SPI) += ms5611_spi.o
+diff --git a/drivers/iio/pressure/mprls0025pa.c b/drivers/iio/pressure/mprls0025pa.c
+new file mode 100644
+index 000000000000..06f40e47c68e
+--- /dev/null
++++ b/drivers/iio/pressure/mprls0025pa.c
+@@ -0,0 +1,450 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * MPRLS0025PA - Honeywell MicroPressure pressure sensor series driver
++ *
++ * Copyright (c) Andreas Klinger <ak@it-klinger.de>
++ *
++ * Data sheet:
++ *  https://prod-edam.honeywell.com/content/dam/honeywell-edam/sps/siot/en-us/
++ *    products/sensors/pressure-sensors/board-mount-pressure-sensors/
++ *    micropressure-mpr-series/documents/
++ *    sps-siot-mpr-series-datasheet-32332628-ciid-172626.pdf
++ *
++ * 7-bit I2C default slave address: 0x18
++ */
++
++#include <linux/delay.h>
++#include <linux/device.h>
++#include <linux/i2c.h>
++#include <linux/math64.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/property.h>
++#include <linux/units.h>
++
++#include <linux/gpio/consumer.h>
++
++#include <linux/iio/buffer.h>
++#include <linux/iio/iio.h>
++#include <linux/iio/trigger_consumer.h>
++#include <linux/iio/triggered_buffer.h>
++
++#include <linux/regulator/consumer.h>
++
++#include <asm/unaligned.h>
++
++/* bits in i2c status byte */
++#define MPR_I2C_POWER	BIT(6)	/* device is powered */
++#define MPR_I2C_BUSY	BIT(5)	/* device is busy */
++#define MPR_I2C_MEMORY	BIT(2)	/* integrity test passed */
++#define MPR_I2C_MATH	BIT(0)	/* internal math saturation */
++
++/*
++ * support _RAW sysfs interface:
++ *
++ * Calculation formula from the datasheet:
++ * pressure = (press_cnt - outputmin) * scale + pmin
++ * with:
++ * * pressure	- measured pressure in Pascal
++ * * press_cnt	- raw value read from sensor
++ * * pmin	- minimum pressure range value of sensor (data->pmin)
++ * * pmax	- maximum pressure range value of sensor (data->pmax)
++ * * outputmin	- minimum numerical range raw value delivered by sensor
++ *						(mpr_func_spec.output_min)
++ * * outputmax	- maximum numerical range raw value delivered by sensor
++ *						(mpr_func_spec.output_max)
++ * * scale	- (pmax - pmin) / (outputmax - outputmin)
++ *
++ * formula of the userspace:
++ * pressure = (raw + offset) * scale
++ *
++ * Values given to the userspace in sysfs interface:
++ * * raw	- press_cnt
++ * * offset	- (-1 * outputmin) - pmin / scale
++ *                note: With all sensors from the datasheet pmin = 0
++ *                which reduces the offset to (-1 * outputmin)
++ */
++
++/*
++ * transfer function A: 10%   to 90%   of 2^24
++ * transfer function B:  2.5% to 22.5% of 2^24
++ * transfer function C: 20%   to 80%   of 2^24
++ */
++enum mpr_func_id {
++	MPR_FUNCTION_A,
++	MPR_FUNCTION_B,
++	MPR_FUNCTION_C,
++};
++
++struct mpr_func_spec {
++	u32			output_min;
++	u32			output_max;
++};
++
++static const struct mpr_func_spec mpr_func_spec[] = {
++	[MPR_FUNCTION_A] = {.output_min = 1677722, .output_max = 15099494},
++	[MPR_FUNCTION_B] = {.output_min =  419430, .output_max =  3774874},
++	[MPR_FUNCTION_C] = {.output_min = 3355443, .output_max = 13421773},
++};
++
++struct mpr_chan {
++	s32			pres;		/* pressure value */
++	s64			ts;		/* timestamp */
++};
++
++struct mpr_data {
++	struct i2c_client	*client;
++	struct mutex		lock;		/*
++						 * access to device during read
++						 */
++	u32			pmin;		/* minimal pressure in pascal */
++	u32			pmax;		/* maximal pressure in pascal */
++	enum mpr_func_id	function;	/* transfer function */
++	u32			outmin;		/*
++						 * minimal numerical range raw
++						 * value from sensor
++						 */
++	u32			outmax;		/*
++						 * maximal numerical range raw
++						 * value from sensor
++						 */
++	int                     scale;          /* int part of scale */
++	int                     scale2;         /* nano part of scale */
++	int                     offset;         /* int part of offset */
++	int                     offset2;        /* nano part of offset */
++	struct gpio_desc	*gpiod_reset;	/* reset */
++	int			irq;		/*
++						 * end of conversion irq;
++						 * used to distinguish between
++						 * irq mode and reading in a
++						 * loop until data is ready
++						 */
++	struct completion	completion;	/* handshake from irq to read */
++	struct mpr_chan		chan;		/*
++						 * channel values for buffered
++						 * mode
++						 */
++};
++
++static const struct iio_chan_spec mpr_channels[] = {
++	{
++		.type = IIO_PRESSURE,
++		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
++					BIT(IIO_CHAN_INFO_SCALE) |
++					BIT(IIO_CHAN_INFO_OFFSET),
++		.scan_index = 0,
++		.scan_type = {
++			.sign = 's',
++			.realbits = 32,
++			.storagebits = 32,
++			.endianness = IIO_CPU,
++		},
++	},
++	IIO_CHAN_SOFT_TIMESTAMP(1),
++};
++
++static void mpr_reset(struct mpr_data *data)
++{
++	if (data->gpiod_reset) {
++		gpiod_set_value(data->gpiod_reset, 0);
++		udelay(10);
++		gpiod_set_value(data->gpiod_reset, 1);
++	}
++}
++
++/**
++ * mpr_read_pressure() - Read pressure value from sensor via I2C
++ * @data: Pointer to private data struct.
++ * @press: Output value read from sensor.
++ *
++ * Reading from the sensor by sending and receiving I2C telegrams.
++ *
++ * If there is an end of conversion (EOC) interrupt registered the function
++ * waits for a maximum of one second for the interrupt.
++ *
++ * Context: The function can sleep and data->lock should be held when calling it
++ * Return:
++ * * 0		- OK, the pressure value could be read
++ * * -ETIMEDOUT	- Timeout while waiting for the EOC interrupt or busy flag is
++ *		  still set after nloops attempts of reading
++ */
++static int mpr_read_pressure(struct mpr_data *data, s32 *press)
++{
++	struct device *dev = &data->client->dev;
++	int ret, i;
++	u8 wdata[] = {0xAA, 0x00, 0x00};
++	s32 status;
++	int nloops = 10;
++	u8 buf[4];
++
++	reinit_completion(&data->completion);
++
++	ret = i2c_master_send(data->client, wdata, sizeof(wdata));
++	if (ret < 0) {
++		dev_err(dev, "error while writing ret: %d\n", ret);
++		return ret;
++	}
++	if (ret != sizeof(wdata)) {
++		dev_err(dev, "received size doesn't fit - ret: %d / %u\n", ret,
++							(u32)sizeof(wdata));
++		return -EIO;
++	}
++
++	if (data->irq > 0) {
++		ret = wait_for_completion_timeout(&data->completion, HZ);
++		if (!ret) {
++			dev_err(dev, "timeout while waiting for eoc irq\n");
++			return -ETIMEDOUT;
++		}
++	} else {
++		/* wait until status indicates data is ready */
++		for (i = 0; i < nloops; i++) {
++			/*
++			 * datasheet only says to wait at least 5 ms for the
++			 * data but leave the maximum response time open
++			 * --> let's try it nloops (10) times which seems to be
++			 *     quite long
++			 */
++			usleep_range(5000, 10000);
++			status = i2c_smbus_read_byte(data->client);
++			if (status < 0) {
++				dev_err(dev,
++					"error while reading, status: %d\n",
++					status);
++				return status;
++			}
++			if (!(status & MPR_I2C_BUSY))
++				break;
++		}
++		if (i == nloops) {
++			dev_err(dev, "timeout while reading\n");
++			return -ETIMEDOUT;
++		}
++	}
++
++	ret = i2c_master_recv(data->client, buf, sizeof(buf));
++	if (ret < 0) {
++		dev_err(dev, "error in i2c_master_recv ret: %d\n", ret);
++		return ret;
++	}
++	if (ret != sizeof(buf)) {
++		dev_err(dev, "received size doesn't fit - ret: %d / %u\n", ret,
++							(u32)sizeof(buf));
++		return -EIO;
++	}
++
++	if (buf[0] & MPR_I2C_BUSY) {
++		/*
++		 * it should never be the case that status still indicates
++		 * business
++		 */
++		dev_err(dev, "data still not ready: %08x\n", buf[0]);
++		return -ETIMEDOUT;
++	}
++
++	*press = get_unaligned_be24(&buf[1]);
++
++	dev_dbg(dev, "received: %*ph cnt: %d\n", ret, buf, *press);
++
++	return 0;
++}
++
++static irqreturn_t mpr_eoc_handler(int irq, void *p)
++{
++	struct mpr_data *data = p;
++
++	complete(&data->completion);
++
++	return IRQ_HANDLED;
++}
++
++static irqreturn_t mpr_trigger_handler(int irq, void *p)
++{
++	int ret;
++	struct iio_poll_func *pf = p;
++	struct iio_dev *indio_dev = pf->indio_dev;
++	struct mpr_data *data = iio_priv(indio_dev);
++
++	mutex_lock(&data->lock);
++	ret = mpr_read_pressure(data, &data->chan.pres);
++	if (ret < 0)
++		goto err;
++
++	iio_push_to_buffers_with_timestamp(indio_dev, &data->chan,
++						iio_get_time_ns(indio_dev));
++
++err:
++	mutex_unlock(&data->lock);
++	iio_trigger_notify_done(indio_dev->trig);
++
++	return IRQ_HANDLED;
++}
++
++static int mpr_read_raw(struct iio_dev *indio_dev,
++	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
++{
++	int ret;
++	s32 pressure;
++	struct mpr_data *data = iio_priv(indio_dev);
++
++	if (chan->type != IIO_PRESSURE)
++		return -EINVAL;
++
++	switch (mask) {
++	case IIO_CHAN_INFO_RAW:
++		mutex_lock(&data->lock);
++		ret = mpr_read_pressure(data, &pressure);
++		mutex_unlock(&data->lock);
++		if (ret < 0)
++			return ret;
++		*val = pressure;
++		return IIO_VAL_INT;
++	case IIO_CHAN_INFO_SCALE:
++		*val = data->scale;
++		*val2 = data->scale2;
++		return IIO_VAL_INT_PLUS_NANO;
++	case IIO_CHAN_INFO_OFFSET:
++		*val = data->offset;
++		*val2 = data->offset2;
++		return IIO_VAL_INT_PLUS_NANO;
++	default:
++		return -EINVAL;
++	}
++}
++
++static const struct iio_info mpr_info = {
++	.read_raw = &mpr_read_raw,
++};
++
++static int mpr_probe(struct i2c_client *client)
++{
++	int ret;
++	struct mpr_data *data;
++	struct iio_dev *indio_dev;
++	struct device *dev = &client->dev;
++	s64 scale, offset;
++
++	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_READ_BYTE))
++		return dev_err_probe(dev, -EOPNOTSUPP,
++					"I2C functionality not supported\n");
++
++	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
++	if (!indio_dev)
++		return dev_err_probe(dev, -ENOMEM, "couldn't get iio_dev\n");
++
++	data = iio_priv(indio_dev);
++	data->client = client;
++	data->irq = client->irq;
++
++	mutex_init(&data->lock);
++	init_completion(&data->completion);
++
++	indio_dev->name = "mprls0025pa";
++	indio_dev->info = &mpr_info;
++	indio_dev->channels = mpr_channels;
++	indio_dev->num_channels = ARRAY_SIZE(mpr_channels);
++	indio_dev->modes = INDIO_DIRECT_MODE;
++
++	ret = devm_regulator_get_enable(dev, "vdd");
++	if (ret)
++		return dev_err_probe(dev, ret,
++				"can't get and enable vdd supply\n");
++
++	if (dev_fwnode(dev)) {
++		ret = device_property_read_u32(dev, "honeywell,pmin-pascal",
++								&data->pmin);
++		if (ret)
++			return dev_err_probe(dev, ret,
++				"honeywell,pmin-pascal could not be read\n");
++		ret = device_property_read_u32(dev, "honeywell,pmax-pascal",
++								&data->pmax);
++		if (ret)
++			return dev_err_probe(dev, ret,
++				"honeywell,pmax-pascal could not be read\n");
++		ret = device_property_read_u32(dev,
++				"honeywell,transfer-function", &data->function);
++		if (ret)
++			return dev_err_probe(dev, ret,
++				"honeywell,transfer-function could not be read\n");
++		if (data->function > MPR_FUNCTION_C)
++			return dev_err_probe(dev, -EINVAL,
++				"honeywell,transfer-function %d invalid\n",
++								data->function);
++	} else {
++		/* when loaded as i2c device we need to use default values */
++		dev_notice(dev, "firmware node not found; using defaults\n");
++		data->pmin = 0;
++		data->pmax = 172369; /* 25 psi */
++		data->function = MPR_FUNCTION_A;
++	}
++
++	data->outmin = mpr_func_spec[data->function].output_min;
++	data->outmax = mpr_func_spec[data->function].output_max;
++
++	/* use 64 bit calculation for preserving a reasonable precision */
++	scale = div_s64(((s64)(data->pmax - data->pmin)) * NANO,
++						data->outmax - data->outmin);
++	data->scale = div_s64_rem(scale, NANO, &data->scale2);
++	/*
++	 * multiply with NANO before dividing by scale and later divide by NANO
++	 * again.
++	 */
++	offset = ((-1LL) * (s64)data->outmin) * NANO -
++			div_s64(div_s64((s64)data->pmin * NANO, scale), NANO);
++	data->offset = div_s64_rem(offset, NANO, &data->offset2);
++
++	if (data->irq > 0) {
++		ret = devm_request_irq(dev, data->irq, mpr_eoc_handler,
++				IRQF_TRIGGER_RISING, client->name, data);
++		if (ret)
++			return dev_err_probe(dev, ret,
++				"request irq %d failed\n", data->irq);
++	}
++
++	data->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
++							GPIOD_OUT_HIGH);
++	if (IS_ERR(data->gpiod_reset))
++		return dev_err_probe(dev, PTR_ERR(data->gpiod_reset),
++						"request reset-gpio failed\n");
++
++	mpr_reset(data);
++
++	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
++						mpr_trigger_handler, NULL);
++	if (ret)
++		return dev_err_probe(dev, ret,
++					"iio triggered buffer setup failed\n");
++
++	ret = devm_iio_device_register(dev, indio_dev);
++	if (ret)
++		return dev_err_probe(dev, ret,
++					"unable to register iio device\n");
++
++	return 0;
++}
++
++static const struct of_device_id mpr_matches[] = {
++	{ .compatible = "honeywell,mprls0025pa" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, mpr_matches);
++
++static const struct i2c_device_id mpr_id[] = {
++	{ "mprls0025pa" },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, mpr_id);
++
++static struct i2c_driver mpr_driver = {
++	.probe_new	= mpr_probe,
++	.id_table	= mpr_id,
++	.driver		= {
++		.name		= "mprls0025pa",
++		.of_match_table = mpr_matches,
++	},
++};
++module_i2c_driver(mpr_driver);
++
++MODULE_AUTHOR("Andreas Klinger <ak@it-klinger.de>");
++MODULE_DESCRIPTION("Honeywell MPRLS0025PA I2C driver");
++MODULE_LICENSE("GPL");
+-- 
+2.30.2
