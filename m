@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C737570588F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF40C7058A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjEPURp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S230330AbjEPUV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjEPURn (ORCPT
+        with ESMTP id S230181AbjEPUV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:17:43 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948141BE2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:17:36 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-643990c5319so10583301b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684268256; x=1686860256;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YJEJEgHLDw3Nrf2OYxAw65J2/yLmkvxFlpYWiAtQcmA=;
-        b=HnGWjuYOAI8Ajbhmofm3GokXhD5YgSqiF6UQCDCLlwnbaHtP73wUieT9TUP2SHAOuO
-         90idaRSc566+i6YTMHc7sZ415zRHQJMrUOZPDCys53qkJdWi3b5hDQ/MN+RLydISIgE2
-         GwdnyrHrai/aOeaCCSDIFQHmxVT8/mRzDgfCA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684268256; x=1686860256;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJEJEgHLDw3Nrf2OYxAw65J2/yLmkvxFlpYWiAtQcmA=;
-        b=jnV1b+y4/bU3EV2rKljCamDF/i5Bu6PZPByjRwgHNXGcb5CF9eYSOk5SM3m2SFjKLp
-         /f8l+TzHM0yUsPLotN3/gpDtzvOJtovTBTpnI5B2RgWqsdwQq1Ei3Jc7ucDAyIcauu+d
-         jpJv7T676kfy7z8D03/20zrX9Ox/cDVk31ed8Rs9aMAp/MTPc7KwEevsKwSY2w2ayGE2
-         Igbb3P05i5S2ttLfvBL8RcCYe8cYEflYk7Q9B1c5CvSUk3UJ8Cb8j5o6c5UOkguPIWlW
-         ARD7/bXdVhH9nL8ellqqs3lcB6n8JjfLPkxMdf9rJ1bVfZzNuc4IHscpkX9tvzME7Mni
-         4t5Q==
-X-Gm-Message-State: AC+VfDx22TrQAPR40AY2IM+Xu9sbh/frscFIQPzK9s5vcNXvDrHRxG2A
-        SNyXjOgrvuZHCsA9C4x3iZ+NkQ==
-X-Google-Smtp-Source: ACHHUZ6Oynxwi7sloZ3Ypg7XgSCwwZO30bG7FPKKxxgXTbfRZw5iZB64xYqMeanZeGOcTKnSKanXQg==
-X-Received: by 2002:a05:6a00:189a:b0:646:7234:cbfc with SMTP id x26-20020a056a00189a00b006467234cbfcmr43435667pfh.27.1684268255812;
-        Tue, 16 May 2023 13:17:35 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q26-20020a62e11a000000b0063d29df1589sm13747558pfh.136.2023.05.16.13.17.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 13:17:34 -0700 (PDT)
-Date:   Tue, 16 May 2023 13:17:34 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Michael McCracken <michael.mccracken@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        serge@hallyn.com, tycho@tycho.pizza,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
+        Tue, 16 May 2023 16:21:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97473171E;
+        Tue, 16 May 2023 13:21:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3433063630;
+        Tue, 16 May 2023 20:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB0DC433D2;
+        Tue, 16 May 2023 20:21:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684268470;
+        bh=n2VkfFrYD6ZvghT2rLwCZ8Tw+H30dUYKFB4kK3wrpLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Egdq1JDtlfkHI3imIUtFlLPSk6qx9GFXiAbKi8sryfRJmytehbY4a0xOV+BSiGezZ
+         W7FDaUt61DKvSnIxjkpekm3I7kXTtkRUSUyWyvRFUPxCUjhJRRL+ndvJHaNzauFR20
+         I1PtN8K8k3bCQpJXuuRO7zyvmJIlFOUKBQlTSQuV8QLdh93ytSkE6wiK3YPGRcdAYN
+         vYKYNI/ZQtR4I8Qc+lMgpGH7OTJ4P3Ijxp7k5VtGbvhNZ3dHLTEt6BPnCnWGkToffn
+         dALxDGPc1Z7AIbxlHmmj9bRV7Ds025ncajsLb0fRcUudjoTy0gKm1sH/PqKZV/idWs
+         RbN1e/+fxQvvQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
-Message-ID: <202305161312.078E5E7@keescook>
-References: <20230504213002.56803-1-michael.mccracken@gmail.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: hide unused usbfs_notify_suspend/resume functions
+Date:   Tue, 16 May 2023 22:17:42 +0200
+Message-Id: <20230516202103.558301-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230504213002.56803-1-michael.mccracken@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 02:30:02PM -0700, Michael McCracken wrote:
-> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_space
-> sysctl to 0444 to disallow all runtime changes. This will prevent
-> accidental changing of this value by a root service.
-> 
-> The config is disabled by default to avoid surprises.
-> 
-> Signed-off-by: Michael McCracken <michael.mccracken@gmail.com>
-> ---
->  kernel/sysctl.c | 4 ++++
->  mm/Kconfig      | 7 +++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index bfe53e835524..c5aafb734abe 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -1913,7 +1913,11 @@ static struct ctl_table kern_table[] = {
->  		.procname	= "randomize_va_space",
->  		.data		= &randomize_va_space,
->  		.maxlen		= sizeof(int),
-> +#if defined(CONFIG_RO_RANDMAP_SYSCTL)
-> +		.mode		= 0444,
-> +#else
->  		.mode		= 0644,
-> +#endif
+From: Arnd Bergmann <arnd@arndb.de>
 
-The way we've dealt with this in the past for similarly sensitive
-sysctl variables to was set a "locked" position. (e.g. 0==off, 1==on,
-2==cannot be turned off). In this case, we could make it, 0, 1, 2,
-3==forced on full.
+The declaration is in an #ifdef, which causes warnings when building
+with 'make W=1' and without CONFIG_PM:
 
-I note that there is actually no min/max (extra1/extra2) for this sysctl,
-which is itself a bug, IMO. And there is just a magic "> 1" test that
-should be a define or enum:
+drivers/usb/core/devio.c:742:6: error: no previous prototype for 'usbfs_notify_suspend'
+drivers/usb/core/devio.c:747:6: error: no previous prototype for 'usbfs_notify_resume'
 
-fs/binfmt_elf.c:        if ((current->flags & PF_RANDOMIZE) && (randomize_va_space > 1)) {
+Use the same #ifdef check around the function definitions to avoid
+the warnings and slightly shrink the USB core.
 
-I think much of this should be improved.
+Fixes: 7794f486ed0b ("usbfs: Add ioctls for runtime power management")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/usb/core/devio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regardless, take a look at yama_dointvec_minmax(), which could, perhaps,
-be generalized and used here.
-
-Then we have a run-time way to manage this bit, without needing full
-kernel rebuilds, etc, etc.
-
--Kees
-
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index e501a03d6c70..1622ad35428d 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -738,6 +738,7 @@ static int driver_resume(struct usb_interface *intf)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM
+ /* The following routines apply to the entire device, not interfaces */
+ void usbfs_notify_suspend(struct usb_device *udev)
+ {
+@@ -756,6 +757,7 @@ void usbfs_notify_resume(struct usb_device *udev)
+ 	}
+ 	mutex_unlock(&usbfs_mutex);
+ }
++#endif
+ 
+ struct usb_driver usbfs_driver = {
+ 	.name =		"usbfs",
 -- 
-Kees Cook
+2.39.2
+
