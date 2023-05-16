@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A03705620
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA1D705624
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjEPShg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S230094AbjEPSjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjEPSh3 (ORCPT
+        with ESMTP id S229498AbjEPSjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:37:29 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0357630F3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:37:27 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510b869fe0dso68538a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684262246; x=1686854246;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K9fNkQqJDfFcYTNfr1VNHIPlwegnRkzoPTNG3p1hlhQ=;
-        b=GF3Rjp3VBjWHSEi4CUJZdmq1WpimHOKMe9nyqQC/SbePd8WhLfHT3RmOvvdDZAWaqJ
-         iTxaBj4toUmB6tEw98JOgzWKzhvhZFl3JzvxvGuIi7Y1OJBz+9i0QXWgePqbZdQl7jsc
-         iHXzOhsUl0nCZrJhkot4UIUCoBh3TXfnIv792algjcuBqnkmlNKXwtQl5Cx4oiHoigBt
-         0WJ7Q0vuLysJOOhSM7g1a6tr0f2Y4lFq8t948v+GLoyCBMMGMq0I6xg4iI8aSU3sJICo
-         7uUoJ0vh/JQirsb5oeMfiQ6GWMBWL6m4KZt1m+xQFoS7qPoYqNQR6M34m0Bs/92ZZItc
-         CQeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684262246; x=1686854246;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K9fNkQqJDfFcYTNfr1VNHIPlwegnRkzoPTNG3p1hlhQ=;
-        b=a2e6rz8Mvx7kVjtzHYB1DM3GZQrHQIROWn51qNoHfdh2rwjqLqK5dwA06nOMKJJz2N
-         v0FPQSiQ9EeEZZrAq4iw+CGN59JzHt5MRtNmL/Tc275yj4hWoUZKsJkO4+gIYE7eeUn5
-         5P+DK+2d1hRW7DdpsPZ63zK6XGfBrqu3enr8CMT2xMNJoBdJ2tbPBNHloUYA9qpdEgmg
-         HroszIDl1AC8hcZpr4+gS4NvEyZTsUy4yP5QiMT3Ek7p9cBilL4MYy++VGNg/jA934T9
-         ZMGleaSe0BYjcl8WAl69904IaE2uvAnKqSD7wjDVMftoCCfEQ9kWKpyWPgN2XeEWeAiw
-         ueKw==
-X-Gm-Message-State: AC+VfDyEcZJBY2T2Hoax8m9rxNxEQF4vb6OqWbF0e3V5CpjmyHArdqd2
-        CeQoKVKmPuWWXhd3usGZMorLAw==
-X-Google-Smtp-Source: ACHHUZ7QiVK8bAUghPg/DxQLmvoqOB8XAEcJFUE2wF3J3eWoGWn4b52NvsRNezlZe2pily3rxHoPew==
-X-Received: by 2002:a17:907:1c88:b0:961:be96:b0e0 with SMTP id nb8-20020a1709071c8800b00961be96b0e0mr36846248ejc.73.1684262246454;
-        Tue, 16 May 2023 11:37:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id s1-20020a1709070b2100b0096a16761ab4sm9879452ejl.144.2023.05.16.11.37.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 11:37:26 -0700 (PDT)
-Message-ID: <21429720-e27f-bf26-64e7-ace1186da31b@linaro.org>
-Date:   Tue, 16 May 2023 20:37:25 +0200
+        Tue, 16 May 2023 14:39:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC98610F9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684262300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bR7XFUDwDwS2QCuwLOFs/PBnLvy7FY7D7eHZBo5Cn1w=;
+        b=GWX6e1QLXUmS8XRGslSSnWAozRYrkSuB+E806Q3nEHdaTeQ/M1WLKNzaUTvW1m3k45/QXo
+        1WqqMHzIgjnUQ4DdtpNYSD0gKcD8EG1mlEXuR/vYsVVvhgaF4VrWtkz0FB9eYwu23SAwnK
+        h/C7JJg+xK6NRm/IabqXE+oloSJaEcg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-Qs50wazRPeS9HugWOpEC4A-1; Tue, 16 May 2023 14:38:16 -0400
+X-MC-Unique: Qs50wazRPeS9HugWOpEC4A-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5D5D2802537;
+        Tue, 16 May 2023 18:38:15 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.147])
+        by smtp.corp.redhat.com (Postfix) with SMTP id F1DD22166B31;
+        Tue, 16 May 2023 18:38:11 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue, 16 May 2023 20:38:02 +0200 (CEST)
+Date:   Tue, 16 May 2023 20:37:57 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        nicolas.dichtel@6wind.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
+        mst@redhat.com, sgarzare@redhat.com,
+        virtualization@lists.linux-foundation.org, konrad.wilk@oracle.com,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
+Message-ID: <20230516183757.GA1286@redhat.com>
+References: <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
+ <CAHk-=wgadfsCnKHLON7op=Qs5t3w3PVz5ZDbvbKsfb=yBg=yjQ@mail.gmail.com>
+ <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
+ <48842e92-835e-bc3f-7118-48b8f415f532@leemhuis.info>
+ <CAHk-=wicXCNR1bBioaAiBqEDgv-CoQD9z2RsM2VOTPzkK0xr8g@mail.gmail.com>
+ <20230515-vollrausch-liebgeworden-2765f3ca3540@brauner>
+ <CAHk-=wgXJ5VS1iBkfsG=HDjsyhn5XYDKt5xhQcNuz-e7VKyg8A@mail.gmail.com>
+ <122b597e-a5fa-daf7-27bb-6f04fa98d496@oracle.com>
+ <CAHk-=wgTpRDwS+F0Gd6+bM+TEh+x4Aiz8EBDTnTm3Q4TFdWOww@mail.gmail.com>
+ <87cz30s20y.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] mux: mmio: use reg property when parent device is not a
- syscon
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230515191909.611241-1-afd@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230515191909.611241-1-afd@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87cz30s20y.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +80,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 21:19, Andrew Davis wrote:
-> The DT binding for the reg-mux compatible states it can be used when the
-> "parent device of mux controller is not syscon device". It also allows
-> for a reg property. When the parent device is indeed not a syscon device,
-> nor is it a regmap provider, we should fallback to using that reg
-> property to identify the address space to use for this mux.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  drivers/mux/mmio.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mux/mmio.c b/drivers/mux/mmio.c
-> index 44a7a0e885b8..42e00b9fd0a9 100644
-> --- a/drivers/mux/mmio.c
-> +++ b/drivers/mux/mmio.c
-> @@ -44,10 +44,13 @@ static int mux_mmio_probe(struct platform_device *pdev)
->  	int ret;
->  	int i;
->  
-> -	if (of_device_is_compatible(np, "mmio-mux"))
-> +	if (of_device_is_compatible(np, "mmio-mux")) {
->  		regmap = syscon_node_to_regmap(np->parent);
-> -	else
-> -		regmap = dev_get_regmap(dev->parent, NULL) ?: ERR_PTR(-ENODEV);
-> +	} else {
-> +		regmap = dev_get_regmap(dev->parent, NULL);
-> +		if (!regmap)
-> +			regmap = device_node_to_regmap(np) ?: ERR_PTR(-ENODEV);
+On 05/16, Eric W. Biederman wrote:
+>
+> A kernel thread can block SIGKILL and that is supported.
+>
+> For a thread that is part of a process you can't block SIGKILL when the
+> task is part of a user mode process.
 
-Unless I miss something obvious, the original code is simply bogus and
-wrong. I would like to give here Rb tag... but maybe I miss something
-obvious. Why mux cannot be a device with MMIO itself? Binding allows it
-which would be perfectly proper description of hardware.
+Or SIGSTOP. Another thread can call do_signal_stop()->signal_wake_up/etc.
 
-Best regards,
-Krzysztof
+> There is this bit in complete_signal when SIGKILL is delivered to any
+> thread in the process.
+>
+> 			t = p;
+> 			do {
+> 				task_clear_jobctl_pending(t, JOBCTL_PENDING_MASK);
+> 				sigaddset(&t->pending.signal, SIGKILL);
+> 				signal_wake_up(t, 1);
+> 			} while_each_thread(p, t);
+
+That is why the latest version adds try_set_pending_sigkill(). No, no,
+it is not that I think this is a good idea.
+
+> For clarity that sigaddset(&t->pending.signal, SIGKILL);  Really isn't
+> setting SIGKILL pending,
+
+Hmm. it does? Nevermind.
+
+> The important part of that code is that SIGNAL_GROUP_EXIT gets set.
+> That indicates the entire process is being torn down.
+
+Yes. and the same is true for io-thread even if it calls get_signal()
+and dequeues SIGKILL and clears TIF_SIGPENDING.
+
+> but in that case the vhost logic needs to act like a process, just
+> like io_uring does.
+
+confused... create_io_thread() creates a sub-thread too?
+
+Although I never understood this logic. I can't even understand the usage
+of lower_32_bits() in create_io_thread().
+
+Oleg.
 
