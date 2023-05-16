@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E315B705534
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DBF70553F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjEPRod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
+        id S230314AbjEPRpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEPRob (ORCPT
+        with ESMTP id S230432AbjEPRpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:44:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B68FC;
-        Tue, 16 May 2023 10:44:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C45363D1F;
-        Tue, 16 May 2023 17:44:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D81C433EF;
-        Tue, 16 May 2023 17:44:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684259069;
-        bh=QFHWIbp7xVmzwRiivQjuxHEv7aR4ZQD6vkzepj5JacU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FYV19NujHbagsyC1cAomrbyAind2xfpeegaLb1HRGWSvOfFGbJmQfEiKYJ2M+oMkF
-         Z6yDHZK6X2y0vxpGI1687M0o6DULdHEE0OY/x1c3RhKD7Oyim8HRI2yOdsOvHrMi+s
-         n9a8RH8ccZLPufuG7LP8oJ9i26fl3hInVxVSBVVEXg1S67uEf5nZQUlbuUrWTcSWG5
-         cG+hYyCOYXCy8UaFuU65tHmBQvT0ffxfLL6DAQiuHcvTeGB/ePYQyAZbYbI+2IQ0G4
-         mWVxt/+kMGR0N+dBdjUzLvqqjEkfNxW1yD8/dCpIoo47P/xpecu6CDPIwugy/cq48A
-         JxbS91iI62rJg==
-Date:   Tue, 16 May 2023 23:14:25 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     peter.ujfalusi@gmail.com, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: ti: k3-udma: define udma_pm_resume,suspend
- with CONFIG_PM_SLEEP
-Message-ID: <ZGPA+V5WqZItfp74@matsya>
-References: <20230501025647.2905317-1-trix@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230501025647.2905317-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 13:45:41 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC307DA9;
+        Tue, 16 May 2023 10:45:39 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id CD2DB5C01A6;
+        Tue, 16 May 2023 13:45:36 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 16 May 2023 13:45:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1684259136; x=1684345536; bh=wBYZT0OYkMw2TLM13VW/L10+YF3tRMc4JyR
+        //pK6kKY=; b=tf1fA1FFYUbqAZixRp8n3F6FYjwLml0yhRx02Mc+jQx1fXN3meF
+        BOchr8HHmmt8N3tVVX5/REOIq4MqC96in9Gssin1m/pgpMma1vHzyKmNyNd046ud
+        /kaCW9N485Z8n2jm4ABp2v64TEyTtgvADgwkzPXss96AcVTE03BU8TD3ViZqsMiZ
+        b9n9NeMCzKQPGl/XFG0WkVa3PH8SOa7iM3+0FJUYMMkWBVm6BAKovQdF/STR5ZtM
+        viCu6pc+oMJk94JleK6TW54nvY+99ZZu0lJfRBKdvBIVjzd9QWPN2/tYjFMONVbR
+        6hZU0k5Q57S5ftGCGR5fDDmPMTMdU9JHttA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684259136; x=1684345536; bh=wBYZT0OYkMw2TLM13VW/L10+YF3tRMc4JyR
+        //pK6kKY=; b=HJT5rvzrsM8s9tPzR6nci6ldrk5LDTxA9hdX+pqi9vE41/Fu2AD
+        Gx2d0ih/RJPuU4BVqp7Y8z3uLn+yebQ5yujB+lPaZj7S27YX81E7Bshh/mevR0RF
+        7CtBx8O2ZT8GKs1Js6s+mBJ5Eqa0SLNYd0WguZJ55efojjjbntGhDfAIH5e8GuE5
+        Ss7egnenBo1YK34RNxNUGUPcxBw9zL08P0b6KSbKFBaqGSBEU70vK8qjW6TFiizQ
+        dQlmK0DbScTWTQaT9CpZAfJGgshN6KfiR7BeJthEPuRuRTeFdAXaERbAvpi2QVXp
+        ektRqGCslWB7Cw72p3wU5O/zLSmd5b3AwMQ==
+X-ME-Sender: <xms:QMFjZMoAK2OPNcQm_1u0VC3EvO7oghx7gHlmPm8Cewapqx6EmNMnVw>
+    <xme:QMFjZCruMgoq74UzUanNSr42TBdBQkRsqec395hH2h93kSSKHr-Wg2Pqk74VIT3LR
+    ujrqb2DiAAmNf9CMCY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgudduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
+    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:QMFjZBN8wQu2db93aF2AsslCg4m3O6XSlktv_KnD_80zcmxh4JNAsA>
+    <xmx:QMFjZD5SQvdlsWY4df01KrZ4kUD-ZjCgKnloS6dgqGYXPP0K_KVe3Q>
+    <xmx:QMFjZL58jK6CwjPRQ3srZpxvMjPKm9mY98DHfQjssPpD-YYDN5voxQ>
+    <xmx:QMFjZDy2N_zTcpTAXLo6ta_tuOQ82FHVnQWlKuMnaHU1boX7gVR-BA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 848A2B60089; Tue, 16 May 2023 13:45:36 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <b53f3673-f6b1-4071-9bcf-9ae5815593eb@app.fastmail.com>
+In-Reply-To: <20230516191245.4149c51a@barney>
+References: <20230516074554.1674536-1-arnd@kernel.org>
+ <20230516191245.4149c51a@barney>
+Date:   Tue, 16 May 2023 19:45:16 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     =?UTF-8?Q?Michael_B=C3=BCsch?= <m@bues.ch>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Kalle Valo" <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Tom Rix" <trix@redhat.com>, linux-wireless@vger.kernel.org,
+        b43-dev@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] wifi: b43: fix incorrect __packed annotation
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-04-23, 22:56, Tom Rix wrote:
-> gcc reports
-> drivers/dma/ti/k3-udma.c:5552:12: error: ‘udma_pm_resume’
->   defined but not used [-Werror=unused-function]
->  5552 | static int udma_pm_resume(struct device *dev)
->       |            ^~~~~~~~~~~~~~
-> drivers/dma/ti/k3-udma.c:5530:12: error: ‘udma_pm_suspend’
->   defined but not used [-Werror=unused-function]
->  5530 | static int udma_pm_suspend(struct device *dev)
->       |            ^~~~~~~~~~~~~~~
-> 
-> These functions are used conditionally with CONFIG_PM_SLEEP,
-> so they should be likewise defined.
+On Tue, May 16, 2023, at 19:12, Michael B=C3=BCsch wrote:
+> On Tue, 16 May 2023 09:45:42 +0200
+> Arnd Bergmann <arnd@kernel.org> wrote:
+>
+>> b43_iv { union {
+>>  		__be16 d16;
+>>  		__be32 d32;
+>> -	} data __packed;
+>> +	} __packed data;
+>>  } __packed;
+>> =20
+>> =20
+>
+> Oh, interesting. This has probably been there forever.
+> Did you check if the b43legacy driver has the same issue?
 
-A better way would be to use __maybe_unused. I have sent a patch with
-that change
+I had not checked, but I see that it does have the same bug.
 
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/dma/ti/k3-udma.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index fc3a2a05ab7b..f189b0f2e423 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -5527,6 +5527,7 @@ static int udma_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +#ifdef CONFIG_PM_SLEEP
->  static int udma_pm_suspend(struct device *dev)
->  {
->  	struct udma_dev *ud = dev_get_drvdata(dev);
-> @@ -5573,6 +5574,7 @@ static int udma_pm_resume(struct device *dev)
->  
->  	return 0;
->  }
-> +#endif
->  
->  static const struct dev_pm_ops udma_pm_ops = {
->  	SET_LATE_SYSTEM_SLEEP_PM_OPS(udma_pm_suspend, udma_pm_resume)
-> -- 
-> 2.27.0
+I only sent this one because the build bot (incorrectly)
+blamed one of my recent patches for a regression here.
+Which reminds me that I was missing:
 
--- 
-~Vinod
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305160749.ay1HAoyP-lkp@in=
+tel.com/
+
+Should I resend this as a combined patch for both drivers?
+
+   Arnd
