@@ -2,91 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3019D705B36
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFA2705B37
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbjEPXTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        id S231375AbjEPXT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbjEPXTM (ORCPT
+        with ESMTP id S229534AbjEPXTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:19:12 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D96749CC;
-        Tue, 16 May 2023 16:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684279138; x=1715815138;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aTTXi21fx3EQBbKsXrlszRhCxMf11Htc3j/PZEduJLo=;
-  b=GZXmWHOIkZF+X7U4QaVswU1y/ExSRLC0cMxKDjJRQZW6uyKXW8fT95Gm
-   bgBH04q2HQKwbndbpskD68U88bonOPbG3Ve34S6zaLpF5qcjQ0g7S1JhD
-   OESu5wL2+y1BscJPJlzmbLgHHylf9x2pptVtK86frajI7mVudWaCeq90Z
-   8eOT1rVOkXQzLOu0g8qTf2ELPL6bwZILpAZ6XtbGTxo7Q1xbOkUCCbwij
-   ty0gn8ZBrOGtXs1GTVoGAVKlRA79lrNJ0s0+G7MWy6rJZEnubq3RF5RDa
-   nFbInCWsApPlIyg91q0UChFOrtIDcNmKdBlUccMcSggLF5cOUgxh/kSfg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="417270309"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="417270309"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 16:18:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="791257808"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="791257808"
-Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 16:18:57 -0700
-Message-ID: <78bb0097-7dca-254f-45a6-5cea6baec0c4@intel.com>
-Date:   Tue, 16 May 2023 16:18:56 -0700
+        Tue, 16 May 2023 19:19:24 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023E476AC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:19:18 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96b0235c10bso5111966b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684279157; x=1686871157;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nwSoMyRdpmQIpvOJRBbBbU+dtgHHa8BVGaeM9DGLkfs=;
+        b=XV8v15tX+PZVEafm8KvnxAaUQqH3DataU3UD+G++s6faFUIzXTXCNUoDb9m0VlfCQI
+         eGN4ioACbazld0HLNFuNm7gQ6dbfcNc28blvMdsHDOwxVvOrzgHWkEGRUOtICDGyfGe+
+         y+ZburXTEyfHh/B6vgZObfltJUXk86CLrYG7Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684279157; x=1686871157;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nwSoMyRdpmQIpvOJRBbBbU+dtgHHa8BVGaeM9DGLkfs=;
+        b=YlKkdhQq+vr33qxx+N/MIMDKEN3zHv49CwrgLEPlkEUbbwXJQGbnpzYH5fZovDXzcl
+         k7cV9A51WX3jM5J57w8HK4ILozVerVjJbOUSF8jqge/EerQSuYbelAMfo+uVV1ZOO/GP
+         FnW+IkEZ0q4C78XYxfTXCz4g4d2JO//FxVTRth4evLLiLidsm7tIXBqmd1mdATsSNKie
+         a1mHMmQRzGaYN5lP6jcuudcU73z6G6GInoJr9ZZi274lDL3plyB7OixJIMjAwG4l0/QD
+         NbKlxSovhDMadIUeoXArWHyqOHQrZSQUxFwX5itUrqhxPo3biUAzobOCINw5/rwPWhq1
+         1O3Q==
+X-Gm-Message-State: AC+VfDyMNijkl6ZWlNoISaqSTunTitMhOAyWNQLJtn8rzZB6RZV+6aAB
+        HLh/0HwPbLl8eSIh9OJ2UJejBWDqHpQJfTmThAfC5A==
+X-Google-Smtp-Source: ACHHUZ60o1CtsVnga/vSI7yTJ3kCDUwUVrQIAAy42Ge/Z705ttDlWgK2bgIRDUNnWgTaio7HX16Eyg==
+X-Received: by 2002:a17:907:7f94:b0:969:e9ec:9a0 with SMTP id qk20-20020a1709077f9400b00969e9ec09a0mr32127707ejc.77.1684279157049;
+        Tue, 16 May 2023 16:19:17 -0700 (PDT)
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
+        by smtp.gmail.com with ESMTPSA id i19-20020a170906265300b0096595cc0810sm11536995ejc.72.2023.05.16.16.19.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 16:19:16 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-966287b0f72so7934366b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:19:16 -0700 (PDT)
+X-Received: by 2002:a17:907:25c1:b0:965:819b:1e73 with SMTP id
+ ae1-20020a17090725c100b00965819b1e73mr33977651ejc.59.1684279155930; Tue, 16
+ May 2023 16:19:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 3/6] PKEY: Apply PKEY_ENFORCE_API to mprotect
-Content-Language: en-US
-To:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        sroettger@google.com
-Cc:     akpm@linux-foundation.org, jeffxu@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
- <20230515130553.2311248-4-jeffxu@chromium.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230515130553.2311248-4-jeffxu@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230516164947.86543-1-adobriyan@gmail.com> <20230516164947.86543-2-adobriyan@gmail.com>
+ <20230516143910.ad39ddb949ca29d3a7cfdba1@linux-foundation.org>
+In-Reply-To: <20230516143910.ad39ddb949ca29d3a7cfdba1@linux-foundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 16 May 2023 16:18:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wizmGie-9SznxRraSEAAQ7OHmyR0y0foWEDF35M7dfJEw@mail.gmail.com>
+Message-ID: <CAHk-=wizmGie-9SznxRraSEAAQ7OHmyR0y0foWEDF35M7dfJEw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] auto: add "auto" keyword as alias for __auto_type
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 06:05, jeffxu@chromium.org wrote:
->  /*
->   * pkey==-1 when doing a legacy mprotect()
-> + * syscall==true if this is called by syscall from userspace.
-> + * Note: this is always true for now, added as a reminder in case that
-> + * do_mprotect_pkey is called directly by kernel in the future.
-> + * Also it is consistent with __do_munmap().
->   */
->  static int do_mprotect_pkey(unsigned long start, size_t len,
-> -		unsigned long prot, int pkey)
-> +		unsigned long prot, int pkey, bool syscall)
->  {
+On Tue, May 16, 2023 at 2:39=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> It is pretty cool and could get used a lot.  Cc Linus for his thoughts?
 
-The 'syscall' seems kinda silly (and a bit confusing).  It's easy to
-check if the caller is a kthread or has a current->mm==NULL.  If you
-*really* want a warning, I'd check for those rather than plumb a
-apparently unused argument in here.
+I'm not against it, although I'm also not convinced we need / want to
+convert existing users of typeof().
 
-BTW, this warning is one of those things that will probably cause some
-amount of angst.  I'd move it to the end of the series or just axe it
-completely.
+The reason we use typeof is that that has always worked in gcc, and
+__auto_type is relatively "new" in contrast.
+
+But we require at least gcc-5.1 anyway, so it should be fine.
+
+Note that mindless conversions can be dangerous: using "typeof(x)" in
+macros may end up feeling a bit verbose, and "auto" can appear nicer,
+but the auto use needs to be *very* careful about integer promotions.
+
+For example, in
+
+  #define WRAPPER(c) do { \
+        typeof(c) __c =3D (c);
+        ...
+
+it is very obvious what the type is.
+
+But while using
+
+   #define WRAPPER(c) do { \
+        auto __c =3D (c);
+
+gives you the same result with less redundancy (no need to state 'c'
+twice), if you *ever* then happen to make that an integer expression
+that is not *just* 'c' - even a trivial one - suddenly 'var' goes from
+'char' to 'int' because of the integer expression.
+
+So __auto_type (and I agree that if we use it, we should probably just
+wrap it in an 'auto' #define, since the legacy 'auto' keyword is
+useless) can result in simpler and more obvious code, but it can also
+lead to subtle type issues that are easy to then overlook.
+
+The above is not an argument against 'auto', but it's one reason I'm
+not convinced some mindless "convert existing uses of __typeof__" is a
+good idea even if it might make some of them more legible.
+
+But I have nothing against people starting to use it in new code.
+
+And no, I don't think we should do that
+
+    KBUILD_CFLAGS +=3D -Dauto=3D__auto_type
+
+in the Makefile as Alexey suggests.
+
+I think this is a 'compiler_types.h' kind of thing, and goes along
+with all the other "simplied syntax" things we do (ie we redefine
+'inline', we add "__weak" etc etc etc).
+
+                  Linus
