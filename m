@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9967051C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D8C7051C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233608AbjEPPO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S233842AbjEPPO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbjEPPOx (ORCPT
+        with ESMTP id S234115AbjEPPOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:14:53 -0400
+        Tue, 16 May 2023 11:14:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D4E40CE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:14:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0466440E6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:14:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C90A5631C6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:14:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD3D7C4339E;
-        Tue, 16 May 2023 15:14:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95FC762A54
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A57F2C433A1;
+        Tue, 16 May 2023 15:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684250091;
-        bh=ueF5/kwgF3xX7zaJFl7ngpNccINdb6ggK5yQp+xHDm8=;
+        s=k20201202; t=1684250093;
+        bh=a7GjnD9cBzjW1/0/iwpljCUZP6WY2SAzUWpu+dZUMvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d5G+bUp7BIUvb/qbm1jI7l4csElNcYSfcgFNRjs4QbzP2Moe3a2GS/jfTUsRL0nkQ
-         jxVqe1EYPgcA6GRKx4vdVgNH85T8wGIQjD4Adb6VjdSZY2V4CKAOfwQj3O0LmnihmX
-         R2gNuJGXgVwhVZ6nU3qPvJcHrWL95kFOdTx1bnPkN7VnuRdIjmHzCg7e5PAItVYMwN
-         /+UUOU2p14KE58sWcmHW0ZtqmbRmnXBTQZJenT4O7hzqy47GZatnbVsgGWLAIP/WI+
-         D5ouJWp9uE4l9Nm9pGJjuiaIVpnLPS1lvqZ2PSKbAqlOQHTJfasHnin66uxfpMlUth
-         uWFnFXrJG9G5A==
+        b=NuywaGJnETBHsbFqcC5PrZuIwrOo4pKkR6efYSdKcvyM26yEA+RFj3GyPAJ4ZzasO
+         Mv0vagGgpeo9eBuiMdGwcE10fEAoahzVZ9I3WcqPozLxFou+5+HBVOIIVkcSpAhwUj
+         wW4xFVl/GfugudVnkEs75SwPbQgomtgICS15Ui0aury490AD+Gxhw0B4l9RA0FyORI
+         A0kRidYAnXDkeNN1LGzBHbcDtJIYI0/hr/E0pm7ZNIkXPrcu6dESDBy1D9lTHOCDvU
+         0KqkxD4zMen9xvCxIgi1DHoeSw8e8eN3jbM2gOUhIPsKJYlDzH5mLZOkFVXvmUCr8J
+         J/X4N1yAy9I/g==
 From:   Will Deacon <will@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Russell King <linux@armlinux.org.uk>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Min-Hua Chen <minhuadotchen@gmail.com>
 Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        kernel test robot <lkp@intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] ARM/arm64: Mark all accessor functions inline
-Date:   Tue, 16 May 2023 16:14:40 +0100
-Message-Id: <168424545094.607408.9407141334580132518.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64/mm: mark private VM_FAULT_X defines as vm_fault_t
+Date:   Tue, 16 May 2023 16:14:41 +0100
+Message-Id: <168424504378.603922.13211388957168018213.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1683561087.git.geert+renesas@glider.be>
-References: <cover.1683561087.git.geert+renesas@glider.be>
+In-Reply-To: <20230502151909.128810-1-minhuadotchen@gmail.com>
+References: <20230502151909.128810-1-minhuadotchen@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,27 +57,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 May 2023 18:05:17 +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
+On Tue, 2 May 2023 23:19:06 +0800, Min-Hua Chen wrote:
+> This patch fixes several sparse warnings for fault.c:
 > 
-> This patch series adds missing "inline" keywords to the few perf
-> accessors that lack them.
-> 
-> BTW, I tried converting my local timing code to the new unified system.
-> This works fine on arm64, but broke on arm32.  Is read_pmccntr()
-> supposed to work on arm32? I get an undefined instruction exception on
-> Cortex A15 and A9.  Before, my custom code used "mrc p15, 0, %0, c9,
-> c13, 0" (as is also used in arch/arm/kernel/perf_event_v7.c), for which
-> there is no accessor yet.
+> arch/arm64/mm/fault.c:493:24: sparse: warning: incorrect type in return expression (different base types)
+> arch/arm64/mm/fault.c:493:24: sparse:    expected restricted vm_fault_t
+> arch/arm64/mm/fault.c:493:24: sparse:    got int
+> arch/arm64/mm/fault.c:501:32: sparse: warning: incorrect type in return expression (different base types)
+> arch/arm64/mm/fault.c:501:32: sparse:    expected restricted vm_fault_t
+> arch/arm64/mm/fault.c:501:32: sparse:    got int
+> arch/arm64/mm/fault.c:503:32: sparse: warning: incorrect type in return expression (different base types)
+> arch/arm64/mm/fault.c:503:32: sparse:    expected restricted vm_fault_t
+> arch/arm64/mm/fault.c:503:32: sparse:    got int
+> arch/arm64/mm/fault.c:511:24: sparse: warning: incorrect type in return expression (different base types)
+> arch/arm64/mm/fault.c:511:24: sparse:    expected restricted vm_fault_t
+> arch/arm64/mm/fault.c:511:24: sparse:    got int
+> arch/arm64/mm/fault.c:670:13: sparse: warning: restricted vm_fault_t degrades to integer
+> arch/arm64/mm/fault.c:670:13: sparse: warning: restricted vm_fault_t degrades to integer
+> arch/arm64/mm/fault.c:713:39: sparse: warning: restricted vm_fault_t degrades to integer
 > 
 > [...]
 
 Applied to arm64 (for-next/fixes), thanks!
 
-[1/2] ARM: perf: Mark all accessor functions inline
-      https://git.kernel.org/arm64/c/68e3f61eb9f5
-[2/2] arm64: perf: Mark all accessor functions inline
-      https://git.kernel.org/arm64/c/3bc879e355da
+[1/1] arm64/mm: mark private VM_FAULT_X defines as vm_fault_t
+      https://git.kernel.org/arm64/c/d91d58087806
 
 Cheers,
 -- 
