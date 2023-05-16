@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CE2705441
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F2F705443
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjEPQnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48530 "EHLO
+        id S230036AbjEPQoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjEPQnb (ORCPT
+        with ESMTP id S229508AbjEPQoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:43:31 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA8A30E6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:43:20 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso21637306a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:43:20 -0700 (PDT)
+        Tue, 16 May 2023 12:44:23 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0F3D3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:44:21 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f475366514so53078795e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684255398; x=1686847398;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZOAvhyxA95RofjLlLR11FjDxcxYHAHrGMmYu61fUjs=;
-        b=Dv7an/6KD+W5Xd63hlfW3ttz36K6sbi1iFuNiQllmPTQhkNSy3iHOXepcGQ+d4DkOl
-         yNiK3PmNk7Z+1D3txCakt9lTdY/5DeUeO0hDyWPpf2d5UyzbwopoCi1aCA746lTuLrAC
-         HF+ozSckD75BDANBKyo/P9pg6RXKgI84SmHjSsym2Mf+UkRP4c+Ca3zXg9FrVz64fTgZ
-         5hizTDNK6umw4zZIIXsYiRIpmqXOcy7Wwwl2OmkUhvus3lHVFJZKFpQS14R7fwl96wiZ
-         F4V4a4ssE8PwKUwELTpWupkte1yFj+itZDMTYg1o8pKo+AKLWvY/AWvQharpESta/AY9
-         KqbA==
+        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1684255460; x=1686847460;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9RRIvZyK8CQAM0dAt4H7LQ/6jjtstZYibAABduiNmKg=;
+        b=1pki32CkIzhFh7JpQ37UTbB0z/0EiqVq7PJo2o0rHD72vTZTKzznUr+zstjp6pW7Ek
+         5Nncvby+RBLpFydfYP84Daneai9k97DsMIaSrrbDD2SGqejUaoLaDb0kwqmgr6LTOVBM
+         EEZ0w0sgFmstOkKPYLbUfMogrU9cEIaCLDXfBZicSZMEg6NLwUAlaWZoUQNcHuT9Y1e5
+         xkgjVm2RC8QFLOhwL+EmZsEC7sLbKn/TUoGwMc9S928xL1uFyTbzKBPxqhNiqBE1wjVw
+         mM4oNJk0AEedy4oa0o3oQ4fzrwbHGgQyzhjNX2iz0tBRCnhfq/utsw5L2htW22SNNyMk
+         9T8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684255398; x=1686847398;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ZOAvhyxA95RofjLlLR11FjDxcxYHAHrGMmYu61fUjs=;
-        b=iSzhKzv4qv3vg0kso1P2CBBc3sAx+ryEhZmMgR6fHz4/xg4RMSRKgMSSYMLv2MkoDw
-         nUAMLXSGIi14logaiOlgVCcP6PTfiddytg7EO/pjThoTOSbnSw8wbamE3lr8yw3M3oLg
-         08iyIYf0zzXqeW7YJWt80RrL/L6FTjzaPiRyJ5Di950pUh+sow4cTjjtmM/sireplPGU
-         50/dvYh3rm5Tuz4DMvdQG+f3wTUZRxxgnXaDxIUgDNF69W5xiDzffdIVhr7KHQmN32FX
-         Ykao9tT5jy4EQV4awik9T26mx+Xec6XEMtRF2DfQdBBKkJZVmBiSHBG6cQbPHTqG5jWz
-         7LSw==
-X-Gm-Message-State: AC+VfDzTDLTCkzeajZAJPxkWVZNSyeONC3WXisL642bOoGMugU7rMhW7
-        n5wWMniuF+e/WB6FsyI93RVi7g==
-X-Google-Smtp-Source: ACHHUZ5QBUhMbbYPJ3FFfVmL6YJJnFhhoYonM5rq6g9+g09lJZFNYofPfcq1AViw2emSGqbXUz96GA==
-X-Received: by 2002:a05:6402:1806:b0:50d:8979:5722 with SMTP id g6-20020a056402180600b0050d89795722mr28080735edy.39.1684255398040;
-        Tue, 16 May 2023 09:43:18 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id u24-20020a056402111800b0050bc4eb9846sm8354012edv.1.2023.05.16.09.43.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 09:43:17 -0700 (PDT)
-Message-ID: <2e6f282c-33d9-7f96-0338-c4fd457d04fa@linaro.org>
-Date:   Tue, 16 May 2023 18:43:16 +0200
+        d=1e100.net; s=20221208; t=1684255460; x=1686847460;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9RRIvZyK8CQAM0dAt4H7LQ/6jjtstZYibAABduiNmKg=;
+        b=HsUlomHn1Lutp99xUWYLMNgW5b1xIgVAn3WjnUYBAtxw0nfMekSEMRNWO8QzZhoDU+
+         6+ywBmM8S8ONiGqI8S7c/CU6/lKNvQjRqm2cxH647EzD1L2FJa8JqshMPx+7Bbbc1iig
+         bHP+o9POAcniGuelzKnbYKgECPeCOf4jTHqQy+8ICZ+pwsq9+kDY+WnYUSwlw05QKM0X
+         cTt3wPELcPYt1/mIQl4x02J9O0745WaiHZKlPxO5hwRrM2T51l/p8KU+iyIoKXpshV6/
+         wZ7hMWemHsPuiJfea/tOKxt1GF9N09hhqXTbahiwZFRqqcoT0HsnmDbVK6Q1kgLzjtVl
+         OYZg==
+X-Gm-Message-State: AC+VfDwCxjmCBcjak0xn6SsePb8kL1HvVCrC9ChZZtr8qH6NsUWko5kd
+        5y/IkRulpe0q39q2gviiwi3FyfnzNXw40BJgt5k=
+X-Google-Smtp-Source: ACHHUZ5PPeGhNUMDjhJMuSkkih/heMu/8CXLe09tt0djJBA5eZwtYs6f1RnDINUQqmnUi5x8iIBd0g==
+X-Received: by 2002:a7b:ca51:0:b0:3f4:2148:e8e5 with SMTP id m17-20020a7bca51000000b003f42148e8e5mr23269068wml.1.1684255460042;
+        Tue, 16 May 2023 09:44:20 -0700 (PDT)
+Received: from localhost.localdomain ([188.27.132.2])
+        by smtp.gmail.com with ESMTPSA id h18-20020adffd52000000b003063db8f45bsm3219899wrs.23.2023.05.16.09.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 09:44:19 -0700 (PDT)
+From:   Alexandru Ardelean <alex@shruggie.ro>
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     airlied@gmail.com, daniel@ffwll.ch,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        Alexandru Ardelean <alex@shruggie.ro>
+Subject: [PATCH] drm: adv7511: Fix low refresh rate register for ADV7533/5
+Date:   Tue, 16 May 2023 19:44:16 +0300
+Message-Id: <20230516164416.11616-1-alex@shruggie.ro>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8550-qrd: add PCIe0
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230516133011.108093-1-krzysztof.kozlowski@linaro.org>
- <CAA8EJpoTgseo3j_5Ab7cQs3ZZZymALpRqpuWGPyKpTEbXR-Cqw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAA8EJpoTgseo3j_5Ab7cQs3ZZZymALpRqpuWGPyKpTEbXR-Cqw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 18:39, Dmitry Baryshkov wrote:
-> On Tue, 16 May 2023 at 16:30, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Add PCIe0 nodes used with WCN7851 device.  The PCIe1 is not connected,
->> thus skip pcie_1_phy_aux_clk input clock to GCC.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 32 +++++++++++++++++++++++++
->>  1 file changed, 32 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
->> index ccc58e6b45bd..e7a2bc5d788b 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
->> +++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
->> @@ -385,6 +385,38 @@ vreg_l3g_1p2: ldo3 {
->>         };
->>  };
->>
->> +&gcc {
->> +       clocks = <&bi_tcxo_div2>, <&sleep_clk>,
->> +                <&pcie0_phy>,
->> +                <&pcie1_phy>,
->> +                <0>,
->> +                <&ufs_mem_phy 0>,
->> +                <&ufs_mem_phy 1>,
->> +                <&ufs_mem_phy 2>,
->> +                <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
->> +};
-> 
-> Is there any reason to disable the PCIe1 PHY AUX clock here? I mean,
-> the PCIe1 is still enabled in the hardware.
+From: Bogdan Togorean <bogdan.togorean@analog.com>
 
-I was thinking about this. The AUX clock seems to be an external clock,
-although I could not find it in schematics. I assume that on QRD8550 it
-could be missing, if it is really external. OTOH, downstream DTS did not
-seem to care...
+For ADV7533 and ADV7535 low refresh rate is selected using
+bits [3:2] of 0x4a main register.
+So depending on ADV model write 0xfb or 0x4a register.
 
-Best regards,
-Krzysztof
+Signed-off-by: Bogdan Togorean <bogdan.togorean@analog.com>
+Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
+---
+ drivers/gpu/drm/i2c/adv7511.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i2c/adv7511.c b/drivers/gpu/drm/i2c/adv7511.c
+index 61aa824d45d2..e016105a8fbe 100644
+--- a/drivers/gpu/drm/i2c/adv7511.c
++++ b/drivers/gpu/drm/i2c/adv7511.c
+@@ -729,8 +729,13 @@ static void adv7511_encoder_mode_set(struct drm_encoder *encoder,
+ 	else
+ 		low_refresh_rate = ADV7511_LOW_REFRESH_RATE_NONE;
+ 
+-	regmap_update_bits(adv7511->regmap, 0xfb,
+-		0x6, low_refresh_rate << 1);
++	if (adv7511->type == ADV7511)
++		regmap_update_bits(adv7511->regmap, 0xfb,
++			0x6, low_refresh_rate << 1);
++	else
++		regmap_update_bits(adv7511->regmap, 0x4a,
++			0xc, low_refresh_rate << 2);
++
+ 	regmap_update_bits(adv7511->regmap, 0x17,
+ 		0x60, (vsync_polarity << 6) | (hsync_polarity << 5));
+ 
+-- 
+2.40.1
 
