@@ -2,221 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E2F704760
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A1A704798
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbjEPIIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S230510AbjEPITj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjEPIIP (ORCPT
+        with ESMTP id S230379AbjEPITh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:08:15 -0400
-Received: from out-9.mta0.migadu.com (out-9.mta0.migadu.com [IPv6:2001:41d0:1004:224b::9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73B73C1F
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:08:10 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684224485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KESE3livhLCPCuhAtGnou9hKvDDNimcW55YJMsd0vFE=;
-        b=oVXDiWFKqsDGNvaZIqW3sDabiHhFmO5+myShDGSg932MLt5pekVX+7CZ0POYX5M9GWKCUs
-        OND+IfLjonypaa3as3aSgsjZ8qgPr8djWp1pIG+lFIaAfPxhjewgk0j+iUb6hQzyNJ3ueE
-        wY+wveuHzPriFnS/JLJUuFBjIB6TX54=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     bp@alien8.de, tony.luck@intel.com, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, corbet@lwn.net
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-doc@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] EDAC: Expose node link in sysfs if CONFIG_NUMA
-Date:   Tue, 16 May 2023 16:07:48 +0800
-Message-Id: <20230516080748.3155788-1-yajun.deng@linux.dev>
+        Tue, 16 May 2023 04:19:37 -0400
+X-Greylist: delayed 629 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 01:19:34 PDT
+Received: from gentwo.de (gentwo.de [161.97.139.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D9CD1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.de; s=default;
+        t=1684224542; bh=MGnFW31psCJp5sPWKx6WOpe7YpGa7jmZLWFLPIu43/8=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=ImdhTrlz2TqRRcSvdWzpxHRRWXoijUmOuAdWQqj2quRa/ovXFZYWeEIaReDrwjfrO
+         TnljqfKs5ulPVfG+RoWq2AE72R/O4HEu7YtMjmbNB62p2M6BtYxDSGQBP1KpaFveoJ
+         dy0gVMm/nL9KJRVQJbnDOi7WxFYOpDAo+OeDY1UBio2M+QwV/fyzZtDlQFqvyxgX0e
+         Sv5kCwQBfFaiT0TrrX1btJTwuHwvmLD77NnSw7oniRPxd+OjPYgPkrH94EXoxmuFey
+         QFwAl6W1yApZpSevVNfVNzPsXLVLu4aSRJZba0bRiySAbUdXW49Fb+uI94wdFSk32k
+         K7IYDUeOjhlxg==
+Received: by gentwo.de (Postfix, from userid 1001)
+        id 3E76AB00191; Tue, 16 May 2023 10:09:02 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id 3CFF1B0009A;
+        Tue, 16 May 2023 10:09:02 +0200 (CEST)
+Date:   Tue, 16 May 2023 10:09:02 +0200 (CEST)
+From:   Christoph Lameter <cl@gentwo.de>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v8 00/13] fold per-CPU vmstats remotely
+In-Reply-To: <20230515180015.016409657@redhat.com>
+Message-ID: <b1f75dca-5d86-125f-bbba-7b575b62d21@gentwo.de>
+References: <20230515180015.016409657@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The node in sysfs already has cpu link and memory link, the memory
-control also under a node.
+The patchset still modifies the semantics of this_cpu operations semantics
+replacing the lockless RMV operations with locked ones. One of the
+rationales for the use  this_cpu operations is their efficiency since
+locked RMV atomics are avoided. This patchset destroys that functionality.
 
-Expose node link to memory control directory and expose memory control
-link to node directory if CONFIG_NUMA.
+If you want locked RMV semantics then use them through cmpxchg() and
+friends. Do not modify this_cpu operations by changing the implementation
+in the arch code.
 
-At the same time, change the type of EDAC from tristate to boolean
-because it needs node_devices.
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- Documentation/ABI/testing/sysfs-devices-edac | 26 ++++++++++
- Documentation/admin-guide/ras.rst            |  2 +
- drivers/edac/Kconfig                         |  2 +-
- drivers/edac/edac_mc_sysfs.c                 | 54 ++++++++++++++++++++
- 4 files changed, 83 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-edac b/Documentation/ABI/testing/sysfs-devices-edac
-index 256a9e990c0b..726f97170b9f 100644
---- a/Documentation/ABI/testing/sysfs-devices-edac
-+++ b/Documentation/ABI/testing/sysfs-devices-edac
-@@ -155,3 +155,29 @@ Description:	This attribute file displays the total count of uncorrectable
- 		errors that have occurred on this DIMM. If panic_on_ue is set, this
- 		counter will not have a chance to increment, since EDAC will panic the
- 		system
-+
-+What:		/sys/devices/system/edac/mc/mc*/node*
-+Date:		May 2023
-+Contact:	Yajun Deng <yajun.deng@linux.dev>
-+		linux-edac@vger.kernel.org
-+Description:	When CONFIG_NUMA is enabled, a symbolic link that points to the
-+		corresponding NUMA node directory.
-+
-+		For example, the following symbolic link is created for node0 on mc0
-+		and mc1:
-+
-+		/sys/devices/system/edac/mc/mc0/node0 -> ../../../node/node0
-+		/sys/devices/system/edac/mc/mc1/node0 -> ../../../node/node0
-+
-+What:		/sys/devices/system/node/node*/mc*
-+Date:		May 2023
-+Contact:	Yajun Deng <yajun.deng@linux.dev>
-+		linux-edac@vger.kernel.org
-+Description:	When CONFIG_NUMA is enabled, a symbolic link that points to the
-+		corresponding memory control directory.
-+
-+		For example, the following symbolic link is created for mc0 and mc1
-+		on node0:
-+
-+		/sys/devices/system/node/node0/mc0 -> ../../edac/mc/mc0
-+		/sys/devices/system/node/node0/mc1 -> ../../edac/mc/mc1
-diff --git a/Documentation/admin-guide/ras.rst b/Documentation/admin-guide/ras.rst
-index 8e03751d126d..ef7cc9867fc8 100644
---- a/Documentation/admin-guide/ras.rst
-+++ b/Documentation/admin-guide/ras.rst
-@@ -458,6 +458,7 @@ A typical EDAC system has the following structure under
- 	│   │   │   └── uevent
- 	│   │   ├── max_location
- 	│   │   ├── mc_name
-+	│   │   ├── node0 -> ../../../node/node0  #if CONFIG_NUMA
- 	│   │   ├── reset_counters
- 	│   │   ├── seconds_since_reset
- 	│   │   ├── size_mb
-@@ -479,6 +480,7 @@ A typical EDAC system has the following structure under
- 	│   │   │   └── uevent
- 	│   │   ├── max_location
- 	│   │   ├── mc_name
-+	│   │   ├── node0 -> ../../../node/node0  #if CONFIG_NUMA
- 	│   │   ├── reset_counters
- 	│   │   ├── seconds_since_reset
- 	│   │   ├── size_mb
-diff --git a/drivers/edac/Kconfig b/drivers/edac/Kconfig
-index 68f576700911..e61a29e0eb28 100644
---- a/drivers/edac/Kconfig
-+++ b/drivers/edac/Kconfig
-@@ -10,7 +10,7 @@ config EDAC_SUPPORT
- 	bool
- 
- menuconfig EDAC
--	tristate "EDAC (Error Detection And Correction) reporting"
-+	bool "EDAC (Error Detection And Correction) reporting"
- 	depends on HAS_IOMEM && EDAC_SUPPORT && RAS
- 	help
- 	  EDAC is a subsystem along with hardware-specific drivers designed to
-diff --git a/drivers/edac/edac_mc_sysfs.c b/drivers/edac/edac_mc_sysfs.c
-index 15f63452a9be..7b81d898f4f2 100644
---- a/drivers/edac/edac_mc_sysfs.c
-+++ b/drivers/edac/edac_mc_sysfs.c
-@@ -18,6 +18,7 @@
- #include <linux/bug.h>
- #include <linux/pm_runtime.h>
- #include <linux/uaccess.h>
-+#include <linux/node.h>
- 
- #include "edac_mc.h"
- #include "edac_module.h"
-@@ -922,6 +923,55 @@ static const struct device_type mci_attr_type = {
- 	.groups		= mci_attr_groups,
- };
- 
-+#ifdef CONFIG_NUMA
-+static int edac_create_node_link(struct mem_ctl_info *mci)
-+{
-+	int nid = dev_to_node(mci->pdev);
-+	struct node *node;
-+	struct device *dev;
-+	int ret;
-+
-+	if (!node_online(nid))
-+		return 0;
-+
-+	node = node_devices[nid];
-+	dev = &mci->dev;
-+
-+	ret = sysfs_create_link(&node->dev.kobj, &dev->kobj,
-+				kobject_name(&dev->kobj));
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_create_link(&dev->kobj, &node->dev.kobj,
-+				 kobject_name(&node->dev.kobj));
-+}
-+
-+static void edac_remove_node_link(struct mem_ctl_info *mci)
-+{
-+	int nid = dev_to_node(mci->pdev);
-+	struct node *node;
-+	struct device *dev;
-+
-+	if (!node_online(nid))
-+		return;
-+
-+	node = node_devices[nid];
-+	dev = &mci->dev;
-+
-+	sysfs_remove_link(&node->dev.kobj, kobject_name(&dev->kobj));
-+
-+	sysfs_remove_link(&dev->kobj, kobject_name(&node->dev.kobj));
-+}
-+#else
-+static inline int edac_create_node_link(struct mem_ctl_info *mci)
-+{
-+	return 0;
-+}
-+static inline void edac_remove_node_link(struct mem_ctl_info *mci)
-+{
-+}
-+#endif
-+
- /*
-  * Create a new Memory Controller kobject instance,
-  *	mc<id> under the 'mc' directory
-@@ -966,6 +1016,8 @@ int edac_create_sysfs_mci_device(struct mem_ctl_info *mci,
- 			goto fail;
- 	}
- 
-+	edac_create_node_link(mci);
-+
- #ifdef CONFIG_EDAC_LEGACY_SYSFS
- 	err = edac_create_csrow_objects(mci);
- 	if (err < 0)
-@@ -1000,6 +1052,8 @@ void edac_remove_sysfs_mci_device(struct mem_ctl_info *mci)
- 	edac_delete_csrow_objects(mci);
- #endif
- 
-+	edac_remove_node_link(mci);
-+
- 	mci_for_each_dimm(mci, dimm) {
- 		if (!device_is_registered(&dimm->dev))
- 			continue;
--- 
-2.25.1
+
 
