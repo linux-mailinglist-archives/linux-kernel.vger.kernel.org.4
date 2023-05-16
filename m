@@ -2,198 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2CF7054E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9A27054E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjEPRVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
+        id S231509AbjEPRXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjEPRVw (ORCPT
+        with ESMTP id S229571AbjEPRXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:21:52 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA27E51
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:21:45 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-335d6260e9bso10225ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:21:45 -0700 (PDT)
+        Tue, 16 May 2023 13:23:43 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21231195
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:23:42 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-335d6260e9bso10685ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:23:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684257705; x=1686849705;
+        d=google.com; s=20221208; t=1684257821; x=1686849821;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GVZ+9c6lPsr2Ao0MCG6loW9XjO0wPrRtUbpRQdctJK8=;
-        b=V20gW+9L8/ycr7z7MDOazESc5AWPQ6RaLNAU1aDp3gfWGjsTlqyb+MOGJspMnYhrzV
-         ScNhoWkwm/CYep76EmK9b6+uQhuv4UzFHTo8iI1l6ODk5Lhb/+wCt5Yco6qwZDZh7ioT
-         a7am0Lrk/vP105gUHlugDOVJSELWJ3whi/YmC+qBm3zfc5wFKO2hTUrBymF8rfsBFAue
-         DDpMu2gB6x20PZhX+z0pixo0INU7xfSjzx7GnUdutGnIJOzRShVnCsz0dM/Vja2h3alB
-         3jMNtlPhTQTcOYfneJRQRVXF6yQPGblwP5erwuJ63dJnwqq9eCpbNF1J/VyOBsBuNGoZ
-         4hkA==
+        bh=KtLDMIe167B85U/+GfK+jGRGZasQjZejfPs58zT2nPo=;
+        b=wTc2x7001d8gBrfDrm+5jQkRDAjYgsBFeRgu1lN7P4Sox5fk/y11Wdh/ge45c1aAXt
+         DpGFODbpp3VrBb64VCHyh5e2EKkjsBEDGuqkseD+j5BZhmyOlsPNb7JEy1vi0bKX8ByO
+         twedDomMdgmcHRS0hoF49Zq3ZHAvcs0JW7Ga07dt/rF2VsoFkR0fJPFssK68PBERL5jJ
+         nTdJov1eSvobo3/f2b24SqBV+NZz+KyPsuJyF1PuU+g5XP/ZzSAp2jPUIZJ6RFHZXQtH
+         jOi6n7ZBsRSuJqY0cMwdHRSZXCokCiGVvWYcf0G2XTB24EpE38gWg8OU4vdzc4yeijhd
+         Ae8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684257705; x=1686849705;
+        d=1e100.net; s=20221208; t=1684257821; x=1686849821;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GVZ+9c6lPsr2Ao0MCG6loW9XjO0wPrRtUbpRQdctJK8=;
-        b=aZ7P0e8tnigLs1nWAIfL5WD+qcLaNXiBJDBNT7x2gfQ5xBe77GfilhxdHV8k4J6znJ
-         30frq5ezktQ99BOLbfCo1f1GWYs7B79urKpHu6YnGL95da8E/gOlYe8De07AgICsfazT
-         3PtG/e7gsgkLGJyKL3EP9fd70pSaP4LmPmajPD+MKqzEGbHcLt4KsQoBYfNYOWXzH7J/
-         nkxmQ4uaWcAI4tGAX9JWjlfVZiTDI6nLfzUg/jXBRv9LZuVASEnFPxBUIDo2p0iydX3V
-         qRzGCEh7vev709Q1KBQk6KMlcsvPJYhf+anjRNvEyQV6zSrEnJ0J2Qtz9AhhjYJWdafV
-         fFCw==
-X-Gm-Message-State: AC+VfDyxyTFyPmk731dv6fsywbOBRmKvczrkQUFwrPwHH0I3k0LrQs3H
-        V3hFbRL7E38nlQ8CChqsBHlPOPQrRJEBeEMtbmGYNA==
-X-Google-Smtp-Source: ACHHUZ6BL2PMIcSJjwAf2AgEJNcVVxzbOdam3StqauutqGNlV5v/nj8Tk0EG41bRNqE6I54B8OY65aevOf4qC52Evtg=
-X-Received: by 2002:a05:6e02:1a0d:b0:32a:db6c:d51d with SMTP id
- s13-20020a056e021a0d00b0032adb6cd51dmr325280ild.12.1684257704853; Tue, 16 May
- 2023 10:21:44 -0700 (PDT)
+        bh=KtLDMIe167B85U/+GfK+jGRGZasQjZejfPs58zT2nPo=;
+        b=WO4Diyk4IV0jQeKlHwyFnhG4K/fcKLeGlfyfXBW+Qs5fJC1o8/EPvgfHun2tS9W845
+         eRDeHinOYh2AQ5vsXfOxdP7Dm7SCRFaUStivYGZ7lEx4p5Kc0emNXeCT+6w8YSeZ8mML
+         VOzX57QKpYo6MBGrxoBAwEv3vUI2xhTQP3vRmlmMyOtOSVvQxqKMZ1Fm094nACPEr1I3
+         5KHt1LrXv2D+DAorzqRoFpWuA+OzFBczvxWNPPlpIQRuUF8ApYNW3xBCrBQMaE6uyx5v
+         YFrCqKFK+MVoOBsf//HQ2yPJRv+tTKEVS3G1q+TGDR1EoThedTBFvHkWAiHSdV0vxXJb
+         Q+7w==
+X-Gm-Message-State: AC+VfDxaUaoDWB1zgS+vXj7OXiSl5rp6MogLm7dMmN0GZ8kxVWXP7Mtd
+        AIodNGRBbd3WoM4/CTc6H6ILng3bqWTCOazjVnTJ1g==
+X-Google-Smtp-Source: ACHHUZ7+MXQY9FJvb+Jjv5Z5fAz6w/bKyOgU/LvgEVB1XBAqnx5OkYRYC0MW/bS6u9VrrsaWcBpvYyxo7Ernz9EYzmU=
+X-Received: by 2002:a05:6e02:1bc3:b0:335:5c4b:2f8a with SMTP id
+ x3-20020a056e021bc300b003355c4b2f8amr246921ilv.5.1684257821269; Tue, 16 May
+ 2023 10:23:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414172922.812640-1-rananta@google.com> <20230414172922.812640-8-rananta@google.com>
- <ZF5xLrr2tEYdLL1i@linux.dev>
-In-Reply-To: <ZF5xLrr2tEYdLL1i@linux.dev>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Tue, 16 May 2023 10:21:33 -0700
-Message-ID: <CAJHc60wUu3xB4J8oJ+FCxerDad1TzZLCMgHYGFfv0K-hzC0qmw@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] KVM: arm64: Use TLBI range-based intructions for unmap
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <000000000000bff72505fbcd1f74@google.com> <000000000000bc152005fbcd1fa2@google.com>
+ <20230516-saftig-einbog-ef2981f0dec2@brauner>
+In-Reply-To: <20230516-saftig-einbog-ef2981f0dec2@brauner>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Tue, 16 May 2023 19:23:30 +0200
+Message-ID: <CANp29Y7ktmz=W5F+uavDa1KzSnUnBHtrH2abHRqAjuWZkJdgxw@mail.gmail.com>
+Subject: Re: [syzbot] [kernel?] Internal error in should_fail_ex
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     syzbot <syzbot+c84b326736ee471158dc@syzkaller.appspotmail.com>,
+        syzbot <syzbot+729f1325904c82acd601@syzkaller.appspotmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:02=E2=80=AFAM Oliver Upton <oliver.upton@linux.d=
-ev> wrote:
+On Tue, May 16, 2023 at 2:32=E2=80=AFPM Christian Brauner <brauner@kernel.o=
+rg> wrote:
 >
-> Hi Raghavendra,
+> On Tue, May 16, 2023 at 03:35:03AM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    457391b03803 Linux 6.3
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D15671fa2280=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D385e197a58c=
+a4afe
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dc84b326736ee4=
+71158dc
+> > compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110=
+, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > Downloadable assets:
+> > disk image (non-bootable): https://storage.googleapis.com/syzbot-assets=
+/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmli=
+nux-457391b0.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9=
+/zImage-457391b0.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+c84b326736ee471158dc@syzkaller.appspotmail.com
 >
-> On Fri, Apr 14, 2023 at 05:29:22PM +0000, Raghavendra Rao Ananta wrote:
-> > The current implementation of the stage-2 unmap walker traverses
-> > the given range and, as a part of break-before-make, performs
-> > TLB invalidations with a DSB for every PTE. A multitude of this
-> > combination could cause a performance bottleneck.
+> On Tue, May 16, 2023 at 03:35:02AM -0700, syzbot wrote:
+> > Hello,
 > >
-> > Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
-> > invalidations until the entire walk is finished, and then
-> > use range-based instructions to invalidate the TLBs in one go.
-> > Condition this upon S2FWB in order to avoid walking the page-table
-> > again to perform the CMOs after issuing the TLBI.
+> > syzbot found the following issue on:
 > >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > Suggested-by: Oliver Upton <oliver.upton@linux.dev>
-> > ---
-> >  arch/arm64/kvm/hyp/pgtable.c | 33 +++++++++++++++++++++++++++++----
-> >  1 file changed, 29 insertions(+), 4 deletions(-)
+> > HEAD commit:    457391b03803 Linux 6.3
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D134e0b01280=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D385e197a58c=
+a4afe
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D729f1325904c8=
+2acd601
+> > compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110=
+, GNU ld (GNU Binutils for Debian) 2.35.2
+> > userspace arch: arm
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D118f964e2=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D16f6e776280=
+000
 > >
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.=
-c
-> > index 3f136e35feb5e..bcb748e3566c7 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -987,10 +987,16 @@ int kvm_pgtable_stage2_set_owner(struct kvm_pgtab=
-le *pgt, u64 addr, u64 size,
-> >       return ret;
-> >  }
+> > Downloadable assets:
+> > disk image (non-bootable): https://storage.googleapis.com/syzbot-assets=
+/c35b5b2731d2/non_bootable_disk-457391b0.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/2a1bf3bafeb6/vmli=
+nux-457391b0.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/21f1e3b4a5a9=
+/zImage-457391b0.xz
 > >
-> > +struct stage2_unmap_data {
-> > +     struct kvm_pgtable *pgt;
-> > +     bool skip_pte_tlbis;
-> > +};
-> > +
-> >  static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx=
-,
-> >                              enum kvm_pgtable_walk_flags visit)
-> >  {
-> > -     struct kvm_pgtable *pgt =3D ctx->arg;
-> > +     struct stage2_unmap_data *unmap_data =3D ctx->arg;
-> > +     struct kvm_pgtable *pgt =3D unmap_data->pgt;
-> >       struct kvm_s2_mmu *mmu =3D pgt->mmu;
-> >       struct kvm_pgtable_mm_ops *mm_ops =3D ctx->mm_ops;
-> >       kvm_pte_t *childp =3D NULL;
-> > @@ -1018,7 +1024,7 @@ static int stage2_unmap_walker(const struct kvm_p=
-gtable_visit_ctx *ctx,
-> >        * block entry and rely on the remaining portions being faulted
-> >        * back lazily.
-> >        */
-> > -     stage2_put_pte(ctx, mmu, mm_ops, false);
-> > +     stage2_put_pte(ctx, mmu, mm_ops, unmap_data->skip_pte_tlbis);
-> >
-> >       if (need_flush && mm_ops->dcache_clean_inval_poc)
-> >               mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, m=
-m_ops),
-> > @@ -1032,13 +1038,32 @@ static int stage2_unmap_walker(const struct kvm=
-_pgtable_visit_ctx *ctx,
-> >
-> >  int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 si=
-ze)
-> >  {
-> > +     int ret;
-> > +     struct stage2_unmap_data unmap_data =3D {
-> > +             .pgt =3D pgt,
-> > +             /*
-> > +              * If FEAT_TLBIRANGE is implemented, defer the individial=
- PTE
-> > +              * TLB invalidations until the entire walk is finished, a=
-nd
-> > +              * then use the range-based TLBI instructions to do the
-> > +              * invalidations. Condition this upon S2FWB in order to a=
-void
-> > +              * a page-table walk again to perform the CMOs after TLBI=
-.
-> > +              */
-> > +             .skip_pte_tlbis =3D system_supports_tlb_range() &&
-> > +                                     stage2_has_fwb(pgt),
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+729f1325904c82acd601@syzkaller.appspotmail.com
 >
-> Why can't the underlying walker just call these two helpers directly?
-> There are static keys behind these...
+> Not complaining but why am I blessed with an explicit Cc on this?
 >
-I wasn't aware of that. Although, I tried to look into the
-definitions, but couldn't understand how static keys are at play here.
-By any chance are you referring to the alternative_has_feature_*()
-implementations when checking for cpu capabilities?
 
-Thank you.
-Raghavendra
+You were Cc'd because syzbot incorrectly identified the guilty file
+for the bug, I've sent a fix [1].
+Sorry for the noise.
 
-> > +     };
-> >       struct kvm_pgtable_walker walker =3D {
-> >               .cb     =3D stage2_unmap_walker,
-> > -             .arg    =3D pgt,
-> > +             .arg    =3D &unmap_data,
-> >               .flags  =3D KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABL=
-E_POST,
-> >       };
-> >
-> > -     return kvm_pgtable_walk(pgt, addr, size, &walker);
-> > +     ret =3D kvm_pgtable_walk(pgt, addr, size, &walker);
-> > +     if (unmap_data.skip_pte_tlbis)
-> > +             /* Perform the deferred TLB invalidations */
-> > +             kvm_call_hyp(__kvm_tlb_flush_vmid_range, pgt->mmu,
-> > +                             addr, addr + size);
-> > +
-> > +     return ret;
-> >  }
-> >
-> >  struct stage2_attr_data {
-> > --
-> > 2.40.0.634.g4ca3ef3211-goog
-> >
->
-> --
-> Thanks,
-> Oliver
+[1] https://github.com/google/syzkaller/pull/3905
+
+--=20
+Aleksandr
