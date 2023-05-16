@@ -2,210 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542AD704588
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87421704591
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjEPGuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S230161AbjEPGvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjEPGud (ORCPT
+        with ESMTP id S230073AbjEPGvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:50:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2724C07;
-        Mon, 15 May 2023 23:50:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C58615FB;
-        Tue, 16 May 2023 06:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2BEC433D2;
-        Tue, 16 May 2023 06:50:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684219805;
-        bh=7VX2LsKv3PQ0dpUkb9e7oVnaxcn5EXXzhXtXcfTUrdo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VnB3eh+W1j0NQcaox7doiPd13Fc8F/IiUM4j8VdhBZm20oiEAt6LpIIe9ZXPuuy07
-         PpHqPmDqTNuewxCeTKCCrlt8tYZ3F4XKvzogI5hmHVwUE8nXYIMOxQ2QmaSXv4wJBP
-         e6tE9Ek/N9ysGgCw4kg26JzP5Q8pT9eMEHEjQcknfCTO03Fy70W5Kz7Z578cqYO3JQ
-         LursPVYyRZoQgXFWlwWDxOYsOUNxXGcBFVUuDPgcFbrtmUZ7RSFJ+DLFZHupMO/xJx
-         xuWaXCHbvnzFewOzyOSLUPYGHKZ/AeecJHJAnBP53Eik0w6Sn6LFCSnuCJG8DulNny
-         9ajILl0m5k9oA==
-Date:   Tue, 16 May 2023 09:49:57 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: Re: [PATCH v5 RESEND 09/17] openrisc: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZGMnlZK1/pZIBCud@kernel.org>
-References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-10-bhe@redhat.com>
+        Tue, 16 May 2023 02:51:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE344C2B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:51:01 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pyoVl-0000di-HX; Tue, 16 May 2023 08:50:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pyoVi-000XiK-M0; Tue, 16 May 2023 08:50:14 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pyoVi-004v4C-3L; Tue, 16 May 2023 08:50:14 +0200
+Date:   Tue, 16 May 2023 08:50:13 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        John Crispin <john@phrozen.org>
+Subject: Re: [PATCH v3 0/2] Support PWM on MediaTek MT7981
+Message-ID: <20230516065013.u2oqdonovdckuvop@pengutronix.de>
+References: <cover.1682007088.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="so7atcmfgma6sw4o"
 Content-Disposition: inline
-In-Reply-To: <20230515090848.833045-10-bhe@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1682007088.git.daniel@makrotopia.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, May 15, 2023 at 05:08:40PM +0800, Baoquan He wrote:
-> By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> and iounmap() are all visible and available to arch. Arch needs to
-> provide wrapper functions to override the generic versions if there's
-> arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> This change will simplify implementation by removing duplicated codes
-> with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
-> functioality as before.
-> 
-> Here, add wrapper function iounmap() for openrisc's special operation
-> when iounmap().
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: openrisc@lists.librecores.org
-> ---
->  arch/openrisc/Kconfig          |  1 +
->  arch/openrisc/include/asm/io.h | 11 +++++---
->  arch/openrisc/mm/ioremap.c     | 46 +---------------------------------
->  3 files changed, 9 insertions(+), 49 deletions(-)
-> 
-> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> index c7f282f60f64..fd9bb76a610b 100644
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -21,6 +21,7 @@ config OPENRISC
->  	select GENERIC_IRQ_PROBE
->  	select GENERIC_IRQ_SHOW
->  	select GENERIC_PCI_IOMAP
-> +	select GENERIC_IOREMAP
->  	select GENERIC_CPU_DEVICES
->  	select HAVE_PCI
->  	select HAVE_UID16
-> diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
-> index ee6043a03173..e640960c26c2 100644
-> --- a/arch/openrisc/include/asm/io.h
-> +++ b/arch/openrisc/include/asm/io.h
-> @@ -15,6 +15,8 @@
->  #define __ASM_OPENRISC_IO_H
->  
->  #include <linux/types.h>
-> +#include <asm/pgalloc.h>
-> +#include <asm/pgtable.h>
->  
->  /*
->   * PCI: We do not use IO ports in OpenRISC
-> @@ -27,11 +29,12 @@
->  #define PIO_OFFSET		0
->  #define PIO_MASK		0
->  
-> -#define ioremap ioremap
-> -void __iomem *ioremap(phys_addr_t offset, unsigned long size);
-> -
-> +/*
-> + * I/O memory mapping functions.
-> + */
->  #define iounmap iounmap
-> -extern void iounmap(volatile void __iomem *addr);
-> +
-> +#define _PAGE_IOREMAP (pgprot_val(PAGE_KERNEL) | _PAGE_CI)
->  
->  #include <asm-generic/io.h>
->  
-> diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-> index 90b59bc53c8c..9f9941df7d4c 100644
-> --- a/arch/openrisc/mm/ioremap.c
-> +++ b/arch/openrisc/mm/ioremap.c
-> @@ -22,49 +22,6 @@
->  
->  extern int mem_init_done;
->  
-> -/*
-> - * Remap an arbitrary physical address space into the kernel virtual
-> - * address space. Needed when the kernel wants to access high addresses
-> - * directly.
-> - *
-> - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
-> - * have to convert them into an offset in a page-aligned mapping, but the
-> - * caller shouldn't need to know that small detail.
-> - */
-> -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
-> -{
-> -	phys_addr_t p;
-> -	unsigned long v;
-> -	unsigned long offset, last_addr;
-> -	struct vm_struct *area = NULL;
-> -
-> -	/* Don't allow wraparound or zero size */
-> -	last_addr = addr + size - 1;
-> -	if (!size || last_addr < addr)
-> -		return NULL;
-> -
-> -	/*
-> -	 * Mappings have to be page-aligned
-> -	 */
-> -	offset = addr & ~PAGE_MASK;
-> -	p = addr & PAGE_MASK;
-> -	size = PAGE_ALIGN(last_addr + 1) - p;
-> -
-> -	area = get_vm_area(size, VM_IOREMAP);
-> -	if (!area)
-> -		return NULL;
-> -	v = (unsigned long)area->addr;
-> -
-> -	if (ioremap_page_range(v, v + size, p,
-> -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
-> -		vfree(area->addr);
-> -		return NULL;
-> -	}
-> -
-> -	return (void __iomem *)(offset + (char *)v);
-> -}
-> -EXPORT_SYMBOL(ioremap);
-> -
->  void iounmap(volatile void __iomem *addr)
->  {
->  	/* If the page is from the fixmap pool then we just clear out
+--so7atcmfgma6sw4o
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The page cannot be from fixmap pool since we removed fixmap support from
-ioremap in an earlier patch.
-I believe that patch should also remove special casing of fixmap in
-iounmap() and then openrisc does not need to override any of ioremap
-methods.
+Hello,
 
-> @@ -88,9 +45,8 @@ void iounmap(volatile void __iomem *addr)
->  		return;
->  	}
->  
-> -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
-> +	generic_iounmap(addr);
->  }
-> -EXPORT_SYMBOL(iounmap);
->  
->  /**
->   * OK, this one's a bit tricky... ioremap can get called before memory is
-> -- 
-> 2.34.1
-> 
-> 
+On Fri, Apr 21, 2023 at 12:22:20AM +0100, Daniel Golle wrote:
+> Add support for PWM on the MediaTek MT7981 to pwm-mediatek.c as well
+> as new mediatek,mt7981-pwm compatible string to the existing bindings.
+>=20
+> Changes since v2:
+>  * improve commit message, adding that alphabetic order is restored
+>=20
+> Changes since v1:
+>  * use pointer to reg_offset instead of u8 reg_ver and if-else
+>=20
+> Daniel Golle (2):
+>   dt-bindings: pwm: mediatek: Add mediatek,mt7981 compatible
+>   pwm: mediatek: Add support for MT7981
+>=20
+>  .../bindings/pwm/mediatek,mt2712-pwm.yaml     |  1 +
+>  drivers/pwm/pwm-mediatek.c                    | 39 +++++++++++++++----
+>  2 files changed, 32 insertions(+), 8 deletions(-)
 
--- 
-Sincerely yours,
-Mike.
+whole series looks good to me,
+
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--so7atcmfgma6sw4o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRjJ6UACgkQj4D7WH0S
+/k6yuwf/ZduV3pWBQmvuxxeH3faEOg2E0ttlDDUG/4fkQeBgASYpDAQvapTJqj/o
+ZIOoIjdBS5X5WbYjl0wshrWc79B6bA/5TUrQxLjc8HRFfN4Q8+Ia+LQH10w/mBND
+ShHmmb5CrVwVUa2t6/zrkUoXRUAM1pU+UM0XDvGHBFxRruPcUb8yuU0oEmgFU0ZQ
+sJz9teGh1jhvxClHVso2erPoz+l64KNc7XSSyR6lwfMm9sMYnKQFvOyrW/LUOHeu
+lkacUxGWTphramLuhvcjatEHqpUrWrvhahwx2k4C0f3aOLZtRTROsZ58xtFtK4Pt
+i725zuKbzW6luWcTX+Ac3O8HlFME6Q==
+=o+7Q
+-----END PGP SIGNATURE-----
+
+--so7atcmfgma6sw4o--
