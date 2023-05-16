@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22271705A79
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2135E705A7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjEPWRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S229951AbjEPWT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjEPWRt (ORCPT
+        with ESMTP id S229475AbjEPWT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:17:49 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA0059F4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:17:48 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510a5a5cf79so181a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684275467; x=1686867467;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DFM3fAYlTPBxQGmteO/2uHFhqAyi1JN0aT26xTBpePY=;
-        b=o2yls/45s0xkZRgXdYp9Llp5QvwSiw2Yins46NJBQ93VxSzpcVos6BkD9ZuzWFA6zU
-         OLiA/M6Ocvy+P4BEWoZdomhusGCoMMqAFW61552mNjMRB4VeIol0mTshVg5jouXKuObl
-         Qj7ybH1dkgrkD5EEkwaYEi3zN4P4l5qGIq5z9AwQNzUOGmyRuM62BwnbBdj6zPnZ0v4B
-         gdKf2Eq2CjxCfpZB1geOeSvb6FtBgiO4ynAq+LDyuAWeuAucwu30IDaI3JRef9OAg43t
-         m+dXn+w3YLkbCgdi1d7j3HJbtKxXGw15d65FITdPhLK6pSsk9JI6fdnBe39mHtctSmcS
-         Shgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684275467; x=1686867467;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DFM3fAYlTPBxQGmteO/2uHFhqAyi1JN0aT26xTBpePY=;
-        b=L83x/vZ2+LZLuaG5YAxxvdfeWAlODPn8PkytuqYrwx8H9SvWIF2Dt3QNc/On6T2uxI
-         x0BfxpjR09PRizhmS8GZD0nXhqKN2E0CREMon83Ugu3vUoRGfcTEGAXDo4AFW8EHQRxU
-         oVt9kCzc44f2YA7almp/Y4kniWb/nMUEDHfxnb64JyRo1Wf8S21LoNJvnYmB8gYY0SlA
-         DLZiEd0aUP7wjlu6MYDYZcgTHhQ/2AtCtcmVbrgmm0Z3lstlad2YI6W0lWAom6phmk5p
-         yOKGtUc07YIf7MnKQMFHBEBE/xXtc22DeUwUvqyxiFURrnf+apdmy4l00N1fPNQj5mNy
-         Lr8A==
-X-Gm-Message-State: AC+VfDzlJrpFTrF3ZFhkLamcDyaL/3pzimjRlNPXrtdytyWrZMZOWskZ
-        2+F2/4aNTM1TWw/FyzWrUxLzCCb0RmACs+A8wN/jFw==
-X-Google-Smtp-Source: ACHHUZ4kIdAG/+KEv1wYdz2uXbEvowoCYDRdQ98dgmPo2TYOqhB/KFXxkuuo4dMNQNDQo21ejrglf36AsKWL2Iuky8U=
-X-Received: by 2002:a50:aadd:0:b0:50b:f6ce:2f3d with SMTP id
- r29-20020a50aadd000000b0050bf6ce2f3dmr51714edc.0.1684275466605; Tue, 16 May
- 2023 15:17:46 -0700 (PDT)
+        Tue, 16 May 2023 18:19:26 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D15759D2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:19:24 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 047C02C04E1;
+        Wed, 17 May 2023 10:19:15 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1684275555;
+        bh=arElUNBLxYP/oS8PzLnuVnQ8MmR2mLGZDAgu2O2gSP0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=HPFIGvXnhVHJyEKGFnxyaxSijIvhEllmsTmbBGp+8Qqb35g1/YKCDZq1dzTp/zGdp
+         MXO8b3wk0ogBOt3D7T01o0EGsIT6bnIyt4Jw66MetNrL71J1GWgdz2qk+gVyCaBrnP
+         lur/J26PiuQlUlw/DoQV7mxuscX3d5cBg5wO6kh0InNO8zat9PEJ/AwkJlnxA2/SHb
+         g/R8eaZOyN1+rp9+Jkf419hgcKUkcYwN8dVrvFumOgt1dQH7eB64AoEzBFsXlqvhlF
+         sxl5asI2MU3uLmd5ubSc9/+TTCWzas5K8fMRuZcG+0An4HO2E64k59/eqrFmcasVt8
+         eoMAfK1L2DdJw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B646401620001>; Wed, 17 May 2023 10:19:14 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 17 May 2023 10:19:14 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.026; Wed, 17 May 2023 10:19:14 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "johan@kernel.org" <johan@kernel.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
+Thread-Topic: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
+Thread-Index: AQHZhIoofApft8Zm8kuYZtpxH+f53K9VfDeAgAQYHQCAApZDgIAAjA4A
+Date:   Tue, 16 May 2023 22:19:14 +0000
+Message-ID: <31a23398-9b0e-4a19-3576-84fcfd3ce4b5@alliedtelesis.co.nz>
+References: <20230512042806.3438373-1-chris.packham@alliedtelesis.co.nz>
+ <CACRpkdYz9ipNTo2ORXKWy5Q4uCpKL=9Gd+kK76pestX7Onuz-Q@mail.gmail.com>
+ <b36fcdf1-45ab-0c06-efe4-237df0612466@alliedtelesis.co.nz>
+ <CACRpkdbiSAFoJP_JB1d_6gQ+Xx7Y+mLAh=C6Za+fpyWuRe6Gbw@mail.gmail.com>
+In-Reply-To: <CACRpkdbiSAFoJP_JB1d_6gQ+Xx7Y+mLAh=C6Za+fpyWuRe6Gbw@mail.gmail.com>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0E08B0DD9C4BAB49AB098DDA8173E7C0@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230515130553.2311248-1-jeffxu@chromium.org> <202305161307.4A16BB6A47@keescook>
-In-Reply-To: <202305161307.4A16BB6A47@keescook>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Tue, 16 May 2023 15:17:09 -0700
-Message-ID: <CALmYWFteCd+h+tn+LmgTpN9Ld5=qAMMQ34=b1KCoE3OSBun+DQ@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-To:     Kees Cook <keescook@chromium.org>
-Cc:     jeffxu@chromium.org, dave.hansen@intel.com, luto@kernel.org,
-        jorgelo@chromium.org, groeck@chromium.org, jannh@google.com,
-        sroettger@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=3N-_S7HmHMGHqhwlQE4A:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 1:08=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
-rote:
->
-> On Mon, May 15, 2023 at 01:05:46PM +0000, jeffxu@chromium.org wrote:
-> > This patch introduces a new flag, PKEY_ENFORCE_API, to the pkey_alloc()
-> > function. When a PKEY is created with this flag, it is enforced that an=
-y
-> > thread that wants to make changes to the memory mapping (such as mprote=
-ct)
-> > of the memory must have write access to the PKEY. PKEYs created without
-> > this flag will continue to work as they do now, for backwards
-> > compatibility.
-> >
-> > Only PKEY created from user space can have the new flag set, the PKEY
-> > allocated by the kernel internally will not have it. In other words,
-> > ARCH_DEFAULT_PKEY(0) and execute_only_pkey won=E2=80=99t have this flag=
- set,
-> > and continue work as today.
->
-> Cool! Yeah, this looks like it could become quite useful. I assume
-> V8 folks are on board with this API, etc?
->
-> > This set of patch covers mprotect/munmap, I plan to work on other
-> > syscalls after this.
->
-> Which ones are on your list currently?
->
-mprotect/mprotect_pkey/munmap
-mmap/mremap
-madvice,brk,sbrk
-
-Thanks!
--Jeff Xu
-
-> --
-> Kees Cook
+DQpPbiAxNy8wNS8yMyAwMTo1NywgTGludXMgV2FsbGVpaiB3cm90ZToNCj4gT24gTW9uLCBNYXkg
+MTUsIDIwMjMgYXQgMTI6MjfigK9BTSBDaHJpcyBQYWNraGFtDQo+IDxDaHJpcy5QYWNraGFtQGFs
+bGllZHRlbGVzaXMuY28ubno+IHdyb3RlOg0KPg0KPj4gSW4gbXkgb3JpZ2luYWwgY2FzZSB3aGlj
+aCBpcyBhIGtlcm5lbCBtb2R1bGUgdGhhdCBleHBvcnRzIGEgR1BJTyBmb3INCj4+IHVzZXJzcGFj
+ZSB1c2luZyBncGlvZF9leHBvcnQoKQ0KPiBXZSBzaG91bGQgbm90IGFkZCBuZXcgdXNlcnMgZm9y
+IHRoYXQgQVBJIGFzIGl0IGluY3JlYXNlIHRoZSB1c2FnZQ0KPiBvZiB0aGUgc3lzZnMgQUJJIGJ1
+dCBpZiBpdCdzIGFuIGV4aXN0aW5nIGluLXRyZWUgdXNlY2FzZSBJIGJ1eSBpdC4NCj4NCj4+IFRo
+ZSBjcnV4IG9mIHRoZSBwcm9ibGVtIGlzIHRoYXQgdGhlIGlycV9kZXNjIGlzIGNyZWF0ZWQgd2hl
+biBpdCBoYXNuJ3QNCj4+IGJlZW4gcmVxdWVzdGVkLg0KPiBUaGUgcmlnaHQgc29sdXRpb24gdG8g
+bWUgc2VlbXMgdG8gYmUgdG8gbm90IHVzZSBncGlvZF9leHBvcnQoKQ0KPiBhbmQgbm90IHVzZSBz
+eXNmcyBUQkguDQoNClRoYXQncyBub3QgcmVhbGx5IGEgZmVhc2libGUgc29sdXRpb24uIEknbSBk
+ZWFsaW5nIHdpdGggYXBwbGljYXRpb24gY29kZSANCnRoYXQgaGFzIGJlZW4gaGFwcGlseSB1c2lu
+ZyB0aGUgc3lzZnMgaW50ZXJmYWNlIGZvciBtYW55IHllYXJzLg0KDQpJIGFjdHVhbGx5IGRpZCBs
+b29rIGF0IGdldHRpbmcgdGhhdCBjb2RlIHVwZGF0ZWQgdG8gdXNlIGxpYmdwaW8gZWFybGllciAN
+CnRoaXMgeWVhciBidXQgZm91bmQgdGhlIEFQSSB3YXMgaW4gYSBzdGF0ZSBvZiBmbHV4IGFuZCBJ
+IHdhc24ndCBnb2luZyB0byANCnJlY29tbWVuZCByZS13cml0aW5nIHRoZSBhcHBsaWNhdGlvbiBj
+b2RlIHRvIHVzZSBsaWJncGlvIGlmIEkga25ldyB0aGUgDQpBUEkgd2FzIGdvaW5nIHRvIGNoYW5n
+ZSBhbmQgd2UnZCBoYXZlIHRvIHJlLXdyaXRlIGl0IGFnYWluLg0KDQpFdmVuIG5vdyB3aXRoIHRo
+ZSAyLjAuMSBsaWJncGlvIHRoZXJlIGRvZXNuJ3Qgc2VlbSB0byBiZSBhIHdheSBvZiBhc2tpbmcg
+DQphYm91dCBqdXN0IEdQSU8gbGluZXMgaW4gdGhlIHN5c3RlbSwgYXBwbGljYXRpb24gY29kZSB3
+b3VsZCBzdGlsbCBuZWVkIA0KdG8gb3BlbiBldmVyeSAvZGV2L2dwaW9jaGlwTiBkZXZpY2UgYW5k
+IGFzayB3aGF0IGxpbmVzIGFyZSBvbiB0aGUgY2hpcCANCmFuZCBrZWVwIHRoZSBmZHMgb3BlbiBm
+b3IgdGhlIGNoaXBzIHRoYXQgaGF2ZSBsaW5lcyB0aGUgYXBwbGljYXRpb24gDQpjYXJlcyBhYm91
+dCBidXQgbWFrZSBzdXJlIHRvIGNsb3NlIHRoZSBmZCBmb3IgdGhlIG9uZXMgdGhhdCBkb24ndC4g
+U28gDQpub3cgdGhlIGFwcGxpY2F0aW9uIGNvZGUgaGFzIHRvIGNhcmUgYWJvdXQgR1BJTyBjaGlw
+cyBpbiBhZGRpdGlvbiB0byB0aGUgDQpHUElPIGxpbmVzLg0KDQo+PiBJbiBzb21lIGNhc2VzIHdl
+IGtub3cgdGhlIEdQSU8gcGluIGlzIGFuIG91dHB1dCBzbyB3ZQ0KPj4gY291bGQgYXZvaWQgaXQs
+IGluIG90aGVycyB3ZSBjb3VsZCBkZWxheSB0aGUgY3JlYXRpb24gdW50aWwgYW4gaW50ZXJydXB0
+DQo+PiBpcyBhY3R1YWxseSByZXF1ZXN0ZWQgKHdoaWNoIGlzIHdoYXQgSSdtIGF0dGVtcHRpbmcg
+dG8gZG8pLg0KPiBZZWFoIEkgZ3Vlc3MuIElmIHdlIHdhbm5hIGtlZXAgcGFwZXJpbmcgb3ZlciBp
+c3N1ZXMgY3JlYXRlZA0KPiBieSB0aGUgc3lzZnMgQUJJLg0KDQpTbyB0aGF0IGFzaWRlLiBJcyBp
+cyByZWFzb25hYmxlIHRvIGV4cGVjdCB0aGF0IGdwaW9faXNfdmlzaWJsZSgpIHNob3VsZCANCm5v
+dCBoYXZlIGFueSBzaWRlIGVmZmVjdHM/DQoNCkkgc3RpbGwgYmVsaWV2ZSB0aGF0IHRoaXMgY2hh
+bmdlIGlzIGluIHRoZSByaWdodCBkaXJlY3Rpb24gYWx0aG91Z2ggDQpjbGVhcmx5IEkgbmVlZCB0
+byBwcm92aWRlIGEgYmV0dGVyIGV4cGxhbmF0aW9uIG9mIHdoeSBJIHRoaW5rIHRoYXQgaXMgDQp0
+aGUgY2FzZS4gQW5kIHRoZXJlIG1pZ2h0IGJlIGEgYmV0dGVyIHdheSBvZiBhY2hpZXZpbmcgbXkg
+Z29hbCBvZiBub3QgDQp0cmlnZ2VyaW5nIHRoZSB3YXJuaW5nIG9uIGtleGVjIChjZXJ0YWlubHkg
+bXkgaW5pdGlhbCBlZmZvcnQgd2FzIHdheSBvZmYgDQp0aGUgbWFyaykuDQoNCj4NCj4gWW91cnMs
+DQo+IExpbnVzIFdhbGxlaWo=
