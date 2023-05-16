@@ -2,180 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB214705728
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D044770572A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjEPTeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
+        id S229869AbjEPTen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjEPTeP (ORCPT
+        with ESMTP id S229458AbjEPTel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:34:15 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C743C14
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:34:13 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64384274895so10362525b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684265653; x=1686857653;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NjomB45/tUXiCEV6Zx/tTP1f+pkWwWrPq8cCPi1RJqc=;
-        b=bNHc1U0CtPLI3FNYS2/3S7VOUmvNc8ETG2uTFHiP/LSmRcJAmNmEa1HQKz+0QsyCYV
-         3LJuktipJLdpM/MdCXUc32xdnPqgSUNSmKg5rGOpcm325DRNUYPUPtaRhkMspnvwt+oR
-         bB+y6nAPpHmohxYRaYqX0u/i97y1iy2CyL9sQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684265653; x=1686857653;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NjomB45/tUXiCEV6Zx/tTP1f+pkWwWrPq8cCPi1RJqc=;
-        b=d5bIoDBzRHj65KBojGhbBD0ArRHAMKH7HcIjAQt6Hk9vxBexw5CXc2EWdfAutxbdna
-         xy1uGNmhFGwDZZLHJYkSBfN7eBEzos6CXdF6MzrAoZcQR2QRwY8vTv+0rF8kw7KbWvUQ
-         IjtDJ8ViBNiXMLoDM/GS3bhkGLG9jqJf/VscmwGKqn+T6rmOiQSdrVe7wKV2wQ16fBDb
-         g2vpVoVaegFScVIDamfe8VL4mBg04kqswq/+Z/lbKzF/Pdh+eux3XqfYItCIB2Y4JeFV
-         rqGmtcce67Md72uRqEFDaOHwAhUsXB5Jm++wtdBd6w4dl4vcamOQqFkY9oNKAQgEtQRD
-         NYeQ==
-X-Gm-Message-State: AC+VfDxL+IxPCxKgOiV/YkpPFroalFMmDt4QMR8a6nb5uncgVH6iP+O+
-        kCchQNmTbwMP/uAJrGDd1OyKXQ==
-X-Google-Smtp-Source: ACHHUZ58B7WESNKne+9oMKYnTHer8L35nMXOvyVf4ZrSBq07pY0pLhMKLIfNUzXFqoCSIzJ7rgsnDw==
-X-Received: by 2002:a05:6a00:1141:b0:64a:ff32:7349 with SMTP id b1-20020a056a00114100b0064aff327349mr16158832pfm.32.1684265652878;
-        Tue, 16 May 2023 12:34:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g19-20020aa78753000000b00634b91326a9sm14259716pfo.143.2023.05.16.12.34.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 12:34:12 -0700 (PDT)
-Date:   Tue, 16 May 2023 12:34:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "GONG, Ruiqi" <gongruiqi1@huawei.com>, Jann Horn <jannh@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        kasan-dev@googlegroups.com, Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: Re: [PATCH RFC v2] Randomized slab caches for kmalloc()
-Message-ID: <202305161204.CB4A87C13@keescook>
-References: <20230508075507.1720950-1-gongruiqi1@huawei.com>
+        Tue, 16 May 2023 15:34:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31673C14;
+        Tue, 16 May 2023 12:34:37 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4EEF14A9;
+        Tue, 16 May 2023 21:34:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1684265664;
+        bh=vD80TzppvxoCyqd+8/aeybtXUwrrIB5HylIddF58t+w=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=h5nxgy0YpdoD6W48hvSi0nTbiAsy+NTIckedqI8fvnsOWng7sjJYfKwdforRtG5tO
+         WF172v862NgT2z4VEh0meU2begVV5fCOUWwqjSItNpD0lE3gWhhtdj0nDbAOQ91SIp
+         AHvcbhZ8evkkVagBEwTBPhYDrldkL0TZc9q3dmE4=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508075507.1720950-1-gongruiqi1@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
+References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
+Subject: Re: [PATCH RFC v2 0/6] media: v4l2-ctrls: add controls for complex lens controller devices
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     libcamera-devel@lists.libcamera.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Riesch <michael.riesch@wolfvision.net>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Date:   Tue, 16 May 2023 20:34:32 +0100
+Message-ID: <168426567274.727956.12078149879172832940@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For new CCs, the start of this thread is here[0].
+Hi Michael
 
-On Mon, May 08, 2023 at 03:55:07PM +0800, GONG, Ruiqi wrote:
-> When exploiting memory vulnerabilities, "heap spraying" is a common
-> technique targeting those related to dynamic memory allocation (i.e. the
-> "heap"), and it plays an important role in a successful exploitation.
-> Basically, it is to overwrite the memory area of vulnerable object by
-> triggering allocation in other subsystems or modules and therefore
-> getting a reference to the targeted memory location. It's usable on
-> various types of vulnerablity including use after free (UAF), heap out-
-> of-bound write and etc.
+Quoting Michael Riesch (2023-04-25 10:45:10)
+> Hi all,
+>=20
+> This patch series aims to add support for complex lens controllers in V4L=
+2.
+> Complex lens controllers usually feature one focus lens and one (or more)
+> zoom lens(es), which are driven by motors (e.g., stepper motors). As a
+> consequence, a few crucial differences to simple lens controllers (such as
+> voice coil motor (VCM) drivers, which are already well supported in V4L2)
+> arise:
+>=20
+>  - Focus and zoom are slow.
+>=20
+> Compared to a simple VCM driver, which reacts almost instantaneously, the
+> motors that control the lens groups may require some time to reach their
+> target position. Therefore, the control process in user space needs
+> to receive feedback on the current status of each lens group, such as the
+> current position and whether or not the lens group is moving. Patch 3/6
+> adds volatile and read-only status controls for each lens group.
+>=20
+>  - The velocity of focus and zoom can be selected.
+>=20
+> In contrast to a simple VCM driver, the motors can move at different
+> velocities. Since the produced noise depends on the velocity, the
+> control process may want to optimize the chosen velocity. Also, some auto
+> focus algorithms use different velocities in different phases (e.g., a
+> coarse and fast scan vs. a slow and precise scan). Patch 4/6 adds speed
+> controls for the focus lens group and the zoom lens group.
+>=20
+>  - Calibration may be required.
+>=20
+> Since moving mechanical parts are involved, calibration is most likely
+> necessary. Patch 5/6 introduces controls to control calibration procedure=
+s.
+>=20
+> In the scope of calibration, the relation between the lens positions may =
+be
+> fine-tuned. This requires the ability to control the individual lenses and
+> gather feedback on their current status. Patch 6/6 introduces a pair of
+> controls for five zoom lenses. (Five is a placeholder here. The most
+> complex objective we had at hand happened to feature five zoom lenses.)
 
-I heartily agree we need some better approaches to deal with UAF, and
-by extension, heap spraying.
+I realise the 'five' is a bit arbitrary at the moment. Have you looked
+at if it's possible to expose each lens as a distinct subdevice?
 
-> There are (at least) two reasons why the heap can be sprayed: 1) generic
-> slab caches are shared among different subsystems and modules, and
-> 2) dedicated slab caches could be merged with the generic ones.
-> Currently these two factors cannot be prevented at a low cost: the first
-> one is a widely used memory allocation mechanism, and shutting down slab
-> merging completely via `slub_nomerge` would be overkill.
-> 
-> To efficiently prevent heap spraying, we propose the following approach:
-> to create multiple copies of generic slab caches that will never be
-> merged, and random one of them will be used at allocation. The random
-> selection is based on the address of code that calls `kmalloc()`, which
-> means it is static at runtime (rather than dynamically determined at
-> each time of allocation, which could be bypassed by repeatedly spraying
-> in brute force). In this way, the vulnerable object and memory allocated
-> in other subsystems and modules will (most probably) be on different
-> slab caches, which prevents the object from being sprayed.
+That would give full control over each one at least. I'm not sure yet
+what the implications are with the 'group' though. I would expect then
+the media graph could show links/connections sequentially between each
+lens portraying the path that light travels through them. Are they
+always linear? (or maybe the better word is sequential?) or do they
+arrange in different orders ... I hope there's not something as complex
+as:
 
-This is a nice balance between the best option we have now
-("slub_nomerge") and most invasive changes (type-based allocation
-segregation, which requires at least extensive compiler support),
-forcing some caches to be "out of reach".
+  1 -> 2 \
+          6
+  4 -> 5 /=20
+ =20
 
-> 
-> The overhead of performance has been tested on a 40-core x86 server by
-> comparing the results of `perf bench all` between the kernels with and
-> without this patch based on the latest linux-next kernel, which shows
-> minor difference. A subset of benchmarks are listed below:
-> 
-> 			control		experiment (avg of 3 samples)
-> sched/messaging (sec)	0.019		0.019
-> sched/pipe (sec)	5.253		5.340
-> syscall/basic (sec)	0.741		0.742
-> mem/memcpy (GB/sec)	15.258789	14.860495
-> mem/memset (GB/sec)	48.828125	50.431069
-> 
-> The overhead of memory usage was measured by executing `free` after boot
-> on a QEMU VM with 1GB total memory, and as expected, it's positively
-> correlated with # of cache copies:
-> 
-> 		control		4 copies	8 copies	16 copies
-> total		969.8M		968.2M		968.2M		968.2M
-> used		20.0M		21.9M		24.1M		26.7M
-> free		936.9M		933.6M		931.4M		928.6M
-> available	932.2M		928.8M		926.6M		923.9M
+>=20
+> On the user space side, it is envisaged that libcamera operates the newly
+> introduced controls. Please note that no tests with libcamera have been
+> carried out yet, the integration will be discussed after the first round =
+of
+> feedback to this RFC.
 
-Great to see the impact: it's relatively tiny. Nice!
+If they are split into individual components then at least libcamera can
+identify the arrangement from the media graph?
 
-Back when we looked at cache quarantines, Jann pointed out that it
-was still possible to perform heap spraying -- it just needed more
-allocations. In this case, I think that's addressed (probabilistically)
-by making it less likely that a cache where a UAF is reachable is merged
-with something with strong exploitation primitives (e.g. msgsnd).
+Will you expect applications to manage each lens manually? or would this
+all be handled within libcamera (perhaps in some custom IPA?)
 
-In light of all the UAF attack/defense breakdowns in Jann's blog
-post[1], I'm curious where this defense lands. It seems like it would
-keep the primitives described there (i.e. "upgrading" the heap spray
-into a page table "type confusion") would be addressed probabilistically
-just like any other style of attack. Jann, what do you think, and how
-does it compare to the KCTF work[2] you've been doing?
 
-In addition to this work, I'd like to see something like the kmalloc
-caches, but for kmem_cache_alloc(), where a dedicated cache of
-variably-sized allocations can be managed. With that, we can split off
-_dedicated_ caches where we know there are strong exploitation
-primitives (i.e. msgsnd, etc). Then we can carve off known weak heap
-allocation caches as well as make merging probabilistically harder.
-
-I imagine it would be possible to then split this series into two
-halves: one that creates the "make arbitrary-sized caches" API, and the
-second that applies that to kmalloc globally (as done here).
-
-> 
-> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+> Version 2 of this series include two new patches that fix mistakes in the
+> documentation of existing controls. These mistakes have been pointed out
+> during the review phase of the first iteration of this series.
+>=20
+> Looking forward to your comments!
+>=20
 > ---
-> 
-> v2:
->   - Use hash_64() and a per-boot random seed to select kmalloc() caches.
-
-This is good: I was hoping there would be something to make it per-boot
-randomized beyond just compile-time.
-
-So, yes, I think this is worth it, but I'd like to see what design holes
-Jann can poke in it first. :)
-
--Kees
-
-[0] https://lore.kernel.org/lkml/20230508075507.1720950-1-gongruiqi1@huawei.com/
-[1] https://googleprojectzero.blogspot.com/2021/10/how-simple-linux-kernel-memory.html
-[2] https://github.com/thejh/linux/commit/a87ad16046f6f7fd61080ebfb93753366466b761
-
--- 
-Kees Cook
+> Changes in v2:
+> - add patch 1/6 that fixes unit description of V4L2_CID_FOCUS_ABSOLUTE
+> - add patch 2/6 that clarifies when to implement V4L2_CID_FOCUS_RELATIVE
+> - remove compound controls _STATUS (struct) and add controls _STATUS
+>   (bitmask) and _CURRENT (integer) instead
+> - fix V4L2_CID_LENS_CALIB_STATUS documentation
+> - Link to v1: https://lore.kernel.org/r/20230406-feature-controls-lens-v1=
+-0-543189a680de@wolfvision.net
+>=20
+> ---
+> Michael Riesch (6):
+>       media: v4l2-ctrls: fix documentation of V4L2_CID_FOCUS_ABSOLUTE unit
+>       media: v4l2-ctrls: clarify documentation of V4L2_CID_FOCUS_RELATIVE
+>       media: v4l2-ctrls: add lens group status controls for zoom and focus
+>       media: v4l2-ctrls: add lens group speed controls for zoom and focus
+>       media: v4l2-ctrls: add lens calibration controls
+>       media: v4l2-ctrls: add controls for individual zoom lenses
+>=20
+>  .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 129 +++++++++++++++=
++++++-
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  41 +++++++
+>  include/uapi/linux/v4l2-controls.h                 |  41 +++++++
+>  3 files changed, 208 insertions(+), 3 deletions(-)
+> ---
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> change-id: 20230406-feature-controls-lens-b85575d3443a
+>=20
+> Best regards,
+> --=20
+> Michael Riesch <michael.riesch@wolfvision.net>
+>
