@@ -2,173 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D54570588A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C737570588F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjEPUQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S229595AbjEPURp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEPUQx (ORCPT
+        with ESMTP id S229521AbjEPURn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:16:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EFE1BE;
-        Tue, 16 May 2023 13:16:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9BD763D86;
-        Tue, 16 May 2023 20:16:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F241FC433D2;
-        Tue, 16 May 2023 20:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684268205;
-        bh=TX21/LnZTnFYt/KzhqOgAcDna4xbf0dO5gIfq+6X2d0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CPkZpwmAyljr5hYRCZp41+IlxyJGnUUUY2PFiF8wDiKwZlCtSQKCOXwYYENGVaQOc
-         kvHM0N4e7sd4jRj4SgVz4Or7IWVEZSpj3dKPvEBPPbqIRMKkapVb/VK6dVHdir8CGJ
-         Tape4j6t+vE1wKyXLHUPVZaF4P574p+OSCURexJrpvkzU0lqOp6hlJ1WXcBJW4rJig
-         MqsWP57fV+6O+HUmAoW5JTGb2UtsyCIXdQDqZdQY8/Q0THfo8oQj5vvCq2WmKognTY
-         inkeYx7MhkBfJZYpqb1EfecGvUzuYE2cpc16bIEGu5FMyouEuCR/PZNwdrxc+TsgDf
-         lXKzkYBdIN+8Q==
-Date:   Tue, 16 May 2023 14:17:32 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] media: venus: Replace one-element arrays with
- flexible-array members
-Message-ID: <ZGPk3PpvYzjD1+0/@work>
+        Tue, 16 May 2023 16:17:43 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948141BE2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:17:36 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-643990c5319so10583301b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684268256; x=1686860256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YJEJEgHLDw3Nrf2OYxAw65J2/yLmkvxFlpYWiAtQcmA=;
+        b=HnGWjuYOAI8Ajbhmofm3GokXhD5YgSqiF6UQCDCLlwnbaHtP73wUieT9TUP2SHAOuO
+         90idaRSc566+i6YTMHc7sZ415zRHQJMrUOZPDCys53qkJdWi3b5hDQ/MN+RLydISIgE2
+         GwdnyrHrai/aOeaCCSDIFQHmxVT8/mRzDgfCA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684268256; x=1686860256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YJEJEgHLDw3Nrf2OYxAw65J2/yLmkvxFlpYWiAtQcmA=;
+        b=jnV1b+y4/bU3EV2rKljCamDF/i5Bu6PZPByjRwgHNXGcb5CF9eYSOk5SM3m2SFjKLp
+         /f8l+TzHM0yUsPLotN3/gpDtzvOJtovTBTpnI5B2RgWqsdwQq1Ei3Jc7ucDAyIcauu+d
+         jpJv7T676kfy7z8D03/20zrX9Ox/cDVk31ed8Rs9aMAp/MTPc7KwEevsKwSY2w2ayGE2
+         Igbb3P05i5S2ttLfvBL8RcCYe8cYEflYk7Q9B1c5CvSUk3UJ8Cb8j5o6c5UOkguPIWlW
+         ARD7/bXdVhH9nL8ellqqs3lcB6n8JjfLPkxMdf9rJ1bVfZzNuc4IHscpkX9tvzME7Mni
+         4t5Q==
+X-Gm-Message-State: AC+VfDx22TrQAPR40AY2IM+Xu9sbh/frscFIQPzK9s5vcNXvDrHRxG2A
+        SNyXjOgrvuZHCsA9C4x3iZ+NkQ==
+X-Google-Smtp-Source: ACHHUZ6Oynxwi7sloZ3Ypg7XgSCwwZO30bG7FPKKxxgXTbfRZw5iZB64xYqMeanZeGOcTKnSKanXQg==
+X-Received: by 2002:a05:6a00:189a:b0:646:7234:cbfc with SMTP id x26-20020a056a00189a00b006467234cbfcmr43435667pfh.27.1684268255812;
+        Tue, 16 May 2023 13:17:35 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id q26-20020a62e11a000000b0063d29df1589sm13747558pfh.136.2023.05.16.13.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 13:17:34 -0700 (PDT)
+Date:   Tue, 16 May 2023 13:17:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Michael McCracken <michael.mccracken@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        serge@hallyn.com, tycho@tycho.pizza,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] sysctl: add config to make randomize_va_space RO
+Message-ID: <202305161312.078E5E7@keescook>
+References: <20230504213002.56803-1-michael.mccracken@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230504213002.56803-1-michael.mccracken@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element arrays with flexible-array
-members in multiple structures, and refactor the rest of the code,
-accordingly.
+On Thu, May 04, 2023 at 02:30:02PM -0700, Michael McCracken wrote:
+> Add config RO_RANDMAP_SYSCTL to set the mode of the randomize_va_space
+> sysctl to 0444 to disallow all runtime changes. This will prevent
+> accidental changing of this value by a root service.
+> 
+> The config is disabled by default to avoid surprises.
+> 
+> Signed-off-by: Michael McCracken <michael.mccracken@gmail.com>
+> ---
+>  kernel/sysctl.c | 4 ++++
+>  mm/Kconfig      | 7 +++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index bfe53e835524..c5aafb734abe 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -1913,7 +1913,11 @@ static struct ctl_table kern_table[] = {
+>  		.procname	= "randomize_va_space",
+>  		.data		= &randomize_va_space,
+>  		.maxlen		= sizeof(int),
+> +#if defined(CONFIG_RO_RANDMAP_SYSCTL)
+> +		.mode		= 0444,
+> +#else
+>  		.mode		= 0644,
+> +#endif
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+The way we've dealt with this in the past for similarly sensitive
+sysctl variables to was set a "locked" position. (e.g. 0==off, 1==on,
+2==cannot be turned off). In this case, we could make it, 0, 1, 2,
+3==forced on full.
 
-This results in no differences in binary output.
+I note that there is actually no min/max (extra1/extra2) for this sysctl,
+which is itself a bug, IMO. And there is just a magic "> 1" test that
+should be a define or enum:
 
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/291
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/media/platform/qcom/venus/hfi_msgs.c |  4 ++--
- drivers/media/platform/qcom/venus/hfi_msgs.h | 14 +++++++-------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+fs/binfmt_elf.c:        if ((current->flags & PF_RANDOMIZE) && (randomize_va_space > 1)) {
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
-index df96db3761a7..6efd78606d9b 100644
---- a/drivers/media/platform/qcom/venus/hfi_msgs.c
-+++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
-@@ -233,7 +233,7 @@ static void hfi_sys_init_done(struct venus_core *core, struct venus_inst *inst,
- 		goto done;
- 	}
- 
--	rem_bytes = pkt->hdr.size - sizeof(*pkt) + sizeof(u32);
-+	rem_bytes = pkt->hdr.size - sizeof(*pkt);
- 	if (rem_bytes <= 0) {
- 		/* missing property data */
- 		error = HFI_ERR_SYS_INSUFFICIENT_RESOURCES;
-@@ -434,7 +434,7 @@ static void hfi_session_init_done(struct venus_core *core,
- 	if (!IS_V1(core))
- 		goto done;
- 
--	rem_bytes = pkt->shdr.hdr.size - sizeof(*pkt) + sizeof(u32);
-+	rem_bytes = pkt->shdr.hdr.size - sizeof(*pkt);
- 	if (rem_bytes <= 0) {
- 		error = HFI_ERR_SESSION_INSUFFICIENT_RESOURCES;
- 		goto done;
-diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.h b/drivers/media/platform/qcom/venus/hfi_msgs.h
-index 510513697335..8c2e17b0d36f 100644
---- a/drivers/media/platform/qcom/venus/hfi_msgs.h
-+++ b/drivers/media/platform/qcom/venus/hfi_msgs.h
-@@ -50,7 +50,7 @@ struct hfi_msg_event_notify_pkt {
- 	u32 event_id;
- 	u32 event_data1;
- 	u32 event_data2;
--	u32 ext_event_data[1];
-+	u32 ext_event_data[];
- };
- 
- struct hfi_msg_event_release_buffer_ref_pkt {
-@@ -63,7 +63,7 @@ struct hfi_msg_sys_init_done_pkt {
- 	struct hfi_pkt_hdr hdr;
- 	u32 error_type;
- 	u32 num_properties;
--	u32 data[1];
-+	u32 data[];
- };
- 
- struct hfi_msg_sys_pc_prep_done_pkt {
-@@ -81,7 +81,7 @@ struct hfi_msg_session_init_done_pkt {
- 	struct hfi_session_hdr_pkt shdr;
- 	u32 error_type;
- 	u32 num_properties;
--	u32 data[1];
-+	u32 data[];
- };
- 
- struct hfi_msg_session_end_done_pkt {
-@@ -228,7 +228,7 @@ struct hfi_msg_session_parse_sequence_header_done_pkt {
- 	struct hfi_session_hdr_pkt shdr;
- 	u32 error_type;
- 	u32 num_properties;
--	u32 data[1];
-+	u32 data[];
- };
- 
- struct hfi_msg_session_property_info_pkt {
-@@ -247,7 +247,7 @@ struct hfi_msg_session_release_buffers_done_pkt {
- 	struct hfi_session_hdr_pkt shdr;
- 	u32 error_type;
- 	u32 num_buffers;
--	u32 buffer_info[1];
-+	u32 buffer_info[];
- };
- 
- struct hfi_msg_sys_debug_pkt {
-@@ -256,7 +256,7 @@ struct hfi_msg_sys_debug_pkt {
- 	u32 msg_size;
- 	u32 time_stamp_hi;
- 	u32 time_stamp_lo;
--	u8 msg_data[1];
-+	u8 msg_data[];
- };
- 
- struct hfi_msg_sys_coverage_pkt {
-@@ -264,7 +264,7 @@ struct hfi_msg_sys_coverage_pkt {
- 	u32 msg_size;
- 	u32 time_stamp_hi;
- 	u32 time_stamp_lo;
--	u8 msg_data[1];
-+	u8 msg_data[];
- };
- 
- struct venus_core;
+I think much of this should be improved.
+
+Regardless, take a look at yama_dointvec_minmax(), which could, perhaps,
+be generalized and used here.
+
+Then we have a run-time way to manage this bit, without needing full
+kernel rebuilds, etc, etc.
+
+-Kees
+
 -- 
-2.34.1
-
+Kees Cook
