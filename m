@@ -2,168 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3132B705676
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3EC705678
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjEPS5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
+        id S229764AbjEPS6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjEPS5B (ORCPT
+        with ESMTP id S229515AbjEPS6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:57:01 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94120FC;
-        Tue, 16 May 2023 11:56:54 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-4361113bdd1so3085328137.0;
-        Tue, 16 May 2023 11:56:54 -0700 (PDT)
+        Tue, 16 May 2023 14:58:52 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF5ADB;
+        Tue, 16 May 2023 11:58:50 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so13413366a12.2;
+        Tue, 16 May 2023 11:58:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684263413; x=1686855413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cS523aYbO4e916ChocjeGla7otigiG6oGRH6aerVi6E=;
-        b=IQ+G+l3pqZxLYOX8IPggT6ikOIQeNcOW0MgCIFe9V7ZCiC0Ck2LrMTyo3mb2VVor3v
-         IubVAT590MXAU93bKMoVo29KuFxW8dj+S5hgDcT1NF9nhQdFBvOMsUaQ1a3whUNJ63Nr
-         y5Wsb+LZcxVu3VXV9tu3g3IN2dqisJsh51uuZHB7tPMkSAZWedmTz0DPsKQ3GM6rw04u
-         ZjaLo7voiI5VfdhB4RqgOf1wON1a6imNFnZ193hHTL6SjMbGYSIdAhCXxxUJmozren/z
-         vuNZ6792hOLtrZwqz2Lc+Ds8M4claO0ud4LP3uXhHYYZHvd/Mr1tV4y3R+nawsI8XM+Y
-         I4Yg==
+        d=gmail.com; s=20221208; t=1684263530; x=1686855530;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7EO4n2Laz1C8qlwm0BP2KlWTOgG8jnlCRu8xYXVkBlM=;
+        b=MLdDUCoUXgY3VBc/rG1vVKVuaE1Q0o8/k3HGC2dyqrjZRlmTTkH8Lg1E4Zi0qE9ko4
+         AKGMH3/QCg70BRCEqyjyq2Z5GdWjCcpI+BQrdiKVNnts3+LlsBxk7F5NmILLGJzWznv/
+         E7M+lc52SvCc9pyjHrxtvETLbOK5xHSbEu3fbBwgRnbp5KVP8gqEd6IrkTZbIOWHq/53
+         3rp/VrPbNU1r+KwhSRLM7n+EOiJJR42SKrEkve/XkFNIAqDc8VT6bdHYRta0TcpK97cL
+         qGEP8lszoL3GfSkb3b63V2grpmNueF4f5omuGTEbcnW1sSaD5py89A3zLVXy4snIAx6u
+         7Nnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684263413; x=1686855413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cS523aYbO4e916ChocjeGla7otigiG6oGRH6aerVi6E=;
-        b=g+tH0Z3X+oUyyibKRMqEeWWkhlvOYUCL5u1lGiHeH68rOcbsIOnbTAFZ6EILtgq9Xf
-         WmNapvOC+XoiYdpS6GbgtDMw4GN9oUIRW37Ryr+yMw78RX75FxugVbexEYguN4OBopT3
-         F26ZKPK5f+dg430LiIbWGi1qd9Q1SjZbeUbLy+qhoEGLZ7qXMUNdkn/HlpwdiGsw97fx
-         sTIypkzuDX0eAGSoO7PEqLLyQFH9anBvZ9QKMg6l5/sUibG+ckD6avzkVzUdKZUsYtLu
-         u/8Uprn/267U3FQdTJ9c7vl4Hqr4eBZGG11s5jv95SpCSjLaVCDBNg5pgZj7TJwCXBK8
-         /Z4g==
-X-Gm-Message-State: AC+VfDwQri3CyoRuz52QxSOgZt25ZdZVzirk0fNDQICvaBgz1ZF669R0
-        NB854CgUjvcOxds4yEEiCm+MpKtNnLp3eLf86i8=
-X-Google-Smtp-Source: ACHHUZ5jFpCHIZ5yA4Z5hqg6vsxFMrT0cTzv0u6bSfJBG+ebdIT1uItMAzxNrsht6ggMQzMyCPgRjhUTu32c3spDEZc=
-X-Received: by 2002:a67:ff15:0:b0:434:7003:8b55 with SMTP id
- v21-20020a67ff15000000b0043470038b55mr16871299vsp.21.1684263413438; Tue, 16
- May 2023 11:56:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684263530; x=1686855530;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7EO4n2Laz1C8qlwm0BP2KlWTOgG8jnlCRu8xYXVkBlM=;
+        b=K3eLK4DhUO6pctd0EKX6Mb9kMRJPHXUfXVg5DxftxG44Lw/gjzKKvBDcQkdRZVjbIe
+         jMZ77yC42MPDCuPRkkZTs1Z+iC9NmYaK1p6DhGucGb3EnNdcFiiuYCPqZ2fyFDvoKJ9L
+         7yPdwaRe7dueBEaDXb1LDs6P5x1dTuGNeIA9AaZHcguYN2bTgsgdclMs19hwtZF0/gdi
+         aNkqVIbjRm/b2Yj3OwM0A02D+CcO4O+A8RyZoQuSarUn2ai128MsrIYxmmej09qpQOOn
+         S8GXHTChuMO/s7JVE1l81XgEkZM/dxaqlUPR8k/MVhK0vp1dP9+0MIJsxwmUq8zLDQ/5
+         MjZg==
+X-Gm-Message-State: AC+VfDwSYH0+/0tIguEFmquk0O8m2rlFSssIu+YqQgNJmGynGreCr8Oh
+        KPHlQC378NjEsTLKmW9E0kg=
+X-Google-Smtp-Source: ACHHUZ5CUsECtgNKu55O5QVrBpZTCG2cVdRZpXkmGOKliZK8PRC4JUHzZkvrgQg1GcCsCLTIZ6wUaQ==
+X-Received: by 2002:a05:6a21:6d8b:b0:104:961d:9e6d with SMTP id wl11-20020a056a216d8b00b00104961d9e6dmr18591524pzb.37.1684263530149;
+        Tue, 16 May 2023 11:58:50 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m26-20020aa78a1a000000b0063b7f3250e9sm13836231pfa.7.2023.05.16.11.58.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 11:58:49 -0700 (PDT)
+Message-ID: <d0543f48-6f0b-58e0-cc18-695a28c493fc@gmail.com>
+Date:   Tue, 16 May 2023 11:58:47 -0700
 MIME-Version: 1.0
-References: <20230516141619.2160800-1-chengzhihao1@huawei.com> <20230516141619.2160800-4-chengzhihao1@huawei.com>
-In-Reply-To: <20230516141619.2160800-4-chengzhihao1@huawei.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 16 May 2023 21:56:42 +0300
-Message-ID: <CAOQ4uxj32Vuxb+8WwwnK4+2e5VXsscfRkja+paktP=HNTJeL3w@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] ovl: get_acl: Fix null pointer dereference at
- realinode in rcu-walk mode
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     miklos@szeredi.hu, brauner@kernel.org,
-        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new
+ binding
+Content-Language: en-US
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        liao jaime <jaimeliao.tw@gmail.com>,
+        "William (Zhenghao) Zhang" <william.zhang@broadcom.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAAQoYRm3766SG7+VuwVzu_xH8aWihoKWMEp8xQGNgJ6oOtC9+g@mail.gmail.com>
+ <CAAQoYRmXdMp7b2r+yCRUtGrbfQH-Cb8gMAVo7YscuQEM5kgajw@mail.gmail.com>
+ <CAKR-sGdiLzZ7iVbLmz1uPwYoUXQZ2qGwmCBAq_-OKXfVT=Pj-A@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAKR-sGdiLzZ7iVbLmz1uPwYoUXQZ2qGwmCBAq_-OKXfVT=Pj-A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 5:19=E2=80=AFPM Zhihao Cheng <chengzhihao1@huawei.c=
-om> wrote:
->
-> Following process:
->          P1                     P2
->  path_openat
->   link_path_walk
->    may_lookup
->     inode_permission(rcu)
->      ovl_permission
->       acl_permission_check
->        check_acl
->         get_cached_acl_rcu
->          ovl_get_inode_acl
->           realinode =3D ovl_inode_real(ovl_inode)
->                               drop_cache
->                                __dentry_kill(ovl_dentry)
->                                 iput(ovl_inode)
->                                  ovl_destroy_inode(ovl_inode)
->                                   dput(oi->__upperdentry)
->                                    dentry_kill(upperdentry)
->                                     dentry_unlink_inode
->                                      upperdentry->d_inode =3D NULL
->             ovl_inode_upper
->              upperdentry =3D ovl_i_dentry_upper(ovl_inode)
->              d_inode(upperdentry) // returns NULL
->           IS_POSIXACL(realinode) // NULL pointer dereference
-> , will trigger an null pointer dereference at realinode:
->   [  205.472797] BUG: kernel NULL pointer dereference, address:
->                  0000000000000028
->   [  205.476701] CPU: 2 PID: 2713 Comm: ls Not tainted
->                  6.3.0-12064-g2edfa098e750-dirty #1216
->   [  205.478754] RIP: 0010:do_ovl_get_acl+0x5d/0x300
->   [  205.489584] Call Trace:
->   [  205.489812]  <TASK>
->   [  205.490014]  ovl_get_inode_acl+0x26/0x30
->   [  205.490466]  get_cached_acl_rcu+0x61/0xa0
->   [  205.490908]  generic_permission+0x1bf/0x4e0
->   [  205.491447]  ovl_permission+0x79/0x1b0
->   [  205.491917]  inode_permission+0x15e/0x2c0
->   [  205.492425]  link_path_walk+0x115/0x550
->   [  205.493311]  path_lookupat.isra.0+0xb2/0x200
->   [  205.493803]  filename_lookup+0xda/0x240
->   [  205.495747]  vfs_fstatat+0x7b/0xb0
->
-> Fetch a reproducer in [Link].
->
-> Use the helper ovl_i_path_realinode() to get realinode and then do
-> non-nullptr checking.
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217404
-> Fixes: 332f606b32b6 ("ovl: enable RCU'd ->get_acl()")
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> Suggested-by: Christian Brauner <brauner@kernel.org>
-> Suggested-by: Amir Goldstein <amir73il@gmail.com>
++William,
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+On 5/16/23 11:55, Álvaro Fernández Rojas wrote:
+> Hi Jaime,
+> 
+> I've reproduced the issue on a Comtrend VR-3032u (MX30LF1G08AA). After
+> forcing it to check block protection (it's not supported on that
+> device), the NAND controller stops reading/writing anything.
+> 
+> @Florian is it possible that low level ops (GET_FEATURES/SET_FEATURES)
+> aren't supported on BCM63268 NAND controllers and this is causing the
+> issue?
 
-> ---
->  fs/overlayfs/inode.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
-> index ca56b1328a2c..e7e888dea634 100644
-> --- a/fs/overlayfs/inode.c
-> +++ b/fs/overlayfs/inode.c
-> @@ -558,20 +558,20 @@ struct posix_acl *do_ovl_get_acl(struct mnt_idmap *=
-idmap,
->                                  struct inode *inode, int type,
->                                  bool rcu, bool noperm)
->  {
-> -       struct inode *realinode =3D ovl_inode_real(inode);
-> +       struct inode *realinode;
->         struct posix_acl *acl;
->         struct path realpath;
->
-> -       if (!IS_POSIXACL(realinode))
-> -               return NULL;
-> -
->         /* Careful in RCU walk mode */
-> -       ovl_i_path_real(inode, &realpath);
-> -       if (!realpath.dentry) {
-> +       realinode =3D ovl_i_path_real(inode, &realpath);
-> +       if (!realinode) {
->                 WARN_ON(!rcu);
->                 return ERR_PTR(-ECHILD);
->         }
->
-> +       if (!IS_POSIXACL(realinode))
-> +               return NULL;
-> +
->         if (rcu) {
->                 /*
->                  * If the layer is idmapped drop out of RCU path walk
-> --
-> 2.39.2
->
+Yes, this looks like what we have seen as well even with newer NAND 
+controllers actually. Would it be possible to obtain a full log from 
+either of you?
+
+William, is this something you have seen before as well?
+
+> 
+> Best regards,
+> Álvaro.
+> 
+> El mié, 26 abr 2023 a las 9:24, liao jaime (<jaimeliao.tw@gmail.com>) escribió:
+>>
+>> Hi Álvaro
+>>
+>> In nand_scan_tail(), each manufacturer init function call will be execute.
+>> In macronix_nand_init(), block protect will be execute after flash detect.
+>> I have validate MX30LF1G18AC in Linux kernel v5.15.
+>> I didn't got situation "device hangs"  on my side.
+>> BP is to prevent incorrect operations.
+>> Please check the controller settings for tracing this issue.
+>>
+>> Thanks
+>> Jaime
+>>
+>>>
+>>> Hello YouChing and Jaime,
+>>>
+>>> I still didn't get any feedback from you (or Macronix) on this issue.
+>>> Did you have time to look into it?
+>>>
+>>> Thanks,
+>>> Álvaro.
+>>>
+>>> El vie, 24 mar 2023 a las 18:04, Álvaro Fernández Rojas
+>>> (<noltari@gmail.com>) escribió:
+>>>>
+>>>> Hi Miquèl,
+>>>>
+>>>> 2023-03-24 15:36 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>:
+>>>>> Hi Álvaro,
+>>>>>
+>>>>> + YouChing and Jaime from Macronix
+>>>>> TLDR for them: there is a misbehavior since Mason added block
+>>>>> protection support. Just checking if the blocks are protected seems to
+>>>>> misconfigure the chip entirely, see below. Any hints?
+>>>>
+>>>> Could it be that the NAND is stuck expecting a read 0x00 command which
+>>>> isn’t sent after getting the features?
+>>>>
+>>>>>
+>>>>> noltari@gmail.com wrote on Fri, 24 Mar 2023 15:15:47 +0100:
+>>>>>
+>>>>>> Hi Miquèl,
+>>>>>>
+>>>>>> 2023-03-24 14:45 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>:
+>>>>>>> Hi Álvaro,
+>>>>>>>
+>>>>>>> noltari@gmail.com wrote on Fri, 24 Mar 2023 12:21:11 +0100:
+>>>>>>>
+>>>>>>>> El vie, 24 mar 2023 a las 11:49, Miquel Raynal
+>>>>>>>> (<miquel.raynal@bootlin.com>) escribió:
+>>>>>>>>>
+>>>>>>>>> Hi Álvaro,
+>>>>>>>>>
+>>>>>>>>> noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
+>>>>>>>>>
+>>>>>>>>>> Hi Miquèl,
+>>>>>>>>>>
+>>>>>>>>>> El vie, 24 mar 2023 a las 10:40, Miquel Raynal
+>>>>>>>>>> (<miquel.raynal@bootlin.com>) escribió:
+>>>>>>>>>>>
+>>>>>>>>>>> Hi Álvaro,
+>>>>>>>>>>>
+>>>>>>>>>>> noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
+>>>>>>>>>>>
+>>>>>>>>>>>> Add new "mxic,disable-block-protection" binding documentation.
+>>>>>>>>>>>> This binding allows disabling block protection support for
+>>>>>>>>>>>> those
+>>>>>>>>>>>> devices not
+>>>>>>>>>>>> supporting it.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>   Documentation/devicetree/bindings/mtd/nand-macronix.txt | 3
+>>>>>>>>>>>> +++
+>>>>>>>>>>>>   1 file changed, 3 insertions(+)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git
+>>>>>>>>>>>> a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>>>>>>>>>>>> b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>>>>>>>>>>>> index ffab28a2c4d1..03f65ca32cd3 100644
+>>>>>>>>>>>> --- a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>>>>>>>>>>>> +++ b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
+>>>>>>>>>>>> @@ -16,6 +16,9 @@ in children nodes.
+>>>>>>>>>>>>   Required NAND chip properties in children mode:
+>>>>>>>>>>>>   - randomizer enable: should be "mxic,enable-randomizer-otp"
+>>>>>>>>>>>>
+>>>>>>>>>>>> +Optional NAND chip properties in children mode:
+>>>>>>>>>>>> +- block protection disable: should be
+>>>>>>>>>>>> "mxic,disable-block-protection"
+>>>>>>>>>>>> +
+>>>>>>>>>>>
+>>>>>>>>>>> Besides the fact that nowadays we prefer to see binding
+>>>>>>>>>>> conversions
+>>>>>>>>>>> to
+>>>>>>>>>>> yaml before adding anything, I don't think this will fly.
+>>>>>>>>>>>
+>>>>>>>>>>> I'm not sure exactly what "disable block protection" means, we
+>>>>>>>>>>> already have similar properties like "lock" and
+>>>>>>>>>>> "secure-regions",
+>>>>>>>>>>> not
+>>>>>>>>>>> sure they will fit but I think it's worth checking.
+>>>>>>>>>>
+>>>>>>>>>> As explained in 2/2, commit 03a539c7a118 introduced a regression
+>>>>>>>>>> on
+>>>>>>>>>> Sercomm H500-s (BCM63268) OpenWrt devices with Macronix
+>>>>>>>>>> MX30LF1G18AC
+>>>>>>>>>> which hangs the device.
+>>>>>>>>>>
+>>>>>>>>>> This is the log with block protection disabled:
+>>>>>>>>>> [    0.495831] bcm6368_nand 10000200.nand: there is not valid maps
+>>>>>>>>>> for
+>>>>>>>>>> state default
+>>>>>>>>>> [    0.504995] nand: device found, Manufacturer ID: 0xc2, Chip ID:
+>>>>>>>>>> 0xf1
+>>>>>>>>>> [    0.511526] nand: Macronix MX30LF1G18AC
+>>>>>>>>>> [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+>>>>>>>>>> 2048, OOB size: 64
+>>>>>>>>>> [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB total,
+>>>>>>>>>> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>>>>>>>>>> [    0.535912] Bad block table found at page 65472, version 0x01
+>>>>>>>>>> [    0.544268] Bad block table found at page 65408, version 0x01
+>>>>>>>>>> [    0.954329] 9 fixed-partitions partitions found on MTD device
+>>>>>>>>>> brcmnand.0
+>>>>>>>>>> ...
+>>>>>>>>>>
+>>>>>>>>>> This is the log with block protection enabled:
+>>>>>>>>>> [    0.495095] bcm6368_nand 10000200.nand: there is not valid maps
+>>>>>>>>>> for
+>>>>>>>>>> state default
+>>>>>>>>>> [    0.504249] nand: device found, Manufacturer ID: 0xc2, Chip ID:
+>>>>>>>>>> 0xf1
+>>>>>>>>>> [    0.510772] nand: Macronix MX30LF1G18AC
+>>>>>>>>>> [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+>>>>>>>>>> 2048, OOB size: 64
+>>>>>>>>>> [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB total,
+>>>>>>>>>> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>>>>>>>>>> [    0.539687] Bad block table not found for chip 0
+>>>>>>>>>> [    0.550153] Bad block table not found for chip 0
+>>>>>>>>>> [    0.555069] Scanning device for bad blocks
+>>>>>>>>>> [    0.601213] CPU 1 Unable to handle kernel paging request at
+>>>>>>>>>> virtual
+>>>>>>>>>> address 10277f00, epc == 8039ce70, ra == 8016ad50
+>>>>>>>>>> *** Device hangs ***
+>>>>>>>>>>
+>>>>>>>>>> Enabling macronix_nand_block_protection_support() makes the device
+>>>>>>>>>> unable to detect the bad block table and hangs it when trying to
+>>>>>>>>>> scan
+>>>>>>>>>> for bad blocks.
+>>>>>>>>>
+>>>>>>>>> Please trace nand_macronix.c and look:
+>>>>>>>>> - are the get_features and set_features really supported by the
+>>>>>>>>>    controller driver?
+>>>>>>>>
+>>>>>>>> This is what I could find by debugging:
+>>>>>>>> [    0.494993] bcm6368_nand 10000200.nand: there is not valid maps for
+>>>>>>>> state default
+>>>>>>>> [    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip ID:
+>>>>>>>> 0xf1
+>>>>>>>> [    0.512077] nand: Macronix MX30LF1G18AC
+>>>>>>>> [    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+>>>>>>>> 2048, OOB size: 64
+>>>>>>>> [    0.523928] bcm6368_nand 10000200.nand: detected 128MiB total,
+>>>>>>>> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+>>>>>>>> [    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
+>>>>>>>> [    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
+>>>>>>>> [    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>>>>>>>> [    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
+>>>>>>>> 0x00
+>>>>>>>> [    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>>>>>>>> [    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
+>>>>>>>> 0x00
+>>>>>>>> [    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+>>>>>>>> [    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
+>>>>>>>> 0x00
+>>>>>>>> [    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
+>>>>>>>> [    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
+>>>>>>>> 0x00
+>>>>>>>> [    0.594657] nand: nand_get_features: addr=a0 subfeature_param=[00
+>>>>>>>> 00 00 00] -> 0
+>>>>>>>> [    0.602341] macronix_nand_block_protection_support:
+>>>>>>>> ONFI_FEATURE_ADDR_MXIC_PROTECTION=0
+>>>>>>>> [    0.610548] macronix_nand_block_protection_support: !=
+>>>>>>>> MXIC_BLOCK_PROTECTION_ALL_LOCK
+>>>>>>>> [    0.624760] Bad block table not found for chip 0
+>>>>>>>> [    0.635542] Bad block table not found for chip 0
+>>>>>>>> [    0.640270] Scanning device for bad blocks
+>>>>>>>>
+>>>>>>>> I don't know how to tell if get_features / set_features is really
+>>>>>>>> supported...
+>>>>>>>
+>>>>>>> Looks like your driver does not support exec_op but the core provides a
+>>>>>>> get/set_feature implementation.
+>>>>>>
+>>>>>> According to Florian, low level should be supported on brcmnand
+>>>>>> controllers >= 4.0
+>>>>>> Also:
+>>>>>> https://github.com/nomis/bcm963xx_4.12L.06B_consumer/blob/e2f23ddbb20bf75689372b6e6a5a0dc613f6e313/shared/opensource/include/bcm963xx/63268_map_part.h#L1597
+>>>>>
+>>>>> Just to be sure, you're using a mainline controller driver, not this
+>>>>> one?
+>>>>
+>>>> Yes, this was just to prove that the HW I’m using has get/set features support.
+>>>> I’m using OpenWrt, so it’s linux v5.15 driver.
+>>>>
+>>>>>
+>>>>>>>
+>>>>>>>>
+>>>>>>>>> - what is the state of the locking configuration in the chip when
+>>>>>>>>> you
+>>>>>>>>>    boot?
+>>>>>>>>
+>>>>>>>> Unlocked, I guess...
+>>>>>>>> How can I check that?
+>>>>>>>
+>>>>>>> It's in your dump, the chip returns 0, meaning it's all unlocked,
+>>>>>>> apparently.
+>>>>>>
+>>>>>> Well, I can read/write the device if block protection isn’t disabled,
+>>>>>> so I guess we can confirm it’s unlocked…
+>>>>>>
+>>>>>>>
+>>>>>>>>> - is there anything that locks the device by calling mxic_nand_lock()
+>>>>>>>>> ?
+>>>>>>>
+>>>>>>> So nobody locks the device I guess? Did you add traces there?
+>>>>>>
+>>>>>> It doesn’t get to the point that it enabled the lock/unlock functions
+>>>>>> since it fails when checking if feature is 0x38, so there’s no point
+>>>>>> in adding those traces…
+>>>>>
+>>>>> Right, it returns before setting these I guess.
+>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>>>> - finding no bbt is one thing, hanging is another, where is it
+>>>>>>>>> hanging
+>>>>>>>>>    exactly? (offset in nand/ and line in the code)
+>>>>>>>>
+>>>>>>>> I've got no idea...
+>>>>>>>
+>>>>>>> You can use ftrace or just add printks a bit everywhere and try to get
+>>>>>>> closer and closer.
+>>>>>>
+>>>>>> I think that after trying to get the feature it just start reading
+>>>>>> nonsense from the NAND and at some point it hangs due to that garbage…
+>>>>>
+>>>>> It should refuse to mount the device somehow, but in no case the kernel
+>>>>> should hang.
+>>>>
+>>>> Yes, I think that this is a side effect (maybe a different bug somewhere else).
+>>>>
+>>>>>
+>>>>>> Is it posible that the NAND starts behaving like this after getting
+>>>>>> the feature due to some specific config of my device?
+>>>>>>
+>>>>>>>
+>>>>>>> I looked at the patch, I don't see anything strange. Besides, I have a
+>>>>>>> close enough datasheet and I don't see what could confuse the device.
+>>>>>>>
+>>>>>>> Are you really sure this patch is the problem? Is the WP pin wired on
+>>>>>>> your design?
+>>>>>>
+>>>>>> There’s no WP pin in brcmnand controllers < 7.0
+>>>>>
+>>>>> What about the chip?
+>>>>
+>>>> Maybe it has a GPIO controlling that, but I don’t have that info…
+>>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Miquèl
+>>>>>
+
+-- 
+Florian
+
