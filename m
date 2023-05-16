@@ -2,129 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3324705A21
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36343705A5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjEPWAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S230063AbjEPWBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjEPWAK (ORCPT
+        with ESMTP id S229578AbjEPWBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:00:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B0810EC;
-        Tue, 16 May 2023 15:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684274409; x=1715810409;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/gElHzywUsJHlUOft8PJljOmt4C9JPUiaPG7wwx26iQ=;
-  b=TpNKLP4VK+BdeciInAAjTaVzx9bdrb4F5hQtBpsAuKRhh8ciTS3scwZv
-   gRwtTkGPT5jPlrSrlL16c7m13BX6zo9Flu3FglVTZkgcOsvFzlYsRryvw
-   Ff3ypO/0NS0SxEGrEkyk76lwIk0ToSbo7QPnve6bSZjldXTvt0TbbLJHp
-   SjIvoKVYWSwuKlTgDt2I+7j+FaXoq/Os4dbeTmaOYHEtn5T7S8ryq5nBz
-   nhAdxNUZ2usMeU31q11uSQ94ErusUhRfxvMHFML5F+jiLIYy3c41rmHCv
-   0K2snU1HOxkXjG+j+ua95FFYCMCjJrbkZW7dh6vzPnV/lV/JdTsGvWHvn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="340980067"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="340980067"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 15:00:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="813612412"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="813612412"
-Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 14:59:56 -0700
-Message-ID: <f7b2e758-625a-aafd-d545-bfa6eae513bb@intel.com>
-Date:   Tue, 16 May 2023 14:59:56 -0700
+        Tue, 16 May 2023 18:01:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A9D1706;
+        Tue, 16 May 2023 15:01:31 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 03C2E66058F7;
+        Tue, 16 May 2023 23:01:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684274490;
+        bh=6VuzT6ae7G/wqb/mbM+/UZDAQjp/Is1WP9mWxQ5YyIo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TzwHnsUgq6M5aQDQ7BliujRzwfM+sKCjIweA7mkDMTVE76Lslbg4iU4+F+MGRG9kP
+         tvHeMh++vslPUk/x39l/R4op0k2zaIp0wV52A2tSkH2PUdR/5t7t0GzFHRC7AdBEZK
+         OLoMQ/vJH/RIvnjZwZBhITKeusFpWGXSZM6Zt6UDIAPHRsDnOxdOj7KHYx64nsSOGE
+         BavuGd84nu17CWUqcd9N3T0WFa+p5oh9V3BNERaR6kPG9Pcy1mLL9zbv937Bq0/Whn
+         RZvVp3eeL8zkxYALmjjPVNulIbJ9fnTV51LyLndbuWXkj/qvtcNRPChnzta8lDPKB6
+         bCUF/ohnOBS6Q==
+Received: by mercury (Postfix, from userid 1000)
+        id B264110620FE; Wed, 17 May 2023 00:01:27 +0200 (CEST)
+Date:   Wed, 17 May 2023 00:01:27 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Vincent Legoll <vincent.legoll@gmail.com>
+Subject: Re: [PATCH v8 05/14] mfd: rk808: split into core and i2c
+Message-ID: <20230516220127.ohumwhchhzzmw7he@mercury.elektranox.org>
+References: <20230504173618.142075-1-sebastian.reichel@collabora.com>
+ <20230504173618.142075-6-sebastian.reichel@collabora.com>
+ <CGME20230516212700eucas1p1fbde1b6181c18d821e0796b6b6a4fa00@eucas1p1.samsung.com>
+ <2d234cd8-f883-800b-af97-116a949b64af@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
- stepping into unaccepted memory
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
- <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
- <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com>
- <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
- <a7550521-65bf-f9af-ddb0-118602a6340c@intel.com>
- <20230516215210.pviqojbr5o4hd6bb@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230516215210.pviqojbr5o4hd6bb@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mutsuecdbukxiwro"
+Content-Disposition: inline
+In-Reply-To: <2d234cd8-f883-800b-af97-116a949b64af@samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 14:52, Kirill A. Shutemov wrote:
-> On Tue, May 16, 2023 at 01:03:32PM -0700, Dave Hansen wrote:
->> On 5/16/23 11:35, Ard Biesheuvel wrote:
->>>>> Does this mean that the kernel maps memory before accepting it? As
->>>>> otherwise, I would assume that such an access would page fault inside
->>>>> the guest before triggering an exception related to the unaccepted
->>>>> state.
->>>> Yes, the kernel maps memory before accepting it (modulo things like
->>>> DEBUG_PAGEALLOC).
->>>>
->>> OK, and so the architecture stipulates that prefetching or other
->>> speculative accesses must never deliver exceptions to the host
->>> regarding such ranges?
->> I don't know of anywhere that this is explicitly written.  It's probably
->> implicit _somewhere_ in the reams of VMX/TDX and base SDM docs, but heck
->> if I know where it is. 😄
-> It is not specific to TDX: on x86 (and all architectures with precise
-> exceptions) exception handling is delayed until instruction retirement and
-> will not happen if speculation turned out to be wrong. And prefetching
-> never generates exceptions.
 
-Not to be Debbie Downer too much here, but it's *totally* possible for
-speculative execution to go read memory that causes you to machine
-check.  We've had such bugs in Linux.
+--mutsuecdbukxiwro
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We just happen to be lucky in this case that the unaccepted memory
-exceptions don't generate machine checks *AND* TDX hardware does not
-machine check on speculative accesses that would _just_ violate TDX
-security properties.
+Hello Marek,
 
-You're right for normal, sane exceptions, though.
+On Tue, May 16, 2023 at 11:26:59PM +0200, Marek Szyprowski wrote:
+> Hi,
+>=20
+> On 04.05.2023 19:36, Sebastian Reichel wrote:
+> > Split rk808 into a core and an i2c part in preparation for
+> > SPI support.
+> >
+> > Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com> # for RTC
+> > Tested-by: Diederik de Haas <didi.debian@cknow.org> # Rock64, Quartz64 =
+Model A + B
+> > Tested-by: Vincent Legoll <vincent.legoll@gmail.com> # Pine64 QuartzPro=
+64
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>=20
+> This patch landed in today's linux-next as commit c20e8c5b1203 ("mfd:=20
+> rk808: Split into core and i2c"). Unfortunately some boards (for example=
+=20
+> Hardkernel's Odroid-M1) stopped to boot after this change. This is=20
+> caused by the lack of updating the related defconfigs. Could you please=
+=20
+> add a patch that updates the MFD_RK808 entries to MFD_RK8XX_I2C in the=20
+> following files:
+>=20
+> $ git grep MFD_RK808
+> arch/arm/configs/multi_v7_defconfig:CONFIG_MFD_RK808=3Dy
+> arch/arm64/configs/defconfig:CONFIG_MFD_RK808=3Dy
+
+Sure, I will prepare a patch for each of them. Thanks for the quick
+report and sorry for the inconvenience.
+
+-- Sebastian
+
+>=20
+>=20
+> > ---
+> >   drivers/clk/Kconfig                   |   2 +-
+> >   drivers/input/misc/Kconfig            |   2 +-
+> >   drivers/mfd/Kconfig                   |   7 +-
+> >   drivers/mfd/Makefile                  |   3 +-
+> >   drivers/mfd/{rk808.c =3D> rk8xx-core.c} | 209 +++++------------------=
+---
+> >   drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
+> >   drivers/pinctrl/Kconfig               |   2 +-
+> >   drivers/power/supply/Kconfig          |   2 +-
+> >   drivers/regulator/Kconfig             |   2 +-
+> >   drivers/rtc/Kconfig                   |   2 +-
+> >   include/linux/mfd/rk808.h             |   6 +
+> >   sound/soc/codecs/Kconfig              |   2 +-
+> >   12 files changed, 256 insertions(+), 183 deletions(-)
+> >   rename drivers/mfd/{rk808.c =3D> rk8xx-core.c} (76%)
+> >   create mode 100644 drivers/mfd/rk8xx-i2c.c
+> >
+> > ...
+>=20
+> Best regards
+> --=20
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+>=20
+
+--mutsuecdbukxiwro
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj/TcACgkQ2O7X88g7
++ppkcg//WH2Y+C6FPh41OdSO5Szxw3CQJ1Ku3dNvcQAt3BHSGl0ATOPFmYc1j2v8
+/DNrXu+6aPU46ko+iu0Jrtlng4zdkl50sLLbYfvoNZQvNtI7oDYVV9ej3NO7diCr
++aN0krfeFW2MiaGcs6/U5B0/wgXCgeRf+2sCLCNxCfUji7xLT9HOQHUf34d6ZRAq
+rU8iIcB7K9Kg1UUDCjn8FSUgKduyy2YriowTgO1Q1Bx93jYZ/wka+qtA9lRJC+bC
+6g/9f2H7hs9IkfwVgGimp5iR++FF0G7wfY7XBZyuyVcsMLPZ9JIdCtl88oISGAFp
+A94yL7MYgxtAuu6gOpnIWQVSits/WgfmfMfs95twzPQ0Vngdxm24bn4wGR7mUrMK
+sd8krWaSfDPxahUkfN43p1WjDXY1WMMT6e0UPNR/MwhE+6fjI1PVc2BNSEsDQGdu
+wlCYwIoPhBBGBh7L1dCKXEThlSdZsUd1N6R1QYZ3qQmYnF0KWHgnp7GDEREabHiO
+RzWc0uHFa/Rnq7p1z/zZlBkUfryUqHRaLO7WIx4hzAj1w8CIMSkV08XA6Hb8X84u
+/7ijOEH/selxYiETdAnkuobE9lf4cbpzU2vN7O0P9rQT7j/QIp6Mm/VsSMQaL74C
+8mk7Q3O6xhh/f1/Y5M9lInSJ7hfkj5WrYCPF2Upb0a6hwfleQg0=
+=tOhN
+-----END PGP SIGNATURE-----
+
+--mutsuecdbukxiwro--
