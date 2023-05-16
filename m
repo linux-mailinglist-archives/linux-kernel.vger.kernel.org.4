@@ -2,70 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB22E7044D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34B97044DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjEPFtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 01:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S229937AbjEPFuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 01:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjEPFtO (ORCPT
+        with ESMTP id S229822AbjEPFuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 01:49:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CF03C32;
-        Mon, 15 May 2023 22:49:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A309662F25;
-        Tue, 16 May 2023 05:49:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95401C433D2;
-        Tue, 16 May 2023 05:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684216152;
-        bh=x1pTlw1V19z0aDBofMrV/rBF4TFc3StzNYctHqoKgiM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nA86npDtnLbRixJeEJg4inJyd169D0VJZZ0/sLDEFPzRPkAe7vbxJMs2z2lbPG5km
-         q6WbR7Rs4E52slK0McHeP0OyGPuNF+ExqWT5d3ufMurZH9QEo/ZNoaYHlVuElFxaSG
-         S0vxArdko6V6Kaxgc812/k7NIYblAYXd/UR4l410vUMJ1DrAVlwZyjVeVx0Tn0P3n+
-         WvIW2rRvuKfKWZATQlTz+siXoCIM43k2k3uv2PLjUs4ElBJ1z3i3VuoLp99BCdKtiU
-         MPEPHHqEQsfSQUen/dA9KH1krrySABXFMYaD80jLM8zUuNr4XBGuTfieqCno/Ui6k5
-         UTuTpfTQTWUCQ==
-Date:   Tue, 16 May 2023 14:49:08 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Ze Gao <zegao2021@gmail.com>, Jiri Olsa <olsajiri@gmail.com>,
-        Song Liu <song@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to
- avoid recursive trap
-Message-Id: <20230516144908.f062ab19327634fc40cfc3b7@kernel.org>
-In-Reply-To: <ee28e791-b3ab-3dfd-161b-4e7ec055c6ff@meta.com>
-References: <20230510122045.2259-1-zegao@tencent.com>
-        <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
-        <ZFvUH+p0ebcgnwEg@krava>
-        <CAD8CoPC_=d+Aocp8pnSi9cbU6HWBNc697bKUS1UydtB-4DFzrA@mail.gmail.com>
-        <ee28e791-b3ab-3dfd-161b-4e7ec055c6ff@meta.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 16 May 2023 01:50:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1B03C33
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 22:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684216198; x=1715752198;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4D/Rsg3HiBDcEacWw3ICgWm108OoAb9aeIMOa50d+7o=;
+  b=PdM8qzn2OO27rdADqvXt/7Q5b5ml9a++ND2MIX4sauklqrI/J6UPfGr8
+   D+wh2gEzaElBRO8BFOAp6HeYVUl2HvahED1zO6X/ZNWvQwnNBGLm96kDK
+   67gT5pB+069uyS5Vh5eEF7FrdWyCEErTFXvwFLGWJBcIrwbSwCGhv+4B5
+   5Esu3U+c3VdCtpGUfnrxxGtt8Z3R+sqTNrAaKNUhnlkfCf7+Xseri8O1i
+   /gcneDMTAdyDYaF6d4U+B8643rS7OuQuiVK5SrsLi3wAWMeGzz9tbpVVH
+   71erW/6pv1XkEBYQxl/C4FeWz2ovRtEboxriIWvZsfNxl/LsgtuBmIIm4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="351422553"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="351422553"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 22:49:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="770902105"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="770902105"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 15 May 2023 22:49:56 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pynZL-00072M-2d;
+        Tue, 16 May 2023 05:49:55 +0000
+Date:   Tue, 16 May 2023 13:49:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: arch/powerpc/kexec/relocate_32.o: warning: objtool: .text+0x2bc:
+ unannotated intra-function call
+Message-ID: <202305161316.4TNTsLUj-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,140 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 07:29:02 -0700
-Yonghong Song <yhs@meta.com> wrote:
+Hi Sathvika,
 
-> 
-> 
-> On 5/11/23 10:53 PM, Ze Gao wrote:
-> > Yes, Jiri. Thanks for pointing it out. It's true that not all probe
-> > blacklisted functions should be banned from bpf_kprobe.
-> > 
-> > I tried some of them, and all kprobe blacklisted symbols I hooked
-> > works fine except preempt_count_{sub, add}.
-> > so the takeaway here is preempt_cout_{sub, add} must be rejected at
-> > least for now since kprobe_multi_link_prog_run
-> > ( i.e., the fprobe handler) and rethook_trampoline_handler( i.e. the
-> > rethook handler) calls preempt_cout_{sub, add}.
-> > 
-> > I'm considering providing a general  fprobe_blacklist framework just
-> > like what kprobe does to allow others to mark
-> > functions used inside fprobe handler or rethook handler as NOFPROBE to
-> > avoid potential stack recursion. But only after
-> > I figure out how ftrace handles recursion problems currently and why
-> > it fails in the case I ran into.
-> 
-> A fprobe_blacklist might make sense indeed as fprobe and kprobe are 
-> quite different... Thanks for working on this.
+First bad commit (maybe != root cause):
 
-No, I don't like fprobe_blacklist, because you can filter user given
-function with <tracefs>/available_filter_functions :)
-If the function is not listed there, you can not put fprobe on it.
-IOW, kprobe_multi_link_prog_run only covers those functions. (white-list)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+commit: c984aef8c8326035570ff6e01d0ff9e79a5dfa76 objtool/powerpc: Add --mcount specific implementation
+date:   6 months ago
+config: powerpc-randconfig-r006-20230516 (https://download.01.org/0day-ci/archive/20230516/202305161316.4TNTsLUj-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c984aef8c8326035570ff6e01d0ff9e79a5dfa76
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c984aef8c8326035570ff6e01d0ff9e79a5dfa76
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
-At the tooling side, it should check whether the probe is defined for
-single function or multiple functions, and use kprobe-blacklist (single)
-or available_filter_functions (multiple).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305161316.4TNTsLUj-lkp@intel.com/
 
-Thank you,
+All warnings (new ones prefixed by >>):
 
-> 
-> > 
-> > Thanks
-> > Ze
-> > 
-> > On Thu, May 11, 2023 at 1:28 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >>
-> >> On Wed, May 10, 2023 at 07:13:58AM -0700, Yonghong Song wrote:
-> >>>
-> >>>
-> >>> On 5/10/23 5:20 AM, Ze Gao wrote:
-> >>>> BPF_LINK_TYPE_KPROBE_MULTI attaches kprobe programs through fprobe,
-> >>>> however it does not takes those kprobe blacklisted into consideration,
-> >>>> which likely introduce recursive traps and blows up stacks.
-> >>>>
-> >>>> this patch adds simple check and remove those are in kprobe_blacklist
-> >>>> from one fprobe during bpf_kprobe_multi_link_attach. And also
-> >>>> check_kprobe_address_safe is open for more future checks.
-> >>>>
-> >>>> note that ftrace provides recursion detection mechanism, but for kprobe
-> >>>> only, we can directly reject those cases early without turning to ftrace.
-> >>>>
-> >>>> Signed-off-by: Ze Gao <zegao@tencent.com>
-> >>>> ---
-> >>>>    kernel/trace/bpf_trace.c | 37 +++++++++++++++++++++++++++++++++++++
-> >>>>    1 file changed, 37 insertions(+)
-> >>>>
-> >>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> >>>> index 9a050e36dc6c..44c68bc06bbd 100644
-> >>>> --- a/kernel/trace/bpf_trace.c
-> >>>> +++ b/kernel/trace/bpf_trace.c
-> >>>> @@ -2764,6 +2764,37 @@ static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u3
-> >>>>      return arr.mods_cnt;
-> >>>>    }
-> >>>> +static inline int check_kprobe_address_safe(unsigned long addr)
-> >>>> +{
-> >>>> +   if (within_kprobe_blacklist(addr))
-> >>>> +           return -EINVAL;
-> >>>> +   else
-> >>>> +           return 0;
-> >>>> +}
-> >>>> +
-> >>>> +static int check_bpf_kprobe_addrs_safe(unsigned long *addrs, int num)
-> >>>> +{
-> >>>> +   int i, cnt;
-> >>>> +   char symname[KSYM_NAME_LEN];
-> >>>> +
-> >>>> +   for (i = 0; i < num; ++i) {
-> >>>> +           if (check_kprobe_address_safe((unsigned long)addrs[i])) {
-> >>>> +                   lookup_symbol_name(addrs[i], symname);
-> >>>> +                   pr_warn("bpf_kprobe: %s at %lx is blacklisted\n", symname, addrs[i]);
-> >>>
-> >>> So user request cannot be fulfilled and a warning is issued and some
-> >>> of user requests are discarded and the rest is proceeded. Does not
-> >>> sound a good idea.
-> >>>
-> >>> Maybe we should do filtering in user space, e.g., in libbpf, check
-> >>> /sys/kernel/debug/kprobes/blacklist and return error
-> >>> earlier? bpftrace/libbpf-tools/bcc-tools all do filtering before
-> >>> requesting kprobe in the kernel.
-> >>
-> >> also fprobe uses ftrace drectly without paths in kprobe, so I wonder
-> >> some of the kprobe blacklisted functions are actually safe
-> >>
-> >> jirka
-> >>
-> >>>
-> >>>> +                   /* mark blacklisted symbol for remove */
-> >>>> +                   addrs[i] = 0;
-> >>>> +           }
-> >>>> +   }
-> >>>> +
-> >>>> +   /* remove blacklisted symbol from addrs */
-> >>>> +   for (i = 0, cnt = 0; i < num; ++i) {
-> >>>> +           if (addrs[i])
-> >>>> +                   addrs[cnt++]  = addrs[i];
-> >>>> +   }
-> >>>> +
-> >>>> +   return cnt;
-> >>>> +}
-> >>>> +
-> >>>>    int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-> >>>>    {
-> >>>>      struct bpf_kprobe_multi_link *link = NULL;
-> >>>> @@ -2859,6 +2890,12 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> >>>>      else
-> >>>>              link->fp.entry_handler = kprobe_multi_link_handler;
-> >>>> +   cnt = check_bpf_kprobe_addrs_safe(addrs, cnt);
-> >>>> +   if (!cnt) {
-> >>>> +           err = -EINVAL;
-> >>>> +           goto error;
-> >>>> +   }
-> >>>> +
-> >>>>      link->addrs = addrs;
-> >>>>      link->cookies = cookies;
-> >>>>      link->cnt = cnt;
-
+>> arch/powerpc/kexec/relocate_32.o: warning: objtool: .text+0x2bc: unannotated intra-function call
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
