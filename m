@@ -2,185 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598D2704339
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5B5704336
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjEPCFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 22:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S229782AbjEPCD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 22:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjEPCF3 (ORCPT
+        with ESMTP id S229709AbjEPCD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 22:05:29 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089E13596
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 19:05:19 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 96E803200940;
-        Mon, 15 May 2023 22:05:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 15 May 2023 22:05:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1684202716; x=1684289116; bh=P
-        qWseRi4Tns2PYqazeOuCibUdRUG/l2L3N/mjf1o2KI=; b=SEcz18ITCdTYmdjBQ
-        UtOMJKh0Vhq668hZYn6zunWRmdSCsar9z2SfEgwtF+f5lF+/ABDnlQTFa9XhgzP3
-        Z2N3hwEnOWmKoCJ9sxXgv27Kq7mZnqsjxq7S4Kb42e/uquy0IpAHphjPSPKXkljz
-        objaBsnWD2/LwdZq7AHxeYMcOiEC+eBM9F1sMKLC+NfUlxzlMErbcrY0G63mc4bw
-        y7lPG6w+bmFec+9oyKrhlezVupHiMMn24yNLLwNfBSA98Np/nqqVZH2Qns7JR8yP
-        fpf4EOtxLV3mWQz4jejfBno0J3KqLVqIEzmx18KTzgnGEIE9D4dKszL589aBBoAi
-        QNfnA==
-X-ME-Sender: <xms:2-RiZByCg-kXG9xwI2sCKW7kuGGt8TYkVxXjnKiCtnDH1rMSjbh-iA>
-    <xme:2-RiZBSqqRXlUFdY2ZZl4hJqahb33eUhG5E2mQqwIX7QrmI-aSCdfQ5gJ5Gpe5iKQ
-    Ljp361jzfi1X41BYY4>
-X-ME-Received: <xmr:2-RiZLW628FVvPRF5XNu9Zd7I6Ykk5qFnf2O7tQF9ZG97gaA3Gly1Q9RREjZrkH5ew_uS0OyUmHtNb63twB7oEK4jVz4ZKLysfI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehkedgheegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepvfevkffhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghi
-    nhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrh
-    hnpeehfffggeefveegvedtiefffeevuedtgefhueehieetffejfefggeevfeeuvdduleen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrg
-    hinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:2-RiZDiJDE4Qxb8RLOSqyREB5ndCUGHM83woNMu37TK3Ka19fhk_Ow>
-    <xmx:2-RiZDCBgsoAfDuNASlH4gxQklRFmWoPbzzTfyCr_YZb-Y1qtTst2A>
-    <xmx:2-RiZMK9yLIp-BGOcWi4XYlynkmyLK4SgXy4XsfYz_MgDrEwTe76Sw>
-    <xmx:3ORiZI6DRpE1Gc2m2h3B6qa8XHfIAy_Wu-1P8_wacjKulxmiWkRABw>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 May 2023 22:05:13 -0400 (EDT)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Brad Boyer" <flar@allandria.com>, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <71ed7fb234a5f7381a50253b0d841a656d53e64c.1684200125.git.fthain@linux-m68k.org>
-From:   Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH v5] nubus: Don't list slot resources by default
-Date:   Tue, 16 May 2023 11:22:05 +1000
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 15 May 2023 22:03:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954B413E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 19:03:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3D8633B8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:03:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5EAC433A0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:03:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684202604;
+        bh=ycv+VEOGv9cbrchvl8jntmN5FDbyqDgaTPIMmjcdJ2E=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RfL+wE+ijp/vwxuUi8Oeoc58fXRtexJKKEwdzdM3jh8pj6jgmWY5R1kijJkO7rprd
+         IFIs2MHseWek6U3oemMJvtq2nSSr6OO/F85mia6BQAFi+45SCUa7SePdsilXTUm1eP
+         A42akmSQh1XZl4OFiXKSnmD6YhlBejLzUkazlXga0g4qsfAbiA0jvkWQFl+Y1uD7y3
+         2GEuJJ0AutAoO3RPBZKJgwijad6mWMlzkXJjBVkfN1L8bb7LXvVUNMDNdu8RDLulwR
+         W/u0cBu5Br8vFJkZ5Q2+NKEjtUDEhQVH6QRN9pjPUqe/1fmbTdjIMhbVJ2swcp+ESF
+         3fHzTB4ntWCaQ==
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-9659f452148so2468843066b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 19:03:24 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxViEw6DjNCkRSCP5KXb4U1BDjX+6Smr3SNvLA6pKdN86XcTgts
+        rrTiesITpPEyfrwtr/WX8zy+9UMO5MMbV0BHlk4=
+X-Google-Smtp-Source: ACHHUZ5gTNUGfE3MSgIgdGoB5vnNs4BSJ48K7k49j26N3jMzpe/R2bH1dkkCHE3cFTF/AI5F8XyrKnjyB2clTp2SkcY=
+X-Received: by 2002:a17:907:2685:b0:94f:3bf7:dacf with SMTP id
+ bn5-20020a170907268500b0094f3bf7dacfmr30748735ejc.71.1684202602654; Mon, 15
+ May 2023 19:03:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAAhV-H48t8tDmWoZOSqx06HwwXKY1CR=X+hi0o_ok6gSu6dQSg@mail.gmail.com>
+ <CY5PR12MB64558068B314942BA1B2ED2BC67B9@CY5PR12MB6455.namprd12.prod.outlook.com>
+In-Reply-To: <CY5PR12MB64558068B314942BA1B2ED2BC67B9@CY5PR12MB6455.namprd12.prod.outlook.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 16 May 2023 10:03:11 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6ep_A-7568zE2ggQUXpyhH=zS90TsHP8X0gn5s8LZ8iQ@mail.gmail.com>
+Message-ID: <CAAhV-H6ep_A-7568zE2ggQUXpyhH=zS90TsHP8X0gn5s8LZ8iQ@mail.gmail.com>
+Subject: Re: [PATCH v2] loongarch: fix debugfs_create_dir error checking
+To:     mirimmad@outlook.com
+Cc:     ivan.orlov0322@gmail.com, kernel@xen0n.name,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        mirimmad17@gmail.com, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some Nubus card ROMs contain many slot resources. A single Radius video
-card produced well over a thousand entries under /proc/bus/nubus/.
-Populating /proc/bus/nubus/ on a slow machine with several such cards
-installed takes long enough that the user may think that the system is
-wedged. All those procfs entries also consume significant RAM though
-they are not normally needed (except by developers).
-Omit these resources from /proc/bus/nubus/ by default and add a kernel
-parameter to enable them when needed.
-On the test machine, this saved 300 kB and 10 seconds.
+Queued, thanks.
 
-Cc: Brad Boyer <flar@allandria.com>
-Reviewed-by: Brad Boyer <flar@allandria.com>
-Tested-by: Stan Johnson <userm57@yahoo.com>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
-Changed since v4:
- - Renamed the new global variable and adopted module_param_named().
-Changed since v3:
- - Better commentary.
-Changed since v2:
- - Added commentary.
- - Moved declaration to nubus.h.
-Changed since v1:
- - Expanded to cover all slot resources in procfs.
----
- drivers/nubus/nubus.c | 13 ++++++++++---
- drivers/nubus/proc.c  |  8 ++++----
- include/linux/nubus.h |  1 +
- 3 files changed, 15 insertions(+), 7 deletions(-)
+Huacai
 
-diff --git a/drivers/nubus/nubus.c b/drivers/nubus/nubus.c
-index f70ba58dbc55..ab0f32b901c8 100644
---- a/drivers/nubus/nubus.c
-+++ b/drivers/nubus/nubus.c
-@@ -32,6 +32,13 @@
- 
- /* Globals */
- 
-+/* The "nubus.populate_procfs" parameter makes slot resources available in
-+ * procfs. It's deprecated and disabled by default because procfs is no longer
-+ * thought to be suitable for that and some board ROMs make it too expensive.
-+ */
-+bool nubus_populate_procfs;
-+module_param_named(populate_procfs, nubus_populate_procfs, bool, 0);
-+
- LIST_HEAD(nubus_func_rsrcs);
- 
- /* Meaning of "bytelanes":
-@@ -572,9 +579,9 @@ nubus_get_functional_resource(struct nubus_board *board, int slot,
- 			nubus_proc_add_rsrc(dir.procdir, &ent);
- 			break;
- 		default:
--			/* Local/Private resources have their own
--			   function */
--			nubus_get_private_resource(fres, dir.procdir, &ent);
-+			if (nubus_populate_procfs)
-+				nubus_get_private_resource(fres, dir.procdir,
-+							   &ent);
- 		}
- 	}
- 
-diff --git a/drivers/nubus/proc.c b/drivers/nubus/proc.c
-index 2c320a84fd72..e7a347db708c 100644
---- a/drivers/nubus/proc.c
-+++ b/drivers/nubus/proc.c
-@@ -55,7 +55,7 @@ struct proc_dir_entry *nubus_proc_add_board(struct nubus_board *board)
- {
- 	char name[2];
- 
--	if (!proc_bus_nubus_dir)
-+	if (!proc_bus_nubus_dir || !nubus_populate_procfs)
- 		return NULL;
- 	snprintf(name, sizeof(name), "%x", board->slot);
- 	return proc_mkdir(name, proc_bus_nubus_dir);
-@@ -72,7 +72,7 @@ struct proc_dir_entry *nubus_proc_add_rsrc_dir(struct proc_dir_entry *procdir,
- 	char name[9];
- 	int lanes = board->lanes;
- 
--	if (!procdir)
-+	if (!procdir || !nubus_populate_procfs)
- 		return NULL;
- 	snprintf(name, sizeof(name), "%x", ent->type);
- 	remove_proc_subtree(name, procdir);
-@@ -157,7 +157,7 @@ void nubus_proc_add_rsrc_mem(struct proc_dir_entry *procdir,
- 	char name[9];
- 	struct nubus_proc_pde_data *pded;
- 
--	if (!procdir)
-+	if (!procdir || !nubus_populate_procfs)
- 		return;
- 
- 	snprintf(name, sizeof(name), "%x", ent->type);
-@@ -176,7 +176,7 @@ void nubus_proc_add_rsrc(struct proc_dir_entry *procdir,
- 	char name[9];
- 	unsigned char *data = (unsigned char *)ent->data;
- 
--	if (!procdir)
-+	if (!procdir || !nubus_populate_procfs)
- 		return;
- 
- 	snprintf(name, sizeof(name), "%x", ent->type);
-diff --git a/include/linux/nubus.h b/include/linux/nubus.h
-index 392fc6c53e96..bdcd85e622d8 100644
---- a/include/linux/nubus.h
-+++ b/include/linux/nubus.h
-@@ -93,6 +93,7 @@ extern struct bus_type nubus_bus_type;
- 
- /* Generic NuBus interface functions, modelled after the PCI interface */
- #ifdef CONFIG_PROC_FS
-+extern bool nubus_populate_procfs;
- void nubus_proc_init(void);
- struct proc_dir_entry *nubus_proc_add_board(struct nubus_board *board);
- struct proc_dir_entry *nubus_proc_add_rsrc_dir(struct proc_dir_entry *procdir,
--- 
-2.37.5
-
+On Sun, May 14, 2023 at 2:44=E2=80=AFPM <mirimmad@outlook.com> wrote:
+>
+> From: Immad Mir <mirimmad17@gmail.com>
+>
+> The debugfs_create_dir returns ERR_PTR incase of an error and the
+> correct way of checking it by using the IS_ERR_OR_NULL inline function, a=
+nd
+> not the simple null comparision. This patch fixes this.
+>
+> Suggested-By: Ivan Orlov <ivan.orlov0322@gmail.com>
+> Signed-off-by: Immad Mir <mirimmad17@gmail.com>
+> ---
+>  arch/loongarch/kernel/unaligned.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/kernel/unaligned.c b/arch/loongarch/kernel/un=
+aligned.c
+> index bdff825d2..85fae3d2d 100644
+> --- a/arch/loongarch/kernel/unaligned.c
+> +++ b/arch/loongarch/kernel/unaligned.c
+> @@ -485,7 +485,7 @@ static int __init debugfs_unaligned(void)
+>         struct dentry *d;
+>
+>         d =3D debugfs_create_dir("loongarch", NULL);
+> -       if (!d)
+> +       if (IS_ERR_OR_NULL(d))
+>                 return -ENOMEM;
+>
+>         debugfs_create_u32("unaligned_instructions_user",
+> --
+> 2.40.0
+>
