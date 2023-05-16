@@ -2,160 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B85704616
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C20704617
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjEPHQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S230316AbjEPHQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjEPHQQ (ORCPT
+        with ESMTP id S229875AbjEPHQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:16:16 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C9949F8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:16:13 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f42711865eso62216895e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684221371; x=1686813371;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oiBlv5aXhyE1YrAkeylL1umyw4Re1O8pIBJgTabc1FQ=;
-        b=RbJEbnh1z/xaER3RNUgf5EOZSOC80EEKBoUosRbeqy1rFudkKmVyHLaAVDOa2P6d5y
-         ZqJGkrbz2RiezmpZ/BwBMtj3wNNKYReGLRfghwy+QDxWtOE89Tz2oFFEixsgt44LhGEi
-         pyEPMh8brRRXj0yC2KDo1Rf9EpBUb7D8CHOxPY1lxlCSCaNfOlrPJVv6ijXvfGWJyyW5
-         hbf+2U9/XPVPZ+k/074/0ZmE2x6BgTPwxbU/+4jLpatsvlclPa1dQkYM3kGghrz4MCg2
-         j+2rObxkblkWZq72m9uOJ1BGeTjXKk7Dbzh9a4H8umoQGcETd/fqfneuyhg0v/6MARm0
-         c6VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684221371; x=1686813371;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oiBlv5aXhyE1YrAkeylL1umyw4Re1O8pIBJgTabc1FQ=;
-        b=HXCXR/jW+IHFit5lD4VxbvPyGi4i4BS/0TsxXPqmL7bmvGl8ntdH0gbUtsKwbnXgVC
-         UqErWfEDTiaP/8Sjt52ymGV9Ah/yZstUqMfWMORPkNTRNCDwAYBgoTZkO14bY5ov34k+
-         NHd4ph3MZbV4MKELoPDlFHwroYSOcRI5FTFVBZp1p/eUjblbq0TudrWS5S31Y+Fcg8Lm
-         wIa3jCKnkIaFVshYKR53Ds0bUWtxy3vHmSHTlFRAZe+dozlfM9lKhOR384IsxYLWkPnj
-         woiyj75wB5GGiGyWE6tMurDUBXbN8SxzpY7ShXopEio+sW9prBOcdt+zLjXxNrAYc4MH
-         dhJA==
-X-Gm-Message-State: AC+VfDxsiqA6yYsjxhSzhEqf0FgMZ4aHAcPTPlC+w2H4na9Sz7TUTwUW
-        7AVNBPBUXRCJ2R7Xe//qPX/D+Q==
-X-Google-Smtp-Source: ACHHUZ6AXpYudBAFRiEXH4ZUFOhCaeBWcGirPae8q4ocfNIe/vPMVrz3fxWrayC5kbNtb738ZEXg7w==
-X-Received: by 2002:a05:600c:2101:b0:3f4:2174:b28f with SMTP id u1-20020a05600c210100b003f42174b28fmr21031622wml.2.1684221371369;
-        Tue, 16 May 2023 00:16:11 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:86be:97a:a043:77a8? ([2a01:e0a:982:cbb0:86be:97a:a043:77a8])
-        by smtp.gmail.com with ESMTPSA id g2-20020a056000118200b003079ed1f0a0sm1526408wrx.44.2023.05.16.00.16.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 00:16:10 -0700 (PDT)
-Message-ID: <fa513824-17cb-cf88-fd9b-0fc4e14da03d@linaro.org>
-Date:   Tue, 16 May 2023 09:16:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v6 5/8] drm/bridge: sii902x: Support format negotiation
- hooks
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Francesco Dolcini <francesco@dolcini.it>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230509093036.3303-1-a-bhatia1@ti.com>
- <20230509093036.3303-6-a-bhatia1@ti.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230509093036.3303-6-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 03:16:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348B91BF7
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:16:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC2763567
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FAAC433EF;
+        Tue, 16 May 2023 07:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684221402;
+        bh=8PLIXGq0nxO8jWho4OEmobicby5oXUWx3+A3Zdb6Hoo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ErzUhtpGb2sXv6kMyCfSAGOqYS10o5/FIbyjBs9cg1hcESA/Dbs469hhnk+czvKAY
+         Bizgq2dKfc+dvGexXWtU++p0/LuI6d5McNccvi/Tglq919/N2Tsx4N0e8jbMHIrV+d
+         6YyubDUeGcRkQRDLU1ESriL8EZ+b3vKatdgffS5zSVu95a1ttGfTZlfCXgsDYSzB86
+         GWqeSZ2mzaWL5B/ZpIWALZ4TSTL6Ryy9NcEPG54OpsF8O9BuBJdTLTSOjl8UH5IHcS
+         fp2I1LknKRDaXWuCEkF9aknbVTszrDfiRDq77QABFofALRGP0KQZ466/7GbgI1GPHo
+         oxZgp7mT63Edg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pyovH-00FRns-Q0;
+        Tue, 16 May 2023 08:16:40 +0100
+Date:   Tue, 16 May 2023 08:16:19 +0100
+Message-ID: <87cz30wxto.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     wangwudi <wangwudi@hisilicon.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] irqchip: gic-v3: Collection table support muti pages
+In-Reply-To: <5e42a892-3826-6370-9702-fefee88bf339@hisilicon.com>
+References: <1684152604-12621-1-git-send-email-wangwudi@hisilicon.com>
+        <86jzx9n4qg.wl-maz@kernel.org>
+        <41cbc6cb4e964fe0bbba87f52110b1c3@hisilicon.com>
+        <5e42a892-3826-6370-9702-fefee88bf339@hisilicon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: wangwudi@hisilicon.com, linux-kernel@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2023 11:30, Aradhya Bhatia wrote:
-> With new connector model, sii902x will not create the connector, when
-> DRM_BRIDGE_ATTACH_NO_CONNECTOR is set and SoC driver will rely on format
-> negotiation to setup the encoder format.
-> 
-> Support format negotiations hooks in the drm_bridge_funcs.
-> Use helper functions for state management.
-> 
-> Input format is selected to MEDIA_BUS_FMT_RGB888_1X24 as default, as is
-> the case with older model.
-> 
-> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> ---
->   drivers/gpu/drm/bridge/sii902x.c | 26 ++++++++++++++++++++++++++
->   1 file changed, 26 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
-> index ef66461e7f7c..662b6cb4aa62 100644
-> --- a/drivers/gpu/drm/bridge/sii902x.c
-> +++ b/drivers/gpu/drm/bridge/sii902x.c
-> @@ -473,6 +473,28 @@ static struct edid *sii902x_bridge_get_edid(struct drm_bridge *bridge,
->   	return sii902x_get_edid(sii902x, connector);
->   }
->   
-> +static u32 *sii902x_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
-> +						     struct drm_bridge_state *bridge_state,
-> +						     struct drm_crtc_state *crtc_state,
-> +						     struct drm_connector_state *conn_state,
-> +						     u32 output_fmt,
-> +						     unsigned int *num_input_fmts)
-> +{
-> +	u32 *input_fmts;
-> +	u32 default_bus_format = MEDIA_BUS_FMT_RGB888_1X24;
-> +
-> +	*num_input_fmts = 0;
-> +
-> +	input_fmts = kcalloc(1, sizeof(*input_fmts), GFP_KERNEL);
-> +	if (!input_fmts)
-> +		return NULL;
-> +
-> +	input_fmts[0] = default_bus_format;
-> +	*num_input_fmts = 1;
-> +
-> +	return input_fmts;
-> +}
-> +
->   static const struct drm_bridge_funcs sii902x_bridge_funcs = {
->   	.attach = sii902x_bridge_attach,
->   	.mode_set = sii902x_bridge_mode_set,
-> @@ -480,6 +502,10 @@ static const struct drm_bridge_funcs sii902x_bridge_funcs = {
->   	.enable = sii902x_bridge_enable,
->   	.detect = sii902x_bridge_detect,
->   	.get_edid = sii902x_bridge_get_edid,
-> +	.atomic_reset = drm_atomic_helper_bridge_reset,
-> +	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
-> +	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-> +	.atomic_get_input_bus_fmts = sii902x_bridge_atomic_get_input_bus_fmts,
->   };
->   
->   static int sii902x_mute(struct sii902x *sii902x, bool mute)
+On Tue, 16 May 2023 03:53:06 +0100,
+wangwudi <wangwudi@hisilicon.com> wrote:
+>=20
+>=20
+>=20
+> =E5=9C=A8 2023/5/16 9:57, wangwudi =E5=86=99=E9=81=93:
+> >=20
+> >=20
+> > -----=E9=82=AE=E4=BB=B6=E5=8E=9F=E4=BB=B6-----
+> > =E5=8F=91=E4=BB=B6=E4=BA=BA: Marc Zyngier [mailto:maz@kernel.org]=20
+> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023=E5=B9=B45=E6=9C=8815=E6=97=
+=A5 20:45
+> > =E6=94=B6=E4=BB=B6=E4=BA=BA: wangwudi <wangwudi@hisilicon.com>
+> > =E6=8A=84=E9=80=81: linux-kernel@vger.kernel.org; Thomas Gleixner <tglx=
+@linutronix.de>
+> > =E4=B8=BB=E9=A2=98: Re: [PATCH] irqchip: gic-v3: Collection table suppo=
+rt muti pages
+> >=20
+> > On Mon, 15 May 2023 13:10:04 +0100,
+> > wangwudi <wangwudi@hisilicon.com> wrote:
+> >>
+> >> Only one page is allocated to the collection table.
+> >> Recalculate the page number of collection table based on the number of=
+=20
+> >> CPUs.
+> >=20
+> > Please document *why* we should even consider this. Do you know of
+> > any existing implementation that is so large (or need so much
+> > memory for its collection) that it would result in overflowing the
+> > collection table?
+>=20
+> Each CPU occupies an entry in the collection table. When there are a
+> large number of CPUs and only one page of the collection table, some
+> CPUs fail to execute ITS-MAPC cmd, and fail to receive LPI
+> interrupts.
+>=20
+> For example, GITS_BASER indicates that the page_size of the
+> collection table is 4 KB, the entry size is 16 Bytes, and only 256
+> entries can be stored on one page.  When the number of CPUs is more
+> than 256(which is common in the SMP system of the server), the
+> subsequent CPUs cannot receive the LPI.
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+You're stating the obvious. My question was whether we were anywhere
+close to that limit on any existing, or even planned HW.
+
+> It is noticed by code review, not by on actual HW.
+
+Right. So let me repeat my question: do you of any existing or planned
+implementation that is both:
+
+- using a small ITS page size
+- having large per-collection memory requirements
+- with a potentially large number of CPUs
+
+that would result in CPUs not fitting in the collection table?
+
+Assuming this is the case, is the CPU numbering space so large and
+potentially sparse that it would benefit from 2 level tables instead
+of a larger single-level table?
+
+Finally, assuming all the above conditions are satisfied, what
+actually populates the second level table in your patch? I don't see
+anything that does. Which makes me think that it was never properly
+tested.
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
