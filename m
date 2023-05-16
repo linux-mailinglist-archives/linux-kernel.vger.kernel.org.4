@@ -2,238 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8E0704A23
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B003704A27
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbjEPKJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S231873AbjEPKKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbjEPKJo (ORCPT
+        with ESMTP id S232249AbjEPKJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:09:44 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0FF1BF6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:09:33 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-44fa585ad7aso8631882e0c.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684231773; x=1686823773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/lEOYeeU5eTLm7de7UnRvbY+9wcsAqP7XOcqCDjWADA=;
-        b=gK8/96Mwc9pJtoGDw27JnaeCATyvSkorVev6aES+s3evOWGv2eZ4S4ZQmr3dLrS1ji
-         P75ZaYIR630JDnG938lXkgTpAzoCDm25UQTJicgxSxrC3C5xMLuqUAPnjpjFrMhTltvf
-         5nOShkedMWMDsdiQC31T8R7CGcauuP/Smnv++IlvHsPbYsldV+8gK/muWzPtBUnpiWnm
-         Edf/xMXcnyiN3A+Aoitl4bcEl0LNRK/bxRLNRAcSY4buq6wTKN2GYV7kQg0AX0DercuO
-         4x6z9zmJyS5hNtZA48bVcCbR5vHvKIoMRTebZWJTjQO8cX5BYJGXGALHEndzBJd2BeEM
-         QaIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684231773; x=1686823773;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/lEOYeeU5eTLm7de7UnRvbY+9wcsAqP7XOcqCDjWADA=;
-        b=RNNJw/GsibINlFpa+syXZ3xA39eaaY6z+a4fO4GclOXRjSDMPeGPpJRYgE9KxK1VHm
-         /HUE0uagaXIEP5FtmbEHcb9ITy85fJCN2LyeDx/Q3gxggJIrw/ASUlVDymnfEPdmDwXn
-         nVNCJHzEAxfJvobazQY6/3BlCsr1g3V8leW4UJDn+dyfMsEfWNzXzjTliUswzXF7XLiQ
-         AANnfWyvOUdMLTj5QIMPdB2I2wDkuKm4L322YoXvrk7VNTzjToFZckqpRs2n9OPEBvXG
-         sh6hgTyio9XT+S4X1Bhdj65bdXZt06vCcVJu0VbCV4Iy+BU2F7o9TNKSc+O/6cD1fTa2
-         Af0A==
-X-Gm-Message-State: AC+VfDxabhEaX6Sro9qXCnYohU7fDnsu2UYVXSmjaoOt9QOTNPPtsg58
-        XN3gi3kq7XfKtuk9FoXMBBgHRiLh9JdbuJmpl1gREA==
-X-Google-Smtp-Source: ACHHUZ6TLbLYd474B27i7fOyl3BsnPpQ4fbmukWnlRJS2Ui51PNk1Fw9UBPkdN9uxCCarlSOI3HX0KcO/kJKITuV9Sk=
-X-Received: by 2002:a1f:6dc6:0:b0:44f:eb0a:77db with SMTP id
- i189-20020a1f6dc6000000b0044feb0a77dbmr13395898vkc.11.1684231772863; Tue, 16
- May 2023 03:09:32 -0700 (PDT)
+        Tue, 16 May 2023 06:09:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D12719;
+        Tue, 16 May 2023 03:09:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F16C16374A;
+        Tue, 16 May 2023 10:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DF8C4339E;
+        Tue, 16 May 2023 10:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684231784;
+        bh=UzWc5Lwm75FxyK+w8YmzHI/DvA777osEnR4l5zmjBh4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OaXk2JUlwNc9953eKu4k6Tz88/RHcSQ8rAN8NQIWm6MZ7UtyQPb+nTSAEsZhCXBVf
+         +XANWEmW4zXYMNZvFxACRsTpj47X29nqAcf9nIfyqGzYR3tsiiwqtLonq1fVvXFLwY
+         EaqnQpFCrX5dV0ZfIPMxoNV5xeYCcHKO5+xnaYQnjMmLtEiCoDYZMRML44IgvRNpXN
+         8ji3D//H6icA/jIND8ED/ofji+rWgN/sytWNwUR3Q0pRQi+0zQTOsE51S3fyJwOn8f
+         EcpwXoYvQBP9mBGIYa2llUd5CdqZ3WeOFo/1knvE6ImJ46qrJ7FHALZW92M/3m+xfW
+         a0TNvvur6xjTQ==
+Date:   Tue, 16 May 2023 11:09:36 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
+Message-ID: <20230516100936.GF10825@google.com>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+ <86o7mpmvqq.wl-maz@kernel.org>
+ <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+ <86mt29mt2m.wl-maz@kernel.org>
+ <20230515112554.GA10825@google.com>
+ <86h6scmzf7.wl-maz@kernel.org>
 MIME-Version: 1.0
-References: <20230419225604.21204-1-dianders@chromium.org> <CAD=FV=Wny=iFQf2GGuC2qP9hy4FHzpiRpV=ZvxEW77DX02XGzQ@mail.gmail.com>
- <ZFvGqD//pm/lZb+p@FVFF77S0Q05N.cambridge.arm.com> <CAD=FV=WjX-XD6tX3hZq0GOh9e+Pc1jMMYP8DCc=u1YWQ2E5hYw@mail.gmail.com>
-In-Reply-To: <CAD=FV=WjX-XD6tX3hZq0GOh9e+Pc1jMMYP8DCc=u1YWQ2E5hYw@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 16 May 2023 15:39:21 +0530
-Message-ID: <CAFA6WYOU8HW2JVBfCeFEkn-5cd81TM-x=ArUKeaSi3NzxgKaGQ@mail.gmail.com>
-Subject: Re: [PATCH v8 00/10] arm64: Add framework to turn an IPI as NMI
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, ito-yuichi@fujitsu.com,
-        kgdb-bugreport@lists.sourceforge.net, Chen-Yu Tsai <wens@csie.org>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-perf-users@vger.kernel.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Ben Dooks <ben-linux@fluff.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <86h6scmzf7.wl-maz@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023 at 22:20, Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Wed, May 10, 2023 at 9:30=E2=80=AFAM Mark Rutland <mark.rutland@arm.co=
-m> wrote:
-> >
-> > On Wed, May 10, 2023 at 08:28:17AM -0700, Doug Anderson wrote:
-> > > Hi,
-> >
-> > Hi Doug,
-> >
-> > > On Wed, Apr 19, 2023 at 3:57=E2=80=AFPM Douglas Anderson <dianders@ch=
-romium.org> wrote:
-> > > > This is an attempt to resurrect Sumit's old patch series [1] that
-> > > > allowed us to use the arm64 pseudo-NMI to get backtraces of CPUs an=
-d
-> > > > also to round up CPUs in kdb/kgdb. The last post from Sumit that I
-> > > > could find was v7, so I called this series v8. I haven't copied all=
- of
-> > > > his old changelongs here, but you can find them from the link.
-> > > >
+On Tue, 16 May 2023, Marc Zyngier wrote:
 
-Thanks Doug for picking up this work and for all your additions/improvement=
-s.
+> On Mon, 15 May 2023 12:25:54 +0100,
+> Lee Jones <lee@kernel.org> wrote:
+> > 
+> > On Fri, 12 May 2023, Marc Zyngier wrote:
+> > 
+> > > On Fri, 12 May 2023 16:39:33 +0100,
+> > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > > > 
+> > > > On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
+> > > > > On Fri, 12 May 2023 13:28:35 +0100,
+> > > > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > > > > > 
+> > > > > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> > > > > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> > > > > > for portable applications. It provides a high dynamic range, stereo
+> > > > > > DAC for headphone output, two integrated Class D amplifiers for
+> > > > > > loudspeakers, and two ADCs for wired headset microphone input or
+> > > > > > stereo line input. PDM inputs are provided for digital microphones.
+> > > > > > 
+> > > > > > The IRQ chip provides IRQ functionality both to other parts of the
+> > > > > > cs42l43 device and to external devices that wish to use its IRQs.
+> > > > > 
+> > > > > Sorry, but this isn't much of an interrupt controller driver. A modern
+> > > > > interrupt controller driver is firmware-driven (DT or ACPI, pick your
+> > > > > poison), uses irq domains, and uses the irqchip API.
+> > > > > 
+> > > > 
+> > > > Apologies but I really need a little help clarifying the issues
+> > > > here. I am totally happy to fix things up but might need a couple
+> > > > pointers.
+> > > > 
+> > > > 1) uses the irqchip API / uses irq domains
+> > > > 
+> > > > The driver does use both the irqchip API and domains, what
+> > > > part of the IRQ API are we not using that we should be?
+> > > > 
+> > > > The driver registers an irq domain using
+> > > > irq_domain_create_linear.  It requests its parent IRQ using
+> > > > request_threaded_irq. It passes IRQs onto the devices requesting
+> > > > IRQs from it using handle_nested_irq and irq_find_mapping.
+> > > > 
+> > > > Is the objection here that regmap is making these calls for us,
+> > > > rather than them being hard coded into this driver?
+> > > 
+> > > That's one of the reasons. Look at the existing irqchip drivers: they
+> > > have nothing in common with yours. The regmap irqchip abstraction may
+> > > be convenient for what you are doing, but the result isn't really an
+> > > irqchip driver. It is something that is a small bit of a larger device
+> > > and not an interrupt controller driver on its own. The irqchip
+> > > subsystem is there for "first class" interrupt controllers.
+> > 
+> > I'm not aware of another subsystem that deals with !IRQChip level IRQ
+> > controllers.  Where do simple or "second class" interrupt controllers
+> > go?
+> 
+> This isn't an interrupt controller. This is internal signalling, local
+> to a single component that has been artificially broken into discrete
+> bits, including an interrupt controller. The only *real* interrupts
+> here are the GPIOs.
+> 
+> I'm happy to see an interrupt controller for the GPIOs. But the rest
+> is just internal muck that doesn't really belong here. Where should it
 
-> > > > Since v7, I have:
-> > > > * Addressed the small amount of feedback that was there for v7.
-> > > > * Rebased.
-> > > > * Added a new patch that prevents us from spamming the logs with id=
-le
-> > > >   tasks.
-> > > > * Added an extra patch to gracefully fall back to regular IPIs if
-> > > >   pseudo-NMIs aren't there.
-> > > >
-> > > > Since there appear to be a few different patches series related to
-> > > > being able to use NMIs to get stack traces of crashed systems, let =
-me
-> > > > try to organize them to the best of my understanding:
-> > > >
-> > > > a) This series. On its own, a) will (among other things) enable sta=
-ck
-> > > >    traces of all running processes with the soft lockup detector if
-> > > >    you've enabled the sysctl "kernel.softlockup_all_cpu_backtrace".=
- On
-> > > >    its own, a) doesn't give a hard lockup detector.
-> > > >
-> > > > b) A different recently-posted series [2] that adds a hard lockup
-> > > >    detector based on perf. On its own, b) gives a stack crawl of th=
-e
-> > > >    locked up CPU but no stack crawls of other CPUs (even if they're
-> > > >    locked too). Together with a) + b) we get everything (full locku=
-p
-> > > >    detect, full ability to get stack crawls).
-> > > >
-> > > > c) The old Android "buddy" hard lockup detector [3] that I'm
-> > > >    considering trying to upstream. If b) lands then I believe c) wo=
-uld
-> > > >    be redundant (at least for arm64). c) on its own is really only
-> > > >    useful on arm64 for platforms that can print CPU_DBGPCSR somehow
-> > > >    (see [4]). a) + c) is roughly as good as a) + b).
-> >
-> > > It's been 3 weeks and I haven't heard a peep on this series. That
-> > > means nobody has any objections and it's all good to land, right?
-> > > Right? :-P
+You should have been a poet! =;-)
 
-For me it was months waiting without any feedback. So I think you are
-lucky :) or atleast better than me at poking arm64 maintainers.
+> go? Together with the rest of the stuff that manages the block as a
+> whole. Which looks like the MFD subsystem to me.
 
-> >
-> > FWIW, there are still longstanding soundness issues in the arm64 pseudo=
--NMI
-> > support (and fixing that requires an overhaul of our DAIF / IRQ flag
-> > management, which I've been chipping away at for a number of releases),=
- so I
-> > hadn't looked at this in detail yet because the foundations are still s=
-omewhat
-> > dodgy.
-> >
-> > I appreciate that this has been around for a while, and it's on my queu=
-e to
-> > look at.
->
-> Ah, thanks for the heads up! We've been thinking about turning this on
-> in production in ChromeOS because it will help us track down a whole
-> class of field-generated crash reports that are otherwise opaque to
-> us. It sounds as if maybe that's not a good idea quite yet? Do you
-> have any idea of how much farther along this needs to go? ...of
-> course, we've also run into issues with Mediatek devices because they
-> don't save/restore GICR registers properly [1]. In theory, we might be
-> able to work around that in the kernel.
->
-> In any case, even if there are bugs that would prevent turning this on
-> for production, it still seems like we could still land this series.
-> It simply wouldn't do anything until someone turned on pseudo NMIs,
-> which wouldn't happen till the kinks are worked out.
+Very well.  Let's see this "muck" in a patch please!
 
-I agree here. We should be able to make the foundations robust later
-on. IMHO, until we turn on features surrounding pseudo NMIs, I am not
-sure how we can have true confidence in the underlying robustness.
-
--Sumit
-
->
-> ...actually, I guess I should say that if all the patches of the
-> current series do land then it actually _would_ still do something,
-> even without pseudo-NMI. Assuming the last patch looks OK, it would at
-> least start falling back to using regular IPIs to do backtraces. That
-> wouldn't get backtraces on hard locked up CPUs but it would be better
-> than what we have today where we don't get any backtraces. This would
-> get arm64 on par with arm32...
->
-> [1] https://issuetracker.google.com/281831288
+-- 
+Lee Jones [李琼斯]
