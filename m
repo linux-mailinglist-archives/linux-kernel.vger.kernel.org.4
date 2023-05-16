@@ -2,122 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247C37058FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FB2705901
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjEPUkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
+        id S229673AbjEPUlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjEPUjx (ORCPT
+        with ESMTP id S229502AbjEPUlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:39:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658B21BF4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:39:52 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684269590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yCVRViIkSyo2p0AVmD2VBFU7NXG7CdGaJTUHpk53BrU=;
-        b=36WTLNP0b8Tfd7PpIDZh6Yf9Q+udTKydU73GAA2jPeqm0kG+CZ6rJvcGRL51MySh3KDp5y
-        UUD7zygPFkj57C3Mw2R1LUYKys3Gmab5bf5s3q5tvMHfRLTfCZSup1wsTvp+fFkf8fGU03
-        W0CBWDGpBxTO2cp7P50b0IGNC6va1M1l2A6krtyQpXhoT0fAaDAJ0tgdqyi68YFnnT3mOT
-        S0LRL7mGBdXy1MEFW4XzvcFnDbqSfM6woZ68U4dDUlTPyM2pZe4/Y1L6UvL0s2xg6HfWfh
-        fHIwE4hPhsaL62IweXc+4Qj8c7a++U/t6wZmI5JLaSdcPsmQy8pOwbi8uiAWMg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684269590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yCVRViIkSyo2p0AVmD2VBFU7NXG7CdGaJTUHpk53BrU=;
-        b=wkjjAvff5MwqI1LdgSgL20aU/GxPcU+j0081LoiGfDaVBR7zcdEf+dwFw2DoYBoeh8IXhZ
-        /R5WA8Yq+B36P6Bg==
-To:     "H. Peter Anvin" <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Rong Tao <rtoax@foxmail.com>
-Cc:     Rong Tao <rongtao@cestc.cn>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/vdso: Use non-serializing instruction rdtsc
-In-Reply-To: <4959DDEE-58DC-45E7-BE00-019A45A97D2B@zytor.com>
-References: <tencent_4DC4468312A1CB2CA34B0215FAD797D11F07@qq.com>
- <56ea846e-bce8-2508-e485-1dada8c39643@intel.com>
- <4959DDEE-58DC-45E7-BE00-019A45A97D2B@zytor.com>
-Date:   Tue, 16 May 2023 22:39:49 +0200
-Message-ID: <878rdo6mei.ffs@tglx>
+        Tue, 16 May 2023 16:41:21 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DD62112;
+        Tue, 16 May 2023 13:41:18 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F2AB6605902;
+        Tue, 16 May 2023 21:41:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684269677;
+        bh=C9zDqyuOb63WjaYQL4pSv774nnw1AN03fB2+IgNujDU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BSHGgGTAPtElpz2DMg1YB3AsFPEtc6bFiMHdgt47HXaPmi4QZa7POQMs/rj4nSTxZ
+         74uX30i7bu6xoAtdbOsVlZ3jvci8fqGBr7Vk7gPE/x9aZ/IDMYQX1K1+cyEPZ0HlXF
+         2APD2YiRmzvLea+cszomdYj6iXe7tOs6a0bp5os10rWXDwuAR3TUqzGpWOkEB7CaSc
+         uFNeb4GGd3eW4ed9acaX4zSBNveCGcy+z9fhjLiFDFVCTH4gIzMxsVoVaE8leJ1V3b
+         /O4DBw9oIfBmZxsx//BKJqB2LGVWLuV3BdpSd61N1dEddN8JTYD5kj7O+Tq9vTNQl3
+         egkRQa9hb0uuQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 5C5B610623DF; Tue, 16 May 2023 22:41:14 +0200 (CEST)
+Date:   Tue, 16 May 2023 22:41:14 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     heikki.krogerus@linux.intel.com, rafael@kernel.org,
+        ajayg@nvidia.com, andriy.shevchenko@linux.intel.com,
+        linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Evan.Quan@amd.com, Lijo.Lazar@amd.com, Sanket.Goswami@amd.com
+Subject: Re: [PATCH 1/2] power: supply: Use the scope of power supplies to
+ tell if power is system supplied
+Message-ID: <20230516204114.vv5w2vmcyulmhmm4@mercury.elektranox.org>
+References: <20230516182541.5836-1-mario.limonciello@amd.com>
+ <20230516182541.5836-2-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="loy7qsitjthxsozd"
+Content-Disposition: inline
+In-Reply-To: <20230516182541.5836-2-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16 2023 at 10:57, H. Peter Anvin wrote:
-> On May 16, 2023 7:12:34 AM PDT, Dave Hansen <dave.hansen@intel.com> wrote:
->>On 5/15/23 23:52, Rong Tao wrote:
->>> Replacing rdtscp or 'lfence;rdtsc' with the non-serializable instruction
->>> rdtsc can achieve a 40% performance improvement with only a small loss of
->>> precision.
->>
->>I think the minimum that can be done in a changelog like this is to
->>figure out _why_ a RDTSCP was in use.  There are a ton of things that
->>can make the kernel go faster, but not all of them are a good idea.
->>
->>I assume that the folks that wrote this had good reason for not using
->>plain RSTSC.  What were those reasons?
->
-> I believe the motivation is that it is atomic with reading the CPU number.
 
-Believe belongs in the realm of religion and does not help much to
-explain technical issues. :)
+--loy7qsitjthxsozd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-rdtsc_ordered() has actually useful comments and also see:
-  https://lore.kernel.org/lkml/87ttwc73za.ffs@tglx
+Hi,
 
-The Intel SDM and the AMD APM are both blury about RDTSC speculation and
-we've observed (quite some time ago) situations where the RDTSC value
-was clearly from the past solely due to speculation. So we had to bite
-the bullet to add the fencing. Preferrably RDTSCP or if not available
-LFENCE; RDTSC. IIRC the original variant was even CPUID; RDTSC, which is
-daft.
+On Tue, May 16, 2023 at 01:25:40PM -0500, Mario Limonciello wrote:
+> The logic used for power_supply_is_system_supplied() counts all power
+> supplies and:
+> * If no power supplies found assumes AC
+> * If non-battery power supplies found uses online to determine AC/DC.
+>   - If any are onlined, assumes AC
+>   - Othewise DC.
+>=20
+> This logic makes sense for desktop systems that don't export an ACPI
+> battery, but it fails once you include a dGPU that provides a UCSI
+> power supply on a desktop system without any other power supplies.
+>=20
+> The dGPU by default doesn't have anything plugged in so it's 'offline'.
+> This makes power_supply_is_system_supplied() return 0 with a count of
+> 1 meaning all drivers that use this get a wrong judgement.
+>=20
+> To fix this case adjust the logic to also examine the scope of the
+> power supply. If the power supply is deemed a device power supply,
+> then don't count it.
+>=20
+> Cc: Evan Quan <Evan.Quan@amd.com>
+> Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
 
-The time readout does (simplified):
+Good find; the current logic should also break with a desktop PC
+once a POWER_SUPPLY_SCOPE_DEVICE battery device is attached (e.g.
+a HID device), because it increases the counter.
 
-    do {
-           // Wait for the sequence count to become even
-           while ((seq = READ_ONCE(vd->seq)) & 1);
+I suppose I can just apply this to my fixes branch since there is
+no compile time dependency to the second patch?
 
-           tsc = rdtsc_ordered();
-           now = convert(vd, tsc);
-    } while (seq != READ_ONCE(vd->seq));
+-- Sebastian
 
-It's obviously more complex than that, but you get the idea.
+>  drivers/power/supply/power_supply_core.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index ab986dbace16..d57f420ba8c3 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -348,6 +348,10 @@ static int __power_supply_is_system_supplied(struct =
+device *dev, void *data)
+>  	struct power_supply *psy =3D dev_get_drvdata(dev);
+>  	unsigned int *count =3D data;
+> =20
+> +	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
+> +		if (ret.intval =3D=3D POWER_SUPPLY_SCOPE_DEVICE)
+> +			return 0;
+> +
+>  	(*count)++;
+>  	if (psy->desc->type !=3D POWER_SUPPLY_TYPE_BATTERY)
+>  		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
+> @@ -366,8 +370,8 @@ int power_supply_is_system_supplied(void)
+>  				      __power_supply_is_system_supplied);
+> =20
+>  	/*
+> -	 * If no power class device was found at all, most probably we are
+> -	 * running on a desktop system, so assume we are on mains power.
+> +	 * If no system scope power class device was found at all, most probabl=
+y we
+> +	 * are running on a desktop system, so assume we are on mains power.
+>  	 */
+>  	if (count =3D=3D 0)
+>  		return 1;
+> --=20
+> 2.34.1
+>=20
 
-Now replace RDTSCP with RDTSC and explain what guarantees that
-the TSC read isn't speculated ahead of the sequence check.
+--loy7qsitjthxsozd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If it's architecturally guaranteed that this can't happen, I'm more than
-happy to use plain RDTSC.
+-----BEGIN PGP SIGNATURE-----
 
-But as I've observed that myself in the past, I'm pretty sure that it is
-not guaranteed, at least not on older microarchitectures. If newer ones
-make that guarantee then they should have exposed that as a feature bit
-in CPUID and clearly documented it in the SDM.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj6mYACgkQ2O7X88g7
++prYYw/+J1BuDhX+ZFGDR0/voAC5dCfIpZGidEQyTgvGCXkk3ZoQr/saqgv5SwPf
+ED/OgJSCJWV/gvj8QTbdtFoEkWia30zwyjEw4Ny1GiOHq9FidHhMo4mUaKPyCr79
+p4EBPSLcD8EQlD0iQT3Gz5rEDm4qb43GBa/HT4odWpkd/AM1H0V9hNeXTrWB7F95
+SgAI7tru7pP9nhHszkn2phhX0AION0IszUhI3Eq92VFPojyPk9akh/HVtTPF4UbZ
+5pXoDrzup1Y46xlxB3lP7l0Hvy5HpVPYtevp350hvPB44ymvgfQ2XRjoPCQO/a8a
+uOudiWg05SFb7/uyp3+4vTGJKoWtZ96DWIX2Ihw6b2f+3atPSBNZaHZ695rJrPT7
+v1QXz8k1HViUAKxqFMWo1LMuv7pT5B0Iphyujr1RD0WyWw/Ib9UMTkmu6ZGkcu3/
+1Looi7Fqnfmd6lXjkVZWbgXmPLyaaRlviObAa/5we/MLWPPxsFCIJSAW7dbULpcq
+NTHviGtf/fUIAIhiy/hphCKmXMMjINsEjleHOjD8+GrMXEp3zvbl+nocrJA/v6K6
+2d48jfZnEheRyJAGkY8L2NibU2q61ABianuuiPzFbokxwoWfvIXwXPVpUNrHyR1t
+/GbgS+V1RmgP0wYzbXgPNkEVz8zXNWH53QH/z+zAIPwJvDj7DlA=
+=GZta
+-----END PGP SIGNATURE-----
 
-As long as that does not happen, I'm sticking to the correctness first
-principle.
-
-Thanks,
-
-        tglx
+--loy7qsitjthxsozd--
