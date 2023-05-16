@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262B8705001
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A59705007
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbjEPNzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
+        id S233115AbjEPN5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbjEPNzl (ORCPT
+        with ESMTP id S232324AbjEPN5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:55:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4076E198B;
-        Tue, 16 May 2023 06:55:34 -0700 (PDT)
+        Tue, 16 May 2023 09:57:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3C71711
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:57:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D221B623A6;
-        Tue, 16 May 2023 13:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11530C433D2;
-        Tue, 16 May 2023 13:55:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62B7E6168D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:57:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 979DBC433D2;
+        Tue, 16 May 2023 13:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684245333;
-        bh=wZ62vZSRS8wP66zvBvXFymljcnlfadcikGe0oxhN+BE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OAGr9szX1xMSABTUwVaAywEIAq0f/k7uM41GXb/FOyxdKxRLSQTL48v/6fRuqTbJj
-         s0S1lR87KmWRD7cWf621kwk0q1PiwDpTRb3VFCVC/1dD9qHt0WooW2V+bzEnKNW9e+
-         nsBYAtQwejfBMnw5/Fyg8NlPtl2GeVgdvRydyuVP0q381CCGfU6fJ7IvZvAInzSTAa
-         cQVyzz6x9/nEhLIWKlazhJXZRcwDS3CK5O24v5VLxs2qJr0OOrKRgzFUvS+IHFDz4R
-         19RqzkxRteJ3k8KQ+JbViNy2cy7P6eypNPoR+KgPdclq5HDMnaBUqEl6sgTvYRHsCN
-         WiRZ1CjEyp6+A==
-Date:   Tue, 16 May 2023 14:55:26 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Lepton Wu <lepton@chromium.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        "moderated list:ARM SMMU DRIVERS" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU SUBSYSTEM" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] iommu/arm-smmu-qcom: Fix missing adreno_smmu's
-Message-ID: <20230516135525.GC30894@willie-the-truck>
-References: <20230511145908.597683-1-robdclark@gmail.com>
+        s=k20201202; t=1684245429;
+        bh=Dg6xwqAYoBbJ+/6rCpEbcwJd7iha1URjRnlvLQywWho=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OfwUrj6GRuK7IpN+1ySxaWFi+FLMIldsaeFzydc+4ar2z8xmew09zdNiWgavN7UgD
+         Lupr7WbGFXNXxdxGhvK1lCIvM6aZO9UWE2mMKhP3zeJ5B+6itQPVrKnr7TWkSiE1k5
+         CZx2QDsC99s3Zw6En+AtfQ2XaFMNbVq5KFJ3uK37jNjzGooczBSdZvexxp0h+53cBe
+         9xJ3OMaPzwSj7RxDzhvXKpSOY5xij3uH/vVpiQ6exdyHxivZfFePfCR3nUeLcT1ixK
+         Y10Jm7Am0/HX8t30ikVogZgudCIqqZkT61U4LU+gjma0WEHbH6MJ7qdPczpSFc6ssU
+         vLpKolMZSw9GQ==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] Revert "x86/orc: Make it callthunk aware"
+Date:   Tue, 16 May 2023 06:56:46 -0700
+Message-Id: <a05b916ef941da872cbece1ab3593eceabd05a79.1684245404.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511145908.597683-1-robdclark@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,65 +53,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 07:59:05AM -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> When the special handling of qcom,adreno-smmu was moved into
-> qcom_smmu_create(), it was overlooked that we didn't have all the
-> required entries in qcom_smmu_impl_of_match.  So we stopped getting
-> adreno_smmu_priv on sc7180, breaking per-process pgtables.
-> 
-> Fixes: 30b912a03d91 ("iommu/arm-smmu-qcom: Move the qcom,adreno-smmu check into qcom_smmu_create")
-> Suggested-by: Lepton Wu <lepton@chromium.org>
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> index d1b296b95c86..66e191773099 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> @@ -496,20 +496,21 @@ static const struct qcom_smmu_match_data qcom_smmu_500_impl0_data = {
->  /*
->   * Do not add any more qcom,SOC-smmu-500 entries to this list, unless they need
->   * special handling and can not be covered by the qcom,smmu-500 entry.
->   */
->  static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
->  	{ .compatible = "qcom,msm8996-smmu-v2", .data = &msm8996_smmu_data },
->  	{ .compatible = "qcom,msm8998-smmu-v2", .data = &qcom_smmu_v2_data },
->  	{ .compatible = "qcom,qcm2290-smmu-500", .data = &qcom_smmu_500_impl0_data },
->  	{ .compatible = "qcom,qdu1000-smmu-500", .data = &qcom_smmu_500_impl0_data  },
->  	{ .compatible = "qcom,sc7180-smmu-500", .data = &qcom_smmu_500_impl0_data },
-> +	{ .compatible = "qcom,sc7180-smmu-v2", .data = &qcom_smmu_v2_data },
->  	{ .compatible = "qcom,sc7280-smmu-500", .data = &qcom_smmu_500_impl0_data },
->  	{ .compatible = "qcom,sc8180x-smmu-500", .data = &qcom_smmu_500_impl0_data },
->  	{ .compatible = "qcom,sc8280xp-smmu-500", .data = &qcom_smmu_500_impl0_data },
->  	{ .compatible = "qcom,sdm630-smmu-v2", .data = &qcom_smmu_v2_data },
->  	{ .compatible = "qcom,sdm845-smmu-v2", .data = &qcom_smmu_v2_data },
->  	{ .compatible = "qcom,sdm845-smmu-500", .data = &sdm845_smmu_500_data },
->  	{ .compatible = "qcom,sm6115-smmu-500", .data = &qcom_smmu_500_impl0_data},
->  	{ .compatible = "qcom,sm6125-smmu-500", .data = &qcom_smmu_500_impl0_data },
->  	{ .compatible = "qcom,sm6350-smmu-v2", .data = &qcom_smmu_v2_data },
->  	{ .compatible = "qcom,sm6350-smmu-500", .data = &qcom_smmu_500_impl0_data },
-> @@ -540,12 +541,18 @@ struct arm_smmu_device *qcom_smmu_impl_init(struct arm_smmu_device *smmu)
->  		/* Match platform for ACPI boot */
->  		if (acpi_match_platform_list(qcom_acpi_platlist) >= 0)
->  			return qcom_smmu_create(smmu, &qcom_smmu_500_impl0_data);
->  	}
->  #endif
->  
->  	match = of_match_node(qcom_smmu_impl_of_match, np);
->  	if (match)
->  		return qcom_smmu_create(smmu, match->data);
->  
-> +	/* If you hit this WARN_ON() you are missing an entry in the
-> +	 * qcom_smmu_impl_of_match[] table, and GPU per-process page-
-> +	 * tables will be broken.
-> +	 */
-> +	WARN_ON(of_device_is_compatible(np, "qcom,adreno-smmu"));
+Commit 396e0b8e09e8 ("x86/orc: Make it callthunk aware") attempted to
+deal with the fact that function prefix code didn't have ORC coverage.
+However, it didn't work as advertised.  Use of the "null" ORC entry just
+caused affected unwinds to end early.
 
-Wouldn't it be better to print the information from the comment, rather
-than force the user to diagnose a WARN_ON() back to the source?
+The root cause has now been fixed with commit 5743654f5e2e ("objtool:
+Generate ORC data for __pfx code").
 
-Will
+Revert most of commit 396e0b8e09e8 ("x86/orc: Make it callthunk aware").
+The is_callthunk() function remains as it's now used by other code.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/x86/include/asm/alternative.h |  5 -----
+ arch/x86/kernel/callthunks.c       |  2 +-
+ arch/x86/kernel/unwind_orc.c       | 21 +--------------------
+ 3 files changed, 2 insertions(+), 26 deletions(-)
+
+diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+index d7da28fada87..6c15a622ad60 100644
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -113,7 +113,6 @@ extern void callthunks_patch_builtin_calls(void);
+ extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
+ 					  struct module *mod);
+ extern void *callthunks_translate_call_dest(void *dest);
+-extern bool is_callthunk(void *addr);
+ extern int x86_call_depth_emit_accounting(u8 **pprog, void *func);
+ #else
+ static __always_inline void callthunks_patch_builtin_calls(void) {}
+@@ -124,10 +123,6 @@ static __always_inline void *callthunks_translate_call_dest(void *dest)
+ {
+ 	return dest;
+ }
+-static __always_inline bool is_callthunk(void *addr)
+-{
+-	return false;
+-}
+ static __always_inline int x86_call_depth_emit_accounting(u8 **pprog,
+ 							  void *func)
+ {
+diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+index 22ab13966427..8e0a9b637e23 100644
+--- a/arch/x86/kernel/callthunks.c
++++ b/arch/x86/kernel/callthunks.c
+@@ -293,7 +293,7 @@ void *callthunks_translate_call_dest(void *dest)
+ 	return target ? : dest;
+ }
+ 
+-bool is_callthunk(void *addr)
++static bool is_callthunk(void *addr)
+ {
+ 	unsigned int tmpl_size = SKL_TMPL_SIZE;
+ 	void *tmpl = skl_call_thunk_template;
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 3ac50b7298d1..183bc20f610e 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -136,21 +136,6 @@ static struct orc_entry null_orc_entry = {
+ 	.type = ORC_TYPE_CALL
+ };
+ 
+-#ifdef CONFIG_CALL_THUNKS
+-static struct orc_entry *orc_callthunk_find(unsigned long ip)
+-{
+-	if (!is_callthunk((void *)ip))
+-		return NULL;
+-
+-	return &null_orc_entry;
+-}
+-#else
+-static struct orc_entry *orc_callthunk_find(unsigned long ip)
+-{
+-	return NULL;
+-}
+-#endif
+-
+ /* Fake frame pointer entry -- used as a fallback for generated code */
+ static struct orc_entry orc_fp_entry = {
+ 	.type		= ORC_TYPE_CALL,
+@@ -203,11 +188,7 @@ static struct orc_entry *orc_find(unsigned long ip)
+ 	if (orc)
+ 		return orc;
+ 
+-	orc =  orc_ftrace_find(ip);
+-	if (orc)
+-		return orc;
+-
+-	return orc_callthunk_find(ip);
++	return orc_ftrace_find(ip);
+ }
+ 
+ #ifdef CONFIG_MODULES
+-- 
+2.40.1
+
