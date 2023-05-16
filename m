@@ -2,175 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F4D705A60
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80B4705A6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjEPWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
+        id S230482AbjEPWJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjEPWCW (ORCPT
+        with ESMTP id S231130AbjEPWJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:02:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A0CB4;
-        Tue, 16 May 2023 15:02:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B587363CF5;
-        Tue, 16 May 2023 22:02:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90F7C433EF;
-        Tue, 16 May 2023 22:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1684274540;
-        bh=Xn5gFOegvDQoAs6fV+QPMtWJd/9gIN1gu+8PHj8jATQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=I8HmcSl3RSMNgObVi4nyzA8Dn0pIVn3Hyd4M9+6+jiCnOIEHPDAD1katsykkWAiMa
-         gn5fQMZJ0CFmK2NC9H7JKcNfD2tVhwbbUSeGJQe61+ttSYu+uB1762WRf9rvoaH/7u
-         R2FZf07p1aiooDIDhn5t28F6IgINIJ5khA8X4Fo4=
-Date:   Tue, 16 May 2023 15:02:18 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v5 3/6] mm/gup: remove vmas parameter from
- get_user_pages_remote()
-Message-Id: <20230516150218.477c5e9d0a2d9ef8b057069c@linux-foundation.org>
-In-Reply-To: <20230516094919.GA411@mutt>
-References: <cover.1684097001.git.lstoakes@gmail.com>
-        <afe323639b7bda066ee5c7a6cca906f5ad8df940.1684097002.git.lstoakes@gmail.com>
-        <20230516094919.GA411@mutt>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 16 May 2023 18:09:54 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A1C2696;
+        Tue, 16 May 2023 15:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=LnbBKJpfQ3I4gQ84zOmiBBremfoaAJsQslxmEhMP0fk=; b=j9wUm4Nb+Cj4O7khI9goKFiRv8
+        b5O8jzEpFLFkUBK0au07ekHpTyX4VTIbE5QRGV97l0fzL0lZmFzgIP+qbyt+zQl4pcOqXcM4txlYp
+        +5A7avbtwzJZ9zjKBuS6hvYp1aUuGLIt4Jd5i/HyvuSLMQuIDJq7RrGMt7HsLTRsnoVE=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:37790 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pz2rW-0004Vr-I0; Tue, 16 May 2023 18:09:43 -0400
+Date:   Tue, 16 May 2023 18:09:42 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Lech Perczak <lech.perczak@camlingroup.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lech Perczak <l.perczak@camlintechnologies.com>,
+        Tomasz =?UTF-8?Q?Mo=C5=84?= <tomasz.mon@camlingroup.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof =?UTF-8?Q?Drobi=C5=84ski?= 
+        <krzysztof.drobinski@camlingroup.com>, hugo@hugovil.com
+Message-Id: <20230516180942.46a51d85746e4246a9a4bba4@hugovil.com>
+In-Reply-To: <20230516115906.9d93685696ae7dc02faff752@hugovil.com>
+References: <20230515160206.2801991-1-hugo@hugovil.com>
+        <2023051551-quickstep-outshine-5526@gregkh>
+        <20230515125155.bf6d64c292ba96f4f6971ac0@hugovil.com>
+        <a27271d5-6d28-d994-b06f-905eea0514aa@camlingroup.com>
+        <20230516115906.9d93685696ae7dc02faff752@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH] Revert
+ "sc16is7xx: Separate GPIOs from modem control lines"
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 11:49:19 +0200 Anders Roxell <anders.roxell@linaro.org> wrote:
+On Tue, 16 May 2023 11:59:06 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-> On 2023-05-14 22:26, Lorenzo Stoakes wrote:
-> > The only instances of get_user_pages_remote() invocations which used the
-> > vmas parameter were for a single page which can instead simply look up the
-> > VMA directly. In particular:-
-> > 
-> > - __update_ref_ctr() looked up the VMA but did nothing with it so we simply
-> >   remove it.
-> > 
-> > - __access_remote_vm() was already using vma_lookup() when the original
-> >   lookup failed so by doing the lookup directly this also de-duplicates the
-> >   code.
-> > 
-> > We are able to perform these VMA operations as we already hold the
-> > mmap_lock in order to be able to call get_user_pages_remote().
-> > 
-> > As part of this work we add get_user_page_vma_remote() which abstracts the
-> > VMA lookup, error handling and decrementing the page reference count should
-> > the VMA lookup fail.
-> > 
-> > This forms part of a broader set of patches intended to eliminate the vmas
-> > parameter altogether.
-> > 
-> > -		int bytes, ret, offset;
-> > +		int bytes, offset;
-> >  		void *maddr;
-> > -		struct page *page = NULL;
-> > +		struct vm_area_struct *vma;
-> > +		struct page *page = get_user_page_vma_remote(mm, addr,
-> > +							     gup_flags, &vma);
-> > +
-> > +		if (IS_ERR_OR_NULL(page)) {
-> > +			int ret = 0;
-> 
-> I see the warning below when building without CONFIG_HAVE_IOREMAP_PROT set.
-> 
-> make --silent --keep-going --jobs=32 \
-> O=/home/anders/.cache/tuxmake/builds/1244/build ARCH=arm \
-> CROSS_COMPILE=arm-linux-gnueabihf- /home/anders/src/kernel/next/mm/memory.c: In function '__access_remote_vm':
-> /home/anders/src/kernel/next/mm/memory.c:5608:29: warning: unused variable 'ret' [-Wunused-variable]
->  5608 |                         int ret = 0;
->       |                             ^~~
+> On Tue, 16 May 2023 10:50:11 +0200
+> Lech Perczak <lech.perczak@camlingroup.com> wrote:
+>=20
+> > Hi Hugo,
+> >=20
+> > Please see my answers inline.
+> >=20
+> > W dniu 15.05.2023 o=A018:51, Hugo Villeneuve pisze:
+> > > Hi Greg,
+> > >
+> > > On Mon, 15 May 2023 18:20:02 +0200
+> > > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > >
+> > >> On Mon, May 15, 2023 at 12:02:07PM -0400, Hugo Villeneuve wrote:
+> > >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > >>>
+> > >>> This reverts commit 679875d1d8802669590ef4d69b0e7d13207ebd61.
+> > >>>
+> > >>> Because of this commit, it is no longer possible to use the 16 GPIO
+> > >>> lines as dedicated GPIOs on the SC16IS752.
+> > >>>
+> > >>> Reverting it makes it work again.
+> > >>>
+> > >>> The log message of the original commit states:
+> > >>>     "Export only the GPIOs that are not shared with hardware modem
+> > >>>     control lines"
+> > >>>
+> > >>> But there is no explanation as to why this decision was taken to
+> > >>> permanently set the function of the GPIO lines as modem control
+> > >>> lines. AFAIK, there is no problem with using these lines as GPIO or=
+ modem
+> > >>> control lines.
+> > >>>
+> > >>> Maybe after reverting this commit, we could define a new
+> > >>> device-tree property named, for example,
+> > >>> "use-modem-control-lines", so that both options can be supported.
+> > >>>
+> > >>> Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control
+> > >>> lines")
+> > >> Please do not line-wrap these lines.
+> > > Ok.
+> > >
+> > >> Nor is a blank line needed here.
+> > > Ok.
+> > >
+> > >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > >>> ---
+> > >>>  drivers/tty/serial/sc16is7xx.c | 14 ++++----------
+> > >>>  1 file changed, 4 insertions(+), 10 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc=
+16is7xx.c
+> > >>> index 5bd98e4316f5..25f1b2f6ec51 100644
+> > >>> --- a/drivers/tty/serial/sc16is7xx.c
+> > >>> +++ b/drivers/tty/serial/sc16is7xx.c
+> > >>> @@ -306,7 +306,6 @@ struct sc16is7xx_devtype {
+> > >>>     char    name[10];
+> > >>>     int     nr_gpio;
+> > >>>     int     nr_uart;
+> > >>> -   int     has_mctrl;
+> > >>>  };
+> > >>>
+> > >>>  #define SC16IS7XX_RECONF_MD                (1 << 0)
+> > >>> @@ -447,35 +446,30 @@ static const struct sc16is7xx_devtype sc16is7=
+4x_devtype =3D {
+> > >>>     .name           =3D "SC16IS74X",
+> > >>>     .nr_gpio        =3D 0,
+> > >>>     .nr_uart        =3D 1,
+> > >>> -   .has_mctrl      =3D 0,
+> > >>>  };
+> > >>>
+> > >>>  static const struct sc16is7xx_devtype sc16is750_devtype =3D {
+> > >>>     .name           =3D "SC16IS750",
+> > >>> -   .nr_gpio        =3D 4,
+> > >>> +   .nr_gpio        =3D 8,
+> > >> I think this one line change is all you really need here, right?  the
+> > >> otner changes do nothing in this patch, so you should just create a =
+new
+> > >> one changing this value.  Oh, and this one:
+> > >>
+> > >>>     .nr_uart        =3D 1,
+> > >>> -   .has_mctrl      =3D 1,
+> > >>>  };
+> > >>>
+> > >>>  static const struct sc16is7xx_devtype sc16is752_devtype =3D {
+> > >>>     .name           =3D "SC16IS752",
+> > >>> -   .nr_gpio        =3D 0,
+> > >>> +   .nr_gpio        =3D 8,
+> > >> right?
+> > >>
+> > >> Don't mess with the has_mctrl stuff, that's not relevant here.
+> > > Sorry, I just noticed that simply reverting commit 679875d1d880 is no=
+t sufficient (and will not compile). We must also revert part of commit:
+> > > 21144bab4f11 ("sc16is7xx: Handle modem status lines").
+> > >
+> > > The problem is that the commit 679875d1d880 was incomplete, and it wa=
+s (unfortunately) completed by integrating it in commit 21144bab4f11 ("sc16=
+is7xx: Handle modem status lines"). The relevant change was only these 5 ne=
+w lines, burried deeply into the second commit:
+> > Just as you noticed, this was required to support full set of flow cont=
+rol lines on this device.
+> > The commit you're trying to revert was a preparation for it. Disabling =
+has_mctrl will break it.
+> > I kindly suggest to suggest a fix, instead of hurrying a revert, and wa=
+iting for a proper fix later.
+>=20
+> Hi Lech,
+> the [RFC] in the subject was there to discuss about a possible revert, an=
+d/or maybe a possible fix that would allow both modes to be supported. I am=
+ not hurrying anything and I am certainly not waiting for a later fix, as I=
+ very much want to help and maybe submit such a fix myself.
+>=20
+> But the reality is that commits 679875d1d880/21144bab4f11 broke userspace=
+ by forcing GPIOs as modem control lines. I understand that reverting these=
+ patches could also potentially break things for applications depending on =
+these patches. I am simply wondering what is the proper course of action he=
+re: revert patches and work on a fix to support both modes, or skip revert =
+and work on a fix (my preference)?
+>=20
+> > > @@ -1353,9 +1452,17 @@ static int sc16is7xx_probe(struct device *dev,
+> > >                 sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFCR_RE=
+G,
+> > >                                      SC16IS7XX_EFCR_RXDISABLE_BIT |
+> > >                                      SC16IS7XX_EFCR_TXDISABLE_BIT);
+> > > +
+> > > +               /* Use GPIO lines as modem status registers */
+> > > +               if (devtype->has_mctrl)
+> > > +                       sc16is7xx_port_write(&s->p[i].port,
+> > > +                                            SC16IS7XX_IOCONTROL_REG,
+> > > +                                            SC16IS7XX_IOCONTROL_MODE=
+M_BIT);
+> > > +
+> > >
+> > > Therefore, I should also remove these lines if we go forward with a r=
+evert of the patch (should I add another tag "Fixes..." in that case?).
+> > >
+> > > And what do you think of my proposal to maybe replace has_mctrl with =
+a device tree property so that both modes can be fully supported?
+> > I think the proper solution here, is not to invent a new device tree pr=
+operty for every single use case.
+> > I would start by looking for other drivers, if, and how they handle sim=
+ilar cases.
+> > For example, imx-serial driver respects "uart-has-rtscts" property, as =
+do a lot of other controllers built into SoC-s.
+> > On the other hand, other devices which can also provide GPIOs, respect =
+"gpio-controller" property.
+>=20
+> I think that testing the presence of the "uart-has-rtscts" to force GPIOs=
+ as modem control lines would make a lot of sense.
+>=20
+> > According to SC16IS752 datasheet [1], respecting one of those should be=
+ enough,
+> > as GPIOs can be enabled in groups of four pins even for dual UART versi=
+on.
+> > Every group matches a single port, so probably this can be probably sel=
+ected per UART even on dual-port versions.
+>=20
+> I am trying to see how we could set "uart-has-rtscts" for only UART chann=
+el A or B in the device tree, but cannot find any example or documentation =
+about that. How do you propose to do it?
+>=20
+> From what I understand, the property "uart-has-rtscts" can be set only fo=
+r the whole chip (channels A and B)...
 
-Thanks, I did the obvious.
+After some analysis, I don't think that we should be using the property "ua=
+rt-has-rtscts". For our chip, this doesn't make sense because RTS/CTS are d=
+edicated pins. also, like I said, this property applies to the whole chip/d=
+evice, not to indivual A or B channels (like sc16is752).
 
-Also s/ret/res/, as `ret' is kinda reserved for "this is what this
-function will return".
+The way to go would be to define a new DT property similar to "irda-mode-po=
+rts" (for the same sc16is7xx driver). Defining a new property named "modem-=
+control-line-ports" would allow us to specify an array that lists the indic=
+es of the port that should have shared GPIO lines configured as modem contr=
+ol lines.
 
---- a/mm/memory.c~mm-gup-remove-vmas-parameter-from-get_user_pages_remote-fix
-+++ a/mm/memory.c
-@@ -5605,11 +5605,11 @@ int __access_remote_vm(struct mm_struct
- 							     gup_flags, &vma);
- 
- 		if (IS_ERR_OR_NULL(page)) {
--			int ret = 0;
--
- #ifndef CONFIG_HAVE_IOREMAP_PROT
- 			break;
- #else
-+			int res = 0;
-+
- 			/*
- 			 * Check if this is a VM_IO | VM_PFNMAP VMA, which
- 			 * we can access using slightly different code.
-@@ -5617,11 +5617,11 @@ int __access_remote_vm(struct mm_struct
- 			if (!vma)
- 				break;
- 			if (vma->vm_ops && vma->vm_ops->access)
--				ret = vma->vm_ops->access(vma, addr, buf,
-+				res = vma->vm_ops->access(vma, addr, buf,
- 							  len, write);
--			if (ret <= 0)
-+			if (res <= 0)
- 				break;
--			bytes = ret;
-+			bytes = res;
- #endif
- 		} else {
- 			bytes = len;
-_
+I already implemented that as a proof of concept and it works great.
 
+Hugo.
+
+
+> > I'll be more than happy to assist with that.
+> >=20
+> > >
+> > > Thank you,
+> > > Hugo.
+> > >
+> > [1] https://www.nxp.com/docs/en/data-sheet/SC16IS752_SC16IS762.pdf
+> >=20
+> > --=20
+> > Pozdrawiam/With kind regards,
+> > Lech Perczak
+> >=20
+> > Sr. Software Engineer
+> > Camlin Technologies Poland Limited Sp. z o.o.
+> > Strzegomska 54,
+> > 53-611 Wroclaw
+> > Tel:     (+48) 71 75 000 16
+> > Email:   lech.perczak@camlingroup.com
+> > Website: http://www.camlingroup.com
+> >=20
+> >=20
+>=20
+>=20
+> --=20
+> Hugo Villeneuve
+>=20
+
+
+--=20
+Hugo Villeneuve
