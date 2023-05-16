@@ -2,98 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00242704C03
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576C1704B61
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbjEPLL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S232550AbjEPLB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232885AbjEPLLc (ORCPT
+        with ESMTP id S232311AbjEPLBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:11:32 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3975146AE;
-        Tue, 16 May 2023 04:10:20 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GB45M9006515;
-        Tue, 16 May 2023 11:09:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=AtGWLXUTN+qs4yeQcx5N9AqF56cJjjk1MlHpZx/g9wo=;
- b=Qh8B4PeJZhDcIH+gAjrr3pVn8eRy99jwMotmiKLbQKJBySUWapuBaLAwbVX8Fk6mqMRW
- rw0iNnSsQVnJ1E1tQnEo+dLdivMtukR8G264HGtxblSzw5NyCH5cmqN1P7UOb1RkwFri
- JrZJUCAfVGpTwx8WVeZN8nu0UaJ2RJRqSUZry5JwlKTKJhLze5O+8NLEq/vdnQGK5Ly/
- LPZUe4BpG6tWdH2T4lkcvE/ATQ2uwiMZY/bzQIv/ilZQI4TYZdcOIy7Vf950CFRQCxzN
- yvpjSZQeomwcJ/1FsCWeZ9aTiaIELMI639hKULTdjsL21FWGgQVM5SdznK7/JPs5+QQr 7g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8mrrdeh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:09:13 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GB4atM008919;
-        Tue, 16 May 2023 11:07:14 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8mrr8a1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:07:14 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G8Ybkw031114;
-        Tue, 16 May 2023 11:01:19 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qj1tdsaux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:18 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB1GiK24117900
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:01:16 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7218C2004D;
-        Tue, 16 May 2023 11:01:16 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 234CC20040;
-        Tue, 16 May 2023 11:01:16 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:01:16 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH v4 41/41] asm-generic/io.h: Remove I/O port accessors for HAS_IOPORT=n
-Date:   Tue, 16 May 2023 13:00:37 +0200
-Message-Id: <20230516110038.2413224-42-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eUHPXjx_Kxq_Tt-dBQSCKCHtt9hyHAWF
-X-Proofpoint-GUID: FEbUPhHOuDgGY7Qb0MJ4mDjn31pei3cy
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 16 May 2023 07:01:08 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2096.outbound.protection.outlook.com [40.107.244.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6962D5F;
+        Tue, 16 May 2023 04:01:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OzeVeD4DRzOD5/SZjUl87BNOrjA0jSiG1V/VBmCkf6acskBcv4GTMNIe7IltSlfzsV8wd6PirbhiLITaf32+k1vblb3SRNf8DuZCnswev6rxFeFSRgzVUpOg3SN2+GF5kFcEu3Rr+2DCbAvQT+no4iNgZaRGypbxhAEP1nz6M20Al4qc3uDAR2HNTxsBCS3mdkif5Tu8HU7GkngMJprOMPfjuVKBO1LA1cXcSDvJ2d1ubv8RCQsjCBQvkDjgMpszhTVE1gwaOvqzpbN9JJb+aWKG75wbTxvZ8eJnUEfNuK5vEhOdpSgjHlAq+T36wdj0VhqxZauk+/S7FL9ZEbAfWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GPFfczXO6aQtrJlHyU0VonSDBiXmqaUdRdAknMLYE0g=;
+ b=l+PHdqm8bz1BIHiKApkhE27ig1oaGtf1ZTK87ABGiQZK2jCiiwugwPEGEGBMfXG1e4s+kV5CsWmYIWvVm6njagOkUkmgnmTjhMaG9N7qE+L3qMM3aYTbqdEiGqmkvPLd+KvsiG3Dg6CtysqGwpPUyvs23uYWGivalVhM20z7/NLXTzx1dnmm0k5ZlNPwO9hh7Lewg76bSoSA+xdwXmbpfBihFZyy4aIQZ8ZQ0loUdnRhsyygjkML/ZJ71f/I1qzn0jzf9oq24ZcMC1bnN7M7UlqvV7rN9eBnDy1MX9Ye8wgwAxQFHtI7vFUUAqAPbksB0/iByyytjzcUYr2+UO/VAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GPFfczXO6aQtrJlHyU0VonSDBiXmqaUdRdAknMLYE0g=;
+ b=CdWA5V8qV42lHsAW/+dmlMaGWXZnn1IFu+9/H1AvDsAQkxBqH/7rf/HC/nZ2XtoLJf4vnF5U4xWtyULhoRRA58uFb3UqLw7rYhQi4trBK0I/eRVQQ8PGrkHVDlnNCT7Eigy4w85fwrhVverOPXyQ99chKAiP0DKy1ESTUVbd8XU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB6367.namprd13.prod.outlook.com (2603:10b6:510:2f3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.15; Tue, 16 May
+ 2023 11:01:01 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.033; Tue, 16 May 2023
+ 11:01:01 +0000
+Date:   Tue, 16 May 2023 13:00:54 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Kalle Valo <kvalo@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-wireless@vger.kernel.org,
+        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] wifi: b43: fix incorrect __packed annotation
+Message-ID: <ZGNiZtG38Kr5M2uW@corigine.com>
+References: <20230516074554.1674536-1-arnd@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516074554.1674536-1-arnd@kernel.org>
+X-ClientProxiedBy: AS4P250CA0019.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e3::10) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160094
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6367:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd1f70b7-b42f-46e7-faee-08db55fcd5b7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: J4NEBrztmxxe5wA777h6Vd0iqf3lWa2Olj5Gnb0c0so2LbGdl1Wy0AnwuPzQQqA2mjWAj0D1DNhujb8rmXjDOopfsoBD7JWO79qm91FgNOqrcjjch8vLHbBCFyuO8OsSGaCBoevtG7ejaoHNobHzkq7T5tRAbIjpisz2XHA1xXe+U91RBYFG35n2I7Cn0orf03eP1PgdLDfAzgLaNxIXgh8M05m7ocHEMy6pMXoKc+5oFd9Eq/ghHcwiEGYLhOvI8WwajgKBe8EXv35KMU+TwxC9fcTDgsUsnN75HGJtzvD7L7rSGznC6OTT/TykKdz8eRZ2DWw1Jp3H33qa2XUMpj/QeTpU/SQwIR2Whs/L3HFIAdKoqSGECEtXEj3tL+ydxHp1kDZ5ZV1fodBb/mnd2nmt4kaayJCr4wCPYmaULEmvOY1T+3Zl/zRNSe3Q3AkJ4S2i3LeZqw8dEPaiKVf1Kv2GK1okFTknfatkQ8vjQ+ObpfF2LZe8zP43ELfcCNxwZMQpxu73VN/IasEHRHU5K6XMeKLnTVrwP1fwhod+/j2QNC9cNUIdF3zHCbVg4P+m
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(376002)(366004)(39840400004)(451199021)(2906002)(6506007)(38100700002)(2616005)(186003)(6512007)(83380400001)(4744005)(44832011)(5660300002)(7416002)(8676002)(8936002)(36756003)(478600001)(316002)(54906003)(4326008)(6666004)(6486002)(66476007)(66556008)(6916009)(41300700001)(86362001)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OuoNnM5b2PD1zqkejDEok07By4V0XdsM92fAHBzoUPxrbmiY4TQGVkUKoifg?=
+ =?us-ascii?Q?XoBviWkQ/HcrB+BJkaCLEZ+edEafyNaVsnrlRuc0aQ0r64JAOcWwo0so0naE?=
+ =?us-ascii?Q?yu5puYBgHKJZwcZycEfksVnAxT8F/87XbNnBGgQc+pTbu6vQZzDE06Ky0bUQ?=
+ =?us-ascii?Q?xgxCDDJRrxcYcCTzg5H8OtYDzQybBL0IygL0WHJGNESD+S8Ktkucl01kOInm?=
+ =?us-ascii?Q?L5eeGiK7GWjkx/W2zMWW6LTam3w9GjJmhiMVYIkD586SgFUiWs6mrL1Jn9fK?=
+ =?us-ascii?Q?AWIuzqP3gcZ1+mccGK1cSa90cp+2N06EW181uVn8AMUW/iQNKpXWy8O8MeBK?=
+ =?us-ascii?Q?fhH4H+m8lhuKf9mNqrkdi66t9yrwMqJhm1Qm7IiFmiHgVuQ6a6R7uF3cm56Z?=
+ =?us-ascii?Q?+DHbFkHWmYGwVrFEZiO/9Xe56Y02PB/qspQfLp9LMqQxvwIG3Shj1Zp1krVS?=
+ =?us-ascii?Q?veg1he7MDRaNf+gurXkxQBCKUKfoRFArzn737PPHJ9K82B1DZC6EP6/fTDQV?=
+ =?us-ascii?Q?nSXG1KeM9UEjgbzCAnydSBNgb2cZxkhqPIcPXsVVCoslowLtBIBPEyhxNkVs?=
+ =?us-ascii?Q?Tt7Oj+Pot/53Cu5L7ZwDPcrd/3aGtrY6xFj0o8xjRt1w66GcekDkOk8hZiYT?=
+ =?us-ascii?Q?gqwP9VtQ0jPybrA95sPUCwUBW8mWlsBp+sny5O1DWFhdEv9iCS45oNAagkcJ?=
+ =?us-ascii?Q?uPyu2PZd3RJYYBd/3F43IAKW2QEPenNthNx9DRlSuwnfS/vXPXmleG0knSFM?=
+ =?us-ascii?Q?6F1GkUuAB4uBu/gZwGQ80djoY5OceJwsINz3v5oUAAG8LdRbUqNbA3nMQXkh?=
+ =?us-ascii?Q?WLOoKLi3IgV7sf6iYmLJD4wLXnE6u1N1YG2FhEmwL1+5kYXhK/2sLz7/aF+4?=
+ =?us-ascii?Q?Mpk1C9W8fvxX2qdNYlFbXgIecpI4kxmJ2NL1S5jaJTDkXxYDtTt4TH3b0fiZ?=
+ =?us-ascii?Q?D+lx/64H5Vrt093qe+QcY/jmo/XlFNijpHz2OwbZKpSqCx+3xzvFeC0i5DZY?=
+ =?us-ascii?Q?Lv5zW5IZpcJjHEFcBw95Gdgkc6+D1vy+M8GvsrZQtZvMNF//hZ4tAOSFG0Dp?=
+ =?us-ascii?Q?z7CIN5vVc3No2RKN8OkYyNjMpVmjrOjNALyaY+UmlSVBFF9PhjFMASp6qZKq?=
+ =?us-ascii?Q?wLpHJJ0I00qDBowYncRCSflPcH8UrF9GMBp9WwS9YAB1zqtYQSjEBYU5bLj2?=
+ =?us-ascii?Q?hGhxeU0nzgfGj3whpoPanMlbGtK6zaVlRohQRheBtWuvMq+iN5LLIkWEdEvh?=
+ =?us-ascii?Q?ZgPflJmNlJAjwLRvnGSJZfRzueU1zBmo0KWox7igsKSmsgyKf2vuM0kNrfxE?=
+ =?us-ascii?Q?bRyQoLHhKjEM7kCcAeR8Ug+rgL7ubMSHlhgKj/5ZCYklEzvDJGmfkxN/PFA3?=
+ =?us-ascii?Q?0h+WStf2m98L3+KK3lbJEov4wfxXM3kLdk35X5gDZnVB2XBqVujM+wN87Fp5?=
+ =?us-ascii?Q?Mdvm0A2Bq2RENaMe2lJMC3311yLdsOjedaQV8stwdn7CCaPdyWvtrXzREyKz?=
+ =?us-ascii?Q?zCUvM7HxH3GnlereU5KYSFgOLu8FZN94zdM06jvWj8aTdNT5VWe27vDAOIsT?=
+ =?us-ascii?Q?VRC1Kh/q2FehajNy5JDxcSKmUdLTDGmgvKWSL38FjpAmOVHeJAPBpY2sEfiO?=
+ =?us-ascii?Q?EcEC0EiZ4Fe5xFHf5bdGeDqxP6rl7OAIxbsorHYFDci3alwBrt4LhIWVK19g?=
+ =?us-ascii?Q?2fjmsA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd1f70b7-b42f-46e7-faee-08db55fcd5b7
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 11:01:01.0655
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yvdLRinW8ZZk26eZSGrI0ZZe7vTAO78P6dQDbF0TDKx+PVQAGM1LnFwcnbfyrQ2OCIqFlUXy4aOMXjMKLJOmoIj3G/so5tsAVP8mXFUXpiQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6367
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,207 +122,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all subsystems and drivers either declaring their dependence on
-HAS_IOPORT or fencing I/O port specific code sections we can finally
-make inb()/outb() and friends compile-time dependent on HAS_IOPORT as
-suggested by Linus in the linked mail. The main benefit of this is that
-on platforms such as s390 which have no meaningful way of implementing
-inb()/outb() their use without the proper HAS_IOPORT dependency will
-result in easy to catch and fix compile-time errors instead of compiling
-code that can never work.
+On Tue, May 16, 2023 at 09:45:42AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> clang warns about an unpacked structure inside of a packed one:
+> 
+> drivers/net/wireless/broadcom/b43/b43.h:654:4: error: field data within 'struct b43_iv' is less aligned than 'union (unnamed union at /home/arnd/arm-soc/drivers/net/wireless/broadcom/b43/b43.h:651:2)' and is usually due to 'struct b43_iv' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+> 
+> The problem here is that the anonymous union has the default alignment
+> from its members, apparently because the original author mixed up the
+> placement of the __packed attribute by placing it next to the struct
+> member rather than the union definition. As the struct itself is
+> also marked as __packed, there is no need to mark its members, so just
+> move the annotation to the inner type instead.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Link: https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- include/asm-generic/io.h | 60 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 587e7e9b9a37..6ab2b6dfb6b1 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -539,6 +539,7 @@ static inline void writesq(volatile void __iomem *addr, const void *buffer,
- 
- #if !defined(inb) && !defined(_inb)
- #define _inb _inb
-+#ifdef CONFIG_HAS_IOPORT
- static inline u8 _inb(unsigned long addr)
- {
- 	u8 val;
-@@ -548,10 +549,15 @@ static inline u8 _inb(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u8 _inb(unsigned long addr)
-+	__compiletime_error("inb()) requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(inw) && !defined(_inw)
- #define _inw _inw
-+#ifdef CONFIG_HAS_IOPORT
- static inline u16 _inw(unsigned long addr)
- {
- 	u16 val;
-@@ -561,10 +567,15 @@ static inline u16 _inw(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u16 _inw(unsigned long addr)
-+	__compiletime_error("inw() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(inl) && !defined(_inl)
- #define _inl _inl
-+#ifdef CONFIG_HAS_IOPORT
- static inline u32 _inl(unsigned long addr)
- {
- 	u32 val;
-@@ -574,36 +585,55 @@ static inline u32 _inl(unsigned long addr)
- 	__io_par(val);
- 	return val;
- }
-+#else
-+u32 _inl(unsigned long addr)
-+	__compiletime_error("inl() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outb) && !defined(_outb)
- #define _outb _outb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outb(u8 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writeb(value, PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outb(u8 value, unsigned long addr)
-+	__compiletime_error("outb() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outw) && !defined(_outw)
- #define _outw _outw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outw(u16 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outw(u16 value, unsigned long addr)
-+	__compiletime_error("outw() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #if !defined(outl) && !defined(_outl)
- #define _outl _outl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void _outl(u32 value, unsigned long addr)
- {
- 	__io_pbw();
- 	__raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
- 	__io_paw();
- }
-+#else
-+void _outl(u32 value, unsigned long addr)
-+	__compiletime_error("outl() requires CONFIG_HAS_IOPORT");
-+#endif
- #endif
- 
- #include <linux/logic_pio.h>
-@@ -687,53 +717,83 @@ static inline void outl_p(u32 value, unsigned long addr)
- 
- #ifndef insb
- #define insb insb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insb(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsb(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insb(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insb() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insw
- #define insw insw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insw(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsw(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insw(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insw() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insl
- #define insl insl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void insl(unsigned long addr, void *buffer, unsigned int count)
- {
- 	readsl(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void insl(unsigned long addr, void *buffer, unsigned int count)
-+	__compiletime_error("insl() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsb
- #define outsb outsb
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsb(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesb(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsb(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsb() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsw
- #define outsw outsw
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsw(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesw(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsw(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsw() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef outsl
- #define outsl outsl
-+#ifdef CONFIG_HAS_IOPORT
- static inline void outsl(unsigned long addr, const void *buffer,
- 			 unsigned int count)
- {
- 	writesl(PCI_IOBASE + addr, buffer, count);
- }
-+#else
-+void outsl(unsigned long addr, const void *buffer, unsigned int count)
-+	__compiletime_error("outsl() requires HAS_IOPORT");
-+#endif
- #endif
- 
- #ifndef insb_p
--- 
-2.39.2
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
