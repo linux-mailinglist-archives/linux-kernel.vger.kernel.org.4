@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41027044B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276B87044B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjEPFaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 01:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S229543AbjEPFae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 01:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEPFaI (ORCPT
+        with ESMTP id S229995AbjEPFac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 01:30:08 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883CF3588;
-        Mon, 15 May 2023 22:30:07 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2ac7462d9f1so146877061fa.2;
-        Mon, 15 May 2023 22:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684215006; x=1686807006;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tScch3vM9yjN7IkXBZXndtJvKhAlbmhByTtRNRsl82o=;
-        b=aVdPof7CuKQ1PM8AtiShK/xXyFJgqUy+JaaXJSI2GMl0Ns4LQzDT0F8vZooGSinwrN
-         1TkUrn+ngU8Rzv+093p2UHPJQ4m8+oBQz01ioy9lVoJMyImR8S/TsJQR4XlP5tRIngAV
-         X/gOy0h+cHlR2QmsY0Pvw9GZ8MWv40aWG0iPEgOFui0cV4yMcKJio4ccwNFXeeHy5JQJ
-         +h7nXEVI2LX3CDw1Xg0c85SpMPcI8AH2h+oJygT5SmTdocV9NKNJa5fOwss4Kkyz1DbI
-         b0wRYrLMABAGppb+Er/4LoNYJXUk5/fo15hMY0RecSs8bWkayJhvN6XyHsu0h2mTceQ/
-         C4fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684215006; x=1686807006;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tScch3vM9yjN7IkXBZXndtJvKhAlbmhByTtRNRsl82o=;
-        b=O3s2s5ZG7aXEhm+Tp7AIa5Nh5jPNrQWq7gs0YV08lVJBKRWhKYtiTG+md3iq/gLb8N
-         2AIkJiF4Xn4T22vTA3FWMCddkGziH38Q3ur/tLD77Q3i4HNsCIHMOg1MFpZ5EXGBr+f/
-         sfDZdZAoFlzYrUBoTIOYpE7eRFZXvUMY7netDrQRoSKOzn14YyRFEwOGs8ZvrfVmhuMM
-         bLOJscgOAIBskp0CncpuNOiCf+Jhig5WCnkyjlTZuuG1R4Ky9SqCvuBswZ8RBcnC2LLQ
-         Fm/dqhrWfjRoTs2khhYXfmU1uVW9wA3cPy1F6ugP2WxMMABlvw5GvGRtZsOfW/BQ8Se5
-         NgDQ==
-X-Gm-Message-State: AC+VfDwtnUWg9fGzfQ6qJb9Jji+b5ksQcoja+lfgBTnTDBV+sbeLnQJF
-        9at9D514DXbb106Vosuy3Gs=
-X-Google-Smtp-Source: ACHHUZ71m/9pOxyYBvVh8mxfhyPiM/bP/wdJ3ylgdP3znusrgrfBibR18YvgwaG3zCkRE41Ip51D7Q==
-X-Received: by 2002:a2e:8051:0:b0:2ac:91c5:76c with SMTP id p17-20020a2e8051000000b002ac91c5076cmr8186052ljg.18.1684215005486;
-        Mon, 15 May 2023 22:30:05 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id w5-20020a2e9985000000b002ad8fc8dda6sm3412572lji.17.2023.05.15.22.30.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 22:30:05 -0700 (PDT)
-Message-ID: <7d6712e4-ae37-4e31-6087-5df89980a5c1@gmail.com>
-Date:   Tue, 16 May 2023 08:30:04 +0300
+        Tue, 16 May 2023 01:30:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1A63588;
+        Mon, 15 May 2023 22:30:28 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QL4TV43NBzqSJN;
+        Tue, 16 May 2023 13:26:06 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 13:30:25 +0800
+Message-ID: <9e19c7a6-58fe-0238-49a5-574f92dd64d9@huawei.com>
+Date:   Tue, 16 May 2023 13:30:24 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/3] iio: kx022a fix irq getting
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 04/12] mm: page_alloc: collect mem statistic into
+ show_mem.c
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+CC:     <oe-kbuild-all@lists.linux.dev>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org
-References: <cover.1683875389.git.mazziesaccount@gmail.com>
- <b45b4b638db109c6078d243252df3a7b0485f7d5.1683875389.git.mazziesaccount@gmail.com>
- <20230513194403.234b4e3f@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230513194403.234b4e3f@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+References: <20230508071200.123962-5-wangkefeng.wang@huawei.com>
+ <202305110807.YVsoVagW-lkp@intel.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <202305110807.YVsoVagW-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/23 21:44, Jonathan Cameron wrote:
-> On Fri, 12 May 2023 10:53:41 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+
+
+On 2023/5/11 8:04, kernel test robot wrote:
+> Hi Kefeng,
 > 
->> The fwnode_irq_get_byname() was returning 0 at device-tree mapping
->> error. If this occurred, the KX022A driver did abort the probe but
->> errorneously directly returned the return value from
->> fwnode_irq_get_byname() from probe. In case of a device-tree mapping
->> error this indicated success.
->>
->> The fwnode_irq_get_byname() has since been fixed to not return zero on
->> error so the check for fwnode_irq_get_byname() can be relaxed to only
->> treat negative values as errors. This will also do decent fix even when
->> backported to branches where fwnode_irq_get_byname() can still return
->> zero on error because KX022A probe should later fail at IRQ requesting
->> and a prober error handling should follow.
-> On that basis I've picked this one up directly for the fixes-togreg branch of
-> iio.git and marked it for stable.
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/mm-page_alloc-move-mirrored_kernelcore-into-mm_init-c/20230508-145724
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230508071200.123962-5-wangkefeng.wang%40huawei.com
+> patch subject: [PATCH 04/12] mm: page_alloc: collect mem statistic into show_mem.c
+> config: loongarch-randconfig-s051-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110807.YVsoVagW-lkp@intel.com/config)
+> compiler: loongarch64-linux-gcc (GCC) 12.1.0
+> reproduce:
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # apt-get install sparse
+>          # sparse version: v0.6.4-39-gce1a6720-dirty
+>          # https://github.com/intel-lab-lkp/linux/commit/be69df472e4d9a6b09a17b854d3aeb9722fc2675
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Kefeng-Wang/mm-page_alloc-move-mirrored_kernelcore-into-mm_init-c/20230508-145724
+>          git checkout be69df472e4d9a6b09a17b854d3aeb9722fc2675
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202305110807.YVsoVagW-lkp@intel.com/
+> 
+> sparse warnings: (new ones prefixed by >>)
+>>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+>     mm/show_mem.c:336:17: sparse:     expected void *ptr
+>     mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+>>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+>     mm/show_mem.c:336:17: sparse:     expected void *ptr
+>     mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+>>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+>     mm/show_mem.c:336:17: sparse:     expected void *ptr
+>     mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+>>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+>     mm/show_mem.c:336:17: sparse:     expected void *ptr
+>     mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+> 
+> vim +336 mm/show_mem.c
+> 
 
-Thanks for picking this up Jonathan. Although, the commit message is 
-slightly misleading w/o the previous patches in this series because the 
-fwnode_irq_get_byname() is fixed in the first patch.
+Thanks, I won't make any change about __show_free_areas（） function,
+and it better not to fix it, at least not in this patch, the patch is 
+only to move some functions. The sparse warning is caused by
+K(this_cpu_read(zone->per_cpu_pageset->count)), maybe change it to
+__this_cpu_read()?
 
-Yours,
-	-- Matti
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
 
-~~ When things go utterly wrong vim users can always type :help! ~~
 
+> 
