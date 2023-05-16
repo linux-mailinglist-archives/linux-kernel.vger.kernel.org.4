@@ -2,159 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6427E7048DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 907967048E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjEPJRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:17:17 -0400
+        id S231824AbjEPJRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:17:36 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbjEPJQ6 (ORCPT
+        with ESMTP id S231986AbjEPJRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:16:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61C91720
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:16:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3E90636B2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:15:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C2ADC433D2;
-        Tue, 16 May 2023 09:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684228532;
-        bh=U6y3925vAkGSTn35sRSDGfUP0WGwMaGFa9+WDRyDGYA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aKdnaR7prRfXN3CcQ3sPI5JcWTQg+MdRsUK/nnCtwy4crSz7qKEgLCg2FlD3CSpvd
-         PHHVgQy57MpvI2o37ij0FhyAkEBlqjw7guK02cTWAGR4tYfjBVemVw9GdlyO4Y82LL
-         RhpRPcRSwxo/sivGoVPpXwvR/RdKZ+SeFAt6myh+yR+3+9G3DkwW+5/kiKm0vdtW9f
-         KzUTt6xR+jI1204+tcfPngSWf6FzjLnUFEzO/fHE+ClfP9UzM1WPauwmS8AYI3HFa0
-         6WM/hu4+yYmk5XmA9do1O+GnatoVN29GsciZuSsvZ6kQixWIjnJn6Kn1bQu3V6jgiG
-         6o++Z3VFTAmUQ==
-Date:   Tue, 16 May 2023 11:15:23 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Sebastian Siewior <bigeasy@linutronix.de>
-Cc:     Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH v6 19/21] timer: Implement the hierarchical pull model
-Message-ID: <ZGNJq_ZITmZ5YciL@localhost.localdomain>
-References: <20230510072817.116056-1-anna-maria@linutronix.de>
- <20230510072817.116056-20-anna-maria@linutronix.de>
- <ZFty1fNMlnuLk4qF@localhost.localdomain>
- <20230515101936.3amAvw0T@linutronix.de>
+        Tue, 16 May 2023 05:17:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BA25BBF;
+        Tue, 16 May 2023 02:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684228604; x=1715764604;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Kb56PZ4c03l2GhNe6a5xbJY4KvpJ9NK+1Yzfq2wlekI=;
+  b=wJZ+Vh/ybYmiUV+0TocdvvdedACtDK4A1Y/Bxj4RAsPTdWJ+NP2upAwB
+   27p3DrhaDtSDjI4zdMn8ZoqwX7eH0RwQEnya0UfQe3jMKvL3F7T4h7MKQ
+   6K9jH8jHT25mcQo4OIUEuuUGAyYJqmN0etYRkTMM5yKgseIaYMFxS+yFD
+   LCpPXwWdcomMUsx4lIAcxTf5cIY7Poy6mwzwO3Qxqkn+5HI9UIAgOjIBM
+   FrNRcv1/4SwVz7EpN1QjW8WnbPSmysNHVuidK0xzZv6n0lejBhU/ZjxPU
+   2PXsZ+uo7nTaAjUBy2Q0TPDvpeOkjvCF1M4AfBetsPSnKXEDVZJVLVrnp
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,278,1677567600"; 
+   d="asc'?scan'208";a="215627684"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 May 2023 02:16:04 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 16 May 2023 02:16:03 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 16 May 2023 02:16:01 -0700
+Date:   Tue, 16 May 2023 10:15:40 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Conor Dooley <conor@kernel.org>, <soc@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Olof Johansson <olof@lixom.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v1] Documentation/process: add soc maintainer handbook
+Message-ID: <20230516-tactical-handcraft-d245a095faa4@wendy>
+References: <20230515-geometry-olympics-b0556ff8a5f7@spud>
+ <cf1c6b8c-8a3f-eca1-948f-e41946d4c34c@linaro.org>
+ <20230516-grader-dejected-df65cdc584b3@wendy>
+ <cca446b3-9b92-3191-ae0d-1bd7e552c90f@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="PtBfR+i2mj9pXUBf"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230515101936.3amAvw0T@linutronix.de>
+In-Reply-To: <cca446b3-9b92-3191-ae0d-1bd7e552c90f@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, May 15, 2023 at 12:19:36PM +0200, Sebastian Siewior a écrit :
-> On 2023-05-10 12:32:53 [+0200], Frederic Weisbecker wrote:
-> > In the case of !PREEMPT_RT, I suppose it's impossible for the target
-> > CPU to be offline. You checked above tmc->online and in-between the
-> > call to timer_lock_remote_bases(), the path is BH-disabled, this prevents
-> > stop_machine from running and from setting the CPU as offline.
-> 
-> I think you refer to the last one invoked from takedown_cpu(). This does
-> not matter, see below.
-> 
-> What bothers me is that _current_ CPU is check for cpu_is_offline() and
-> not the variable 'cpu'. Before the check timer_expire_remote() is
-> invoked on 'cpu' and not on current.
+--PtBfR+i2mj9pXUBf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Oh right!
+On Tue, May 16, 2023 at 11:06:41AM +0200, Krzysztof Kozlowski wrote:
+> On 16/05/2023 10:57, Conor Dooley wrote:
+> > On Tue, May 16, 2023 at 10:31:19AM +0200, Krzysztof Kozlowski wrote:
+> >> On 15/05/2023 21:20, Conor Dooley wrote:
 
-> 
-> > However in PREEMPT_RT, ksoftirqd (or timersd) is preemptible, so it seems
-> > that it could happen in theory. And that could create a locking imbalance.
-> 
-> The ksoftirqd thread is part of smpboot_park_threads(). They have to
-> stop running and clean up before the machinery continues bringing down
-> the CPU (that is before takedown_cpu()). On the way down we have:
-> - tmigr_cpu_offline() followed by
-> - smpboot_park_threads().
-> 
-> So ksoftirqd (preempted or not) finishes before. This is for the
-> _target_ CPU.
+> >>> + - Defer the devicetree changes to a release after the binding and d=
+river have
+> >>> +   already been merged
+> >>> +
+> >>> + - Change the bindings in a shared immutable branch that is used as =
+the base for
+> >>> +   both the driver change and the devicetree changes
+> >>
+> >> The policy told to me some time ago was that no merges from driver
+> >> branch or tree are allowed towards DTS branch, even if they come only
+> >> with binding header change. There are exceptions for this, e.g. [1], b=
+ut
+> >> that would mean we need to express here rules for cross-tree merges.
+> >=20
+> > I've got away with having an immutable branch for dt-binding headers!
+>=20
+> Of course, all is in an immutable branch, but in which tree?
 
-Ok I forgot about the smpboot cleanup part.
+For example:
+- dt-bindings & header with the clock defines in the base/immutable branch
+  on top of -rc1
+- driver patches on top of the immutable branch, in a PR to Stephen
+- dts patches on top of the immutable branch, PR to Arnd
 
-> 
-> After the "tmc->online" check the lock is dropped and this is invoked
-> from run_timer_softirq(). That means that _this_ CPU could get preempted
-> (by an IRQ for instance) at this point, and once the CPU gets back here,
-> the remote CPU (as specified in `cpu') can already be offline by the
-> time timer_lock_remote_bases() is invoked.
-> 
-> So RT or not, this is racy.
+So, clock tree doesn't get the dts, soc tree doesn't get the driver.
+Hopefully that clarifies what I meant.
 
-Well, all CPUs must schedule to stop machine on take_cpu_down().
+> I talk about a case when driver tree, e.g. different clock maintainer,
+> takes the binding.
 
-So:
+If the other tree just "takes the binding", without some coordination,
+then you're SOOL and have to wait a release.
 
-  //CPU 1                            //CPU 2
-  softirq()
-     tmigr_handle_remote_cpu()
-        LOCK(tmc->lock)
-           if (!tmc->online)
-              UNLOCK(tmc->lock)
-              return;
-                                     cpu_down()
-                                        tmigr_cpu_offline()
-                                           LOCK(tmc->lock)
-                                           tmc->online = 0
-                                           UNLOCK(tmc->lock)
-                                        stop_machine()
-                                           //wait for CPU 1  
-                                           poll on MULTI_STOP_PREPARE
-        if (cpu_is_offline(2))
-           //not possible
-   //end of softirq
-   stop_machine()
-                                           set MULTI_STOP_PREPARE
-                                           ...
-                                           set_cpu_online(0)
+> > That said, Arnd did actually have a look at this (and suggested some
+> > changes) before I sent it & did not cry fowl about this section. IIRC,
+> > this is actually his wording, not mine.
 
+Probably worth Arnd chiming in & just telling us what he is okay with
+taking.
 
-Things should be fine on !RT but I may easily be missing something.
+Cheers,
+Conor.
 
-As for RT it should be fine as well as you pointed out since CPU 1
-can be preempted but the CPU still needs to park the kthreads before joining
-the stop machine party.
+--PtBfR+i2mj9pXUBf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> > My suggestion would be to unconditionally lock the bases, you already checked if
-> > !tmc->online before. The remote CPU may have gone down since then because the
-> > tmc lock has been relaxed but it should be rare enough that you don't care
-> > about optimizing with a lockless check. So you can just lock the bases,
-> > lock the tmc and check again if tmc->online. If not then you can just ignore
-> > the tmigr_new_timer_up call and propagation.
-> 
-> Regardless the previous point, this still looks odd as you pointed out.
-> The return code is ignored and the two functions perform lock + unlock
-> depending on it.
+-----BEGIN PGP SIGNATURE-----
 
-Agreed!
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGNJvAAKCRB4tDGHoIJi
+0q0lAP4yeb7Qv9khm4px8qzetAw8FByjxe7F7Hb5Iu38DARrsQEAhy8q7y1R1tmp
+IJ/kRF2k57AInRDcYTR/PChtZvzF/AA=
+=20NK
+-----END PGP SIGNATURE-----
+
+--PtBfR+i2mj9pXUBf--
