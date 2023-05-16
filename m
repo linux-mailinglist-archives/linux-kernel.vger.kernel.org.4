@@ -2,104 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3857046C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B807046C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjEPHoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S230482AbjEPHpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjEPHoK (ORCPT
+        with ESMTP id S230117AbjEPHpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:44:10 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831C619BF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:44:08 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9659443fb56so2161832966b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684223047; x=1686815047;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=knTSlcHxUZPKa0wlQrVdNwYp/jYVO/YuubSx7u5s0Ls=;
-        b=TeUx4gZf5l8kCwUOpM3vraO/dpj8ZKCYeYC+UyukIKK8PhquXj1z5nXdDveJhllDzO
-         BshJCjDBpjIFmHTSgQMbK5nlvJAj8qy5TSkVLti6rcNcETEJTJE/DNmYT9Iy1phRyozY
-         faALNzW2VFnPuBdXLSVjWQnJz23wFRiGnXXR38lifJWFxZH/jTUb2deWHS1k8grOCVRr
-         EUg5ANaFvAjuLMay07f9PvRLefzzI/xLgt5I3M1vL2j9AXIEzNyxZNqKJTMhd2FOBIUX
-         Obi1b3phqJj6B5VQX4/s7Z0cV+Wz4/wTYkrCtvm0rEgjG3FL94F9w8KmJVAS+nG+VQ8E
-         qsSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684223047; x=1686815047;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=knTSlcHxUZPKa0wlQrVdNwYp/jYVO/YuubSx7u5s0Ls=;
-        b=HFn5hxNIepOMbRHNHxNbKFKAYoDvK/euqQ5QLx2Q+F25QDzypYUgbwenUS42O8CPNT
-         1dvJv2noVmYM5kujaQQ6XUCbhXtJK/loEaNVeh6U1/gXTYfoko5I6bucyt2Emub8zQYn
-         v01hIlmKlH/kZ06c1NCAGqeDxIQrgNtkRimA1tHnFB/2a/oYHsx300BqCeydXAdP7W/6
-         pn9KepLmbS93W7rGlQhviWmx174J93Gf/OsDkWEgGPniNHwTqlMgdx4p9s5bsVDwbzci
-         9SnDi8Gd9eu5zUA6zWW35RA23dXqAHdXjOVszmXbxLtMzBrtP7LUNKwh9JPaMYsYFB16
-         l7Eg==
-X-Gm-Message-State: AC+VfDy6AqLN1m3n2lwD9EW2LPX6GjGiC16MSRL3jJgQ4Be8dIPRl5os
-        MOZMy86aPS0CUlYhDWHnd/udVg==
-X-Google-Smtp-Source: ACHHUZ5Xc/3fLyfIt7CaeI8B9CHN4J4ETHB21vbWYlJ+ZxGKEsCjykxYrKvyB93jjVhaoBslUozBAw==
-X-Received: by 2002:a17:907:3daa:b0:96a:1cbf:3dcc with SMTP id he42-20020a1709073daa00b0096a1cbf3dccmr25286333ejc.54.1684223047014;
-        Tue, 16 May 2023 00:44:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4d4a:9b97:62e:1439? ([2a02:810d:15c0:828:4d4a:9b97:62e:1439])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1709065dac00b009663cf5dc2fsm10674369ejv.66.2023.05.16.00.44.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 00:44:06 -0700 (PDT)
-Message-ID: <0a70fd40-fcf6-7297-8464-a23d3981afc3@linaro.org>
-Date:   Tue, 16 May 2023 09:44:05 +0200
+        Tue, 16 May 2023 03:45:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4946A1FC9;
+        Tue, 16 May 2023 00:45:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAAF560AFF;
+        Tue, 16 May 2023 07:45:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E556C433D2;
+        Tue, 16 May 2023 07:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684223112;
+        bh=7BlG4EAaAQ/2PfJOByK6/yL6MquEqFQSgp+HP1sIrO0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rIvMj1JmRgzYN1y+iVKqKvOkJp/1DmVR5JlVAwph4mcKzBnAFR1M+UEX/2O3Y+dYv
+         DMj5yrVMHmmg2CPbXLrmFwOXJHHx2cL0finNLS6cke3kiK2QtuKhUD8pMyrYYIJaXH
+         nmcAcHCoPmUrEyHKoc3eY30kwGjwvdx111WWwQl56Eup8W48WkJACGL6YCET7SooA4
+         iJCWfehbNamCnfrj19DFONCzV5WGoEg0eEIMKBIFXvVwhCnxy2HIanrNdWsPq9f/hH
+         PzUfoASABgYdCIyv32R57oCFO7DoPQbxl67VxGeeguaFbQUXT04PrAJybbPO2nzJPv
+         UhUDEraTb2alQ==
+Date:   Tue, 16 May 2023 10:45:05 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH] mm: pagemap: restrict pagewalk to the requested range
+Message-ID: <ZGM0gegQkvrQtq49@kernel.org>
+References: <20230515172608.3558391-1-yuanchu@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/2] dt-binding: cdns,usb3: Fix cdns,on-chip-buff-size
- type
-Content-Language: en-US
-To:     Frank Li <Frank.Li@nxp.com>, shawnguo@kernel.org,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "open list:CADENCE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     imx@lists.linux.dev
-References: <20230515162053.2825405-1-Frank.Li@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230515162053.2825405-1-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515172608.3558391-1-yuanchu@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 18:20, Frank Li wrote:
-> In cdns3-gadget.c, 'cdns,on-chip-buff-size' was read using
-> device_property_read_u16(). It resulted in 0 if a 32bit value was used
-> in dts. This commit fixes the dt binding doc to declare it as u16.
+On Tue, May 16, 2023 at 01:26:08AM +0800, Yuanchu Xie wrote:
+> The pagewalk in pagemap_read reads one PTE past the end of the requested
+> range, and stops when the buffer runs out of space. While it produces
+> the right result, the extra read is unnecessary and less performant.
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 68989fe1c39d ("dt-bindings: usb: Convert cdns-usb3.txt to YAML schema")
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> I timed the following command before and after this patch:
+> 	dd count=100000 if=/proc/self/pagemap of=/dev/null
+> The results are consistently within 0.001s across 5 runs.
+> 
+> Before:
+> 100000+0 records in
+> 100000+0 records out
+> 51200000 bytes (51 MB) copied, 0.0763159 s, 671 MB/s
+> 
+> real    0m0.078s
+> user    0m0.012s
+> sys     0m0.065s
+> 
+> After:
+> 100000+0 records in
+> 100000+0 records out
+> 51200000 bytes (51 MB) copied, 0.0487928 s, 1.0 GB/s
+> 
+> real    0m0.050s
+> user    0m0.011s
+> sys     0m0.039s
+> 
+> Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
 > ---
+>  fs/proc/task_mmu.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index 420510f6a545..6259dd432eeb 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1689,23 +1689,23 @@ static ssize_t pagemap_read(struct file *file, char __user *buf,
+>  	/* watch out for wraparound */
+>  	start_vaddr = end_vaddr;
+>  	if (svpfn <= (ULONG_MAX >> PAGE_SHIFT)) {
+> +		unsigned long end;
+> +
+>  		ret = mmap_read_lock_killable(mm);
+>  		if (ret)
+>  			goto out_free;
+>  		start_vaddr = untagged_addr_remote(mm, svpfn << PAGE_SHIFT);
+>  		mmap_read_unlock(mm);
+> +
+> +		end = start_vaddr + ((count / PM_ENTRY_BYTES) << PAGE_SHIFT);
+> +		if (end >= start_vaddr && end < mm->task_size)
+> +			end_vaddr = end;
+>  	}
+>  
+>  	/* Ensure the address is inside the task */
+>  	if (start_vaddr > mm->task_size)
+>  		start_vaddr = end_vaddr;
+>  
+> -	/*
+> -	 * The odds are that this will stop walking way
+> -	 * before end_vaddr, because the length of the
+> -	 * user buffer is tracked in "pm", and the walk
+> -	 * will stop when we hit the end of the buffer.
+> -	 */
+>  	ret = 0;
+>  	while (count && (start_vaddr < end_vaddr)) {
+>  		int len;
+> -- 
+> 2.40.1.606.ga4b1b128d6-goog
+> 
+> 
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Sincerely yours,
+Mike.
