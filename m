@@ -2,145 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FF7704751
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A5770474C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjEPIFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S231530AbjEPIFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjEPIFg (ORCPT
+        with ESMTP id S230136AbjEPIFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:05:36 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB64469F;
-        Tue, 16 May 2023 01:05:34 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G6WjNS030536;
-        Tue, 16 May 2023 08:05:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=E4kETU/bgdAp48Vc9CYxxz7aGuqStSJykDGqUXfAonI=;
- b=aRygt18pL6e80ousW2e+32Ap9xA54kxrdsps4c7NBrdNfLVXcxi/Q+EMO1Ti7CInRhnI
- Dr9Lzz87NCvDmgQR74G2HfnX/YW/oDXjxpZSgT+cO66KcF/JSEjkAKDTplAm56/aWfAH
- QvwFSnRYEBJlTFxcFVqBUnxqCkSiZCPEabA4aQKcgL06YfX6x/q+KEOct2HcRWAUJXKz
- 1gPEYwZfD4r+RnXjnF2fwnOvCB7BV6HcrvsW5fSRPw+pEsoRK35JaBX5ejblTYJwxMLp
- wlIHLN2gAPeP7dqDCYdl3iQXbrR/ByaR1rc+N2TUjWnHmD8B0WLaUGzdr3w4t3wkfbaU nA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkt9w15ds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 08:05:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34G85Epx027068
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 08:05:14 GMT
-Received: from [10.216.33.161] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 16 May
- 2023 01:05:06 -0700
-Message-ID: <99213d31-c0a1-e0ce-d58d-36f392ad9095@quicinc.com>
-Date:   Tue, 16 May 2023 13:35:03 +0530
+        Tue, 16 May 2023 04:05:17 -0400
+Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [178.154.239.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391C844B0;
+        Tue, 16 May 2023 01:05:14 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:2c24:0:640:73f8:0])
+        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 2A0B360AC5;
+        Tue, 16 May 2023 11:05:12 +0300 (MSK)
+Received: from [IPV6:2a02:6b8:8f:4:7a31:c1ff:fef2:bf07] (unknown [2a02:6b8:8f:4:7a31:c1ff:fef2:bf07])
+        by mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id A5WFgX1OmGk0-7LFYAc0J;
+        Tue, 16 May 2023 11:05:11 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1684224311; bh=F5bRoS4xpTyVs5DFCkErH3y1wwSu6rDSU3Adh9JEHxc=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=aWj+cMyK7wLaA426sbgLxmJI/jn353ehUh0W4FX9Qt5m3TfTpQAarrBB3ryPNv0qX
+         xjFvuwwj5GHQF2ERpKOU8lfeIiSyMIJVG8+C8CXYxng6XyjTtQsAApcicaGG3f0t/W
+         SJlqOaXQwOF8rzWBTP+JXWoMGxbQvkNW+wHgOJqc=
+Authentication-Results: mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+Message-ID: <fa295ea1-d7ee-3f85-98be-f6a547fa13ce@yandex-team.ru>
+Date:   Tue, 16 May 2023 11:05:10 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2 1/4] dt-bindings: clock: Add crypto clock and reset
- definitions
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <thara.gopinath@gmail.com>, <herbert@gondor.apana.org.au>,
-        <davem@davemloft.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <linux-arm-msm@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <20230515150722.12196-1-quic_anusha@quicinc.com>
- <20230515150722.12196-2-quic_anusha@quicinc.com>
- <4f68a71f-b9ea-7240-8d82-5578b9a94fbc@linaro.org>
-From:   Anusha Canchi <quic_anusha@quicinc.com>
-In-Reply-To: <4f68a71f-b9ea-7240-8d82-5578b9a94fbc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] fs/coredump: open coredump file in O_WRONLY instead of
+ O_RDWR
+To:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ptikhomirov@virtuozzo.com, Andrey Ryabinin <arbn@yandex-team.com>
+References: <20230420120409.602576-1-vsementsov@yandex-team.ru>
+ <14af0872-a7c2-0aab-b21d-189af055f528@yandex-team.ru>
+ <20230515-bekochen-ertrinken-ce677c8d9e6e@brauner>
+ <CAHk-=wiRmfEmUWTcVPexUk50Ejgy4NCBE6HP84eckraMRrL6gQ@mail.gmail.com>
+ <CAHk-=wjex4GE-HXFNPzi+xE+w2hkZTQrACgAaScNdf-8hnMHKA@mail.gmail.com>
+Content-Language: en-US
+From:   Vladimir Sementsov-Ogievskiy <vsementsov@yandex-team.ru>
+In-Reply-To: <CAHk-=wjex4GE-HXFNPzi+xE+w2hkZTQrACgAaScNdf-8hnMHKA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4k1sACSEcNOzNnaTTx6WQDLgcRvAss42
-X-Proofpoint-ORIG-GUID: 4k1sACSEcNOzNnaTTx6WQDLgcRvAss42
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_02,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- adultscore=0 bulkscore=0 impostorscore=0 clxscore=1015 spamscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160069
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/16/2023 1:15 PM, Bhupesh Sharma wrote:
->
-> On 5/15/23 8:37 PM, Anusha Rao wrote:
->> Add crypto clock and reset ID definitions for ipq9574.
+On 15.05.23 22:13, Linus Torvalds wrote:
+> On Mon, May 15, 2023 at 11:50 AM Linus Torvalds
+> <torvalds@linuxfoundation.org> wrote:
 >>
->> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
->> ---
->>   Changes in V2:
->>     - Separated out the clock/reset binding changes to a new patch.
->>
->>   include/dt-bindings/clock/qcom,ipq9574-gcc.h | 4 ++++
->>   include/dt-bindings/reset/qcom,ipq9574-gcc.h | 1 +
->>   2 files changed, 5 insertions(+)
->>
->> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h 
->> b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->> index 5a2961bfe893..86790efa10f0 100644
->> --- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->> @@ -210,4 +210,8 @@
->>   #define GCC_SNOC_PCIE1_1LANE_S_CLK            201
->>   #define GCC_SNOC_PCIE2_2LANE_S_CLK            202
->>   #define GCC_SNOC_PCIE3_2LANE_S_CLK            203
->> +#define CRYPTO_CLK_SRC                    204
->
-> For uniformity, please use GCC_ prefix int the above define as well.
-> Also make the similar changes at the places where this CLOCK_SRC macro 
-> is used.
-Sure, will update in the next spin.
+>> It's strange, because the "O_WRONLY" -> "2" change that changes to a
+>> magic raw number is right next to changing "(unsigned short) 0x10" to
+>> "KERNEL_DS", so we're getting *rid* of a magic raw number there.
+> 
+> Oh, no, never mind. I see what is going on.
+> 
+> Back then, "open_namei()" didn't actually take O_RDWR style flags AT ALL.
+> 
+> The O_RDONLY flags are broken, because you cannot say "open with no
+> permissions", which we used internally. You have
+> 
+>   0 - read-only
+>   1 - write-only
+>   2 - read-write
+> 
+> but the internal code actually wants to match that up with the
+> read-write permission bits (FMODE_READ etc).
+> 
+> And then we've long had a special value for "open for special
+> accesses" (format etc), which (naturally) was 3.
+> 
+> So then the open code would do
+> 
+>          f->f_flags = flag = flags;
+>          f->f_mode = (flag+1) & O_ACCMODE;
+>          if (f->f_mode)
+>                  flag++;
+> 
+> which means that "f_mode" now becomes that FMODE_READ | FMODE_WRITE
+> mask, and "flag" ends up being a translation from that O_RDWR space
+> (0/1/2/3) into the FMODE_READ/WRITE space (1/2/3/3, where "special"
+> required read-write permissions, and 0 was only used for symlinks).
+> 
+> We still have that, although the code looks different.
+> 
+> So back then, "open_namei()" took that FMODE_READ/WRITE flag as an
+> argument, and the  "O_WRONLY" -> "2" change is actually a bugfix and
+> makes sense. The O_WRONLY thing was wrong, because it was 1, which
+> actuall ymeant FMODE_READ.
+> 
+> And back then, we didn't *have* FMODE_READ and FMODE_WRITE.
+> 
+> So just writing it as "2" made sense, even if it was horrible. We
+> added FMODE_WRITE later, but never fixed up those core file writers.
+> 
+> So that 0.99pl10 commit from 1993 is actually correct, and the bug
+> happened *later*.
+> 
+> I think the real bug may have been in 2.2.4pre4 (February 16, 1999),
+> when this happened:
+> 
+> -       dentry = open_namei(corefile,O_CREAT | 2 | O_TRUNC | O_NOFOLLOW, 0600);
+> ...
+> +       file = filp_open(corefile,O_CREAT | 2 | O_TRUNC | O_NOFOLLOW, 0600);
+> 
+> without realizing that the "2" in open_namei() should have become a
+> O_WRONLY for filp_open().
+> 
+> So I think this explains it all.
+> 
+> Very understandable mistake after all.
+> 
+>                      Linus
 
-Thanks,
-Anusha
->
-> Thanks,
-> Bhupesh
->
->> +#define GCC_CRYPTO_CLK 205
->> +#define GCC_CRYPTO_AXI_CLK                206
->> +#define GCC_CRYPTO_AHB_CLK                207
->>   #endif
->> diff --git a/include/dt-bindings/reset/qcom,ipq9574-gcc.h 
->> b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
->> index d01dc6a24cf1..c709d103673d 100644
->> --- a/include/dt-bindings/reset/qcom,ipq9574-gcc.h
->> +++ b/include/dt-bindings/reset/qcom,ipq9574-gcc.h
->> @@ -160,5 +160,6 @@
->>   #define GCC_WCSS_Q6_BCR                        151
->>   #define GCC_WCSS_Q6_TBU_BCR                    152
->>   #define GCC_TCSR_BCR                        153
->> +#define GCC_CRYPTO_BCR                        154
->>     #endif
+Wow that's became a detective story, great thanks! [took note to check history myself next time]
+
+-- 
+Best regards,
+Vladimir
 
