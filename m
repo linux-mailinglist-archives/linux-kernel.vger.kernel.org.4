@@ -2,252 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E87704E5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9E7704E68
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233361AbjEPM4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S233343AbjEPM6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbjEPM4b (ORCPT
+        with ESMTP id S233374AbjEPM5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:56:31 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74BD4492
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:56:00 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2ac8cc8829fso134596561fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684241747; x=1686833747;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KThRHpQPHpZPJSTEGZZjIaigcF+AfIhnsyQDOpO+RdU=;
-        b=kWj3kn1pOuUsl+DepVm/MZsJBwrfldQssLnsjBuMBKxgDM7AD3zgTCSnIAwFDKsRUK
-         5VfSr66foS5xDfMMdHzg4P7k7JfWWCQGTXKdgVJQySW6SIWyYFk5rvu09MuRVkxlhXcs
-         Uinu873E7zwk1tFIVR+AdaZrnFUum5I2rr5asv0/KlH5Wv5t02H7W+XUmUvQzwS/jmNs
-         OVH1gI5yMtTah1iUfUN7iZIz9Iri9HXhxF0EzF4nEAIZpRIWfL4pYuM3wj5tc7XLYfpz
-         YaxYURTOaUJctn4bjey7TeOkNMZcBiYiTqJeqQioFJ53DZMsyuKqb1xo4zZS9E/4cnq0
-         +MYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684241747; x=1686833747;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KThRHpQPHpZPJSTEGZZjIaigcF+AfIhnsyQDOpO+RdU=;
-        b=JQklU1k0veVJKqVz05sFblBPARo5ELcy/vM6uXidl7iUAJPNtl/dCPV8Sgck6ilUE3
-         1YmH7FrottfG1D2ziA+I7rUnAtJzs3VZScZAR8MwDkFLJcg46lQ3tO1LwbcQTnjaIGxY
-         p9aaAitrDNvg05tuMw1nAy28HZpTefLJwHvOZbNtPraMKS/tEyVLC0F8UUgfPxARgqlu
-         ND/hiR4DAUcRHpYWQ9bobdcbZ+MX/wGh2pdIBRPT8SYa33yqGdCKxrgSA3cfxHmI3BsC
-         qvPR5k4tz+ay/Ah+DbKanT8/g9WGfSwWHBSnZZWf1Got+hoW6ECeymvXwtPaYuJERg6T
-         Jwmg==
-X-Gm-Message-State: AC+VfDzaDDgGBjWsWFT+beTT25K/EskQHLCnTNNi3SHJPNxrHBgOFZ8q
-        GtJNX514lHPpGZmPP7qcQgc2a8WMRwyK3TxQztg=
-X-Google-Smtp-Source: ACHHUZ690LWVzRKPMZYlSQC1TXpjCqNEZDAIs/JcX2XqOWxWgk4gW0PoN33eVAk88x6uQ/6grOwRTg==
-X-Received: by 2002:a2e:9f17:0:b0:2a8:bce1:5cac with SMTP id u23-20020a2e9f17000000b002a8bce15cacmr8101788ljk.37.1684241747533;
-        Tue, 16 May 2023 05:55:47 -0700 (PDT)
-Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id o23-20020a2e7317000000b002add1f4a92asm1647789ljc.113.2023.05.16.05.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 05:55:46 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 16 May 2023 14:55:37 +0200
-Subject: [PATCH v3 7/7] dmaengine: ste_dma40: Return error codes properly
+        Tue, 16 May 2023 08:57:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B754EFF;
+        Tue, 16 May 2023 05:57:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2440E6399E;
+        Tue, 16 May 2023 12:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB70C433EF;
+        Tue, 16 May 2023 12:56:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684241797;
+        bh=kX4Rxpw+Xpgmt8wu5MKO6M/8EfKU9eaYZ8q0eueknLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AeurgxXbjhjO7nH5RPc+ReOKzZIHL6M6vlQfsq3Ynpq17Guc5ms9ErfxRk+cbem40
+         jtZKxinRg29KQc6LBB+bFZlN8CFMgeisnQ2jL9ephNM715Kq8H3YYxX+3L8V8BXqlZ
+         UMHcJydzJ2ec7t82dt6KVZyWSnmQwWyg7jexvmNiXKUVF03ljATeGi7nx20aM6ZtB4
+         tHetdHUCLhlrwEC4m5Uaa263douVGkg3JKOerMWCd5cPGC32EVrMCcs6jfMKPO4e89
+         HWHSPxvdDuLpQwz9QzJyfPndS1ExWSx56euCI03r1FXp8emqsqJ7MmiANzfwRZfQRF
+         Qm5S2TYOfLLrA==
+Date:   Tue, 16 May 2023 18:26:33 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v11 0/9] Enable IPQ9754 USB
+Message-ID: <ZGN9gchu7dRb6QwC@matsya>
+References: <cover.1683630932.git.quic_varada@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230417-ux500-dma40-cleanup-v3-7-60bfa6785968@linaro.org>
-References: <20230417-ux500-dma40-cleanup-v3-0-60bfa6785968@linaro.org>
-In-Reply-To: <20230417-ux500-dma40-cleanup-v3-0-60bfa6785968@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1683630932.git.quic_varada@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes the probe() and its subfunction d40_hw_detect_init()
-return proper error codes.
+On 09-05-23, 17:24, Varadarajan Narayanan wrote:
+> This patch series adds the relevant phy and controller
+> configurations for enabling USB on IPQ9754
 
-One effect of this is that deferred probe, e.g from the clock,
-will start to work, would it happen. Also it is better design.
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/dma/ste_dma40.c | 46 ++++++++++++++++++++++++----------------------
- 1 file changed, 24 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/dma/ste_dma40.c b/drivers/dma/ste_dma40.c
-index 313baf316f13..c30d00a78eed 100644
---- a/drivers/dma/ste_dma40.c
-+++ b/drivers/dma/ste_dma40.c
-@@ -3132,7 +3132,8 @@ static void d40_drop_kmem_cache_action(void *d)
- 	kmem_cache_destroy(desc_slab);
- }
- 
--static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
-+static int __init d40_hw_detect_init(struct platform_device *pdev,
-+				     struct d40_base **retbase)
- {
- 	struct stedma40_platform_data *plat_data = dev_get_platdata(&pdev->dev);
- 	struct device *dev = &pdev->dev;
-@@ -3150,14 +3151,12 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 
- 	clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(clk))
--		return NULL;
-+		return PTR_ERR(clk);
- 
- 	/* Get IO for DMAC base address */
- 	virtbase = devm_platform_ioremap_resource_byname(pdev, "base");
--	if (IS_ERR(virtbase)) {
--		dev_err(dev, "No IO base defined\n");
--		return NULL;
--	}
-+	if (IS_ERR(virtbase))
-+		return PTR_ERR(virtbase);
- 
- 	/* This is just a regular AMBA PrimeCell ID actually */
- 	for (pid = 0, i = 0; i < 4; i++)
-@@ -3169,13 +3168,13 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 
- 	if (cid != AMBA_CID) {
- 		d40_err(dev, "Unknown hardware! No PrimeCell ID\n");
--		return NULL;
-+		return -EINVAL;
- 	}
- 	if (AMBA_MANF_BITS(pid) != AMBA_VENDOR_ST) {
- 		d40_err(dev, "Unknown designer! Got %x wanted %x\n",
- 			AMBA_MANF_BITS(pid),
- 			AMBA_VENDOR_ST);
--		return NULL;
-+		return -EINVAL;
- 	}
- 	/*
- 	 * HW revision:
-@@ -3189,7 +3188,7 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 	rev = AMBA_REV_BITS(pid);
- 	if (rev < 2) {
- 		d40_err(dev, "hardware revision: %d is not supported", rev);
--		return NULL;
-+		return -EINVAL;
- 	}
- 
- 	/* The number of physical channels on this HW */
-@@ -3216,7 +3215,7 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 		sizeof(struct d40_chan), GFP_KERNEL);
- 
- 	if (!base)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->rev = rev;
- 	base->clk = clk;
-@@ -3263,51 +3262,53 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
- 				     sizeof(*base->phy_res),
- 				     GFP_KERNEL);
- 	if (!base->phy_res)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->lookup_phy_chans = devm_kcalloc(dev, num_phy_chans,
- 					      sizeof(*base->lookup_phy_chans),
- 					      GFP_KERNEL);
- 	if (!base->lookup_phy_chans)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->lookup_log_chans = devm_kcalloc(dev, num_log_chans,
- 					      sizeof(*base->lookup_log_chans),
- 					      GFP_KERNEL);
- 	if (!base->lookup_log_chans)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->reg_val_backup_chan = devm_kmalloc_array(dev, base->num_phy_chans,
- 						  sizeof(d40_backup_regs_chan),
- 						  GFP_KERNEL);
- 	if (!base->reg_val_backup_chan)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->lcla_pool.alloc_map = devm_kcalloc(dev, num_phy_chans
- 					    * D40_LCLA_LINK_PER_EVENT_GRP,
- 					    sizeof(*base->lcla_pool.alloc_map),
- 					    GFP_KERNEL);
- 	if (!base->lcla_pool.alloc_map)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->regs_interrupt = devm_kmalloc_array(dev, base->gen_dmac.il_size,
- 					     sizeof(*base->regs_interrupt),
- 					     GFP_KERNEL);
- 	if (!base->regs_interrupt)
--		return NULL;
-+		return -ENOMEM;
- 
- 	base->desc_slab = kmem_cache_create(D40_NAME, sizeof(struct d40_desc),
- 					    0, SLAB_HWCACHE_ALIGN,
- 					    NULL);
- 	if (!base->desc_slab)
--		return NULL;
-+		return -ENOMEM;
- 
- 	ret = devm_add_action_or_reset(dev, d40_drop_kmem_cache_action,
- 				       base->desc_slab);
- 	if (ret)
--		return NULL;
-+		return ret;
-+
-+	*retbase = base;
- 
--	return base;
-+	return 0;
- }
- 
- static void __init d40_hw_init(struct d40_base *base)
-@@ -3503,20 +3504,20 @@ static int __init d40_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = pdev->dev.of_node;
- 	struct device_node *np_lcpa;
--	int ret = -ENOENT;
- 	struct d40_base *base;
- 	struct resource *res;
- 	struct resource res_lcpa;
- 	int num_reserved_chans;
- 	u32 val;
-+	int ret;
- 
- 	if (d40_of_probe(dev, np)) {
- 		ret = -ENOMEM;
- 		goto report_failure;
- 	}
- 
--	base = d40_hw_detect_init(pdev);
--	if (!base)
-+	ret = d40_hw_detect_init(pdev, &base);
-+	if (ret)
- 		goto report_failure;
- 
- 	num_reserved_chans = d40_phy_res_init(base);
-@@ -3530,6 +3531,7 @@ static int __init d40_probe(struct platform_device *pdev)
- 	np_lcpa = of_parse_phandle(np, "sram", 0);
- 	if (!np_lcpa) {
- 		dev_err(dev, "no LCPA SRAM node\n");
-+		ret = -EINVAL;
- 		goto report_failure;
- 	}
- 	/* This is no device so read the address directly from the node */
+Applied phy patches, 1,2,5,6
 
 -- 
-2.40.1
-
+~Vinod
