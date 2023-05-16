@@ -2,178 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9947046A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0917046AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjEPHkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
+        id S231396AbjEPHko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjEPHkR (ORCPT
+        with ESMTP id S230205AbjEPHkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:40:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2E71737;
-        Tue, 16 May 2023 00:40:16 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G7aShZ005037;
-        Tue, 16 May 2023 07:39:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=oyXmAuPB2QwCsFmA09TyMaE9r5Wsa42TS9CvhNr4Xxo=;
- b=jQyJnX2IE0Q9/uHuiK+tFFDM2ICZfdAS10yyEEvjakfFqK1quX2CS8p56sTYXWMVS9QP
- hlMhqOQ+mI2WQwYJsEhn/wIKZL3WkKjRMXk6BZ5K5F/WPJmxqsampKPSkDiJmsAwxLPd
- QY59SXf1QlQ2ey9cq+26TAma4O3D76d5TXhUj46eB6o4zAbnPGEbluM8Lr7Wt3ylPD0b
- TxIDWKMJtEgDfyXMimQ6TXr011dMhE4PtQ4wOjElsEyFil+mkDcEqxqAJcWoxs0Fmgce
- X8T8mgU2Vps3ESnTmGZo3FC5OP5dsorRnLIdraV+j9qiSgyKFAl3jwTnHpk6XFcyzama 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm4y8hh1p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 07:39:32 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34G7amRA007488;
-        Tue, 16 May 2023 07:39:31 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm4y8hgpq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 07:39:31 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G3qs8k006665;
-        Tue, 16 May 2023 07:39:23 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sfp5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 07:39:23 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34G7dKNV41615626
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 07:39:20 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3C0C320043;
-        Tue, 16 May 2023 07:39:20 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7498920040;
-        Tue, 16 May 2023 07:39:18 +0000 (GMT)
-Received: from [9.152.222.242] (unknown [9.152.222.242])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 16 May 2023 07:39:18 +0000 (GMT)
-Message-ID: <168d8026-207a-e7ee-21b3-4a02ed00f0ce@linux.ibm.com>
-Date:   Tue, 16 May 2023 09:39:17 +0200
+        Tue, 16 May 2023 03:40:43 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF3F2690;
+        Tue, 16 May 2023 00:40:39 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96aa0cab88dso754430666b.1;
+        Tue, 16 May 2023 00:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684222838; x=1686814838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/wQZn//CGe7+K2GqKzKrwn7d0YEVExyW7SoiXjaCuEA=;
+        b=BF4cySnnIE51miOa5sJV6Ea5OhpNrPr4mrkPuoUq7bAYBg3gj0evsBCNBHcn99PXkf
+         op8qHkpgWa6g5anBmsUpyJ4lIpPIrXgs7dsrzb/Vcvvk6/VVr1oWDBfEXfivlA7Q7844
+         tVFvJEN1hMLq7qKl7IKvbsxclVwMck85AllCYLgfChcD/0DefTI+J/9eL1BAyR+RbGuo
+         uFi7SABoEUBtcPwkhoMMYJz/F7cIOZF1MfyFGjRyeYQiO/aGXFwqSZ/0vefo3u5d18nY
+         dvNzJEW7JQOeazIU114IWmnbK1SA653ou+9uPZ0HyXs7kpk0UqwWTZixsVG6r2rSN0Aj
+         MICQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684222838; x=1686814838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/wQZn//CGe7+K2GqKzKrwn7d0YEVExyW7SoiXjaCuEA=;
+        b=dGNbaVAw8bgAWXLEjHcyurXSDa0bQ4TlBFlQAxaehrwBBYl4QHBYdAKcYrMUaron0t
+         DIqWPtBK2XXQ4YQol7oWnV86co+AvfSR2wD/GfuHitB8u0Y5c3049adxkULCAxEYwXqb
+         AKpQx0+J3MneTbOHZZypwQRSONZBBIJpoPvtkvv46Lq8kNhMphVT1Y3WkYdAlDPkJuks
+         vb7EwTI31o4R2C+XAsYyN3tofMBj88KfeQwGx6GeEI4Q86IU9C5uT86X8JMoUlVuFzFX
+         LfGpoyFI85RWKaRQaFam5uixTufvFGrdvnAeel52os2c7Tfekux6aurX57nbRAbxfRoO
+         iwwg==
+X-Gm-Message-State: AC+VfDyvHikGErVp8FihstsqW61/7/Ni0gVQLuye9A/LaScBAlH97yxF
+        VliTNIyQ52uhv8prbewS9Yw=
+X-Google-Smtp-Source: ACHHUZ6/oyokjYydgVAHBsq30ik7SCbvdOz8OrTjxLmR6ZRUuZeA7F380IDWMw95s+omX7P1hcWviA==
+X-Received: by 2002:a17:907:c19:b0:960:7643:c970 with SMTP id ga25-20020a1709070c1900b009607643c970mr38743981ejc.26.1684222837739;
+        Tue, 16 May 2023 00:40:37 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id rh2-20020a17090720e200b0094f698073e0sm10489521ejb.123.2023.05.16.00.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 00:40:37 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 16 May 2023 09:40:35 +0200
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>
+Subject: Re: [PATCH v1 1/2] perf expr: Make the evaluation of & and | logical
+ and lazy
+Message-ID: <ZGMzc20dvBRk2Eys@krava>
+References: <20230504195803.3331775-1-irogers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v9 1/6] s390/ism: Set DMA coherent mask
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Julian Ruess <julianr@linux.ibm.com>,
-        Alexandra Winter <wintera@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Reddy <vdumpa@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230310-dma_iommu-v9-0-65bb8edd2beb@linux.ibm.com>
- <20230310-dma_iommu-v9-1-65bb8edd2beb@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20230310-dma_iommu-v9-1-65bb8edd2beb@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: J4ionigi6aUPze2O9mlNApMYAufA_hrk
-X-Proofpoint-GUID: i4d6Dd2ZX11emMnTTTHfoZmJwBDtd8nN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_02,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- clxscore=1011 spamscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- mlxscore=0 impostorscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305160065
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504195803.3331775-1-irogers@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 04, 2023 at 12:58:02PM -0700, Ian Rogers wrote:
+> Currently the & and | operators are only used in metric thresholds
+> like (from the tma_retiring metric):
+> tma_retiring > 0.7 | tma_heavy_operations > 0.1
+> 
+> Thresholds are always computed when present, but a lack events may
+> mean the threshold can't be computed. This happens with the option
+> --metric-no-threshold for say the metric tma_retiring on Tigerlake
+> model CPUs. To fully compute the threshold tma_heavy_operations is
+> needed and it needs the extra events of IDQ.MS_UOPS,
+> UOPS_DECODED.DEC0, cpu/UOPS_DECODED.DEC0,cmask=1/ and
+> IDQ.MITE_UOPS. So --metric-no-threshold is a useful option to reduce
+> the number of events needed and potentially multiplexing of events.
+> 
+> Rather than just fail threshold computations like this, we may know a
+> result from just the left or right-hand side. So, for tma_retiring if
+> its value is "> 0.7" we know it is over the threshold. This allows the
+> metric to have the threshold coloring, when possible, without all the
+> counters being programmed.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-On 5/15/23 11:15, Niklas Schnelle wrote:
-> A future change will convert the DMA API implementation from the
-> architecture specific arch/s390/pci/pci_dma.c to using the common code
-> drivers/iommu/dma-iommu.c which the utilizes the same IOMMU hardware
-> through the s390-iommu driver. Unlike the s390 specific DMA API this
-> requires devices to correctly call set the coherent mask to be allowed
+lgtm
 
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-s/call//
+jirka
 
-
-> to use IOVAs >2^32 in dma_alloc_coherent(). This was however not done
-> for ISM devices. ISM requires such addresses since currently the DMA
-> aperture for PCI devices starts at 2^32 and all calls to
-> dma_alloc_coherent() would thus fail.
->
-> Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
-> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
->   drivers/s390/net/ism_drv.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
-> index 8acb9eba691b..1399b5dc646c 100644
-> --- a/drivers/s390/net/ism_drv.c
-> +++ b/drivers/s390/net/ism_drv.c
-> @@ -660,7 +660,7 @@ static int ism_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	if (ret)
->   		goto err_disable;
->   
-> -	ret = dma_set_mask(&pdev->dev, DMA_BIT_MASK(64));
-> +	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
->   	if (ret)
->   		goto err_resource;
->   
->
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-
+>  tools/perf/tests/expr.c | 40 +++++++++++++++++++
+>  tools/perf/util/expr.y  | 86 +++++++++++++++++++++++++++++++++--------
+>  2 files changed, 109 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+> index cbf0e0c74906..45c7fedb797a 100644
+> --- a/tools/perf/tests/expr.c
+> +++ b/tools/perf/tests/expr.c
+> @@ -184,6 +184,46 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+>  			NULL, ctx) == 0);
+>  	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+>  
+> +	/* The expression is a constant 0.0 without needing to evaluate EVENT1. */
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("0 & EVENT1 > 0", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("EVENT1 > 0 & 0", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("1 & EVENT1 > 0", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("EVENT1 > 0 & 1", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> +
+> +	/* The expression is a constant 1.0 without needing to evaluate EVENT1. */
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("1 | EVENT1 > 0", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("EVENT1 > 0 | 1", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("0 | EVENT1 > 0", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> +	expr__ctx_clear(ctx);
+> +	TEST_ASSERT_VAL("find ids",
+> +			expr__find_ids("EVENT1 > 0 | 0", NULL, ctx) == 0);
+> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
+> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
+> +
+>  	/* Test toplogy constants appear well ordered. */
+>  	expr__ctx_clear(ctx);
+>  	TEST_ASSERT_VAL("#num_cpus", expr__parse(&num_cpus, ctx, "#num_cpus") == 0);
+> diff --git a/tools/perf/util/expr.y b/tools/perf/util/expr.y
+> index 250e444bf032..6b110f9f95c9 100644
+> --- a/tools/perf/util/expr.y
+> +++ b/tools/perf/util/expr.y
+> @@ -123,20 +123,6 @@ static struct ids handle_id(struct expr_parse_ctx *ctx, char *id,
+>   * constant value using OP. Its invariant that there are no ids.  If computing
+>   * ids for non-constants union the set of IDs that must be computed.
+>   */
+> -#define BINARY_LONG_OP(RESULT, OP, LHS, RHS)				\
+> -	if (!compute_ids || (is_const(LHS.val) && is_const(RHS.val))) { \
+> -		assert(LHS.ids == NULL);				\
+> -		assert(RHS.ids == NULL);				\
+> -		if (isnan(LHS.val) || isnan(RHS.val)) {			\
+> -			RESULT.val = NAN;				\
+> -		} else {						\
+> -			RESULT.val = (long)LHS.val OP (long)RHS.val;	\
+> -		}							\
+> -		RESULT.ids = NULL;					\
+> -	} else {							\
+> -	        RESULT = union_expr(LHS, RHS);				\
+> -	}
+> -
+>  #define BINARY_OP(RESULT, OP, LHS, RHS)					\
+>  	if (!compute_ids || (is_const(LHS.val) && is_const(RHS.val))) { \
+>  		assert(LHS.ids == NULL);				\
+> @@ -213,9 +199,75 @@ expr: NUMBER
+>  }
+>  | ID				{ $$ = handle_id(ctx, $1, compute_ids, /*source_count=*/false); }
+>  | SOURCE_COUNT '(' ID ')'	{ $$ = handle_id(ctx, $3, compute_ids, /*source_count=*/true); }
+> -| expr '|' expr { BINARY_LONG_OP($$, |, $1, $3); }
+> -| expr '&' expr { BINARY_LONG_OP($$, &, $1, $3); }
+> -| expr '^' expr { BINARY_LONG_OP($$, ^, $1, $3); }
+> +| expr '|' expr
+> +{
+> +	if (is_const($1.val) && is_const($3.val)) {
+> +		assert($1.ids == NULL);
+> +		assert($3.ids == NULL);
+> +		$$.ids = NULL;
+> +		$$.val = (fpclassify($1.val) == FP_ZERO && fpclassify($3.val) == FP_ZERO) ? 0 : 1;
+> +	} else if (is_const($1.val)) {
+> +		assert($1.ids == NULL);
+> +		if (fpclassify($1.val) == FP_ZERO) {
+> +			$$ = $3;
+> +		} else {
+> +			$$.val = 1;
+> +			$$.ids = NULL;
+> +			ids__free($3.ids);
+> +		}
+> +	} else if (is_const($3.val)) {
+> +		assert($3.ids == NULL);
+> +		if (fpclassify($3.val) == FP_ZERO) {
+> +			$$ = $1;
+> +		} else {
+> +			$$.val = 1;
+> +			$$.ids = NULL;
+> +			ids__free($1.ids);
+> +		}
+> +	} else {
+> +		$$ = union_expr($1, $3);
+> +	}
+> +}
+> +| expr '&' expr
+> +{
+> +	if (is_const($1.val) && is_const($3.val)) {
+> +		assert($1.ids == NULL);
+> +		assert($3.ids == NULL);
+> +		$$.val = (fpclassify($1.val) != FP_ZERO && fpclassify($3.val) != FP_ZERO) ? 1 : 0;
+> +		$$.ids = NULL;
+> +	} else if (is_const($1.val)) {
+> +		assert($1.ids == NULL);
+> +		if (fpclassify($1.val) != FP_ZERO) {
+> +			$$ = $3;
+> +		} else {
+> +			$$.val = 0;
+> +			$$.ids = NULL;
+> +			ids__free($3.ids);
+> +		}
+> +	} else if (is_const($3.val)) {
+> +		assert($3.ids == NULL);
+> +		if (fpclassify($3.val) != FP_ZERO) {
+> +			$$ = $1;
+> +		} else {
+> +			$$.val = 0;
+> +			$$.ids = NULL;
+> +			ids__free($1.ids);
+> +		}
+> +	} else {
+> +		$$ = union_expr($1, $3);
+> +	}
+> +}
+> +| expr '^' expr
+> +{
+> +	if (is_const($1.val) && is_const($3.val)) {
+> +		assert($1.ids == NULL);
+> +		assert($3.ids == NULL);
+> +		$$.val = (fpclassify($1.val) == FP_ZERO) != (fpclassify($3.val) == FP_ZERO) ? 1 : 0;
+> +		$$.ids = NULL;
+> +	} else {
+> +		$$ = union_expr($1, $3);
+> +	}
+> +}
+>  | expr '<' expr { BINARY_OP($$, <, $1, $3); }
+>  | expr '>' expr { BINARY_OP($$, >, $1, $3); }
+>  | expr '+' expr { BINARY_OP($$, +, $1, $3); }
+> -- 
+> 2.40.1.521.gf1e218fcd8-goog
+> 
