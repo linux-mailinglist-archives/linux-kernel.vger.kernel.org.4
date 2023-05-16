@@ -2,173 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A4D704C96
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1047704CA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbjEPLnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S232764AbjEPLqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbjEPLnc (ORCPT
+        with ESMTP id S232428AbjEPLqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:43:32 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2121.outbound.protection.outlook.com [40.107.105.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455B45582;
-        Tue, 16 May 2023 04:43:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O5lXcWwqE+7narN/RQR2ABm6KuTZilm3kNEstLJHJ4eV+ZztARYOgi42XoPvfKeCLx464Evhn8eSqO0LmPjr2HJYr0BqPykUICNsT8kT8ceiwMami2RyZiEVkX5cDfT3oTVkFnefz1KcDSTgAEy95Y5KbjqBBOOHcNsATv8eBFHB3UtyhhfQ1Tyo9mv3uIe2aOUEQ1YQhBcApFDCaqprz/BMjUXnUpy4Tjj5NCvy2FgpyIx4MS+bSxNrdVoV7FBgbbMh1h1aWPJPX6hi7wtELPhO5Spkv/2FhfqjxMym78IIYjo63QbBZLPkXtV5uqcIRdS6nVuNPObGIpE0agOzLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K11vaygDjDk2uVERRUKq0MuPPwoT5ciVb2e+YJzc/7I=;
- b=YdCJrMbth0AkwuR/m1KOqwQEm8a+LwDGa+V36UBDgq3Tb99Qjt9j1lr8um+iMOBH+I29GozQSn+idDypQPJe917fmgWSBtQS/xwQssHwnxgemwbvrcS9SKftZtkskXZRboUZLDNl5uBqhlKhJIaXcWhgK5rSsw6XGA7r79fNm+b0EgU4BawfraMsx08ADOi3fBEBITbKF+HjLU8CUzAkuP/HyMGpuM2LPRmTqbkRwNxEqp9gdMJe/0asXk1SJVGUvzdanEKZHuNAwMWtcNXXu9s+q0RNGC8L2mp7/f9y2Yv/Bnduy+f/pZ3j1c424v9LXrR3N2V8+WegWbAnK2lkNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
- dkim=pass header.d=prevas.dk; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K11vaygDjDk2uVERRUKq0MuPPwoT5ciVb2e+YJzc/7I=;
- b=QZpRoMqywoeFCbySme2o7/6eae2bGBPJPb3u4nHqkcCekmoyLIaTrlO3l83KtO85sjR5BFyOfje6dvbmUxv/fLEERZ04dxOAujxQVizqdaW7CSig8O/aWRJknJuHs/uYfIXYn8cUM9MNACtpfkBjJ+ffcMG8JfFFNwQSv1yxISM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=prevas.dk;
-Received: from DB9PR10MB7100.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:45a::14)
- by PAXPR10MB5662.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:245::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 11:43:26 +0000
-Received: from DB9PR10MB7100.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8edd:b6b0:d2dd:ee12]) by DB9PR10MB7100.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8edd:b6b0:d2dd:ee12%7]) with mapi id 15.20.6387.030; Tue, 16 May 2023
- 11:43:26 +0000
-Message-ID: <9f9d4f04-70d1-7d62-7d27-c76e80d2861f@prevas.dk>
-Date:   Tue, 16 May 2023 13:43:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
-Content-Language: en-US, da
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
- <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
- <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
- <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
- <38eef5df-ca8d-41f1-93e7-e13c1d7b6232@sirena.org.uk>
- <a56c2cec-b10c-ec73-2179-6b92251a7419@rasmusvillemoes.dk>
-From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-In-Reply-To: <a56c2cec-b10c-ec73-2179-6b92251a7419@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0069.SWEP280.PROD.OUTLOOK.COM (2603:10a6:190:8::6)
- To DB9PR10MB7100.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:45a::14)
+        Tue, 16 May 2023 07:46:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE5D4494;
+        Tue, 16 May 2023 04:46:12 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G9mOxW029807;
+        Tue, 16 May 2023 11:45:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=yHnqeEF1gNh/uwWLh9z7i1Wtz9AYfRFLB2K12IRmv6M=;
+ b=f1iBS3sixB/k35zCi3P/3ybE8T15DeBzsHpalnRr1d3lbDBtB/rHbMcsg/ye0kS90MOi
+ wwi4ubvb6VqRgRX10qg4n8XCqdH3de1U1pn7pMByZoKIxxlJcNsTnbCfvczuf71nDP2K
+ 4BLEgqqsUC2CvXo7443F0A69v/vM8VgZiLOsacMXhuynITJEHekK5nUWPeFgHbdpR4P6
+ BfAA62S8mo3QqYgexwH1GuXa6BQwd7ZlbwCcb3NHcSbLf1BCvx65PPAKyNdxFvSE6RDA
+ xNig+rXi6JJ4F/zcNV+uyXQM0tkNbgMivzmB6GaY4KarNU4FYP6B8fvJPqK2Jr3iTR9i Uw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qm36n0rdy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:45:52 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GBjprI029977
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:45:51 GMT
+Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 16 May 2023 04:45:45 -0700
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <robimarko@gmail.com>,
+        <andy.shevchenko@gmail.com>, <quic_srichara@quicinc.com>
+Subject: [PATCH V5 0/8] Add minimal boot support for IPQ5018
+Date:   Tue, 16 May 2023 17:15:15 +0530
+Message-ID: <20230516114523.3266419-1-quic_srichara@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR10MB7100:EE_|PAXPR10MB5662:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95a51da3-5ef8-460a-e47e-08db5602c2ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IhwmSxbZhLd95dzHM9tgPqifu8cWAR/5OL4OACJM5YRdjiSI62400puOgsJQBCHYZflXdPj08Bu5OM1x53i66408ukRR+gH0w72O8NhwCpGNxgdQtYaOWQM9KnJOMF73pF7Uamn4gaHxhFqnK7fC7KZfeIF4NjyepE//QAB/r43qKyrSZ3voBd4ZKKGElZHcELr+jw+OYEjKG4VwPpog9FpDqYmPYWrszPFYiiRShoikvq3TCe3rDiybRO4Rua5mK7wIYV8vsUog0l2RctLiHgt3NYAwcdrXtE8VTf7FwN89EK3cWzEf9XES29mXm5uJcKGDtsyQsLoN57ZLWjTF0LuO3vDoXcAMCXzZkXbNjtOyvriqvRKM2uL42fOqciQ8BgTLamSDfY0lf+5g46y1gfzZ/XUmpBijEmR+rjtfC9DN8Gn3CgB36VWhj5xbN7/oWORFJecMoj3s7ZJrs+cn/d+KXyRDh5Z6VxRFES/IkO6LYze+2EhCcfcgKgwm3ozDCoPnq7ud2qY0Otv1VPs9UO8EJsCHZGK5ug+/xAc+sDdjSobNxVM6NV1mtumvTbdJ0ixx7E6oXF3Mr9tFmGq+T7Ot9nSkPMqfZSDxcFZNBSZJTpjuoSUgDofQHHw4OcXZOJ3AqJnDnrWp2S2zw5CF2c4A9kQDSTMKhdzIi3nwGbcHEQBXRzaHAAb9MAuS9KkD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB7100.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(396003)(39850400004)(136003)(451199021)(86362001)(186003)(31686004)(38350700002)(2906002)(6512007)(6506007)(26005)(31696002)(6666004)(52116002)(2616005)(83380400001)(6486002)(478600001)(8676002)(8976002)(8936002)(66946007)(110136005)(36756003)(54906003)(5660300002)(316002)(41300700001)(44832011)(66556008)(4326008)(7416002)(66476007)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SFQ4NGNlRlpFZU4za2tVcy85ZmVRYUZNWmhLM3VUZlJ1aE9QSVZ3RW9hR0ho?=
- =?utf-8?B?MGFNdkFNaFRGK1RZTWRTYWE2QVAwcHJpeUViaHUvcEhSa2tWb3dpVDA0aGUz?=
- =?utf-8?B?T3hCT0JjdWY2cEt4dEMzTzc5aW1mR2p1Umk1ekR4ZkV4c3paejYyVHJwTGFL?=
- =?utf-8?B?Q2l3emx3bytXa1FEcHp4c3k1Mm9BdUg3cFpENHBrVDdjM1lWaFA2TEMwRUxq?=
- =?utf-8?B?ZExuR1R4SkF2MXV1ZVlHdzEveEVGV20vMG1oQUdHYWlyMzV6VEdRU0V4djRC?=
- =?utf-8?B?Uk15b0NWb01XZ0RFU1BmQXRpLzhod3FiMEd5U2hOMExsUFM0R3A4VkVBOWJP?=
- =?utf-8?B?QVJZeWRNZ1Z4ZTluTXdoUVpmZFBQTjBaaFZpNkpjZ0hLeThyRWdpTlVBa0Y0?=
- =?utf-8?B?NlZhbGp2eHp4d29LSExLSGRrbGNZaGtxaldOaGlrNmxGdnFlenlicThtS3hY?=
- =?utf-8?B?QnE4VTAxQzhuUUVtdmY3eDRZc3c0NnlXKzIrQjd3ZEduUjErRk5xTytUWU1t?=
- =?utf-8?B?UXhNUmFMcmZZZDdQT3JKeUdyREt2WW5maVhUUEM4eHNBek0wdTRqL1hwcGo3?=
- =?utf-8?B?enNnVkc2NElGSkw1VUJwSnNpSm5wSHpGSzZqbjRoVUxBMU4yQXpPNE5vNis5?=
- =?utf-8?B?dCtnUWJoUDhtaWl5dVh4RGU3cUR6aUtGaFJDY3dIRCtFTEtjYVREbkN1dXBl?=
- =?utf-8?B?TjhRUldXR2tNeDlDMDg2TGlUdW1sdERzZXVGMEFMeVZtaGs2ZnNuTFU3akhH?=
- =?utf-8?B?ek84a05CZnNUbkozeHJFb0dpV2gya3FmazFJVFdVVWxSdXh4WVVvME5acExq?=
- =?utf-8?B?ZXFKeDFlWld1UU9LU2RmN01nbEFSazNPR1A2WEVMY3llTk9PRW1uQ3BWNHIr?=
- =?utf-8?B?a0FwQTBHWStJVHNwU0VxdC9uZ0FRdHhYN0dKU3NqR08zaHE0UjhsVmF5SjJL?=
- =?utf-8?B?OVJCZVE4MlZ6UFZqVTVadm5COEhpa29hU2pTL0EydDk4S2wvR3k3Y1N2ZlJC?=
- =?utf-8?B?ZE0vRmZxZ0pldnV4eGNpZXYrWDF5ZmlXMThhZ3dLNEdYNXRzL1dGT3YyMitT?=
- =?utf-8?B?QVlHQXJ2OGZaZ1N5VUZUb05lS3JyYWdPWGtDUXREYm9WbFA1QXZTRGlhbG1Y?=
- =?utf-8?B?OW9ZVEg4MSttZGYvdTdoT2pJKzVoRVNJTi9maHBBT3o1bUxxa3BkYzRQcFBH?=
- =?utf-8?B?N3VjdXY3TlZwcXo0SkV1K1ZtbFV1ZmhmSUtPc24zU0JrcGhLUjdCZUhWamFr?=
- =?utf-8?B?Z2tQb2NKY2FxR2gzc0xLaTBDWE16UjBCRWc2WEVpQ2tuUGVZREVsek1vQWxO?=
- =?utf-8?B?dzRzYXJCN01YMzZyYlcvck1aR0tTejVTVXMvaldEQlV2djlERWVZSjNkYjk2?=
- =?utf-8?B?REJDSzNxREdwVytnbmZoUU9rQ1UvV0xrWVY5MXBwN09BejJIWUFkeGk5eXVo?=
- =?utf-8?B?TEdLbnZlWTlIWWNzTUhEdTBWTEVMNE41Qzh3SlJKTHN5QkM4anBrV3dLMk5m?=
- =?utf-8?B?MFBYQm5IUEFhS0tNVVBpdkx1SHRWaXlIeDZPVGJEaW5zNmxjWFo5YWEzSUdU?=
- =?utf-8?B?SkxXbit5OWtza3NVS2tkNmNXVUFsMTY2NDd1cWNDTnRBYmFCWnloL0JqUVkw?=
- =?utf-8?B?ZDBIUU9oQjM2ZDZmUEMxYXRSSnIzblhKR0tLRnRkTVlBTC9rMTlTQzVzNFpl?=
- =?utf-8?B?Q1k2UnNqVEh5WmpOeGN3L0NuaFhNZ25qN2I2M0lSbWM1dC9nWFFkZStpckhG?=
- =?utf-8?B?VmJadVJoMU9PNXRqT0dYdmZWS1JlY3N5OFhORk8zdFRiK1VIalpMSTlUa1Mz?=
- =?utf-8?B?Y3d3dXRqZnJLeGUzQjMwQ3A2MG5HNEFwdmg1MVJ2RTNvQS8wMFpzdjBMNlVs?=
- =?utf-8?B?cExybEtVbS9JRnl3a244M1NqMDRVZXdPOUp3cUZ2MjNqNHMvZytDd0x1eG0v?=
- =?utf-8?B?RG5QeEV6S29ON0lraXhSOFo0bGRsWjBRTmVENVIreUdNaXM1TlpIUS92VHFX?=
- =?utf-8?B?bXBQcW81d3NuZ3JYSlNYcTR4dlRSUU1IU1UzZ0NXbmN1dFZhdmEySkpXRjdk?=
- =?utf-8?B?YUFuOXdCMEN0Skh0emFaRFZSU3NKa2VHYmNnWm5uTXloREtGbmp0eDFuemFE?=
- =?utf-8?B?aUtUbENaSmVKa0FDRDRvWEJ4RFhTQmpxc1EwQk1qRXdXZ2JzaXdJejFHMVlX?=
- =?utf-8?B?bXc9PQ==?=
-X-OriginatorOrg: prevas.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95a51da3-5ef8-460a-e47e-08db5602c2ff
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB7100.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 11:43:26.6212
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aTM2i0RKqiq+b8ciFffHEzOIqBTVusOxGAYuVnKslcvrz1/YbI+E45cZVX44nfR6m2XJvXrPIpnLUc19OfRXgaWAFy/dYs13u6QLAg64LO8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB5662
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tlelaXIWTupBJ-xtp_8hizZDKeXc57Z6
+X-Proofpoint-ORIG-GUID: tlelaXIWTupBJ-xtp_8hizZDKeXc57Z6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=873
+ spamscore=0 suspectscore=0 priorityscore=1501 malwarescore=0 phishscore=0
+ bulkscore=0 impostorscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305160100
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 15.23, Rasmus Villemoes wrote:
+The IPQ5018 is Qualcomm's 802.11ax SoC for Routers,
+Gateways and Access Points.
 
->>> It's not exactly a regression, because any chip_select >= 4 never
->>> actually worked, but what I'm saying is that 87c614175bbf also isn't a
->>> complete fix if one wants to support mixing native and gpio chip
->>> selects. For that, one really needs the unused_native_cs to be used for
->>> all gpio chip selects; in particular, one needs some unused native cs to
->>> exist. IOW, what my series tries to do.
->>
->> No, we only need one unused chip select to be available.
-> 
-> Which is exactly what I'm saying, so I think we're in agreement.
-> 
-> I.e., something like this 3-patch series is needed to actually support
-> mixing native and gpio chip selects (having the core verify that there
-> is an unused chip select available, and provide that in the
-> ->unused_native_cs field in the spi_controller). I don't think there's
-> any textual conflict with 87c614175bbf, and the masking done by
-> 87c614175bbf doesn't hurt, but also becomes irrelevant if this series is
-> applied, since we'd never pass any value > 3 to those macros.
+This series adds minimal board boot support for ipq5018-mp03.1-c2 board.
 
-So, what's the conclusion here? Will these three patches be applied, or
-will we just live with the status as of next-20230516, namely that
+[v5]
+       Added Reviewed-by tags from Krzysztof Kozlowski.
+       Changed patch [6/8] with [1] since its already Acked
+       Rebased patch [4/8] on top of [2] and fixed other comments
+       Fixed commit log for patch [7/8]
+       Fixed comments for patch [2/8]
 
-* for up to four slaves, any combination of native and gpio chip select
-works
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1678164097-13247-4-git-send-email-quic_mmanikan@quicinc.com/
+[2] https://lore.kernel.org/r/1683718725-14869-1-git-send-email-quic_rohiagar@quicinc.com
+       
+[v4]
+       Fixed all comments for clocks, schema, dts
+       Added Reviewed-by tags.
 
-* with more then four slaves, CSn and CS(n&3) must be be gpios for all n
->= 4
+[v3]
+	Fixed all comments for clocks, schema fixes
+        Picked up Reviewed-by from Bjorn for pinctrl driver
 
-?
+[v2]
+	Fixed all comments and rebased for TOT.
 
-Rasmus
+Manikanta Mylavarapu (1):
+  dt-bindings: scm: Add compatible for IPQ5018
+
+Sricharan Ramabadhran (7):
+  dt-bindings: arm64: Add IPQ5018 clock and reset
+  clk: qcom: Add Global Clock controller (GCC) driver for IPQ5018
+  dt-bindings: pinctrl: qcom: Add support for ipq5018
+  pinctrl: qcom: Add IPQ5018 pinctrl driver
+  dt-bindings: qcom: Add ipq5018 bindings
+  arm64: dts: Add ipq5018 SoC and rdp432-c2 board support
+  arm64: defconfig: Enable IPQ5018 SoC base configs
+
+ .../devicetree/bindings/arm/qcom.yaml         |    7 +
+ .../bindings/clock/qcom,ipq5018-gcc.yaml      |   63 +
+ .../bindings/firmware/qcom,scm.yaml           |    1 +
+ .../bindings/pinctrl/qcom,ipq5018-tlmm.yaml   |  127 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ .../arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts |   72 +
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         |  250 ++
+ arch/arm64/configs/defconfig                  |    3 +
+ drivers/clk/qcom/Kconfig                      |   10 +-
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-ipq5018.c                | 3731 +++++++++++++++++
+ drivers/pinctrl/qcom/Kconfig                  |   10 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-ipq5018.c        |  783 ++++
+ include/dt-bindings/clock/qcom,gcc-ipq5018.h  |  183 +
+ include/dt-bindings/reset/qcom,gcc-ipq5018.h  |  122 +
+ 16 files changed, 5363 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5018-gcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-tlmm.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-ipq5018.c
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-ipq5018.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq5018.h
+ create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq5018.h
+
+-- 
+2.34.1
 
