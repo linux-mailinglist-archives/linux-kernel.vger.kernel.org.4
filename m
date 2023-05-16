@@ -2,84 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B66F705969
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7FB705972
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjEPVYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
+        id S230247AbjEPV1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjEPVYX (ORCPT
+        with ESMTP id S229682AbjEPV1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:24:23 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFF52693
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:24:21 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6439df6c268so9660881b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684272260; x=1686864260;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2t/JV41B23wn51WmTbAsDHcdxitNO9yCyn6PuCNMWvw=;
-        b=JA4gjOyNnkOp6N9yhir+XZgrlFNqLN73f73FcIJHA1+X8QEZAJiMpbN7VZktdvWTrP
-         dWm+zNi2W7pCpBqRcmyCZh4bploVzN5SUQLhukNNLsvxbzGGGgpOwGeWnc27KpOwM5pP
-         x3jVQBLHuosKERY91H3OWqqw8+Bo5I5pXaqTE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684272260; x=1686864260;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2t/JV41B23wn51WmTbAsDHcdxitNO9yCyn6PuCNMWvw=;
-        b=jQ+4EAsphmMagmqRZ0Ndme6Y9pwJYX9wju4WneXfuJNyHIQye9zzyrOMGIxVut5SLU
-         BqsFQfRO8K3AtYFWzOQIvRYmPXJdTDd0nPIC7XdBiB4QKjmNGJitwoBP72wjwS94jURO
-         91TiGtAr7NBjjfy652P92yfED9hbfn8NpOC07Mia8kl6GoLD72/ANN3EjFjIIPsoHfOt
-         ytCM4IlfAemyv5kshEFApp/8J1j8vjYn++XeNgDlPrTYGLMPLNyNsY2WqHX09pCSss5V
-         Y9i4CYz4caobQxwYOsROR34jYgvxJKUdqdTc6PJNd2B/qJ0te4ScPBqp91syWxm3wYW9
-         pn4Q==
-X-Gm-Message-State: AC+VfDzvvlfUyNb8+2kn8d8r72BO9OmJhkObxIHotpDslZA16x1H+Igt
-        hVQgYnvlsZEauRVzIVHnHwp/hP/pF9cr5p95xUw=
-X-Google-Smtp-Source: ACHHUZ5N7+JzoLslg82KahZDNUss7Zg+K5TpRtXDWO72DRmMMsrc7EohFWF6NZElsnlEvLA2Gd/grQ==
-X-Received: by 2002:a05:6a00:a28:b0:63f:1eb3:824b with SMTP id p40-20020a056a000a2800b0063f1eb3824bmr54851505pfh.17.1684272259897;
-        Tue, 16 May 2023 14:24:19 -0700 (PDT)
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com. [209.85.214.176])
-        by smtp.gmail.com with ESMTPSA id c25-20020a62e819000000b0063f172b1c47sm7591410pfi.35.2023.05.16.14.24.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 14:24:18 -0700 (PDT)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1ac65ab7432so29625ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:24:18 -0700 (PDT)
-X-Received: by 2002:a17:902:e74a:b0:1ac:3605:97dc with SMTP id
- p10-20020a170902e74a00b001ac360597dcmr88838plf.6.1684272257936; Tue, 16 May
- 2023 14:24:17 -0700 (PDT)
+        Tue, 16 May 2023 17:27:07 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEEF6A54
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:27:04 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230516212702euoutp0176e49d01e596556c9d934c432a67ea94~fvNgyNDiU2920529205euoutp01B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:27:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230516212702euoutp0176e49d01e596556c9d934c432a67ea94~fvNgyNDiU2920529205euoutp01B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1684272422;
+        bh=AWnFPzdKQ3BmDA6aeSsFt7RWiz9U9+getE+2R81AueU=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=OuUaNOoesxxJSJukHoQCMhFRMIVPfBefG6JYEau0reBbr/qij3NYV+xuE4jeVLWln
+         P5xFab7pIb+KqxL5upi2q3d/iCCBuAw8Yt13/I1OQXGSPvjxClLiT9MN5bmloJEnCp
+         fyQipo1NyHaanCzhEq2iA3WbernQvPF/DK2vd9v0=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230516212701eucas1p182e16c522a2e31461b9511b2390b8b3a~fvNf2Xpgy1496114961eucas1p1o;
+        Tue, 16 May 2023 21:27:01 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 06.92.42423.525F3646; Tue, 16
+        May 2023 22:27:01 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230516212700eucas1p1fbde1b6181c18d821e0796b6b6a4fa00~fvNepBxWa1501615016eucas1p1N;
+        Tue, 16 May 2023 21:27:00 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230516212700eusmtrp109235a95d334cf742154f8b806fbb48e~fvNeoUmSE1235012350eusmtrp1W;
+        Tue, 16 May 2023 21:27:00 +0000 (GMT)
+X-AuditID: cbfec7f2-a3bff7000002a5b7-5e-6463f52569d4
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id FE.7F.14344.325F3646; Tue, 16
+        May 2023 22:26:59 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230516212659eusmtip1402a48b4d27c0ca2942f69a8219ae669~fvNdz47OG2253222532eusmtip1_;
+        Tue, 16 May 2023 21:26:59 +0000 (GMT)
+Message-ID: <2d234cd8-f883-800b-af97-116a949b64af@samsung.com>
+Date:   Tue, 16 May 2023 23:26:59 +0200
 MIME-Version: 1.0
-References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
- <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
- <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
- <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com> <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
-In-Reply-To: <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 16 May 2023 14:24:06 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
-Message-ID: <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
-To:     Amit Pundir <amit.pundir@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH v8 05/14] mfd: rk808: split into core and i2c
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Vincent Legoll <vincent.legoll@gmail.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20230504173618.142075-6-sebastian.reichel@collabora.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPKsWRmVeSWpSXmKPExsWy7djP87qqX5NTDCa1C1ksuXiV3aL93TJ2
+        i6kPn7BZzD9yjtWi9dVzdov/j16zWmw+18Nq0ffiIbPFjraFLBbfrnQwWUz5s5zJ4vKuOWwW
+        nx78Z7a4eMrVonXvEXaLf9c2sljcfe1ncXztMzYHIY/3N1rZPeatqfY48f8Ii8eOu0sYPXbO
+        usvusWlVJ5vHnWt72Dw2L6n32H5tHrPH9Hk/mTw+b5IL4I7isklJzcksSy3St0vgyvj76Apr
+        QRd/xYfjfA2MC7m7GDk5JARMJJ49n87SxcjFISSwglHiyccuNpCEkMAXRolrh5MgEp8ZJZp/
+        tjPDdJz+ugKqYzmjxOVdd6Gcj4wS7RfesoBU8QrYSUzvvQNmswioShyfOxUqLihxcuYTMFtU
+        IFVi1eaLYFOFBRwlLk3dyApiMwuIS9x6Mp8JZKiIwBVGie4lF9hBHGaBj8wSTc/fgh3IJmAo
+        0fUW4lhOATeJs43LGSG65SW2v50Ddes1TonDjZIQtovEkaadrBC2sMSr41vYIWwZidOTe8Be
+        kBBoZ5RY8Ps+E4QzgVGi4fktRogqa4k7534BbeMA2qApsX6XPkTYUWL6xEXsIGEJAT6JG28F
+        IW7gk5i0bTozRJhXoqNNCKJaTWLW8XVwaw9euMQ8gVFpFlK4zELy/ywk38xC2LuAkWUVo3hq
+        aXFuemqxYV5quV5xYm5xaV66XnJ+7iZGYJo8/e/4px2Mc1991DvEyMTBeIhRgoNZSYQ3sC85
+        RYg3JbGyKrUoP76oNCe1+BCjNAeLkjivtu3JZCGB9MSS1OzU1ILUIpgsEwenVANTtoBkgi2f
+        2i/Gn5sMtk7dx8RSb8u9g3vJu5qONc+1brrOStuWfbzGt8D3r327DvObvivvL05at+xHpgvj
+        NFaPeT9cjz5a2a393bby46XLb27fUfw+yfCKasl7eRPDaR4XT0xKlDv6eqb0m8+bn150Wp68
+        xVmrxrq7WOGP0gJZHw7FLHf3pnUS70KCPmXUvUnWsTXbZFq9aTavrf2h0G2TI6dtZIks+/rk
+        7RfHNbkL/ZQNd7hbmE9h1H1XNF3Z0f7Wr8De8ObHPA8PM8sb/tq/rn2HHHv64ZdftjnsCL3V
+        pbP7+R/5GytPxJuduOesZt92ISvBseyoy7t5D2weXZxnIcsfttLo5M5jirf2t6/3U2Ipzkg0
+        1GIuKk4EAEWGzLQCBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmleLIzCtJLcpLzFFi42I5/e/4XV3lr8kpBtemWFssuXiV3aL93TJ2
+        i6kPn7BZzD9yjtWi9dVzdov/j16zWmw+18Nq0ffiIbPFjraFLBbfrnQwWUz5s5zJ4vKuOWwW
+        nx78Z7a4eMrVonXvEXaLf9c2sljcfe1ncXztMzYHIY/3N1rZPeatqfY48f8Ii8eOu0sYPXbO
+        usvusWlVJ5vHnWt72Dw2L6n32H5tHrPH9Hk/mTw+b5IL4I7SsynKLy1JVcjILy6xVYo2tDDS
+        M7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQy/j76AprQRd/xYfjfA2MC7m7GDk5JARM
+        JE5/XcHSxcjFISSwlFHi6axJbBAJGYmT0xpYIWxhiT/Xutggit4zSkz9fZwZJMErYCcxvfcO
+        C4jNIqAqcXzuVBaIuKDEyZlPwGxRgVSJk0tvgNnCAo4Sl6ZuBBvKLCAucevJfCaQoSIC1xgl
+        lsw4CbaBWeAzs8TcXXdYIdY1MkpM+vqFEaSFTcBQouttF9h9nAJuEmcblzNCjDKT6NraBWXL
+        S2x/O4d5AqPQLCSXzEKycRaSlllIWhYwsqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQITA3b
+        jv3csoNx5auPeocYmTgYDzFKcDArifAG9iWnCPGmJFZWpRblxxeV5qQWH2I0BQbHRGYp0eR8
+        YHLKK4k3NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1OTS1ILYLpY+LglGpg8tgZ4sPybEaE
+        gtOC0uzc2zMfbJt2zev3oaU1jH8PmgXIbAkz/21t+blpqSPfLROG6385F17PTfIw1BZy6/K3
+        /PKG7ZFp3ObgmetFb7Dy62l/mnKA+z3XCelMM5logSeJYmX/ngsudBH75Xyr8EDuNmXrtyL8
+        h43j2riynY/8l7hcVnGm9sjpL8zz9PTO3ewJ/G/tELmQ9brjJfPfNyxLKwSDua8bv/zd/O3q
+        8/WvZU9oiofOL/CwruYXyb8exXZQrrz+GYv44d9bJrpXNU3/m6N763HC5E9Pl5a0iIr1t+46
+        aPjL/1PcZs83Em6Ws5hfXObPeTbhbZvd7cRXzQ3PlHTsbudOWPRqk2nWR9f9SizFGYmGWsxF
+        xYkAaplqb5YDAAA=
+X-CMS-MailID: 20230516212700eucas1p1fbde1b6181c18d821e0796b6b6a4fa00
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230516212700eucas1p1fbde1b6181c18d821e0796b6b6a4fa00
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230516212700eucas1p1fbde1b6181c18d821e0796b6b6a4fa00
+References: <20230504173618.142075-1-sebastian.reichel@collabora.com>
+        <20230504173618.142075-6-sebastian.reichel@collabora.com>
+        <CGME20230516212700eucas1p1fbde1b6181c18d821e0796b6b6a4fa00@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,115 +133,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Tue, May 16, 2023 at 11:12=E2=80=AFAM Amit Pundir <amit.pundir@linaro.or=
-g> wrote:
+On 04.05.2023 19:36, Sebastian Reichel wrote:
+> Split rk808 into a core and an i2c part in preparation for
+> SPI support.
 >
-> On Mon, 15 May 2023 at 20:33, Doug Anderson <dianders@chromium.org> wrote=
-:
-> >
-> > Hi,
-> >
-> > On Mon, May 15, 2023 at 7:42=E2=80=AFAM Amit Pundir <amit.pundir@linaro=
-.org> wrote:
-> > >
-> > > On Sun, 14 May 2023 at 18:11, Caleb Connolly <caleb.connolly@linaro.o=
-rg> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 13/05/2023 18:08, Amit Pundir wrote:
-> > > > > On Fri, 24 Mar 2023 at 19:05, Douglas Anderson <dianders@chromium=
-.org> wrote:
-> > > > >>
-> > > > >> This reverts commit 58973046c1bf ("regulator: qcom-rpmh: Use
-> > > > >> PROBE_FORCE_SYNCHRONOUS"). Further digging into the problems tha=
-t
-> > > > >> prompted the us to switch to synchronous probe showed that the r=
-oot
-> > > > >> cause was a missing "rootwait" in the kernel command line
-> > > > >> arguments. Let's reinstate asynchronous probe.
-> > > > >
-> > > > > Hi, the asynchronous probe is broken on Dragonboard 845c (SDM845)
-> > > > > running AOSP (Android Open Source Project) with v6.4-rc1
-> > > > > https://bugs.linaro.org/show_bug.cgi?id=3D5975.
-> > > > > Can we please go back to synchronous probe.
-> > > > >
-> > > > > AOSP do not make use of rootwait, IIRC, but it is added by the
-> > > > > bootloader anyway. And the device fails to boot AOSP regardless o=
-f
-> > > > > "rootwait" bootarg being present or not.
-> > > >
-> > > > Could you try applying this diff to enable some log spam and let me=
- know
-> > > > what you get? I'm keen to try and figure this one out. My mail clie=
-nt
-> > > > might crunch this a bit so I have pasted it here too
-> > > > https://p.calebs.dev/ab74b7@raw
-> > >
-> > > These prints add just enough delay for the UFS probe to succeed that =
-I
-> > > can't reproduce the failure anymore.
-> >
-> > I'd prefer doing at least a little debugging before jumping to a
-> > revert. From looking at your dmesg [1], it looks as if the async probe
-> > is allowing RPMH to probe at the same time as "qcom-vadc-common".
-> > That's something that talks on the SPMI bus and is (potentially)
-> > talking to the same PMICs that RPMH-regulator is, right? I'm by no
-> > means an expert on how Qualcomm's PMICs work, but it seems plausible
-> > that the "qcom-vadc-common" is somehow causing problems and screwing
-> > up RPMH. Does that seem plausible to you?
-> >
-> > If so, one interesting way to track it down would be to move around
-> > delays. Put ~500ms sleep at the _end_ of vadc_probe(). Presumably that
-> > _won't_ fix the problem. Now put a ~500ms sleep at the beginning of
-> > vadc_probe(). Maybe that will fix the problem? If so, you can move the
-> > delay around to narrow down the conflict. My wild guess would be that
-> > vadc_reset() could be throwing things for a loop?
-> >
-> > If the above doesn't work, maybe we could add more tracing / printouts
-> > to see what is probing at the same time as RPMH?
+> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com> # for RTC
+> Tested-by: Diederik de Haas <didi.debian@cknow.org> # Rock64, Quartz64 Model A + B
+> Tested-by: Vincent Legoll <vincent.legoll@gmail.com> # Pine64 QuartzPro64
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+This patch landed in today's linux-next as commit c20e8c5b1203 ("mfd: 
+rk808: Split into core and i2c"). Unfortunately some boards (for example 
+Hardkernel's Odroid-M1) stopped to boot after this change. This is 
+caused by the lack of updating the related defconfigs. Could you please 
+add a patch that updates the MFD_RK808 entries to MFD_RK8XX_I2C in the 
+following files:
+
+$ git grep MFD_RK808
+arch/arm/configs/multi_v7_defconfig:CONFIG_MFD_RK808=y
+arch/arm64/configs/defconfig:CONFIG_MFD_RK808=y
+
+
+> ---
+>   drivers/clk/Kconfig                   |   2 +-
+>   drivers/input/misc/Kconfig            |   2 +-
+>   drivers/mfd/Kconfig                   |   7 +-
+>   drivers/mfd/Makefile                  |   3 +-
+>   drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
+>   drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
+>   drivers/pinctrl/Kconfig               |   2 +-
+>   drivers/power/supply/Kconfig          |   2 +-
+>   drivers/regulator/Kconfig             |   2 +-
+>   drivers/rtc/Kconfig                   |   2 +-
+>   include/linux/mfd/rk808.h             |   6 +
+>   sound/soc/codecs/Kconfig              |   2 +-
+>   12 files changed, 256 insertions(+), 183 deletions(-)
+>   rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
+>   create mode 100644 drivers/mfd/rk8xx-i2c.c
 >
-> Tried out a few changes today but none of them worked or were
-> effective enough to debug this crash further, other than setting
-> fw_devlink=3Dpermissive.
->
-> Adding more tracing / prints (BOOTTIME_TRACING and
-> FUNCTION_GRAPH_TRACER) didn't work and didn't help in reproducing the
-> crash either. They added just enough delay to boot the device
-> successfully everytime.
->
-> I tried to reason with the kernel modules which gets loaded before and
-> after the qcom-rpmh-regulator (QCOM_REBOOT_MODE, QCOM_PON, IIO/VADC,
-> SPMI_PMIC* etc) as suggested, but I run into the same crash even if I
-> disable those driver modules. So I don't think that the other driver
-> modules which gets loaded at around the same time as
-> qcom-rpmh-regulator by default have any impact on this failure.
+> ...
 
-Ugh, Heisenbugs are no fun to debug. :( It sorta sounds as if pretty
-much anything you can do to change the timing fixes you. That does
-make reverting the async probe of the regulator less appealing. If, as
-you said, it's not just some other driver loading at the same time
-that's interfering then the revert "fixes" you in the same way that a
-"msleep" would fix you. That doesn't seem like enough of a
-justification for the revert to me.
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-It still feels to me like _something_ is happening at the same time as
-the RPMH regulator driver is loading, though, I'm just not sure how to
-suggest debugging it. I guess other thoughts:
-
-* When RPMH complains, is it always with the same regulator (lvs1), or
-sometimes different ones? Any clue there?
-
-* How much can you control module loading order? If rpmh-regulator
-module loads first, does it "fix" things? If it does, maybe you could
-bisect to find the place where problems start cropping up. Does that
-give any clues?
-
-
-> The only way I can boot successfully everytime is if I boot with
-> fw_devlink=3Dpermissive bootarg. So I'll have to check if there is any
-> new dependency which got added recently in DT or somewhere else that
-> is causing this breakage.
-
-I guess I'll assume that `fw_devlink=3Dpermissive` only fixes you
-because it changes the timing...
