@@ -2,90 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB26F704357
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC14B70435A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbjEPCVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 22:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
+        id S229832AbjEPCWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 22:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjEPCVj (ORCPT
+        with ESMTP id S229519AbjEPCWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 22:21:39 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9162D4C31;
-        Mon, 15 May 2023 19:21:38 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G20Z3T003134;
-        Tue, 16 May 2023 02:19:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=LiMbVFgnG1PzMz6t/NP0aA0ihJ+GRrYRu08HhKni1nM=;
- b=H/Ojax+A2FC/br0M3kQnFdV9mhPQztpIQfYrmA29e+XvCKb8NGyrsrZZcy8mngZF0hyN
- bIf5hq3/rH+qqpc/kHiNXJmDuLoHK+tY9mxpoaz86kLPVcE7Xbn5rFXrI9v6DqDnzuXN
- Gg1SPFVrry37ZsRkG/0Fo36tAU2QrZvYOz+v24+VZCE0hVj3klbRudP6+MLDU1vNETqQ
- T+YqVS2+ZalziZIcQJdVKjLHtZLGgBipRgh6Ii40GbiJoyYeDz9lWPVnL1XGkT83URor
- zoepB8lCf9qbe2g7cqeRVm0ngrpTeDNRkY6jzEouJfmq+tt7ePPEnjiZDv5dXbjqSWkf DA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkkde1xeq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 02:19:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34G2JS61012632
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 02:19:28 GMT
-Received: from [10.216.35.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
- 2023 19:19:19 -0700
-Message-ID: <bc347624-4539-4a3a-9399-9b4e272cdb32@quicinc.com>
-Date:   Tue, 16 May 2023 07:49:14 +0530
+        Mon, 15 May 2023 22:22:31 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DE3F2;
+        Mon, 15 May 2023 19:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684203749; x=1715739749;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xhub620MvUkYB5ByKu+zzBEV74A0k3faGyp2jpIPNqo=;
+  b=nyA0Yhl4OJIhJERB3C9eHDKSGvW5u4/1gyxkPV8GWRHCJOavYtA5wAu4
+   Wr4dnSLKe332AYy1XApP0bj4NBptUUnlUaDM7nfwkCFkCLV63PE2X9k/d
+   MMSQ6Hjf/m1cP5uH719+m/NR+eF9irAr6k44qMcDG3me1L0J8zA2yblz2
+   jo8Yj/fQTnq6XTinurc9+JL+uOYmtJkKqSel6CUpk47+tygEKUu4qqZn3
+   e4qoTS0czsgi9V4H6X8/GJ3o/OOl6elDNwOsqTPjy9lBpbnKOwPsdDYtm
+   ioqcC73AYdC6gyMtXt5jik4i/Edeafpn0kyTePPFzw/bJdfHIBW3028p8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="417018389"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="417018389"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 19:22:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="695261042"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="695261042"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.127]) ([10.249.174.127])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 19:22:25 -0700
+Message-ID: <9c75663c-6363-34e7-8341-d8f719365768@intel.com>
+Date:   Tue, 16 May 2023 10:22:22 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
+ Firefox/102.0 Thunderbird/102.10.1
+Subject: Re: [RFC PATCH v2 02/11] KVM: x86: Advertise CPUID.7.2.EDX and
+ RRSBA_CTRL support
 Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
-        <ahalaney@redhat.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-7-quic_kriskura@quicinc.com>
- <20230515222730.7snn2i33gkg6ctd2@ripper>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230515222730.7snn2i33gkg6ctd2@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, Jiaan Lu <jiaan.lu@intel.com>,
+        Zhang Chen <chen.zhang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20230414062545.270178-1-chao.gao@intel.com>
+ <20230414062545.270178-3-chao.gao@intel.com>
+ <a88b2504-b79b-83d6-383e-a948f9da662b@intel.com>
+ <ZGLkvlx5W0JStTjD@chao-email>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <ZGLkvlx5W0JStTjD@chao-email>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: B6f2WW032P7KSqQfW5i-uJ1ZII0SbsV2
-X-Proofpoint-ORIG-GUID: B6f2WW032P7KSqQfW5i-uJ1ZII0SbsV2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_21,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 suspectscore=0 bulkscore=0 clxscore=1015 impostorscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 spamscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160018
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,92 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/16/2023 3:57 AM, Bjorn Andersson wrote:
-> On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
->> QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
->> ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
->> for all the ports during suspend/resume.
+On 5/16/2023 10:04 AM, Chao Gao wrote:
+> On Mon, May 15, 2023 at 02:53:07PM +0800, Xiaoyao Li wrote:
+>> On 4/14/2023 2:25 PM, Chao Gao wrote:
+>>> From: Zhang Chen <chen.zhang@intel.com>
+>>>
+>>> Add a kvm-only CPUID feature leaf for CPUID.7.2.EDX and RRSBA_CTRL
+>>> as the first feature in the leaf.
+>>>
+>>> RRSBA_CTRL is enumerated by CPUID.7.2.EDX[2]. If supported, RRSBA_DIS_U
+>>> (bit 5) and RRSBA_DIS_S (bit 6) of IA32_SPEC_CTRL MSR can be used to
+>>> disable RRSBA behavior for CPL3 and CPL0/1/2 respectively.
+>>>
+>>> Note that KVM does not intercept guests' IA32_SPEC_CTRL MSR accesses
+>>> after a non-zero is written to the MSR. Therefore, guests can already
+>>> toggle the two bits if the host supports RRSBA_CTRL, and no extra code
+>>> is needed to allow guests to toggle the two bits.
 >>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/usb/dwc3/dwc3-qcom.c | 28 ++++++++++++++++++++++------
->>   1 file changed, 22 insertions(+), 6 deletions(-)
+>> This is a bug that also matters with other bits in MSR_IA32_SPEC_CTRL which
+>> has a dedicated enumeration CPUID bit and no support in KVM yet.
+> 
+> Do you mean passing through the MSR is a bug? guest can write any hardware
+> supported value to the MSR if the MSR isn't intercepted.
+> 
+> I guess this is intentional and a trade-off for performance (note that
+> context-switch may cause writes to the MSR). And see
+> 
+> commit 841c2be09fe4 ("kvm: x86: replace kvm_spec_ctrl_test_value with runtime test on the host")
+> 
+> it appears that this behavior is widely recognized.
+> 
 >>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index 959fc925ca7c..7a9bce66295d 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -37,7 +37,10 @@
->>   #define PIPE3_PHYSTATUS_SW			BIT(3)
->>   #define PIPE_UTMI_CLK_DIS			BIT(8)
->>   
->> -#define PWR_EVNT_IRQ_STAT_REG			0x58
->> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
->> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
->> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
->> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
->>   #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
->>   #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
->>   
->> @@ -93,6 +96,13 @@ struct dwc3_qcom {
->>   	struct icc_path		*icc_path_apps;
->>   };
->>   
->> +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
->> +			PWR_EVNT_IRQ1_STAT_REG,
->> +			PWR_EVNT_IRQ2_STAT_REG,
->> +			PWR_EVNT_IRQ3_STAT_REG,
->> +			PWR_EVNT_IRQ4_STAT_REG,
+>> I think we need to fix this bug at first.
 > 
-> Seems to be excessive indentation of these...
-> 
-> Can you also please confirm that these should be counted starting at 1 -
-> given that you otherwise talk about port0..N-1?
-> 
-Hi Bjorn,
+> I have no idea how to fix the "bug" without intercepting the MSR. The
+> performance penalty makes me think intercepting the MSR is not a viable
+> solution.
 
-   I am fine with either way. Since this just denoted 4 different ports, 
-I named them starting with 1. Either ways, we will run through array 
-from (0-3), so we must be fine.
+I thought correctness always takes higher priority over performance.
 
->> +};
->> +
->>   static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
->>   {
->>   	u32 reg;
->> @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
->>   {
->>   	u32 val;
->>   	int i, ret;
->> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
->>   
->>   	if (qcom->is_suspended)
->>   		return 0;
->>   
->> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
->> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
->> -		dev_err(qcom->dev, "HS-PHY not in L2\n");
->> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
+>>
+>>> Signed-off-by: Zhang Chen <chen.zhang@intel.com>
+>>> Signed-off-by: Chao Gao <chao.gao@intel.com>
+>>> Tested-by: Jiaan Lu <jiaan.lu@intel.com>
+>>> ---
+>>>    arch/x86/kvm/cpuid.c         | 22 +++++++++++++++++++---
+>>>    arch/x86/kvm/reverse_cpuid.h |  7 +++++++
+>>>    2 files changed, 26 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+>>> index 9583a110cf5f..f024c3ac2203 100644
+>>> --- a/arch/x86/kvm/cpuid.c
+>>> +++ b/arch/x86/kvm/cpuid.c
+>>> @@ -685,6 +685,10 @@ void kvm_set_cpu_caps(void)
+>>>    		SF(SGX1) | SF(SGX2) | SF(SGX_EDECCSSA)
+>>>    	);
+>>> +	kvm_cpu_cap_init_kvm_defined(CPUID_7_2_EDX,
+>>> +		SF(RRSBA_CTRL)
+>>> +	);
+>>> +
+>>
+>> Please move this hook up to right follow the leaf CPUID_7_1_EAX.
 > 
-> In the event that the dwc3 core fails to acquire or enable e.g. clocks
-> its drvdata will be NULL. If you then hit a runtime pm transition in the
-> dwc3-qcom glue you will dereference NULL here. (You can force this issue
-> by e.g. returning -EINVAL from dwc3_clk_enable()).
-> 
-> So if you're peaking into qcom->dwc3 you need to handle the fact that
-> dwc might be NULL, here and in resume below.
-> 
-Thanks for catching this. You are right, there were instances where the 
-we saw probe for dwc3 being deferred while the probe for dwc3-qcom was 
-still successful [1]. In this case, if the dwc3 probe never happened and 
-system tries to enter suspend, we might hit a NULL pointer dereference.
+> sure. will do.
 
-I will fix this in v9.
-
-[1]: 
-https://patchwork.kernel.org/project/linux-usb/patch/1657809067-25815-1-git-send-email-quic_kriskura@quicinc.com/
-
-Regards,
-Krishna,
