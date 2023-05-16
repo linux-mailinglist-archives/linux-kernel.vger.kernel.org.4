@@ -2,140 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0011A704A54
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943E2704A6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbjEPKT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S232221AbjEPKW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjEPKTu (ORCPT
+        with ESMTP id S232252AbjEPKWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:19:50 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2118.outbound.protection.outlook.com [40.107.96.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F3EE6D;
-        Tue, 16 May 2023 03:19:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mjpY9ASaUEzMES+tSlQH9PpnfhPqoEdMu9yYrDtnZE+NwcBm1Bj3a89aIPsSyLEctKEIX+1PzQGaku5RAQM+WxxxHIQuTUEBUVI6iq4+HPPm/1NMd6z42W86MF0C/+p2iSIpppX5lH41oUUd6EzB6Tg4E2HGkYcTNur+QY+Zk+PhI2Si9qWhm6bFrNXDQNl5f39AmvnaSC6m4d9P8HzV1CfyHTDZVVi4c4Bql7oZKuzqoW0xyvYVKKogvOcyjbUnwgB78Oj9f7honlFlPbP8h5Wj8CxPwdtlDStDus639wQzJ6jU/0dmsMD0pOcteU/OXmQqmUac2fEPaIgvk5kGIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jqdZcNSSA5Q6mYX8ets8m45s1LQgkwLcI4uPd7/uBt0=;
- b=Z04jTvQUSTgZU6vXlpq4aYVjBYtPFUBVzk8YDGYaOPUxOBslfny97GhvsPYemGt/SPSG8q/KL5jIg5fwhTsh7GizI8JFr4gZt2fwXif/OFs6dBatPcwmX9fzcz97PsAvWHku2arZnLseXR0uYjRn1niE73CvvRfPe8vZS1lzym5Y9PNevBcDolJoxPfCqSxt+5pnksTbs7xJItb+RjkTDaBYkuZROlBQJ34jn9FggSUZg6pMS6v8UQFVcxrfQlRFGXkaZ1HhEjm6emQRoWal+vwiBU4V3ANEaYmyWGmUPsS8xlycfWBhr59NnRBdl+K5KOx9LjHikzDxdKWdND1/jQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jqdZcNSSA5Q6mYX8ets8m45s1LQgkwLcI4uPd7/uBt0=;
- b=BdJ//5fJ2gWkZ7sntiDcpXq2TarcF0PyLWXp2AmtxkYKHJ6vPm1SqjNs7/Y5hPw1Gix5upPnHJH0VJIWULLdomClrOxwXu3M444BIgcrtCHmmVk3HC6ZMUSIRrSeTa83LBIZUXsZDLl4KEyw6hEXQUsKZBuOGdQolVjq+w6qiXU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB4081.namprd13.prod.outlook.com (2603:10b6:5:2a1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.32; Tue, 16 May
- 2023 10:19:45 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.033; Tue, 16 May 2023
- 10:19:45 +0000
-Date:   Tue, 16 May 2023 12:19:25 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] iavf: Replace one-element array with
- flexible-array member
-Message-ID: <ZGNYrUeFHC7wR/1A@corigine.com>
-References: <ZGLR3H1OTgJfOdFP@work>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGLR3H1OTgJfOdFP@work>
-X-ClientProxiedBy: AM0P190CA0002.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:208:190::12) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 16 May 2023 06:22:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5ED2738
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684232516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DdwZekQhQhJYfD71ineBvZDWMF1v7qroVT5L1UXxv4Y=;
+        b=BJLmKJH/+DqLPoaghhFc3uDuMNe1iWdl6Z5VnoOsIyjD7ypWzdGOFt/lYPDua3+5sc3G2Y
+        uGl4QbTUvj0zM3bIhaVLwwLKip7EZvNQdI3CA49SOjkDWsZF1EViw1qIqNcpUpEh2je6KS
+        aRAH03hFn/6QNuCRQ/Y+PmQmHn9s2es=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-447-YnCaYPAoPP2jcxw6BwBWIg-1; Tue, 16 May 2023 06:21:55 -0400
+X-MC-Unique: YnCaYPAoPP2jcxw6BwBWIg-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3078b9943d6so4099306f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:21:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684232514; x=1686824514;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DdwZekQhQhJYfD71ineBvZDWMF1v7qroVT5L1UXxv4Y=;
+        b=NMkt/Rzvos/NnHsNKTZzBs5CjXTdXwgKhBxPNdVMMBl6FRPtjh5rwbxsWtrx91+efL
+         PxTKgxLxXo++FGrO8UDht6LIibn3ZMIvD3dO2tinOPzMFJtu2zB0EaAfPvsBY5mkuyXM
+         DPOOamE0qVAWZT4b9IL5KcIs9VW0DvoYWzPmgO2gc7wF+eO5hN+0S4TEEEubxFMwoRAc
+         l9QJwXIeHESdAVjalRMdh3uTS0jiwOuZnhCfz2JCzxaH915FB3DvC6ps0SXjml20TDS+
+         tCf2t+UBmQex4A4NZOJm5D5bbhrMyZuo4HtzH2uYJSeQPPrSSILjhnzlB4fa+q5lfAy4
+         wmFw==
+X-Gm-Message-State: AC+VfDzbEiUt/mvUpWmgRBRDKCgK0PkxEX3WobHHKHIyGWnBBJcyjfMb
+        hTTCVGZVrWJ6qp3lMldPcAfQtex3Y9KuEA81sUwjvFrzenABRxHo423J1OYvbXuENnaDH9qcBMi
+        HE+1762yNapKj+pJsxnDl7kxN
+X-Received: by 2002:a5d:6ad2:0:b0:306:3b39:9a3d with SMTP id u18-20020a5d6ad2000000b003063b399a3dmr28037432wrw.15.1684232513857;
+        Tue, 16 May 2023 03:21:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6bdJSovfEtFVKVvmRsoufWG6M0qCFHLXRoPnSmKuTb+/8PzxuUbfsqia5+hKdAyzixUpyepw==
+X-Received: by 2002:a5d:6ad2:0:b0:306:3b39:9a3d with SMTP id u18-20020a5d6ad2000000b003063b399a3dmr28037403wrw.15.1684232513432;
+        Tue, 16 May 2023 03:21:53 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74f:2500:1e3a:9ee0:5180:cc13? (p200300cbc74f25001e3a9ee05180cc13.dip0.t-ipconnect.de. [2003:cb:c74f:2500:1e3a:9ee0:5180:cc13])
+        by smtp.gmail.com with ESMTPSA id t1-20020a5d5341000000b002ff2c39d072sm2092106wrv.104.2023.05.16.03.21.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 03:21:52 -0700 (PDT)
+Message-ID: <b97e8c2a-b629-f597-d011-395071011f1b@redhat.com>
+Date:   Tue, 16 May 2023 12:21:51 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB4081:EE_
-X-MS-Office365-Filtering-Correlation-Id: d0509c69-c26e-4789-d29d-08db55f711c7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7P/BRVAErn76lefJGiL/vNzcxI075p0M7SIHw/eFSu18t4mFl68q9ToK7mHHUloMnOCxQJxRqS3eD/kyILCDGPM6I6WFDNJA6fO/HLIBwdnSMkR1SngEmE6CdbxCS9UDb8cWrwP0qCI1mMLG7/waJ9VtnubIi2W2TBJZm8KQwMpL3eJ6yo832eQ36/C/OTaOSETRm51fk0KLgG27fLa6sYMsqT4NLczwIVCBjQwPZUo1iStwFFkcbeHRsYr3ElEVCLIb7WLYyR3V+a1ovODqyjnLjDIuOOHbVMvgyG++Gd7o1DCFfD2fGlhYz3fNr/6RDuK7Gk+5zi4cOyEyv+V3YsBoEEQvLCoXkgXhu1qqVHVO0OoY0WDRiYVbW6Fwpovs/ekfymIroBUtQuf5cUmK9QxREDOsNGdWPTZGOrhVBx0lUvAEYQvQl7fz4q5j2KIY8Mvpw5Poq6aabqcITuhs/k+yzDu31dL14Q2Skl1hHxZFbHht80S1OPsHstG6Nt6JV51ScMprVmVsjFMW3dBGLGybzmrl4qmD6OTQNtHxW4w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(136003)(396003)(39840400004)(451199021)(38100700002)(478600001)(2616005)(83380400001)(6506007)(6512007)(6666004)(6486002)(186003)(36756003)(966005)(316002)(41300700001)(66476007)(66946007)(66556008)(4326008)(44832011)(6916009)(86362001)(8936002)(8676002)(4744005)(2906002)(7416002)(5660300002)(54906003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ApVVqwYfM88l0MtGNcF1cM6SP/RTeV9DjRP86WyQnV8gtJakE8z9jy2cPj5l?=
- =?us-ascii?Q?qW+32j2ytjVA/zfrRgEVBUMfMoU0PEbYudSafjM01TZzQ9J/gIW3gO6aWGhe?=
- =?us-ascii?Q?uFXPBAk5Sqq2c/G7VFiRgwIMvKJcYvoGfm9b6Q5xsrJZjS6P6j7WcLHEcCdR?=
- =?us-ascii?Q?7WwdkUeuanNtR+INcRcoz7kA73DaXjkf+mClst0qlpjpF5se2z5HHsM4LQVt?=
- =?us-ascii?Q?Z0GebUKB9BoTEVcnyGkz5bWCtPxvw2t69ZTlLlvzhiXbK8s1HJi3o0xt4M/e?=
- =?us-ascii?Q?hmUR2noOItbDBM6QtY0HWa0Ds3287aM0RO5Xd8ef5vNkA8ZjWOMxOeYN415u?=
- =?us-ascii?Q?+LhqkoSP/do21gwDMW2MODcb165nYloe4lAAzGkMUBfJmQwX5Hriku76S2Fj?=
- =?us-ascii?Q?9Ct/njUrLqUrgnVCi/Smfo3c+ZmDUQY8UMEqR3H1jCUj6z1oEnOdb41Wzd2Z?=
- =?us-ascii?Q?p9uOttX+tVOfOjMo68yW99Ofl3yC0YksyCQtGB2QsqAcIx5eYNgP6szoYALz?=
- =?us-ascii?Q?bu6LZUrh8CpSa3gMItykzRsBqdvJJmR2MUGr2J+sl9XnSMMJMtUQUOxvugHp?=
- =?us-ascii?Q?02ic4232eZ+Lzpy+OeomG46GOM7MxYT6dUHVF9mNumYJuRToxjHv+kHlHFpb?=
- =?us-ascii?Q?yGyWHtoKxL8tA7/zFY/+UnA2VmoiOL6lOzRKrtamQAz16l63Wx8tfvLrIF8O?=
- =?us-ascii?Q?eEHGp2TLT/nZyVyhF6XCTr2mAYlFV4+IfD4jMSnwszQobsZryyZ6tU6k/k8P?=
- =?us-ascii?Q?ULsBiFcOCfbRzxwEaAwlmewsIzG1OTwHh+dXO8r/RQ55LA6aWk3JqCLS8l7G?=
- =?us-ascii?Q?9/3rqT0/pw5Lj4nMQzxXva2A+1zrApZ01+jnonBAB84fgS2bUVodcjme8t7w?=
- =?us-ascii?Q?8UxiQZP3XxLNMfsFI1NqkSJk8Zc7Po7EAaSG2Pl1t5iZ0U/uOfcMLMHiKdHB?=
- =?us-ascii?Q?2Wf1cEF+tLKtV0kywZbgSvTaosWRi5r5JCW+Li+TRR/HQNHwku48KRB/K4QS?=
- =?us-ascii?Q?UNrPU7zLgHcn8PH6VyZoZqS+OBjTH2f01nN3wZa0M1XQD1uxFRU2Ncxxdwmg?=
- =?us-ascii?Q?kKou9GEg3krDqGMF8Qbj6nrUPEfM8VFqZgjCX+wHoMluvZuzhN/PDu7xzMSz?=
- =?us-ascii?Q?lqDk+ppr2WhI6iUcTUNfwNIqeXAFtO+IIKuhhR++do7mlZyzsoRkuhgaoXf+?=
- =?us-ascii?Q?8cCVhwKRzty5SAIcJSeHO8S4Xt4BQypbr7VbetVplCBsniQIZTQyx2FFWZIc?=
- =?us-ascii?Q?stB2GKMV1yJpdyXVstZGRX1dYAcneJz6wy+cJPBZK2lSk3bxElleWuAP42ri?=
- =?us-ascii?Q?7yyYhgT3PB5wnWcG7vU3HQx7h5x1gyowrTtPWUtj58mMFkyXJ4GNns8ioVzW?=
- =?us-ascii?Q?qJIThQl/TjapoGIjoLIOcP0mLMPSRxF1iJRPDuHlziHb3IIq83Dm6RwZt3zR?=
- =?us-ascii?Q?RVAvaK9rBrWQYBi0HhmUrQUe74CkeFbUBxIj5ahaWxCBVioX3Hte1jpLJjEx?=
- =?us-ascii?Q?tCjNq5iSoqrT89rvwizeaGpOKukNWgNH0UCTwMEiTMUvkmMJpJS/BKVrbPgw?=
- =?us-ascii?Q?SY7GCHeN6xskgF7m4DKmN2p9mDWFYyFFdsN6SYUVSg1RKopNenm8Eq28cepy?=
- =?us-ascii?Q?teBvu02Rf09spU6jDayDX0k5VJkPdBPbCNVZfWCNYI5BgoKcKd2SrES90H0P?=
- =?us-ascii?Q?OT+8GA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0509c69-c26e-4789-d29d-08db55f711c7
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 10:19:44.9383
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F6ekm636j7/j42tPzIcmGuE1kPL+0e3h4+ojpuIz0sUKRaocnjiTyH5z8cbly4lQdElMzYPl7tcE8V7scakbcQ2hDFkU4XMkyEq+1tLnHds=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB4081
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Xinhui Pan <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <cover.1684097001.git.lstoakes@gmail.com>
+ <b61d5999a4fc6d50b7e073cc3c3efa8fe79bbd94.1684097002.git.lstoakes@gmail.com>
+ <ZGKC9fHoE+kDs0ar@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v5 1/6] mm/gup: remove unused vmas parameter from
+ get_user_pages()
+In-Reply-To: <ZGKC9fHoE+kDs0ar@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 06:44:12PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element array with flexible-array
-> member in struct iavf_qvlist_info, and refactor the rest of the code,
-> accordingly.
+On 15.05.23 21:07, Sean Christopherson wrote:
+> On Sun, May 14, 2023, Lorenzo Stoakes wrote:
+>> No invocation of get_user_pages() use the vmas parameter, so remove it.
+>>
+>> The GUP API is confusing and caveated. Recent changes have done much to
+>> improve that, however there is more we can do. Exporting vmas is a prime
+>> target as the caller has to be extremely careful to preclude their use
+>> after the mmap_lock has expired or otherwise be left with dangling
+>> pointers.
+>>
+>> Removing the vmas parameter focuses the GUP functions upon their primary
+>> purpose - pinning (and outputting) pages as well as performing the actions
+>> implied by the input flags.
+>>
+>> This is part of a patch series aiming to remove the vmas parameter
+>> altogether.
+>>
+>> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Acked-by: David Hildenbrand <david@redhat.com>
+>> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Acked-by: Christian Kï¿½nig <christian.koenig@amd.com> (for radeon parts)
+>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+>> ---
+>>   arch/x86/kernel/cpu/sgx/ioctl.c     | 2 +-
+>>   drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
+>>   drivers/misc/sgi-gru/grufault.c     | 2 +-
+>>   include/linux/mm.h                  | 3 +--
+>>   mm/gup.c                            | 9 +++------
+>>   mm/gup_test.c                       | 5 ++---
+>>   virt/kvm/kvm_main.c                 | 2 +-
+>>   7 files changed, 10 insertions(+), 15 deletions(-)
 > 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
+> Acked-by: Sean Christopherson <seanjc@google.com> (KVM)
 > 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/289
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+>> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>> index cb5c13eee193..eaa5bb8dbadc 100644
+>> --- a/virt/kvm/kvm_main.c
+>> +++ b/virt/kvm/kvm_main.c
+>> @@ -2477,7 +2477,7 @@ static inline int check_user_page_hwpoison(unsigned long addr)
+>>   {
+>>   	int rc, flags = FOLL_HWPOISON | FOLL_WRITE;
+>>   
+>> -	rc = get_user_pages(addr, 1, flags, NULL, NULL);
+>> +	rc = get_user_pages(addr, 1, flags, NULL);
+>>   	return rc == -EHWPOISON;
+> 
+> Unrelated to this patch, I think there's a pre-existing bug here.  If gup() returns
+> a valid page, KVM will leak the refcount and unintentionally pin the page.  That's
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+When passing NULL as "pages" to get_user_pages(), 
+__get_user_pages_locked() won't set FOLL_GET. As FOLL_PIN is also not 
+set, we won't be messing with the mapcount of the page.
+
+So even if get_user_pages() returns "1", we should be fine.
+
+
+Or am I misunderstanding your concern? At least hva_to_pfn_slow() most 
+certainly didn't return "1" if we end up calling 
+check_user_page_hwpoison(), so nothing would have been pinned there as well.
+
+-- 
+Thanks,
+
+David / dhildenb
 
