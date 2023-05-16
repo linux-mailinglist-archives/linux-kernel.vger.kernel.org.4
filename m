@@ -2,128 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4FC704D9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B800704D9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbjEPMSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
+        id S231996AbjEPMSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjEPMR7 (ORCPT
+        with ESMTP id S231549AbjEPMSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:17:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3C4C13
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:17:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51B396392B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9EEAC433EF;
-        Tue, 16 May 2023 12:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684239477;
-        bh=sP9gNr70JhVah2PxtGLjXPjgrkId19Xw0B/4W82U6Qo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DmiuJEhjigE9MaqcXF9VZ4sWQJB36J2eUJZrHX6Ca8BFifZt4T2m0YfQ5fVNO4RZO
-         pB05XuJB9Wel9zois5Zrg98NoweZ/9AXGSb53/EYtKHr6wOin4M5a+TjHhc3MZzqDL
-         ILFn6AfGXeh0aANY+gEsUK3NHIeYmEuppLsH9dqFDIYdwLIuYpsWUwK1fL0puTaeKV
-         u1WJURX+geSw+/yzHhoxP9RTxQoP1H1TFXdTiftOd54Y1A4ac8H8SCKrKP2F5ogRY5
-         hGyV4nC7eB8H1n+UmlZ5PAlDnRJvowTRt3eZxeXsNfdfyaFRO3F6bYiaNU21G0G8xi
-         yLE6r+MqxAVoA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 644B5CE1432; Tue, 16 May 2023 05:17:57 -0700 (PDT)
-Date:   Tue, 16 May 2023 05:17:57 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: kernel/rcu/srcutree.c:1644 srcu_advance_state() warn:
- inconsistent returns '&ssp->srcu_sup->srcu_gp_mutex'.
-Message-ID: <2ef061eb-e82d-4c16-a333-e499095a7162@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <c0937326-1cf1-429a-9883-30d9d79b01d0@kili.mountain>
- <c33b0348-7f86-47ce-913c-f1ebc6431f93@paulmck-laptop>
- <30f2e760-e2f3-4941-be9b-b9c5624fd861@kili.mountain>
- <4bdbbcd3-6620-4320-ada5-02b71a54106c@paulmck-laptop>
- <782b3fa6-576d-4c26-888e-5dc151feaaa8@kili.mountain>
+        Tue, 16 May 2023 08:18:38 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8EA49E4;
+        Tue, 16 May 2023 05:18:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=iXg6k8lAqcLNkjmM+3EjJ6NUCTSstzc0OitScDh3o0Y=; b=Hh1LTdZpP+lxGRRpTjM2Yajuf5
+        VaUDIdDYUn3NSEyIRl1DkNqo39Y8bAjZEC/npHZD9LoG4f7ZJA12gctKXgyIC3y0y6RZsryeFTN3c
+        HV4P0KBKqbDL8fbtKpHq3lEbTtly0EmXbLfuRttcDwjwr/XyX1l4k3WZEugdb1+0+xH8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pytdF-00D0uj-8p; Tue, 16 May 2023 14:18:21 +0200
+Date:   Tue, 16 May 2023 14:18:21 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marco Migliore <m.migliore@tiesse.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ashkan Boldaji <ashkan.boldaji@digi.com>,
+        Pavana Sharma <pavana.sharma@digi.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: dsa: mv88e6xxx: Fix mv88e6393x EPC write
+ command offset
+Message-ID: <7a51da03-30b9-41d0-ac14-ec29573afd61@lunn.ch>
+References: <20230516073854.91742-1-m.migliore@tiesse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <782b3fa6-576d-4c26-888e-5dc151feaaa8@kili.mountain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230516073854.91742-1-m.migliore@tiesse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 06:13:02PM +0300, Dan Carpenter wrote:
-> On Tue, May 09, 2023 at 07:08:05AM -0700, Paul E. McKenney wrote:
-> > On Tue, May 09, 2023 at 08:40:33AM +0300, Dan Carpenter wrote:
-> > > On Sat, May 06, 2023 at 11:45:35AM -0700, Paul E. McKenney wrote:
-> > > > On Sat, May 06, 2023 at 10:22:04AM +0300, Dan Carpenter wrote:
-> > > > > aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1632  	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) == SRCU_STATE_SCAN2) {
-> > > > > 
-> > > > > We don't mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex) if this if
-> > > > > statement is false.
-> > > > 
-> > > > Hmmm...
-> > > > 
-> > > > I could make the above line read something like the following:
-> > > > 
-> > > > 	if (!WARN_ON_ONCE(rcu_seq_state(READ_ONCE(ssp->srcu_sup->srcu_gp_seq)) != SRCU_STATE_SCAN2)) {
-> > > 
-> > > Smatch ignores WARN_ON().  WARNings are triggered all the time, so it's
-> > > not like a BUG() which stops the code flow.
-> > > 
-> > > > 
-> > > > The theory is that there are only three legal values for ->srcu_gp_seq.
-> > > > Because we hold ->srcu_gp_mutex, no one else can change it.   The first
-> > > > "if" statement either returns or sets that state to SRCU_STATE_SCAN1.
-> > > > The second "if" statement also either returns or sets that state to
-> > > > SRCU_STATE_SCAN2.  So that statement should not be false.
-> > > 
-> > > Smatch can't figure out that the statement is true.  The issue there is
-> > > that ssp->srcu_sup->srcu_gp_seq stores a value in the low bits and a
-> > > different value in the high bits.  This seems like something that might
-> > > be worth handling correctly at some point, but that point is in the
-> > > distant future...
-> > > 
-> > > Just ignore this one.
-> > 
-> > Fair enough!  Yeah, I could imagine that this would be non-trivial.
-> > 
-> > Is there a not-reached annotation that Smatch pays attention to?
+On Tue, May 16, 2023 at 09:38:54AM +0200, Marco Migliore wrote:
+> According to datasheet, the command opcode must be specified
+> into bits [14:12] of the Extended Port Control register (EPC).
 > 
-> Hm...  Yeah.  If you wanted you could do this.  I'm not sure it improves
-> the readability.  Also for some reason my private Smatch build doesn't
-> print a warning...  I need to investigate why that is...
+> Fixes: de776d0d316f ("net: dsa: mv88e6xxx: add support for mv88e6393x family")
+> Signed-off-by: Marco Migliore <m.migliore@tiesse.com>
 
-There does seem to be a fair number of instances of unreachable() in
-the kernel, so why not?
+Hi Marco
 
-May I add your Signed-off-by?
+Thanks for the respin.
 
-							Thanx, Paul
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-> regards,
-> dan carpenter
-> 
-> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> index 20d7a238d675..58e13d3c5a6a 100644
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -1669,6 +1669,8 @@ static void srcu_advance_state(struct srcu_struct *ssp)
->  		}
->  		ssp->srcu_sup->srcu_n_exp_nodelay = 0;
->  		srcu_gp_end(ssp);  /* Releases ->srcu_gp_mutex. */
-> +	} else {
-> +		unreachable();
->  	}
->  }
->  
+For the next time you submit a patch, it is normal to put a version in the Subject line:
+
+[PATCH net v2] net: dsa: mv88e6xxx: Fix mv88e6393x EPC write command offset
+
+That helps us keep track of the versions, and makes it clear which is
+the latest version.
+
+    Andrew
