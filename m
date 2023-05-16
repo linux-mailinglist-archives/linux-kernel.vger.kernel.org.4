@@ -2,249 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8DA7042BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF0D7042C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjEPBQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S229515AbjEPBRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjEPBQb (ORCPT
+        with ESMTP id S229482AbjEPBRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:16:31 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A2E618D;
-        Mon, 15 May 2023 18:16:30 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QKyrS6x6BzqSHQ;
-        Tue, 16 May 2023 09:12:08 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 09:16:27 +0800
-Subject: Re: [PATCH v2 1/2] ovl: ovl_permission: Fix null pointer dereference
- at realinode in rcu-walk mode
-To:     Amir Goldstein <amir73il@gmail.com>,
-        Christian Brauner <brauner@kernel.org>
-CC:     <miklos@szeredi.hu>, <linux-unionfs@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230515133629.1974610-1-chengzhihao1@huawei.com>
- <20230515133629.1974610-2-chengzhihao1@huawei.com>
- <20230515-sprachen-zeltlager-6925dfbe19c1@brauner>
- <CAOQ4uxjo3rzdrjmbXr=SgJbrBf_EA-HpXH25LORo_vPY=q0jWQ@mail.gmail.com>
- <20230515-dulden-symmetrie-3b5d934478d4@brauner>
- <CAOQ4uxjageSA8G1UR=9KPCYm80=GFLrwVonEotjOf0tpZDBY+g@mail.gmail.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <53e81e0a-a99c-9a2a-7691-04789e2a2710@huawei.com>
-Date:   Tue, 16 May 2023 09:16:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Mon, 15 May 2023 21:17:49 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879E5E7A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:17:48 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f25d79f6bfso9489976e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684199867; x=1686791867;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WACwJGv8gsOQeDW3ZaDiXX7Fzl5vd3342+yL7YL6Kn8=;
+        b=hARnqa4yEveffmwYihTWwU3aHHPP9wSW4Bk/52TvRcJZZrf17eGrVV6eJ5ws5HJrF7
+         IPN/04lnFUg+5zP/JYRwFWKppQtWVVKHAksORVM2srLjiJOb0jUEsEhcZ9tTi0n2PPOK
+         plAflzLYHkR9CI7NziTyqRaWuzkc9F4qDyhOOxWCg5ulCljUE7lLrx1aeGsCg7wqf5Aa
+         2H+HBgr4xATalp1m4+ve4pY1gEd6a96jau8p2KPVty42EBt5BcfeIw133KbT2VeTFGWv
+         gJVsCXgcdwGhaa/ZqAk56noXdPEEjpb8wmGfiNearKWE94GOqm1aie3ZJ+OEnw6AiF5W
+         03Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684199867; x=1686791867;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WACwJGv8gsOQeDW3ZaDiXX7Fzl5vd3342+yL7YL6Kn8=;
+        b=Hx9otO/y/tlB4D0+YT3L4xVstV/PeV/zq5FgB1DeHEJm32BidQTySSM6HwiKxLXpJ6
+         2aSJZw2vTCtJgrxFd3sgoKs24Ddt3kRiDMJWocoNU5g47uuGtvdW1bUYGj0aRGZ9Rhp/
+         VDDpR4prRNVQy5UfIMIDApBmlL5DUIYWW2qeu7y8LtTCPhNXskHJDekiNwBLDCtUmmNv
+         bWMPM4krTPFpEUCY117Q9js5xF+Gj3BPS+IuaoQnZn2l8lcKob56TxJfwZryKbOG+0SB
+         etTo3LGqy8IICqGYMgUmZiSNIt4B9KWdeo1r62ntOKOwCuUtiYM4GnyxIyFdRbsg1MtJ
+         6jiw==
+X-Gm-Message-State: AC+VfDxkoQMOgkledA4/e/x0ZvFUgHl5YOKJvxOvB3TF9GSgqlKkbsUd
+        odKeJjRY8v13bt7bNs5IlJE3O/cX+rBl5APSg8E=
+X-Google-Smtp-Source: ACHHUZ4JNYC7Doy3Hnr2LE6tTJvsIEpXocwMqY7PIXE8ZRt4GhDn7EK5Y/rjvycBw00KaOj7K/nV5w==
+X-Received: by 2002:a2e:9916:0:b0:2ac:53f7:41d6 with SMTP id v22-20020a2e9916000000b002ac53f741d6mr7391563lji.49.1684199866814;
+        Mon, 15 May 2023 18:17:46 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id y19-20020ac24473000000b004efe8991806sm2786742lfl.6.2023.05.15.18.17.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 18:17:46 -0700 (PDT)
+Message-ID: <27108475-a482-dc2c-67e4-ee573090a524@linaro.org>
+Date:   Tue, 16 May 2023 03:17:44 +0200
 MIME-Version: 1.0
-In-Reply-To: <CAOQ4uxjageSA8G1UR=9KPCYm80=GFLrwVonEotjOf0tpZDBY+g@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6/6] ARM: dts: qcom: msm8226: Add ocmem
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230506-msm8226-ocmem-v1-0-3e24e2724f01@z3ntu.xyz>
+ <20230506-msm8226-ocmem-v1-6-3e24e2724f01@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230506-msm8226-ocmem-v1-6-3e24e2724f01@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/5/15 23:36, Amir Goldstein 写道:
-> On Mon, May 15, 2023 at 6:16 PM Christian Brauner <brauner@kernel.org> wrote:
->>
->> On Mon, May 15, 2023 at 05:58:55PM +0300, Amir Goldstein wrote:
->>> On Mon, May 15, 2023 at 4:58 PM Christian Brauner <brauner@kernel.org> wrote:
->>>>
->>>> On Mon, May 15, 2023 at 09:36:28PM +0800, Zhihao Cheng wrote:
->>>>> Following process:
->>>>>            P1                     P2
->>>>>   path_lookupat
->>>>>    link_path_walk
->>>>>     inode_permission
->>>>>      ovl_permission
->>>>>        ovl_i_path_real(inode, &realpath)
->>>>>          path->dentry = ovl_i_dentry_upper(inode)
->>>>>                            drop_cache
->>>>>                           __dentry_kill(ovl_dentry)
->>>>>                            iput(ovl_inode)
->>>>>                             ovl_destroy_inode(ovl_inode)
->>>>>                              dput(oi->__upperdentry)
->>>>>                               dentry_kill(upperdentry)
->>>>>                                dentry_unlink_inode
->>>>>                                 upperdentry->d_inode = NULL
->>>>>        realinode = d_inode(realpath.dentry) // return NULL
->>>>>        inode_permission(realinode)
->>>>>         inode->i_sb  // NULL pointer dereference
->>>>> , will trigger an null pointer dereference at realinode:
->>>>>    [  335.664979] BUG: kernel NULL pointer dereference,
->>>>>                   address: 0000000000000002
->>>>>    [  335.668032] CPU: 0 PID: 2592 Comm: ls Not tainted 6.3.0
->>>>>    [  335.669956] RIP: 0010:inode_permission+0x33/0x2c0
->>>>>    [  335.678939] Call Trace:
->>>>>    [  335.679165]  <TASK>
->>>>>    [  335.679371]  ovl_permission+0xde/0x320
->>>>>    [  335.679723]  inode_permission+0x15e/0x2c0
->>>>>    [  335.680090]  link_path_walk+0x115/0x550
->>>>>    [  335.680771]  path_lookupat.isra.0+0xb2/0x200
->>>>>    [  335.681170]  filename_lookup+0xda/0x240
->>>>>    [  335.681922]  vfs_statx+0xa6/0x1f0
->>>>>    [  335.682233]  vfs_fstatat+0x7b/0xb0
->>>>>
->>>>> Fetch a reproducer in [Link].
->>>>>
->>>>> Add a new helper ovl_i_path_realinode() to get realpath and real inode
->>>>> after non-nullptr checking, use the helper to replace the current realpath
->>>>> getting logic.
->>>>>
->>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217405
->>>>> Fixes: 4b7791b2e958 ("ovl: handle idmappings in ovl_permission()")
->>>>> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
->>>>> Suggested-by: Christian Brauner <brauner@kernel.org>
->>>>> ---
->>>>>   fs/overlayfs/inode.c | 31 ++++++++++++++++++++++++-------
->>>>>   1 file changed, 24 insertions(+), 7 deletions(-)
->>>>>
->>>>> diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
->>>>> index 541cf3717fc2..cc3ef5a6666a 100644
->>>>> --- a/fs/overlayfs/inode.c
->>>>> +++ b/fs/overlayfs/inode.c
->>>>> @@ -278,6 +278,26 @@ int ovl_getattr(struct mnt_idmap *idmap, const struct path *path,
->>>>>        return err;
->>>>>   }
->>>>>
->>>>> +static inline int ovl_i_path_realinode(struct inode *inode,
->>>>> +                                    struct path *realpath,
->>>>> +                                    struct inode **realinode, int rcu)
->>>>> +{
->>>>> +     /* Careful in RCU walk mode */
->>>>> +     ovl_i_path_real(inode, realpath);
->>>>> +     if (!realpath->dentry) {
->>>>> +             WARN_ON(!rcu);
->>>>> +             return -ECHILD;
->>>>> +     }
->>>>> +
->>>>> +     *realinode = d_inode(realpath->dentry);
->>>>> +     if (!*realinode) {
->>>>> +             WARN_ON(!rcu);
->>>>> +             return -ECHILD;
->>>>> +     }
->>>>> +
->>>>> +     return 0;
->>>>> +}
->>>>
->>>> If you want to return the inode wouldn't it possibly make more sense to
->>>> return the inode from the function directly? But not fuzzed. Maybe Amir
->>>> has a preference. As I said, I'm even fine with the original approach.
->>>
->>> Sorry for not reviewing v1, I was traveling, even though it is hard to use
->>> this excuse when I was traveling with Christian who did review v1 :)
->>
->> Well, I did only do it this morning. :)
->>
->>>
->>>>
->>>> static inline struct inode *ovl_i_path_realinode(struct inode *inode,
->>>>                                                   struct path *realpath,
->>>>                                                   int rcu)
->>>> {
->>>>          struct inode *realinode;
->>>>
->>>>          /* Careful in RCU walk mode */
->>>>          ovl_i_path_real(inode, realpath);
->>>>          if (!realpath->dentry) {
->>>>                  WARN_ON(!rcu);
->>>>                  return ERR_PTR(-ECHILD);
->>>>          }
->>>>
->>>>          realinode = d_inode(realpath->dentry);
->>>>          if (!realinode) {
->>>>                  WARN_ON(!rcu);
->>>>                  return ERR_PTR(-ECHILD);
->>>>          }
->>>>
->>>>          return realinode;
->>>> }
->>>>
->>>
->>> I think this helper is over engineered ;-)
->>
->> Yes. As mentioned before, I would've been happy even with v1 that didn't
->> have any helper.
->>
->>> The idea for a helper that returns inode is good,
->>> but I see no reason to mix RCU walk in this helper
->>> and don't even need a new helper (see untested patch below).
->>
->> Looks good to me too.
->>
->>>
->>> Thanks,
->>> Amir.
->>>
->>> ---
->>> -void ovl_i_path_real(struct inode *inode, struct path *path)
->>> +struct inode *ovl_i_path_real(struct inode *inode, struct path *path)
->>>   {
->>>          struct ovl_path *lowerpath = ovl_lowerpath(OVL_I_E(inode));
->>>
->>> @@ -342,6 +342,8 @@ void ovl_i_path_real(struct inode *inode, struct path *path)
->>>          } else {
->>>                  path->mnt = ovl_upper_mnt(OVL_FS(inode->i_sb));
->>>          }
->>> +
->>> +       return path->dentry ? d_inode(path->dentry) : NULL;
->>>   }
->>>
->>> @@ -295,8 +295,8 @@ int ovl_permission(struct mnt_idmap *idmap,
->>>          int err;
->>>
->>>          /* Careful in RCU walk mode */
->>> -       ovl_i_path_real(inode, &realpath);
->>> -       if (!realpath.dentry) {
->>> +       realinode = ovl_i_path_real(inode, &realpath);
->>> +       if (!realpath.dentry || !realinode) {
->>>                  WARN_ON(!(mask & MAY_NOT_BLOCK));
->>>                  return -ECHILD;
->>>          }
->>> @@ -309,7 +309,6 @@ int ovl_permission(struct mnt_idmap *idmap,
->>>
->>>          if (err)
->>>                  return err;
->>>
->>> -       realinode = d_inode(realpath.dentry);
->>>          old_cred = ovl_override_creds(inode->i_sb);
->>
 
-Thanks for reviewings and helpful discussion from Amir and Christian.
 
->> Btw, if the reproducer that Zhihao has posted in the bugzilla link:
->>
->> #!/bin/bash
->>
->> mkdir -p /root/tmp/merge /root/tmp/upper/dir /root/tmp/lower /root/tmp/work
->> touch /root/tmp/upper/dir/file
->> chown freg:freg -R /root/tmp/upper/dir
->> mount -t overlay none -oupperdir=/root/tmp/upper,lowerdir=/root/tmp/lower,workdir=/root/tmp/work /root/tmp/merge
->> ls /root/tmp/merge/dir/file &
->> echo 3 > /proc/sys/vm/drop_caches
->>
->> is reliable we should add it to xfstests...
+On 7.05.2023 11:12, Luca Weiss wrote:
+> Add a node for the ocmem found on msm8226. It contains one region, used
+> as gmu_ram.
 > 
-> If only it was that easy to trigger this race.
-> Look at the debug kernel patch named 'diff' in bugzilla...
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Yes, I can hardly reproduce the problem without the time delay in kernel.
-
+Konrad
+>  arch/arm/boot/dts/qcom-msm8226.dtsi | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> Thanks,
-> Amir.
-> .
+> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
+> index 42acb9ddb8cc..7ad073eb85c8 100644
+> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
+> @@ -636,6 +636,23 @@ smd-edge {
+>  				label = "lpass";
+>  			};
+>  		};
+> +
+> +		sram@fdd00000 {
+> +			compatible = "qcom,msm8226-ocmem";
+> +			reg = <0xfdd00000 0x2000>,
+> +			      <0xfec00000 0x20000>;
+> +			reg-names = "ctrl", "mem";
+> +			ranges = <0 0xfec00000 0x20000>;
+> +			clocks = <&rpmcc RPM_SMD_OCMEMGX_CLK>;
+> +			clock-names = "core";
+> +
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +
+> +			gmu_sram: gmu-sram@0 {
+> +				reg = <0x0 0x20000>;
+> +			};
+> +		};
+>  	};
+>  
+>  	timer {
 > 
-
