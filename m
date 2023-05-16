@@ -2,119 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758337054EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C41A7054F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbjEPRZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S231825AbjEPR0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjEPRZq (ORCPT
+        with ESMTP id S231772AbjEPRZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:25:46 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7A7E7A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:25:42 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C69CB1C0003;
-        Tue, 16 May 2023 17:25:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684257941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aFevxj/rrkp09WHDPC8r1cjBszhyMx/0fchc8f659C8=;
-        b=ah0R2drhxSyAsYICQwRvoJcC+ZAwy8OXWfWdXbNqkI7uilswu7AT4Ot1GJ/Ab2D11Owqhl
-        ttM8vNs01fx7pam7U/I+/+hqueWpKfsCW+VXTUmx24gVOlYSSVpVElVYKLhXD0YttVol8d
-        CkGYLe/Oisveabg+7id3ZwDEqbjsbBWcUs2aGiBsNTqvYZXPuPBvCgwXY/N3GbOqA5YSqX
-        jfVWACoboMNH/sDI2sUXzSP5pH6+d1WMq0BlWk4ml4qWy5dq27+IGY+PCe6AbjCHaZZ4oL
-        qt8JxscjZICxycfQmByooMkkTZkEfs0IXSkOEda9EaycprL0Bormxjc15jLzBw==
-Date:   Tue, 16 May 2023 19:25:38 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Marvell NFC timings on CN9130
-Message-ID: <20230516192538.45b35b6b@xps-13>
-In-Reply-To: <17a9eee2-d84f-549d-a5ff-da88d43393c1@alliedtelesis.co.nz>
-References: <17a9eee2-d84f-549d-a5ff-da88d43393c1@alliedtelesis.co.nz>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 16 May 2023 13:25:58 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44329EEF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:25:56 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96adcb66f37so800489566b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684257955; x=1686849955;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AaxHwIc3YTomkyxf5bv7RebD5LndIOVkZkiSgimWPcQ=;
+        b=SWrfbgY93o65ciJ/hQhx6fcIKAU1aE41lTMHirqmMKIElBzqohgSGGiDkNEM2+/ecz
+         1KsRe2w+BxUYXK5f2P69CQILZGMUhifkVmg/lUOXr/knZ/NUZ3IPk103+g5BJKSxn4pz
+         03Isrw/EUpOv60d3KTs0NRTiavnnZ1I4VtfCoCxcyBZQhznZ+wDzD3+QokjZBNMbd4VU
+         RTWx/zl12SQBRRmwk0duBJofnr9f/Wc3D0Aq9SJaoYca0Sm3Prmusb5pXtsZyiPziGMQ
+         N2mqLQwMvkKnWu1sY3Uh2dQW24GqMlH2mjhXh+4PXAr9tBLhTvqTviIuaUofih8S9umX
+         do/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684257955; x=1686849955;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AaxHwIc3YTomkyxf5bv7RebD5LndIOVkZkiSgimWPcQ=;
+        b=kXziN7FMh61ZqhgDR8Ois82FcP3RQOWg22m3BQvuYXzzRwMSwMTsk1YRqwmVCSxSJ1
+         AB8Mo5aGWyAhHy5S+dSBxH2YGsAXHJBhdTk0DWah6CopnS26UF9N+/RcGwWNWzkOKsAy
+         njjc1+oih9P+3Z28dfEdV4GNaIt/7R7TiAB+0VVe45pTC9L4jwelJw1et1mbkAQjKH35
+         mfdohfaRmEdLfLOPV2Hjv8YTNO2w8aMCrV7ax59xQMdTbyvOpEw2bdSpB0q8VAkEBCUK
+         plcLMFtkwpZ59/yhcNE6xNTTGhA5/zU6X8OI2u/7Y/vwcg/IX86Jh2ay0hQFqd8srgVj
+         bz5g==
+X-Gm-Message-State: AC+VfDyxD3tWO/G+ZJAJHrjGQLgdVtjeyKd89tLXaqkRdZqMOEigXFdk
+        pDzxek5NxLWs2KGyMRWLR405fQ==
+X-Google-Smtp-Source: ACHHUZ4ANbmrMhZNLKIey//CUk5U76aHoVbhuHjT0j3SzTxfHKQkOQs9zz0Q131ZddtwQSy8cdTkwA==
+X-Received: by 2002:a17:907:1629:b0:96a:9c6:d752 with SMTP id hb41-20020a170907162900b0096a09c6d752mr27352738ejc.54.1684257955147;
+        Tue, 16 May 2023 10:25:55 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id p15-20020a17090653cf00b0094ebc041e20sm11023754ejo.46.2023.05.16.10.25.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 10:25:45 -0700 (PDT)
+Message-ID: <451a1f59-2575-10ad-f8f4-eb5f0872f2d0@linaro.org>
+Date:   Tue, 16 May 2023 19:25:43 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: zynqmp: Switch to amd.com emails
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Andrew Davis <afd@ti.com>, Conor Dooley <conor+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <4c3426077075683b866f144b633cf5218a688c7c.1684244480.git.michal.simek@amd.com>
+ <bbb63fb9-69c3-9c86-c5aa-55b4beac0832@linaro.org>
+ <c03d5e9a-7f04-5a26-8e6f-635c526bc859@amd.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c03d5e9a-7f04-5a26-8e6f-635c526bc859@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chris!
+On 16/05/2023 19:20, Michal Simek wrote:
+> 
+> 
+> On 5/16/23 18:05, Krzysztof Kozlowski wrote:
+>> On 16/05/2023 15:41, Michal Simek wrote:
+>>> Update my and DPs email address to match current setup.
+>>>
+>>> Signed-off-by: Michal Simek <michal.simek@amd.com>
+>>> ---
+>>>
+>>>   arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts      | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi         | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso   | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso   | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts      | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts     | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts      | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts      | 7 ++++---
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts | 7 ++++---
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts      | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dts    | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts    | 5 +++--
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts      | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts      | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts      | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts      | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts      | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts      | 2 +-
+>>>   arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts     | 7 ++++---
+>>>   arch/arm64/boot/dts/xilinx/zynqmp.dtsi                 | 5 +++--
+>>>   24 files changed, 51 insertions(+), 39 deletions(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
+>>> index 88aa06fa78a8..1495272e5668 100644
+>>> --- a/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
+>>> +++ b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
+>>> @@ -2,9 +2,10 @@
+>>>   /*
+>>>    * dts file for Avnet Ultra96 rev1
+>>>    *
+>>> - * (C) Copyright 2018, Xilinx, Inc.
+>>> + * (C) Copyright 2018 - 2022, Xilinx, Inc.
+>>> + * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
+>>
+>> I think these should be split. Your commit suggests only update to email
+>> but you add copyrights. While email change is trivial, 
+> 
+> ok
+> 
+>> the copyright
+>> change is not (at least not for everyone and for every legal system).
+>>
+>> What's more, there were no changes to this file after 2018. What
+>> copyrighted work did you add in 2019, 2020, 2021, 2022 and 2023? For
+>> this file clear: NAK
+> 
+> All these files are regularly updated in soc vendor tree. I can do stats to 
+> double check every file but I am quite sure that every year we did touch these 
+> files at least with single line of change (and not just copyright update).
 
-Chris.Packham@alliedtelesis.co.nz wrote on Tue, 16 May 2023 04:46:38
-+0000:
+I checked. Copyrights, if you need them, should be added in a meaningful
+way, so with copyrightable work. This file has 0.
 
-> Hi Miquel, Thomas,
->=20
-> A hardware colleague reported a concern to me about a new design we have=
-=20
-> using the Marvell CN9130 SoC (which I think was called Armada-8K before=20
-> they rebranded).
->=20
-> Basically their concern is that the tWC timing they observe is faster=20
-> (~18ns) than the documented minimum in the hardware datasheet for the=20
-> CN9130 (25ns). Aside from not meeting the datasheet spec we've not=20
-> observed any other issue (yet).
+For other files, if you want to add copyrights for every trivial change,
+this will lead to adding other people's copyrights as well...
 
-I would have expected the controller to support almost any kind of
-timings, including SDR EDO mode 5. tWC is 25ns with mode 4, but 20 on
-mode 5 (ONFI). So I believe you're running a system with a chip that is
-not compatible with the fastest mode. If that is the case, it may
-explain why you don't see errors with this chip: it may support
-slightly faster timings than it advertises.
+> It means at least it is not big concern from me that we created file in 2018 and 
+> then touch them this year.
+> The question is if this is valid argument which could be accepted upstream.
+> TBH I don't mind too much because primary reason for this patch was updating my 
+> email address.
+> 
 
-Anyway, if your findings are true, it means the current implementation
-is slightly out of spec and the timing calculation might require to be
-tweaked a little bit to reduce tWC.
 
-> I notice in the marvell_nand.c driver that marvell_nfc_init() sets the=20
-> NAND Clock Frequency Select bit (0xF2440700:0) to 1 which runs according=
-=20
-> to the datasheet the NAND flash at 400MHz . But the calculations in=20
-> marvell_nfc_setup_interface() use the value from=20
-> clk_get_rate(nfc->core_clk) which is still 250MHz so I'm wondering if=20
-> maybe the fact that the NAND flash is being run faster is having an=20
-> impact on timings that are calculated around the core_clk frequency.
+Best regards,
+Krzysztof
 
-What if you reset this bit? Do you observe different timings? I hope
-you do, otherwise this is a dead-end.
-
-The timings are derived from this clock but I remember seeing different
-rates than the ones I expected with no obvious explanation (see the "*
-2" in the calculation of period_ns and the comment right below). So
-maybe this is due to the 400MHz vs. 250MHz issue you are reporting, or
-there is an undocumented pre-scaler in-between (this is my original
-guess).
-
-> Do you think that the timings calculations should take the NAND Clock=20
-> Frequency Select setting into account?
-
-There is not much about this clock in the manual, so if the clock is
-feeding the logic of the controller generating the signals on the bus,
-then yes. You can verify this with the test mentioned above.
-
-Could you check the values set to tWP and tWH with and without the bit
-and probe the signals in both cases? Maybe the "* 2" in the
-period_ns calculation will vanish if we use 400MHz as input clock rather
-than clk_get_rate() (or better, expose the bit as a mux-clock and use
-it to tell the CCF the right frequency) and you'll get a sharper tWC in
-the end, which hopefully should match the spec this time.
-
-Thanks,
-Miqu=C3=A8l
