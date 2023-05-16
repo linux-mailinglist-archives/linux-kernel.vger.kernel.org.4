@@ -2,131 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFF270558F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BDA705597
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjEPR7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S230480AbjEPSB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjEPR7l (ORCPT
+        with ESMTP id S229522AbjEPSBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:59:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03719B;
-        Tue, 16 May 2023 10:59:39 -0700 (PDT)
+        Tue, 16 May 2023 14:01:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9AC3A81;
+        Tue, 16 May 2023 11:01:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F31563CA4;
-        Tue, 16 May 2023 17:59:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99991C433D2;
-        Tue, 16 May 2023 17:59:33 +0000 (UTC)
-Date:   Tue, 16 May 2023 18:59:30 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Borislav Petkov <bp@suse.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH v2 RESEND 4/7] swiotlb: Dynamically allocated bounce
- buffers
-Message-ID: <ZGPEgsplBSsI9li3@arm.com>
-References: <cover.1683623618.git.petr.tesarik.ext@huawei.com>
- <346abecdb13b565820c414ecf3267275577dbbf3.1683623618.git.petr.tesarik.ext@huawei.com>
- <BYAPR21MB168874BC467BFCEC133A9DCDD7789@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230516061309.GA7219@lst.de>
- <20230516083942.0303b5fb@meshulam.tesarici.cz>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C21963D7A;
+        Tue, 16 May 2023 18:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 008BFC433AE;
+        Tue, 16 May 2023 18:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684260112;
+        bh=fTMeSN7AzVHCiTkT+f9pmwZrYPpPz9puMnicx/1cTkI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RlotsGFNhRhoLtH8XEDeUgZi0A9QysXGzNW8uROo+1oL6hMQNZvWQDrnhux+u4kuL
+         rBR59dmF/PkfieVlBNIH1U1SIcpn0efnUOGY3QnJJtnJ4UrDjHDcH5D9BhjF4kBaZ8
+         bBRiBA/tSfue4MAsveruziEiuKBZXaGVBbBHbJo7QB4ByWcpqPORiEgRXW3lfSlaZe
+         vhxpodHCgI5iUhqpiYlCygt5y6dfBbI0TX3fSEyE2Fu1uRkyevrX1u4p12epe/aDh2
+         E8lkieM74b5CRgpImmOljoSHYCgGLLGVIGkWnZfUVCItCqyIIOLcoTGf6Igll8FGOP
+         HDcxizFz2RvQQ==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f00d41df22so5965380e87.1;
+        Tue, 16 May 2023 11:01:51 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz/3ocs2lhoWG4IBLPTMn6f5yEqLPkKQgzdX/Gxdj9OVZkKOae8
+        V7p1ulzO7YeX0vvdhGgyZL5TC5RoqUXb8m3ZXi8=
+X-Google-Smtp-Source: ACHHUZ5mkGKvbS8jLvIh+c+5mkY/if/pIGe5q1s0NkvzsdFe2AoncbM41M63JlAbaP+eAQpipVwoyg4qvgPfbmTVI+I=
+X-Received: by 2002:a05:651c:1728:b0:2a9:f9e0:a820 with SMTP id
+ be40-20020a05651c172800b002a9f9e0a820mr7846949ljb.11.1684260109821; Tue, 16
+ May 2023 11:01:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230516083942.0303b5fb@meshulam.tesarici.cz>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
+ <20230513220418.19357-4-kirill.shutemov@linux.intel.com> <9549d984-e581-048d-95a3-7c54acd70fb8@redhat.com>
+ <20230514211324.fymzoa263wx2hs2p@box.shutemov.name>
+In-Reply-To: <20230514211324.fymzoa263wx2hs2p@box.shutemov.name>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 16 May 2023 20:01:38 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGzqfHVcg2EAeXqnHG0mmg3ykOBVEa8OpJHc-+k2Xx2Aw@mail.gmail.com>
+Message-ID: <CAMj1kXGzqfHVcg2EAeXqnHG0mmg3ykOBVEa8OpJHc-+k2Xx2Aw@mail.gmail.com>
+Subject: Re: [PATCHv11 3/9] efi/libstub: Implement support for unaccepted memory
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     =?UTF-8?Q?Mika_Penttil=C3=A4?= <mpenttil@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 08:39:42AM +0200, Petr Tesařík wrote:
-> On Tue, 16 May 2023 08:13:09 +0200
-> Christoph Hellwig <hch@lst.de> wrote:
-> > On Mon, May 15, 2023 at 07:43:52PM +0000, Michael Kelley (LINUX) wrote:
-> > > FWIW, I don't think the approach you have implemented here will be
-> > > practical to use for CoCo VMs (SEV, TDX, whatever else).  The problem
-> > > is that dma_direct_alloc_pages() and dma_direct_free_pages() must
-> > > call dma_set_decrypted() and dma_set_encrypted(), respectively.  In CoCo
-> > > VMs, these calls are expensive because they require a hypercall to the host,
-> > > and the operation on the host isn't trivial either.  I haven't measured the
-> > > overhead, but doing a hypercall on every DMA map operation and on
-> > > every unmap operation has long been something we thought we must
-> > > avoid.  The fixed swiotlb bounce buffer space solves this problem by
-> > > doing set_decrypted() in batch at boot time, and never
-> > > doing set_encrypted().  
-> > 
-> > I also suspect it doesn't really scale too well due to the number of
-> > allocations.  I suspect a better way to implement things would be to
-> > add more large chunks that are used just like the main swiotlb buffers.
-> > 
-> > That is when we run out of space try to allocate another chunk of the
-> > same size in the background, similar to what we do with the pool in
-> > dma-pool.c.  This means we'll do a fairly large allocation, so we'll
-> > need compaction or even CMA to back it up, but the other big upside
-> > is that it also reduces the number of buffers that need to be checked
-> > in is_swiotlb_buffer or the free / sync side.
-> 
-> I have considered this approach. The two main issues I ran into were:
-> 
-> 1. MAX_ORDER allocations were too small (at least with 4K pages), and
->    even then they would often fail.
-> 
-> 2. Allocating from CMA did work but only from process context.
->    I made a stab at modifying the CMA allocator to work from interrupt
->    context, but there are non-trivial interactions with the buddy
->    allocator. Making them safe from interrupt context looked like a
->    major task.
+On Sun, 14 May 2023 at 23:13, Kirill A. Shutemov <kirill@shutemov.name> wro=
+te:
+>
+> On Sun, May 14, 2023 at 08:08:07AM +0300, Mika Penttil=C3=A4 wrote:
+> > > +   status =3D efi_bs_call(allocate_pool, EFI_LOADER_DATA,
+> > > +                        sizeof(*unaccepted_table) + bitmap_size,
+> > > +                        (void **)&unaccepted_table);
+> >
+> >
+> > Wonder if EFI_LOADER_DATA guarantees bitmap not to be freed, or should =
+some
+> > more persistent type be used. If EFI_LOADER_DATA is enough, maybe a com=
+ment
+> > why it is safe could be added.
+>
+> Ughh.. I've lost the hunk that reserves the memory explicitly while
+> folding in the patch we discussed with Ard. See below.
+>
+> But the question is solid.
+>
+> Ard, do we want to allocate the memory as EFI_RUNTIME_SERVICES_DATA (or
+> something else?) that got reserved automatically without additional steps=
+?
+>
 
-Can you kick off a worker thread when the swiotlb allocation gets past
-some reserve limit? It still has a risk of failing to bounce until the
-swiotlb buffer is extended.
 
-> I also had some fears about the length of the dynamic buffer list. I
-> observed maximum length for block devices, and then it roughly followed
-> the queue depth. Walking a few hundred buffers was still fast enough.
-> I admit the list length may become an issue with high-end NVMe and
-> I/O-intensive applications.
+EFI loader data should be fine here, as long as we reserve it.
 
-You could replace the list with an rbtree, O(log n) look-up vs O(n),
-could be faster if you have many bounces active.
+EFI runtime services data is intended for allocations that have
+significance to the firmware itself, so it gets mapped into the EFI
+runtime page tables and on some architectures, it gets removed from
+the direct map as well.
 
--- 
-Catalin
+The unaccepted bitmap is only accessed by the OS itself, so runtime
+services data is really not the right choice. We just have to ensure
+the bitmap gets reserved in memblock sufficiently early.
+
+> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> index e15a2005ed93..d817e7afd266 100644
+> --- a/drivers/firmware/efi/efi.c
+> +++ b/drivers/firmware/efi/efi.c
+> @@ -765,6 +765,25 @@ int __init efi_config_parse_tables(const efi_config_=
+table_t *config_tables,
+>                 }
+>         }
+>
+> +       if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
+> +           efi.unaccepted !=3D EFI_INVALID_TABLE_ADDR) {
+> +               struct efi_unaccepted_memory *unaccepted;
+> +
+> +               unaccepted =3D early_memremap(efi.unaccepted, sizeof(*una=
+ccepted));
+> +               if (unaccepted) {
+> +                       unsigned long size;
+> +
+> +                       if (unaccepted->version =3D=3D 1) {
+> +                               size =3D sizeof(*unaccepted) + unaccepted=
+->size;
+> +                               memblock_reserve(efi.unaccepted, size);
+> +                       } else {
+> +                               efi.unaccepted =3D EFI_INVALID_TABLE_ADDR=
+;
+> +                       }
+> +
+> +                       early_memunmap(unaccepted, sizeof(*unaccepted));
+> +               }
+> +       }
+> +
+>         return 0;
+>  }
+>
+> --
+>   Kiryl Shutsemau / Kirill A. Shutemov
