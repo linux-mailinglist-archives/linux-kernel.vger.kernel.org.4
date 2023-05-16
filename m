@@ -2,139 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30817053E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895567053E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjEPQa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S231292AbjEPQbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbjEPQaI (ORCPT
+        with ESMTP id S231446AbjEPQaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:30:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFA76EA2;
-        Tue, 16 May 2023 09:30:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F09DF63253;
-        Tue, 16 May 2023 16:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD2DDC433D2;
-        Tue, 16 May 2023 16:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684254599;
-        bh=vttB+w6xhJh6dQEXGeNl47yxmySBqTNQCwQjRAMFsBg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F35ios5qxCuQ8Is3q1fZpStxc+iW66BXvZYrkzqLOkKDTag5NbB7jod6P/5EHuvI3
-         DgtV+qxbyGinI4dTDsUlPLU7Aw0X8+E2yO1h7ml7lD1Bq7Al8I83El4agQ6NIBQ9uf
-         ci9BKiUesi8dhdZekHeu6J3VaAgz8KWPHoeR938g=
-Date:   Tue, 16 May 2023 18:29:56 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
-Message-ID: <2023051643-overtime-unbridle-7cdd@gregkh>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-36-schnelle@linux.ibm.com>
+        Tue, 16 May 2023 12:30:11 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C9155A6;
+        Tue, 16 May 2023 09:30:07 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34GGTwMA064586;
+        Tue, 16 May 2023 11:29:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684254599;
+        bh=q4p/q6fKRi0HDifLb9cFkQsbiK2S5lYUgZu+peL5kcA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=drCu5VTDWOTTHmhQRPnxHBrwDiod4y1OqHZDrbUBHwVozWmOCeyRqGQVSw/EIUNHG
+         paj4oY4b7fIlMq2VSfUaXKyqkVJPe1EkjPWJW0YuoKxDtzuzriXIuF2h5Y+5TXCPsq
+         TA4uAt8CSWcgP2TfozGFc3QjRE9P2rnGvZk37lF8=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34GGTwcM030637
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 May 2023 11:29:58 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
+ May 2023 11:29:58 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 16 May 2023 11:29:58 -0500
+Received: from [10.250.35.184] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34GGTwpO065903;
+        Tue, 16 May 2023 11:29:58 -0500
+Message-ID: <558ebfaf-bd7e-1760-5799-8ed430acad7a@ti.com>
+Date:   Tue, 16 May 2023 11:29:58 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516110038.2413224-36-schnelle@linux.ibm.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] mux: mmio: use reg property when parent device is not a
+ syscon
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230515191909.611241-1-afd@ti.com>
+ <13c1f6ea-63b5-9667-18a2-705829c46437@axentia.se>
+ <895c84f5-4a3c-fd2c-2b43-1a1996862e15@ti.com>
+ <7d73a37f-80b7-b623-1b71-fa19bf379713@linaro.org>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <7d73a37f-80b7-b623-1b71-fa19bf379713@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to guard sections of code calling them
-> as alternative access methods with CONFIG_HAS_IOPORT checks. For
-> uhci-hcd there are a lot of I/O port uses that do have MMIO alternatives
-> all selected by uhci_has_pci_registers() so this can be handled by
-> UHCI_IN/OUT macros and making uhci_has_pci_registers() constant 0 if
-> CONFIG_HAS_IOPORT is unset.
+On 5/16/23 11:19 AM, Krzysztof Kozlowski wrote:
+> On 16/05/2023 17:18, Andrew Davis wrote:
+>> On 5/15/23 4:14 PM, Peter Rosin wrote:
+>>> Hi!
+>>>
+>>> 2023-05-15 at 21:19, Andrew Davis wrote:
+>>>> The DT binding for the reg-mux compatible states it can be used when the
+>>>> "parent device of mux controller is not syscon device". It also allows
+>>>> for a reg property. When the parent device is indeed not a syscon device,
+>>>> nor is it a regmap provider, we should fallback to using that reg
+>>>> property to identify the address space to use for this mux.
+>>>
+>>> We should? Says who?
+>>>
+>>> Don't get me wrong, I'm not saying the change is bad or wrong, I would just
+>>> like to see an example where it matters. Or, at least some rationale for why
+>>> the code needs to change other than covering some case that looks like it
+>>> could/should be possible based on the binding. I.e., why is it not better to
+>>> "close the hole" in the binding instead?
+>>>
+>>
+>> Sure, so this all stated when I was building a checker to make sure that drivers
+>> are not mapping overlapping register spaces. I noticed syscon nodes are a source
+>> of that so I'm trying to look into their usage.
+>>
+>> To start, IHMO there is only one valid use for syscon and that is when more than
+>> one driver needs to access shared bits in a single register. DT has no way to
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
->       per-subsystem patches may be applied independently
+> It has... what about all existing efuse/nvmem devices?
 > 
->  drivers/usb/host/uhci-hcd.c |  2 +-
->  drivers/usb/host/uhci-hcd.h | 36 +++++++++++++++++++++++-------------
->  2 files changed, 24 insertions(+), 14 deletions(-)
+>> describe down to the bit granular level, so one must give that register to
+>> a "syscon node", then have the device node use a phandle to the syscon node:
+>>
+>> common_reg: syscon@10000 {
+>> 	compatible = "syscon";
+>> 	reg = <0x10000 0x4>;
+>> };
+>>
+>> consumer@1 {
+>> 	syscon-efuse = <&common_reg 0x1>;
+>> };
+>>
+>> consumer@2 {
+>> 	syscon-efuse = <&common_reg 0x2>;
+>> };
+>>
+>> Something like that, then regmap will take care of synchronizing access.
 > 
-> diff --git a/drivers/usb/host/uhci-hcd.c b/drivers/usb/host/uhci-hcd.c
-> index 7cdc2fa7c28f..fd2408b553cf 100644
-> --- a/drivers/usb/host/uhci-hcd.c
-> +++ b/drivers/usb/host/uhci-hcd.c
-> @@ -841,7 +841,7 @@ static int uhci_count_ports(struct usb_hcd *hcd)
->  
->  static const char hcd_name[] = "uhci_hcd";
->  
-> -#ifdef CONFIG_USB_PCI
-> +#if defined(CONFIG_USB_PCI) && defined(CONFIG_HAS_IOPORT)
->  #include "uhci-pci.c"
->  #define	PCI_DRIVER		uhci_pci_driver
->  #endif
-> diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-> index 0688c3e5bfe2..c77705d03ed0 100644
-> --- a/drivers/usb/host/uhci-hcd.h
-> +++ b/drivers/usb/host/uhci-hcd.h
-> @@ -505,41 +505,49 @@ static inline bool uhci_is_aspeed(const struct uhci_hcd *uhci)
->   * we use memory mapped registers.
->   */
->  
-> +#ifdef CONFIG_HAS_IOPORT
-> +#define UHCI_IN(x)	x
-> +#define UHCI_OUT(x)	x
-> +#else
-> +#define UHCI_IN(x)	0
-> +#define UHCI_OUT(x)
-> +#endif
-> +
->  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
->  /* Support PCI only */
->  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
->  {
-> -	return inl(uhci->io_addr + reg);
-> +	return UHCI_IN(inl(uhci->io_addr + reg));
->  }
->  
->  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
->  {
-> -	outl(val, uhci->io_addr + reg);
-> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+> Syscon is not for this.
+> 
 
-I'm confused now.
+That is how it is used today, and in 5 other ways too and there is
+no guidance on it. Let me know what syscon is for then.
 
-So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
+>>
+> 
+> ...
+> 
+>>
+>> Ideally DT nodes all describe their register space in a "reg"
+>> property and all the "large collection of devices" spaces become
+>> "simple-bus" nodes. "syscon" nodes can then be limited to only the
+>> rare case when multiple devices share bits in a single register.
+>>
+>> If Rob and Krzysztof agree I can send a patch with the above
+>> guidance to the Devicetree Specification repo also.
+> 
+> Agree on what?
+> 
 
-But if it isn't, then these are just no-ops that do nothing?  So then
-the driver will fail to work?  Why have these stubs at all?
+That we should provide the above guidance on when and how to use syscon
+nodes. Right now it is a free for all and it is causing issues.
 
-Why not just not build the driver at all if this option is not enabled?
+Andrew
 
-thanks,
-
-greg k-h
+> 
+> Best regards,
+> Krzysztof
+> 
