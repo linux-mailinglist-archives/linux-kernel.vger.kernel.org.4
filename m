@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF7D705155
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD33705159
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbjEPO4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S234057AbjEPO56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234007AbjEPO4B (ORCPT
+        with ESMTP id S233744AbjEPO5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:56:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F2444AD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:56:00 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 16 May 2023 10:57:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E3F4487;
+        Tue, 16 May 2023 07:57:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A21EF66058F7;
-        Tue, 16 May 2023 15:55:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684248958;
-        bh=A4ghUFGtUYGU+mfPLHdDtAdikMKuNk5QXqN5HGiifkY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=l6JzNxYnLdBMJMUF7phZbXums/Tk1uG/m1vOZ+yGslG8K6suBMltTmgy0f35wA90W
-         +iGuvufTJpHwl7SXtpg71EXlFI8gUmQsEAuyiqqsSulAjKHFu8IA80zRPnx3efsx1N
-         ArNSFASWlfNvx/XJ5v2sWNM7lb32+lpEHeZnCkpntR3Ol84e1kfFQqwSJ+F9bT182Q
-         hcx3VaLjAN1XekVoYBPF+PKSTnMdWkhro/zHqX6dvYJJbmMTiz331iV0Wt6Z5t2gZH
-         J1MiLGewZMe3gB4bEbfIDhfDbWESRQ2ayLWN9SrKDVVsSu3CUhd/x33oEtCXW9bG7R
-         MmvNPXmgEsE0g==
-Message-ID: <de62cddc-affe-297c-f020-425f80e683fe@collabora.com>
-Date:   Tue, 16 May 2023 16:55:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/2] phy: mtk-mipi-csi: add driver for CSI phy
-Content-Language: en-US
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
-        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
-        Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:DRM DRIVERS FOR MEDIATEK" 
-        <dri-devel@lists.freedesktop.org>
-References: <20230515090551.1251389-1-jstephan@baylibre.com>
- <20230515090551.1251389-3-jstephan@baylibre.com>
- <cd6067b2-660a-8f2c-697d-26814a9dc131@collabora.com>
- <b2nk4jw2hpy4ndoq4cojazkn6h3tra2zjffhiswb7aqryabf7q@mkbtzhzcbivv>
- <54e6923c-729a-49de-8395-fbd0b8443aa8@collabora.com>
- <shthzc3zekvm2mrcch6vexsq5djpoxwupvdmmovhrz2ack3wxx@s4ptfhq7iwvi>
-From:   AngeloGioacchino Del Regno 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F1D2630E5;
+        Tue, 16 May 2023 14:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4065C433EF;
+        Tue, 16 May 2023 14:57:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684249070;
+        bh=i6M5/UI5gYYrcQo2Y00Z1kbdlK8gGZF19QqQZFugTaY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YEhtFhZUuBANto1gfEjvX685M5ITtH5A8Hkf8vV39QSsHuzhU8vKYjUbZ8lCkLiN4
+         ud3NZe8HIg1njVTzWb1OlWZlpO+hM8Bgw3HpdOx0HrRYpM8c1WVipVSBh3gBBWCweQ
+         Ta+DgY/lKHPhxpAb+EbuPuOf7/NqnPO5bT2pwWx9g4IYDSDwHm/SUFO8P94SkM34el
+         izYq72jex2oZi+2qTV83qA1F6J1NTAZ1reh1Nj4JjVkqu5MoKziBRbyqXrbhfCJMN7
+         TNfZr7w+RhBN2SoCsaawo2yXgAND8CoWWhORmmqZ5NqMYDn0PziOEAi/+SUSTBBqSa
+         ufyG6pXKGgH9A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pyw7Y-00FZt0-H1;
+        Tue, 16 May 2023 15:57:48 +0100
+Date:   Tue, 16 May 2023 15:57:48 +0100
+Message-ID: <865y8smihf.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <shthzc3zekvm2mrcch6vexsq5djpoxwupvdmmovhrz2ack3wxx@s4ptfhq7iwvi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        wenst@chromium.org, yidilin@chromium.org,
+        Tinghan Shen <tinghan.shen@mediatek.com>, jwerner@chromium.org,
+        Weiyi Lu <weiyi.lu@mediatek.com>, Ben Ho <Ben.Ho@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware issues
+In-Reply-To: <3cc683e7-28aa-7b6e-1499-3aca953294cc@collabora.com>
+References: <20230515131353.v2.cover@dianders>
+        <20230515131353.v2.2.I88dc0a0eb1d9d537de61604cd8994ecc55c0cac1@changeid>
+        <3cc683e7-28aa-7b6e-1499-3aca953294cc@collabora.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: angelogioacchino.delregno@collabora.com, dianders@chromium.org, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, allen-kh.cheng@mediatek.com, linux-mediatek@lists.infradead.org, eddie.huang@mediatek.com, hsin-hsiung.wang@mediatek.com, wenst@chromium.org, yidilin@chromium.org, tinghan.shen@mediatek.com, jwerner@chromium.org, weiyi.lu@mediatek.com, Ben.Ho@mediatek.com, seiya.wang@mediatek.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,133 +82,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/05/23 11:30, Julien Stephan ha scritto:
-> On Mon, May 15, 2023 at 04:32:42PM +0200, AngeloGioacchino Del Regno wrote:
->> Il 15/05/23 16:07, Julien Stephan ha scritto:
->>> On Mon, May 15, 2023 at 02:22:52PM +0200, AngeloGioacchino Del Regno wrote:
->>>>> +#define CSIxB_OFFSET		0x1000
->>>>
->>>> What if we grab two (or three?) iospaces from devicetree?
->>>>
->>>> - base (global)
->>>> - csi_a
->>>> - csi_b
->>>>
->>>> That would make it possible to maybe eventually extend this driver to more
->>>> versions (older or newer) of the CSI PHY IP without putting fixes offsets
->>>> inside of platform data structures and such.
->>>>
->>> Hi Angelo,
->>> The register bank of the CSI port is divided into 2:
->>> * from base address to base + 0x1000 (port A)
->>> * from base + 0x1000 to base +0x2000 (port B)
->>> Some CSI port can be configured in 4D1C mode (4 data + 1 clock) using
->>> the whole register bank from base to base + 0x2000 or in 2D1C mode (2 data +
->>> 1 clock) and use either port A or port B.
->>>
->>> For example  mt8365 has CSI0 that can be used either in 4D1C mode or in
->>> 2 * 2D1C and CSI1 which can use only 4D1C mode
->>>
->>> 2D1C mode can not be tested and is not implemented in the driver so
->>> I guess adding csi_a and csi_b reg value may be confusing?
->>>
->>> What do you think?
->>
->> Ok so we're talking about two data lanes per CSI port... it may still be
->> beneficial to split the two register regions as
->>
->> reg-names = "csi-a", "csi-b"; (whoops, I actually used underscores before,
->>                                 and that was a mistake, sorry!)
->>
->> ....but that would be actually good only if we are expecting to get a CSI
->> PHY in the future with four data lanes per port.
->>
->> If you do *not* expect at all such a CSI PHY, or you do *not* expect such
->> a PHY to ever be compatible with this driver (read as: if you expect such
->> a PHY to be literally completely different from this one), then it would
->> not change much to have the registers split in two.
->>
->> Another case in which it would make sense is if we were to get a PHY that
->> provides more than two CSI ports: in that case, we'd avoid platform data
->> machinery to check the number of actual ports in the IP, as we would be
->> just checking how many register regions we were given from the devicetree,
->> meaning that if we got "csi-a", "csi-b", "csi-c", "csi-d", we have four
->> ports.
->>
->> Besides, another thing to think about is... yes you cannot test nor implement
->> 2D1C mode in your submission, but this doesn't mean that others won't ever be
->> interested in this and that other people won't be actually implementing that;
->> Providing them with the right initial driver structure will surely make things
->> easier, encouraging other people from the community to spend their precious
->> time on the topic.
->>
-> Hi Angelo,
-> Ok, I see your point, but for future potential upgrade to support A/B
-> ports I was thinking of something else: adding independent nodes for csixA
-> and csixB such as:
+On Tue, 16 May 2023 14:23:52 +0100,
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
 > 
-> csi0_rx: phy@11c10000 {
->    reg = <0 0x11C10000 0 0x2000>;
->    mediatek,mode = <4D1c>;
->    ...
-> };
+> Il 15/05/23 22:13, Douglas Anderson ha scritto:
+> > Some Chromebooks with Mediatek SoCs have a problem where the firmware
+> > doesn't properly save/restore certain GICR registers. Newer
+> > Chromebooks should fix this issue and we may be able to do firmware
+> > updates for old Chromebooks. At the moment, the only known issue with
+> > these Chromebooks is that we can't enable "pseudo NMIs" since the
+> > priority register can be lost. Enabling "pseudo NMIs" on Chromebooks
+> > with the problematic firmware causes crashes and freezes.
+> > 
+> > Let's detect devices with this problem and then disable "pseudo NMIs"
+> > on them. We'll detect the problem by looking for the presence of the
+> > "mediatek,broken-save-restore-fw" property in the GIC device tree
+> > node. Any devices with fixed firmware will not have this property.
+> > 
+> > Our detection plan works because we never bake a Chromebook's device
+> > tree into firmware. Instead, device trees are always bundled with the
+> > kernel. We'll update the device trees of all affected Chromebooks and
+> > then we'll never enable "pseudo NMI" on a kernel that is bundled with
+> > old device trees. When a firmware update is shipped that fixes this
+> > issue it will know to patch the device tree to remove the property.
+> > 
+> > In order to make this work, the quick detection mechanism of the GICv3
+> > code is extended to be able to look for properties in addition to
+> > looking at "compatible".
+> > 
+> > Reviewed-by: Julius Werner <jwerner@chromium.org>
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > 
-> csi0a_rx: phy@11c10000 {
->    reg = <0 0x11C10000 0 0x1000>;
->    mediatek,mode = <2D1c>;
->    ...
-> };
-> csi0b_rx: phy@11c11000 {
->    reg = <0 0x11C11000 0 0x1000>;
->    mediatek,mode = <2D1c>;
->    ...
-> };
-> 
-> giving the correct register range. One thing I did not mention is that if
-> csi0_rx is used csi0a_rx and csi0b_rx cannot be used (they share same
-> physical lanes as csio_rx), but csi0a_rx and csi0b_rx can be used simultaneously.
-> So platform device will enable only the node(s) it needs and enabling
-> csi0_rx and csioa/b_rx will fail because they share the same register
-> region and map will fail and it does not have any sense because you
-> either have a camera using the whole port or sub port but you cannot have
-> both plugged in. What do you think about it?
-> 
+> I don't like firmware removing properties from my devicetrees and I'd like this
+> issue to get addressed in another way (use a scratch register? and check it in
+> Linux drivers to determine if the issue is not present: if scratch contains BIT(x),
+> do not parse the quirk) but that's a different discussion which is a bit out of
+> context for this patch, so:
 
-Your description of the hardware makes me even more confident in pushing for
-having one single node with multiple iospaces.
+So what you're advocating for is that we have another flag somewhere
+that says the same thing. Stored where? Accessible how? On top of
+having to check for DT, ACPI, and SOC_ID interfaces, you want YAFM
+(Yet Another Fixing Method)?
 
-You could have a node such as:
+Thanks, but no, thanks.
 
-csi0_rx: phy@11c10000 {
-	compatible = ....
-	reg = <0 0x11c10000 0 0x1000>, <0 0x11c20000 0 0x1000>;
-	reg-names = "csi-a", "csi-b";
-	/* 4 means 4D1C */
-	num-lanes = <4>;
-		or
-	/* 2 means 2D1C */
-	num-lanes = <2>;
-};
+	M.
 
-You would then reference the csi0_rx node as:
-
-	/* PHY is configured as 4 lanes (4D1C) */
-	something = <&csi0_rx 0>;
-
-	or
-
-	/* First two lanes (CSI0 PORT-A) */
-	something = <&csi0_rx 0>;
-	/* Second two lanes (CSI0 PORT-B) */
-	something = <&csi0_rx 1>;
-
-Preferrably, you should (or shall?) use a graph to describe such connections,
-anyway.
-
-This is because overriding the number of lanes on a per-board basis becomes
-*otherwise* difficult, in the sense of human readability issues, other than
-duplicated nodes being a real issue.
-
-Regards,
-Angelo
-
+-- 
+Without deviation from the norm, progress is not possible.
