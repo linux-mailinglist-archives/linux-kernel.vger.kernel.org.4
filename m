@@ -2,103 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3761370570B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EDB70570D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjEPTZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S229497AbjEPTZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjEPTZ3 (ORCPT
+        with ESMTP id S229793AbjEPTZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6494C8A48;
-        Tue, 16 May 2023 12:25:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F188663E5B;
-        Tue, 16 May 2023 19:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2317C433D2;
-        Tue, 16 May 2023 19:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684265127;
-        bh=S0Rq0G95CHXp1m5S50Xtw88jTsSFrtOHdzpyyFfPe0E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wz3FHy0V43KAsSPzha+tkRRwMjg88jaek5nHtnOKFD69lkdQjPK1x4dLPI8VAhx4+
-         cUjeTfmLgmawZQr1sy/f0j9C5nRE2xgaE0EKWlK9c5bYUcwIXNDs7+jH22wKB/ukWv
-         TiMRfHW63t4IQ6YksDh/bFAzrJP12OWuWyhmNNtY=
-Date:   Tue, 16 May 2023 21:25:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Avadhut Naik <Avadhut.Naik@amd.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, yazen.ghannam@amd.com,
+        Tue, 16 May 2023 15:25:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CC57AB8;
+        Tue, 16 May 2023 12:25:43 -0700 (PDT)
+Date:   Tue, 16 May 2023 19:25:39 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684265141;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5oc/4U3LxxwXeuua8k3JKf4lQsuXnu0v2GB/nxPvrxQ=;
+        b=jrCnx+4OnOu6Wo7yd0zVoHojAQarFBr68+unZtHgM3yVAnr+rNU+R5/lpQbq+5aE6eawVC
+        AEdwA0qol+H3jj2GzaEEjoStSONGquqD/5yEISXfwF8EHY2SSce7nTC+zHTzNbLdoq6zOA
+        QVIy0n7G1YAGiv3Sa2ctLXtSX2IQsy402BHGkvUeYw8bhIAdweQoedsnufDn7WIWHPhI3J
+        Q56V0c4j+rFbHEBh9CsrrBC5Jk2T5GzZMz1yBz9BAmWx7TlxqS9SHv0LKB03r8SUoPtRpS
+        beFQx8sj6yVw3A40aRneB+jl+wwV4ooi2du+nRZpOr30jkV5LEll+rfOiaj4cg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684265141;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5oc/4U3LxxwXeuua8k3JKf4lQsuXnu0v2GB/nxPvrxQ=;
+        b=R9LF7eEz0yLjneDEU213z5m8mo1jQ821QyVAzbxo/+uCXJxz9qA9cUEh88lbjz9uLZz7CT
+        FqPnxRRqg2JTrxBA==
+From:   "tip-bot2 for Osama Muhammad" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] ras/debugfs: Fix error checking for debugfs_create_dir()
+Cc:     Osama Muhammad <osmtendev@gmail.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1] ACPI: APEI: EINJ: Add support for vendor defined
- error types
-Message-ID: <2023051602-clear-encode-984e@gregkh>
-References: <20230516183228.3736-1-Avadhut.Naik@amd.com>
+In-Reply-To: <20230516182927.9171-1-osmtendev@gmail.com>
+References: <20230516182927.9171-1-osmtendev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516183228.3736-1-Avadhut.Naik@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168426514015.404.17879655413957369852.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 06:32:28PM +0000, Avadhut Naik wrote:
-> According to ACPI specification 6.5, section 18.6.4, Vendor-Defined Error
-> types are supported by the system apart from standard error types if bit
-> 31 is set in the output of GET_ERROR_TYPE Error Injection Action. While
-> the errors themselves and the length of their associated OEM Vendor data
-> structure might vary between vendors, the physical address of this very
-> structure can be computed through vendor_extension and length fields of
-> SET_ERROR_TYPE_WITH_ADDRESS Data Structure and Vendor Error Type Extension
-> Structure respectively (ACPI Spec 6.5, Table 18.31 and 18.32).
-> 
-> Currently, however, the einj module only computes the physical address of
-> Vendor Error Type Extension Structure. Neither does it compute the physical
-> address of OEM Vendor structure nor does it establish the memory mapping
-> required for injecting Vendor-defined errors. Consequently, userspace
-> tools have to establish the very mapping through /dev/mem, nopat kernel
-> parameter and system calls like mmap/munmap initially before injecting
-> Vendor-defined errors.
-> 
-> Circumvent the issue by computing the physical address of OEM Vendor data
-> structure and establishing the required mapping with the structure. Create
-> a new file "oem_error", if the system supports Vendor-defined errors, to
-> export this mapping, through debugfs_create_blob API. Userspace tools can
-> then populate their respective OEM Vendor structure instances and just
-> write to the file as part of injecting Vendor-defined Errors.
-> 
-> Additionally, since the debugfs files created through debugfs_create_blob
-> API are read-only, introduce a write callback to enable userspace tools to
-> write OEM Vendor structures into the oem_error file.
+The following commit has been merged into the ras/core branch of tip:
 
-When you say "additionally", that's usually a huge hint that you need to
-split this up into multiple patches.
+Commit-ID:     2a1d18a5dc5056825b8e9527d188130da6256efc
+Gitweb:        https://git.kernel.org/tip/2a1d18a5dc5056825b8e9527d188130da6256efc
+Author:        Osama Muhammad <osmtendev@gmail.com>
+AuthorDate:    Tue, 16 May 2023 23:29:27 +05:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Tue, 16 May 2023 21:12:23 +02:00
 
-Please do so here.
+ras/debugfs: Fix error checking for debugfs_create_dir()
 
-Also note that debugfs is almost never a valid api for anything you care
-about for having a running system, as it is locked down for root access
-only and some distros refuse to enable it at all due to its security
-leakage.  So be careful about creating an api here that you might need
-to use on a normal running system.
+Check the return value of debugfs_create_dir() properly.
 
+  [ bp: Rewrite commit message. ]
 
-> 
-> Note: Some checkpatch warnings are ignored to maintain coding style.
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230516182927.9171-1-osmtendev@gmail.com
+---
+ drivers/ras/debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That's not good, please follow the right style for new code.
-
-thanks,
-
-greg k-h
+diff --git a/drivers/ras/debugfs.c b/drivers/ras/debugfs.c
+index f0a6391..ffb973c 100644
+--- a/drivers/ras/debugfs.c
++++ b/drivers/ras/debugfs.c
+@@ -46,7 +46,7 @@ int __init ras_add_daemon_trace(void)
+ 
+ 	fentry = debugfs_create_file("daemon_active", S_IRUSR, ras_debugfs_dir,
+ 				     NULL, &trace_fops);
+-	if (!fentry)
++	if (IS_ERR(fentry))
+ 		return -ENODEV;
+ 
+ 	return 0;
