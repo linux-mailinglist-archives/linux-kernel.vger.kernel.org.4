@@ -2,102 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7540705500
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EE770550A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjEPRal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S231685AbjEPRau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjEPRaj (ORCPT
+        with ESMTP id S231432AbjEPRaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:30:39 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88453F7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:30:34 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:34798.1811634643
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 565D31001F4;
-        Wed, 17 May 2023 01:30:31 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-pgxlx with ESMTP id a26d85785d524ee0bd802022817a2a6a for suijingfeng@loongson.cn;
-        Wed, 17 May 2023 01:30:32 CST
-X-Transaction-ID: a26d85785d524ee0bd802022817a2a6a
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>, Li Yi <liyi@loongson.cn>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH] drm/drm_vblank.c: avoid unsigned int to signed int cast
-Date:   Wed, 17 May 2023 01:30:26 +0800
-Message-Id: <20230516173026.2990705-1-15330273260@189.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 16 May 2023 13:30:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A221AE6D;
+        Tue, 16 May 2023 10:30:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B48863D38;
+        Tue, 16 May 2023 17:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB000C433EF;
+        Tue, 16 May 2023 17:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684258243;
+        bh=QD+y7h/o+bRIaX/7p4zBhpXDILcMaDt9viGNVq9SFJQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WO7PUdZy5p60/jMafhJ2tYe06L2M2Cprbo9AxD2sNrP3xexPv3QttCp0xHg0tc+Yy
+         MqiLwxaa639BVKzigEpAEt0gJSMkKYYnv/O+GD3GW5ITFJOpUfgXIoaO4P6FhtNtY3
+         1XFMC8mzKtDrOmlVcMbUgRpmChgDAr3FtKF+zH/9c2/daoNVWIHtKgOtQ1YR2Xi8PR
+         Fn8EZvzW/Wl7L0tQce1Ob5Wz+xlaguZiqw1VTOxib08hkEfW3dyalKkOK3ujEiCulw
+         PCT2F40CtUX/ev+JeypVu8SKsq7Cr8LcQfPDbklyU4Iueke4P58o0kFq0SSoUXyMEX
+         LhPYduS2uIlSw==
+Date:   Tue, 16 May 2023 23:00:38 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 0/7] DMA40 SRAM refactoring and cleanup
+Message-ID: <ZGO9vrlQlGU+H07g@matsya>
+References: <20230417-ux500-dma40-cleanup-v3-0-60bfa6785968@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417-ux500-dma40-cleanup-v3-0-60bfa6785968@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+On 16-05-23, 14:55, Linus Walleij wrote:
+> I started out by augmenting the STE DMA40 driver to get
+> its LCPA SRAM memory from a proper SRAM handle in the
+> device tree instead of as a reg cell, and then I saw
+> that the driver was in a bit of sad state so I did a bit
+> of cleanups on top.
 
-Both mode->crtc_htotal and mode->crtc_vtotal are u16 type,
-mode->crtc_htotal * mode->crtc_vtotal will results a unsigned type.
-Using a u32 is enough to store the result, but considering that the
-result will be casted to u64 soon after. We use a u64 type directly.
-So there no need to cast it to signed type and cast back then.
+Applied, thanks
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Cc: loongson-kernel@lists.loongnix.cn
----
- drivers/gpu/drm/drm_vblank.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-index 877e2067534f..d99c404b181b 100644
---- a/drivers/gpu/drm/drm_vblank.c
-+++ b/drivers/gpu/drm/drm_vblank.c
-@@ -622,7 +622,7 @@ void drm_calc_timestamping_constants(struct drm_crtc *crtc,
- 
- 	/* Valid dotclock? */
- 	if (dotclock > 0) {
--		int frame_size = mode->crtc_htotal * mode->crtc_vtotal;
-+		u64 frame_size = mode->crtc_htotal * mode->crtc_vtotal;
- 
- 		/*
- 		 * Convert scanline length in pixels and video
-@@ -630,7 +630,7 @@ void drm_calc_timestamping_constants(struct drm_crtc *crtc,
- 		 * in nanoseconds:
- 		 */
- 		linedur_ns  = div_u64((u64) mode->crtc_htotal * 1000000, dotclock);
--		framedur_ns = div_u64((u64) frame_size * 1000000, dotclock);
-+		framedur_ns = div_u64(frame_size * 1000000, dotclock);
- 
- 		/*
- 		 * Fields of interlaced scanout modes are only half a frame duration.
 -- 
-2.25.1
-
+~Vinod
