@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1610B705341
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DEF705340
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjEPQJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S229455AbjEPQJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbjEPQJR (ORCPT
+        with ESMTP id S231241AbjEPQJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:09:17 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60134D04D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:08:43 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GFMCac029111;
+        Tue, 16 May 2023 12:09:09 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920BA9EEF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:08:34 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GFMLXM013969;
         Tue, 16 May 2023 11:07:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=l9AzgEd9FVgYOtjPpkXOXkDV5Y0LT4iZYlTcb1nMxuA=;
- b=D8p65v5BqeGGQqTGqw4LkpFUGeqxi2pLDAblHESA4QJehwhpl9+aB1ESgtjXT/O5ik47
- ri4j6q94HEfN/1IReTlcqRetUWLOdjZVZHtw8Z47SIgCuZGXG+jzJ891TEJZ634ChKWj
- RtXcrROjzdKxqV+sf5amKAB+lKfJlZJmLT0/aZo523DHD0aEQQj6/rxofV1nr1O89FvW
- IlXWGt6jMZcGQvp0VML3nqPQG/Uuh2ApXfStlxDLrc3nWtQ4oNgjH7bWs94rlyOdself
- AIzK0ulmICW7rBqBxGmmHrXw45upKF1KK8vqGBjFJM4XelLCZXNzyJ6jQtX95dR0aVfC oA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qj6ymvnvm-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=T2DH6/H5m8Qazyq8fWgGGTIxlN/LEAb7+hM6ytoAYMY=;
+ b=jaYJo2OZNJaOaQrzjITNXQW+77MenPnRLDgfl4yJSF1ZEy4lESaGCIij26mkBdeoOcL3
+ jw8dqXTMd/lPIbf+go/3Tw4kfuwPUpiEi3CUuWdr7qE48C6GbsPVj7I/LpzW/H/mQfiV
+ JRLbofGTer24W/7Kmh6ZfEaJn/3fQQsREwv5Yj+/1qGlLebFTH6Va+4FT/GEwLNWJb6J
+ EuwwV65XH+BYiYBsGU2ANWfdS0WlbmdCp28sszGEpVvdbDfMOdYs5coM+wBmh8uJ3vN/
+ NT5cldcZCzXw+akmOEt3X8xBudYqH8jlySboURtFo9S2zwdxv8rfVBfqEcuAffOypIAd OQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qj7y14epn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:07:57 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 16 May 2023 11:07:58 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 16 May
  2023 11:07:56 -0500
 Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
  Transport; Tue, 16 May 2023 11:07:56 -0500
 Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.64.66])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BFA99B38;
-        Tue, 16 May 2023 16:07:55 +0000 (UTC)
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 15B7211A8;
+        Tue, 16 May 2023 16:07:56 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>
 CC:     <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
         Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH 0/5] debugfs: Fixes and improvements to debugfs_create_str()
-Date:   Tue, 16 May 2023 17:07:48 +0100
-Message-ID: <20230516160753.32317-1-rf@opensource.cirrus.com>
+Subject: [PATCH 1/5] debugfs: Prevent NULL dereference reading from string property
+Date:   Tue, 16 May 2023 17:07:49 +0100
+Message-ID: <20230516160753.32317-2-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230516160753.32317-1-rf@opensource.cirrus.com>
+References: <20230516160753.32317-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: 6vNdF13aEgD8RDfyQZReKc9I20BYKlQe
-X-Proofpoint-ORIG-GUID: 6vNdF13aEgD8RDfyQZReKc9I20BYKlQe
+X-Proofpoint-GUID: F3BY0PdYc71JIRmuN6TytsC3HzMbVf3f
+X-Proofpoint-ORIG-GUID: F3BY0PdYc71JIRmuN6TytsC3HzMbVf3f
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -65,22 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix NULL-deference bug, kerneldoc errors, minor coding style error.
-Also add a wrapper to avoid having to cast a const pointer to non-const.
+Check in debugfs_read_file_str() if the string pointer is NULL.
 
-Richard Fitzgerald (5):
-  debugfs: Prevent NULL dereference reading from string property
-  debugfs: Remove kerneldoc that says debugfs_create_str() returns a
-    value
-  debugfs: Update debugfs_create_str() kerneldoc to warn about pointer
-    race
-  debugfs: Move debugfs_create_str() export to correct location
-  debugfs: Add debugfs_create_const_str()
+It is perfectly reasonable that a driver may wish to export a string
+to debugfs that can have the value NULL to indicate empty/unused/ignore.
 
- fs/debugfs/file.c       | 21 +++++++++++----------
- include/linux/debugfs.h | 27 +++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+), 10 deletions(-)
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ fs/debugfs/file.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+index 1f971c880dde..2c085ab4e800 100644
+--- a/fs/debugfs/file.c
++++ b/fs/debugfs/file.c
+@@ -878,6 +878,9 @@ ssize_t debugfs_read_file_str(struct file *file, char __user *user_buf,
+ 		return ret;
+ 
+ 	str = *(char **)file->private_data;
++	if (!str)
++		return simple_read_from_buffer(user_buf, count, ppos, "\n", 1);
++
+ 	len = strlen(str) + 1;
+ 	copy = kmalloc(len, GFP_KERNEL);
+ 	if (!copy) {
 -- 
 2.30.2
 
