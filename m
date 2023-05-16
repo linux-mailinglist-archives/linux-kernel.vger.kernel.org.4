@@ -2,144 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907967048E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8887049A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjEPJRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
+        id S231679AbjEPJqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbjEPJRP (ORCPT
+        with ESMTP id S230203AbjEPJqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:17:15 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BA25BBF;
-        Tue, 16 May 2023 02:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684228604; x=1715764604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kb56PZ4c03l2GhNe6a5xbJY4KvpJ9NK+1Yzfq2wlekI=;
-  b=wJZ+Vh/ybYmiUV+0TocdvvdedACtDK4A1Y/Bxj4RAsPTdWJ+NP2upAwB
-   27p3DrhaDtSDjI4zdMn8ZoqwX7eH0RwQEnya0UfQe3jMKvL3F7T4h7MKQ
-   6K9jH8jHT25mcQo4OIUEuuUGAyYJqmN0etYRkTMM5yKgseIaYMFxS+yFD
-   LCpPXwWdcomMUsx4lIAcxTf5cIY7Poy6mwzwO3Qxqkn+5HI9UIAgOjIBM
-   FrNRcv1/4SwVz7EpN1QjW8WnbPSmysNHVuidK0xzZv6n0lejBhU/ZjxPU
-   2PXsZ+uo7nTaAjUBy2Q0TPDvpeOkjvCF1M4AfBetsPSnKXEDVZJVLVrnp
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,278,1677567600"; 
-   d="asc'?scan'208";a="215627684"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 May 2023 02:16:04 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+        Tue, 16 May 2023 05:46:33 -0400
+X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 02:46:30 PDT
+Received: from mail.inventec.com (mail.inventec.com [218.32.67.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C570F2;
+        Tue, 16 May 2023 02:46:30 -0700 (PDT)
+Received: from IEC1-EX2016-03.iec.inventec (10.15.2.59) by
+ IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 16 May 2023 02:16:03 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 16 May 2023 02:16:01 -0700
-Date:   Tue, 16 May 2023 10:15:40 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Conor Dooley <conor@kernel.org>, <soc@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
+ 15.1.2507.21; Tue, 16 May 2023 17:15:47 +0800
+Received: from IEC1-MSE-FE2.inventec.com (10.1.254.204) by
+ IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Tue, 16 May 2023 17:15:47 +0800
+Received: from IEC1-EX2016-02.iec.inventec (IEC1-EX2016-02.iec.inventec [10.1.254.221])
+        by IEC1-MSE-FE2.inventec.com with ESMTP id 34G9FhJO052455;
+        Tue, 16 May 2023 17:15:43 +0800 (GMT-8)
+        (envelope-from Chen.PJ@inventec.com)
+Received: from IEC1-EX2016-01.iec.inventec (10.15.2.58) by
+ IEC1-EX2016-02.iec.inventec (10.1.254.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 16 May 2023 17:15:43 +0800
+Received: from IEC1-EX2016-01.iec.inventec ([fe80::ad9c:c1af:d29:f80d]) by
+ IEC1-EX2016-01.iec.inventec ([fe80::ad9c:c1af:d29:f80d%7]) with mapi id
+ 15.01.2507.021; Tue, 16 May 2023 17:15:43 +0800
+From:   =?big5?B?Q2hlbi5QSiCzr6xmpfQgVEFP?= <Chen.PJ@inventec.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Olof Johansson <olof@lixom.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        "Andrew Jeffery" <andrew@aj.id.au>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v1] Documentation/process: add soc maintainer handbook
-Message-ID: <20230516-tactical-handcraft-d245a095faa4@wendy>
-References: <20230515-geometry-olympics-b0556ff8a5f7@spud>
- <cf1c6b8c-8a3f-eca1-948f-e41946d4c34c@linaro.org>
- <20230516-grader-dejected-df65cdc584b3@wendy>
- <cca446b3-9b92-3191-ae0d-1bd7e552c90f@linaro.org>
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     =?big5?B?WWUuVmljILitpnSyTSBUQU8=?= <ye.vic@inventec.com>,
+        =?big5?B?SHVhbmcuQWxhbmcgtsCtXq2mIFRBTw==?= 
+        <Huang.Alang@inventec.com>
+Subject: [PATCH] dt-bindings: arm: aspeed: add Inventec starscream-bmc
+Thread-Topic: [PATCH] dt-bindings: arm: aspeed: add Inventec starscream-bmc
+Thread-Index: AQHZh9b9H4korMyllESFK0bWK7oT/Q==
+Date:   Tue, 16 May 2023 09:15:43 +0000
+Message-ID: <c5dd9b64b4754da8b11efefd97527a4f@inventec.com>
+References: <28f0ce0a82464083ae24f9ef2f598425@inventec.com>
+In-Reply-To: <28f0ce0a82464083ae24f9ef2f598425@inventec.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-imapappendstamp: IEC1-EX2016-01.iec.inventec (15.01.2507.021)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [10.6.245.192]
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="PtBfR+i2mj9pXUBf"
-Content-Disposition: inline
-In-Reply-To: <cca446b3-9b92-3191-ae0d-1bd7e552c90f@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MAIL: IEC1-MSE-FE2.inventec.com 34G9FhJO052455
+X-TM-SNTS-SMTP: 3DB4FA82B12A3F874D9AD0E6CE5DB7C7CED8E01020EE1E34F6EC7C0C85E61F382000:8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---PtBfR+i2mj9pXUBf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, May 16, 2023 at 11:06:41AM +0200, Krzysztof Kozlowski wrote:
-> On 16/05/2023 10:57, Conor Dooley wrote:
-> > On Tue, May 16, 2023 at 10:31:19AM +0200, Krzysztof Kozlowski wrote:
-> >> On 15/05/2023 21:20, Conor Dooley wrote:
-
-> >>> + - Defer the devicetree changes to a release after the binding and d=
-river have
-> >>> +   already been merged
-> >>> +
-> >>> + - Change the bindings in a shared immutable branch that is used as =
-the base for
-> >>> +   both the driver change and the devicetree changes
-> >>
-> >> The policy told to me some time ago was that no merges from driver
-> >> branch or tree are allowed towards DTS branch, even if they come only
-> >> with binding header change. There are exceptions for this, e.g. [1], b=
-ut
-> >> that would mean we need to express here rules for cross-tree merges.
-> >=20
-> > I've got away with having an immutable branch for dt-binding headers!
->=20
-> Of course, all is in an immutable branch, but in which tree?
-
-For example:
-- dt-bindings & header with the clock defines in the base/immutable branch
-  on top of -rc1
-- driver patches on top of the immutable branch, in a PR to Stephen
-- dts patches on top of the immutable branch, PR to Arnd
-
-So, clock tree doesn't get the dts, soc tree doesn't get the driver.
-Hopefully that clarifies what I meant.
-
-> I talk about a case when driver tree, e.g. different clock maintainer,
-> takes the binding.
-
-If the other tree just "takes the binding", without some coordination,
-then you're SOOL and have to wait a release.
-
-> > That said, Arnd did actually have a look at this (and suggested some
-> > changes) before I sent it & did not cry fowl about this section. IIRC,
-> > this is actually his wording, not mine.
-
-Probably worth Arnd chiming in & just telling us what he is okay with
-taking.
-
-Cheers,
-Conor.
-
---PtBfR+i2mj9pXUBf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGNJvAAKCRB4tDGHoIJi
-0q0lAP4yeb7Qv9khm4px8qzetAw8FByjxe7F7Hb5Iu38DARrsQEAhy8q7y1R1tmp
-IJ/kRF2k57AInRDcYTR/PChtZvzF/AA=
-=20NK
------END PGP SIGNATURE-----
-
---PtBfR+i2mj9pXUBf--
+RG9jdW1lbnQgdGhlIG5ldyBjb21wYXRpYmxlcyB1c2VkIG9uIEludmVudGVjIHN0YXJzY3JlYW0t
+Ym1jDQoNClNpZ25lZC1vZmYtYnk6IENoZW4gUEogPENoZW4ucGpAaW52ZW50ZWMuY29tPg0KLS0t
+DQogRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlh
+bWwgfCAxICsNCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCg0KZGlmZiAtLWdpdCBh
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXNwZWVkL2FzcGVlZC55YW1s
+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlh
+bWwNCmluZGV4IDFiNTg1ZTU1NDc5MS4uZmI0Y2U1ZGYyZmEwIDEwMDY0NA0KLS0tIGEvRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlhbWwNCisrKyBi
+L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXNwZWVkL2FzcGVlZC55YW1s
+DQpAQCAtODIsNiArODIsNyBAQCBwcm9wZXJ0aWVzOg0KICAgICAgICAgICAgICAgLSBpYm0sZXZl
+cmVzdC1ibWMNCiAgICAgICAgICAgICAgIC0gaWJtLHJhaW5pZXItYm1jDQogICAgICAgICAgICAg
+ICAtIGlibSx0YWNvbWEtYm1jDQorICAgICAgICAgICAgICAtIGludmVudGVjLHN0YXJzY3JlYW0t
+Ym1jDQogICAgICAgICAgICAgICAtIGludmVudGVjLHRyYW5zZm9ybWVyLWJtYw0KICAgICAgICAg
+ICAgICAgLSBqYWJpbCxyYnAtYm1jDQogICAgICAgICAgICAgICAtIG51dmlhLGRjLXNjbS1ibWMN
+Ci0tIA0KMi4yNS4xDQoNCg==
