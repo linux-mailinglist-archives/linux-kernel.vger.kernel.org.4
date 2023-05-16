@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C54B7057CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3882F7057D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjEPTq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S229535AbjEPTrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjEPTq5 (ORCPT
+        with ESMTP id S230056AbjEPTrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:46:57 -0400
+        Tue, 16 May 2023 15:47:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A24468B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:46:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05751BE6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:47:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F7B563D0B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:46:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832C2C433D2;
-        Tue, 16 May 2023 19:46:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8480163DB9
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:47:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82409C433D2;
+        Tue, 16 May 2023 19:47:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684266412;
-        bh=Retqq5JfF+1v3Y0juT8ukUupAtMcuR+tzDBH2kPz0nA=;
+        s=k20201202; t=1684266445;
+        bh=WJ7zJ8wKo3Z+xOwBRYH0RqKqN+ywQ2CmZE2kNKIwXgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CYoYaBX+m/LPk4VBRp8JNpVscrno+XDoOxsbtT049WnQxI9/kSv1bR5kiaTmgxUUy
-         yyC7zNWfHk1n1+Bj8Et1dY92a6p0p51q4zMvCDb9u/iIFhC965iehJ9+OHPWqp9bok
-         8fR9wBQWSjY95WV68eJL+MIsjiuxWDC3uu+Jjzd0BE4+In115Zc1eGavYGPScFq5OB
-         6WFmKjetm6poZK2aA6o+B7/MSKLwV/Sim4gAPGVazWEZDClKW9/9Ibhr3Xv7uzOEp1
-         5qU0+8VwZdehpR7d99IB8cS41Y3EeSlnta9+f3e9RwtJ+zwAvcGzKZJEpKMztEPuVn
-         DkgRIf/FWV1mw==
+        b=ScBp9XTf1mm/fEQERYAAs/zBoK/nbDJ0uqqFSmni2XihRGPIdvbwY3lfhG/YoV7Wk
+         J5ctZDxpFI4vdvE84yROlQOdZt++NmUbf0ePCEcq3gAf4W0ER+QCu1TjjKdJMg8zwy
+         XzcERynrFL0aWUV/od/4XdAGFFJAP1P/a3abFTGixVQcJ33obSRvsNIjuk5Dh9YzUq
+         XlqokYWCIuxrYW2FM0CBvyrojG4GVxKaasDcH4rVYv3DL3b4MDus35EXkiWnSsy/9o
+         GadEdoq7H/lLC2q01zg2HgZH0AXVtKEimojnWjMKwIvD36ya3ynPySjY3QcVIeXoGG
+         XJY5mD3O5V5rQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+To:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] bridge: always declare tunnel functions
-Date:   Tue, 16 May 2023 21:45:35 +0200
-Message-Id: <20230516194625.549249-3-arnd@kernel.org>
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 4/4] mdio_bus: unhide mdio_bus_init prototype
+Date:   Tue, 16 May 2023 21:45:36 +0200
+Message-Id: <20230516194625.549249-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516194625.549249-1-arnd@kernel.org>
 References: <20230516194625.549249-1-arnd@kernel.org>
@@ -60,49 +63,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-When CONFIG_BRIDGE_VLAN_FILTERING is disabled, two functions are still
-defined but have no prototype or caller. This causes a W=1 warning for
-the missing prototypes:
+mdio_bus_init() is either used as a local module_init() entry,
+or it gets called in phy_device.c. In the former case, there
+is no declaration, which causes a warning:
 
-net/bridge/br_netlink_tunnel.c:29:6: error: no previous prototype for 'vlan_tunid_inrange' [-Werror=missing-prototypes]
-net/bridge/br_netlink_tunnel.c:199:5: error: no previous prototype for 'br_vlan_tunnel_info' [-Werror=missing-prototypes]
+drivers/net/phy/mdio_bus.c:1371:12: error: no previous prototype for 'mdio_bus_init' [-Werror=missing-prototypes]
 
-The functions are already contitional on CONFIG_BRIDGE_VLAN_FILTERING,
-and I coulnd't easily figure out the right set of #ifdefs, so just
-move the declarations out of the #ifdef to avoid the warning,
-at a small cost in code size over a more elaborate fix.
+Remove the #ifdef around the declaration to avoid the warning..
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- net/bridge/br_private_tunnel.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ include/linux/phy.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/net/bridge/br_private_tunnel.h b/net/bridge/br_private_tunnel.h
-index 2b053289f016..efb096025151 100644
---- a/net/bridge/br_private_tunnel.h
-+++ b/net/bridge/br_private_tunnel.h
-@@ -27,6 +27,10 @@ int br_process_vlan_tunnel_info(const struct net_bridge *br,
- int br_get_vlan_tunnel_info_size(struct net_bridge_vlan_group *vg);
- int br_fill_vlan_tunnel_info(struct sk_buff *skb,
- 			     struct net_bridge_vlan_group *vg);
-+bool vlan_tunid_inrange(const struct net_bridge_vlan *v_curr,
-+			const struct net_bridge_vlan *v_last);
-+int br_vlan_tunnel_info(const struct net_bridge_port *p, int cmd,
-+			u16 vid, u32 tun_id, bool *changed);
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index c5a0dc829714..6478838405a0 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -1900,10 +1900,8 @@ void phy_package_leave(struct phy_device *phydev);
+ int devm_phy_package_join(struct device *dev, struct phy_device *phydev,
+ 			  int addr, size_t priv_size);
  
- #ifdef CONFIG_BRIDGE_VLAN_FILTERING
- /* br_vlan_tunnel.c */
-@@ -43,10 +47,6 @@ void br_handle_ingress_vlan_tunnel(struct sk_buff *skb,
- 				   struct net_bridge_vlan_group *vg);
- int br_handle_egress_vlan_tunnel(struct sk_buff *skb,
- 				 struct net_bridge_vlan *vlan);
--bool vlan_tunid_inrange(const struct net_bridge_vlan *v_curr,
--			const struct net_bridge_vlan *v_last);
--int br_vlan_tunnel_info(const struct net_bridge_port *p, int cmd,
--			u16 vid, u32 tun_id, bool *changed);
- #else
- static inline int vlan_tunnel_init(struct net_bridge_vlan_group *vg)
- {
+-#if IS_ENABLED(CONFIG_PHYLIB)
+ int __init mdio_bus_init(void);
+ void mdio_bus_exit(void);
+-#endif
+ 
+ int phy_ethtool_get_strings(struct phy_device *phydev, u8 *data);
+ int phy_ethtool_get_sset_count(struct phy_device *phydev);
 -- 
 2.39.2
 
