@@ -2,104 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743F0705AAB
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD9B705AAA
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjEPWha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S229877AbjEPWh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjEPWhK (ORCPT
+        with ESMTP id S230179AbjEPWhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:37:10 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84F36182;
-        Tue, 16 May 2023 15:37:07 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52c6f8ba7e3so13605808a12.3;
-        Tue, 16 May 2023 15:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684276627; x=1686868627;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MJGpY/NrMrg0JPSvmjgjr2tdaUCxwO0LhI4q74mpwfE=;
-        b=ska/yoAStgLqoC6IkwvPhKPiq7vXwb59GUYHSaIf8DtpCSLlwOU2aYHAo0+P+Re1AN
-         XdEGGSOwLUK9aJJ/qgqkhxfk/cCLHHy7RUBItrWoWClEskoawObzfeLdKUN5Ac8lE/74
-         oTUOI8oscxXl8UCiwBmd0lVKStdoA3jxLWruQWGw3hmlT5YuNOKTVVQsIs1EIJZtMAIE
-         su0MNU7RgNu5h4ImCfRd5HyTfFfr9jHslAQH9PFLzLN66JbAPR7PvWbJqodEwo6jm/5X
-         p0YETctd9o3jsJTE5IEk9C9Qsvx1JcAM6GX8NYjDQn+/Zka0fAk+xtBRLGRqHv0NAm1i
-         ndTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684276627; x=1686868627;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MJGpY/NrMrg0JPSvmjgjr2tdaUCxwO0LhI4q74mpwfE=;
-        b=f8WkRj261eJcbafeJHl3UZP+ZzVS5smb4jIpz7IIX9LBZRMoPkm9dXj1p52KdF/W4m
-         /W1di7KVTHhvIUbaCsqeHUaS2OQSWO5g3P4T+zh2kQTrZolD53phuS78p+6ryxtIx0MW
-         aRlo6eTrZK+M1l7v7r1auIOpjWhZnOyiI3aVv7lBlQuxj4Xo+/NThNQ5u+bj1wEBqhDM
-         /yvlRbDp92B8iESPCqImgRrM4qtauyQLcMZbMmEtoQtPU3ujAbbiYqvS9vX3eAPNnwUU
-         MznNqVIiuz2ytXRnzk0w4oXX/UUeDiE+d7G0UpbnJSFZhwOhCSRsWMVyGqujXG+hUbO/
-         rhQw==
-X-Gm-Message-State: AC+VfDxt2NPTF3Ky+VAJoJ6uDmUamVkR8x8Zjp0F3Jslf1kRBOS1qUCk
-        /gIRZP6uy73MLXzO8yjKnkgSaiKvD8c=
-X-Google-Smtp-Source: ACHHUZ4UgpIFYQ3VqL6Zs6iIB+uR3kp7qBDoMHFkDx/rQyJ5l2jMSu8mNXq5xOPBWr7JyPCo88kaVA==
-X-Received: by 2002:a05:6a20:7f9d:b0:105:66a1:5d05 with SMTP id d29-20020a056a207f9d00b0010566a15d05mr15148395pzj.55.1684276627209;
-        Tue, 16 May 2023 15:37:07 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
-        by smtp.gmail.com with ESMTPSA id b20-20020aa78714000000b0062dbafced27sm11961983pfo.27.2023.05.16.15.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 15:37:06 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: tegra: tegra210_adx: fix snd_pcm_format_t type
-Date:   Wed, 17 May 2023 06:36:59 +0800
-Message-Id: <20230516223700.185569-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 16 May 2023 18:37:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC7B6195;
+        Tue, 16 May 2023 15:37:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BD7863D83;
+        Tue, 16 May 2023 22:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 819DDC433EF;
+        Tue, 16 May 2023 22:37:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684276622;
+        bh=IiAK7QVYdYVsem35FW1p0MBdsSji3BGNOue2Nk3ycaY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mnlM+uflWJJDIsrLLf0MHYw1Qtc10DB6EptX1eyhePE1rkuuQq5jqvjjAOzr0xT/w
+         jw4Gx0v4RROfQKogfvGcpFlPFNr7fLN3ThHBUMvOfXz5y0gTGCldqh2yO6Pu07Uasb
+         mVDJr+oG7kUxV1IRulWJDZIICYAwPCHyUt5fs2pKvBmQCqc7MNdBBIDIV6kG3X/vlX
+         bFCLuxMrJ4bVxjDNtf/l2wEuJSdfzV1uvvE3Q+bf3xASNUYVTEFQNmjlqhDT/oMddX
+         UvacSHjIq99/8yBrUSfmPd7g1N9VGekjaX0eqnu8b9lD68yD7l1AsBRJqbAZnvAxSV
+         CRejixJeTV3FA==
+Date:   Tue, 16 May 2023 15:37:00 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Remote Direct Memory Access Kernel Subsystem 
+        <linux-rdma@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Gal Pressman <gal@nvidia.com>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH net v2 0/4] Documentation fixes for Mellanox mlx5
+ devlink info
+Message-ID: <20230516153700.2bd46b47@kernel.org>
+In-Reply-To: <87zg64b05d.fsf@meer.lwn.net>
+References: <20230510035415.16956-1-bagasdotme@gmail.com>
+        <30df7ad7-3b8b-c578-b153-7bf0a38fa0cc@gmail.com>
+        <87zg64b05d.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-use snd_pcm_format_t instead of unsigned int to fix
-the following sparse warnings:
+On Tue, 16 May 2023 12:29:18 -0600 Jonathan Corbet wrote:
+> > If there is no response from mellanox and/or netdev maintainers,
+> > would you like to review and pick this series up?
+> 
+> They seem OK other than the gratuitous use of Fixes tags.  The netdev
+> maintainers are generally responsive and on top of things, though, and I
+> don't think there would be any justification for bypassing them here.
 
-sound/soc/tegra/tegra210_adx.c:125:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/tegra/tegra210_adx.c:128:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/tegra/tegra210_adx.c:131:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
-
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
----
- sound/soc/tegra/tegra210_adx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/sound/soc/tegra/tegra210_adx.c b/sound/soc/tegra/tegra210_adx.c
-index 41117c1d61fb..bd0b10c70c4c 100644
---- a/sound/soc/tegra/tegra210_adx.c
-+++ b/sound/soc/tegra/tegra210_adx.c
-@@ -109,7 +109,7 @@ static int __maybe_unused tegra210_adx_runtime_resume(struct device *dev)
- 
- static int tegra210_adx_set_audio_cif(struct snd_soc_dai *dai,
- 				      unsigned int channels,
--				      unsigned int format,
-+				      snd_pcm_format_t format,
- 				      unsigned int reg)
- {
- 	struct tegra210_adx *adx = snd_soc_dai_get_drvdata(dai);
--- 
-2.34.1
-
+I'm expecting Saeed to pick them up to the mlx5 tree. Either that 
+or tell us to take them in. I think he was out and traveling recently.
+Let's give him some time :|
