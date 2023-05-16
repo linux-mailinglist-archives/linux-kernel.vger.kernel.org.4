@@ -2,133 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0D870431B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A66B70431E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjEPBrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S229764AbjEPBuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjEPBrQ (ORCPT
+        with ESMTP id S229553AbjEPBtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:47:16 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E9B2681
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:47:14 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-38e3228d120so7154650b6e.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1684201634; x=1686793634;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vQMONc5SJDyCvN7VZRBXzuqqiXsyACiKWFthRnNjkI=;
-        b=MJ1jp2jKeZlhrFpiyXssgMah5dc3o5krDLHVOiR0AZia+Lqn9dfT8qtVIhmqCho2vT
-         T9iDlq+DyxbBb1aq+P3T6wmlnrWFRFWOpOjwZp1Y7YeUYij0dg75hbzXn3CO1JkcVB5q
-         7fdN24YuXgRYmhULBdSi259hdYNiLt1vMbNOoP6AEl9aALNw4Enu7jKfFON70Ho/NBrP
-         sJkWBFC9JsM4h6jA9Q000f74LWzz6PuMElq1uuaitTsoyM6xkweI+nsgeU4OnzW0nOk0
-         v3p9WGCmpuBNSTbwuk6Z0PceQtzR0fFkr7RvqdGEGclm2H+BKrBAWcKhpeA16UUVSoiJ
-         Yp5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684201634; x=1686793634;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7vQMONc5SJDyCvN7VZRBXzuqqiXsyACiKWFthRnNjkI=;
-        b=XQLmypvm+1Tl5ZO5V+n1XFhuetPCkZs3NR7IauIiaB5lY3bRuxXi6KBbshUCxCGE05
-         kcYEVqf5osplfHXLUt9VrCK42Xb38gGNMaiMyJRM1ywjqlhEuzgO+USRdOL7HDJUhOEw
-         Dx1lF+uaQycvQe1Mv/DuIqFJth8bHoXjO8/lVg+sT1zOhpWVR2aclaSEwRNGs4phFKE5
-         wmfvFY/awJS4NGYD4hE1abWCDOaIfmoq+6Yhu9vq99oHJjIeYkPNy7RleqOZeZ3oEXjV
-         CYUMj+hMad1vMmztAcd8rSCEkzIlFwCMON6hWyVcf0JluhyPo6oBakbAuBpdDknI8FGP
-         ImRA==
-X-Gm-Message-State: AC+VfDymSSDR/qxNiNebz875jT5f6SMVT7f5I/4Yg6OcTyeIGiTZQxzX
-        Cw6hoyxBNdXitBcpsHifoVeHEVZrXXNa8fGw33r1Gg==
-X-Google-Smtp-Source: ACHHUZ7niwSe+XVzisHsadeHDBRjQ1d1V4QqTLQeyQjsBlq+b+NyhnKZFwY3Q8zeutdPuzTiykiwl74B2MiAm0eSRD8=
-X-Received: by 2002:a05:6808:1a04:b0:395:df63:63af with SMTP id
- bk4-20020a0568081a0400b00395df6363afmr5860001oib.54.1684201634118; Mon, 15
- May 2023 18:47:14 -0700 (PDT)
+        Mon, 15 May 2023 21:49:55 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F511BD0;
+        Mon, 15 May 2023 18:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684201794; x=1715737794;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yoBH6vhYXirTJn4ngLQetM+EEw/EqS96eNcX9cDbZ/o=;
+  b=BR04lS4lP/ELMB8tQoS067kbCPNy39tya0lNKYcdtOBpA4roEG1G1Aeg
+   YKmAxRUCqlkp2q2j0JyBzgTQiNJ1dEl9N6D9TmHAXQ5sarZxgrrMEnLe5
+   X4E0cHVpBEepw1U5mB/YC1Cwg0cVf6TfE3ec8l4qb0aLbPd/nB4ckSYZg
+   qxq7/QjOBWaHSCrJh51nIX4JfsQuspI9Cbsea1wFqsZBobY8LThLt4ywt
+   lRPUw2Etu408HkPLbjRrmiNcnWQrOJw8ScCkqiaf5h6Niu3ki4Z6HTqEA
+   xjNug+iSQY8UxovqRQ/rDYrhsHiWnnovzBF6F0Qb+r/l6nu6ku6S+TstG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="340716246"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="340716246"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 18:49:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="790880836"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="790880836"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 May 2023 18:49:48 -0700
+Message-ID: <57101685-35c3-8a71-9a39-a6d9fd58414c@linux.intel.com>
+Date:   Tue, 16 May 2023 09:49:13 +0800
 MIME-Version: 1.0
-References: <20230515025716.316888-1-vineeth@bitbyteword.org>
- <20230515025716.316888-3-vineeth@bitbyteword.org> <20230515100616.33ba5dd9@luca64>
-In-Reply-To: <20230515100616.33ba5dd9@luca64>
-From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date:   Mon, 15 May 2023 21:47:03 -0400
-Message-ID: <CAO7JXPgq8V5yHM6F2+iXf4XJ9cyT30Hn4ot5b2k7srjsaPc3JQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] sched/deadline: Fix reclaim inaccuracy with SMP
-To:     luca abeni <luca.abeni@santannapisa.it>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+Content-Language: en-US
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>
+References: <20230511143024.19542-1-yi.l.liu@intel.com>
+ <20230511143024.19542-4-yi.l.liu@intel.com>
+ <6ab2d63e-4dcc-6562-9698-d23300c7d1ae@linux.intel.com>
+ <DS0PR11MB752940450312B2E0529C3DC6C3789@DS0PR11MB7529.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <DS0PR11MB752940450312B2E0529C3DC6C3789@DS0PR11MB7529.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
+On 5/15/23 2:14 PM, Liu, Yi L wrote:
+>> -----Original Message-----
+>> From: Baolu Lu<baolu.lu@linux.intel.com>
+>> Sent: Friday, May 12, 2023 1:39 PM
+>> To: Liu, Yi L<yi.l.liu@intel.com>;joro@8bytes.org;alex.williamson@redhat.com;
+>> jgg@nvidia.com; Tian, Kevin<kevin.tian@intel.com>;robin.murphy@arm.com
+>> Cc:baolu.lu@linux.intel.com;cohuck@redhat.com;eric.auger@redhat.com;
+>> nicolinc@nvidia.com;kvm@vger.kernel.org;mjrosato@linux.ibm.com;
+>> chao.p.peng@linux.intel.com;yi.y.sun@linux.intel.com;peterx@redhat.com;
+>> jasowang@redhat.com;shameerali.kolothum.thodi@huawei.com;lulu@redhat.com;
+>> suravee.suthikulpanit@amd.com;iommu@lists.linux.dev;linux-kernel@vger.kernel.org;
+>> linux-kselftest@vger.kernel.org; Duan, Zhenzhong<zhenzhong.duan@intel.com>
+>> Subject: Re: [PATCH v3 3/4] iommufd: Add IOMMU_DEVICE_GET_HW_INFO
+>>
+>> On 5/11/23 10:30 PM, Yi Liu wrote:
+>>> Under nested IOMMU translation, userspace owns the stage-1 translation
+>>> table (e.g. the stage-1 page table of Intel VT-d or the context table
+>>> of ARM SMMUv3, and etc.). Stage-1 translation tables are vendor specific,
+>>> and needs to be compatiable with the underlying IOMMU hardware. Hence,
+>>> userspace should know the IOMMU hardware capability before creating and
+>>> configuring the stage-1 translation table to kernel.
+>>>
+>>> This adds IOMMU_DEVICE_GET_HW_INFO to query the IOMMU hardware
+>> information
+>>> for a given device. The returned data is vendor specific, userspace needs
+>>> to decode it with the structure mapped by the @out_data_type field.
+>>>
+>>> As only physical devices have IOMMU hardware, so this will return error
+>>> if the given device is not a physical device.
+>>>
+>>> Co-developed-by: Nicolin Chen<nicolinc@nvidia.com>
+>>> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
+>>> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
+>>> ---
+>>>    drivers/iommu/iommufd/device.c          | 72 +++++++++++++++++++++++++
+>>>    drivers/iommu/iommufd/iommufd_private.h |  1 +
+>>>    drivers/iommu/iommufd/main.c            |  3 ++
+>>>    include/uapi/linux/iommufd.h            | 37 +++++++++++++
+>>>    4 files changed, 113 insertions(+)
+>>>
+>>> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+>>> index 051bd8e99858..bc99d092de8f 100644
+>>> --- a/drivers/iommu/iommufd/device.c
+>>> +++ b/drivers/iommu/iommufd/device.c
+>>> @@ -263,6 +263,78 @@ u32 iommufd_device_to_id(struct iommufd_device *idev)
+>>>    }
+>>>    EXPORT_SYMBOL_NS_GPL(iommufd_device_to_id, IOMMUFD);
+>>>
+>>> +static int iommufd_zero_fill_user(u64 ptr, int bytes)
+>>> +{
+>>> +	int index = 0;
+>>> +
+>>> +	for (; index < bytes; index++) {
+>>> +		if (put_user(0, (uint8_t __user *)u64_to_user_ptr(ptr + index)))
+>>> +			return -EFAULT;
+>>> +	}
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
+>>> +{
+>>> +	struct iommu_hw_info *cmd = ucmd->cmd;
+>>> +	unsigned int length = 0, data_len;
+>>> +	struct iommufd_device *idev;
+>>> +	const struct iommu_ops *ops;
+>>> +	void *data = NULL;
+>>> +	int rc = 0;
+>>> +
+>>> +	if (cmd->flags || cmd->__reserved || !cmd->data_len)
+>>> +		return -EOPNOTSUPP;
+>>> +
+>>> +	idev = iommufd_get_device(ucmd, cmd->dev_id);
+>>> +	if (IS_ERR(idev))
+>>> +		return PTR_ERR(idev);
+>>> +
+>>> +	ops = dev_iommu_ops(idev->dev);
+>>> +	if (!ops->hw_info)
+>>> +		goto done;
+>> If the iommu driver doesn't provide a hw_info callback, it still
+>> returns success?
+> Yes, as noted in the cover letter. It's for a remark from Jason. In such
+> case, the out_data_type is NULL, it means no specific data is filled
+> in the buffer pointed by cmd->data_ptr.
+> 
+> - Let IOMMU_DEVICE_GET_HW_INFO succeed even the underlying iommu driver
+>     does not have driver-specific data to report per below remark.
+>     https://lore.kernel.org/kvm/ZAcwJSK%2F9UVI9LXu@nvidia.com/
 
-On Mon, May 15, 2023 at 4:06=E2=80=AFAM luca abeni <luca.abeni@santannapisa=
-.it> wrote:
+Oh, I overlooked that. Thanks for the explanation. It's fair enough.
 
->
-> this patch is giving me some headaches:
->
-Sorry about that.. I was also stressing out on how to get the
-reclaiming done right for the past couple of days ;-)
-
-> Vineeth Pillai <vineeth@bitbyteword.org> wrote:
-> [...]
-> >   *   Uextra:         Extra bandwidth not reserved:
-> > - *                   =3D Umax - \Sum(u_i / #cpus in the root domain)
-> > + *                   =3D Umax - this_bw
->
-> While I agree that this setting should be OK, it ends up with
->         dq =3D -Uact / Umax * dt
-> which I remember I originally tried, and gave some issues
-> (I do not remember the details, but I think if you try N
-> identical reclaiming tasks, with N > M, the reclaimed time
-> is not distributed equally among them?)
->
-I have noticed this behaviour where the reclaimed time is not equally
-distributed when we have more tasks than available processors. But it
-depended on where the task was scheduled. Within the same cpu, the
-distribution seemed to be proportional. But the tasks migrated often
-and then depending on whether the task got a whole cpu for its
-runtime or not, the reclaimed bandwidth differed. I thought that
-should be okay as it depended upon where the task landed.
-
-One other problem I saw was cpu usage spiking above max_bw leading to
-system hang sometimes. I thought stopping reclaiming when running_bw
-gets larger than max_bw(in 4th patch) fixed this, but when I ran the
-tests long enough, I did see this hang.
-
-> I need to think a little bit more about this...
->
-Thanks for looking into this.. I have a basic idea why tasks with less
-bandwidth reclaim less in SMP when number of tasks is less than number
-of cpus, but do not yet have a verifiable fix for it.
-
-If patches 1 and 4 looks good to you, we shall drop 2 and 3 and fix the
-SMP issue with varying bandwidth separately.. Patch 4 would differ a
-bit when I remove 2 and 3 so as to use the formula:
- "dq =3D -(max{u, (Umax_reclaim - Uinact - Uextra)} / Umax_reclaim) dt"
-
-Thanks for your patience with all these brainstorming:-)
-
-Thanks,
-Vineeth
+Best regards,
+baolu
