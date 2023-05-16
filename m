@@ -2,82 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2364C704A87
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08916704A8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjEPK2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S232308AbjEPK3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjEPK2g (ORCPT
+        with ESMTP id S232129AbjEPK25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:28:36 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8079D;
-        Tue, 16 May 2023 03:28:34 -0700 (PDT)
-Received: from localhost ([31.220.116.19]) by mrelayeu.kundenserver.de
- (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N3Xvv-1q6wcL3nDH-010eR4; Tue, 16 May 2023 12:28:19 +0200
-Date:   Tue, 16 May 2023 12:28:18 +0200
-From:   Andreas Klinger <ak@it-klinger.de>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Tue, 16 May 2023 06:28:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702525261;
+        Tue, 16 May 2023 03:28:50 -0700 (PDT)
+Date:   Tue, 16 May 2023 10:28:48 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684232929;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hr5bExCKZxqebJdRuLy60M/3NBxhUajsShV67vDRyu0=;
+        b=gERDV1aove6Qn14UaJfZ9AOBFlHXwkapZoPBlJOOvev+r8xSttLjhBQHXJQCGPguE6v28O
+        v6YPh6ZPigTcsnYlFOunmtrrTypCda9hf6CJ0ydPn5DHXEKA4s0JLEJqIjIE+iC+/9VWuT
+        60KajN9AQulup2yfVIn+WkcZi4uW819UZKfW03fXVQnZDHVOio1xkAHtnqe+nq/eW4kcJn
+        Iq+rtb0z9X6xrUCX5Dzk7rxg5NpYKZ1UqKWrM/9bREgwiXkpSLLcg7ihz/2rT14FruYDkS
+        XCqsXYZKZdM3n14FwNaGg3DuXKIeXm6YuFiIdY5IvuRCtxWJ4vDI14ggNwIl6Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684232929;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hr5bExCKZxqebJdRuLy60M/3NBxhUajsShV67vDRyu0=;
+        b=hNMAta5HiFICdruoPlVPVB+3uP/fnCPOD3Z3etG/zpQuNNPfUKy810X1DA2EuYwTZg/Z8N
+        g4w3V7Lj4TEKhABQ==
+From:   "tip-bot2 for Yazen Ghannam" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: ras/core] x86/MCE: Check a hw error's address to determine
+ proper recovery action
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] iio: pressure: Honeywell mprls0025pa pressure
- sensor
-Message-ID: <ZGNawohZTDhPazil@arbad>
-References: <ZFUCf059+PSR+3Wb@arbad>
- <ZFUC/3zBFQRBsYUk@arbad>
- <20230506170420.71bead77@jic23-huawei>
+In-Reply-To: <20230322005131.174499-1-tony.luck@intel.com>
+References: <20230322005131.174499-1-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230506170420.71bead77@jic23-huawei>
-X-Provags-ID: V03:K1:Bd0SdWuyGMZ0Xl9NCXajCiIF4veXtIMrhG4X94KnSmKcBVJV++x
- vXSEiId2lKnB+89CFB6ZRoJyVJnFcASUCGmnpxeWfLwdy0GksCYE1A4yNS4+GDDcz5+/wax
- okXAZMIv2RRTY6wxNouDUlMBM26u7vo3fyH5WjqsPte82BbISslolYleUr5zZqjHl3Hp1p0
- 9St9RP5IMRhOlY/y+gvPg==
-UI-OutboundReport: notjunk:1;M01:P0:xQDyem14oOc=;XddJOI4rFIaxukEi9U5MCloXRWW
- UoRH3UWxE6uqmX/zSOdGE/1hUL+AL5yqRiQGrfq6M+Rwo/yRWeD8vofIN8xF6y5A69in8PAFg
- LYjIO4nXGsztQFhElNDUGvtSrBNVNVhCGUXd8S/MWrAZrVUqY33xbmJTVaTvfd9NJ4t9PcfUe
- WCrVjzL2ERdkj0Sn0gumKjwFa2V0sxwQMg4n5LtCi5ppg4Sd0AvS9SPR0hRiELuBUYn2gytHz
- GFBXJuZdSCbthbxmnF7bpAZbCzzTYMeIDpiu+/KqH2LQEdxqShzJhDq6N1YrPStPGOL7DURDv
- epTwlgocm2HCixwx5jtBg+LxZjbD7JYnAkfLYGgFn3gRowa0j3ifQgGVXps4ZnMywTuQUlpP4
- v2yoYURCCf2ERYZss2rGs2eTzq3tIpqg1lBYklO47m72MiT3Td76nZ3Ebbi+3+DYe034bMhFN
- H52/al1mnZBEg9JHRmi+qY45VM4JV5RNaKgNd+L80Tk1d9IrnDJtSO3XjLj759ZZNpHM1qIr+
- 3QDFhOa+MY6wQXEgsfgNggbmiaB6qb4mnU5KywaAwnVw2CjjvT0JhF/7oWe8s9rBTc2L8l94N
- wHev/g0TD7rE8ny1+BMFirmp4+ctNcWbJZYruwEVN+LryDNd+vdEr++VKFw6Mhavk38qAJPWt
- /nG+s4IPFWI+w1EuCQh+sqzdxp1yYpOG88GrLhG33g==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168423292833.404.13379284574944485895.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+The following commit has been merged into the ras/core branch of tip:
 
-thanks for your review. I have one comment.
+Commit-ID:     e40879b6d7d858b03813cd53c17dfef9c297f525
+Gitweb:        https://git.kernel.org/tip/e40879b6d7d858b03813cd53c17dfef9c297f525
+Author:        Yazen Ghannam <yazen.ghannam@amd.com>
+AuthorDate:    Fri, 08 Jan 2021 04:00:35 
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Tue, 16 May 2023 12:16:22 +02:00
 
-Jonathan Cameron <jic23@kernel.org> schrieb am Sa, 06. Mai 17:04:
-> > +	int                     scale;          /* int part of scale */
-> > +	int                     scale2;         /* nano part of scale */
-> > +	int                     offset;         /* int part of offset */
-> > +	int                     offset2;        /* nano part of offset */
-> > +	struct gpio_desc	*gpiod_reset;	/* reset */
-> > +	int			irq;		/* end of conversion irq */
-> 
-> Only needed in probe, no need for a copy in here.
+x86/MCE: Check a hw error's address to determine proper recovery action
 
-It's also used in mpr_read_pressure() to distinguish the two possible operation
-modes:
-- waiting for an interrupt
-- reading in a loop until status indicates data ready
+Make sure that machine check errors with a usable address are properly
+marked as poison.
 
-Andreas
+This is needed for errors that occur on memory which have
+MCG_STATUS[RIPV] clear - i.e., the interrupted process cannot be
+restarted reliably. One example is data poison consumption through the
+instruction fetch units on AMD Zen-based systems.
+
+The MF_MUST_KILL flag is passed to memory_failure() when
+MCG_STATUS[RIPV] is not set. So the associated process will still be
+killed.  What this does, practically, is get rid of one more check to
+kill_current_task with the eventual goal to remove it completely.
+
+Also, make the handling identical to what is done on the notifier path
+(uc_decode_notifier() does that address usability check too).
+
+The scenario described above occurs when hardware can precisely identify
+the address of poisoned memory, but execution cannot reliably continue
+for the interrupted hardware thread.
+
+  [ bp: Massage commit message. ]
+
+Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Link: https://lore.kernel.org/r/20230322005131.174499-1-tony.luck@intel.com
+---
+ arch/x86/kernel/cpu/mce/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 2eec60f..22dfcb2 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1533,7 +1533,7 @@ noinstr void do_machine_check(struct pt_regs *regs)
+ 		/* If this triggers there is no way to recover. Die hard. */
+ 		BUG_ON(!on_thread_stack() || !user_mode(regs));
+ 
+-		if (kill_current_task)
++		if (!mce_usable_address(&m))
+ 			queue_task_work(&m, msg, kill_me_now);
+ 		else
+ 			queue_task_work(&m, msg, kill_me_maybe);
