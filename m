@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68200704557
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61E7704559
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjEPGcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S230222AbjEPGch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjEPGcU (ORCPT
+        with ESMTP id S230239AbjEPGcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:32:20 -0400
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CAB1FD2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:32:18 -0700 (PDT)
-Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-77d46c7dd10so2146433241.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:32:18 -0700 (PDT)
+        Tue, 16 May 2023 02:32:32 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407C430EE
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:32:28 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f450815d02so45738565e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 23:32:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684218737; x=1686810737;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=axvwDlJhYgeMBtyqkqSId5dpb2QAvw4DQSOjPByvMPo=;
-        b=Wnx3hBFLkV2ByW1MGim/2vrjyZUZq2Icg7yvp8hzN1xRjM3trwY6Yy7dDA2OnBEG+w
-         IcvBuGp+2Nvy4hfWbvOViHtu58ddWIEfhH7c4TRwogb9AjHAdPmvHAY1/ClLuQ/TnL04
-         G3+kKGMlQaOWSYpvzkEN3VZ0T9OiaHWF9XOl/4rlTtHy7aE3jwN6noyyGXi7tCNHZmd/
-         sLTSu5oXJ2Nq+Gs3+/wsINjam2xqifUuCWhYQ+pgRv724gcPAJvOE7tHVr8codXkcrxs
-         xGYGWLhUC/T/M539/3qwPyGoYcaF1UNmP/YIsOfTbVuElGczLXRJb8ty2kqy+sJ3OdXf
-         xieA==
+        d=linaro.org; s=google; t=1684218746; x=1686810746;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7lBYj8ubshxFZMV2M2dh3Q9GAqRDgdmnrPLpkRcqheE=;
+        b=E7lp2/zxyUfWM8mqSnWBx6Gr8T9y0wx04g6j0kApgXCCZGdq+5Cqhc0NbQK8ivHOQQ
+         yrHN0xqzSaWjlJI60THjkLSNGD+MGbVsPx9pofbL7K4gMA/PatIBvXwbMi3rIiZ5VAe7
+         5OwfEXWu56qIfV27q9jBo6dOoRP1WBsfR13geRY0RMvCQrGb74RALdM5Qqdy6BM3zj/7
+         aCbJ5u5r0OLhTyq9YA/bfQUtjG+5/hHjgpMjrt9p87UNP+LVX8mo/TDYZs/a5sEDgpUH
+         gSR6fZcFkaTRnqH16wXEJ9jyc4wnCy63Ui7/eXvLv6cvGHWUpK/wBsiFXnMMJlXnK1oz
+         iFcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684218737; x=1686810737;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=axvwDlJhYgeMBtyqkqSId5dpb2QAvw4DQSOjPByvMPo=;
-        b=P0eo8GXp4fS/TbVN4SCoFpxH1Z7YtZ9dy5fT8fNIs/kmfjK3vH2rYZTqn9Mvhz0cdp
-         NyWwJFJKaMY8RSD9PjBqi3VvUYH74YJj193BMhmgbcwYmBiJ5ciKolOtcDJMIWfaHQSn
-         fvcNBznM0KwK29SNz2dlVctw30FaBZvgRgK3uTyvfv5TZjXugvulvbhNMCYVzOYX0Yyb
-         KhUzdyo/jTWBi6/lIaBe9LhMjhH6Ir08QDKomcfRfrsaxq7E1nDCGDzqyd+7wz5Lfbu3
-         2fCU/FRqNkm9/vxtSBKxYOz/qQvhzcY58sx6Fg1QcIk1W1MxeAjJmfYRTOR2HTS5kwbG
-         J93Q==
-X-Gm-Message-State: AC+VfDzfUrPFYsUMb0bvNwrUv1kQm3rl4CWb31nl0BoUuo2Nx6y+1wO5
-        OYKKr62unO+hYXpyyFFlyKk3RiEGEMQ8qcAAulP1zQeYjzHsFUyB
-X-Google-Smtp-Source: ACHHUZ6Vz+vpk+6Vmj9hy23uyjYdsRCV2Ghpq0/6Cz6eY41nPHbCWitRI9h/vo4jD/d6GOy23maDHf3HCxSbQgQ1+/M=
-X-Received: by 2002:a05:6102:5124:b0:42e:5b08:ec71 with SMTP id
- bm36-20020a056102512400b0042e5b08ec71mr15940123vsb.11.1684218737433; Mon, 15
- May 2023 23:32:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684218746; x=1686810746;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7lBYj8ubshxFZMV2M2dh3Q9GAqRDgdmnrPLpkRcqheE=;
+        b=X1ozbciTwLbSDXA3KZ1y5Xl+MnVItXCePG+Zx/BgVu0jO1SrdaAoG4GrzlwWc4cuP0
+         +fI4EylxWi0gpZLrTliFye87lTl2oji+AwiaxGt7R1JYET/354YqAbYi9ucxyWHuJ/bW
+         3e2690Xb61R4pBetMUohj4LeRMXh/CTwbUJdMjEUox25x/avbTaNPeb7P9Jw8KOBMsAQ
+         MgS46ZjDIF3I4TaMVarwJ2gxJJf4lrvY/OZ7s3LZH/GResjk8e/GPx4Hx1RHnOM+a4uC
+         UPZe6riK9Di57U0MJpN6nqqXrQihx5mizJ1ZIZ+Gyxk6XtEghEhi8W/txT1/fIt0IdH6
+         bW8w==
+X-Gm-Message-State: AC+VfDz7pqqynm5HjjaGQo5oxVHuR92P7QddzIwoWXCTWH5icnbkDBUO
+        BkovQkeNEVMm/vTxYvZoq0R77g==
+X-Google-Smtp-Source: ACHHUZ6eWEwQhXAz42LEWVAzrvtlzhMX2ISlzyfQB+Oi5NjYsZ6Fh6C0/XVxtBWtmHuOEgl00zRU3A==
+X-Received: by 2002:adf:ee46:0:b0:306:26d7:3805 with SMTP id w6-20020adfee46000000b0030626d73805mr27228159wro.63.1684218746523;
+        Mon, 15 May 2023 23:32:26 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05600c214900b003f42158288dsm1151344wml.20.2023.05.15.23.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 23:32:24 -0700 (PDT)
+Date:   Tue, 16 May 2023 09:32:20 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: drivers/block/drbd/drbd_worker.c:588 make_resync_request() warn:
+ variable dereferenced before check 'peer_device' (see line 587)
+Message-ID: <4b953dfb-fb5b-4f12-87b2-0ad667581106@kili.mountain>
 MIME-Version: 1.0
-References: <20230505173012.881083-1-etienne.carriere@linaro.org>
- <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
- <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com>
- <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com>
- <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
- <CAN5uoS8HF5ymsjkLthFnoQxBHQ3TOVonycTH3g5K76qKzUniuA@mail.gmail.com>
- <CAFA6WYMBoUom6yr-BGzfJKLsuQLPEkkcS021mf-KjCfkt-ejJw@mail.gmail.com>
- <CAN5uoS8mj35qXdhHaHVsiuEJ4PtZWCRn=OmNUDrQM=JjFc7P0w@mail.gmail.com>
- <CAFA6WYMTtxt4XCbHuoj9gJyxLeAK=a98C5e2JtPHvTtB527MEw@mail.gmail.com> <CAN5uoS8jacBOfBxSWkPrc7+MjoG3zJPjXCOiJwhGM4gBQUypow@mail.gmail.com>
-In-Reply-To: <CAN5uoS8jacBOfBxSWkPrc7+MjoG3zJPjXCOiJwhGM4gBQUypow@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Tue, 16 May 2023 12:02:06 +0530
-Message-ID: <CAFA6WYOTCNAfr6QYmR_F3qOzxB4qJKQQSBu9qEdv=Dfzn1oH3Q@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -78,251 +74,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 at 11:28, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Hello Sumit,
->
-> On Mon, 15 May 2023 at 10:48, Sumit Garg <sumit.garg@linaro.org> wrote:
-> >
-> > On Fri, 12 May 2023 at 10:27, Etienne Carriere
-> > <etienne.carriere@linaro.org> wrote:
-> > >
-> > > On Thu, 11 May 2023 at 13:31, Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > >
-> > > > On Thu, 11 May 2023 at 13:49, Etienne Carriere
-> > > > <etienne.carriere@linaro.org> wrote:
-> > > > >
-> > > > > On Thu, 11 May 2023 at 09:27, Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > > > > (snip)
-> > > > > > > > > >
-> > > > > > > > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
-> > > > > > > > > > +{
-> > > > > > > > > > +       bool rc = false;
-> > > > > > > > > > +
-> > > > > > > > > > +       mutex_lock(&cq->mutex);
-> > > > > > > > > > +
-> > > > > > > > > > +       /* Leave at least 1 normal (non-system) thread */
-> > > > > > > > >
-> > > > > > > > > IMO, this might be counter productive. As most kernel drivers open a
-> > > > > > > > > session during driver probe which are only released in the driver
-> > > > > > > > > release method.
-> > > > > > > >
-> > > > > > > > It is always the case?
-> > > > > > >
-> > > > > > > This answer of mine is irrelevant. Sorry,
-> > > > > > > Please read only the below comments of mine, especially:
-> > > > > > > | Note that an OP-TEE thread is not bound to a TEE session but rather
-> > > > > > > | bound to a yielded call to OP-TEE.
-> > > > > > >
-> > > > > > > >
-> > > > > > > > > If the kernel driver is built-in then the session is
-> > > > > > > > > never released. Now with system threads we would reserve an OP-TEE
-> > > > > > > > > thread for that kernel driver as well which will never be available to
-> > > > > > > > > regular user-space clients.
-> > > > > > > >
-> > > > > > > > That is not true. No driver currently requests their TEE thread to be
-> > > > > > > > a system thread.
-> > > > > > > > Only SCMI does because it needs to by construction.
-> > > > > > > >
-> > > > > >
-> > > > > > Yes that's true but what prevents future/current kernel TEE drivers
-> > > > > > from requesting a system thread once we have this patch-set landed.
-> > > > >
-> > > > > Only clients really needing this system_thread attribute should request it.
-> > > > > If they really need, the OP-TEE firmware in secure world should
-> > > > > provision sufficient thread context.
-> > > >
-> > > > How do we quantify it? We definitely need a policy here regarding
-> > > > normal vs system threads.
-> > > >
-> > > > One argument in favor of kernel clients requiring system threads could
-> > > > be that we don't want to compete with user-space for OP-TEE threads.
-> > >
-> > > Sorry I don't understand. What do you mean qualifying this?
-> >
-> > I mean we have to fairly allocate threads among system and non-system
-> > thread invocations.
-> >
-> > > In an ideal situation, we would have OP-TEE provisioned with largely
-> > > sufficient thread contexts. However there are systems with constraints
-> > > memory resource that do lower at most the number of OP-TEE thread
-> > > contexts.
-> > >
-> >
-> > Yeah, I think we are on the same page here.
-> >
-> > >
-> > >
-> > > >
-> > > > >
-> > > > > >
-> > > > > > > >
-> > > > > > > > > So I would rather suggest we only allow a
-> > > > > > > > > single system thread to be reserved as a starting point which is
-> > > > > > > > > relevant to this critical SCMI service. We can also make this upper
-> > > > > > > > > bound for system threads configurable with default value as 1 if
-> > > > > > > > > needed.
-> > > > > > >
-> > > > > > > Note that SCMI server can expose several SCMI channels (at most 1 per
-> > > > > > > SCMI protocol used) and each of them will need to request a
-> > > > > > > system_thread to TEE driver.
-> > > > > > >
-> > > > > > > Etienne
-> > > > > > >
-> > > > > > > >
-> > > > > > > > Reserving one or more system threads depends on the number of thread
-> > > > > > > > context provisioned by the TEE.
-> > > > > > > > Note that the implementation proposed here prevents Linux kernel from
-> > > > > > > > exhausting TEE threads so user space always has at least a TEE thread
-> > > > > > > > context left available.
-> > > > > >
-> > > > > > Yeah but on the other hand user-space clients which are comparatively
-> > > > > > larger in number than kernel clients. So they will be starved for
-> > > > > > OP-TEE thread availability. Consider a user-space client which needs
-> > > > > > to serve a lot of TLS connections just waiting for OP-TEE thread
-> > > > > > availability.
-> > > > >
-> > > > > Note that OP-TEE default configuration provisions (number of CPUs + 1)
-> > > > > thread context, so the situation is already present before these
-> > > > > changes on systems that embedded an OP-TEE without a properly tuned
-> > > > > configuration. As I said above, Linux kernel cannot be responsible for
-> > > > > the total number of thread contexts provisioned in OP-TEE. If the
-> > > > > overall system requires a lot of TEE thread contexts, one should embed
-> > > > > a suitable OP-TEE firmware.
-> > > >
-> > > > Wouldn't the SCMI deadlock problem be solved with just having a lot of
-> > > > OP-TEE threads? But we are discussing the system threads solution here
-> > > > to make efficient use of OP-TEE threads. The total number of OP-TEE
-> > > > threads is definitely in control of OP-TEE but the control of how to
-> > > > schedule and efficiently use them lies with the Linux OP-TEE driver.
-> > > >
-> > > > So, given our overall discussion in this thread, how about the upper
-> > > > bound for system threads being 50% of the total number of OP-TEE
-> > > > threads?
-> > >
-> > > What would be a shame if the system does not use any Linux kernel
-> > > client sessions, only userland clients. This information cannot be
-> > > knwon be the linux optee driver.
-> > > Instead of leaving at least 1 TEE thread context for regular session,
-> > > what if this change enforce 2? or 3? Which count?
-> > > I think 1 is a fair choice: it allows to support OP-TEE firmwares with
-> > > a very small thread context pool (when running in small secure
-> > > memory), embedding only 2 or 3 contextes.
-> >
-> > IMO, leaving only 1 thread for user-space will starve TLS based
-> > applications. How about the following change on top of this patchset?
-> >
-> > diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> > index 8b8181099da7..1deb5907d075 100644
-> > --- a/drivers/tee/optee/call.c
-> > +++ b/drivers/tee/optee/call.c
-> > @@ -182,8 +182,8 @@ bool optee_cq_inc_sys_thread_count(struct
-> > optee_call_queue *cq)
-> >
-> >         mutex_lock(&cq->mutex);
-> >
-> > -       /* Leave at least 1 normal (non-system) thread */
-> > -       if (cq->res_sys_thread_count + 1 < cq->total_thread_count) {
-> > +       /* Leave at least 50% for normal (non-system) threads */
-> > +       if (cq->res_sys_thread_count < cq->total_thread_count/2) {
-> >                 cq->free_normal_thread_count--;
-> >                 cq->res_sys_thread_count++;
-> >                 rc = true;
-> >
-> > >
-> > > >
-> > > > >
-> > > > > >
-> > > > > > > >
-> > > > > > > > Note that an OP-TEE thread is not bound to a TEE session but rather
-> > > > > > > > bound to a yielded call to OP-TEE.
-> > > > > >
-> > > > > > tee_client_open_session()
-> > > > > >   -> optee_open_session()
-> > > > > >
-> > > > > > tee_client_system_session()
-> > > > > >   -> optee_system_session()
-> > > > > >     -> optee_cq_inc_sys_thread_count()       <- At this point you
-> > > > > > reserve a system thread corresponding to a particular kernel client
-> > > > > > session
-> > > > > >
-> > > > > > All tee_client_invoke_func() invocations with a system thread capable
-> > > > > > session will use that reserved thread.
-> > > > > >
-> > > > > > tee_client_close_session()
-> > > > > >   -> optee_close_session()
-> > > > > >     -> optee_close_session_helper()
-> > > > > >       -> optee_cq_dec_sys_thread_count()    <- At this point the
-> > > > > > reserved system thread is released
-> > > > > >
-> > > > > > Haven't this tied the system thread to a particular TEE session? Or am
-> > > > > > I missing something?
-> > > > >
-> > > > > These changes do not define an overall single system thread.
-> > > > > If several sessions requests reservation of TEE system thread, has
-> > > > > many will be reserved.
-> > > > > Only the very sessions with its sys_thread attribute set will use a
-> > > > > reserved thread. If such a kernel client issues several concurrent
-> > > > > calls to OP-TEE over that session, it will indeed consume more
-> > > > > reserved system threads than what is actually reserved. Here I think
-> > > > > it is the responsibility of such client to open as many sessions as
-> > > > > requests. This is what scmi/optee driver does (see patch v6 4/4). An
-> > > > > alternative would be to have a ref count of sys_thread in session
-> > > > > contexts rather than a boolean value. I don't think it's worth it.
-> > > >
-> > > > Ah, I missed that during the review. The invocations with system
-> > > > threads should be limited by res_sys_thread_count in a similar manner
-> > > > as we do with normal threads via free_normal_thread_count. Otherwise,
-> > > > it's unfair for normal thread scheduling.
-> > > >
-> > > > I suppose there isn't any interdependency among SCMI channels itself
-> > > > such that a particular SCMI invocation can wait until the other SCMI
-> > > > invocation has completed.
-> > >
-> > > I think that would over complexify the logic.
-> > >
-> >
-> > We shouldn't allow system thread invocations to be greater than what
-> > is actually reserved count for system threads. One thing I am not able
-> > to understand here is why do you need a lot of system threads? Are
-> > SCMI operations too expensive? I suppose those should just involve
-> > configuring some register bits and using a single OP-TEE thread which
-> > is invoked sequentially should be enough.
->
-> Ok, I get your point.
-> I think you're right, reserving at most 1 TEE thread for system
-> sessions should be enough to prevent TEE entry calls deadlocks which
-> is the purpose of these changee.
->
-> Would you be ok if the following logic: optee driver would reserve at
-> most 1 TEE call entry for system sessions.
-> If at least 1 kernel client claims a system session, a TEE call entry
-> is reserved to that purpose.
-> Once all system sessions are closed, the TEE reserved system call
-> entry is released.
-> When a system thread calls the TEE, if the TEE system thread context
-> is not already in use, then that client consumes the reserved entry.
-> If the system thread context is already in use, then that client call
-> is treated as a regular call: it calls the TEE and would return
-> waiting for a free thread if no TEE thread context is available.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+commit: 0d11f3cf279c5ad20a41f29242f170ba3c02f2da drbd: Pass a peer device to the resync and online verify functions
+config: csky-randconfig-m031-20230515
+compiler: csky-linux-gcc (GCC) 12.1.0
 
-Yeah this sounds reasonable to me.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305160126.PAmfRexV-lkp@intel.com/
 
--Sumit
+smatch warnings:
+drivers/block/drbd/drbd_worker.c:588 make_resync_request() warn: variable dereferenced before check 'peer_device' (see line 587)
 
->
-> Etienne
->
->
-> >
-> > -Sumit
-> >
-> > > Note I will send a patch v8 series but feel free to continue the discussion.
-> > > It will at least address other comments you shared.
-> > >
-> > > Best regards,
-> > > Etienne
-> > >
-> > > >
-> > > > -Sumit
+vim +/peer_device +588 drivers/block/drbd/drbd_worker.c
+
+e65f440d474d7d Lars Ellenberg       2010-11-05  584  
+0d11f3cf279c5a Christoph Böhmwalder 2023-03-30  585  static int make_resync_request(struct drbd_peer_device *const peer_device, int cancel)
+b411b3637fa71f Philipp Reisner      2009-09-25  586  {
+0d11f3cf279c5a Christoph Böhmwalder 2023-03-30 @587  	struct drbd_device *const device = peer_device->device;
+                                                                                           ^^^^^^^^^^^^^^^^^^^
+Dereference.
+
+44a4d551846b8c Lars Ellenberg       2013-11-22 @588  	struct drbd_connection *const connection = peer_device ? peer_device->connection : NULL;
+                                                                                                   ^^^^^^^^^^^^^
+The existing code assumes "peer_device" can be NULL.
+
+b411b3637fa71f Philipp Reisner      2009-09-25  589  	unsigned long bit;
+b411b3637fa71f Philipp Reisner      2009-09-25  590  	sector_t sector;
+155bd9d1abd604 Christoph Hellwig    2020-09-25  591  	const sector_t capacity = get_capacity(device->vdisk);
+1816a2b47afae8 Lars Ellenberg       2010-11-11  592  	int max_bio_size;
+e65f440d474d7d Lars Ellenberg       2010-11-05  593  	int number, rollback_i, size;
+506afb6248af57 Lars Ellenberg       2014-01-31  594  	int align, requeue = 0;
+0f0601f4ea2f53 Lars Ellenberg       2010-08-11  595  	int i = 0;
+92d94ae66aebda Philipp Reisner      2016-06-14  596  	int discard_granularity = 0;
+b411b3637fa71f Philipp Reisner      2009-09-25  597  
+b411b3637fa71f Philipp Reisner      2009-09-25  598  	if (unlikely(cancel))
+99920dc5c5fe52 Andreas Gruenbacher  2011-03-16  599  		return 0;
+b411b3637fa71f Philipp Reisner      2009-09-25  600  
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  601  	if (device->rs_total == 0) {
+af85e8e83d160f Lars Ellenberg       2010-10-07  602  		/* empty resync? */
+0d11f3cf279c5a Christoph Böhmwalder 2023-03-30  603  		drbd_resync_finished(peer_device);
+
+More new unchecked dereferences.
+
+99920dc5c5fe52 Andreas Gruenbacher  2011-03-16  604  		return 0;
+af85e8e83d160f Lars Ellenberg       2010-10-07  605  	}
+af85e8e83d160f Lars Ellenberg       2010-10-07  606  
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  607  	if (!get_ldev(device)) {
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  608  		/* Since we only need to access device->rsync a
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  609  		   get_ldev_if_state(device,D_FAILED) would be sufficient, but
+b411b3637fa71f Philipp Reisner      2009-09-25  610  		   to continue resync with a broken disk makes no sense at
+b411b3637fa71f Philipp Reisner      2009-09-25  611  		   all */
+d01801710265cf Andreas Gruenbacher  2011-07-03  612  		drbd_err(device, "Disk broke down during resync!\n");
+99920dc5c5fe52 Andreas Gruenbacher  2011-03-16  613  		return 0;
+b411b3637fa71f Philipp Reisner      2009-09-25  614  	}
+b411b3637fa71f Philipp Reisner      2009-09-25  615  
+9104d31a759fba Lars Ellenberg       2016-06-14  616  	if (connection->agreed_features & DRBD_FF_THIN_RESYNC) {
+
+But this dereference isn't checked either so hopefully "peer_device"
+can't be NULL.
+
+92d94ae66aebda Philipp Reisner      2016-06-14  617  		rcu_read_lock();
+92d94ae66aebda Philipp Reisner      2016-06-14  618  		discard_granularity = rcu_dereference(device->ldev->disk_conf)->rs_discard_granularity;
+92d94ae66aebda Philipp Reisner      2016-06-14  619  		rcu_read_unlock();
+92d94ae66aebda Philipp Reisner      2016-06-14  620  	}
+92d94ae66aebda Philipp Reisner      2016-06-14  621  
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  622  	max_bio_size = queue_max_hw_sectors(device->rq_queue) << 9;
+0d11f3cf279c5a Christoph Böhmwalder 2023-03-30  623  	number = drbd_rs_number_requests(peer_device);
+0e49d7b014c5d5 Lars Ellenberg       2014-04-28  624  	if (number <= 0)
+0f0601f4ea2f53 Lars Ellenberg       2010-08-11  625  		goto requeue;
+b411b3637fa71f Philipp Reisner      2009-09-25  626  
+b411b3637fa71f Philipp Reisner      2009-09-25  627  	for (i = 0; i < number; i++) {
+506afb6248af57 Lars Ellenberg       2014-01-31  628  		/* Stop generating RS requests when half of the send buffer is filled,
+506afb6248af57 Lars Ellenberg       2014-01-31  629  		 * but notify TCP that we'd like to have more space. */
+44a4d551846b8c Lars Ellenberg       2013-11-22  630  		mutex_lock(&connection->data.mutex);
+44a4d551846b8c Lars Ellenberg       2013-11-22  631  		if (connection->data.socket) {
+506afb6248af57 Lars Ellenberg       2014-01-31  632  			struct sock *sk = connection->data.socket->sk;
+506afb6248af57 Lars Ellenberg       2014-01-31  633  			int queued = sk->sk_wmem_queued;
+506afb6248af57 Lars Ellenberg       2014-01-31  634  			int sndbuf = sk->sk_sndbuf;
+506afb6248af57 Lars Ellenberg       2014-01-31  635  			if (queued > sndbuf / 2) {
+506afb6248af57 Lars Ellenberg       2014-01-31  636  				requeue = 1;
+506afb6248af57 Lars Ellenberg       2014-01-31  637  				if (sk->sk_socket)
+506afb6248af57 Lars Ellenberg       2014-01-31  638  					set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
+b411b3637fa71f Philipp Reisner      2009-09-25  639  			}
+506afb6248af57 Lars Ellenberg       2014-01-31  640  		} else
+506afb6248af57 Lars Ellenberg       2014-01-31  641  			requeue = 1;
+44a4d551846b8c Lars Ellenberg       2013-11-22  642  		mutex_unlock(&connection->data.mutex);
+506afb6248af57 Lars Ellenberg       2014-01-31  643  		if (requeue)
+b411b3637fa71f Philipp Reisner      2009-09-25  644  			goto requeue;
+b411b3637fa71f Philipp Reisner      2009-09-25  645  
+b411b3637fa71f Philipp Reisner      2009-09-25  646  next_sector:
+b411b3637fa71f Philipp Reisner      2009-09-25  647  		size = BM_BLOCK_SIZE;
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  648  		bit  = drbd_bm_find_next(device, device->bm_resync_fo);
+b411b3637fa71f Philipp Reisner      2009-09-25  649  
+4b0715f09655e7 Lars Ellenberg       2010-12-14  650  		if (bit == DRBD_END_OF_BITMAP) {
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  651  			device->bm_resync_fo = drbd_bm_bits(device);
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  652  			put_ldev(device);
+99920dc5c5fe52 Andreas Gruenbacher  2011-03-16  653  			return 0;
+b411b3637fa71f Philipp Reisner      2009-09-25  654  		}
+b411b3637fa71f Philipp Reisner      2009-09-25  655  
+b411b3637fa71f Philipp Reisner      2009-09-25  656  		sector = BM_BIT_TO_SECT(bit);
+b411b3637fa71f Philipp Reisner      2009-09-25  657  
+0d11f3cf279c5a Christoph Böhmwalder 2023-03-30  658  		if (drbd_try_rs_begin_io(peer_device, sector)) {
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  659  			device->bm_resync_fo = bit;
+b411b3637fa71f Philipp Reisner      2009-09-25  660  			goto requeue;
+b411b3637fa71f Philipp Reisner      2009-09-25  661  		}
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  662  		device->bm_resync_fo = bit + 1;
+b411b3637fa71f Philipp Reisner      2009-09-25  663  
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  664  		if (unlikely(drbd_bm_test_bit(device, bit) == 0)) {
+b30ab7913b0a7b Andreas Gruenbacher  2011-07-03  665  			drbd_rs_complete_io(device, sector);
+b411b3637fa71f Philipp Reisner      2009-09-25  666  			goto next_sector;
+b411b3637fa71f Philipp Reisner      2009-09-25  667  		}
+b411b3637fa71f Philipp Reisner      2009-09-25  668  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
+
