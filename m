@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CC970477A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69051704780
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjEPIMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S231543AbjEPIMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjEPIL4 (ORCPT
+        with ESMTP id S230522AbjEPIMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:11:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4E010EF;
-        Tue, 16 May 2023 01:11:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684224715; x=1715760715;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4PmBifolSayMyjTDCnehOHENnUmjyS1+9ipEjl7yTUA=;
-  b=f/oHd5HciG8h24RZBMLPQiJzEWQEdh+DB0IhsPVj/zjI1dIM0ujf/4dy
-   +/lqTY5T+N1cP9725v31CWFI6yE3QFG6+8UcR0Y51PbtRNAINLOc4Ly1w
-   qX7dKlqeirr9rMVah47gDTZwMwWwhosCHXekP+tIBw0ZjiL6yYUtyIw8N
-   EpLG6IbvJ2hehWyjFFzVebu0oLb2rbeiFKUcDYWQ0kI/zfQ62SgiKUOue
-   a1+u2gH29ME/tqrOAl6vRHMqTCHw919WKXw3qHEbB0jZ7iY6gGK7WChrC
-   iqoffNrhzZ7UBGh6Top4ebGVWqq/LrQkexG5qtaJN4v+H+huHZVRmHnAo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="335960725"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="335960725"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 01:11:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="1031208455"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="1031208455"
-Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([143.185.115.141])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 01:11:52 -0700
-Message-ID: <1d425030407e11d776070e8ef12ce51dac3e0147.camel@intel.com>
-Subject: Re: [PATCH v3] media: uapi: v4l: Intel metadata format update
-From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
-To:     Sakari Ailus <sakari.ailus@intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
-        linux-kernel@vger.kernel.org, laurent.pinchart@ideasonboard.com,
-        evgeni.raikhel@intel.com, demisrael@gmail.com
-Date:   Tue, 16 May 2023 11:11:49 +0300
-In-Reply-To: <ZGIp7E94eAW7UFSP@valkosipuli.retiisi.eu>
-References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
-         <ZGIp7E94eAW7UFSP@valkosipuli.retiisi.eu>
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 16 May 2023 04:12:50 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C4B40C1;
+        Tue, 16 May 2023 01:12:48 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9C68D5C0199;
+        Tue, 16 May 2023 04:12:46 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 16 May 2023 04:12:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684224766; x=1684311166; bh=zJFhqzNVhoR5l
+        m67xTo7+8wzlRuT2gv3QZpUUtl4vAk=; b=kL9k898xjep0Tp0/oJBfkJH/wHpG2
+        mykreL0o7AnLiO1vuWsemCE7FvmFA2tMFUxkE0RWC10d/9EqRzoVruXM1JqQqMT4
+        UTZu0p4soAC2RdwYeUbwHBhJcDHIVJlC+oHLlgCld00SVhKZBwBPsZyZEXy28380
+        NATyCxCz+CwXg8WQ8Hkt2omSPpoJmmHWb9x3Eh9BurgmNRD4aXPB3DF0xhg/m1nz
+        FEIP73RpeFmM0XP/i6YPTKh+/Uh0JWquLj6gDacubRJca4Z/La2bdyryU+SfHVs2
+        ESZJAXCTJUW01+D+iw8FVUBz4Topz4W/38aTA9ZMQzj3WEv1Ssf6HRfYQ==
+X-ME-Sender: <xms:_jpjZC5LirHSlK2kKkJi8AaxKjDfs75zwQ7aO3-fa1zVFq-Ki6akWA>
+    <xme:_jpjZL5yy1FcoRN_kRoswaw6-zRlkreaqqhqL5_ISCEbuxh2SGZBkTwrtKaoXr9IO
+    O1qltp27cxg3TQ>
+X-ME-Received: <xmr:_jpjZBfnPh_auZCM6Em6XtbbMEMxkuQXtPmj0tePBcFPOLyYM8gnkD3ZM7-DfwrJu3sw2XVKCSKbRV0uR3tXADhKOvg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgtdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
+    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:_jpjZPJ6fhEbsnWPazme88GnEzfa_kTTodoc5_VGXShe1hSnK0k32w>
+    <xmx:_jpjZGKJq4TS4Ps4rwbcf4-1UJT0UfGVidTlltRKLWuLwl5RhNKMdQ>
+    <xmx:_jpjZAwntr38fpIHjxwqmeSMQR2t9Vs6oydib71ayWgTiLDRTW4bwA>
+    <xmx:_jpjZIiZoeviI0qQuL35POudnpiE44l151vcJ6fvIMarFu0rrm4vzg>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 May 2023 04:12:45 -0400 (EDT)
+Date:   Tue, 16 May 2023 11:12:42 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "dsahern@kernel.org" <dsahern@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] net: Remove low_thresh in ip defrag
+Message-ID: <ZGM6+oaSOXNlf8u2@shredder>
+References: <20230512010152.1602-1-angus.chen@jaguarmicro.com>
+ <ZGIRWjNcfqI8yY8W@shredder>
+ <TY2PR06MB34243E08982541B8371E913085789@TY2PR06MB3424.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TY2PR06MB34243E08982541B8371E913085789@TY2PR06MB3424.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-15 at 15:47 +0300, Sakari Ailus wrote:
-> Hi Dmitry,
-> =
+On Mon, May 15, 2023 at 12:06:45PM +0000, Angus Chen wrote:
+> > -----Original Message-----
+> > From: Ido Schimmel <idosch@idosch.org>
+> > Sent: Monday, May 15, 2023 7:03 PM
+> > To: Angus Chen <angus.chen@jaguarmicro.com>
+> > Cc: davem@davemloft.net; dsahern@kernel.org; edumazet@google.com;
+> > kuba@kernel.org; pabeni@redhat.com; netdev@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH v2] net: Remove low_thresh in ip defrag
+> > 
+> > On Fri, May 12, 2023 at 09:01:52AM +0800, Angus Chen wrote:
+> > > As low_thresh has no work in fragment reassembles,del it.
+> > > And Mark it deprecated in sysctl Document.
+> > >
+> > > Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+> > 
+> > Getting the following traces with this patch when creating a netns:
+> Sorry for test miss because I tested it in card and didn't test it with multi net.
+> Should I create a pernet struct for it?
+> It may looks too complicated.
 
-> On Sun, May 14, 2023 at 12:36:50PM +0300, Dmitry Perchanov wrote:
-> > Update metadata structure for Intel RealSense UVC/MIPI cameras.
-> > Compliant to Intel Configuration version 3.
-> > =
-
-> > Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
-> =
-
-> Could you reply my comments on v2 and use my @intel.com address going
-> forward?
-It's done.
-Thanks.
-> =
-
-> Thanks.
-> =
-
-
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
-
+Sorry but I don't understand the motivation behind this patch. IIUC, the
+sysctl is deprecated and has no use in the kernel, yet it cannot be
+removed because user space may rely on it being present. If so, what is
+the significance of the code changes in this patch? Why not just update
+the documentation?
