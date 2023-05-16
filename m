@@ -2,108 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C6B704D63
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFF97050D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbjEPMGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        id S233978AbjEPOcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbjEPMGp (ORCPT
+        with ESMTP id S233913AbjEPOcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:06:45 -0400
-X-Greylist: delayed 16930 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 05:06:42 PDT
-Received: from forward502a.mail.yandex.net (forward502a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d502])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A444AD;
-        Tue, 16 May 2023 05:06:42 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net [IPv6:2a02:6b8:c18:58f:0:640:3768:0])
-        by forward502a.mail.yandex.net (Yandex) with ESMTP id 226C25EB96;
-        Tue, 16 May 2023 15:06:40 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id b6aGXvFDdKo0-Qd5YAZVi;
-        Tue, 16 May 2023 15:06:39 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1684238799;
-        bh=/a6pvyDAWlMZ0z7v7y2vBNHYN4rbuFjpKaEnziP4leI=;
-        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-        b=g5DXrY5seHHIRvbxU18DdWqOc5we2o1Y9nxHH41nZKWf8C5lfFVF/OERoFLIVWtp+
-         jpVrB61ha4mlM1/4aWky+QYKvwXLHSAkat5ud5IOfqTRY9JLFOgwl5a4C88fUeVvYE
-         EBB8uQsTaJoFSlSIRvq9VeLtDSGLwIDKLTzxOlEY=
-Authentication-Results: mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <4950f67bf989a7f5eba462c44d6bdbffb34485d1.camel@maquefel.me>
-Subject: Re: [PATCH 2/2] perf vendor events riscv: add T-HEAD C9xx JSON file
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Inochi Amaoto <inochiama@outlook.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Date:   Tue, 16 May 2023 18:06:39 +0300
-In-Reply-To: <IA1PR20MB49539F3FBE068C7C811152B1BB799@IA1PR20MB4953.namprd20.prod.outlook.com>
-References: <38eaec6b495786b048f78be08470f7c770793d7b.camel@maquefel.me>
-         <IA1PR20MB49539F3FBE068C7C811152B1BB799@IA1PR20MB4953.namprd20.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Tue, 16 May 2023 10:32:12 -0400
+X-Greylist: delayed 3598 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 07:32:02 PDT
+Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BC2C2738;
+        Tue, 16 May 2023 07:32:02 -0700 (PDT)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.securetransport.de (Postfix) with ESMTPSA id 32C2E5EA7C;
+        Tue, 16 May 2023 14:37:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1684240622;
+        bh=skp/axhNMcvbtQkJMBiWbGqy7uv3b/YrL4HOY83nmFg=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
+        b=J9G1+exx3Ap1T2ZF/zWX4gTsSvd1v/UswdOxtXxJ3oscDMJikayVQh1Osz5K2lcv2
+         IUsN+slIxXQ79d9mCRC/ALlHqalgMAdiPgiVAAb26U4H92hTDiUJ5C+Ikyi0mOqyT9
+         Y3SXTvwzIvbkpcovbPNcaKkuOhtNrU2N/Ll80bDTaGDA823UkBmz79aiZ9ATlyvb4a
+         m7Dv+LQfu648ZIQkKv/oLQWdHeHMF8Ns8inh3ao3RPTj0GEPoaJzObraNfxSy2hEaS
+         8YdmOJ+nKA4VQOuk9iOeG2tGnCWXinE3HreOJQw/X/ohwK7MXSllQegMoYniq4BOqL
+         vwzVecHQTGGzw==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 16 May 2023 14:36:57 +0200
+Received: from localhost.localdomain (172.16.51.22) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Tue, 16 May 2023 14:36:56 +0200
+From:   Ludwig Zenz <lzenz@dh-electronics.com>
+To:     <tomi.valkeinen@ideasonboard.com>
+CC:     <Matti.Vaittinen@fi.rohmeurope.com>, <andriy.shevchenko@intel.com>,
+        <andriy.shevchenko@linux.intel.com>, <broonie@kernel.org>,
+        <devicetree@vger.kernel.org>, <hverkuil@xs4all.nl>,
+        <khalasa@piap.pl>, <krzysztof.kozlowski+dt@linaro.org>,
+        <laurent.pinchart+renesas@ideasonboard.com>, <lgirdwood@gmail.com>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <luca.ceresoli@bootlin.com>,
+        <m.tretter@pengutronix.de>, <marex@denx.de>, <mchehab@kernel.org>,
+        <mpagano@gentoo.org>, <peda@axentia.se>, <robh+dt@kernel.org>,
+        <sakari.ailus@linux.intel.com>, <satish.nagireddy@getcruise.com>,
+        <wsa@kernel.org>
+Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
+Date:   Tue, 16 May 2023 14:35:49 +0200
+Message-ID: <20230516123549.3120-1-lzenz@dh-electronics.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
+References: <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-klartext: yes
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-16 at 17:45 +0800, Inochi Amaoto wrote:
-> > Do c906 and c910 have same HPM events ?
-> >=20
-> > https://github.com/T-head-Semi/openc906/blob/main/C906_RTL_FACTORY/gen_=
-rtl/pmu/rtl/aq_hpcp_top.v
-> >=20
-> > and
-> >=20
-> >=20
-> > https://github.com/T-head-Semi/openc910/blob/main/C910_RTL_FACTORY/gen_=
-rtl/pmu/rtl/ct_hpcp_top.v
-> >=20
-> > Look different to me - am i missing something ?
->=20
-> Yes, they as different, but event ids are compatible. See [1] p.99
-> and [2] p.73.
->=20
-> It seems I forgot extra event index from C906. I will fix in the v2.
->=20
-> [1]
-> https://github.com/T-head-Semi/openc910/blob/main/doc/%E7%8E%84%E9%93%81C=
-910%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C.pdf
-> [2]
-> https://github.com/T-head-Semi/openc906/blob/main/doc/%E7%8E%84%E9%93%81C=
-906%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C.pdf
+On Wed, 26 Apr 2023 14:51:12 +0300, Tomi Valkeinen wrote:
 
-They are not the same - they are different in many ways. And c906 list
-seems more complete to me.
+[...]
 
-I think you should drop wildcard (it shouldn't be used anyway) then and
-name it c906.
+>  +static int ub960_configure_ports_for_streaming(struct ub960_data *priv,
+>  +					       struct v4l2_subdev_state *state)
+>  +{
+>  +	u8 fwd_ctl;
+>  +	struct {
+>  +		u32 num_streams;
+>  +		u8 pixel_dt;
+>  +		u8 meta_dt;
+>  +		u32 meta_lines;
+>  +		u32 tx_port;
+>  +	} rx_data[UB960_MAX_RX_NPORTS] = {};
+>  +	u8 vc_map[UB960_MAX_RX_NPORTS] = {};
+>  +	struct v4l2_subdev_route *route;
+>  +	unsigned int nport;
+>  +	int ret;
+>  +
+>  +	ret = ub960_validate_stream_vcs(priv);
+>  +	if (ret)
+>  +		return ret;
+>  +
+>  +	ub960_get_vc_maps(priv, state, vc_map);
+>  +
+>  +	for_each_active_route(&state->routing, route) {
+>  +		struct ub960_rxport *rxport;
+>  +		struct ub960_txport *txport;
+>  +		struct v4l2_mbus_framefmt *fmt;
+>  +		const struct ub960_format_info *ub960_fmt;
+>  +		unsigned int nport;
+>  +
+>  +		nport = ub960_pad_to_port(priv, route->sink_pad);
+>  +
+>  +		rxport = priv->rxports[nport];
+>  +		if (!rxport)
+>  +			return -EINVAL;
+>  +
+>  +		txport = priv->txports[ub960_pad_to_port(priv, route->source_pad)];
+>  +		if (!txport)
+>  +			return -EINVAL;
+>  +
+>  +		rx_data[nport].tx_port = ub960_pad_to_port(priv, route->source_pad);
+>  +
+>  +		rx_data[nport].num_streams++;
+>  +
+>  +		/* For the rest, we are only interested in parallel busses */
+>  +		if (rxport->rx_mode == RXPORT_MODE_CSI2_SYNC ||
+>  +		    rxport->rx_mode == RXPORT_MODE_CSI2_ASYNC)
+>  +			continue;
+>  +
+>  +		if (rx_data[nport].num_streams > 2)
+>  +			return -EPIPE;
+>  +
+>  +		fmt = v4l2_subdev_state_get_stream_format(state,
+>  +							  route->sink_pad,
+>  +							  route->sink_stream);
+>  +		if (!fmt)
+>  +			return -EPIPE;
+>  +
+>  +		ub960_fmt = ub960_find_format(fmt->code);
+>  +		if (!ub960_fmt)
+>  +			return -EPIPE;
+>  +
+>  +		if (ub960_fmt->meta) {
+>  +			if (fmt->height > 3) {
+>  +				dev_err(&priv->client->dev,
+>  +					"rx%u: unsupported metadata height %u\n",
+>  +					nport, fmt->height);
+>  +				return -EPIPE;
+>  +			}
+>  +
+>  +			rx_data[nport].meta_dt = ub960_fmt->datatype;
+>  +			rx_data[nport].meta_lines = fmt->height;
+>  +		} else {
+>  +			rx_data[nport].pixel_dt = ub960_fmt->datatype;
+>  +		}
+>  +	}
+>  +
+>  +	/* Configure RX ports */
+>  +
+>  +	fwd_ctl = 0;
 
-"0x5b7-0x0-0x0,v1,t-head/c906,core" would match both c906 and c910.
+Hello, I have only used the first RX port in my setup (ds90ub933 to ds90ub964). The logic for activating/deactivating the Rx ports did not work for me. My suggestion is:
 
+-	fwd_ctl = 0;
++	fwd_ctl = 0xF0; /* Default: Disable forwarding for all RX ports */
 
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>  +
+>  +	for (nport = 0; nport < priv->hw_data->num_rxports; nport++) {
+>  +		struct ub960_rxport *rxport = priv->rxports[nport];
+>  +		u8 vc = vc_map[nport];
+>  +
+>  +		if (rx_data[nport].num_streams == 0)
+>  +			continue;
+>  +
+>  +		switch (rxport->rx_mode) {
+>  +		case RXPORT_MODE_RAW10:
+>  +			ub960_rxport_write(priv, nport, UB960_RR_RAW10_ID,
+>  +				rx_data[nport].pixel_dt | (vc << UB960_RR_RAW10_ID_VC_SHIFT));
+>  +
+>  +			ub960_rxport_write(priv, rxport->nport,
+>  +				UB960_RR_RAW_EMBED_DTYPE,
+>  +				(rx_data[nport].meta_lines << UB960_RR_RAW_EMBED_DTYPE_LINES_SHIFT) |
+>  +					rx_data[nport].meta_dt);
+>  +
+>  +			break;
+>  +
+>  +		case RXPORT_MODE_RAW12_HF:
+>  +		case RXPORT_MODE_RAW12_LF:
+>  +			/* Not implemented */
+>  +			break;
+>  +
+>  +		case RXPORT_MODE_CSI2_SYNC:
+>  +		case RXPORT_MODE_CSI2_ASYNC:
+>  +			if (!priv->hw_data->is_ub9702) {
+>  +				/* Map all VCs from this port to the same VC */
+>  +				ub960_rxport_write(priv, nport, UB960_RR_CSI_VC_MAP,
+>  +						   (vc << UB960_RR_CSI_VC_MAP_SHIFT(3)) |
+>  +						   (vc << UB960_RR_CSI_VC_MAP_SHIFT(2)) |
+>  +						   (vc << UB960_RR_CSI_VC_MAP_SHIFT(1)) |
+>  +						   (vc << UB960_RR_CSI_VC_MAP_SHIFT(0)));
+>  +			} else {
+>  +				unsigned int i;
+>  +
+>  +				/* Map all VCs from this port to VC(nport) */
+>  +				for (i = 0; i < 8; i++)
+>  +					ub960_rxport_write(priv, nport,
+>  +							   UB960_RR_VC_ID_MAP(i),
+>  +							   nport);
+>  +			}
+>  +
+>  +			break;
+>  +		}
+>  +
+>  +		/* Forwarding */
+>  +
+>  +		fwd_ctl |= BIT(4 + nport); /* forward disable */
 
+-		fwd_ctl |= BIT(4 + nport); /* forward disable */
++		fwd_ctl &= ~UB960_SR_FWD_CTL1_PORT_DIS(nport); /* clear disable
++								  forwarding */
+
+According to the data sheet, the ds90ub960 and the ds90ub964 should be identical, so this change should fit both devices.
+
+>  +		if (rx_data[nport].tx_port == 1)
+>  +			fwd_ctl |= BIT(nport); /* forward to TX1 */
+>  +		else
+>  +			fwd_ctl &= ~BIT(nport); /* forward to TX0 */
+>  +	}
+>  +
+>  +	ub960_write(priv, UB960_SR_FWD_CTL1, fwd_ctl);
+>  +
+>  +	return 0;
+>  +}
+
+[...]
+
+Thanks and regards,
+Ludwig Zenz
