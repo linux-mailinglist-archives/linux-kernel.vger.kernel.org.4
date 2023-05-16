@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECCA704C15
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BAC704C16
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbjEPLOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
+        id S232917AbjEPLON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbjEPLNs (ORCPT
+        with ESMTP id S232887AbjEPLNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:13:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F5EC72B9;
-        Tue, 16 May 2023 04:12:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B66C52F4;
-        Tue, 16 May 2023 04:12:42 -0700 (PDT)
-Received: from [10.163.71.75] (unknown [10.163.71.75])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1CC03F663;
-        Tue, 16 May 2023 04:11:51 -0700 (PDT)
-Message-ID: <a03cc9da-4990-26d5-b3d5-acec2106ea2d@arm.com>
-Date:   Tue, 16 May 2023 16:41:48 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V2 2/5] coresight: etm4x: Drop iomem 'base' argument from
- etm4_probe()
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com
-Cc:     scclevenger@os.amperecomputing.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230327050537.30861-1-anshuman.khandual@arm.com>
- <20230327050537.30861-3-anshuman.khandual@arm.com>
- <60e86c22-ca05-81a0-da0a-73928e4b2c93@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <60e86c22-ca05-81a0-da0a-73928e4b2c93@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Tue, 16 May 2023 07:13:54 -0400
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBAD1997
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:13:03 -0700 (PDT)
+Received: by mail-wr1-x449.google.com with SMTP id ffacd0b85a97d-3063394ae41so5045296f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684235525; x=1686827525;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sEUQpMHb6dJRirsjs02VRZsGdmT007slrG/7m3ecq4A=;
+        b=jTh2sQy0h/wnTK3qlXXk0iLSLxxkkq3JJYemyleO0akNJycR3xdqBSpFNtuP78sZPH
+         q1z/GaeVqh9f2wSvYHQqSuSK7Bnt7Fu3exPaDiHHDDRttWsjp+vLnZlEPiweSaqgYXGs
+         w8cnMdF+arz1/vqXlDr6fqPt/uNxzKSj4h15+wWoA70j/0yrHfTLjW5ETXWnsjsuk/Gx
+         dkH36a5oiSpgOQuj1kffDVVXxBdYnIH+/IrQ//0LrMqG6OGLj3rCv13LncGf0/iaSpk6
+         tgSXGNexxLB2X+dNoIuTwdn2UNfplnB30pKsU61QfAH4pzhHPPxixiGt4jrRPoGXosGM
+         L5zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684235525; x=1686827525;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sEUQpMHb6dJRirsjs02VRZsGdmT007slrG/7m3ecq4A=;
+        b=Lr3MnutjkKas1zbE97Rlo3mkGeyorgHXLmMSysfUe2/8O2z55U/xx8xAYvMPiMYgLn
+         5alxSKc2nBTV3ehkcx4WHCUdBGu3RCr7+QxydM4H3lJo0TI06Ek1QTTk1S/a6M9kQusx
+         TGjSO3qfTvMHO5pJHPEx4qUWeLk7FNxRlWzJmYEu2T6kGsMo3h9tIkkisiNZBcJo8kGI
+         bTfOvOVku08MZLgT8QsKrATlHJf7rWN5U/4zcjt24EzOujnMnmT8GOvAfpPppfn+yCuO
+         BZ4r7DWiyVKMo96WwuaeOqgW/nyv/+NxukWD0D/vo7IqUzOxDdzJT/CdzyMjegdwhXUm
+         VZOg==
+X-Gm-Message-State: AC+VfDyKIwfRZniDHVU1MKjXptCfwVSspF0627BPdx2GDdwbZs5Yjgk1
+        vod83M/UlXHJmTIvcPPsPzDG+VnT0CZL9C8=
+X-Google-Smtp-Source: ACHHUZ7bk6OwKBPWjNuvpRxLseI+VezMQERmUNQzW8hSrKxmZjJnVMCvYNXDCOS7pg3d6PBqqkO+3Thap10VUM8=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a5d:4ac4:0:b0:307:cea0:ee9a with SMTP id
+ y4-20020a5d4ac4000000b00307cea0ee9amr2239352wrs.7.1684235525305; Tue, 16 May
+ 2023 04:12:05 -0700 (PDT)
+Date:   Tue, 16 May 2023 11:12:02 +0000
+In-Reply-To: <871qjhe9xh.fsf@metaspace.dk>
+Mime-Version: 1.0
+References: <871qjhe9xh.fsf@metaspace.dk>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230516111202.2455529-1-aliceryhl@google.com>
+Subject: Re: [PATCH v2] rust: str: add conversion from `CStr` to `CString`
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     nmi@metaspace.dk
+Cc:     alex.gaynor@gmail.com, alice@ryhl.io, benno.lossin@proton.me,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        wedsonaf@gmail.com, yakoyoku@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,73 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/4/23 20:52, James Clark wrote:
-> 
-> On 27/03/2023 06:05, Anshuman Khandual wrote:
->> 'struct etm4_drvdata' itself can carry the base address before etm4_probe()
->> gets called. Just drop that redundant argument from etm4_probe().
+Andreas Hindborg <nmi@metaspace.dk> writes:
+> Alice Ryhl <alice@ryhl.io> writes:
+>> On 5/8/23 13:41, Gary Guo wrote:
+>>> On Wed,  3 May 2023 14:10:16 +0000
+>>> Alice Ryhl <aliceryhl@google.com> wrote:
+>>>> These methods can be used to copy the data in a temporary c string into
+>>>> a separate allocation, so that it can be accessed later even if the
+>>>> original is deallocated.
+>>>>
+>>>> The API in this change mirrors the standard library API for the `&str`
+>>>> and `String` types. The `ToOwned` trait is not implemented because it
+>>>> assumes that allocations are infallible.
+>>> How about add a `TryToOwned` trait to the kernel crate and implement
+>>> that trait for `CStr` instead?
 >>
->> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
->> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
->> Cc: Mike Leach <mike.leach@linaro.org>
->> Cc: Leo Yan <leo.yan@linaro.org>
->> Cc: coresight@lists.linaro.org
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>  drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 +++++-----
->>  1 file changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> index 10119c223fbe..5d77571a8df9 100644
->> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->> @@ -2048,7 +2048,7 @@ static int etm4_add_coresight_dev(struct etm4_init_arg *init_arg)
->>  	return 0;
->>  }
->>  
->> -static int etm4_probe(struct device *dev, void __iomem *base, u32 etm_pid)
->> +static int etm4_probe(struct device *dev, u32 etm_pid)
->>  {
->>  	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
->>  	struct csdev_access access = { 0 };
->> @@ -2069,8 +2069,6 @@ static int etm4_probe(struct device *dev, void __iomem *base, u32 etm_pid)
->>  			return -ENOMEM;
->>  	}
->>  
->> -	drvdata->base = base;
->> -
->>  	spin_lock_init(&drvdata->spinlock);
->>  
->>  	drvdata->cpu = coresight_get_cpu(dev);
->> @@ -2124,8 +2122,9 @@ static int etm4_probe_amba(struct amba_device *adev, const struct amba_id *id)
->>  	if (!drvdata)
->>  		return -ENOMEM;
->>  
->> +	drvdata->base = base;
->>  	dev_set_drvdata(dev, drvdata);
->> -	ret = etm4_probe(dev, base, id->id);
->> +	ret = etm4_probe(dev, id->id);
->>  	if (!ret)
->>  		pm_runtime_put(&adev->dev);
->>  
->> @@ -2141,6 +2140,7 @@ static int etm4_probe_platform_dev(struct platform_device *pdev)
->>  	if (!drvdata)
->>  		return -ENOMEM;
->>  
->> +	drvdata->base = NULL;
-> Very minor point, drvdata is zero alloced so it doesn't make sense to
-> zero this field but not the others. It's harmless, but it might imply
-> something and confuse someone.
-
-Just to keep changes to both call sites of etm4_probe() similar i.e
-etm4_probe()'s 'base' argument being pre-assigned as drvdata->base,
-let's keep the NULL assignment above unchanged.
-
+>> Eh, I don't think it's worth it. It doesn't give anything new to the CStr api,
+>> and I think it's rather unlikely that someone will actually need to be generic
+>> over such a trait any time soon.
 > 
-> Either way:
-> Reviewed-by: James Clark <james.clark@arm.com>
+> It is just as valid as having `From<&str>` and `ToOwned<&str>`. While it
+> does not add anything in terms of function, it carries intention. I
+> think we should consider adding it at some point.
 > 
+> BR Andreas
+
+Sure, I think its quite reasonable to add new traits, I just don't think
+it should be part of this patch. Adding new traits makes it a
+significantly bigger change IMO, and my changes have an actual user down
+the road.
+
+Alice
