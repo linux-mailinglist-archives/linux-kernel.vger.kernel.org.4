@@ -2,346 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121CA70559C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F005C70559F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbjEPSEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:04:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        id S231441AbjEPSE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjEPSEK (ORCPT
+        with ESMTP id S232096AbjEPSEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:04:10 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D83D5FCF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:04:08 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-43604f20944so7246613137.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:04:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684260247; x=1686852247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vvzg25v2oIEfNdNdkr9ntW85A+SET9yRI5a0pRi7L/0=;
-        b=sEdkWnYfz1zslsG4WM18jSxyezgQrNq463fZoa8yCdWUxYbfMTl0vdCbxMmpaTSNub
-         u6qn2ZO84qSn6oRYdupCOT6b2cNJSzhwxup1lB4OIFwpwUJPfgXrRwQa32vpPgTPpDSH
-         bH6XrJinPH8xYTT8EW6qgBaCo2RYV+gQ1es7P6Xn6mgUZpK6fAAoqDlqe0IeCd4Ty8C1
-         kdIDNyMqLmVdhvImg8TMZNqpDQozc1sma2EyiW2XUpcxH65NLDr6+GHP8ZKFYyWEricc
-         FnH1efXODtqTImOEADh97BKcJvJlJPNw3+eMqQwWeCuAME/rHjTZ9QSJ06rBndqllLn7
-         3TKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684260247; x=1686852247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vvzg25v2oIEfNdNdkr9ntW85A+SET9yRI5a0pRi7L/0=;
-        b=P/mCYFB1I59IJyk7rJvqe4xhNbFHzr3t2VClhHE9JVmJJa/dT79r+4E/8b4wjZkzmv
-         t5hDcs0gqsn/ISUYFObDQJ7RXEMHKIYeASUav8aMiTzbirQ0aCAvz0mjn7lkw7j3HpJA
-         IeJUt4OXtSZiq+bbL9vre//J1N2lRtW6k+cnGkE7cUMmdQ0IPWk/ujn6gTOBnPiSXAr0
-         J4jWRRfO2AbAa3IpNtofTO4ifwG2AnxjTFGSayex3PCDCv/tgm8dMW0Sz1bwBeEnCMJo
-         Z4iZhw3m7Zkp7gpaRjYVxC5jub95GllsMPs4MYf4lUmh9plgNw9oi+vXpcdJqY0zJ13h
-         a1Lg==
-X-Gm-Message-State: AC+VfDzcMt7zIZc22HUXha+oK3aqDQL2ZObYMKnIngbWMUeuaZjows0H
-        0RE2sFZKl+Zdy8CjbX8O9C7DUyZzkIRR/BCRUMkXiA==
-X-Google-Smtp-Source: ACHHUZ4dCOV4LauCVxAwh+D6cPCaNzdjf9tHbKfIBWRaLaT+SOP3CuFj1esRSO97triBxPPZXU/cNH8fWdGrpVBvIVQ=
-X-Received: by 2002:a05:6102:3cd:b0:42e:63a5:b711 with SMTP id
- n13-20020a05610203cd00b0042e63a5b711mr16338138vsq.10.1684260247144; Tue, 16
- May 2023 11:04:07 -0700 (PDT)
+        Tue, 16 May 2023 14:04:49 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BE059FB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:04:48 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GHpBVJ005765;
+        Tue, 16 May 2023 13:04:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=RdOxtwqyQz2m4IQtLkz+xbmQS+TDqoEd+n7MB6g1Q+k=;
+ b=B1+UetkP5LHgRzhc+Z1YjgpakQf8zi+bHgBsiDyOWTpXe5PQMHMelDr6aGy2xgdaH0Cp
+ 99xcuzksweip+VWwskUUAw9m2WeycPhN4MYsPkc6h7bYbtO7ELHwFzj8GtUnZuU8A0f0
+ 8yg6bwzrTBMYGYr3N3KanA+E5/hbxsMQ6k9mt1PGN3R3o2LVPj/rL+bfBGUCKZY1N05q
+ Pz6iNuWUudy3h+MCTvn9TKZCHyPfAP/FgUmM+k4De18XXA0hrGgd6FLqDvnPfmBVMOnV
+ 6UATjk1OWGfFclAwB9IGpSBLPdJw1hn4F6ED2PDkkN9ATXfhzxo0pUXsE3ciFERnFwmV lA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qj7y14kka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 13:04:44 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 16 May
+ 2023 13:04:42 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 16 May 2023 13:04:42 -0500
+Received: from [198.61.64.66] (EDIN4L06LR3.ad.cirrus.com [198.61.64.66])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9954011CA;
+        Tue, 16 May 2023 18:04:42 +0000 (UTC)
+Message-ID: <1efdb84f-5a84-4c1e-8d0c-bb516c0aebf7@opensource.cirrus.com>
+Date:   Tue, 16 May 2023 19:04:42 +0100
 MIME-Version: 1.0
-References: <20230515161736.775969473@linuxfoundation.org>
-In-Reply-To: <20230515161736.775969473@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 16 May 2023 23:33:55 +0530
-Message-ID: <CA+G9fYsCjQPQxde3-vw6SKmPPr16Gy4-P4uOCh7r6iEDwDpf9w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/381] 5.10.180-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/5] debugfs: Prevent NULL dereference reading from string
+ property
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <rafael@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+References: <20230516160753.32317-1-rf@opensource.cirrus.com>
+ <20230516160753.32317-2-rf@opensource.cirrus.com>
+ <2023051659-sinless-lemon-e3b1@gregkh>
+ <705c4511-bfba-ea46-1aad-b3783c1b21ae@opensource.cirrus.com>
+ <2023051642-tiling-manlike-7536@gregkh>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <2023051642-tiling-manlike-7536@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: b6oIfun3RtBATSGhx0TTIiA10q-Fd2U-
+X-Proofpoint-ORIG-GUID: b6oIfun3RtBATSGhx0TTIiA10q-Fd2U-
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 at 23:03, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.180 release.
-> There are 381 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.180-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
+On 16/5/23 18:43, Greg KH wrote:
+> On Tue, May 16, 2023 at 06:29:52PM +0100, Richard Fitzgerald wrote:
+>> On 16/5/23 17:33, Greg KH wrote:
+>>> On Tue, May 16, 2023 at 05:07:49PM +0100, Richard Fitzgerald wrote:
+>>>> Check in debugfs_read_file_str() if the string pointer is NULL.
+>>>>
+>>>> It is perfectly reasonable that a driver may wish to export a string
+>>>> to debugfs that can have the value NULL to indicate empty/unused/ignore.
+>>>
+>>> Does any in-kernel driver do this today?
+>>
+>> I don't know. The history here is that I was using debugfs_create_str()
+>> to add a debugfs to a driver and made these improvements along the way.
+>> Ultimately I had a reason to use a custom reader implementation.
+>> But as I'd already written these patches I thought I'd send them.
+>>
+>>>
+>>> If not, why not fix up the driver instead?
+>>>
+>>
+>> Well... could do. Though it seems a bit odd to me that a driver
+>> design should be forced by the debugfs API, instead of the debugfs API
+>> fitting normal code design. It's pretty standard and idiomatic for code
+>> to use if (!str) { /* bail */ } type logic, so why shouldn't the debugfs
+>> API handle that?
+>>
+>>>>
+>>>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+>>>> ---
+>>>>    fs/debugfs/file.c | 3 +++
+>>>>    1 file changed, 3 insertions(+)
+>>>>
+>>>> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+>>>> index 1f971c880dde..2c085ab4e800 100644
+>>>> --- a/fs/debugfs/file.c
+>>>> +++ b/fs/debugfs/file.c
+>>>> @@ -878,6 +878,9 @@ ssize_t debugfs_read_file_str(struct file *file, char __user *user_buf,
+>>>>    		return ret;
+>>>>    	str = *(char **)file->private_data;
+>>>> +	if (!str)
+>>>> +		return simple_read_from_buffer(user_buf, count, ppos, "\n", 1);
+>>>
+>>> Why not print "(NULL)"?
+>>>
+>>
+>> Again, could do. My thought here is that a debugfs can be piped into
+>> tools and having to insert a catch for "(NULL)" in the pipeline is a
+>> nuisance. This is a bit different from a dmesg print, which is less
+>> likely to be used this way or to guarantee machine-parsing.
+>> However, I don't mind changing to "(NULL)" if you prefer.
+> 
+> If a driver wants an "empty" string, they should provide an empty
+> string.  We don't do empty values for any other type of pointer, right?
+> 
+> Actually we really should just bail out with an error if this is NULL,
+> let's not paper over bad drivers like this.
+> 
+
+I don't understand this comment.
+I think you'll find there is a very large amount of kernel code that
+uses a NULL value in a pointer to mean ignore/unspecified in
+some way. This has always been accepted C coding style.
+
+The whole idea that a driver is "bad" for signalling some state
+by a pointer being NULL makes no sense.
+
+Please ignore this patch chain. I really don't feel like writing
+non-idiomatic C code just to work around badly designed debugfs APIs.
+Better to write a custom read().
+
 > thanks,
->
+> 
 > greg k-h
-
-
-Results from Linaro=E2=80=99s test farm.
-Regressions on arm64, arm, x86_64 and i386.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-We have recently upgraded our selftest sources to stable-rc 6.3 and
-running on stable rc 6.1, 5.15, 5.10, 5.4, 4.19 and 4.14 kernels.
-
-List of test regressions:
-=3D=3D=3D=3D=3D=3D=3D=3D
-kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-kselftest-memfd
-  - memfd_memfd_test
-
-kselftest-rseq
-  - rseq_basic_test
-
- kselftest-kvm
-  - kvm_xapic_state_test
-
-
-NOTE:
-The logs are the same as reported on other email reports.
-link,
- - https://lore.kernel.org/stable/CA+G9fYu6ZOu_We2GMP0sFnSovOsqd6waW7oKS-Y1=
-VPrjdibu5Q@mail.gmail.com/
-
-## Build
-* kernel: 5.10.180-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 065b6901e6dab7dcc7c8884779b96269724c7201
-* git describe: v5.10.179-382-g065b6901e6da
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.179-382-g065b6901e6da
-
-## Test Regressions (compared to v5.10.176-363-g1ef2000b94cb)
-* bcm2711-rpi-4-b, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* bcm2711-rpi-4-b, kselftest-memfd
-  - memfd_memfd_test
-
-* bcm2711-rpi-4-b, kselftest-rseq
-  - rseq_basic_test
-
-* dragonboard-410c, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* dragonboard-410c, kselftest-memfd
-  - memfd_memfd_test
-
-* i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* i386, kselftest-memfd
-  - memfd_memfd_test
-
-* i386, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* juno-r2, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* juno-r2, kselftest-memfd
-  - memfd_memfd_test
-
-* juno-r2, kselftest-rseq
-  - rseq_basic_test
-
-* qemu_i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_i386, kselftest-memfd
-  - memfd_memfd_test
-
-* qemu_i386, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* qemu_x86_64, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_x86_64, kselftest-memfd
-  - memfd_memfd_test
-
-* qemu_x86_64, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* x15, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* x15, kselftest-rseq
-  - rseq_basic_test
-
-* x86, kselftest-kvm
-  - kvm_xapic_state_test
-
-* x86, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* x86, kselftest-memfd
-  - memfd_memfd_test
-
-* x86, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-## Metric Regressions (compared to v5.10.176-363-g1ef2000b94cb)
-
-## Test Fixes (compared to v5.10.176-363-g1ef2000b94cb)
-
-## Metric Fixes (compared to v5.10.176-363-g1ef2000b94cb)
-
-## Test result summary
-total: 126856, pass: 105919, fail: 3576, skip: 17174, xfail: 187
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 117 total, 116 passed, 1 failed
-* arm64: 45 total, 42 passed, 3 failed
-* i386: 35 total, 33 passed, 2 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 26 total, 20 passed, 6 failed
-* riscv: 12 total, 11 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 38 total, 36 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
