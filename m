@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26412704894
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76097048A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbjEPJKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S231966AbjEPJK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbjEPJKE (ORCPT
+        with ESMTP id S231806AbjEPJKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:10:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD84D4227;
-        Tue, 16 May 2023 02:09:59 -0700 (PDT)
+        Tue, 16 May 2023 05:10:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295903AAC;
+        Tue, 16 May 2023 02:10:00 -0700 (PDT)
 Date:   Tue, 16 May 2023 09:09:55 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1684228195;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ae9SElgMhiy5kA+2p0t34L/wUZDdVE3Qxr6yI4gN/w0=;
-        b=E2azaAp56ed92RUc5+1syAOMVJhtLVSGabBCADIUrxqZXnfQwOp0fvOlzNxYKfKqlw5DQf
-        MQg5P0+d0XH7LHIIK8KeZ09ccsoakFJ543SX1Cd5KGLWP+cfPt7bhcNJsntlnz759poc/j
-        EsC9XL3fHLk84G+fAxGZe96Qgm7StaeAuNaKP6N3EFQBFE/a5hM5OaH/45SwyJRbOKFPKY
-        kb7OqnuP8iWgW8DXmQz2nQSYq0Jjk97/vncIUESee6t8mPe//ugiCM4UQAqbUJMQGN2ru6
-        //YMUR6qF9U2hXr2S1jyZkgI08y/nvmTe1p//AQX9MSF2UDtcrLmksAwefD5mQ==
+        bh=PdDGTOTh34IsmWSDxUg/LPSimNk3e+pihd/S/kw8Qb4=;
+        b=muLJ2bohUK3KIDc+CdMIDuuiPO5LhVPEazsZPHF+aAayKC1aNMOI0VIkMZMV09QTGckoZ3
+        ULLEqIH+qMt4AjYpGMKFmHCWvMOtK25X+dh6GaS1+efS1U90pFRVIYt1RC+iJCmwVKixSq
+        aq3c243j51YH1JTGr2eVBhAh9ULwctyXlmx+qDgOTaophOJsOlsuaEZZb18Sc781sB6uFp
+        U0fN4OEgnqW5v33yLr61Ujo4cGI9RQq/q3Y5PCugMzsEy25Pnbl4myXbvolwQILM4vmcyc
+        kqzsJRPDEnUUbuWKkgOswoTU5XNuJFhqeRkCExHtzrLRcjtiVDPuCW++mwOOBQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1684228195;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,14 +36,14 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ae9SElgMhiy5kA+2p0t34L/wUZDdVE3Qxr6yI4gN/w0=;
-        b=hS94bUE0KpTEkW24kmeSF9OtvjptSI9/3OOjaTJ9R79lAML0lNbIywPxydJ5MWRTfsFRLE
-        KTG3Vk40mDbORNCw==
+        bh=PdDGTOTh34IsmWSDxUg/LPSimNk3e+pihd/S/kw8Qb4=;
+        b=g1qeS6sw5GTe9XYM7pM8d7qoMDQDeciqpXR93v5yMv9CzWjdF9rf/0FfDDuBnKGne/fntz
+        SORZZU2tXp6Ao7BQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] x86/apic: Provide cpu_primary_thread mask
+Subject: [tip: smp/core] cpu/hotplug: Provide a split up CPUHP_BRINGUP mechanism
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Michael Kelley <mikelley@microsoft.com>,
@@ -51,10 +51,10 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Helge Deller <deller@gmx.de>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230512205257.186599880@linutronix.de>
-References: <20230512205257.186599880@linutronix.de>
+In-Reply-To: <20230512205257.080801387@linutronix.de>
+References: <20230512205257.080801387@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168422819500.404.16598527509892623147.tip-bot2@tip-bot2>
+Message-ID: <168422819550.404.2949108833035827678.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,17 +71,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     f54d4434c281f38b975d58de47adeca671beff4f
-Gitweb:        https://git.kernel.org/tip/f54d4434c281f38b975d58de47adeca671beff4f
+Commit-ID:     a631be92b996c5db9b368e8b96305d22fb8c4180
+Gitweb:        https://git.kernel.org/tip/a631be92b996c5db9b368e8b96305d22fb8c4180
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 12 May 2023 23:07:48 +02:00
+AuthorDate:    Fri, 12 May 2023 23:07:45 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 15 May 2023 13:45:02 +02:00
+CommitterDate: Mon, 15 May 2023 13:45:01 +02:00
 
-x86/apic: Provide cpu_primary_thread mask
+cpu/hotplug: Provide a split up CPUHP_BRINGUP mechanism
 
-Make the primary thread tracking CPU mask based in preparation for simpler
-handling of parallel bootup.
+The bring up logic of a to be onlined CPU consists of several parts, which
+are considered to be a single hotplug state:
+
+  1) Control CPU issues the wake-up
+
+  2) To be onlined CPU starts up, does the minimal initialization,
+     reports to be alive and waits for release into the complete bring-up.
+
+  3) Control CPU waits for the alive report and releases the upcoming CPU
+     for the complete bring-up.
+
+Allow to split this into two states:
+
+  1) Control CPU issues the wake-up
+
+     After that the to be onlined CPU starts up, does the minimal
+     initialization, reports to be alive and waits for release into the
+     full bring-up. As this can run after the control CPU dropped the
+     hotplug locks the code which is executed on the AP before it reports
+     alive has to be carefully audited to not violate any of the hotplug
+     constraints, especially not modifying any of the various cpumasks.
+
+     This is really only meant to avoid waiting for the AP to react on the
+     wake-up. Of course an architecture can move strict CPU related setup
+     functionality, e.g. microcode loading, with care before the
+     synchronization point to save further pointless waiting time.
+
+  2) Control CPU waits for the alive report and releases the upcoming CPU
+     for the complete bring-up.
+
+This allows that the two states can be split up to run all to be onlined
+CPUs up to state #1 on the control CPU and then at a later point run state
+#2. This spares some of the latencies of the full serialized per CPU
+bringup by avoiding the per CPU wakeup/wait serialization. The assumption
+is that the first AP already waits when the last AP has been woken up. This
+obvioulsy depends on the hardware latencies and depending on the timings
+this might still not completely eliminate all wait scenarios.
+
+This split is just a preparatory step for enabling the parallel bringup
+later. The boot time bringup is still fully serialized. It has a separate
+config switch so that architectures which want to support parallel bringup
+can test the split of the CPUHP_BRINGUG step separately.
+
+To enable this the architecture must support the CPU hotplug core sync
+mechanism and has to be audited that there are no implicit hotplug state
+dependencies which require a fully serialized bringup.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
@@ -89,144 +133,158 @@ Tested-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 Tested-by: Helge Deller <deller@gmx.de> # parisc
 Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
-Link: https://lore.kernel.org/r/20230512205257.186599880@linutronix.de
+Link: https://lore.kernel.org/r/20230512205257.080801387@linutronix.de
 ---
- arch/x86/include/asm/apic.h     |  2 --
- arch/x86/include/asm/topology.h | 19 +++++++++++++++----
- arch/x86/kernel/apic/apic.c     | 20 +++++++++-----------
- arch/x86/kernel/smpboot.c       | 12 +++---------
- 4 files changed, 27 insertions(+), 26 deletions(-)
+ arch/Kconfig               |  4 ++-
+ include/linux/cpuhotplug.h |  4 ++-
+ kernel/cpu.c               | 70 +++++++++++++++++++++++++++++++++++--
+ 3 files changed, 76 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index dc50ed7..030f5fb 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -506,10 +506,8 @@ extern int default_check_phys_apicid_present(int phys_apicid);
- #endif /* CONFIG_X86_LOCAL_APIC */
+diff --git a/arch/Kconfig b/arch/Kconfig
+index f55c5fc..d3015a6 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -49,6 +49,10 @@ config HOTPLUG_CORE_SYNC_FULL
+ 	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
+ 	select HOTPLUG_CORE_SYNC
  
- #ifdef CONFIG_SMP
--bool apic_id_is_primary_thread(unsigned int id);
- void apic_smt_update(void);
- #else
--static inline bool apic_id_is_primary_thread(unsigned int id) { return false; }
- static inline void apic_smt_update(void) { }
++config HOTPLUG_SPLIT_STARTUP
++	bool
++	select HOTPLUG_CORE_SYNC_FULL
++
+ config GENERIC_ENTRY
+ 	bool
+ 
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index 5def71f..bc2d0a1 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -133,6 +133,7 @@ enum cpuhp_state {
+ 	CPUHP_MIPS_SOC_PREPARE,
+ 	CPUHP_BP_PREPARE_DYN,
+ 	CPUHP_BP_PREPARE_DYN_END		= CPUHP_BP_PREPARE_DYN + 20,
++	CPUHP_BP_KICK_AP,
+ 	CPUHP_BRINGUP_CPU,
+ 
+ 	/*
+@@ -517,9 +518,12 @@ void cpuhp_online_idle(enum cpuhp_state state);
+ static inline void cpuhp_online_idle(enum cpuhp_state state) { }
  #endif
  
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 2ba5758..caf41c4 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -31,9 +31,9 @@
-  * CONFIG_NUMA.
-  */
- #include <linux/numa.h>
-+#include <linux/cpumask.h>
- 
- #ifdef CONFIG_NUMA
--#include <linux/cpumask.h>
- 
- #include <asm/mpspec.h>
- #include <asm/percpu.h>
-@@ -139,9 +139,20 @@ static inline int topology_max_smt_threads(void)
- int topology_update_package_map(unsigned int apicid, unsigned int cpu);
- int topology_update_die_map(unsigned int dieid, unsigned int cpu);
- int topology_phys_to_logical_pkg(unsigned int pkg);
--bool topology_is_primary_thread(unsigned int cpu);
- bool topology_smt_supported(void);
--#else
++struct task_struct;
 +
-+extern struct cpumask __cpu_primary_thread_mask;
-+#define cpu_primary_thread_mask ((const struct cpumask *)&__cpu_primary_thread_mask)
-+
-+/**
-+ * topology_is_primary_thread - Check whether CPU is the primary SMT thread
-+ * @cpu:	CPU to check
-+ */
-+static inline bool topology_is_primary_thread(unsigned int cpu)
+ void cpuhp_ap_sync_alive(void);
+ void arch_cpuhp_sync_state_poll(void);
+ void arch_cpuhp_cleanup_kick_cpu(unsigned int cpu);
++int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle);
+ 
+ #ifdef CONFIG_HOTPLUG_CORE_SYNC_DEAD
+ void cpuhp_ap_report_dead(void);
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 0ab6a7d..d2487aa 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -761,6 +761,47 @@ static int bringup_wait_for_ap_online(unsigned int cpu)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_HOTPLUG_SPLIT_STARTUP
++static int cpuhp_kick_ap_alive(unsigned int cpu)
 +{
-+	return cpumask_test_cpu(cpu, cpu_primary_thread_mask);
++	if (!cpuhp_can_boot_ap(cpu))
++		return -EAGAIN;
++
++	return arch_cpuhp_kick_ap_alive(cpu, idle_thread_get(cpu));
 +}
-+#else /* CONFIG_SMP */
- #define topology_max_packages()			(1)
- static inline int
- topology_update_package_map(unsigned int apicid, unsigned int cpu) { return 0; }
-@@ -152,7 +163,7 @@ static inline int topology_max_die_per_package(void) { return 1; }
- static inline int topology_max_smt_threads(void) { return 1; }
- static inline bool topology_is_primary_thread(unsigned int cpu) { return true; }
- static inline bool topology_smt_supported(void) { return false; }
--#endif
-+#endif /* !CONFIG_SMP */
- 
- static inline void arch_fix_phys_package_id(int num, u32 slot)
- {
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 7705571..e17600d 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -2386,20 +2386,16 @@ bool arch_match_cpu_phys_id(int cpu, u64 phys_id)
- }
- 
- #ifdef CONFIG_SMP
--/**
-- * apic_id_is_primary_thread - Check whether APIC ID belongs to a primary thread
-- * @apicid: APIC ID to check
-- */
--bool apic_id_is_primary_thread(unsigned int apicid)
-+static void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid)
- {
--	u32 mask;
--
--	if (smp_num_siblings == 1)
--		return true;
- 	/* Isolate the SMT bit(s) in the APICID and check for 0 */
--	mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
--	return !(apicid & mask);
-+	u32 mask = (1U << (fls(smp_num_siblings) - 1)) - 1;
 +
-+	if (smp_num_siblings == 1 || !(apicid & mask))
-+		cpumask_set_cpu(cpu, &__cpu_primary_thread_mask);
- }
++static int cpuhp_bringup_ap(unsigned int cpu)
++{
++	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
++	int ret;
++
++	/*
++	 * Some architectures have to walk the irq descriptors to
++	 * setup the vector space for the cpu which comes online.
++	 * Prevent irq alloc/free across the bringup.
++	 */
++	irq_lock_sparse();
++
++	ret = cpuhp_bp_sync_alive(cpu);
++	if (ret)
++		goto out_unlock;
++
++	ret = bringup_wait_for_ap_online(cpu);
++	if (ret)
++		goto out_unlock;
++
++	irq_unlock_sparse();
++
++	if (st->target <= CPUHP_AP_ONLINE_IDLE)
++		return 0;
++
++	return cpuhp_kick_ap(cpu, st, st->target);
++
++out_unlock:
++	irq_unlock_sparse();
++	return ret;
++}
 +#else
-+static inline void cpu_mark_primary_thread(unsigned int cpu, unsigned int apicid) { }
- #endif
+ static int bringup_cpu(unsigned int cpu)
+ {
+ 	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
+@@ -781,7 +822,6 @@ static int bringup_cpu(unsigned int cpu)
+ 	 */
+ 	irq_lock_sparse();
  
- /*
-@@ -2544,6 +2540,8 @@ int generic_processor_info(int apicid, int version)
- 	set_cpu_present(cpu, true);
- 	num_processors++;
- 
-+	cpu_mark_primary_thread(cpu, apicid);
-+
- 	return cpu;
+-	/* Arch-specific enabling code. */
+ 	ret = __cpu_up(cpu, idle);
+ 	if (ret)
+ 		goto out_unlock;
+@@ -805,6 +845,7 @@ out_unlock:
+ 	irq_unlock_sparse();
+ 	return ret;
  }
++#endif
  
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index a27941a..51122f0 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -102,6 +102,9 @@ EXPORT_PER_CPU_SYMBOL(cpu_die_map);
- DEFINE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
- EXPORT_PER_CPU_SYMBOL(cpu_info);
- 
-+/* CPUs which are the primary SMT threads */
-+struct cpumask __cpu_primary_thread_mask __read_mostly;
+ static int finish_cpu(unsigned int cpu)
+ {
+@@ -1944,13 +1985,38 @@ static struct cpuhp_step cpuhp_hp_states[] = {
+ 		.startup.single		= timers_prepare_cpu,
+ 		.teardown.single	= timers_dead_cpu,
+ 	},
+-	/* Kicks the plugged cpu into life */
 +
- /* Representing CPUs for which sibling maps can be computed */
- static cpumask_var_t cpu_sibling_setup_mask;
- 
-@@ -277,15 +280,6 @@ static void notrace start_secondary(void *unused)
- }
- 
- /**
-- * topology_is_primary_thread - Check whether CPU is the primary SMT thread
-- * @cpu:	CPU to check
-- */
--bool topology_is_primary_thread(unsigned int cpu)
--{
--	return apic_id_is_primary_thread(per_cpu(x86_cpu_to_apicid, cpu));
--}
--
--/**
-  * topology_smt_supported - Check whether SMT is supported by the CPUs
-  */
- bool topology_smt_supported(void)
++#ifdef CONFIG_HOTPLUG_SPLIT_STARTUP
++	/*
++	 * Kicks the AP alive. AP will wait in cpuhp_ap_sync_alive() until
++	 * the next step will release it.
++	 */
++	[CPUHP_BP_KICK_AP] = {
++		.name			= "cpu:kick_ap",
++		.startup.single		= cpuhp_kick_ap_alive,
++	},
++
++	/*
++	 * Waits for the AP to reach cpuhp_ap_sync_alive() and then
++	 * releases it for the complete bringup.
++	 */
++	[CPUHP_BRINGUP_CPU] = {
++		.name			= "cpu:bringup",
++		.startup.single		= cpuhp_bringup_ap,
++		.teardown.single	= finish_cpu,
++		.cant_stop		= true,
++	},
++#else
++	/*
++	 * All-in-one CPU bringup state which includes the kick alive.
++	 */
+ 	[CPUHP_BRINGUP_CPU] = {
+ 		.name			= "cpu:bringup",
+ 		.startup.single		= bringup_cpu,
+ 		.teardown.single	= finish_cpu,
+ 		.cant_stop		= true,
+ 	},
++#endif
+ 	/* Final state before CPU kills itself */
+ 	[CPUHP_AP_IDLE_DEAD] = {
+ 		.name			= "idle:dead",
