@@ -2,145 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3BC705AA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743F0705AAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjEPWgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S229974AbjEPWha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjEPWgT (ORCPT
+        with ESMTP id S230434AbjEPWhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:36:19 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B9F6A5E;
-        Tue, 16 May 2023 15:36:09 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-4360bef3213so3441677137.2;
-        Tue, 16 May 2023 15:36:09 -0700 (PDT)
+        Tue, 16 May 2023 18:37:10 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84F36182;
+        Tue, 16 May 2023 15:37:07 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52c6f8ba7e3so13605808a12.3;
+        Tue, 16 May 2023 15:37:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684276569; x=1686868569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MO6goYlwL4iToGOjsZHzqUARbwpLkTb6qhA2YqxeeVE=;
-        b=hHu4z1Gzj57Y9XSFHW/ju30BU2KLMb+YSpi8TuZHrkg1bqrNjM+STsh81jCq26DBrX
-         3BQ+vYSJzyQh3G16m5/QRa+KcRgF2aXnu+npeWsJzJda+vECoDNreDI4q0V8KTnKK4bX
-         OrM9LKR5zrxY6TzZixoNRGdddtHCXf3CAKsXZ5cSUXlkbn1FlgyavZ+L7xFkIjAlUeG3
-         KSTbrT06+jf0pwl0qOG3axtRG8F7eEkx1y6Ik4idJUO5DhB2Drm8j8m0Cwg1LTBxrMu4
-         fkJdWxN1xnznd49FPjjGZEe9ovB/HzRTTtsimzJ/Vl3Go8dQKiabSbAQI3nKFZpKFdVH
-         8rfQ==
+        d=gmail.com; s=20221208; t=1684276627; x=1686868627;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MJGpY/NrMrg0JPSvmjgjr2tdaUCxwO0LhI4q74mpwfE=;
+        b=ska/yoAStgLqoC6IkwvPhKPiq7vXwb59GUYHSaIf8DtpCSLlwOU2aYHAo0+P+Re1AN
+         XdEGGSOwLUK9aJJ/qgqkhxfk/cCLHHy7RUBItrWoWClEskoawObzfeLdKUN5Ac8lE/74
+         oTUOI8oscxXl8UCiwBmd0lVKStdoA3jxLWruQWGw3hmlT5YuNOKTVVQsIs1EIJZtMAIE
+         su0MNU7RgNu5h4ImCfRd5HyTfFfr9jHslAQH9PFLzLN66JbAPR7PvWbJqodEwo6jm/5X
+         p0YETctd9o3jsJTE5IEk9C9Qsvx1JcAM6GX8NYjDQn+/Zka0fAk+xtBRLGRqHv0NAm1i
+         ndTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684276569; x=1686868569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MO6goYlwL4iToGOjsZHzqUARbwpLkTb6qhA2YqxeeVE=;
-        b=d5JLOOU7fn4nfDPPmllELArkACNnbQVAn0g1XoMazYJtukYpsoZPLpiSW5Pgs797Ds
-         HPto6Q1atoHJQrLVHft6tBC8g4cZkb3VgCSbgWtGDdA5AsXTxkVQk78DhoqTwPkz1ayj
-         x4aZxRUap+FKruDzDBPgyCRHdvxj9oQGLnsho+3R20m56KlTPmmDIhV+HR4nByesKDgn
-         iF/ZU3OkD7lb9NmAaIMf8fXH+hMxWCjBR0yebPJJgb+JqklkbdeCyb3LBZQoa3sXv3lh
-         /gQKlSHNj1OM16NQWqi8MVlV3MyP8JZTJ9uTeAa5wVIcVtGLPGALn3RrPbDHBn9kjtGZ
-         6tEQ==
-X-Gm-Message-State: AC+VfDzV1XNuiEbap94PlsIJWnqizPIqvIUac5ZhMXrYa93gjyzKO51B
-        QW0Is5nQqjr6iocBxwk0NDz1npx53ZRdrKhjz+M=
-X-Google-Smtp-Source: ACHHUZ73RHEjDMwdKY0r76kxqXj9fZ3K2nw7Oc6gTCkuau/VaSGKaDGTs2MjpBab2/r5uvF6Zc3sahF0FENGRwGUKhE=
-X-Received: by 2002:a67:f30d:0:b0:436:3238:bd1 with SMTP id
- p13-20020a67f30d000000b0043632380bd1mr7960550vsf.34.1684276568666; Tue, 16
- May 2023 15:36:08 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684276627; x=1686868627;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MJGpY/NrMrg0JPSvmjgjr2tdaUCxwO0LhI4q74mpwfE=;
+        b=f8WkRj261eJcbafeJHl3UZP+ZzVS5smb4jIpz7IIX9LBZRMoPkm9dXj1p52KdF/W4m
+         /W1di7KVTHhvIUbaCsqeHUaS2OQSWO5g3P4T+zh2kQTrZolD53phuS78p+6ryxtIx0MW
+         aRlo6eTrZK+M1l7v7r1auIOpjWhZnOyiI3aVv7lBlQuxj4Xo+/NThNQ5u+bj1wEBqhDM
+         /yvlRbDp92B8iESPCqImgRrM4qtauyQLcMZbMmEtoQtPU3ujAbbiYqvS9vX3eAPNnwUU
+         MznNqVIiuz2ytXRnzk0w4oXX/UUeDiE+d7G0UpbnJSFZhwOhCSRsWMVyGqujXG+hUbO/
+         rhQw==
+X-Gm-Message-State: AC+VfDxt2NPTF3Ky+VAJoJ6uDmUamVkR8x8Zjp0F3Jslf1kRBOS1qUCk
+        /gIRZP6uy73MLXzO8yjKnkgSaiKvD8c=
+X-Google-Smtp-Source: ACHHUZ4UgpIFYQ3VqL6Zs6iIB+uR3kp7qBDoMHFkDx/rQyJ5l2jMSu8mNXq5xOPBWr7JyPCo88kaVA==
+X-Received: by 2002:a05:6a20:7f9d:b0:105:66a1:5d05 with SMTP id d29-20020a056a207f9d00b0010566a15d05mr15148395pzj.55.1684276627209;
+        Tue, 16 May 2023 15:37:07 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa78714000000b0062dbafced27sm11961983pfo.27.2023.05.16.15.37.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 15:37:06 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: tegra: tegra210_adx: fix snd_pcm_format_t type
+Date:   Wed, 17 May 2023 06:36:59 +0800
+Message-Id: <20230516223700.185569-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230508075507.1720950-1-gongruiqi1@huawei.com>
- <CAB=+i9QxWL6ENDz_r1jPbiZsTUj1EE3u-j0uP6y_MxFSM9RerQ@mail.gmail.com> <5f5a858a-7017-5424-0fa0-db3b79e5d95e@huawei.com>
-In-Reply-To: <5f5a858a-7017-5424-0fa0-db3b79e5d95e@huawei.com>
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Date:   Wed, 17 May 2023 07:35:57 +0900
-Message-ID: <CAB=+i9R0GZiau7PKDSGdCOijPH1TVqA3rJ5tQLejJpoR55h6dg@mail.gmail.com>
-Subject: Re: [PATCH RFC v2] Randomized slab caches for kmalloc()
-To:     Gong Ruiqi <gongruiqi1@huawei.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        kasan-dev@googlegroups.com, Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Resending this email after noticing I did not reply-to-all]
+use snd_pcm_format_t instead of unsigned int to fix
+the following sparse warnings:
 
-On Fri, May 12, 2023 at 7:11=E2=80=AFPM Gong Ruiqi <gongruiqi1@huawei.com> =
-wrote:
->
->
->
-> On 2023/05/11 2:43, Hyeonggon Yoo wrote:
-> > I dont think adding a hardening feature by sacrificing one digit
-> > percent performance
-> > (and additional complexity) is worth. Heap spraying can only occur
-> > when the kernel contains
-> > security vulnerabilities, and if there is no known ways of performing
-> > such an attack,
-> > then we would simply be paying a consistent cost.
-> >
-> > Any opinions from hardening folks?
->
-> I did a more throughout performance test on the same machine in the same
-> way, and here are the results:
->
->               sched/  sched/  syscall/       mem/         mem/
->            messaging    pipe     basic     memcpy       memset
-> control1       0.019   5.459     0.733  15.258789    51.398026
-> control2       0.019   5.439     0.730  16.009221    48.828125
-> control3       0.019   5.282     0.735  16.009221    48.828125
-> control_avg    0.019   5.393     0.733  15.759077    49.684759
->
-> exp1           0.019   5.374     0.741  15.500992    46.502976
-> exp2           0.019   5.440     0.746  16.276042    51.398026
-> exp3           0.019   5.242     0.752  15.258789    51.398026
-> exp_avg        0.019   5.352     0.746  15.678608    49.766343
->
-> I believe the results show only minor differences and normal
-> fluctuation, and no substantial performance degradation.
->
-> As Pedro points out in his reply, unfortunately there are always
-> security vulnerabilities in the kernel, which is a fact that we have to
-> admit. Having a useful mitigation mechanism at the expense of a little
-> performance loss would be, in my opinion, quite a good deal in many
-> circumstances. And people can still choose not to have it by setting the
-> config to n.
+sound/soc/tegra/tegra210_adx.c:125:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/tegra/tegra210_adx.c:128:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
+sound/soc/tegra/tegra210_adx.c:131:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
 
-Okay, now I don't think I need to tackle it from a performance
-perspective anymore, at least it looks like a good tradeoff.
+Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
+---
+ sound/soc/tegra/tegra210_adx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I had few design level concerns (i.e. in ARM64 instructions are 4-byte
-aligned) before switching to hash_64(^ random sequence), but looks
-good to me now.
+diff --git a/sound/soc/tegra/tegra210_adx.c b/sound/soc/tegra/tegra210_adx.c
+index 41117c1d61fb..bd0b10c70c4c 100644
+--- a/sound/soc/tegra/tegra210_adx.c
++++ b/sound/soc/tegra/tegra210_adx.c
+@@ -109,7 +109,7 @@ static int __maybe_unused tegra210_adx_runtime_resume(struct device *dev)
+ 
+ static int tegra210_adx_set_audio_cif(struct snd_soc_dai *dai,
+ 				      unsigned int channels,
+-				      unsigned int format,
++				      snd_pcm_format_t format,
+ 				      unsigned int reg)
+ {
+ 	struct tegra210_adx *adx = snd_soc_dai_get_drvdata(dai);
+-- 
+2.34.1
 
-> >> +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-> >> +# define SLAB_RANDOMSLAB       ((slab_flags_t __force)0x01000000U)
-> >> +#else
-> >> +# define SLAB_RANDOMSLAB       0
-> >> +#endif
-
-There is already the SLAB_KMALLOC flag that indicates if a cache is a
-kmalloc cache. I think that would be enough for preventing merging
-kmalloc caches?
