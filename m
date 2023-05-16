@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C377053FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 315CD705404
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjEPQfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S231324AbjEPQgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231480AbjEPQel (ORCPT
+        with ESMTP id S229745AbjEPQgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:34:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA44D863;
-        Tue, 16 May 2023 09:34:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2BCF63C4E;
-        Tue, 16 May 2023 16:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81033C433EF;
-        Tue, 16 May 2023 16:34:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684254848;
-        bh=a5gD6Sj2I5YN1JdKb6fmBN6fLXBHxziCoDX0JM00sqY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MLKshx667MZY3r80PjDOVG+7FWMX01YuYGt1yw90uoPbquW2BUeLngRKkIZDcOBxr
-         rlGZSjBHuZLG45fPyH8+0WXp/Pgz5latxrdbFPe6Ye9HO4T+wA7I1n818XGez3vpdd
-         j7ctedMTOLqRIL6ZdyY1avZBpPG7ZrxHvT1jSxuM3MCZJy/SoJ5UkqpWUttP6qLufS
-         /g6fkOLnum8xOd53DX2MXKL5hiEz2W+n8c+XpHG2ktB8arJJ3BHsrcmXjvOxs9oivy
-         pM9F/nmY4YOoUAQnpxQZoZTif7eKDipWLCudOTQmdJZsSFRvoqoeXDYfSQZE+IGn/y
-         qOps90klCQwoA==
-Date:   Tue, 16 May 2023 22:04:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     devicetree@vger.kernel.org, fushi.peng@nxp.com,
-        imx@lists.linux.dev, kernel@pengutronix.de, kishon@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, shawnguo@kernel.org
-Subject: Re: [PATCH v4 3/6] phy: cadence: salvo: add bist fix
-Message-ID: <ZGOwfFlqWIrAXpHy@matsya>
-References: <20230516154329.3155031-1-Frank.Li@nxp.com>
- <20230516154329.3155031-4-Frank.Li@nxp.com>
+        Tue, 16 May 2023 12:36:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA9AD040
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684254887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=53NKQ5uw9SnRFMJTCe9LxwJTjXKaTTMdxaGXn1HcNvI=;
+        b=SNMEPZwFFdN13UhiQ8O/WjGp85JyzlVIEVWFRt6xiM377HAZ7Colou0QxME4fxaDVuHbVT
+        gfQvj8UdWbbrexoaFci7IAHD3H+wyZ3xxYZeoqleQARVFUNU2bq0bqucQuW/BCAulreikg
+        jYlLyEiWQWvB9lWqGr9QnRiu++EZdbo=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-492-rwj2_qq2PIm4fpUGn_sxWQ-1; Tue, 16 May 2023 12:34:45 -0400
+X-MC-Unique: rwj2_qq2PIm4fpUGn_sxWQ-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f387d3b41eso8749541cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:34:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684254885; x=1686846885;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=53NKQ5uw9SnRFMJTCe9LxwJTjXKaTTMdxaGXn1HcNvI=;
+        b=in4oYC5HS9sDJADINGYkd3c8m9Nrmrutyp1la3+LfuOmuD3LZQkvDrHJHQ0Abr41Am
+         5pSzRj/H1HTDsT69hSm2Jq63e9PYj0Csx0TSgXN8a3FRVUwRdPkYdX/NpCGvkE3PeH8G
+         4JPdh4xkUhUDKdhyMsY4zhAYF6HjAb7kBjbGsmfDKLnp6yVuNLY2iqqOZRhtRp0EjLua
+         H66wLBKlfPS06EU/KJrbDUknmehJ8Ay21n72/PqfAQaFB32gBAMDlyxCd8tf5g8hnrwB
+         k4rn2Ph1Y6FtKX7A19Yed6DCiQnXZijrxT1/lUlCrzY+PyTg+Kc/iaj9R7hYPEgk9UGO
+         ez4w==
+X-Gm-Message-State: AC+VfDwKbIz5xFg7/EjmeEhj37aSdMi8ADPkmKHLnXzVSWiu8YqIP/wV
+        eUnCDPkgFc/hSiDN+CXoc/jX4u+MAWGM7uE2PxueeeYhP2Ir9f+QYhiDNHQJ3S1bNzfgieniQRU
+        8GdULc73wfSEkvm/WzNrb7SCNbdkTWaFg
+X-Received: by 2002:a05:622a:1883:b0:3ef:3912:ab3e with SMTP id v3-20020a05622a188300b003ef3912ab3emr241899qtc.2.1684254884939;
+        Tue, 16 May 2023 09:34:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ45k6UsYhy0Q1O9scbqGvnXiic8Hnt7VxHTJtSYtfcme6kIxey26s7vFgM/LTlqpcCOXk5E4g==
+X-Received: by 2002:a05:622a:1883:b0:3ef:3912:ab3e with SMTP id v3-20020a05622a188300b003ef3912ab3emr241870qtc.2.1684254884693;
+        Tue, 16 May 2023 09:34:44 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id d28-20020ac84e3c000000b003dd8ad765dcsm6336150qtw.76.2023.05.16.09.34.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 09:34:44 -0700 (PDT)
+Date:   Tue, 16 May 2023 12:34:42 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Jeff Xu <jeffxu@chromium.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, linux-hardening@vger.kernel.org,
+        Jorge Lucangeli Obes <jorgelo@chromium.org>,
+        lstoakes@gmail.com, Liam.Howlett@oracle.com,
+        zhangpeng.00@bytedance.com
+Subject: Re: mprotect outbound check.
+Message-ID: <ZGOworXBstm+jmw3@x1n>
+References: <CABi2SkXjN+5iFoBhxk71t3cmunTk-s=rB4T7qo0UQRh17s49PQ@mail.gmail.com>
+ <CABi2SkUfsOWKGdFqgXZg=0AcnUj=AOFb9JmYfp=RwDp_5AcH0Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230516154329.3155031-4-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABi2SkUfsOWKGdFqgXZg=0AcnUj=AOFb9JmYfp=RwDp_5AcH0Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-05-23, 11:43, Frank Li wrote:
-> From: Peter Chen <peter.chen@nxp.com>
+On Mon, May 15, 2023 at 06:41:35PM -0700, Jeff Xu wrote:
+> + Peter, Lian, Lorenzo
 > 
-> Very limited parts may fail to work on full speed mode (both host and
-> device modes) for USB3 port due to higher threshold in full speed receiver
-> of USB2.0 PHY.
-> 
-> One example failure symptom is, the enumeration is failed when connecting
-> full speed USB mouse to USB3 port, especially under high temperature.
-> 
-> The workaround is to configure threshold voltage value of single ended
-> receiver by setting USB2.0 PHY register AFE_RX_REG5[2:0] to 3'b101.
-> 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> Is this related to this hotfix ?
+>       mm/mprotect: fix do_mprotect_pkey() return on error
 
-This needs senders S-o-b as well!
+Doesn't look like to me, that seems to only avoid replacing an error with
+another error, rather than stop returning error for any case.
 
-> ---
->  drivers/phy/cadence/phy-cadence-salvo.c | 3 +++
->  1 file changed, 3 insertions(+)
+AFAIU this shouldn't be intentional, but Liam could correct.  Maybe a
+bisection would show at least when it got changed?
+
 > 
-> diff --git a/drivers/phy/cadence/phy-cadence-salvo.c b/drivers/phy/cadence/phy-cadence-salvo.c
-> index 2e3d4d8fb8eb..b9866dc146ce 100644
-> --- a/drivers/phy/cadence/phy-cadence-salvo.c
-> +++ b/drivers/phy/cadence/phy-cadence-salvo.c
-> @@ -91,6 +91,7 @@
->  
->  /* USB2 PHY register definition */
->  #define UTMI_REG15				0xaf
-> +#define UTMI_AFE_RX_REG5			0x12
->  
->  /* TB_ADDR_TX_RCVDETSC_CTRL */
->  #define RXDET_IN_P3_32KHZ			BIT(0)
-> @@ -247,6 +248,8 @@ static int cdns_salvo_phy_init(struct phy *phy)
->  	cdns_salvo_write(salvo_phy, USB2_PHY_OFFSET, UTMI_REG15,
->  			 value | TXVALID_GATE_THRESHOLD_HS_0US);
->  
-> +	cdns_salvo_write(salvo_phy, USB2_PHY_OFFSET, UTMI_AFE_RX_REG5,
-> +			 0x5);
-
-single line reads better
-
->  	udelay(10);
->  
->  	clk_disable_unprepare(salvo_phy->clk);
-> -- 
-> 2.34.1
+> 
+> Thanks!
+> 
+> -Jeff
+> 
+> 
+> 
+> 
+> 
+> 
+> On Mon, May 15, 2023 at 11:00 AM Jeff Xu <jeffxu@chromium.org> wrote:
+> >
+> > Noticed there is a slight change for mprotect between 6.1 and 6.4 RC1
+> >
+> > For example:
+> > Consider the case below:
+> > 1 mmap(0x5000000, PAGE_SIZE,  ...)
+> > 2 mprotect(0x5000000, PAGE_SIZE*4, ...)
+> >
+> > in 6.1 and before, 2 will fail, and in 6.4 RC1, it will pass.
+> >
+> > I know that munmap will accept out-of-bound cases like this (because
+> > memory is freed anyway).
+> >
+> > Is this change intentional ?
+> >
+> > Thanks!
+> > Best regards,
+> > -Jeff
+> 
 
 -- 
-~Vinod
+Peter Xu
+
