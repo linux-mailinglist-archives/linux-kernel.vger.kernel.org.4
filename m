@@ -2,77 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56132704A35
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2F8704A45
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjEPKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S231722AbjEPKQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjEPKOG (ORCPT
+        with ESMTP id S231690AbjEPKQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:14:06 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AB2E6A;
-        Tue, 16 May 2023 03:14:05 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id AB0B930000347;
-        Tue, 16 May 2023 12:14:03 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 9FFB3260B59; Tue, 16 May 2023 12:14:03 +0200 (CEST)
-Date:   Tue, 16 May 2023 12:14:03 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Fontenot Nathan <Nathan.Fontenot@amd.com>
-Subject: Re: [PATCH 1/2] PCI: pciehp: Add support for OS-First Hotplug and
- AER/DPC
-Message-ID: <20230516101403.GA3398@wunner.de>
-References: <20221101000719.36828-1-Smita.KoralahalliChannabasappa@amd.com>
- <20221101000719.36828-2-Smita.KoralahalliChannabasappa@amd.com>
- <20221104101536.GA11363@wunner.de>
- <fba22d6b-c225-4b44-674b-2c62306135ed@amd.com>
- <20230510201937.GA11550@wunner.de>
- <20230511152326.GA16215@wunner.de>
- <579cb233-4827-2d03-56ad-1b807a189ba8@amd.com>
- <20230515193835.GA17526@wunner.de>
- <14ac1391-9ab9-d352-d3b1-ba6caae3d9df@amd.com>
+        Tue, 16 May 2023 06:16:00 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9251A1A5;
+        Tue, 16 May 2023 03:15:50 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pyrhy-009Z5W-Qv; Tue, 16 May 2023 18:15:07 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 16 May 2023 18:15:06 +0800
+Date:   Tue, 16 May 2023 18:15:06 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Dmitry Safonov <dima@arista.com>
+Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v6 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+Message-ID: <ZGNXqrqoFfA5DUsr@gondor.apana.org.au>
+References: <20230512202311.2845526-1-dima@arista.com>
+ <20230512202311.2845526-2-dima@arista.com>
+ <ZGG5rtuHB4lvLyKI@gondor.apana.org.au>
+ <eb6d0724-92d6-3c3f-b698-9734adc7e1b9@arista.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <14ac1391-9ab9-d352-d3b1-ba6caae3d9df@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <eb6d0724-92d6-3c3f-b698-9734adc7e1b9@arista.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 01:56:25PM -0700, Smita Koralahalli wrote:
-> Could I please know, why do you think masking surprise down during
-> initialization would be a better approach than reading surprise down error
-> status on a DPC event? Because in both approaches we should be however
-> clearing status registers right?
+On Mon, May 15, 2023 at 05:25:55PM +0100, Dmitry Safonov wrote:
+>
+> Hi Herbert, thanks for your patches. Could you point me to the repo that
+> has ciphers clone-tfm support? I've looked in Torvald's/master, your
+> cryptodev-2.6.git and in linux-next, but I can't see anywhere in
+> cmac_create() something of inst->alg.base.clone_tfm = cmac_clone_tfm kind.
+> 
+> As I wrote two paragraphs above, it's required for TCP-AO to provide
+> cmac(aes128) support. Let me know if you have cmac clone-tfm somewhere
+> or if you're cooking it. On the cover-letter for this patch set, it's in
+> TODO.
 
-Masking seemed much simpler, more elegant, less code.
-
-I wasn't aware that masking the error merely suppresses the message to
-the Root Complex plus the resulting interrupt, but still logs the error.
-That's kind of a bummer, so I think your approach is fine and I've just
-sent you some review feedback on your patch.
+Good point.  I'll post something for cmac soon.
 
 Thanks,
-
-Lukas
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
