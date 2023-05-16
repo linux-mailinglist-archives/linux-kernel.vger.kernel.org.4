@@ -2,124 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E7570526F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9419705273
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233981AbjEPPlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S234019AbjEPPls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbjEPPlG (ORCPT
+        with ESMTP id S234013AbjEPPll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:41:06 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0383E6196
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:41:03 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id 006d021491bc7-54f8b7a4feeso3372736eaf.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:41:02 -0700 (PDT)
+        Tue, 16 May 2023 11:41:41 -0400
+Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5107DBF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:41:31 -0700 (PDT)
+Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-44fc48d993fso5058465e0c.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684251662; x=1686843662;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbsMPqm3v90m7Kt6BBFrfiEYM7ABiPPbBLoB2ZG6Q3g=;
-        b=Wyq1A2PGVAEvpWr68+3BoJ3z/9/0cXR2sH8ATvaFYSqdyIwD7kom5XvU0thz0wG3ge
-         x4/JRJ1Uk7pED0uHYUEcwj57ULhIOtcdAyfVNH0PWG0sbPonoVtSeHKDAfrcE6FAoEii
-         SJRHDMJnOG6CZbWQm3fkol3D6G4eDh2nL1j2s9EWu434VijfrPSxgJGF3RoLeY/Oo9dS
-         t6lACaLXDgyGOaNzHawD449olscrGoaYX3XanxupwRMIU3dVQd2OFmQafT/uxcmJBgo9
-         bS6G1wXItl4gSbZr2Y6FU9mNmspi5tRzSnlqiwTfzYonaLP4RH9qIVXa3JJndwbtQC9E
-         y02g==
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684251690; x=1686843690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dUlgGwi/Bid+V+vNq0ihjnvnFHGXCmk1OrWz555v4NM=;
+        b=PwfMKsdb+yRpZ4onFvCLkAE93SmlnNm0Ta3+o6TB28KIbmR8tK1ZYoO5t9fa4TfPDk
+         lw9jaDL9fSmEFurrwzHmqYRCZPO8h/K8PRgP03l8Rpkpy/9kOa4cFt8n8j/IGa4PjN5e
+         xe06l6ToYOPFrMKxW5ChRmmbw1TPJSTuq+KM+CMWNiIY1fnlHEq2AdRLU0uXN/ihPxLl
+         D4LDqU8lNz6pSLUwB9xkU6A2/8AVlFvNoTVW4QYLQKPr6NwqWVxkKiNB3QSdLhGbe7dD
+         zgCFO+ccPHibN/JBS4R/XtUiJFNonfUTYhe+mKZxY061UdbpsdpRUasBFCuuRG8NRtaP
+         d4Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684251662; x=1686843662;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WbsMPqm3v90m7Kt6BBFrfiEYM7ABiPPbBLoB2ZG6Q3g=;
-        b=LRkXr7GLSZZ6TtfoZtcwSbA1Kc7PqXP30grKoXhuedSdlTp0b7pRqMiQKMSx3+UzBX
-         EJPMJ3YSbhbz8bYN+gR0XhBUrlQkyWTeGzpyzWf3RzW48/jgh46KKZq3HifajsUv3EFK
-         llhjSpxD5pL2zj46LoRWNrzG2OGBYPF8qlfo71VKC7vz+UFEcRo4M9zkfKlHy7Q0zgS8
-         i5OoRAIrqWB3LN9hRYAhtERZgbtv/Exj9AuVVx0uDnowgXu1Tcm8CCwl1sZWXs5OHWYc
-         8f3aK377qQxAfgj8p7ltjNJ/aSYXKNcUvpGlDmGfzL+p1xSXHVeLF7BZVj8l1JWdRAOa
-         14vQ==
-X-Gm-Message-State: AC+VfDy9pLyTrY1a7iLSqLHZ+jUMwqXjhZAkzKVu0aHoCwa+jcKc2z4N
-        e4Tz8wC5P9cfiJIy2C3fXpVNV9liK69BENEp3hM=
-X-Google-Smtp-Source: ACHHUZ6dA9rQrjAkG2+kGq5fO4n9bu0GgH/FymYUcDowPI578t2MaTHa1rSqPc521PtIwWWiWDkkiTms5+fSE50XvDw=
-X-Received: by 2002:a4a:301c:0:b0:551:50d8:2325 with SMTP id
- q28-20020a4a301c000000b0055150d82325mr6923294oof.3.1684251662162; Tue, 16 May
- 2023 08:41:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684251690; x=1686843690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dUlgGwi/Bid+V+vNq0ihjnvnFHGXCmk1OrWz555v4NM=;
+        b=Qk8GiAxB5Ehl6Z2Q4P9nVGXlAJjm0k2pJJaOPOUR9Bfs33d29Q2V5nofuAearQ8juV
+         WtbYKJzt8RjMPHPaNr+4xKViv60czc/WB1qKfAqt5SoLR706G3QA2A0xDFPVdQU07g0Z
+         MEtb+haaISS49QUwplEYcx/fgr7w19uKa7auhB+Zn5PfCnnomOCN+13JciqmvpbjJ1X9
+         bNREMXEXl/9QX8/8lDpXNqJDt875G8E0Z8AoTLTGvlMD+a1Tq+9zW0xRSLVQCmiP5ZPu
+         z5+N5/YqNXA4o42G2B8T27emtSUYuRekkQYj6d4c+PoKUygjA1ESUCjdgA2lYhF5hWMC
+         jWWw==
+X-Gm-Message-State: AC+VfDy58EMqaIT4l7kXakOrnCJnJ2vd65accWP3q6f7nNdVGu4cdJoL
+        UyrmOzIw4Yj/nhuqzZ6xKfKsfxGCsteTcOmXSLYDnA==
+X-Google-Smtp-Source: ACHHUZ7geFgnpKprltmekDwePERwLI1/NGr2YZczOVKccWMobKpDNL54KOiEZyFYlCUv/sA4Wmnqgjfv0BdhoMFOVIs=
+X-Received: by 2002:a1f:bd47:0:b0:44f:cc25:2007 with SMTP id
+ n68-20020a1fbd47000000b0044fcc252007mr12901502vkf.11.1684251690642; Tue, 16
+ May 2023 08:41:30 -0700 (PDT)
 MIME-Version: 1.0
-Sender: ericgloriapaul@gmail.com
-Received: by 2002:a05:6358:5e0c:b0:11a:758f:2411 with HTTP; Tue, 16 May 2023
- 08:41:00 -0700 (PDT)
-From:   Stepan CHERNOVETSKYI <s.chernovetskyii@gmail.com>
-Date:   Tue, 16 May 2023 16:41:00 +0100
-X-Google-Sender-Auth: K51qsM_8nJPbmwMc7SZAvxoJIgw
-Message-ID: <CAApFGfTSBwLbju1tWR1n9do3BtWN-F=jwZnNO7iDa2A=_b2_xw@mail.gmail.com>
-Subject: Dear Sir/Madam,
-To:     undisclosed-recipients:;
+References: <20230516153109.514251-1-arnd@kernel.org> <20230516153109.514251-2-arnd@kernel.org>
+In-Reply-To: <20230516153109.514251-2-arnd@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 16 May 2023 17:41:19 +0200
+Message-ID: <CAMRc=MdHC=PPs2f3XXpRF5705553dXgVaVpN1kbRzypoeuOpRQ@mail.gmail.com>
+Subject: Re: [PATCH 01/13] ARM: davinci: fix davinci_cpufreq_init() declaration
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.3 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
-        DEAR_SOMETHING,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:c31 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ericgloriapaul[at]gmail.com]
-        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.0 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- My beloved friend,
+On Tue, May 16, 2023 at 5:31=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The davinci_cpufreq_init() declaration is only seen by its caller
+> but not the definition:
+>
+> drivers/cpufreq/davinci-cpufreq.c:153:12: error: no previous prototype fo=
+r 'davinci_cpufreq_init'
+>
+> Move it into the platform_data header that is already used an
+> interface between the two places.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/mach-davinci/common.c                | 1 +
+>  arch/arm/mach-davinci/common.h                | 6 ------
+>  include/linux/platform_data/davinci-cpufreq.h | 6 ++++++
+>  3 files changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/arm/mach-davinci/common.c b/arch/arm/mach-davinci/commo=
+n.c
+> index c1ce6b2a8d48..7bc7018688de 100644
+> --- a/arch/arm/mach-davinci/common.c
+> +++ b/arch/arm/mach-davinci/common.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/etherdevice.h>
+>  #include <linux/davinci_emac.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/platform_data/davinci-cpufreq.h>
+>
+>  #include <asm/tlb.h>
+>  #include <asm/mach/map.h>
+> diff --git a/arch/arm/mach-davinci/common.h b/arch/arm/mach-davinci/commo=
+n.h
+> index b2a96cdf88da..010ba1df27b3 100644
+> --- a/arch/arm/mach-davinci/common.h
+> +++ b/arch/arm/mach-davinci/common.h
+> @@ -55,12 +55,6 @@ extern void davinci_common_init(const struct davinci_s=
+oc_info *soc_info);
+>  extern void davinci_init_ide(void);
+>  void davinci_init_late(void);
+>
+> -#ifdef CONFIG_CPU_FREQ
+> -int davinci_cpufreq_init(void);
+> -#else
+> -static inline int davinci_cpufreq_init(void) { return 0; }
+> -#endif
+> -
+>  #ifdef CONFIG_SUSPEND
+>  int davinci_pm_init(void);
+>  #else
+> diff --git a/include/linux/platform_data/davinci-cpufreq.h b/include/linu=
+x/platform_data/davinci-cpufreq.h
+> index bc208c64e3d7..1ef91c36f609 100644
+> --- a/include/linux/platform_data/davinci-cpufreq.h
+> +++ b/include/linux/platform_data/davinci-cpufreq.h
+> @@ -16,4 +16,10 @@ struct davinci_cpufreq_config {
+>         int (*init)(void);
+>  };
+>
+> +#ifdef CONFIG_CPU_FREQ
+> +int davinci_cpufreq_init(void);
+> +#else
+> +static inline int davinci_cpufreq_init(void) { return 0; }
+> +#endif
+> +
+>  #endif /* _MACH_DAVINCI_CPUFREQ_H */
+> --
+> 2.39.2
+>
 
-
-Please do not be embarrassed for contacting you through this medium; I
-got your contact from Google people search and then decided to contact
-you. My goal is to establish a viable business relationship with you
-there in your country.
-
-I am Stepan Leonid CHERNOVETSKYI, from Kyiv (Ukraine); I was a
-businessman, Investor and Founder of Chernovetskyi Investment Group
-(CIG) in Kyiv before Russia=E2=80=99s Invasion of my country. My business h=
-as
-been destroyed by the Russian military troops and there are no
-meaningful economic activities going on in my country.
-
-I am looking for your help and assistance to buy properties and other
-investment projects, I consider it necessary to diversify my
-investment project in your country, due to the invasion of Russia to
-my country, Ukraine and to safeguard the future of my family.
-
-Please, I would like to discuss with you the possibility of how we can
-work together as business partners and invest in your country through
-your assistance, if you can help me.
-
-Please, if you are interested in partnering with me, please respond
-urgently for more information.
-
-Yours Sincerely,
-Stepan Leonid CHERNOVETSKYI ,
-CEO - Chernovetskyi Investment Group (CIG)
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
