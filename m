@@ -2,138 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88230704B8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD32A704B3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbjEPLCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S232478AbjEPK7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbjEPLCE (ORCPT
+        with ESMTP id S232458AbjEPK7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:02:04 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E570D5269;
-        Tue, 16 May 2023 04:01:16 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAr4FL008868;
-        Tue, 16 May 2023 11:01:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=cRwDyTs23RrwIKduskipf0l0ugXNo9AE6MIoy0cvmdE=;
- b=joFtr7+2TXv+4X1mvNEDyroDAHKypvhykG9LM33dZVisWkpl0fBv2UaZAzPntb/1qyf8
- E220eCLL2m95P5EB/5xRM132MYmS2z67691v6oclG8RW2dH7eXURZnCrFQicuKFyepZe
- eDO5EyD4fl1SggOlKE9ALgG7XD4ivq049vswULTi5u9ABmXpe8JNGgHUU2jVainT0gyg
- GFURYDCQpkTpx6XC8DkLy7XT6i5WszDINL/BPOGx3nFGrRj0L8fDfpX19fj0EfITAPh2
- SKoIM3F6q7jcPDX36v3zJkF5PztuRBNgSnDGyZfrUdDIiDY+YHY3K/BPqfOHxjr87qGc tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8fbg6sa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:04 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAt3DT018992;
-        Tue, 16 May 2023 11:01:03 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8fbg6ra-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:03 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G2wIsi009276;
-        Tue, 16 May 2023 11:01:01 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdsjrc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:01 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB0x7L8782368
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:00:59 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 64B1A20043;
-        Tue, 16 May 2023 11:00:59 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE6CA20040;
-        Tue, 16 May 2023 11:00:58 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:00:58 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH v4 22/41] PCI: Make quirk using inw() depend on HAS_IOPORT
-Date:   Tue, 16 May 2023 13:00:18 +0200
-Message-Id: <20230516110038.2413224-23-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+        Tue, 16 May 2023 06:59:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555D81707
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:59:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C951C21AEB;
+        Tue, 16 May 2023 10:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684234756; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=iFna9KXPdqHnFgf/U0ob1QdCunsSneOuply4hQac6Wo=;
+        b=RnsjJYIGuwP46R1RiBaqO1uGQcDh5wPiOmV9chJxeMOqLBuYSIwPWohO4RBw/mBOfcar22
+        rWNTPxQNs4OeLctIyh36orxrTZ0wY8AWDSAbc/pROqKmTmNLv15ZVcpDNOdM4IrrlKy28o
+        ErkjyxtNrzwmAjGcNCgEyJ5+Y+stOZE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684234756;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=iFna9KXPdqHnFgf/U0ob1QdCunsSneOuply4hQac6Wo=;
+        b=Q6r2KdWSQrWA5NfBOxZk9U02LMCAcSgDz2MAz8DJcWVpN1f7ekdvwm8mWgHiHFeHLKZdeL
+        Gp8rggU9iKWTKHCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B541F138F5;
+        Tue, 16 May 2023 10:59:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oLbMKgRiY2TfdQAAMHmgww
+        (envelope-from <chrubis@suse.cz>); Tue, 16 May 2023 10:59:16 +0000
+Date:   Tue, 16 May 2023 13:00:19 +0200
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     ltp@lists.linux.it, linux-kernel@vger.kernel.org,
+        libc-alpha@sourceware.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        lwn@lwn.net
+Subject: [ANNOUNCE] The Linux Test Project has been released for MAY 2023
+Message-ID: <ZGNiQ1sMGvPU_ETp@yuki>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Ibrn0fY5XHIre5foHQysxvgTrYaQDP4w
-X-Proofpoint-GUID: FqYuV50yRnP9H7X0WXioxSD-QIy0Io6L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxscore=0 clxscore=1015 adultscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305160089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the future inw() and friends will not be compiled on architectures
-without I/O port support.
+Good news everyone,
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
-Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
-      per-subsystem patches may be applied independently
+(sorry for the repeated email to some, apparently a few email addresses
+ were mistyped on the first announcement)
 
- drivers/pci/quirks.c | 2 ++
- 1 file changed, 2 insertions(+)
+the Linux Test Project test suite stable release for *May 2023* has been
+released.
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index f4e2a88729fd..81fb75f128f7 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -268,6 +268,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_2,	quirk_isa_d
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_3,	quirk_isa_dma_hangs);
- #endif
- 
-+#ifdef CONFIG_HAS_IOPORT
- /*
-  * Intel NM10 "TigerPoint" LPC PM1a_STS.BM_STS must be clear
-  * for some HT machines to use C4 w/o hanging.
-@@ -287,6 +288,7 @@ static void quirk_tigerpoint_bm_sts(struct pci_dev *dev)
- 	}
- }
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TGP_LPC, quirk_tigerpoint_bm_sts);
-+#endif
- 
- /* Chipsets where PCI->PCI transfers vanish or hang */
- static void quirk_nopcipci(struct pci_dev *dev)
+Since the last release 199 patches by 33 authors were merged.
+
+Patch review is what most of the projects struggle with and LTP is no
+different. If you can spare some effort helping with the patch review is more
+than welcomed.
+
+NOTABLE CHANGES
+===============
+
+* New tests
+  - kvm_svm01 aka CVE-2021-3653
+  - cgroup_core03 test case for the cgroup kill
+  - hugetlb32 regression test for:
+    - ba9c1201beaa (mm/hugetlb: clear compound_nr before freeing gigantic pages)
+    - a01f43901cfb (hugetlb: be sure to free demoted CMA pages to CMA)
+  - mmap20 test for mmap() with MAP_SHARED_VALIDATE
+  - mqnotify03 aka CVE-2021-38604
+  - mprotect05 regression test for:
+    - 2fcd07b7ccd5 (mm/mprotect: Fix successful vma_merge() of next in do_mprotect_pkey())
+  - fsconfig03 aka CVE-2022-0185
+  - madvise11 regression test for:
+    - d4ae9916ea29 (mm: soft-offline: close the race against page allocation)
+  - mount07 test case for MS_NOSYMFOLLOW
+
+* Increased coverage
+  - NFS tests now run on btrfs, ext4 and xfs
+  - setpgid were rewritten and increased coverage in a few corner cases
+  - ioctl01 added more termios coverage
+
+* fs_fill test was fixed on 256+ CPUs
+
+* loongarch support was added
+
++ The usual amount of fixes and cleanups
+
+NOTABLE CHANGES IN NETWORK TESTS
+================================
+brought to you by Petr Vorel
+
+- NFS tests now run on btrfs, ext4, xfs
+  (might be extended to more filesystems later)
+- nfs08.sh a new test for NFS cache invalidation
+
+RUNLTP-NG
+=========
+
+* The new runltp-ng was finally included in the previous release tarball
+  - https://github.com/linux-test-project/runltp-ng/#readme
+  - https://www.youtube.com/watch?v=JMeJBt3S7B0
+
+* There were no changes done in this release, however parallel text execution
+  is being worked on, possibly there would be preview ready for the next release
+
+REMOVED TESTS
+=============
+
+* tomoyo testsuite which is maintained elsewhere by tomoyo devs
+
+* execltp script which was unmaintained for years
+
+DOWNLOAD AND LINKS
+==================
+
+The latest version of the test-suite contains 3000+ tests for the Linux
+and can be downloaded at:
+
+https://github.com/linux-test-project/ltp/releases/tag/20230516
+
+The project pages as well as GIT repository are hosted on GitHub:
+
+https://github.com/linux-test-project/ltp
+http://linux-test-project.github.io/
+
+If you ever wondered how to write a LTP testcase, don't miss our developer
+documentation at:
+
+https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines
+
+https://github.com/linux-test-project/ltp/wiki/C-Test-API
+
+https://github.com/linux-test-project/ltp/wiki/C-Test-Network-API
+
+https://github.com/linux-test-project/ltp/wiki/Shell-Test-API
+
+https://github.com/linux-test-project/ltp/wiki/C-Test-Case-Tutorial
+
+https://github.com/linux-test-project/ltp/wiki/Build-System
+
+Patches, new tests, bugs, comments or questions should go to to our mailing
+list at ltp@lists.linux.it.
+
+CREDITS
+=======
+
+Many thanks to the people contributing to this release:
+
+git shortlog -s -e -n 20230127..
+
+    58  Petr Vorel <pvorel@suse.cz>
+    20  Andrea Cervesato via ltp <ltp@lists.linux.it>
+    19  Yang Xu <xuyang2018.jy@fujitsu.com>
+    15  Martin Doucha <mdoucha@suse.cz>
+    11  Andrea Cervesato <andrea.cervesato@suse.com>
+    11  Edward Liaw <edliaw@google.com>
+    10  Wei Gao <wegao@suse.com>
+     8  Avinesh Kumar <akumar@suse.de>
+     5  Cyril Hrubis <chrubis@suse.cz>
+     5  Teo Couprie Diaz <teo.coupriediaz@arm.com>
+     4  Li Wang <liwang@redhat.com>
+     3  Hao Ge <gehao@kylinos.cn>
+     3  Ping Fang <pifang@redhat.com>
+     3  Richard Palethorpe <rpalethorpe@suse.com>
+     3  Tarun Sahu <tsahu@linux.ibm.com>
+     2  Hao Zeng <zenghao@kylinos.cn>
+     2  Leo Yu-Chi Liang <ycliang@andestech.com>
+     2  Sowmya Indranna <reachmesowmyati@gmail.com>
+     1  Andrei Gherzan <andrei.gherzan@canonical.com>
+     1  Ashwin Dayanand Kamat via ltp <ltp@lists.linux.it>
+     1  David Hildenbrand <david@redhat.com>
+     1  Enze Li <lienze@kylinos.cn>
+     1  Fabrice Fontaine <fontaine.fabrice@gmail.com>
+     1  Frank He <hexiaoxiao@kylinos.cn>
+     1  Hui Min Mina Chou <minachou@andestech.com>
+     1  Jan Stancek <jstancek@redhat.com>
+     1  Liam R. Howlett <Liam.Howlett@oracle.com>
+     1  Mahesh Kumar G <maheshkumar657g@gmail.com>
+     1  Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+     1  Paulson Raja L <paulson@zilogic.com>
+     1  Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+     1  Vignesh Raman <vignesh.raman@collabora.com>
+     1  William Roche <william.roche@oracle.com>
+
+
+And also thanks to patch reviewers:
+
+git log 20230127.. | grep -Ei '(reviewed|acked)-by:' | sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+     68 Cyril Hrubis <chrubis@suse.cz>
+     60 Petr Vorel <pvorel@suse.cz>
+     36 Richard Palethorpe <rpalethorpe@suse.com>
+     35 Li Wang <liwang@redhat.com>
+      7 Jan Stancek <jstancek@redhat.com>
+      4 Avinesh Kumar <akumar@suse.de>
+      3 Yang Xu <xuyang2018.jy@fujitsu.com>
+      2 Andrea Cervesato <andrea.cervesato@suse.com>
+      1 Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 -- 
-2.39.2
-
+Cyril Hrubis
+chrubis@suse.cz
