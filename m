@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1880C704548
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB7770454B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjEPG1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S230204AbjEPG10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjEPG1H (ORCPT
+        with ESMTP id S229981AbjEPG1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:27:07 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D68198D;
-        Mon, 15 May 2023 23:27:07 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-52c30fbccd4so12707901a12.0;
-        Mon, 15 May 2023 23:27:07 -0700 (PDT)
+        Tue, 16 May 2023 02:27:24 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F043D35AF;
+        Mon, 15 May 2023 23:27:19 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aaebed5bd6so97247275ad.1;
+        Mon, 15 May 2023 23:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684218426; x=1686810426;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J/hLNN3H+lpepMaqTgLArXu+K/5Z87+b97kJZLWuHrw=;
-        b=OEDwriibEMmE+wcy0oDS7CtPwvKCOmr/MZXOiwuixK6Ztzoio0Q7zmVPdwoSwE3hoE
-         o5RlkQvJXCheWgHA6pOxXQu0n4/jKHO39GkpcPyr3pc+XPL6AIIwN97nJfLKFlfKkyo8
-         HHqpmfQpU0GPm91zmKvG66gYkIpOch1CLBlEt2Pq1xcl1qXrj8siFGVezdx/tiidrHxm
-         7rcSNI1NRJ/eXWRBU6yQ1gp45RfC23ZDfAeHhV0a5z2fnftPg+Q4sWiTkkCa78e2mB4g
-         iymzeH98n2LuHPq+HT0XBtjIIjz+mKQ2g7bnJI65i8eVp4bHh5xP/IeCfjvrgtn9EB/n
-         bcVg==
+        d=gmail.com; s=20221208; t=1684218439; x=1686810439;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MEAnMpd6wdtOy2vwlfjPurAIrcJAUQpKXG37N4nz4YI=;
+        b=Uj0ifojq6EdcNq4Y3rHaz5PpLggXKjIKq2yFOn/M3JX8nkWRlkQ7RKEjslcDd8nTl8
+         qc6kX4Q5Yy3NpiPnTL1Mewb+7OOmEZJrkULw6r12N0w4K52VtnmmStn4zg9LXFxmF96v
+         AMBLMpZQOHE2PQezUsJcau0SXcO6ymgoGMWWqd1rNWTxRm8oUlP1gD8z7/fF4MjpKdEe
+         qBelsc6KXY1RZ4RyrXGnlhh9KklSe8mZQLPqWUpcK10zPUzKLSu1w1v9wImbzKenukOB
+         t2Ozpbtxh+x7klmaLLBzdaX6jxAHz+bTsmDUOxFVt63prWOKXUzqdzjL+JvovX3KbAJW
+         3rlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684218426; x=1686810426;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J/hLNN3H+lpepMaqTgLArXu+K/5Z87+b97kJZLWuHrw=;
-        b=H+V1zHAbtlMYhd4xVdt1Zg+jAAeljGkL2ismMej/iUIQiyVRbh8drH9Jy9z/I+pgiQ
-         FripAQMfw5obLSEbsOvhXIPnY00JDG+APerdpadKZxh9F+KBe4eEOGY2UMADoqLHxvoQ
-         BK/PGQetvFD42GjIoFNOJwniLRKvlx7tanh4lg3sq879H7xermN3lM0d10LsKemAccJy
-         CoxKDFbo7pXQ1Q2t1Vt1fWgxIGTWhP3ZnD7dARctiIaqFBZiL/UeFRby3ooHTXnInW9g
-         m0MjRdKRe4udEYoa6P0xMzHVIsBj2ip2uuIRn1UbUGHldjHfvRKE+oDoca69KdjznV4+
-         DQgA==
-X-Gm-Message-State: AC+VfDxgoC37ZtAdxji6lRmA4957MynhbQOVdswo1t+j7V5j+74XSTCJ
-        CmYbmdt+4nddwXqn9FqqfeU=
-X-Google-Smtp-Source: ACHHUZ4ePe6mVpiWhceFcpuW5itW94mvZZseRbqudYhueRP7IMPA/WJ8v6jCFBN2/A0MXCCuNx3i2g==
-X-Received: by 2002:a17:903:234c:b0:1ab:289f:65cf with SMTP id c12-20020a170903234c00b001ab289f65cfmr48674930plh.54.1684218426470;
-        Mon, 15 May 2023 23:27:06 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684218439; x=1686810439;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MEAnMpd6wdtOy2vwlfjPurAIrcJAUQpKXG37N4nz4YI=;
+        b=UeWigwsgEPRmZ0F5nzBR+Ej7n/GsxMnkSnY6EbdadqZr7246uKTf5hVgdV7BWqahAl
+         nDY4NnS1r2gHbciKgAD5H8J68bHks5Zd41lzPCEcl23uN9HGYS+ArWlyV3WJ7RJjKXud
+         RF+YRx8AoLdo2dnG/mDvgPURJ1PdmlcSbG5kDhcqmkiwBH+e3vnjanAjq1Qygi59aYb0
+         8XlzSQIHfX/BwcVmssRf1z7wad+mFH3+xsQR3i/2+rtEoqm3c2yZ+LYMApntuy2Ikl/u
+         GiX1CC25ITzlw0U5nIE6f83mkYlWCg/5hn1qTpp8tidF1ABmsK5nznLqhX0N3ys9JpkJ
+         3JTw==
+X-Gm-Message-State: AC+VfDyCMdwykzdIKx8dmrgMjFm6SmwuQqqx5zKvRIhcWcLg2JJNKMRa
+        TKwzeb03BfdtpM4qgrpsAy8hJZoS8pYKRQ==
+X-Google-Smtp-Source: ACHHUZ6xUDJj3aEkckO8bCjAZDnv7vsKHZujw8XOx5aaR64Ac7kXg8RMgdLHug8IF1Z2l0jyMl1N0Q==
+X-Received: by 2002:a17:902:c453:b0:1a9:a672:12b8 with SMTP id m19-20020a170902c45300b001a9a67212b8mr29330812plm.68.1684218439287;
+        Mon, 15 May 2023 23:27:19 -0700 (PDT)
 Received: from localhost.localdomain (n220246252240.netvigator.com. [220.246.252.240])
-        by smtp.gmail.com with ESMTPSA id j18-20020a170902da9200b001aaea7bdaa7sm14579710plx.50.2023.05.15.23.27.01
+        by smtp.gmail.com with ESMTPSA id j18-20020a170902da9200b001aaea7bdaa7sm14579710plx.50.2023.05.15.23.27.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 23:27:05 -0700 (PDT)
+        Mon, 15 May 2023 23:27:18 -0700 (PDT)
 From:   Jianhua Lu <lujianhua000@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,10 +62,12 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND,PATCH 1/3] arm64: dts: qcom: sm8250-xiaomi-elish-boe: fix panel compatible
-Date:   Tue, 16 May 2023 14:26:55 +0800
-Message-Id: <20230516062657.28616-1-lujianhua000@gmail.com>
+Subject: [RESEND,PATCH 2/3] arm64: dts: qcom: sm8250-xiaomi-elish-csot: fix panel compatible
+Date:   Tue, 16 May 2023 14:26:56 +0800
+Message-Id: <20230516062657.28616-2-lujianhua000@gmail.com>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20230516062657.28616-1-lujianhua000@gmail.com>
+References: <20230516062657.28616-1-lujianhua000@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,25 +84,25 @@ From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 The bindings expect "novatek,nt36523" fallback in the panel compatible:
 
-  sm8250-xiaomi-elish-boe.dtb: panel@0: compatible: ['xiaomi,elish-boe-nt36523'] is too shor
+  sm8250-xiaomi-elish-csot.dtb: panel@0: compatible: ['xiaomi,elish-csot-nt36523'] is too short
 
-Fixes: 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
+Fixes: 8a786036c7b6 ("arm64: dts: qcom: sm8250-xiaomi-elish-csot: Add Xiaomi Mi Pad 5 Pro CSOT variant")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts | 2 +-
+ arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
-index 8b2ae39950ff..de6101ddebe7 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-boe.dts
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
+index a4d5341495cf..4cffe9c703df 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
++++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
 @@ -13,6 +13,6 @@ / {
  };
  
  &display_panel {
--	compatible = "xiaomi,elish-boe-nt36523";
-+	compatible = "xiaomi,elish-boe-nt36523", "novatek,nt36523";
+-	compatible = "xiaomi,elish-csot-nt36523";
++	compatible = "xiaomi,elish-csot-nt36523", "novatek,nt36523";
  	status = "okay";
  };
 -- 
