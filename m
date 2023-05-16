@@ -2,109 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB2A705132
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6802705133
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbjEPOqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S233598AbjEPOrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjEPOqv (ORCPT
+        with ESMTP id S234039AbjEPOrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:46:51 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4948C30F1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:46:50 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-42c38a6daf3so9711130137.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684248409; x=1686840409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UOhmwZfKJQlJRGzere4rhYjpul5gFst5eFskc2CxCHI=;
-        b=jDHNlDwrYTXxID7x+2TVi7DdflqOASVTWysEmnf2zCJMvpnBqux5xOnUVcjzBS7zwE
-         lrM7dg4qxLxEc2XlNPkELa+vxwsaVxOhx51xGK0a+WqH5dQ+Dvfbb+5PbCw6rwx4yj/S
-         cUBnPfXJc/DRDwA3UeYUq826fNgCbiXRN3dS5skX5Cut6B/dxoctwm1NuSxkBbSGU8M5
-         0OqfGNPUVRN4ZQuF4vjrH7dQkSMuRAfveHxO+szROC0WdXNh4wklUkIV3LPhoBMJLwW2
-         xTmWGY4TIeJ4aYhCbfwANBEhmoxnD8LV3wJCXdMgB9VIQd5Fbj2eJ8iybxjuLSp0vtHG
-         qlxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684248409; x=1686840409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UOhmwZfKJQlJRGzere4rhYjpul5gFst5eFskc2CxCHI=;
-        b=b3r4rbdFXaS7wdIDO1d+ZiC/zV3Dz1o1fuJNQaxkN+1XYjdXTtYHjqB3JcgH23DtxQ
-         CcVbVqQsrboB7haWTUaZuNO3AbQkQ8UvDbz6LhT5t0vbvQUVCiLFua/sH6gr8YzQwcMD
-         eSw7osZGIncoXPI0Yu9ckFIya3SvQUJ5CT4iWpoYtCQ+nV+UmGFYogIanw2Q9roi40pq
-         GN1jp9g07U6dCwTotxU1HazMoUZFfDBLLWmbCZSmjeCUzCpBAbKEunocr5mtjTICL6N9
-         bOJsfreuf9EkMRR9roEZfaL51wWrn6pKWXSZ2u7NrL0C2LZF5aKlYqVu0QPKQhk4BeO+
-         VBsQ==
-X-Gm-Message-State: AC+VfDy9N+2blcz6iz0KC3fImv7CHtzfbJfdi94AXspT+AA3rb6JvTvg
-        uOqGc5NYOYPJlVn7Z6SLhroqO9SvqMC7UoVBw1tK6AF5hLRwIVgl
-X-Google-Smtp-Source: ACHHUZ5KoHDWDTbdMQnJ0Jto8kIPps/K7bOZNuPP95SVIURLaOQHRvbDyVf2dn4RaDOzY7eKSaOEV65Me19DslJq4DI=
-X-Received: by 2002:a67:de14:0:b0:434:9021:30c1 with SMTP id
- q20-20020a67de14000000b00434902130c1mr14963256vsk.14.1684248409391; Tue, 16
- May 2023 07:46:49 -0700 (PDT)
+        Tue, 16 May 2023 10:47:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9997630E6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:47:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 352FA62E1E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E40C433EF;
+        Tue, 16 May 2023 14:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684248432;
+        bh=rw01jFzWE+dBQpKmkiy9pElSCaXqj2ETacLAGV1l9oo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uHPkdJH2fkM20Qy/X/CKY36SBlgoEEA7fx/nrNx4VWH9MW31yTTVmeHG4WUdwLBMs
+         8Ucb3uxPgVPgum5XQ9kXVLJiNdRBGIP55mGU92ptmegHd0hApTjuVEbTaGVE9bezHH
+         esNhPto0FyvH6GHzVgSDCmVQadPuWH+XRiVZ8VVwPNnc4qrMbkV5GQjAUUOkqkovX1
+         LPopTHzxVUs/X4S5hjM7N/C9uUswJmfS+YAGMXWDpZtO0hITsqxyO4Un1SVZjDSEg8
+         zu27hUNLHQjAyIOgopHqu6CElVMRjx+htCYnLxxbOK0UuF855y+du2H9xxWmaq8BCv
+         tutB19X1NTY6w==
+Date:   Tue, 16 May 2023 23:47:09 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Daniel Baluta <daniel.baluta@oss.nxp.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        daniel.baluta@gmail.com
+Subject: Re: [RESEND PATCH 0/2] Improve support for sof_ipc{3|4}_bytes_ext_put
+Message-ID: <ZGOXbaq7jILy2a39@finisterre.sirena.org.uk>
+References: <20230516132401.205563-1-daniel.baluta@oss.nxp.com>
 MIME-Version: 1.0
-References: <20230515175042.495377-1-afd@ti.com>
-In-Reply-To: <20230515175042.495377-1-afd@ti.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 16 May 2023 16:46:38 +0200
-Message-ID: <CAMRc=MfqJSYbrbS9cuQFdOB4EW-RaYt0qGN_HZEL17hbvWAK_A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] i2c: davinci: Use platform table macro over module_alias
-To:     Andrew Davis <afd@ti.com>
-Cc:     Wolfram Sang <wsa@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="j9f+YHhPoyVZmHLb"
+Content-Disposition: inline
+In-Reply-To: <20230516132401.205563-1-daniel.baluta@oss.nxp.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 7:50=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
->
-> Generates the same platform module alias. More standard usage.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  drivers/i2c/busses/i2c-davinci.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-da=
-vinci.c
-> index 9750310f2c96..c55bd937def7 100644
-> --- a/drivers/i2c/busses/i2c-davinci.c
-> +++ b/drivers/i2c/busses/i2c-davinci.c
-> @@ -940,12 +940,16 @@ static const struct dev_pm_ops davinci_i2c_pm =3D {
->  #define davinci_i2c_pm_ops NULL
->  #endif
->
-> -/* work with hotplug and coldplug */
-> -MODULE_ALIAS("platform:i2c_davinci");
-> +static const struct platform_device_id davinci_i2c_driver_ids[] =3D {
-> +       { .name =3D "i2c_davinci", },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(platform, davinci_i2c_driver_ids);
->
->  static struct platform_driver davinci_i2c_driver =3D {
->         .probe          =3D davinci_i2c_probe,
->         .remove         =3D davinci_i2c_remove,
-> +       .id_table       =3D davinci_i2c_driver_ids,
->         .driver         =3D {
->                 .name   =3D "i2c_davinci",
->                 .pm     =3D davinci_i2c_pm_ops,
-> --
-> 2.39.2
->
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+--j9f+YHhPoyVZmHLb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 16, 2023 at 04:23:59PM +0300, Daniel Baluta wrote:
+> From: Daniel Baluta <daniel.baluta@nxp.com>
+>=20
+> This patch series provides better handling of cases where sending
+> a data blob to FW results in a validation error.
+
+Please allow a reasonable time for review, we're only at -rc1.
+
+--j9f+YHhPoyVZmHLb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRjl20ACgkQJNaLcl1U
+h9D8aQf+I5WsLa82cUh8ITXa9tQK1ma83k9JpIwd68KZvIPSDmH/1RbVUGv87fHz
+Q39FdEpGarPImVJBaOS+tUa1m+dlAKrR3fAqbMl54JrdZ25ikLksXcAoLU2x1//s
+oTpSzE3iHBDI6/e0E44oM19x8Up57q2cbn6Dk7olzALVrwVHJRHZDW94Mb0qVffz
+D2tflhza/w8FRLvv1xcibl+uGTNy8g4E11ZdAPIkqrS2W/DZwwRC3Ds4gMA2NOdX
+Yy6EiddmmS8MRvHirk4q8VCRMGrIILaJZTguLEwNDukwZuP3uhsaHpXVMNsiPbJc
+6gWEKLHYvnUPyqtLf0MBuVFcEhGagQ==
+=R6fk
+-----END PGP SIGNATURE-----
+
+--j9f+YHhPoyVZmHLb--
