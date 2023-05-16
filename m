@@ -2,120 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F0A704412
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B72470441F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjEPDqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 23:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S229913AbjEPDr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 23:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEPDp6 (ORCPT
+        with ESMTP id S229493AbjEPDrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 23:45:58 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEBD55A8
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:45:57 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-643a1fed360so8384142b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:45:57 -0700 (PDT)
+        Mon, 15 May 2023 23:47:21 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8593D4C22;
+        Mon, 15 May 2023 20:47:20 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1aae46e62e9so97098635ad.2;
+        Mon, 15 May 2023 20:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684208757; x=1686800757;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=H6xFm5v7Zliq3lQdYvYJJM7LEIo9eVLB2Vl6mhd8DHI=;
-        b=RAczxxBxYyMSZJjVasUdeYM77Gq40PtSHaaMLD0DjQeMs8vPZgi6NSorFQkASWrCwg
-         qT5mZFiQZDoUFfrkxuZfrkEF+4xsKQAXf22F5hJ0kjchSj9yTT7JERtPq+ncBzq0WeXX
-         awW11lvxDNmdCadLsYmwTh6DsXrH0fN7svpJjnMeyUIb+z8qWSup1diiPHJbx3ZD6MzS
-         J93Pe7tPM+ehcVHPExahCtgYpMYCV385NVhct/UKAexHclI8ouHfX6WzQb5OhmmOaS5k
-         brGh4tNpyrj3JnrEkWhXfGKk4hfYLWiFWbmbhaUfkDByWEEqAo5r46OpCMlxo2qoXt+/
-         AFgA==
+        d=gmail.com; s=20221208; t=1684208840; x=1686800840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PJkA0m3mLV3FScvH0VRdP/qwbPPh2FB8d0fW+TuWxR4=;
+        b=ApPSFRvnOtBS+Z/iKlnWcxMj6EFTaNcebWTAxUNqbr2V59bdCsI1CCGa7BSHqaDeQo
+         Y716hG4KkN0jkNJRqHDrjT+AwLp9OZhn4DGdlJ3osLyZeE9jrOxLkOIUjMJkvpo84CAq
+         nUTDHKlEa12CbYtD834uGpkePWIxfOzVkSxhCNiXiFb0yo2dh6eXGqhzdTiT1iPqmM5o
+         51Or2UyL9Qx+e5KfZ5LhYuXVvZSCPLsQ/mCaORrP9aCbUB2c2S/PnEh5FColWdomJPuP
+         SPspvw61zWv9jTS1y0MWuWQpPc6Zc2rkMxuDBflIpnO2zr1wz5G588YCFmWLp553g2yw
+         ki8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684208757; x=1686800757;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H6xFm5v7Zliq3lQdYvYJJM7LEIo9eVLB2Vl6mhd8DHI=;
-        b=FRQnSuasAqDsplHF+O3DCC0WWJz6HpCK8FLXouP9O7jfPaIWehbBX31r/uL12nSm3n
-         eSD0wIux73crC4SWV8v9Y99jrLaaPXZciTw9rH5Rjk0YJeo2rUn8ebP7CxgZESUK0cZM
-         PYU1M/HTjGuBZ35njjjd+OWt7M635hMwYy6wBgWKk5w7nJNXHt9e85qnNszSDR7/QzYv
-         Yf2+zMgzdY5Ptw1y0cBPIkCE7fA0z28H3vzbr1ldMqBNyEAfV/7UO2+u3LtD5lRD8G0k
-         bNmSkKCMKGimorY3IK6Wk125l0XUy8vtwZxCD7X/wUTEBglxfNsSDuLKGQYY08qhX/Lf
-         BasA==
-X-Gm-Message-State: AC+VfDxaf1Bbz8uCL4gMWWw9qRe3NDOL6d83uuS2teOzjyj58JUosdqz
-        vYlYpdACk8O51m+JZEZKjcgnqw==
-X-Google-Smtp-Source: ACHHUZ56WoYFeSj3BHyPQukZPnzA11OQRYSDO7dolYWR9RwgzZ75qh8S99h/y6XeuE5d4Qt3DDJ/Tg==
-X-Received: by 2002:a05:6a00:1496:b0:643:857d:879a with SMTP id v22-20020a056a00149600b00643857d879amr52781034pfu.24.1684208757169;
-        Mon, 15 May 2023 20:45:57 -0700 (PDT)
-Received: from PXLDJ45XCM.bytedance.net ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id 9-20020aa79249000000b0063db25e140bsm12488032pfp.32.2023.05.15.20.45.54
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 15 May 2023 20:45:56 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     gregkh@linuxfoundation.org, tj@kernel.org
-Cc:     linux-kernel@vger.kernel.org, muchun.song@linux.dev,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH] kernfs: fix missing kernfs_idr_lock to remove an ID from the IDR
-Date:   Tue, 16 May 2023 11:45:36 +0800
-Message-Id: <20230516034536.25548-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+        d=1e100.net; s=20221208; t=1684208840; x=1686800840;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PJkA0m3mLV3FScvH0VRdP/qwbPPh2FB8d0fW+TuWxR4=;
+        b=lHE2H5xgGA75v6QHR6fsJMhj+/NE14jwZY3j7T9HIPRVZ97/X55/R9CoqnA4Dl046j
+         Y8cMKFcpEZYg/g1kR7y4EYBElg+qnIBcMptWd+fGN1+cylu4RB+SMC+sR8RWHQi/KFXe
+         M3dBYvw4kyZ6/5Kh7XCy3rx1gxarNYpSzotIe7w5ASSSqpI4fFSmaS2GYKjRFBpFO6rj
+         z9fyVYKWDZhQ7iuu3iOEh/4Q8Rwid6zKaDf1tZiF1ZA5bpdVWuhzHOzeZG86wowwPkdK
+         YbtI1n0GgGz18a15Cv/HFOdtxAz6pL6WQeMrirUJoDyoVc14wi+GJNnxD3pC0M2UnUPx
+         +JdQ==
+X-Gm-Message-State: AC+VfDyq8O1WQNc6X8mxYtOGpmcI++e7UerQtZ5uHxX/1J+2SLz01mLB
+        NKItuW386nSo5Q1BLzYjkjg=
+X-Google-Smtp-Source: ACHHUZ7e1MfX6kyZu2E4WmLGOzMJRaaqKuW9yru0MqXdpKhkdM51h0LCt+6AtwA0+6KM5psbnkf95w==
+X-Received: by 2002:a17:903:41cb:b0:1ad:f7d9:1ae0 with SMTP id u11-20020a17090341cb00b001adf7d91ae0mr12593543ple.38.1684208839868;
+        Mon, 15 May 2023 20:47:19 -0700 (PDT)
+Received: from [10.230.29.214] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id k3-20020a170902ba8300b001a245b49731sm9786807pls.128.2023.05.15.20.47.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 20:47:19 -0700 (PDT)
+Message-ID: <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
+Date:   Mon, 15 May 2023 20:47:07 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+Content-Language: en-US
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Brian Norris <briannorris@chromium.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Eric Dumazet <edumazet@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Le Moal <damien.lemoal@opensource.wdc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        netdev@vger.kernel.org, soc@kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The root->ino_idr is supposed to be protected by kernfs_idr_lock, fix
-it.
 
-Fixes: 488dee96bb62 ("kernfs: allow creating kernfs objects with arbitrary uid/gid")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- fs/kernfs/dir.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
-index 45b6919903e6..84a2cd196076 100644
---- a/fs/kernfs/dir.c
-+++ b/fs/kernfs/dir.c
-@@ -525,6 +525,13 @@ void kernfs_get(struct kernfs_node *kn)
- }
- EXPORT_SYMBOL_GPL(kernfs_get);
- 
-+static void kernfs_idr_remove(struct kernfs_root *root, struct kernfs_node *kn)
-+{
-+	spin_lock(&kernfs_idr_lock);
-+	idr_remove(&root->ino_idr, (u32)kernfs_ino(kn));
-+	spin_unlock(&kernfs_idr_lock);
-+}
-+
- /**
-  * kernfs_put - put a reference count on a kernfs_node
-  * @kn: the target kernfs_node
-@@ -559,9 +566,7 @@ void kernfs_put(struct kernfs_node *kn)
- 		simple_xattrs_free(&kn->iattr->xattrs);
- 		kmem_cache_free(kernfs_iattrs_cache, kn->iattr);
- 	}
--	spin_lock(&kernfs_idr_lock);
--	idr_remove(&root->ino_idr, (u32)kernfs_ino(kn));
--	spin_unlock(&kernfs_idr_lock);
-+	kernfs_idr_remove(root, kn);
- 	kmem_cache_free(kernfs_node_cache, kn);
- 
- 	kn = parent;
-@@ -655,7 +660,7 @@ static struct kernfs_node *__kernfs_new_node(struct kernfs_root *root,
- 	return kn;
- 
-  err_out3:
--	idr_remove(&root->ino_idr, (u32)kernfs_ino(kn));
-+	kernfs_idr_remove(root, kn);
-  err_out2:
- 	kmem_cache_free(kernfs_node_cache, kn);
-  err_out1:
+On 4/24/2023 5:34 AM, Nikita Shubin wrote:
+> This series aims to convert ep93xx from platform to full device tree support.
+> 
+> Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
+> 
+> Thank you Linus and Arnd for your support, review and comments, sorry if i missed something -
+> these series are quite big for me.
+> 
+> Big thanks to Alexander Sverdlin for his testing, support, review, fixes and patches.
+
+If anyone is interested I still have a TS-7300 board [1] that is fully 
+functional and could be sent out to a new home.
+
+https://www.embeddedts.com/products/TS-7300
 -- 
-2.11.0
-
+Florian
