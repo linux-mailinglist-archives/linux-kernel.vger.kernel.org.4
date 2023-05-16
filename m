@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7A77048FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082A37048FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbjEPJTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S231706AbjEPJUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbjEPJTd (ORCPT
+        with ESMTP id S232124AbjEPJTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:19:33 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662335585
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:19:06 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-55a2cb9788dso195933887b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:19:06 -0700 (PDT)
+        Tue, 16 May 2023 05:19:48 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240B12D4A;
+        Tue, 16 May 2023 02:19:25 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f475366522so45196635e9.1;
+        Tue, 16 May 2023 02:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684228735; x=1686820735;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G3PO2Pyp97ZMAD2vBcdWWuGlS8wMmQ0Anr89fdT1itg=;
-        b=SnLc7z4OusgQkdLJW2gpC1baRzLHCxxry6/C+4UjVFNnTPasnfiPkwK53P1kkgTVdD
-         jTKK8ss4OZD8XKjjQq8wY03VJ5Oe5RHDs1yvY8+EOTxoWcJSuTK7C11kpIWmw3gXQJHd
-         Lr1Q3yVH/sbUISDc/hPO6XN45n3T4qV7q9AbqbvoF3TF/CKKfgqucw7C9ikJ60JvtEYM
-         RZWq8qHyla87xTV8v+o/RkUfgaKOxVyUC2q+zgx1kDfIfEhVq+nmpO3H61poEs9vdGUc
-         mOzQj6BxLBs2pa6WpFCON0vyVIFD01vnG8CwRDr7oaC2ucRGNIWDDeoHyor0/J84BNNJ
-         GWWQ==
+        d=gmail.com; s=20221208; t=1684228752; x=1686820752;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=y3MkdtHJ2Wn6h9YsBmYWmD4vsSF6yvzo+NF5U8NDuFA=;
+        b=hFh/MCjLptpQwDMiF7H3IKYj9HR6c/PLjm63ECA5NSQN6FEIN8BL4ZOUSNRDwZekBA
+         bs7Uyrpc1YT8AD74aMHC5fWvW3rdPBaK5gifHRuktsAcpSvmZnxKIREl/6y22XbB3eRe
+         S0mz20yLu/ayAMLVszs6jFC5mCPnVp8bhmVkCZhVx7XTVNqScWDWSoPflEXChscKwRZr
+         7YTqOYSJ+cUKWnN0ew8SpyHoejAgkEVeVQ7wBNux8XCNwcl/LoPY5wK/KBNvFW0WsO1m
+         s6XUtWQMESkI8UBQT6oRX0ax7D/SfsJYmoi4kfI0YGnUCpdp2Fk6TmqPbjvjvBdRvBZp
+         80kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684228735; x=1686820735;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G3PO2Pyp97ZMAD2vBcdWWuGlS8wMmQ0Anr89fdT1itg=;
-        b=PW+Rvmk4SmOpHiwCgYV+KV0tAc1ui9Ua+XeH1NJPLtbaSr3q0B58k1qkf/fg3CS1zX
-         Ar9tM71m3k0S17MyUMrdIxxqXn8UjeWIgK/bf4njFckDuBtp6wM++2J532NYbFRC42dY
-         jyMH0M2UB9SuuMR71qsc629t0Dfej6X4IO4NpBNjar6bDLNihAuXEJjw+R5r7owFVceM
-         y1acTo5BmE6GR0wZBinzNaeyHbnT6i0qNbjSq5g3PzV88L8k+Tw0e5+/5FIk1G/fnkDy
-         2pLXMJfBWexLh7EYI8ausZ2LtrZywSSWGm1Vn9xeAfVCA+Vg3NDzVmQMCYEbZChqee8K
-         ymvQ==
-X-Gm-Message-State: AC+VfDwYlG1CvliD0g6DIyvbXze6oPmsIC7fM4+bxq8aSu4XJYpjQWZV
-        IPwYOWFGQFphDYoDDTxOAaSMMIC273GyK4sMbuLwhQ==
-X-Google-Smtp-Source: ACHHUZ7ouX4pR8enSVuqce0U0lt0Y3WNzSweQexHvE3MJ4CinODJS3Gxe6HEZ3NipwDnbhl+pti8r/LzgvUfPj6ua34=
-X-Received: by 2002:a0d:c701:0:b0:556:d4ab:cbe with SMTP id
- j1-20020a0dc701000000b00556d4ab0cbemr34265656ywd.39.1684228735569; Tue, 16
- May 2023 02:18:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684228752; x=1686820752;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y3MkdtHJ2Wn6h9YsBmYWmD4vsSF6yvzo+NF5U8NDuFA=;
+        b=GR93MN1Dz6aQatInNAnmPtQbx8U2UziX8LybElYUjiF4XbesEJL532r4Ff8HGjlexV
+         oseoSHKJaJJDyWghaGH/ldpXeNaAanX3YPjMva/R4B+9BZL73AHHCibXgRhWYrLdY0vk
+         kUMBy1LElenOXRkyu2CYi/Zg/kIcLrKLY6CIC4uWJWXLTLaKvmDILoyD0Z1L+7xR72aD
+         ITC09xy7D+aFE05JJ6+lp5vWC7YpQ5aWrMCaAJCJUpeR6S1iqlVEF+ZGbS+daCPTdGi3
+         6fsZ3SObXVQS9YhtUlQwGRVtPUEH01IgYfXEAX55SBbhdeLwbHqSDCWvhUbMxbKQEfix
+         L5Hw==
+X-Gm-Message-State: AC+VfDx2FYI+EbYxFoc8vViaRIJMRLuR+t+Qo9w4BoLo97c0N/wTSgK3
+        OyHN2r8YxPzPD4dy4Jk7F2o=
+X-Google-Smtp-Source: ACHHUZ505uRu6aCnAjzxPjg3zmhCDP2VDUbzyaYyhVG1tTnQMVN5NkjnjklVdIM7B2nUochZAOCRMA==
+X-Received: by 2002:a05:600c:2149:b0:3f5:1240:ace4 with SMTP id v9-20020a05600c214900b003f51240ace4mr1589722wml.25.1684228752006;
+        Tue, 16 May 2023 02:19:12 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id v10-20020a05600c214a00b003f50e88ffb5sm1664081wml.24.2023.05.16.02.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 02:19:11 -0700 (PDT)
+Date:   Tue, 16 May 2023 10:19:10 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/242] 6.2.16-rc1 review
+Message-ID: <ZGNKjkwrGvqGRv1U@debian>
+References: <20230515161721.802179972@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
- <20230503-virt-to-pfn-v6-4-rc1-v1-2-6c4698dcf9c8@linaro.org>
- <CAMuHMdVJjjo9TMeow1-i27ybpQOu9-VZYnTkY5p8p_Cm6sW_GA@mail.gmail.com> <CAMuHMdV5Aukxx+XyC-s2=CDa2BYqvc3uRvWBhD6ri5j09tXj3A@mail.gmail.com>
-In-Reply-To: <CAMuHMdV5Aukxx+XyC-s2=CDa2BYqvc3uRvWBhD6ri5j09tXj3A@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 16 May 2023 11:18:43 +0200
-Message-ID: <CACRpkdbwd6ELhJVu--=N+Ckjp0MNyG3aWv5B+DQUoXNVFicDfw@mail.gmail.com>
-Subject: Re: [PATCH 02/12] m68k: Pass a pointer to virt_to_pfn() virt_to_page()
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515161721.802179972@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 12:26=E2=80=AFPM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
+Hi Greg,
 
-> Much simpler to drop the cast in __pte_page() instead:
->
-> @@ -91,7 +91,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newp=
-rot)
->  #define pmd_set(pmdp,ptep) do {} while (0)
->
->  #define __pte_page(pte) \
-> -((unsigned long) __va ((pte_val (pte) & SUN3_PAGE_PGNUM_MASK) << PAGE_SH=
-IFT))
-> +        (__va ((pte_val (pte) & SUN3_PAGE_PGNUM_MASK) << PAGE_SHIFT))
+On Mon, May 15, 2023 at 06:25:26PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.16 release.
+> There are 242 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-Thanks, folded this into the patch!
+Build test (gcc version 12.2.1 20230511):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Yours,
-Linus Walleij
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/3537
+[2]. https://openqa.qa.codethink.co.uk/tests/3538
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
