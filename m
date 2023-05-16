@@ -2,155 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807E5704F31
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254C5704F35
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbjEPNYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S233615AbjEPNYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbjEPNYa (ORCPT
+        with ESMTP id S233608AbjEPNYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:24:30 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B160261AA
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:24:17 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230516132414epoutp0290ee5f901d12a120ad2c507bd3a59bd8~fon_XROCt0691806918epoutp02P
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:24:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230516132414epoutp0290ee5f901d12a120ad2c507bd3a59bd8~fon_XROCt0691806918epoutp02P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1684243454;
-        bh=cg4C7x99d6gMeddzSh0dDTiOK7SmEUwxAYZsbOtNGmc=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=RHduGJ+mox1uwvkL9CrWTwdjQY64J+OI+raGGaQy72CRRpH3JriElZYia6c1jwp9F
-         9GaQB7xwDbxZZFrvZUNIDHUOxobum8hoo1gdK+NuhwiZs5GnJ0VneDKXfQXK23tUQa
-         vyA9Gvbug2YRGMkMPXIu1CgTzFBi96BnyqXjbMSc=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230516132413epcas2p15f78b10667e670c1546ca1dd981b3745~fon91tdyG0107401074epcas2p1h;
-        Tue, 16 May 2023 13:24:13 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4QLH5935Ddz4x9Px; Tue, 16 May
-        2023 13:24:13 +0000 (GMT)
-X-AuditID: b6c32a48-475ff70000005998-c3-646383fdb5d3
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E4.7C.22936.DF383646; Tue, 16 May 2023 22:24:13 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH v2 05/14] block: blk-merge: fix to add the number of
- integrity segments to the request twice
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     "hch@lst.de" <hch@lst.de>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "kbusch@kernel.org" <kbusch@kernel.org>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
-        "kch@nvidia.com" <kch@nvidia.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230512135136.GD32242@lst.de>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230516132412epcms2p2549c58f92db9919002c7e05ed044bcc8@epcms2p2>
-Date:   Tue, 16 May 2023 22:24:12 +0900
-X-CMS-MailID: 20230516132412epcms2p2549c58f92db9919002c7e05ed044bcc8
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMJsWRmVeSWpSXmKPExsWy7bCmqe7f5uQUg6+nxSxW3+1ns3h5SNNi
-        5eqjTBaLbmxjsvjbdY/JYtKha4wWT6/OYrLYe0vb4vKuOWwWy4//Y7JY9/o9i8XvH3PYHHg8
-        zt/byOKxeYWWx+WzpR6bVnWyeUxYdIDRY/fNBjaP3uZ3bB4fn95i8ejbsorR4/MmOY/2A91M
-        AdxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QJcr
-        KZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEK
-        E7IzZlxvZSw4L1GxpWEtewPjCfEuRk4OCQETiakLvrF2MXJxCAnsYJSY+KOJpYuRg4NXQFDi
-        7w5hkBphgVKJm5M+soPYQgJKEufWzGIEKREWMJC41WsOEmYT0JP4uWQGG0hYREBW4sqKepAw
-        s8AnZon/7wwgNvFKzGh/ygJhS0tsX74VbAqngI7Ehz4fiLCGxI9lvcwQtqjEzdVv2WHs98fm
-        M0LYIhKt985C1QhKPPi5GyouKXHo0FewCyQE8iU2HAiECNdIvF1+AKpEX+Jax0awC3gFfCVO
-        rXnCBmKzCKhK/Lu5HGqVi8TCvy8YIa7Xlli28DUzyEhmAU2J9bv0IaYrSxy5xQJRwSfRcfgv
-        O8x/DRt/Y2XvmPeECaJVTWJRk9EERuVZiCCehWTVLIRVCxiZVzGKpRYU56anFhsVmMBjNTk/
-        dxMjOPVqeexgnP32g94hRiYOxkOMEhzMSiK87TPjU4R4UxIrq1KL8uOLSnNSiw8xmgI9OZFZ
-        SjQ5H5j880riDU0sDUzMzAzNjUwNzJXEeT92KKcICaQnlqRmp6YWpBbB9DFxcEo1MPXJuW9z
-        lwqabuCRYypkeOvGIxXPr9VmvTJ3ClI+VU689mPCubMZpyLaOmvDpYtKqj0uFgVeW1lnvmdv
-        afiBUOPF2XcON3xUD13/4J5RfQWf4sK0r4k91UZ57LfOA5NQpbiltFHzqh/5lzNXv/klkVMm
-        LqQ1j69yS86bjUY6bVmb9uwuLGeuurzYhv2e46mK65N1PNMeplgZ9F/caxZYMlPL4qvEOsey
-        0jD3pDVGEp5rlVYf+lfFsiRwVbTXptj8RwXpWqdq3yq+fpy+8UCM1v/Y0ik3Ltx51/p6x6ug
-        /u03nJmUCw7dFDkV8er+NjFfhx1q+Qel79itOdwdu9S/adnayP+TzE4V5gY7bhVVYinOSDTU
-        Yi4qTgQAsFJUy0YEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
-References: <20230512135136.GD32242@lst.de>
-        <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
-        <20230510085208epcms2p52a6dec8da80152ec2101f11ce2ea5321@epcms2p5>
-        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 09:24:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102B13A9D;
+        Tue, 16 May 2023 06:24:23 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C93206603232;
+        Tue, 16 May 2023 14:24:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684243461;
+        bh=kZjlYIWkTqRt7pjdy6yVknojMTh71KUX07DtZxaZFeI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AlNyUv33cm7cTtCPAC5VhsL9rLAu+rshug94Z/kKXtfkHwFkT/kcV5pom6hexnktM
+         6GuytHOUwQCeYxamlzmPWe15twkt9Fo2HDxhCt1uGWVBJ6M4Uy1MJuYyQGSnKA8rqD
+         mzBh+4N7mr4z9dHHuqxBn2nQq32Wk4R7+BIJIlBmD49vZ7Y2VmKbjih2O+E6dL7IVM
+         3wnFIHmoMRHDL6h0UvHZ2/1CGvM+ja5+ecIVjrOFiMTKCV+nc+7bp866ISp1vP2Z3x
+         hpOmMLOuwBhO05UNSxUppCtyz2OrNZBMN2AmvufNv1DqtM7f8/EjSfCBEvcg70xhT2
+         KY4Ra07dIx7uw==
+Message-ID: <30766850-b4c7-3ea2-fadf-3d67855107e1@collabora.com>
+Date:   Tue, 16 May 2023 15:24:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 1/5] dt-bindings: interrupt-controller: arm,gic-v3: Add
+ quirk for Mediatek SoCs w/ broken FW
+Content-Language: en-US
+To:     Douglas Anderson <dianders@chromium.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        wenst@chromium.org, yidilin@chromium.org,
+        Tinghan Shen <tinghan.shen@mediatek.com>, jwerner@chromium.org,
+        Weiyi Lu <weiyi.lu@mediatek.com>, Ben Ho <Ben.Ho@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20230515131353.v2.cover@dianders>
+ <20230515131353.v2.1.Iabe67a827e206496efec6beb5616d5a3b99c1e65@changeid>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230515131353.v2.1.Iabe67a827e206496efec6beb5616d5a3b99c1e65@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->The subject looks a bit odd, I think you're trying to say:
->
->=22do not add the number of integrity segments to the request twice=22
->
->based on the actual patch, is this correct?
->
+Il 15/05/23 22:13, Douglas Anderson ha scritto:
+> When trying to turn on the "pseudo NMI" kernel feature in Linux, it
+> was discovered that all Mediatek-based Chromebooks that ever shipped
+> (at least ones with GICv3) had a firmware bug where they wouldn't save
+> certain GIC "GICR" registers properly. If a processor ever entered a
+> suspend/idle mode where the GICR registers lost state then they'd be
+> reset to their default state.
+> 
+> As a result of the bug, if you try to enable "pseudo NMIs" on the
+> affected devices then certain interrupts will unexpectedly get
+> promoted to be "pseudo NMIs" and cause crashes / freezes / general
+> mayhem.
+> 
+> ChromeOS is looking to start turning on "pseudo NMIs" in production to
+> make crash reports more actionable. To do so, we will release firmware
+> updates for at least some of the affected Mediatek Chromebooks.
+> However, even when we update the firmware of a Chromebook it's always
+> possible that a user will end up booting with old firmware. We need to
+> be able to detect when we're running with firmware that will crash and
+> burn if pseudo NMIs are enabled.
+> 
+> The current plan is:
+> * Update the device trees of all affected Chromebooks to include the
+>    'mediatek,broken-save-restore-fw' property. The kernel can use this
+>    to know not to enable certain features like "pseudo NMI". NOTE:
+>    device trees for Chromebooks are never baked into the firmware but
+>    are bundled with the kernel. A kernel will never be configured to
+>    use "pseudo NMIs" and be bundled with an old device tree.
+> * When we get a fixed firmware for one of these Chromebooks, it will
+>    patch the device tree to remove this property.
+> 
+> For some details, you can also see the public bug
+> <https://issuetracker.google.com/281831288>
+> 
+> Reviewed-by: Julius Werner <jwerner@chromium.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
-Yes. I will fix it.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
->> +static inline bool blk_integrity_bypass_check(struct request *req,
->> + =C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20bio=20=
-*bio)=0D=0A>>=20+=7B=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=
-=20blk_integrity_rq(req)=20=3D=3D=200=20&&=20bio_integrity(bio)=20=3D=3D=20=
-NULL;=0D=0A>>=20+=7D=0D=0A>=0D=0A>No=20need=20for=20the=20explicit=20compar=
-isms,=20this=20could=20just=20be:=0D=0A>=0D=0A>=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0return=20=21blk_integrity_rq(req)=20&&=20=21bio_integrity(bio);=0D=
-=0A>=0D=0A>and=20given=20that=20it=20just=20has=20two=20callers=20I'm=20not=
-=20sure=20the=20helper=20is=0D=0A>all=20that=20useful=20to=20start=20with.=
-=0D=0A=0D=0AThere=20are=20many=20conditional=20sentences=20like=20that,=20s=
-o=20I=20left=20them=20for=20unity,=0D=0AIf=20it's=20okay=20to=20change,=20I=
-'ll=20do=20so.=0D=0A=0D=0A>>=20+static=20bool=20__blk_integrity_mergeable(s=
-truct=20request_queue=20*q,=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20reques=
-t=20*req,=20struct=20bio=20*bio)=0D=0A>>=20+=7B=0D=0A>>=20+=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0if=20(blk_integrity_rq(req)=20=3D=3D=200=20=7C=7C=20bi=
-o_integrity(bio)=20=3D=3D=20NULL)=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=20false;=0D=0A>>=20+=0D=0A=
->>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(bio_integrity(req->bio)->bi=
-p_flags=20=21=3D=20bio_integrity(bio)->bip_flags)=0D=0A>>=20+=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=20false;=
-=0D=0A>>=20+=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0return=20true;=
-=0D=0A>>=20+=7D=0D=0A>>=20+=0D=0A>>=20+bool=20blk_integrity_mergeable(struc=
-t=20request_queue=20*q,=20struct=20request=20*req,=0D=0A>>=20+=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20struct=20bio=20*bio)=0D=0A>>=20+=
-=7B=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(blk_integrity_bypa=
-ss_check(req,=20bio))=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0return=20true;=0D=0A>>=20+=0D=0A>>=20+=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0return=20__blk_integrity_mergeable(q,=20req,=
-=20bio);=0D=0A>>=20+=7D=0D=0A>=0D=0A>Similarly=20here,=20I'm=20not=20even=
-=20sure=20we=20need=20all=20these=20helpers.=20=C2=A0I=20supect=0D=0A>the=
-=20code=20would=20become=20more=20readable=20by=20dropping=20these=20helper=
-s=20and=20just=0D=0A>making=20the=20checks=20explicitl=E1=BA=8F=0D=0A=0D=0A=
-OK.=20I=20will=20drop=20this.=0D=0A=0D=0ABest=20Regards,=0D=0AJinyoung.
