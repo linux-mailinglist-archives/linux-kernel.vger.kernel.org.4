@@ -2,93 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC86D70428B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8F0704297
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245716AbjEPA6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 20:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
+        id S245731AbjEPBHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236580AbjEPA6x (ORCPT
+        with ESMTP id S245593AbjEPBHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 20:58:53 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98A5AA
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:58:50 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1aad5245571so92898645ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:58:50 -0700 (PDT)
+        Mon, 15 May 2023 21:07:17 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557A859C1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:07:13 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ad819ab8a9so112882951fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:07:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684198730; x=1686790730;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RVkJA3lTgCORmQkh7N6TzUrBQFxDZlWdNA3lW0Mj46Y=;
-        b=J4s70hg4/JjW2UMnl2JT8bfnV8Ukk7qLfBS4DfHMVP/JOgNwokgC8Dkyy2iBK3s/cp
-         gYZ6QgETEMQEuQcaiI/OJ5jo/jb+rywH6Mkwi5VKIqdUn+z7pLG0mH8/Xdu1ClrSnI0F
-         D3LvdA8xlycb8GyP3a6rCitQflEC7moRpyYaf5up3ILf0Xx0cSBVaMnvbFy8NVBts9GE
-         5hECGlXekzHP+n599yioqGSTNeSbVPLdCnkcSBxJYGSOBFyrtH/4tmSwwxn2ZeMeC+1n
-         AMsNcnG9GUeKoQDRdWRnVSFVTXhZtCpL5/fALCQksNQ+CACQun2/IQWigbCmHWXY7tc/
-         DK0Q==
+        d=linaro.org; s=google; t=1684199231; x=1686791231;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CM/lSevDv8XjzRTSjTzIIM/SCKVVJzi2LgwGYfmNjT4=;
+        b=NXAOh1IEio1Nx7BVRPjfwhLwEzJ0sHFCTGlM5p35PDwC66xXC1HZIkS9SjPwN0UxVK
+         rsu2y0SlKjL+V26zo9r+5k0GKJv6ZYuLZjhJr+LIkEXaVSq6DLR8z+vTdl88VdpcTI0x
+         NaFOsjBmSoA9oyVq6yvZSodqwXcVaTAj83gaFGRbrsB0NW5srpsN2BmC1ursaaqioEg4
+         9TcvUp2c3sA/gpI/WlL66bq05xUTQXBkoSPsqvKelnCeKaKTiqVvZ208SvI2OuvBHBiO
+         59QU+AxgMCYS2tkjPqxubB9tMyZtxFyQjLlUWMfAa+m11coDm3eiIRyN6HcClVDFJqyl
+         j1Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684198730; x=1686790730;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RVkJA3lTgCORmQkh7N6TzUrBQFxDZlWdNA3lW0Mj46Y=;
-        b=T3cC+hu14JJp3hcVbfHupKTJ4L/Bptjz0wB4GSa8Zo+hLi5M6UuwakeNKUH7JiJ5Xd
-         hCLncoQw9g7sY20eacwRFczzJqaTbGpbOvXNtVE8S3+Y4Y0RPojYpCV2bCpZkQOC/HdJ
-         JEsYqt+9biAsfsFDJ4tbB6EjGcgs6FKAB9P48JGerDhQJ7fKVKuME0+ymgk8VlCBOUC6
-         LtTNNI9hRV4aaunaMvflc5G9+S2ix2hV7ZiS1oDO/jhBTwrvIxzkP88ZBOWrBfYHM73e
-         8Od0wcKxfYHHDHeplQZN4JKm/f/K1T02pYJwbXUrxuXhEdjsNG/h1msj4ONko/lD2dFc
-         LL0g==
-X-Gm-Message-State: AC+VfDy7mP8gGB8UPFvpZLxcV85+w3uKMW0eHIC6AK9TRVgUTfVXZTAw
-        mg6trskhQQ4YkGqsjbNRyoAxiYuHGNg=
-X-Google-Smtp-Source: ACHHUZ59kkW3M/Lto4bJ5/I3FVMybYj2cauPWRT3XU4pPllt57pKl1czKu4W3Q3W8oduUHqHXWZ1MQ==
-X-Received: by 2002:a17:902:e543:b0:1ac:8062:4f31 with SMTP id n3-20020a170902e54300b001ac80624f31mr39420635plf.37.1684198730328;
-        Mon, 15 May 2023 17:58:50 -0700 (PDT)
-Received: from localhost ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id v20-20020a17090ad59400b0024e1236f599sm232716pju.8.2023.05.15.17.58.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 15 May 2023 17:58:50 -0700 (PDT)
-Date:   Tue, 16 May 2023 09:06:40 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>
-Cc:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, huyue2@coolpad.com,
-        zhangwen@coolpad.com
-Subject: Re: [PATCH v2] erofs: fix null-ptr-deref caused by
- erofs_xattr_prefixes_init
-Message-ID: <20230516090640.00001a85.zbestahu@gmail.com>
-In-Reply-To: <20230515103941.129784-1-jefflexu@linux.alibaba.com>
-References: <20230515103941.129784-1-jefflexu@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        d=1e100.net; s=20221208; t=1684199231; x=1686791231;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CM/lSevDv8XjzRTSjTzIIM/SCKVVJzi2LgwGYfmNjT4=;
+        b=S1nKzn+o8PVhCUN4Hs/kCcl6iIPbS7mrN4MpQKWitHxyTmSm3wDWSSWRpMvN0CUQF3
+         Hr7/d7r0ed/SWPVqYt1/Kz5+scX7BvhJDbUAsb2tvMLIoO3cNYo7A9GhIrNvX26H8t/s
+         1RW1ANtXYGiPx+vTCZrbRpT7oQeWKPj6WbA56ABN+AlkriYd3sGz3eHECYDjpdA7JNvN
+         9Dszna5vgxfEjM1zQ5wjt2eF+rDfRRUVDYWPpHD9+9yLd41hBdLFPcVQ5TUo+tvFlZTP
+         qqp8vNTIEbcoNBw9eS94VmwDH6tiHACG1kjDexkwAI3DNeJfpLrhObb6WrvHRINszLfB
+         WF6A==
+X-Gm-Message-State: AC+VfDwsnWgT3n3ko8wijy2x1XZ7Z7iyGKeOh/VUUcd/L+Hq+YkRP2+f
+        TNgFCKOUvHPjiXGIlQFAlnDShA==
+X-Google-Smtp-Source: ACHHUZ40Ce3BmZXcXMME5urWr0CG8SeU1US+J4EHGbJPzj0vNXzvxEi/rHPtUFcRAGA9cJ4SfWaLhg==
+X-Received: by 2002:a2e:8618:0:b0:2ad:9acb:484e with SMTP id a24-20020a2e8618000000b002ad9acb484emr7898066lji.49.1684199231595;
+        Mon, 15 May 2023 18:07:11 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id a15-20020a056512020f00b004ecad67a925sm2837994lfo.66.2023.05.15.18.07.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 18:07:11 -0700 (PDT)
+Message-ID: <e77647ec-4f77-541e-3df4-264c4f4f1bf7@linaro.org>
+Date:   Tue, 16 May 2023 03:07:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: thermal: tsens: Fix "make dtbs_check"
+ error
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <72707b76a717b410b06ed7fcc854314104f5f845.1684140883.git.quic_varada@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <72707b76a717b410b06ed7fcc854314104f5f845.1684140883.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 18:39:41 +0800
-Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
 
-> Fragments and dedupe share one feature bit, and thus packed inode may not
-> exist when fragment feature bit (dedupe feature bit exactly) is set, e.g.
-> when deduplication feature is in use while fragments feature is not.  In
-> this case, sbi->packed_inode could be NULL while fragments feature bit
-> is set.
-> 
-> Fix this by accessing packed inode only when it exists.
-> 
-> Reported-by: syzbot+902d5a9373ae8f748a94@syzkaller.appspotmail.com
-> Link: https://syzkaller.appspot.com/bug?extid=902d5a9373ae8f748a94
-> Fixes: 9e382914617c ("erofs: add helpers to load long xattr name prefixes")
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
+On 15.05.2023 12:13, Varadarajan Narayanan wrote:
+> While verifying make dtbs_check for ipq9574, qcm2290-tsens and
+> sm6375-tsens threw the following errors.
+> 	['qcom,qcm2290-tsens', 'qcom,tsens-v2'] is too long
+> 	...
+> 	['qcom,sm6375-tsens', 'qcom,tsens-v2'] is too long
+> 
+> Fix them by adding their entries.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+https://lore.kernel.org/linux-arm-msm/20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org/
+https://lore.kernel.org/linux-arm-msm/20230303-topic-sm6375_features0_dts-v2-1-708b8191f7eb@linaro.org/
+
+These never got picked up..
+
+I'll bump them.
+
+Konrad
+> [v3]:
+> 	Fix the following 'make dtbs_check' error
+> 		['qcom,qcm2290-tsens', 'qcom,tsens-v2'] is too long
+> 		['qcom,sm6375-tsens', 'qcom,tsens-v2'] is too long
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index d1ec963..d9aa54c 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -48,6 +48,7 @@ properties:
+>                - qcom,msm8953-tsens
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+> +              - qcom,qcm2290-tsens
+>                - qcom,sc7180-tsens
+>                - qcom,sc7280-tsens
+>                - qcom,sc8180x-tsens
+> @@ -56,6 +57,7 @@ properties:
+>                - qcom,sdm845-tsens
+>                - qcom,sm6115-tsens
+>                - qcom,sm6350-tsens
+> +              - qcom,sm6375-tsens
+>                - qcom,sm8150-tsens
+>                - qcom,sm8250-tsens
+>                - qcom,sm8350-tsens
