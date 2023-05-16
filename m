@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615D4704261
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF024704262
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245369AbjEPAlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 20:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S245599AbjEPAnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 20:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjEPAlx (ORCPT
+        with ESMTP id S230170AbjEPAnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 20:41:53 -0400
-Received: from sender3-of-o57.zoho.com (sender3-of-o57.zoho.com [136.143.184.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE8430FD;
-        Mon, 15 May 2023 17:41:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684197665; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=XqR1E9WYKCH5zE0xzfY8q4o8hGEYSOcK4tGK8Q2iZaxhLN15Hn9ctmHY8DtzrsYk2A5JcUeaikJSlwkgyABpztvRWjet1OYjyGyL7URMv+qwqpyjSYxr5HsuEOVzD0Xal0X8RUmyepOxiwtPHvYTxubO8ftpTOFqd94yQnxZSGQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1684197665; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=x9E1sPNjs8TnJyDDWuPW+7RruRAouFKTsWP7ZU6lxAw=; 
-        b=edBBMwqoIA3px3KRjoqOeVRGIRAKy1Ii6k5VvgFlZblTWvXISxJ1iWXnImdMo8Z/jsjvfy/JPv/0fwx9Up2i0+vuBxSIPlzcAfciWFQyaK2FjPCqIwH/tjXIHcBVW1csLV8OOcA9IABP7hzKJhzpdhsMssnbz7X4BgC83UfqkGQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684197665;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=x9E1sPNjs8TnJyDDWuPW+7RruRAouFKTsWP7ZU6lxAw=;
-        b=KkBrhxus1IChftrmWFiE0iWqNP8pwvcEA93j1NsBljZB12Dwn/pFRs9ba7CJ9Wc7
-        edP2pGXBARtnJM2FPzweZ/GrpdlaMrUSCdjtpbMPbNg2rK5PpKzF9po1PYMenL2dJZy
-        M3Z+MoI/+mmQL2JgJ9L9p3qb/TwugPj5kW90GVqc=
-Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1684197664523566.236879037264; Mon, 15 May 2023 17:41:04 -0700 (PDT)
-Message-ID: <df9d1260-41dd-034b-9dc6-14173c6c0d25@apertussolutions.com>
-Date:   Mon, 15 May 2023 20:41:00 -0400
+        Mon, 15 May 2023 20:43:00 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C3530FD
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:42:34 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2531f846835so44831a91.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1684197753; x=1686789753;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m5hbCoXXCLVF8MzOJ73BXVTZCAtdnkR4Rw57AoX42iw=;
+        b=Wh8br5+K13gY6AURiwlRegSvBaTL8uC7EwtJq1BLOMe7e0luIc4+ha6+12UfS735zh
+         Ocl+yPlyTErcsGBqX/VGHUw+SLnGyu4XlW4Dl5Jz0HRu/i+rhzR7tW9N0L6TKK0Si8nL
+         5JmMlnEr3hbtdV8SjYMk4KrqjNuM7jXts0OykrSPiss/k2yMI2Pg42JpfEy9rlkxO0nP
+         FUO1pviYIAwcyT2SLF0aOJdc5+OmkdVXFnhmx0bwPdzQKXE7IlA5Tsj0kGrZWrmKhr/s
+         rQSBK6FOGqfzRsw7AfObZtWEC950lfP3UeUFM0k7AK8b3viRxJI6BxK9clslOM3+d+yT
+         QnOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684197753; x=1686789753;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=m5hbCoXXCLVF8MzOJ73BXVTZCAtdnkR4Rw57AoX42iw=;
+        b=eEv1nVI3rIH4T8w2kj5ebzwz5DrWum8tzMUZaXJ8uxKFYv8uqq7B/uXYBa+UZS9/9p
+         Ek/88OonmUAZYJv40EpnzVXdiWe0M34dH+OidyEHQlu9FWeruffBOd15oss2eXY+2h0s
+         hiVKSXLIcW4ZTJKGdFP89REJniRTBB73NuErZ9ztuvbrQAx0LW++M3Fd1swmmNLOLWvQ
+         pze926FNAyEqy/al6vvYiF7Wib5fqtho8GkGKNo0WxEfgtLZCs++gCbi0zBYhu92rcXM
+         NAxYWJVLrLr/ENFX5gN2eWzN2rkGGrQWuwTDh0lKSsjQXY4DkuLQlKuRTl4Pn8+w1V6C
+         WsrA==
+X-Gm-Message-State: AC+VfDzbnrKMe6PbwlRwnlruVPZGIfBrDljN06xFjyub4ggWp9YAibAx
+        d90K2BFzp3Dc8/xJqbD8QoXe3g==
+X-Google-Smtp-Source: ACHHUZ6VEKvfhERfe5LC7EzstyaFNWASlsmnb1eGLL0HaEbarBYWN3row/Slh2nfhWkpgWg8E7QR4Q==
+X-Received: by 2002:a17:90b:4a51:b0:247:5654:fcf3 with SMTP id lb17-20020a17090b4a5100b002475654fcf3mr35005149pjb.11.1684197753702;
+        Mon, 15 May 2023 17:42:33 -0700 (PDT)
+Received: from [10.200.9.178] ([139.177.225.227])
+        by smtp.gmail.com with ESMTPSA id f15-20020a17090a120f00b0024e3d26f644sm243932pja.3.2023.05.15.17.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 17:42:33 -0700 (PDT)
+Message-ID: <9b9fb65c-ebc9-f86b-c85d-2676c1c5d0eb@bytedance.com>
+Date:   Tue, 16 May 2023 08:42:28 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
-Content-Language: en-US
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-5-ross.philipson@oracle.com>
- <20230512105554.GB14461@srcf.ucam.org>
- <30d5891d-4747-8d67-2667-ff07628740bd@apertussolutions.com>
- <20230515212206.GA2162@srcf.ucam.org>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-In-Reply-To: <20230515212206.GA2162@srcf.ucam.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH 03/10] maple_tree: Remove __must_hold() which does not
+ work
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+References: <20230515131757.60035-1-zhangpeng.00@bytedance.com>
+ <20230515131757.60035-4-zhangpeng.00@bytedance.com>
+ <ZGJH3s2Z581fcbTs@casper.infradead.org>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <ZGJH3s2Z581fcbTs@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,66 +79,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 17:22, Matthew Garrett wrote:
-> On Mon, May 15, 2023 at 05:15:15PM -0400, Daniel P. Smith wrote:
->> On 5/12/23 06:55, Matthew Garrett wrote:
->>> On Thu, May 04, 2023 at 02:50:13PM +0000, Ross Philipson wrote:
->>>
->>>> +#define SLR_TABLE_MAGIC		0x4452544d
->>>
->>>   From convention I'd expect this to be 0x534c5254, but not really an
->>> issue.
->>
->> Apologies, but which convention?
+
+
+在 2023/5/15 22:55, Matthew Wilcox 写道:
+> On Mon, May 15, 2023 at 09:17:50PM +0800, Peng Zhang wrote:
+>> The arguments to __must_hold() seem to be wrong so they should not work,
+>> remove them.
 > 
-> Tables in ACPI and UEFI tend to have magic that corresponds to their
-> name, so a table called SLRT would tend to have magic that matches the
-> ASCII values for that. In this case the SLRT has DRTM as its magic,
-> which is a touch unexpected.
-
-While the SLRT is meant for UEFI and non-UEFI environments, DRTM is 
-definitely a hold over when we started this and you are correct, 
-probably not the best choice. In fact, I agree that SLRT is a far better 
-magic. We will update the spec and fix it in the series.
-
->>> Oof. Having the kernel know about bootloaders has not worked out super
->>> well for us in the past. If someone writes a new bootloader, are they
->>> unable to Secure Launch any existing kernels? The pragmatic thing for
->>> them to do would be to just pretend they're grub, which kind of defeats
->>> the point of having this definition...
->>
->> Actually, this is not for making the kernel know about bootloaders. This is
->> dealing with the challenge created when the preamble was split for efi-stub,
->> and similar use cases, where what sets up the preamble, ie. the bootloader,
->> is separate from what invokes the dynamic launch, ie. the DLE handler. The
->> reality is that even in the simplest implementation of the DLE handler, a
->> remnant of GRUB for call back from efi-stub, there is information that is
->> needed to cross the gap.
-> 
-> What if I don't use grub, but use something that behaves equivalently?
-> Which value should be used here?
-
-Generally we would request that the bootloader submit a request to 
-register for a value to be reserved in the spec. That aside, the intent 
-here is to allow for the possibility for the DLE handler to be 
-independent from the bootloader, but this does not have to be this way. 
-If a non-open entity decides to produce their own implementation, they 
-can freely use a unallocated value at their own risk that it could be 
-allocated to another bootloader in the future. Though in this scenario 
-it likely would not matter as the non-open DLE handler would only be 
-present when the non-open bootloader was present.
-
->> We wrote the TrenchBoot Secure Launch general spec [1] with as much
->> forethought as possible for the target environments. Specifically, the
->> desire is to have a common approach for x86 (Intel and AMD), Arm, and
->> perhaps down the road the POWER arch. In particular, I do not believe there
->> is anything in the Arm DRTM beta spec that prohibits a mixed 32/64 bit
->> environment. In the end it is better to for the spec to be safe for those
->> environments then having to make changes to the spec later down the road.
-> 
-> Ok.
-
-Thank you for the review!
-
-v/r,
-dps
+> Why not fix them?
+I'll fix it in v2.
