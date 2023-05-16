@@ -2,76 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761CD705064
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11168705067
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbjEPOTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S233905AbjEPOTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233901AbjEPOTF (ORCPT
+        with ESMTP id S233937AbjEPOTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:19:05 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5B272B8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:18:53 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f396606ab0so1822221cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:18:53 -0700 (PDT)
+        Tue, 16 May 2023 10:19:16 -0400
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8587280
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:19:12 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id 5b1f17b1804b1-3f50aa22cd2so14825065e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:19:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684246732; x=1686838732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ABaiiANU88bGvckBvXgI3VuNlV8cLVjijeK5jkg4/ck=;
-        b=g/dTGVKrnOyAW6gQtWR48XtNN3aHkA70cOuV96/xgC4m2jxOg20sqbyg3ZV6myFbXD
-         eE+WCXyYweDzgJhlXEhbKTEwWGwxMz8v4deX3BAfcPPlD2Zcg+E1CJvCzjeiFyrnJRNf
-         eniT/4O0IozDFdeQyW4Flh0fZ9ufwCAzk3VgVT2F7TRuIWpcp/zmKrjU7YBaaXBPxHfM
-         Ub9SFGP/e447BbJzqe2d/qcQpW99RbefsiAg32q61XDlUH3yRZ7MWXijymLQVyNa7uuY
-         1sj7VCSN2S8MZ0ZqXuOTIr1gsUHo2nxt2sEoLfb8hsoQhatHGjrqxqvk95y23Fac4Y2/
-         eY/Q==
+        d=google.com; s=20221208; t=1684246750; x=1686838750;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gA6XtRTSFH+7gbI9LxiaMPmJ/zupzliW7od3onrGWNM=;
+        b=AOwGUZnMyyLA8iHs7jP21cMgPRF2hzI6RmNK7aKc/NSUxG/UCoWTY7Fu+gupD3aoFb
+         efLSnTdFHYS/SFWT5hnebtwD9p/rI2tIJycNlKvw89utzeUx0jXlTuJdlQgKpPWjoolh
+         bisZDCj08FJCWwCxeiGvw1GjKLtM1mhkI1Qt1snZPjyD+/AofG9I2G1uitjkgDOmtH5J
+         wgdfIE+s2BDJnqxdvZf9zePYbBv3lrZ6tBtNVltJo2s39IBAvOFrvvjuA48JWLThSFmW
+         V1gliA0Ot12nXkt+9YeXbcFn6FBu17Ab9icwTBFtyWDp3/h3XfxElurRlCEmYN/Xc8vj
+         hlgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684246732; x=1686838732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ABaiiANU88bGvckBvXgI3VuNlV8cLVjijeK5jkg4/ck=;
-        b=bEcRaWzstqLWxHlnGh5ZzF52MRY7eq3P09oIq4GN6pVmQZUj0sppI+e8pM/iVhqpmH
-         VtzJT+hzWlWJ1a3tkEKhJ+fsyqcu6xSak+cc2+IAssLpVDqFk2YomARBYuLbvyJaDqrE
-         hvvXC+IvIKNTTmO6OnWnfKfh7QdT2gDoEDnMQpFkGWFMj7qssm5a0tDrDlvaD3tEd0bl
-         guCYMDNUz/n1EbLg7EYnDtIVVcP04YIE5IFkwOGQMqsN9l7/HD3tBOsC4Ig1uFxlcatF
-         m/H6vYlJ6U8aMeYeRz5CTbrPx9JV1vJ5LQ1Xt1AvOOD4NN/up+RBi9JGnRuSmrzlMjz6
-         YpCw==
-X-Gm-Message-State: AC+VfDzBQrBzx0f4+7wjT/sbCtio3otzxtmd5tY13anRG9zm8nUCh5BR
-        SqcyRJ9UxNieC98tFWl0ISpJrJSFwN2Kd9Ai4YYUOw==
-X-Google-Smtp-Source: ACHHUZ4gmQgTk/vLfBBaKbZtx8qpjqztGsRpYmVK6fqToFwjVIqjeLlhjGhg3v6sVcBq/hxz6cEvnCuEoGgzaeT1PKU=
-X-Received: by 2002:a05:622a:182a:b0:3f5:49b6:f196 with SMTP id
- t42-20020a05622a182a00b003f549b6f196mr102474qtc.9.1684246732310; Tue, 16 May
- 2023 07:18:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
- <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com>
-In-Reply-To: <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Tue, 16 May 2023 16:18:40 +0200
-Message-ID: <CALPaoCgknY0pWkXaCayPx28otcA5=v5a5FFoLFx3At0cGvAykg@mail.gmail.com>
-Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
- collect CPUs' MBM events
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+        d=1e100.net; s=20221208; t=1684246750; x=1686838750;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gA6XtRTSFH+7gbI9LxiaMPmJ/zupzliW7od3onrGWNM=;
+        b=GtDSSTxFgeeUU+Ul4JOqSEnlYIZ9kRGNJx7BdmKWvHJfzP4Lh8LQjgQdbytIULTmpa
+         xD6Iq/NZn/MQ6ONM1HxDHCM6A1W4rq8ecSKyO87n3bvV26L8jLNKLAy/AKX8VJpr0YuJ
+         8ywa5kHWca6NYRxaTvmctN8m5tlfJwGEc+6UtWJZ5xb03NKGPZFlyeusUEcb4B3Pl1Wm
+         sKwyDQ6OaMUs49xdxvInktYhgK2MUBZqbQuHATS9j2Sx1vJsKWCrSHNkLL8Ofift2MGn
+         xImOh+DzSnR4eXLGIp0oJLSjY5zInpEFvI4yJ/3J3TnHSjGk6axHBpBt7oR4SuHDqakr
+         43FQ==
+X-Gm-Message-State: AC+VfDwageeEVbdyYWA+8B9QMjtUXUkAJ1MHruAXwo8z3g1RKxWeavGv
+        CVuVWvIHeO3qk1QgHfKvCkdCPiABDqhLKA==
+X-Google-Smtp-Source: ACHHUZ7Io7X+jy8JLQYkj4bFApjAK1ehdd/QE0fm7hTqEAONOITaXEZbjKxjz9KOwpLiV94EXcGHlOEs8OGsMQ==
+X-Received: from mostafa.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:333c])
+ (user=smostafa job=sendgmr) by 2002:a7b:c4cc:0:b0:3f4:ec32:69fe with SMTP id
+ g12-20020a7bc4cc000000b003f4ec3269femr3071985wmk.0.1684246750417; Tue, 16 May
+ 2023 07:19:10 -0700 (PDT)
+Date:   Tue, 16 May 2023 14:18:46 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230516141846.792193-1-smostafa@google.com>
+Subject: [PATCH] KVM: arm64: Use BTI for pKVM
+From:   Mostafa Saleh <smostafa@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com, Mostafa Saleh <smostafa@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,68 +70,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+However, the nvhe code doesn't make use of it as it doesn't map any
+pages with Guarded Page(GP) bit.
 
-On Fri, May 12, 2023 at 3:25=E2=80=AFPM Peter Newman <peternewman@google.co=
-m> wrote:
-> On Thu, May 11, 2023 at 11:37=E2=80=AFPM Reinette Chatre
-> <reinette.chatre@intel.com> wrote:
-> > On 4/21/2023 7:17 AM, Peter Newman wrote:
-> > > +
-> > > +     if (evtid =3D=3D QOS_L3_MBM_LOCAL_EVENT_ID) {
-> > > +             counter =3D &state->local;
-> > > +     } else {
-> > > +             WARN_ON(evtid !=3D QOS_L3_MBM_TOTAL_EVENT_ID);
-> > > +             counter =3D &state->total;
-> > > +     }
-> > > +
-> > > +     /*
-> > > +      * Propagate the value read from the hw_rmid assigned to the cu=
-rrent CPU
-> > > +      * into the "soft" rmid associated with the current task or CPU=
-.
-> > > +      */
-> > > +     m =3D get_mbm_state(d, soft_rmid, evtid);
-> > > +     if (!m)
-> > > +             return;
-> > > +
-> > > +     if (resctrl_arch_rmid_read(r, d, hw_rmid, evtid, &val))
-> > > +             return;
-> > > +
-> >
-> > This all seems unsafe to run without protection. The code relies on
-> > the rdt_domain but a CPU hotplug event could result in the domain
-> > disappearing underneath this code. The accesses to the data structures
-> > also appear unsafe to me. Note that resctrl_arch_rmid_read() updates
-> > the architectural MBM state and this same state can be updated concurre=
-ntly
-> > in other code paths without appropriate locking.
->
-> The domain is supposed to always be the current one, but I see that
-> even a get_domain_from_cpu(smp_processor_id(), ...) call needs to walk
-> a resource's domain list to find a matching entry, which could be
-> concurrently modified when other domains are added/removed.
->
-> Similarly, when soft RMIDs are enabled, it should not be possible to
-> call resctrl_arch_rmid_read() outside of on the current CPU's HW RMID.
->
-> I'll need to confirm whether it's safe to access the current CPU's
-> rdt_domain in an atomic context. If it isn't, I assume I would have to
-> arrange all of the state used during flush to be per-CPU.
->
-> I expect the constraints on what data can be safely accessed where is
-> going to constrain how the state is ultimately arranged, so I will
-> need to settle this before I can come back to the other questions
-> about mbm_state.
+This patch maps pKVM .text section with GP bit which matches the
+kernel handling for BTI.
 
-According to cpu_hotplug.rst, the startup callbacks are called before
-a CPU is started and the teardown callbacks are called after the CPU
-has become dysfunctional, so it should always be safe for a CPU to
-access its own data, so all I need to do here is avoid walking domain
-lists in resctrl_mbm_flush_cpu().
+A new flag is added to enum kvm_pgtable_prot: KVM_PGTABLE_PROT_GP_S1,
+which represents BTI guarded page in hypervisor stage-1 page table.
 
-However, this also means that resctrl_{on,off}line_cpu() call
-clear_closid_rmid() on a different CPU, so whichever CPU executes
-these will zap its own pqr_state struct and PQR_ASSOC MSR.
+Signed-off-by: Mostafa Saleh <smostafa@google.com>
+---
+ arch/arm64/include/asm/kvm_pgtable.h | 3 +++
+ arch/arm64/kvm/hyp/nvhe/setup.c      | 8 ++++++--
+ arch/arm64/kvm/hyp/pgtable.c         | 6 ++++--
+ 3 files changed, 13 insertions(+), 4 deletions(-)
 
--Peter
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index 4cd6762bda80..5bcd06d664d3 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -151,6 +151,7 @@ enum kvm_pgtable_stage2_flags {
+  * @KVM_PGTABLE_PROT_W:		Write permission.
+  * @KVM_PGTABLE_PROT_R:		Read permission.
+  * @KVM_PGTABLE_PROT_DEVICE:	Device attributes.
++ * @KVM_PGTABLE_PROT_GP_S1:	GP(guarded page) used for BTI in stage-1 only
+  * @KVM_PGTABLE_PROT_SW0:	Software bit 0.
+  * @KVM_PGTABLE_PROT_SW1:	Software bit 1.
+  * @KVM_PGTABLE_PROT_SW2:	Software bit 2.
+@@ -163,6 +164,8 @@ enum kvm_pgtable_prot {
+ 
+ 	KVM_PGTABLE_PROT_DEVICE			= BIT(3),
+ 
++	KVM_PGTABLE_PROT_GP_S1			= BIT(50),
++
+ 	KVM_PGTABLE_PROT_SW0			= BIT(55),
+ 	KVM_PGTABLE_PROT_SW1			= BIT(56),
+ 	KVM_PGTABLE_PROT_SW2			= BIT(57),
+diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+index 110f04627785..95f80e2b2946 100644
+--- a/arch/arm64/kvm/hyp/nvhe/setup.c
++++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+@@ -66,7 +66,7 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+ {
+ 	void *start, *end, *virt = hyp_phys_to_virt(phys);
+ 	unsigned long pgt_size = hyp_s1_pgtable_pages() << PAGE_SHIFT;
+-	enum kvm_pgtable_prot prot;
++	enum kvm_pgtable_prot prot = PAGE_HYP_EXEC;
+ 	int ret, i;
+ 
+ 	/* Recreate the hyp page-table using the early page allocator */
+@@ -88,7 +88,11 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, PAGE_HYP_EXEC);
++	/* Hypervisor text is mapped as guarded pages(GP). */
++	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && cpus_have_const_cap(ARM64_BTI))
++		prot |= KVM_PGTABLE_PROT_GP_S1;
++
++	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, prot);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 3d61bd3e591d..028e198acd48 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -145,7 +145,8 @@ static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+ 	u64 type = (level == KVM_PGTABLE_MAX_LEVELS - 1) ? KVM_PTE_TYPE_PAGE :
+ 							   KVM_PTE_TYPE_BLOCK;
+ 
+-	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI);
++	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI |
++		       KVM_PGTABLE_PROT_GP_S1);
+ 	pte |= FIELD_PREP(KVM_PTE_TYPE, type);
+ 	pte |= KVM_PTE_VALID;
+ 
+@@ -378,7 +379,8 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot, kvm_pte_t *ptep)
+ 	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_AP, ap);
+ 	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_SH, sh);
+ 	attr |= KVM_PTE_LEAF_ATTR_LO_S1_AF;
+-	attr |= prot & KVM_PTE_LEAF_ATTR_HI_SW;
++	attr |= prot & (KVM_PTE_LEAF_ATTR_HI_SW | KVM_PGTABLE_PROT_GP_S1);
++
+ 	*ptep = attr;
+ 
+ 	return 0;
+-- 
+2.40.1.606.ga4b1b128d6-goog
+
