@@ -2,98 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0EF7050EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7DB7050F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbjEPOgp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 16 May 2023 10:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S233409AbjEPOiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbjEPOgh (ORCPT
+        with ESMTP id S232016AbjEPOiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:36:37 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457637DB1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:36:33 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-8-yAXuvbLIMxym3I4uiJP6oA-1; Tue, 16 May 2023 15:36:31 +0100
-X-MC-Unique: yAXuvbLIMxym3I4uiJP6oA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 16 May
- 2023 15:36:30 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 16 May 2023 15:36:30 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Chuck Lever III' <chuck.lever@oracle.com>
-CC:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "Linux NFS Mailing List" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3] NFSD: Remove open coding of string copy
-Thread-Topic: [PATCH v3] NFSD: Remove open coding of string copy
-Thread-Index: AQHZhtarLR7mMXSOG0mD9inDFwvZGq9cpMAQgAA9NACAABfNkA==
-Date:   Tue, 16 May 2023 14:36:29 +0000
-Message-ID: <6af8294f4a744cfc8bad3de754047b0a@AcuMS.aculab.com>
-References: <20230515024044.2677124-1-azeemshaikh38@gmail.com>
- <d48a166d1cbc477f9cf063e91f7b3005@AcuMS.aculab.com>
- <63008A50-48CC-4915-88D6-71EA1B289322@oracle.com>
-In-Reply-To: <63008A50-48CC-4915-88D6-71EA1B289322@oracle.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 16 May 2023 10:38:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D4E131
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:38:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB04A63AA1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:38:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBABC433D2;
+        Tue, 16 May 2023 14:38:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684247883;
+        bh=Rp891Wn0Cv9Njo4jV9mzOxWl35NvhyIucIFSBf4T7Ds=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=mONIeLqEex+UW4Q07DFZTiSg15hTFF9JtA6KGAWjF/JtphUPzfMZM1C/5HSPfU2Wx
+         dff6+Hpc78H+NUBGrfHRjkJi0Cp7j8uvybYbWzZUMCNYc0qJvMHSnqyE87lpjRxeP2
+         lz4NEcaH7gI5i7Q+Ild8vw081EHiXK5wzOUeVgpwy515yL4LvTNIbbjt6dTQwAVA0d
+         hOwTeEEzTM6SAbei6rdfvhupuMJJUGtagBSnPNENvaGfct4xpCz7dLjlgsLLl0/iyh
+         xzsu/1mo4Ow6givSsH9GXCHPaWRlOxs+inO+yIAIycvd8BBy0Z8SJQpUwfTPP20rns
+         qpIgBZ3UIrEHA==
+From:   Mark Brown <broonie@kernel.org>
+To:     lgirdwood@gmail.com, Osama Muhammad <osmtendev@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <20230515172938.13338-1-osmtendev@gmail.com>
+References: <20230515172938.13338-1-osmtendev@gmail.com>
+Subject: Re: [PATCH] regulator:core.c: Fix error checking for
+ debugfs_create_dir
+Message-Id: <168424788116.433984.10581444850230359141.b4-ty@kernel.org>
+Date:   Tue, 16 May 2023 23:38:01 +0900
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever III
-> Sent: 16 May 2023 15:11
+On Mon, 15 May 2023 22:29:38 +0500, Osama Muhammad wrote:
+> This patch fixes the error checking in core.c in debugfs_create_dir.
+> The correct way to check if an error occurred is 'IS_ERR' inline function.
 > 
-> > On May 16, 2023, at 5:33 AM, David Laight <David.Laight@ACULAB.COM> wrote:
-> >
-> > From: Azeem Shaikh
-> >> Sent: 15 May 2023 03:41
-> >>
-> >> Instead of open coding a __dynamic_array(), use the __string() and
-> >> __assign_str() helper macros that exist for this kind of use case.
-> >
-> > Is this actually a dynamic array, or just a char[8] ?
-> > On 64 bit copying a short fixed-length string is far better
-> > than any kind of dynamic sized allocation.
 > 
-> I'd prefer to use a string helper, since the netid is a string,
-> and this documents the data type better and it is not subject
-> to sudden breakage if someone creates a standard netid longer
-> than 8 characters.
-> 
-> The nfsd_cb_setup tracepoint is not in a performance-sensitive
-> path.
-> 
-> In addition, trace consumers should be able to count on the
-> string helpers to perform memory copies without overrunning
-> either the source or destination buffers... one less source
-> of error.
 
-That is an entirely different justification :-)
+Applied to
 
-	David
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Thanks!
+
+[1/1] regulator:core.c: Fix error checking for debugfs_create_dir
+      commit: 2bf1c45be3b8f3a3f898d0756c1282f09719debd
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
