@@ -2,183 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2130705247
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF9870524A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbjEPPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S232597AbjEPPfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjEPPfR (ORCPT
+        with ESMTP id S233631AbjEPPfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:35:17 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2025FEB;
-        Tue, 16 May 2023 08:35:14 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GCFQCb014872;
-        Tue, 16 May 2023 17:35:04 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=V8TfW2yFnFlBR+PvqUa/5jzNo/cIcHh5MaXp9eIlTJ0=;
- b=CiEp9jCFXi2uLnNtBtVkNxzsc9LPbjKVTr0lFBQTtUvt5lMIKrFSPAL/HDZTVqdq8MfD
- YD8JtbfU4ZXTmMO9Up+NXwCaWpcSBEPS+aD+7syTXvQf/MQpnCaNo5LvpHXb0bQ6CRtX
- 46LYdk96aUZDAPWVuMu2gmHUTN7DZhndcg4qV2HXpbM7dG4u5FXjpcYE8JvEu0BcPHMC
- vpmSH8wLyvaZnBmwC/CIF5HsGfMOABj/kxUrbqA2/QKDECTsqGXCa0ahfxBSMD4490Py
- InCTP4UHaWFaKNfBUVn5nxOclcmlAuRrCKJ/7lR/UE31vjrry/JPQDRbKwPJCfsOK18c pg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qkhp0hu5m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 17:35:04 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0C13E10002A;
-        Tue, 16 May 2023 17:35:02 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 27D1423300B;
-        Tue, 16 May 2023 17:35:02 +0200 (CEST)
-Received: from [10.252.0.230] (10.252.0.230) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 16 May
- 2023 17:35:01 +0200
-Message-ID: <20c010da-7245-7acf-db2f-991ee2975ea2@foss.st.com>
-Date:   Tue, 16 May 2023 17:35:00 +0200
+        Tue, 16 May 2023 11:35:30 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABE56E91
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:35:27 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so8486826a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684251326; x=1686843326;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tpE+wPoeKV+h9Nk/fiHXbe17B0293VPtsZXVO82srgY=;
+        b=v+PmY5Ypp4t2Z3D7vsYQc9bKHmpcoaIJHG8fKxWDUlv1IZR2n9r2OSHIb8yIKJQKGy
+         PUV3pk21rLWHsIdo5PtHOk4V8iBEKsPHoKMyucJ59XamMQkxNPlazOfASHhORE9KDPUm
+         /sJcqKAHtY2emk5rp0v4jU/vMxgMaDjRdTmg388f3xieS1jIzKxPF2k4oGPqiF6+MUT1
+         bApgtFdo0UI0+SdVU5Av4HzwaljGeoHnZtpgtbav4rqZvnfN1HF9FpDE89Q4tUTIgbHW
+         9nIZSsryhfzV51nQ1yBvR9GxNMZpDJEt6FusgzFz5gJND5B+ccu67eLieTqSRUEiCMC8
+         3StA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684251326; x=1686843326;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tpE+wPoeKV+h9Nk/fiHXbe17B0293VPtsZXVO82srgY=;
+        b=UgASeksXodauv4kpvjpofkuVg3noDytSw2A6YoHkVXM+n1ZxZt4ulTo9J7Da05W/f0
+         +OVuQenjQWCKjxPJtL3eQNoD0LNy9lelbDZL/eRIUSDdrjVe2eXvZt8Us86x5Pgfdu/p
+         Gm5pspPBR11ohMLs150zXeyYkbQA1ozAS04Ju/cinlyqUBp8CQKccz7AzhmAZFyg5r6c
+         GKZ9fj3nFH2QZZjF4YqdzE5vdAfOxX0AlAWYUJEjORO8SU1554AUcQHSRBnjkNDGMqZP
+         q9POkpttuZ70GAyROp0ysAdUybxn87GbaAOk8zkQtOLRD0+nkKZ1WFXmpf9Qctt4INqJ
+         jKOA==
+X-Gm-Message-State: AC+VfDwyXVIc/2KrffekoQbds5paZ+AfoPOQOeKf1phueqCqy2AZ2Lhy
+        uVCdQWKFUncHKr27/hBbYhbnSg==
+X-Google-Smtp-Source: ACHHUZ70yIZR2qufhyOR7GtRdaN8dK7NhacIOoYJBr9zfJtbEG+KvJZNaxcnXy2axVjGLhwrKoUC/w==
+X-Received: by 2002:a17:907:94c2:b0:96a:f8ec:c311 with SMTP id dn2-20020a17090794c200b0096af8ecc311mr8549967ejc.36.1684251326055;
+        Tue, 16 May 2023 08:35:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id n5-20020a1709065da500b0096616adc0d5sm11085544ejv.104.2023.05.16.08.35.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 08:35:25 -0700 (PDT)
+Message-ID: <f790b655-4192-bcad-07af-814a359a351a@linaro.org>
+Date:   Tue, 16 May 2023 17:35:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/4] ARM: dts: stm32: fix m4_rproc references to use
- SCMI
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550-qrd: add display and panel
 Content-Language: en-US
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230512093926.661509-1-arnaud.pouliquen@foss.st.com>
- <20230512093926.661509-5-arnaud.pouliquen@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230512093926.661509-5-arnaud.pouliquen@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        "Signed-off-by : Abel Vesa" <abel.vesa@linaro.org>
+References: <20230516151708.213744-1-krzysztof.kozlowski@linaro.org>
+ <ecfe4f62-9c54-df5e-cd5d-e7a956510696@linaro.org>
+ <8b670310-47b3-c301-99ae-84ccb704d733@linaro.org>
+ <2bc16f9a-e150-b3d0-6d72-a2ff0a4d05ae@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2bc16f9a-e150-b3d0-6d72-a2ff0a4d05ae@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.0.230]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_08,2023-05-16_01,2023-02-09_01
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaud
-
-On 5/12/23 11:39, Arnaud Pouliquen wrote:
-> Fixes stm32mp15*-scmi DTS files introduced in [1]:
-> This patch fixes the node which uses the MCU reset and adds the
-> missing HOLD_BOOT which is also handled by the SCMI reset service.
+On 16/05/2023 17:26, Konrad Dybcio wrote:
+>>>> +&mdss_mdp {
+>>>> +	status = "okay";
+>>>> +};
+>>> This should also be enabled by default, MDSS is useless when MDP is
+>>> disabled.
+>>
+>> But don't we want to disable both when display is not used (not connected)?
+> The MDSS bus device only has a 0x1000 slice of the 0x90000-long "full MDSS",
+> the rest is probed with MDP/DPU. It also calls of_something_populate that
+> make DSI, DSIPHY and DP/HDMI probe. But all of them ultimately need a graph
+> handle to MDP.
 > 
-> This change cannot be applied as a fix on commit [1], the management
-> of the hold boot impacts also the stm32_rproc driver.
+> If we have a display (of any kind), MDP has to be enabled (or the display
+> engine will not have a way to be programmed).
 > 
-> [1] 'commit 5b7e58313a77 ("ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)")'
+> If we don't, enabling MDSS makes no sense as all of the hardware will be
+> shut down right after probing.
 > 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> ---
+> So I'd say either both or none.
 
-I just ran YAML validation on your DT patches and it fails. I added your 
-DT patches + dt-binding one (just for the test). I got the following issue:
+Yes, so the current state - both disabled - is matching it.
 
-/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dtb: m4@10000000: 
-st,syscfg-holdboot: False schema does not allow [[7, 268, 1]]
-	From schema: 
-/local/home/frq08678/STLINUX/kernel/my-kernel/stm32/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-
-Do I miss another dt-binding update not present in this series ?
-
-alex
-
->   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 6 ++++--
->   arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 6 ++++--
->   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 6 ++++--
->   arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 6 ++++--
->   4 files changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-> index e539cc80bef8..134788e64265 100644
-> --- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-> +++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-> @@ -55,8 +55,10 @@ &mdma1 {
->   	resets = <&scmi_reset RST_SCMI_MDMA>;
->   };
->   
-> -&mlahb {
-> -	resets = <&scmi_reset RST_SCMI_MCU>;
-> +&m4_rproc {
-> +	resets = <&scmi_reset RST_SCMI_MCU>,
-> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-> +	reset-names =  "mcu_rst", "hold_boot";
->   };
->   
->   &rcc {
-> diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-> index 97e4f94b0a24..c42e658debfb 100644
-> --- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-> +++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-> @@ -61,8 +61,10 @@ &mdma1 {
->   	resets = <&scmi_reset RST_SCMI_MDMA>;
->   };
->   
-> -&mlahb {
-> -	resets = <&scmi_reset RST_SCMI_MCU>;
-> +&m4_rproc {
-> +	resets = <&scmi_reset RST_SCMI_MCU>,
-> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-> +	reset-names =  "mcu_rst", "hold_boot";
->   };
->   
->   &rcc {
-> diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-> index 9cf0a44d2f47..7a56ff2d4185 100644
-> --- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-> +++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-> @@ -60,8 +60,10 @@ &mdma1 {
->   	resets = <&scmi_reset RST_SCMI_MDMA>;
->   };
->   
-> -&mlahb {
-> -	resets = <&scmi_reset RST_SCMI_MCU>;
-> +&m4_rproc {
-> +	resets = <&scmi_reset RST_SCMI_MCU>,
-> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-> +	reset-names =  "mcu_rst", "hold_boot";
->   };
->   
->   &rcc {
-> diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-> index 3b9dd6f4ccc9..119874dd91e4 100644
-> --- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-> +++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-> @@ -66,8 +66,10 @@ &mdma1 {
->   	resets = <&scmi_reset RST_SCMI_MDMA>;
->   };
->   
-> -&mlahb {
-> -	resets = <&scmi_reset RST_SCMI_MCU>;
-> +&m4_rproc {
-> +	resets = <&scmi_reset RST_SCMI_MCU>,
-> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-> +	reset-names =  "mcu_rst", "hold_boot";
->   };
->   
->   &rcc {
+Best regards,
+Krzysztof
 
