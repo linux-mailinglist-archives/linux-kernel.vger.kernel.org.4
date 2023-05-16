@@ -2,118 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FBD705903
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2FF705905
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjEPUml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S229995AbjEPUmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEPUmk (ORCPT
+        with ESMTP id S229502AbjEPUms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:42:40 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417661AE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684269759; x=1715805759;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/E7gUklL5bA43Tj50V90p5FleCakaQxx5h7vB4YWpfU=;
-  b=FEhrcNr7cu8iwEO0cgQ4a0+yJZR8vIbO7f8fBFnhQFJPCRkYpGYAHvQI
-   GD78lzfbtN3QiHS8GQkQw4Z5+TPz7olnVTPB4UyGkWcMqyPXB/2QueRyl
-   0kYyWMoTh786UcS9mwJW+UU5KLxcFXCo1UTCzsdqiTMLUuWL7uKobyxil
-   ZmOWPQyEPHz8aiH63X41pZSLNfb5yCd7tB+UXOrr0ethilhpzQF5vCToH
-   YHQgNhyAHgy2zqLHRjC/N8ts3ItYJAzkMkk8lXVLy05IUqNp3+5mI76Jg
-   Ccq864EwliibaMfLMoBxvuiUBaCZKufdnouhzFV8at+F6Qm2Eoa9+LTNd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="331948406"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="331948406"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:42:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="695604567"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="695604567"
-Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:42:38 -0700
-Message-ID: <025f7715-536e-bca0-3e44-7bddd8668b35@intel.com>
-Date:   Tue, 16 May 2023 13:42:38 -0700
+        Tue, 16 May 2023 16:42:48 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62155252
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:42:46 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bcb00a4c2so22363752a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684269765; x=1686861765;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8ecYicVNlqCwpTD7keug9XpsIRW3LWPQcbFkS4Vo5hc=;
+        b=XIClU4E1NQN1zrShL54htYb2q/NZEl/z6+bUm7qeZIRht65yH8MxJA4Ii8HcDxAaNj
+         cDaVStkRVJRnJsTXcMcViR+N3TXrDd0AHbaGhtcC0etfEtXe07av3nCSZIcmxTa+ulZC
+         nw9UWFDF7jWESe96v4dcPuGp5VuPAAvJXHfsbICU5oVySrd65u5kuSgSSNBj2cKSG3Jh
+         hICxLMnSYC5QyAfWBvbfNPWsjbBchqnc1WsDmHRwfxNHuNpT3EZxW2dt5fl/Gd20Zqe3
+         8gGHC2rdG4kAlUkot8ciJPNbtl/WTXQiXazGwlVIqUbGFOrmoKXR3B8hAzwOBRj31mvP
+         BfIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684269765; x=1686861765;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ecYicVNlqCwpTD7keug9XpsIRW3LWPQcbFkS4Vo5hc=;
+        b=Rw2VtNwwQ3g+dGhzqzvuP/8Z2zcENrNomxEwHZKj6EM/5CDAR7LvWOd2yXcGlBlpYC
+         GqwZwY0pOCg5E8pRQNMtTd3aiSfAE023UlqlXgu6jiNMddQzDBeTm6jTnYf98/oRiXUL
+         o4e1sr/vfejVEs7yp0IF9ehwmdop2XsmkuI+jYvMQZMfxHjVg5ti/hddFl1IyZjXWgn5
+         HBC2gD0pdJQyirESSh79s5fG7LNq1zjiD5nTBoaRm9o5aC9U9bn7X8dEAIUMILuwxoFg
+         Dmrr5+oQezTb4mlSEv1si7C9enL51ysOZR0h6u8eZYWelcpZbcjrZS6DVWmZIZ2ZcdUj
+         Iw+g==
+X-Gm-Message-State: AC+VfDz8/8SD6abmc5786DJt630WGeXcdX3X5TVMf58oCn2IQ4VUnsi1
+        1WqVHPUWa/rC7Rkm1Q2orH5UtTlpBEin4OtWdzE=
+X-Google-Smtp-Source: ACHHUZ4Q1DfgDg3zEdFYP+t061/iCddkRIqKmLL3FPtAQnFzl6DU8PEp4U9KIYwRx2MMNKG1XUD2xiah6OXxzwJcxpU=
+X-Received: by 2002:aa7:d659:0:b0:50b:d305:3788 with SMTP id
+ v25-20020aa7d659000000b0050bd3053788mr354820edr.11.1684269764864; Tue, 16 May
+ 2023 13:42:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] x86/shstk for 6.4
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
- <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
- <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
- <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com>
- <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
- <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
- <4171c4b0-e24b-a7e2-9928-030cc14f1d8d@intel.com>
- <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
- <CAHk-=wg4vpYz+xRtd+PsdmQ9gtNGbXrFKW3ndvXcrLEEDN0hyw@mail.gmail.com>
- <95c2e669-bce9-3dd5-e197-3faf816c4b45@intel.com>
- <CAHk-=wjzEA_TO0wWNir0HzAFJ5_tMoQnrL_-8+igqmCZGVGdcw@mail.gmail.com>
- <93ae88a4-1dac-77bf-37f6-f8708a6d83b7@intel.com>
- <CAHk-=wgZvH9KZPVbeTeLKwnv+bO4x15JVjeqWX68-+pmbsxJCQ@mail.gmail.com>
- <CAHk-=wg6TWSvb8Lk5uEu=QKQRFj7vewMsqLhuah4_7r2S=dXWA@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAHk-=wg6TWSvb8Lk5uEu=QKQRFj7vewMsqLhuah4_7r2S=dXWA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Sender: munniralhassanmunniralhassan@gmail.com
+Received: by 2002:a05:7208:4222:b0:69:8066:c3d9 with HTTP; Tue, 16 May 2023
+ 13:42:44 -0700 (PDT)
+From:   "Mrs. Margaret Christopher" <mrsmargaretchristopher001@gmail.com>
+Date:   Tue, 16 May 2023 14:42:44 -0600
+X-Google-Sender-Auth: O8UR8YA9MsZ_wOjsk_-PWAWkMDY
+Message-ID: <CALefQgMDR9X7RGQsP84smPzVDpHb=kXv4Hz1juZAKm-GRO-e4w@mail.gmail.com>
+Subject: Humanitarian Project For Less Privileged.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 13:38, Linus Torvalds wrote:
-> On Mon, May 15, 2023 at 3:40 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->> So I *think* fork() could do something like this:
->>
->>   struct fork_cookie; // dummy type purely for type checking
->>   static struct fork_cookie *is_singe_threaded(void)
->>   {
->>         struct mm_struct *mm = current->mm;
->>         mutex_lock(&mm->fork_lock);
-> Actually, let's not even bother with a new fork_lock.
-> 
-> I for some reason thought that fork only took the mmap_lock for
-> reading (because it kind of does just read the old VM data), but when
-> I actually look at dup_mmap() I notice that what it does is actually
-> just
-> 
->         if (mmap_write_lock_killable(oldmm)) ..
-> 
-> and so I think we can just use that as the lock.
-> 
-> So then all we'd need is to use mmap_read_lock(mm) in kthread_use_mm()
-> around the mmgrab.
-> 
-> I don't think we even need it in kthread_unuse_mm(), because
-> *decrementing* the mm counters isn't even something we need to worry
-> about.
-> 
-> How does that sound?
+-- 
+Hello Dear
 
-Sounds promising.  I was really hesitant to bring a new lock into the world.
+  Am a dying woman here in the hospital, i was diagnose as a
+Coronavirus patient over 2 months ago. I am A business woman who is
+dealing with Gold Exportation, I Am 59 year old from USA California i
+have a charitable and unfufilling  project that am about to handover
+to you, if you are interested to know more about this project please reply me.
 
-I need to digest what you write yesterday and convince myself a little
-more that doing it at kthread_unuse_mm() is sufficient, but that's my
-problem. ;)
+ Hope to hear from you
