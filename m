@@ -2,144 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8047B7045E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD0D7045DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjEPHMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjEPHMg (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230526AbjEPHMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 16 May 2023 03:12:36 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24441BF5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684221154; x=1715757154;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t8CijbnvNDIu5h7DZKaUt0LbJeKMTc2o7hsFHeeJoGY=;
-  b=oNuPs/G7WP62xEgwj7e+flEShDwJkYySXAgrSaEvPZxCv9ovJeY+fZad
-   KSrHM7/W8HxJHX1jYAy2cgvUejHZWCgNXQEdQ+sE972Io85egKE3DypvM
-   J7TXcNPwZ3ZaSX07vmkTXEmrjXtGwcyAbp4uwcHufaX6cXvDzxoouGJeG
-   r50KGqqex4sAbkXnIhVHGmT6uOQupfO3+ApN3u9qGP61UnUZ24en2pAlh
-   ymbqWa6Z8ztEviaFM+4LyDsw+VpJK0k/qBKfT/jjl1Ta5SqrQCX9lPHuP
-   JY72XoHD/PD0mi+73q8MATs3enStwJ0XBeGqw8IBekz6URtlDzmuEYk8c
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,278,1677567600"; 
-   d="asc'?scan'208";a="213481929"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 May 2023 00:12:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 16 May 2023 00:12:33 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 16 May 2023 00:12:31 -0700
-Date:   Tue, 16 May 2023 08:12:10 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-CC:     Randy Dunlap <rdunlap@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        <linux-kernel@vger.kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, <iommu@lists.linux.dev>,
-        Conor Dooley <conor@kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH] iommu: PGTABLE_LPAE is also for RISCV
-Message-ID: <20230516-gristle-spill-e27c58770a47@wendy>
-References: <20230330060105.29460-1-rdunlap@infradead.org>
- <2529dd93-2cb2-6ed8-20c0-c424e6613717@arm.com>
- <833203b0-aee5-eb23-afb4-ff71a3024258@infradead.org>
- <280c0994-f7cd-bb0e-8c68-62f72a4a38ca@ghiti.fr>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230111AbjEPHMd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 16 May 2023 03:12:33 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1D935AD;
+        Tue, 16 May 2023 00:12:28 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f1fe1208a4so12906237e87.2;
+        Tue, 16 May 2023 00:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684221147; x=1686813147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nIQsLaHssKkl6pMh4izl/5JY75K4E7vPiAyWjhDInUQ=;
+        b=kVyZEfq6Q5jbhZ2IenNtfFHWP9ROgSqyZjUzcQyz17v9aApeHKzTAiCKMRPPt8Cz+U
+         sO1aikJBvml29mD0dna23tcxwWy8iHg0X56CibVfXurzDAHBQtvy3SPRBkQD9BUmzSRK
+         UWGib1T+IESAZ5lTgswFoUp48FFp3s7chTAeep0cf2bZw5QodQ3QQVMiATwuiLdfSeqx
+         8bvDST1CyN0vGgJFpxQNPn9RUEOeyQGRQBxtrynZzueM9HkG9B5sPKXdhwlOqikCnhmx
+         j3hmIizOF/ix81U+k34v3TwnOPw5iu3mcbo/QwSHusrF9rI9a7AGDinMrTOB9bxl6DxC
+         yjfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684221147; x=1686813147;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nIQsLaHssKkl6pMh4izl/5JY75K4E7vPiAyWjhDInUQ=;
+        b=VqqZT1yZgoVMCjRDxsTnz/cs0Us6ZIyk3E728W8wr0Q93hrTZwVmYndt1WKwmNpM0Z
+         x60bjYm3kDUla42gGLoFqogqR1VRi+I66X4JUpHgJlS5Jxe3r1phbs/lBPkvvWsqCyb/
+         +lYiqRE/XGxFdEQrb2NfmvgLi7GiyiTd2BSavBB/uUNLAiSPSOtgKaUy4JK8kzSSyh+2
+         q8pbGnTTVK6YF/TL4//LpcxgZS42f3dZQctbuAxb5SEFckhED2w04DputPYd59ZfB5xX
+         SVSuLvvvi2X1KdrZh9fDp6qq7cb8H6nt+KMoc9Uy6iETbitbztcsI2X1Et7MASTz/6N/
+         RyMg==
+X-Gm-Message-State: AC+VfDysQ7KlMsmFR/Y0grRkGP/UWVU0NdiI6BMHLDxcuQMzMJJSwZRQ
+        Dk9MOzWOGY03VwbhahS3hjU=
+X-Google-Smtp-Source: ACHHUZ6JEHZtYC7O57uCCGGCuU8NkL8W8zXPnQeRN4Mi+ogX1rDd1FtJEtvrACaEgE9PUk2Ib2pPaQ==
+X-Received: by 2002:ac2:48a1:0:b0:4f3:8823:ebe9 with SMTP id u1-20020ac248a1000000b004f38823ebe9mr715145lfg.22.1684221146822;
+        Tue, 16 May 2023 00:12:26 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id g14-20020a19ee0e000000b004f25c29f64esm2700143lfb.176.2023.05.16.00.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 00:12:26 -0700 (PDT)
+Date:   Tue, 16 May 2023 10:12:21 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v4 1/7] drivers: fwnode: fix fwnode_irq_get[_byname]()
+Message-ID: <339cc23ccae4580d5551cc2b6b9b4afdde48f25e.1684220962.git.mazziesaccount@gmail.com>
+References: <cover.1684220962.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kEpcCnhkORFemaUM"
+        protocol="application/pgp-signature"; boundary="fzqZWu+mtDdK0Jc5"
 Content-Disposition: inline
-In-Reply-To: <280c0994-f7cd-bb0e-8c68-62f72a4a38ca@ghiti.fr>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1684220962.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---kEpcCnhkORFemaUM
-Content-Type: text/plain; charset=iso-8859-1
+
+--fzqZWu+mtDdK0Jc5
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 16, 2023 at 09:02:50AM +0200, Alexandre Ghiti wrote:
-> Hi Randy,
->=20
->=20
-> On 3/30/23 18:49, Randy Dunlap wrote:
-> >=20
-> > On 3/30/23 09:34, Robin Murphy wrote:
-> > > On 2023-03-30 07:01, Randy Dunlap wrote:
-> > > > On riscv64, linux-next-20233030 (and for several days earlier),
-> > > > there is a kconfig warning:
-> > > >=20
-> > > > WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LP=
-AE
-> > > >  =A0=A0 Depends on [n]: IOMMU_SUPPORT [=3Dy] && (ARM || ARM64 || CO=
-MPILE_TEST [=3Dn]) && !GENERIC_ATOMIC64 [=3Dn]
-> > > >  =A0=A0 Selected by [y]:
-> > > >  =A0=A0 - IPMMU_VMSA [=3Dy] && IOMMU_SUPPORT [=3Dy] && (ARCH_RENESA=
-S [=3Dy] || COMPILE_TEST [=3Dn]) && !GENERIC_ATOMIC64 [=3Dn]
-> > > >=20
-> > > > and build errors:
-> > > >=20
-> > > > riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L14=
-0':
-> > > > io-pgtable-arm.c:(.init.text+0x1e8): undefined reference to `alloc_=
-io_pgtable_ops'
-> > > > riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L16=
-8':
-> > > > io-pgtable-arm.c:(.init.text+0xab0): undefined reference to `free_i=
-o_pgtable_ops'
-> > > > riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L140':
-> > > > ipmmu-vmsa.c:(.text+0xbc4): undefined reference to `free_io_pgtable=
-_ops'
-> > > > riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L0 ':
-> > > > ipmmu-vmsa.c:(.text+0x145e): undefined reference to `alloc_io_pgtab=
-le_ops'
-> > > >=20
-> > > > Add RISCV as an allowed ARCH dependency to fix these problems.
-> > > >=20
-> > > > Fixes: d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
-> > > BTW that doesn't look like the right fix target - this presumably dat=
-es back as far as when ARCH_RENESAS was added to RISCV, such that it was po=
-ssible to start selecting IPMMU_VMSA without COMPILE_TEST?
-> > OK, I can go with that. Thanks for your help.
-> >=20
->=20
-> Any updates on this fix?
+The fwnode_irq_get() and the fwnode_irq_get_byname() return 0 upon
+device-tree IRQ mapping failure. This is contradicting the
+fwnode_irq_get_byname() function documentation and can potentially be a
+source of errors like:
 
-Superseeded by
-https://lore.kernel.org/linux-iommu/20230330165817.21920-1-rdunlap@infradea=
-d.org/
+int probe(...) {
+	...
 
-I guess that never went anywhere?
+	irq =3D fwnode_irq_get_byname();
+	if (irq <=3D 0)
+		return irq;
+
+	...
+}
+
+Here we do correctly check the return value from fwnode_irq_get_byname()
+but the driver probe will now return success. (There was already one
+such user in-tree).
+
+Change the fwnode_irq_get_byname() to work as documented and make also the
+fwnode_irq_get() follow same common convention returning a negative errno
+upon failure.
+
+Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
+Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Suggested-by: Jonathan Cameron <jic23@kernel.org>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+---
+I dropped the existing reviewed-by tags because change to
+fwnode_irq_get() was added.
+
+Revision history:
+v3 =3D> v4:
+ - Change also the fwnode_irq_get()
+---
+ drivers/base/property.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index f6117ec9805c..8c40abed7852 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -987,12 +987,18 @@ EXPORT_SYMBOL(fwnode_iomap);
+  * @fwnode:	Pointer to the firmware node
+  * @index:	Zero-based index of the IRQ
+  *
+- * Return: Linux IRQ number on success. Other values are determined
+- * according to acpi_irq_get() or of_irq_get() operation.
++ * Return: Linux IRQ number on success. Negative errno on failure.
+  */
+ int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
+ {
+-	return fwnode_call_int_op(fwnode, irq_get, index);
++	int ret;
++
++	ret =3D fwnode_call_int_op(fwnode, irq_get, index);
++	/* We treat mapping errors as invalid case */
++	if (ret =3D=3D 0)
++		return -EINVAL;
++
++	return ret;
+ }
+ EXPORT_SYMBOL(fwnode_irq_get);
+=20
+--=20
+2.40.1
 
 
---kEpcCnhkORFemaUM
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--fzqZWu+mtDdK0Jc5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGMsygAKCRB4tDGHoIJi
-0vOKAQCLR9m9tYztuGYjhMQ0trXZPKE2Y8xVwNtfr5jJy14lRgD/WEmttGELpMve
-zitK847mqPuq6YE2XnjnZvsdGcD6cAc=
-=WJ81
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRjLNUACgkQeFA3/03a
+ocXWBwgAoTg2gyrbSegZNG72m8qgJFB4ijYPCs2RyJCcx8WVs0X8/B10OZjD3x3H
+B6+4ZYtlNLDhwBkP3H/p1F6P0g7uhRVPNR3HeLlr6VTXXnO4o2KxkbeOVIEcidf0
+eR0hR6PtI7qKbYZvqKLOJetWefDRVlaARk8xy6G0Q+6VNShxm+TDBzJ1SklJnrSw
+sIeyeK41XqMbQ2PFZzWW1REd0ai0wyYCKTQj3h/oawsZDS0AT0JxIAlsW1W6RAfo
+F/4Z2f1fsrHX2+/7AX3h7YWzUNVgjaPIHf1qV+GlulWzUNY81k6PAdH9b+rbHnP/
+wAxUsuKyRch+fUgLBJWNfIk670GzUg==
+=9vGc
 -----END PGP SIGNATURE-----
 
---kEpcCnhkORFemaUM--
+--fzqZWu+mtDdK0Jc5--
