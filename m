@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34EA705AF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58713705AF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjEPXDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S231240AbjEPXEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjEPXDv (ORCPT
+        with ESMTP id S229658AbjEPXEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:03:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF727EEC;
-        Tue, 16 May 2023 16:03:35 -0700 (PDT)
+        Tue, 16 May 2023 19:04:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4CA72AA;
+        Tue, 16 May 2023 16:03:44 -0700 (PDT)
 Received: from localhost.localdomain (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: shreeya)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 65656660322D;
-        Wed, 17 May 2023 00:03:22 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B232E6605905;
+        Wed, 17 May 2023 00:03:36 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684278214;
-        bh=FVMe/5NMLn43mP7albuxLlvogh9o3Yme9lezj9TaBTo=;
+        s=mail; t=1684278223;
+        bh=APUXpv76gAJ+bvr5pL51Y23+mXfXNgygrnteOrO5pJI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DCCDEMjrrn0YouSvTb0b0EFIbk81oW3SvEAMRgraJ72fqcOIZAQoXHYYGtk9kiibk
-         g5lkwzQ/qOyZHv6l/1Ak/BRZvp0SZUHKOYiuwCSw5ZFlUruDk2dtKcWlPu9giDeXC0
-         gLWWyFyU3dL2i0i4TqZ5r+Ly42Op3pWYgYK94kr7rFgf8BfLk0mWRWbUGy/gdKUtgu
-         DS45rl1rR7LI/YurnE/P4y/34tEq6K4thixMhMnwB9sc4AhPQaEjupBqcmAAQjPgyl
-         LkMK3FffbZzqp8y5AX5MEfq21UEBYRqXdxOluqT1Gz8BcNKXq8x4F1BcmYNG3YUsGn
-         SFzJvdS0fQNHQ==
+        b=l+Ht+y+fcgjaPk088r5OsjgjFwbFXVgpdc0Nj+zL8zEkWY81HL+LGhORJ/YFLcUC2
+         DR9xkqjdks0rfhQN13R3eP3pXOMQz1G619FRRKV7BZ3JSuBpS+sZZ8eOypQRHOAxha
+         1r2ObYvLlzG09yAVsX/rlq1sBz84CjlxYyATNaRTq1vrUqaJhWvmhrfO4ckzXDlScT
+         oUyaRZxtcFqwIQAFOHeQnXRXkltx9N1E2dffYSHdwQpIbv49NLIVDH+M0WGvMN1Bgm
+         Cqa+qBbjL+2BuO5FdpzWjoJ6dXiA5Qf8I6K1Vx8iOobkUdqF2SD4zxxnAhfue8mtVq
+         lwsy+BHDZBJRA==
 From:   Shreeya Patel <shreeya.patel@collabora.com>
 To:     jic23@kernel.org, lars@metafoo.de, heiko@sntech.de,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -42,9 +42,9 @@ Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         kernel@collabora.com, gustavo.padovan@collabora.com,
         serge.broslavsky@collabora.com,
         Shreeya Patel <shreeya.patel@collabora.com>
-Subject: [PATCH 4/7] iio: adc: rockchip_saradc: Match alignment with open parenthesis
-Date:   Wed, 17 May 2023 04:30:48 +0530
-Message-Id: <20230516230051.14846-5-shreeya.patel@collabora.com>
+Subject: [PATCH 5/7] iio: adc: rockchip_saradc: Use dev_err_probe
+Date:   Wed, 17 May 2023 04:30:49 +0530
+Message-Id: <20230516230051.14846-6-shreeya.patel@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230516230051.14846-1-shreeya.patel@collabora.com>
 References: <20230516230051.14846-1-shreeya.patel@collabora.com>
@@ -60,37 +60,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Match alignment with open parenthesis for improving the code
-readability.
+Use dev_err_probe instead of dev_err in probe function,
+which simplifies code a little bit and prints the error
+code.
 
 Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
 ---
- drivers/iio/adc/rockchip_saradc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/iio/adc/rockchip_saradc.c | 45 ++++++++++++++-----------------
+ 1 file changed, 20 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/iio/adc/rockchip_saradc.c b/drivers/iio/adc/rockchip_saradc.c
-index 05ea823a8f16..5e1e8575bc76 100644
+index 5e1e8575bc76..a52021fd477d 100644
 --- a/drivers/iio/adc/rockchip_saradc.c
 +++ b/drivers/iio/adc/rockchip_saradc.c
-@@ -144,7 +144,7 @@ static void rockchip_saradc_power_down(struct rockchip_saradc *info)
- }
+@@ -418,25 +418,23 @@ static int rockchip_saradc_probe(struct platform_device *pdev)
+ 		return -ENODEV;
  
- static int rockchip_saradc_conversion(struct rockchip_saradc *info,
--				   struct iio_chan_spec const *chan)
-+				      struct iio_chan_spec const *chan)
- {
- 	reinit_completion(&info->completion);
+ 	indio_dev = devm_iio_device_alloc(&pdev->dev, sizeof(*info));
+-	if (!indio_dev) {
+-		dev_err(&pdev->dev, "failed allocating iio device\n");
+-		return -ENOMEM;
+-	}
++	if (!indio_dev)
++		return dev_err_probe(&pdev->dev, -ENOMEM,
++				     "failed allocating iio device\n");
++
+ 	info = iio_priv(indio_dev);
  
-@@ -387,8 +387,7 @@ static irqreturn_t rockchip_saradc_trigger_handler(int irq, void *p)
- }
+ 	match_data = of_device_get_match_data(&pdev->dev);
+-	if (!match_data) {
+-		dev_err(&pdev->dev, "failed to match device\n");
+-		return -ENODEV;
+-	}
++	if (!match_data)
++		return dev_err_probe(&pdev->dev, -ENODEV,
++				     "failed to match device\n");
  
- static int rockchip_saradc_volt_notify(struct notifier_block *nb,
--						   unsigned long event,
--						   void *data)
-+				       unsigned long event, void *data)
- {
- 	struct rockchip_saradc *info =
- 			container_of(nb, struct rockchip_saradc, nb);
+ 	info->data = match_data;
+ 
+ 	/* Sanity check for possible later IP variants with more channels */
+-	if (info->data->num_channels > SARADC_MAX_CHANNELS) {
+-		dev_err(&pdev->dev, "max channels exceeded");
+-		return -EINVAL;
+-	}
++	if (info->data->num_channels > SARADC_MAX_CHANNELS)
++		return dev_err_probe(&pdev->dev, -EINVAL,
++				     "max channels exceeded");
+ 
+ 	info->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(info->regs))
+@@ -494,23 +492,20 @@ static int rockchip_saradc_probe(struct platform_device *pdev)
+ 	 * This may become user-configurable in the future.
+ 	 */
+ 	ret = clk_set_rate(info->clk, info->data->clk_rate);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "failed to set adc clk rate, %d\n", ret);
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret,
++				     "failed to set adc clk rate\n");
+ 
+ 	ret = regulator_enable(info->vref);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "failed to enable vref regulator\n");
+-		return ret;
+-	}
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret,
++				     "failed to enable vref regulator\n");
++
+ 	ret = devm_add_action_or_reset(&pdev->dev,
+ 				       rockchip_saradc_regulator_disable, info);
+-	if (ret) {
+-		dev_err(&pdev->dev, "failed to register devm action, %d\n",
+-			ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "failed to register devm action\n");
+ 
+ 	ret = regulator_get_voltage(info->vref);
+ 	if (ret < 0)
 -- 
 2.30.2
 
