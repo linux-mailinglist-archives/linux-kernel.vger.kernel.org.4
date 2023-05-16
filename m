@@ -2,334 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DE0705A71
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9004D705A75
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjEPWNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47314 "EHLO
+        id S229609AbjEPWPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEPWNV (ORCPT
+        with ESMTP id S229454AbjEPWPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:13:21 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A65446B0;
-        Tue, 16 May 2023 15:13:19 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24ded4b33d7so104696a91.3;
-        Tue, 16 May 2023 15:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684275199; x=1686867199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=deLfvcQ8xa6CGUhVXRhGKunzIPsoCAcNdYd8Dsf32jM=;
-        b=cnRk6WTCmn7+02bJP06xojBUtFVAapIW8EBusy6jRtOAT6EtdBpWwOJR9b8slQU26J
-         u4Yl3zSl5LPNX/vA6TQzHKcc/tM4bvGcbV9rpX9voRSJg5Bxnzu5MJI5E2tRZ4mlV8jZ
-         qkV6PJETsXUiWE3ZcyAcKKhj99G/D/723PIUstPKQqT8RfuY9vaP7KecxQqG/DMQMoqY
-         Sc+p7lP19ygaZutb+W100Trgktn7r9ziYcwCliq5SQfLQW7pGj4uB3BO1VGbDePkterP
-         oTpTymNr/8vayPrlGXiQAKkZUNa+GqgeWwUk2UixHygCYFdpNRQ5K+fk1dQikQ7yR8nS
-         3Zuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684275199; x=1686867199;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=deLfvcQ8xa6CGUhVXRhGKunzIPsoCAcNdYd8Dsf32jM=;
-        b=Nk2y9jI0bhmjCiozdsbeU+rVWg4Y7MbW8tnHtb0545O1GsVTYtLKdTXivLr50gPy0O
-         0zT7SrKKifPLnW/JXCrvfGoG7oBWe9HQhasESpwGGi6b/4fTyTNL8NjVAv0qMOcsWVW6
-         XLHj9THnp3GZ023x1JTxb33GqlTrPTCD3jOCa2RvtLXWU6rNx+I8jZm2BJu5InKNyT6S
-         05KAngrxkGi43uxo2qtOo/eogVIWhYThT6s77njtTtUqFrFVwtMnnEGtMB+eAV3ciJX0
-         R+TGoW49foByTC83vFk/H1P6B/GKpaB94uKD6Uijd8HwF3F+digN2zdxSbQ6t0lT/TLt
-         MS5A==
-X-Gm-Message-State: AC+VfDw4icWABkuGmyzJi1Tpj0wEvtMZa0mFWR6FIf4CKrz/AcwHIZgq
-        ipAbVLHaJNy8scAAt5Ongk5UbGUjEa+TdQrF6qIGuEQytGb+K6qm
-X-Google-Smtp-Source: ACHHUZ7QHvqhBmf6DE62EnZvVmHwt/V7NlzlJIjAlLypBO6QGP0Uf8LSkmhLsqmTYyjEvvF0N8BPhjOVQ/rZKQqDVj4=
-X-Received: by 2002:a17:90a:b297:b0:24d:ff56:f8c1 with SMTP id
- c23-20020a17090ab29700b0024dff56f8c1mr39160380pjr.13.1684275198705; Tue, 16
- May 2023 15:13:18 -0700 (PDT)
+        Tue, 16 May 2023 18:15:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7864231;
+        Tue, 16 May 2023 15:15:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F7C363CF5;
+        Tue, 16 May 2023 22:15:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8E5C433AC;
+        Tue, 16 May 2023 22:15:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684275345;
+        bh=1CVkm2h1qch1auKHIlF0XC2larxx6NtF2jvkbfM3xkE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=G+BtFuRtmO43VpHUyXzzLrGRiKKiGKFzaJ1G/xmVPtKgURUm2bRbh7ubHUJ8D0d+3
+         W/LOKo/w1wOQozubpTzz1KvUk2ZAUhzOHIUxuNavpfJojgyYnMt9AW43CCV4d6vTCp
+         a8zC53EjQerVUtIpToCHqUFWSjlhqQ4Yt+H02t5L44VdcOY8eppFQ1zoDZf6XVyyid
+         6GNrGrulqtB6stMf+Sz56LomEbpd+NNlUETl308W7lS7/zEwSgNEtbv051wM/eGYK+
+         +LJTtsZA3ObVScGmI25LRKPJahNG4iIN70fuQ5Lfd0mgACBkUXqaarrFEqe0XYOjxD
+         E+9QCs9rGZNrQ==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f37b860173so101101e87.2;
+        Tue, 16 May 2023 15:15:45 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxiIuXE0NRwDsFPc/hKnY7lywcNXYILQfogCAx+X/xj5TpkeFIG
+        Co2ar3H7Ds+PYKKmhdsCa25L6oUgjuoUCXSFJN4=
+X-Google-Smtp-Source: ACHHUZ5mI+okYrvd0yt5zMehG48RxTQOQz4+Gycufmk9DgSt/lmCXjtU/NESXXGYNMmBUE7Ys4ZVWKH2l+eyPbWHGw8=
+X-Received: by 2002:ac2:5285:0:b0:4f2:6857:1d98 with SMTP id
+ q5-20020ac25285000000b004f268571d98mr5554640lfm.48.1684275343279; Tue, 16 May
+ 2023 15:15:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com>
- <023f6cf9-0f08-f27e-d203-5ff78faf110f@linaro.org>
-In-Reply-To: <023f6cf9-0f08-f27e-d203-5ff78faf110f@linaro.org>
-From:   Paulo Pavacic <pavacic.p@gmail.com>
-Date:   Wed, 17 May 2023 00:13:06 +0200
-Message-ID: <CAO9szn1EsbuPSRrOW8CLqhp+QUcL=9NE93FAwsg2n3htd_aJTw@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: display: panel: add panel-mipi-dsi-bringup
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        robh+dt@kernel.org, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
+ <20230513220418.19357-7-kirill.shutemov@linux.intel.com> <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
+ <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com> <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
+ <a7550521-65bf-f9af-ddb0-118602a6340c@intel.com> <20230516215210.pviqojbr5o4hd6bb@box.shutemov.name>
+ <f7b2e758-625a-aafd-d545-bfa6eae513bb@intel.com>
+In-Reply-To: <f7b2e758-625a-aafd-d545-bfa6eae513bb@intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 17 May 2023 00:15:32 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFXh8wAAU2XT9Aifat4myE_+4GBpUcpT5-sTkgWi-Ab6g@mail.gmail.com>
+Message-ID: <CAMj1kXFXh8wAAU2XT9Aifat4myE_+4GBpUcpT5-sTkgWi-Ab6g@mail.gmail.com>
+Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
+ stepping into unaccepted memory
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, thank you for your time to review this patch and sorry for not
-addressing all of the concerns, it was done unintentionally. This is
-my first contribution to the Linux kernel and it is quite a process.
-I have run those two scripts and haven't received any errors I have
-latest master cloned so I will check what I did wrong.
+On Wed, 17 May 2023 at 00:00, Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 5/16/23 14:52, Kirill A. Shutemov wrote:
+> > On Tue, May 16, 2023 at 01:03:32PM -0700, Dave Hansen wrote:
+> >> On 5/16/23 11:35, Ard Biesheuvel wrote:
+> >>>>> Does this mean that the kernel maps memory before accepting it? As
+> >>>>> otherwise, I would assume that such an access would page fault insi=
+de
+> >>>>> the guest before triggering an exception related to the unaccepted
+> >>>>> state.
+> >>>> Yes, the kernel maps memory before accepting it (modulo things like
+> >>>> DEBUG_PAGEALLOC).
+> >>>>
+> >>> OK, and so the architecture stipulates that prefetching or other
+> >>> speculative accesses must never deliver exceptions to the host
+> >>> regarding such ranges?
+> >> I don't know of anywhere that this is explicitly written.  It's probab=
+ly
+> >> implicit _somewhere_ in the reams of VMX/TDX and base SDM docs, but he=
+ck
+> >> if I know where it is. =F0=9F=98=84
+> > It is not specific to TDX: on x86 (and all architectures with precise
+> > exceptions) exception handling is delayed until instruction retirement =
+and
+> > will not happen if speculation turned out to be wrong. And prefetching
+> > never generates exceptions.
+>
+> Not to be Debbie Downer too much here, but it's *totally* possible for
+> speculative execution to go read memory that causes you to machine
+> check.  We've had such bugs in Linux.
+>
+> We just happen to be lucky in this case that the unaccepted memory
+> exceptions don't generate machine checks *AND* TDX hardware does not
+> machine check on speculative accesses that would _just_ violate TDX
+> security properties.
+>
+> You're right for normal, sane exceptions, though.
 
-The thing I would like to get approval on before I try anything else
-is the name 'panel-mipi-dsi-bringup':
+Same thing on ARM, although I'd have to check their RME stuff in more
+detail to see how it behaves in this particular case.
 
-> Still wrong filename. You did not respond to my previous comments, so I
-don't really understand what's this.
->
-> Judging by compatible, this should be fannal,c3004.yaml
->
-> If not, explain please.
->
-> Missing user of the bindings - driver or DTS. Please sent patches togethe=
-r as patchset.
+But Kyrill is right that it doesn't really matter for the logic in
+this patch - it just accepts some additional pages. The relevant
+difference between implementations will likely be whether unaccepted
+memory gets mapped beforehand in the first place, but we'll deal with
+that once we have to.
 
+As long as we only accept memory that appears in the bitmap as
+'unaccepted', this kind of rounding seems safe and reasonable to me.
 
-I wasn't sure how to name it and this name seemed fit. I'm not sure
-how to be concise about this, but here is the full story as to why I
-have done that:
-
-I got a task to enable panel for which working driver wasn't
-available. I have started testing raydium driver and modifying parts
-of it until I got it working.
-Driver was modified quite a lot, new functions, macros and structures
-were added which resulted in a new driver.
-Therefore I have made a simple driver which I have submitted for a
-review which will probably be rejected now due tomany reasons I have
-noticed after sending it:
-https://lore.kernel.org/lkml/CAO9szn03msW6pu37Zws5EaFGL10rjp9ugPdCuDvOPuQRU=
-72gVQ@mail.gmail.com/T/
-
-While talking with manufacturers of the panel I have figured out that
-they aren't that familiar with the Linux kernel.
-They had previously only enabled  it on bare metal (PLA?) and provided
-me with the initialization sequences. Initialization sequences are hex
-values sent over MIPI DSI to initialize panel controller.
-Initialization sequences sometimes also require delays after certain
-commands and for different panels it can be very different.
-I believe I have simplified it so that someone can follow comments
-inside of the driver and try to enable mipi dsi panel by copy pasting
-initialization code from bare metal system and doing minor
-modifications.
-Since I have targeted this at people who need to enable their panels
-for the first time name seemed okay. I thought that since there is
-panel-simple.yml that panel-mipi-dsi-bringup.yml would be acceptable
-name.
-
-Best regards,
-Paulo
-
-
-uto, 16. svi 2023. u 17:57 Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> napisao je:
->
-> On 16/05/2023 15:09, Paulo Pava=C4=8Di=C4=87 wrote:
-> > Add dt-bindings documentation for panel-mipi-dsi-bringup which currentl=
-y
-> > supports fannal,c3004 panel. Also added fannal to vendor-prefixes.
->
-> Thank you for your patch. There is something to discuss/improve.
->
-> >
-> > v2 changelog:
->
-> Please put changelog after ---
->
-> Missing user of the bindings - driver or DTS. Please sent patches
-> together as patchset.
->
->
->
-> >   - revised driver title, now describes purpose
-> >   - revised description, now describes hw
-> >   - revised maintainers, now has only 1 mail
-> >   - removed diacritics from commit/commit author
-> >   - properties/compatible is now enum
-> >   - compatible using only lowercase
-> >   - revised dts example
-> >   - modified MAINTAINERS in this commit (instead of driver commit)
-> >   - dt_bindings_check checked yml
-> >   - checkpatch warning fixed
-> >
-> > Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
-> > ---
-> >  .../display/panel/panel-mipi-dsi-bringup.yaml | 54 +++++++++++++++++++
-> >  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
-> >  MAINTAINERS                                   |  6 +++
-> >  3 files changed, 62 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bringup.=
-yaml
->
-> Still wrong filename. You did not respond to my previous comments, so I
-> don't really understand what's this.
->
-> Judging by compatible, this should be fannal,c3004.yaml
->
-> If not, explain please.
->
-> >
-> > diff --git a/Documentation/devicetree/bindings/display/panel/panel-mipi=
--dsi-bringup.yaml
-> > b/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bringu=
-p.yaml
-> > new file mode 100644
-> > index 000000000000..c9e2b545657e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-br=
-ingup.yaml
-> > @@ -0,0 +1,54 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/display/panel/panel-mipi-dsi-bringu=
-p.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MIPI DSI Bringup Panel Porting Bindings
->
-> Drop Bindings. I don't understand what is "Porting" in the terms of
-> hardware. If it these are bindings for Panel, please write here proper
-> hardware.
->
-> > +
-> > +description: |
-> > +  MIPI DSI Bringup Panel porting bindings to be used for a collection =
-of panels
->
-> I have no clue what is "Bringup panel". Is it technical term for some
-> type of panels?
->
-> > +  from different manufacturers which don't require backlight control f=
-rom the
-> > +  driver and have a single reset pin which is required to be passed as=
- an
-> > +  argument.
->
-> Drop "driver"
->
-> > +
-> > +maintainers:
-> > +  - Paulo Pavacic <pavacic.p@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: panel-common.yaml#
-> > +
-> > +properties:
-> > +
->
-> Drop blank line.
->
-> > +  compatible:
-> > +    enum:
-> > +      # compatible must be listed in alphabetical order, ordered by co=
-mpatible.
-> > +      # The description in the comment is mandatory for each compatibl=
-e.
->
-> Drop above comment.
->
-> > +
-> > +        # Fannal 480x800 panel
-> > +      - fannal,c3004
-> > +
-> > +  reg: true
-> > +  reset-gpios: true
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reset-gpios
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +    //example on IMX8MM where GPIO pin 9 is used as a reset pin
->
-> This is a friendly reminder during the review process.
->
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all
-> requested changes or keep discussing them.
->
-> Thank you.
->
-> I asked to drop the comment.
->
-> > +    mipi_dsi@32e10000 {
->
-> dsi {
->
-> There is no way it was correct in current form.
->
-> It does not look like you tested the bindings, at least after quick
-> look. Please run `make dt_binding_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
-> Maybe you need to update your dtschema and yamllint.
->
-> > +        panel@0 {
-> > +            compatible =3D "fannal,c3004";
-> > +            reg =3D <0>;
-> > +            pinctrl-0 =3D <&pinctrl_mipi_dsi_rst>;
-> > +            pinctrl-names =3D "default";
-> > +            reset-gpios =3D <&gpio1 9 GPIO_ACTIVE_LOW>;
-> > +        };
-> > +    };
-> > +...
-> > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > index 82d39ab0231b..f962750f630a 100644
-> > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> > @@ -462,6 +462,8 @@ patternProperties:
-> >      description: Facebook
-> >    "^fairphone,.*":
-> >      description: Fairphone B.V.
-> > +  "^fannal,.*":
-> > +    description: Fannal Electronics Co., Ltd
-> >    "^faraday,.*":
-> >      description: Faraday Technology Corporation
-> >    "^fastrax,.*":
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index e0ad886d3163..46f988ee60bd 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -6566,6 +6566,12 @@ T:    git git://anongit.freedesktop.org/drm/drm-=
-misc
-> >  F:    Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-s=
-pi.yaml
-> >  F:    drivers/gpu/drm/tiny/panel-mipi-dbi.c
-> >
-> > +DRM DRIVER FOR MIPI DSI BRINGUP
-> > +M:    Paulo Pavacic <pavacic.p@gmail.com>
-> > +S:    Maintained
-> > +C:    mipi-dsi-bringup:matrix.org
->
-> Missing protocol. See explanation of C: entry at the beginning.
->
-> > +F:    Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-b=
-ringup.yaml
-> > +
-> >  DRM DRIVER FOR MSM ADRENO GPU
-> >  M:    Rob Clark <robdclark@gmail.com>
-> >  M:    Abhinav Kumar <quic_abhinavk@quicinc.com>
->
-> Best regards,
-> Krzysztof
->
-
-
---=20
-Lijep pozdrav,
-Paulo
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
