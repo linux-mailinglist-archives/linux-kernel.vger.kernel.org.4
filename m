@@ -2,297 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94ACB704E00
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3665F704E04
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjEPMqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S233253AbjEPMrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbjEPMqk (ORCPT
+        with ESMTP id S233236AbjEPMrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:46:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1B7E4A;
-        Tue, 16 May 2023 05:46:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD2876347D;
-        Tue, 16 May 2023 12:46:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D643C433EF;
-        Tue, 16 May 2023 12:46:35 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Liang Gao <gaoliang@loongson.cn>, Jun Yi <yijun@loongson.cn>
-Subject: [PATCH] LoongArch: Introduce hardware page table walker
-Date:   Tue, 16 May 2023 20:46:10 +0800
-Message-Id: <20230516124610.535360-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Tue, 16 May 2023 08:47:02 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A51D122;
+        Tue, 16 May 2023 05:46:58 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-453859b6b18so2088225e0c.3;
+        Tue, 16 May 2023 05:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684241217; x=1686833217;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hl50wTUeOZF25t4IkNhKUoFdpuHrFZ4x2mhQ8xO0ymg=;
+        b=pIe4aiW0v9WOIzD89Fo2ZFvsJyTSN5dq+oCYm6yQ36TCS19lHHqAI+t58dY4T8IOCj
+         5o06YSd4Y27cRhvkG8gfF3sXtIrzBaPd+kVUEDOpqlZpUjNm7VguH09s/92r5J+r6Kj1
+         oCpMhDu8xutYVVsASXyhUYk72KJ2tv4PpfydZcXW13EbtG8knFFGShFT/zUfY+QIr9gE
+         31gvoy62f2UwCbMxgY59U1P/WFw+aoRXASiv2hCRP02EFt7CQXwmszNb64Dg5pkuoMji
+         9HaFEuk9LKWT6Hcfs3yvf0BiFfs/QsVHm2ogK3VRx/dNs1Daf+EDFlfj6p5koo6XCx86
+         1JPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684241217; x=1686833217;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hl50wTUeOZF25t4IkNhKUoFdpuHrFZ4x2mhQ8xO0ymg=;
+        b=G8F8CV9RpQcoy/Q9H0LgEqRvIb3V70fjVLzGO8xX0ipMymB3+U1shevQS+MN5oK/G7
+         xYJRDJ6AZw0mo72opvzX/tMBGs/SlAvvUx3rko4WOpDrplvLvv75PQr1KbZZRiQhr0yQ
+         q5+huSaw42BFfae6rcLb+94G3G0t2KriiJRQV76//Blc6DpZmrTTyRlm6LMCcb50k2Ht
+         8yTwGd2i6b8wGueCbXm/Acl0CuAxg9cyeh94NQxsy6iwEoTeVZntoPGHc6Hj15QtgU5w
+         N/CYLOPms5ddzqKutP44sV4Xpx18iz3td4bfJ3ff/kZb0hKSJi1cJC8AnQ3ACXc64cVv
+         d5jA==
+X-Gm-Message-State: AC+VfDxRy4lAeJCuHJ8XTTn7JtQpmtNyLD8xGddYix9SuIiDg0xZ9NQI
+        svt6cr04pNp7h0bpuZh1C89RK4Nmgn6+sYDdk10=
+X-Google-Smtp-Source: ACHHUZ4lDGjF5lxrx9P2QZ9TgcVMgYPU6VtByZSaiIfusyMq+aURJqVrFxfUnylPFivtHsxII3HjUPbb3IuFvs1tZ9w=
+X-Received: by 2002:a1f:bd47:0:b0:44f:cc25:2007 with SMTP id
+ n68-20020a1fbd47000000b0044fcc252007mr12388960vkf.11.1684241217408; Tue, 16
+ May 2023 05:46:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230515133629.1974610-1-chengzhihao1@huawei.com>
+ <20230515133629.1974610-3-chengzhihao1@huawei.com> <CAOQ4uxj-j-ugHrvvfS+XF=rzE3NH_NaZgf4_rWBxvaGYO3iN-w@mail.gmail.com>
+ <1f11e2f3-bdf8-553c-82fa-b24619e28e73@huawei.com>
+In-Reply-To: <1f11e2f3-bdf8-553c-82fa-b24619e28e73@huawei.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 16 May 2023 15:46:46 +0300
+Message-ID: <CAOQ4uxigfZhtfBv9VLvfcxcyj7NjYs9-rJycAep0xCNefnHm5w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] ovl: get_acl: Fix null pointer dereference at
+ realinode in rcu-walk mode
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     miklos@szeredi.hu, brauner@kernel.org,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Loongson-3A6000 and newer processors have hardware page table walker
-(PTW) support. PTW can handle all fastpaths of TLBI/TLBL/TLBS/TLBM
-exceptions by hardware, software only need to handle slowpaths (page
-faults).
+On Tue, May 16, 2023 at 3:25=E2=80=AFPM Zhihao Cheng <chengzhihao1@huawei.c=
+om> wrote:
+>
+> =E5=9C=A8 2023/5/16 19:40, Amir Goldstein =E5=86=99=E9=81=93:
+> > On Mon, May 15, 2023 at 4:39=E2=80=AFPM Zhihao Cheng <chengzhihao1@huaw=
+ei.com> wrote:
+> >>
+> >> Following process:
+> >>           P1                     P2
+> >>   path_openat
+> >>    link_path_walk
+> >>     may_lookup
+> >>      inode_permission(rcu)
+> >>       ovl_permission
+> >>        acl_permission_check
+> >>         check_acl
+> >>          get_cached_acl_rcu
+> >>           ovl_get_inode_acl
+> >>            realinode =3D ovl_inode_real(ovl_inode)
+> >>                                drop_cache
+> >>                                 __dentry_kill(ovl_dentry)
+> >>                                  iput(ovl_inode)
+> >>                                   ovl_destroy_inode(ovl_inode)
+> >>                                    dput(oi->__upperdentry)
+> >>                                     dentry_kill(upperdentry)
+> >>                                      dentry_unlink_inode
+> >>                                       upperdentry->d_inode =3D NULL
+> >>              ovl_inode_upper
+> >>               upperdentry =3D ovl_i_dentry_upper(ovl_inode)
+> >>               d_inode(upperdentry) // returns NULL
+> >>            IS_POSIXACL(realinode) // NULL pointer dereference
+> >> , will trigger an null pointer dereference at realinode:
+> >>    [  205.472797] BUG: kernel NULL pointer dereference, address:
+> >>                   0000000000000028
+> >>    [  205.476701] CPU: 2 PID: 2713 Comm: ls Not tainted
+> >>                   6.3.0-12064-g2edfa098e750-dirty #1216
+> >>    [  205.478754] RIP: 0010:do_ovl_get_acl+0x5d/0x300
+> >>    [  205.489584] Call Trace:
+> >>    [  205.489812]  <TASK>
+> >>    [  205.490014]  ovl_get_inode_acl+0x26/0x30
+> >>    [  205.490466]  get_cached_acl_rcu+0x61/0xa0
+> >>    [  205.490908]  generic_permission+0x1bf/0x4e0
+> >>    [  205.491447]  ovl_permission+0x79/0x1b0
+> >>    [  205.491917]  inode_permission+0x15e/0x2c0
+> >>    [  205.492425]  link_path_walk+0x115/0x550
+> >>    [  205.493311]  path_lookupat.isra.0+0xb2/0x200
+> >>    [  205.493803]  filename_lookup+0xda/0x240
+> >>    [  205.495747]  vfs_fstatat+0x7b/0xb0
+> >>
+> >> Fetch a reproducer in [Link].
+> >>
+> >> Fix it by using helper ovl_i_path_realinode() to get realpath and real
+> >> inode after non-nullptr checking.
+> >>
+> >> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217404
+> >> Fixes: 332f606b32b6 ("ovl: enable RCU'd ->get_acl()")
+> >
+> > Note that this bug is also in 5.15.y, in method ovl_get_acl().
+> > I hope you will be able to follow up with a simple backport for 5.15 -
+> > i.e. only need to add a check for NULL realinode at the beginning.
+> > There was no realpath back then.
+> >
+>
+> Sure. I notice that there is a '[ Upstream commit xxx ]' field in 5.15
+> patch, so may I backport it after the fix applied into mainline(6.4)?
+>
 
-BTW, PTW doesn't append _PAGE_MODIFIED for page table entries, so we
-change pmd_dirty() and pte_dirty() to also check _PAGE_DIRTY for the
-"dirty" attribute.
+Yes, you need to wait until the fix is merged to mainline before
+posting a backport.
 
-Signed-off-by: Liang Gao <gaoliang@loongson.cn>
-Signed-off-by: Jun Yi <yijun@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/include/asm/cpu-features.h |  2 +-
- arch/loongarch/include/asm/cpu.h          |  2 ++
- arch/loongarch/include/asm/loongarch.h    |  4 ++++
- arch/loongarch/include/asm/pgtable.h      |  4 ++--
- arch/loongarch/include/asm/tlb.h          |  3 +++
- arch/loongarch/include/uapi/asm/hwcap.h   |  1 +
- arch/loongarch/kernel/cpu-probe.c         |  4 ++++
- arch/loongarch/kernel/proc.c              |  1 +
- arch/loongarch/mm/tlb.c                   | 24 ++++++++++++++++++-----
- arch/loongarch/mm/tlbex.S                 | 21 ++++++++++++++++++++
- 10 files changed, 58 insertions(+), 8 deletions(-)
+You'd usually prefix the patch subject with [PATCH 5.15] and send
+it to stable@kernel.
 
-diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
-index f6177f133477..2eafe6a6aca8 100644
---- a/arch/loongarch/include/asm/cpu-features.h
-+++ b/arch/loongarch/include/asm/cpu-features.h
-@@ -64,6 +64,6 @@
- #define cpu_has_eiodecode	cpu_opt(LOONGARCH_CPU_EIODECODE)
- #define cpu_has_guestid		cpu_opt(LOONGARCH_CPU_GUESTID)
- #define cpu_has_hypervisor	cpu_opt(LOONGARCH_CPU_HYPERVISOR)
--
-+#define cpu_has_ptw		cpu_opt(LOONGARCH_CPU_PTW)
- 
- #endif /* __ASM_CPU_FEATURES_H */
-diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
-index 88773d849e33..48b9f7168bcc 100644
---- a/arch/loongarch/include/asm/cpu.h
-+++ b/arch/loongarch/include/asm/cpu.h
-@@ -98,6 +98,7 @@ enum cpu_type_enum {
- #define CPU_FEATURE_EIODECODE		23	/* CPU has EXTIOI interrupt pin decode mode */
- #define CPU_FEATURE_GUESTID		24	/* CPU has GuestID feature */
- #define CPU_FEATURE_HYPERVISOR		25	/* CPU has hypervisor (running in VM) */
-+#define CPU_FEATURE_PTW			26	/* CPU has hardware page table walker */
- 
- #define LOONGARCH_CPU_CPUCFG		BIT_ULL(CPU_FEATURE_CPUCFG)
- #define LOONGARCH_CPU_LAM		BIT_ULL(CPU_FEATURE_LAM)
-@@ -125,5 +126,6 @@ enum cpu_type_enum {
- #define LOONGARCH_CPU_EIODECODE		BIT_ULL(CPU_FEATURE_EIODECODE)
- #define LOONGARCH_CPU_GUESTID		BIT_ULL(CPU_FEATURE_GUESTID)
- #define LOONGARCH_CPU_HYPERVISOR	BIT_ULL(CPU_FEATURE_HYPERVISOR)
-+#define LOONGARCH_CPU_PTW		BIT_ULL(CPU_FEATURE_PTW)
- 
- #endif /* _ASM_CPU_H */
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index b3323ab5b78d..93b22a7af654 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -138,6 +138,7 @@ static inline u32 read_cpucfg(u32 reg)
- #define  CPUCFG2_MIPSBT			BIT(20)
- #define  CPUCFG2_LSPW			BIT(21)
- #define  CPUCFG2_LAM			BIT(22)
-+#define  CPUCFG2_PTW			BIT(24)
- 
- #define LOONGARCH_CPUCFG3		0x3
- #define  CPUCFG3_CCDMA			BIT(0)
-@@ -453,6 +454,9 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
- #define  CSR_PWCTL0_PTBASE		(_ULCAST_(0x1f) << CSR_PWCTL0_PTBASE_SHIFT)
- 
- #define LOONGARCH_CSR_PWCTL1		0x1d	/* PWCtl1 */
-+#define  CSR_PWCTL1_PTW_SHIFT		24
-+#define  CSR_PWCTL1_PTW_WIDTH		1
-+#define  CSR_PWCTL1_PTW			(_ULCAST_(0x1) << CSR_PWCTL1_PTW_SHIFT)
- #define  CSR_PWCTL1_DIR3WIDTH_SHIFT	18
- #define  CSR_PWCTL1_DIR3WIDTH_WIDTH	5
- #define  CSR_PWCTL1_DIR3WIDTH		(_ULCAST_(0x1f) << CSR_PWCTL1_DIR3WIDTH_SHIFT)
-diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-index d28fb9dbec59..5f93d6eef657 100644
---- a/arch/loongarch/include/asm/pgtable.h
-+++ b/arch/loongarch/include/asm/pgtable.h
-@@ -362,7 +362,7 @@ extern pgd_t invalid_pg_dir[];
-  */
- static inline int pte_write(pte_t pte)	{ return pte_val(pte) & _PAGE_WRITE; }
- static inline int pte_young(pte_t pte)	{ return pte_val(pte) & _PAGE_ACCESSED; }
--static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & _PAGE_MODIFIED; }
-+static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & (_PAGE_DIRTY | _PAGE_MODIFIED); }
- 
- static inline pte_t pte_mkold(pte_t pte)
- {
-@@ -506,7 +506,7 @@ static inline pmd_t pmd_wrprotect(pmd_t pmd)
- 
- static inline int pmd_dirty(pmd_t pmd)
- {
--	return !!(pmd_val(pmd) & _PAGE_MODIFIED);
-+	return !!(pmd_val(pmd) & (_PAGE_DIRTY | _PAGE_MODIFIED));
- }
- 
- static inline pmd_t pmd_mkclean(pmd_t pmd)
-diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
-index f5e4deb97402..0dc9ee2b05d2 100644
---- a/arch/loongarch/include/asm/tlb.h
-+++ b/arch/loongarch/include/asm/tlb.h
-@@ -163,6 +163,9 @@ extern void handle_tlb_store(void);
- extern void handle_tlb_modify(void);
- extern void handle_tlb_refill(void);
- extern void handle_tlb_protect(void);
-+extern void handle_tlb_load_ptw(void);
-+extern void handle_tlb_store_ptw(void);
-+extern void handle_tlb_modify_ptw(void);
- 
- extern void dump_tlb_all(void);
- extern void dump_tlb_regs(void);
-diff --git a/arch/loongarch/include/uapi/asm/hwcap.h b/arch/loongarch/include/uapi/asm/hwcap.h
-index 8840b72fa8e8..6955a7cb2c65 100644
---- a/arch/loongarch/include/uapi/asm/hwcap.h
-+++ b/arch/loongarch/include/uapi/asm/hwcap.h
-@@ -16,5 +16,6 @@
- #define HWCAP_LOONGARCH_LBT_X86		(1 << 10)
- #define HWCAP_LOONGARCH_LBT_ARM		(1 << 11)
- #define HWCAP_LOONGARCH_LBT_MIPS	(1 << 12)
-+#define HWCAP_LOONGARCH_PTW		(1 << 13)
- 
- #endif /* _UAPI_ASM_HWCAP_H */
-diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-index f42acc6c8df6..e925579c7a71 100644
---- a/arch/loongarch/kernel/cpu-probe.c
-+++ b/arch/loongarch/kernel/cpu-probe.c
-@@ -136,6 +136,10 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
- 		c->options |= LOONGARCH_CPU_CRYPTO;
- 		elf_hwcap |= HWCAP_LOONGARCH_CRYPTO;
- 	}
-+	if (config & CPUCFG2_PTW) {
-+		c->options |= LOONGARCH_CPU_PTW;
-+		elf_hwcap |= HWCAP_LOONGARCH_PTW;
-+	}
- 	if (config & CPUCFG2_LVZP) {
- 		c->options |= LOONGARCH_CPU_LVZ;
- 		elf_hwcap |= HWCAP_LOONGARCH_LVZ;
-diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-index 0d82907b5404..782a34e7336e 100644
---- a/arch/loongarch/kernel/proc.c
-+++ b/arch/loongarch/kernel/proc.c
-@@ -79,6 +79,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 	if (cpu_has_crc32)	seq_printf(m, " crc32");
- 	if (cpu_has_complex)	seq_printf(m, " complex");
- 	if (cpu_has_crypto)	seq_printf(m, " crypto");
-+	if (cpu_has_ptw)	seq_printf(m, " ptw");
- 	if (cpu_has_lvz)	seq_printf(m, " lvz");
- 	if (cpu_has_lbt_x86)	seq_printf(m, " lbt_x86");
- 	if (cpu_has_lbt_arm)	seq_printf(m, " lbt_arm");
-diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-index 8bad6b0cff59..3e1d1d3c7058 100644
---- a/arch/loongarch/mm/tlb.c
-+++ b/arch/loongarch/mm/tlb.c
-@@ -167,6 +167,9 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t *ptep
- 	int idx;
- 	unsigned long flags;
- 
-+	if (cpu_has_ptw)
-+		return;
-+
- 	/*
- 	 * Handle debugger faulting in for debugee.
- 	 */
-@@ -220,7 +223,11 @@ static void setup_ptwalker(void)
- 	pte_w = PAGE_SHIFT - 3;
- 
- 	pwctl0 = pte_i | pte_w << 5 | pmd_i << 10 | pmd_w << 15 | pud_i << 20 | pud_w << 25;
--	pwctl1 = pgd_i | pgd_w << 6;
-+
-+	if (!cpu_has_ptw)
-+		pwctl1 = pgd_i | pgd_w << 6;
-+	else
-+		pwctl1 = pgd_i | pgd_w << 6 | CSR_PWCTL1_PTW;
- 
- 	csr_write64(pwctl0, LOONGARCH_CSR_PWCTL0);
- 	csr_write64(pwctl1, LOONGARCH_CSR_PWCTL1);
-@@ -264,10 +271,17 @@ void setup_tlb_handler(int cpu)
- 	if (cpu == 0) {
- 		memcpy((void *)tlbrentry, handle_tlb_refill, 0x80);
- 		local_flush_icache_range(tlbrentry, tlbrentry + 0x80);
--		set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load, VECSIZE);
--		set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load, VECSIZE);
--		set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store, VECSIZE);
--		set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify, VECSIZE);
-+		if (!cpu_has_ptw) {
-+			set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load, VECSIZE);
-+			set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load, VECSIZE);
-+			set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store, VECSIZE);
-+			set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify, VECSIZE);
-+		} else {
-+			set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load_ptw, VECSIZE);
-+			set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load_ptw, VECSIZE);
-+			set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store_ptw, VECSIZE);
-+			set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify_ptw, VECSIZE);
-+		}
- 		set_handler(EXCCODE_TLBNR * VECSIZE, handle_tlb_protect, VECSIZE);
- 		set_handler(EXCCODE_TLBNX * VECSIZE, handle_tlb_protect, VECSIZE);
- 		set_handler(EXCCODE_TLBPE * VECSIZE, handle_tlb_protect, VECSIZE);
-diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
-index 240ced55586e..01df8a0b87f6 100644
---- a/arch/loongarch/mm/tlbex.S
-+++ b/arch/loongarch/mm/tlbex.S
-@@ -190,6 +190,13 @@ nopage_tlb_load:
- 	jr		t0
- SYM_FUNC_END(handle_tlb_load)
- 
-+SYM_FUNC_START(handle_tlb_load_ptw)
-+	csrwr	t0, LOONGARCH_CSR_KS0
-+	csrwr	t1, LOONGARCH_CSR_KS1
-+	la_abs	t0, tlb_do_page_fault_0
-+	jirl	zero, t0, 0
-+SYM_FUNC_END(handle_tlb_load_ptw)
-+
- SYM_FUNC_START(handle_tlb_store)
- 	csrwr		t0, EXCEPTION_KS0
- 	csrwr		t1, EXCEPTION_KS1
-@@ -339,6 +346,13 @@ nopage_tlb_store:
- 	jr		t0
- SYM_FUNC_END(handle_tlb_store)
- 
-+SYM_FUNC_START(handle_tlb_store_ptw)
-+	csrwr	t0, LOONGARCH_CSR_KS0
-+	csrwr	t1, LOONGARCH_CSR_KS1
-+	la_abs	t0, tlb_do_page_fault_1
-+	jirl	zero, t0, 0
-+SYM_FUNC_END(handle_tlb_store_ptw)
-+
- SYM_FUNC_START(handle_tlb_modify)
- 	csrwr		t0, EXCEPTION_KS0
- 	csrwr		t1, EXCEPTION_KS1
-@@ -486,6 +500,13 @@ nopage_tlb_modify:
- 	jr		t0
- SYM_FUNC_END(handle_tlb_modify)
- 
-+SYM_FUNC_START(handle_tlb_modify_ptw)
-+	csrwr	t0, LOONGARCH_CSR_KS0
-+	csrwr	t1, LOONGARCH_CSR_KS1
-+	la_abs	t0, tlb_do_page_fault_1
-+	jirl	zero, t0, 0
-+SYM_FUNC_END(handle_tlb_modify_ptw)
-+
- SYM_FUNC_START(handle_tlb_refill)
- 	csrwr		t0, LOONGARCH_CSR_TLBRSAVE
- 	csrrd		t0, LOONGARCH_CSR_PGD
--- 
-2.39.1
+It'd be good to mention the changes from upstream commit,
+because this is not a trivial backport.
 
+Thanks,
+Amir.
