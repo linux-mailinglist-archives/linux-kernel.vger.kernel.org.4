@@ -2,137 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D371F705840
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2AE705845
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjEPUDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S230056AbjEPUEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjEPUDk (ORCPT
+        with ESMTP id S229497AbjEPUEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:03:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6D619B;
-        Tue, 16 May 2023 13:03:34 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7511C6605902;
-        Tue, 16 May 2023 21:03:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684267412;
-        bh=neBnBIFI0CIVAk8FH71HI3up4NB8vfsI9KknH645BgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oG++9agVNx+YfmqZ/xi5WTDJ6ENKtWAUyL1dKl4dT+/eF5WRm94oh4tNc8WdcjB5x
-         jIVuyFhwKKj9JGBMUXT+QhG8rGAzo81f2oCPcr7Wcf69X7TxhKoH0RgLKJA0ZPXevm
-         ZFA/OE7j6ErLBYk7mj83e76PWftkj5R1PDDHPwfHzrXCtNuvwAhsBIeI/s9O8YbNdT
-         WabTM8JZt3L+ZYDoIXmGaZc/XfOCZfvbI+QIbQsywJQeeUylcWoqx8t8Rq4wQ0TfQR
-         M7hMOhCZ/WkujL6APddqvUT4bBVoVdmeq00+FKazdS567hyr0qsE3cupOcX8QIQ4KD
-         2/p6vS5DD/9LQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 8121C10623DF; Tue, 16 May 2023 22:03:29 +0200 (CEST)
-Date:   Tue, 16 May 2023 22:03:29 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 27/41] power: add HAS_IOPORT dependencies
-Message-ID: <20230516200329.oxxgvnm5ivj46mph@mercury.elektranox.org>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-28-schnelle@linux.ibm.com>
+        Tue, 16 May 2023 16:04:01 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCE75FD3;
+        Tue, 16 May 2023 13:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684267432; x=1715803432;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=953wYAY7UWvrm1tXjfski6EbreQeUgE/9pY7lM47LiQ=;
+  b=giAhZizUhd5c/eXALB3h7EnS+M3NUW3edybry7WIUjtWBmY1/KtmUXHs
+   tl6TqJzlPJVSQcTrMEIO+1dFZXysVGujtyRuSqCSeQGl25zBpbkhK4cdz
+   nNHgars+aLn/umoGNTYGC37AUcnxSppIrKslr+jl3CFTKNykXkl3sSmrD
+   kikR2609FPRX29lauPAMnBozf5ejddARIl9Kmxln54ICSGemSk9R6cFX5
+   wzf1ricVq8VT1XPD+21BSGktIUjCnkx82go8YehU5ikw7/KwSuv3KGalA
+   GzwFXfj03qTk2PuLchqs9+crq6+dGeGiXBtVmF5uv8jOOtXVoMCGtWc4E
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="414982863"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="414982863"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:03:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="875784499"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="875784499"
+Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:03:32 -0700
+Message-ID: <a7550521-65bf-f9af-ddb0-118602a6340c@intel.com>
+Date:   Tue, 16 May 2023 13:03:32 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jp3qgbjcymzuog6w"
-Content-Disposition: inline
-In-Reply-To: <20230516110038.2413224-28-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
+ stepping into unaccepted memory
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
+ <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
+ <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
+ <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com>
+ <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/16/23 11:35, Ard Biesheuvel wrote:
+>>> Does this mean that the kernel maps memory before accepting it? As
+>>> otherwise, I would assume that such an access would page fault inside
+>>> the guest before triggering an exception related to the unaccepted
+>>> state.
+>> Yes, the kernel maps memory before accepting it (modulo things like
+>> DEBUG_PAGEALLOC).
+>>
+> OK, and so the architecture stipulates that prefetching or other
+> speculative accesses must never deliver exceptions to the host
+> regarding such ranges?
 
---jp3qgbjcymzuog6w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't know of anywhere that this is explicitly written.  It's probably
+implicit _somewhere_ in the reams of VMX/TDX and base SDM docs, but heck
+if I know where it is. :)
 
-Hi,
-
-On Tue, May 16, 2023 at 01:00:23PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
->=20
-> Acked-by: Sebastian Reichel <sre@kernel.org>
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
->       per-subsystem patches may be applied independently
-
-Thanks, queued to power-supply's for-next branch.
-
--- Sebastian
-
->  drivers/power/reset/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 8c87eeda0fec..fff07b2bd77b 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -158,6 +158,7 @@ config POWER_RESET_OXNAS
->  config POWER_RESET_PIIX4_POWEROFF
->  	tristate "Intel PIIX4 power-off driver"
->  	depends on PCI
-> +	depends on HAS_IOPORT
->  	depends on MIPS || COMPILE_TEST
->  	help
->  	  This driver supports powering off a system using the Intel PIIX4
-> --=20
-> 2.39.2
->=20
-
---jp3qgbjcymzuog6w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj4Y0ACgkQ2O7X88g7
-+prvBQ//S5/2ZNXe0IRtGqYh6TrppJf6jIzcQKzwlDdsYrpaxPmNCo0K7y2IiVip
-uLF/HNmX2TzwGzwhiCn0qyEqfCpflQIzoVmRYI+QINGKDKki/x3diinsRQyovHat
-CtgvLc+n48bvV2a/4uiIaQKRFl5ALOWgf4d3xLy9xzSxHnJ2o/IHE9j+ggFqfaS0
-mfq0h0/iEldRbcYxn5Nc5M7JwkXurWI5eeLM7sFfzMl6Lt8WJtTIiEjmOsoDksR1
-rkqmYFZaj9N4w+0tfSXj58oPc4o0y2tBLP/6xYFKfHsix0s4yS69nGlPkJgvCdun
-diZdzVGavGLjmyndKIYTJOtP3xnl8/N9JdAMDprfJ+0Tp/Vrp+wUZWA/RPQyUMGV
-jddpFKhV3fs1FfVypVBQPJyi/NOl06hCmBrE6YwEgCWd9kA391qA9Zm38hDMHSqR
-b52OhqF9+yV2KHFx3KikzxDFZOHbqMuJV4VPHepmABk+TTys1FPsqsnSJOmenSmv
-dytYPdxhUOZBGv7zbjoA6/5zM70oNJqhqznYyUrAH+XC39Q5ss8VHeQ38BTEqI9M
-VBSSezMw2Avjp2I6SXvbb5t61Se4/V+sEVcsYlcJ3SsPbsx7b6jCxIe7CXRal+OU
-eemXHq+QLUY+a/y9XuVN9fn5nf1kKgou97yBWlxBp+GOj47L2So=
-=TeOZ
------END PGP SIGNATURE-----
-
---jp3qgbjcymzuog6w--
+If this is something anyone wants to see added to the SEPT_VE_DISABLE
+documentation, please speak up.  I don't think it would be hard to get
+it added and provide an explicit guarantee.
