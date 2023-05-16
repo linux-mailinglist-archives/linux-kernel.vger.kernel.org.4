@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678827048B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD55A7048AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjEPJLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S231803AbjEPJLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjEPJKH (ORCPT
+        with ESMTP id S231812AbjEPJKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:10:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3834C27;
+        Tue, 16 May 2023 05:10:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD28A2D7F;
         Tue, 16 May 2023 02:10:03 -0700 (PDT)
 Date:   Tue, 16 May 2023 09:09:57 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qdbvvu6BrxBV7t5evLs0L6TSfLdjo8KI9T2x9+XWKOE=;
-        b=CQ1EjrCbCkebiA6aQbJLYX/Qs+wJtITFvnznb0Y3UfdYLipmN9V8/0t1rUe3C4BSfz7bIU
-        ifvT1qv8hcBxfwh0Uqot0WIqfjkaNqEEqZISiswevbKZ9W7ubge1+C6Si8b9i0WsGw/fVg
-        KJOu0EcTm08i6c09nqAb0uHFK1RtorMTdEyF9kSYZqdmmaS1HY9ZlragNSKljdr7nhqPhW
-        MBHtRNCHaTL4M0MFQdyt9/st5CG7rX1oruqZJM3mhkRW7qxTzXSVUwRm3fpeVpgKx5O+Qy
-        +Pib8jF/rJkveOPpVwxbcHer48HbRYbikBP6ddbxKfriSkjKwkdQ3AFfJ5jGEw==
+        bh=UaP3IirQS29/nSRBGEvaWqpv53AEDPCueTjFwjsewdU=;
+        b=yYMXhxyw1cZSdgPS9GRgRXxHEwwE0Q2foQtzhTHwRJfEslu2EcG1qguNDVLs9lKxak49sq
+        EtfCsXV2ZLsvOX8n53uVsQCG4ckLLwm588joMplO/GPGktMFPcLwbZC7cw1W7ddAcxjZ28
+        1Sfb9iXGWbn8FNIM6MHYCQ7BKM5UKCZvOCGscSXJRV8Jac1N7ttTAiaqwwDYrQpBGZjdaG
+        nFqE4UA2snPMycANAhSaPDsO8GPfAiryqDgqD5jjnaMjJHy5Aeli+FUHWhH1znpfIxCEiD
+        EpjnCjY5UHoy5uzyh0Fu9Adwg78KEbBgNkZkM1pl8zaY8BZk51/zDH9T9Va2Wg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1684228198;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,15 +36,14 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qdbvvu6BrxBV7t5evLs0L6TSfLdjo8KI9T2x9+XWKOE=;
-        b=V+DArtJSTytdCe/7gkS2PPQrQpfNRj7PovwSgj6r2m9/GsGdOOmsSPGhLlO8FzYCRUS1UG
-        sEI61gtP0uCmUUDw==
+        bh=UaP3IirQS29/nSRBGEvaWqpv53AEDPCueTjFwjsewdU=;
+        b=hV/fvp5UmC1dZ4ZtJhTYLv2Rk6mveoUPHZ2LhHIiCUJUNj7E1RHj/unQDv/dWL5YtZyyhl
+        GeSJYRRzo0h/rtCA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] cpu/hotplug: Remove cpu_report_state() and related
- unused cruft
+Subject: [tip: smp/core] ARM: smp: Switch to hotplug core state synchronization
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Michael Kelley <mikelley@microsoft.com>,
@@ -52,10 +51,10 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Helge Deller <deller@gmx.de>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230512205256.582584351@linutronix.de>
-References: <20230512205256.582584351@linutronix.de>
+In-Reply-To: <20230512205256.635326070@linutronix.de>
+References: <20230512205256.635326070@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168422819798.404.4048606373768134100.tip-bot2@tip-bot2>
+Message-ID: <168422819767.404.5002572577505730138.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -72,16 +71,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     5356297d12d9ee6f70d09485878904bc41bac422
-Gitweb:        https://git.kernel.org/tip/5356297d12d9ee6f70d09485878904bc41bac422
+Commit-ID:     5490e769cdc7230cb93e804e656cce19d6c82253
+Gitweb:        https://git.kernel.org/tip/5490e769cdc7230cb93e804e656cce19d6c82253
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 12 May 2023 23:07:30 +02:00
+AuthorDate:    Fri, 12 May 2023 23:07:32 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 15 May 2023 13:44:56 +02:00
+CommitterDate: Mon, 15 May 2023 13:44:57 +02:00
 
-cpu/hotplug: Remove cpu_report_state() and related unused cruft
+ARM: smp: Switch to hotplug core state synchronization
 
-No more users.
+Switch to the CPU hotplug core state tracking and synchronization
+mechanim. No functional change intended.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
@@ -89,124 +89,74 @@ Tested-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 Tested-by: Helge Deller <deller@gmx.de> # parisc
 Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
-Link: https://lore.kernel.org/r/20230512205256.582584351@linutronix.de
+Link: https://lore.kernel.org/r/20230512205256.635326070@linutronix.de
 ---
- include/linux/cpu.h |  2 +-
- kernel/smpboot.c    | 90 +--------------------------------------------
- 2 files changed, 92 deletions(-)
+ arch/arm/Kconfig           |  1 +
+ arch/arm/include/asm/smp.h |  2 +-
+ arch/arm/kernel/smp.c      | 18 +++++++-----------
+ 3 files changed, 9 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index 8582a71..68f69e8 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -184,8 +184,6 @@ void arch_cpu_idle_enter(void);
- void arch_cpu_idle_exit(void);
- void __noreturn arch_cpu_idle_dead(void);
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 0fb4b21..775ce86 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -124,6 +124,7 @@ config ARM
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_UID16
+ 	select HAVE_VIRT_CPU_ACCOUNTING_GEN
++	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
+ 	select IRQ_FORCED_THREADING
+ 	select MODULES_USE_ELF_REL
+ 	select NEED_DMA_MAP_STATE
+diff --git a/arch/arm/include/asm/smp.h b/arch/arm/include/asm/smp.h
+index 7c1c90d..8c05a7f 100644
+--- a/arch/arm/include/asm/smp.h
++++ b/arch/arm/include/asm/smp.h
+@@ -64,7 +64,7 @@ extern void secondary_startup_arm(void);
  
--int cpu_report_state(int cpu);
--int cpu_check_up_prepare(int cpu);
- void cpu_set_state_online(int cpu);
- void play_idle_precise(u64 duration_ns, u64 latency_ns);
+ extern int __cpu_disable(void);
  
-diff --git a/kernel/smpboot.c b/kernel/smpboot.c
-index 3dcfd3f..1940f33 100644
---- a/kernel/smpboot.c
-+++ b/kernel/smpboot.c
-@@ -329,97 +329,7 @@ EXPORT_SYMBOL_GPL(smpboot_unregister_percpu_thread);
- #ifndef CONFIG_HOTPLUG_CORE_SYNC
- static DEFINE_PER_CPU(atomic_t, cpu_hotplug_state) = ATOMIC_INIT(CPU_POST_DEAD);
+-extern void __cpu_die(unsigned int cpu);
++static inline void __cpu_die(unsigned int cpu) { }
  
--/*
-- * Called to poll specified CPU's state, for example, when waiting for
-- * a CPU to come online.
-- */
--int cpu_report_state(int cpu)
--{
--	return atomic_read(&per_cpu(cpu_hotplug_state, cpu));
--}
--
--/*
-- * If CPU has died properly, set its state to CPU_UP_PREPARE and
-- * return success.  Otherwise, return -EBUSY if the CPU died after
-- * cpu_wait_death() timed out.  And yet otherwise again, return -EAGAIN
-- * if cpu_wait_death() timed out and the CPU still hasn't gotten around
-- * to dying.  In the latter two cases, the CPU might not be set up
-- * properly, but it is up to the arch-specific code to decide.
-- * Finally, -EIO indicates an unanticipated problem.
-- *
-- * Note that it is permissible to omit this call entirely, as is
-- * done in architectures that do no CPU-hotplug error checking.
-- */
--int cpu_check_up_prepare(int cpu)
--{
--	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_UP_PREPARE);
--		return 0;
--	}
--
--	switch (atomic_read(&per_cpu(cpu_hotplug_state, cpu))) {
--
--	case CPU_POST_DEAD:
--
--		/* The CPU died properly, so just start it up again. */
--		atomic_set(&per_cpu(cpu_hotplug_state, cpu), CPU_UP_PREPARE);
--		return 0;
--
--	case CPU_DEAD_FROZEN:
--
--		/*
--		 * Timeout during CPU death, so let caller know.
--		 * The outgoing CPU completed its processing, but after
--		 * cpu_wait_death() timed out and reported the error. The
--		 * caller is free to proceed, in which case the state
--		 * will be reset properly by cpu_set_state_online().
--		 * Proceeding despite this -EBUSY return makes sense
--		 * for systems where the outgoing CPUs take themselves
--		 * offline, with no post-death manipulation required from
--		 * a surviving CPU.
--		 */
--		return -EBUSY;
--
--	case CPU_BROKEN:
--
--		/*
--		 * The most likely reason we got here is that there was
--		 * a timeout during CPU death, and the outgoing CPU never
--		 * did complete its processing.  This could happen on
--		 * a virtualized system if the outgoing VCPU gets preempted
--		 * for more than five seconds, and the user attempts to
--		 * immediately online that same CPU.  Trying again later
--		 * might return -EBUSY above, hence -EAGAIN.
--		 */
--		return -EAGAIN;
--
--	case CPU_UP_PREPARE:
--		/*
--		 * Timeout while waiting for the CPU to show up. Allow to try
--		 * again later.
--		 */
--		return 0;
--
--	default:
--
--		/* Should not happen.  Famous last words. */
--		return -EIO;
--	}
--}
--
--/*
-- * Mark the specified CPU online.
-- *
-- * Note that it is permissible to omit this call entirely, as is
-- * done in architectures that do no CPU-hotplug error checking.
-- */
--void cpu_set_state_online(int cpu)
--{
--	(void)atomic_xchg(&per_cpu(cpu_hotplug_state, cpu), CPU_ONLINE);
--}
--
- #ifdef CONFIG_HOTPLUG_CPU
--
+ extern void arch_send_call_function_single_ipi(int cpu);
+ extern void arch_send_call_function_ipi_mask(const struct cpumask *mask);
+diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
+index 87f8d0e..6756203 100644
+--- a/arch/arm/kernel/smp.c
++++ b/arch/arm/kernel/smp.c
+@@ -288,15 +288,11 @@ int __cpu_disable(void)
+ }
+ 
  /*
-  * Wait for the specified CPU to exit the idle loop and die.
+- * called on the thread which is asking for a CPU to be shutdown -
+- * waits until shutdown has completed, or it is timed out.
++ * called on the thread which is asking for a CPU to be shutdown after the
++ * shutdown completed.
   */
+-void __cpu_die(unsigned int cpu)
++void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
+ {
+-	if (!cpu_wait_death(cpu, 5)) {
+-		pr_err("CPU%u: cpu didn't die\n", cpu);
+-		return;
+-	}
+ 	pr_debug("CPU%u: shutdown\n", cpu);
+ 
+ 	clear_tasks_mm_cpumask(cpu);
+@@ -336,11 +332,11 @@ void __noreturn arch_cpu_idle_dead(void)
+ 	flush_cache_louis();
+ 
+ 	/*
+-	 * Tell __cpu_die() that this CPU is now safe to dispose of.  Once
+-	 * this returns, power and/or clocks can be removed at any point
+-	 * from this CPU and its cache by platform_cpu_kill().
++	 * Tell cpuhp_bp_sync_dead() that this CPU is now safe to dispose
++	 * of. Once this returns, power and/or clocks can be removed at
++	 * any point from this CPU and its cache by platform_cpu_kill().
+ 	 */
+-	(void)cpu_report_death();
++	cpuhp_ap_report_dead();
+ 
+ 	/*
+ 	 * Ensure that the cache lines associated with that completion are
