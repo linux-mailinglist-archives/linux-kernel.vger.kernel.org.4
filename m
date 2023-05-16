@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94631704EBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16720704EC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbjEPNHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S233416AbjEPNHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233489AbjEPNGu (ORCPT
+        with ESMTP id S233530AbjEPNHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:06:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9506B76A6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684242350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hOeS/Moq8QRL6oaFvPEPC6z/Y8ReCQRtGAiBZK40l1Q=;
-        b=bTIyKsURsykA4+G96Ccu4pIkVNCB0G88XxYgg03DIe6jA/rHXwgR3zGdg0m9+2vVA7DMD4
-        kVbLwohLmcoNz62mjbnMp5Lcp+rd55GPal6Vfa0rSAHa+Kgh2UDaXhm4FhTDkAcBe3DOav
-        SzFAc8J2r6WC/QVCFj52tfvqwaQjP+M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-96-GhdKlOAUPYyoefAVSH87Kw-1; Tue, 16 May 2023 09:05:48 -0400
-X-MC-Unique: GhdKlOAUPYyoefAVSH87Kw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8965B101A555;
-        Tue, 16 May 2023 13:05:46 +0000 (UTC)
-Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE20DBC88;
-        Tue, 16 May 2023 13:05:45 +0000 (UTC)
-Date:   Tue, 16 May 2023 21:05:41 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: Re: [PATCH v5 RESEND 09/17] openrisc: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZGN/pfd6WZ8PlYCs@MiWiFi-R3L-srv>
-References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-10-bhe@redhat.com>
- <ZGMnlZK1/pZIBCud@kernel.org>
+        Tue, 16 May 2023 09:07:16 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A206CFF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:06:45 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-966400ee79aso2189446666b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684242403; x=1686834403;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y5v71FLoqMz+RUxDIpAMnXyAxgkejquVbG/xCAcbJdU=;
+        b=M3FPgcFsAiM2X5YXNkTxJ2ewxrvUjaCL4p9om+mGfL2xhkjHLJjW/D8eoqyLBd4B1q
+         VKQNDqz1BqtmFk33x5ddKE/YkFg/ZmEJ83nEKDwfa8BQ6rQLHd+TZJhqbqHQcb/VonPQ
+         mmaRwInfCCyDulO9t3XuXwxQhuZwGV5l0rwuQz0+lpPFIPirRQ2N1iZ2S7dqd29GvcLQ
+         nEEziAPrxXY4ZXYjYEdZTxM56Ayh6UBG7+pvxs7UcHBMWzvERXkg9rApldZDCA9MSM4b
+         FO4GnMOwpJNV/Wd9IBsUAxQW5Q9OAxU6vZmMYLzzLT/dl0tFATkXvUK4rXU7qSYVH2HZ
+         HPKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684242403; x=1686834403;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5v71FLoqMz+RUxDIpAMnXyAxgkejquVbG/xCAcbJdU=;
+        b=KaDdWVIf/unTk+DsjTUTd3yQ2CRMY6xDvMjTL1NNBI6gQMJ+ezv5jy03Zh44BokfMO
+         98qxVm5M+0qHt+rClQOBBGufcGWG8h5HLYPEb/fSmVcV2+47QNHZ6cfnMvSWszzQwir0
+         +17euY3CWjGGSFBJ847ui4NI2+5k+CBtZBiLpa5VbPI83MRvEVXuyZ7onyZYS6xBLX6n
+         vqUpZOMi/8obFdrI5NmsUX+QUCy7Zvm6WtKOkj8CsTRWwQoYb9TypC6vYFQ2YrYwohuc
+         vecNcKegcSjiMXAg8GMLIyJA422cYgjdBGJR9jCDWxnedN/vRAPYS3Rj9tjrqROdGVxJ
+         K7fw==
+X-Gm-Message-State: AC+VfDyJ33nAmvC2TCs9xexHgqhBG9Udg16kWn7dabtAFjxQDU3GlHqT
+        ysB5qqvxmVLEwnBfz7RucnLGaA==
+X-Google-Smtp-Source: ACHHUZ5go4YGvwMvuHkX/P2nKXUI6kO6rJj/HD94dK8KJ24a7KSOeuUBx0cQE4d1WftX21i+qsvZFg==
+X-Received: by 2002:a17:907:9444:b0:969:e304:7a22 with SMTP id dl4-20020a170907944400b00969e3047a22mr24064513ejc.18.1684242402864;
+        Tue, 16 May 2023 06:06:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id bu2-20020a170906a14200b0096654fdbe34sm11074552ejb.142.2023.05.16.06.06.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 06:06:42 -0700 (PDT)
+Message-ID: <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
+Date:   Tue, 16 May 2023 15:06:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGMnlZK1/pZIBCud@kernel.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
+ <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
+ <20230516120426.GA1679@varda-linux.qualcomm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230516120426.GA1679@varda-linux.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,158 +84,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/16/23 at 09:49am, Mike Rapoport wrote:
-> Hi,
+On 16/05/2023 14:04, Varadarajan Narayanan wrote:
+> On Mon, May 15, 2023 at 06:10:29PM +0200, Krzysztof Kozlowski wrote:
+>> On 15/05/2023 12:13, Varadarajan Narayanan wrote:
+>>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>
+>>> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
+>>>
+>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>> ---
+>>> [v3]:
+>>> 	Fix dt_binding_check & dtbs_check errors (Used
+>>> 	Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+>>> 	as reference/example)
+>>>
+>>> 	Drop 'Acked-by: Rob Herring' as suggested in review
+>>>
+>>> [v2]:
+>>> 	Thanks to Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> 	for the tip to make qcom,ipq8074-tsens as fallback.
+>>> ---
+>>>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 13 +++++++++++--
+>>>  1 file changed, 11 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>>> index d9aa54c..57e3908 100644
+>>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>>> @@ -19,6 +19,11 @@ description: |
+>>>  properties:
+>>>    compatible:
+>>>      oneOf:
+>>> +      - const: qcom,tsens-v0_1
+>>> +      - const: qcom,tsens-v1
+>>> +      - const: qcom,tsens-v2
+>>
+>> Nope, these are not correct.
+>>
+>>> +      - const: qcom,ipq8074-tsens
+>>
+>> Also nope, this is already there.
+>>
+>>> +
+>>>        - description: msm8960 TSENS based
+>>>          items:
+>>>            - enum:
+>>> @@ -66,8 +71,10 @@ properties:
+>>>            - const: qcom,tsens-v2
+>>>
+>>>        - description: v2 of TSENS with combined interrupt
+>>> -        enum:
+>>> -          - qcom,ipq8074-tsens
+>>
+>> Why?
+>>
+>>> +        items:
+>>> +          - enum:
+>>> +              - qcom,ipq9574-tsens
+>>> +          - const: qcom,ipq8074-tsens
 > 
-> On Mon, May 15, 2023 at 05:08:40PM +0800, Baoquan He wrote:
-> > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
-> > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
-> > and iounmap() are all visible and available to arch. Arch needs to
-> > provide wrapper functions to override the generic versions if there's
-> > arch specific handling in its ioremap_prot(), ioremap() or iounmap().
-> > This change will simplify implementation by removing duplicated codes
-> > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
-> > functioality as before.
-> > 
-> > Here, add wrapper function iounmap() for openrisc's special operation
-> > when iounmap().
-> > 
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Cc: Stafford Horne <shorne@gmail.com>
-> > Cc: Jonas Bonn <jonas@southpole.se>
-> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> > Cc: openrisc@lists.librecores.org
-> > ---
-> >  arch/openrisc/Kconfig          |  1 +
-> >  arch/openrisc/include/asm/io.h | 11 +++++---
-> >  arch/openrisc/mm/ioremap.c     | 46 +---------------------------------
-> >  3 files changed, 9 insertions(+), 49 deletions(-)
-> > 
-> > diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> > index c7f282f60f64..fd9bb76a610b 100644
-> > --- a/arch/openrisc/Kconfig
-> > +++ b/arch/openrisc/Kconfig
-> > @@ -21,6 +21,7 @@ config OPENRISC
-> >  	select GENERIC_IRQ_PROBE
-> >  	select GENERIC_IRQ_SHOW
-> >  	select GENERIC_PCI_IOMAP
-> > +	select GENERIC_IOREMAP
-> >  	select GENERIC_CPU_DEVICES
-> >  	select HAVE_PCI
-> >  	select HAVE_UID16
-> > diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
-> > index ee6043a03173..e640960c26c2 100644
-> > --- a/arch/openrisc/include/asm/io.h
-> > +++ b/arch/openrisc/include/asm/io.h
-> > @@ -15,6 +15,8 @@
-> >  #define __ASM_OPENRISC_IO_H
-> >  
-> >  #include <linux/types.h>
-> > +#include <asm/pgalloc.h>
-> > +#include <asm/pgtable.h>
-> >  
-> >  /*
-> >   * PCI: We do not use IO ports in OpenRISC
-> > @@ -27,11 +29,12 @@
-> >  #define PIO_OFFSET		0
-> >  #define PIO_MASK		0
-> >  
-> > -#define ioremap ioremap
-> > -void __iomem *ioremap(phys_addr_t offset, unsigned long size);
-> > -
-> > +/*
-> > + * I/O memory mapping functions.
-> > + */
-> >  #define iounmap iounmap
-> > -extern void iounmap(volatile void __iomem *addr);
-> > +
-> > +#define _PAGE_IOREMAP (pgprot_val(PAGE_KERNEL) | _PAGE_CI)
-> >  
-> >  #include <asm-generic/io.h>
-> >  
-> > diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-> > index 90b59bc53c8c..9f9941df7d4c 100644
-> > --- a/arch/openrisc/mm/ioremap.c
-> > +++ b/arch/openrisc/mm/ioremap.c
-> > @@ -22,49 +22,6 @@
-> >  
-> >  extern int mem_init_done;
-> >  
-> > -/*
-> > - * Remap an arbitrary physical address space into the kernel virtual
-> > - * address space. Needed when the kernel wants to access high addresses
-> > - * directly.
-> > - *
-> > - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
-> > - * have to convert them into an offset in a page-aligned mapping, but the
-> > - * caller shouldn't need to know that small detail.
-> > - */
-> > -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
-> > -{
-> > -	phys_addr_t p;
-> > -	unsigned long v;
-> > -	unsigned long offset, last_addr;
-> > -	struct vm_struct *area = NULL;
-> > -
-> > -	/* Don't allow wraparound or zero size */
-> > -	last_addr = addr + size - 1;
-> > -	if (!size || last_addr < addr)
-> > -		return NULL;
-> > -
-> > -	/*
-> > -	 * Mappings have to be page-aligned
-> > -	 */
-> > -	offset = addr & ~PAGE_MASK;
-> > -	p = addr & PAGE_MASK;
-> > -	size = PAGE_ALIGN(last_addr + 1) - p;
-> > -
-> > -	area = get_vm_area(size, VM_IOREMAP);
-> > -	if (!area)
-> > -		return NULL;
-> > -	v = (unsigned long)area->addr;
-> > -
-> > -	if (ioremap_page_range(v, v + size, p,
-> > -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
-> > -		vfree(area->addr);
-> > -		return NULL;
-> > -	}
-> > -
-> > -	return (void __iomem *)(offset + (char *)v);
-> > -}
-> > -EXPORT_SYMBOL(ioremap);
-> > -
-> >  void iounmap(volatile void __iomem *addr)
-> >  {
-> >  	/* If the page is from the fixmap pool then we just clear out
+> Without changing it like this either dtbs_check or
+> dt_binding_check kept failing.
 > 
-> The page cannot be from fixmap pool since we removed fixmap support from
-> ioremap in an earlier patch.
-> I believe that patch should also remove special casing of fixmap in
-> iounmap() and then openrisc does not need to override any of ioremap
-> methods.
+> 	- description: v2 of TSENS with combined interrupt
+> 	  enum:
+> 	    - qcom,ipq8074-tsens
+> 	    - qcom,ipq9574-tsens
 
-Totally agree. I will clean it up in iounmap() in patch 3, and rearrange
-this patch. Thanks again.
+But we do not talk about this... Look, I commented out under specific
+hunks which are not correct. Not under the hunk which is correct.
 
 > 
-> > @@ -88,9 +45,8 @@ void iounmap(volatile void __iomem *addr)
-> >  		return;
-> >  	}
-> >  
-> > -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
-> > +	generic_iounmap(addr);
-> >  }
-> > -EXPORT_SYMBOL(iounmap);
-> >  
-> >  /**
-> >   * OK, this one's a bit tricky... ioremap can get called before memory is
-> > -- 
-> > 2.34.1
-> > 
-> > 
+> dtbs_check gave this kind of error
+> 	['qcom,ipq9574-tsens', 'qcom,ipq8074-tsens'] is too long
 > 
-> -- 
-> Sincerely yours,
-> Mike.
+> After changing it like in https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
 > 
+> 	- description: v2 of TSENS with combined interrupt
+> 	  const: qcom,ipq8074-tsens
+> 	  - enum:
+> 	      - qcom,ipq9574-tsens
+> 	  - const: qcom,ipq8074-tsens
+> 
+> dt_binding_check gives the following error
+> 
+> 	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: did not find expected key
+
+Because it is not even valid syntax.
+
+> 
+> and dtbs_check gives
+> 
+> 	./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: [error] syntax error: expected <block end>, but found '-' (syntax)
+> 	  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+> 	./Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+> 	./Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/thermal/qcom-tsens.yaml
+> 	./Documentation/devicetree/bindings/thermal/qcom-tsens.yaml:70:9: did not find expected key
+> 	  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+> 	/local/mnt/workspace/varada/v3/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml: ignoring, error parsing file
+> 
+> If i change it like below,
+> 
+> 	- description: v2 of TSENS with combined interrupt
+> 	  enum:
+> 	    - qcom,ipq9574-tsens
+> 	  - const: qcom,ipq8074-tsens
+> 
+> dt_binding_check and dtbs_check gives same error as above.
+> 
+> Looked around and found Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+> which seemed to do something similar to what is wanted in this
+> case. Hence changed qcom-tsens.yaml similar to the allwinner yaml
+> file. After which dt_binding_check and dtbs_check passed. Please
+> let me know if there is a better way to solve this. Will go with
+
+Changing one valid syntax to another valid syntax is not related to the
+patch. If you think such change as reasonable, please split it, but to
+me it does not look justified. As for actual change, so adding new
+compatible, it's not really related to the others. Why you cannot add
+the proper list (so the only valid hunk) and that's it?
+
+Best regards,
+Krzysztof
 
