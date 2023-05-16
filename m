@@ -2,102 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1446D7042D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CF17042D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjEPBYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
+        id S229597AbjEPBXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEPBYM (ORCPT
+        with ESMTP id S229524AbjEPBXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:24:12 -0400
-Received: from sender3-of-o57.zoho.com (sender3-of-o57.zoho.com [136.143.184.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1515258;
-        Mon, 15 May 2023 18:24:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684200216; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=RR1TfYZEGin5arrnpEvRLWCOsSlqGAODka5QOqh2UA6NN6tkN7W1/C/km7Ck+0CDl4L5rVEUMtYv+yPDiA7jNsSCKS+WP2uxKsvQC2jf61kWiBZRvWAErOIZ5SbVaixkF4lGKQqpLmeLnqHfv8cgiqYVUb1uFpAADHh84lCeVhk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1684200216; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=t9xe8yTG0sKAFENcXbIvh8DJsGK2DfwwVT3xWVKVb+I=; 
-        b=UiPq7TVpfHS6m6iqXIN5DewJeEvOV/dHvI8gI9eNHXYCMxTsDm/WuiYOHyCfayPhky6qGStvc3KUk3qzB7QUrxZ7ro/5tyKIGkN6PuLm3k3UMpmKfw9QQpQq2/Fc1Y7mhA8jJOSYw7FhYsmMzWRTgybRi/vuCfSZgBMCwJB8U1Q=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684200216;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=t9xe8yTG0sKAFENcXbIvh8DJsGK2DfwwVT3xWVKVb+I=;
-        b=UChlLcFEY/XnIK0uv4PQvV3Wp/AYkCd1F/foF76++k0T6Fbsfwsl1QUco905bf8W
-        YSZLMd/ydEkuFSZj1ZRHIGKTEMctK5pQzMZz4tWjqAVsVwYRWWTNNOLtnJKj2XByA59
-        gWMN4d5dNI0bPS0iPIJWi8kUs/zySml0uj8qu6Ko=
-Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1684200214907165.64041646283852; Mon, 15 May 2023 18:23:34 -0700 (PDT)
-Message-ID: <0e232a30-9b47-2315-86ea-4f6eeb7829a8@apertussolutions.com>
-Date:   Mon, 15 May 2023 21:23:32 -0400
+        Mon, 15 May 2023 21:23:48 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D2B619A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:23:40 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f122ff663eso15454826e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684200218; x=1686792218;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hFsdzrNUCB91yNriDm61THdPDwlSojJxD49b8QFiUmM=;
+        b=hZfzw1jWLGlfj8aOiW0+povajyBUAE80+Nt0QYyn45dJJMfs0gqgxKSxoRDOXWG4bQ
+         1ifplYkaZPR7ivNrnAMm8prJAz7Wzyi2ohvFRNSF07Nw5vVaRZvt8tB0xCvq+k8FPBQX
+         T3HSyMWnaUSMfXUUK9ueruIMYHm2mpQJUsdjEGxrNILNqrPo9M75WwnwisBl7GlNX31q
+         xytqmiy2rMbiTklYK2HKt2rXrBdKcr1Fk0hpNjeL8PuLYfmgEiLqGHNnkhoNBsXACELy
+         pTFM+v3bKjao9OWeNtJtAR5Nrc8hJyX6wAnWWpSSjX46AzZa4GxgMVJpOqdjxliuoX8p
+         CyRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684200218; x=1686792218;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hFsdzrNUCB91yNriDm61THdPDwlSojJxD49b8QFiUmM=;
+        b=WLYZPgvuETEW7zizHOE7oB6nGgdwE/bD4EWvrBLwfpfGaj+gCDksFxXNqTMOk7T5im
+         ZPvzXGVQnQYgIj/EOB3hj2tXzHD3err9qIn72UKLxet9pfiIiS+MiQzBPfLtLICeKu1w
+         CBWWcID7cLe074biKLjDNJNJf7Feo4cwTNocYlZuEA0EcxEcdwsTnfPSl2pRgnP7u0cx
+         iTHZbntxWFnUTUR2rHtiS3N2rcai4+TKCitr2iIyc8ySwlQ2M940He2ranCreXC4kIKG
+         IqYTjFoOx4fefg9SlvZKP4VOGTZ+IThZZlzhMMSsmYVNSc0sM5WdO6Yls8sVTAnUqyU2
+         NRcg==
+X-Gm-Message-State: AC+VfDzXFNGFOl6o5CTTGIVaLst/EGgPYEtLzR8QMoOhhkphuOoByIi5
+        bmtZvEctfeTrvp3+syam4N9iD84yFzfQ+T3uk9k=
+X-Google-Smtp-Source: ACHHUZ4v7ANIpHd1PgWjbMlH9q/KP2hjU5YgkpFLPMRPmOhdHzM9lfAf1/Fv4mxIbS3a7C99nWveAw==
+X-Received: by 2002:ac2:532a:0:b0:4f3:84dd:a4e with SMTP id f10-20020ac2532a000000b004f384dd0a4emr992846lfh.37.1684200218653;
+        Mon, 15 May 2023 18:23:38 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id y27-20020ac2447b000000b004db3eff4b12sm2651977lfl.171.2023.05.15.18.23.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 18:23:38 -0700 (PDT)
+Message-ID: <5353e51c-46c5-5178-fa1b-65fb71072e7f@linaro.org>
+Date:   Tue, 16 May 2023 03:23:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 11/14] reboot: Secure Launch SEXIT support on reboot
- paths
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 5/5] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug
+ peripheral
 Content-Language: en-US
-To:     Ross Philipson <ross.philipson@oracle.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-12-ross.philipson@oracle.com>
- <20230512114000.GG14461@srcf.ucam.org>
- <a38e0589-fa20-77ac-2fb0-2cb247c2b408@oracle.com>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-In-Reply-To: <a38e0589-fa20-77ac-2fb0-2cb247c2b408@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        krzysztof.kozlowski@linaro.org
+References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
+ <20230505064039.1630025-6-bhupesh.sharma@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230505064039.1630025-6-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 14:16, Ross Philipson wrote:
-> On 5/12/23 07:40, Matthew Garrett wrote:
->> On Thu, May 04, 2023 at 02:50:20PM +0000, Ross Philipson wrote:
->>> If the MLE kernel is being powered off, rebooted or halted,
->>> then SEXIT must be called. Note that the SEXIT GETSEC leaf
->>> can only be called after a machine_shutdown() has been done on
->>> these paths. The machine_shutdown() is not called on a few paths
->>> like when poweroff action does not have a poweroff callback (into
->>> ACPI code) or when an emergency reset is done. In these cases,
->>> just the TXT registers are finalized but SEXIT is skipped.
->>
->> What are the consequences of SEXIT not being called, and why is it ok to
->> skip it in these circumstances?
+
+
+On 5.05.2023 08:40, Bhupesh Sharma wrote:
+> Since the USB-C type port on the Qualcomm QRB4210-RB2 board
+> can be set primarily in a 'device' configuration (with the default
+> DIP switch settings), it makes sense to enable the EUD debug
+> peripheral on the board by default by setting the USB 'dr_mode' property
+> as 'otg'.
 > 
-> Well the system is resetting so there are no real consequences. The 
-> problem on those two paths is that the APs have not been halted with a 
-> machine_shutdown() and that is a precondition to issuing GETSEC[SEXIT]. 
-> Only the BSP should be active and SEXIT must be done on it.
+> Now, the EUD debug peripheral can be enabled by executing:
+>  $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-To expand on this just a bit further. On all paths we were able to 
-identify, the SECRETS bit is cleared, memconfig is unlocked, and the 
-private registers are all closed. This makes the system as safe as 
-possible to go through a power event and be able to come back up on the 
-other side. The clean way is to always go through an SEXIT before a 
-power event, but as Ross highlighted this can only be done after the APs 
-have been halted.
-
-v/r,
-dps
+Konrad
+>  arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> index 1a0776a0cfd0..0ce72f1ebc10 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> @@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
+>  	};
+>  };
+>  
+> +&eud {
+> +	status = "okay";
+> +};
+> +
+>  &qupv3_id_0 {
+>  	status = "okay";
+>  };
+> @@ -253,7 +257,28 @@ &usb {
+>  
+>  &usb_dwc3 {
+>  	maximum-speed = "super-speed";
+> -	dr_mode = "peripheral";
+> +
+> +	/*
+> +	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
+> +	 * via a DIP Switch:
+> +	 * - to either an USB - C type connector or an USB - A type connector
+> +	 *   (via a GL3590-S hub), and
+> +	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
+> +	 *   for further connection with a mezzanine board.
+> +	 *
+> +	 * All of the above hardware muxes would allow us to hook things up in
+> +	 * different ways to some potential benefit for static configurations (for e.g.
+> +	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
+> +	 * connection available and on the other we can use the USB - C type in
+> +	 * peripheral mode).
+> +	 *
+> +	 * Note that since the USB - C type can be used only in peripehral mode,
+> +	 * so hardcoding the mode to 'peripheral' here makes sense.
+> +	 *
+> +	 * However since we want to use the EUD debug device, we set the mode as
+> +	 * 'otg' here.
+> +	 */
+> +	dr_mode = "otg";
+>  };
+>  
+>  &usb_hsphy {
