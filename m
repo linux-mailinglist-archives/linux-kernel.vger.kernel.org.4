@@ -2,237 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C74A704319
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0D870431B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjEPBqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S229758AbjEPBrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjEPBqt (ORCPT
+        with ESMTP id S229753AbjEPBrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:46:49 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967FCE4A;
-        Mon, 15 May 2023 18:46:47 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-45046c21e55so3447321e0c.1;
-        Mon, 15 May 2023 18:46:47 -0700 (PDT)
+        Mon, 15 May 2023 21:47:16 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E9B2681
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:47:14 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-38e3228d120so7154650b6e.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684201606; x=1686793606;
+        d=bitbyteword.org; s=google; t=1684201634; x=1686793634;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fcw/atW51mgbVwTH4USOTRlFF9OK4r1s1etFUmDFJ98=;
-        b=VNkpiOUGMUigCL23X7MQWB88J2ylhb3KmIvpYDPvgLOoynrYCAMAqjDK8dgBOnwUHJ
-         fghfIxxiynkJ9HI5K+/b4QUldMYjo4w4LHeHFl45ByFnBJCj+r8P3MRNvbHs4B3vTJod
-         enuHr0plZAtOXa2A+2Nv1zoipTgxdlggpvvN15vB9ohGjIo243s6EIPtVOKS0T8yCjCY
-         9kEmnq0z7GXN/rbOGOcYBGkVkCjYQdyrLG/Z8XOx36iFxkB/seJ4QlX5DAuW+T67xnig
-         19d4uKWmSx44A7rwNL7lGYnn08MXT+uvbSbUXq6uJ48AJ7ct0MyUoWUM3+qCjDP7Zgyq
-         QUzw==
+        bh=7vQMONc5SJDyCvN7VZRBXzuqqiXsyACiKWFthRnNjkI=;
+        b=MJ1jp2jKeZlhrFpiyXssgMah5dc3o5krDLHVOiR0AZia+Lqn9dfT8qtVIhmqCho2vT
+         T9iDlq+DyxbBb1aq+P3T6wmlnrWFRFWOpOjwZp1Y7YeUYij0dg75hbzXn3CO1JkcVB5q
+         7fdN24YuXgRYmhULBdSi259hdYNiLt1vMbNOoP6AEl9aALNw4Enu7jKfFON70Ho/NBrP
+         sJkWBFC9JsM4h6jA9Q000f74LWzz6PuMElq1uuaitTsoyM6xkweI+nsgeU4OnzW0nOk0
+         v3p9WGCmpuBNSTbwuk6Z0PceQtzR0fFkr7RvqdGEGclm2H+BKrBAWcKhpeA16UUVSoiJ
+         Yp5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684201606; x=1686793606;
+        d=1e100.net; s=20221208; t=1684201634; x=1686793634;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fcw/atW51mgbVwTH4USOTRlFF9OK4r1s1etFUmDFJ98=;
-        b=DbkrnL9GIe9aF76t89s17AAXU79Zce8GUbzDYtFcfShGp88cIyz3ntyY1Wswwcot6Q
-         QT6kF7QqKQiL7iYVzUZ0BGTXNWIoBFpSMBzkuAnRH5wiBi+ojUWiT28aowx8EssbCXUD
-         z7ApShhUQA5XvJZJSeA3aZP5Bq2lewrtZ/46uMcpJyQtcsC2cOq5spIbill8dwg7i2UP
-         D/Q8Hv560vCCWoCU9DNhvBy8P75VOUo8FAInkBusgcsIlEIZ/LSq+RQ1Yq6zS/q6C+tp
-         /xP1+ozReVKES4eYRZUxorJBljDr6xilwdsv9eRRP5fDne+mzVfOITazewIcYaNrVUbW
-         lXBw==
-X-Gm-Message-State: AC+VfDyJb3oRO8VK//gXdTQph9D1qMXBf2jm4UqZw3h3FZ/yS/YKtnEp
-        G+ClKgdiH4lSdZbTJbGYV95ZX3WAMuxONWnGGStA2E4W7ZQ=
-X-Google-Smtp-Source: ACHHUZ4iM+AF+aVGcHvCFIhQX4yXng4lz+U/av6CcLOSLXhgdFfK4DhSX38mCQV1nWshsLiAwJiF+W8TulqEjPUTiNA=
-X-Received: by 2002:a1f:c112:0:b0:439:bd5c:630 with SMTP id
- r18-20020a1fc112000000b00439bd5c0630mr11969562vkf.6.1684201606376; Mon, 15
- May 2023 18:46:46 -0700 (PDT)
+        bh=7vQMONc5SJDyCvN7VZRBXzuqqiXsyACiKWFthRnNjkI=;
+        b=XQLmypvm+1Tl5ZO5V+n1XFhuetPCkZs3NR7IauIiaB5lY3bRuxXi6KBbshUCxCGE05
+         kcYEVqf5osplfHXLUt9VrCK42Xb38gGNMaiMyJRM1ywjqlhEuzgO+USRdOL7HDJUhOEw
+         Dx1lF+uaQycvQe1Mv/DuIqFJth8bHoXjO8/lVg+sT1zOhpWVR2aclaSEwRNGs4phFKE5
+         wmfvFY/awJS4NGYD4hE1abWCDOaIfmoq+6Yhu9vq99oHJjIeYkPNy7RleqOZeZ3oEXjV
+         CYUMj+hMad1vMmztAcd8rSCEkzIlFwCMON6hWyVcf0JluhyPo6oBakbAuBpdDknI8FGP
+         ImRA==
+X-Gm-Message-State: AC+VfDymSSDR/qxNiNebz875jT5f6SMVT7f5I/4Yg6OcTyeIGiTZQxzX
+        Cw6hoyxBNdXitBcpsHifoVeHEVZrXXNa8fGw33r1Gg==
+X-Google-Smtp-Source: ACHHUZ7niwSe+XVzisHsadeHDBRjQ1d1V4QqTLQeyQjsBlq+b+NyhnKZFwY3Q8zeutdPuzTiykiwl74B2MiAm0eSRD8=
+X-Received: by 2002:a05:6808:1a04:b0:395:df63:63af with SMTP id
+ bk4-20020a0568081a0400b00395df6363afmr5860001oib.54.1684201634118; Mon, 15
+ May 2023 18:47:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230412-increase_ipvs_conn_tab_bits-v2-1-994c0df018e6@gmail.com> <56b88a99-db88-36e4-9ff1-a5d940578108@ssi.bg>
-In-Reply-To: <56b88a99-db88-36e4-9ff1-a5d940578108@ssi.bg>
-From:   Abhijeet Rastogi <abhijeet.1989@gmail.com>
-Date:   Mon, 15 May 2023 18:46:09 -0700
-Message-ID: <CACXxYfy+yoLLFr0W9HYuM78GjzJsQvbHnm43uRQbor_ncQdMgw@mail.gmail.com>
-Subject: Re: [PATCH v2] ipvs: increase ip_vs_conn_tab_bits range for 64BIT
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20230515025716.316888-1-vineeth@bitbyteword.org>
+ <20230515025716.316888-3-vineeth@bitbyteword.org> <20230515100616.33ba5dd9@luca64>
+In-Reply-To: <20230515100616.33ba5dd9@luca64>
+From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date:   Mon, 15 May 2023 21:47:03 -0400
+Message-ID: <CAO7JXPgq8V5yHM6F2+iXf4XJ9cyT30Hn4ot5b2k7srjsaPc3JQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] sched/deadline: Fix reclaim inaccuracy with SMP
+To:     luca abeni <luca.abeni@santannapisa.it>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Julian Anastasov,
+Hi Luca,
 
->Can you keep the previous line width of the above help
-because on standard 80-width window the help now gets truncated in
-make menuconfig.
+On Mon, May 15, 2023 at 4:06=E2=80=AFAM luca abeni <luca.abeni@santannapisa=
+.it> wrote:
 
-Refer this screenshot: https://i.imgur.com/9LgttpC.png
+>
+> this patch is giving me some headaches:
+>
+Sorry about that.. I was also stressing out on how to get the
+reclaiming done right for the past couple of days ;-)
 
-Sorry for the confusion, I was already expecting this comment. The
-patch had a few words added, hence it feels like many lines have
-changed. However, no line actually exceeds 80 width.
+> Vineeth Pillai <vineeth@bitbyteword.org> wrote:
+> [...]
+> >   *   Uextra:         Extra bandwidth not reserved:
+> > - *                   =3D Umax - \Sum(u_i / #cpus in the root domain)
+> > + *                   =3D Umax - this_bw
+>
+> While I agree that this setting should be OK, it ends up with
+>         dq =3D -Uact / Umax * dt
+> which I remember I originally tried, and gave some issues
+> (I do not remember the details, but I think if you try N
+> identical reclaiming tasks, with N > M, the reclaimed time
+> is not distributed equally among them?)
+>
+I have noticed this behaviour where the reclaimed time is not equally
+distributed when we have more tasks than available processors. But it
+depended on where the task was scheduled. Within the same cpu, the
+distribution seemed to be proportional. But the tasks migrated often
+and then depending on whether the task got a whole cpu for its
+runtime or not, the reclaimed bandwidth differed. I thought that
+should be okay as it depended upon where the task landed.
 
-Longest line is still 80-width max. Do you prefer I reduce it to a
-lower number like 70?
+One other problem I saw was cpu usage spiking above max_bw leading to
+system hang sometimes. I thought stopping reclaiming when running_bw
+gets larger than max_bw(in 4th patch) fixed this, but when I ran the
+tests long enough, I did see this hang.
+
+> I need to think a little bit more about this...
+>
+Thanks for looking into this.. I have a basic idea why tasks with less
+bandwidth reclaim less in SMP when number of tasks is less than number
+of cpus, but do not yet have a verifiable fix for it.
+
+If patches 1 and 4 looks good to you, we shall drop 2 and 3 and fix the
+SMP issue with varying bandwidth separately.. Patch 4 would differ a
+bit when I remove 2 and 3 so as to use the formula:
+ "dq =3D -(max{u, (Umax_reclaim - Uinact - Uextra)} / Umax_reclaim) dt"
+
+Thanks for your patience with all these brainstorming:-)
 
 Thanks,
-Abhijeet
-
-
-On Mon, May 15, 2023 at 8:18=E2=80=AFAM Julian Anastasov <ja@ssi.bg> wrote:
->
->
->         Hello,
->
-> On Sun, 14 May 2023, Abhijeet Rastogi wrote:
->
-> > Current range [8, 20] is set purely due to historical reasons
-> > because at the time, ~1M (2^20) was considered sufficient.
-> > With this change, 27 is the upper limit for 64-bit, 20 otherwise.
-> >
-> > Previous change regarding this limit is here.
-> >
-> > Link: https://lore.kernel.org/all/86eabeb9dd62aebf1e2533926fdd13fed48ba=
-b1f.1631289960.git.aclaudi@redhat.com/T/#u
-> >
-> > Signed-off-by: Abhijeet Rastogi <abhijeet.1989@gmail.com>
-> > ---
-> > The conversation for this started at:
-> >
-> > https://www.spinics.net/lists/netfilter/msg60995.html
-> >
-> > The upper limit for algo is any bit size less than 32, so this
-> > change will allow us to set bit size > 20. Today, it is common to have
-> > RAM available to handle greater than 2^20 connections per-host.
-> >
-> > Distros like RHEL already allow setting limits higher than 20.
-> > ---
-> > Changes in v2:
-> > - Lower the ranges, 27 for 64bit, 20 otherwise
-> > - Link to v1: https://lore.kernel.org/r/20230412-increase_ipvs_conn_tab=
-_bits-v1-1-60a4f9f4c8f2@gmail.com
-> > ---
-> >  net/netfilter/ipvs/Kconfig      | 26 +++++++++++++-------------
-> >  net/netfilter/ipvs/ip_vs_conn.c |  4 ++--
-> >  2 files changed, 15 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
-> > index 271da8447b29..aac5d6bd82e6 100644
-> > --- a/net/netfilter/ipvs/Kconfig
-> > +++ b/net/netfilter/ipvs/Kconfig
-> > @@ -44,7 +44,8 @@ config      IP_VS_DEBUG
-> >
-> >  config       IP_VS_TAB_BITS
-> >       int "IPVS connection table size (the Nth power of 2)"
-> > -     range 8 20
-> > +     range 8 20 if !64BIT
-> > +     range 8 27 if 64BIT
-> >       default 12
-> >       help
-> >         The IPVS connection hash table uses the chaining scheme to hand=
-le
-> > @@ -52,18 +53,17 @@ config    IP_VS_TAB_BITS
-> >         reduce conflicts when there are hundreds of thousands of connec=
-tions
-> >         in the hash table.
-> >
-> > -       Note the table size must be power of 2. The table size will be =
-the
-> > -       value of 2 to the your input number power. The number to choose=
- is
-> > -       from 8 to 20, the default number is 12, which means the table s=
-ize
-> > -       is 4096. Don't input the number too small, otherwise you will l=
-ose
-> > -       performance on it. You can adapt the table size yourself, accor=
-ding
-> > -       to your virtual server application. It is good to set the table=
- size
-> > -       not far less than the number of connections per second multiply=
-ing
-> > -       average lasting time of connection in the table.  For example, =
-your
-> > -       virtual server gets 200 connections per second, the connection =
-lasts
-> > -       for 200 seconds in average in the connection table, the table s=
-ize
-> > -       should be not far less than 200x200, it is good to set the tabl=
-e
-> > -       size 32768 (2**15).
-> > +       Note the table size must be power of 2. The table size will be =
-the value
-> > +       of 2 to the your input number power. The number to choose is fr=
-om 8 to 27
-> > +       for 64BIT(20 otherwise), the default number is 12, which means =
-the table
-> > +       size is 4096. Don't input the number too small, otherwise you w=
-ill lose
-> > +       performance on it. You can adapt the table size yourself, accor=
-ding to
-> > +       your virtual server application. It is good to set the table si=
-ze not far
-> > +       less than the number of connections per second multiplying aver=
-age lasting
-> > +       time of connection in the table.  For example, your virtual ser=
-ver gets
-> > +       200 connections per second, the connection lasts for 200 second=
-s in
-> > +       average in the connection table, the table size should be not f=
-ar less
-> > +       than 200x200, it is good to set the table size 32768 (2**15).
->
->         Can you keep the previous line width of the above help
-> because on standard 80-width window the help now gets truncated in
-> make menuconfig.
->
->         After that I'll send a patch on top of yours to limit the
-> rows depending on the memory.
->
-> >         Another note that each connection occupies 128 bytes effectivel=
-y and
-> >         each hash entry uses 8 bytes, so you can estimate how much memo=
-ry is
-> > diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs=
-_conn.c
-> > index 13534e02346c..e1b9b52909a5 100644
-> > --- a/net/netfilter/ipvs/ip_vs_conn.c
-> > +++ b/net/netfilter/ipvs/ip_vs_conn.c
-> > @@ -1484,8 +1484,8 @@ int __init ip_vs_conn_init(void)
-> >       int idx;
-> >
-> >       /* Compute size and mask */
-> > -     if (ip_vs_conn_tab_bits < 8 || ip_vs_conn_tab_bits > 20) {
-> > -             pr_info("conn_tab_bits not in [8, 20]. Using default valu=
-e\n");
-> > +     if (ip_vs_conn_tab_bits < 8 || ip_vs_conn_tab_bits > 27) {
-> > +             pr_info("conn_tab_bits not in [8, 27]. Using default valu=
-e\n");
-> >               ip_vs_conn_tab_bits =3D CONFIG_IP_VS_TAB_BITS;
-> >       }
-> >       ip_vs_conn_tab_size =3D 1 << ip_vs_conn_tab_bits;
-> >
-> > ---
->
-> Regards
->
-> --
-> Julian Anastasov <ja@ssi.bg>
->
-
-
---
-Cheers,
-Abhijeet (https://abhi.host)
+Vineeth
