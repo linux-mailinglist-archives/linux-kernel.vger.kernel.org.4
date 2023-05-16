@@ -2,113 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A5670483D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70361704842
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjEPIy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S231435AbjEPIzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjEPIyZ (ORCPT
+        with ESMTP id S230408AbjEPIzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:54:25 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC4EBD;
-        Tue, 16 May 2023 01:54:24 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so3963308b3a.0;
-        Tue, 16 May 2023 01:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684227264; x=1686819264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qs/7Ze1koAlsm5VE1mt/ZaAC7P2mkk2AOe4o4H+TXhY=;
-        b=Q1mZzol7NxDDcA+ExVSYU416UvOvHQjarH9Vhi3Hb9071xfeMYxg/aAMScUEnmbfya
-         AeriSjcgR6+enOmXIG+yKmwb775aC+bOzI5ZrDjunOL+/p//771T9L91+cFBY3VeoHEw
-         C8RlA/bhqFlvWtbvssBEMdv1dXZJoLrl4hKuXfwzxVuQc8vfDc71pRfyx8I298if8oGZ
-         3n/QTjbDyZa4ytB2oiXpZM/QBIKLfsTNfPFx19VfTpnzBrS4Vcxzc2x242tPqXXpivZl
-         2E92vU+NdAIGEOfHmNzRD7AigDhzYQH0RXLBKPsYQULpC/mVUhsCLr8qARQhfWRyRPI/
-         iEfA==
+        Tue, 16 May 2023 04:55:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF21FEC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684227299;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Eq/mJ6TAAxJjl7zNrtuDiAJaf9k+xodjW5Fgf6CgBUc=;
+        b=a2SL57+dRf6+KEzdZxslngrwhszXpUDDrkd9uZkeLxbmOO9d4JvAEm7eRT8+tYSCSwtnyq
+        XPPej0u6yHvd2o0JIeqG9sT2oRSiaxSOyFqYpdCE7hIM0ebwKoZAsvK/6rFNz0764FK7AY
+        eAqqZaSecvNwYa7B83j/0Sk1HgJCuxc=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-121-HmOYOA-YOYGujKMZxKK9aA-1; Tue, 16 May 2023 04:54:57 -0400
+X-MC-Unique: HmOYOA-YOYGujKMZxKK9aA-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-758ae5c9494so998401585a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:54:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684227264; x=1686819264;
+        d=1e100.net; s=20221208; t=1684227297; x=1686819297;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qs/7Ze1koAlsm5VE1mt/ZaAC7P2mkk2AOe4o4H+TXhY=;
-        b=f2QRUt6U2NDd4Yk3cUVpbZcC+zVr2yr7HiyjrIDY1iSjQwdoYejP2xAkMOZcSbBQz+
-         gZ1bs/1Fxk2LXKZr1MGf4/SrBPEgQkfq/Gb+en6c7CvW7hAv0PeUjPpFt+AdlDjECsY+
-         PRGWo/FX5Rig/yJTxpWtQ0Ifc5v3G3vi44IhHghsiscnjoG489uLKneomiLJRcCs3cfT
-         HxKaIudP/eksFLfjW9VA16jzq7zk3etP/b1rifik1WsAnn3VSUfRFDYUMtynWOVCKHjb
-         0mSjDZsZDnvSJVqanWIHI5w9Drl9Da6ODGiD9InHkKoRZDSbi0NThxwPtN2hMf/rHicj
-         qX8Q==
-X-Gm-Message-State: AC+VfDxcbokzSksU5Ol3ocO+QFWcOZHA/xv4sJXRE/IbaVlSVCeuyzyZ
-        /FUlpRbCkfBUp9M9aqbXDr1oEZPRUP0=
-X-Google-Smtp-Source: ACHHUZ7FAm2N6rYgyI7z56LkGLy2JrcqBECUBs3LbN0MXNUIu2TCC7TajgNt8E0bYKfQcaFCJJa5Yg==
-X-Received: by 2002:a17:902:ecd0:b0:1ac:76a6:a1f with SMTP id a16-20020a170902ecd000b001ac76a60a1fmr36362638plh.16.1684227263596;
-        Tue, 16 May 2023 01:54:23 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-73.three.co.id. [180.214.233.73])
-        by smtp.gmail.com with ESMTPSA id y5-20020a1709027c8500b001a98f844e60sm14889934pll.263.2023.05.16.01.54.22
+        bh=Eq/mJ6TAAxJjl7zNrtuDiAJaf9k+xodjW5Fgf6CgBUc=;
+        b=SEHJ1XqBYg8ouXizOrQJKmJr0Q0i6YEclFEU2X66/uhYY1dv0mw25I8uJBuUUUHtP9
+         5ZSVQ/w6g+IXBsUbcEkPOOTVlOYxTvh8pJSlI/psxnLoHhDQc12rxHC+vivmiNmGpptO
+         r+l/Z1hiMmxKpgquxNvxYCavBgvThPQMq2uHc2SJD8hKulN/cOTY+VVux9saQ/9rRki6
+         RjtaVnyct47sTP4iGhLYyJvsrGNfo6hZlpJHs1lQTsuD1M1M8LEnEPCgBjKVesn0Zi99
+         b0HC3Se8WSZS8X+YkgUB0Cv089YpPyaMyqvewB+T5tO3q89NDycdzapJAfYYN44vO+CH
+         rq/A==
+X-Gm-Message-State: AC+VfDzIiqb97bF8U4m94Lv/7CZo+RG7k+gbnl31g66B3BnADa0w63EG
+        szJOwMQXplsPLTbmtpuq4AjjYHxXs11e1VEhHRHHk1CZTSh8nZlTkYzgD7F55SHXsLg1CzFABdV
+        sZzl3hM1088h17muSqxm8eoULLbH6omBoIBg=
+X-Received: by 2002:a05:622a:1209:b0:3ef:2649:44ae with SMTP id y9-20020a05622a120900b003ef264944aemr58730391qtx.13.1684227296801;
+        Tue, 16 May 2023 01:54:56 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5D9o1sGj4fhdU2O4/61znCNopICXE8BhGEHjhbqI5WM+IEL+ulBtWf2tSFOkkGS6Bw6+fuOw==
+X-Received: by 2002:a05:622a:1209:b0:3ef:2649:44ae with SMTP id y9-20020a05622a120900b003ef264944aemr58730380qtx.13.1684227296564;
+        Tue, 16 May 2023 01:54:56 -0700 (PDT)
+Received: from sgarzare-redhat (c-115-213.cust-q.wadsl.it. [212.43.115.213])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05622a148e00b003f549b8b7d6sm24436qtx.68.2023.05.16.01.54.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 01:54:22 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id A37D01069A7; Tue, 16 May 2023 15:54:19 +0700 (WIB)
-Date:   Tue, 16 May 2023 15:54:19 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.2 000/242] 6.2.16-rc1 review
-Message-ID: <ZGNEu12M/Xa7vAt/@debian.me>
-References: <20230515161721.802179972@linuxfoundation.org>
+        Tue, 16 May 2023 01:54:56 -0700 (PDT)
+Date:   Tue, 16 May 2023 10:54:49 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Simon Horman <horms@kernel.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] virtio: Add missing documentation for structure fields
+Message-ID: <y6kgnwu35oci7y5hx2htfobglrecjhxgpnqmtjetv52xk7hlsc@gwvfoojunl4x>
+References: <20230510-virtio-kdoc-v2-1-1c5a20eb4cfe@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4kN2eSG9PT4RUYXb"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20230515161721.802179972@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230510-virtio-kdoc-v2-1-1c5a20eb4cfe@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 11, 2023 at 04:46:22PM +0200, Simon Horman wrote:
+>Add missing documentation for the vqs_list_lock field of struct virtio_device,
+>and the validate field of struct virtio_driver.
+>
+>./scripts/kernel-doc says:
+>
+> .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
+> .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
+> 2 warnings as Errors
+>
+>No functional changes intended.
+>
+>Signed-off-by: Simon Horman <horms@kernel.org>
+>---
+>Changes in v2:
+>- As suggested by Michael S. Tsirkin
+>  + @validate is not called on probe
+>  + @validate does validates config space
+>  + embarrassingly, validate was misspelt
+>- Link to v1: https://lore.kernel.org/r/20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org
+>---
+> include/linux/virtio.h | 2 ++
+> 1 file changed, 2 insertions(+)
 
---4kN2eSG9PT4RUYXb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I left some minor comments, anyway this version LGTM:
 
-On Mon, May 15, 2023 at 06:25:26PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.16 release.
-> There are 242 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Successfully compiled and installed bindeb-pkgs on my computer (Acer
-Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+>
+>diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+>index b93238db94e3..3abe8e9c8090 100644
+>--- a/include/linux/virtio.h
+>+++ b/include/linux/virtio.h
+>@@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
+>  * @config_enabled: configuration change reporting enabled
+>  * @config_change_pending: configuration change reported while disabled
+>  * @config_lock: protects configuration change reporting
+>+ * @vqs_list_lock: protects @vqs.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Maybe we can now remove `/* Protects VQs list access */`
 
---=20
-An old man doll... just what I always wanted! - Clara
+>  * @dev: underlying device.
+>  * @id: the device type identification (used to match it with a driver).
+>  * @config: the configuration ops for this device.
+>@@ -160,6 +161,7 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
+>  * @feature_table_size: number of entries in the feature table array.
+>  * @feature_table_legacy: same as feature_table but when working in legacy mode.
+>  * @feature_table_size_legacy: number of entries in feature table legacy array.
+>+ * @validate: the function to call to validate features and config space
 
---4kN2eSG9PT4RUYXb
-Content-Type: application/pgp-signature; name="signature.asc"
+Maybe we can add ". Returns 0 or -errno."
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Stefano
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGNEsgAKCRD2uYlJVVFO
-o7MQAP4roA5DQA/rKJNf1HNYRbcObFNB6vTfm23+KXqkwA8fSgD+I47N+Mvkk1GI
-ZUNmn/Sl7NAYnsGlvicbpZTc3OeFvQo=
-=eVSk
------END PGP SIGNATURE-----
+>  * @probe: the function to call when a device is found.  Returns 0 or -errno.
+>  * @scan: optional function to call after successful probe; intended
+>  *    for virtio-scsi to invoke a scan.
+>
 
---4kN2eSG9PT4RUYXb--
