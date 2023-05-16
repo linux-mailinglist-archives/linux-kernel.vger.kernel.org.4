@@ -2,67 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A80704D9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4FC704D9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjEPMRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S233040AbjEPMSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjEPMRd (ORCPT
+        with ESMTP id S231237AbjEPMR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:17:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6438D4698;
-        Tue, 16 May 2023 05:17:32 -0700 (PDT)
+        Tue, 16 May 2023 08:17:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F3C4C13
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:17:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAA5460F5A;
-        Tue, 16 May 2023 12:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE48C433EF;
-        Tue, 16 May 2023 12:17:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51B396392B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9EEAC433EF;
+        Tue, 16 May 2023 12:17:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684239451;
-        bh=FUya8l0e9W9RYjyU+HM+cs83+DOnaPciCuvV7VzRtTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PC2dFqdc1Z/sdXZ5oYa4dBdtDdnVirjaldQ/c52s9XJSgc+dL6PzDhDqFcp2t3h8s
-         zYfoMkYN/25F07KizBYjudULLyvUqwGH4yudmVo1ypcJJouV1/5+Mg4MeS5B8lMkD0
-         hQFQoQIq+YgyjIykKOhLxfIocaQC41WOqBWGXbhiVLWe6fe28VCP3WdVWmpSQCjDGZ
-         4aUtJ+q5C2ZDupcuSwaDldLY/u4MQlQ0TzGZBRKjwKENXZiV02g38rH23LqSunEk2C
-         ZcPR/87t5GlnvCLL0uv1alI+o744JmEyXHD56IECx3oXhz5KtTzRNFnXlUcJFOS1/L
-         +dh0MXsyQXSYg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pytcR-0008TQ-5q; Tue, 16 May 2023 14:17:31 +0200
-Date:   Tue, 16 May 2023 14:17:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 4/9] usb: dwc3: core: Skip setting event buffers for
- host only controllers
-Message-ID: <ZGN0W0YbIjzmQnH1@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-5-quic_kriskura@quicinc.com>
+        s=k20201202; t=1684239477;
+        bh=sP9gNr70JhVah2PxtGLjXPjgrkId19Xw0B/4W82U6Qo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DmiuJEhjigE9MaqcXF9VZ4sWQJB36J2eUJZrHX6Ca8BFifZt4T2m0YfQ5fVNO4RZO
+         pB05XuJB9Wel9zois5Zrg98NoweZ/9AXGSb53/EYtKHr6wOin4M5a+TjHhc3MZzqDL
+         ILFn6AfGXeh0aANY+gEsUK3NHIeYmEuppLsH9dqFDIYdwLIuYpsWUwK1fL0puTaeKV
+         u1WJURX+geSw+/yzHhoxP9RTxQoP1H1TFXdTiftOd54Y1A4ac8H8SCKrKP2F5ogRY5
+         hGyV4nC7eB8H1n+UmlZ5PAlDnRJvowTRt3eZxeXsNfdfyaFRO3F6bYiaNU21G0G8xi
+         yLE6r+MqxAVoA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 644B5CE1432; Tue, 16 May 2023 05:17:57 -0700 (PDT)
+Date:   Tue, 16 May 2023 05:17:57 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: kernel/rcu/srcutree.c:1644 srcu_advance_state() warn:
+ inconsistent returns '&ssp->srcu_sup->srcu_gp_mutex'.
+Message-ID: <2ef061eb-e82d-4c16-a333-e499095a7162@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <c0937326-1cf1-429a-9883-30d9d79b01d0@kili.mountain>
+ <c33b0348-7f86-47ce-913c-f1ebc6431f93@paulmck-laptop>
+ <30f2e760-e2f3-4941-be9b-b9c5624fd861@kili.mountain>
+ <4bdbbcd3-6620-4320-ada5-02b71a54106c@paulmck-laptop>
+ <782b3fa6-576d-4c26-888e-5dc151feaaa8@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230514054917.21318-5-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <782b3fa6-576d-4c26-888e-5dc151feaaa8@kili.mountain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,39 +62,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 11:19:12AM +0530, Krishna Kurapati wrote:
-> On some SoC's like SA8295P where the tertiary controller is host-only
-> capable, GEVTADDRHI/LO, GEVTSIZ, GEVTCOUNT registers are not accessible.
-> Trying to setup them up during core_init leads to a crash.
+On Tue, May 09, 2023 at 06:13:02PM +0300, Dan Carpenter wrote:
+> On Tue, May 09, 2023 at 07:08:05AM -0700, Paul E. McKenney wrote:
+> > On Tue, May 09, 2023 at 08:40:33AM +0300, Dan Carpenter wrote:
+> > > On Sat, May 06, 2023 at 11:45:35AM -0700, Paul E. McKenney wrote:
+> > > > On Sat, May 06, 2023 at 10:22:04AM +0300, Dan Carpenter wrote:
+> > > > > aacb5d91ab1bfb Paul E. McKenney 2018-10-28  1632  	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)) == SRCU_STATE_SCAN2) {
+> > > > > 
+> > > > > We don't mutex_unlock(&ssp->srcu_sup->srcu_gp_mutex) if this if
+> > > > > statement is false.
+> > > > 
+> > > > Hmmm...
+> > > > 
+> > > > I could make the above line read something like the following:
+> > > > 
+> > > > 	if (!WARN_ON_ONCE(rcu_seq_state(READ_ONCE(ssp->srcu_sup->srcu_gp_seq)) != SRCU_STATE_SCAN2)) {
+> > > 
+> > > Smatch ignores WARN_ON().  WARNings are triggered all the time, so it's
+> > > not like a BUG() which stops the code flow.
+> > > 
+> > > > 
+> > > > The theory is that there are only three legal values for ->srcu_gp_seq.
+> > > > Because we hold ->srcu_gp_mutex, no one else can change it.   The first
+> > > > "if" statement either returns or sets that state to SRCU_STATE_SCAN1.
+> > > > The second "if" statement also either returns or sets that state to
+> > > > SRCU_STATE_SCAN2.  So that statement should not be false.
+> > > 
+> > > Smatch can't figure out that the statement is true.  The issue there is
+> > > that ssp->srcu_sup->srcu_gp_seq stores a value in the low bits and a
+> > > different value in the high bits.  This seems like something that might
+> > > be worth handling correctly at some point, but that point is in the
+> > > distant future...
+> > > 
+> > > Just ignore this one.
+> > 
+> > Fair enough!  Yeah, I could imagine that this would be non-trivial.
+> > 
+> > Is there a not-reached annotation that Smatch pays attention to?
 > 
-> For DRD/Peripheral supported controllers, event buffer setup is done
-> again in gadget_pullup. Skip setup or cleanup of event buffers if
-> controller is host-only capable.
+> Hm...  Yeah.  If you wanted you could do this.  I'm not sure it improves
+> the readability.  Also for some reason my private Smatch build doesn't
+> print a warning...  I need to investigate why that is...
+
+There does seem to be a fair number of instances of unreachable() in
+the kernel, so why not?
+
+May I add your Signed-off-by?
+
+							Thanx, Paul
+
+> regards,
+> dan carpenter
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/core.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index e983aef1fb93..46192d08d1b6 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -505,6 +505,11 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
->  int dwc3_event_buffers_setup(struct dwc3 *dwc)
->  {
->  	struct dwc3_event_buffer	*evt;
-> +	unsigned int			hw_mode;
-> +
-> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
-> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
-> +		return 0;
+> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> index 20d7a238d675..58e13d3c5a6a 100644
+> --- a/kernel/rcu/srcutree.c
+> +++ b/kernel/rcu/srcutree.c
+> @@ -1669,6 +1669,8 @@ static void srcu_advance_state(struct srcu_struct *ssp)
+>  		}
+>  		ssp->srcu_sup->srcu_n_exp_nodelay = 0;
+>  		srcu_gp_end(ssp);  /* Releases ->srcu_gp_mutex. */
+> +	} else {
+> +		unreachable();
+>  	}
+>  }
 >  
->  	evt = dwc->ev_buf;
-
-How about adding this check to dwc3_alloc_event_buffers() instead as
-there should be no need to allocate buffer that you never use?
-
-Then you can just check dwc->ev_buf here and elsewhere.
-
-Johan
