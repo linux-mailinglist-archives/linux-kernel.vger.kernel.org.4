@@ -2,121 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E36B704670
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EFE70468F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjEPHc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S231383AbjEPHiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjEPHc1 (ORCPT
+        with ESMTP id S230388AbjEPHiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:32:27 -0400
-Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [178.154.239.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA3244B6;
-        Tue, 16 May 2023 00:32:25 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-36.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-36.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:a716:0:640:8b36:0])
-        by forward501c.mail.yandex.net (Yandex) with ESMTP id 579785EA23;
-        Tue, 16 May 2023 10:32:21 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-36.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id IWV7H95W0Gk0-2hQZJWns;
-        Tue, 16 May 2023 10:32:20 +0300
+        Tue, 16 May 2023 03:38:08 -0400
+Received: from forward501b.mail.yandex.net (forward501b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d501])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9329C423C;
+        Tue, 16 May 2023 00:38:05 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:2991:0:640:bb47:0])
+        by forward501b.mail.yandex.net (Yandex) with ESMTP id 6695D5F29E;
+        Tue, 16 May 2023 10:38:03 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id rbVsqF6Wo4Y0-UkaxrYJI;
+        Tue, 16 May 2023 10:38:01 +0300
 X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1684222340;
-        bh=MFjNdJMYyp7CuQaOvoVqnCB28BDnLblM6oVyHYcfyno=;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1684222681;
+        bh=R3NyR73k7IhF7nI84HX4UghfXKGpid2SwwTSfXwtO70=;
         h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-        b=TnZzKCBtKXwa5wyHOdpB5g/glPTYIxg4OJtlOKqpf4lyTmj+eyPJuPQ3ZIDNyVidW
-         MJvKxuPFmhvV2zgFsaVyHLr11/DCItE+6NhakoZhBl5IqJCv0e5cQ9s6ZNk5ASVZoI
-         lBr2xnRw1xeOl7LLoOP0/cOmLJ9fkmQrG/OoKr6Q=
-Authentication-Results: mail-nwsmtp-smtp-production-main-36.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <df1ffa574ca014cf5e23b3482efc5a7f432948af.camel@maquefel.me>
-Subject: Re: [PATCH 0/2] perf: add T-HEAD C9xx series cpu support
+        b=QotG58g6dFkLdzg/jCTCPqPNHWfIFJSnx9H8OHC12M2roLLuxVWKx6W2h25dkjVSe
+         HRwtXoqfClom0cLuEY16ejoh6MbeEy+uPI8UAhwOs+j0NQ/gw1AVexLnYUBpraFKDp
+         l0egQl1rEQANggrBncTSCi4j3ZinsQfxms2ylvX4=
+Authentication-Results: mail-nwsmtp-smtp-production-main-91.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <4f81a96b826344f45d0994539e3b3fe94fe7eb50.camel@maquefel.me>
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
 From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Inochi Amaoto <inochiama@outlook.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nikita Shubin <n.shubin@yadro.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Date:   Tue, 16 May 2023 13:32:20 +0300
-In-Reply-To: <IA1PR20MB49539201E93DE46A9A2A8E74BB799@IA1PR20MB4953.namprd20.prod.outlook.com>
-References: <IA1PR20MB49539201E93DE46A9A2A8E74BB799@IA1PR20MB4953.namprd20.prod.outlook.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Brian Norris <briannorris@chromium.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Eric Dumazet <edumazet@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Le Moal <damien.lemoal@opensource.wdc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        netdev@vger.kernel.org, soc@kernel.org
+Date:   Tue, 16 May 2023 13:37:54 +0300
+In-Reply-To: <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <1ff2333a-8f78-c066-0158-9c8a1a17684f@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Inochi Amaoto!
+Hello Florian!
 
-Thank you for your series!
+On Mon, 2023-05-15 at 20:47 -0700, Florian Fainelli wrote:
+>=20
+>=20
+> On 4/24/2023 5:34 AM, Nikita Shubin wrote:
+> > This series aims to convert ep93xx from platform to full device
+> > tree support.
+> >=20
+> > Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
+> >=20
+> > Thank you Linus and Arnd for your support, review and comments,
+> > sorry if i missed something -
+> > these series are quite big for me.
+> >=20
+> > Big thanks to Alexander Sverdlin for his testing, support, review,
+> > fixes and patches.
+>=20
+> If anyone is interested I still have a TS-7300 board [1] that is
+> fully=20
+> functional and could be sent out to a new home.
 
-Could you also provide HPM device tree bindings which were used in
-OpenSBI for testing in cover letter ?
+Thank you kindly, i'll keep this in mind !
 
-On Tue, 2023-05-16 at 10:37 +0800, Inochi Amaoto wrote:
-> The T-HEAD C9xx series cpu is a series of riscv CPU IP. As this IP
-> was
-> proposed before the current riscv event standard. It has a non-
-> standard
-> events encoding for perf events and unimplemented MARCH and MIMP CSR.
-> This patch add these events to support C9xx cpus.
 >=20
-> AFAIK, at least the following chips used C9xx cpu.
->=20
-> * Allwinner D1 (C906)
-> * T-HEAD th1520 (C910)
-> * Sophgo mango (C920)
->=20
-> Inochi Amaoto (2):
-> =C2=A0 perf tools riscv: Allow get_cpuid return empty MARCH and MIMP
-> =C2=A0 perf vendor events riscv: add T-HEAD C9xx JSON file
->=20
-> =C2=A0tools/perf/arch/riscv/util/header.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 7 +-
-> =C2=A0tools/perf/pmu-events/arch/riscv/mapfile.csv=C2=A0 |=C2=A0 1 +
-> =C2=A0.../arch/riscv/t-head/c9xx/cache.json=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 67
-> ++++++++++++++++++
-> =C2=A0.../arch/riscv/t-head/c9xx/firmware.json=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 68
-> +++++++++++++++++++
-> =C2=A0.../arch/riscv/t-head/c9xx/instruction.json=C2=A0=C2=A0 | 22 ++++++
-> =C2=A0.../arch/riscv/t-head/c9xx/microarch.json=C2=A0=C2=A0=C2=A0=C2=A0 |=
- 42 ++++++++++++
-> =C2=A06 files changed, 201 insertions(+), 6 deletions(-)
-> =C2=A0create mode 100644 tools/perf/pmu-events/arch/riscv/t-
-> head/c9xx/cache.json
-> =C2=A0create mode 100644 tools/perf/pmu-events/arch/riscv/t-
-> head/c9xx/firmware.json
-> =C2=A0create mode 100644 tools/perf/pmu-events/arch/riscv/t-
-> head/c9xx/instruction.json
-> =C2=A0create mode 100644 tools/perf/pmu-events/arch/riscv/t-
-> head/c9xx/microarch.json
->=20
-> --
-> 2.40.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> https://www.embeddedts.com/products/TS-7300
 
