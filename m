@@ -2,155 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5FC704A7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE61704A7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjEPK0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S232048AbjEPK0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbjEPKZq (ORCPT
+        with ESMTP id S232208AbjEPKZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:25:46 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3146A79
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:25:10 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96aadfb19d7so881333666b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684232709; x=1686824709;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F2Oe3JB1551Ifyx7cKfdHGYFp9RdJC1mFhFOMst3c+Y=;
-        b=TcQSMAYetCU7XethsGdoMi1IU7K2tphdW8gTMBtGnakEEiqSkZvj0sh92MSZalIf8I
-         WHX42fNRPM7m9mWlEVcoIkD7bdwKDXmegGgn+pmy158YQIMffbgY0LKTQPE6M/GOsY1/
-         ypewFN7+0iu86uXNl/TnXPMNK/xaw9BEEkkg1IHXP7ilDQGOZ0fqeEcy/XfwoF57ICEM
-         2bQikMf5OIpgW21dmtQZJppts77OaB8WuzN5bgGuH2Bf9VWH4MxG8amhznE4Kxc5Sdq+
-         6iubQGN65P4Qbvok8XYB9Lcm9n13k/hPb4DYCMANglYaydXYfgJNB7ePj3C0pLRE1Ldd
-         KLSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684232709; x=1686824709;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2Oe3JB1551Ifyx7cKfdHGYFp9RdJC1mFhFOMst3c+Y=;
-        b=KqoUtgKFNlyGQEV76DvvqutCfGpWvCTSVQbxAHDbr32GYenF81xnI2etl5ICKzF9k7
-         DYA1fAncIIG8xnM/FmABZU63BH+gUDvcDehq+Z8TcKoIJOj461ZTRe7vrnZVSzbWsQep
-         RrNQqH7jipkicZYWohHRZOGD2UmLfXwycvqGRkTrBy7x4LUUiX3ifJz2hy8Aj/YpbuCU
-         nmhYwzG1MeBDZWLuDnN4NFjFcltK3dZjOcX5knagWie5YD3DSWAVikTAvrGU+cxxgn0R
-         5okCEFGxHsVrWAJsr+MKuC/2i8LyUK4Dlv9/h0DurrCWEIH+TVIis4C4puwx0VFrxd2P
-         uzUg==
-X-Gm-Message-State: AC+VfDwGmc3L6n0WrVak3GLy8TvvqNCW9Igf38M37kRDBKJ6me6kmMan
-        rE3h2SygdBjlsfwMXxrwPoZhIg==
-X-Google-Smtp-Source: ACHHUZ4B7fCNUMfYrGV8dXmk26j3EQ8WI2HtGXoKigndG71Seq21Cc00mF4ru+7HVvb/XJvJY20DrA==
-X-Received: by 2002:a17:907:9281:b0:960:ddba:e5c5 with SMTP id bw1-20020a170907928100b00960ddbae5c5mr39077044ejc.11.1684232708841;
-        Tue, 16 May 2023 03:25:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id d19-20020a1709061f5300b009596e7e0dbasm10695764ejk.162.2023.05.16.03.25.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 03:25:08 -0700 (PDT)
-Message-ID: <578a743e-dee4-59b7-2f4e-290b551211e0@linaro.org>
-Date:   Tue, 16 May 2023 12:25:07 +0200
+        Tue, 16 May 2023 06:25:59 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B132D5594;
+        Tue, 16 May 2023 03:25:24 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id d62d357134d2fbef; Tue, 16 May 2023 12:25:23 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 62198CE4FA9;
+        Tue, 16 May 2023 12:25:22 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH v2] ACPI: scan: Reduce overhead related to devices with dependencies
+Date:   Tue, 16 May 2023 12:25:22 +0200
+Message-ID: <12223415.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
- system watchdog driver
-Content-Language: en-US
-To:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230508131515.19403-1-bbhushan2@marvell.com>
- <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
- <DM5PR1801MB1883175A2538B85FEF571B7AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
- <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
- <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
- <8b540cc2-bc0d-9d8b-45e6-98410322b3f6@linaro.org>
- <BY3PR18MB4737947E20CB44CE6DAB940DC6799@BY3PR18MB4737.namprd18.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <BY3PR18MB4737947E20CB44CE6DAB940DC6799@BY3PR18MB4737.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgvdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhuggvghhovgguvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohepshgrkhgrrhhirdgrihhluhhssehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 12:06, Sunil Kovvuri Goutham wrote:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH] ACPI: scan: Reduce overhead related to devices with dependencies
+
+Notice that all of the objects for which the acpi_scan_check_dep()
+return value is greater than 0 are present in acpi_dep_list as consumers
+(there may be multiple entries for one object, but that is not a
+problem), so after carrying out the initial ACPI namespace walk in which
+devices with dependencies are skipped, acpi_bus_scan() can simply walk
+acpi_dep_list and enumerate all of the unique consumer objects from
+there and their descendants instead of walking the entire target branch
+of the ACPI namespace and looking for device objects that have not been
+enumerated yet in it.
+
+Because walking acpi_dep_list is generally less overhead than walking
+the entire ACPI namespace, use the observation above to reduce the
+system initialization overhead related to ACPI, which is particularly
+important on large systems.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+-> v2: Hold acpi_dep_list_lock around the acpi_fetch_acpi_dev() invocation in
+       acpi_scan_postponed() (Hans).
+
+---
+ drivers/acpi/scan.c     |   81 ++++++++++++++++++++++++++++++++++++------------
+ include/acpi/acpi_bus.h |    2 +
+ 2 files changed, 63 insertions(+), 20 deletions(-)
+
+Index: linux-pm/include/acpi/acpi_bus.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpi_bus.h
++++ linux-pm/include/acpi/acpi_bus.h
+@@ -289,6 +289,8 @@ struct acpi_dep_data {
+ 	acpi_handle supplier;
+ 	acpi_handle consumer;
+ 	bool honor_dep;
++	bool met;
++	bool free_when_met;
+ };
+ 
+ /* Performance Management */
+Index: linux-pm/drivers/acpi/scan.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/scan.c
++++ linux-pm/drivers/acpi/scan.c
+@@ -2029,8 +2029,6 @@ static u32 acpi_scan_check_dep(acpi_hand
+ 	return count;
+ }
+ 
+-static bool acpi_bus_scan_second_pass;
+-
+ static acpi_status acpi_bus_check_add(acpi_handle handle, bool check_dep,
+ 				      struct acpi_device **adev_p)
+ {
+@@ -2050,10 +2048,8 @@ static acpi_status acpi_bus_check_add(ac
+ 			return AE_OK;
+ 
+ 		/* Bail out if there are dependencies. */
+-		if (acpi_scan_check_dep(handle, check_dep) > 0) {
+-			acpi_bus_scan_second_pass = true;
++		if (acpi_scan_check_dep(handle, check_dep) > 0)
+ 			return AE_CTRL_DEPTH;
+-		}
+ 
+ 		fallthrough;
+ 	case ACPI_TYPE_ANY:	/* for ACPI_ROOT_OBJECT */
+@@ -2301,6 +2297,12 @@ static bool acpi_scan_clear_dep_queue(st
+ 	return true;
+ }
+ 
++static void acpi_scan_delete_dep_data(struct acpi_dep_data *dep)
++{
++	list_del(&dep->node);
++	kfree(dep);
++}
++
+ static int acpi_scan_clear_dep(struct acpi_dep_data *dep, void *data)
+ {
+ 	struct acpi_device *adev = acpi_get_acpi_dev(dep->consumer);
+@@ -2311,8 +2313,10 @@ static int acpi_scan_clear_dep(struct ac
+ 			acpi_dev_put(adev);
+ 	}
+ 
+-	list_del(&dep->node);
+-	kfree(dep);
++	if (dep->free_when_met)
++		acpi_scan_delete_dep_data(dep);
++	else
++		dep->met = true;
+ 
+ 	return 0;
+ }
+@@ -2406,6 +2410,55 @@ struct acpi_device *acpi_dev_get_next_co
+ }
+ EXPORT_SYMBOL_GPL(acpi_dev_get_next_consumer_dev);
+ 
++static void acpi_scan_postponed_branch(acpi_handle handle)
++{
++	struct acpi_device *adev = NULL;
++
++	if (ACPI_FAILURE(acpi_bus_check_add(handle, false, &adev)))
++		return;
++
++	acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
++			    acpi_bus_check_add_2, NULL, NULL, (void **)&adev);
++	acpi_bus_attach(adev, NULL);
++}
++
++static void acpi_scan_postponed(void)
++{
++	struct acpi_dep_data *dep, *tmp;
++
++	mutex_lock(&acpi_dep_list_lock);
++
++	list_for_each_entry_safe(dep, tmp, &acpi_dep_list, node) {
++		acpi_handle handle = dep->consumer;
++
++		/*
++		 * In case there are multiple acpi_dep_list entries with the
++		 * same consumer, skip the current entry if the consumer device
++		 * object corresponding to it is present already.
++		 */
++		if (!acpi_fetch_acpi_dev(handle)) {
++			/*
++			 * Even though the lock is released here, tmp is
++			 * guaranteed to be valid, because none of the list
++			 * entries following dep is marked as "free when met"
++			 * and so they cannot be deleted.
++			 */
++			mutex_unlock(&acpi_dep_list_lock);
++
++			acpi_scan_postponed_branch(handle);
++
++			mutex_lock(&acpi_dep_list_lock);
++		}
++
++		if (dep->met)
++			acpi_scan_delete_dep_data(dep);
++		else
++			dep->free_when_met = true;
++	}
++
++	mutex_unlock(&acpi_dep_list_lock);
++}
++
+ /**
+  * acpi_bus_scan - Add ACPI device node objects in a given namespace scope.
+  * @handle: Root of the namespace scope to scan.
+@@ -2424,8 +2477,6 @@ int acpi_bus_scan(acpi_handle handle)
+ {
+ 	struct acpi_device *device = NULL;
+ 
+-	acpi_bus_scan_second_pass = false;
+-
+ 	/* Pass 1: Avoid enumerating devices with missing dependencies. */
+ 
+ 	if (ACPI_SUCCESS(acpi_bus_check_add(handle, true, &device)))
+@@ -2438,19 +2489,9 @@ int acpi_bus_scan(acpi_handle handle)
+ 
+ 	acpi_bus_attach(device, (void *)true);
+ 
+-	if (!acpi_bus_scan_second_pass)
+-		return 0;
+-
+ 	/* Pass 2: Enumerate all of the remaining devices. */
+ 
+-	device = NULL;
+-
+-	if (ACPI_SUCCESS(acpi_bus_check_add(handle, false, &device)))
+-		acpi_walk_namespace(ACPI_TYPE_ANY, handle, ACPI_UINT32_MAX,
+-				    acpi_bus_check_add_2, NULL, NULL,
+-				    (void **)&device);
+-
+-	acpi_bus_attach(device, NULL);
++	acpi_scan_postponed();
+ 
+ 	return 0;
+ }
 
 
->>>>> Marvell have octeontx2 series of processor which have watchdog timer.
->>>>> In 95xx,98xx,96xx are the processors in octeontx2 series of
->>>>> processor. So
->>>> octeontx2-95xx is on soc, octeontx2-96xx is another and so on.
->>>>
->>>> No, 95xx is not a processor. Otherwise please point me to exact
->>>> product datasheet. Hint: I checked it.
->>>
->>> Looks like 95xx data sheet is not public, will remove in that case.
->>
->> We can talk about 96xx. Can you point me to the SoC named exactly like this?
->> Hint: I checked it.
-> 
-> To recap what Bharat mentioned before along with references to individual processors.
-> OcteonTx2 is a family of processors
-> https://www.marvell.com/products/data-processing-units.html
-> Please check for "OCTEON TX2 DPUs"
-> CN96xx and CN98xx are two silicon variants in this family.
-> https://www.marvell.com/content/dam/marvell/en/public-collateral/embedded-processors/marvell-infrastructure-processors-octeon-tx2-cn92xx-cn96xx-cn98xx-product-brief-2020-02.pdf
-
-This is a product brief which further suggests CN96xx is a family (or
-sub-family).
-
-"xx" is pretty often used as family, not as product. Otherwise how one
-product CN92XX can come with 12-18 cores *in the same time*?
-
-https://www.marvell.com/company/newsroom/marvell-announces-octeon-tx2-family-of-multi-core-infrastructure-processors.html
-"Marvell’s CN91xx, CN92xx, CN96xx, and CN98xx processor families include:"
-
-https://www.marvell.com/products/data-processing-units.html
-
-
-> And CNF95xx is another silicon variant in the same family.
-> https://www.marvell.com/content/dam/marvell/en/public-collateral/embedded-processors/marvell-infrastructure-processors-octeon-fusion-cnf95xx-product-brief.pdf
-
-Again, unspecific product brief. Your other briefs specify them clearer,
-e.g. CN9130, CN9131
-
-> 
-> Since the HW block is same in all the variants of silicons in this family, we would like to use a
-> generic string instead of different compatible string for each one. ie
-> - const: marvell,octeontx2-wdt
-> Hope this is okay.
-
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
-
-> 
-> Same with CN10K or Octeon10 family of silicons.
-> https://www.marvell.com/products/data-processing-units.html
-> Please check for "OCTEON 10"
-> 
-> CN103xx and CN106xx are two silicons in this family.
-
-Are they? "Up to 8" cores, so how this can be one specific silicon? One
-customer buys CN10300 with 8 cores, second buys exactly the same CN10300
-and has 4 cores?
-
-You are mixing families and specific devices.
-
-Best regards,
-Krzysztof
 
