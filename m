@@ -2,52 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A273D70439A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835BA70439E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjEPCvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 22:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
+        id S229794AbjEPCxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 22:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjEPCvo (ORCPT
+        with ESMTP id S229460AbjEPCxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 22:51:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1181E48;
-        Mon, 15 May 2023 19:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Jmfb0+AMOohyZqKXEeXp7ZN9Wbo6dEb6Z8dicoVNm0c=; b=CvAYWrgRgNwh9w1ywla/f13+sJ
-        uCyP8lhHKxVwGD3LL4GjnSF3AncQCnoiUA5/A8bvG1Ek6aT7+u/djGSDwlB7nGH+zo+KkiGZEaPIi
-        YtnAkpX9yNWI8FBqsbXUGBOeeflIEdgPXN5cWACrFw2KslzsJqgkWuMYLpbgvxSZCzAE40DjUKKNy
-        8Iec6eOUp9jPTKQjxMUHhqMkkFQ73ZX5FNVhyJ7keucZiZRJTmaiC52SqlMvOBAcQivnTucKQLf3F
-        BDVpcHPdiDyQfv0em6fhK2UBDBBoT2GL1PSK7znrvq/p5aD3fayZGOAf81cfUkXC8GH90uOuOsyC2
-        CtF6aoBQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pykms-004Bav-1h;
-        Tue, 16 May 2023 02:51:42 +0000
-Message-ID: <1538d954-864e-3a07-594a-dfe6d3178a72@infradead.org>
-Date:   Mon, 15 May 2023 19:51:42 -0700
+        Mon, 15 May 2023 22:53:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97706E58
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 19:53:08 -0700 (PDT)
+Received: from dggpemm500003.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QL12g6S5WzsRv1;
+        Tue, 16 May 2023 10:51:07 +0800 (CST)
+Received: from [10.67.145.254] (10.67.145.254) by
+ dggpemm500003.china.huawei.com (7.185.36.56) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 10:53:06 +0800
+Message-ID: <5e42a892-3826-6370-9702-fefee88bf339@hisilicon.com>
+Date:   Tue, 16 May 2023 10:53:06 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: linux-next: Tree for May 15 (config SERIAL_CPM)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-References: <20230515141235.0777c631@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230515141235.0777c631@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH] irqchip: gic-v3: Collection table support muti pages
+To:     Marc Zyngier <maz@kernel.org>
+References: <1684152604-12621-1-git-send-email-wangwudi@hisilicon.com>
+ <86jzx9n4qg.wl-maz@kernel.org>
+ <41cbc6cb4e964fe0bbba87f52110b1c3@hisilicon.com>
+From:   wangwudi <wangwudi@hisilicon.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+In-Reply-To: <41cbc6cb4e964fe0bbba87f52110b1c3@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.145.254]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500003.china.huawei.com (7.185.36.56)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,52 +53,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 5/14/23 21:12, Stephen Rothwell wrote:
-> Hi all,
+在 2023/5/16 9:57, wangwudi 写道:
 > 
-> Changes since 20230512:
 > 
+> -----邮件原件-----
+> 发件人: Marc Zyngier [mailto:maz@kernel.org] 
+> 发送时间: 2023年5月15日 20:45
+> 收件人: wangwudi <wangwudi@hisilicon.com>
+> 抄送: linux-kernel@vger.kernel.org; Thomas Gleixner <tglx@linutronix.de>
+> 主题: Re: [PATCH] irqchip: gic-v3: Collection table support muti pages
+> 
+> On Mon, 15 May 2023 13:10:04 +0100,
+> wangwudi <wangwudi@hisilicon.com> wrote:
+>>
+>> Only one page is allocated to the collection table.
+>> Recalculate the page number of collection table based on the number of 
+>> CPUs.
+> 
+> Please document *why* we should even consider this. Do you know of any existing implementation that is so large (or need so much memory for its collection) that it would result in overflowing the collection table?
 
-commit e3e7b13bffae
-Author: Jiri Slaby <jirislaby@kernel.org>
-Date:   Thu Apr 21 12:17:08 2022 +0200
+Each CPU occupies an entry in the collection table. When there are a large number of CPUs and only one page of the collection table, some CPUs fail to execute ITS-MAPC cmd, and fail to receive LPI interrupts.
 
-    serial: allow COMPILE_TEST for some drivers
+For example, GITS_BASER indicates that the page_size of the collection table is 4 KB, the entry size is 16 Bytes, and only 256 entries can be stored on one page.
+When the number of CPUs is more than 256(which is common in the SMP system of the server), the subsequent CPUs cannot receive the LPI.
 
-See this portion of that commit:
+It is noticed by code review, not by on actual HW.
 
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -783,7 +783,7 @@ config SERIAL_PMACZILOG_CONSOLE
- 
- config SERIAL_CPM
-        tristate "CPM SCC/SMC serial port support"
--       depends on CPM2 || CPM1
-+       depends on CPM2 || CPM1 || (PPC32 && COMPILE_TEST)
-
-
-When PPC32=y and COMPILE_TEST=y but CPM1 is not set and CPM2 is not set:
-
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_release_port':
-cpm_uart_core.c:(.text+0x598): undefined reference to `cpm_uart_freebuf'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_set_termios':
-cpm_uart_core.c:(.text+0x8e0): undefined reference to `__cpm2_setbrg'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_break_ctl':
-cpm_uart_core.c:(.text+0xb10): undefined reference to `cpm_line_cr_cmd'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0xb6c): undefined reference to `cpm_line_cr_cmd'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_startup':
-cpm_uart_core.c:(.text+0x1d48): undefined reference to `cpm_line_cr_cmd'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_request_port':
-cpm_uart_core.c:(.text+0x1ddc): undefined reference to `cpm_uart_allocbuf'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2170): undefined reference to `cpm_line_cr_cmd'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_probe':
-cpm_uart_core.c:(.text+0x2474): undefined reference to `cpm_uart_map_pram'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2724): undefined reference to `cpm_uart_unmap_pram'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2838): undefined reference to `cpm_uart_map_pram'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_shutdown':
-cpm_uart_core.c:(.text+0x2aa8): undefined reference to `cpm_line_cr_cmd'
-/opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2ba4): undefined reference to `cpm_line_cr_cmd'
-
-
--- 
-~Randy
+> 
+> Thanks,
+> 
+> 	M.
+> 
+> --
+> Without deviation from the norm, progress is not possible.
