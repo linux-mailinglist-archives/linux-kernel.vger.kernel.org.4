@@ -2,142 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18152704DA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6668704DB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbjEPMWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S233224AbjEPMZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232597AbjEPMWJ (ORCPT
+        with ESMTP id S232714AbjEPMZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:22:09 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02530F1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:22:07 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50db7ec8188so13437246a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1684239725; x=1686831725;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZDvSzF7eFHvldf+F8B0EAJefAcI+szYaDeqPAOVVxnA=;
-        b=Me5vW3mGX149xX/rbimM22Ywtfg6BI7CDY4N+UNdAN/qi3aTJZZQ4TgkpFibpDSO9+
-         S0QWc9KSQvb/94s4HG5cAbn27P6Ttb6l/hMvmiCxznwdMtffxTv0DirXukAvH+BBzDCB
-         KyoOuxDMGFve+fgzbXzUYzl6nqw9KZMauKqX7sGdWtzgNn5mQVCOa4M/jH1dAWRfSXnl
-         UIbK3EhyVVEplIV1LRTGteDRQt6MGxui7nqQRjtGMDKvJt6tcQl7282xUjszByF9DJkR
-         u/yNB5YKij23ZYGW5DtpPj5caGQQd/V6HiWRPoTehcJGwgQSfLrp6BNPlVpIZdDzGaIw
-         UOUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684239725; x=1686831725;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZDvSzF7eFHvldf+F8B0EAJefAcI+szYaDeqPAOVVxnA=;
-        b=FdgvS1KXgfySAo2++aLc77+aVtWAolPf7ezGQFjoOoRbSvIAgY2r32L7QSa2bgceAS
-         NZLTooD2QcJEyCRqfCwZnhT95yQyd0F7I4/VtVkmnmNiS/VIxM0P0K+WM/ld3Zgz87Ls
-         Ogv2dUFo6SmIZss5OVcnF0IFacJIwPvwzF2jVa/uqbnz9KevF/Z0QCFMMAXHu2avg1m5
-         KF20+yYRP+cAlWYh2n5Mqh1wAnIUaskezQk5VM9d2YyI5bH7em0a05wh30g32XjxkhdG
-         aQWeGuYLA+x6DXSgPdpjWvSP0bFCekSP8Q5bKpVoSBZ99HmyFJYGdihImFIfuXM6jvBX
-         I1kg==
-X-Gm-Message-State: AC+VfDy7Kvo8DUMTSd7qAOauKxWNHy64WfaepMccr+Jtn+rAW37i806f
-        8B5MBYZufeBEjkhW92QLjG3i44Q0k6rsnt393wM=
-X-Google-Smtp-Source: ACHHUZ65vYQ4QXaFf1yiJccB33WZZZQhORecTVGgtKm+Mo+JIXng8QroXzvR7g3ThzdxEpjqn3eZsQ==
-X-Received: by 2002:a05:6402:414:b0:50b:c0ce:d55 with SMTP id q20-20020a056402041400b0050bc0ce0d55mr25801498edv.3.1684239725269;
-        Tue, 16 May 2023 05:22:05 -0700 (PDT)
-Received: from neptune.lan ([188.27.128.119])
-        by smtp.gmail.com with ESMTPSA id d11-20020a05640208cb00b0050bd4b8ca8fsm8063115edz.14.2023.05.16.05.22.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 05:22:04 -0700 (PDT)
-From:   Alexandru Ardelean <alex@shruggie.ro>
-To:     linux-kernel@vger.kernel.org
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, tian.xianting@h3c.com,
-        steffen.aschbacher@stihl.de, Alexandru Ardelean <alex@shruggie.ro>
-Subject: [PATCH][V2] sched/rt: Print curr when RT throttling activated
-Date:   Tue, 16 May 2023 15:22:02 +0300
-Message-Id: <20230516122202.954313-1-alex@shruggie.ro>
-X-Mailer: git-send-email 2.40.1
+        Tue, 16 May 2023 08:25:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBA61FE7;
+        Tue, 16 May 2023 05:24:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684239899; x=1715775899;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=1kZ67IohKTNXw9v48L99Ve76ncobxnQ7nLLOn/LyTKQ=;
+  b=bGztEPKF1Ov+pXMZwo7x/7vcEdHRpNeEL7DcfevD2x9YZGx4uFVEaL09
+   NHo2034CpOo3G1NCRVB+8rhnq+vqu7TGkLaocANPHxYltlnzWp9mYBKzb
+   ntUA65105/kCa1D0omrXEP6e3abCh8FRYkulOvjdcckynDexROuv/PSZ7
+   DIl3qdhyE7Wo8jo9O2GmcNcySTTOV4tX8Odbve4xwWCgjmyepUDPlTaVJ
+   AyhaWE1prh51BwJBBryizRnJqud+s3NXEL7cjqHtQMYrg1wl1aBA7f0Pl
+   wbuaWqJtd3le9q/dKzNdPrMh+dD3tTlzKkM6cqMLDpGIWfnbqQlmfeytZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="414868724"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="414868724"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 05:24:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="771018670"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="771018670"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
+  by fmsmga004.fm.intel.com with SMTP; 16 May 2023 05:24:53 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 16 May 2023 15:24:52 +0300
+Date:   Tue, 16 May 2023 15:24:52 +0300
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v4 37/41] fbdev: atyfb: Remove unused clock determination
+Message-ID: <ZGN2FKSBkMREujgR@intel.com>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-38-schnelle@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230516110038.2413224-38-schnelle@linux.ibm.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xianting Tian <tian.xianting@h3c.com>
+On Tue, May 16, 2023 at 01:00:33PM +0200, Niklas Schnelle wrote:
+> Just below the removed lines par->clk_wr_offset is hard coded to 3 so
+> there is no use in determining a different clock just to then ignore it
+> anyway. This also removes the only I/O port use remaining in the driver
+> allowing it to be built without CONFIG_HAS_IOPORT.
+> 
+> Link: https://lore.kernel.org/all/ZBx5aLo5h546BzBt@intel.com/
+> Suggested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-We may meet the issue, that one RT thread occupied the cpu by 950ms/1s,
-The RT thread maybe is a business thread or other unknown thread.
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-Currently, it only outputs the print "sched: RT throttling activated"
-when RT throttling happen. It is hard to know what is the RT thread,
-For further analysis, we need add more prints.
+> ---
+> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+>       per-subsystem patches may be applied independently
+> 
+>  drivers/video/fbdev/aty/atyfb_base.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/drivers/video/fbdev/aty/atyfb_base.c b/drivers/video/fbdev/aty/atyfb_base.c
+> index b02e4e645035..cba2b113b28b 100644
+> --- a/drivers/video/fbdev/aty/atyfb_base.c
+> +++ b/drivers/video/fbdev/aty/atyfb_base.c
+> @@ -3498,11 +3498,6 @@ static int atyfb_setup_generic(struct pci_dev *pdev, struct fb_info *info,
+>  	if (ret)
+>  		goto atyfb_setup_generic_fail;
+>  #endif
+> -	if (!(aty_ld_le32(CRTC_GEN_CNTL, par) & CRTC_EXT_DISP_EN))
+> -		par->clk_wr_offset = (inb(R_GENMO) & 0x0CU) >> 2;
+> -	else
+> -		par->clk_wr_offset = aty_ld_8(CLOCK_CNTL, par) & 0x03U;
+> -
+>  	/* according to ATI, we should use clock 3 for acelerated mode */
+>  	par->clk_wr_offset = 3;
+>  
+> -- 
+> 2.39.2
 
-This patch is to print current RT task when RT throttling activated,
-It help us to know what is the RT thread in the first time.
-
-Tested-by: Alexandru Ardelean <alex@shruggie.ro>
-Signed-off-by: Xianting Tian <tian.xianting@h3c.com>
----
-
-Initial patch submission:
-  https://lore.kernel.org/all/f3265adc26d4416dacf157f61fa60ad6@h3c.com/T/
-
-We've been having some issues of our own with some applications + some RT
-configuration == some threads endded up taking too much CPU time.
-This patch came in quite in handy to see in logs which thread is more
-problematic.
-
-We've applied this patch onto a 5.10.116 tree. It did need a bit of
-re-applying since some context has changed since the initial version (hence
-the V2 tag).
-Since 5.10.116 (where we used it), it applied nicely to the latest/current
-linux-next tree (hence the Tested-by tag).
-
-It would be nice to apply this to the mainline kernel and have this handy.
-
- kernel/sched/rt.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 00e0e5074115..44b161e42733 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -995,7 +995,7 @@ static inline int rt_se_prio(struct sched_rt_entity *rt_se)
- 	return rt_task_of(rt_se)->prio;
- }
- 
--static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
-+static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq, struct task_struct *curr)
- {
- 	u64 runtime = sched_rt_runtime(rt_rq);
- 
-@@ -1019,7 +1019,8 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
- 		 */
- 		if (likely(rt_b->rt_runtime)) {
- 			rt_rq->rt_throttled = 1;
--			printk_deferred_once("sched: RT throttling activated\n");
-+			printk_deferred_once("sched: RT throttling activated (curr: pid %d, comm %s)\n",
-+						curr->pid, curr->comm);
- 		} else {
- 			/*
- 			 * In case we did anyway, make it go away,
-@@ -1074,7 +1075,7 @@ static void update_curr_rt(struct rq *rq)
- 		if (sched_rt_runtime(rt_rq) != RUNTIME_INF) {
- 			raw_spin_lock(&rt_rq->rt_runtime_lock);
- 			rt_rq->rt_time += delta_exec;
--			exceeded = sched_rt_runtime_exceeded(rt_rq);
-+			exceeded = sched_rt_runtime_exceeded(rt_rq, curr);
- 			if (exceeded)
- 				resched_curr(rq);
- 			raw_spin_unlock(&rt_rq->rt_runtime_lock);
 -- 
-2.40.1
-
+Ville Syrjälä
+Intel
