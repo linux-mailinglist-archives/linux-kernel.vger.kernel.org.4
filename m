@@ -2,41 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6504B704DEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E612E704DEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbjEPMir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53330 "EHLO
+        id S233202AbjEPMjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjEPMip (ORCPT
+        with ESMTP id S231721AbjEPMjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:38:45 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66CE170E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:38:43 -0700 (PDT)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QLFzf4xH9z18LRM;
-        Tue, 16 May 2023 20:34:22 +0800 (CST)
-Received: from huawei.com (10.67.175.85) by kwepemi500009.china.huawei.com
- (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 16 May
- 2023 20:38:41 +0800
-From:   Xia Fukun <xiafukun@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <prajnoha@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <xiafukun@huawei.com>
-Subject: [PATCH v5] kobject: Fix global-out-of-bounds in kobject_action_type()
-Date:   Tue, 16 May 2023 20:37:19 +0800
-Message-ID: <20230516123719.117137-1-xiafukun@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 16 May 2023 08:39:06 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF7501725
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:39:04 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ae454844edso1852785ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google; t=1684240744; x=1686832744;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/oW/IIcwZUlvaFPTsVVZ4y7Z+vHDWRm/FW0iybV2A1U=;
+        b=kI/q/toQd2vzR0miiBwBSiBUX38TKZiDljoH8PXAjj9WWTWW5gTEobj3i9DvbCWrL/
+         vn/lSYhY1zNBFhP585sXquHN4np9ms4ncRrwqR0U/gQ8PnrZyxex53dn8UUjjmMz0aqY
+         FzbyM25RIUwc+PPoyMA3f8/CYCwOMmpZfeLwQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684240744; x=1686832744;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/oW/IIcwZUlvaFPTsVVZ4y7Z+vHDWRm/FW0iybV2A1U=;
+        b=Up1LwamJTNGLgk0BJLThKYg9JfqI1tutzRWM9VnyqdnX8X6FeIuA3iq8uW8w45GcyP
+         7bNnesiZAD0cyyX52P74RZXu0366jwFI2j+OnC3JF3QP4UMk+/+FDXixX4TA/I1u9AFb
+         K2bfEjVk87mYIlxtWWoFngKPVkdOuzoc+8TYeV/93opWGJy0pgEd8MU+FdmxC741g5Wc
+         8sa/CZ0p5AiycMI+9qodml6WXZdvunSqaC1Zx73M/MiNDq4tfRCaSyYLmT0DU0Ujx48O
+         jc3Vn+QXJbOWEdcS0mRqnM4QYQNdRZj9nNzbmgdGZob2I4xroK3YbX9rQjdmWdcQQFYB
+         ZzNA==
+X-Gm-Message-State: AC+VfDzSOlVSeWbaRsCkRFgjLLEGN/A5ddWK49b3564yTcifwAG7+ZZ+
+        nvvamprGLbA5OLNQjlm13wOc8w==
+X-Google-Smtp-Source: ACHHUZ7QfEB8SeXqY4hgGFdGx/qpz6aDthFOR7yJN98PQIgCWf7EgdDzcbzN6Y9d9MSl6JEIFS5i8Q==
+X-Received: by 2002:a17:902:6a8a:b0:1ae:3bfb:f58b with SMTP id n10-20020a1709026a8a00b001ae3bfbf58bmr1278285plk.64.1684240743993;
+        Tue, 16 May 2023 05:39:03 -0700 (PDT)
+Received: from 1989cf8cd4e7 ([122.199.31.3])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170902d50d00b001adf6b21c77sm7264426plg.107.2023.05.16.05.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 05:39:03 -0700 (PDT)
+Date:   Tue, 16 May 2023 12:38:56 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 000/246] 6.3.3-rc1 review
+Message-ID: <20230516123856.GA184274@1989cf8cd4e7>
+References: <20230515161722.610123835@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.85]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500009.china.huawei.com (7.221.188.199)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,110 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following c language code can trigger KASAN's global variable
-out-of-bounds access error in kobject_action_type():
+On Mon, May 15, 2023 at 06:23:32PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.3 release.
+> There are 246 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
 
-int main() {
-    int fd;
-    char *filename = "/sys/block/ram12/uevent";
-    char str[86] = "offline";
-    int len = 86;
+Hi Greg,
 
-    fd = open(filename, O_WRONLY);
-    if (fd == -1) {
-        printf("open");
-        exit(1);
-    }
+6.3.3-rc1 tested.
 
-    if (write(fd, str, len) == -1) {
-        printf("write");
-        exit(1);
-    }
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
 
-    close(fd);
-    return 0;
-}
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-Function kobject_action_type() receives the input parameters buf and count,
-where count is the length of the string buf.
-
-In the use case we provided, count is 86, the count_first is 85.
-Buf points to a string with a length of 86, and its first seven
-characters are "offline".
-In line 87 of the code, kobject_actions[action] is the string "offline"
-with the length of 7,an out-of-boundary access will appear:
-
-kobject_actions[action][85].
-
-Use sysfs_match_string() to replace the fragile and convoluted loop.
-This function is well-tested for parsing sysfs inputs. Moreover, this
-modification will not cause any functional changes.
-
-Fixes: f36776fafbaa ("kobject: support passing in variables for synthetic uevents")
-Signed-off-by: Xia Fukun <xiafukun@huawei.com>
----
-v4 -> v5:
-- Fixed build errors and warnings, and retested the patch.
-
-v3 -> v4:
-- Refactor the function to be more obviously correct and readable.
----
- lib/kobject_uevent.c | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
-
-diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
-index 7c44b7ae4c5c..1ec20a7d3d45 100644
---- a/lib/kobject_uevent.c
-+++ b/lib/kobject_uevent.c
-@@ -64,9 +64,8 @@ static int kobject_action_type(const char *buf, size_t count,
- 			       const char **args)
- {
- 	enum kobject_action action;
--	size_t count_first;
- 	const char *args_start;
--	int ret = -EINVAL;
-+	int i, ret = -EINVAL;
- 
- 	if (count && (buf[count-1] == '\n' || buf[count-1] == '\0'))
- 		count--;
-@@ -75,23 +74,22 @@ static int kobject_action_type(const char *buf, size_t count,
- 		goto out;
- 
- 	args_start = strnchr(buf, count, ' ');
--	if (args_start) {
--		count_first = args_start - buf;
-+	if (args_start)
- 		args_start = args_start + 1;
--	} else
--		count_first = count;
- 
--	for (action = 0; action < ARRAY_SIZE(kobject_actions); action++) {
--		if (strncmp(kobject_actions[action], buf, count_first) != 0)
--			continue;
--		if (kobject_actions[action][count_first] != '\0')
--			continue;
--		if (args)
--			*args = args_start;
--		*type = action;
--		ret = 0;
--		break;
--	}
-+	/* Use sysfs_match_string() to replace the fragile and convoluted loop */
-+	i = sysfs_match_string(kobject_actions, buf);
-+
-+	if (i < 0)
-+		return ret;
-+
-+	action = i;
-+
-+	if (args)
-+		*args = args_start;
-+
-+	*type = action;
-+	ret = 0;
- out:
- 	return ret;
- }
--- 
-2.17.1
-
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
