@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A1E7046B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC277046BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjEPHmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
+        id S231419AbjEPHnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbjEPHmH (ORCPT
+        with ESMTP id S230005AbjEPHm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:42:07 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1681BEE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:42:05 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so4324860a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684222924; x=1686814924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gZXzXb1KfBobQ3/S5Ajx1vdxSIw+IsxbJT3mEJpFQFk=;
-        b=SyW/B3o1Cvhb+mnJ/X5yMx1qFyuPznvCd95LH0MsgEjf8ckxW9z/DCxKplt4MsaoRS
-         RuVhDobvymXJVu+VrxNAN/FcmW12+a+YA0MKFY/qn4+vw9+WchqnCPaDsW8YgOgPkNnL
-         JgH2Pm/HxTZzlAvk6v3Q764WbWHhe/vi4hz4InorUwn/WJBw8jzTkmGnaKjcYAD+71Po
-         h4qd1qPJ8WGQgYDGgZkQDFJOH8uAf3nc+VKeGZL8ZIGglpCuS9q+74lOfvwqKQfJ5652
-         PUClBj2Qe03YNN3tNae+9rrzgvH0GZdv4+UCxsDPICRYIkCGdmpEAKC700ZobWwaKgJ0
-         ZJyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684222924; x=1686814924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZXzXb1KfBobQ3/S5Ajx1vdxSIw+IsxbJT3mEJpFQFk=;
-        b=SQXl4cuagqid0BCT8qpyF/E9sJ1kSCsu9fCdvV9tH+8VLDN17/yKlYHIcRmb8dtWDI
-         4y/DLsaQ+wYpmvXjNv0ktSv4H/FDOOBSRRF0A8oBKjrAZoLnTFTv6aRa4SH7mvTgd9GR
-         PddQObwCt7IeZKMTk6wcDD7yPq4hsJ7a/JT+rMKT7VG3w6FIZS55VhtrQLBYFy0lyJUS
-         VT5LTP7OMyrX+xJaMXy4JLC5qdK7NNYGKWzLXVI6p01dw0jwLxdgpDmWp+AY5DPWRNxx
-         xKFapJCJt+MepdRouaFRSeXk3Hn5JxiHVbQxpCVDOwgpC8nl3vKd3w1NyrvzLAFUWTHB
-         Jkrg==
-X-Gm-Message-State: AC+VfDzmlrkKFuwuGIGa1t3EEDET1Uh8yawCFVYUTqVRIGoPH1qyuGtU
-        wzP8gqgMDHsqEpzz8pelt58law==
-X-Google-Smtp-Source: ACHHUZ7Y5mGt2pCocBPB4HD9MPrv4mCmUe48c3hHfcI7LUxwItGZ2C1O6srfl8JUqAGzVhA6xZEVzQ==
-X-Received: by 2002:aa7:cb11:0:b0:504:a3ec:eacc with SMTP id s17-20020aa7cb11000000b00504a3eceaccmr31502223edt.4.1684222924086;
-        Tue, 16 May 2023 00:42:04 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4d4a:9b97:62e:1439? ([2a02:810d:15c0:828:4d4a:9b97:62e:1439])
-        by smtp.gmail.com with ESMTPSA id n8-20020a056402514800b0050d8aac0a1esm7940579edd.19.2023.05.16.00.42.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 00:42:03 -0700 (PDT)
-Message-ID: <418cc644-80c9-bf5c-d54b-b2d4dd725450@linaro.org>
-Date:   Tue, 16 May 2023 09:42:01 +0200
+        Tue, 16 May 2023 03:42:59 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FB219BF;
+        Tue, 16 May 2023 00:42:57 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 92FBAEBA11;
+        Tue, 16 May 2023 00:42:26 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id haCKqCl3j_pU; Tue, 16 May 2023 00:42:25 -0700 (PDT)
+Message-ID: <a4b3cf3be9f105adcbcad688f8745556eec4d9df.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1684222945; bh=hNjjN4aUowMpetU4hQNKDhkB3mHZChV8fgTpId6EMEY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HLQZwyvPnFKZdXq8EXsL6LEhNYigiSbK0uxDs9KFCOoMnaTt3Bfeei6CqN6932AU6
+         AtsBcbs8iHv3k4E1X6v1gJL8E0AzgdH//vhiecDEvDxbqIb0OXAadMItXcI2sEe7+G
+         BZs7vxGxcv2AwcU8rtuJHbgGQ2g7Jlb5eHKaG1MRIvhOExHOLAvgEUZBZP/E2t1jOW
+         3C0AggK6YgJUvq3BDU0VCg1YK2VJAILXKLD6CUK7dNJRwe4ih6vvh3RZOJWLkKY9/5
+         UfOcrEpRI/c4Lp4RSGu4Tg9PSCfV2pLR2L55g1a9AO/alTA1Im7W/SnxmzL1/DRH9F
+         FMVovSo86KHbQ==
+Subject: Re: [PATCH v2] media: imx: Unstage the imx8mq-mipi-csi2 driver
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     mchehab@kernel.org, shawnguo@kernel.org, festevam@gmail.com,
+        slongerbeam@gmail.com, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, rmfrfs@gmail.com, kernel@pengutronix.de,
+        linux-imx@nxp.com, kernel@puri.sm, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Tue, 16 May 2023 09:42:18 +0200
+In-Reply-To: <20230425094346.GA17841@pendragon.ideasonboard.com>
+References: <20230425090804.2664466-1-martin.kepplinger@puri.sm>
+         <20230425094346.GA17841@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1+deb11u1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Patch v8 0/8] Tegra234 Memory interconnect support
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, helgaas@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-References: <20230511173211.9127-1-sumitg@nvidia.com>
- <a032d9e6-6cb5-1856-9eda-28028bf05633@linaro.org> <ZGJbXg88JOu4aiNe@orome>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZGJbXg88JOu4aiNe@orome>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 18:18, Thierry Reding wrote:
-> On Sun, May 14, 2023 at 12:41:45PM +0200, Krzysztof Kozlowski wrote:
->> On 11/05/2023 19:32, Sumit Gupta wrote:
->>> Hi All,
->>>
->>> Have incorporated the suggestions in v7. Only changed 'patch 1' in v7
->>> to fix possible race when setting 'mc->bpmp' as pointed by Krzysztof.
->>> Requesting to merge the patch series.
->>>
->>
->> Can I apply it since you request it? I asked you long time ago to
->> clearly state dependencies or merging limitations. It's v8 and cover
->> letter still does not state it. Neither the patches do.
+Am Dienstag, dem 25.04.2023 um 12:43 +0300 schrieb Laurent Pinchart:
+> Hi Martin,
 > 
-> I thought we had discussed and agreed to merge this through the Tegra
-> tree, which is why you had provided Acked-bys on all the patches. I was
-> waiting for a final Acked-by on patch 1, since that was the only one
-> still being revised.
+> Thank you for the patch.
 > 
-> If you prefer to merge this, that works for me too. In that case, the
-> series:
+> On Tue, Apr 25, 2023 at 11:08:04AM +0200, Martin Kepplinger wrote:
+> > The imx8mq-mipi-csi2 MIPI CSI-2 receiver driver is used and
+> > maintained.
+> > There is no reason to keep it in staging. The accompanying CSI
+> > bridge
+> > driver that uses it is in drivers/media/platform/nxp as well.
+> > 
+> > One TODO is to get rid of csi_state's "state" and "lock" variables.
+> > Especially make sure suspend/resume is working without them. That
+> > can
+> > very well be worked on from the new location.
+> > 
+> > Also add a MAINTAINERS section for the imx8mq-mipi-csi2 mipi
+> > receiver
+> > driver.
+> > 
+> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 > 
-> Acked-by: Thierry Reding <treding@nvidia.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-I have short memory and that's why we have cover letter. Solves all the
-problems. Let me ack it now.
+Thanks for reviewing Laurent,
 
-Best regards,
-Krzysztof
+Are there any second thoughts to this? If not: It still applies to
+todays' next kernel. Who would be able to queue this up?
+
+(This enables Debian and other distributions to use cameras on imx8mq.)
+
+thanks,
+
+                       martin
 
