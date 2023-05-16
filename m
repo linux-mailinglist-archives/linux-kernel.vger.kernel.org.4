@@ -2,260 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742C170482F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6421704833
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjEPIv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S231717AbjEPIwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjEPIvz (ORCPT
+        with ESMTP id S231418AbjEPIwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:51:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08224494
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684227066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0q0sgrvIYyyF6O9U4atmmjpqy1XO7y6aYy7IyStT97o=;
-        b=bOXL4dppIdJsh36Cp3PEOfZVrrSA7ngj0Ac5IUXtLx5MPvL5yu0BqW42dhD6wHSWI2EKSb
-        4FxhgF16m4F60LL0gXwgcerhYw9LqVTZ2rtmN4AHxiPqwFqPF0aBWqMPEBuvduPpE5shlX
-        6U/bh5xJolx2ympCyKY+2sXvmbTRhu0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-524-vdXUMRg2MDyFYuNK9pomJA-1; Tue, 16 May 2023 04:51:04 -0400
-X-MC-Unique: vdXUMRg2MDyFYuNK9pomJA-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f508c2b301so2938455e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:51:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684227063; x=1686819063;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0q0sgrvIYyyF6O9U4atmmjpqy1XO7y6aYy7IyStT97o=;
-        b=bH6FiSZOne0MDnBHPqKDGuwgnSVBZmzypH5Rr/iyyeKEJ6FzZ/LPjCkpJd0vuYAqEJ
-         wA5iDkKZPcgZqYkj4pVwmLtVawDQWHGGDge3PlcYByYXBgl8SQJ+KMXDxJXICNfjmW77
-         xBFVw1vgTxjYXom9ERlOXWX92W957XBibsx9yo5/8bFrKLgjCE/eNc2YsO7Wm6wX7Qco
-         BgXntul39bVNgrMqZW9cnb+mcsjYBUJXE7Z+jXF2TMyKcJ/BiI2T0p/fX4K2jIpPFIJN
-         obDIx5rGKxvJItXd9t8QvzkP5tlgPlBDP6EWzVLfufIs3oqSCO4JuD54rJi/mFZBPruv
-         wmrA==
-X-Gm-Message-State: AC+VfDz98fZBxmIkWOuEP0IkPLZLbEo0pyUfkhDXnKcG5PWl/zuzqi76
-        Bngd5gRmMBk988yJm3KudgbVpzLd3kyzpM0AJgR3mvd1xniJN9c97u9A8K0Qb7HYbPee9iSJQl0
-        4orOICsNE/MML3mAowPiGtm0g
-X-Received: by 2002:a05:600c:1d86:b0:3f4:2297:f263 with SMTP id p6-20020a05600c1d8600b003f42297f263mr1974958wms.0.1684227063506;
-        Tue, 16 May 2023 01:51:03 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7cN31E0NJMMedOy9G9bqynpyxHDxn4MHX6HVSPUY6wUMCHR1v5LPGN/yP5HOeQW+HYYji4iQ==
-X-Received: by 2002:a05:600c:1d86:b0:3f4:2297:f263 with SMTP id p6-20020a05600c1d8600b003f42297f263mr1974933wms.0.1684227063081;
-        Tue, 16 May 2023 01:51:03 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-225-74.dyn.eolo.it. [146.241.225.74])
-        by smtp.gmail.com with ESMTPSA id s5-20020a7bc385000000b003f19b3d89e9sm1537023wmj.33.2023.05.16.01.51.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 01:51:02 -0700 (PDT)
-Message-ID: <90a2c5891b435c7d3734e46a70cadb56e84865b6.camel@redhat.com>
-Subject: Re: Re: [PATCH net-next] octeontx2-pf: Add support for page pool
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Ratheesh Kannoth <rkannoth@marvell.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>
-Date:   Tue, 16 May 2023 10:51:01 +0200
-In-Reply-To: <MWHPR1801MB191862CDE18A98A89E57E3D9D3799@MWHPR1801MB1918.namprd18.prod.outlook.com>
-References: <20230515055607.651799-1-rkannoth@marvell.com>
-         <c50a0969-4b17-f2c2-6ad6-b085b8ac4043@huawei.com>
-         <MWHPR1801MB191862CDE18A98A89E57E3D9D3799@MWHPR1801MB1918.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 04:52:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CB34C0E;
+        Tue, 16 May 2023 01:52:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DFD063663;
+        Tue, 16 May 2023 08:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90387C433D2;
+        Tue, 16 May 2023 08:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684227119;
+        bh=5i87WjgwyMiViOIMguz296sht10SHl9HYvunIq8Fdz4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QLNhcuAENyPWj8HBP1xQi92yQxaGrmxituQp8obI3cx7BjaPVB9+qsvvsvlI4Nqgf
+         u9K1wOfF+YfKEf4fhK3iI5ee+6qgGb8I9l8eonvaN4PeSuzlq+BzFeB/NuzdKw45tc
+         fn5rSwzJFYbqRvRD2T0Bike6LbN5JyhXXNm+dD+kZ3XAydlEsduQ9US8S7kqe35Cmi
+         nOjb9Wew+jxCiWaQv9ICqZTPNKMpaXCUsqk/2ytILmk5a7V6VPJtoIPI+sZblVbsoS
+         l7YSO3KKqTC7c5miN190ZnZXEcXB6xx43fCS6g99KF/COv9tKlP9rtCkDbmUVtCR1M
+         pCyqIxfYS9kmA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pyqPV-00FTKi-5E;
+        Tue, 16 May 2023 09:51:57 +0100
+Date:   Tue, 16 May 2023 09:51:56 +0100
+Message-ID: <86h6scmzf7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
+In-Reply-To: <20230515112554.GA10825@google.com>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+        <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+        <86o7mpmvqq.wl-maz@kernel.org>
+        <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+        <86mt29mt2m.wl-maz@kernel.org>
+        <20230515112554.GA10825@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lee@kernel.org, ckeepax@opensource.cirrus.com, broonie@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, patches@opensource.cirrus.com, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-16 at 03:36 +0000, Ratheesh Kannoth wrote:
->=20
-> > ....
-> > > @@ -1170,15 +1199,24 @@ void otx2_free_aura_ptr(struct otx2_nic
-> > > *pfvf,
-> > int type)
-> > > =C2=A0	/* Free SQB and RQB pointers from the aura pool */
-> > > =C2=A0	for (pool_id =3D pool_start; pool_id < pool_end;
-> > > pool_id++) {
-> > > =C2=A0		iova =3D otx2_aura_allocptr(pfvf, pool_id);
-> > > +		pool =3D &pfvf->qset.pool[pool_id];
-> > > =C2=A0		while (iova) {
-> > > =C2=A0			if (type =3D=3D AURA_NIX_RQ)
-> > > =C2=A0				iova -=3D OTX2_HEAD_ROOM;
-> > >=20
-> > > =C2=A0			pa =3D otx2_iova_to_phys(pfvf-
-> > > >iommu_domain,
-> > iova);
-> > > -			dma_unmap_page_attrs(pfvf->dev, iova,
-> > > size,
-> > > -					     DMA_FROM_DEVICE,
-> > > -					   =20
-> > > DMA_ATTR_SKIP_CPU_SYNC);
-> > > -
-> > > 			put_page(virt_to_page(phys_to_virt(pa)));
-> > > +			page =3D virt_to_page(phys_to_virt(pa));
-> >=20
-> > virt_to_page() seems ok for order-0 page allocated from page pool
-> > as it does
-> > now, but it may break for order-1+ page as
-> > page_pool_put_page() expects head page of compound page or base
-> > page.
-> > Maybe add a comment for that or use virt_to_head_page() explicitly.
-> Thanks !!.=20
-> >=20
-> > > +
-> > > +			if (pool->page_pool) {
-> > > +				page_pool_put_page(pool-
-> > > >page_pool,
-> > page, size, true);
-> >=20
-> > page_pool_put_full_page() seems more appropriate here, as the
-> > PP_FLAG_DMA_SYNC_DEV flag is not set, even if it is set, it seems
-> > the whole
-> > page need to be synced instead of a frag.
-> Agree.=20
-> >=20
-> >=20
-> > > +			} else {
-> > > +				dma_unmap_page_attrs(pfvf->dev,
-> > > iova,
-> > size,
-> > > +						   =20
-> > > DMA_FROM_DEVICE,
-> > > +
-> > DMA_ATTR_SKIP_CPU_SYNC);
-> > > +
-> > > +				put_page(page);
-> > > +			}
-> > > +
-> > > =C2=A0			iova =3D otx2_aura_allocptr(pfvf,
-> > > pool_id);
-> > > =C2=A0		}
-> > > =C2=A0	}
-> > > @@ -1196,6 +1234,8 @@ void otx2_aura_pool_free(struct otx2_nic
-> > > *pfvf)
-> > > =C2=A0		pool =3D &pfvf->qset.pool[pool_id];
-> > > =C2=A0		qmem_free(pfvf->dev, pool->stack);
-> > > =C2=A0		qmem_free(pfvf->dev, pool->fc_addr);
-> > > +		page_pool_destroy(pool->page_pool);
-> > > +		pool->page_pool =3D NULL;
-> > > =C2=A0	}
-> > > =C2=A0	devm_kfree(pfvf->dev, pfvf->qset.pool);
-> > > =C2=A0	pfvf->qset.pool =3D NULL;
-> > > @@ -1279,8 +1319,10 @@ static int otx2_aura_init(struct otx2_nic
-> > > *pfvf, int aura_id,  }
-> > >=20
-> > > =C2=A0static int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
-> > > -			  int stack_pages, int numptrs, int
-> > > buf_size)
-> > > +			  int stack_pages, int numptrs, int
-> > > buf_size,
-> > > +			  int type)
-> > > =C2=A0{
-> > > +	struct page_pool_params pp_params =3D { 0 };
-> > > =C2=A0	struct npa_aq_enq_req *aq;
-> > > =C2=A0	struct otx2_pool *pool;
-> > > =C2=A0	int err;
-> > > @@ -1324,6 +1366,22 @@ static int otx2_pool_init(struct otx2_nic
-> > > *pfvf,
-> > u16 pool_id,
-> > > =C2=A0	aq->ctype =3D NPA_AQ_CTYPE_POOL;
-> > > =C2=A0	aq->op =3D NPA_AQ_INSTOP_INIT;
-> > >=20
-> > > +	if (type !=3D AURA_NIX_RQ) {
-> > > +		pool->page_pool =3D NULL;
-> > > +		return 0;
-> > > +	}
-> > > +
-> > > +	pp_params.flags =3D PP_FLAG_PAGE_FRAG | PP_FLAG_DMA_MAP;
-> > > +	pp_params.pool_size =3D numptrs;
-> > > +	pp_params.nid =3D NUMA_NO_NODE;
-> > > +	pp_params.dev =3D pfvf->dev;
-> > > +	pp_params.dma_dir =3D DMA_FROM_DEVICE;
-> > > +	pool->page_pool =3D page_pool_create(&pp_params);
-> > > +	if (!pool->page_pool) {
-> > > +		netdev_err(pfvf->netdev, "Creation of page pool
-> > > failed\n");
-> > > +		return -EFAULT;
-> > > +	}
-> > > +
-> > > =C2=A0	return 0;
-> > > =C2=A0}
-> > >=20
-> > > @@ -1358,7 +1416,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic
-> > > *pfvf)
-> > >=20
-> > > =C2=A0		/* Initialize pool context */
-> > > =C2=A0		err =3D otx2_pool_init(pfvf, pool_id, stack_pages,
-> > > -				     num_sqbs, hw->sqb_size);
-> > > +				     num_sqbs, hw->sqb_size,
-> > > AURA_NIX_SQ);
-> > > =C2=A0		if (err)
-> > > =C2=A0			goto fail;
-> > > =C2=A0	}
-> > > @@ -1421,7 +1479,7 @@ int otx2_rq_aura_pool_init(struct otx2_nic
-> > > *pfvf)
-> > > =C2=A0	}
-> > > =C2=A0	for (pool_id =3D 0; pool_id < hw->rqpool_cnt; pool_id++) {
-> > > =C2=A0		err =3D otx2_pool_init(pfvf, pool_id, stack_pages,
-> > > -				     num_ptrs, pfvf->rbsize);
-> > > +				     num_ptrs, pfvf->rbsize,
-> > > AURA_NIX_RQ);
-> > > =C2=A0		if (err)
-> > > =C2=A0			goto fail;
-> > > =C2=A0	}
-> >=20
-> > ...
-> >=20
-> > > diff --git
-> > > a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> > > b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> > > index 7045fedfd73a..df5f45aa6980 100644
-> > > --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> > > +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-> > > @@ -217,9 +217,10 @@ static bool otx2_skb_add_frag(struct
-> > > otx2_nic
-> > *pfvf, struct sk_buff *skb,
-> > > =C2=A0		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
-> > > page,
-> > > =C2=A0				va - page_address(page) + off,
-> > > =C2=A0				len - off, pfvf->rbsize);
-> > > -
-> > > +#ifndef CONFIG_PAGE_POOL
-> >=20
-> > Most driver does 'select PAGE_POOL' in config when adding page pool
-> > support, is there any reason it does not do it here?
-> We thought about it. User should be able to use the driver without
-> PAGE_POOL support.=20
+On Mon, 15 May 2023 12:25:54 +0100,
+Lee Jones <lee@kernel.org> wrote:
+> 
+> On Fri, 12 May 2023, Marc Zyngier wrote:
+> 
+> > On Fri, 12 May 2023 16:39:33 +0100,
+> > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > > 
+> > > On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
+> > > > On Fri, 12 May 2023 13:28:35 +0100,
+> > > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
+> > > > > 
+> > > > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> > > > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> > > > > for portable applications. It provides a high dynamic range, stereo
+> > > > > DAC for headphone output, two integrated Class D amplifiers for
+> > > > > loudspeakers, and two ADCs for wired headset microphone input or
+> > > > > stereo line input. PDM inputs are provided for digital microphones.
+> > > > > 
+> > > > > The IRQ chip provides IRQ functionality both to other parts of the
+> > > > > cs42l43 device and to external devices that wish to use its IRQs.
+> > > > 
+> > > > Sorry, but this isn't much of an interrupt controller driver. A modern
+> > > > interrupt controller driver is firmware-driven (DT or ACPI, pick your
+> > > > poison), uses irq domains, and uses the irqchip API.
+> > > > 
+> > > 
+> > > Apologies but I really need a little help clarifying the issues
+> > > here. I am totally happy to fix things up but might need a couple
+> > > pointers.
+> > > 
+> > > 1) uses the irqchip API / uses irq domains
+> > > 
+> > > The driver does use both the irqchip API and domains, what
+> > > part of the IRQ API are we not using that we should be?
+> > > 
+> > > The driver registers an irq domain using
+> > > irq_domain_create_linear.  It requests its parent IRQ using
+> > > request_threaded_irq. It passes IRQs onto the devices requesting
+> > > IRQs from it using handle_nested_irq and irq_find_mapping.
+> > > 
+> > > Is the objection here that regmap is making these calls for us,
+> > > rather than them being hard coded into this driver?
+> > 
+> > That's one of the reasons. Look at the existing irqchip drivers: they
+> > have nothing in common with yours. The regmap irqchip abstraction may
+> > be convenient for what you are doing, but the result isn't really an
+> > irqchip driver. It is something that is a small bit of a larger device
+> > and not an interrupt controller driver on its own. The irqchip
+> > subsystem is there for "first class" interrupt controllers.
+> 
+> I'm not aware of another subsystem that deals with !IRQChip level IRQ
+> controllers.  Where do simple or "second class" interrupt controllers
+> go?
 
-Uhm... the above looks like a questionable choice, as page pull is a
-small infra, and the performance delta should be relevant.
+This isn't an interrupt controller. This is internal signalling, local
+to a single component that has been artificially broken into discrete
+bits, including an interrupt controller. The only *real* interrupts
+here are the GPIOs.
 
-Anyway if you really want to use such strategy, please be consistent
-and guard any relevant chunck of code with compiler guards. Likely it
-would be better providing dummy helpers for the few page_pool functions
-still missing them when !CONFIG_PAGE_POOL
+I'm happy to see an interrupt controller for the GPIOs. But the rest
+is just internal muck that doesn't really belong here. Where should it
+go? Together with the rest of the stuff that manages the block as a
+whole. Which looks like the MFD subsystem to me.
 
->=20
-Cheers,
+Thanks,
 
-Paolo
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.
