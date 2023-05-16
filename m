@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3288B7053BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398D17053C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjEPQ2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S230181AbjEPQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjEPQ2B (ORCPT
+        with ESMTP id S230166AbjEPQ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:28:01 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A1C1FDC;
-        Tue, 16 May 2023 09:27:44 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GFIIiQ012006;
-        Tue, 16 May 2023 18:27:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=udGhMp0O1RByLfJX0yGSSTgRBYNdT/tj2/Vqssv7rUQ=;
- b=wGS2V22FJvSUHZJ+1N42FintCjkXvCVioWPRDWbOFZMKfGnzD440SjC78P2z9hjt3lXo
- gVGi5IdUsFdu5JhQJAgCdD1Moy+4CPD4vPjbxqGZNg+XjHQcxxBxIFSnCD86b/pKvJv/
- O+WMwmfAymAFXO//I0d+kH3EJZFApXUrTJ9+3ouC5X2yxw793IK5lcFO9VrUtYiwCm1n
- VnFWGPilUHvDxs9y1IA4VgHOhemBgCPo4D4tcXFdEFt8pme5zl/WUe1Kc+4HchXB7Paw
- z9HgsPcSUDe3XSr9Zgbkz2sHwWsxCNxBt55ttUiUJO2kKXEc8nXrviiqpz3h6ATikOUS rg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qkgqx2dre-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 18:27:35 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BEC1910002A;
-        Tue, 16 May 2023 18:27:33 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B1AE4235F07;
-        Tue, 16 May 2023 18:27:33 +0200 (CEST)
-Received: from [10.252.0.230] (10.252.0.230) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 16 May
- 2023 18:27:33 +0200
-Message-ID: <7839b9dc-0f33-0931-a552-ba4697f64150@foss.st.com>
-Date:   Tue, 16 May 2023 18:27:32 +0200
+        Tue, 16 May 2023 12:28:16 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E5083D0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:27:53 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f13ef4ad91so17213557e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684254471; x=1686846471;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5oIDovYmdir1hRdagWnu4jSmI2T1nqPjTwi5YwOyxgA=;
+        b=ctlfHIfy/pnyBqKUcxnftaxk1UUJS2eFiOvHeGUtK07L7Tf1jD8ABLBEzvDeX93Dpy
+         +QFBrqCddN0S7YK+j/O6496/pv7sQTnprUsYgiybABwctrDzzmbEC3uhSzTJsr0Jfedh
+         5jbiXrUsw211upKE6NKNoAP+/km28mcGxUYBl8i0gPf5+25PwyuMR1jb0+UoynGK73Y9
+         GrmjUojicvodTCbuUyCcughzt6QajjyjM3O4BCiuXP+/FPVrAwhFSpel6sn2NFDyy95y
+         fuXtikpGWRkZAsbKXmNXB0lLG6O/aXLXXZK1bgP/9aF8pwtIC1/WYT8O6Hxx50cMKyaM
+         I94g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684254471; x=1686846471;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5oIDovYmdir1hRdagWnu4jSmI2T1nqPjTwi5YwOyxgA=;
+        b=K5KgFZ1JUdkMTU/smWukv3ofN5rs53ooP8fbwUSxXRDRTXvGtkTqu70fSf4pLf9yNQ
+         fQsYLP3wvh4XOm8vVo+kz1kEn584K5nC7CUH/uo08wqzrZVKNLFFo7Pk/j261mQQyAAD
+         +5lrs229HQN9kkvU4ZISnQ1e8u1vRuA+uFs9VKTe11sOIbT7a4TeUevWsvkZldz5xU0x
+         Gs3dYJYNDt5/U5z2nk1L07b+W02HgNo2NSKSEDqM+0xMWeuZSFe4GLpnkTcHJAsmgrAy
+         qplp88okVQfz/S4ElxKtk1EZCcYdtgbOf8bbw3RXZbMKKXjXcQ/MxdcFyOYPUFrp4b+8
+         F6Zw==
+X-Gm-Message-State: AC+VfDyy1V6xp3/8fMDlVCnbhsRz2iPk8e+Qoy5GO64YAnakaVsn+oO0
+        jrfK7QxLxOvsKuVbydWu97TR+w==
+X-Google-Smtp-Source: ACHHUZ4AVD8Q+jW2q8EIFDC2FRD+P++kfUUF24+pF6SuIp8fyLiIRxpYisuG978FxEBZUtcaNm5JCA==
+X-Received: by 2002:a19:5214:0:b0:4f3:789a:b8a0 with SMTP id m20-20020a195214000000b004f3789ab8a0mr3194973lfb.18.1684254470866;
+        Tue, 16 May 2023 09:27:50 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id h18-20020a05651211d200b004f138c4de81sm3034974lfr.149.2023.05.16.09.27.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 09:27:50 -0700 (PDT)
+Message-ID: <67d1d171-d372-a11e-dc9a-73cc698e67a1@linaro.org>
+Date:   Tue, 16 May 2023 18:27:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH] ARM: dts: stm32: remove typec port dtbs_check warning
- on stm32mp15xx-dkx
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sm8550-qrd: add display and
+ panel
 Content-Language: en-US
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230412151332.3037845-1-fabrice.gasnier@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230412151332.3037845-1-fabrice.gasnier@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230516154539.238655-1-krzysztof.kozlowski@linaro.org>
+ <20230516154539.238655-3-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230516154539.238655-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.0.230]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_08,2023-05-16_01,2023-02-09_01
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,66 +83,113 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 4/12/23 17:13, Fabrice Gasnier wrote:
-> According to usb-connector.yaml, typec connector should always use:
-> - ports property
-> - with port@0 (required).
-> This is also true for a single HS port. This removes dtbs_check warning:
-> stusb1600@28: connector: Unevaluated properties are not allowed ('port'
-> was unexpected)
-> 
-> Downside is it introduces another warning when building with W=1:
-> 
-> Warning (graph_child_address): /soc/i2c@5c002000/stusb1600@28/connector/
-> ports: graph node has single child node 'port@0', #address-cells
-> /#size-cells are not necessary
-> 
-> By removing #address-cells/#size-cells as suggested, another couple of
-> W=1 warning shows up:
-> Warning (avoid_default_addr_size): /soc/i2c@5c002000/stusb1600@28/
-> connector/ports/port@0: Relying on default #address-cells value
-> Warning (avoid_default_addr_size): /soc/i2c@5c002000/stusb1600@28/
-> connector/ports/port@0: Relying on default #size-cells value
-> 
-> Is there a clean way or necessary change to reach a clean build and clean
-> dtbs_check ?
-> Maybe this kind of concern has already been addressed ?
-> As far as I understand, the OF graph allows a single port {} node (e.g.
-> code being reworked here). Could this be added in relevant dtschema, to
-> address the single HS port use case (usb-connector.yaml) ?
-> 
 
-Rob, Krzysztof, do you an idea to figure out this issue ?
-
-Thanks in advance
-Alex
-
-
-> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+On 16.05.2023 17:45, Krzysztof Kozlowski wrote:
+> Enable Display Subsystem with Visionox VTDR6130 Panel (same as on
+> MTP8550).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
->   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-> index cefeeb00fc22..41e79c8cc752 100644
-> --- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-> @@ -259,9 +259,14 @@ connector {
->   			power-role = "dual";
->   			typec-power-opmode = "default";
->   
-> -			port {
-> -				con_usbotg_hs_ep: endpoint {
-> -					remote-endpoint = <&usbotg_hs_ep>;
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +				port@0 {
-> +					reg = <0>;
-> +					con_usbotg_hs_ep: endpoint {
-> +						remote-endpoint = <&usbotg_hs_ep>;
-> +					};
->   				};
->   			};
->   		};
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+> 
+> Context in the patch depends on:
+> 1. https://lore.kernel.org/linux-arm-msm/20230516133011.108093-1-krzysztof.kozlowski@linaro.org/T/#t
+> 2. https://lore.kernel.org/linux-arm-msm/20230512160452.206585-1-krzysztof.kozlowski@linaro.org/
+> 
+> Changes in v2:
+> 1. dispcc is enabled in DTSI.
+> 2. Re-order pinctrl and regulators.
+> 3. Drop mdp.
+> ---
+>  arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 68 +++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> index 30b36a149125..ade6ba53ae6b 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> @@ -431,6 +431,46 @@ &gcc {
+>  		 <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
+>  };
+>  
+> +&mdss {
+> +	status = "okay";
+> +};
+> +
+> +&mdss_dsi0 {
+> +	vdda-supply = <&vreg_l3e_1p2>;
+> +	status = "okay";
+> +
+> +	panel@0 {
+> +		compatible = "visionox,vtdr6130";
+> +		reg = <0>;
+> +
+> +		pinctrl-0 = <&sde_dsi_active>, <&sde_te_active>;
+> +		pinctrl-1 = <&sde_dsi_suspend>, <&sde_te_suspend>;
+> +		pinctrl-names = "default", "sleep";
+> +
+> +		vci-supply = <&vreg_l13b_3p0>;
+> +		vdd-supply = <&vreg_l11b_1p2>;
+> +		vddio-supply = <&vreg_l12b_1p8>;
+> +
+> +		reset-gpios = <&tlmm 133 GPIO_ACTIVE_LOW>;
+> +
+> +		port {
+> +			panel0_in: endpoint {
+> +				remote-endpoint = <&mdss_dsi0_out>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&mdss_dsi0_out {
+> +	remote-endpoint = <&panel0_in>;
+> +	data-lanes = <0 1 2 3>;
+> +};
+> +
+> +&mdss_dsi0_phy {
+> +	vdds-supply = <&vreg_l1e_0p88>;
+> +	status = "okay";
+> +};
+> +
+>  &pcie_1_phy_aux_clk {
+>  	status = "disabled";
+>  };
+> @@ -532,6 +572,34 @@ wcd_tx: codec@0,3 {
+>  &tlmm {
+>  	gpio-reserved-ranges = <32 8>;
+>  
+> +	sde_dsi_active: sde-dsi-active-state {
+> +		pins = "gpio133";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-disable;
+> +	};
+> +
+> +	sde_dsi_suspend: sde-dsi-suspend-state {
+> +		pins = "gpio133";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	sde_te_active: sde-te-active-state {
+> +		pins = "gpio86";
+> +		function = "mdp_vsync";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	sde_te_suspend: sde-te-suspend-state {
+> +		pins = "gpio86";
+> +		function = "mdp_vsync";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+>  	wcd_default: wcd-reset-n-active-state {
+>  		pins = "gpio108";
+>  		function = "gpio";
