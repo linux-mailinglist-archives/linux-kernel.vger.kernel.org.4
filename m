@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE6B70579D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E382D7057A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjEPTlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S230056AbjEPTml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjEPTle (ORCPT
+        with ESMTP id S229938AbjEPTmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:41:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CF5AD13;
-        Tue, 16 May 2023 12:41:10 -0700 (PDT)
+        Tue, 16 May 2023 15:42:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540BC76AF;
+        Tue, 16 May 2023 12:42:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99DB16324B;
-        Tue, 16 May 2023 19:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31695C4339B;
-        Tue, 16 May 2023 19:40:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDD426340C;
+        Tue, 16 May 2023 19:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01CDFC433D2;
+        Tue, 16 May 2023 19:42:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684266022;
-        bh=jJJcduVZoL7FA07spYoM0rBgXI6P51X+u5P3BZBB8fU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VvSe0V1IjrV/xFL3ACCeditJS5NKMhIffRaUX/X6MOSnLt3NG4iN/7P07PEq9pQtu
-         mgSLVxphCbj7fdh/UKsfk4HjiIZn3RbHL2pzJsNvwWK9RGRlnkdKkt/raraPfB1sV7
-         daSCbdfM8GNCmhkkqjzctsDV1Za66AzuIgNvxQey4QHzPIKUBL4pjQqIfFUKPRKSgm
-         hqkWcOL5VzJqBx02Wp1bdFEUVZVM1sydcwWi5ZYIcpGKU5hiP2BLDNwn8jOYCFS6fC
-         PuGngq4gX5q3w8wm49Uba4ldqZPo4CoWWIPblDRg3VnuR8EO4m4GiCOWyoqIPyghap
-         IGuGelICq4oJA==
+        s=k20201202; t=1684266139;
+        bh=5lvCP4bPSOrgTZv7kSqqa1Lk3TnQEcnuBUwkjntOlBw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sGA1G0BIX4VM0STtkY1VwQj3jrY3tVJHulInpr9gDGJUF3jOd3lNFrcIrzwM8ugtV
+         RLRTSLD+ZcLMVVbOOvjSh2l+22yPCuJtPOID4cM1qUW0n06BMh5n9BCV8HYAqiTQDW
+         wxN81EThZVxFIn9XWcHduKuVkBLdLH2mJkdJ9WjIPTcxgLhz2rEhP8Nw01l2iPsX20
+         V/qDU83w4Pbp9H+7FZPij4usjaOYHce36PuZL/5ZPOpPeT5t7idjpHkPbLE7ZcNKI8
+         G6UkDWbj5r97z28djwWHPSVAFXd+cKnmrbiSizfpZTJ/YzEGVu/1ko4r/2jn2wDfNk
+         kAkjc2JXeL9ig==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] mips: asm-offsets: add missing prototypes
-Date:   Tue, 16 May 2023 21:39:43 +0200
-Message-Id: <20230516194000.548487-2-arnd@kernel.org>
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH] radix-tree: move declarations to header
+Date:   Tue, 16 May 2023 21:41:54 +0200
+Message-Id: <20230516194212.548910-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516194000.548487-1-arnd@kernel.org>
-References: <20230516194000.548487-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,139 +55,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Building with -Werror and W=1 fails entirely because of warnings in
-asm-offsets.c:
+The xarray.c file contains the only call to radix_tree_node_rcu_free(),
+and it comes with its own extern declaration for it. This means the
+function definition causes a missing-prototype warning:
 
-arch/mips/kernel/asm-offsets.c:26:6: error: no previous prototype for 'output_ptreg_defines' [-Werror=missing-prototypes]
-arch/mips/kernel/asm-offsets.c:78:6: error: no previous prototype for 'output_task_defines' [-Werror=missing-prototypes]
-arch/mips/kernel/asm-offsets.c:92:6: error: no previous prototype for 'output_thread_info_defines' [-Werror=missing-prototypes]
-arch/mips/kernel/asm-offsets.c:108:6: error: no previous prototype for 'output_thread_defines' [-Werror=missing-prototypes]
-arch/mips/kernel/asm-offsets.c:136:6: error: no previous prototype for 'output_thread_fpu_defines' [-Werror=missing-prototypes]
+lib/radix-tree.c:288:6: error: no previous prototype for 'radix_tree_node_rcu_free' [-Werror=missing-prototypes]
 
-Nothing actually calls these functions, so just add prototypes to shut
-up the warnings.
+Instead, move the declaration for this function to a new header that
+can be included by both, and do the same for the radix_tree_node_cachep
+variable that has the same underlying problem but does not cause
+a warning with gcc.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/mips/kernel/asm-offsets.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ lib/radix-tree.c | 2 ++
+ lib/radix-tree.h | 8 ++++++++
+ lib/xarray.c     | 6 ++----
+ 3 files changed, 12 insertions(+), 4 deletions(-)
+ create mode 100644 lib/radix-tree.h
 
-diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
-index 40fd4051bb3d..d1b11f66f748 100644
---- a/arch/mips/kernel/asm-offsets.c
-+++ b/arch/mips/kernel/asm-offsets.c
-@@ -23,6 +23,7 @@
+diff --git a/lib/radix-tree.c b/lib/radix-tree.c
+index 049ba132f7ef..1a31065b2036 100644
+--- a/lib/radix-tree.c
++++ b/lib/radix-tree.c
+@@ -27,6 +27,8 @@
+ #include <linux/string.h>
+ #include <linux/xarray.h>
  
- #include <linux/kvm_host.h>
++#include "radix-tree.h"
++
+ /*
+  * Radix tree node cache.
+  */
+diff --git a/lib/radix-tree.h b/lib/radix-tree.h
+new file mode 100644
+index 000000000000..40d5c03e2b09
+--- /dev/null
++++ b/lib/radix-tree.h
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0+
++/* radix-tree helpers that are only shared with xarray */
++
++struct kmem_cache;
++struct rcu_head;
++
++extern struct kmem_cache *radix_tree_node_cachep;
++extern void radix_tree_node_rcu_free(struct rcu_head *head);
+diff --git a/lib/xarray.c b/lib/xarray.c
+index ea9ce1f0b386..2071a3718f4e 100644
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -12,6 +12,8 @@
+ #include <linux/slab.h>
+ #include <linux/xarray.h>
  
-+void output_ptreg_defines(void);
- void output_ptreg_defines(void)
- {
- 	COMMENT("MIPS pt_regs offsets.");
-@@ -75,6 +76,7 @@ void output_ptreg_defines(void)
- 	BLANK();
++#include "radix-tree.h"
++
+ /*
+  * Coding conventions in this file:
+  *
+@@ -247,10 +249,6 @@ void *xas_load(struct xa_state *xas)
  }
+ EXPORT_SYMBOL_GPL(xas_load);
  
-+void output_task_defines(void);
- void output_task_defines(void)
- {
- 	COMMENT("MIPS task_struct offsets.");
-@@ -89,6 +91,7 @@ void output_task_defines(void)
- 	BLANK();
- }
+-/* Move the radix tree node cache here */
+-extern struct kmem_cache *radix_tree_node_cachep;
+-extern void radix_tree_node_rcu_free(struct rcu_head *head);
+-
+ #define XA_RCU_FREE	((struct xarray *)1)
  
-+void output_thread_info_defines(void);
- void output_thread_info_defines(void)
- {
- 	COMMENT("MIPS thread_info offsets.");
-@@ -105,6 +108,7 @@ void output_thread_info_defines(void)
- 	BLANK();
- }
- 
-+void output_thread_defines(void);
- void output_thread_defines(void)
- {
- 	COMMENT("MIPS specific thread_struct offsets.");
-@@ -133,6 +137,7 @@ void output_thread_defines(void)
- }
- 
- #ifdef CONFIG_MIPS_FP_SUPPORT
-+void output_thread_fpu_defines(void);
- void output_thread_fpu_defines(void)
- {
- 	OFFSET(THREAD_FPU, task_struct, thread.fpu);
-@@ -176,6 +181,7 @@ void output_thread_fpu_defines(void)
- }
- #endif
- 
-+void output_mm_defines(void);
- void output_mm_defines(void)
- {
- 	COMMENT("Size of struct page");
-@@ -210,6 +216,7 @@ void output_mm_defines(void)
- }
- 
- #ifdef CONFIG_32BIT
-+void output_sc_defines(void);
- void output_sc_defines(void)
- {
- 	COMMENT("Linux sigcontext offsets.");
-@@ -232,6 +239,7 @@ void output_sc_defines(void)
- #endif
- 
- #ifdef CONFIG_64BIT
-+void output_sc_defines(void);
- void output_sc_defines(void)
- {
- 	COMMENT("Linux sigcontext offsets.");
-@@ -245,6 +253,7 @@ void output_sc_defines(void)
- }
- #endif
- 
-+void output_signal_defined(void);
- void output_signal_defined(void)
- {
- 	COMMENT("Linux signal numbers.");
-@@ -284,6 +293,7 @@ void output_signal_defined(void)
- }
- 
- #ifdef CONFIG_CPU_CAVIUM_OCTEON
-+void output_octeon_cop2_state_defines(void);
- void output_octeon_cop2_state_defines(void)
- {
- 	COMMENT("Octeon specific octeon_cop2_state offsets.");
-@@ -315,6 +325,7 @@ void output_octeon_cop2_state_defines(void)
- #endif
- 
- #ifdef CONFIG_HIBERNATION
-+void output_pbe_defines(void);
- void output_pbe_defines(void)
- {
- 	COMMENT(" Linux struct pbe offsets. ");
-@@ -327,6 +338,7 @@ void output_pbe_defines(void)
- #endif
- 
- #ifdef CONFIG_CPU_PM
-+void output_pm_defines(void);
- void output_pm_defines(void)
- {
- 	COMMENT(" PM offsets. ");
-@@ -341,6 +353,7 @@ void output_pm_defines(void)
- #endif
- 
- #ifdef CONFIG_MIPS_FP_SUPPORT
-+void output_kvm_defines(void);
- void output_kvm_defines(void)
- {
- 	COMMENT(" KVM/MIPS Specific offsets. ");
-@@ -385,6 +398,7 @@ void output_kvm_defines(void)
- #endif
- 
- #ifdef CONFIG_MIPS_CPS
-+void output_cps_defines(void);
- void output_cps_defines(void)
- {
- 	COMMENT(" MIPS CPS offsets. ");
+ static void xa_node_free(struct xa_node *node)
 -- 
 2.39.2
 
