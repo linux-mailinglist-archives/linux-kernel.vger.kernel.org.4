@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D21705641
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89771705647
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjEPSqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
+        id S229464AbjEPSqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjEPSqg (ORCPT
+        with ESMTP id S229635AbjEPSqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:46:36 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF8A7ED5;
-        Tue, 16 May 2023 11:46:35 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34GIkShJ101895;
-        Tue, 16 May 2023 13:46:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684262788;
-        bh=nNBe5P/DBo3Uk1BRjtGrx8bcwS7/b+ZkZy8oqUawqAo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Pj1SqnvECNYa2vLo/1a+QKA6B8qQfLfBqrrVZ4C26GAwMM+lOT5Q2P24BsCk0niX0
-         rshCmWd3/QPb3bDQSTe7row7Jtik50sjFTVG8KCDh6D7C+wOrgM9dveSbqCgZCg5ea
-         BvJ/bxKJ1DGXHbDIQXcfA1uTFiUXxCgI7on9i4yQ=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34GIkSY5094765
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 May 2023 13:46:28 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
- May 2023 13:46:28 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 16 May 2023 13:46:28 -0500
-Received: from lelv0326.itg.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34GIkRGP025014;
-        Tue, 16 May 2023 13:46:27 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH 2/2] dt-bindings: clock: ehrpwm: Remove unneeded syscon compatible
-Date:   Tue, 16 May 2023 13:46:26 -0500
-Message-ID: <20230516184626.154892-2-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516184626.154892-1-afd@ti.com>
-References: <20230516184626.154892-1-afd@ti.com>
+        Tue, 16 May 2023 14:46:49 -0400
+Received: from out-42.mta1.migadu.com (out-42.mta1.migadu.com [IPv6:2001:41d0:203:375::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489F81B5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:46:45 -0700 (PDT)
+Date:   Tue, 16 May 2023 18:46:39 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684262803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CK/p0lkmv/Tqb9sGLpB8/chiSJ3ZIxj/h3TTrpNfdf0=;
+        b=qSWvpu06QCE5s64r+PVFlGYriE800M/aXScyB5KM89Zg+oqn7rzUouemstYn358I7LD1ls
+        5WoW4Zx7WP9gKceNrz60JC7iLfhmswWhHyFEygWlweByUM2sU2vgpUySPZT08qooY1NQMA
+        h9lbI4NSqmSwKFYh1/3EXybhLdC436w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] KVM: arm64: Use TLBI range-based intructions for
+ unmap
+Message-ID: <ZGPPj1AXS0Uah2Ug@linux.dev>
+References: <20230414172922.812640-1-rananta@google.com>
+ <20230414172922.812640-8-rananta@google.com>
+ <ZF5xLrr2tEYdLL1i@linux.dev>
+ <CAJHc60wUu3xB4J8oJ+FCxerDad1TzZLCMgHYGFfv0K-hzC0qmw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJHc60wUu3xB4J8oJ+FCxerDad1TzZLCMgHYGFfv0K-hzC0qmw@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This node's register space is not accessed by any other node, which
-is the traditional use for the "syscon" hint. It looks to have been
-added here to make use of a Linux kernel helper syscon_node_to_regmap().
-The Linux driver now uses a more appropriate helper that does not
-require the hint, so let's remove it from the binding.
+On Tue, May 16, 2023 at 10:21:33AM -0700, Raghavendra Rao Ananta wrote:
+> On Fri, May 12, 2023 at 10:02 AM Oliver Upton <oliver.upton@linux.dev> wrote:
+> > >  int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
+> > >  {
+> > > +     int ret;
+> > > +     struct stage2_unmap_data unmap_data = {
+> > > +             .pgt = pgt,
+> > > +             /*
+> > > +              * If FEAT_TLBIRANGE is implemented, defer the individial PTE
+> > > +              * TLB invalidations until the entire walk is finished, and
+> > > +              * then use the range-based TLBI instructions to do the
+> > > +              * invalidations. Condition this upon S2FWB in order to avoid
+> > > +              * a page-table walk again to perform the CMOs after TLBI.
+> > > +              */
+> > > +             .skip_pte_tlbis = system_supports_tlb_range() &&
+> > > +                                     stage2_has_fwb(pgt),
+> >
+> > Why can't the underlying walker just call these two helpers directly?
+> > There are static keys behind these...
+> >
+> I wasn't aware of that. Although, I tried to look into the
+> definitions, but couldn't understand how static keys are at play here.
+> By any chance are you referring to the alternative_has_feature_*()
+> implementations when checking for cpu capabilities?
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- .../devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml     | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Ah, right, these were recently changed to rely on alternative patching
+in commit 21fb26bfb01f ("arm64: alternatives: add alternative_has_feature_*()").
+Even still, the significance remains as the alternative patching
+completely eliminates a conditional branch on the presence of a
+particular feature.
 
-diff --git a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
-index 66765116aff5..64b8bce5962c 100644
---- a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
-+++ b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
-@@ -16,7 +16,6 @@ properties:
-           - ti,am654-ehrpwm-tbclk
-           - ti,am64-epwm-tbclk
-           - ti,am62-epwm-tbclk
--      - const: syscon
- 
-   "#clock-cells":
-     const: 1
-@@ -33,8 +32,8 @@ additionalProperties: false
- 
- examples:
-   - |
--    ehrpwm_tbclk: syscon@4140 {
--        compatible = "ti,am654-ehrpwm-tbclk", "syscon";
-+    ehrpwm_tbclk: clock@4140 {
-+        compatible = "ti,am654-ehrpwm-tbclk";
-         reg = <0x4140 0x18>;
-         #clock-cells = <1>;
-     };
+Initializing a local with the presence/absence of a feature defeats such
+an optimization.
+
 -- 
-2.39.2
-
+Thanks,
+Oliver
