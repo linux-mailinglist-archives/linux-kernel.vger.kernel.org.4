@@ -2,161 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E85705A10
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3324705A21
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjEPV7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S230127AbjEPWAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjEPV7j (ORCPT
+        with ESMTP id S229578AbjEPWAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:59:39 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F51810EC;
-        Tue, 16 May 2023 14:59:38 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GKRlO9013008;
-        Tue, 16 May 2023 21:59:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6WBOdrp4MoRntPk4JTak4XppU+MY2+sHrZfFMGMjML8=;
- b=DMf+dTPgQgntwEMgqi6ZG+LAhviXPqdFnX6AnIf3JQ5vJ6gWdm34k4EmRFZgL7DkXnLG
- aHVU06r3oI/jq/YHbe6N/28+yDgALEibdjQXmh7wFAaLiii8fce4CjKSqjuAxdn0a67I
- EsuvAPvdXkWreMjBBb5/oI3dZeXcmPlVFxCgtl5KZFF6TksPi19qTzNo1Q1Vdw5bBcom
- gjYaPVDehvbETKzIAcck0PO29ZDCVKBvkkiVUDqKmdVae5HZVhbZFM94iHlfms8Y0lTg
- 0wlQIrAEGPVX9fm6xEUO6c9JE6+50ZTKBN5tmEzHytsmy9VUjFAoyGjcf75B2t+1pSxG 4A== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qm36n21s9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 21:58:53 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GLwqZF022335
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 21:58:52 GMT
-Received: from [10.110.39.6] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 16 May
- 2023 14:58:51 -0700
-Message-ID: <db728b45-473a-e088-7296-160d93d79e0b@quicinc.com>
-Date:   Tue, 16 May 2023 14:58:51 -0700
+        Tue, 16 May 2023 18:00:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B0810EC;
+        Tue, 16 May 2023 15:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684274409; x=1715810409;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/gElHzywUsJHlUOft8PJljOmt4C9JPUiaPG7wwx26iQ=;
+  b=TpNKLP4VK+BdeciInAAjTaVzx9bdrb4F5hQtBpsAuKRhh8ciTS3scwZv
+   gRwtTkGPT5jPlrSrlL16c7m13BX6zo9Flu3FglVTZkgcOsvFzlYsRryvw
+   Ff3ypO/0NS0SxEGrEkyk76lwIk0ToSbo7QPnve6bSZjldXTvt0TbbLJHp
+   SjIvoKVYWSwuKlTgDt2I+7j+FaXoq/Os4dbeTmaOYHEtn5T7S8ryq5nBz
+   nhAdxNUZ2usMeU31q11uSQ94ErusUhRfxvMHFML5F+jiLIYy3c41rmHCv
+   0K2snU1HOxkXjG+j+ua95FFYCMCjJrbkZW7dh6vzPnV/lV/JdTsGvWHvn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="340980067"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="340980067"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 15:00:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="813612412"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="813612412"
+Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 14:59:56 -0700
+Message-ID: <f7b2e758-625a-aafd-d545-bfa6eae513bb@intel.com>
+Date:   Tue, 16 May 2023 14:59:56 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V6 1/3] dt-bindings: sram: qcom,imem: Add Boot Stat region
- within IMEM
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
+ stepping into unaccepted memory
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1683628357.git.quic_schowdhu@quicinc.com>
- <343182748e12b6a4ac57d336405c50e36fc5520c.1683628357.git.quic_schowdhu@quicinc.com>
- <CAA8EJpp2x2OEB2sg+caKmjkDYJp_NJ9mXo85FxTZr-9zRXHNhw@mail.gmail.com>
- <7d397e67-5d56-4975-98af-1ac9746c07f4@app.fastmail.com>
- <CAA8EJpoMGyAJBTw1-=+NT=ysy+cpc4EpJSv1SABJVh2BscdJ+g@mail.gmail.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <CAA8EJpoMGyAJBTw1-=+NT=ysy+cpc4EpJSv1SABJVh2BscdJ+g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 06qlANEolpxD5bkS0wOaTIjr0rpYHE67
-X-Proofpoint-ORIG-GUID: 06qlANEolpxD5bkS0wOaTIjr0rpYHE67
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_12,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- spamscore=0 suspectscore=0 priorityscore=1501 malwarescore=0 phishscore=0
- bulkscore=0 impostorscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305160186
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
+ <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
+ <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
+ <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com>
+ <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
+ <a7550521-65bf-f9af-ddb0-118602a6340c@intel.com>
+ <20230516215210.pviqojbr5o4hd6bb@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230516215210.pviqojbr5o4hd6bb@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/2023 12:17 PM, Dmitry Baryshkov wrote:
-> On Tue, 16 May 2023 at 11:16, Arnd Bergmann <arnd@arndb.de> wrote:
->>
->> On Tue, May 9, 2023, at 13:35, Dmitry Baryshkov wrote:
->>> On Tue, 9 May 2023 at 13:53, Souradeep Chowdhury
->>> <quic_schowdhu@quicinc.com> wrote:
+On 5/16/23 14:52, Kirill A. Shutemov wrote:
+> On Tue, May 16, 2023 at 01:03:32PM -0700, Dave Hansen wrote:
+>> On 5/16/23 11:35, Ard Biesheuvel wrote:
+>>>>> Does this mean that the kernel maps memory before accepting it? As
+>>>>> otherwise, I would assume that such an access would page fault inside
+>>>>> the guest before triggering an exception related to the unaccepted
+>>>>> state.
+>>>> Yes, the kernel maps memory before accepting it (modulo things like
+>>>> DEBUG_PAGEALLOC).
 >>>>
->>>> All Qualcomm bootloaders log useful timestamp information related
->>>> to bootloader stats in the IMEM region. Add the child node within
->>>> IMEM for the boot stat region containing register address and
->>>> compatible string.
->>>
->>> I might have a minor vote here. Is there any reason why you have to
->>> instantiate the device from DT?
->>> It looks like a software interface. Ideally software should not be
->>> described in DT (e.g. this can be instantiated from imem
->>> driver-to-be).
->>
->> There is nothing wrong with describing firmware in DT, if that
->> firmware is part of the platform, we do that for a lot of
->> other bits of firmware.
->>
->> However, in this specific case, many things are wrong with the
->> implementation, and neither the DT binding nor the driver
->> makes sense to me in its current state.
->>
->>>> +  "^stats@[0-9a-f]+$":
->>>> +    type: object
->>>> +    description:
->>>> +      Imem region dedicated for storing timestamps related
->>>> +      information regarding bootstats.
->>>> +
->>>> +    additionalProperties: false
->>>> +
->>>> +    properties:
->>>> +      compatible:
->>>> +        items:
->>>> +          - enum:
->>>> +              - qcom,sm8450-bootstats
->>>> +          - const: qcom,imem-bootstats
->>>> +
->>>> +      reg:
->>>> +        maxItems: 1
->>
->> If I understand this right, this "qcom,imem-bootstats"
->> device serves as an indirection to store additional
->> properties of the system in a memory area, but the description
->> of that area is more complex than its contents, which
->> makes no sense to me.
->>
->> Just create a binding for a firmware node in the devicetree
->> itself, and put the values in properties of that. The first
->> stage firmware can still use the same interface, but the
->> actual loader that assembles the DT can get it out of that
->> and store it in the properties. With that done, there is also
->> no need for a kernel driver, as userspace can just get the
->> values from /sys/firmware/devicetree/ directly.
-> 
-> This sounds good, except the always-present issue of the devices which
-> have already been released. Usually we can not expect a bootloader
-> update for these devices.
+>>> OK, and so the architecture stipulates that prefetching or other
+>>> speculative accesses must never deliver exceptions to the host
+>>> regarding such ranges?
+>> I don't know of anywhere that this is explicitly written.  It's probably
+>> implicit _somewhere_ in the reams of VMX/TDX and base SDM docs, but heck
+>> if I know where it is. 😄
+> It is not specific to TDX: on x86 (and all architectures with precise
+> exceptions) exception handling is delayed until instruction retirement and
+> will not happen if speculation turned out to be wrong. And prefetching
+> never generates exceptions.
 
-Valid point. I don't expect current SOCs supported at upstream to update 
-with the newer bootloader having this feature done through bootloader.
+Not to be Debbie Downer too much here, but it's *totally* possible for
+speculative execution to go read memory that causes you to machine
+check.  We've had such bugs in Linux.
 
----Trilok Soni
+We just happen to be lucky in this case that the unaccepted memory
+exceptions don't generate machine checks *AND* TDX hardware does not
+machine check on speculative accesses that would _just_ violate TDX
+security properties.
 
+You're right for normal, sane exceptions, though.
