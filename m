@@ -2,116 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20297705A02
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B41705A03
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjEPVxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S229814AbjEPVzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjEPVxs (ORCPT
+        with ESMTP id S229611AbjEPVzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:53:48 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5709572AA;
-        Tue, 16 May 2023 14:53:18 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 5195232004ED;
-        Tue, 16 May 2023 17:52:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 16 May 2023 17:52:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-transfer-encoding:content-type:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1684273932; x=1684360332; bh=1mTVN0zWdMUI2lVaj0xdpaB12
-        1fz73d+fGcmjELhUZk=; b=Kl0XuJ/7rIR0raL3yWB6485sHqvMnmL2RGcc3l/D9
-        XK1ozRr20oXtM/pkqnBga8x4OZiLPdkuPeTcya8KxrKOuPaNK5iHbd4Z1EfybFu3
-        0DDU9lqBFLxnxgs2FIk0IkREbJWAQj8SQu69lVMsFNSinDaNr7+6YKEGkl0ArOeL
-        WjkXcV0svcu/tIpvgKROlYgnBURRbckLIi2BheWDrl22IkmeFR2gVtBeLcYiHP+9
-        P4VYisa62yS4Hc8fGJNZur83EFykS5LoZtQBEELJqrPmzbDKV3tnKL1Zg49vLGLP
-        g+CA3o3bvf7hNejFutszhr6Jj5xTXDo23+vvjZCejsIQQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684273932; x=1684360332; bh=1mTVN0zWdMUI2lVaj0xdpaB121fz73d+fGc
-        mjELhUZk=; b=tU+ViBfmK/un/Lo4Z03YcEyAbW/0SFOQJJQx4AsI0E3jnBxx2qh
-        3IhxNCJHYBpozyEtOjb4guShzBj+bzhNjwYnaf8WC/xaaaqmzo8h6WBd/AljRtsX
-        4vwVFQh1hDr8N8xyZzq+0OKOd3AsfE+ePvrvheZMPnbxiS61ULC7E/aL2Z8Xe9Sm
-        P3PSHT4we7zgEtV2JALq1pRJkuUTUVvonLkRNTKfvow6RYAIqHVVr6PZiZ3gW7VW
-        3qphfT70JBf7jMKYx45+krDE9y3XOz3bWfEjd6yyg/ZUUVYiOfT+If7yNuQGsP9Y
-        heX0TB/zA0TetA7lPy5AKDqoxaA7G2KUkig==
-X-ME-Sender: <xms:DPtjZL-ppO_MaUN-_qnvhaoUJQd7rkHmyUEoi-0dzj_bOr2z9j7alg>
-    <xme:DPtjZHv8p1-q2AwHqsQAaJx4GgaJr10Ed5wUDIqlvlk6Ook3C55Mq7afAdX2M9YMb
-    b72fCkW9OVqJEgTvbs>
-X-ME-Received: <xmr:DPtjZJBaIQqCSSJUYo2-_EruuRhrrJ8zmhtSO96wOBsfWPfo2Y9PjkJF2G6YDRc0Jcu9Eg>
+        Tue, 16 May 2023 17:55:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646786EA2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:54:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4627E63FD3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E88EC4339C;
+        Tue, 16 May 2023 21:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684274028;
+        bh=c2XN6cZstCHczarNlQBcFrj20ialrTX30SbvpFfFpPA=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=CVWAx9v832/iGK/cokVtpSu11MPkJz0I0Pfc4Ch/61XeqUtJU2S4lRGhjGJBQdKWe
+         VWmLe7/1D3FLyp+Jd4XT8Em05Rn6e2E1Mk0Zfh5FiZsg0jEtpvQpPrkHhacnzKWujA
+         /U+mdYAIaPHWgtye6ksZGmnxMLEw/aOcs0Ar8Cv0iG+6tfRQ+BAKGm1B0waJLUANmS
+         Gq4w8rgZqFlH4zjKwMQL2RkGtyoqc7aiM8RZWnBkGsO4wMGaceYEqAqz9qGatIQdPs
+         LAssY3krj4b3kIfEAaEEjfxmriuc9BICRVGD29TmwIACowgNCCwdWc8Hu5OTenTjUR
+         QYBzWBIYetZQA==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id EEF2227C0054;
+        Tue, 16 May 2023 17:53:46 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Tue, 16 May 2023 17:53:46 -0400
+X-ME-Sender: <xms:avtjZE2ay_OOWan78jYX-5kEfhvelx64SJhb4VyhQ4i5U4aiIeKQGg>
+    <xme:avtjZPH8QwdGO4_J7haAKUf4qxiCYHUKvx0oonQ6jCMhaL9KePs5DB3QyNjmG65_O
+    NIH1akANXJeGbJfl4Q>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgudeiiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthektddttddtjeenucfhrhhomhepfdfm
-    ihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovh
-    drnhgrmhgvqeenucggtffrrghtthgvrhhnpefgjeeikefffeefvedugfdtkedvhfdttdei
-    feevtdehgefgjeffleelgffggfdvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:DPtjZHdbNOmxf78SUAuooIpu3DuGASNHWhjOdkZqikBlz9nuv7rXVQ>
-    <xmx:DPtjZAOgbxXExWgJrmf5Gvna7DU6dGvROxX4NnMbMDZg2sbus4Qpdw>
-    <xmx:DPtjZJlv9AfGLjQ7NrPr0EWMgpB0Gm5-c3sBZUVYMnDzg_rkeyOFVA>
-    <xmx:DPtjZEIrRpYB0OxexSbAFrh-6ru_OHFmi5WvxTuOf1g7pf3DZvBCNg>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 May 2023 17:52:12 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 480C510C8C1; Wed, 17 May 2023 00:52:10 +0300 (+03)
-Date:   Wed, 17 May 2023 00:52:10 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
- stepping into unaccepted memory
-Message-ID: <20230516215210.pviqojbr5o4hd6bb@box.shutemov.name>
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
- <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
- <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com>
- <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
- <a7550521-65bf-f9af-ddb0-118602a6340c@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7550521-65bf-f9af-ddb0-118602a6340c@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeehveelgedvvedtfeehvdeuieetvdeijeegieeivdffgeeukeff
+    tdefuedvieejvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgvvhhilhdqtghloh
+    gtkhdqthgvshhtrdgttgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
+    ihhlfhhrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqud
+    duiedukeehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrghes
+    lhhinhhugidrlhhuthhordhush
+X-ME-Proxy: <xmx:avtjZM6Qv1CBQSQGkNJpPJzQ5AHORnY9pZIGTsjy0XkzvbLmg1kxoA>
+    <xmx:avtjZN0ndeSJkPyWI8bpvIvhW7Kwk0pZzOem204_mTSA1LPI5ElGdw>
+    <xmx:avtjZHFLsinqRNvZFgpvsJhxmolyyOhA5T8vYTthW9U1ehzn_CZAvg>
+    <xmx:avtjZM4sOPSF30RNkDHpr6bJ-H0C13STsfXTS_5aiC-L80dUZYmTdg>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E6A1531A0063; Tue, 16 May 2023 17:53:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <6d2cf767-a5bb-4df4-bf9c-dcbf3bf82722@app.fastmail.com>
+In-Reply-To: <tencent_4DC4468312A1CB2CA34B0215FAD797D11F07@qq.com>
+References: <tencent_4DC4468312A1CB2CA34B0215FAD797D11F07@qq.com>
+Date:   Tue, 16 May 2023 14:53:24 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Rong Tao" <rtoax@foxmail.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Cc:     "Rong Tao" <rongtao@cestc.cn>, "Ingo Molnar" <mingo@redhat.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86/vdso: Use non-serializing instruction rdtsc
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,30 +86,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 01:03:32PM -0700, Dave Hansen wrote:
-> On 5/16/23 11:35, Ard Biesheuvel wrote:
-> >>> Does this mean that the kernel maps memory before accepting it? As
-> >>> otherwise, I would assume that such an access would page fault inside
-> >>> the guest before triggering an exception related to the unaccepted
-> >>> state.
-> >> Yes, the kernel maps memory before accepting it (modulo things like
-> >> DEBUG_PAGEALLOC).
-> >>
-> > OK, and so the architecture stipulates that prefetching or other
-> > speculative accesses must never deliver exceptions to the host
-> > regarding such ranges?
-> 
-> I don't know of anywhere that this is explicitly written.  It's probably
-> implicit _somewhere_ in the reams of VMX/TDX and base SDM docs, but heck
-> if I know where it is. :)
+On Mon, May 15, 2023, at 11:52 PM, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+>
+> Replacing rdtscp or 'lfence;rdtsc' with the non-serializable instruction
+> rdtsc can achieve a 40% performance improvement with only a small loss of
+> precision.
+>
+> The RDTSCP instruction is not a serializing instruction, but it does wait
+> until all previous instructions have executed and all previous loads are
+> globally visible. The RDTSC instruction is not a serializing instruction.
+> It does not necessarily wait until all previous instructions have been
+> executed before reading the counter.
+>
+> Record the time-consuming of vdso clock_gettime(), pseudo code:
+>
+>     count = 1000 * 1000 * 100;
+>     while (count--)
+>         clock_gettime(CLOCK_REALTIME, &ts);
+>
+> Time-consuming comparison:
+>
+>      Time Consume(ns) | rdtsc_ordered() |  rdtsc()  | Promote
+>     ------------------+-----------------+-----------+---------
+>     Physical Machine  |  1269147289     | 759067324 |   40%
+>      Guest OS (KVM)   |  1756615963     | 995823886 |   43%
+>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
 
-It is not specific to TDX: on x86 (and all architectures with precise
-exceptions) exception handling is delayed until instruction retirement and
-will not happen if speculation turned out to be wrong. And prefetching
-never generates exceptions.
+Out of curiosity, what happens if you apply that patch and run this thing:
 
-But I failed to find right away in 5000+ pages of Intel Software
-Developer’s Manual. :/
+https://git.kernel.org/pub/scm/linux/kernel/git/luto/misc-tests.git/tree/evil-clock-test.cc
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Build it with g++ -O2 and run:
+
+./evil-clock-test -c monotonic
+
+--Andy
