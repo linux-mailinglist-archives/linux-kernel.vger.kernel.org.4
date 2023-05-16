@@ -2,79 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E687054A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B8D7054A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjEPRCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S230440AbjEPREH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjEPRCo (ORCPT
+        with ESMTP id S229644AbjEPREF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:02:44 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200B083EC;
-        Tue, 16 May 2023 10:02:23 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GE7fMQ015581;
-        Tue, 16 May 2023 19:01:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=EEGjMvBwmChywxvRvi7rS3GCQucVoQGQ96IwahsoA5Q=;
- b=rnPxbOSHwO2TIpEiV36gayBM2qIkRyZ7Lm9yeNMl3nyf/YO56dDvdN9nmRH+ARYZncXJ
- chxQzRNF0+GwPltv3+zJoSpa+eeyIG6fj8/NhsZa55VQ7TPzIyMluubHpfpLF95aAfAX
- LQTodchwDIsyreKvVi1zCT2q4xwkJyRqhzePsV3IfjllNyx1apre7nNKbmycAfL3zJ5P
- 5DN1vr9wnx2mDHvC8MKYgZ7jq3AZnwEYAthHXyJdz+MlqrsW+Z+O2RkUA6DhCqzjmqrW
- YinV9MP8sDAMg6dQpUpdp/rzQByw4K4FRgQ7yEbpxqSV5O2ysl+04aeeR/ZHw1YvFM8N uQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qm7tfagke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 19:01:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 336B410002A;
-        Tue, 16 May 2023 19:01:57 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1A10423BDF3;
-        Tue, 16 May 2023 19:01:57 +0200 (CEST)
-Received: from [10.201.21.213] (10.201.21.213) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 16 May
- 2023 19:01:53 +0200
-Message-ID: <33acd8d5-20bf-e39d-85c8-4379f5e7e6ad@foss.st.com>
-Date:   Tue, 16 May 2023 19:01:52 +0200
-MIME-Version: 1.0
+        Tue, 16 May 2023 13:04:05 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2066.outbound.protection.outlook.com [40.107.93.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187A1102;
+        Tue, 16 May 2023 10:04:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TVnjM+f7C2lqDXrixxKHXm+KGToFilkVKG7voHiZJkl9myymf+ObksTsqJnozF3a48KwijkbGmMulU5jst8aJshjfFhaRlmmq0GzwkVngEK/G/c3vidU3CR+RqREa6/+F32qSC06O5u8WuiqatTcnfJvMbxuqkqLC3+2f/4OHFBx+iFS03h4/KQ6PUbRvAw1GtyS2Lm7HaybrIay8mu3JLu6zxOX/fSJWL13kN9uNJreiAyKQYu/z0Is3rRNYqsA1YVVeZF9IB95NxFVu5xUCSn5+aNp3sv1khyH0/Hu0SRA/Ryqc5WRvzW6WjqNZ6Uzfd+ldn1GOG7HX7Rkepu2sA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=69PrBF497gMQGtzXZi1dErDa8PqQHhoZZT/PmP8uQpw=;
+ b=RXKIKSBpRM42cF7kSwgI99SW/ie0iFEGqID8y/tQ6mG+gVVQ3TM2a5MIhrS5x+mdVFD+Gr+4g13Qr6VjzybNkfGKVr8oNI9M5qcwqSg3Vg9IgOy+I6SVz82A9zbaor/ov1xh0FXyBWKYEM+UbReXs5TbdfSEbiHcZODGl2D53b3CuE64JyR2FxddHsYOa3jxskAJSfNguxIeaytwC4jekY95QTspS1f9FA0rCFhwnDP1EJVwnC2xnrcJDtvqHRTkeV2EfuyYCUsYAY0f80Qh3hliNe/ptH/K8FozfC6nzRiQE2vrpwfEfQwoLlHKPMrlPIEZh6uGzZMoERCqqAJvsg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=69PrBF497gMQGtzXZi1dErDa8PqQHhoZZT/PmP8uQpw=;
+ b=quRh28OSYSJ435SWGJhzISIQV0rXhjUo9V4cN7mBFBIhZJZaadrKa8VsKiSsaFFx2AiJfXXxoh2z0IDf9TgfIHqqK829Eqd7KxSyKCG39v5WtzoqIibhjezx+X4RSZhrbvvs8B+yM3xxXekWyWStoDI/52thOg/L9hnSfhIOb+Qmdub9smBDN4PTDJnLl4/rme0GnS15k1WyZZvNM6IBvlQUTr2Az8gzBewG6Olh61Db9VC6GdoxqIoX30UCCfuUDk5ghXS11gY8SlWUJJmQ33PBHxYWjTbc9kByoPHR5Kmq0uZn6pBV8SBgD98g5UI9zLALFhGVj1PlPje5PwS0BA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by DM6PR12MB4465.namprd12.prod.outlook.com (2603:10b6:5:28f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.31; Tue, 16 May
+ 2023 17:04:02 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::e01a:d41e:80b4:7cef]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::e01a:d41e:80b4:7cef%6]) with mapi id 15.20.6387.032; Tue, 16 May 2023
+ 17:04:02 +0000
+Message-ID: <dfb84ac7-cb5f-5631-3f71-7f882300e240@nvidia.com>
+Date:   Tue, 16 May 2023 10:03:59 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/4] ARM: dts: stm32: fix m4_rproc references to use
- SCMI
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v5 1/6] mm/gup: remove unused vmas parameter from
+ get_user_pages()
 Content-Language: en-US
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230512093926.661509-1-arnaud.pouliquen@foss.st.com>
- <20230512093926.661509-5-arnaud.pouliquen@foss.st.com>
- <20c010da-7245-7acf-db2f-991ee2975ea2@foss.st.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <20c010da-7245-7acf-db2f-991ee2975ea2@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.21.213]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_09,2023-05-16_01,2023-02-09_01
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+To:     David Hildenbrand <david@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Xinhui Pan <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian Konig <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <cover.1684097001.git.lstoakes@gmail.com>
+ <b61d5999a4fc6d50b7e073cc3c3efa8fe79bbd94.1684097002.git.lstoakes@gmail.com>
+ <ZGKC9fHoE+kDs0ar@google.com>
+ <b97e8c2a-b629-f597-d011-395071011f1b@redhat.com>
+ <ZGOTadDG/b0904YI@google.com>
+ <7e9651d6-382a-287c-cd08-03762ccce1f7@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <7e9651d6-382a-287c-cd08-03762ccce1f7@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR05CA0095.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::36) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|DM6PR12MB4465:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8eb85184-8d4f-4fed-b250-08db562f8c06
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kQpI8jSlx6im8pDgxB+kchrY6HZIxIR4s8KR1MLTMJb8OXlbeZtzUHOsvwLjps75aLRVy5plPcWOmuG7weVCsunAcsOQYnD6cBw6YxMTltPlmHJLGcub2eVTcr8aLdW1nCLG/28ayAvx6e3ypZ7UCmguaIUhfW4f3LaMbZqfDaCxUvtc2v69+cmvLPAgB2lTtxuip3Ve53hZdtift2A+PGNKWBg0p8RMbyweRcox48rzyK2jXSGcSvBdGfaRWEur0Hrl/dZka7IpL5KDnGirtkkmHt74sB6dbxZoz0E5+qX8vBOVNRDuTUpC69nOGkKwbQfCDIBc2iSyo0/jW19r2QBPk0Rt+PvcKiX1RClJEuUAxtutNAF85nxXSrOL/BqS57U01OuIDBpSRv/a0jImik4KFqJBwPVfd5gXi2xn3Jz2yFJ8DRXMudLmEGbXKCnaauITyTQh6qiVvoVMznNKfDL6nz1q37wpdq49o7JFC4XFdhQGbxIz5XHTJmMeAOLLQF3W/9mdgre8A72mNCOuU5zCDK0wUHx1QYBAiPg/CZdBM7OJN6sBqOL1V31VCbl2XLJzTRIod/duz4Js76EJwXA3IizpLILu/Wsm++4GOL0IIP4FiUeDJuJbH+LFkoUHB+Hop5CVhuDAcmBpjVHKkA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(376002)(396003)(39860400002)(451199021)(83380400001)(2616005)(66946007)(66556008)(66476007)(6486002)(478600001)(6666004)(26005)(107886003)(8676002)(7416002)(54906003)(186003)(110136005)(4744005)(31696002)(6506007)(5660300002)(8936002)(2906002)(86362001)(6512007)(316002)(4326008)(38100700002)(41300700001)(36756003)(53546011)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?STFRTEhianVpQzhyWnFxTjNRR3o1NFpPZ2dUYjNSQ20xUEs2LzlCNUJCQ2NM?=
+ =?utf-8?B?em5tS1Y2bFFidWNvVVpqTjY5bjM1RGlJN1ZTVlYyNmc0bG1ycHRvRkZORjRt?=
+ =?utf-8?B?L0x2aWtGNFRVTGJRcTQ3OXVDRnRodlRsRnBmZkJVNG9Nbnd1SmVVVnlMOTNw?=
+ =?utf-8?B?Z0svQWl6aVl0eFpEVnBaQkZKUWZVYUZ3MHk4aDJXWFRMdjRZTEdUWXFXWWxM?=
+ =?utf-8?B?MkhOdGM0MDR1R0hUTE1UbmcxaHV1WE4veWcvQ0s5UytwN2Z4QjM1UU5sMDVG?=
+ =?utf-8?B?OFNUazdsSUorMnFObEdKZkRMbjV2cDZDOUphblV6VFhtOWhNL3hEYURLczNL?=
+ =?utf-8?B?Y2MrVEVtUjhDdlJKZVd0M2Z5OFJONjRpVjVBS05vQXlCL3ZNU1J4Yk9Hckp1?=
+ =?utf-8?B?UUJ6Q1hwbklDajRhU3djekNtc3VCMzJmd0tqeXYrUkpKYS9OcjFlS1NMRlpv?=
+ =?utf-8?B?N05hZitNanR4QjZleFYyd25IZ0tkdVE1TkszcHpBSzJzN1ZicTVGVDRsdlZW?=
+ =?utf-8?B?bkx2cms4YnJIdXBJTWo1d1h0eGRpWmxOYkM5RTdIbFBiZVdMcjV0eHljbVlG?=
+ =?utf-8?B?TWtWUGlqWFRYMFFxVzBtY2I0SVYraWhHMElMMjlFK0ljNVE1MDZTc0h3Q096?=
+ =?utf-8?B?cWlCdFpZNTZaWjJDOG1FdlhlcnRYcnRHK1NJTC9DUzNtS3RDZnM5QWFHTEJQ?=
+ =?utf-8?B?eTRBLzdkWGNXRmt1U0dzUzhJN004S1FCUy8vcThuRVdFbVhFOGZUb2UyeE1U?=
+ =?utf-8?B?SUJ0ZUlWTXVtU1Vjb0UvSDd4a0V6azZIUGF6SUlpMVJmUm9HTlNlNFIwdmdW?=
+ =?utf-8?B?NGs4ZEZWR0l0SFRaVHRtMmZXd2w1Rmk2NGNmMEFsOVljc01XMXRpaVBMNGNq?=
+ =?utf-8?B?K2JRNHh2Q2xZT2d2TFhZenp1UVhmcHBZTzNFWldKK1FHTWFjaDY0NVY2YXg0?=
+ =?utf-8?B?YS9YaUJ5L01jN3A4YU1pMEhWT1VKNGljYklWN1lzRzE3UzI3Z1ZEakowc3Ex?=
+ =?utf-8?B?enVnQ3NteDVXQW1lb1lmSUdrSVl3S0VOVkRNY0ZtYXFENkFVc2d2TlBUanB0?=
+ =?utf-8?B?YnBsTjgrN0h1dEZ4MHhZSjUwdDRQUzFHcEJRMXVlTVo2dGNCQkY3VFd3ckQ5?=
+ =?utf-8?B?d2hiS2JnUTZNS2YyODdDbmNhZkhZYjlhcE9MUjFLUTdhbHBKbHU3SGJIeHVX?=
+ =?utf-8?B?eW1adVJaNndzSXhkUmxHWkVkNlJwSWRUcG9vRFBjTHFUWjZYOFJGZlg0WFR3?=
+ =?utf-8?B?MVBHQmxLWE9SUW9NZW9yUVYrbzkrLzdFNXBUWE5KOUdremxxNnFBbkJwTjgz?=
+ =?utf-8?B?NzUySVlIVDBBWjZ5ZTBGclZQcVh0T3JDU2FFejZ1RDZtZlFUNlFQZ2t0NUdh?=
+ =?utf-8?B?ZitHODVNVFQ5WkZ4andhdXU5anlZT1FpemtXVVJOL1dwZENWdUFQQms0Uy9a?=
+ =?utf-8?B?RUJ0dGEwRzkzTmxnUnJ4Wm9JVGd4OTdoTVZUa1l5RmlCQ1BlZ0QrTkEwVVA1?=
+ =?utf-8?B?MFUwZVBlMnc2NVNWeitUYlU2a20xTnByV0FTZGVhdXArSVFPUkg2dTcyajRt?=
+ =?utf-8?B?dnNyamNkTTlXZ3F2TWVmTjZjN0llQkEzM1BGeWxmb3Zpa2pNbHhuQVIrUUw3?=
+ =?utf-8?B?T3Z4ZGQ4OXFPeGxmQ0tZbHFYN0tiRnJSQStNenB2TGc5Z3JhK252S1NuZC9W?=
+ =?utf-8?B?QXAvWkMybWVCdi9id0M2TnNnbjlBZXkreDd0aW0yMTdhT1dGeUUwTmptZE9V?=
+ =?utf-8?B?cDZycUp0dmRXcW5Ya21vMWFaVUNkbkpwYjNpYkI0ZTR0ZEgxRFJaelNUMnUv?=
+ =?utf-8?B?TzBWblhYQ2sySlRXcFRUb2xhaG1XWEVsM2VkdTkxSmFheTlFWGx5dzRtK2c0?=
+ =?utf-8?B?NmJ0cTB6OHlHZXRqL2Q3Ykl3dVBRYXBaUWNkSER5bTgrclBJTThLUDN1Tlp1?=
+ =?utf-8?B?YzJHMlVsRTJvRGNvaklSQzd2Z0s3VC9lMlg1QzB4eUZXWDVYKzJ2RkdsSnVV?=
+ =?utf-8?B?bW5sek1BMUM1Q3lNOWNXWUc5dXJXZTNTbFNNRnNLYWlOZlA4Mkd0WG5iTzU2?=
+ =?utf-8?B?R0xEbWUrM0ZtU290YTNDV2NxYS9KZHdUQkJEanJxYUFvVTJvVVZqaEFxSmh4?=
+ =?utf-8?Q?oEm6zP/EPsoorC+JtPC84NJEL?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8eb85184-8d4f-4fed-b250-08db562f8c06
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 17:04:01.9836
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xgab2dXUr4ntzf2cb6vGwVzPf+rWvuepZcnfhtWENIbjW33+FVBwykRsiaIad+DegwTK3+OREbC6YRITI22cKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4465
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,117 +152,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
+On 5/16/23 07:35, David Hildenbrand wrote:
+...
+>>> When passing NULL as "pages" to get_user_pages(), __get_user_pages_locked()
+>>> won't set FOLL_GET. As FOLL_PIN is also not set, we won't be messing with
+>>> the mapcount of the page.
+> 
+> For completeness: s/mapcount/refcount/ :)
 
-On 5/16/23 17:35, Alexandre TORGUE wrote:
-> Hi Arnaud
-> 
-> On 5/12/23 11:39, Arnaud Pouliquen wrote:
->> Fixes stm32mp15*-scmi DTS files introduced in [1]:
->> This patch fixes the node which uses the MCU reset and adds the
->> missing HOLD_BOOT which is also handled by the SCMI reset service.
->>
->> This change cannot be applied as a fix on commit [1], the management
->> of the hold boot impacts also the stm32_rproc driver.
->>
->> [1] 'commit 5b7e58313a77 ("ARM: dts: stm32: Add SCMI version of STM32 boards
->> (DK1/DK2/ED1/EV1)")'
->>
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->> ---
-> 
-> I just ran YAML validation on your DT patches and it fails. I added your DT
-> patches + dt-binding one (just for the test). I got the following issue:
-> 
-> /arch/arm/boot/dts/stm32mp157c-ed1-scmi.dtb: m4@10000000: st,syscfg-holdboot:
-> False schema does not allow [[7, 268, 1]]
->     From schema:
-> /local/home/frq08678/STLINUX/kernel/my-kernel/stm32/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-> 
-> Do I miss another dt-binding update not present in this series ?
+whew, you had me going there! Now it all adds up. :) 
 
-I reproduced the issue.
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-I need to add "/delete-property/ st,syscfg-holdboot;" in stm32mp157*-scmi.dts
-files.
-
-As Mathieu already integrates the patch 1/4 and 2/4, I will send a V4 containing
-only the patches 3 and 4.
-
-Thanks,
-Arnaud
-
-> 
-> alex
-> 
->>   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 6 ++++--
->>   arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 6 ++++--
->>   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 6 ++++--
->>   arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 6 ++++--
->>   4 files changed, 16 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->> b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->> index e539cc80bef8..134788e64265 100644
->> --- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
->> @@ -55,8 +55,10 @@ &mdma1 {
->>       resets = <&scmi_reset RST_SCMI_MDMA>;
->>   };
->>   -&mlahb {
->> -    resets = <&scmi_reset RST_SCMI_MCU>;
->> +&m4_rproc {
->> +    resets = <&scmi_reset RST_SCMI_MCU>,
->> +         <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
->> +    reset-names =  "mcu_rst", "hold_boot";
->>   };
->>     &rcc {
->> diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->> b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->> index 97e4f94b0a24..c42e658debfb 100644
->> --- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
->> @@ -61,8 +61,10 @@ &mdma1 {
->>       resets = <&scmi_reset RST_SCMI_MDMA>;
->>   };
->>   -&mlahb {
->> -    resets = <&scmi_reset RST_SCMI_MCU>;
->> +&m4_rproc {
->> +    resets = <&scmi_reset RST_SCMI_MCU>,
->> +         <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
->> +    reset-names =  "mcu_rst", "hold_boot";
->>   };
->>     &rcc {
->> diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->> b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->> index 9cf0a44d2f47..7a56ff2d4185 100644
->> --- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
->> @@ -60,8 +60,10 @@ &mdma1 {
->>       resets = <&scmi_reset RST_SCMI_MDMA>;
->>   };
->>   -&mlahb {
->> -    resets = <&scmi_reset RST_SCMI_MCU>;
->> +&m4_rproc {
->> +    resets = <&scmi_reset RST_SCMI_MCU>,
->> +         <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
->> +    reset-names =  "mcu_rst", "hold_boot";
->>   };
->>     &rcc {
->> diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
->> b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
->> index 3b9dd6f4ccc9..119874dd91e4 100644
->> --- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
->> +++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
->> @@ -66,8 +66,10 @@ &mdma1 {
->>       resets = <&scmi_reset RST_SCMI_MDMA>;
->>   };
->>   -&mlahb {
->> -    resets = <&scmi_reset RST_SCMI_MCU>;
->> +&m4_rproc {
->> +    resets = <&scmi_reset RST_SCMI_MCU>,
->> +         <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
->> +    reset-names =  "mcu_rst", "hold_boot";
->>   };
->>     &rcc {
-> 
