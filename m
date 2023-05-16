@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAFB70579E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE6B70579D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjEPTlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S230091AbjEPTlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjEPTle (ORCPT
+        with ESMTP id S229905AbjEPTle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 May 2023 15:41:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE454494;
-        Tue, 16 May 2023 12:41:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CF5AD13;
+        Tue, 16 May 2023 12:41:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF0F5635A1;
-        Tue, 16 May 2023 19:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8D0C433EF;
-        Tue, 16 May 2023 19:40:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99DB16324B;
+        Tue, 16 May 2023 19:40:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31695C4339B;
+        Tue, 16 May 2023 19:40:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684266009;
-        bh=8n2CvzDo289ObcDnbgcLUxlNv6SunFRuUSz2MeWdEMM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PPja12+jUDGrCbIzpFocVLXHKNfRllVRa/7kobiZhwTwubGr2MFZw3y/5/bvrEThA
-         6WGO5HuaTDWe0pTkZTYjFic6nTQPW1y6R0j7/qko/z2uhI8mzQuFlE+F8v0jV5ZA3E
-         kmoXEWxYtS7L2k2x0Q0sOCBdMiYZgIwHHyxmgtABBeENRgim1TWHxLzFiK9At1lMYJ
-         bAMffkM6q+jFgAxDo7kq6qiANwmEeUEKDR/6i9YugWrRPujT0/sTlnRmOpckxiq6Vr
-         gtFoFG6xUDZrBqapU28gMi80jXfo4h54UuTP/g20HqiPcM3vdS0rL2jF0zX2p0IFAA
-         OGpcDJsH+d8vQ==
+        s=k20201202; t=1684266022;
+        bh=jJJcduVZoL7FA07spYoM0rBgXI6P51X+u5P3BZBB8fU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VvSe0V1IjrV/xFL3ACCeditJS5NKMhIffRaUX/X6MOSnLt3NG4iN/7P07PEq9pQtu
+         mgSLVxphCbj7fdh/UKsfk4HjiIZn3RbHL2pzJsNvwWK9RGRlnkdKkt/raraPfB1sV7
+         daSCbdfM8GNCmhkkqjzctsDV1Za66AzuIgNvxQey4QHzPIKUBL4pjQqIfFUKPRKSgm
+         hqkWcOL5VzJqBx02Wp1bdFEUVZVM1sydcwWi5ZYIcpGKU5hiP2BLDNwn8jOYCFS6fC
+         PuGngq4gX5q3w8wm49Uba4ldqZPo4CoWWIPblDRg3VnuR8EO4m4GiCOWyoqIPyghap
+         IGuGelICq4oJA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] mips: provide unxlate_dev_mem_ptr() in asm/io.h
-Date:   Tue, 16 May 2023 21:39:42 +0200
-Message-Id: <20230516194000.548487-1-arnd@kernel.org>
+Subject: [PATCH 2/2] mips: asm-offsets: add missing prototypes
+Date:   Tue, 16 May 2023 21:39:43 +0200
+Message-Id: <20230516194000.548487-2-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230516194000.548487-1-arnd@kernel.org>
+References: <20230516194000.548487-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,55 +59,139 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The unxlate_dev_mem_ptr() function has no prototype on the mips
-architecture, which does not include asm-generic/io.h, so gcc warns
-about the __weak definition:
+Building with -Werror and W=1 fails entirely because of warnings in
+asm-offsets.c:
 
-drivers/char/mem.c:94:29: error: no previous prototype for 'unxlate_dev_mem_ptr' [-Werror=missing-prototypes]
+arch/mips/kernel/asm-offsets.c:26:6: error: no previous prototype for 'output_ptreg_defines' [-Werror=missing-prototypes]
+arch/mips/kernel/asm-offsets.c:78:6: error: no previous prototype for 'output_task_defines' [-Werror=missing-prototypes]
+arch/mips/kernel/asm-offsets.c:92:6: error: no previous prototype for 'output_thread_info_defines' [-Werror=missing-prototypes]
+arch/mips/kernel/asm-offsets.c:108:6: error: no previous prototype for 'output_thread_defines' [-Werror=missing-prototypes]
+arch/mips/kernel/asm-offsets.c:136:6: error: no previous prototype for 'output_thread_fpu_defines' [-Werror=missing-prototypes]
 
-Since everyone else already gets the generic definition or has a custom
-one, there is not really much point in having a __weak version as well.
-
-Remove this one, and instead add a trivial macro to the mips header.
-Once we convert mips to use the asm-generic header, this can go away
-again.
+Nothing actually calls these functions, so just add prototypes to shut
+up the warnings.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/mips/include/asm/io.h | 1 +
- drivers/char/mem.c         | 7 -------
- 2 files changed, 1 insertion(+), 7 deletions(-)
+ arch/mips/kernel/asm-offsets.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-index cc28d207a061..affd21e9c20b 100644
---- a/arch/mips/include/asm/io.h
-+++ b/arch/mips/include/asm/io.h
-@@ -554,6 +554,7 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
-  * access
-  */
- #define xlate_dev_mem_ptr(p)	__va(p)
-+#define unxlate_dev_mem_ptr(p, v) do { } while (0)
+diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
+index 40fd4051bb3d..d1b11f66f748 100644
+--- a/arch/mips/kernel/asm-offsets.c
++++ b/arch/mips/kernel/asm-offsets.c
+@@ -23,6 +23,7 @@
  
- void __ioread64_copy(void *to, const void __iomem *from, size_t count);
+ #include <linux/kvm_host.h>
  
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index f494d31f2b98..94eff6a2a7b6 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -90,13 +90,6 @@ static inline int range_is_allowed(unsigned long pfn, unsigned long size)
++void output_ptreg_defines(void);
+ void output_ptreg_defines(void)
+ {
+ 	COMMENT("MIPS pt_regs offsets.");
+@@ -75,6 +76,7 @@ void output_ptreg_defines(void)
+ 	BLANK();
+ }
+ 
++void output_task_defines(void);
+ void output_task_defines(void)
+ {
+ 	COMMENT("MIPS task_struct offsets.");
+@@ -89,6 +91,7 @@ void output_task_defines(void)
+ 	BLANK();
+ }
+ 
++void output_thread_info_defines(void);
+ void output_thread_info_defines(void)
+ {
+ 	COMMENT("MIPS thread_info offsets.");
+@@ -105,6 +108,7 @@ void output_thread_info_defines(void)
+ 	BLANK();
+ }
+ 
++void output_thread_defines(void);
+ void output_thread_defines(void)
+ {
+ 	COMMENT("MIPS specific thread_struct offsets.");
+@@ -133,6 +137,7 @@ void output_thread_defines(void)
+ }
+ 
+ #ifdef CONFIG_MIPS_FP_SUPPORT
++void output_thread_fpu_defines(void);
+ void output_thread_fpu_defines(void)
+ {
+ 	OFFSET(THREAD_FPU, task_struct, thread.fpu);
+@@ -176,6 +181,7 @@ void output_thread_fpu_defines(void)
  }
  #endif
  
--#ifndef unxlate_dev_mem_ptr
--#define unxlate_dev_mem_ptr unxlate_dev_mem_ptr
--void __weak unxlate_dev_mem_ptr(phys_addr_t phys, void *addr)
--{
--}
--#endif
--
- static inline bool should_stop_iteration(void)
++void output_mm_defines(void);
+ void output_mm_defines(void)
  {
- 	if (need_resched())
+ 	COMMENT("Size of struct page");
+@@ -210,6 +216,7 @@ void output_mm_defines(void)
+ }
+ 
+ #ifdef CONFIG_32BIT
++void output_sc_defines(void);
+ void output_sc_defines(void)
+ {
+ 	COMMENT("Linux sigcontext offsets.");
+@@ -232,6 +239,7 @@ void output_sc_defines(void)
+ #endif
+ 
+ #ifdef CONFIG_64BIT
++void output_sc_defines(void);
+ void output_sc_defines(void)
+ {
+ 	COMMENT("Linux sigcontext offsets.");
+@@ -245,6 +253,7 @@ void output_sc_defines(void)
+ }
+ #endif
+ 
++void output_signal_defined(void);
+ void output_signal_defined(void)
+ {
+ 	COMMENT("Linux signal numbers.");
+@@ -284,6 +293,7 @@ void output_signal_defined(void)
+ }
+ 
+ #ifdef CONFIG_CPU_CAVIUM_OCTEON
++void output_octeon_cop2_state_defines(void);
+ void output_octeon_cop2_state_defines(void)
+ {
+ 	COMMENT("Octeon specific octeon_cop2_state offsets.");
+@@ -315,6 +325,7 @@ void output_octeon_cop2_state_defines(void)
+ #endif
+ 
+ #ifdef CONFIG_HIBERNATION
++void output_pbe_defines(void);
+ void output_pbe_defines(void)
+ {
+ 	COMMENT(" Linux struct pbe offsets. ");
+@@ -327,6 +338,7 @@ void output_pbe_defines(void)
+ #endif
+ 
+ #ifdef CONFIG_CPU_PM
++void output_pm_defines(void);
+ void output_pm_defines(void)
+ {
+ 	COMMENT(" PM offsets. ");
+@@ -341,6 +353,7 @@ void output_pm_defines(void)
+ #endif
+ 
+ #ifdef CONFIG_MIPS_FP_SUPPORT
++void output_kvm_defines(void);
+ void output_kvm_defines(void)
+ {
+ 	COMMENT(" KVM/MIPS Specific offsets. ");
+@@ -385,6 +398,7 @@ void output_kvm_defines(void)
+ #endif
+ 
+ #ifdef CONFIG_MIPS_CPS
++void output_cps_defines(void);
+ void output_cps_defines(void)
+ {
+ 	COMMENT(" MIPS CPS offsets. ");
 -- 
 2.39.2
 
