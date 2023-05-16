@@ -2,163 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36343705A5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F4D705A60
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjEPWBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S230459AbjEPWCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjEPWBd (ORCPT
+        with ESMTP id S229578AbjEPWCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:01:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A9D1706;
-        Tue, 16 May 2023 15:01:31 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 16 May 2023 18:02:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A0CB4;
+        Tue, 16 May 2023 15:02:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 03C2E66058F7;
-        Tue, 16 May 2023 23:01:30 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684274490;
-        bh=6VuzT6ae7G/wqb/mbM+/UZDAQjp/Is1WP9mWxQ5YyIo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TzwHnsUgq6M5aQDQ7BliujRzwfM+sKCjIweA7mkDMTVE76Lslbg4iU4+F+MGRG9kP
-         tvHeMh++vslPUk/x39l/R4op0k2zaIp0wV52A2tSkH2PUdR/5t7t0GzFHRC7AdBEZK
-         OLoMQ/vJH/RIvnjZwZBhITKeusFpWGXSZM6Zt6UDIAPHRsDnOxdOj7KHYx64nsSOGE
-         BavuGd84nu17CWUqcd9N3T0WFa+p5oh9V3BNERaR6kPG9Pcy1mLL9zbv937Bq0/Whn
-         RZvVp3eeL8zkxYALmjjPVNulIbJ9fnTV51LyLndbuWXkj/qvtcNRPChnzta8lDPKB6
-         bCUF/ohnOBS6Q==
-Received: by mercury (Postfix, from userid 1000)
-        id B264110620FE; Wed, 17 May 2023 00:01:27 +0200 (CEST)
-Date:   Wed, 17 May 2023 00:01:27 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Vincent Legoll <vincent.legoll@gmail.com>
-Subject: Re: [PATCH v8 05/14] mfd: rk808: split into core and i2c
-Message-ID: <20230516220127.ohumwhchhzzmw7he@mercury.elektranox.org>
-References: <20230504173618.142075-1-sebastian.reichel@collabora.com>
- <20230504173618.142075-6-sebastian.reichel@collabora.com>
- <CGME20230516212700eucas1p1fbde1b6181c18d821e0796b6b6a4fa00@eucas1p1.samsung.com>
- <2d234cd8-f883-800b-af97-116a949b64af@samsung.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mutsuecdbukxiwro"
-Content-Disposition: inline
-In-Reply-To: <2d234cd8-f883-800b-af97-116a949b64af@samsung.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B587363CF5;
+        Tue, 16 May 2023 22:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90F7C433EF;
+        Tue, 16 May 2023 22:02:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1684274540;
+        bh=Xn5gFOegvDQoAs6fV+QPMtWJd/9gIN1gu+8PHj8jATQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=I8HmcSl3RSMNgObVi4nyzA8Dn0pIVn3Hyd4M9+6+jiCnOIEHPDAD1katsykkWAiMa
+         gn5fQMZJ0CFmK2NC9H7JKcNfD2tVhwbbUSeGJQe61+ttSYu+uB1762WRf9rvoaH/7u
+         R2FZf07p1aiooDIDhn5t28F6IgINIJ5khA8X4Fo4=
+Date:   Tue, 16 May 2023 15:02:18 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v5 3/6] mm/gup: remove vmas parameter from
+ get_user_pages_remote()
+Message-Id: <20230516150218.477c5e9d0a2d9ef8b057069c@linux-foundation.org>
+In-Reply-To: <20230516094919.GA411@mutt>
+References: <cover.1684097001.git.lstoakes@gmail.com>
+        <afe323639b7bda066ee5c7a6cca906f5ad8df940.1684097002.git.lstoakes@gmail.com>
+        <20230516094919.GA411@mutt>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 16 May 2023 11:49:19 +0200 Anders Roxell <anders.roxell@linaro.org> wrote:
 
---mutsuecdbukxiwro
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On 2023-05-14 22:26, Lorenzo Stoakes wrote:
+> > The only instances of get_user_pages_remote() invocations which used the
+> > vmas parameter were for a single page which can instead simply look up the
+> > VMA directly. In particular:-
+> > 
+> > - __update_ref_ctr() looked up the VMA but did nothing with it so we simply
+> >   remove it.
+> > 
+> > - __access_remote_vm() was already using vma_lookup() when the original
+> >   lookup failed so by doing the lookup directly this also de-duplicates the
+> >   code.
+> > 
+> > We are able to perform these VMA operations as we already hold the
+> > mmap_lock in order to be able to call get_user_pages_remote().
+> > 
+> > As part of this work we add get_user_page_vma_remote() which abstracts the
+> > VMA lookup, error handling and decrementing the page reference count should
+> > the VMA lookup fail.
+> > 
+> > This forms part of a broader set of patches intended to eliminate the vmas
+> > parameter altogether.
+> > 
+> > -		int bytes, ret, offset;
+> > +		int bytes, offset;
+> >  		void *maddr;
+> > -		struct page *page = NULL;
+> > +		struct vm_area_struct *vma;
+> > +		struct page *page = get_user_page_vma_remote(mm, addr,
+> > +							     gup_flags, &vma);
+> > +
+> > +		if (IS_ERR_OR_NULL(page)) {
+> > +			int ret = 0;
+> 
+> I see the warning below when building without CONFIG_HAVE_IOREMAP_PROT set.
+> 
+> make --silent --keep-going --jobs=32 \
+> O=/home/anders/.cache/tuxmake/builds/1244/build ARCH=arm \
+> CROSS_COMPILE=arm-linux-gnueabihf- /home/anders/src/kernel/next/mm/memory.c: In function '__access_remote_vm':
+> /home/anders/src/kernel/next/mm/memory.c:5608:29: warning: unused variable 'ret' [-Wunused-variable]
+>  5608 |                         int ret = 0;
+>       |                             ^~~
 
-Hello Marek,
+Thanks, I did the obvious.
 
-On Tue, May 16, 2023 at 11:26:59PM +0200, Marek Szyprowski wrote:
-> Hi,
->=20
-> On 04.05.2023 19:36, Sebastian Reichel wrote:
-> > Split rk808 into a core and an i2c part in preparation for
-> > SPI support.
-> >
-> > Acked-for-MFD-by: Lee Jones <lee@kernel.org>
-> > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com> # for RTC
-> > Tested-by: Diederik de Haas <didi.debian@cknow.org> # Rock64, Quartz64 =
-Model A + B
-> > Tested-by: Vincent Legoll <vincent.legoll@gmail.com> # Pine64 QuartzPro=
-64
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> This patch landed in today's linux-next as commit c20e8c5b1203 ("mfd:=20
-> rk808: Split into core and i2c"). Unfortunately some boards (for example=
-=20
-> Hardkernel's Odroid-M1) stopped to boot after this change. This is=20
-> caused by the lack of updating the related defconfigs. Could you please=
-=20
-> add a patch that updates the MFD_RK808 entries to MFD_RK8XX_I2C in the=20
-> following files:
->=20
-> $ git grep MFD_RK808
-> arch/arm/configs/multi_v7_defconfig:CONFIG_MFD_RK808=3Dy
-> arch/arm64/configs/defconfig:CONFIG_MFD_RK808=3Dy
+Also s/ret/res/, as `ret' is kinda reserved for "this is what this
+function will return".
 
-Sure, I will prepare a patch for each of them. Thanks for the quick
-report and sorry for the inconvenience.
+--- a/mm/memory.c~mm-gup-remove-vmas-parameter-from-get_user_pages_remote-fix
++++ a/mm/memory.c
+@@ -5605,11 +5605,11 @@ int __access_remote_vm(struct mm_struct
+ 							     gup_flags, &vma);
+ 
+ 		if (IS_ERR_OR_NULL(page)) {
+-			int ret = 0;
+-
+ #ifndef CONFIG_HAVE_IOREMAP_PROT
+ 			break;
+ #else
++			int res = 0;
++
+ 			/*
+ 			 * Check if this is a VM_IO | VM_PFNMAP VMA, which
+ 			 * we can access using slightly different code.
+@@ -5617,11 +5617,11 @@ int __access_remote_vm(struct mm_struct
+ 			if (!vma)
+ 				break;
+ 			if (vma->vm_ops && vma->vm_ops->access)
+-				ret = vma->vm_ops->access(vma, addr, buf,
++				res = vma->vm_ops->access(vma, addr, buf,
+ 							  len, write);
+-			if (ret <= 0)
++			if (res <= 0)
+ 				break;
+-			bytes = ret;
++			bytes = res;
+ #endif
+ 		} else {
+ 			bytes = len;
+_
 
--- Sebastian
-
->=20
->=20
-> > ---
-> >   drivers/clk/Kconfig                   |   2 +-
-> >   drivers/input/misc/Kconfig            |   2 +-
-> >   drivers/mfd/Kconfig                   |   7 +-
-> >   drivers/mfd/Makefile                  |   3 +-
-> >   drivers/mfd/{rk808.c =3D> rk8xx-core.c} | 209 +++++------------------=
----
-> >   drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
-> >   drivers/pinctrl/Kconfig               |   2 +-
-> >   drivers/power/supply/Kconfig          |   2 +-
-> >   drivers/regulator/Kconfig             |   2 +-
-> >   drivers/rtc/Kconfig                   |   2 +-
-> >   include/linux/mfd/rk808.h             |   6 +
-> >   sound/soc/codecs/Kconfig              |   2 +-
-> >   12 files changed, 256 insertions(+), 183 deletions(-)
-> >   rename drivers/mfd/{rk808.c =3D> rk8xx-core.c} (76%)
-> >   create mode 100644 drivers/mfd/rk8xx-i2c.c
-> >
-> > ...
->=20
-> Best regards
-> --=20
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
->=20
-
---mutsuecdbukxiwro
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj/TcACgkQ2O7X88g7
-+ppkcg//WH2Y+C6FPh41OdSO5Szxw3CQJ1Ku3dNvcQAt3BHSGl0ATOPFmYc1j2v8
-/DNrXu+6aPU46ko+iu0Jrtlng4zdkl50sLLbYfvoNZQvNtI7oDYVV9ej3NO7diCr
-+aN0krfeFW2MiaGcs6/U5B0/wgXCgeRf+2sCLCNxCfUji7xLT9HOQHUf34d6ZRAq
-rU8iIcB7K9Kg1UUDCjn8FSUgKduyy2YriowTgO1Q1Bx93jYZ/wka+qtA9lRJC+bC
-6g/9f2H7hs9IkfwVgGimp5iR++FF0G7wfY7XBZyuyVcsMLPZ9JIdCtl88oISGAFp
-A94yL7MYgxtAuu6gOpnIWQVSits/WgfmfMfs95twzPQ0Vngdxm24bn4wGR7mUrMK
-sd8krWaSfDPxahUkfN43p1WjDXY1WMMT6e0UPNR/MwhE+6fjI1PVc2BNSEsDQGdu
-wlCYwIoPhBBGBh7L1dCKXEThlSdZsUd1N6R1QYZ3qQmYnF0KWHgnp7GDEREabHiO
-RzWc0uHFa/Rnq7p1z/zZlBkUfryUqHRaLO7WIx4hzAj1w8CIMSkV08XA6Hb8X84u
-/7ijOEH/selxYiETdAnkuobE9lf4cbpzU2vN7O0P9rQT7j/QIp6Mm/VsSMQaL74C
-8mk7Q3O6xhh/f1/Y5M9lInSJ7hfkj5WrYCPF2Upb0a6hwfleQg0=
-=tOhN
------END PGP SIGNATURE-----
-
---mutsuecdbukxiwro--
