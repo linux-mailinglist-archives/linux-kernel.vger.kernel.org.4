@@ -2,355 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FF9705794
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAFB70579E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjEPTke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S230233AbjEPTlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjEPTk3 (ORCPT
+        with ESMTP id S230085AbjEPTle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:40:29 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0C7D050
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:40:05 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-783e5f8717aso15474241.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684265957; x=1686857957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bl0KxKY/sUcM54GB5tUsJdCgfaOj1mAl6bkpff/gM1k=;
-        b=dsbLYDRucXeFfy0Q/wCYCvEpNLRRzLYvTikvSdUg55vOz24AO+E/QwEMZYFCLgsIUL
-         TP2kqL/XSO9xo4qYSlxpIMcnDRh93iGsYH1x1Of0ShspCO1GxrShBtdFerCbFQ7XNOOS
-         h1ROfA6eOs4GIHyR6q/h/4u+C8FOWvtUBAr35zxQeSISTQ+fm7utqJjvjB9bP+jW+ys1
-         oT2uZk/G+oUv+KhJPlOiv/tHPy5vl/Y6MWIsLReICSp28OninHw7eMvOT97IJ4XYogrk
-         fq5n2E8l+4lUW3JwfVBNlMCpWk91W3x46+13OI/IntSRkIJHnKz2tn+HbVkm/e/9QXEi
-         ZVSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684265957; x=1686857957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bl0KxKY/sUcM54GB5tUsJdCgfaOj1mAl6bkpff/gM1k=;
-        b=Be5qse0Y26fu0Ki/qCOWX6r9OpAhkwv1e351BvN3V2yYBivya6G4smfyfV396YxjLf
-         HiwXtXUz3y4s8qjZT7qbb8YsppSky8MKit420939+cSM4+vygeRGJT4Zoxhx3zh+2rvr
-         GfWaToVy9KM8BuX1zgjlrYXC9CdwlUczQszzI9fSdLhonKrKZUCB8ErKYxGf4JEmfyd6
-         2grJY3SXr+jRgsEiNA68S9Kpx0YuRWLxd2xZrv0Abjaao2SUGvO6BsOotDFE/piDzQRM
-         V/e+diTXaIirfQh/rCLJaCYtnJ0lNwaoEL6AXRZfybWwYNSI5CHkXBrwmkDTmPOqAnzq
-         E5Ig==
-X-Gm-Message-State: AC+VfDwaS10Ji+5KJvHo/tSzWmzVK3DnaKIu/jkQVtlT42eNCOjHJgVO
-        PXbgUTbk7A0TLTnGLfB5thqi0wW4GRdADQtrdQ+Fhg==
-X-Google-Smtp-Source: ACHHUZ5vIZUSmno0LG6tQNjwPdpLccVbcF3x/foJyasbY5MnT2o8uMNXCaMfo51qg7XyO1B4jwPULmnkSizsP8h04ik=
-X-Received: by 2002:a1f:bf47:0:b0:453:9057:1693 with SMTP id
- p68-20020a1fbf47000000b0045390571693mr7211731vkf.5.1684265956844; Tue, 16 May
- 2023 12:39:16 -0700 (PDT)
+        Tue, 16 May 2023 15:41:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE454494;
+        Tue, 16 May 2023 12:41:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF0F5635A1;
+        Tue, 16 May 2023 19:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8D0C433EF;
+        Tue, 16 May 2023 19:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684266009;
+        bh=8n2CvzDo289ObcDnbgcLUxlNv6SunFRuUSz2MeWdEMM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PPja12+jUDGrCbIzpFocVLXHKNfRllVRa/7kobiZhwTwubGr2MFZw3y/5/bvrEThA
+         6WGO5HuaTDWe0pTkZTYjFic6nTQPW1y6R0j7/qko/z2uhI8mzQuFlE+F8v0jV5ZA3E
+         kmoXEWxYtS7L2k2x0Q0sOCBdMiYZgIwHHyxmgtABBeENRgim1TWHxLzFiK9At1lMYJ
+         bAMffkM6q+jFgAxDo7kq6qiANwmEeUEKDR/6i9YugWrRPujT0/sTlnRmOpckxiq6Vr
+         gtFoFG6xUDZrBqapU28gMi80jXfo4h54UuTP/g20HqiPcM3vdS0rL2jF0zX2p0IFAA
+         OGpcDJsH+d8vQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] mips: provide unxlate_dev_mem_ptr() in asm/io.h
+Date:   Tue, 16 May 2023 21:39:42 +0200
+Message-Id: <20230516194000.548487-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230515161707.203549282@linuxfoundation.org>
-In-Reply-To: <20230515161707.203549282@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 17 May 2023 01:09:05 +0530
-Message-ID: <CA+G9fYtjmJS893BLx7ggwMXvqzqpiRU7BrvgRjE8d+epJYLrGQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/191] 4.19.283-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-cifs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 at 22:09, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.283 release.
-> There are 191 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.283-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+From: Arnd Bergmann <arnd@arndb.de>
 
-Results from Linaro=E2=80=99s test farm.
-Regressions on arm64, arm, x86_64 and i386.
+The unxlate_dev_mem_ptr() function has no prototype on the mips
+architecture, which does not include asm-generic/io.h, so gcc warns
+about the __weak definition:
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+drivers/char/mem.c:94:29: error: no previous prototype for 'unxlate_dev_mem_ptr' [-Werror=missing-prototypes]
 
-1) ltp-syscalls fallocate06 - FAILS on arm and arm64 on 4.19 and 4.14.
+Since everyone else already gets the generic definition or has a custom
+one, there is not really much point in having a __weak version as well.
 
-2) We have recently upgraded our selftest sources to stable-rc 6.3 and
-running on stable rc 6.1, 5.15, 5.10, 5.4, 4.19 and 4.14 kernels.
+Remove this one, and instead add a trivial macro to the mips header.
+Once we convert mips to use the asm-generic header, this can go away
+again.
 
-List of test regressions:
-=3D=3D=3D=3D=3D=3D=3D=3D
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/mips/include/asm/io.h | 1 +
+ drivers/char/mem.c         | 7 -------
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
-ltp-syscalls
-  - fallocate06
+diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+index cc28d207a061..affd21e9c20b 100644
+--- a/arch/mips/include/asm/io.h
++++ b/arch/mips/include/asm/io.h
+@@ -554,6 +554,7 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
+  * access
+  */
+ #define xlate_dev_mem_ptr(p)	__va(p)
++#define unxlate_dev_mem_ptr(p, v) do { } while (0)
+ 
+ void __ioread64_copy(void *to, const void __iomem *from, size_t count);
+ 
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index f494d31f2b98..94eff6a2a7b6 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -90,13 +90,6 @@ static inline int range_is_allowed(unsigned long pfn, unsigned long size)
+ }
+ #endif
+ 
+-#ifndef unxlate_dev_mem_ptr
+-#define unxlate_dev_mem_ptr unxlate_dev_mem_ptr
+-void __weak unxlate_dev_mem_ptr(phys_addr_t phys, void *addr)
+-{
+-}
+-#endif
+-
+ static inline bool should_stop_iteration(void)
+ {
+ 	if (need_resched())
+-- 
+2.39.2
 
-kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-kselftest-memfd
-  - memfd_memfd_test
-
-kselftest-rseq
-  - rseq_basic_test
-
- kselftest-kvm
-  - kvm_xapic_state_test
-
-=3D=3D=3D=3D=3D=3D
-
-ltp-syscalls
-  - fallocate06 - FAILS on arm and arm64 on 4.19 and 4.14
-
-fallocate06.c:155: TFAIL: fallocate(FALLOC_FL_PUNCH_HOLE |
-FALLOC_FL_KEEP_SIZE) failed unexpectedly: ENOSPC (28)
-
-Test log links,
-=3D=3D=3D=3D=3D=3D=3D=3D
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4=
-.19.282-192-g373cdd8d6123/testrun/17027069/suite/ltp-syscalls/test/fallocat=
-e06/history/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4=
-.19.282-192-g373cdd8d6123/testrun/17027069/suite/ltp-syscalls/test/fallocat=
-e06/log
-
-NOTE:
-The logs are the same as reported on other email reports.
-link,
- - https://lore.kernel.org/stable/CA+G9fYu6ZOu_We2GMP0sFnSovOsqd6waW7oKS-Y1=
-VPrjdibu5Q@mail.gmail.com/
-
-## Build
-* kernel: 4.19.283-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 373cdd8d6123d6ed489c5a5b91a0ab5b206ba0e4
-* git describe: v4.19.282-192-g373cdd8d6123
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.282-192-g373cdd8d6123
-
-## Test Regressions (compared to v4.19.279-173-g8ca3c8d28616)
-
-* dragonboard-410c, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* dragonboard-410c, kselftest-rseq
-  - rseq_basic_test
-
-* dragonboard-410c, ltp-syscalls
-  - fallocate06
-
-* i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* i386, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* juno-r2, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* juno-r2, kselftest-rseq
-  - rseq_basic_test
-
-* juno-r2, ltp-syscalls
-  - fallocate06
-
-* juno-r2-compat, ltp-syscalls
-  - fallocate06
-
-* juno-r2-kasan, ltp-syscalls
-  - fallocate06
-
-* qemu_i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_i386, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* qemu_x86_64, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_x86_64, kselftest-rseq
-  - rseq_basic_test
-
-* x15, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* x15, kselftest-rseq
-  - rseq_basic_test
-
-* x86, kselftest-kvm
-  - kvm_xapic_state_test
-
-* x86, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* x86, kselftest-rseq
-  - rseq_basic_test
-
-## Metric Regressions (compared to v4.19.279-173-g8ca3c8d28616)
-
-## Test Fixes (compared to v4.19.279-173-g8ca3c8d28616)
-
-## Metric Fixes (compared to v4.19.279-173-g8ca3c8d28616)
-
-## Test result summary
-total: 80130, pass: 68396, fail: 2694, skip: 8901, xfail: 139
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 111 total, 106 passed, 5 failed
-* arm64: 37 total, 32 passed, 5 failed
-* i386: 21 total, 18 passed, 3 failed
-* mips: 22 total, 22 passed, 0 failed
-* parisc: 6 total, 6 passed, 0 failed
-* powerpc: 24 total, 24 passed, 0 failed
-* s390: 6 total, 6 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 31 total, 26 passed, 5 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
