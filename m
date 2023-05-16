@@ -2,82 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB4570520D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3DE70521E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbjEPP0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S233919AbjEPP3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbjEPP0w (ORCPT
+        with ESMTP id S233111AbjEPP25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:26:52 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309176182
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:26:50 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2acb6571922so129265651fa.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:26:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684250808; x=1686842808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OdgCtQ9x428g2fmdq2eeF1lpjWBXFBmUKUBwGdZd0fw=;
-        b=F8IDR3e8D15lWntbesEEnnzt0b7ERjoyuM2hgFPYNc58euIW6njIvDNilJkAz4ZC56
-         LhtUGQiK9kT++dq0l4+94724yxzysWsDLGsNho5Cak9npWcJz7ZSr/YdUBGc4gyBxJ/+
-         LvPtMo8VmpgUUyBc9cpJJCREfA1kMojcqCgk07vjs0Sqsabqi7xaH7yprJc1xia11Nd5
-         xWvRDTD2K9c1iqslb7MZNcd6VcG2mq7vZp77FWhhf0K+MD1bW/QiIamEzrB5JlB00lSA
-         jF32Oo4rN4Xre5AL/BQ4koSXzneRQjwgaYZD63X+07z9/FDvQkISHXR49vZszx2zfvwt
-         H05g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684250808; x=1686842808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OdgCtQ9x428g2fmdq2eeF1lpjWBXFBmUKUBwGdZd0fw=;
-        b=X5so5pPGiFHLlhaJ+Jdxb68KHg02VckxaRf/o3Y2XRyPc/U8lPfORNTtiDNrbAvvMe
-         qDUoH613DGEXza+S40h0jlzDagYHXmE/2x+PAvho35r1JR+4SphVSGyW+L21Y7yr7I2c
-         1Gnqsz2nmetqeCT9z/fLh0xSVlc/wK/SCuJQ18Ic9x62EiyaKtTPSHPOhNLEfm8foNYL
-         5SzPQPjAwECGJ7RFLbMbD9+A2jfDk9NFzFvNxBSyrLc/h/+c7awsOwaZpjgmF5O2j7V5
-         VXteSu7J/8AAGzxocGtd7ss1jWeut+B9jGE2+St41f59AnnyIYfoqgDe5JMbGLLSk2EO
-         XZCw==
-X-Gm-Message-State: AC+VfDydwQ9147s8G2KUNY7W9HpJzSSiSW1FEx5rG/g2akJxQ1WGZ5ju
-        R3vsO1hoUcXBtU6ZoZTwjd6ziQ==
-X-Google-Smtp-Source: ACHHUZ4JnnNBUH5N5yBTJqLceiHUwDt+Vr2wAmyEEWYqYKDQDcGQ51HM6tKSml1kcspqDpAFHoykdw==
-X-Received: by 2002:a2e:9c97:0:b0:2a8:c7c2:c380 with SMTP id x23-20020a2e9c97000000b002a8c7c2c380mr9408632lji.48.1684250808416;
-        Tue, 16 May 2023 08:26:48 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id y5-20020a2e95c5000000b002addbc16a54sm1456172ljh.41.2023.05.16.08.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 08:26:47 -0700 (PDT)
-Message-ID: <2bc16f9a-e150-b3d0-6d72-a2ff0a4d05ae@linaro.org>
-Date:   Tue, 16 May 2023 17:26:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] arm64: dts: qcom: sm8550-qrd: add display and panel
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tue, 16 May 2023 11:28:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37075FF1;
+        Tue, 16 May 2023 08:28:56 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-191-196.ewe-ip-backbone.de [91.248.191.196])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E5ABC66058F4;
+        Tue, 16 May 2023 16:28:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684250935;
+        bh=9Zbfci1TdhO6S4+wcLiRqTU98Ygr/MBClVVcg3Aacnc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C1QarmdofT6VuceBRnhEC8QA2IPFK3B3SaZk26W0KRWVXlGUlIglp+j8hZXgrPxdG
+         LTeVPM0qZvYgHO1l9oqgcIEQn0gJwiSqEucxe+xaM0LYqLk1TqIBiVuL7Gm/oIKhD5
+         68Ij32npBTDNc0taR6+PPTMFtvQjsQliy8dnEghJQqd3bRIcYv9L9xVTFgNE6/C5qv
+         rBzBOGihvBPpFDnLWeiA1xKeSk1SGhShAPSdghTQx/XCF15KRTI3kVqum3t9PXxGeq
+         WzzNxjfsKP6UZPDajDyqisD4fYCP66aPFjXp91/mZypwjMcmGd6P5NQ7HYSNuTbIt/
+         LUOnsiSpa0Xdg==
+Received: by mercury (Postfix, from userid 1000)
+        id E1D901060F7F; Tue, 16 May 2023 17:28:51 +0200 (CEST)
+Date:   Tue, 16 May 2023 17:28:51 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
+        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
+        vishal.sagar@amd.com, kalyani.akula@amd.com,
+        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        "Signed-off-by : Abel Vesa" <abel.vesa@linaro.org>
-References: <20230516151708.213744-1-krzysztof.kozlowski@linaro.org>
- <ecfe4f62-9c54-df5e-cd5d-e7a956510696@linaro.org>
- <8b670310-47b3-c301-99ae-84ccb704d733@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <8b670310-47b3-c301-99ae-84ccb704d733@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+Message-ID: <20230516152851.74xcwa7naaniox6x@mercury.elektranox.org>
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uzdssvofxc7p4teh"
+Content-Disposition: inline
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,95 +101,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--uzdssvofxc7p4teh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 16.05.2023 17:23, Krzysztof Kozlowski wrote:
-> On 16/05/2023 17:20, Konrad Dybcio wrote:
->>
->>
->> On 16.05.2023 17:17, Krzysztof Kozlowski wrote:
->>> Enable Display Subsystem with Visionox VTDR6130 Panel (same as on
->>> MTP8550).
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> ---
->>>
->>> Context in the patch depends on:
->>> 1. https://lore.kernel.org/linux-arm-msm/20230516133011.108093-1-krzysztof.kozlowski@linaro.org/T/#t
->>> 2. https://lore.kernel.org/linux-arm-msm/20230512160452.206585-1-krzysztof.kozlowski@linaro.org/
->>> ---
->>>  arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 76 +++++++++++++++++++++++++
->>>  1 file changed, 76 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
->>> index 30b36a149125..03bf6bc2db4d 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
->>> @@ -420,6 +420,10 @@ vreg_l3g_1p2: ldo3 {
->>>  	};
->>>  };
->>>  
->>> +&dispcc {
->>> +	status = "okay";
->>> +};
->> Missed this in the bigpatchdrop review.. It makes no sense to keep
->> dispcc disabled by default (other than for lazily "solving" UEFI
->> framebuffer being shut down)
-> 
-> Sure.
-> 
->>
->>> +
->>>  &gcc {
->>>  	clocks = <&bi_tcxo_div2>, <&sleep_clk>,
->>>  		 <&pcie0_phy>,
->>> @@ -431,6 +435,50 @@ &gcc {
->>>  		 <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
->>>  };
->>>  
->>> +&mdss {
->>> +	status = "okay";
->>> +};
->>> +
->>> +&mdss_dsi0 {
->>> +	vdda-supply = <&vreg_l3e_1p2>;
->>> +	status = "okay";
->>> +
->>> +	panel@0 {
->>> +		compatible = "visionox,vtdr6130";
->>> +		reg = <0>;
->>> +
->>> +		pinctrl-names = "default", "sleep";
->>> +		pinctrl-0 = <&sde_dsi_active>, <&sde_te_active>;
->>> +		pinctrl-1 = <&sde_dsi_suspend>, <&sde_te_suspend>;
->> property-n
->> property-names
-> 
-> Sure, copy-pasta from MTP8550.
-> 
->>> +
->>> +&mdss_mdp {
->>> +	status = "okay";
->>> +};
->> This should also be enabled by default, MDSS is useless when MDP is
->> disabled.
-> 
-> But don't we want to disable both when display is not used (not connected)?
-The MDSS bus device only has a 0x1000 slice of the 0x90000-long "full MDSS",
-the rest is probed with MDP/DPU. It also calls of_something_populate that
-make DSI, DSIPHY and DP/HDMI probe. But all of them ultimately need a graph
-handle to MDP.
+Hi,
 
-If we have a display (of any kind), MDP has to be enabled (or the display
-engine will not have a way to be programmed).
+On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
 
-If we don't, enabling MDSS makes no sense as all of the hardware will be
-shut down right after probing.
+[...]
 
-So I'd say either both or none.
+>  .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
 
-Konrad
-> 
-> Best regards,
-> Krzysztof
-> 
+[...]
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+--uzdssvofxc7p4teh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRjoSkACgkQ2O7X88g7
++pqZnA//TDDMhr+y5x6WtK0aAHgdZNjN+PvDZjdFdHabNv9Ne7ZbkH8zfacX2Ixj
+vcRQLK7IEndRfP76oe/Yd30gDh3af+G/6sGDihy7qDIYKFZ4U59e52eijzGtzOzd
+bIQd+nK7rVLLPD6TCQnIMd59dX0YBGWW1NQsc9viEUKa73617ANSXPmUS9/z7BAc
+TB9a9Wh11wWkmndxV32Fquuq7mTmmqfBMh7rPnKm8WIqxWfdMZeZy2UvZMBVj2YB
+yXzEskCayveuLHQMKZoHrj8nUpItatw6BOupTR5Df1VQ8aZGpiedTulY/dVgusiR
+4qO9zXCKpjpRb7X4CgfvWM9L8qVEG1X47iepFNX+CEQXv+3EJCHZEF8QSyPxAk8P
+85aI/FZOmLHKjTlu9TMJspG1ruxDaPyhxtfZEpI7+xGhiH4OQN48QRk+PfIpIEqt
+9c+PCUCXosIGpX7sNn3hrXGQhPRItiRGDEX2tqt0SWyn3/V2GvG+8rOqIv3F42Bg
+5vRf8LlcgEZlAeu0CNwUFmi4T/Wu+/77sa7Tbm+HDIqEo1kHJnlLJTs2LRjSgqSR
+/vlgH3m61YKqg9jy5xrmuFeH6Yg2GQQVtig9l1+r1XmHTUXrTvROk5kQ8AgTOYZh
+ZAqxk1Gb2IdIBXK0U6iG/7jHEhu3spe5gSzqdFc/+FUfveluN/o=
+=1MS+
+-----END PGP SIGNATURE-----
+
+--uzdssvofxc7p4teh--
