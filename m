@@ -2,70 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CBF704A70
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222F1704A74
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232313AbjEPKYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S232349AbjEPKYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbjEPKYS (ORCPT
+        with ESMTP id S232097AbjEPKYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:24:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551FE59FB;
-        Tue, 16 May 2023 03:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eW1zTzluRyqIINnOs8VCUy4pxgzgc9V9Y6G7uV7MxuQ=; b=NcnPY4RB8yYqW9VjiQjCFMVTEx
-        PyloglVA0lSckZnGCcKmkZ2Slyvomc6r63BDwgu9hb7+fZn8oYerUNRw0VppdBaQiNSaKLHHIwzvZ
-        kqjvaP73hu1BC6hnojADsEmeTPcRO8z2zDGrEfhPH3kDIJJHe6oOE+itSZqT5zjlPlZEwcisSFkd7
-        d90j6kcjUfyNzBAn6Ka25DP8LnBfnOv1X0r6Q0cCKZyKoRGDB52lo4OuA4Sx3FMNZr6QAziPa7mqR
-        RXHYQ9JZDqvZBb5gHucltoVkO4/ti3E3YLajQ8CFaQzecFiWp2mKB1IWmZlZ0dhzQQ66Pb6eU2V0B
-        ZLZpmDtA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pyrpk-004AIk-3R; Tue, 16 May 2023 10:23:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 376D230008D;
-        Tue, 16 May 2023 12:23:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1DEF920118D79; Tue, 16 May 2023 12:23:06 +0200 (CEST)
-Date:   Tue, 16 May 2023 12:23:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
-        srutherford@google.com, akpm@linux-foundation.org,
-        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
-        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
-        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
-        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
-        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
-        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
-        fenghua.yu@intel.com, pangupta@amd.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V6 04/14] x86/sev: optimize system vector processing
- invoked from #HV exception
-Message-ID: <20230516102305.GF2587705@hirez.programming.kicks-ass.net>
-References: <20230515165917.1306922-1-ltykernel@gmail.com>
- <20230515165917.1306922-5-ltykernel@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515165917.1306922-5-ltykernel@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Tue, 16 May 2023 06:24:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F693AB5;
+        Tue, 16 May 2023 03:23:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF2436376E;
+        Tue, 16 May 2023 10:23:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162E0C433D2;
+        Tue, 16 May 2023 10:23:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684232628;
+        bh=UtT+cu3FXiZJ1Mr9HS235vPUOkZGm2Gs6P2exNmcd6c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aPbQcE8EkNLk39cKWelvpiORI+He4fat2OkVvsFm2co5WYNhH7vMSSNpjzrogqKOO
+         ZRAt+Wc9A2Nfgz9eXQ2mAkmCZIDZM/nlu0vf+41i6wVoYEI/q97FQB3iC2PU9Icxt/
+         ZSVIxcVNg74VX+z6zz8J94cLnW3vHqrOiWRgOwybM237OId/OAcYKTiB6qyQ1bElCN
+         S9nClummfY+xSX6sRhC3iarAus7ejGdYSXgMKzmxfhVKckq73WdxB71Qio+kyuAPKR
+         o4ZY9dU7S/BvSwz89F4vYr3h28+DCCQrGvbbO33Bjchp65k3b9TZRNoLBj3ZSP95xw
+         u12b/S09rOwrw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pyrqL-00FUuf-N5;
+        Tue, 16 May 2023 11:23:45 +0100
+Date:   Tue, 16 May 2023 11:23:45 +0100
+Message-ID: <86a5y4mv66.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
+In-Reply-To: <20230516100936.GF10825@google.com>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+        <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+        <86o7mpmvqq.wl-maz@kernel.org>
+        <20230512153933.GH68926@ediswmail.ad.cirrus.com>
+        <86mt29mt2m.wl-maz@kernel.org>
+        <20230515112554.GA10825@google.com>
+        <86h6scmzf7.wl-maz@kernel.org>
+        <20230516100936.GF10825@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lee@kernel.org, ckeepax@opensource.cirrus.com, broonie@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, patches@opensource.cirrus.com, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,73 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 12:59:06PM -0400, Tianyu Lan wrote:
+On Tue, 16 May 2023 11:09:36 +0100,
+Lee Jones <lee@kernel.org> wrote:
+> 
+> On Tue, 16 May 2023, Marc Zyngier wrote:
+> 
+> > I'm happy to see an interrupt controller for the GPIOs. But the rest
+> > is just internal muck that doesn't really belong here. Where should it
+> 
+> You should have been a poet! =;-)
 
-So your subject states:
+Who says I'm not?
 
-> Subject: [RFC PATCH V6 04/14] x86/sev: optimize system vector processing invoked from #HV exception
-                                         ^^^^^^^^
+	M.
 
-> @@ -228,51 +238,11 @@ static void do_exc_hv(struct pt_regs *regs)
->  		} else if (pending_events.vector == IA32_SYSCALL_VECTOR) {
->  			WARN(1, "syscall shouldn't happen\n");
->  		} else if (pending_events.vector >= FIRST_SYSTEM_VECTOR) {
-> -			switch (pending_events.vector) {
-> -#if IS_ENABLED(CONFIG_HYPERV)
-> -			case HYPERV_STIMER0_VECTOR:
-> -				sysvec_hyperv_stimer0(regs);
-> -				break;
-> -			case HYPERVISOR_CALLBACK_VECTOR:
-> -				sysvec_hyperv_callback(regs);
-> -				break;
-> -#endif
-> -#ifdef CONFIG_SMP
-> -			case RESCHEDULE_VECTOR:
-> -				sysvec_reschedule_ipi(regs);
-> -				break;
-> -			case IRQ_MOVE_CLEANUP_VECTOR:
-> -				sysvec_irq_move_cleanup(regs);
-> -				break;
-> -			case REBOOT_VECTOR:
-> -				sysvec_reboot(regs);
-> -				break;
-> -			case CALL_FUNCTION_SINGLE_VECTOR:
-> -				sysvec_call_function_single(regs);
-> -				break;
-> -			case CALL_FUNCTION_VECTOR:
-> -				sysvec_call_function(regs);
-> -				break;
-> -#endif
-> -#ifdef CONFIG_X86_LOCAL_APIC
-> -			case ERROR_APIC_VECTOR:
-> -				sysvec_error_interrupt(regs);
-> -				break;
-> -			case SPURIOUS_APIC_VECTOR:
-> -				sysvec_spurious_apic_interrupt(regs);
-> -				break;
-> -			case LOCAL_TIMER_VECTOR:
-> -				sysvec_apic_timer_interrupt(regs);
-> -				break;
-> -			case X86_PLATFORM_IPI_VECTOR:
-> -				sysvec_x86_platform_ipi(regs);
-> -				break;
-> -#endif
-> -			case 0x0:
-> -				break;
-> -			default:
-> -				panic("Unexpected vector %d\n", vector);
-> -				unreachable();
-> +			if (!(sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])) {
-> +				WARN(1, "system vector entry 0x%x is NULL\n",
-> +				     pending_events.vector);
-> +			} else {
-> +				(*sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])(regs);
->  			}
->  		} else {
->  			common_interrupt(regs, pending_events.vector);
-
-But your code replace direct calls with an indirect call. Now AFAIK,
-this SNP shit came with Zen3, and Zen3 still uses retpolines for
-indirect calls.
-
-Can you connect the dots?
+-- 
+Without deviation from the norm, progress is not possible.
