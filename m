@@ -2,130 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66909704BD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C67704BE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjEPLIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S232832AbjEPLJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbjEPLIT (ORCPT
+        with ESMTP id S231965AbjEPLJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:08:19 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6685855B3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:07:22 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f42ba32e24so55086255e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1684235139; x=1686827139;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K8sgWdaXsCGFV0Z5HXvEODuykBpWRfti5JgH2bVoUyg=;
-        b=MhfTthXQsiC/JBOl4CrGG+sG87DQcoNyspUinDPlpos1yOAoQJI4OHv3CV2oPQYYKR
-         wdchb5E/L0hbJiIxiS/L6L021meYV0fow9cQJ/ft6YD15uo2NyIsKJVc3CcXRwVLE5pf
-         FqdSlKCGm9LM9gkZ4CAEbmDiB4cMLGWjjbHPsYjBp/voBRY7kIwof7gJSfpWKP3oMPUr
-         8K7fTLWQTNSlySnvSGNkJlin3Jg6C/BfrhEyDQSR1HvZx039Qx/lkT56gj9aI62ZwtsI
-         Xi5a9Lopzm9mCj6UC5AjDalUBFUPUrMFaGqv3N+zGNOdZHDuV47+MOLIC35cA/Ampzq7
-         VPqA==
+        Tue, 16 May 2023 07:09:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3574B7D94
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684235168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cffqgY240u6LKhQiohGL7llXzs3YEJD7Cg0tf+vxCaM=;
+        b=OhQ1obOw3rykwQW9wW0fjL/ZJgDQtWccLQmSZLxIjDVLXBAdwUHsZp2Z/RsQCiOSCjky3j
+        VChE17bIzDlAutV8spRM8/rbMG92rr/Fk2ko9OVMXwPwkVytf5m8KxaN1ookzehinUL5eL
+        ym2gs9/2OHlylqa4FzVK30vrVURd+SI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-SZVILWIdOp-7ksl196chbw-1; Tue, 16 May 2023 07:06:07 -0400
+X-MC-Unique: SZVILWIdOp-7ksl196chbw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3062dedf7d9so8354547f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:06:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684235139; x=1686827139;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K8sgWdaXsCGFV0Z5HXvEODuykBpWRfti5JgH2bVoUyg=;
-        b=dY2Wn6oOsIYlb2f/QrVGdxzSFyD5RFKK3Yw3APyhb/enP8nl4jQqev/XwuDmEYbFIJ
-         enm2kSjNz2FpemyTBvkr6zh6P5wEZOY3GVxPPbZjvScY6BgEkDzn1uV44DYWkERhD0lR
-         AOoZhq6qHOh6laZZoggPPvC0ZZUNNaSg8Hjwvob6i6yFehUW03XZn7OnQn3v4mPJtQaO
-         2S0sJZAfY2StCq86xI85GZruS/LOfiGyid3GjxT+CsEQnH5wQISZjmqqCkM4rE3+xNjg
-         y5WM0UFWl7BTaKhnmCDRrIzWJjf52U59f0dtsDf7xsyV7kjTlf834XCgfJsw6n2SzYUf
-         G8QQ==
-X-Gm-Message-State: AC+VfDzVdksUhP6MBYlTkymFuDXSCeZEut6E8SlxiBmV92RzbiEhZo+F
-        pl6dbjeOHC4Afnn/Vo1Laq6rwQ==
-X-Google-Smtp-Source: ACHHUZ4/S1AoM1YqvH5ctv5xi1JB9jIVGk6B2NI3GauSZZDsVKZa4jKNcJ7EG2fc2kTEpuydm4geaQ==
-X-Received: by 2002:a05:600c:214f:b0:3f4:23b9:eed2 with SMTP id v15-20020a05600c214f00b003f423b9eed2mr20407550wml.38.1684235139034;
-        Tue, 16 May 2023 04:05:39 -0700 (PDT)
-Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
-        by smtp.gmail.com with ESMTPSA id d9-20020adfe889000000b00307972e46fasm2178890wrm.107.2023.05.16.04.05.37
+        d=1e100.net; s=20221208; t=1684235165; x=1686827165;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cffqgY240u6LKhQiohGL7llXzs3YEJD7Cg0tf+vxCaM=;
+        b=h5rPvcNRXuJi14cZh9eW9bWDulcr46/L7ytW0xG6u2kUYEk6DhXtDlXKKHM+2xUgrn
+         QOwx1IymP5wZinyVuGpxCtl/DeoJSRY/JsxkFkniSMcf1PJDlNdBXr1KZxBvhtkBrqbY
+         UKazNIir8y0a6FQukbOzVBld5uEfidHXVCDxQtCGC1Vj3tbCChVNnjkK2hUS/DhSbRwJ
+         nl/8p4d+oeaMY+I8bSBXzwzybwwVZaQk9O1sjc2Jc3JAzhPz0cYvOzoDxb35GeTWMy66
+         zWtPwTbyUSWnXaaxDVnRPN9QNY6k2/vjhUzlsEO4L6p6htxz0E/SkHVCztdpISc4jMvd
+         MFFA==
+X-Gm-Message-State: AC+VfDzSuBwjVx7ojN8yxPzBcN9xIHo1oSo7XHzi4zv/bCXYFG7CXRxd
+        sIA3+Uofsdr63t6UqAgIpfEm/8ssyvswp7YnrkjZ4QaEqZ5PNkcVlcmZjqOhWZjWFmPFCSwks/G
+        2UPdt1VlyoI1ynmcstvzlZ9Ba
+X-Received: by 2002:adf:e547:0:b0:2e4:bfa0:8c30 with SMTP id z7-20020adfe547000000b002e4bfa08c30mr27781219wrm.47.1684235165595;
+        Tue, 16 May 2023 04:06:05 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4K9rbW0popZUr4vxTzQqMSMKba7jC9OqdpcSblcqHA+87lbMWIehFQ7VRpuGfRuPp2LzRt5Q==
+X-Received: by 2002:adf:e547:0:b0:2e4:bfa0:8c30 with SMTP id z7-20020adfe547000000b002e4bfa08c30mr27781204wrm.47.1684235165222;
+        Tue, 16 May 2023 04:06:05 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74f:2500:1e3a:9ee0:5180:cc13? (p200300cbc74f25001e3a9ee05180cc13.dip0.t-ipconnect.de. [2003:cb:c74f:2500:1e3a:9ee0:5180:cc13])
+        by smtp.gmail.com with ESMTPSA id y12-20020a5d614c000000b003062c609115sm2222988wrt.21.2023.05.16.04.06.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 04:05:38 -0700 (PDT)
-Message-ID: <4e5fc3ff-5b70-20a9-101a-cba9d20fc961@monstr.eu>
-Date:   Tue, 16 May 2023 13:05:37 +0200
+        Tue, 16 May 2023 04:06:04 -0700 (PDT)
+Message-ID: <d1b054d0-d083-d35c-e547-7e8756fd802a@redhat.com>
+Date:   Tue, 16 May 2023 13:06:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 07/23] arm64: zynqmp: Add pmu interrupt-affinity
+Subject: Re: [PATCH] swap: cleanup get/put_swap_device usage
 Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        michal.simek@xilinx.com, git@xilinx.com
-Cc:     Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Parth Gajjar <parth.gajjar@amd.com>,
-        Piyush Mehta <piyush.mehta@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Vishal Sagar <vishal.sagar@amd.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <cover.1683034376.git.michal.simek@amd.com>
- <4c6674bf7e048e7370248e50ed3d011d604d020e.1683034376.git.michal.simek@amd.com>
-From:   Michal Simek <monstr@monstr.eu>
-In-Reply-To: <4c6674bf7e048e7370248e50ed3d011d604d020e.1683034376.git.michal.simek@amd.com>
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
+References: <20230516052957.175432-1-ying.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230516052957.175432-1-ying.huang@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16.05.23 07:29, Huang Ying wrote:
+> The general rule to use a swap entry is as follows.
+> 
+> When we get a swap entry, if there isn't some other way to prevent
+> swapoff, such as page lock for swap cache, page table lock, etc., the
+> swap entry may become invalid because of swapoff.  Then, we need to
+> enclose all swap related functions with get_swap_device() and
+> put_swap_device(), unless the swap functions call
+> get/put_swap_device() by themselves.
+> 
+> Add the rule as comments of get_swap_device(), and cleanup some
+> functions which call get/put_swap_device().
+> 
+> 1. Enlarge the get/put_swap_device() protection range in
+> __read_swap_cache_async().  This makes the function a little easier to
+> be understood because we don't need to consider swapoff.  And this
+> makes it possible to remove get/put_swap_device() calling in some
+> function called by __read_swap_cache_async().
+> 
+> 2. Remove get/put_swap_device() in __swap_count().  Which is call in
+> do_swap_page() only, which encloses the call with get/put_swap_device()
+> already.
+> 
+> 3. Remove get/put_swap_device() in __swp_swapcount().  Which is call
+> in __read_swap_cache_async() only, which encloses the call with
+> get/put_swap_device() already.
+> 
+> 4. Remove get/put_swap_device() in __swap_duplicate(). Which is called
+> by
+> 
+> - swap_shmem_alloc(): the swap cache is locked.
+> 
+> - copy_nonpresent_pte() -> swap_duplicate() and try_to_unmap_one() ->
+> swap_duplicate(): the page table lock is held.
+> 
+> - __read_swap_cache_async() -> swapcache_prepare(): enclosed with
+> get/put_swap_device() already.
+> 
+> Other get/put_swap_device() usages are checked too.
 
-
-On 5/2/23 15:35, Michal Simek wrote:
-> From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> 
-> Explicitly specify interrupt affinity to avoid HW perfevents
-> need to guess. This avoids the following error upon linux boot:
-> armv8-pmu pmu: hw perfevents: no interrupt-affinity property,
-> guessing.
-> 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
->   arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> index 61c7045eb992..a117294dc890 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> @@ -161,6 +161,10 @@ pmu {
->   			     <0 144 4>,
->   			     <0 145 4>,
->   			     <0 146 4>;
-> +		interrupt-affinity = <&cpu0>,
-> +				     <&cpu1>,
-> +				     <&cpu2>,
-> +				     <&cpu3>;
->   	};
->   
->   	psci {
-
-Applied.
-M
+I suggest splitting this patch up into logical pieces as outlined here 
+by you already.
 
 -- 
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
-TF-A maintainer - Xilinx ZynqMP/Versal/Versal NET SoCs
+Thanks,
+
+David / dhildenb
+
