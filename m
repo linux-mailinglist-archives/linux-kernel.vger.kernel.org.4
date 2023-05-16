@@ -2,81 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F37704983
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9690C704989
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbjEPJkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S232098AbjEPJlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjEPJkk (ORCPT
+        with ESMTP id S230517AbjEPJlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:40:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62420F2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:40:39 -0700 (PDT)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QLB296kM6zqSJm;
-        Tue, 16 May 2023 17:36:17 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 17:40:36 +0800
-Subject: Re: [PATCH v10 3/5] hisi_acc_vfio_pci: register debugfs for hisilicon
- migration driver
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     <alex.williamson@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        <jonathan.cameron@huawei.com>, <cohuck@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>
-References: <20230408074224.62608-1-liulongfang@huawei.com>
- <20230408074224.62608-4-liulongfang@huawei.com> <ZDlGC8SUXqKNmfSe@nvidia.com>
- <ca592d60-9a5b-dec3-9565-76cd5c0740e0@huawei.com>
- <81e11acf-0ede-d515-bb5a-3964c302f384@huawei.com>
- <ZEKeUBiLyWWW7E+V@nvidia.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <fa3d47a1-0af5-f8ba-d14c-8d9a756e2c23@huawei.com>
-Date:   Tue, 16 May 2023 17:40:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 16 May 2023 05:41:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D73826A2;
+        Tue, 16 May 2023 02:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8/4tilrQKiIvB0XfRafYvjplDtXGmdWzz3tJ/hV+6Oo=; b=ERWziaznZS59/P3raJ/oSaU4FO
+        5DzH9OMJuMMiTDupib/I5+sd2VAdnjXu0PaIjSknwMx+MNgg4Ub6bviM0g8QnvZrV1xbO3jQyIdcU
+        1jafU4KSEKHxEBtMhCnvbRZMEcgIsUbZS7QRLLxAAFKvPEtZRUiR0oCsfRqyPn72qgUOZKgMv20Uc
+        z81G3YOnoR1ANp5XYuNZ2kGnBrY8u0EwPntOBjNng1V4ZXrtTJj1hrgyUBETn5D7ElQsuCN4j34Gs
+        c2Vn2kKovXSm6B7BZjC4/KTXifk7pbFGYutQEQ216e28uLuIQJ5TP5QLSuS+seFD/h1/W7IdXukC6
+        8C4peoRA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pyrAn-0048tQ-F2; Tue, 16 May 2023 09:40:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 771B93003CF;
+        Tue, 16 May 2023 11:40:48 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 593AE20118D79; Tue, 16 May 2023 11:40:48 +0200 (CEST)
+Date:   Tue, 16 May 2023 11:40:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, pangupta@amd.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH V6 03/14] x86/sev: Add AMD sev-snp enlightened guest
+ support on hyperv
+Message-ID: <20230516094048.GE2587705@hirez.programming.kicks-ass.net>
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-4-ltykernel@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <ZEKeUBiLyWWW7E+V@nvidia.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515165917.1306922-4-ltykernel@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/21 22:31, Jason Gunthorpe wrote:
-> On Fri, Apr 21, 2023 at 11:32:47AM +0800, liulongfang wrote:
+On Mon, May 15, 2023 at 12:59:05PM -0400, Tianyu Lan wrote:
+> From: Tianyu Lan <tiala@microsoft.com>
 > 
->> Thank you for your suggestion, but the current debugfs method can already
->> meet the functional requirements of verification testing and
->> problem location.
+> Enable #HV exception to handle interrupt requests from hypervisor.
 > 
-> To be clear, I'm against adding selftest code in this manner. We have
-> many frameworks for kernel teesting, please pick one and integrate
-> with it.
+> Co-developed-by: Lendacky Thomas <thomas.lendacky@amd.com>
+> Co-developed-by: Kalra Ashish <ashish.kalra@amd.com>
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+> Change since RFC V5:
+>        * Merge patch "x86/sev: Fix interrupt exit code paths from
+>         #HV exception" with this commit.
 > 
+> Change since RFC V3:
+>        * Check NMI event when irq is disabled.
+>        * Remove redundant variable
+> ---
+>  arch/x86/include/asm/idtentry.h    |  12 +-
+>  arch/x86/include/asm/mem_encrypt.h |   2 +
+>  arch/x86/include/uapi/asm/svm.h    |   4 +
+>  arch/x86/kernel/sev.c              | 349 ++++++++++++++++++++++++-----
+>  arch/x86/kernel/traps.c            |   2 +
+>  5 files changed, 310 insertions(+), 59 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index b0f3501b2767..867073ccf1d1 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -13,6 +13,12 @@
+>  
+>  #include <asm/irq_stack.h>
+>  
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
+> +#else
+> +#define irqentry_exit_hv_cond(regs, state)	irqentry_exit(regs, state)
+> +#endif
+> +
+>  /**
+>   * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+>   *		      No error code pushed by hardware
+> @@ -201,7 +207,7 @@ __visible noinstr void func(struct pt_regs *regs,			\
+>  	kvm_set_cpu_l1tf_flush_l1d();					\
+>  	run_irq_on_irqstack_cond(__##func, regs, vector);		\
+>  	instrumentation_end();						\
+> -	irqentry_exit(regs, state);					\
+> +	irqentry_exit_hv_cond(regs, state);				\
+>  }									\
+>  									\
+>  static noinline void __##func(struct pt_regs *regs, u32 vector)
+> @@ -241,7 +247,7 @@ __visible noinstr void func(struct pt_regs *regs)			\
+>  	kvm_set_cpu_l1tf_flush_l1d();					\
+>  	run_sysvec_on_irqstack_cond(__##func, regs);			\
+>  	instrumentation_end();						\
+> -	irqentry_exit(regs, state);					\
+> +	irqentry_exit_hv_cond(regs, state);				\
+>  }									\
+>  									\
+>  static noinline void __##func(struct pt_regs *regs)
+> @@ -270,7 +276,7 @@ __visible noinstr void func(struct pt_regs *regs)			\
+>  	__##func (regs);						\
+>  	__irq_exit_raw();						\
+>  	instrumentation_end();						\
+> -	irqentry_exit(regs, state);					\
+> +	irqentry_exit_hv_cond(regs, state);				\
+>  }									\
+>  									\
+>  static __always_inline void __##func(struct pt_regs *regs)
 
-Hi, Jason:
-The purpose of this hisi_acc_vf_debug_restore function is to obtain the
-migration status data of the migration device. It is a debug operation.
-Just to obtain this status data, user need to complete the few steps
-of live migration.
-Therefore, it is a debug function here, not a self-test function.
+WTF is this supposed to do and why is this the right way to achieve the
+desired result?
 
-Thanks,
-Longfang.
-> Jason
-> .
-> 
+Your changelog gives me 0 clues -- guess how much I then care about your
+patches?
