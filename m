@@ -2,207 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE9D704E90
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D41704E94
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbjEPNDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S233404AbjEPNDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233020AbjEPNDO (ORCPT
+        with ESMTP id S233401AbjEPNDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:03:14 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DB126B9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:02:45 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-52c6f8ba7e3so13013334a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:02:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684242163; x=1686834163;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kaXORhz+8RW894yoFfhPFe4LLGnVYgme5zSeBCWCFHk=;
-        b=EHiMiNDFqzYZH5BSekJGhS8x7xb1zcmnIC701W+wG85+uJQPEJdKPET0bsK1LXHZJQ
-         IcDScvY88OyXCdEXFqij1pGx17YZNgkM3Ff+FMp7W5gocdRo2lm9rnd7pwHTeaigt0Jy
-         ew0IioPC+UFdRDyDR1hNECB9IYyn1rDdZcFS/7ukvhjavNMlrlhvk3wwNW/xRjHENNyI
-         QNfamb/pddXHv/uPkGPD7zxlblSCOKcVjD9P4G6GB3/TsbIwb0vKLxjlEsFUJQhcOXaJ
-         y/b1yWsdIb/1eaHvzpym4AKUlUIgAzlzu9J8B1wJU0PEJIMtZIShmRomeR3yNYVfvIyR
-         rqlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684242163; x=1686834163;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kaXORhz+8RW894yoFfhPFe4LLGnVYgme5zSeBCWCFHk=;
-        b=CDLSFgYxOioCp1jQQ6dVawWUSe077NDaytT79RK+NOnMCdLtdr2LUjFAHhJxZhW2un
-         +BbO1QyOkTucQKUGZfQ1TciB1ubz3qWJUzr6Fq6OE2I6Q0Ge17H45FJjmBhTNAimSWnT
-         FcJ7GF/48UA3y/IYbvcXdaXzPLsIt/pkE+6qUPoHj6R5fywowPht7hIEiB0BPTb4F9N6
-         CoO1IAfzBujjs4OMliPi0AiaGe/tgmgDc1KpVWLBJmbQJS5Htr/G7tSq7qtPJp81pOZm
-         wDpXE9rEHvgElteIbslbVRlV0mQ8pnly51rm1s+yGUc4+T/g7/joPBO3NtRjSSTTpmBt
-         ps3g==
-X-Gm-Message-State: AC+VfDwVB91wFT+pRlh57wHa/a+2+RTZxNJ17NdZfl9EhYFwf1ZVa6cm
-        DI10rjSVAuxCh1iGnYADoQSbMluz5jX/W81vlaE=
-X-Google-Smtp-Source: ACHHUZ51C0wEaA3yJ4UzgPmQyHJvXvfxH09GFBbgghyInTN0AWx4Cn/7unwTxVUGykHy2mSFqHyAPkaq0GDsPlkgo0w=
-X-Received: by 2002:a17:902:ea07:b0:1ac:b0c5:77e5 with SMTP id
- s7-20020a170902ea0700b001acb0c577e5mr26208073plg.68.1684242162562; Tue, 16
- May 2023 06:02:42 -0700 (PDT)
+        Tue, 16 May 2023 09:03:16 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CEF4EED;
+        Tue, 16 May 2023 06:02:46 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 398454A9;
+        Tue, 16 May 2023 15:02:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1684242150;
+        bh=TlNdBKkLAEInokDFjqPTsQOhyqAowP6vdWV3DseKRdI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=F3jTIoCqLOBdBANGTURE8Lv4rZHMVH+exMuINBzmHL0WuJKXKceSIRHg1mu1duOJl
+         AIa/708sqhAtsqNlybfXBoUtQ3AsizEdrakqpYdyou2gDHe8mNNZFBC/f13zR8FgI8
+         fsEZZIhHBXlS/o0OU37q/DGcj79CxsxtG+4pFXmg=
+Message-ID: <80f05939-1cc8-e435-138d-b2f519c3b407@ideasonboard.com>
+Date:   Tue, 16 May 2023 16:02:37 +0300
 MIME-Version: 1.0
-References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-7-aford173@gmail.com>
- <CAGXv+5EDYvjOiAWDnQsrrp=0iWm54N+pR3O43xDFXYE=UxAw-g@mail.gmail.com>
-In-Reply-To: <CAGXv+5EDYvjOiAWDnQsrrp=0iWm54N+pR3O43xDFXYE=UxAw-g@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Tue, 16 May 2023 08:02:30 -0500
-Message-ID: <CAHCN7xKdr1syQS6RKNnuAuEEbsbDQjEnOdJcYdaFNDEnYVuK6w@mail.gmail.com>
-Subject: Re: [PATCH V6 6/6] drm: bridge: samsung-dsim: Support non-burst mode
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
+To:     Ludwig Zenz <lzenz@dh-electronics.com>
+Cc:     Matti.Vaittinen@fi.rohmeurope.com, andriy.shevchenko@intel.com,
+        andriy.shevchenko@linux.intel.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, hverkuil@xs4all.nl, khalasa@piap.pl,
+        krzysztof.kozlowski+dt@linaro.org,
+        laurent.pinchart+renesas@ideasonboard.com, lgirdwood@gmail.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, luca.ceresoli@bootlin.com,
+        m.tretter@pengutronix.de, marex@denx.de, mchehab@kernel.org,
+        mpagano@gentoo.org, peda@axentia.se, robh+dt@kernel.org,
+        sakari.ailus@linux.intel.com, satish.nagireddy@getcruise.com,
+        wsa@kernel.org
+References: <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
+ <20230516123549.3120-1-lzenz@dh-electronics.com>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230516123549.3120-1-lzenz@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 10:26=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> =
-wrote:
->
-> On Tue, May 16, 2023 at 7:57=E2=80=AFAM Adam Ford <aford173@gmail.com> wr=
-ote:
-> >
-> > The high-speed clock is hard-coded to the burst-clock
-> > frequency specified in the device tree.  However, when
-> > using devices like certain bridge chips without burst mode
-> > and varying resolutions and refresh rates, it may be
-> > necessary to set the high-speed clock dynamically based
-> > on the desired pixel clock for the connected device.
-> >
-> > This also removes the need to set a clock speed from
-> > the device tree for non-burst mode operation, since the
-> > pixel clock rate is the rate requested from the attached
-> > device like a bridge chip.  This should have no impact
-> > for people using burst-mode and setting the burst clock
-> > rate is still required for those users.  If the burst
-> > clock is not present, change the error message to
-> > dev_info indicating the clock use the pixel clock.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> > Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> > ---
-> >  drivers/gpu/drm/bridge/samsung-dsim.c | 27 +++++++++++++++++++++------
-> >  1 file changed, 21 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/br=
-idge/samsung-dsim.c
-> > index 3944b7cfbbdf..03b21d13f067 100644
-> > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> > @@ -655,16 +655,28 @@ static unsigned long samsung_dsim_set_pll(struct =
-samsung_dsim *dsi,
-> >
-> >         dsi->hs_clock =3D fout;
-> >
-> > +       dsi->hs_clock =3D fout;
-> > +
->
-> Not sure about the double assignment. Was this caused by a rebase?
+Hi,
 
-Oops,
+On 16/05/2023 15:35, Ludwig Zenz wrote:
+> On Wed, 26 Apr 2023 14:51:12 +0300, Tomi Valkeinen wrote:
+> 
+> [...]
+> 
+>>   +static int ub960_configure_ports_for_streaming(struct ub960_data *priv,
+>>   +					       struct v4l2_subdev_state *state)
+>>   +{
+>>   +	u8 fwd_ctl;
+>>   +	struct {
+>>   +		u32 num_streams;
+>>   +		u8 pixel_dt;
+>>   +		u8 meta_dt;
+>>   +		u32 meta_lines;
+>>   +		u32 tx_port;
+>>   +	} rx_data[UB960_MAX_RX_NPORTS] = {};
+>>   +	u8 vc_map[UB960_MAX_RX_NPORTS] = {};
+>>   +	struct v4l2_subdev_route *route;
+>>   +	unsigned int nport;
+>>   +	int ret;
+>>   +
+>>   +	ret = ub960_validate_stream_vcs(priv);
+>>   +	if (ret)
+>>   +		return ret;
+>>   +
+>>   +	ub960_get_vc_maps(priv, state, vc_map);
+>>   +
+>>   +	for_each_active_route(&state->routing, route) {
+>>   +		struct ub960_rxport *rxport;
+>>   +		struct ub960_txport *txport;
+>>   +		struct v4l2_mbus_framefmt *fmt;
+>>   +		const struct ub960_format_info *ub960_fmt;
+>>   +		unsigned int nport;
+>>   +
+>>   +		nport = ub960_pad_to_port(priv, route->sink_pad);
+>>   +
+>>   +		rxport = priv->rxports[nport];
+>>   +		if (!rxport)
+>>   +			return -EINVAL;
+>>   +
+>>   +		txport = priv->txports[ub960_pad_to_port(priv, route->source_pad)];
+>>   +		if (!txport)
+>>   +			return -EINVAL;
+>>   +
+>>   +		rx_data[nport].tx_port = ub960_pad_to_port(priv, route->source_pad);
+>>   +
+>>   +		rx_data[nport].num_streams++;
+>>   +
+>>   +		/* For the rest, we are only interested in parallel busses */
+>>   +		if (rxport->rx_mode == RXPORT_MODE_CSI2_SYNC ||
+>>   +		    rxport->rx_mode == RXPORT_MODE_CSI2_ASYNC)
+>>   +			continue;
+>>   +
+>>   +		if (rx_data[nport].num_streams > 2)
+>>   +			return -EPIPE;
+>>   +
+>>   +		fmt = v4l2_subdev_state_get_stream_format(state,
+>>   +							  route->sink_pad,
+>>   +							  route->sink_stream);
+>>   +		if (!fmt)
+>>   +			return -EPIPE;
+>>   +
+>>   +		ub960_fmt = ub960_find_format(fmt->code);
+>>   +		if (!ub960_fmt)
+>>   +			return -EPIPE;
+>>   +
+>>   +		if (ub960_fmt->meta) {
+>>   +			if (fmt->height > 3) {
+>>   +				dev_err(&priv->client->dev,
+>>   +					"rx%u: unsupported metadata height %u\n",
+>>   +					nport, fmt->height);
+>>   +				return -EPIPE;
+>>   +			}
+>>   +
+>>   +			rx_data[nport].meta_dt = ub960_fmt->datatype;
+>>   +			rx_data[nport].meta_lines = fmt->height;
+>>   +		} else {
+>>   +			rx_data[nport].pixel_dt = ub960_fmt->datatype;
+>>   +		}
+>>   +	}
+>>   +
+>>   +	/* Configure RX ports */
+>>   +
+>>   +	fwd_ctl = 0;
+> 
+> Hello, I have only used the first RX port in my setup (ds90ub933 to ds90ub964). The logic for activating/deactivating the Rx ports did not work for me. My suggestion is:
 
-I moved this to the previous patch since the updated dphy changes
-needed to know the hs_clock. I must forgot to check this when I
-applied the subsequent patch, so the double assignment appeared.  I am
-surprised the patch tool didn't complain.  I guess the good news is
-that nothing is broken, but the bad news is I have to spam everyone
-with a V7.  I'll wait a couple days to see if anything finds anything
-else.
+Why doesn't it work? What happens?
 
-adam
->
-> ChenYu
->
-> >         return fout;
-> >  }
-> >
-> >  static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
-> >  {
-> > -       unsigned long hs_clk, byte_clk, esc_clk;
-> > +       unsigned long hs_clk, byte_clk, esc_clk, pix_clk;
-> >         unsigned long esc_div;
-> >         u32 reg;
-> > +       struct drm_display_mode *m =3D &dsi->mode;
-> > +       int bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
-> > +
-> > +       /* m->clock is in KHz */
-> > +       pix_clk =3D m->clock * 1000;
-> > +
-> > +       /* Use burst_clk_rate if available, otherwise use the pix_clk *=
-/
-> > +       if (dsi->burst_clk_rate)
-> > +               hs_clk =3D samsung_dsim_set_pll(dsi, dsi->burst_clk_rat=
-e);
-> > +       else
-> > +               hs_clk =3D samsung_dsim_set_pll(dsi, DIV_ROUND_UP(pix_c=
-lk * bpp, dsi->lanes));
-> >
-> > -       hs_clk =3D samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
-> >         if (!hs_clk) {
-> >                 dev_err(dsi->dev, "failed to configure DSI PLL\n");
-> >                 return -EFAULT;
-> > @@ -935,7 +947,7 @@ static void samsung_dsim_set_display_mode(struct sa=
-msung_dsim *dsi)
-> >         u32 reg;
-> >
-> >         if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> > -               int byte_clk_khz =3D dsi->burst_clk_rate / 1000 / 8;
-> > +               int byte_clk_khz =3D dsi->hs_clock / 1000 / 8;
-> >                 int hfp =3D (m->hsync_start - m->hdisplay) * byte_clk_k=
-hz / m->clock;
-> >                 int hbp =3D (m->htotal - m->hsync_end) * byte_clk_khz /=
- m->clock;
-> >                 int hsa =3D (m->hsync_end - m->hsync_start) * byte_clk_=
-khz / m->clock;
-> > @@ -1785,10 +1797,13 @@ static int samsung_dsim_parse_dt(struct samsung=
-_dsim *dsi)
-> >                         return PTR_ERR(pll_clk);
-> >         }
-> >
-> > +       /* If it doesn't exist, use pixel clock instead of failing */
-> >         ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-clock-fre=
-quency",
-> > -                                      &dsi->burst_clk_rate, 0);
-> > -       if (ret < 0)
-> > -               return ret;
-> > +                                      &dsi->burst_clk_rate, 1);
-> > +       if (ret < 0) {
-> > +               dev_info(dev, "Using pixel clock for HS clock frequency=
-\n");
-> > +               dsi->burst_clk_rate =3D 0;
-> > +       }
-> >
-> >         ret =3D samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequ=
-ency",
-> >                                        &dsi->esc_clk_rate, 0);
-> > --
-> > 2.39.2
-> >
+  Tomi
+
