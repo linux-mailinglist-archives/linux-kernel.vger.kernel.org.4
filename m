@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17697042CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7651B7042CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjEPBWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S229570AbjEPBX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjEPBWq (ORCPT
+        with ESMTP id S229562AbjEPBXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:22:46 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F892D66
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:22:44 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f38bea8be8so360863e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:22:44 -0700 (PDT)
+        Mon, 15 May 2023 21:23:24 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298DD1BF6
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:23:23 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ac80da3443so146081231fa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:23:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684200163; x=1686792163;
+        d=linaro.org; s=google; t=1684200201; x=1686792201;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0ZUmfin9A8hNGiBBOjTB9e2R9glJPnwDR5gTUtbZSiA=;
-        b=JdcjEPIBnfl1YOktLWY4Dlm9DCvDYp0UjkYpMGCQEiwza0MbfhGlHlWPDAWVfD+2cW
-         3pmSaNwjgqhwcu0OEQjvlCJ1G1/MzxIIXwPUjHjdk+GutfyOuQRDOzRkmKPEJ099oyae
-         F+4JMeG/Hy6syDf2Xi0NF2xtB1b9F9ghTmOBFS4uAiem1I96ShIh50Z4fnfnRnFAkiEf
-         k1rDRFlDuc8u3c/S7ybtNaO7dsGifbBJRcTxTnMT2jQu2idnI5hptbxIS2lCO13KkAod
-         +sivemErXwjvCHnMkr0//9QQ7IStguoKtk51t7XxXNgTVDSeyB1GGyX+ehl5DgOmQvTQ
-         oF6Q==
+        bh=rdcz+tlufyCWWmwwRYaeolzxPDHo6Vkg33VyiauA0pw=;
+        b=Mw4KMu+EFSlqV0wV1eo6KCnJr+WVbPdA+8FJT5c6eJSfhILo4i/sBevX12Ios/Gpks
+         +WMapNODRme/GSwdhzReXInQ8cDG/dHggw0J/Xjh3QWbROlooH/tCguFmLSiMfq+FI7y
+         L3YqPyQuaoyKgH+wH+RdImfNTsfmzyuxnGeeGGCZnVB8NQjCpmxalkvLWJjBSjkrbCih
+         GC2FcrAYj73k0gSa/t0aYpmhB+liFlguMT76n3afTkrj6exGxm+BU4dSO2ZxVdS2KbUY
+         Q/M8DGghjm7/0kGKGn+klieK2eNZBrj5a3TyBq8eeS22YF36Mbgi2/Ydti9Z/6VSy1gl
+         Qhdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684200163; x=1686792163;
+        d=1e100.net; s=20221208; t=1684200201; x=1686792201;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ZUmfin9A8hNGiBBOjTB9e2R9glJPnwDR5gTUtbZSiA=;
-        b=gNAfwVtPOzOyUOKz8TEo0/x9qTxMe8QgL5HEYr1VfpiFjtKTxWIxVN3Skn53pkQeXd
-         vi+mORHR3CY1H1o0Y12H2A1GJ8dluHCZW15IR4Dg0eY9apwTsnaOvQEmkmm29mojGsLW
-         K1q++Fr8jXtTerPByxwPw9MU0mikgZ96GnfayOj1T82q1uTE1khPYULju8c8Iv3+V9Od
-         KY10Q0N6E4TjcgVUuUn80BnGbDY2MzPXcsVGdFBGOJvPUcEU4zntfvtJxT8pJHfCENB4
-         5MmAWh5rFpLxRAgMeYUtCHUn7eC2fSExGC5dzCJ45dQc+0tjBFlRV4fwf/bmEo8olAzB
-         X9Vw==
-X-Gm-Message-State: AC+VfDxuYQCviV0PsGQ+9V2r1dANA8GaixaPFLLswQDcuGAI9nbErX1E
-        QkEadgHgPyhH7b+CioFTDLzzxQ==
-X-Google-Smtp-Source: ACHHUZ6zEhTpvW4dpkth4ZOToXLIvIJIWXLqONU3Vih6GcLSgDan3DxIV0QF2ktnqsHRVwEDlr4xow==
-X-Received: by 2002:ac2:47f8:0:b0:4f3:78dd:8e0b with SMTP id b24-20020ac247f8000000b004f378dd8e0bmr2465642lfp.32.1684200163052;
-        Mon, 15 May 2023 18:22:43 -0700 (PDT)
+        bh=rdcz+tlufyCWWmwwRYaeolzxPDHo6Vkg33VyiauA0pw=;
+        b=SI62FnrKkbfC/HWcqADfTNu0JJRcc6W/M9/YvPA2AXTu7Dg8Lbrd4o8fr0iIE+UnYU
+         pbWEM1Iv/OoNdKqBTGzE4URsIhgXr5lwUGN4IbtdjuXpqeXDXoAMh5+Nbx2Er+TAd0i3
+         592aNPtm8c4TqePhlzqqj6ptSzDXtUVkTCWHfzrhUvXtw23Ksis4zu7OQqohnW0yEh5I
+         XyYr9VdaIUlW7bfXAytYfrYoQFBIVcY3//asrUzQGP7Wd9nOCkzX7RRJHR+lL/Z+5cBn
+         8aVga9xlMcuSieh2h91td85AyGmMDXwKsKzUiRJgRCdksJ6nEuNW/XP3b6jLr+nE6P1q
+         jJYw==
+X-Gm-Message-State: AC+VfDzsG2EIrYCFRV20ZwVnHEhTJROaK/OvR4m5Jjltd6dg3PFUKo3T
+        u/eJs5ACWv0Lc2A8te1zokwChg==
+X-Google-Smtp-Source: ACHHUZ6r9pzz9/eTWV8LflnTd0wsAp9+78FKTyrZ2P1/zI1IumkTrCsCMttylpIlB6cmdAu09tGo7w==
+X-Received: by 2002:a2e:87cc:0:b0:2a7:b168:9e87 with SMTP id v12-20020a2e87cc000000b002a7b1689e87mr7341738ljj.18.1684200201468;
+        Mon, 15 May 2023 18:23:21 -0700 (PDT)
 Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id w20-20020a19c514000000b004f26d63f823sm1891577lfe.237.2023.05.15.18.22.41
+        by smtp.gmail.com with ESMTPSA id p21-20020a2e8055000000b002ad8cbb7349sm3464568ljg.98.2023.05.15.18.23.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 18:22:42 -0700 (PDT)
-Message-ID: <0855c1ea-2104-c7ab-e775-1340dac21c58@linaro.org>
-Date:   Tue, 16 May 2023 03:22:41 +0200
+        Mon, 15 May 2023 18:23:21 -0700 (PDT)
+Message-ID: <bfc92e7b-e5c0-b038-9719-151995396a8c@linaro.org>
+Date:   Tue, 16 May 2023 03:23:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc8280xp: Add SDC2 and enable on
- CRD
+Subject: Re: [PATCH v4 4/5] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3
+ connector
 Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230509030136.1524860-1-quic_bjorande@quicinc.com>
- <20230509030136.1524860-2-quic_bjorande@quicinc.com>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        krzysztof.kozlowski@linaro.org
+References: <20230505064039.1630025-1-bhupesh.sharma@linaro.org>
+ <20230505064039.1630025-5-bhupesh.sharma@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230509030136.1524860-2-quic_bjorande@quicinc.com>
+In-Reply-To: <20230505064039.1630025-5-bhupesh.sharma@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,193 +83,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 9.05.2023 05:01, Bjorn Andersson wrote:
-> The CRD has Micro SD slot, introduce the necessary DeviceTree nodes for
-> enabling this.
+On 5.05.2023 08:40, Bhupesh Sharma wrote:
+> Add the Embedded USB Debugger(EUD) device tree node for
+> SM6115 / SM4250 SoC.
 > 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> The node contains EUD base register region, EUD mode manager
+> register region and TCSR Base register region along with the
+> interrupt entry.
+> 
+> Also add the typec connector node for EUD which is attached to
+> EUD node via port. EUD is also attached to DWC3 node via port.
+> 
+> To enable the role switch, we need to set dr_mode = "otg" property
+> for 'usb_dwc3' sub-node in the board dts file.
+> 
+> Also the EUD device can be enabled on a board once linux is boot'ed
+> by setting:
+>  $ echo 1 > /sys/bus/platform/drivers/qcom_eud/../enable
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 80 +++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi    | 39 +++++++++++
->  2 files changed, 119 insertions(+)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 51 ++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> index 5b25d54b9591..f83411e0e7f8 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> @@ -308,6 +308,13 @@ vreg_l1c: ldo1 {
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> +		vreg_l6c: ldo6 {
-> +			regulator-name = "vreg_l6c";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2960000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
->  		vreg_l7c: ldo7 {
->  			regulator-name = "vreg_l7c";
->  			regulator-min-microvolt = <2504000>;
-> @@ -318,6 +325,13 @@ vreg_l7c: ldo7 {
->  						   RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> +		vreg_l9c: ldo9 {
-> +			regulator-name = "vreg_l9c";
-> +			regulator-min-microvolt = <2960000>;
-> +			regulator-max-microvolt = <2960000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-Generally I ask people to add the missing regulator-allow-set-load,
-but in case of the RPMh driver, should we also consider allowing LPM?
-
-> +		};
-> +
->  		vreg_l13c: ldo13 {
->  			regulator-name = "vreg_l13c";
->  			regulator-min-microvolt = <3072000>;
-> @@ -600,6 +614,18 @@ &remoteproc_nsp0 {
->  	status = "okay";
->  };
->  
-> +&sdc2 {
-> +	cd-gpios = <&tlmm 131 GPIO_ACTIVE_LOW>;
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&sdc2_default_state>;
-> +	pinctrl-1 = <&sdc2_sleep_state>;
-pinctrl-n
-pinctrl-names
-
-please
-> +	vmmc-supply = <&vreg_l9c>;
-> +	vqmmc-supply = <&vreg_l6c>;
-> +	no-sdio;
-> +	no-mmc;
-> +	status = "okay";
-> +};
-> +
->  &uart17 {
->  	compatible = "qcom,geni-debug-uart";
->  
-> @@ -842,6 +868,60 @@ wake-n-pins {
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index f67863561f3f..61a0af33ca43 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -180,6 +180,18 @@ core3 {
 >  		};
 >  	};
 >  
-> +	sdc2_default_state: sdc2-default-state {
-> +		clk-pins {
-> +			pins = "sdc2_clk";
-> +			drive-strength = <16>;
-> +			bias-disable;
-> +		};
+> +	eud_typec: connector {
+> +		compatible = "usb-c-connector";
 > +
-> +		cmd-pins {
-> +			pins = "sdc2_cmd";
-> +			drive-strength = <16>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		data-pins {
-> +			pins = "sdc2_data";
-> +			drive-strength = <16>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		card-detect-pins {
-> +			pins = "gpio131";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-disable;
+> +		ports {
+> +			port@0 {
+> +				con_eud: endpoint {
+> +					remote-endpoint = <&eud_con>;
+> +				};
+> +			};
 > +		};
 > +	};
 > +
-> +	sdc2_sleep_state: sdc2-sleep-state {
-> +		clk-pins {
-> +			pins = "sdc2_clk";
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +		};
-> +
-> +		cmd-pins {
-> +			pins = "sdc2_cmd";
-> +			drive-strength = <2>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		data-pins {
-> +			pins = "sdc2_data";
-> +			drive-strength = <2>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		card-detect-pins {
-> +			pins = "gpio131";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +		};
-> +	};
-That's totally SoC-specific, modulo the CD pin which can have
-its own separate node and label
-
-> +
->  	tpad_default: tpad-default-state {
->  		int-n-pins {
->  			pins = "gpio182";
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 8fa9fbfe5d00..21dfb48d923c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -2815,6 +2815,45 @@ data-pins {
->  			};
+>  	firmware {
+>  		scm: scm {
+>  			compatible = "qcom,scm-sm6115", "qcom,scm";
+> @@ -647,6 +659,38 @@ gcc: clock-controller@1400000 {
+>  			#power-domain-cells = <1>;
 >  		};
 >  
-> +		sdc2: mmc@8804000 {
-> +			compatible = "qcom,sc8280xp-sdhci", "qcom,sdhci-msm-v5";
-> +			reg = <0 0x08804000 0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hc_irq", "pwr_irq";
-> +
-> +			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-> +				 <&gcc GCC_SDCC2_APPS_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "iface", "core", "xo";
-> +			resets = <&gcc GCC_SDCC4_BCR>;
-4?
-
-> +			interconnects = <&aggre2_noc MASTER_SDCC_2 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_SDCC_2 0>;
-> +			interconnect-names = "sdhc-ddr","cpu-sdhc";
-> +			iommus = <&apps_smmu 0x4e0 0x0>;
-> +			power-domains = <&rpmhpd SC8280XP_CX>;
-> +			operating-points-v2 = <&sdc2_opp_table>;
-> +			bus-width = <4>;
-> +			dma-coherent;
-> +
+> +		eud: eud@1610000 {
+> +			compatible = "qcom,sm6115-eud", "qcom,eud";
+> +			reg = <0x0 0x01610000 0x0 0x2000>,
+> +			      <0x0 0x01612000 0x0 0x1000>,
+> +			      <0x0 0x003c0000 0x0 0x40000>;
+> +			reg-names = "eud-base", "eud-mode-mgr", "tcsr-base";
+> +			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
+> +			qcom,secure-mode-enable;
 > +			status = "disabled";
 > +
-> +			sdc2_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
+> +			ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
 > +
-> +				opp-100000000 {
-> +					opp-hz = /bits/ 64 <100000000>;
-> +					required-opps = <&rpmhpd_opp_low_svs>;
-You specified interconnects, but no bw values.. was that on purpose?
-
-Other than these nits, lgtm
-(generally, my dt sources don't even have sdhci to compare)
-
-Konrad
+> +				port@0 {
+> +					reg = <0>;
+> +
+> +					eud_ep: endpoint {
+> +						remote-endpoint = <&usb2_role_switch>;
+> +					};
 > +				};
 > +
-> +				opp-202000000 {
-> +					opp-hz = /bits/ 64 <202000000>;
-> +					required-opps = <&rpmhpd_opp_svs_l1>;
+> +				port@1 {
+> +					reg = <1>;
+> +
+> +					eud_con: endpoint {
+> +						remote-endpoint = <&con_eud>;
+> +					};
 > +				};
 > +			};
 > +		};
 > +
->  		usb_0_qmpphy: phy@88eb000 {
->  			compatible = "qcom,sc8280xp-qmp-usb43dp-phy";
->  			reg = <0 0x088eb000 0 0x4000>;
+>  		usb_hsphy: phy@1613000 {
+>  			compatible = "qcom,sm6115-qusb2-phy";
+>  			reg = <0x0 0x01613000 0x0 0x180>;
+> @@ -1144,6 +1188,13 @@ usb_dwc3: usb@4e00000 {
+>  				snps,has-lpm-erratum;
+>  				snps,hird-threshold = /bits/ 8 <0x10>;
+>  				snps,usb3_lpm_capable;
+> +				usb-role-switch;
+> +
+> +				port {
+> +					usb2_role_switch: endpoint {
+> +						remote-endpoint = <&eud_ep>;
+> +					};
+> +				};
+>  			};
+>  		};
+>  
