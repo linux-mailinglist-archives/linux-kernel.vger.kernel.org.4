@@ -2,243 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922117044EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C3F7044F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 07:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbjEPF6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 01:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S229970AbjEPF7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 01:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjEPF6s (ORCPT
+        with ESMTP id S229978AbjEPF7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 01:58:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BC440F5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 22:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684216590;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xE2vX9E3wrj8UcSGbMoNwC1q+B39hVP/OfNafMgz0vs=;
-        b=I2hmVjHSNEsIjmC2Lx5wzjtxkPOi33cCsEF43VuJ7EeJYM5q8BYUgP0kxr0/fUW4UOB++r
-        zHNHWrnnptisoFR2RX5xnPsd/kZ9mgmcpcPO7nA+Lr/Svh6f05lUIAyPi2jc85Bjoclz9D
-        Sn1ZjyoYSedYHMHWvLfLU6EYWduaKHE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-LtuRdBjtP-irunm3UEYENg-1; Tue, 16 May 2023 01:56:28 -0400
-X-MC-Unique: LtuRdBjtP-irunm3UEYENg-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-306311a2b99so5345176f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 22:56:28 -0700 (PDT)
+        Tue, 16 May 2023 01:59:00 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273033C3B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 22:58:46 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50db7ec8188so12860136a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 22:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684216724; x=1686808724;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2XJHaG4c+GPnkNk+xhxJFjoF+qbtt7fynPXddIFMddM=;
+        b=OkBoy+h8zYPwGCx8eMz7mb1OtidrsMcSveG7hGWIccAGeRKTASLiu54xrCyO6Xv+OA
+         ymnn1EnS4kDDpoCV708X/Z0o0j+/cKlaieE4Ow26pa3+u5EQmQDp5ZPGg67pXN9Eqgpm
+         XTtEZCjGmhvM0jJmvd1oU1JVgjYIsNPu6UGi2g31XfBloqf92U89u7NEv5nPcgpS09jY
+         ccAxDnGeTtcJRmeg/mDt4mLRs71OI6VT3LGhSfst9ZTIf2hC2P3WprnhNrCb7ZTKKCHY
+         pXjsoo/WCDEzrWVM3qP7SvHayTPOkcahRqisPo0yI+8vE2DVtEIY+/ttZuf1P//2zGkm
+         il9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684216587; x=1686808587;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xE2vX9E3wrj8UcSGbMoNwC1q+B39hVP/OfNafMgz0vs=;
-        b=XnNKZ0dAuQIR0fWtJzAKHz91T/jcdSPSHLngZJEQw2Z6rTqmxUbXUFTyorg3ds13Es
-         50sDKzdp1pLkLd7It+5utNZjyw9G7hEy2mSOsW6w1p3jBY6OIhx8WWOAV7XySGQ3eKKw
-         8MvvDDwR61ZRt1/FWrWC3qgMoeSkDYPiR9cbgY0uw//UTOXWAlwjGaK7CguevATxcHRG
-         H14P2eJ0Sk8QXOM+nYN06sDTKoYm4RW76UWznBzIdDxkYHvHOVRvHG7FpMscq1Wu8EBL
-         8M+kF3yTav6Rc65sXfgkrVlnobU1Iz6CZx9jk6PRDRATiRGJbSqrX1qTlGH6619V9kB6
-         vKnw==
-X-Gm-Message-State: AC+VfDzOmuJPB37hYjbJTzlCv8wWoRY9OqK6IvZwLQI8/ozjP91h9wrP
-        yAXCeQaa357dLm5Elk2VsyHa4T3h/nMDrJSoxRnRZLDo53WkDrXX/di7Mrt6ONc2Bm6xqJ3JdeA
-        QVj2LllrQkp1lVnyL7GLZjMpS
-X-Received: by 2002:adf:e88a:0:b0:2ef:bada:2f25 with SMTP id d10-20020adfe88a000000b002efbada2f25mr23481274wrm.67.1684216587766;
-        Mon, 15 May 2023 22:56:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6VOYlL8HQ+iOu5OwzIWQzrbzMHDIe+8lZ375iEzXfw1aZ3CniP6q9reUDXiExA4a5y7ChjZg==
-X-Received: by 2002:adf:e88a:0:b0:2ef:bada:2f25 with SMTP id d10-20020adfe88a000000b002efbada2f25mr23481259wrm.67.1684216587465;
-        Mon, 15 May 2023 22:56:27 -0700 (PDT)
-Received: from redhat.com ([2.52.26.5])
-        by smtp.gmail.com with ESMTPSA id k15-20020a05600c0b4f00b003f4247fbb5fsm1067384wmr.10.2023.05.15.22.56.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 22:56:26 -0700 (PDT)
-Date:   Tue, 16 May 2023 01:56:22 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        alvaro.karsz@solid-run.com, eperezma@redhat.com,
-        xuanzhuo@linux.alibaba.com, david.marchand@redhat.com,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next V2 1/2] virtio-net: convert rx mode setting to
- use workqueue
-Message-ID: <20230516015514-mutt-send-email-mst@kernel.org>
-References: <20230414031947-mutt-send-email-mst@kernel.org>
- <CACGkMEtutGn0CoJhoPHbzPuqoCLb4OCT6a_vB_WPV=MhwY0DXg@mail.gmail.com>
- <20230510012951-mutt-send-email-mst@kernel.org>
- <CACGkMEszPydzw_MOUOVJKBBW_8iYn66i_9OFvLDoZMH34hMx=w@mail.gmail.com>
- <20230515004422-mutt-send-email-mst@kernel.org>
- <CACGkMEv+Q2UoBarNOzKSrc3O=Wb2_73O2j9cZXFdAiLBm1qY-Q@mail.gmail.com>
- <20230515061455-mutt-send-email-mst@kernel.org>
- <CACGkMEt8QkK1PnTrRUjDbyJheBurdibr4--Es8P0Y9NZM659pQ@mail.gmail.com>
- <20230516000829-mutt-send-email-mst@kernel.org>
- <CACGkMEvCHQLFbtB2fbF27oCd5fNSjUtUOS0q-Lx7=MeYR8KzRA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1684216724; x=1686808724;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2XJHaG4c+GPnkNk+xhxJFjoF+qbtt7fynPXddIFMddM=;
+        b=FRlzi3F47fStUJ/Bcx04XgKIiO59CujPFShsLrjMHFrj969gMTp7gtBnVaRPFFzdX5
+         ZmO3M00XtBwj0QsIu7pjnY8k0/j0YJ4qBYwpDNXI4R9PCklZY7yvPISiUbprUMmXdF4p
+         72jYkaOp3Zj+ee70QI5Yw+aiyeoiypZLNak70CBqh4pxa5uuOEeAdtpl8VUcoLhyuyIx
+         PNubg96k7dqvPUdNPF0nMoT9zkZ7qSdDh0V4sxA6E2UZcaHwq84N6IbvtsK5CyR3vwSN
+         /IGKOTkwO6UDqkCHn27TUWrEUDmThE5pN6T4JYNivxtBbrtCH7xDOU3XbG/oTHPizQ0w
+         XnAQ==
+X-Gm-Message-State: AC+VfDyhFu8C7Fl1dpQ7s7qRUOFpczedig49bk/2IvVG6ycnAYwlmo7j
+        +4ezf0zefO8FNkumzu8c3Dx6jB6IHP9QTBeCWorvHA==
+X-Google-Smtp-Source: ACHHUZ5z6bBobKb+suHxnAY1ug5gfmRaUkfU3QX3xHHILdi75HMHGNmvcdeYUcok/qiUsPe6uoeyvhj429HcUnQQQuI=
+X-Received: by 2002:aa7:c991:0:b0:50d:88f3:2e30 with SMTP id
+ c17-20020aa7c991000000b0050d88f32e30mr28134371edt.13.1684216724563; Mon, 15
+ May 2023 22:58:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEvCHQLFbtB2fbF27oCd5fNSjUtUOS0q-Lx7=MeYR8KzRA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230505173012.881083-1-etienne.carriere@linaro.org>
+ <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
+ <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com>
+ <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com>
+ <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
+ <CAN5uoS8HF5ymsjkLthFnoQxBHQ3TOVonycTH3g5K76qKzUniuA@mail.gmail.com>
+ <CAFA6WYMBoUom6yr-BGzfJKLsuQLPEkkcS021mf-KjCfkt-ejJw@mail.gmail.com>
+ <CAN5uoS8mj35qXdhHaHVsiuEJ4PtZWCRn=OmNUDrQM=JjFc7P0w@mail.gmail.com> <CAFA6WYMTtxt4XCbHuoj9gJyxLeAK=a98C5e2JtPHvTtB527MEw@mail.gmail.com>
+In-Reply-To: <CAFA6WYMTtxt4XCbHuoj9gJyxLeAK=a98C5e2JtPHvTtB527MEw@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Tue, 16 May 2023 07:58:33 +0200
+Message-ID: <CAN5uoS8jacBOfBxSWkPrc7+MjoG3zJPjXCOiJwhGM4gBQUypow@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 12:17:50PM +0800, Jason Wang wrote:
-> On Tue, May 16, 2023 at 12:13 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+Hello Sumit,
+
+On Mon, 15 May 2023 at 10:48, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Fri, 12 May 2023 at 10:27, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
 > >
-> > On Tue, May 16, 2023 at 10:44:45AM +0800, Jason Wang wrote:
-> > > On Mon, May 15, 2023 at 6:17 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > On Thu, 11 May 2023 at 13:31, Sumit Garg <sumit.garg@linaro.org> wrote:
+> > >
+> > > On Thu, 11 May 2023 at 13:49, Etienne Carriere
+> > > <etienne.carriere@linaro.org> wrote:
 > > > >
-> > > > On Mon, May 15, 2023 at 01:13:33PM +0800, Jason Wang wrote:
-> > > > > On Mon, May 15, 2023 at 12:45 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > On Thu, 11 May 2023 at 09:27, Sumit Garg <sumit.garg@linaro.org> wrote:
+> > > > > (snip)
+> > > > > > > > >
+> > > > > > > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
+> > > > > > > > > +{
+> > > > > > > > > +       bool rc = false;
+> > > > > > > > > +
+> > > > > > > > > +       mutex_lock(&cq->mutex);
+> > > > > > > > > +
+> > > > > > > > > +       /* Leave at least 1 normal (non-system) thread */
+> > > > > > > >
+> > > > > > > > IMO, this might be counter productive. As most kernel drivers open a
+> > > > > > > > session during driver probe which are only released in the driver
+> > > > > > > > release method.
+> > > > > > >
+> > > > > > > It is always the case?
 > > > > > >
-> > > > > > On Mon, May 15, 2023 at 09:05:54AM +0800, Jason Wang wrote:
-> > > > > > > On Wed, May 10, 2023 at 1:33 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, Apr 17, 2023 at 11:40:58AM +0800, Jason Wang wrote:
-> > > > > > > > > On Fri, Apr 14, 2023 at 3:21 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Fri, Apr 14, 2023 at 01:04:15PM +0800, Jason Wang wrote:
-> > > > > > > > > > > Forget to cc netdev, adding.
-> > > > > > > > > > >
-> > > > > > > > > > > On Fri, Apr 14, 2023 at 12:25 AM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > > > > > >
-> > > > > > > > > > > > On Thu, Apr 13, 2023 at 02:40:26PM +0800, Jason Wang wrote:
-> > > > > > > > > > > > > This patch convert rx mode setting to be done in a workqueue, this is
-> > > > > > > > > > > > > a must for allow to sleep when waiting for the cvq command to
-> > > > > > > > > > > > > response since current code is executed under addr spin lock.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > > > > > >
-> > > > > > > > > > > > I don't like this frankly. This means that setting RX mode which would
-> > > > > > > > > > > > previously be reliable, now becomes unreliable.
-> > > > > > > > > > >
-> > > > > > > > > > > It is "unreliable" by design:
-> > > > > > > > > > >
-> > > > > > > > > > >       void                    (*ndo_set_rx_mode)(struct net_device *dev);
-> > > > > > > > > > >
-> > > > > > > > > > > > - first of all configuration is no longer immediate
-> > > > > > > > > > >
-> > > > > > > > > > > Is immediate a hard requirement? I can see a workqueue is used at least:
-> > > > > > > > > > >
-> > > > > > > > > > > mlx5e, ipoib, efx, ...
-> > > > > > > > > > >
-> > > > > > > > > > > >   and there is no way for driver to find out when
-> > > > > > > > > > > >   it actually took effect
-> > > > > > > > > > >
-> > > > > > > > > > > But we know rx mode is best effort e.g it doesn't support vhost and we
-> > > > > > > > > > > survive from this for years.
-> > > > > > > > > > >
-> > > > > > > > > > > > - second, if device fails command, this is also not
-> > > > > > > > > > > >   propagated to driver, again no way for driver to find out
-> > > > > > > > > > > >
-> > > > > > > > > > > > VDUSE needs to be fixed to do tricks to fix this
-> > > > > > > > > > > > without breaking normal drivers.
-> > > > > > > > > > >
-> > > > > > > > > > > It's not specific to VDUSE. For example, when using virtio-net in the
-> > > > > > > > > > > UP environment with any software cvq (like mlx5 via vDPA or cma
-> > > > > > > > > > > transport).
-> > > > > > > > > > >
-> > > > > > > > > > > Thanks
-> > > > > > > > > >
-> > > > > > > > > > Hmm. Can we differentiate between these use-cases?
-> > > > > > > > >
-> > > > > > > > > It doesn't look easy since we are drivers for virtio bus. Underlayer
-> > > > > > > > > details were hidden from virtio-net.
-> > > > > > > > >
-> > > > > > > > > Or do you have any ideas on this?
-> > > > > > > > >
-> > > > > > > > > Thanks
-> > > > > > > >
-> > > > > > > > I don't know, pass some kind of flag in struct virtqueue?
-> > > > > > > >         "bool slow; /* This vq can be very slow sometimes. Don't wait for it! */"
-> > > > > > > >
-> > > > > > > > ?
-> > > > > > > >
-> > > > > > >
-> > > > > > > So if it's slow, sleep, otherwise poll?
-> > > > > > >
-> > > > > > > I feel setting this flag might be tricky, since the driver doesn't
-> > > > > > > know whether or not it's really slow. E.g smartNIC vendor may allow
-> > > > > > > virtio-net emulation over PCI.
-> > > > > > >
-> > > > > > > Thanks
+> > > > > > This answer of mine is irrelevant. Sorry,
+> > > > > > Please read only the below comments of mine, especially:
+> > > > > > | Note that an OP-TEE thread is not bound to a TEE session but rather
+> > > > > > | bound to a yielded call to OP-TEE.
 > > > > > >
-> > > > > > driver will have the choice, depending on whether
-> > > > > > vq is deterministic or not.
+> > > > > > >
+> > > > > > > > If the kernel driver is built-in then the session is
+> > > > > > > > never released. Now with system threads we would reserve an OP-TEE
+> > > > > > > > thread for that kernel driver as well which will never be available to
+> > > > > > > > regular user-space clients.
+> > > > > > >
+> > > > > > > That is not true. No driver currently requests their TEE thread to be
+> > > > > > > a system thread.
+> > > > > > > Only SCMI does because it needs to by construction.
+> > > > > > >
 > > > > >
-> > > > > Ok, but the problem is, such booleans are only useful for virtio ring
-> > > > > codes. But in this case, virtio-net knows what to do for cvq. So I'm
-> > > > > not sure who the user is.
+> > > > > Yes that's true but what prevents future/current kernel TEE drivers
+> > > > > from requesting a system thread once we have this patch-set landed.
+> > > >
+> > > > Only clients really needing this system_thread attribute should request it.
+> > > > If they really need, the OP-TEE firmware in secure world should
+> > > > provision sufficient thread context.
+> > >
+> > > How do we quantify it? We definitely need a policy here regarding
+> > > normal vs system threads.
+> > >
+> > > One argument in favor of kernel clients requiring system threads could
+> > > be that we don't want to compete with user-space for OP-TEE threads.
+> >
+> > Sorry I don't understand. What do you mean qualifying this?
+>
+> I mean we have to fairly allocate threads among system and non-system
+> thread invocations.
+>
+> > In an ideal situation, we would have OP-TEE provisioned with largely
+> > sufficient thread contexts. However there are systems with constraints
+> > memory resource that do lower at most the number of OP-TEE thread
+> > contexts.
+> >
+>
+> Yeah, I think we are on the same page here.
+>
+> >
+> >
+> > >
+> > > >
 > > > > >
-> > > > > Thanks
-> > > >
-> > > > Circling back, what exactly does the architecture you are trying
-> > > > to fix look like? Who is going to introduce unbounded latency?
-> > > > The hypervisor?
-> > >
-> > > Hypervisor is one of the possible reason, we have many more:
-> > >
-> > > Hardware device that provides virtio-pci emulation.
-> > > Userspace devices like VDUSE.
-> >
-> > So let's start by addressing VDUSE maybe?
-> 
-> It's reported by at least one hardware vendor as well. I remember it
-> was Alvaro who reported this first in the past.
-> 
-> >
-> > > > If so do we not maybe want a new feature bit
-> > > > that documents this? Hypervisor then can detect old guests
-> > > > that spin and decide what to do, e.g. prioritise cvq more,
-> > > > or fail FEATURES_OK.
-> > >
-> > > We suffer from this for bare metal as well.
-> > >
-> > > But a question is what's wrong with the approach that is used in this
-> > > patch? I've answered that set_rx_mode is not reliable, so it should be
-> > > fine to use workqueue. Except for this, any other thing that worries
-> > > you?
-> > >
-> > > Thanks
-> >
-> > It's not reliable for other drivers but has been reliable for virtio.
-> > I worry some software relied on this.
-> 
-> It's probably fine since some device like vhost doesn't support this
-> at all and we manage to survive for several years.
-
-vhost is often connected to a clever learning backend
-such as a bridge which will DTRT without guest configuring
-anything at all though, this could be why it works.
-
-
-
-> > You are making good points though ... could we get some
-> > maintainer's feedback on this?
-> 
-> That would be helpful. Jakub, any input on this?
-> 
-> Thanks
-> 
-> >
-> > > >
+> > > > > > >
+> > > > > > > > So I would rather suggest we only allow a
+> > > > > > > > single system thread to be reserved as a starting point which is
+> > > > > > > > relevant to this critical SCMI service. We can also make this upper
+> > > > > > > > bound for system threads configurable with default value as 1 if
+> > > > > > > > needed.
 > > > > > >
+> > > > > > Note that SCMI server can expose several SCMI channels (at most 1 per
+> > > > > > SCMI protocol used) and each of them will need to request a
+> > > > > > system_thread to TEE driver.
 > > > > > >
-> > > > > > > > --
-> > > > > > > > MST
-> > > > > > > >
+> > > > > > Etienne
 > > > > > >
+> > > > > > >
+> > > > > > > Reserving one or more system threads depends on the number of thread
+> > > > > > > context provisioned by the TEE.
+> > > > > > > Note that the implementation proposed here prevents Linux kernel from
+> > > > > > > exhausting TEE threads so user space always has at least a TEE thread
+> > > > > > > context left available.
+> > > > >
+> > > > > Yeah but on the other hand user-space clients which are comparatively
+> > > > > larger in number than kernel clients. So they will be starved for
+> > > > > OP-TEE thread availability. Consider a user-space client which needs
+> > > > > to serve a lot of TLS connections just waiting for OP-TEE thread
+> > > > > availability.
 > > > >
+> > > > Note that OP-TEE default configuration provisions (number of CPUs + 1)
+> > > > thread context, so the situation is already present before these
+> > > > changes on systems that embedded an OP-TEE without a properly tuned
+> > > > configuration. As I said above, Linux kernel cannot be responsible for
+> > > > the total number of thread contexts provisioned in OP-TEE. If the
+> > > > overall system requires a lot of TEE thread contexts, one should embed
+> > > > a suitable OP-TEE firmware.
+> > >
+> > > Wouldn't the SCMI deadlock problem be solved with just having a lot of
+> > > OP-TEE threads? But we are discussing the system threads solution here
+> > > to make efficient use of OP-TEE threads. The total number of OP-TEE
+> > > threads is definitely in control of OP-TEE but the control of how to
+> > > schedule and efficiently use them lies with the Linux OP-TEE driver.
+> > >
+> > > So, given our overall discussion in this thread, how about the upper
+> > > bound for system threads being 50% of the total number of OP-TEE
+> > > threads?
 > >
+> > What would be a shame if the system does not use any Linux kernel
+> > client sessions, only userland clients. This information cannot be
+> > knwon be the linux optee driver.
+> > Instead of leaving at least 1 TEE thread context for regular session,
+> > what if this change enforce 2? or 3? Which count?
+> > I think 1 is a fair choice: it allows to support OP-TEE firmwares with
+> > a very small thread context pool (when running in small secure
+> > memory), embedding only 2 or 3 contextes.
+>
+> IMO, leaving only 1 thread for user-space will starve TLS based
+> applications. How about the following change on top of this patchset?
+>
+> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+> index 8b8181099da7..1deb5907d075 100644
+> --- a/drivers/tee/optee/call.c
+> +++ b/drivers/tee/optee/call.c
+> @@ -182,8 +182,8 @@ bool optee_cq_inc_sys_thread_count(struct
+> optee_call_queue *cq)
+>
+>         mutex_lock(&cq->mutex);
+>
+> -       /* Leave at least 1 normal (non-system) thread */
+> -       if (cq->res_sys_thread_count + 1 < cq->total_thread_count) {
+> +       /* Leave at least 50% for normal (non-system) threads */
+> +       if (cq->res_sys_thread_count < cq->total_thread_count/2) {
+>                 cq->free_normal_thread_count--;
+>                 cq->res_sys_thread_count++;
+>                 rc = true;
+>
+> >
+> > >
+> > > >
+> > > > >
+> > > > > > >
+> > > > > > > Note that an OP-TEE thread is not bound to a TEE session but rather
+> > > > > > > bound to a yielded call to OP-TEE.
+> > > > >
+> > > > > tee_client_open_session()
+> > > > >   -> optee_open_session()
+> > > > >
+> > > > > tee_client_system_session()
+> > > > >   -> optee_system_session()
+> > > > >     -> optee_cq_inc_sys_thread_count()       <- At this point you
+> > > > > reserve a system thread corresponding to a particular kernel client
+> > > > > session
+> > > > >
+> > > > > All tee_client_invoke_func() invocations with a system thread capable
+> > > > > session will use that reserved thread.
+> > > > >
+> > > > > tee_client_close_session()
+> > > > >   -> optee_close_session()
+> > > > >     -> optee_close_session_helper()
+> > > > >       -> optee_cq_dec_sys_thread_count()    <- At this point the
+> > > > > reserved system thread is released
+> > > > >
+> > > > > Haven't this tied the system thread to a particular TEE session? Or am
+> > > > > I missing something?
+> > > >
+> > > > These changes do not define an overall single system thread.
+> > > > If several sessions requests reservation of TEE system thread, has
+> > > > many will be reserved.
+> > > > Only the very sessions with its sys_thread attribute set will use a
+> > > > reserved thread. If such a kernel client issues several concurrent
+> > > > calls to OP-TEE over that session, it will indeed consume more
+> > > > reserved system threads than what is actually reserved. Here I think
+> > > > it is the responsibility of such client to open as many sessions as
+> > > > requests. This is what scmi/optee driver does (see patch v6 4/4). An
+> > > > alternative would be to have a ref count of sys_thread in session
+> > > > contexts rather than a boolean value. I don't think it's worth it.
+> > >
+> > > Ah, I missed that during the review. The invocations with system
+> > > threads should be limited by res_sys_thread_count in a similar manner
+> > > as we do with normal threads via free_normal_thread_count. Otherwise,
+> > > it's unfair for normal thread scheduling.
+> > >
+> > > I suppose there isn't any interdependency among SCMI channels itself
+> > > such that a particular SCMI invocation can wait until the other SCMI
+> > > invocation has completed.
+> >
+> > I think that would over complexify the logic.
+> >
+>
+> We shouldn't allow system thread invocations to be greater than what
+> is actually reserved count for system threads. One thing I am not able
+> to understand here is why do you need a lot of system threads? Are
+> SCMI operations too expensive? I suppose those should just involve
+> configuring some register bits and using a single OP-TEE thread which
+> is invoked sequentially should be enough.
 
+Ok, I get your point.
+I think you're right, reserving at most 1 TEE thread for system
+sessions should be enough to prevent TEE entry calls deadlocks which
+is the purpose of these changee.
+
+Would you be ok if the following logic: optee driver would reserve at
+most 1 TEE call entry for system sessions.
+If at least 1 kernel client claims a system session, a TEE call entry
+is reserved to that purpose.
+Once all system sessions are closed, the TEE reserved system call
+entry is released.
+When a system thread calls the TEE, if the TEE system thread context
+is not already in use, then that client consumes the reserved entry.
+If the system thread context is already in use, then that client call
+is treated as a regular call: it calls the TEE and would return
+waiting for a free thread if no TEE thread context is available.
+
+Etienne
+
+
+>
+> -Sumit
+>
+> > Note I will send a patch v8 series but feel free to continue the discussion.
+> > It will at least address other comments you shared.
+> >
+> > Best regards,
+> > Etienne
+> >
+> > >
+> > > -Sumit
