@@ -2,211 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456B07049AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013CA7049AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjEPJtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S232152AbjEPJt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjEPJt0 (ORCPT
+        with ESMTP id S231847AbjEPJti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:49:26 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EF42D55
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:49:24 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f24ddf514eso12309545e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:49:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684230563; x=1686822563;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZU/9Bd1F4v4AQI4XYwGvMKtVUVhP+Ta/KlDV/Ofhgvw=;
-        b=DLO9Sp+4W+z5eLJ4OplpY56KL7dsXPxPyKzZN31e24ZgWla/8bs4IkvAtRU1sNrr4d
-         M/zIAUZjhZlW4P2rkk7T+6W0UVsyD90WG+YdGYFrH/Glii/KUDZq0IpUmntg707CdF5n
-         i37UB3Tbbcas87bL0/efYfe6w3ZnC5XyG3qMqn02SGpfBU+8hNkNlrN1nhw2lKAkzq5B
-         CRMAVzp4RUPFc/3/QZ675+4TlLXQLlc1iMNrOb5F/K4RaFPvTUMi9nJBxjhqICMZPBab
-         XEfOKIgxNn+kxSFXUOWAg+ZiVcGCmn7Ho0MHbSwpND8R8HARcto93DQrGrEkUYhsomoF
-         2BmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684230563; x=1686822563;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZU/9Bd1F4v4AQI4XYwGvMKtVUVhP+Ta/KlDV/Ofhgvw=;
-        b=UnOo/Sb74qGznp1+LXR38p78eiGiPLcldH99mVGsqoQZ5a5oRYh+PdRutv9N/0DWaY
-         qEqXxT9+5QU8ihxgs0MM+5VxnJX+T0ilGG3gdq8UJnyTSxGVng/HpX7q6pbbrM/e3MBD
-         h9cXNjNhMhOxWpc+77xr9Zv+LiwVLwjZ3tuykBPCNZzZQJn7jik9V+zBwBgyY3rQY6JF
-         12Gmtr5IuuWzIDEOa3+xFgefQSV2Fdjwf6YgUZ8FGUu4J6bZLVAkLxupxGk25Z5n0ouj
-         VnMK//Jc4ZGMxMFcpWG5f7n2jQNa3jRmWjeB2nXoFfLXMAQuVzKekaqTcmrDi9kRG+Ty
-         3pQg==
-X-Gm-Message-State: AC+VfDws781Z1GPbOei9+XumVb/mcAehlRnFJtsiVjWqjb7x9H3QY92k
-        +zWTLSr/HOBPTntxXQGY27JOKg==
-X-Google-Smtp-Source: ACHHUZ4l3TyALRDEaGcVcIkdK7q9mH/ov5OVGGAezktN7u9QG834/IDjSuCD7zTf56ZU9ouww0Hd6Q==
-X-Received: by 2002:a05:6512:2181:b0:4e8:4a21:9c92 with SMTP id b1-20020a056512218100b004e84a219c92mr7419897lft.4.1684230562687;
-        Tue, 16 May 2023 02:49:22 -0700 (PDT)
-Received: from mutt (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
-        by smtp.gmail.com with ESMTPSA id w11-20020a19c50b000000b004f251cf3d31sm2908003lfe.153.2023.05.16.02.49.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 02:49:21 -0700 (PDT)
-Date:   Tue, 16 May 2023 11:49:19 +0200
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v5 3/6] mm/gup: remove vmas parameter from
- get_user_pages_remote()
-Message-ID: <20230516094919.GA411@mutt>
-References: <cover.1684097001.git.lstoakes@gmail.com>
- <afe323639b7bda066ee5c7a6cca906f5ad8df940.1684097002.git.lstoakes@gmail.com>
+        Tue, 16 May 2023 05:49:38 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5AA2D62;
+        Tue, 16 May 2023 02:49:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684230575; x=1715766575;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=fKe6/XFXBGkwreXb/HN9jPkMOxfd3eRoCAjzTqBc/Vc=;
+  b=lj4MiDB2v+HuUrGcM7Lw/adiovSCEYPFt8Fg1xyDAn8s+SZjlJCjiB32
+   lb27F3xiejsXwg0NLb7ZsrWVjwZ9hWshpNeQkse64zfNtUTNxCdkmSD7Z
+   0env/aY0kORtr7mvoJ1VCyOcD6P+Wxu+30zR7965IUFJIUEQZBbo4IEK/
+   T5Q7oWABApS92CFs2W7pdkWdS6O89UCIFdi/fZsMGuNaYpBvmM3ghchf7
+   Y22ZMthDOFV2xLox9wW+tbYKT/ciamZkhiQprVLyqAHX3wmnNR1I9YYUP
+   a0+jXiKwmnEEwfxm5EXqIjVypJAT1V6TfFueA6muVpOlNIWF8IQX2d5Lp
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="417091368"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="417091368"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:49:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="825511964"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="825511964"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.202])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:49:31 -0700
+Message-ID: <3918ec79-29de-97cd-a454-7f681028409f@intel.com>
+Date:   Tue, 16 May 2023 12:49:27 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <afe323639b7bda066ee5c7a6cca906f5ad8df940.1684097002.git.lstoakes@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v4 0/4] perf tools: Add printing perf_event_attr `config`
+ and `id` symbol in perf_event_attr__fprintf()
+To:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, anshuman.khandual@arm.com,
+        jesussanp@google.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230516065538.83021-1-yangjihong1@huawei.com>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230516065538.83021-1-yangjihong1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-14 22:26, Lorenzo Stoakes wrote:
-> The only instances of get_user_pages_remote() invocations which used the
-> vmas parameter were for a single page which can instead simply look up the
-> VMA directly. In particular:-
+On 16/05/23 09:55, Yang Jihong wrote:
+> Add printing perf_event_attr `config` and `id` symbol to improve the readability of debugging information.
 > 
-> - __update_ref_ctr() looked up the VMA but did nothing with it so we simply
->   remove it.
+> Before:
 > 
-> - __access_remote_vm() was already using vma_lookup() when the original
->   lookup failed so by doing the lookup directly this also de-duplicates the
->   code.
+>   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
+>   <SNIP>
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     size                             136
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             1
+>     size                             136
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             2
+>     size                             136
+>     config                           0x143
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             3
+>     size                             136
+>     config                           0x10005
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             4
+>     size                             136
+>     config                           0x101
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             5
+>     size                             136
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>     bp_type                          3
+>     { bp_len, config2 }              0x4
+>   ------------------------------------------------------------
+>   <SNIP>
 > 
-> We are able to perform these VMA operations as we already hold the
-> mmap_lock in order to be able to call get_user_pages_remote().
+> After:
 > 
-> As part of this work we add get_user_page_vma_remote() which abstracts the
-> VMA lookup, error handling and decrementing the page reference count should
-> the VMA lookup fail.
+>   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
+>   <SNIP>
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             0 (PERF_TYPE_HARDWARE)
+>     size                             136
+>     config                           0 (PERF_COUNT_HW_CPU_CYCLES)
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             1 (PERF_TYPE_SOFTWARE)
+>     size                             136
+>     config                           0 (PERF_COUNT_SW_CPU_CLOCK)
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             2 (PERF_TYPE_TRACEPOINT)
+>     size                             136
+>     config                           0x143 (sched:sched_switch)
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             3 (PERF_TYPE_HW_CACHE)
+>     size                             136
+>     config                           0x10005 (PERF_COUNT_HW_CACHE_RESULT_MISS | PERF_COUNT_HW_CACHE_OP_READ | PERF_COUNT_HW_CACHE_BPU)
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             4 (PERF_TYPE_RAW)
+>     size                             136
+>     config                           0x101
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             5 (PERF_TYPE_BREAKPOINT)
+>     size                             136
+>     config                           0
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>     bp_type                          3
+>     { bp_len, config2 }              0x4
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             1 (PERF_TYPE_SOFTWARE)
+>     size                             136
+>     config                           0x9 (PERF_COUNT_SW_DUMMY)
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     inherit                          1
+>     mmap                             1
+>     comm                             1
+>     freq                             1
+>     task                             1
+>     sample_id_all                    1
+>     mmap2                            1
+>     comm_exec                        1
+>     ksymbol                          1
+>     bpf_event                        1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 12
+>   <SNIP>
 > 
-> This forms part of a broader set of patches intended to eliminate the vmas
-> parameter altogether.
+> Yang Jihong (4):
+>   perf trace-event-info: Add tracepoint_id_to_name() helper
+>   perf tools: Extend PRINT_ATTRf to support printing of members with a
+>     value of 0
+>   perf tools: Add printing perf_event_attr type symbol in
+>     perf_event_attr__fprintf()
+>   perf tools: Add printing perf_event_attr config symbol in
+>     perf_event_attr__fprintf()
 > 
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com> (for arm64)
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Janosch Frank <frankja@linux.ibm.com> (for s390)
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> ---
->  arch/arm64/kernel/mte.c   | 17 +++++++++--------
->  arch/s390/kvm/interrupt.c |  2 +-
->  fs/exec.c                 |  2 +-
->  include/linux/mm.h        | 34 +++++++++++++++++++++++++++++++---
->  kernel/events/uprobes.c   | 13 +++++--------
->  mm/gup.c                  | 12 ++++--------
->  mm/memory.c               | 14 +++++++-------
->  mm/rmap.c                 |  2 +-
->  security/tomoyo/domain.c  |  2 +-
->  virt/kvm/async_pf.c       |  3 +--
->  10 files changed, 61 insertions(+), 40 deletions(-)
+>  tools/perf/util/perf_event_attr_fprintf.c | 186 ++++++++++++++++++++--
+>  tools/perf/util/trace-event-info.c        |  11 ++
+>  tools/perf/util/trace-event.h             |   6 +
+>  3 files changed, 194 insertions(+), 9 deletions(-)
 > 
 
-[...]
-
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 146bb94764f8..63632a5eafc1 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -5590,7 +5590,6 @@ EXPORT_SYMBOL_GPL(generic_access_phys);
->  int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  		       int len, unsigned int gup_flags)
->  {
-> -	struct vm_area_struct *vma;
->  	void *old_buf = buf;
->  	int write = gup_flags & FOLL_WRITE;
->  
-> @@ -5599,13 +5598,15 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  
->  	/* ignore errors, just check how much was successfully transferred */
->  	while (len) {
-> -		int bytes, ret, offset;
-> +		int bytes, offset;
->  		void *maddr;
-> -		struct page *page = NULL;
-> +		struct vm_area_struct *vma;
-> +		struct page *page = get_user_page_vma_remote(mm, addr,
-> +							     gup_flags, &vma);
-> +
-> +		if (IS_ERR_OR_NULL(page)) {
-> +			int ret = 0;
-
-I see the warning below when building without CONFIG_HAVE_IOREMAP_PROT set.
-
-make --silent --keep-going --jobs=32 \
-O=/home/anders/.cache/tuxmake/builds/1244/build ARCH=arm \
-CROSS_COMPILE=arm-linux-gnueabihf- /home/anders/src/kernel/next/mm/memory.c: In function '__access_remote_vm':
-/home/anders/src/kernel/next/mm/memory.c:5608:29: warning: unused variable 'ret' [-Wunused-variable]
- 5608 |                         int ret = 0;
-      |                             ^~~
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
 
->  
-> -		ret = get_user_pages_remote(mm, addr, 1,
-> -				gup_flags, &page, &vma, NULL);
-> -		if (ret <= 0) {
->  #ifndef CONFIG_HAVE_IOREMAP_PROT
->  			break;
->  #else
-> @@ -5613,7 +5614,6 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
->  			 * Check if this is a VM_IO | VM_PFNMAP VMA, which
->  			 * we can access using slightly different code.
->  			 */
-> -			vma = vma_lookup(mm, addr);
->  			if (!vma)
->  				break;
->  			if (vma->vm_ops && vma->vm_ops->access)
-
-Cheers,
-Anders
