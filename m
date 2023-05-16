@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE1C70505E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEE4705062
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbjEPORw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S233362AbjEPOTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbjEPORq (ORCPT
+        with ESMTP id S233345AbjEPOS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:17:46 -0400
+        Tue, 16 May 2023 10:18:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA217A92;
-        Tue, 16 May 2023 07:17:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D0D7689
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:18:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AD1063AA0;
-        Tue, 16 May 2023 14:17:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D71CC4339B;
-        Tue, 16 May 2023 14:17:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0898C63A9B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:18:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AB6C4339C;
+        Tue, 16 May 2023 14:18:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684246664;
-        bh=zbu+/n1x0xP+L4aQcQ1ZrPVzWz9/XfixfwAvoEb/yWY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ayLeUhjLyoFQG5An2cJGxC2tnorgg7lrk9krHEdlFdl/qiqXZhr0HVyT6kCNoPbND
-         FgxKAP2cVUM7uMESbbhxr+dEMZ0e3EyqXgWnriWaZOerADL5RiXdYG4xJemn3/o9to
-         sWxQ9YeEV8G1lflOd5FyfzDFlLTXjwpnHQka4WleO/+cexT9jBSEicUTaAA4GycJbq
-         IEdPJLPoa7AyBQFoRzVjceVebRzui5162Pm7VJXfAtQLGX+qmAV4Q0jgfJqTAGGcM6
-         1AT8pHu+iI41O43TCZDNg+HPlyLAi5mx5a7I5n+1Sixpse4IsB8Cqro/Y7/G8Exsex
-         DnKQ0Lkeyly8w==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>, trondmy@hammerspace.com,
-        eggert@cs.ucla.edu, bruno@clisp.org,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] fs: don't call posix_acl_listxattr in generic_listxattr
-Date:   Tue, 16 May 2023 16:17:37 +0200
-Message-Id: <20230516-notorisch-geblickt-6b591fbd77c1@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230516124655.82283-1-jlayton@kernel.org>
-References: <20230516124655.82283-1-jlayton@kernel.org>
+        s=k20201202; t=1684246706;
+        bh=YXhBO9eG7UWbqzuiSK1fn6Kv4L06SYxCu/Poh/mJHwQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T5Z7Rp6T/k00U4NfiIA60xzvdndp67Bi9eF0AXmi1sA/kR32HdVQVykmsjg7jpBY3
+         hrl4quu7TpWXEaSdRD0/00cH3TVaDAnwl2GzwGDu/KBVuCWG4cHEfGl4PnPaqHFV23
+         LLvsveTXCqPOThx9ey11JL9f2wLczR0XpLfjr4NIsqGSxKDVbXUhbEyRLLeeqQbetu
+         jR3zKAFkY1IEEACvliEdA3dTw7DcVNYSPZ4BsYy80UReKX36g/7iAKu+ooov0hPAi8
+         HeuJcT7z/GMYo4dw+9UmllPbFYrEXcAXcQmm/Q7XXFNwa16RX/sKMXFVOM8q+BiSVI
+         cbMpIcnnQaU5w==
+Date:   Tue, 16 May 2023 19:48:22 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
+        chunfeng.yun@mediatek.com, kishon@kernel.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] phy: mediatek: rework the floating point comparisons
+ to fixed point
+Message-ID: <ZGOQroo9KB0IKeu1@matsya>
+References: <20230502145005.2927101-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=928; i=brauner@kernel.org; h=from:subject:message-id; bh=zbu+/n1x0xP+L4aQcQ1ZrPVzWz9/XfixfwAvoEb/yWY=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQkT8hVmlNc1X3s8NrkkKmPAixtFY0WBhpPs9zLdsks2/FX 5WLtjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIks+MTwT0P97YqIcwFbxIxLZl9g08 gzqGZWWegtvYXpzs8L9TyKixkZ7oo6lfROP779TF/Kk8KZm/tubtNiU/Wcsebx3UuH/S5+4gAA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230502145005.2927101-1-trix@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,25 +61,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 08:46:54 -0400, Jeff Layton wrote:
-> Commit f2620f166e2a caused the kernel to start emitting POSIX ACL xattrs
-> for NFSv4 inodes, which it doesn't support. The only other user of
-> generic_listxattr is HFS (classic) and it doesn't support POSIX ACLs
-> either.
+On 02-05-23, 10:50, Tom Rix wrote:
+> gcc on aarch64 reports
+> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c: In function ‘mtk_hdmi_pll_set_rate’:
+> drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:240:52: error: ‘-mgeneral-regs-only’
+>   is incompatible with the use of floating-point types
+>   240 |         else if (tmds_clk >= 54 * MEGA && tmds_clk < 148.35 * MEGA)
 > 
-> 
+> Floating point should not be used, so rework the floating point comparisons
+> to fixed point.
 
-Applied to the vfs.misc.fixes branch of the vfs/vfs.git tree.
-Patches in the vfs.misc.fixes branch should appear in linux-next soon.
+Applied, thanks
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc.fixes
-
-[1/1] fs: don't call posix_acl_listxattr in generic_listxattr
-      https://git.kernel.org/vfs/vfs/c/f3689fa785f0
+-- 
+~Vinod
