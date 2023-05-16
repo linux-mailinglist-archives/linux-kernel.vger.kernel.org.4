@@ -2,92 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD86B705AB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 661F6705AB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjEPWlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60556 "EHLO
+        id S230080AbjEPWlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEPWlf (ORCPT
+        with ESMTP id S229457AbjEPWlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:41:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782AD6199;
-        Tue, 16 May 2023 15:41:33 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QLWS76r7Sz4x1R;
-        Wed, 17 May 2023 08:41:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684276888;
-        bh=gWlEvzXLzpBF9MFux4TfkINKyaL2YbDtBYpWGyZsv14=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IwRuQw3Ev3O3QhlacdJQxVgkR4/gvP0B3CmdTjBWq4tBpjv/R92nQrbdpCzHUn6t2
-         /uGkQngiGf6MJAQU4ulyqKTB4VlHuUX698IS65K4ATfneHLLxqwM4FeFloyRIJ27VZ
-         OPt8fQeAYbvgs1jIY1sgFIeMDZXlJHfi9OPkopf8rybZL+7zDAKfymzimLLY61luFn
-         f65DNNdlB3DdubxRzbg57CrjCmw+8ce/C7eMl43XjRaU0PRICNIq69XJ/RNYB+izXt
-         +8HQdPzS7wvm71Pu1+TkvI+SXyNnRiSN/+Bwstg5fcjJT0AuW6cBdbjUzfcsPyjfvm
-         Eg+SHeNAKruCw==
-Date:   Wed, 17 May 2023 08:41:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the rcu tree
-Message-ID: <20230517084116.17be78d7@canb.auug.org.au>
+        Tue, 16 May 2023 18:41:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062AC7688;
+        Tue, 16 May 2023 15:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684276901; x=1715812901;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IDhBF4fgjJGRK2kGvqetdUuW5dTqUG9nUhpZg9K0OCo=;
+  b=EyeYxWO9vH3wtSkq7AqI4AtjGmN7pjq8oIiTewXUFQZYljmAyMITAY9M
+   SepucNT+TiS2Q04y6ajTv/p46syN3auOru5gqEQDW9wlO79FfkSBIV8aD
+   fqIhRbWhe3SHRpPSmqrPB9/6nCNxxPVuOxjO72vDUBDdwrldKkLLmSDme
+   1J7GmEitfpa9U0bQUB9qnmKszw7Qafko6/CzcdroKNvZSHkDwM+Qyh3pf
+   fncOZgFN5HQzx4+KHl3jROTVesq20n841/qR9h9IV9RxvBNfD9k2rAyw+
+   QAgBd+ovSlfQz107TpHaEXj/XQ9D70AgMpmo6s2P6wHxHGkF3Wb/gAcFK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="350447269"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="350447269"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 15:41:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="766534490"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="766534490"
+Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 15:41:40 -0700
+Message-ID: <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
+Date:   Tue, 16 May 2023 15:41:39 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6OTSmgYD0xnjKr6XbxImHLA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+Content-Language: en-US
+To:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>
+Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+ <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+ <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/6OTSmgYD0xnjKr6XbxImHLA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 5/16/23 00:06, Stephen Röttger wrote:
+> On Mon, May 15, 2023 at 4:28 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>>
+>> On 5/15/23 06:05, jeffxu@chromium.org wrote:
+>>> We're using PKU for in-process isolation to enforce control-flow integrity
+>>> for a JIT compiler. In our threat model, an attacker exploits a
+>>> vulnerability and has arbitrary read/write access to the whole process
+>>> space concurrently to other threads being executed. This attacker can
+>>> manipulate some arguments to syscalls from some threads.
+>>
+>> This all sounds like it hinges on the contents of PKRU in the attacker
+>> thread.
+>>
+>> Could you talk a bit about how the attacker is prevented from running
+>> WRPKRU, XRSTOR or compelling the kernel to write to PKRU like at sigreturn?
+> 
+> (resending without html)
+> 
+> Since we're using the feature for control-flow integrity, we assume
+> the control-flow is still intact at this point. I.e. the attacker
+> thread can't run arbitrary instructions.
 
-Hi all,
+Can't run arbitrary instructions, but can make (pretty) arbitrary syscalls?
 
-Commits
+> * For JIT code, we're going to scan it for wrpkru instructions before
+> writing it to executable memory
 
-  1d29b558483d ("tools/nolibc: remove LINUX_REBOOT_ constants")
-  09efff85e556 ("tools/nolibc: add testcase for fork()/waitpid()")
-  d9d16cc80854 ("tools/nolibc: s390: provide custom implementation for sys_=
-fork")
-  c792624d254d ("tools/nolibc: validate C89 compatibility")
-  d7644912ea9c ("tools/nolibc: use C89 comment syntax")
-  9cd4e2eb852c ("tools/nolibc: use __inline__ syntax")
-  367742887f79 ("tools/nolibc: use standard __asm__ statements")
+... and XRSTOR, right?
 
-are missing a Signed-off-by from their committer.
+> * For regular code, we only use wrpkru around short critical sections
+> to temporarily enable write access
+> 
+> Sigreturn is a separate problem that we hope to solve by adding pkey
+> support to sigaltstack
 
---=20
-Cheers,
-Stephen Rothwell
+What kind of support were you planning to add?
 
---Sig_/6OTSmgYD0xnjKr6XbxImHLA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+I was thinking that an attacker with arbitrary write access would wait
+until PKRU was on the userspace stack and *JUST* before the kernel
+sigreturn code restores it to write a malicious value.  It could
+presumably do this with some asynchronous mechanism so that even if
+there was only one attacker thread, it could change its own value.
 
------BEGIN PGP SIGNATURE-----
+Also, the kernel side respect for PKRU is ... well ... rather weak.
+It's a best effort and if we *happen* to be in a kernel context where
+PKRU is relevant, we can try to respect PKRU.  But there are a whole
+bunch of things like get_user_pages_remote() that just plain don't have
+PKRU available and can't respect it at all.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRkBowACgkQAVBC80lX
-0Gy/+wf+JDyDOKREdVclX3IuAxObLvEggRwfJbMrxxj9BZ1cvCl6H9FAjC8Ekh5L
-mmjI4fbgXQ5POTu2e1lDnmRE2LFrdVuy6Dg/qAfxC3sxmv8wHlMFU5ykFT8gSlpP
-bzl+DkmeYGUwMFVH2CDU1iBgaHtfzJdsYUETEC1XsXUFPYsSbE+bAUgJnzLl2Q7S
-AtKXKB4ivMTj4jA8pytSkH5Hn+/swN5lGxLIpX3n1OTR5S7bH2Konvyw4Q6uB4xE
-elxssmRHAqVih3unHW/nZWLUPynu9z3r1geEQCp7oRvhySW+6yN9eRKXUd86E1lH
-9EMPaNHFbcDSn9woyn50bFwTGhp4eg==
-=iQi4
------END PGP SIGNATURE-----
+I think io_uring also greatly expanded how common "remote" access to
+process memory is.
 
---Sig_/6OTSmgYD0xnjKr6XbxImHLA--
+So, overall, I'm thrilled to see another potential user for pkeys.  It
+sounds like there's an actual user lined up here, which would be
+wonderful.  But, I also want to make sure we don't go to the trouble to
+build something that doesn't actually present meaningful, durable
+obstacles to an attacker.
+
+I also haven't more than glanced at the code.
