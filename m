@@ -2,139 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814F47050BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3147050B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbjEPO2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
+        id S233911AbjEPO2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233913AbjEPO2h (ORCPT
+        with ESMTP id S233843AbjEPO2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 May 2023 10:28:37 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A861BC6;
-        Tue, 16 May 2023 07:28:34 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GCAecw004449;
-        Tue, 16 May 2023 14:28:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RMFXA7ZudVjHyZ4kH0k4IsYmxdb+amxND9ev4TL+PJg=;
- b=i/5efG5oQ5S2n9dcGNFeOm50w+dd95BVSdWs0r2Rtt0DZE1wBsIXyA3+CBQQLoEa/2/S
- Vw0TlhR4RHyjdzJ3HIK/5SIWg0+NyXvG9CjoCpE8sqvjKK9A8BwNIRe04llJ4P0+/uea
- 2Hdql0k7wyPUwOVqSCrLHoIJwSdAdnX3hv6vdWUtUa3bWd7YhKXuwmLKqzm/MxU5wkuy
- lMsyXvkUlaHdnHmMXoLiuw4iPqd2j2JORBwsLa5rSBvwkcVRio51LQdCXtvy2i/UB+e3
- w7VV4qY4c1t22DOv0szZ6PfHXTXqIFqrcFml2evPj8cF8NqLSSUcygoCHRoby15jLm8K dw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qm1x096x7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 14:28:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GESL02026238
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 14:28:22 GMT
-Received: from [10.216.35.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 16 May
- 2023 07:28:14 -0700
-Message-ID: <52b5c1ac-ac69-2ca7-1bf4-01b1f53b1634@quicinc.com>
-Date:   Tue, 16 May 2023 19:58:10 +0530
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2982E526E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:28:31 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f38bea8be8so3737781e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:28:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1684247309; x=1686839309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kOOZCXXP4LpksxHkg4nvdaIq0tmnRiTZx/elW7W7niI=;
+        b=arVBo25pNBMxfPhoKYvltlB2Uawur/F4MwIhKfOR0W/WANPEJ4fkT9fZ9/Z+67DvC4
+         PYkZ5qy1YsWJ2cSP3jNStIcHxio06VMqYxMIt9Bm7J6eRNLlkKTJ+ZQF3SZI5VsbCQd3
+         rqAETBqGvxX4bPwjK+3MGw9NTSsRra04LPUHsz8jciXU0YhQ0HB2OvRipVMi7ek1okZk
+         RAsQxXpyYyiPbFwi19FE0r55eKYoalQ0p9nbdnhjFMsctO4owxzAEyKYPAnPs83Rv/Ar
+         SdYtn0w0UqI1dYILJ+yIfP8lZPB9XYe4HuDndSPPOw2dpNi0RZkKl3oRuIuF6XYpPhQS
+         LCzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684247309; x=1686839309;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kOOZCXXP4LpksxHkg4nvdaIq0tmnRiTZx/elW7W7niI=;
+        b=hCQ0ozGWwm4oeUxFR+Dx0BoUXgUmXwgLAfU6oNNmjkE3THOTXclZl32E8a0Cim6Pah
+         RiGj7u3o8UG74Cm+TyfjUStzQaTfsGRbyH1lDDEU5CPx6znnET5dnB/yclpn1ynCXSZh
+         NmGoDWLT/9e3blMrAHBptdHFbCf60x7av/A6DI5DBtN6NpZ8SAUfQcOblfQD9bd73njz
+         k+WAOhAnRklS2GqtPh+EC4FhwuvlTRE47saGnaQdIgwgCNQ3YxIv6OpYB7Q6PaANdGob
+         yBIdfnBrh+qxjg1FHnYOmjYVUq5fPe/cKrnHdTyjCynD7U7afAblzzOzx/iSu7DcBKeJ
+         sFgg==
+X-Gm-Message-State: AC+VfDyoxoepNS90aZP760+eQkeD0Xy6zdm/mcSveVWn7jJwaa5GjYvQ
+        b/h87BwT4/SePZvSVEttl/+WCaqLruwrjYWMjuPfIQ==
+X-Google-Smtp-Source: ACHHUZ7c3hpAgVDEakFIgQTQp0miw0Pxe4R/I3dNmfZOb4bLnc8dYAsrTxAxvOzRqzhyH7uBZf87J9mRIW+Ood4BRJY=
+X-Received: by 2002:a05:6512:90d:b0:4eb:e8e:4139 with SMTP id
+ e13-20020a056512090d00b004eb0e8e4139mr6452092lft.2.1684247309388; Tue, 16 May
+ 2023 07:28:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v8 4/9] usb: dwc3: core: Skip setting event buffers for
- host only controllers
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
-        <ahalaney@redhat.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-5-quic_kriskura@quicinc.com>
- <ZGN0W0YbIjzmQnH1@hovoldconsulting.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZGN0W0YbIjzmQnH1@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: THSS0IZNn5baN6Z7Bij_d4pFBAaLOwkV
-X-Proofpoint-GUID: THSS0IZNn5baN6Z7Bij_d4pFBAaLOwkV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_07,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0 impostorscore=0
- spamscore=0 adultscore=0 phishscore=0 clxscore=1015 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160121
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+References: <20230514090432.78217-1-bagasdotme@gmail.com> <20230514090432.78217-4-bagasdotme@gmail.com>
+ <20230514-proposal-resort-3ce1beeaa089@spud>
+In-Reply-To: <20230514-proposal-resort-3ce1beeaa089@spud>
+From:   Andy Chiu <andy.chiu@sifive.com>
+Date:   Tue, 16 May 2023 22:28:18 +0800
+Message-ID: <CABgGipWt+ux3CJwotoG588MBqO1EeSV2E4mw8Kvm+d01WTPPzQ@mail.gmail.com>
+Subject: Re: [PATCH 3/5] Documentation: riscv: vector: Use bullet lists for
+ prctl list
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux RISC-V <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Bagas,
 
+On Sun, May 14, 2023 at 5:49=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> Hey Bagas,
+>
+> On Sun, May 14, 2023 at 04:04:30PM +0700, Bagas Sanjaya wrote:
+> > The documentation lists two userspace prctl() calls. Use bullet
+> > lists for the listing.
+> >
+> > Fixes: 412c68cfeeb178 ("riscv: Add documentation for Vector")
+>
+> Firstly, these fixes commit hashes would not be stable as this series
+> has been applied to riscv/for-next [1]. But also, from this commit
+> onwards, things seem like stylistic comments that would be undeserving
+> of a Fixes: tag to begin with.
+> Perhaps you'd be better off suggesting these changes in response to the
+> original thread [2], so that it goes in "correctly" in the first place?
+> Andy has to re-submit anyway as there are a few bugs that crept in in
+> the most recent revision of his series.
+>
+> Thanks,
+> Conor.
+>
+> 1 - https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/log/?=
+h=3Dfor-next
+> 2 - https://lore.kernel.org/linux-riscv/20230509103033.11285-25-andy.chiu=
+@sifive.com/
+>
+> > Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > ---
+> >  Documentation/riscv/vector.rst | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/riscv/vector.rst b/Documentation/riscv/vecto=
+r.rst
+> > index 178b3f3f452462..c7bd701c7963b6 100644
+> > --- a/Documentation/riscv/vector.rst
+> > +++ b/Documentation/riscv/vector.rst
+> > @@ -13,7 +13,7 @@ order to support the use of the RISC-V Vector Extensi=
+on.
+> >  Two new prctl() calls are added to allow programs to manage the enable=
+ment
+> >  status for the use of Vector in userspace:
+> >
+> > -prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+> > +* prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+> >
+> >      Sets the Vector enablement status of the calling thread, where the=
+ control
+> >      argument consists of two 2-bit enablement statuses and a bit for i=
+nheritance
+> > @@ -89,7 +89,7 @@ prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+> >          * Every successful call overwrites a previous setting for the =
+calling
+> >            thread.
+> >
+> > -prctl(PR_RISCV_V_SET_CONTROL)
+> > +* prctl(PR_RISCV_V_SET_CONTROL)
+> >
+> >      Gets the same Vector enablement status for the calling thread. Set=
+ting for
+> >      next execve() call and the inheritance bit are all OR-ed together.
+> > --
+> > An old man doll... just what I always wanted! - Clara
+> >
 
-On 5/16/2023 5:47 PM, Johan Hovold wrote:
-> On Sun, May 14, 2023 at 11:19:12AM +0530, Krishna Kurapati wrote:
->> On some SoC's like SA8295P where the tertiary controller is host-only
->> capable, GEVTADDRHI/LO, GEVTSIZ, GEVTCOUNT registers are not accessible.
->> Trying to setup them up during core_init leads to a crash.
->>
->> For DRD/Peripheral supported controllers, event buffer setup is done
->> again in gadget_pullup. Skip setup or cleanup of event buffers if
->> controller is host-only capable.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/usb/dwc3/core.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index e983aef1fb93..46192d08d1b6 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -505,6 +505,11 @@ static int dwc3_alloc_event_buffers(struct dwc3 *dwc, unsigned int length)
->>   int dwc3_event_buffers_setup(struct dwc3 *dwc)
->>   {
->>   	struct dwc3_event_buffer	*evt;
->> +	unsigned int			hw_mode;
->> +
->> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
->> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST)
->> +		return 0;
->>   
->>   	evt = dwc->ev_buf;
-> 
-> How about adding this check to dwc3_alloc_event_buffers() instead as
-> there should be no need to allocate buffer that you never use?
-> 
-> Then you can just check dwc->ev_buf here and elsewhere.
-> 
+Thanks for fixing the document. Do you mind if I merge them into my
+patch and add you as a co-developer? I think merging those fixes into
+the one original patch would be much cleaner than providing fix
+patches afterward.
 
-Thanks for this idea. We can save 4096 bytes from being allocated this 
-way. Will get this in next version.
-
-Regards,
-Krishna,
+Thanks,
+Andy
