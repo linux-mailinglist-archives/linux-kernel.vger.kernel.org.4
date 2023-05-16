@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EC370425C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615D4704261
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245671AbjEPAkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 20:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S245369AbjEPAlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 20:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbjEPAkF (ORCPT
+        with ESMTP id S230343AbjEPAlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 20:40:05 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4194486
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:39:34 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24e01ba9e03so9212611a91.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684197574; x=1686789574;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=anq0Dx/y6CxVEmQw6r0YtSvw2DpI1Jz0AvRNCGxjAb4=;
-        b=WSyNAaJoTiySOyqUHAL2TFJcCFF0bl5Jb/d7rhS5/7LFDEIZ+QwDbFi8p1gy8aV37d
-         YuoG0B3CFmgbaI2StCVZ50DuXpMYnTVCco553c7CZWf81mMRjpeMJQHUF8wZ3G27Vsom
-         e/QthlyzAXwogcdsN5lNnbKiutgRiiOX4ViKldqBRG+gS/vOtVmoHLPZWQJ+UiXpTAR/
-         ZYy1zwTAnS08mrp8jtqPCVd2B6Pv/ovGn1AAntBKWNmq43aRv8Zoe/RyNvqqAXarQT5q
-         71OG1+XvSE8NxTlmT5qp09v2BZiQJb7wQ1UdHq90XqqNHQwZtS3wa/B9GGJmoxeuxUIh
-         D7HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684197574; x=1686789574;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=anq0Dx/y6CxVEmQw6r0YtSvw2DpI1Jz0AvRNCGxjAb4=;
-        b=ZHT5FEuhbProhCqIquKT0vTVYHCbJdUs5PGp9PYRqHka0bkUl3XKPvaGhVshPvYouy
-         LzlXjb68KVGQBzPKwJ0H56f+6ooMgYoK8d+nZGMAuHlCL+idQpWiDA1E7yZbTsf8uSvr
-         1OIjOV2M4Kb2FbeggeFmoDGqm6HhFmvo4m8PvjqtkEcNHDKsKE5ed15goQeUoiwiykHH
-         Ha6jEjJM0I9xuanJEmcFj6JrXvz+g6HwXyxBroipXoT4npMCRf3Bl4v7s+IWY987EcE/
-         /VkCFnUEu0aTYoqNnLwy9AIFngLTegHLpbqKD6G8u+FmgDC7mH/sHCO7uruW/CLo/PPA
-         J9Kw==
-X-Gm-Message-State: AC+VfDwu5EbtJf0lOtrJ/T3xG3t14K1YF1Nze8zS3SMcKjbbN3rdk2um
-        sQd7lJWL1PO6e6hV7mOLKn4+muzU1bsN6nTlo8A=
-X-Google-Smtp-Source: ACHHUZ5NcTS8/wwjOKQBJzOZQS0mPdkTYYWeK79aGZ375sI2PtGiKnEbk2+oDyJSvUhi3LQACWeYFw==
-X-Received: by 2002:a17:90b:3609:b0:247:2437:d5c4 with SMTP id ml9-20020a17090b360900b002472437d5c4mr35808739pjb.13.1684197573978;
-        Mon, 15 May 2023 17:39:33 -0700 (PDT)
-Received: from [10.200.9.178] ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id ob15-20020a17090b390f00b002502161b063sm198088pjb.54.2023.05.15.17.39.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 17:39:33 -0700 (PDT)
-Message-ID: <52da839c-f23f-3341-961d-a253003bfbb3@bytedance.com>
-Date:   Tue, 16 May 2023 08:39:29 +0800
+        Mon, 15 May 2023 20:41:53 -0400
+Received: from sender3-of-o57.zoho.com (sender3-of-o57.zoho.com [136.143.184.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE8430FD;
+        Mon, 15 May 2023 17:41:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684197665; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=XqR1E9WYKCH5zE0xzfY8q4o8hGEYSOcK4tGK8Q2iZaxhLN15Hn9ctmHY8DtzrsYk2A5JcUeaikJSlwkgyABpztvRWjet1OYjyGyL7URMv+qwqpyjSYxr5HsuEOVzD0Xal0X8RUmyepOxiwtPHvYTxubO8ftpTOFqd94yQnxZSGQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1684197665; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=x9E1sPNjs8TnJyDDWuPW+7RruRAouFKTsWP7ZU6lxAw=; 
+        b=edBBMwqoIA3px3KRjoqOeVRGIRAKy1Ii6k5VvgFlZblTWvXISxJ1iWXnImdMo8Z/jsjvfy/JPv/0fwx9Up2i0+vuBxSIPlzcAfciWFQyaK2FjPCqIwH/tjXIHcBVW1csLV8OOcA9IABP7hzKJhzpdhsMssnbz7X4BgC83UfqkGQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684197665;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=x9E1sPNjs8TnJyDDWuPW+7RruRAouFKTsWP7ZU6lxAw=;
+        b=KkBrhxus1IChftrmWFiE0iWqNP8pwvcEA93j1NsBljZB12Dwn/pFRs9ba7CJ9Wc7
+        edP2pGXBARtnJM2FPzweZ/GrpdlaMrUSCdjtpbMPbNg2rK5PpKzF9po1PYMenL2dJZy
+        M3Z+MoI/+mmQL2JgJ9L9p3qb/TwugPj5kW90GVqc=
+Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1684197664523566.236879037264; Mon, 15 May 2023 17:41:04 -0700 (PDT)
+Message-ID: <df9d1260-41dd-034b-9dc6-14173c6c0d25@apertussolutions.com>
+Date:   Mon, 15 May 2023 20:41:00 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH 02/10] maple_tree: Drop mtree_alloc_{range,rrange}() and
- related functions.
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-References: <20230515131757.60035-1-zhangpeng.00@bytedance.com>
- <20230515131757.60035-3-zhangpeng.00@bytedance.com>
- <ZGJrketUDnGkWw8b@casper.infradead.org>
- <20230515173516.5tmytjvnzvdogfm7@revolver>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        akpm@linux-foundation.org, maple-tree@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230515173516.5tmytjvnzvdogfm7@revolver>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 04/14] x86: Secure Launch Resource Table header file
+Content-Language: en-US
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-5-ross.philipson@oracle.com>
+ <20230512105554.GB14461@srcf.ucam.org>
+ <30d5891d-4747-8d67-2667-ff07628740bd@apertussolutions.com>
+ <20230515212206.GA2162@srcf.ucam.org>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+In-Reply-To: <20230515212206.GA2162@srcf.ucam.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,32 +72,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/15/23 17:22, Matthew Garrett wrote:
+> On Mon, May 15, 2023 at 05:15:15PM -0400, Daniel P. Smith wrote:
+>> On 5/12/23 06:55, Matthew Garrett wrote:
+>>> On Thu, May 04, 2023 at 02:50:13PM +0000, Ross Philipson wrote:
+>>>
+>>>> +#define SLR_TABLE_MAGIC		0x4452544d
+>>>
+>>>   From convention I'd expect this to be 0x534c5254, but not really an
+>>> issue.
+>>
+>> Apologies, but which convention?
+> 
+> Tables in ACPI and UEFI tend to have magic that corresponds to their
+> name, so a table called SLRT would tend to have magic that matches the
+> ASCII values for that. In this case the SLRT has DRTM as its magic,
+> which is a touch unexpected.
 
+While the SLRT is meant for UEFI and non-UEFI environments, DRTM is 
+definitely a hold over when we started this and you are correct, 
+probably not the best choice. In fact, I agree that SLRT is a far better 
+magic. We will update the spec and fix it in the series.
 
-在 2023/5/16 01:35, Liam R. Howlett 写道:
-> * Matthew Wilcox <willy@infradead.org> [230515 13:27]:
->> On Mon, May 15, 2023 at 09:17:49PM +0800, Peng Zhang wrote:
->>> Drop mtree_alloc_{range,rrange}(), mas_{rev_}alloc() and mas_fill_gap().
->>> mtree_alloc_{range,rrange}() currently have no users and can be easily
->>> implemented with mas_empty_area{_rev}(). mas_{rev_}alloc() and
->>> mas_fill_gap() are just their internal functions, drop them together.
+>>> Oof. Having the kernel know about bootloaders has not worked out super
+>>> well for us in the past. If someone writes a new bootloader, are they
+>>> unable to Secure Launch any existing kernels? The pragmatic thing for
+>>> them to do would be to just pretend they're grub, which kind of defeats
+>>> the point of having this definition...
 >>
->> No, I think this is the wrong way to go.
->>
->> Most users should not be using the mas_* API.  These are the advanced
->> APIs.  Most users will want to use mtree_alloc_range().  Just like most
->> users of the XArray use the xa_insert() API rather than open-coding the
->> xa_state and calling the xas_* APIs.
->>
->> Please read Documentation/core-api/xarray.rst and maple_tree.rst for more
->> details on Normal vs Advanced API.  The real problem is that we have so
->> few users today, so you haven't seen that most people don't want to use
->> the advanced APIs.
+>> Actually, this is not for making the kernel know about bootloaders. This is
+>> dealing with the challenge created when the preamble was split for efi-stub,
+>> and similar use cases, where what sets up the preamble, ie. the bootloader,
+>> is separate from what invokes the dynamic launch, ie. the DLE handler. The
+>> reality is that even in the simplest implementation of the DLE handler, a
+>> remnant of GRUB for call back from efi-stub, there is information that is
+>> needed to cross the gap.
 > 
+> What if I don't use grub, but use something that behaves equivalently?
+> Which value should be used here?
+
+Generally we would request that the bootloader submit a request to 
+register for a value to be reserved in the spec. That aside, the intent 
+here is to allow for the possibility for the DLE handler to be 
+independent from the bootloader, but this does not have to be this way. 
+If a non-open entity decides to produce their own implementation, they 
+can freely use a unallocated value at their own risk that it could be 
+allocated to another bootloader in the future. Though in this scenario 
+it likely would not matter as the non-open DLE handler would only be 
+present when the non-open bootloader was present.
+
+>> We wrote the TrenchBoot Secure Launch general spec [1] with as much
+>> forethought as possible for the target environments. Specifically, the
+>> desire is to have a common approach for x86 (Intel and AMD), Arm, and
+>> perhaps down the road the POWER arch. In particular, I do not believe there
+>> is anything in the Arm DRTM beta spec that prohibits a mixed 32/64 bit
+>> environment. In the end it is better to for the spec to be safe for those
+>> environments then having to make changes to the spec later down the road.
 > 
-> Peng, Apologies on the confusion.  Please do as Matthew said.  If you
-> have a way to unify the functionality to use the same internal
-> functions, then I think that would be a welcome change.
-> 
-I will implement new mtree_alloc_{range,rrange}() using other internal 
-functions.
+> Ok.
+
+Thank you for the review!
+
+v/r,
+dps
