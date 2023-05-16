@@ -2,655 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0296705AAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D470A705AB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjEPWjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
+        id S229552AbjEPWkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjEPWiz (ORCPT
+        with ESMTP id S231144AbjEPWkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:38:55 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6D6199
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:38:52 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GK02YT032006;
-        Tue, 16 May 2023 22:38:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=F8ZV3nnhyUX0XdRvHlH02sw9CbS0I1wNIQ1dCi05YRI=;
- b=Ez4ukBYMWc/360PnUmspWwPIUnh81ZS3FtaCBiXJt9Ztl5b262QcuIJuT+Xqz5FEaCn+
- TP2fWoR1P2z2lVGWb5B5oCPVD2rFXmLyhihQi5Fy18oAdxmfxTEQUiYENJ+tGk1JDS9I
- oPLgKu1hnzfxDRWGO5xk5s+WWDlwtBiZ4er5XGm0gi0zvHs+xNRr2kRTolOGy2bGwH9u
- /dHhFMFP2+YnfILnG90bj6T5OCPiU6GSysNntIh+etfJQUf/S80NjOcLEoMOHL5tjvyl
- 67pJfjdUcwjpfVucV8fBbiHwJMTV5tJKvAeHIpAUi5HVjuafni6ZCyVicQrt6e/KVD6v Cg== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj2eb3ymf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 22:38:37 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34GKcIlv023755;
-        Tue, 16 May 2023 22:38:35 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qj10axvkg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 22:38:35 +0000
+        Tue, 16 May 2023 18:40:05 -0400
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EED672AA;
+        Tue, 16 May 2023 15:39:52 -0700 (PDT)
+Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
+        by mx0b-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GJqrUv013660;
+        Tue, 16 May 2023 15:39:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
+ bh=53jNvPUsxQBtSbRsbMy5QztIX6K5o4vByir7RxPH66U=;
+ b=HZqRy9R7MKrBRQc18TRvT8FKlrdDOmWTggVtnqtYJb69oNyBp1TQe2b+cBjBrw4z0TEt
+ VE1fy1KE3UV8WoHysBxPhbjVbID3+e0VjSCkX/UsNUMvdYrKHuel394W7/PbCZvUIChT
+ KNNiwaWgd/4VzO5pjc1hRGiVCaPtR2TvY4j3ll0CyW0MAq+vdJVISTuOiJOneO+Tu1YE
+ H2zqpZy6Q+80gt8sTR6+sSR0x3qzPoLxaf4NwcxRrLaQCncRhpDLo9uJrcTDakzeTlU3
+ xDwq8jMasD9DBRDXwPVDDV9TpHXukQL3N1eZthTOQO5Tvs3QtuhvDVgHPB+CBczM3R+p Ew== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3qj96eh74g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 15:39:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1684276770; bh=53jNvPUsxQBtSbRsbMy5QztIX6K5o4vByir7RxPH66U=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=EQ1Vi0xLZAGUMXa3LnV3sSbZN8+dBBarZAhB121BzB869eLg76uCUKFcSdJACxBC2
+         FcHTQiFuavyFGzZ4XwVMogLtMK7yZJFkSOjzXplraYTh0xQk3yRGx6tnE62bUVwqpm
+         vBMDXGqppQUM7Rs2s2OrqvjVgKf2t+9sTW2R5Yl850zvKjsSP1EJTmwh0Onysq/s4q
+         PMkmDJFueB4b1ln/kOtl6Qk+YbebhhfI6wd7wMty63wMaErD6pdZ7oziq1m7AitiXj
+         /Vg4MrYUA+jEcaF5TUh3vn5Nyh4R9TQ+O2GHdA5dRX8B7uqrUp6OKiV1ozqyAC236f
+         dZoWCx1AVMPNg==
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits)
+         client-signature RSA-PSS (2048 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E2B6840407;
+        Tue, 16 May 2023 22:39:28 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id C7A70A00C3;
+        Tue, 16 May 2023 22:39:27 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=hjFLDYbT;
+        dkim-atps=neutral
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2043.outbound.protection.outlook.com [104.47.51.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id D7FD7405D5;
+        Tue, 16 May 2023 22:39:25 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XgJj8wOXEjnRBIX/J2O+39T9DsaMzglOadTBfl2bnu2R6kzyIcM09glp77luVxllp4iwoudrGnNn3EcCFsZVnBYuD4xbNeeTC7LEH0Gtl+v9uCYUIp4dtj9iXz5nQcF942hQjT1HLrXRNJ+SicYTqX2MEyw0KvYQppSjI2LaV1lQ6FaRuPYdayicfVVnUCZCrx8LRyGT9caOuPtiXNPpJd7Q9CLJV6gnYcagWj7X2RFoB/hSJBuknzrCTYslUTTqyWGjhgjmooeOqAGxiN3jcFbZyl08N+KYZaa+SHwLOY2NBLN/DTE2vUg5KTIvjBmXuyTav1GOBvW+ma/zOWMnpw==
+ b=RoUSiYPhw9x2MvKEFNRSAlrVnY5nR/D96g6Xi9/UQ+Q1br4qINnvkZbBUj65Y6iMbN9vqC40GAVhpYaJmBfOuIvpKUrAkIOWgboOrqKbb9k759jpAOcMiE0tMaQbh+Mo2NM7+s7a54hPMRYn7Yqua1jJLWqkfEHUcast9GYcg8ccTLoRi0y20U5hSDgJxMzI1d2H3Oh8NTxEWCuu6yAvOMop1kylrOTHGeibcis0Pk36lQ8Q0K+hMpSMp5q16a/xDehciXXVXENBd9iDU4u8PIsy6ThFDJRhZ3dyyCAQ6CZiLPELNcivVRKBU4eb4x+gzYN/O5kyWJUSzLs5XmbOeg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F8ZV3nnhyUX0XdRvHlH02sw9CbS0I1wNIQ1dCi05YRI=;
- b=g6t/KTWQPZL/OHz3vnYyp1AUSAyA1ETH9tnfoL1qW2lwA6mURrMBigUFsBkpOc4m9MTmQgMWk4QUZIsTex9UIe+oaDaXOfDYYTqZc5eGPOWFftfPFsqqe/73dZ7mUjhvgyUT8a6BGRm0ynqfEXvvk8W4H8h2AsRinkVxoGs94Ttt4OUIDGdoO4R+kKm2x8EuEJsio2nMlb/gYps13iTFA9IhTIcI78SkVkO14RJV5zhUhIkxdAHeK9JajEPQwgas/bS9f1qweZPmYhFJmsdvbW0uJc0BHXLHtWweBelEW220zdXUGVH3oID4JtS9m+NPb6OAxGqYkbTxK38n4JC4Kw==
+ bh=53jNvPUsxQBtSbRsbMy5QztIX6K5o4vByir7RxPH66U=;
+ b=iIr8lNOLXc52tawCd/aGSkAEGeMrSBXUc5ptb6e/DDF8DCOJwyMD15i24mcaIREEydK6Ge1izk5yy2KxALjdIsOWkyzFdgEsRltteZQToCCAHhWj7aejfqT9dLVXquwPfJ8N6JporQot+inbwG+xGNbTfbEG+3GRiUdKG0O6eMSUjY/6tYMpGHsCdSeF94WPx4BxzxIHmEsuFtayHbeS3Dp9R2UZVpFBTwKQu6DTOzHwWuwyttS4yrRZeIHs3kDC7oJs15RJr4Qd3zqs79adV9C082aJo8L20sJ7ueLCOtY8/GhWIZ1q6KwpqX8gxco1oRU8YPJD6N/UxdEz7S0Ing==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F8ZV3nnhyUX0XdRvHlH02sw9CbS0I1wNIQ1dCi05YRI=;
- b=IutUXo1esZtFtA2uSEHJ2TlwCRp7fdYWFaplzGdjZqsIbOq7KVN3Seq+Rppol9tnFofXjtNZWfds/5g+qIv5hI6D7xuJjMnLeUGeNNgB9vu8DL9nGoiGztP8HaUVcOLfIj3tuYkzmQMGBCcz0FFmk7n4mvq2NJ7GLfrcLTMSPWU=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by PH0PR10MB5845.namprd10.prod.outlook.com (2603:10b6:510:14b::14) with
+ bh=53jNvPUsxQBtSbRsbMy5QztIX6K5o4vByir7RxPH66U=;
+ b=hjFLDYbT+sKQaaCYYT84n2TS4FmpGzMFjxjjg/Pw4cpIZrBXefiLpinox7R++jeGcbxzGEiSSS94pyv0nJLwYYuuNaJ6k6b6ReqYraLmqQyssFbKU8SLfNripdPUZwAc6lWgGRIdiIVbMrJPr8wwDnF8O60MUuaeMHr3F4wNywg=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by SA0PR12MB7462.namprd12.prod.outlook.com (2603:10b6:806:24b::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 22:38:32 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%6]) with mapi id 15.20.6387.030; Tue, 16 May 2023
- 22:38:32 +0000
-Date:   Tue, 16 May 2023 18:38:30 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2] mm: userfaultfd: avoid passing an invalid range to
- vma_merge()
-Message-ID: <20230516223830.64ege7magdtx3zsr@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <lstoakes@gmail.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-References: <20230515193232.67552-1-lstoakes@gmail.com>
- <ZGKjvceDfpKMxtfb@x1n>
- <bcfb0376-ccf4-4467-9da5-8ae6f1c86876@lucifer.local>
- <20abea10-5307-498b-b9df-8f0b2fed1701@lucifer.local>
- <ZGOcAOFOjx3XPGqO@x1n>
- <9739133c-3ee7-4e94-a6a8-783045a50ac6@lucifer.local>
- <ZGPn00ZqqQqdmk2e@x1n>
- <e90c2b38-805b-4df1-abdd-8ee460b12b72@lucifer.local>
- <ZGP4KSw/yD5ItTYu@x1n>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGP4KSw/yD5ItTYu@x1n>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT1PR01CA0037.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2e::6) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
+ 2023 22:39:22 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::3400:81ff:f191:b312]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::3400:81ff:f191:b312%5]) with mapi id 15.20.6387.033; Tue, 16 May 2023
+ 22:39:22 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
+        "ahalaney@redhat.com" <ahalaney@redhat.com>
+Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Thread-Topic: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Thread-Index: AQHZhifwmS3nkBg8RUifIdaehLDgz69b1ncAgABU9wCAAVbAgA==
+Date:   Tue, 16 May 2023 22:39:21 +0000
+Message-ID: <20230516223917.k4iynqopde4ltrir@synopsys.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-4-quic_kriskura@quicinc.com>
+ <20230515210826.gwvmyrxrtt6yjc44@ripper>
+ <d70ffe46-7282-b81e-1929-90902dd10feb@quicinc.com>
+In-Reply-To: <d70ffe46-7282-b81e-1929-90902dd10feb@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR12MB4791:EE_|SA0PR12MB7462:EE_
+x-ms-office365-filtering-correlation-id: 728477a2-ad4c-4b01-9b63-08db565e649f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: aOQ6fcx3S3ErhMiKZyQSL1yClqHyO4DVB19XcyJHZtZ/nWh8OJ9MZ8WKoEhgwnrZPtzB/nXzpa45+fCTFFr/1B3nx1UdBG6h5qI+CCnJbVCkvhQ80z0TnxOTvSYK7mqPCGHsNrjUwKHwY3VHyJntFAyFAT4QGB/IbXpy84/5/sesHRd2htQpwltpMxdqBJQxLPcVFJllSgt5mgbC8f6Vwx/U3Ggu7q3+kUWKboRG20BU3enqB4qhyh6EzSVkUb5S9ct6GGPDKD5Cuibncz2LK17VBCuXPukTVcMdl/OSCFijke2xCwEn6HO5o1jrClj+W3Y0K7eMXsO431VVtV1l+3y35DSGwRfRJJcjyNpDUq0hrB8M+YgciiMYlHJCyr5wBBDsiW0YyZI8yNmO6Onb7j0K6dZmgSHa3AUylIJRxtO2i6F/2qeJB4BfCVNorTFJCZWUEPpOCxE5h4cLbXOHCq7I0vspGadrVk4J/oL827IlUxbaIII0pAyccrhgcXatvOMcJrIoqfOn+ING4bEow5iigH2Ce/cbHNJHbTWIsmfYNVzx0HhL5u4wDmrfesuzeCXCdrmxgZn4K/cJOOBSeYQo8H8sZt1WDOPZMceI67w=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(136003)(376002)(346002)(39860400002)(451199021)(6486002)(4326008)(66556008)(66446008)(64756008)(6916009)(66946007)(66476007)(76116006)(478600001)(86362001)(316002)(966005)(54906003)(36756003)(83380400001)(6506007)(186003)(1076003)(26005)(2616005)(6512007)(53546011)(8676002)(41300700001)(5660300002)(2906002)(7416002)(71200400001)(8936002)(122000001)(38070700005)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eDF2cmV1WkpkKzNSUllhVFhpWS9IaDMwSzVmVGVqaURiL3JCOCtmdnVIVW53?=
+ =?utf-8?B?dEpJUU5EM1FoWUF6VTJWWWg2K2lnc0RMajlIeHV4Q0IzbmZSLzliSFlsNGF5?=
+ =?utf-8?B?ZndwNnJtZzVNbVpsVVZYaWxCU3BTcGpvWm1hNTVQK3lqbWtEVy9maDZ2VW4y?=
+ =?utf-8?B?YkY3YnF1REcrWlFKY0lqY0pzZ3VFaC9qZTdIeTZMUXc4Y04xM0xSdDFKR0sw?=
+ =?utf-8?B?dVljZnFTRWpMNyswSVR3RmpwU2pZVzU2Ti9SbksyL0ZjaFVhKzh0cnhxVlA5?=
+ =?utf-8?B?N0tSNUNOem1pRGlaazRZOTdnUFhrNi9vQVA1QlZmWVEvTHd3TFZIeTJ6Q04r?=
+ =?utf-8?B?UGt2Tlk2ZmlPWHdmcnE1SWtRSUZZRG1EdkZQMVRKWFR4SU9nMytOQXJxTjFG?=
+ =?utf-8?B?TEVyeUFKT3l5NEVxWEYxZVZwSFRiNjlXTUhtaUFwaWxXWWxKc3RHNW9qc3Q4?=
+ =?utf-8?B?bElWbDlycHdPTWZWT284TzAra1MxaGZYQmo0SXFDNDlpdC9tYzlYZUVVV1A0?=
+ =?utf-8?B?STVmaXViVFRxRU55L1p1ckdEdncvY0k5VzFEcjd3Q0p5SW9XRmkxaTZQbHI0?=
+ =?utf-8?B?bFBrUXBLZ2Y3bEZDMktpNStmcWtHUEhJWXZoN1ppZVloNkJTQUlnU1JxUm5v?=
+ =?utf-8?B?TlMrS0FsVy85ZXVSRkdIRkZsN2hjeGpRZ1UyU00vNWdFTUt2aTNtOTlwQmVP?=
+ =?utf-8?B?NEtWbzZGOTM5ck1paHhiWnJ5ZnlwSzVZcCtmdmpuc2pLQXhlRDR6MVhzQzVT?=
+ =?utf-8?B?Z21nNVQzaVVydlZZMTVMSUxyWTdZT2hDY3gxcFBWN3JJTUM3WHNTcWVzU1ho?=
+ =?utf-8?B?cDhyVzJoNktxTEVPdVNaUi9YSjdwQjdVdERyckwwb1VqckNzT3pVVHNhd1Rj?=
+ =?utf-8?B?VGwwTGoyZjVnTTZlMlgzVThiUTFKdmQ5VHJYaWNuYzdVTXh3SGFnbS9lOVNI?=
+ =?utf-8?B?OHVHZk9nTmhaL04wcWFFSmZLcXdQd3JnUmFESU5qcWtiaC9wRmtZeUQxWDF0?=
+ =?utf-8?B?TnJ1OHRBckNFemxrbVNta3Y2WWxtc3QxbHdYMHZaVGhENTlyZTdSTEhWdXNH?=
+ =?utf-8?B?SlA4YlZxUGV3a0N5ZXI1QXpLQ2hRZmpHK2RMRnYxZDdoYTloNFUyaXd2U2lI?=
+ =?utf-8?B?K21rYkx6M2V2QlVqRExFTS9UdkQ4L3BacDJjTHpZZU1uYlBZdnBNKzhKZnFq?=
+ =?utf-8?B?QkxtM1oybEJaZnhOWVJuVWJ5ZFNOTlA3Y2xlWFJvWVJ2UkFGL20yZEJycVJw?=
+ =?utf-8?B?ZkV2Q0pyRTJZUzhjT0dCQnJuVVJpUTN4YVdNUEtWZlE0dk9yZmwxeDk1c2dh?=
+ =?utf-8?B?aGRUdG4yWFlCL01FMVljbWtJSUdZWTVhenl4STAxdlloSnhhSE92QmNFcXFH?=
+ =?utf-8?B?dnpCTzMxaTZqSG9XTjg4NkNmaWVwSGc0enJSQ0pnQ1hKYVVHYjNONzBwMWJy?=
+ =?utf-8?B?bU1ocW8yaitQNWcyZjdyUnI3Z3p0bFZuY1k3ek84eXJLVTFOdGhrVDUzL1Fm?=
+ =?utf-8?B?dVhkV1U0YlJqNVJaZjkvZC9qWDl5V0UrYmpGMVh3SytxRUh4dHRJK3dLMFEr?=
+ =?utf-8?B?RzZxWDlMblMyYjVQcXVQQWZKM1lWWUt1b1IrOXNIdzhVR0xGYnZGUHFOaVJG?=
+ =?utf-8?B?V2JYTGNzU0MwUWxDcVVGd0hLTUlXOWJ2TG4yaHdYeDlTMG96WEsvUU1qWnJ2?=
+ =?utf-8?B?TUdMWFI3QWx0ZmliTmQrNk90SXlwdDBCaXFRQUYrNWVrMVBNcDA1T3VlWVM5?=
+ =?utf-8?B?bmIyQ2QwYk1zWW0vVDBMcFdid0cxQi9kUmk0Q0V5VjV1RENPOUsyTWJaTExN?=
+ =?utf-8?B?VWd0VmVhQVpYblJkRHkxRWIxeENVYmZ4ZGRKU1I3Qm5zaHNIOEUrUEQxOVhF?=
+ =?utf-8?B?cnBpKzNKOUtjTERqSlJydU9QRjd1Z1h1VzVRbGNUUkNVempaYmFUNlZXK1Zt?=
+ =?utf-8?B?aklYKzU4VHJ2eFBiSThmbGhDSHUrYzRTWXVJMHpmbjNGdTdXdXhUdWZ3a0tD?=
+ =?utf-8?B?alY3MGxLUzRJOGlXZHR4cHBUaG9Nank2Y2ZCZThadnFpd1JwandFWm9wWTJl?=
+ =?utf-8?B?V25MUTRKVmN4WU9FMmIyMjAycHdWL1JoWTdRb2FvMkJrbFNENU5iQTFJeEFI?=
+ =?utf-8?Q?sXhsyoZdTPelZywXS2DH7vQZE?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3272F00D106ADD45B033C780555E8C84@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|PH0PR10MB5845:EE_
-X-MS-Office365-Filtering-Correlation-Id: 440fc629-1d88-471c-388c-08db565e4702
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uzKlNJYGhPttUhXDjbJ7QwnlbdHKFv3ozkdUwMM02+TdDHY2l70hQyYRkHtr3BSKm2Hl3BBEfyguxEtOYG13mIyVYq3McpZMKJdsG/8SxptuAkb1B8XdvUpvH/lN8XRfbLWgVXo7JhUA5E/l4fFskksTSgxaeiPIiUc0fNxU3H/le46Orb3/Zoq4JxH8hW1z1pfyxr4YgzaGC2fnUukPeYMVQw39X31eu/UjEubfHaw2PgxCaDBT1Gm/XwnDm/9tuS4B7njipJB07JI9MHiaOhpvEkOk15nCQNhUnyScrVOjZFSFipmyKfos3Po+4mBEc0AsSAxokg4wxnQqFZapO8iEOXk4w9BeQ/ZgmRk4IQD9knm5SOvjBY9DL27ZVFPvr1P7epEBdvOoFYzsD/yEwfl/xRcd9o4+uIFPGf6TneaDHAnEIX5kawoEauHqCpy2+peIKo3FGbNQC1vzJwH/dmbFfg3H7w/1UtkSBdwa4/Rppp1nxh0dbNNhFuscLFUQDTCKCs2pZIUktwk9PU8qYXDZ7gGOvJumQCMMowex3dCxqSIvznycGQ343mPbFHKCere8Z4qCP+6t56aDBVUrqw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(346002)(136003)(396003)(39860400002)(366004)(451199021)(66899021)(4326008)(478600001)(66556008)(66946007)(6916009)(66476007)(6486002)(316002)(86362001)(54906003)(966005)(1076003)(186003)(6512007)(26005)(6506007)(9686003)(83380400001)(8936002)(2906002)(5660300002)(8676002)(30864003)(33716001)(38100700002)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xcjVj5kw4jMvAVTNdeO7BakBnLyDdPwAy8YnpoOEh2BQB8XR/QcixcIO6UVw?=
- =?us-ascii?Q?Yp43dNuFs00g1ysZbXDDWiuy1sb4cjBuQvy/vJlYN/0rqfigMgF7yxx9WAkZ?=
- =?us-ascii?Q?6EtL+wr6LixMSmX3SZwPnL5ysBZxXu7GnTvtqD1Thls7S8OX27pMroo4+AqN?=
- =?us-ascii?Q?nipO97x2Di6Cs3CFRBxZe4Gi3X3en71Xi4mwnoAatPumEz+DVyke5UohVJyp?=
- =?us-ascii?Q?ecNlHw+X9GoPEQWVmgefcbb7B8aXDD5okquI826LAw5qfD6vGJcramLGM511?=
- =?us-ascii?Q?Yz0amA/2EBihdlOv59S35YbdSrzU2xB1094u7wlDZQrAPoFXkic4vzv3bTEb?=
- =?us-ascii?Q?FlGUQC13xHqmObWdw/b0HCezrGVqodEMzlPtwnAuQXbthJQMiyt8x5oC2Z9O?=
- =?us-ascii?Q?SDXJ+L4H63HkvGxQC/8dkjlRRFkb58LqGANftRiv4xrIGhHmT6wuHohcCs8N?=
- =?us-ascii?Q?CCfzy1PlBDGBmeWIVZ35nXWzKSyBJ3qGtBvhs6mKPSsAj/HBxciDFV3BlnA/?=
- =?us-ascii?Q?NX5qvHGp3I/I2YoBy6MOqMFw2WshRacaZgFAguTr8jaxJXvSyEDl10/yFvv4?=
- =?us-ascii?Q?n4CAmV3GxKCR4NisDx/xjmttkpvh4vEmH7AOVA99GxIlzePwqQkEONgYAENQ?=
- =?us-ascii?Q?MQTGmP2yJzS7fZ96RrKKrmydaSbc+j9Gx3+RQD0VNYPNZ5q1SvCa1O0J6FMQ?=
- =?us-ascii?Q?x7+aOcQTMwfbMKPiskXfsiI6jmZibUMVbxRFRT4HJndDF5ibkuLSSOrdJGKr?=
- =?us-ascii?Q?6+VLxpfISHpqQ6s3cUU1y5T9/XENYzcMKpgHjHwDISMj48PhvmTq8Ntl17E+?=
- =?us-ascii?Q?Tx6mJXek7xByDKBQzSGDAIn4Cs5xRv/VN8pazA4SCQqHVZy9L68M8xShB8si?=
- =?us-ascii?Q?g5eNBzTdSMwZSkaeessacR3JUUn8duHoLSXUn/GV0K8iTLeViNgg2BjJUt1m?=
- =?us-ascii?Q?SZisSbDsYd+jNiJ4rGvrGy7opL9yteIYLove0eG45f2Cs34pJQh6ONPyY7a6?=
- =?us-ascii?Q?o4pGbTPuW/Skv40scvSTHxk0mFV44r6lUQeDKPPKbOIjH0/x4Sc9Ke5Dei+1?=
- =?us-ascii?Q?dhFqfdwkxeFNzv+8U0SD31s57uveMNC+fU2lb4w4C4LldkcBreujzODdbE+B?=
- =?us-ascii?Q?DYyOnw8OymRwfBHBdlw2ZuF6lNegSStmMMLrw3LEMgsNKx35g0JwwEk16Rl6?=
- =?us-ascii?Q?0mNVnn1GOJ79TTmuTMmVoPOhRZa5D9mJnsnV8eRtJAdTP+FT53KPykIHxXmt?=
- =?us-ascii?Q?EevBf4yqfpHxvueFtaxuq8iBkZ2TGYQh7gwkwWQ3vVBaG+BIcYGwshpf9R8j?=
- =?us-ascii?Q?OS8vTkgBLRZ9tzI4e5eg7AfPOQQsl0mtGNeiIhBGzMm/0tzg81T/wp15iPWb?=
- =?us-ascii?Q?NVl7xk5VXcL5Df4G7ELgCwi+jurampuMrSSmBdZnTrrGaH8REZCKq5ivfzfN?=
- =?us-ascii?Q?oT0x55kF7cyAUmeB18WdgL6/qAYYeOO4VfTB35FqT+B7X3xMMx2Mbc6lB4fS?=
- =?us-ascii?Q?qtwT/5BEFt2qfZ1+xipNCSx/b8LgmtwGJS/FpwR+IWR30HS4pbl5chULQSHv?=
- =?us-ascii?Q?aFeRMMl7ASspVUbYtFWjdt0dXOeBMKz+aJ1pKhGODjo5gAuz0qQxEjqRKHP4?=
- =?us-ascii?Q?9Q=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?6+X5/ra92taCGW3BkCBjhiKsFQeqyK3UPny6r5EZJJFQmYy5cDblj9Nq2oy4?=
- =?us-ascii?Q?9AFRERKLJI+Ujun8O5sWQ23EHDVIr1TTgU5H+YoqnsFN9aqJn7yHNIzCu3Mg?=
- =?us-ascii?Q?VLei0UWRf9i/DLRMw0GvHrYWjn/glNmQuAwtKAl7W2T79p7IFjAEOqA5b2yM?=
- =?us-ascii?Q?vctC1O4J8v1iNsbVkOHFtifO7FzoExlnCOnTm2KpuDJ6EUnAUbDejbCO4Fov?=
- =?us-ascii?Q?tzrQSmsmciD860z43vJy29jWmmPLeJR4ry4gdjWNUpLAJL/j+61kY2nBy1/N?=
- =?us-ascii?Q?waI2w67QK+rrjBhB0M95Z3Fo7dPHQKoBG0WLWz82hbRK+PLVg6xUScDsRGMH?=
- =?us-ascii?Q?au+TjliaV/PpkK3foz/DWRqDKYQYQl1O8M5yqf7VBPTEoiRw3SSLnxuVPYxI?=
- =?us-ascii?Q?y6HcTjNyPelbXUnb5Q/LZddreBqo33iAAnD2pkWhbRb0wVOQpnHMqxCuxhB4?=
- =?us-ascii?Q?ZS7qqPVhEmSjKzSQP37O0WoviqJLyF/Sa2rQks48ALBCG7UT21zb23C8ONQ/?=
- =?us-ascii?Q?IzNmOXq9N/epbp2TkrVNzdYIygVIuiL5nbVEXxtgJdBdUxx5WzN6wC5vSsBM?=
- =?us-ascii?Q?GROo+E79u+8XQuHH57bu8Ysb8hAK2DvvhdtakLyZ5UJBPykeLl7OE7mu7JnW?=
- =?us-ascii?Q?YWtBBva6GqolGW8xO1BM4e21Yhdxr2hLSKI0/ef1K82UThYN+16akg+bWSYh?=
- =?us-ascii?Q?cz1vZbaiIthXBYtrXhRPVwJlqz0ISe0l+xAsi3Sq9qWjoMlwH1/Tod6hxI6t?=
- =?us-ascii?Q?NgzfFWb0ZRc9CkpP9p9RrvN2KkZkhL9bZj/z16uz4exAmuB16PFIVerKxwbK?=
- =?us-ascii?Q?IR4sl9S1IrzUN3yAT5ny9n98mAhxJ13cb3Vs05V51Av2IUjKCpXlKPAR6lG3?=
- =?us-ascii?Q?JW288YYNIzPUaCl3LjFtYoNMtcyVnpzX9+vZpCh+joef3EnGJOCSvisgylPn?=
- =?us-ascii?Q?Asa/3qlrqb+miY/OJgBix0hwNRJ+Pi1WZ2tN7yWTDjaowbf8E1krjqkJZDia?=
- =?us-ascii?Q?lGcF?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 440fc629-1d88-471c-388c-08db565e4702
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?QStxc2tuZXZvK3NZM0UySWZmb0Y4QTVPM3FnZnVlUERzVkdQR3Jrdkhsa08z?=
+ =?utf-8?B?dEU5UXN6RTRiQWZ1NG50c3NzN2x0cDk1YWRjUTdzVTVhR1dpbWVmd1h3M1Nj?=
+ =?utf-8?B?SmFNRUVuT3hxUnllejdmQ0N4dkJlUkdXRjFGU29GQWNIU2srWktNS3h1ZlJC?=
+ =?utf-8?B?eDBpQUJSajAydWhXSzBkZytJb0Vlem9ncUNabS96c0hDOWFqa3FlYktkb0FH?=
+ =?utf-8?B?UFhJM3UybThjNEdMcWxPWHo5a0krQS9DSWdFTnFRL2ZuU24yOC8xeEFHL1ZP?=
+ =?utf-8?B?bm9nVit0WjFVdWRBc0JhM2NhOFRqWWliMHRNVXBkTjlOZFpuTmJjUlZFY1Fs?=
+ =?utf-8?B?WFB3bndrRTRHL0FaS3J5amVLUnRzenRuTmk0RDJ0dk5oQkZQTzdCaW4yU2dv?=
+ =?utf-8?B?ZDlmM2pNSzZOUEtsU01PVW5MU21PRjk4UnhkMytjakVXQXhrRW1sdFRtRklS?=
+ =?utf-8?B?ZzZNb0loQmlVMXhXdUdMeTlXQitWbUVMQzFoS0N6WTJZZ3FlaDJjcWovNWcw?=
+ =?utf-8?B?Y0lkU1lrTG53cnZ2K2V3TFJBMVNKeXdtVmtCL2NYQWVwV2lDRXZvbWdvTWlp?=
+ =?utf-8?B?VjQ0NVYyeEFObkd6azhvVlNkYmZkRFQydHNBSVVaWWFuN0I3c1F5TzljK3J0?=
+ =?utf-8?B?NlFOb3VWWDZaZ0ZZNGFNQW9sYWllU2pVaVJXZE5vNUJDL0MvczJ2SVYyU1F2?=
+ =?utf-8?B?TWVFQ1Z0aGVnV1FTZHk1OFU5UkljNUllUHdvSVFhNG80NTQwQ0JVdlRuV0hw?=
+ =?utf-8?B?bm5VSUZxTXhRbzJnbTdEWXBMV1NQZWx1cmhQRy9ESXZueEhuNFlIOGNUWHJC?=
+ =?utf-8?B?LzN3YkVzaklsK3RqV0w0aHdwSmFsdFlpejlXNDJZemJnLzl5cGwzMnNld1Jr?=
+ =?utf-8?B?WDJXcmwxSlY5MjV6ZFl4Qkk1UERXbGwvS1dSWHNkc0VtQ2cxQ2MwV3BtbmxM?=
+ =?utf-8?B?R0FFK1YyejJQM3hXREl5VWFyK2pHdTIwWUhocCs4RXl3YlF5QUpsakNXWkx5?=
+ =?utf-8?B?elFWRm9lTHd3RzhzRXFtdG05K3RXeS85aTlKdlYyeGY3TzgzdFMyZnpZbS8r?=
+ =?utf-8?B?b2dJRDNhNWxKTFJrczJyNm9hYWNkTzVTMkc3dkdPOW5BTytJeXdjWmUxN1RM?=
+ =?utf-8?B?M3FqdXFMYlN2S2F0Z2pSK3BCYzRNNGorQ0NsaU0wdCt1OWV0TVJYQW1keHVZ?=
+ =?utf-8?B?aHlQQjNZY0cySmZPd2F2VUM5aXBWYjFiTHNGRzdmS2NkYTg1RW01RTArcjA0?=
+ =?utf-8?B?TEd4dmRvYWV4bWxoc0JreUg1NGJOYml4MUgxcWh5c1dvbzBwSW1MOVcvQ01X?=
+ =?utf-8?B?L2ZvVC9uWkV4aUVrV1NtQ0t5Zy9ndzVsWmIwNmlVczVOUlhCWUY2SWdoYjVE?=
+ =?utf-8?B?akxQaEMyYldGRHc9PQ==?=
+X-OriginatorOrg: synopsys.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 22:38:32.3956
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 728477a2-ad4c-4b01-9b63-08db565e649f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 May 2023 22:39:21.7832
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Yhlpy1hF5GOjZUv4376ZqptJVCoOGXC5ENTa1Y4DXhUz/FzxxCvr74gMMXMNBXIkDx3IDT81lkmEB3NszSBqjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5845
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DWynRtrSR2sduorW7q1spb91cLYXjq9tDGRNX9UzAyKRFfkxu9elqYh1uXfZCAr1OpkGAIXAOLwPJ2z1GEqKRA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7462
+X-Proofpoint-GUID: my5QQb2SLwOUxieFu4VXza-uquZ_GAU1
+X-Proofpoint-ORIG-GUID: my5QQb2SLwOUxieFu4VXza-uquZ_GAU1
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-16_12,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160192
-X-Proofpoint-GUID: oZtI7lcuyYo2Rb_KQSksYM0tOj8afeXf
-X-Proofpoint-ORIG-GUID: oZtI7lcuyYo2Rb_KQSksYM0tOj8afeXf
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 adultscore=0
+ clxscore=1011 lowpriorityscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ spamscore=0 suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305160191
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Peter Xu <peterx@redhat.com> [230516 17:40]:
-> On Tue, May 16, 2023 at 10:01:06PM +0100, Lorenzo Stoakes wrote:
-> > On Tue, May 16, 2023 at 04:30:11PM -0400, Peter Xu wrote:
-> > > On Tue, May 16, 2023 at 08:25:13PM +0100, Lorenzo Stoakes wrote:
-> > > > On Tue, May 16, 2023 at 11:06:40AM -0400, Peter Xu wrote:
-> > > > > On Tue, May 16, 2023 at 12:07:11AM +0100, Lorenzo Stoakes wrote:
-> > > > > > On Mon, May 15, 2023 at 11:04:27PM +0100, Lorenzo Stoakes wrote:
-> > > > > > [snip]
-> > > > > > > > Could you explain a bit why we don't need to merge in this case?
-> > > > > > > >
-> > > > > > > > I'm considering, for example, when we have:
-> > > > > > > >
-> > > > > > > >   vma1(range 0-9, with uffd), vma2(range 10-19, no uffd)
-> > > > > > > >
-> > > > > > > > Then someone unregisters uffd on range (5-9), iiuc it should become:
-> > > > > > > >
-> > > > > > > >   vma1(range 0-4, with uffd), vma2(range 5-19, no uffd)
-> > > > > > > >
-> > > > > > > > But if no merge here it's:
-> > > > > > > >
-> > > > > > > >   vma1(range 0-4, with uffd), vma3(range 5-9, no uffd), vma2(range 10-19, no uffd)
-> > > > > > > >
-> > > > > > > > Maybe I missed something?
-> > > > > > > >
-> > > > > > >
-> > > > > > > There's something really, really wrong with this. It simply isn't valid to
-> > > > > > > invoke vma_merge() over an existing VMA that != prev where you're not
-> > > > > > > specifying addr = vma->vm_start, end == vma->vm_end.
-> > > > > > >
-> > > > > > > This seems like you're relying on:-
-> > > > > > >
-> > > > > > >   ***
-> > > > > > > CCCCCNNNNN -> CCNNNNNNNN
-> > > > >
-> > > > > I had a closer look today, I still think this patch is not really the right
-> > > > > one.  The split/merge order is something we use everywhere and I am not
-> > > > > convinced it must change as drastic.  At least so far it still seems to me
-> > > > > if we do with what current patch proposed we can have vma fragmentations.
-> > > >
-> > > > 'something we use everywhere' is not an argument (speak to Willy about
-> > > > folios), vma_merge() expects valid input, relying on it _happening_ to be
-> > >
-> > > I still think it's an argument.
-> > >
-> > > I believe Matthew tried hard to justify he's correct in that aspect when
-> > > changing "something we used everywhere". Blindly referencing it doesn't
-> > > help much on a technical discussion.
-> > >
-> > > If we have similar code that handles similar things, IMHO you need a reason
-> > > to modify one of them to not like the other.
-> > >
-> > > If you think what you proposed is better, please consider (1) justify why
-> > > it's better, and then (2) also apply it to all the rest places where
-> > > applicable.  Please refer to my reply to Liam on the other use cases of
-> > > vma_merge().
-> > >
-> > > Said that, I apprecaite a lot on your assert patch that found this problem.
-> > >
-> > > > ok or to fail in ways that _happen_ not to cause big problems is not right.
-> > > >
-> > > > This is just further evidence that the vma_merge() interface is
-> > > > fundamentally broken. Implicitly assuming you will only get a partial prev
-> > > > overlap merge is far from intuitive.
-> > > >
-> > > > I am definitely going to try to do a series addressing vma_merge() horrors
-> > > > because I feel like we need a generic means of doing this split/merge pattern.
-> > >
-> > > It'll be great if you can make it better.
-> > >
-> > > >
-> > > > >
-> > > > > I think I see what you meant, but here I think it's a legal case where we
-> > > > > should have PPPP rather than CCCC (PPPPPNNNN --> PPNNNNNNNN).
-> > > > >
-> > > > > To be explicit, for register I think it _should_ be the case 0 where we
-> > > > > cannot merge (note: the current code is indeed wrong though, see below):
-> > > > >
-> > > > >    ****
-> > > > >   PPPPPPNNNNNN
-> > > > >   cannot merge
-> > > > >
-> > > > > While for the unregister case here it's case 4:
-> > > > >
-> > > > >     ****
-> > > > >   PPPPPPNNNNNN
-> > > > >   might become
-> > > > >   PPNNNNNNNNNN
-> > > > >   case 4 below
-> > > > >
-> > > > > Here the problem is not that we need to do split then merge (I think it'll
-> > > > > have the problem of vma defragmentation here), the problem is we simply
-> > > > > passed in the wrong "prev" vma pointer, IMHO.  I've patches attached
-> > > > > showing what I meant.
-> > > >
-> > > > Yeah if you do it with prev = vma this form should _probably_ work, that's
-> > > > a good point. This _is_ a case (see https://ljs.io/vma_merge_cases.png for
-> > > > nice diagram of cases btw :), like 5, where we actually do split and merge
-> > > > at the same time.
-> > >
-> > > It's not something I came up with myself, it's just that I started looking
-> > > back to see what people did and trying to understand why they did it.
-> > > Normally people did things with good reasons.
-> > >
-> > 
-> > Yup, it's an iffy pattern in each case. I can see why you chose to do it,
-> > it's not a criticism of that, it's just that the incorrect (but
-> > accidentally ok to be incorrect seemingly) input is made more obvious by
-> > recent changes.
-> > 
-> > > So far it seems clearer at least to me to keep this pattern of "merge then
-> > > split".  But I'm happy to be proven wrong anytime.
-> > 
-> > But you're not, you're doing a vma_merge() and (without it being clear)
-> > hoping it does a merge AND SPLIT in case in an instance where that might be
-> > required followed by you doing any further splits required.
-> 
-> I don't quite get the reason that you seem to keep saying this is
-> "incorrect input" to vma_merge().  vma_merge() definitely includes splits
-> too where it can, to be explicit, for case 4 & 5.
-> 
-> It seems to me what you're trying to explain is we shouldn't handle any
-> split in vma_merge() so we should move cases 4 & 5 out of vma_merge().  If
-> we split first then merge, cases 4 & 5 will become case 2 & 3 after split.
-
-We don't split in case 4 or 5 - we adjust the existing VMA limits.  We
-don't actually handle any splits in vma_merge().  I think splitting
-first would change 4 & 5 to 7 & 8?  2 & 3 would require a split and
-munmap, right?
-
-> My question would be: if it worked perfect in the past few years and it
-> looks all good enough, why bother..
-
-I suspect, but it's not clear (like all of this), that the other
-arguments to vma_merge() is ruling out this potential hazard I thought
-existed.
-
-> 
-> > 
-> > But it's _not your fault_ that this is the standard approach, it's the
-> > interface that's wrong absolutely.
-> > 
-> > To me doing this is quite a bit less clear than simply 'splitting so this
-> > is mergable first then try to merge' but obviously this current patch does
-> > not avoid the previously introduced fragmentation. However it does maintain
-> > existing behaviour.
-> > 
-> > >
-> > > >
-> > > > Liam's raised some issues with the safety of your patches, let me look at
-> > > > them when I get a chance, nasty headcold = brain less functional atm.
-> > >
-> > > Sure, no need to rush.
-> > >
-> > > >
-> > > > I would say for now this fix resolves the issue in a way that should
-> > > > emphatically avoid invalid input to vma_merge(), the fragmentation existed
-> > > > before so this is not a new issue, so for the time being I think it's ok to
-> > > > stay as-is.
-> > >
-> > > So far I would still suggest having uffd code the same as the rest if
-> > > possible.
-> > >
-> > 
-> > Absolutely, but in the immediate term, we are seeing VM_WARN_ON()'s here
-> > and not from other callers (which is actually surprising).
-> 
-> Not surprising anymore to me, simply because the uffd path was the only one
-> got overlooked when converting to maple in commit 69dbe6daf104, as Liam
-> rightfully pointed out.
-> 
-> For example, mprotect() has similar handling when the start addr of the
-> range can be in the middle of a vma, then in do_mprotect_pkey() there is:
-> 
-> 	prev = vma_prev(&vmi);
-> 	if (start > vma->vm_start)
-> 		prev = vma;
-> 
-> IMHO it's the same thing.
-> 
-> > 
-> > Again, we absolutely do need an abstracted solution for the whole. And
-> > that's something I'll try to work on!
-> > 
-> > > I think I'll wait for the other discussion to settle on patch 2 to see
-> > > whether I should post a formal patchset.
-> > 
-> > My suggestion is that it's ok to proceed as-is, not because this is the
-> > final change that should be applied, but rather because it resolves the
-> > issue while maintaining existing behaviour.
-> > 
-> > I will be more than happy to see patches land after this one that replace
-> > it if necessary but I think it's safe for this to land as a mainline fixup,
-> > even if temporary, is all I am saying :)
-> 
-> I'd hope we can replace this patch with my patch 1 if possible because I
-> _think_ this patch is still in hotfixes-unstable (while patch 2 doesn't
-> need to copy stable in all cases).  Andrew may know better on how to
-> proceed.
-> 
-> If this lands first, I'll probably propose a full revert otherwise as the
-> 1st patch of the patchset to post, then make uffd the same as others.
-> 
-> Before that I'd like to know whether you agree that the new patch 1 (I'll
-> fixup the vma_prev() side effect) could be a better solution than the
-> current one, no matter whether we need a full revert or not.
-> 
-> Thanks,
-> 
-> > 
-> > >
-> > > >
-> > > > >
-> > > > > I checked the original commit from Andrea and I found that it _was_ correct:
-> > > > >
-> > > > > commit 86039bd3b4e6a1129318cbfed4e0a6e001656635
-> > > > > Author: Andrea Arcangeli <aarcange@redhat.com>
-> > > > > Date:   Fri Sep 4 15:46:31 2015 -0700
-> > > > >
-> > > > >     userfaultfd: add new syscall to provide memory externalization
-> > > > >
-> > > > > I had a feeling that it's broken during the recent rework on vma (or maybe
-> > > > > even not that close), but I'm not yet sure and need to further check.
-> > > > >
-> > > > > > >
-> > > > > > > By specifying parameters that are compatible with N even though you're only
-> > > > > > > partially spanning C?
-> > > > > > >
-> > > > > > > This is crazy, and isn't how this should be used. vma_merge() is not
-> > > > > > > supposed to do partial merges. If it works (presumably it does) this is not
-> > > > > > > by design unless I've lost my mind and I (and others) have somehow not
-> > > > > > > noticed this??
-> > > > > > >
-> > > > > > > I think you're right that now we'll end up with more fragmentation, but
-> > > > > > > what you're suggesting is not how vma_merge() is supposed to work.
-> > > > > > >
-> > > > > > > As I said above, giving vma_merge() invalid parameters is very dangerous as
-> > > > > > > you could end up merging over empty ranges in theory (and could otherwise
-> > > > > > > have corruption).
-> > > > > > >
-> > > > > > > I guess we should probably be passing 0 to the last parameter in
-> > > > > > > split_vma() here then to ensure we do a merge pass too. Will experiment
-> > > > > > > with this.
-> > > > > > >
-> > > > > > > I'm confused as to how the remove from case 8 is not proceeding. I'll look
-> > > > > > > into this some more...
-> > > > > > >
-> > > > > > > Happy to be corrected if I'm misconstruing this!
-> > > > > > >
-> > > > > >
-> > > > > > OK, so I wrote a small program to do perform exactly this case [0] and it seems
-> > > > > > that the outcome is the same before and after this patch - vma_merge() is
-> > > > > > clearly rejecting the case 8 merge (phew!) and in both instances you end up with
-> > > > > > 3 VMAs.
-> > > > > >
-> > > > > > So this patch doesn't change this behaviour and everything is as it was
-> > > > > > before. Ideally we'd let it go for another pass, so maybe we should change the
-> > > > > > split to add a new VMA _afterwards_. Will experiment with that, separately.
-> > > > > >
-> > > > > > But looks like the patch is good as it is.
-> > > > > >
-> > > > > > (if you notice something wrong with the repro, etc. do let me know!)
-> > > > > >
-> > > > > > [0]: https://gist.github.com/lorenzo-stoakes/a11a10f5f479e7a977fc456331266e0e
-> > > > >
-> > > > > I think your test case is fine, but... no, this is still not expected. The
-> > > > > vma should just merge.
-> > > > >
-> > > > > So I have another closer look on this specific issue, it seems we have a
-> > > > > long standing bug on pgoff calculation here when passing that to
-> > > > > vma_merge().  I've got another patch attached to show what I meant.
-> > > > >
-> > > > > To summarize.. now I've got two patches attached:
-> > > > >
-> > > > > Patch 1 is something I'd like to propose to replace this patch that fixes
-> > > > > incorrect use of vma_merge() so it should also eliminate the assertion
-> > > > > being triggered (I still think this is a regression but I need to check
-> > > > > which I will do later; I'm not super familiar with maple tree work, maybe
-> > > > > you or Liam can quickly spot).
-> > > > >
-> > > > > Patch 2 fixes the long standing issue of vma not being able to merge in
-> > > > > above case, and with patch 2 applied it should start merging all right.
-> > > > >
-> > > > > Please have a look, thanks.
-> > > > >
-> > > > > ---8<---
-> > > > > From 6bc39028bba246394bb0bafdaeaab7b8dfd1694f Mon Sep 17 00:00:00 2001
-> > > > > From: Peter Xu <peterx@redhat.com>
-> > > > > Date: Tue, 16 May 2023 09:03:22 -0400
-> > > > > Subject: [PATCH 1/2] mm/uffd: Fix vma operation where start addr cuts part of
-> > > > >  vma
-> > > > >
-> > > > > It seems vma merging with uffd paths is broken with either
-> > > > > register/unregister, where right now we can feed wrong parameters to
-> > > > > vma_merge() and it's found by recent patch which moved asserts upwards in
-> > > > > vma_merge():
-> > > > >
-> > > > > https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
-> > > > >
-> > > > > The problem is in the current code base we didn't fixup "prev" for the case
-> > > > > where "start" address can be within the "prev" vma section.  In that case
-> > > > > we should have "prev" points to the current vma rather than the previous
-> > > > > one when feeding to vma_merge().
-> > > > >
-> > > > > This will eliminate the report and make sure vma_merge() calls will become
-> > > > > legal again.
-> > > > >
-> > > > > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > > > > ---
-> > > > >  fs/userfaultfd.c | 27 +++++++++++++++++++++------
-> > > > >  1 file changed, 21 insertions(+), 6 deletions(-)
-> > > > >
-> > > > > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > > > > index 0fd96d6e39ce..7eb88bc74d00 100644
-> > > > > --- a/fs/userfaultfd.c
-> > > > > +++ b/fs/userfaultfd.c
-> > > > > @@ -1458,10 +1458,17 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> > > > >  	BUG_ON(!found);
-> > > > >
-> > > > >  	vma_iter_set(&vmi, start);
-> > > > > -	prev = vma_prev(&vmi);
-> > > > > +	vma = vma_find(&vmi, end);
-> > > > > +	if (!vma)
-> > > > > +		goto out_unlock;
-> > > > > +
-> > > > > +	if (vma->vm_start < start)
-> > > > > +		prev = vma;
-> > > > > +	else
-> > > > > +		prev = vma_prev(&vmi);
-> > > > >
-> > > > >  	ret = 0;
-> > > > > -	for_each_vma_range(vmi, vma, end) {
-> > > > > +	do {
-> > > > >  		cond_resched();
-> > > > >
-> > > > >  		BUG_ON(!vma_can_userfault(vma, vm_flags));
-> > > > > @@ -1517,7 +1524,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> > > > >  	skip:
-> > > > >  		prev = vma;
-> > > > >  		start = vma->vm_end;
-> > > > > -	}
-> > > > > +	} for_each_vma_range(vmi, vma, end);
-> > > > >
-> > > > >  out_unlock:
-> > > > >  	mmap_write_unlock(mm);
-> > > > > @@ -1624,9 +1631,17 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
-> > > > >  	BUG_ON(!found);
-> > > > >
-> > > > >  	vma_iter_set(&vmi, start);
-> > > > > -	prev = vma_prev(&vmi);
-> > > > > +	vma = vma_find(&vmi, end);
-> > > > > +	if (!vma)
-> > > > > +		goto out_unlock;
-> > > > > +
-> > > > > +	if (vma->vm_start < start)
-> > > > > +		prev = vma;
-> > > > > +	else
-> > > > > +		prev = vma_prev(&vmi);
-> > > > > +
-> > > > >  	ret = 0;
-> > > > > -	for_each_vma_range(vmi, vma, end) {
-> > > > > +	do {
-> > > > >  		cond_resched();
-> > > > >
-> > > > >  		BUG_ON(!vma_can_userfault(vma, vma->vm_flags));
-> > > > > @@ -1692,7 +1707,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
-> > > > >  	skip:
-> > > > >  		prev = vma;
-> > > > >  		start = vma->vm_end;
-> > > > > -	}
-> > > > > +	} for_each_vma_range(vmi, vma, end);
-> > > > >
-> > > > >  out_unlock:
-> > > > >  	mmap_write_unlock(mm);
-> > > > > --
-> > > > > 2.39.1
-> > > > >
-> > > > > From bf61f3c937e9e2ab96ab2bed0005cb7dc74db231 Mon Sep 17 00:00:00 2001
-> > > > > From: Peter Xu <peterx@redhat.com>
-> > > > > Date: Tue, 16 May 2023 09:39:38 -0400
-> > > > > Subject: [PATCH 2/2] mm/uffd: Allow vma to merge as much as possible
-> > > > >
-> > > > > We used to not pass in the pgoff correctly when register/unregister uffd
-> > > > > regions, it caused incorrect behavior on vma merging.
-> > > > >
-> > > > > For example, when we have:
-> > > > >`
-> > > > >   vma1(range 0-9, with uffd), vma2(range 10-19, no uffd)
-> > > > >
-> > > > > Then someone unregisters uffd on range (5-9), it should become:
-> > > > >
-> > > > >   vma1(range 0-4, with uffd), vma2(range 5-19, no uffd)
-> > > > >
-> > > > > But with current code it's:
-> > > > >
-> > > > >   vma1(range 0-4, with uffd), vma3(range 5-9, no uffd), vma2(range 10-19, no uffd)
-> > > > >
-> > > > > This patch allows such merge to happen correctly.
-> > > > >
-> > > > > This behavior seems to have existed since the 1st day of uffd, keep it just
-> > > > > as a performance optmization and not copy stable.
-> > > > >
-> > > > > Cc: Andrea Arcangeli <aarcange@redhat.com>
-> > > > > Cc: Mike Rapoport (IBM) <rppt@kernel.org>
-> > > > > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > > > > ---
-> > > > >  fs/userfaultfd.c | 8 ++++++--
-> > > > >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > > > > index 7eb88bc74d00..891048b4799f 100644
-> > > > > --- a/fs/userfaultfd.c
-> > > > > +++ b/fs/userfaultfd.c
-> > > > > @@ -1332,6 +1332,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> > > > >  	bool basic_ioctls;
-> > > > >  	unsigned long start, end, vma_end;
-> > > > >  	struct vma_iterator vmi;
-> > > > > +	pgoff_t pgoff;
-> > > > >
-> > > > >  	user_uffdio_register = (struct uffdio_register __user *) arg;
-> > > > >
-> > > > > @@ -1489,8 +1490,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> > > > >  		vma_end = min(end, vma->vm_end);
-> > > > >
-> > > > >  		new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
-> > > > > +		pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
-> > > > >  		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
-> > > > > -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
-> > > > > +				 vma->anon_vma, vma->vm_file, pgoff,
-> > > > >  				 vma_policy(vma),
-> > > > >  				 ((struct vm_userfaultfd_ctx){ ctx }),
-> > > > >  				 anon_vma_name(vma));
-> > > > > @@ -1570,6 +1572,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
-> > > > >  	unsigned long start, end, vma_end;
-> > > > >  	const void __user *buf = (void __user *)arg;
-> > > > >  	struct vma_iterator vmi;
-> > > > > +	pgoff_t pgoff;
-> > > > >
-> > > > >  	ret = -EFAULT;
-> > > > >  	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
-> > > > > @@ -1677,8 +1680,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
-> > > > >  			uffd_wp_range(vma, start, vma_end - start, false);
-> > > > >
-> > > > >  		new_flags = vma->vm_flags & ~__VM_UFFD_FLAGS;
-> > > > > +		pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
-> > > > >  		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
-> > > > > -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
-> > > > > +				 vma->anon_vma, vma->vm_file, pgoff,
-> > > > >  				 vma_policy(vma),
-> > > > >  				 NULL_VM_UFFD_CTX, anon_vma_name(vma));
-> > > > >  		if (prev) {
-> > > > > --
-> > > > > 2.39.1
-> > > > > ---8<---
-> > > > >
-> > > > > --
-> > > > > Peter Xu
-> > > > >
-> > > >
-> > >
-> > > --
-> > > Peter Xu
-> > >
-> > >
-> > 
-> 
-> -- 
-> Peter Xu
-> 
+T24gVHVlLCBNYXkgMTYsIDIwMjMsIEtyaXNobmEgS3VyYXBhdGkgUFNTTlYgd3JvdGU6DQo+IA0K
+PiANCj4gT24gNS8xNi8yMDIzIDI6MzggQU0sIEJqb3JuIEFuZGVyc3NvbiB3cm90ZToNCj4gPiBP
+biBTdW4sIE1heSAxNCwgMjAyMyBhdCAxMToxOToxMUFNICswNTMwLCBLcmlzaG5hIEt1cmFwYXRp
+IHdyb3RlOg0KPiA+ID4gQ3VycmVudGx5IGhvc3Qtb25seSBjYXBhYmxlIERXQzMgY29udHJvbGxl
+cnMgc3VwcG9ydCBNdWx0aXBvcnQuDQo+ID4gPiBUZW1wb3JhcmlseSBtYXAgWEhDSSBhZGRyZXNz
+IHNwYWNlIGZvciBob3N0LW9ubHkgY29udHJvbGxlcnMgYW5kIHBhcnNlDQo+ID4gPiBYSENJIEV4
+dGVuZGVkIENhcGFiaWxpdGllcyByZWdpc3RlcnMgdG8gcmVhZCBudW1iZXIgb2YgdXNiMiBwb3J0
+cyBhbmQNCj4gPiA+IHVzYjMgcG9ydHMgcHJlc2VudCBvbiBtdWx0aXBvcnQgY29udHJvbGxlci4g
+RWFjaCBVU0IgUG9ydCBpcyBhdCBsZWFzdCBIUw0KPiA+ID4gY2FwYWJsZS4NCj4gPiA+IA0KPiA+
+ID4gVGhlIHBvcnQgaW5mbyBmb3IgdXNiMiBhbmQgdXNiMyBwaHkgYXJlIGlkZW50aWZpZWQgYXMg
+bnVtX3VzYjJfcG9ydHMNCj4gPiA+IGFuZCBudW1fdXNiM19wb3J0cy4gVGhlIGludGVudGlvbiBp
+cyBhcyBmb2xsb3dzOg0KPiA+ID4gDQo+ID4gPiBXaGVyZXZlciB3ZSBuZWVkIHRvIHBlcmZvcm0g
+cGh5IG9wZXJhdGlvbnMgbGlrZToNCj4gPiA+IA0KPiA+ID4gTE9PUF9PVkVSX05VTUJFUl9PRl9B
+VkFJTEFCTEVfUE9SVFMoKQ0KPiA+ID4gew0KPiA+ID4gCXBoeV9zZXRfbW9kZShkd2MtPnVzYjJf
+Z2VuZXJpY19waHlbaV0sIFBIWV9NT0RFX1VTQl9IT1NUKTsNCj4gPiA+IAlwaHlfc2V0X21vZGUo
+ZHdjLT51c2IzX2dlbmVyaWNfcGh5W2ldLCBQSFlfTU9ERV9VU0JfSE9TVCk7DQo+ID4gPiB9DQo+
+ID4gPiANCj4gPiA+IElmIG51bWJlciBvZiB1c2IyIHBvcnRzIGlzIDMsIGxvb3AgY2FuIGdvIGZy
+b20gaW5kZXggMC0yIGZvcg0KPiA+ID4gdXNiMl9nZW5lcmljX3BoeS4gSWYgbnVtYmVyIG9mIHVz
+YjMtcG9ydHMgaXMgMiwgd2UgZG9uJ3Qga25vdyBmb3Igc3VyZSwNCj4gPiA+IGlmIHRoZSBmaXJz
+dCAyIHBvcnRzIGFyZSBTUyBjYXBhYmxlIG9yIHNvbWUgb3RoZXIgcG9ydHMgbGlrZSAoMiBhbmQg
+MykNCj4gPiA+IGFyZSBTUyBjYXBhYmxlLiBTbyBpbnN0ZWFkLCBudW1fdXNiMl9wb3J0cyBpcyB1
+c2VkIHRvIGxvb3AgYXJvdW5kIGFsbA0KPiA+ID4gcGh5J3MgKGJvdGggaHMgYW5kIHNzKSBmb3Ig
+cGVyZm9ybWluZyBwaHkgb3BlcmF0aW9ucy4gSWYgYW55DQo+ID4gPiB1c2IzX2dlbmVyaWNfcGh5
+IHR1cm5zIG91dCB0byBiZSBOVUxMLCBwaHkgb3BlcmF0aW9uIGp1c3QgYmFpbHMgb3V0Lg0KPiA+
+ID4gDQo+ID4gPiBudW1fdXNiM19wb3J0cyBpcyB1c2VkIHRvIG1vZGlmeSBHVVNCM1BJUEVDVEwg
+cmVnaXN0ZXJzIHdoaWxlIHNldHRpbmcgdXANCj4gPiA+IHBoeSdzIGFzIHdlIG5lZWQgdG8ga25v
+dyBob3cgbWFueSBTUyBjYXBhYmxlIHBvcnRzIGFyZSB0aGVyZSBmb3IgdGhpcy4NCj4gPiA+IA0K
+PiA+ID4gU2lnbmVkLW9mZi1ieTogS3Jpc2huYSBLdXJhcGF0aSA8cXVpY19rcmlza3VyYUBxdWlj
+aW5jLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gICBkcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyB8IDEx
+MyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gPiAgIGRyaXZl
+cnMvdXNiL2R3YzMvY29yZS5oIHwgIDE3ICsrKysrLQ0KPiA+ID4gICAyIGZpbGVzIGNoYW5nZWQs
+IDEyOSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4gPiANCj4gPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+
+ID4gPiBpbmRleCAwYmVhYWI5MzJlN2QuLmU5ODNhZWYxZmI5MyAxMDA2NDQNCj4gPiA+IC0tLSBh
+L2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+ID4gPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2Nv
+cmUuYw0KPiA+ID4gQEAgLTE3NjcsNiArMTc2NywxMDQgQEAgc3RhdGljIGludCBkd2MzX2dldF9j
+bG9ja3Moc3RydWN0IGR3YzMgKmR3YykNCj4gPiA+ICAgCXJldHVybiAwOw0KPiA+ID4gICB9DQo+
+ID4gPiArLyoqDQo+ID4gPiArICogZHdjM194aGNpX2ZpbmRfbmV4dF9leHRfY2FwIC0gRmluZCB0
+aGUgb2Zmc2V0IG9mIHRoZSBleHRlbmRlZCBjYXBhYmlsaXRpZXMNCj4gPiA+ICsgKgkJCQkJd2l0
+aCBjYXBhYmlsaXR5IElEIGlkLg0KPiA+IA0KPiA+ICgpIGFmdGVyIGZ1bmN0aW9uIG5hbWUgaW4g
+a2VybmVsLWRvYw0KPiA+IA0KPiA+ID4gKyAqDQo+ID4gPiArICogQGJhc2U6CVBDSSBNTUlPIHJl
+Z2lzdGVycyBiYXNlIGFkZHJlc3MuDQo+ID4gDQo+ID4gU2hvdWxkIHRoaXMgYmUgIlhIQ0kgTU1J
+Ty4uLiI/DQo+IA0KPiBIaSBCam9ybiwNCj4gDQo+ICAgSSBjb3BpZWQgdGhpcyBjb2RlIGZyb20g
+eGhjaS1leHQtY2Fwcy5oLiBUaGUgZG9jdW1lbnRhdGlvbiBvZiB0aGlzDQo+IGZ1bmN0aW9uIG1l
+bnRpb25lZCBQQ0kgaW4gdGhhdCBmaWxlLiBNYXkgYmUgVGhpbmgvTWF0aGlhcyBjYW4gY29ycmVj
+dCB1cyBpZg0KPiB0aGlzIGlzIHdyb25nLg0KPiANCg0KSXQncyB0aGUgYmVnaW5uaW5nIG9mIHRo
+ZSB4aGNpIE1NSU8gYWRkcmVzcyBzcGFjZS4gWW91IGNhbiByZWZlciB0byBpdA0KYXMgInhIQ0kg
+TU1JTyBiYXNlIGFkZHJlc3MiLiBJdCdzIG5vdCBzcGVjaWZpYyB0byBQQ0kgeEhDSS4NCg0KPiA+
+IA0KPiA+ID4gKyAqIEBzdGFydDoJYWRkcmVzcyBhdCB3aGljaCB0byBzdGFydCBsb29raW5nLCAo
+MCBvciBIQ0NfUEFSQU1TIHRvIHN0YXJ0IGF0DQo+ID4gPiArICoJCWJlZ2lubmluZyBvZiBsaXN0
+KQ0KPiA+ID4gKyAqIEBpZDoJCUV4dGVuZGVkIGNhcGFiaWxpdHkgSUQgdG8gc2VhcmNoIGZvciwg
+b3IgMCBmb3IgdGhlIG5leHQNCj4gPiA+ICsgKgkJY2FwYWJpbGl0eQ0KPiA+ID4gKyAqDQo+ID4g
+PiArICogUmV0dXJucyB0aGUgb2Zmc2V0IG9mIHRoZSBuZXh0IG1hdGNoaW5nIGV4dGVuZGVkIGNh
+cGFiaWxpdHkgc3RydWN0dXJlLg0KPiA+IA0KPiA+IFJldHVybjogVGhlIG9mZnNldC4uLg0KPiA+
+IA0KPiA+IFBlciBodHRwczovL3VybGRlZmVuc2UuY29tL3YzL19faHR0cHM6Ly93d3cua2VybmVs
+Lm9yZy9kb2MvaHRtbC9uZXh0L2RvYy1ndWlkZS9rZXJuZWwtZG9jLmh0bWxfXzshIUE0RjJSOUdf
+cGchYkV3YmxTS01jTHZSNUZBNUhFWWdWOThLUjRWd2pqOVduSUtIc1VhNXVkYnA3WU9CekxSNzdZ
+ekw1SWpxeDQxa2NlNEREY2dVdFNzRm9TMVRuN2luSVBBUVpGZFZ1dyQgLg0KPiA+IA0KPiANCj4g
+SSBleGVjdXRlZCB0aGUgZm9sbG93aW5nIGNvbW1hbmQgYW5kIGl0IGRpZG4ndCBnaXZlIGFueSBl
+cnJvcnM6DQo+IA0KPiAuL3NjcmlwdHMva2VybmVsLWRvYyAtbm9uZSAtV2Vycm9yIC1mdW5jdGlv
+biBkd2MzX3hoY2lfZmluZF9uZXh0X2V4dF9jYXANCj4gZHJpdmVycy91c2IvZHdjMy9jb3JlLmMN
+Cj4gDQo+IEkgc2VlIHRoYXQgZXZlbiBmb3IgZHdjM19jb3JlX2luaXQgdGhlIGNvbW1lbnRzIGFy
+ZSB0aGUgc2FtZToNCj4gDQo+IC8qKg0KPiAqIGR3YzNfY29yZV9pbml0IC0gTG93LWxldmVsIGlu
+aXRpYWxpemF0aW9uIG9mIERXQzMgQ29yZQ0KPiAqIEBkd2M6IFBvaW50ZXIgdG8gb3VyIGNvbnRy
+b2xsZXIgY29udGV4dCBzdHJ1Y3R1cmUNCj4gKg0KPiAqIFJldHVybnMgMCBvbiBzdWNjZXNzIG90
+aGVyd2lzZSBuZWdhdGl2ZSBlcnJuby4NCj4gKi8NCg0KVGhlIGRvY3VtZW50YXRpb24gQmpvcm4g
+c2VudCBpcyBjb3JyZWN0LiBUaGUgc2NyaXB0IGlzbid0IHNtYXJ0IGVub3VnaA0KdG8gY2F0Y2gg
+ZXZlcnl0aGluZy4gTG9va3MgbGlrZSB3ZSBoYXZlIGEgbG90IG9mIGtlcm5lbC1kb2MgbWlzdGFr
+ZXMgaW4NCmR3YzMuDQoNCj4gDQo+ID4gPiArICogU29tZSBjYXBhYmlsaXRpZXMgY2FuIG9jY3Vy
+IHNldmVyYWwgdGltZXMsIGUuZy4sIHRoZSBYSENJX0VYVF9DQVBTX1BST1RPQ09MLA0KPiA+ID4g
+KyAqIGFuZCB0aGlzIHByb3ZpZGVzIGEgd2F5IHRvIGZpbmQgdGhlbSBhbGwuDQo+ID4gPiArICov
+DQo+ID4gPiArc3RhdGljIGludCBkd2MzX3hoY2lfZmluZF9uZXh0X2V4dF9jYXAodm9pZCBfX2lv
+bWVtICpiYXNlLCB1MzIgc3RhcnQsIGludCBpZCkNCj4gPiA+ICt7DQo+ID4gPiArCXUzMiB2YWw7
+DQo+ID4gPiArCXUzMiBuZXh0Ow0KPiA+ID4gKwl1MzIgb2Zmc2V0Ow0KPiA+ID4gKw0KPiA+ID4g
+KwlvZmZzZXQgPSBzdGFydDsNCj4gPiA+ICsJaWYgKCFzdGFydCB8fCBzdGFydCA9PSBYSENJX0hD
+Q19QQVJBTVNfT0ZGU0VUKSB7DQo+ID4gPiArCQl2YWwgPSByZWFkbChiYXNlICsgWEhDSV9IQ0Nf
+UEFSQU1TX09GRlNFVCk7DQo+ID4gPiArCQlpZiAodmFsID09IH4wKQ0KPiA+ID4gKwkJCXJldHVy
+biAwOw0KPiA+ID4gKwkJb2Zmc2V0ID0gWEhDSV9IQ0NfRVhUX0NBUFModmFsKSA8PCAyOw0KPiA+
+ID4gKwkJaWYgKCFvZmZzZXQpDQo+ID4gPiArCQkJcmV0dXJuIDA7DQo+ID4gPiArCX0NCj4gPiA+
+ICsJZG8gew0KPiA+ID4gKwkJdmFsID0gcmVhZGwoYmFzZSArIG9mZnNldCk7DQo+ID4gPiArCQlp
+ZiAodmFsID09IH4wKQ0KPiA+ID4gKwkJCXJldHVybiAwOw0KPiA+ID4gKwkJaWYgKG9mZnNldCAh
+PSBzdGFydCAmJiAoaWQgPT0gMCB8fCBYSENJX0VYVF9DQVBTX0lEKHZhbCkgPT0gaWQpKQ0KPiA+
+ID4gKwkJCXJldHVybiBvZmZzZXQ7DQo+ID4gPiArDQo+ID4gPiArCQluZXh0ID0gWEhDSV9FWFRf
+Q0FQU19ORVhUKHZhbCk7DQo+ID4gPiArCQlvZmZzZXQgKz0gbmV4dCA8PCAyOw0KPiA+ID4gKwl9
+IHdoaWxlIChuZXh0KTsNCj4gPiA+ICsNCj4gPiA+ICsJcmV0dXJuIDA7DQo+ID4gPiArfQ0KPiA+
+ID4gKw0KPiA+ID4gK3N0YXRpYyBpbnQgZHdjM19yZWFkX3BvcnRfaW5mbyhzdHJ1Y3QgZHdjMyAq
+ZHdjKQ0KPiA+ID4gK3sNCj4gPiA+ICsJdm9pZCBfX2lvbWVtCQkqcmVnczsNCj4gPiA+ICsJdTMy
+CQkJb2Zmc2V0Ow0KPiA+ID4gKwl1MzIJCQl0ZW1wOw0KPiA+ID4gKwl1OAkJCW1ham9yX3Jldmlz
+aW9uOw0KPiA+ID4gKwlpbnQJCQlyZXQgPSAwOw0KPiA+IA0KPiA+IFBsZWFzZSBkcm9wIHRoZSBz
+cGFjaW5nIGJldHdlZW4gdHlwZSBhbmQgdmFyaWFibGUgbmFtZSBoZXJlLCBpZiBub3RoaW5nDQo+
+ID4gZWxzZSBpdCdzIGluY29uc2lzdGVudCB3aXRoIHRoZSBwcmV2aW91cyBmdW5jdGlvbi4NCj4g
+PiANCj4gDQo+IFN1cmUsIHdpbGwgZml4IHRoaXMgbml0Lg0KPiANCg0KSXQncyB1bmRlcnN0YW5k
+YWJsZSB3aHkgeW91IGhhZCB0aGlzIGluIHRoZSBiZWdpbm5pbmcgc2luY2UgaXQncyBjb21tb24N
+CmluIGRpZmZlcmVudCBwbGFjZXMgd2l0aGluIGR3YzMgZHJpdmVyLiBJdCdzIGEgYml0IGRpZmZp
+Y3VsdCB0byBlbmZvcmNlDQp0aGlzLCBhbmQgaXQncyBqdXN0IG1pbm9yIHN0eWxlIGlzc3VlLiBN
+eSBvbmx5IHJlcXVlc3QgaXMgdG8ga2VlcCBpdA0KY29uc2lzdGVudCB0aHJvdWdob3V0IHlvdXIg
+Y2hhbmdlcy4NCg0KVGhhbmtzLA0KVGhpbmgNCg0KDQo+ID4gPiArDQo+ID4gPiArCS8qDQo+ID4g
+PiArCSAqIFJlbWFwIHhIQ0kgYWRkcmVzcyBzcGFjZSB0byBhY2Nlc3MgWEhDSSBleHQgY2FwIHJl
+Z3MsDQo+ID4gPiArCSAqIHNpbmNlIGl0IGlzIG5lZWRlZCB0byBnZXQgcG9ydCBpbmZvLg0KPiA+
+ID4gKwkgKi8NCj4gPiA+ICsJcmVncyA9IGlvcmVtYXAoZHdjLT54aGNpX3Jlc291cmNlc1swXS5z
+dGFydCwNCj4gPiA+ICsJCQkJcmVzb3VyY2Vfc2l6ZSgmZHdjLT54aGNpX3Jlc291cmNlc1swXSkp
+Ow0KPiA+ID4gKwlpZiAoSVNfRVJSKHJlZ3MpKQ0KPiA+ID4gKwkJcmV0dXJuIFBUUl9FUlIocmVn
+cyk7DQo+ID4gPiArDQo+ID4gPiArCW9mZnNldCA9IGR3YzNfeGhjaV9maW5kX25leHRfZXh0X2Nh
+cChyZWdzLCAwLA0KPiA+ID4gKwkJCQkJWEhDSV9FWFRfQ0FQU19QUk9UT0NPTCk7DQo+ID4gPiAr
+CXdoaWxlIChvZmZzZXQpIHsNCj4gPiA+ICsJCXRlbXAgPSByZWFkbChyZWdzICsgb2Zmc2V0KTsN
+Cj4gPiA+ICsJCW1ham9yX3JldmlzaW9uID0gWEhDSV9FWFRfUE9SVF9NQUpPUih0ZW1wKTsNCj4g
+PiA+ICsNCj4gPiA+ICsJCXRlbXAgPSByZWFkbChyZWdzICsgb2Zmc2V0ICsgMHgwOCk7DQo+ID4g
+PiArCQlpZiAobWFqb3JfcmV2aXNpb24gPT0gMHgwMykgew0KPiA+ID4gKwkJCWR3Yy0+bnVtX3Vz
+YjNfcG9ydHMgKz0gWEhDSV9FWFRfUE9SVF9DT1VOVCh0ZW1wKTsNCj4gPiA+ICsJCX0gZWxzZSBp
+ZiAobWFqb3JfcmV2aXNpb24gPD0gMHgwMikgew0KPiA+ID4gKwkJCWR3Yy0+bnVtX3VzYjJfcG9y
+dHMgKz0gWEhDSV9FWFRfUE9SVF9DT1VOVCh0ZW1wKTsNCj4gPiA+ICsJCX0gZWxzZSB7DQo+ID4g
+PiArCQkJZGV2X2Vycihkd2MtPmRldiwNCj4gPiA+ICsJCQkJIlVucmVjb2duaXplZCBwb3J0IG1h
+am9yIHJldmlzaW9uICVkXG4iLCBtYWpvcl9yZXZpc2lvbik7DQo+ID4gPiArCQkJcmV0ID0gLUVJ
+TlZBTDsNCj4gPiA+ICsJCQlnb3RvIHVubWFwX3JlZzsNCj4gPiA+ICsJCX0NCj4gPiA+ICsNCj4g
+PiA+ICsJCW9mZnNldCA9IGR3YzNfeGhjaV9maW5kX25leHRfZXh0X2NhcChyZWdzLCBvZmZzZXQs
+DQo+ID4gPiArCQkJCQkJWEhDSV9FWFRfQ0FQU19QUk9UT0NPTCk7DQo+ID4gPiArCX0NCj4gPiA+
+ICsNCj4gPiA+ICsJdGVtcCA9IHJlYWRsKHJlZ3MgKyBEV0MzX1hIQ0lfSENTUEFSQU1TMSk7DQo+
+ID4gPiArCWlmIChIQ1NfTUFYX1BPUlRTKHRlbXApICE9IChkd2MtPm51bV91c2IzX3BvcnRzICsg
+ZHdjLT5udW1fdXNiMl9wb3J0cykpIHsNCj4gPiA+ICsJCWRldl9lcnIoZHdjLT5kZXYsDQo+ID4g
+PiArCQkJIk1pc21hdGNoZWQgcmVwb3J0ZWQgTUFYUE9SVFMgKCVkKVxuIiwgSENTX01BWF9QT1JU
+Uyh0ZW1wKSk7DQo+ID4gPiArCQlyZXQgPSAtRUlOVkFMOw0KPiA+ID4gKwkJZ290byB1bm1hcF9y
+ZWc7DQo+ID4gPiArCX0NCj4gPiA+ICsNCj4gPiA+ICsJZGV2X2RiZyhkd2MtPmRldiwNCj4gPiA+
+ICsJCSJocy1wb3J0czogJWQgc3MtcG9ydHM6ICVkXG4iLCBkd2MtPm51bV91c2IyX3BvcnRzLCBk
+d2MtPm51bV91c2IzX3BvcnRzKTsNCj4gPiA+ICsNCj4gPiA+ICt1bm1hcF9yZWc6DQo+ID4gPiAr
+CWlvdW5tYXAocmVncyk7DQo+ID4gPiArCXJldHVybiByZXQ7DQo+ID4gPiArfQ0KPiA+ID4gKw0K
+PiA+ID4gICBzdGF0aWMgaW50IGR3YzNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRl
+dikNCj4gPiA+ICAgew0KPiA+ID4gICAJc3RydWN0IGRldmljZQkJKmRldiA9ICZwZGV2LT5kZXY7
+DQo+ID4gPiBAQCAtMTc3NCw2ICsxODcyLDcgQEAgc3RhdGljIGludCBkd2MzX3Byb2JlKHN0cnVj
+dCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ID4gPiAgIAl2b2lkIF9faW9tZW0JCSpyZWdzOw0K
+PiA+ID4gICAJc3RydWN0IGR3YzMJCSpkd2M7DQo+ID4gPiAgIAlpbnQJCQlyZXQ7DQo+ID4gPiAr
+CXVuc2lnbmVkIGludAkJaHdfbW9kZTsNCj4gPiA+ICAgCWR3YyA9IGRldm1fa3phbGxvYyhkZXYs
+IHNpemVvZigqZHdjKSwgR0ZQX0tFUk5FTCk7DQo+ID4gPiAgIAlpZiAoIWR3YykNCj4gPiA+IEBA
+IC0xODQzLDYgKzE5NDIsMjAgQEAgc3RhdGljIGludCBkd2MzX3Byb2JlKHN0cnVjdCBwbGF0Zm9y
+bV9kZXZpY2UgKnBkZXYpDQo+ID4gPiAgIAkJCWdvdG8gZXJyX2Rpc2FibGVfY2xrczsNCj4gPiA+
+ICAgCX0NCj4gPiA+ICsJLyoNCj4gPiA+ICsJICogQ3VycmVudGx5IERXQzMgY29udHJvbGxlcnMg
+dGhhdCBhcmUgaG9zdC1vbmx5IGNhcGFibGUNCj4gPiA+ICsJICogc3VwcG9ydCBNdWx0aXBvcnQN
+Cj4gPiA+ICsJICovDQo+ID4gPiArCWh3X21vZGUgPSBEV0MzX0dIV1BBUkFNUzBfTU9ERShkd2Mt
+Pmh3cGFyYW1zLmh3cGFyYW1zMCk7DQo+ID4gPiArCWlmIChod19tb2RlID09IERXQzNfR0hXUEFS
+QU1TMF9NT0RFX0hPU1QpIHsNCj4gPiA+ICsJCXJldCA9IGR3YzNfcmVhZF9wb3J0X2luZm8oZHdj
+KTsNCj4gPiA+ICsJCWlmIChyZXQpDQo+ID4gPiArCQkJZ290byBlcnJfZGlzYWJsZV9jbGtzOw0K
+PiA+ID4gKwl9IGVsc2Ugew0KPiA+ID4gKwkJZHdjLT5udW1fdXNiMl9wb3J0cyA9IDE7DQo+ID4g
+PiArCQlkd2MtPm51bV91c2IzX3BvcnRzID0gMTsNCj4gPiA+ICsJfQ0KPiA+ID4gKw0KPiA+ID4g
+ICAJc3Bpbl9sb2NrX2luaXQoJmR3Yy0+bG9jayk7DQo+ID4gPiAgIAltdXRleF9pbml0KCZkd2Mt
+Pm11dGV4KTsNCj4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuaCBiL2Ry
+aXZlcnMvdXNiL2R3YzMvY29yZS5oDQo+ID4gPiBpbmRleCBkNTY0NTdjMDI5OTYuLmQzNDAxOTYz
+YmMyNyAxMDA2NDQNCj4gPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5oDQo+ID4gPiAr
+KysgYi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuaA0KPiA+ID4gQEAgLTM1LDYgKzM1LDE3IEBADQo+
+ID4gPiAgICNkZWZpbmUgRFdDM19NU0dfTUFYCTUwMA0KPiA+ID4gKy8qIERlZmluZSBYSENJIEV4
+dGNhcCByZWdpc3RlciBvZmZzZXRzIGZvciBnZXR0aW5nIG11bHRpcG9ydCBpbmZvICovDQo+ID4g
+PiArI2RlZmluZSBYSENJX0hDQ19QQVJBTVNfT0ZGU0VUCTB4MTANCj4gPiA+ICsjZGVmaW5lIERX
+QzNfWEhDSV9IQ1NQQVJBTVMxCTB4MDQNCj4gPiA+ICsjZGVmaW5lIFhIQ0lfRVhUX0NBUFNfUFJP
+VE9DT0wJMg0KPiA+ID4gKyNkZWZpbmUgWEhDSV9IQ0NfRVhUX0NBUFMoeCkgICAgKCgoeCkgPj4g
+MTYpICYgMHhmZmZmKQ0KPiA+ID4gKyNkZWZpbmUgWEhDSV9FWFRfQ0FQU19JRCh4KSAgICAgKCgo
+eCkgPj4gMCkgJiAweGZmKQ0KPiA+ID4gKyNkZWZpbmUgWEhDSV9FWFRfQ0FQU19ORVhUKHgpICAg
+KCgoeCkgPj4gOCkgJiAweGZmKQ0KPiA+ID4gKyNkZWZpbmUgWEhDSV9FWFRfUE9SVF9NQUpPUih4
+KSAgKCgoeCkgPj4gMjQpICYgMHhmZikNCj4gPiA+ICsjZGVmaW5lIFhIQ0lfRVhUX1BPUlRfQ09V
+TlQoeCkgICgoKHgpID4+IDgpICYgMHhmZikNCj4gPiA+ICsjZGVmaW5lIEhDU19NQVhfUE9SVFMo
+eCkgICAgICAgICgoKHgpID4+IDI0KSAmIDB4N2YpDQo+ID4gPiArDQo+ID4gPiAgIC8qIEdsb2Jh
+bCBjb25zdGFudHMgKi8NCj4gPiA+ICAgI2RlZmluZSBEV0MzX1BVTExfVVBfVElNRU9VVAk1MDAJ
+LyogbXMgKi8NCj4gPiA+ICAgI2RlZmluZSBEV0MzX0JPVU5DRV9TSVpFCTEwMjQJLyogc2l6ZSBv
+ZiBhIHN1cGVyc3BlZWQgYnVsayAqLw0KPiA+ID4gQEAgLTEwMjUsNiArMTAzNiw4IEBAIHN0cnVj
+dCBkd2MzX3NjcmF0Y2hwYWRfYXJyYXkgew0KPiA+ID4gICAgKiBAdXNiX3BzeTogcG9pbnRlciB0
+byBwb3dlciBzdXBwbHkgaW50ZXJmYWNlLg0KPiA+ID4gICAgKiBAdXNiMl9waHk6IHBvaW50ZXIg
+dG8gVVNCMiBQSFkNCj4gPiA+ICAgICogQHVzYjNfcGh5OiBwb2ludGVyIHRvIFVTQjMgUEhZDQo+
+ID4gPiArICogQG51bV91c2IyX3BvcnRzOiBudW1iZXIgb2YgdXNiMiBwb3J0cy4NCj4gPiA+ICsg
+KiBAbnVtX3VzYjNfcG9ydHM6IG51bWJlciBvZiB1c2IzIHBvcnRzLg0KPiA+ID4gICAgKiBAdXNi
+Ml9nZW5lcmljX3BoeTogcG9pbnRlciB0byBVU0IyIFBIWQ0KPiA+ID4gICAgKiBAdXNiM19nZW5l
+cmljX3BoeTogcG9pbnRlciB0byBVU0IzIFBIWQ0KPiA+ID4gICAgKiBAcGh5c19yZWFkeTogZmxh
+ZyB0byBpbmRpY2F0ZSB0aGF0IFBIWXMgYXJlIHJlYWR5DQo+ID4gPiBAQCAtMTE2Miw2ICsxMTc1
+LDkgQEAgc3RydWN0IGR3YzMgew0KPiA+ID4gICAJc3RydWN0IHVzYl9waHkJCSp1c2IyX3BoeTsN
+Cj4gPiA+ICAgCXN0cnVjdCB1c2JfcGh5CQkqdXNiM19waHk7DQo+ID4gPiArCXU4CQkJbnVtX3Vz
+YjJfcG9ydHM7DQo+ID4gPiArCXU4CQkJbnVtX3VzYjNfcG9ydHM7DQo+ID4gPiArDQo+ID4gPiAg
+IAlzdHJ1Y3QgcGh5CQkqdXNiMl9nZW5lcmljX3BoeTsNCj4gPiA+ICAgCXN0cnVjdCBwaHkJCSp1
+c2IzX2dlbmVyaWNfcGh5Ow0KPiA+ID4gQEAgLTE2NDksNSArMTY2NSw0IEBAIHN0YXRpYyBpbmxp
+bmUgaW50IGR3YzNfdWxwaV9pbml0KHN0cnVjdCBkd2MzICpkd2MpDQo+ID4gPiAgIHN0YXRpYyBp
+bmxpbmUgdm9pZCBkd2MzX3VscGlfZXhpdChzdHJ1Y3QgZHdjMyAqZHdjKQ0KPiA+ID4gICB7IH0N
+Cj4gPiA+ICAgI2VuZGlmDQo+ID4gPiAtDQo+ID4gPiAgICNlbmRpZiAvKiBfX0RSSVZFUlNfVVNC
+X0RXQzNfQ09SRV9IICovDQo+ID4gPiAtLSANCj4gPiA+IDIuNDAuMA0KPiA+ID4g
