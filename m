@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078F9704AFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9708704AFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbjEPKoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S232161AbjEPKoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbjEPKoQ (ORCPT
+        with ESMTP id S229664AbjEPKoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:44:16 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2101.outbound.protection.outlook.com [40.107.237.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1E1E8;
-        Tue, 16 May 2023 03:44:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hV3cI2CNRwI76jlS53biIo7ZLLqL1S0fejZEbiiDuStuBITSzM66IgsDfg14qnX+1p231Xs0j1pju27NvpWr5gQtvzQMzqyX+Y/qcTp16FeaKgyfZ9wKSR31/L8+XPjBZBsTMKQBlmFGUh9vTFKKrKSE5LZ0bOW1tg6hEdXqs2MLBEqAPFmaRwdmXPNAhfYYZbOK4K+b+xSrxHKA052p+3EEkfGcgmj/WSa3SaN6GMzwsfMrI+inuFsYf1PU/LyBqaL3IyfqjFtAUACyoHaxE5bNiwX2ENOCWrZc6nTdbOUeeHyFwfFEizWYMqPlf98RT1GZrqTh4f6YBrBvqNMZrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C+fi44/vVXyC0D4eK30g7wWePVL6bsBf/E/JsmvLIvE=;
- b=k6nmF6npwY498u6I/Wk5hWw/cBzo4vEa9gSupPpuvg5eQ4uVgMIlEYfXJouWs2212t5DKdAfsWDTblg2RUO/DIHFIkLAoGfYVcy8K1hDDs3HPI1onkZQd9zs86m2Tz7ZGp7Ax6wSfXfzwFpPuKGhlnxxWr5beVVqbMwttF5FOZj67okBOjDOMauh+00d816Hcj3T7YmiEQgPtZvt6BQhHoI1Qv0vpef3HHa0sTmsEw7P22Gmyrv54SfcpfNtnLpQDPzlrPMYEEtVHD/EQLL3mb/uiVgrkLlflqgr3i6B/nljgGyFDO1WouDJ3/mveiSZmMULW5nmmAXuVCy/UZpNuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C+fi44/vVXyC0D4eK30g7wWePVL6bsBf/E/JsmvLIvE=;
- b=d3CU/FEWu7VQDyGebIna6dRI5Gkw29fygZIhBudk4GeJS6ZCs+dqEfXyCSvQvTtclVMZFy7j4ZWx6PDvAwEC76qlu5XlCNtNOD2gLuMjSWFXU1iyytGfR+uJ4EWFlseBBMqjdipBSQEl0A8FcE/Xr9Bn3q0Fj0uBq7bmCvJZ1gI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA3PR13MB6209.namprd13.prod.outlook.com (2603:10b6:806:2f9::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 10:44:12 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.033; Tue, 16 May 2023
- 10:44:12 +0000
-Date:   Tue, 16 May 2023 12:44:05 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jaswinder Singh <jaswinder@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] cassini: Fix a memory leak in the error handling path of
- cas_init_one()
-Message-ID: <ZGNedY5UltgPtqjN@corigine.com>
-References: <de2bb89d2c9c49198353c3d66fa9b67ce6c0f191.1684177731.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de2bb89d2c9c49198353c3d66fa9b67ce6c0f191.1684177731.git.christophe.jaillet@wanadoo.fr>
-X-ClientProxiedBy: AM3PR05CA0133.eurprd05.prod.outlook.com
- (2603:10a6:207:3::11) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 16 May 2023 06:44:15 -0400
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92689D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 03:44:13 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id EAAD21863DAE;
+        Tue, 16 May 2023 13:44:09 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 9VESRIB6IE8L; Tue, 16 May 2023 13:44:09 +0300 (MSK)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 647B81863DA7;
+        Tue, 16 May 2023 13:44:09 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id HuHyhYPGR5Z8; Tue, 16 May 2023 13:44:09 +0300 (MSK)
+Received: from [192.168.0.144] (host-189-99.skynet-msk.ru [91.227.189.99])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 3243C1863D9B;
+        Tue, 16 May 2023 13:44:07 +0300 (MSK)
+Message-ID: <ba0ad96d-6515-66e3-e140-cd7c3999577e@astralinux.ru>
+Date:   Tue, 16 May 2023 13:44:06 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA3PR13MB6209:EE_
-X-MS-Office365-Filtering-Correlation-Id: f55dde41-b050-4950-19f3-08db55fa7c8e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rbQvdFCr4zluIFCuBOLuRPo+R89+nznyp8qx/7vWiEq92voYLckKI8WIosimYFiJ6S0A0xGy++dgaDieEMFME9VhjYUzXQE+TSmGS/XNB5CL022rg1WpXW9LgUGCt8zxQ+vYUbzOlr3weK6YYgM7K/dGqsy1A5ZYBLAuANjIXd0A8uyuu9KSFaK9OSNGAaEuO2Jt3xx3cKeQbnAgKBE44QRKMz+nPYP1yYjkeNcp2dpAtUrYT95rZloqSGU/MNJOmbCIMvTFFqXE0nBRu7WrefLpnHbz9lgSvbZ84R5U09FU9StwIi+i3VlKXaONQPIv2Ia9QJ2xgP/Nd9HEoymGpyW+eBbeArcViX97d99cKmbcEyr+ynNlNfV0t0ePMbQ2R6a91RfkFy+82c+6obXG2We5RaXAJynnT1LeWIcSi7jt99HbbEk1KnyO2Vfc9MRdIveVQOHNXZIa69hb2YKNjtwxDqkslcoNwzqvHW+WoD8MuUfSpf5iXQx8BLyO+RwUTJFjkmBINPa8Dr4TDOThEWA/BhiRprXneficl7U/WGhu0Ii4M4Fyli5wNscXTTtc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(39840400004)(376002)(366004)(451199021)(316002)(4326008)(6916009)(66556008)(66946007)(66476007)(6486002)(6666004)(83380400001)(38100700002)(86362001)(54906003)(5660300002)(2616005)(7416002)(8676002)(8936002)(44832011)(478600001)(2906002)(4744005)(36756003)(186003)(6506007)(41300700001)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?74Gmn8fCeSDChq0yA7YGEcXcZlBr4r4b9nfhWLxn+2dq/1EYqqXaeHJowWYH?=
- =?us-ascii?Q?ctInC7hvcHkJalOD4/IvHWsxlujD7X7u9Opl0WBMROtDSn0MG3KaaV88/UL+?=
- =?us-ascii?Q?eOsA0vpD74yrDs132WKvxL5XRjdVyiQR9t2PmrY9UKgQtZ475f3iLVpgMYLu?=
- =?us-ascii?Q?QjcJShCqMOuS+hG6xe2QD+TlumVlgN9khu0VFNJDg7oOz80bchyJgJ1eQcmv?=
- =?us-ascii?Q?0/yE9gWK413byvBff6VqyVrBCSIyT++NvDE93Rf4uNU1Wo9lb6ziar6F/75h?=
- =?us-ascii?Q?zslW9xixds+0TUe00yvQ5j5L2XyDnczL5Asrdi2BcQPQE5h2hE+i4J60TNF4?=
- =?us-ascii?Q?KBmezVSoHDuOCExxHAATiYZOnm9CuPJVsWu+MVjaHxC2QxebIl3vuiAex+mg?=
- =?us-ascii?Q?Zcdg6bJkntCyp6gaPcMC314uzePxaHwgM5P58Y7OJZ4e8HQnoIL8THzxuDkP?=
- =?us-ascii?Q?Y42dj/19bbnn/3GVR0Wz/AzfTnqWP7bCPpY3t/Qcnwx0AT3kyt7mEQwXyFbQ?=
- =?us-ascii?Q?ZZjBSI1gG1Nfzyyy34hFVeJw95DahA7mScnwUL8MXKH+IR9wIOT+WUuJ3EvY?=
- =?us-ascii?Q?phkFMGluJ4Nme4gapTf5BbibHGmc83cO46yncy1Koet6g9X0Wzy++Ifo661S?=
- =?us-ascii?Q?r6PTC6TyJDI1SDfvi/avEPGT0G3JfZ/jf0zNazGA5WQW6DdPnwqegdYXLMfO?=
- =?us-ascii?Q?gOY8CD+bLumMFqKL6hkm5q2eYTV/T0yeqLM80c0k8r5aXZBfOeyE/8g+Nzll?=
- =?us-ascii?Q?Ydp9FdaHAAJ5lLzifAaC6ZX9FfvCxe61vrKe1aeBFBgfdek+6GdOezCIorXM?=
- =?us-ascii?Q?eXrvF0+w1Q5rSas7KuCaGcAngeeCTAvRyeOhbbfU6l2IrljLBNDIIIHTzrgp?=
- =?us-ascii?Q?aAvh9120S0Kz310MJN3ej8+Y6edJCEK+IjnmcBgkZ+Gp+nn0boLWWsO5dNec?=
- =?us-ascii?Q?omRTvQ/plbbFdws38qTTjvsLLQLgfYj+PfGKU4bQnNM+RdIhq1RmRTfILBHs?=
- =?us-ascii?Q?adU0jbGa+3qZPW87GjDqQrQStFym7rgKSS9JkXwJFVyQXMxTAufPUOvFG4ra?=
- =?us-ascii?Q?QzQSjVa+MDO9KLddnLhsA3d8uUocqm1nwVurHxX0tWbyk5jvw4aAdk635zO7?=
- =?us-ascii?Q?gqb8V2AHvMO6ZLnH3C6c0eycP+rB07fVAi1xcwpIr5ioU6dzd5ZeEQDwOv//?=
- =?us-ascii?Q?kfmRWcQWUk0nAs6blYHuiyAesAADJ4nGSVrTOIn/cGC+R0gVy+bL+OHPM4Dl?=
- =?us-ascii?Q?KQIvXWdYKoTYsd6V/EQgYgscSu5c76AtA8ol575KtiTXV42tBJ/1rAFxQKJg?=
- =?us-ascii?Q?11Myzii/eM67+GZWRfxc4opWbcCG2WHg9O1jYlMMnJxsPrGxgAH4TN1+dDaI?=
- =?us-ascii?Q?POqsrX33azQATK04g8iVxpNsWrj7htyyf96K/Igw+ycAoj60z9hPDTCbPIzz?=
- =?us-ascii?Q?zU6zUBgphhCctHdtUrNhJbZlFER7UnG2sFxS8fqAnqvSntBPAJKGuI3MnTAg?=
- =?us-ascii?Q?OLOKck0rp3LMSpXmuYEjwTz+srE4sueixkd8/goUiGf1LAE19vhGWVlrp46V?=
- =?us-ascii?Q?0noxRwAar9U+DOuD4cSQ12FgSO+tDNzwMq5vOIU4BgokgiS4nZ9Zo9+BcMRw?=
- =?us-ascii?Q?N6jk9WzZ2D80kPehkVvYc1wsPtoPcjTACxo5mQVE8IcJB66FgTY7Q89eMPiq?=
- =?us-ascii?Q?cQxucw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f55dde41-b050-4950-19f3-08db55fa7c8e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 10:44:12.5007
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: was5O363kt2e8fCInFPCkXnsNKbF7M6xEkcha4K+CatxsigOTfrWPN5uPsR6m3zSZT2q+5Fs/A6zr9G+F26d9N+H/5jKV7Tx5KSUIyRjqqk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR13MB6209
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5.10] staging: gasket: interrupt: Clean interrupt_data
+ after free
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Springer <rspringer@google.com>,
+        Todd Poynor <toddpoynor@google.com>,
+        Ben Chan <benchan@chromium.org>, Richard Yeh <rcy@google.com>,
+        John Joseph <jnjoseph@google.com>,
+        Simon Que <sque@chromium.org>, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+References: <20230515122950.100564-1-eesina@astralinux.ru>
+ <2023051546-churn-obstinate-20af@gregkh>
+From:   Ekaterina Esina <eesina@astralinux.ru>
+In-Reply-To: <2023051546-churn-obstinate-20af@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 09:09:11PM +0200, Christophe JAILLET wrote:
-> cas_saturn_firmware_init() allocates some memory using vmalloc(). This
-> memory is freed in the .remove() function but not it the error handling
-> path of the probe.
-> 
-> Add the missing vfree() to avoid a memory leak, should an error occur.
-> 
-> Fixes: fcaa40669cd7 ("cassini: use request_firmware")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
+On 15.05.2023 16:02, Greg Kroah-Hartman wrote:
+> On Mon, May 15, 2023 at 03:29:50PM +0300, Esina Ekaterina wrote:
+>> Add interrupt_data = NULL after kfree(interrupt_data) in
+>> gasket_interrupt_init. It is needed to avoid double free
+>> in gasket_interrupt_cleanup, there is a check for NULL
+>> before kfree(interrupt_data).
+>>
+>> Found by Astra Linux on behalf of Linux Verification Center
+>> (linuxtesting.org) with SVACE.
+>>
+>> Fixes: 9a69f5087ccc ("drivers/staging: Gasket driver framework + Apex driver")
+>> Signed-off-by: Esina Ekaterina <eesina@astralinux.ru>
+>> ---
+>>   drivers/staging/gasket/gasket_interrupt.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/staging/gasket/gasket_interrupt.c b/drivers/staging/gasket/gasket_interrupt.c
+>> index 864342acfd86..48b664b9134a 100644
+>> --- a/drivers/staging/gasket/gasket_interrupt.c
+>> +++ b/drivers/staging/gasket/gasket_interrupt.c
+>> @@ -337,6 +337,7 @@ int gasket_interrupt_init(struct gasket_dev *gasket_dev)
+>>   			sizeof(*interrupt_data->eventfd_ctxs), GFP_KERNEL);
+>>   	if (!interrupt_data->eventfd_ctxs) {
+>>   		kfree(interrupt_data);
+>> +		interrupt_data = NULL;
+>>   		return -ENOMEM;
+>>   	}
+>>   
+>> @@ -346,6 +347,7 @@ int gasket_interrupt_init(struct gasket_dev *gasket_dev)
+>>   	if (!interrupt_data->interrupt_counts) {
+>>   		kfree(interrupt_data->eventfd_ctxs);
+>>   		kfree(interrupt_data);
+>> +		interrupt_data = NULL;
+>>   		return -ENOMEM;
+>>   	}
+>>   
+>> -- 
+>> 2.40.1
+> 
+> Also, your tool is wrong, this is not a correct fix at all.
+> 
+> How did you test it?  Why is your tool spitting out incorrect code?  Why
+> are you not verifying it's output before asking others to do so?
+> 
+> Please don't do this anymore, it's wasteful on our side, right?  Please
+> take the time to review existing changes for problems, that would be
+> more useful overall to everyone.
+> 
+> thanks,
+> 
+> greg k-h
+
+I apologize, there is a mistake. It should've been 
+gasket_dev->interrupt_data = NULL istead of interrupt_data = NULL
+
+Best regards,
+Ekaterina Esina
