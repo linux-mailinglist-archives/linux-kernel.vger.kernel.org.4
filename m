@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12F4705280
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FFC705282
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233918AbjEPPoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
+        id S234095AbjEPPoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234052AbjEPPoB (ORCPT
+        with ESMTP id S234079AbjEPPoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:44:01 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2058.outbound.protection.outlook.com [40.107.7.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6102249C9;
-        Tue, 16 May 2023 08:44:00 -0700 (PDT)
+        Tue, 16 May 2023 11:44:07 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2084.outbound.protection.outlook.com [40.107.104.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D123A7ABB;
+        Tue, 16 May 2023 08:44:03 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YfRWVQjko5PlPGEVDmjMErh6ed3sJRho1cBqwVE4rXWZe85g/dwCD101bnWB3iL2akDnnW4V18YslQP96z4WhbRAZ9pOi5BU6wQV0WEWhRlGzSZvBV5LCygREBZ+/ioiJwJ6UQRI5k0BuRyRde2xQ6cDW0FOwxP23jcw9TUaM5E+BPuk5nQcTfjnayZ6MfAJ6QpSdu9+9+vK7jbBpQGker6fgTUiFtBaG26X4xIggRgEDA6Gxvz3kQ6FQQNzVUSw7yhN18yHQVQcszAYxV5jTXT5Zlh7ApMYijdA8bHU9J5UWvoQ5dZaRv3x53bPEIch3MnNz/PbmzWf1u6PiRz81A==
+ b=itXCne8ifVvRC2B9qgDgiu5gLrUXM+aK7ENUSzBfvfbcWIfmLQCMjuyuuMQjWAnLznh7UjkWqoQyJGHg5SUUUfSCtFO2YIYufrkXsv+KcNH58gQBGiptsbSEGMC4LTGwAukXvcUHYhFLmp8snpMGv6U8vpm17nQ73M8INpSpQUFm5nEERGbnn0EIsrz+qZvcPpo0rzXKasWHWkbTy+2pDRHiGsqiabcqQEPVx6UhQTPBBwxCk7u/LPXmfWEQDHzbNY8t/u0RjkMMOpthA1v5riqfI8Al4wGv/P6PnWSuEjxupdVVYNuDoA+WXGtTq6xy8J6+MvRltDXkrTIjlzgrEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IEKcMWrG4j00kLtWuBqK7mtLn0v5TER+fvwsd9rWV+M=;
- b=PQhPmgpethAie1odyoEuuaXqZ3gO3OxcJZ0jHPfwfifNq+OLfZFeWtsthovYUaYUy/Sjsr/samedPTVZVwNIAaDa4kv6DxDbeyxvzEsI9nbzoBOvdtfqp8ElKZmNP9x9ctfOHk8EnAff2C0LaU91TQrvaVv/8tkQrhNC20wbxIOn58TOhZznhQ/n80yioVSNPP/BEQmm7EMPodetUbW8titnDU8nclnpU2ieZ4xX8eHpGzqMWebmU1b8Y5lWhSbswkdpWug3k17gf4ngJ8pDUwsghN1f2AMItEmLM2asxC+1aI8HA6YY+IJeA0h6g3fTkMPPyKdTMoAkn9IFrj71iw==
+ bh=8f+b6cXeWjgCVkuK08UozeofpLH0pNg35r0cKFO4gSw=;
+ b=OWzIn5YK0WyorsspmN0sjZ2SaYL/OgcEqUc4xDA1861mbIx0S+ZHVfTnQNG9ry1kzv+SYkqTc/mI6Cg1x0x1xgaCo5FWvVTgWEabd/1m4Xj4OdvdMnMhnjZM/FZhxMV+JtNcpTZsAzC/4m9h4dABieWWcPRuozxRt5s4qtczBf6zfP6v+BZV71FM1dEKmxaGYmXDhITf74NhsLDXA8+iZPwrcLr0N1PADF+8cTSNLSVkPKzXJymYJsUlDb6MG94xuYfbN6AQL3+yOwMBB2q+2BSyPLudkJX4/2JGO03DUlTe40m8fCbo/dsMZtMiQxJqYdPdgMXeCVKEEoVc7UJkGw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IEKcMWrG4j00kLtWuBqK7mtLn0v5TER+fvwsd9rWV+M=;
- b=hGJFmHALRt7yfnZQEW8T2Uh7pDSOnkxlkXY1d82wgux8WEdSIc6SaCKLBr/wOs2KkpS3E8iq5PpAIzcOEh+KUyNoy7Cr1QT2WCCapkdjc9OpyVVSJ4Ri9jkdU85Qx2ZCyhpwJW+QvDE80lxA6sMkiimC3RjV1JPgayAqdBf4nic=
+ bh=8f+b6cXeWjgCVkuK08UozeofpLH0pNg35r0cKFO4gSw=;
+ b=ai9G4BWnmgbnGpA66mAbjpKFHncJaGQCf9uYd9cLDBj+L2jGSJH5+OqUbpUYDxiutRmzFrDLeGG2nOiTkoLpGROYXGt9gP0M+xPf/xGj1TKnISNAI9pxMKggBHBZVG4lHDDjKZnVVMWMuX17OBM3/vk2kVkxpP+GYR3sf/RswMw=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
  by PAXPR04MB9008.eurprd04.prod.outlook.com (2603:10a6:102:20d::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 15:43:57 +0000
+ 2023 15:44:01 +0000
 Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
  ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
  ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.033; Tue, 16 May 2023
- 15:43:57 +0000
+ 15:44:01 +0000
 From:   Frank Li <Frank.Li@nxp.com>
 To:     frank.li@nxp.com, vkoul@kernel.org
 Cc:     devicetree@vger.kernel.org, fushi.peng@nxp.com,
@@ -48,9 +48,9 @@ Cc:     devicetree@vger.kernel.org, fushi.peng@nxp.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-phy@lists.infradead.org, robh+dt@kernel.org,
         s.hauer@pengutronix.de, shawnguo@kernel.org
-Subject: [PATCH v4 1/6] phy: cadence: salvo: add access for USB2PHY
-Date:   Tue, 16 May 2023 11:43:24 -0400
-Message-Id: <20230516154329.3155031-2-Frank.Li@nxp.com>
+Subject: [PATCH v4 2/6] phy: cadence: salvo: decrease delay value to zero for txvalid
+Date:   Tue, 16 May 2023 11:43:25 -0400
+Message-Id: <20230516154329.3155031-3-Frank.Li@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230516154329.3155031-1-Frank.Li@nxp.com>
 References: <20230516154329.3155031-1-Frank.Li@nxp.com>
@@ -62,54 +62,54 @@ X-ClientProxiedBy: BYAPR08CA0011.namprd08.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|PAXPR04MB9008:EE_
-X-MS-Office365-Filtering-Correlation-Id: b1805898-f912-48be-91d8-08db56245ca8
+X-MS-Office365-Filtering-Correlation-Id: c1386de5-d168-49be-d1b1-08db56245eb9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CunfwBvdYxcO0kTQ1Xhx1gUlOhrBK9OPBVQtRKslHojOohHPIvT255zWczkEFWM/q7JAWxO1Kk3mfNz4EzPnH5mKrxVxU1Rb154CkW4TKYfmNdcpCyB5k1krVWqpU/SKIYsle2omIjXhNc04YvY8O/kIsUWyFX2/NuN1jmoyJzv7hzm5tBxVtsdBrEgokscxKSeEN4bfIZZ8kjbkSEKfXGhEZE5CglqU8H10xax7IuDJVAxjEdhGysy6Qjlbw91ZXWazuPBSiPFkm5UZEOjDzQxkemMVjFMeNYp87jQEDZ878Ug1e45EMb5Mu5qOp66VFjJYasXMS7pWtiL0eMhtQFvRhlew1AldF7P6w4q//tNj52qG0sC6pmwpZTrJyRJat6yxXL3gosoIP9ojBlTAtlz7qMIdmNYksOipCjtUO7TK2yyMNSb+mjb6AFR+4g0wCycqAGXxPsaMA9RXszHMq1Wm9zAqs2sEfo269AnPNHVTiTILjxlMFhJq2teKR7AFde9DJhIK+GDa6rYD1V8Sda7r4iIQGFbAwdNYmjSVIrbS3wra7DzpZ/pfrtu/Rh489a+PE4SSJT5vgfrKCwyMw0lAsDVqPre+A0ivEMOB2FWeXcwnBhpb3pEMqjCpN7lS
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(376002)(366004)(136003)(451199021)(66476007)(66556008)(4326008)(66946007)(478600001)(6506007)(186003)(6512007)(38100700002)(38350700002)(83380400001)(2616005)(36756003)(8676002)(8936002)(41300700001)(2906002)(52116002)(6666004)(7416002)(6486002)(316002)(86362001)(5660300002)(1076003)(26005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: k0k18FkE86NtyNASDHnJ8cBkKPyd+nxzA/G2W2RxN9m2t8HCRX1BpN8F/oTRb3TO1OtcZqao3jJ9CRlWUMppBoxIpoRQcfBLCHTLV6CMf9rCHPEm3dzRWKBKTfYtEcSI56TpMroMXlUcAWtJHQ1BQ0R1HA1MQDOooNLiIEBr9TtuAVuLs/MLuXx94LPQyNbhdXkxLWpYjTf6jhdtEQbn9br7sEWZ4Sk5zWHmc5tdEiXY32ARQmSAWf8Sra7fB6CdKVbt8unuQSfmCT31r5LRkwVxPSFpnDX+Q1SUOcduQO4C57r7o5MB45t1S6M6lYjR87mGFUnHtygz/hHzqyoeTnVeSC4uU+/6AMAHa/cCUwKpHuWjSmutX/0vzTqbzku3UFYEobNey7cz9ZIsnl02GzVet4CAfepz0qbtwTSa7KjK8IzPunBjdIRVPoLCZRbFplOTun2yHeSoNPOS0eX4M7RoCwTl1Cf1eoh5o4ztG1muVqhAU2l1PtmzxvOhPJ6qAZ466GPH2KxGaqWjdtgdGxR1pkK27/8nrW0Yvb8GY9gcNNxKwpcIa+CWOxhFnrieE0lXLKOspkb5wh+3CDVta4Tft2jNuZ3d+JMXos20vS0CY3AcYPckvRxv9BJ47Jij
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(376002)(366004)(136003)(451199021)(66476007)(66556008)(4326008)(66946007)(478600001)(6506007)(186003)(6512007)(38100700002)(38350700002)(2616005)(36756003)(8676002)(8936002)(41300700001)(2906002)(52116002)(6666004)(7416002)(6486002)(316002)(86362001)(5660300002)(1076003)(26005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dV15GRvKBYwQ8/alpAEsXZqQu9i8SrtN4CVj8jE67awW1m/JdabI+Vpn/3fY?=
- =?us-ascii?Q?8mVcqWPF529L7TiSfCfYyTnf+XnjR9AgMpW6KCbCoRhZAj4AAcArOyUh/9xL?=
- =?us-ascii?Q?cGl1uUtsmsMu3NrQMzHe5CaEVKjoNDmbt0+EdtIjwjlKrgz83s17tIxJIGCe?=
- =?us-ascii?Q?o3UsyaLpqj6iOT3sEyuHbLRNq10TtrQL00Opk7uTmP/hC6z8tFqoMnhW4QQt?=
- =?us-ascii?Q?pbkAw971JXiyBfysbT9e35W6qBU5/qdiBKBVdQMqXb7g8PdZ/AHtIg3cEDxD?=
- =?us-ascii?Q?TcQN4i8Tu38g1zKUvsLcKuDMF/6JX6J74a8Wcx7gB9oUStO0SpB+ZPFtOMn5?=
- =?us-ascii?Q?7GGLaqn0naLe7h4uqbJdoT1rmF5XU19U9cc5zYIRS6DvchUgE3nPSFc+PXNU?=
- =?us-ascii?Q?d1EoJ4xGzT+4ScD2H0/YLkNmJR4HcGlXZR5ozN/W67/BpFRzIVOhukXkNf95?=
- =?us-ascii?Q?VKnVHb+lGqnBLJNGlLnUzXWYUnAhYJ/0VrLn0uw6MMtJ8vRAV+DuoDLefH1l?=
- =?us-ascii?Q?llUX6DkNZd2iRknxpkXyRVHnQVVNuFg3QlOJM8IE55w8+1+8wFe1abYleEaU?=
- =?us-ascii?Q?nDh7C2YvDChGd1nOW8DInEaPu2YuyjdRcZL90uRXFKZVCBo47WpE9PAsNc3Q?=
- =?us-ascii?Q?lVYk4Nd4IJ1k/75iO9UG0YteaQFCmkpeq+Qd+DEacSXz50POPiB4iL9YuW3p?=
- =?us-ascii?Q?bUZQ+bSgD+y8bA1qttNnfaH35xTsbCYe2Bicf+Jk/aZEjTvQR3rZFzaiN6N0?=
- =?us-ascii?Q?p6+lpaZbsSSlnTpkPus0Ynu7BwjPn3f6lgIHxzce4PRd6m4Ahhy3nPgQLOKb?=
- =?us-ascii?Q?PdF5hohApiZ99ZiZ8L9bFKTO/i7JUjemIMmL81RiAe/NVxDzONnPelQG359a?=
- =?us-ascii?Q?pj8a7ulffkbwB6xbwnvQRxQoBDwGF0ERjIKH8dHNNiU7vdyK5zVeIbC11D99?=
- =?us-ascii?Q?xDgIzu8wylw3ijA5R9SrJLatvYU0tHQxcjvmxRTcQb0TTyoaA0eWW14sHLrD?=
- =?us-ascii?Q?5RdMkR60p1AWTf8UGvYiR7d1TXN3RekCi3f6JnTUiRLwpAavIXtKAmEQiu37?=
- =?us-ascii?Q?phxgoS1TfkMdA/HQfNmYmMa7MNrJMFPU5+VlX4kj3HtCKKvtB0FvSsG0XrAf?=
- =?us-ascii?Q?yjsYFgAXwy61VsFkJP3qQx5JFlVl6uklPRS4ltbDbOjBLhriHKsxz/hO15gK?=
- =?us-ascii?Q?dn6WYcd1GslAtOlali9ipMb8VSwOnXePVphHKqEDHPKfO0owcdCae0zoWZtC?=
- =?us-ascii?Q?sk/O7CS5Gg3Vj/VGguLwXeR2xDkMOrPAOFD+lGPDRtf7JPU2WNnf+j2/0A32?=
- =?us-ascii?Q?MvuwPgj1O5FRzpJwphJrQnUCuJ8fMegMJgr8PJ3EvuiESax/eEW7GpRERXV1?=
- =?us-ascii?Q?qY0SlNPwNk4Eb111FGGi1d3FKCq2qVq9hbRp9/2osxJEffh3JzU8zi+HI+A4?=
- =?us-ascii?Q?ML95wRp+JkgAYLOoiGtnCEkrtHM3xpCXS/OeXzq4C6j/K9VUCzGYekA8dk8b?=
- =?us-ascii?Q?G3EJ18a/zsbp4x9HqUCeMpUAe6HrHXC66jVxtuDJMspstbQ89vWrYXKnkB1L?=
- =?us-ascii?Q?yqU7BmVvmEUpbuPC0FlnkHiWo97alLROjbJLPSjO?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Efkoar4OANPP0gMQmGgDengs/pKTCr17FJm73aE5Wra62Ou7+TqHTO8CShO9?=
+ =?us-ascii?Q?DFYLxtRr5hk9Y5CD4avOUdNkce+EqSJU03WOXGAdS+GqIrvbJVY9qugONM/T?=
+ =?us-ascii?Q?TU8cRGnK9yv/6QPCt3RderRoUVzuI1AbcqXSZmp7qRxrTKdV1LEXq7y34B6o?=
+ =?us-ascii?Q?W0LpAH/koGa1oZTd5ziyMWRxmKEJMpaYEoGr/geVpB/BYMz0u6uhpFjLwIDC?=
+ =?us-ascii?Q?VdkpWecGmCDQLAUqFnekguCbkVZD+XEXYtbpqiyyFJ1rkg/YlEp36GlimA50?=
+ =?us-ascii?Q?VdpMjZVmgz4CcymIyWyYnQCx5YxLTheU4BRjoghGdRltUX58p4gelHceSmYc?=
+ =?us-ascii?Q?N9zq8KqT06VQL0LrhfGfpGGVk3rU02vqXtfEoiUhrplw+xBXgTq9rkemrjC4?=
+ =?us-ascii?Q?V6JrIKBFyHFDX6qF4oUpbLt5SVz5X1cWwR7Tri0T4ptm8Ha8l0gh8K6Prr0x?=
+ =?us-ascii?Q?IMNOjDn8nf85Bc567/RL3SjE9U2OG06QShW1aUzrwMpxx1kWqVh3x5OhfboX?=
+ =?us-ascii?Q?jj1LWZWzDvwX7NWZcZuSub+669VIrr0T1Iy8jAYqxdYXPRbec5KhVsbQMsIo?=
+ =?us-ascii?Q?Ae8hoLqWo24abLyXakQo1Vzicnc+KdHoS3JzWdWL62QBr1ScHAovUPuXdNMs?=
+ =?us-ascii?Q?9PnJ79f0ArytFd6sAb4fSDwmN/1FDdbsMHT7a/U3GXdQY8WQOVVv6GBPCXXQ?=
+ =?us-ascii?Q?PqVowg145eZler9fpR2M4BOnnrXzgCl+FWjP2pVCEUKkokUQv1rfTkAupOWV?=
+ =?us-ascii?Q?ijW1IxBLp2caT8bY2ugejuVo4f7QxrDbC1SEQchA3kYTxCOf5EBHVK8w0NYv?=
+ =?us-ascii?Q?syae10XFaPluu0qN1mLSg2U2H1mcnz/3oR8hfWs+IL+ctdUZbypFLHUDHZLh?=
+ =?us-ascii?Q?j7aMjuTwtVgnwPowixuvs+cKDums/f7mUpsrLWoX3B0j/a3+S/b25+IFN2Gy?=
+ =?us-ascii?Q?O7iKPbX0mk5HV2FoO1FtOBaicwE0pszsGKEwhdM9J4YNF+pUz82MELe1uaOf?=
+ =?us-ascii?Q?CoWns0q53hnjQaeF48p0x6oZGnDd0lYwO6z6BqDQ09TltPbajjqSwYAvu14j?=
+ =?us-ascii?Q?7mKqk1nlf/B++FqSD6rBliSsNjj8FW7mLqisNbcfUJITbyBTy0QQHVEJgCsb?=
+ =?us-ascii?Q?kgTkAeozHSawyNtQfxIT0gNRmgbIwx2+RoqHRzMPDu+LOxP7P4MTZ2Uet+XW?=
+ =?us-ascii?Q?Mq42tV7WTY5SSu00lxeknFub+MZaABEpEpQDvsoala4u8hRmaSdyHiQKeG8e?=
+ =?us-ascii?Q?FIFN3urduOCLLENTtCdCyC66L7yZaGgb5b1Ddz4UI6duJUPHVIDi+lI49bAl?=
+ =?us-ascii?Q?T9M1wR2G7HHZCQomYduC+mzoqsMDXUup34AB9Rq72fjjqknpNiNb0j7BUv0v?=
+ =?us-ascii?Q?1G4ujjAyeVhYkt3m8gZpNCkh3SWBssPu+aMRHgCcrJpR7g+q011UvF9UTErk?=
+ =?us-ascii?Q?qECoGRpgk4tfjCXT6hE9V2woDOA/DtJN6+FYUQK4yR0X0NCq3a3OcNMMHpJN?=
+ =?us-ascii?Q?wlrbdAndX1NdnZImppYj0W4vTEHSr/9sjoVgVzaf8p265qIGI1abWpaXyt11?=
+ =?us-ascii?Q?I2ajvIliQZlyEzHsA5Se8b0RkGrztZEDqnKCKcrv?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1805898-f912-48be-91d8-08db56245ca8
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1386de5-d168-49be-d1b1-08db56245eb9
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 15:43:57.8109
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 15:44:01.3517
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AtvGta3SAaSO76PohDZCjASqfkAv0xSM0H0q+QH6T/rpN51sZyO0szrxs4BARcz68LoBWiQNDYNlxByRnTD6SQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: deJTWQXou6iqkrOFooPuM1B9N9sGc0PtEsgtLNRa8V1bFldPQoQZmFDU4u1Xlx1hHLzEOINVZ7pnV57ACFY2dA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9008
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,68 +119,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peter Chen <peter.chen@nxp.com>
 
-There is an offset for USB2PHY in SALVO phy, add offset parameter for read
-and write API to cover both USB2 and USB3 PHY control.
+For USB2 L1 use cases, some hosts may start transferring less than 20us
+after End of Resume, it causes the host seeing corrupt packet from the
+device side. The reason is the delay time between PHY powers up and
+txvalid is 20us. To fix it, we change the delay value as 0us.
 
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
- drivers/phy/cadence/phy-cadence-salvo.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/phy/cadence/phy-cadence-salvo.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/drivers/phy/cadence/phy-cadence-salvo.c b/drivers/phy/cadence/phy-cadence-salvo.c
-index e569f5f67578..06c5dbdb700e 100644
+index 06c5dbdb700e..2e3d4d8fb8eb 100644
 --- a/drivers/phy/cadence/phy-cadence-salvo.c
 +++ b/drivers/phy/cadence/phy-cadence-salvo.c
-@@ -15,7 +15,9 @@
- #include <linux/of.h>
- #include <linux/of_platform.h>
+@@ -89,8 +89,20 @@
+ #define TB_ADDR_XCVR_DIAG_LANE_FCM_EN_MGN_TMR	0x40f2
+ #define TB_ADDR_TX_RCVDETSC_CTRL	        0x4124
  
--/* PHY register definition */
-+#define USB3_PHY_OFFSET			0x0
-+#define USB2_PHY_OFFSET			0x38000
-+/* USB3 PHY register definition */
- #define PHY_PMA_CMN_CTRL1			0xC800
- #define TB_ADDR_CMN_DIAG_HSCLK_SEL		0x01e0
- #define TB_ADDR_CMN_PLL0_VCOCAL_INIT_TMR	0x0084
-@@ -109,16 +111,16 @@ struct cdns_salvo_phy {
- };
++/* USB2 PHY register definition */
++#define UTMI_REG15				0xaf
++
+ /* TB_ADDR_TX_RCVDETSC_CTRL */
+ #define RXDET_IN_P3_32KHZ			BIT(0)
++/*
++ * UTMI_REG15
++ *
++ * Gate how many us for the txvalid signal until analog
++ * HS/FS transmitters have powered up
++ */
++#define TXVALID_GATE_THRESHOLD_HS_MASK		(BIT(4) | BIT(5))
++/* 0us, txvalid is ready just after HS/FS transmitters have powered up */
++#define TXVALID_GATE_THRESHOLD_HS_0US		(BIT(4) | BIT(5))
  
- static const struct of_device_id cdns_salvo_phy_of_match[];
--static u16 cdns_salvo_read(struct cdns_salvo_phy *salvo_phy, u32 reg)
-+static u16 cdns_salvo_read(struct cdns_salvo_phy *salvo_phy, u32 offset, u32 reg)
- {
--	return (u16)readl(salvo_phy->base +
-+	return (u16)readl(salvo_phy->base + offset +
- 		reg * (1 << salvo_phy->data->reg_offset_shift));
- }
- 
--static void cdns_salvo_write(struct cdns_salvo_phy *salvo_phy,
-+static void cdns_salvo_write(struct cdns_salvo_phy *salvo_phy, u32 offset,
- 			     u32 reg, u16 val)
- {
--	writel(val, salvo_phy->base +
-+	writel(val, salvo_phy->base + offset +
- 		reg * (1 << salvo_phy->data->reg_offset_shift));
- }
- 
-@@ -219,13 +221,13 @@ static int cdns_salvo_phy_init(struct phy *phy)
- 	for (i = 0; i < data->init_sequence_length; i++) {
- 		const struct cdns_reg_pairs *reg_pair = data->init_sequence_val + i;
- 
--		cdns_salvo_write(salvo_phy, reg_pair->off, reg_pair->val);
-+		cdns_salvo_write(salvo_phy, USB3_PHY_OFFSET, reg_pair->off, reg_pair->val);
- 	}
- 
- 	/* RXDET_IN_P3_32KHZ, Receiver detect slow clock enable */
--	value = cdns_salvo_read(salvo_phy, TB_ADDR_TX_RCVDETSC_CTRL);
-+	value = cdns_salvo_read(salvo_phy, USB3_PHY_OFFSET, TB_ADDR_TX_RCVDETSC_CTRL);
- 	value |= RXDET_IN_P3_32KHZ;
--	cdns_salvo_write(salvo_phy, TB_ADDR_TX_RCVDETSC_CTRL,
-+	cdns_salvo_write(salvo_phy, USB3_PHY_OFFSET, TB_ADDR_TX_RCVDETSC_CTRL,
+ struct cdns_reg_pairs {
+ 	u16 val;
+@@ -230,6 +242,11 @@ static int cdns_salvo_phy_init(struct phy *phy)
+ 	cdns_salvo_write(salvo_phy, USB3_PHY_OFFSET, TB_ADDR_TX_RCVDETSC_CTRL,
  			 RXDET_IN_P3_32KHZ);
  
++	value = cdns_salvo_read(salvo_phy, USB2_PHY_OFFSET, UTMI_REG15);
++	value &= ~TXVALID_GATE_THRESHOLD_HS_MASK;
++	cdns_salvo_write(salvo_phy, USB2_PHY_OFFSET, UTMI_REG15,
++			 value | TXVALID_GATE_THRESHOLD_HS_0US);
++
  	udelay(10);
+ 
+ 	clk_disable_unprepare(salvo_phy->clk);
 -- 
 2.34.1
 
