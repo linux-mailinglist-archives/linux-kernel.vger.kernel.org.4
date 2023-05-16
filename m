@@ -2,96 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930A6705A0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E5A705A0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjEPV5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S230060AbjEPV6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjEPV5l (ORCPT
+        with ESMTP id S229454AbjEPV6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:57:41 -0400
-Received: from out-38.mta1.migadu.com (out-38.mta1.migadu.com [IPv6:2001:41d0:203:375::26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED40D170E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:57:39 -0700 (PDT)
-Date:   Tue, 16 May 2023 17:57:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684274258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rg+4VYgNan6dQhp4G+ztNtHxMTIHL0gkWBPXAeaTX8c=;
-        b=jJSE6AXlg0mKNpZ3QsGHLfN984zv1y3ihtZM67UQucdGqvaeKISoBqjvubCygEtZOjn63P
-        CgtKcnIJRmvE8tN4JU0oQdw66873QmANJIugqZktPXHNnkHuR8oAA0U6N1F3eeJ2Y1sGo5
-        envgWXp+n4uKqfyotbMjEdRM/d9ymyg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <ZGP8TYbpOdJilvD2@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
- <202305111525.67001E5C4@keescook>
- <ZF6Ibvi8U9B+mV1d@moria.home.lan>
- <202305161401.F1E3ACFAC@keescook>
- <ZGPzocRpSlg+4vgN@moria.home.lan>
- <ZGP54T0d89TMySsf@casper.infradead.org>
+        Tue, 16 May 2023 17:58:09 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6071987;
+        Tue, 16 May 2023 14:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684274285; x=1715810285;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NSB1DDJvWd6GUYsrQHxUG9mD9q935otky3mP/KcLA58=;
+  b=PiOKO5J2oxO+DsRolmgXZiA3mldTkF+CXxu4HgKd7mB5M512mmVl6Y/l
+   Q+gFc9NLlqSFZHOpxMVRgx/b7zFAybX6xPwrckkLxaHxhai/Mr06FpJDI
+   iPbQU7WhVwMb3/DwPVywJ7IzE0T4TIqmYdIn4qsziq29Y4wlL3eG2sfnq
+   ag3RmMd/ki3lAPbPf0zaitPoXJRveQRb8PxQtuUhKiCKgo0+lqb3MQs/Y
+   j87sxczLUEaj2JInDiuUcOomcNWIxnpEXkjCRrRwORGN/oMXVRO28D2Cf
+   5R2P6klIrzuQ/zfB+AXHTsbd8GLZzBumR+Y+xj76sDvQDf2x9aPZRegTl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="437946915"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="437946915"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 14:57:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="732132627"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="732132627"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.5.122]) ([10.212.5.122])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 14:57:52 -0700
+Message-ID: <c6becc30-ce5d-8290-54c7-f2a6497f4200@intel.com>
+Date:   Tue, 16 May 2023 14:57:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGP54T0d89TMySsf@casper.infradead.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v5 06/15] dmaengine: idxd: Add wq private data accessors
+Content-Language: en-US
+To:     Tom Zanussi <tom.zanussi@linux.intel.com>,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        fenghua.yu@intel.com, vkoul@kernel.org
+Cc:     tony.luck@intel.com, wajdi.k.feghali@intel.com,
+        james.guilford@intel.com, kanchana.p.sridhar@intel.com,
+        giovanni.cabiddu@intel.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
+References: <20230516215009.51794-1-tom.zanussi@linux.intel.com>
+ <20230516215009.51794-7-tom.zanussi@linux.intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230516215009.51794-7-tom.zanussi@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 10:47:13PM +0100, Matthew Wilcox wrote:
-> On Tue, May 16, 2023 at 05:20:33PM -0400, Kent Overstreet wrote:
-> > On Tue, May 16, 2023 at 02:02:11PM -0700, Kees Cook wrote:
-> > > For something that small, why not use the text_poke API?
-> > 
-> > This looks like it's meant for patching existing kernel text, which
-> > isn't what I want - I'm generating new functions on the fly, one per
-> > btree node.
-> > 
-> > I'm working up a new allocator - a (very simple) slab allocator where
-> > you pass a buffer, and it gives you a copy of that buffer mapped
-> > executable, but not writeable.
-> > 
-> > It looks like we'll be able to convert bpf, kprobes, and ftrace
-> > trampolines to it; it'll consolidate a fair amount of code (particularly
-> > in bpf), and they won't have to burn a full page per allocation anymore.
-> > 
-> > bpf has a neat trick where it maps the same page in two different
-> > locations, one is the executable location and the other is the writeable
-> > location - I'm stealing that.
-> 
-> How does that avoid the problem of being able to construct an arbitrary
-> gadget that somebody else will then execute?  IOW, what bpf has done
-> seems like it's working around & undoing the security improvements.
-> 
-> I suppose it's an improvement that only the executable address is
-> passed back to the caller, and not the writable address.
 
-That's my thinking; grepping around finds several uses of module_alloc()
-that are all doing different variations on the page permissions dance.
-Let's just do it once and do it right...
+
+On 5/16/23 2:50 PM, Tom Zanussi wrote:
+> Add the accessors idxd_wq_set_private() and idxd_wq_get_private()
+> allowing users to set and retrieve a private void * associated with an
+> idxd_wq.
+> 
+> The private data is stored in the idxd_dev.conf_dev associated with
+> each idxd_wq.
+> 
+> Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+
+> ---
+>   drivers/dma/idxd/idxd.h | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+> index 276b5f9cf967..971daf323655 100644
+> --- a/drivers/dma/idxd/idxd.h
+> +++ b/drivers/dma/idxd/idxd.h
+> @@ -609,6 +609,16 @@ static inline int idxd_wq_refcount(struct idxd_wq *wq)
+>   	return wq->client_count;
+>   };
+>   
+> +static inline void idxd_wq_set_private(struct idxd_wq *wq, void *private)
+> +{
+> +	dev_set_drvdata(wq_confdev(wq), private);
+> +}
+> +
+> +static inline void *idxd_wq_get_private(struct idxd_wq *wq)
+> +{
+> +	return dev_get_drvdata(wq_confdev(wq));
+> +}
+> +
+>   /*
+>    * Intel IAA does not support batch processing.
+>    * The max batch size of device, max batch size of wq and
