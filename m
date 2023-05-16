@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531A67052AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB857052AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbjEPPsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
+        id S234304AbjEPPsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234205AbjEPPrj (ORCPT
+        with ESMTP id S234151AbjEPPrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:47:39 -0400
+        Tue, 16 May 2023 11:47:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586847EDD;
-        Tue, 16 May 2023 08:47:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B8D7DB4;
+        Tue, 16 May 2023 08:47:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C09463B9D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A7F763BA4;
+        Tue, 16 May 2023 15:46:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5187BC433D2;
         Tue, 16 May 2023 15:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8BDC433A0;
-        Tue, 16 May 2023 15:46:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684252005;
-        bh=1m6Ec7twcC2NaPKOcuVM9lqODfTf5Y70mYt0kY6b7Xc=;
+        s=k20201202; t=1684252009;
+        bh=hEUlhy3x74ptZihWpTN1KOaQRhy1uwVK0q8Cu7Mv2w0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kzAdBbWlRCx5TDu2jFFXn3n3DHysi9+vGwC0OBd7f12eUbKsSemdnlSDW3q6NrJGx
-         Sx1LPRHBbeaaOIGPV5Oqn4wHxc9Wy+tYfs5RtyzErb6id1wcUuT6v87ecvr23dchZc
-         3nqiENT39Md26RlUzH+95As0vTZcHfmJn+NuGWomLfwdG/9BranS8XX98YuzvfMB9V
-         sdAVg1wVi5/qeBf8CYTB+VHKQfI+VRnnVOehKeLaGk5QS6VrzNnXggzacrI7WO3M6k
-         VurEaGGym4T17vwJ7/3+mb0OxWk2rD1XpLWU6JFQMC34XlrQvpGLhuBjj1n/wwozc0
-         rS1sgWSyPmm/g==
+        b=Mr8YfsTNoulwGWvD0tgfBs0wwbldurQP87cM+bffA6WAgrco/DCyut4Dk70ezgjb3
+         s+rcP0dVrALpiBxiwpppiZJCgDuNbXrQSlgKiqUzYbO7Rp9FPZky/idQVj59srnUR/
+         rU5ySRLhnEFvMtEDm3VCLjjON95rItlQ0ofQSzC6qTpwmt7yv2NA5bbccWy1G95VpL
+         Ni6quHY5h7Rellf3j00PpuwafyY7yuh5yx53gzMJhUU4h9EnUWGtc5RnodHFsYa6Xa
+         9o7hMEhJE2nmTZm4FB9Rxq6yXF+IouUgEI4K7ghU/pF44VvDOSr8LtHs/0OrY9bcJe
+         M2bdA3bv1aK7Q==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -46,9 +46,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Kees Cook <keescook@chromium.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 08/16] ARM: add clear/copy_user_highpage declarations
-Date:   Tue, 16 May 2023 17:45:57 +0200
-Message-Id: <20230516154605.517690-9-arnd@kernel.org>
+Subject: [PATCH 09/16] ARM: cacheflush: avoid __flush_anon_page() missing-prototype warning
+Date:   Tue, 16 May 2023 17:45:58 +0200
+Message-Id: <20230516154605.517690-10-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516154605.517690-1-arnd@kernel.org>
 References: <20230516154605.517690-1-arnd@kernel.org>
@@ -66,55 +66,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The CPU specific helpers have to be global functions when building
-a kernel for just one CPU, but are called through indirect function
-pointers in a multi-CPU kernel. This config currently lacks the
-declarations for the individual helpers, e.g.:
+The prototype for __flush_anon_page() is intentionally hidden
+inside the flush_anon_page() inline function to prevent it from
+being called from drivers.
 
-arch/arm/mm/copypage-v4wb.c:47:6: error: no previous prototype for 'v4wb_copy_user_highpage' [-Werror=missing-prototypes]
-arch/arm/mm/copypage-v4wb.c:65:6: error: no previous prototype for 'v4wb_clear_user_highpage' [-Werror=missing-prototypes]
+When building with 'W=1', this causes a warning:
 
-Add the complete set of prototypes in asm/page.h to allow
-building iwth -Wmissing-prototypes.
+arch/arm/mm/flush.c:358:6: error: no previous prototype for '__flush_anon_page' [-Werror=missing-prototypes]
+
+Work around this by adding a prototype directly next to the function
+definition.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/include/asm/page.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ arch/arm/mm/flush.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
-index 74bb5947b387..28c63d172a96 100644
---- a/arch/arm/include/asm/page.h
-+++ b/arch/arm/include/asm/page.h
-@@ -113,6 +113,28 @@ struct cpu_user_fns {
- 			unsigned long vaddr, struct vm_area_struct *vma);
- };
- 
-+void fa_copy_user_highpage(struct page *to, struct page *from,
-+	unsigned long vaddr, struct vm_area_struct *vma);
-+void fa_clear_user_highpage(struct page *page, unsigned long vaddr);
-+void feroceon_copy_user_highpage(struct page *to, struct page *from,
-+	unsigned long vaddr, struct vm_area_struct *vma);
-+void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr);
-+void v4_mc_copy_user_highpage(struct page *to, struct page *from,
-+	unsigned long vaddr, struct vm_area_struct *vma);
-+void v4_mc_clear_user_highpage(struct page *page, unsigned long vaddr);
-+void v4wb_copy_user_highpage(struct page *to, struct page *from,
-+	unsigned long vaddr, struct vm_area_struct *vma);
-+void v4wb_clear_user_highpage(struct page *page, unsigned long vaddr);
-+void v4wt_copy_user_highpage(struct page *to, struct page *from,
-+	unsigned long vaddr, struct vm_area_struct *vma);
-+void v4wt_clear_user_highpage(struct page *page, unsigned long vaddr);
-+void xsc3_mc_copy_user_highpage(struct page *to, struct page *from,
-+	unsigned long vaddr, struct vm_area_struct *vma);
-+void xsc3_mc_clear_user_highpage(struct page *page, unsigned long vaddr);
-+void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
-+	unsigned long vaddr, struct vm_area_struct *vma);
-+void xscale_mc_clear_user_highpage(struct page *page, unsigned long vaddr);
-+
- #ifdef MULTI_USER
- extern struct cpu_user_fns cpu_user;
- 
+diff --git a/arch/arm/mm/flush.c b/arch/arm/mm/flush.c
+index 9b112009c708..43678137a9b2 100644
+--- a/arch/arm/mm/flush.c
++++ b/arch/arm/mm/flush.c
+@@ -355,6 +355,7 @@ EXPORT_SYMBOL(flush_dcache_page);
+  *  memcpy() to/from page
+  *  if written to page, flush_dcache_page()
+  */
++void __flush_anon_page(struct vm_area_struct *vma, struct page *page, unsigned long vmaddr);
+ void __flush_anon_page(struct vm_area_struct *vma, struct page *page, unsigned long vmaddr)
+ {
+ 	unsigned long pfn;
 -- 
 2.39.2
 
