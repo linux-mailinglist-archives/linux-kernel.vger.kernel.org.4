@@ -2,124 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B41705A03
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC65D705A07
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjEPVzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S229881AbjEPVzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjEPVzL (ORCPT
+        with ESMTP id S229611AbjEPVzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:55:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646786EA2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:54:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 16 May 2023 17:55:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514267687;
+        Tue, 16 May 2023 14:55:17 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4627E63FD3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E88EC4339C;
-        Tue, 16 May 2023 21:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684274028;
-        bh=c2XN6cZstCHczarNlQBcFrj20ialrTX30SbvpFfFpPA=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=CVWAx9v832/iGK/cokVtpSu11MPkJz0I0Pfc4Ch/61XeqUtJU2S4lRGhjGJBQdKWe
-         VWmLe7/1D3FLyp+Jd4XT8Em05Rn6e2E1Mk0Zfh5FiZsg0jEtpvQpPrkHhacnzKWujA
-         /U+mdYAIaPHWgtye6ksZGmnxMLEw/aOcs0Ar8Cv0iG+6tfRQ+BAKGm1B0waJLUANmS
-         Gq4w8rgZqFlH4zjKwMQL2RkGtyoqc7aiM8RZWnBkGsO4wMGaceYEqAqz9qGatIQdPs
-         LAssY3krj4b3kIfEAaEEjfxmriuc9BICRVGD29TmwIACowgNCCwdWc8Hu5OTenTjUR
-         QYBzWBIYetZQA==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id EEF2227C0054;
-        Tue, 16 May 2023 17:53:46 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Tue, 16 May 2023 17:53:46 -0400
-X-ME-Sender: <xms:avtjZE2ay_OOWan78jYX-5kEfhvelx64SJhb4VyhQ4i5U4aiIeKQGg>
-    <xme:avtjZPH8QwdGO4_J7haAKUf4qxiCYHUKvx0oonQ6jCMhaL9KePs5DB3QyNjmG65_O
-    NIH1akANXJeGbJfl4Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgudeiiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeehveelgedvvedtfeehvdeuieetvdeijeegieeivdffgeeukeff
-    tdefuedvieejvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgvvhhilhdqtghloh
-    gtkhdqthgvshhtrdgttgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqud
-    duiedukeehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrghes
-    lhhinhhugidrlhhuthhordhush
-X-ME-Proxy: <xmx:avtjZM6Qv1CBQSQGkNJpPJzQ5AHORnY9pZIGTsjy0XkzvbLmg1kxoA>
-    <xmx:avtjZN0ndeSJkPyWI8bpvIvhW7Kwk0pZzOem204_mTSA1LPI5ElGdw>
-    <xmx:avtjZHFLsinqRNvZFgpvsJhxmolyyOhA5T8vYTthW9U1ehzn_CZAvg>
-    <xmx:avtjZM4sOPSF30RNkDHpr6bJ-H0C13STsfXTS_5aiC-L80dUZYmTdg>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E6A1531A0063; Tue, 16 May 2023 17:53:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <6d2cf767-a5bb-4df4-bf9c-dcbf3bf82722@app.fastmail.com>
-In-Reply-To: <tencent_4DC4468312A1CB2CA34B0215FAD797D11F07@qq.com>
-References: <tencent_4DC4468312A1CB2CA34B0215FAD797D11F07@qq.com>
-Date:   Tue, 16 May 2023 14:53:24 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Rong Tao" <rtoax@foxmail.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>
-Cc:     "Rong Tao" <rongtao@cestc.cn>, "Ingo Molnar" <mingo@redhat.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/vdso: Use non-serializing instruction rdtsc
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6EAFE66058F7;
+        Tue, 16 May 2023 22:54:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684274094;
+        bh=TYATkcZpn+WF2fVP6g3L/fkTDnNdYXbfzcSxHe1/ToE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oYdOwjbrip9BGlXm6HZ+l0C94cXRf0My31K76qbu4K62GaU/xXohQ66lGxxSDL0PK
+         GPV4i/RC1LZbiVRm92vsQy7p16K4jIpiLeMly3Lx9WBoODHsUar/W/rUSyNV3+YJ7s
+         ALDtoDy42HA7P+VYSHIMMDWQaGLgKI1Bdn2Irp82PmXMdBwxYPgyhSqgkGFXNgw+Rd
+         3SOToyy/z7jA1E7M5pWVq18JE6XQwH2JxzHEZj2ewENTnZJa9NK+dtw1sZXDA7c6Sq
+         4xyjdKDNehoBdcvgT+4MDHNXev4mfhWT6WcYX7Yjwb9PKZyYXpCHwHTbeLttmcGEpa
+         rzSHuFiCfw4fw==
+Received: by mercury (Postfix, from userid 1000)
+        id 4A65710620FE; Tue, 16 May 2023 23:54:52 +0200 (CEST)
+Date:   Tue, 16 May 2023 23:54:52 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     "Limonciello, Mario" <mlimonci@amd.com>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        heikki.krogerus@linux.intel.com, rafael@kernel.org,
+        ajayg@nvidia.com, andriy.shevchenko@linux.intel.com,
+        linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Evan.Quan@amd.com, Lijo.Lazar@amd.com, Sanket.Goswami@amd.com
+Subject: Re: [PATCH 1/2] power: supply: Use the scope of power supplies to
+ tell if power is system supplied
+Message-ID: <20230516215452.icwx6vb2763hybxs@mercury.elektranox.org>
+References: <20230516182541.5836-1-mario.limonciello@amd.com>
+ <20230516182541.5836-2-mario.limonciello@amd.com>
+ <20230516204114.vv5w2vmcyulmhmm4@mercury.elektranox.org>
+ <8cd8d02f-f4b2-3ad3-a3e5-f9857d8519e2@amd.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="x7qrij76ovy2qfiw"
+Content-Disposition: inline
+In-Reply-To: <8cd8d02f-f4b2-3ad3-a3e5-f9857d8519e2@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023, at 11:52 PM, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
->
-> Replacing rdtscp or 'lfence;rdtsc' with the non-serializable instruction
-> rdtsc can achieve a 40% performance improvement with only a small loss of
-> precision.
->
-> The RDTSCP instruction is not a serializing instruction, but it does wait
-> until all previous instructions have executed and all previous loads are
-> globally visible. The RDTSC instruction is not a serializing instruction.
-> It does not necessarily wait until all previous instructions have been
-> executed before reading the counter.
->
-> Record the time-consuming of vdso clock_gettime(), pseudo code:
->
->     count = 1000 * 1000 * 100;
->     while (count--)
->         clock_gettime(CLOCK_REALTIME, &ts);
->
-> Time-consuming comparison:
->
->      Time Consume(ns) | rdtsc_ordered() |  rdtsc()  | Promote
->     ------------------+-----------------+-----------+---------
->     Physical Machine  |  1269147289     | 759067324 |   40%
->      Guest OS (KVM)   |  1756615963     | 995823886 |   43%
->
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
 
-Out of curiosity, what happens if you apply that patch and run this thing:
+--x7qrij76ovy2qfiw
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://git.kernel.org/pub/scm/linux/kernel/git/luto/misc-tests.git/tree/evil-clock-test.cc
+Hi,
 
-Build it with g++ -O2 and run:
+On Tue, May 16, 2023 at 03:44:17PM -0500, Limonciello, Mario wrote:
+> On 5/16/2023 3:41 PM, Sebastian Reichel wrote:
+> > Hi,
+> >=20
+> > On Tue, May 16, 2023 at 01:25:40PM -0500, Mario Limonciello wrote:
+> > > The logic used for power_supply_is_system_supplied() counts all power
+> > > supplies and:
+> > > * If no power supplies found assumes AC
+> > > * If non-battery power supplies found uses online to determine AC/DC.
+> > >    - If any are onlined, assumes AC
+> > >    - Othewise DC.
+> > >=20
+> > > This logic makes sense for desktop systems that don't export an ACPI
+> > > battery, but it fails once you include a dGPU that provides a UCSI
+> > > power supply on a desktop system without any other power supplies.
+> > >=20
+> > > The dGPU by default doesn't have anything plugged in so it's 'offline=
+'.
+> > > This makes power_supply_is_system_supplied() return 0 with a count of
+> > > 1 meaning all drivers that use this get a wrong judgement.
+> > >=20
+> > > To fix this case adjust the logic to also examine the scope of the
+> > > power supply. If the power supply is deemed a device power supply,
+> > > then don't count it.
+> > >=20
+> > > Cc: Evan Quan <Evan.Quan@amd.com>
+> > > Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > Good find; the current logic should also break with a desktop PC
+> > once a POWER_SUPPLY_SCOPE_DEVICE battery device is attached (e.g.
+> > a HID device), because it increases the counter.
+>=20
+> Yup!
+>=20
+> > I suppose I can just apply this to my fixes branch since there is
+> > no compile time dependency to the second patch?
+>=20
+> Yes, that's correct.=A0 I don't see a problem with the other patch going
+> through another tree.
 
-./evil-clock-test -c monotonic
+Ok, I modified the commit message to also mention the HID issue and
+applied it to power-supply's fixes branch.
 
---Andy
+Thanks,
+
+-- Sebastian
+
+>=20
+> > -- Sebastian
+> >=20
+> > >   drivers/power/supply/power_supply_core.c | 8 ++++++--
+> > >   1 file changed, 6 insertions(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power=
+/supply/power_supply_core.c
+> > > index ab986dbace16..d57f420ba8c3 100644
+> > > --- a/drivers/power/supply/power_supply_core.c
+> > > +++ b/drivers/power/supply/power_supply_core.c
+> > > @@ -348,6 +348,10 @@ static int __power_supply_is_system_supplied(str=
+uct device *dev, void *data)
+> > >   	struct power_supply *psy =3D dev_get_drvdata(dev);
+> > >   	unsigned int *count =3D data;
+> > > +	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
+> > > +		if (ret.intval =3D=3D POWER_SUPPLY_SCOPE_DEVICE)
+> > > +			return 0;
+> > > +
+> > >   	(*count)++;
+> > >   	if (psy->desc->type !=3D POWER_SUPPLY_TYPE_BATTERY)
+> > >   		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
+> > > @@ -366,8 +370,8 @@ int power_supply_is_system_supplied(void)
+> > >   				      __power_supply_is_system_supplied);
+> > >   	/*
+> > > -	 * If no power class device was found at all, most probably we are
+> > > -	 * running on a desktop system, so assume we are on mains power.
+> > > +	 * If no system scope power class device was found at all, most pro=
+bably we
+> > > +	 * are running on a desktop system, so assume we are on mains power.
+> > >   	 */
+> > >   	if (count =3D=3D 0)
+> > >   		return 1;
+> > > --=20
+> > > 2.34.1
+> > >=20
+
+--x7qrij76ovy2qfiw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj+6kACgkQ2O7X88g7
++pqvTg/+LiE+XBlOO714ueWEP/EpOGvtW5I4kA2i49P+zyNLuHehWNy35sG7kJDE
+mUkzN0tpGQmnvGbRLkQr/GCMwcIsz3C5TJV40zbX7zTz/5ItbgCV19JP+BYu9n1Q
+9CYT57ya7NawRZgitSMxbcbl1+vo07sUf49JsT4aXkO68oWAYWBwF+h7QrZoWyjr
+VI246w/BYFcR6kcEt6s6tXERflLNbqFbcQpGKOBvPP/DgkSWs9LygC/roMqWH+Q5
+0FoTBIuOg5KcVHPys9fLZ3491Gf+9be+vq+3tksOAH4JTGBRHhh4rlUjMO8FEaJo
+1NKa5whdnEIrzBweXJsInH6NccubeLrCAvmEygWHwY2URPWGwV2G5zmxhXwg/JDY
+UdgFu9Xzz1u1tIUMPR/3Ztuj8ZFut8zeOR9XRlt1ddsFh6Kq5AKq3PvM4ZKiFbDw
+9QMYIqNAiku9mZvSBnOQM6Uamvy+cMp8fCReyvEoj/QO4/B9WSFN7P1eAroe4nta
+rusGx/mFqTjq2jV4vhCFWyPg2EpsrRwR54xt9h8HuLiJJGFltK0VvpRQXmy8lTtY
+/wMffGG0LbfAIxyKIGtoe84NRLg3yvfxkNqJWKnAhPqbWOKbqXIvT2J0hCWMDmwF
+Fnvu2RonE8kd31YDRs6bL8lhHS9vOYb6719RhCq0dW2hj1kNpjU=
+=ksLZ
+-----END PGP SIGNATURE-----
+
+--x7qrij76ovy2qfiw--
