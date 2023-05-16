@@ -2,120 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F067070455B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C02870451A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjEPGeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
+        id S230092AbjEPGVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjEPGd6 (ORCPT
+        with ESMTP id S230060AbjEPGVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:33:58 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFA71FD4;
-        Mon, 15 May 2023 23:33:56 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34G6XhTC061465;
-        Tue, 16 May 2023 01:33:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684218823;
-        bh=kQRrE7NQZFThfXtU1mqcmhZYEzl2mdVQGQNER6/T2C0=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=Sil2Z57zIaLO+SgeLTzPZaxtl3XHObFirJgsO7Lpx0evRCQK3xO0FQ958WeRRKe8J
-         myieRPQ33oWhT+d4qYPdIm4RBmByO7Xsj6++saNDI2bzJb3zvLwB/HQmGkrsz+C16y
-         /QIFLsz83hRme9bc3EJ4Vl80zbnU74t8cPx+gGF4=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34G6XhhE026382
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 May 2023 01:33:43 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
- May 2023 01:33:42 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 16 May 2023 01:33:42 -0500
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34G6XdN3016858;
-        Tue, 16 May 2023 01:33:39 -0500
-Message-ID: <728c0165-3caa-de09-2493-e7225a78b77a@ti.com>
-Date:   Tue, 16 May 2023 12:03:38 +0530
+        Tue, 16 May 2023 02:21:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E2726BF;
+        Mon, 15 May 2023 23:21:31 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QL5f45G4jzLq2Y;
+        Tue, 16 May 2023 14:18:36 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 14:21:28 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>
+CC:     David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <ying.huang@intel.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next v2 00/13] mm: page_alloc: misc cleanup and refector
+Date:   Tue, 16 May 2023 14:38:08 +0800
+Message-ID: <20230516063821.121844-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <s-vadapalli@ti.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-j7200: correct num-lanes requested for
- PCIe
-Content-Language: en-US
-To:     Achal Verma <a-verma1@ti.com>
-References: <20230516062212.2635948-1-a-verma1@ti.com>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <20230516062212.2635948-1-a-verma1@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Achal,
+This is aim to reduce more space in page_alloc.c, also do some
+cleanup, no functional changes intended.
 
-On 16/05/23 11:52, Achal Verma wrote:
-> From: Matt Ranostay <mranostay@ti.com>
-> 
-> J7200 has a limited 2x support for PCIe, and the properties should be
-> updated as such.
+This is based on next-20230515.
 
-According to J7200 Datasheet at [0], the SoC supports up to x4 PCIe lanes. Could
-you please clarify where the lanes are documented to be 2x?
+v2: 
+- drop move of __pageblock_pfn_to_page(), suggested by Huang Ying
+- move __show_mem() below the __show_free_areas() in patch4
+- add new patch13
+- add RB from Mike
 
-[0]: https://www.ti.com/lit/ds/symlink/dra821u-q1.pdf
+Kefeng Wang (13):
+  mm: page_alloc: move mirrored_kernelcore into mm_init.c
+  mm: page_alloc: move init_on_alloc/free() into mm_init.c
+  mm: page_alloc: move set_zone_contiguous() into mm_init.c
+  mm: page_alloc: collect mem statistic into show_mem.c
+  mm: page_alloc: squash page_is_consistent()
+  mm: page_alloc: remove alloc_contig_dump_pages() stub
+  mm: page_alloc: split out FAIL_PAGE_ALLOC
+  mm: page_alloc: split out DEBUG_PAGEALLOC
+  mm: page_alloc: move mark_free_page() into snapshot.c
+  mm: page_alloc: move pm_* function into power
+  mm: vmscan: use gfp_has_io_fs()
+  mm: page_alloc: move sysctls into it own fils
+  mm: page_alloc: move is_check_pages_enabled() into page_alloc.c
 
-> 
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Achal Verma <a-verma1@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> index ef352e32f19d..5e62b431d6e8 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-> @@ -729,7 +729,7 @@ pcie1_rc: pcie@2910000 {
->  		device_type = "pci";
->  		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
->  		max-link-speed = <3>;
-> -		num-lanes = <4>;
-> +		num-lanes = <2>;
->  		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
->  		clocks = <&k3_clks 240 6>;
->  		clock-names = "fck";
-> @@ -757,7 +757,7 @@ pcie1_ep: pcie-ep@2910000 {
->  		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
->  		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
->  		max-link-speed = <3>;
-> -		num-lanes = <4>;
-> +		num-lanes = <2>;
->  		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
->  		clocks = <&k3_clks 240 6>;
->  		clock-names = "fck";
+ include/linux/fault-inject.h   |   9 +
+ include/linux/gfp.h            |  15 +-
+ include/linux/memory_hotplug.h |   3 -
+ include/linux/mm.h             |  87 ++--
+ include/linux/mmzone.h         |  21 -
+ include/linux/suspend.h        |   9 +-
+ kernel/power/main.c            |  27 ++
+ kernel/power/power.h           |   5 +
+ kernel/power/snapshot.c        |  52 +++
+ kernel/sysctl.c                |  67 ---
+ lib/Makefile                   |   2 +-
+ lib/show_mem.c                 |  37 --
+ mm/Makefile                    |   4 +-
+ mm/debug_page_alloc.c          |  59 +++
+ mm/fail_page_alloc.c           |  66 +++
+ mm/internal.h                  |  21 +-
+ mm/mm_init.c                   |  32 ++
+ mm/page_alloc.c                | 799 ++++-----------------------------
+ mm/show_mem.c                  | 429 ++++++++++++++++++
+ mm/swapfile.c                  |   1 +
+ mm/vmscan.c                    |   2 +-
+ 21 files changed, 857 insertions(+), 890 deletions(-)
+ delete mode 100644 lib/show_mem.c
+ create mode 100644 mm/debug_page_alloc.c
+ create mode 100644 mm/fail_page_alloc.c
+ create mode 100644 mm/show_mem.c
 
 -- 
-Regards,
-Siddharth.
+2.35.3
+
