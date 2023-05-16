@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0B5705AC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDA8705AC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjEPWr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
+        id S229567AbjEPWuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 18:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEPWr5 (ORCPT
+        with ESMTP id S229475AbjEPWuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:47:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9976619B
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:47:56 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684277274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtkrSYxnuRq6fiYCIde637D8KY4d2NVOuzHNW7z0qFg=;
-        b=YFYIkcto9cPds9qu96Ubj5+T/w+4IEqS9GqLheJM3JbElVLAh7rNwB/NGbGMN0uqwjNMV3
-        gmJuyQ5pdbswYubgo332tN7gA8Qf6e4WGIIh0OskJ4P+egADvoNKvWfFwIfPI3JrGxyZOV
-        fmUdF5DEBgGHrVV/x/VhpZR65p0eTNElsIe9unk7WFqMC8RyQ09kaV41A/ZJBGaSeS2Z0M
-        KA83fx7LJl7ryiDa6h67QclG2E0YY/sdJZZ9c2kRwTN6XhbCpmMEzlJ82FcThDuGva2jnc
-        U91IH+Qjc2Ia7VIWBqUUjrXVj9TdPf1R1cXCKLTueYnwWy4sEN3+IvzgGxC6Nw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684277274;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtkrSYxnuRq6fiYCIde637D8KY4d2NVOuzHNW7z0qFg=;
-        b=nsnm3oFCOawHhI4D325r12isohSzO7y7xFjeebthE/ujyb8RB6nsbKoGoDRm/ZyDN73O3t
-        Ot00+4+38JbvFVDQ==
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        Shanker Donthineni <sdonthineni@nvidia.com>
-Subject: Re: your mail
-In-Reply-To: <20230515192708.sypitem5hzycdois@revolver>
-References: <87mt2cxb7y.ffs@tglx> <20230515192708.sypitem5hzycdois@revolver>
-Date:   Wed, 17 May 2023 00:47:53 +0200
-Message-ID: <875y8r7v1i.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 18:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CB26EBB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 15:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D5AF6400C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA396C433EF;
+        Tue, 16 May 2023 22:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1684277414;
+        bh=nwS/+R1Nz36K2RuprOKSZylh8GjG/v200hMwgApQJ3k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b7J7c6WdL+ItXg9DqLpV1Jsr6fY0rGtXInr7s1fyXhF53Z/mH+yiu1qevDkJ/yrNE
+         NyJFTLxiR6gbZB3HdbRyQ6WNtK4DGnhBr4Phxvxcy4Do3XoTyWl4DBzA4PC11bntgn
+         i3p/YpxfBzxLrWc2xPGDFYhnNIpihOgt+j2FQ9jU=
+Date:   Tue, 16 May 2023 15:50:13 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Wander Lairson Costa <wander@redhat.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Brian Cain <bcain@quicinc.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: Re: [PATCH v9] kernel/fork: beware of __put_task_struct calling
+ context
+Message-Id: <20230516155013.5c6ec02a8c9deb1e8fc4af8f@linux-foundation.org>
+In-Reply-To: <ZGP4fvxQmeDVF7fK@casper.infradead.org>
+References: <20230516191441.34377-1-wander@redhat.com>
+        <ZGPYVAF6Nkp2umaa@casper.infradead.org>
+        <20230516140555.b150a43517d85b7cad75e7da@linux-foundation.org>
+        <ZGP4fvxQmeDVF7fK@casper.infradead.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15 2023 at 15:27, Liam R. Howlett wrote:
-> * Thomas Gleixner <tglx@linutronix.de> [230510 15:01]:
->> The documentation of mt_next() claims that it starts the search at the
->> provided index. That's incorrect as it starts the search after the provided
->> index.
->> 
->> The documentation of mt_find() is slightly confusing. "Handles locking" is
->> not really helpful as it does not explain how the "locking" works.
->
-> More locking notes can be found in Documentation/core-api/maple_tree.rst
-> which lists mt_find() under the "Takes RCU read lock" list.  I'm okay
-> with duplicating the comment of taking the RCU read lock in here.
+On Tue, 16 May 2023 22:41:18 +0100 Matthew Wilcox <willy@infradead.org> wrote:
 
-Without a reference to the actual locking documentation such comments
-are not super helpful.
+> 
+> Oh, I missed that put_task_struct() was still inlined.  Should it be?
+> It seems quite large now.
 
->> Fix similar issues for mt_find_after() and mt_prev().
->> 
->> Remove the completely confusing and pointless "Note: Will not return the
->> zero entry." comment from mt_for_each() and document @__index correctly.
->
-> The zero entry concept is an advanced API concept which allows you to
-> store something that cannot be seen by the mt_* family of users, so it
-> will not be returned and, instead, it will return NULL.  Think of it as
-> a reservation for an entry that isn't fully initialized.  Perhaps it
-> should read "Will not return the XA_ZERO_ENTRY" ?
->>
->> - *
->> - * Note: Will not return the zero entry.
->
-> This function "will not return the zero entry", meaning it will return
-> NULL if xa_is_zero(entry).
+It's not significantly worse because of this patch.  In fact, it's
+unchanged for non-RT kernels.
 
-If I understand correctly, this translates to:
+Possibly put_task_struct() *should* be uninlined, because it made the
+mistake of using the dang refcount stuff, which never saw a byte which
+it couldn't consume :(
 
-  This iterator skips entries, which have been reserved for future use
-  but have not yet been fully initialized.
 
-Right?
+I mean...
 
->> @@ -6487,9 +6493,14 @@ EXPORT_SYMBOL(mtree_destroy);
->>   * mt_find() - Search from the start up until an entry is found.
->>   * @mt: The maple tree
->>   * @index: Pointer which contains the start location of the search
->> - * @max: The maximum value to check
->> + * @max: The maximum value of the search range
->> + *
->> + * Takes RCU read lock internally to protect the search, which does not
->> + * protect the returned pointer after dropping RCU read lock.
->>   *
->> - * Handles locking.  @index will be incremented to one beyond the range.
->> + * In case that an entry is found @index contains the index of the found
->> + * entry plus one, so it can be used as iterator index to find the next
->> + * entry.
->
-> What about:
-> "In case that an entry is found @index contains the last index of the
-> found entry plus one"
+--- a/fs/open.c~a
++++ a/fs/open.c
+@@ -1572,3 +1572,9 @@ int stream_open(struct inode *inode, str
+ }
+ 
+ EXPORT_SYMBOL(stream_open);
++
++#include <linux/refcount.h>
++bool foo(refcount_t *r)
++{
++	return refcount_dec_and_test(r);
++}
+_
 
-Still confusing to the casual reader like me :)
+is worth
 
-    "In case that an entry is found @index is updated to point to the next
-     possible entry independent whether the found entry is occupying a
-     single index or a range if indices."
+339 bytes of text for an allmodconfig build 
+67 bytes of text for an allnoconfig build 
+77 bytes of text for a defconfig build 
 
-Hmm?
 
-Thanks,
 
-        tglx
