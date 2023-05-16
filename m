@@ -2,100 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994EB70500F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF34705014
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbjEPN6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S233582AbjEPN7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjEPN6K (ORCPT
+        with ESMTP id S232324AbjEPN7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:58:10 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44B949C9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:58:09 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5617d793160so15506827b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684245489; x=1686837489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WThK0RP6IIU5fNVkO1bRft41UD70/Hf/Gn6lHhOsC1s=;
-        b=HmwkY2wodCDgUULJ81Fkyk9fo6uFME8MgDIHmJCcrGG7UU8YLjqspl/bLjJOdL13Q0
-         ZCwcLORRUSVTK/S2n7gC0GKjWL6RwN1j6XEOyW71fnIz7wSfn4SOmMODKKLjMCHy6TQT
-         yCbq2MW26byfYL2c0KTPWeQwAkKpcF7HZMwx/Xmug8jiAaSc1+IgnwyqB8ZG6sAv2rlf
-         Wgm+Rg9z7YE/G3C8Y6fA0rkrgsNkuAciCmsgC9u75eht2sm6u6V5swjD7Ch7rN4/hpo+
-         SQkaQaSaE+FqYQrLpgBSOA6p70/UthOSbFtx1y9+HEKjohqvle4W6WVmLS7sFka/PUbN
-         eUFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684245489; x=1686837489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WThK0RP6IIU5fNVkO1bRft41UD70/Hf/Gn6lHhOsC1s=;
-        b=c2brTWSLstEg8xYTyOQNNvP0qmAWWqXvvhaPgGYyyKKpi+mWY1DeQXETjRo2vcXezC
-         3labdAmxos6nt833ahkjwVhDD8ouQ3ZZSVuNZGStxv9oA+AkEt57/zrQUqM6sW+t3wbg
-         234vNWcPasScrTUQU6RTWr1NksM+q4T9Fz9Dg3uADJUkE1p9VWOwMOFTNW3R67lvlC6s
-         mcyihi/TvwxNNt99LtQL7iRK6+Pjn2jOiPzz3jYsN0hrHqdNxyqJWNGNmLKsdyGH0b8K
-         h/KU9oUuhrgqQHeIS+Sb+6h6g/gQlp2DZAMtjQEQTvvorE0tBU1ljcFQnCNoQcDG3B/c
-         +4bQ==
-X-Gm-Message-State: AC+VfDwoSsrExZMpygGO+EB2iikm+F5FsAW/Iuv0oT+PRs2GbgbiUx1m
-        b1U133mUJNPueO6ri3lpUiPaspEAhS/0i7kMvjcqlw==
-X-Google-Smtp-Source: ACHHUZ7JP+kJk7OwmFu0wcuva7/WsLYtplfy8+SvFsX4iZHfWMGF/dfDg1ApiLLz8fEBMeqGpk4P0w6cVBcd75VvoKs=
-X-Received: by 2002:a0d:c101:0:b0:561:1cff:8675 with SMTP id
- c1-20020a0dc101000000b005611cff8675mr11601079ywd.14.1684245489008; Tue, 16
- May 2023 06:58:09 -0700 (PDT)
+        Tue, 16 May 2023 09:59:06 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB30F1711;
+        Tue, 16 May 2023 06:59:04 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C38EC496;
+        Tue, 16 May 2023 15:58:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1684245531;
+        bh=gEsB0fM6tfxewDDdl3+BOaZexrT5+eQ7tC+wPa1JWRw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=djN2Trpe15eh46x7+13ZWImiBtHULSwhNVucLkofotQ0kvA7zZIzRc1Wpt2iGA2ey
+         PGUcOKEmw79drgPwMm7gG0kZ9tldicjQdvsUu0FriTt0qp4S9GUOyKB0Z8O3qEuzs+
+         qcw5gL9NN2Q39PbGiqNNOBFiXriY4TbhPE0ONv/I=
+Message-ID: <ed622265-326e-b150-1c18-c028c04da6e0@ideasonboard.com>
+Date:   Tue, 16 May 2023 16:58:57 +0300
 MIME-Version: 1.0
-References: <20230512042806.3438373-1-chris.packham@alliedtelesis.co.nz>
- <CACRpkdYz9ipNTo2ORXKWy5Q4uCpKL=9Gd+kK76pestX7Onuz-Q@mail.gmail.com> <b36fcdf1-45ab-0c06-efe4-237df0612466@alliedtelesis.co.nz>
-In-Reply-To: <b36fcdf1-45ab-0c06-efe4-237df0612466@alliedtelesis.co.nz>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 16 May 2023 15:57:57 +0200
-Message-ID: <CACRpkdbiSAFoJP_JB1d_6gQ+Xx7Y+mLAh=C6Za+fpyWuRe6Gbw@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "johan@kernel.org" <johan@kernel.org>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
+Content-Language: en-US
+To:     Ludwig Zenz <lzenz@dh-electronics.com>
+Cc:     "Matti.Vaittinen@fi.rohmeurope.com" 
+        <Matti.Vaittinen@fi.rohmeurope.com>,
+        "andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "khalasa@piap.pl" <khalasa@piap.pl>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+        "m.tretter@pengutronix.de" <m.tretter@pengutronix.de>,
+        "marex@denx.de" <marex@denx.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mpagano@gentoo.org" <mpagano@gentoo.org>,
+        "peda@axentia.se" <peda@axentia.se>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>,
+        "wsa@kernel.org" <wsa@kernel.org>
+References: <e13dade162f74a3e812f9331b83928f0@dh-electronics.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <e13dade162f74a3e812f9331b83928f0@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 12:27=E2=80=AFAM Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
+On 16/05/2023 16:32, Ludwig Zenz wrote:
+>> Hi,
+>>
+>> On 16/05/2023 15:35, Ludwig Zenz wrote:
+>>> On Wed, 26 Apr 2023 14:51:12 +0300, Tomi Valkeinen wrote:
+>>>
+>>> [...]
+>>>
+>>>>    +static int ub960_configure_ports_for_streaming(struct ub960_data *priv,
+>>>>    +                                         struct v4l2_subdev_state *state)
+>>>>    +{
+>>>>    +  u8 fwd_ctl;
+>>>>    +  struct {
+>>>>    +          u32 num_streams;
+>>>>    +          u8 pixel_dt;
+>>>>    +          u8 meta_dt;
+>>>>    +          u32 meta_lines;
+>>>>    +          u32 tx_port;
+>>>>    +  } rx_data[UB960_MAX_RX_NPORTS] = {};
+>>>>    +  u8 vc_map[UB960_MAX_RX_NPORTS] = {};
+>>>>    +  struct v4l2_subdev_route *route;
+>>>>    +  unsigned int nport;
+>>>>    +  int ret;
+>>>>    +
+>>>>    +  ret = ub960_validate_stream_vcs(priv);
+>>>>    +  if (ret)
+>>>>    +          return ret;
+>>>>    +
+>>>>    +  ub960_get_vc_maps(priv, state, vc_map);
+>>>>    +
+>>>>    +  for_each_active_route(&state->routing, route) {
+>>>>    +          struct ub960_rxport *rxport;
+>>>>    +          struct ub960_txport *txport;
+>>>>    +          struct v4l2_mbus_framefmt *fmt;
+>>>>    +          const struct ub960_format_info *ub960_fmt;
+>>>>    +          unsigned int nport;
+>>>>    +
+>>>>    +          nport = ub960_pad_to_port(priv, route->sink_pad);
+>>>>    +
+>>>>    +          rxport = priv->rxports[nport];
+>>>>    +          if (!rxport)
+>>>>    +                  return -EINVAL;
+>>>>    +
+>>>>    +          txport = priv->txports[ub960_pad_to_port(priv, route->source_pad)];
+>>>>    +          if (!txport)
+>>>>    +                  return -EINVAL;
+>>>>    +
+>>>>    +          rx_data[nport].tx_port = ub960_pad_to_port(priv, route->source_pad);
+>>>>    +
+>>>>    +          rx_data[nport].num_streams++;
+>>>>    +
+>>>>    +          /* For the rest, we are only interested in parallel busses */
+>>>>    +          if (rxport->rx_mode == RXPORT_MODE_CSI2_SYNC ||
+>>>>    +              rxport->rx_mode == RXPORT_MODE_CSI2_ASYNC)
+>>>>    +                  continue;
+>>>>    +
+>>>>    +          if (rx_data[nport].num_streams > 2)
+>>>>    +                  return -EPIPE;
+>>>>    +
+>>>>    +          fmt = v4l2_subdev_state_get_stream_format(state,
+>>>>    +                                                    route->sink_pad,
+>>>>    +                                                    route->sink_stream);
+>>>>    +          if (!fmt)
+>>>>    +                  return -EPIPE;
+>>>>    +
+>>>>    +          ub960_fmt = ub960_find_format(fmt->code);
+>>>>    +          if (!ub960_fmt)
+>>>>    +                  return -EPIPE;
+>>>>    +
+>>>>    +          if (ub960_fmt->meta) {
+>>>>    +                  if (fmt->height > 3) {
+>>>>    +                          dev_err(&priv->client->dev,
+>>>>    +                                  "rx%u: unsupported metadata height %u\n",
+>>>>    +                                  nport, fmt->height);
+>>>>    +                          return -EPIPE;
+>>>>    +                  }
+>>>>    +
+>>>>    +                  rx_data[nport].meta_dt = ub960_fmt->datatype;
+>>>>    +                  rx_data[nport].meta_lines = fmt->height;
+>>>>    +          } else {
+>>>>    +                  rx_data[nport].pixel_dt = ub960_fmt->datatype;
+>>>>    +          }
+>>>>    +  }
+>>>>    +
+>>>>    +  /* Configure RX ports */
+>>>>    +
+>>>>    +  fwd_ctl = 0;
+>>>
+>>> Hello, I have only used the first RX port in my setup (ds90ub933 to ds90ub964). The logic for activating/deactivating the Rx ports did not work for me. My suggestion is:
+>>
+>> Why doesn't it work? What happens?
+>>
+>>   Tomi
+> 
+> Hello Tomi,
+> 
+> the port rx0 which I need was disabled and the other ports rx1 to rx3 were enabled. In other words, the exact inverse of the required selection.
+> 
+>>>>   +		/* Forwarding */
+>>>>   +
+>>>>   +		fwd_ctl |= BIT(4 + nport); /* forward disable */
+> According to the data sheet, a set bit4-7 in fwd_ctl means that the channel is disabled. So the comment 'forward disable' is correct. While debugging, however, this code was only reached for the ports to be enabled but not for the ones which should be disabled.
 
-> In my original case which is a kernel module that exports a GPIO for
-> userspace using gpiod_export()
+This is just a setup phase, where we initialize the registers for the 
+ports we want to use. The forwarding is then enabled later, in 
+ub960_enable_rx_port, and even later disabled in ub960_disable_rx_port.
 
-We should not add new users for that API as it increase the usage
-of the sysfs ABI but if it's an existing in-tree usecase I buy it.
+This assumes that the forwarding is disabled in the registers by default 
+(which it is in UB960).
 
-> The crux of the problem is that the irq_desc is created when it hasn't
-> been requested.
+I need to try this on my HW to verify my understanding is correct, but 
+looking at the code, it is indeed a bit buggy.
 
-The right solution to me seems to be to not use gpiod_export()
-and not use sysfs TBH.
+At this setup phase we disable the forwarding for ports we'll use, and 
+enable the forwarding for ports we don't use (which doesn't make sense). 
+Later, when the streaming is started for that port, we enable the 
+forwarding. So here we should just always disable the forwarding for all 
+ports.
 
-> In some cases we know the GPIO pin is an output so we
-> could avoid it, in others we could delay the creation until an interrupt
-> is actually requested (which is what I'm attempting to do).
+Saying "disable the forwarding" is perhaps a bit confusing here, as the 
+the forwarding should already be disabled in the HW here anyway. But as 
+we write the UB960_SR_FWD_CTL1, we need to set that bit.
 
-Yeah I guess. If we wanna keep papering over issues created
-by the sysfs ABI.
+So. You should see the rx0 getting enabled (later, in 
+ub960_enable_rx_port), and I'm curious why you don't see that.
 
-Yours,
-Linus Walleij
+  Tomi
+
