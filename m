@@ -2,86 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4767047CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0867047CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjEPI3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        id S231633AbjEPI3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjEPI3H (ORCPT
+        with ESMTP id S231618AbjEPI3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:29:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4861FE9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684225705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4LrwsQpkNzKQ73ySEswNaQqCDWSvOkZL+SFTwTYbhpM=;
-        b=Pb+od5HJdB3d8TB38hoA/FkjMKY/vQ5fp2ZDZC+DH7i2sQIgFdUV+Cn5BuC2P9pEev6voQ
-        IXmJ8toJ+uUelOlwXNN39TKKp49xAgFjYGnwMcBxcRBfNMlZEzGVhjOZ42s0LzURTffyOh
-        IbD4GvQjQUFCkGfTy1jAnvreGsU68Nc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-u3PbJbvIO9qfJoDBlN9eBw-1; Tue, 16 May 2023 04:28:19 -0400
-X-MC-Unique: u3PbJbvIO9qfJoDBlN9eBw-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f4ef4bf00dso29549015e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:28:19 -0700 (PDT)
+        Tue, 16 May 2023 04:29:15 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286644C28
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:29:12 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3062b101ae1so9016498f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684225751; x=1686817751;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B/ypdlKoJzYeteQaEdxqwC+GyLlhFe9AxiId8OT+9jg=;
+        b=YoNqViKvzNmMhhCH+oiB1FQOuMBnr7xP9dkHfITqVLJhPuTk8wF33B+IztamIVkSvU
+         Q3LTK+D69ddlGKbpvp0il8KfEZ7gqicQ1Kh2egq9NRsJ79Os9hLhAW0j3Gxyf/fFOHtt
+         uXvbOphhHb6KPi2UyRK6JbyvclPKlXZt/PF/RKHEIVRpsRgB1sW8Js+fF0aUCOrLeTYc
+         zcDM0O+Yjmyp0GiJJYwagRsLsDdpW1fnblN7ZPl0fWRQ+Z0rKxM0rMd8bodnIfwmfqUh
+         4TscFK/rft71kUGBul9IRuWwpy28QVyTW+JNaNy7j/gC8/W1WIJ1BDMhGSEZBmwTvYod
+         KCFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684225698; x=1686817698;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1684225751; x=1686817751;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4LrwsQpkNzKQ73ySEswNaQqCDWSvOkZL+SFTwTYbhpM=;
-        b=OlrS6yjIsvqVLig4WlmkY4NDPFGuYftpJjQud7cxZu0lU0M6h9p8k5aTWwzBLJlRM/
-         2YXP6b7Mz+5CXjti1ZvaU9P1r3LyPCPHW7hPx0hz/yj9xEI+1TP6jqZwVUFs2MO8wBhh
-         DuM3ZWp7xuI+EsTbHnnZ0mkwjMQ7JySrl3M5M3dSePpQfmcP00+QrQghsiJDEXjCa/9S
-         DrQSVNemaBxtjLN3aK6vv20Avxh4dKqGNjK9WeiLVxgY7sFbi400P6q7Tygs62eVe0Cs
-         q+WS/uz48Y2VahC2aqh9975t67m/n2Rdmee6sWTe3P7GDI/qBdfU7WWB66EBtm1cTqZQ
-         D9Gw==
-X-Gm-Message-State: AC+VfDy8COpWG2XqCz/J0H0PrWbeVZk0ctuDb+n1lY0Giv8FI6L/ve8H
-        gXxBvfXDoWTNB2ecKvIjxhJ0BVND3VFr/U2w892O62lGq5MPPVnNb0qoVZH/OwXU+xu0RwZgQw+
-        76XxS9WeGApM7yv2i/w3d4NM0
-X-Received: by 2002:a7b:cb97:0:b0:3f4:2c71:b9ad with SMTP id m23-20020a7bcb97000000b003f42c71b9admr19670887wmi.30.1684225698395;
-        Tue, 16 May 2023 01:28:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5u32JaX9DoCvDoS+J6br6qwyFtkIX97b4yVh+uAVQvAOm++RWuF2owUBJbfmhSh0S5nzEg/g==
-X-Received: by 2002:a7b:cb97:0:b0:3f4:2c71:b9ad with SMTP id m23-20020a7bcb97000000b003f42c71b9admr19670863wmi.30.1684225697971;
-        Tue, 16 May 2023 01:28:17 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74f:2500:1e3a:9ee0:5180:cc13? (p200300cbc74f25001e3a9ee05180cc13.dip0.t-ipconnect.de. [2003:cb:c74f:2500:1e3a:9ee0:5180:cc13])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c214a00b003f50e88ffb5sm1494416wml.24.2023.05.16.01.28.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 01:28:17 -0700 (PDT)
-Message-ID: <184c0b11-4f97-5872-5b25-ffd99eb6185d@redhat.com>
-Date:   Tue, 16 May 2023 10:28:16 +0200
+        bh=B/ypdlKoJzYeteQaEdxqwC+GyLlhFe9AxiId8OT+9jg=;
+        b=EWWfc2r3nRq2qqm0NCDUzQrbBc35rdkdf1rG9Y5orlsE+G38I+VTBxpf2yL9PWcOwU
+         U2IrQhtU4rC99+iIQe5JQc4qf6v9r7ssw6R0iuJkQPRQLPXclj+9+Cybh2zEow07eAx9
+         IKrMMHD7ag/HpwzGH1BgmOje5He+7JC3ew7u1Z/ffi4e6EOrdSULEGedGyr0YeYiUL/Q
+         GrZZkD0i8pVpt3sUuo9TUwKXW0Ne5eQl9u76g3mYPDn9rZXipbs0V8ibeqxp8V8vPxjL
+         1jq2/7qMrSL2J0/oBay+PwsHOHPIdDopfscrZW4TI5BKnxF2/TirteVxH/buy+vMl0FB
+         8L+Q==
+X-Gm-Message-State: AC+VfDwuZeblA+zMDN4vo4fGIKZbAkWGhV4NVAD4/HxhEz6iFOm6oewU
+        4lq6k8IZjWXqkv9/O1CNM7WPwGVegFq5XTjEWz8=
+X-Google-Smtp-Source: ACHHUZ4kkNBHq5+iZvTyaGaWiUJOUodv3eeLzUx/XoBAYWzqs3SUMm8Wabmz8Ntc7R9E6MxfLazK2g==
+X-Received: by 2002:adf:e4c8:0:b0:304:8888:87ad with SMTP id v8-20020adfe4c8000000b00304888887admr28523576wrm.12.1684225751120;
+        Tue, 16 May 2023 01:29:11 -0700 (PDT)
+Received: from hackbox.lan ([86.121.163.20])
+        by smtp.gmail.com with ESMTPSA id h16-20020a5d4fd0000000b00306344eaebfsm1753300wrw.28.2023.05.16.01.29.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 01:29:10 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        manivannan.sadhasivam@linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v3] soc: qcom: Rename ice to qcom_ice to avoid module name conflict
+Date:   Tue, 16 May 2023 11:28:56 +0300
+Message-Id: <20230516082856.150214-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 4/6] io_uring: rsrc: delegate VMA file-backed check to
- GUP
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        John Hubbard <jhubbard@nvidia.com>
-References: <cover.1684097001.git.lstoakes@gmail.com>
- <642128d50f5423b3331e3108f8faf6b8ac0d957e.1684097002.git.lstoakes@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <642128d50f5423b3331e3108f8faf6b8ac0d957e.1684097002.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,23 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.05.23 23:26, Lorenzo Stoakes wrote:
-> Now that the GUP explicitly checks FOLL_LONGTERM pin_user_pages() for
-> broken file-backed mappings in "mm/gup: disallow FOLL_LONGTERM GUP-nonfast
-> writing to file-backed mappings", there is no need to explicitly check VMAs
-> for this condition, so simply remove this logic from io_uring altogether.
-> 
+The following error was reported when building x86_64 allmodconfig:
 
-Worth adding "Note that this change will make iouring fixed buffers work 
-on MAP_PRIVATE file mappings."
+error: the following would cause module name conflict:
+  drivers/soc/qcom/ice.ko
+  drivers/net/ethernet/intel/ice/ice.ko
 
-I'll run my test cases with this series and expect no surprises :)
+Seems the 'ice' module name is already used by some Intel ethernet
+driver, so lets rename the Qualcomm Inline Crypto Engine (ICE) module
+from 'ice' to 'qcom_ice' to avoid any kind of errors/confusions.
 
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 2afbf43a4aec ("soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver")
+Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Changes since v2:
+ * kept the filename as 'ice.c' while renaming the modules to 'qcom_ice'
 
+ drivers/soc/qcom/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+index 0f43a88b4894..89b775512bef 100644
+--- a/drivers/soc/qcom/Makefile
++++ b/drivers/soc/qcom/Makefile
+@@ -32,4 +32,5 @@ obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+ obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+ obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+ obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+-obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
++qcom_ice-objs			+= ice.o
++obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= qcom_ice.o
 -- 
-Thanks,
-
-David / dhildenb
+2.34.1
 
