@@ -2,222 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A62B704392
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A6570438D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjEPCp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 22:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
+        id S229892AbjEPCpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 22:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjEPCps (ORCPT
+        with ESMTP id S229540AbjEPCpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 22:45:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC02E79
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 19:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684205101;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XOtiAl8xEr+yF4q9V8Mv37+Ez0ZSu8GNo6YwcqTW6us=;
-        b=Gw9Zi2/3+NGj81lys1lZQI6w8XKhBOYypG+G9p1LvgjNMQgYsBW2zXp7gmSPPD0r6qmUn+
-        fQtfZw8Ct+oeID3aP8rX2jd5mEyDksdEHuXQRh/4d43BrGcJBAXaOhrXf5+vgRrkT4qsx0
-        VSu4QhKgXwx/FLrBb0+6svG8IUEm2b4=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-651-z3cGHSxmPn6qY1jIksCalQ-1; Mon, 15 May 2023 22:44:58 -0400
-X-MC-Unique: z3cGHSxmPn6qY1jIksCalQ-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4edc5526c5fso7701910e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 19:44:57 -0700 (PDT)
+        Mon, 15 May 2023 22:45:04 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7DE35BD;
+        Mon, 15 May 2023 19:45:02 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aaf70676b6so97115955ad.3;
+        Mon, 15 May 2023 19:45:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684205102; x=1686797102;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GNrwrxEXioPVU1CHB+NMHjC+VIIUqcxI7JMhaUrSWzw=;
+        b=dJ4Hmy3CaKT4Ee1HiDj2nV6ZHGbgYqFpv1QMLVSDrBv9JqTkLbQz53HqcyS+5uUPeH
+         V9WN9IhbsnBidl+LVUjFgIqmrNiXQY1iaY4erbQh+4eYQ6IPKBEd9aC7L0B73fUDaQns
+         9T9LR9fkb2XR5U0H7lGo+8nAPBCwPBJrOClmJHCXA8ZF0af9Ow4Ty7Rd3D2T0DohIuk3
+         uLQdexWGJond3609bpwpYbm7PBpjFZ+vmuGyLb9TyJm/1XNqiO6Dpbf4UQIoU322U6vU
+         0WLZymNq0eGGZCMHyxYJsqazgZ8cZzKpLA1Fguh9H/lRO+gvA54Geq2jgcgzE3SjJWJL
+         Qgew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684205097; x=1686797097;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XOtiAl8xEr+yF4q9V8Mv37+Ez0ZSu8GNo6YwcqTW6us=;
-        b=EwAK9jIvVVGfwqVjOy4zupspt6UoYBAo++3Eq2qfHeneH7oTy9/VUdliFY24kv7Ik/
-         7uzH8texNzRiR4tARzxtjdh6ZXv9z9R7bUQgjIVLFJoFcFO45u0B1XLESYlvc/40fWdm
-         saUPnraZF7y8Be96o5NZJnJISDZyIC7wkCLXPiuODHLW4Kjuq7hBQzVuWcZZXjDKiQX1
-         xWEbMYk0mx5R6iKN2g1lib6RnQAJ4HTncpMxQyzuJwmK/Lh5DNIxV1FmqtPf7vNTdAP3
-         ra1XUbmPnzYMPSjm/vyoCMwLd4N3L6oiH9DMySxoVeYZB5GT3AMejuVl5GyEL9KDponX
-         sA8Q==
-X-Gm-Message-State: AC+VfDwCnY/L2kd47gt8RUE3wj1BIZJ02+fxl/2ACf6QpP+A2fX2BKCM
-        JitNvJeWh2vyaJC+Iawu2rCWMukMG4k7y+sdECbG0ZwnIce6UJp8wAM0FfeZ1bg4YUhzJ5j3B2H
-        SBdiAlzDn2fNd+ja4hhrhfXEwIAapTsOj0x6iZVpv
-X-Received: by 2002:a05:6512:4ce:b0:4f1:4d8c:1d21 with SMTP id w14-20020a05651204ce00b004f14d8c1d21mr7882543lfq.61.1684205096828;
-        Mon, 15 May 2023 19:44:56 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6SX3NNInS5JM11CnSdd/RQUe4EjlvNV3aF41mBtFpvesjIsE4L2Uy2YEav+fOPTOaHB91hUPwXs99PQU4gbws=
-X-Received: by 2002:a05:6512:4ce:b0:4f1:4d8c:1d21 with SMTP id
- w14-20020a05651204ce00b004f14d8c1d21mr7882521lfq.61.1684205096498; Mon, 15
- May 2023 19:44:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684205102; x=1686797102;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GNrwrxEXioPVU1CHB+NMHjC+VIIUqcxI7JMhaUrSWzw=;
+        b=HbZ7sMqSLZtuK+8OGRYa9GAHpomZFgaYFVdo7AUiN4dNmuuF2uDKGs0yxt+ZvrUjZu
+         fRaOCd68c8AsiIk2sgZlVzzPaWGlnW58MOh6iXMdlq2k59ohqcvygFNJe6x2U4H5o2Ry
+         ioZiGALUBC4AksfhPRSRvJbYeuSGjbbwGylpeYiPmSqE3CXTdqVV56v6nDA+SFs9PJgs
+         9VQTxlkBvgc0il7MpzXFIaua3zjUlzbr4lMQdadgJPagSzTwUV+Czfl4rnjRI1pLZPGg
+         rlr0Jg4kKNnSZKe95AZ2Gp3JOEqnM4UB+fyEYx8g/aq7MgiFL4DjY8wjYLj7NCCKhi9I
+         g2aA==
+X-Gm-Message-State: AC+VfDwX62XyBtA8eGUSJmtBpH7j8FNCbBs9UeV2+dfYTUOw/vTb+E1Y
+        zdcOxFFpZVm7suMUCEZMiUO16SBRvg8=
+X-Google-Smtp-Source: ACHHUZ4aAjo16mYYVJw56/Ey7MpV0voqIMFvFyHGqu/Q9QHjMqsHSp1BSS1zWi4rVF3Rn9w3xV3BVA==
+X-Received: by 2002:a17:903:234f:b0:1ae:bf5:7b5 with SMTP id c15-20020a170903234f00b001ae0bf507b5mr8733272plh.34.1684205101918;
+        Mon, 15 May 2023 19:45:01 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-4.three.co.id. [116.206.28.4])
+        by smtp.gmail.com with ESMTPSA id j10-20020a170902690a00b001ac7c6fd12asm14168055plk.104.2023.05.15.19.44.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 19:45:01 -0700 (PDT)
+Message-ID: <24fb92c2-27e1-e98b-c163-74b530d613fa@gmail.com>
+Date:   Tue, 16 May 2023 09:44:52 +0700
 MIME-Version: 1.0
-References: <20230413064027.13267-1-jasowang@redhat.com> <20230413064027.13267-2-jasowang@redhat.com>
- <20230413121525-mutt-send-email-mst@kernel.org> <CACGkMEunn1Z3n8yjVaWLqdV502yjaCBSAb_LO4KsB0nuxXmV8A@mail.gmail.com>
- <20230414031947-mutt-send-email-mst@kernel.org> <CACGkMEtutGn0CoJhoPHbzPuqoCLb4OCT6a_vB_WPV=MhwY0DXg@mail.gmail.com>
- <20230510012951-mutt-send-email-mst@kernel.org> <CACGkMEszPydzw_MOUOVJKBBW_8iYn66i_9OFvLDoZMH34hMx=w@mail.gmail.com>
- <20230515004422-mutt-send-email-mst@kernel.org> <CACGkMEv+Q2UoBarNOzKSrc3O=Wb2_73O2j9cZXFdAiLBm1qY-Q@mail.gmail.com>
- <20230515061455-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230515061455-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 16 May 2023 10:44:45 +0800
-Message-ID: <CACGkMEt8QkK1PnTrRUjDbyJheBurdibr4--Es8P0Y9NZM659pQ@mail.gmail.com>
-Subject: Re: [PATCH net-next V2 1/2] virtio-net: convert rx mode setting to
- use workqueue
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        alvaro.karsz@solid-run.com, eperezma@redhat.com,
-        xuanzhuo@linux.alibaba.com, david.marchand@redhat.com,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Filesystems <linux-fsdevel@vger.kernel.org>,
+        Linux x86 <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Cc:     Vladimir Lomov <lomov.vl@bkoty.ru>,
+        Matthew Wilcox <willy@infradead.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: _filemap_get_folio and NULL pointer dereference
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 6:17=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
->
-> On Mon, May 15, 2023 at 01:13:33PM +0800, Jason Wang wrote:
-> > On Mon, May 15, 2023 at 12:45=E2=80=AFPM Michael S. Tsirkin <mst@redhat=
-.com> wrote:
-> > >
-> > > On Mon, May 15, 2023 at 09:05:54AM +0800, Jason Wang wrote:
-> > > > On Wed, May 10, 2023 at 1:33=E2=80=AFPM Michael S. Tsirkin <mst@red=
-hat.com> wrote:
-> > > > >
-> > > > > On Mon, Apr 17, 2023 at 11:40:58AM +0800, Jason Wang wrote:
-> > > > > > On Fri, Apr 14, 2023 at 3:21=E2=80=AFPM Michael S. Tsirkin <mst=
-@redhat.com> wrote:
-> > > > > > >
-> > > > > > > On Fri, Apr 14, 2023 at 01:04:15PM +0800, Jason Wang wrote:
-> > > > > > > > Forget to cc netdev, adding.
-> > > > > > > >
-> > > > > > > > On Fri, Apr 14, 2023 at 12:25=E2=80=AFAM Michael S. Tsirkin=
- <mst@redhat.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Thu, Apr 13, 2023 at 02:40:26PM +0800, Jason Wang wrot=
-e:
-> > > > > > > > > > This patch convert rx mode setting to be done in a work=
-queue, this is
-> > > > > > > > > > a must for allow to sleep when waiting for the cvq comm=
-and to
-> > > > > > > > > > response since current code is executed under addr spin=
- lock.
-> > > > > > > > > >
-> > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > > >
-> > > > > > > > > I don't like this frankly. This means that setting RX mod=
-e which would
-> > > > > > > > > previously be reliable, now becomes unreliable.
-> > > > > > > >
-> > > > > > > > It is "unreliable" by design:
-> > > > > > > >
-> > > > > > > >       void                    (*ndo_set_rx_mode)(struct net=
-_device *dev);
-> > > > > > > >
-> > > > > > > > > - first of all configuration is no longer immediate
-> > > > > > > >
-> > > > > > > > Is immediate a hard requirement? I can see a workqueue is u=
-sed at least:
-> > > > > > > >
-> > > > > > > > mlx5e, ipoib, efx, ...
-> > > > > > > >
-> > > > > > > > >   and there is no way for driver to find out when
-> > > > > > > > >   it actually took effect
-> > > > > > > >
-> > > > > > > > But we know rx mode is best effort e.g it doesn't support v=
-host and we
-> > > > > > > > survive from this for years.
-> > > > > > > >
-> > > > > > > > > - second, if device fails command, this is also not
-> > > > > > > > >   propagated to driver, again no way for driver to find o=
-ut
-> > > > > > > > >
-> > > > > > > > > VDUSE needs to be fixed to do tricks to fix this
-> > > > > > > > > without breaking normal drivers.
-> > > > > > > >
-> > > > > > > > It's not specific to VDUSE. For example, when using virtio-=
-net in the
-> > > > > > > > UP environment with any software cvq (like mlx5 via vDPA or=
- cma
-> > > > > > > > transport).
-> > > > > > > >
-> > > > > > > > Thanks
-> > > > > > >
-> > > > > > > Hmm. Can we differentiate between these use-cases?
-> > > > > >
-> > > > > > It doesn't look easy since we are drivers for virtio bus. Under=
-layer
-> > > > > > details were hidden from virtio-net.
-> > > > > >
-> > > > > > Or do you have any ideas on this?
-> > > > > >
-> > > > > > Thanks
-> > > > >
-> > > > > I don't know, pass some kind of flag in struct virtqueue?
-> > > > >         "bool slow; /* This vq can be very slow sometimes. Don't =
-wait for it! */"
-> > > > >
-> > > > > ?
-> > > > >
-> > > >
-> > > > So if it's slow, sleep, otherwise poll?
-> > > >
-> > > > I feel setting this flag might be tricky, since the driver doesn't
-> > > > know whether or not it's really slow. E.g smartNIC vendor may allow
-> > > > virtio-net emulation over PCI.
-> > > >
-> > > > Thanks
-> > >
-> > > driver will have the choice, depending on whether
-> > > vq is deterministic or not.
-> >
-> > Ok, but the problem is, such booleans are only useful for virtio ring
-> > codes. But in this case, virtio-net knows what to do for cvq. So I'm
-> > not sure who the user is.
-> >
-> > Thanks
->
-> Circling back, what exactly does the architecture you are trying
-> to fix look like? Who is going to introduce unbounded latency?
-> The hypervisor?
+Hi,
 
-Hypervisor is one of the possible reason, we have many more:
+I notice a regression report on bugzilla [1]. Quoting from it:
 
-Hardware device that provides virtio-pci emulation.
-Userspace devices like VDUSE.
+> Hello.
+> 
+> (I apologize if I chose the wrong "Product" and "Component".)
+> 
+> On two of my systems, I see strange "bug" when running 6+ kernels (below is a recent one):
+> 
+> ```
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RIP: 0010:__filemap_get_folio+0xbf/0x6a0
+> May 14 14:48:07 smoon7.bkoty.ru kernel: Code: ef e8 c5 60 c3 00 48 89 c7 48 3d 02 04 00 00 74 e4 48 3d 06 04 00 00 74 dc 48 85 c0 0f 84 6a 04 00 00 a8 01 0f 85 6c 04 00 00 <8b> 40 34 85 c0 74 c4 8d 50 01 4c 8d 47 34 f0 0f b1 57 34 75 ee 48
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RSP: 0000:ffffa7800b1dfbf8 EFLAGS: 00010246
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RAX: 0000000000000002 RBX: 0000000000000000 RCX: 0000000000000004
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RDX: ffffa7800b1dfc50 RSI: ffff9a2413646910 RDI: 0000000000000002
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 00007f862b600000
+> May 14 14:48:07 smoon7.bkoty.ru kernel: R10: 00007f8659246f48 R11: ffff9a21c1494a0c R12: 000000000002dc46
+> May 14 14:48:07 smoon7.bkoty.ru kernel: R13: ffffa7800b1dfc50 R14: ffff9a21e2cb82b0 R15: 00007f8659246f48
+> May 14 14:48:07 smoon7.bkoty.ru kernel: FS:  00007f87fcff96c0(0000) GS:ffff9a295e280000(0000) knlGS:0000000000000000
+> May 14 14:48:07 smoon7.bkoty.ru kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> May 14 14:48:07 smoon7.bkoty.ru kernel: CR2: 0000000000000036 CR3: 0000000105b2c003 CR4: 00000000003706e0
+> May 14 14:48:07 smoon7.bkoty.ru kernel: Call Trace:
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  <TASK>
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  ? psi_group_change+0x274/0x430
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  filemap_fault+0x6f/0xfd0
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  ? filemap_map_pages+0x15f/0x640
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  __do_fault+0x30/0x130
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  do_fault+0x1d7/0x400
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  handle_mm_fault+0xb48/0x1450
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  do_user_addr_fault+0x1c7/0x740
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  exc_page_fault+0x7c/0x180
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  asm_exc_page_fault+0x26/0x30
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RIP: 0033:0x7f881a56cb0d
+> May 14 14:48:07 smoon7.bkoty.ru kernel: Code: 00 00 00 00 00 66 66 2e 0f 1f 84 00 00 00 00 00 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 83 fa 20 72 23 <c5> fe 6f 06 48 83 fa 40 0f 87 a5 00 00 00 c5 fe 6f 4c 16 e0 c5 fe
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RSP: 002b:00007f87fcff72c8 EFLAGS: 00010202
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RAX: 00007f87dc02a700 RBX: 00007f87fcff8308 RCX: 00007f87fcff7500
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RDX: 0000000000004000 RSI: 00007f8659246f48 RDI: 00007f87dc02a700
+> May 14 14:48:07 smoon7.bkoty.ru kernel: RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+> May 14 14:48:07 smoon7.bkoty.ru kernel: R10: 0000000000000008 R11: 0000000000000246 R12: 0000000000000000
+> May 14 14:48:07 smoon7.bkoty.ru kernel: R13: 00007f87dc001370 R14: 0000000000000009 R15: 00005645d0719a70
+> May 14 14:48:07 smoon7.bkoty.ru kernel:  </TASK>
+> ```
+> 
+> I've seen these errors since the very first kernel of the 6 series, while I see no problem with 5.15 on the same hardware.
+> 
+> These two systems have the same CPU (Intel(R) Core(TM) i5-10500 CPU @ 3.10GHz) but slightly different motherboards, same amount of memory (same  manufacturer, I tested it when plugged in).
+> 
+> The hosts in question don't show this "bug" immediately, but after some time while having "heavy" disk load (torrents). The "bug" shows up whether I use `mitigations=off` or not (at first I thought the "bug" might be related to `mitigations=off`, but I got the above output when I removed that setting from the kernel command line).
+> 
+> What puzzles me is that I don't see these errors on the other hosts (but they don't have "heavy" disk loads), they work just fine. On the other hand, they have different CPUs (not i5-10500). Sometimes (less often than this error) I saw the following in the kernel log (dmesg):
+> 
+> ```
+> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: Machine check events logged
+> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: CPU 0: Machine Check: 0 Bank 0: 9000004000010005
+> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: TSC 95596a63008b
+> May 14 08:09:09 smoon7.bkoty.ru kernel: mce: [Hardware Error]: PROCESSOR 0:a0653 TIME 1684022949 SOCKET 0 APIC 0 microcode f6
+> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: Machine check events logged
+> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: CPU 5: Machine Check: 0 Bank 0: 9000004000010005
+> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: TSC 95c56b82abf0
+> May 14 08:11:39 smoon7.bkoty.ru kernel: mce: [Hardware Error]: PROCESSOR 0:a0653 TIME 1684023099 SOCKET 0 APIC a microcode f6
+> ```
+> 
+> So now I'm thinking of buying a new CPU (same socket) and see if I will see the same error.
 
-> If so do we not maybe want a new feature bit
-> that documents this? Hypervisor then can detect old guests
-> that spin and decide what to do, e.g. prioritise cvq more,
-> or fail FEATURES_OK.
+For the full thread, see bugzilla.
 
-We suffer from this for bare metal as well.
+FYI, filemap_get_folio() is introduced in 3f0c6a07fee6a1 ("mm/filemap:
+Add filemap_get_folio").
 
-But a question is what's wrong with the approach that is used in this
-patch? I've answered that set_rx_mode is not reliable, so it should be
-fine to use workqueue. Except for this, any other thing that worries
-you?
+Anyway, I'm adding this to regzbot:
 
-Thanks
+#regzbot introduced: v5.15..v6.0 https://bugzilla.kernel.org/show_bug.cgi?id=217441
+#regzbot title: NULL pointer dereference on filemap_get_folio() on Intel Core i5-10500
 
->
-> > >
-> > >
-> > > > > --
-> > > > > MST
-> > > > >
-> > >
->
+Thanks.
 
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217441
+
+-- 
+An old man doll... just what I always wanted! - Clara
