@@ -2,120 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8AB5704962
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94747704967
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbjEPJeG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 16 May 2023 05:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S231901AbjEPJfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjEPJeF (ORCPT
+        with ESMTP id S231586AbjEPJfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:34:05 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93330E52
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:34:03 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-135-X5UBcpsYPH-IDE9hxwtcdQ-1; Tue, 16 May 2023 10:34:00 +0100
-X-MC-Unique: X5UBcpsYPH-IDE9hxwtcdQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 16 May
- 2023 10:33:58 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 16 May 2023 10:33:58 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Azeem Shaikh' <azeemshaikh38@gmail.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>
-CC:     "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v3] NFSD: Remove open coding of string copy
-Thread-Topic: [PATCH v3] NFSD: Remove open coding of string copy
-Thread-Index: AQHZhtarLR7mMXSOG0mD9inDFwvZGq9cpMAQ
-Date:   Tue, 16 May 2023 09:33:58 +0000
-Message-ID: <d48a166d1cbc477f9cf063e91f7b3005@AcuMS.aculab.com>
-References: <20230515024044.2677124-1-azeemshaikh38@gmail.com>
-In-Reply-To: <20230515024044.2677124-1-azeemshaikh38@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 16 May 2023 05:35:30 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32E498;
+        Tue, 16 May 2023 02:35:28 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-965ab8ed1c0so2332821866b.2;
+        Tue, 16 May 2023 02:35:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684229727; x=1686821727;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KqGNQlwMx1+Ogs6surmgImDAecFNm6DtkKzA0x5eExc=;
+        b=W96Obq6Kwcr4OetGcA3e6EA08+zU0vL9He1o7bfJHXzN17HPtSZReEWaIIMt2yt24g
+         Ew6cVSbA6jBoWKlen23blhnoHdyJbHi4ICb44jMpgAN5U9Xj/wYw7SQXbL7V4vZOnXr6
+         5BLCOGp4LdSMehP9ePLGGcIO7qz2vOcHfqA/vlAKTk9oNJsNNeoLlvuVSl7gC6qPVkBY
+         6pt+qidwNL4LjxnX9wjXIT5PTdtlkNUxoAPXc2h+n/O985M1RKlp52b/dhNoyFuN0+La
+         4mOfz3xDOpH3PqVrevMD+XLvac3yvwk5HAPNDCue8uCRvw4HHM8/k3ibClCNbVkKX2Q6
+         WFQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684229727; x=1686821727;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KqGNQlwMx1+Ogs6surmgImDAecFNm6DtkKzA0x5eExc=;
+        b=C6h7er3icxVWqPvV3GCTaFdyn0EIgx4WSSXr/3x6Rucpb1eiQYBnSNrw+mvDEKvU9l
+         zeC/fAsSuYJWO/RQ6W5CV9bYoK17pM8n+cXhCM8dDXx3TMZTu9hNH2aIszKzQulGJs0t
+         vHhJMWuTuGcvPzTbs4TO4quLMnYWVPAe4VbnBhkZI5A/cvkurV7P43WeLwEQ7cZEn/EH
+         /I4ZCPJMKvbaKsds1y49725gANFfgMlGHHtXAtS9CIMY78waGvJWh8wdFj2qnPY5WmMr
+         3EO5kouWif39/ZYKDMYUItOrbKhKYdSSnuldRg8lTy72T+5JeNi0gC/AJJxlw9F+Hs1D
+         NpCA==
+X-Gm-Message-State: AC+VfDxbqnWnUw7zBPrjIf12NBmfK2I2siJflciM+D2o5udOiCMhrKb1
+        8NYQfpmZK0eKYT0xVV3Z7nY=
+X-Google-Smtp-Source: ACHHUZ6EF+4ZmDxZNVD6IuepFP0JX54P53UIpTR/tniJEeIm1VuD8GcVE6QpIQqKBuSXvRhrU2K5MA==
+X-Received: by 2002:a17:907:5c5:b0:95f:56e8:1c3c with SMTP id wg5-20020a17090705c500b0095f56e81c3cmr34307227ejb.17.1684229726983;
+        Tue, 16 May 2023 02:35:26 -0700 (PDT)
+Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id la26-20020a170906ad9a00b00967a18df1easm10693805ejb.117.2023.05.16.02.35.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 02:35:26 -0700 (PDT)
+Date:   Tue, 16 May 2023 11:35:24 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc:     jonathanh@nvidia.com, mperttunen@nvidia.com, sudeep.holla@arm.com,
+        talho@nvidia.com, robh@kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefank@nvidia.com,
+        krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v4 6/6] firmware: tegra: bpmp: Add support for DRAM MRQ
+ GSCs
+Message-ID: <ZGNOXO3rRtFx_12R@orome>
+References: <20230511132048.1122075-1-pdeschrijver@nvidia.com>
+ <20230511132048.1122075-7-pdeschrijver@nvidia.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FcNmRFebYumcoH83"
+Content-Disposition: inline
+In-Reply-To: <20230511132048.1122075-7-pdeschrijver@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Azeem Shaikh
-> Sent: 15 May 2023 03:41
-> 
-> Instead of open coding a __dynamic_array(), use the __string() and
-> __assign_str() helper macros that exist for this kind of use case.
 
-Is this actually a dynamic array, or just a char[8] ?
-On 64 bit copying a short fixed-length string is far better
-than any kind of dynamic sized allocation.
+--FcNmRFebYumcoH83
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	David
-
-> 
-> Part of an effort to remove deprecated strlcpy() [1] completely from the
-> kernel[2].
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Fixes: 3c92fba557c6 ("NFSD: Enhance the nfsd_cb_setup tracepoint")
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+On Thu, May 11, 2023 at 04:20:51PM +0300, Peter De Schrijver wrote:
+> Implement support for DRAM MRQ GSCs.
+>=20
+> Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
 > ---
->  fs/nfsd/trace.h |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/nfsd/trace.h b/fs/nfsd/trace.h
-> index 4183819ea082..72a906a053dc 100644
-> --- a/fs/nfsd/trace.h
-> +++ b/fs/nfsd/trace.h
-> @@ -1365,19 +1365,19 @@ TRACE_EVENT(nfsd_cb_setup,
->  		__field(u32, cl_id)
->  		__field(unsigned long, authflavor)
->  		__sockaddr(addr, clp->cl_cb_conn.cb_addrlen)
-> -		__array(unsigned char, netid, 8)
-> +		__string(netid, netid)
->  	),
->  	TP_fast_assign(
->  		__entry->cl_boot = clp->cl_clientid.cl_boot;
->  		__entry->cl_id = clp->cl_clientid.cl_id;
-> -		strlcpy(__entry->netid, netid, sizeof(__entry->netid));
-> +		__assign_str(netid, netid);
->  		__entry->authflavor = authflavor;
->  		__assign_sockaddr(addr, &clp->cl_cb_conn.cb_addr,
->  				  clp->cl_cb_conn.cb_addrlen)
->  	),
->  	TP_printk("addr=%pISpc client %08x:%08x proto=%s flavor=%s",
->  		__get_sockaddr(addr), __entry->cl_boot, __entry->cl_id,
-> -		__entry->netid, show_nfsd_authflavor(__entry->authflavor))
-> +		__get_str(netid), show_nfsd_authflavor(__entry->authflavor))
->  );
-> 
->  TRACE_EVENT(nfsd_cb_setup_err,
-> --
-> 2.40.1.606.ga4b1b128d6-goog
-> 
+>  drivers/firmware/tegra/bpmp-tegra186.c | 232 ++++++++++++++++++-------
+>  drivers/firmware/tegra/bpmp.c          |   4 +-
+>  2 files changed, 168 insertions(+), 68 deletions(-)
+>=20
+> diff --git a/drivers/firmware/tegra/bpmp-tegra186.c b/drivers/firmware/te=
+gra/bpmp-tegra186.c
+> index 2e26199041cd..74575c9f0014 100644
+> --- a/drivers/firmware/tegra/bpmp-tegra186.c
+> +++ b/drivers/firmware/tegra/bpmp-tegra186.c
+> @@ -4,7 +4,9 @@
+>   */
+> =20
+>  #include <linux/genalloc.h>
+> +#include <linux/io.h>
+>  #include <linux/mailbox_client.h>
+> +#include <linux/of_address.h>
+>  #include <linux/platform_device.h>
+> =20
+>  #include <soc/tegra/bpmp.h>
+> @@ -13,12 +15,21 @@
+> =20
+>  #include "bpmp-private.h"
+> =20
+> +enum tegra_bpmp_mem_type { TEGRA_INVALID, TEGRA_SRAM, TEGRA_DRAM };
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Still not convinced about this one.
 
+> +
+>  struct tegra186_bpmp {
+>  	struct tegra_bpmp *parent;
+> =20
+>  	struct {
+> -		struct gen_pool *pool;
+> -		void __iomem *virt;
+> +		union {
+> +			struct {
+> +				void __iomem *virt;
+> +				struct gen_pool *pool;
+> +			} sram;
+> +			struct {
+> +				void *virt;
+> +			} dram;
+> +		};
+
+The drawback of these unions is that they can lead to ambiguity, so you
+need the tegra_bpmp_mem_type enum to differentiate between the two.
+
+If you change this to something like:
+
+	struct {
+		struct gen_pool *pool;
+		void __iomem *sram;
+		void *dram;
+		dma_addr_t phys;
+	} tx, rx;
+
+you eliminate all ambiguity because you can either have pool and sram
+set, or you can have dram set, and depending on which are set you know
+which type of memory you're dealing with.
+
+Plus you then don't need the extra enum to differentiate between them.
+
+Another alternative would be to use something like:
+
+	union {
+		void __iomem *sram;
+		void *dram;
+	} virt;
+
+if you want to avoid the extra 8 bytes. But to be honest, I wouldn't
+bother.
+
+>  		dma_addr_t phys;
+>  	} tx, rx;
+> =20
+> @@ -26,6 +37,8 @@ struct tegra186_bpmp {
+>  		struct mbox_client client;
+>  		struct mbox_chan *channel;
+>  	} mbox;
+> +
+> +	enum tegra_bpmp_mem_type type;
+>  };
+> =20
+>  static inline struct tegra_bpmp *
+> @@ -118,8 +131,17 @@ static int tegra186_bpmp_channel_init(struct tegra_b=
+pmp_channel *channel,
+>  	queue_size =3D tegra_ivc_total_queue_size(message_size);
+>  	offset =3D queue_size * index;
+> =20
+> -	iosys_map_set_vaddr_iomem(&rx, priv->rx.virt + offset);
+> -	iosys_map_set_vaddr_iomem(&tx, priv->tx.virt + offset);
+> +	if (priv->type =3D=3D TEGRA_SRAM) {
+> +		iosys_map_set_vaddr_iomem(&rx, priv->rx.sram.virt + offset);
+> +		iosys_map_set_vaddr_iomem(&tx, priv->tx.sram.virt + offset);
+> +	} else if (priv->type =3D=3D TEGRA_DRAM) {
+> +		iosys_map_set_vaddr(&rx, priv->rx.dram.virt + offset);
+> +		iosys_map_set_vaddr(&tx, priv->tx.dram.virt + offset);
+> +	} else {
+> +		dev_err(bpmp->dev, "Inconsistent state %d of priv->type detected in %s=
+\n",
+> +				priv->type, __func__);
+> +		return -EINVAL;
+> +	}
+
+With an enum you need to do this because theoretically it could happen.
+But practically it will never happen and you can just rely on the pool
+variable, for example, to distinguish.
+
+Thierry
+
+--FcNmRFebYumcoH83
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRjTloACgkQ3SOs138+
+s6HTCxAAiwPF3YuFt2+2YuS9k1+CsKkjOjDesfjtMcnvO5MVQqrB1Ip3JfSaqlOR
+Jnfwm3BtscLNdppy1H91pVbPunZpBlLDPsb0jUpHz//rJBJv6zRPhGcgONJs9L5M
+EWlzz2wlAEraOggoTIIqh7Zk71l0hTl5IuZgiG8Kag2CONg1OzR1BI+nSSnoKH8Y
+1CyiYqzPNjYYm9n59XVEWhlfojVuHkaTzUFa4vb+JN4eC3v6iGkophBruh+M6YcA
+xk53akXqXGXJVL1OGOGAH/nmIccvpoWalTMB7PrMyaPa/Tm0hXIo1f1r3RhgqyNz
+rflto9GBIIwcNN85ojy8abrQHammczomtTsPmxkdWGanvqmFzx8jJQrAugGqAGgN
+6Mky76sUXGmwDsHJ3HX2T11xyYE0Sfc1jnIKNuZ12Z90ag545O8XNZJ8iflKCvgd
+nb3VwcMJz2ECHc9/80wB8ECJMxekrdccOhmedXwgC6sP127wrQTrDZbe2Bm07jTA
+23AiIWGLm8uptkq6NvzYHlexoYM9ma/3bk06rodXJIRmTrldLt+OFZsS3FcS/SaK
+BUBbFQLiKpNtRvVcnBzAkiNEu4Yu+oxqkeasC8VnWKTicenIb/M/5mpGyJ6PUBvy
+wCTV0MTG+FPONz855yiIj0Qz2a8G85whHcicZKsEKPMpDOyUXzg=
+=1YeJ
+-----END PGP SIGNATURE-----
+
+--FcNmRFebYumcoH83--
