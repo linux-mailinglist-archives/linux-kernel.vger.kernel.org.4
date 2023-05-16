@@ -2,143 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29407045BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB687045BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjEPHCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S230443AbjEPHDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjEPHCi (ORCPT
+        with ESMTP id S230444AbjEPHDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:02:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD1B40C0;
-        Tue, 16 May 2023 00:02:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8C386351C;
-        Tue, 16 May 2023 07:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4998C4339B;
-        Tue, 16 May 2023 07:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684220554;
-        bh=X9UrfPvqqhVbnlEuITxxN82KxDibpUaM4pahEhKSVQQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dqKO7pq5UGDtIJ1c5ASW+yMbd+dr+SgekKIq/AifX6XgNmFCfW50hv5yfQTrDLvDr
-         M4utw2ZSRmQ96/DsD9ZUmp/r+VaLrJr1LX1FI6MoMYF4GvbYPN3L0DC7KZE0fTEGrJ
-         wRGz2Vc0tURGM6JPz/zlzk7K22VrIScJh+vJ2aYdsXYibBBAxnf6geAyMG7cuxJ7V8
-         8CQz/I5BxR/sof/mhEQkRq1eBp5AHh4Ys9onieZWZkw4e/VX/lxen2drPKmOZ2FQr5
-         zsYRvuA3svHu+9GOVUfcp17byP8gyjlSzUmiEFCKjHzuBacNZJc5qqy5w7qj2EGvfV
-         zyKuKFKeQlTdw==
-Date:   Tue, 16 May 2023 10:02:27 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de
-Subject: Re: [PATCH v5 RESEND 17/17] mm: ioremap: remove unneeded
- ioremap_allowed and iounmap_allowed
-Message-ID: <ZGMqg8D0LOSH6SpX@kernel.org>
-References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-18-bhe@redhat.com>
+        Tue, 16 May 2023 03:03:05 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DC93C32
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:02:53 -0700 (PDT)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 39B5D240003;
+        Tue, 16 May 2023 07:02:50 +0000 (UTC)
+Message-ID: <280c0994-f7cd-bb0e-8c68-62f72a4a38ca@ghiti.fr>
+Date:   Tue, 16 May 2023 09:02:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515090848.833045-18-bhe@redhat.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] iommu: PGTABLE_LPAE is also for RISCV
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux.dev, Conor Dooley <conor@kernel.org>,
+        linux-riscv@lists.infradead.org
+References: <20230330060105.29460-1-rdunlap@infradead.org>
+ <2529dd93-2cb2-6ed8-20c0-c424e6613717@arm.com>
+ <833203b0-aee5-eb23-afb4-ff71a3024258@infradead.org>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <833203b0-aee5-eb23-afb4-ff71a3024258@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 05:08:48PM +0800, Baoquan He wrote:
-> Now there are no users of ioremap_allowed and iounmap_allowed, clean
-> them up.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
+Hi Randy,
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-> ---
->  include/asm-generic/io.h | 26 --------------------------
->  mm/ioremap.c             |  6 ------
->  2 files changed, 32 deletions(-)
-> 
-> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-> index 39244c3ee797..bac63e874c7b 100644
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -1047,32 +1047,6 @@ static inline void iounmap(volatile void __iomem *addr)
->  #elif defined(CONFIG_GENERIC_IOREMAP)
->  #include <linux/pgtable.h>
->  
-> -/*
-> - * Arch code can implement the following two hooks when using GENERIC_IOREMAP
-> - * ioremap_allowed() return a bool,
-> - *   - true means continue to remap
-> - *   - false means skip remap and return directly
-> - * iounmap_allowed() return a bool,
-> - *   - true means continue to vunmap
-> - *   - false means skip vunmap and return directly
-> - */
-> -#ifndef ioremap_allowed
-> -#define ioremap_allowed ioremap_allowed
-> -static inline bool ioremap_allowed(phys_addr_t phys_addr, size_t size,
-> -				   unsigned long prot)
-> -{
-> -	return true;
-> -}
-> -#endif
-> -
-> -#ifndef iounmap_allowed
-> -#define iounmap_allowed iounmap_allowed
-> -static inline bool iounmap_allowed(void *addr)
-> -{
-> -	return true;
-> -}
-> -#endif
-> -
->  void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
->  				   pgprot_t prot);
->  
-> diff --git a/mm/ioremap.c b/mm/ioremap.c
-> index 4a7749d85044..8cb337446bba 100644
-> --- a/mm/ioremap.c
-> +++ b/mm/ioremap.c
-> @@ -32,9 +32,6 @@ void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
->  	phys_addr -= offset;
->  	size = PAGE_ALIGN(size + offset);
->  
-> -	if (!ioremap_allowed(phys_addr, size, pgprot_val(prot)))
-> -		return NULL;
-> -
->  #ifdef IOREMAP_START
->  	area = __get_vm_area_caller(size, VM_IOREMAP, IOREMAP_START,
->  				    IOREMAP_END, __builtin_return_address(0));
-> @@ -68,9 +65,6 @@ void generic_iounmap(volatile void __iomem *addr)
->  {
->  	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
->  
-> -	if (!iounmap_allowed(vaddr))
-> -		return;
-> -
->  	if (is_ioremap_addr(vaddr))
->  		vunmap(vaddr);
->  }
-> -- 
-> 2.34.1
-> 
-> 
+On 3/30/23 18:49, Randy Dunlap wrote:
+>
+> On 3/30/23 09:34, Robin Murphy wrote:
+>> On 2023-03-30 07:01, Randy Dunlap wrote:
+>>> On riscv64, linux-next-20233030 (and for several days earlier),
+>>> there is a kconfig warning:
+>>>
+>>> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
+>>>     Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+>>>     Selected by [y]:
+>>>     - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
+>>>
+>>> and build errors:
+>>>
+>>> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L140':
+>>> io-pgtable-arm.c:(.init.text+0x1e8): undefined reference to `alloc_io_pgtable_ops'
+>>> riscv64-linux-ld: drivers/iommu/io-pgtable-arm.o: in function `.L168':
+>>> io-pgtable-arm.c:(.init.text+0xab0): undefined reference to `free_io_pgtable_ops'
+>>> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L140':
+>>> ipmmu-vmsa.c:(.text+0xbc4): undefined reference to `free_io_pgtable_ops'
+>>> riscv64-linux-ld: drivers/iommu/ipmmu-vmsa.o: in function `.L0 ':
+>>> ipmmu-vmsa.c:(.text+0x145e): undefined reference to `alloc_io_pgtable_ops'
+>>>
+>>> Add RISCV as an allowed ARCH dependency to fix these problems.
+>>>
+>>> Fixes: d286a58bc8f4 ("iommu: Tidy up io-pgtable dependencies")
+>> BTW that doesn't look like the right fix target - this presumably dates back as far as when ARCH_RENESAS was added to RISCV, such that it was possible to start selecting IPMMU_VMSA without COMPILE_TEST?
+> OK, I can go with that. Thanks for your help.
+>
 
--- 
-Sincerely yours,
-Mike.
+Any updates on this fix?
+
+
+Thanks,
+
+
+Alex
+
