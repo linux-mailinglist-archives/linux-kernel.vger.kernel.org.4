@@ -2,110 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301C9704D57
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BFDA704D5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbjEPMFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
+        id S232821AbjEPMGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbjEPMFf (ORCPT
+        with ESMTP id S232607AbjEPMF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:05:35 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBEB59C0;
-        Tue, 16 May 2023 05:05:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VioIoq8_1684238723;
-Received: from 30.240.108.124(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VioIoq8_1684238723)
-          by smtp.aliyun-inc.com;
-          Tue, 16 May 2023 20:05:27 +0800
-Message-ID: <e1242268-e7b6-d77c-a94f-edd913845ca7@linux.alibaba.com>
-Date:   Tue, 16 May 2023 20:05:21 +0800
+        Tue, 16 May 2023 08:05:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6B110D2;
+        Tue, 16 May 2023 05:05:54 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GBTu8j016044;
+        Tue, 16 May 2023 12:05:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=tX/my1SwYZPgLxEVNvnjUMSY7/9Bl5CftXwMRn4aaL0=;
+ b=BPGWpxhkcaECGNCG/BfPrzTHBBLaIsPErYJs+s86L3uCUja7XxfSHa2+skHywIV5ILs1
+ q1XD1SGP3AcDcL24HZPpWyffXJp7dUDzPbYlx6FDV7V1oqXXMaHpR0MBqGCdwkLuJa9+
+ cnB6++WKQY3qwJpUcDo2YTPFEdS+Cq9dK5xjIq2z97zh9jyg/EJru95GmKH/PGQwX0kR
+ gj7Le0KMvhGqbn77Lx0vSP1GC9W9O0zPvqXW2Rwo9YfS357ylLyn9fyxmn6OlRkaKifp
+ 85PiVT0D+mPQcvwhMbL2cKwQ5SvGT3gAvuWlb7AlL93SeoeN3uZfZgnvR9h5sEvzwaRg sQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkqg8t434-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:05:46 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GC5jBY019170
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 12:05:45 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 16 May 2023 05:05:39 -0700
+Date:   Tue, 16 May 2023 17:35:35 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Kathiravan T <quic_kathirav@quicinc.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v11 7/9] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <20230516120535.GB1679@varda-linux.qualcomm.com>
+References: <cover.1683630932.git.quic_varada@quicinc.com>
+ <b4c9dcfbfc328e9404be0edeaa70dde076cb7144.1683630932.git.quic_varada@quicinc.com>
+ <dc816d43-d3ca-62be-3e8d-9e6d7470c530@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 0/2] capability: Introduce CAP_BLOCK_ADMIN
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        louxiao.lx@alibaba-inc.com
-References: <20230511070520.72939-1-tianjia.zhang@linux.alibaba.com>
- <b645e195-7875-9fc3-a8de-6676dfe800b8@schaufler-ca.com>
-Content-Language: en-US
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <b645e195-7875-9fc3-a8de-6676dfe800b8@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <dc816d43-d3ca-62be-3e8d-9e6d7470c530@quicinc.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: CZTdxF-EgkOSF8rP1cgjb77J_zTu2FLL
+X-Proofpoint-GUID: CZTdxF-EgkOSF8rP1cgjb77J_zTu2FLL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
+ impostorscore=0 clxscore=1015 mlxscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160102
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
-
-On 5/12/23 12:17 AM, Casey Schaufler wrote:
-> On 5/11/2023 12:05 AM, Tianjia Zhang wrote:
->> Separated fine-grained capability CAP_BLOCK_ADMIN from CAP_SYS_ADMIN.
->> For backward compatibility, the CAP_BLOCK_ADMIN capability is included
->> within CAP_SYS_ADMIN.
->>
->> Some database products rely on shared storage to complete the
->> write-once-read-multiple and write-multiple-read-multiple functions.
->> When HA occurs, they rely on the PR (Persistent Reservations) protocol
->> provided by the storage layer to manage block device permissions to
->> ensure data correctness.
->>
->> CAP_SYS_ADMIN is required in the PR protocol implementation of existing
->> block devices in the Linux kernel, which has too many sensitive
->> permissions, which may lead to risks such as container escape. The
->> kernel needs to provide more fine-grained permission management like
->> CAP_NET_ADMIN to avoid online products directly relying on root to run.
->>
->> CAP_BLOCK_ADMIN can also provide support for other block device
->> operations that require CAP_SYS_ADMIN capabilities in the future,
->> ensuring that applications run with least privilege.
+On Mon, May 15, 2023 at 04:06:29PM +0530, Kathiravan T wrote:
 > 
-> Can you demonstrate that there are cases where a program that needs
-> CAP_BLOCK_ADMIN does not also require CAP_SYS_ADMIN for other operations?
-> How much of what's allowed by CAP_SYS_ADMIN would be allowed by
-> CAP_BLOCK_ADMIN? If use of a new capability is rare it's difficult to
-> justify.
+> On 5/9/2023 5:24 PM, Varadarajan Narayanan wrote:
+> >Add USB phy and controller related nodes
+> >
+> >SS PHY need two supplies and HS PHY needs three supplies. 0.925V
+> >and 3.3V are from fixed regulators and 1.8V is generated from
+> >PMIC's LDO
+> >
+> >Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> >---
+> >  Changes in v11:
+> >	- Rename dwc_0 -> usb_0_dwc3
+> >  Changes in v10:
+> >	- Fix regulator definitions
+> >  Changes in v8:
+> >	- Change clocks order to match the bindings
+> >  Changes in v7:
+> >	- Change com_aux -> cfg_ahb
+> >  Changes in v6:
+> >	- Introduce fixed regulators for the phy
+> >	- Resolved all 'make dtbs_check' messages
+> >
+> >  Changes in v5:
+> >	- Fix additional comments
+> >	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >	- 'make dtbs_check' giving the following messages since
+> >	  ipq9574 doesn't have power domains. Hope this is ok
+> >
+> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> >		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> >
+> >  Changes in v4:
+> >	- Use newer bindings without subnodes
+> >	- Fix coding style issues
+> >
+> >  Changes in v3:
+> >	- Insert the nodes at proper location
+> >
+> >  Changes in v2:
+> >	- Fixed issues flagged by Krzysztof
+> >	- Fix issues reported by make dtbs_check
+> >	- Remove NOC related clocks (to be added with proper
+> >	  interconnect support)
+> >---
+> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 104 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 104 insertions(+)
+> >
+> >diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >index 93b4ba9..42b61f6 100644
+> >--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> >@@ -150,6 +150,24 @@
+> >  		method = "smc";
+> >  	};
+> >+	fixed_3p3: s3300 {
+> >+		compatible = "regulator-fixed";
+> >+		regulator-min-microvolt = <3300000>;
+> >+		regulator-max-microvolt = <3300000>;
+> >+		regulator-boot-on;
+> >+		regulator-always-on;
+> >+		regulator-name = "fixed_3p3";
+> >+	};
+> >+
+> >+	fixed_0p925: s0925 {
+> >+		compatible = "regulator-fixed";
+> >+		regulator-min-microvolt = <925000>;
+> >+		regulator-max-microvolt = <925000>;
+> >+		regulator-boot-on;
+> >+		regulator-always-on;
+> >+		regulator-name = "fixed_0p925";
+> >+	};
+> >+
+> >  	reserved-memory {
+> >  		#address-cells = <2>;
+> >  		#size-cells = <2>;
+> >@@ -191,6 +209,45 @@
+> >  			reg = <0x00060000 0x6000>;
+> >  		};
+> >+		usb_0_qusbphy: phy@7b000 {
+> >+			compatible = "qcom,ipq9574-qusb2-phy";
+> >+			reg = <0x0007b000 0x180>;
+> >+			#phy-cells = <0>;
+> >+
+> >+			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> >+				 <&xo_board_clk>;
+> >+			clock-names = "cfg_ahb",
+> >+				      "ref";
+> >+
+> >+			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> >+			status = "disabled";
+> >+		};
+> >+
+> >+		usb_0_qmpphy: phy@7d000 {
+> >+			compatible = "qcom,ipq9574-qmp-usb3-phy";
+> >+			reg = <0x0007d000 0xa00>;
+> >+			#phy-cells = <0>;
+> >+
+> >+			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> >+				 <&xo_board_clk>,
+> >+				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> >+				 <&gcc GCC_USB0_PIPE_CLK>;
+> >+			clock-names = "aux",
+> >+				      "ref",
+> >+				      "cfg_ahb",
+> >+				      "pipe";
+> >+
+> >+			resets = <&gcc GCC_USB0_PHY_BCR>,
+> >+				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> >+			reset-names = "phy",
+> >+				      "phy_phy";
+> >+
+> >+			status = "disabled";
+> >+
+> >+			#clock-cells = <0>;
+> >+			clock-output-names = "usb0_pipe_clk";
+> >+		};
+> >+
+> >  		pcie0_phy: phy@84000 {
+> >  			compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+> >  			reg = <0x00084000 0x1000>;
+> >@@ -560,6 +617,53 @@
+> >  			status = "disabled";
+> >  		};
+> >+		usb3: usb@8a00000 {
 > 
+> node address should be updated to 8af8800 ?
 
-For the previous non-container scenarios, the block device is a shared
-device, because the business-system generally operates the file system
-on the block. Therefore, directly operating the block device has a high
-probability of affecting other processes on the same host, and it is a
-reasonable requirement to need the CAP_SYS_ADMIN capability.
+Ok. Will update and post a new patchset.
 
-But for a database running in a container scenario, especially a
-container scenario on the cloud, it is likely that a container
-exclusively occupies a block device. That is to say, for a container,
-its access to the block device will not affect other process, there is
-no need to obtain a higher CAP_SYS_ADMIN capability.
-
-For a file system similar to distributed write-once-read-many, it is
-necessary to ensure the correctness of recovery, then when recovery
-occurs, it is necessary to ensure that no inflighting-io is completed
-after recovery.
-
-This can be guaranteed by performing operations such as SCSI/NVME
-Persistent Reservations on block devices on the distributed file system.
-Therefore, at present, it is only necessary to have the relevant
-permission support of the control command of such container-exclusive
-block devices.
-
-Kind regards,
-Tianjia
+Thanks
+Varada
