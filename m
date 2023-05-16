@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EF2704903
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874CB704905
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjEPJVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60228 "EHLO
+        id S232170AbjEPJV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbjEPJVJ (ORCPT
+        with ESMTP id S232126AbjEPJVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:21:09 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173EF49E4
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:20:35 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso20803474a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:20:35 -0700 (PDT)
+        Tue, 16 May 2023 05:21:10 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5E11997;
+        Tue, 16 May 2023 02:20:37 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so17627175e9.1;
+        Tue, 16 May 2023 02:20:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684228833; x=1686820833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AKmrFlgSWX+t+l7PFgADejC3QH11/GIGNmgdRMFWF4M=;
-        b=wNjphbz7UyLurZVuOw11aYjCR9pjaj5kpOwiOgs5llFTjhoQ2nXjO7AkDn85sl31VK
-         AzibSy1qBWebYtFSQHQcm9jsOY4JZn8F+S3tGoAWBlKaORwFqBgNo3LnwLF+g/hJcy37
-         s/lmssAGNCtAFfqz9EqYzmCTG1ZpMZtO1Gp2v+IZus6A7PKbpxrn66+lB23RkxiXm+ze
-         ADy5a4oSp2rYpBfugLJDh+i1YPeC3gt8PnDhEqiMRpCcPTBJ1D4mRFjbOEMe5RoKk4XZ
-         VqUMml0LLnFBkYhtMFX1QJfA2LYdgiJgKYnkE0qjxoqpJG3AHLyunTzBzWTMIY8ZhB4M
-         H83A==
+        d=gmail.com; s=20221208; t=1684228833; x=1686820833;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bf8niA9dFNqb8/6zqk0cfY1upregS7xh6PWdNGORQhM=;
+        b=mUot4xoBX4iGmqkstjP8aDJ3zBNwYhA2G4z426kWrguLoC0BitUwFzUzMQnxxEIgHA
+         FtbopgdIm35fJX5ntP5FINCK308Gd6qTfq/m+efAJUTNYfLeflcddgt016YnNIE4VnOM
+         YI5ocNCinhb7Sf9b2UDZFacTlcZsSt48XAz48AtqZnvfgrGRpJbYtTR1gKvxMLpCBAcu
+         oQ0ZVyQQWStLf8S430aUj42YpUpaFWHaMQGWuYJUSw22k0qpkfAuT5LPwvUYSIhix61o
+         lfoHB3/7Gobohxx4bSogCvdsogiyVX1VbtH4RHigNT3CsH3gPHHfXbJJZaXv/zUw/K5r
+         dfxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1684228833; x=1686820833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AKmrFlgSWX+t+l7PFgADejC3QH11/GIGNmgdRMFWF4M=;
-        b=Q5yRs1FLs9+2yeLr6KufCOe3qwGWDUOjSByij1gnbRQfDDRY5shWTEPMI0h94FsI0Y
-         uOyEBshZdT3WkaY97tAxoHKDqrXMCnVI//7nyzkf+9C2dvPPPQKu9vZNX+6ch9H5s+CQ
-         cCpZ89GOgE41MRreqgsImPk6AG6w971u5ge6pWcrJ+zsL51iDNrR/8d5lwu08sG8YGrX
-         +W/QW3Q6l5VRGdvDkjipg5bNSKr4dcvQDHUU6zLG4Vn26/aF55x1/zi97cLVKiDPT26b
-         b3DH1vQshkpPhV01dxe+c05Fge3D8EE9tU0jCArWYzLrV6xxHyMD89Mph2mJer1VeJNH
-         QeMg==
-X-Gm-Message-State: AC+VfDyYQH6i5J5PvmKqPIqlurWvYVnpapUzvQpGpodkR5IIMojIeb7H
-        OvXCEcOeRVeoeBZuI/Mw21qk1g==
-X-Google-Smtp-Source: ACHHUZ6BJWFuWCwXtypRGM2NV6a/s3a/P/PDkDpk8hHfQebAywD0uX9kjk0A0N0fAJ3zx6ufXn35Nw==
-X-Received: by 2002:a05:6402:202a:b0:504:8c1a:70db with SMTP id ay10-20020a056402202a00b005048c1a70dbmr31410720edb.32.1684228832934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bf8niA9dFNqb8/6zqk0cfY1upregS7xh6PWdNGORQhM=;
+        b=Y/DrMUY8TitrLqXMxLlxQ25QtcsdaQ+Rmf+zvJhVmWMtcny8/vjX2K+NTcRiey51i4
+         yctr9GtjlUA8vhizu9ckBOxp3tyh9JCP40y0ioHbA2WvHaV3NHbjEYrBYSkB2aVJEr//
+         TlRfWJzj8aj153U9vAMimPPE+I3KWmDJVhr1QxDH17cz8APH7lnOih/X6Jvv33xzM3Yr
+         GaoMpbU6JtL52CidPmUQmyaPRrOBF5+2/FtwMJKIckS9jpPsyeeM3bYdYPhRxqC8Sk9k
+         7TgumqT/xid5JeXMP7FDKObjzWZsF++iqvCVmTGCyzavyiEhbDIq/g6G46uLs1TN3AZj
+         3wzA==
+X-Gm-Message-State: AC+VfDzhXNLXLwQIf+QL38nt3iJvopqJEIZiHSfuPaeFxX3UG2Mje9Nc
+        OBdENQHdJiD1hxcZq6zvrw4=
+X-Google-Smtp-Source: ACHHUZ5eDj7Yehs023857OsvA5mGGLmTFEZC+rtL63WQL5IwzfcHatKOCLG6ZMbny3CyAgPXBC80PA==
+X-Received: by 2002:adf:f2ca:0:b0:307:8b6f:dcf1 with SMTP id d10-20020adff2ca000000b003078b6fdcf1mr24326445wrp.25.1684228833127;
+        Tue, 16 May 2023 02:20:33 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id r14-20020a5d494e000000b003063a92bbf5sm1904018wrs.70.2023.05.16.02.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 16 May 2023 02:20:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id v16-20020a056402185000b0050cc4461fc5sm7874223edy.92.2023.05.16.02.20.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 02:20:32 -0700 (PDT)
-Message-ID: <c4d30304-08d8-6a31-8f91-7840fe2922fb@linaro.org>
-Date:   Tue, 16 May 2023 11:20:30 +0200
+Date:   Tue, 16 May 2023 10:20:30 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 000/246] 6.3.3-rc1 review
+Message-ID: <ZGNK3vxOsQXf3d9K@debian>
+References: <20230515161722.610123835@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V8 RESEND 0/4] Add S4 SoC PLL and Peripheral clock
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
-References: <20230516064736.10270-1-yu.tu@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516064736.10270-1-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 08:47, Yu Tu wrote:
-> 1. Add S4 SoC PLL and Peripheral clock controller dt-bindings.
-> 2. Add PLL and Peripheral clock controller driver for S4 SOC.
-> 
-> Yu Tu (4):
->   dt-bindings: clock: document Amlogic S4 SoC PLL clock controller
->   dt-bindings: clock: document Amlogic S4 SoC peripherals clock
->     controller
->   clk: meson: S4: add support for Amlogic S4 SoC PLL clock driver
->   clk: meson: s4: add support for Amlogic S4 SoC peripheral clock
->     controller
-> 
-> V7 -> V8:
-> 1. Change patch 0001/0002 dt-bindings title description, remove "meson".
-> Suggested by Dmitry, Neil.
+Hi Greg,
 
-So you only removed one word from title and description? This does not
-justify dropping review tag.
+On Mon, May 15, 2023 at 06:23:32PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.3 release.
+> There are 246 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-You already got a comment for this - add the tag.
+Build test (gcc version 12.2.1 20230511):
+mips: 52 configs -> no failure
+arm: 71 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Best regards,
-Krzysztof
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
+[1]. https://openqa.qa.codethink.co.uk/tests/3539
+[2]. https://openqa.qa.codethink.co.uk/tests/3540
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
