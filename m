@@ -2,154 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D41704E94
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEC9704EAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbjEPNDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
+        id S233478AbjEPNFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjEPNDQ (ORCPT
+        with ESMTP id S233522AbjEPNF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:03:16 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CEF4EED;
-        Tue, 16 May 2023 06:02:46 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 398454A9;
-        Tue, 16 May 2023 15:02:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1684242150;
-        bh=TlNdBKkLAEInokDFjqPTsQOhyqAowP6vdWV3DseKRdI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=F3jTIoCqLOBdBANGTURE8Lv4rZHMVH+exMuINBzmHL0WuJKXKceSIRHg1mu1duOJl
-         AIa/708sqhAtsqNlybfXBoUtQ3AsizEdrakqpYdyou2gDHe8mNNZFBC/f13zR8FgI8
-         fsEZZIhHBXlS/o0OU37q/DGcj79CxsxtG+4pFXmg=
-Message-ID: <80f05939-1cc8-e435-138d-b2f519c3b407@ideasonboard.com>
-Date:   Tue, 16 May 2023 16:02:37 +0300
+        Tue, 16 May 2023 09:05:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1D13AB5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684242226;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tINlKvgyQ2vAChliCA1uarlkfAXboH0fEYXvp0VtNa8=;
+        b=YVwN4ss6jwJEsfHE+3sIoruLuIflHiNgq9Oim+Lfupv8uY2PKSe70Y52pmFBafUnfFRKfp
+        5uS9psnP9kHTWiwlncNc/40erE46546ngljvk6Za0ob+YEHor5yplpRD/Lj1QMSsaXk92V
+        BGEvKBMKKdU04TrT/dEKR5h+ohllVz4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-264-RiGwLzi-MrG956DbXJ3JHg-1; Tue, 16 May 2023 09:03:42 -0400
+X-MC-Unique: RiGwLzi-MrG956DbXJ3JHg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96A52101A551;
+        Tue, 16 May 2023 13:03:41 +0000 (UTC)
+Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EDF3C63F5F;
+        Tue, 16 May 2023 13:03:39 +0000 (UTC)
+Date:   Tue, 16 May 2023 21:03:36 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        hch@infradead.org, agordeev@linux.ibm.com,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
+        deller@gmx.de, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        openrisc@lists.librecores.org
+Subject: Re: [PATCH v5 RESEND 03/17] openrisc: mm: remove unneeded early
+ ioremap code
+Message-ID: <ZGN/KDhJDc0oSUi/@MiWiFi-R3L-srv>
+References: <20230515090848.833045-1-bhe@redhat.com>
+ <20230515090848.833045-4-bhe@redhat.com>
+ <ZGMf+P6yccCYYI07@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
-To:     Ludwig Zenz <lzenz@dh-electronics.com>
-Cc:     Matti.Vaittinen@fi.rohmeurope.com, andriy.shevchenko@intel.com,
-        andriy.shevchenko@linux.intel.com, broonie@kernel.org,
-        devicetree@vger.kernel.org, hverkuil@xs4all.nl, khalasa@piap.pl,
-        krzysztof.kozlowski+dt@linaro.org,
-        laurent.pinchart+renesas@ideasonboard.com, lgirdwood@gmail.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, luca.ceresoli@bootlin.com,
-        m.tretter@pengutronix.de, marex@denx.de, mchehab@kernel.org,
-        mpagano@gentoo.org, peda@axentia.se, robh+dt@kernel.org,
-        sakari.ailus@linux.intel.com, satish.nagireddy@getcruise.com,
-        wsa@kernel.org
-References: <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
- <20230516123549.3120-1-lzenz@dh-electronics.com>
-Content-Language: en-US
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20230516123549.3120-1-lzenz@dh-electronics.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGMf+P6yccCYYI07@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 16/05/2023 15:35, Ludwig Zenz wrote:
-> On Wed, 26 Apr 2023 14:51:12 +0300, Tomi Valkeinen wrote:
+On 05/16/23 at 09:17am, Mike Rapoport wrote:
+> On Mon, May 15, 2023 at 05:08:34PM +0800, Baoquan He wrote:
+> > Under arch/openrisc, there isn't any place where ioremap() is called.
+> > It means that there isn't early ioremap handling needed in openrisc,
+> > So the early ioremap handling code in ioremap() of
+> > arch/openrisc/mm/ioremap.c is unnecessary and can be removed.
 > 
-> [...]
-> 
->>   +static int ub960_configure_ports_for_streaming(struct ub960_data *priv,
->>   +					       struct v4l2_subdev_state *state)
->>   +{
->>   +	u8 fwd_ctl;
->>   +	struct {
->>   +		u32 num_streams;
->>   +		u8 pixel_dt;
->>   +		u8 meta_dt;
->>   +		u32 meta_lines;
->>   +		u32 tx_port;
->>   +	} rx_data[UB960_MAX_RX_NPORTS] = {};
->>   +	u8 vc_map[UB960_MAX_RX_NPORTS] = {};
->>   +	struct v4l2_subdev_route *route;
->>   +	unsigned int nport;
->>   +	int ret;
->>   +
->>   +	ret = ub960_validate_stream_vcs(priv);
->>   +	if (ret)
->>   +		return ret;
->>   +
->>   +	ub960_get_vc_maps(priv, state, vc_map);
->>   +
->>   +	for_each_active_route(&state->routing, route) {
->>   +		struct ub960_rxport *rxport;
->>   +		struct ub960_txport *txport;
->>   +		struct v4l2_mbus_framefmt *fmt;
->>   +		const struct ub960_format_info *ub960_fmt;
->>   +		unsigned int nport;
->>   +
->>   +		nport = ub960_pad_to_port(priv, route->sink_pad);
->>   +
->>   +		rxport = priv->rxports[nport];
->>   +		if (!rxport)
->>   +			return -EINVAL;
->>   +
->>   +		txport = priv->txports[ub960_pad_to_port(priv, route->source_pad)];
->>   +		if (!txport)
->>   +			return -EINVAL;
->>   +
->>   +		rx_data[nport].tx_port = ub960_pad_to_port(priv, route->source_pad);
->>   +
->>   +		rx_data[nport].num_streams++;
->>   +
->>   +		/* For the rest, we are only interested in parallel busses */
->>   +		if (rxport->rx_mode == RXPORT_MODE_CSI2_SYNC ||
->>   +		    rxport->rx_mode == RXPORT_MODE_CSI2_ASYNC)
->>   +			continue;
->>   +
->>   +		if (rx_data[nport].num_streams > 2)
->>   +			return -EPIPE;
->>   +
->>   +		fmt = v4l2_subdev_state_get_stream_format(state,
->>   +							  route->sink_pad,
->>   +							  route->sink_stream);
->>   +		if (!fmt)
->>   +			return -EPIPE;
->>   +
->>   +		ub960_fmt = ub960_find_format(fmt->code);
->>   +		if (!ub960_fmt)
->>   +			return -EPIPE;
->>   +
->>   +		if (ub960_fmt->meta) {
->>   +			if (fmt->height > 3) {
->>   +				dev_err(&priv->client->dev,
->>   +					"rx%u: unsupported metadata height %u\n",
->>   +					nport, fmt->height);
->>   +				return -EPIPE;
->>   +			}
->>   +
->>   +			rx_data[nport].meta_dt = ub960_fmt->datatype;
->>   +			rx_data[nport].meta_lines = fmt->height;
->>   +		} else {
->>   +			rx_data[nport].pixel_dt = ub960_fmt->datatype;
->>   +		}
->>   +	}
->>   +
->>   +	/* Configure RX ports */
->>   +
->>   +	fwd_ctl = 0;
-> 
-> Hello, I have only used the first RX port in my setup (ds90ub933 to ds90ub964). The logic for activating/deactivating the Rx ports did not work for me. My suggestion is:
+> It looks like early ioremap was the only user of fixmap on openrisc, so it
+> can be removed as well.
 
-Why doesn't it work? What happens?
+You are right, and you are saying the relic in iounmap() about fixmap
+handling, hope I got it right. I will remove it, the code will be more
+cleaner. Thanks.
 
-  Tomi
+>  
+> > Link: https://lore.kernel.org/linux-mm/YwxfxKrTUtAuejKQ@oscomms1/
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Acked-by: Stafford Horne <shorne@gmail.com>
+> > Cc: Jonas Bonn <jonas@southpole.se>
+> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> > Cc: Stafford Horne <shorne@gmail.com>
+> > Cc: openrisc@lists.librecores.org
+> > ---
+> >  arch/openrisc/mm/ioremap.c | 22 +++++-----------------
+> >  1 file changed, 5 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
+> > index 8ec0dafecf25..90b59bc53c8c 100644
+> > --- a/arch/openrisc/mm/ioremap.c
+> > +++ b/arch/openrisc/mm/ioremap.c
+> > @@ -22,8 +22,6 @@
+> >  
+> >  extern int mem_init_done;
+> >  
+> > -static unsigned int fixmaps_used __initdata;
+> > -
+> >  /*
+> >   * Remap an arbitrary physical address space into the kernel virtual
+> >   * address space. Needed when the kernel wants to access high addresses
+> > @@ -52,24 +50,14 @@ void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
+> >  	p = addr & PAGE_MASK;
+> >  	size = PAGE_ALIGN(last_addr + 1) - p;
+> >  
+> > -	if (likely(mem_init_done)) {
+> > -		area = get_vm_area(size, VM_IOREMAP);
+> > -		if (!area)
+> > -			return NULL;
+> > -		v = (unsigned long)area->addr;
+> > -	} else {
+> > -		if ((fixmaps_used + (size >> PAGE_SHIFT)) > FIX_N_IOREMAPS)
+> > -			return NULL;
+> > -		v = fix_to_virt(FIX_IOREMAP_BEGIN + fixmaps_used);
+> > -		fixmaps_used += (size >> PAGE_SHIFT);
+> > -	}
+> > +	area = get_vm_area(size, VM_IOREMAP);
+> > +	if (!area)
+> > +		return NULL;
+> > +	v = (unsigned long)area->addr;
+> >  
+> >  	if (ioremap_page_range(v, v + size, p,
+> >  			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
+> > -		if (likely(mem_init_done))
+> > -			vfree(area->addr);
+> > -		else
+> > -			fixmaps_used -= (size >> PAGE_SHIFT);
+> > +		vfree(area->addr);
+> >  		return NULL;
+> >  	}
+> >  
+> > -- 
+> > 2.34.1
+> > 
+> > 
+> 
+> -- 
+> Sincerely yours,
+> Mike.
+> 
 
