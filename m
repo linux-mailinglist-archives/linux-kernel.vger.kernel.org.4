@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B90704973
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB1B70497A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjEPJiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S232069AbjEPJjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjEPJiG (ORCPT
+        with ESMTP id S230517AbjEPJjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:38:06 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397011A4;
-        Tue, 16 May 2023 02:38:05 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24e09b4153eso9537471a91.2;
-        Tue, 16 May 2023 02:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684229884; x=1686821884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lcPyZ54ldUCQts1fa3VDXSS+xl2KucQtdFVpSxiwBxc=;
-        b=DU5/VIrFG7reTAO9QxhhODhV5q6nQbRuCcFF7dZS+vo49dM051KgUyLTkEGAY17YhA
-         NUGNaHs5g+z1g2S5tlreNpi9npqPyctgfVcd0xndJqnSK+rH/C5pdo8KDhhlMEDrJrMb
-         8jM9ZfbDgCjNowGUfj9bHMn/XwXc0dcDMrCJIj699zNypRCUhm6quAIUot8k8IuBoiS7
-         Khkjv4D+39G03t+FtvLUJzQm0f3FhID83B+2w8QYJTJh2exa6+XX6eJeeY2ZQaJNciXI
-         eawJngTYScPCmzGUv2+sDdBg+EIu8iAnjOO9eIj30DgNFWMJdg3yYUZdsJ5imJGfrseA
-         DJgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684229884; x=1686821884;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lcPyZ54ldUCQts1fa3VDXSS+xl2KucQtdFVpSxiwBxc=;
-        b=bQpgLLlKJPbeoaaj1mY0QnaQQsiZprBuE8mbbdVr0rJXUaewb9EIAUrjsw0+oFOKIN
-         wdg+8+AZ+3I2OHtIRJeCqpkqmDLdCEQ46yh4xagbIjEpA9pUSKp6xbT0sBsO2mCXoh6Y
-         8MCeASd/uCzXT3Dy48NK82pqdc64hlwNdU4rwFrtkCXY2ex3hysS/Vd+cfVaD5v2NvVR
-         jYE64av8noKBc2kRaKR8Sx85V/743wnhH4ZT1swQpw/zRiwX+XgjNjkxiXyjeAFuRpTl
-         lqfYRRG4OkOlwIiRlX5I5oPNQCn6frsDD2qaLHj7WU28SRxdXDzq/MWxBU4WgIKk2pSh
-         xRdA==
-X-Gm-Message-State: AC+VfDzUsyufdbIJHZqq5SStjBcHSjjfQwyseiXAg9fAUw3X4lcRftlW
-        hxVBD9/9hKNcvvZSCz3DxtVUFclfmZw0X+yeJRU=
-X-Google-Smtp-Source: ACHHUZ66lklqalTjUc1ffo3yWrc+bRrfEml1qJYxgf/ydcHrvZSuxhSIWWtNK8ldHQ96S4/rnUtpu1XgkdQdHu4Km8Y=
-X-Received: by 2002:a17:90a:fe05:b0:250:9d75:abe7 with SMTP id
- ck5-20020a17090afe0500b002509d75abe7mr26052714pjb.47.1684229884532; Tue, 16
- May 2023 02:38:04 -0700 (PDT)
+        Tue, 16 May 2023 05:39:23 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2232326B1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684229962; x=1715765962;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=a+1CyWspy7I4EDdP6KfbpZ/3Tq3hn9rZKAuCfoYYGB4=;
+  b=Y8Ok/K6YflkRpBZzTubIJj8Hls9NIvUidPEVbSK11vz607pzi9dpvY3D
+   a80lmFqMnvuBhDEju7zAZFBWbqGt+LO3Srmf68aYQNJcPzRNDzVJsCUFR
+   qUO4yKH/C98mtv2khFk+hUlxJwBXt13TbW5IDXnuqMpxmpRQONj++4AZD
+   BH5LU1qwWKBcZEFcU7MIjIpU+i01M5oAyZXWKBLb6hPCA/heoRKHAxDk7
+   cCYJZJirVEddKnZDKx0R07Urv4EykLD07jc3GkatEhpouYZdrtt8Lk3UP
+   QQvK5snrCR90p7RhAwLMlQpecC1c4FgGsASTX89SHIzg83TEeQPSrXR7W
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="354597997"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="354597997"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:39:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="731928090"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="731928090"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 02:39:18 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Arjan Van De Ven <arjan@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <jweiner@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [RFC 0/6] mm: improve page allocator scalability via splitting
+ zones
+References: <20230511065607.37407-1-ying.huang@intel.com>
+        <ZF0ET82ajDbFrIw/@dhcp22.suse.cz>
+        <87r0rm8die.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <ZGIUEqhSydAdvRFN@dhcp22.suse.cz>
+Date:   Tue, 16 May 2023 17:38:06 +0800
+In-Reply-To: <ZGIUEqhSydAdvRFN@dhcp22.suse.cz> (Michal Hocko's message of
+        "Mon, 15 May 2023 13:14:26 +0200")
+Message-ID: <87jzx87h1d.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230511093234.3123181-1-suagrfillet@gmail.com>
- <20230511093234.3123181-5-suagrfillet@gmail.com> <20230515143700.26beeacf@gandalf.local.home>
-In-Reply-To: <20230515143700.26beeacf@gandalf.local.home>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Tue, 16 May 2023 09:37:53 +0000
-Message-ID: <CAAYs2=hd1geHCTGrO=JohTYtgu+yj+D7EPono-ADOGfjYnLfrA@mail.gmail.com>
-Subject: Re: [PATCH V10 4/4] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, mhiramat@kernel.org, mark.rutland@arm.com,
-        guoren@kernel.org, jszhang@kernel.org, e.shatokhin@yadro.com,
-        bjorn@rivosinc.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +74,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt <rostedt@goodmis.org> =E4=BA=8E2023=E5=B9=B45=E6=9C=8815=E6=
-=97=A5=E5=91=A8=E4=B8=80 18:37=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, 11 May 2023 17:32:34 +0800
-> Song Shuai <suagrfillet@gmail.com> wrote:
->
-> > select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
-> > for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
-> > the ftrace-direct*.c files in samples/ftrace/.
-> >
-> > Link: https://lore.kernel.org/linux-riscv/c68bac83-5c88-80b1-bac9-e1fd4=
-ea8f07e@yadro.com/T/#ma13012560331c66b051b580b3ab4a04ba44455ec
-> > Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-> > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > Tested-by: Guo Ren <guoren@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> > ---
-> >  arch/riscv/Kconfig                          |  2 ++
-> >  samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
-> >  samples/ftrace/ftrace-direct-multi-modify.c | 40 +++++++++++++++++++++
-> >  samples/ftrace/ftrace-direct-multi.c        | 24 +++++++++++++
-> >  samples/ftrace/ftrace-direct-too.c          | 27 ++++++++++++++
-> >  samples/ftrace/ftrace-direct.c              | 23 ++++++++++++
-> >  6 files changed, 150 insertions(+)
->
-> I acked v8 (which you will need my ack to get these in). Unless this patc=
-h
-> changed since v8, you should include my ack in further versions.
->
-There were no changes in this patch, except for a few tab pretties since v8=
-.
-your Acked-by will still be included.
-> Or you may be waiting longer for its acceptance.
->
-> If the patch did change, please acknowledge that in the next version (or
-> this one if it did change), asking me to ack it again.
->
-> -- Steve
+Michal Hocko <mhocko@suse.com> writes:
 
+> On Fri 12-05-23 10:55:21, Huang, Ying wrote:
+>> Hi, Michal,
+>> 
+>> Thanks for comments!
+>> 
+>> Michal Hocko <mhocko@suse.com> writes:
+>> 
+>> > On Thu 11-05-23 14:56:01, Huang Ying wrote:
+>> >> The patchset is based on upstream v6.3.
+>> >> 
+>> >> More and more cores are put in one physical CPU (usually one NUMA node
+>> >> too).  In 2023, one high-end server CPU has 56, 64, or more cores.
+>> >> Even more cores per physical CPU are planned for future CPUs.  While
+>> >> all cores in one physical CPU will contend for the page allocation on
+>> >> one zone in most cases.  This causes heavy zone lock contention in
+>> >> some workloads.  And the situation will become worse and worse in the
+>> >> future.
+>> >> 
+>> >> For example, on an 2-socket Intel server machine with 224 logical
+>> >> CPUs, if the kernel is built with `make -j224`, the zone lock
+>> >> contention cycles% can reach up to about 12.7%.
+>> >> 
+>> >> To improve the scalability of the page allocation, in this series, we
+>> >> will create one zone instance for each about 256 GB memory of a zone
+>> >> type generally.  That is, one large zone type will be split into
+>> >> multiple zone instances.  Then, different logical CPUs will prefer
+>> >> different zone instances based on the logical CPU No.  So the total
+>> >> number of logical CPUs contend on one zone will be reduced.  Thus the
+>> >> scalability is improved.
+>> >
+>> > It is not really clear to me why you need a new zone for all this rather
+>> > than partition free lists internally within the zone? Essentially to
+>> > increase the current two level system to 3: per cpu caches, per cpu
+>> > arenas and global fallback.
+>> 
+>> Sorry, I didn't get your idea here.  What is per cpu arenas?  What's the
+>> difference between it and per cpu caches (PCP)?
+>
+> Sorry, I didn't give this much thought than the above. Essentially, we
+> have 2 level system right now. Pcp caches should reduce the contention
+> on the per cpu level and that should work reasonably well, if you manage
+> to align batch sizes to the workload AFAIK. If this is not sufficient
+> then why to add the full zone rather than to add another level that
+> caches across a larger than a cpu unit. Maybe a core?
+>
+> This might be a wrong way around going for this but there is not much
+> performance analysis about the source of the lock contention so I am
+> mostly guessing.
 
+I guess that the page allocation scalability will be improved if we put
+more pages in the per CPU caches, or add another level of cache for
+multiple logical CPUs.  Because more page allocation requirements can be
+satisfied without acquiring zone lock.
 
---=20
-Thanks,
-Song
+As other caching system, there are always cases that the caches are
+drained and too many requirements goes to underlying slow layer (zone
+here).  For example, if a workload needs to allocate a huge number of
+pages (larger than cache size) in parallel, it will run into zone lock
+contention finally.  The situation will became worse and worse if we
+share one zone with more and more logical CPUs.  Which is the trend in
+industry now.  Per my understanding, we can observe the high zone lock
+contention cycles in kbuild test because of that.
+
+So, per my understanding, to improve the page allocation scalability in
+bad situations (that is, caching doesn't work well enough), we need to
+restrict the number of logical CPUs that share one zone.  This series is
+an attempt for that.  Better caching can increase the good situations
+and reduce the bad situations.  But it seems hard to eliminate all bad
+situations.
+
+From another perspective, we don't install more and more memory for each
+logical CPU.  This makes it hard to enlarge the default per-CPU cache
+size.
+
+>> > I am also missing some information why pcp caches tunning is not
+>> > sufficient.
+>> 
+>> PCP does improve the page allocation scalability greatly!  But it
+>> doesn't help much for workloads that allocating pages on one CPU and
+>> free them in different CPUs.  PCP tuning can improve the page allocation
+>> scalability for a workload greatly.  But it's not trivial to find the
+>> best tuning parameters for various workloads and workload run time
+>> statuses (workloads may have different loads and memory requirements at
+>> different time).  And we may run different workloads on different
+>> logical CPUs of the system.  This also makes it hard to find the best
+>> PCP tuning globally.
+>
+> Yes this makes sense. Does that mean that the global pcp tuning is not
+> keeping up and we need to be able to do more auto-tuning on local bases
+> rather than global?
+
+Similar as above, I think that PCP helps the good situations performance
+greatly, and splitting zone can help the bad situations scalability.
+They are working at the different levels.
+
+As for PCP auto-tuning, I think that it's hard to implement it to
+resolve all problems (that is, makes PCP never be drained).
+
+And auto-tuning doesn't sound easy.  Do you have some idea of how to do
+that?
+
+>> It would be better to find a solution to improve
+>> the page allocation scalability out of box or automatically.  Do you
+>> agree?
+>
+> Yes. 
+
+Best Regards,
+Huang, Ying
