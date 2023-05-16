@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF4A7052BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA6D7052CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbjEPPtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S234138AbjEPPuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbjEPPsK (ORCPT
+        with ESMTP id S234362AbjEPPtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:48:10 -0400
+        Tue, 16 May 2023 11:49:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BB49EEB;
-        Tue, 16 May 2023 08:47:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DEF903B;
+        Tue, 16 May 2023 08:48:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16A5663BAF;
-        Tue, 16 May 2023 15:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E2EC433D2;
-        Tue, 16 May 2023 15:46:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAE1B63BA0;
+        Tue, 16 May 2023 15:47:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC25EC433A4;
+        Tue, 16 May 2023 15:47:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684252020;
-        bh=Npxydn52yNm/V36pPXxMeglIGETaw+vXx4GeRAC3zdI=;
+        s=k20201202; t=1684252024;
+        bh=ukkcZIi3rJQFXBZ+gAriRZey/Vj4dRVkg8uSR9+fmpc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nxtqi0WvFSlHGYKBv/f3fm7o9hL3K1bNtnja2ASbeAJIlcaB8frJ16v2Tr5vxA72j
-         QIS2ucqJFlN3AvvuNr8oWbDkrwt3zlx+O/pDzwLuCC1X9AGzOcn1QOLG5uEq/scTET
-         4OBbIcE4bPK+GoIgPoPRvQUY0iB4N7WNY98jlmvm4V05vrUT+Y2pV11HVT9na/eaNl
-         XYSOnhzIijZvTI7jf5VXiZbCSY4NSqPqqJX5v9LtKgjUtrvu9n0IOTyZy9o6h0y8FB
-         iRaAiSUG88ROpRuVU2V2rWeA/jn3gSomOm3+LFP3uG+HNumJ4SH3FmP8QxJFPmCAq/
-         cls4GlKSlcD3g==
+        b=TjYro4Jxqr2dc8uNfkbZR0YX17V/6dDi6Z2CqqKR6hDNo8Z/9tATqiR/kGvB/zI7L
+         AC/NrRNyUUeR5MCHYu+8OKvpBW2ic6tGVm98MAOEgi+JJ2B3mHUHv8IwdgasHvPtet
+         z0zGjoC/wdgfpqjgfgBV+X+UrHIrkvjwD4tL1KFgwGvVYp10z8VsW/C21iYUj3RdQI
+         4+4iIMxm2jxDWTfPMmT7VuVQHoaeJTHHxn2vdg0tsuczx5LjPUZzJTQkKT74dOXRwP
+         uhvWYhhj53dwW9OVJz1Vgp/0T6HFI9pWOpCC8CKtMIpd6FyVBv+lP56JnslHxHVBiX
+         ZDLfw0lhn13bA==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -46,9 +46,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Kees Cook <keescook@chromium.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 12/16] ARM: fiq: include asm/mach/irq.h for prototypes
-Date:   Tue, 16 May 2023 17:46:01 +0200
-Message-Id: <20230516154605.517690-13-arnd@kernel.org>
+Subject: [PATCH 13/16] ARM: vfp: add vfp_entry prototype
+Date:   Tue, 16 May 2023 17:46:02 +0200
+Message-Id: <20230516154605.517690-14-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516154605.517690-1-arnd@kernel.org>
 References: <20230516154605.517690-1-arnd@kernel.org>
@@ -66,30 +66,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-There are two global functions in fiq.c that get called from
-other files through an extern declaration, but a W=1 build
-warns about the header not being included before the definition:
+vfp_entry is only called from assembler code, so it does not
+need a declaration. Since gcc complains when extra warnings
+are enabled, add one anyway to avoid:
 
-arch/arm/kernel/fiq.c:85:5: error: no previous prototype for 'show_fiq_list' [-Werror=missing-prototypes]
-arch/arm/kernel/fiq.c:159:13: error: no previous prototype for 'init_FIQ' [-Werror=missing-prototypes]
+arch/arm/vfp/vfpmodule.c:657:17: warning: no previous prototype for function 'vfp_entry' [-Wmissing-prototypes]
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/kernel/fiq.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/vfp/vfp.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/kernel/fiq.c b/arch/arm/kernel/fiq.c
-index 98ca3e3fa847..d2c8e5313539 100644
---- a/arch/arm/kernel/fiq.c
-+++ b/arch/arm/kernel/fiq.c
-@@ -45,6 +45,7 @@
- #include <asm/cacheflush.h>
- #include <asm/cp15.h>
- #include <asm/fiq.h>
-+#include <asm/mach/irq.h>
- #include <asm/irq.h>
- #include <asm/traps.h>
+diff --git a/arch/arm/vfp/vfp.h b/arch/arm/vfp/vfp.h
+index 5cd6d5053271..10d9c0da0fd4 100644
+--- a/arch/arm/vfp/vfp.h
++++ b/arch/arm/vfp/vfp.h
+@@ -375,3 +375,6 @@ struct op {
+ };
  
+ asmlinkage void vfp_save_state(void *location, u32 fpexc);
++struct thread_info;
++asmlinkage void vfp_entry(u32 trigger, struct thread_info *ti, u32 resume_pc,
++			  u32 resume_return_address);
 -- 
 2.39.2
 
