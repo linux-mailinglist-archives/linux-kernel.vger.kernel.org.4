@@ -2,159 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1E7704EDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81343704EEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233145AbjEPNJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S233508AbjEPNMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbjEPNJk (ORCPT
+        with ESMTP id S233424AbjEPNMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:09:40 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5BBE5A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:09:37 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GD8soS007201;
-        Tue, 16 May 2023 13:09:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=nxzlSFyM1UfLWBpMcq3UIm35aq+DbuE26Lnn/akAZ+I=;
- b=nW7C0Bg4E1f/rxu6QWAzs8Zyyf+NOTjzz6ZVecIAT439ZQoCQIGytyYXmqVu+xn6bSqQ
- jTuUeF18T8dwd8m1ACLpLT8H5wDP5wIxA3uKNGdpdZD4dCDQohQ4tNSv2XGsPAsKJqzY
- LBrp5WUYLJHLmX0J0wcUKEMJg0fk+NAnD2YKPqNr8VwPS8AlgaeHCb0c9MmWmO4czlfl
- o/oTX6Tdq9cmluqUYxs5WhxebvZ/mhCVjlHATtfiy41L3ehI6YWmC0ykQUlufmdIdMMw
- Tf5IuyGHjNcW7NMW5zLnvUwssu9tU4GVIInxElVL/tfZajB+IDPHkOTEMKmvihzbiRC6 nw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm9akafr6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 13:09:23 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G1c0nk027917;
-        Tue, 16 May 2023 13:09:19 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sn5f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 13:09:19 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GD9FAk9437940
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 13:09:15 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6B7BC20049;
-        Tue, 16 May 2023 13:09:15 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45F2D20043;
-        Tue, 16 May 2023 13:09:13 +0000 (GMT)
-Received: from tarunpc (unknown [9.199.157.25])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 16 May 2023 13:09:12 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        muchun.song@linux.dev, mike.kravetz@oracle.com,
-        aneesh.kumar@linux.ibm.com, sidhartha.kumar@oracle.com,
-        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
-        jaypatel@linux.ibm.com
-Subject: Re: [PATCH v2] mm/folio: Avoid special handling for order value 0
- in folio_set_order
-In-Reply-To: <ZGJo4UhdyakGFwP7@casper.infradead.org>
-References: <20230515170809.284680-1-tsahu@linux.ibm.com>
- <ZGJo4UhdyakGFwP7@casper.infradead.org>
-Date:   Tue, 16 May 2023 18:39:11 +0530
-Message-ID: <87fs7wqv7s.fsf@linux.ibm.com>
+        Tue, 16 May 2023 09:12:36 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9AFF188;
+        Tue, 16 May 2023 06:12:33 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxzOo+gWNkVCkJAA--.15794S3;
+        Tue, 16 May 2023 21:12:30 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrA5gWNkXF5jAA--.40062S2;
+        Tue, 16 May 2023 21:12:29 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v10 0/2] spi: loongson: add bus driver for the loongson spi
+Date:   Tue, 16 May 2023 21:12:22 +0800
+Message-Id: <20230516131224.25481-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aBal4JNQ1_zjIOHk7A1PNZgOgWx31HNL
-X-Proofpoint-ORIG-GUID: aBal4JNQ1_zjIOHk7A1PNZgOgWx31HNL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_06,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- clxscore=1015 malwarescore=0 mlxscore=0 suspectscore=0 phishscore=0
- spamscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160110
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxkrA5gWNkXF5jAA--.40062S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy3Zr48trWrJw4UuFW5Awb_yoWrtw43pF
+        W5Cas8Kr48AF4xArs3Aay7uFyFv3y5J39rXay3t39ruryDZ34UZryktF1rZr9xAFsIy3Z2
+        qFy0grs5Ga4UZr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+        1UYxBIdaVFxhVjvjDU0xZFpf9x07Uio7NUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mathew,
+Loongson platform support spi hardware controller and this series patch
+was to add spi driver and binding support.
 
-Matthew Wilcox <willy@infradead.org> writes:
+Change in v2:
+		1. This [PATCH v2 1/2] dt-bindings patch need depend on clk patch:
+	 	   https://
+		   lore.kernel.org/all/20230307115022.12846-1-zhuyinbo@loongson.cn/
+		2. Remove the clock-names in spi yaml file.
+		3. Add "loongson,ls7a-spi" compatible in spi yaml file.
+		4. Add an || COMPILE_TEST and drop && PCI then add some CONFIG_PCI
+		   macro to limit some pci code.
+		5. Make the spi driver top code comment block that use C++ style.
+		6. Drop spi->max_speed_hz.
+		7. Add a spin_lock for loongson_spi_setup.
+		8. Add a timeout and cpu_relax() in loongson_spi_write_read_8bit.
+		9. Add spi_transfer_one and drop transfer and rework entire spi
+		   driver that include some necessary changes.
+		10. Use module_init replace subsys_initcall.
+		11. About PM interface that I don't find any issue so I don't add
+		    any changes.
+Change in v3:
+		1. This [PATCH v3 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Drop the unused blank line in loongson,ls-spi.yaml file.
+		3. Replace clock minItems with clock maxItems in yaml file.
+		4. Separate spi driver into platform module, pci module and core
+		   module.
+		5. Replace DIV_ROUND_UP with DIV_ROUND_UP_ULL to fix compile error
+		   "undefined reference to `__aeabi_uldivmod'" and  "__udivdi3 undefined"
+		   that reported by test robot.
+		6. Remove the spin lock.
+		7. Clear the loongson_spi->hz and loongson_spi->mode in setup to fixup
+		   the issue that multiple spi device transfer that maybe cause spi was
+		   be misconfigured.
+Change in v4:
+		1. This [PATCH v4 1/2] dt-bindings patch need depend on clk patch:
+		   https://
+		   lore.kernel.org/all/20230323025229.2971-1-zhuyinbo@loongson.cn/
+		2. Add "#include <linux/io.h>" in spi-loongson-core.c for fix the compile
+		   issue which devm_ioremap no declaration.
+		3. Add "EXPORT_SYMBOL_GPL(loongson_spi_dev_pm_ops)" in
+		   spi-loongson-core.c for fix the compile issue which
+		   loongson_spi_dev_pm_ops undefined.
+Change in v5:
+		1. Get rid of the clock patch's dependency and open-code the clock IDs.
+		2. Fixup checkpatch issue that by installed ply and gitpython package
+		   locally, but this series of patch's code doesn't have any change.
+Change in v6:
+		1. Remove the "#include <dt-bindings/clock/loongson,ls2k-clk.h>" in
+		   yaml file.
+Change in v7:
+		1. Remove the "loongson,ls7a-spi" and change yaml file name as
+		   "loongson,ls2k-spi.yaml".
+		2. Use module_pci_driver and module_platform_driver to replace
+		   module_init and module_exit.
+		3. Drop ".owner	= THIS_MODULE" in spi platform driver.
+		4. Add devm_spi_alloc_master devm_spi_register_master to simplify code.
+		5. Add pci_disable_device() in loongson_spi_pci_unregister.
+Change in v8:
+		1. Add reviewed-by information for spi bindings patch.
+		2. Fixup the uncorrect spi yaml file path in MAINTAINERS file.
+		3. Add spi_master_suspend and spi_master_resume in spi pm function.
+Change in v9:
+		1. Make spi_master_suspend go first in pm suspend.
+Change in v10:
+		1. Fix the compile issue about of_node_get and of_get_property no
+		   declaration.
+		2. set config SPI_LOONGSON_CORE invisible.
+		3. Captial "spi" in commit log and Kconfig file.
+		4. Write header files in alphabetical order.
+		5. Use clamp_val, GENMASK() and BIT() in spi clock setting.
+		6. Optimize clock and mode setting code.
+		7. Use readb_poll_timeout in loongson_spi_write_read_8bit.
+		8. Remove some useless dmesg print.
+		9. Use device_set_node replace of_node_get.
+		10. Use dev_err_probe in code.
+		11. Use devm_clk_get_optional replace devm_clk_get.
+		12. Remove SPI_NO_CS for drop 2k500 non common type spi.
+		13. Use pcim_enable_device() and pcim_iomap_regions() in spi pci
+		    driver.
+		14. Passing the remapped address in loongson_spi_init_master.
+		15. Remove the useless goto flag "err_out".
+		16. Use pci vendor id in pci_ids.h.
+		17. Use devm_platform_ioremap_resource in spi platform driver.
+		18. Remove the useless item in pci_device_id.
+		19. Remove the inned comma in of_device_id.
+		20. Add some headfile in spi_loongson.h.
+		21. Remove the useless extern for loongson_spi_init_master in
+		    spi_loongson.h.
 
-> On Mon, May 15, 2023 at 10:38:09PM +0530, Tarun Sahu wrote:
->> @@ -1951,9 +1950,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
->>  	struct page *p;
->>  
->>  	__folio_clear_reserved(folio);
->> -	__folio_set_head(folio);
->> -	/* we rely on prep_new_hugetlb_folio to set the destructor */
->> -	folio_set_order(folio, order);
->>  	for (i = 0; i < nr_pages; i++) {
->>  		p = folio_page(folio, i);
->>  
->> @@ -1999,6 +1995,9 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
->>  		if (i != 0)
->>  			set_compound_head(p, &folio->page);
->>  	}
->> +	__folio_set_head(folio);
->> +	/* we rely on prep_new_hugetlb_folio to set the destructor */
->> +	folio_set_order(folio, order);
->
-> This makes me nervous, as I said before.  This means that
-> compound_head(tail) can temporarily point to a page which is not marked
-> as a head page.  That's different from prep_compound_page().  You need to
-> come up with some good argumentation for why this is safe, and no amount
-> of testing you do can replace it -- any race in this area will be subtle.
+Yinbo Zhu (2):
+  dt-bindings: spi: add loongson spi
+  spi: loongson: add bus driver for the loongson spi controller
 
-IIUC, I am certain that it is safe to move these calls and agree with what
-Mike said. Here is my reasoning:
+ .../bindings/spi/loongson,ls2k-spi.yaml       |  41 +++
+ MAINTAINERS                                   |  10 +
+ drivers/spi/Kconfig                           |  26 ++
+ drivers/spi/Makefile                          |   3 +
+ drivers/spi/spi-loongson-core.c               | 279 ++++++++++++++++++
+ drivers/spi/spi-loongson-pci.c                |  61 ++++
+ drivers/spi/spi-loongson-plat.c               |  46 +++
+ drivers/spi/spi-loongson.h                    |  47 +++
+ 8 files changed, 513 insertions(+)
 
-When we get pages from CMA allocator for gigantic folio, page refcount
-for each pages is 1.
-page_cache_get_speculative (now folio_try_get_rcu) can take reference to
-any of these pages before prep_compound_gigantic_folio explicitly freeze
-refcount of these pages. With this race condition there are 2 possible situation.
+-- 
+2.20.1
 
-...
-		if (!demote) {
-			if (!page_ref_freeze(p, 1)) {
-				pr_warn("HugeTLB page can not be used due to unexpected inflated ref count\n");
-				goto out_error;
-			}
-		} else {
-			VM_BUG_ON_PAGE(page_count(p), p);
-		}
-		if (i != 0)
-			set_compound_head(p, &folio->page);
-	}
-...
-
-1. In the current code, before freezing refcount of nth (hence, n+th)
-tail page, folio_try_get_rcu might try to take nth tail page reference,
-so refcount will be increased of the nth tail page not the head page
-(as compound head is not yet set for nth tail page). and once this
-happens, nth iteration of loop will cause error and
-prep_compound_gigantic_folio will fail.
-
-So, setting the PG_head at the starting of for-loop or at the end won't
-have any difference to this flow.
-
-2. If reference for the head page is taken by folio_try_get_rcu before
-freezing it, prep_compound_gigantic_page will fail, but before PG_head
-and folio_order of head page is cleared in error path, the caller of
-folio_try_get_rcu path will find that this page is head page and might
-try to operate on its tail pages while these tail pages are invalid.
-
-Hence, It will be safer if we call __folio_set_head and folio_set_order
-after freezing the tail page refcount.
-
-~Tarun
