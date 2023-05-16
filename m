@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709EA7048C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C547048C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbjEPJMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
+        id S231954AbjEPJMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjEPJKQ (ORCPT
+        with ESMTP id S231853AbjEPJKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:10:16 -0400
+        Tue, 16 May 2023 05:10:15 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE654EE8;
-        Tue, 16 May 2023 02:10:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A09F49EC;
+        Tue, 16 May 2023 02:10:07 -0700 (PDT)
 Date:   Tue, 16 May 2023 09:10:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684228204;
+        s=2020; t=1684228203;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=x9sWVRJedFibc6rSu8z+Ut4qppQZb1WpLCQ9D5Xg158=;
-        b=j+HyFhSEYF0uLyU2IrmCPxewDSkNY5yWuYh3AOr0/E13Tuwr5lbaFqN0pPQDTYEl+c/Xvc
-        k5xutZW7tQDmcSoYMgda8k9fPlMBEGrl5OlA1PiZn/r09XRHPXUGBHu73nuxAVP0BmP7DS
-        OdOVyvdKFfEPxGCbf84NIVGHYqaGWTpi/n/ZQqQplOGLkrYLiAhZcY6pwv+vQRhQI2xB36
-        dKv2FY3vFfzBLmoa0TZ2fuHTeDfhvcTRmkZe2KxuZaYZ2KQ1XuVVSJ4RDC4DK3rCyN3v+o
-        zGBLfa+cxveLkz/gCpCxEcz0GmkPMAsGo1CnU/cCbsuW+PpFAzpdFjv5Ps3gLA==
+        bh=LAw3iiNKYMs7YXhTK+oHrE7mTiSbiNakd4j8jRewZtA=;
+        b=32LCS+h2JVoJNIHOcky7ZlnkRrwsiTdyswJ/rQMPDnBIzJuhTb3dw6xFCmeUnFkqLS62GB
+        lRGHEPGXKbZmehL0eETY20GjJiY3sZVddUlVxHzJZTGAUM1NKeB9LRnzX2dzeLezLNqYq6
+        KJNu527IMwx115QD9tN/Pa+4mu7AoMvZcmhMrZEiPZuZiqz9K9QbS5gHCzPw6ntvgG1IQX
+        sb0e0H3YGnEj5t0lo4qH0NWK/Q6m2JWo4yJp3Vn5GescngoBwBf1a6xep7V1dId0vdm+Fq
+        MoETgxvzwDbxr71dVEInUxQhv0Ct8z+/SRgdd/FxUXzgxFPE8a/I45qiVn5AJQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684228204;
+        s=2020e; t=1684228203;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=x9sWVRJedFibc6rSu8z+Ut4qppQZb1WpLCQ9D5Xg158=;
-        b=bBVbPZPv3lS7gmGx4k7sBHPJs9FmQQZh2PAVpSgfDm8acoWA6VFP54n1iqh6VEh5ghAe3+
-        YKowcwepVqZhroDQ==
+        bh=LAw3iiNKYMs7YXhTK+oHrE7mTiSbiNakd4j8jRewZtA=;
+        b=jDjJae2Es86p8L53Ur6hqTJmlBJkhXDtEm8dDHMonrDZK2UlJhKWul3VcE8UKt9+oCIEam
+        W/ys6aly2Cr8bUAA==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] x86/smpboot: Cleanup topology_phys_to_logical_pkg()/die()
+Subject: [tip: smp/core] cpu/hotplug: Mark arch_disable_smp_support() and
+ bringup_nonboot_cpus() __init
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Michael Kelley <mikelley@microsoft.com>,
@@ -51,10 +52,10 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Helge Deller <deller@gmx.de>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230512205255.493750666@linutronix.de>
-References: <20230512205255.493750666@linutronix.de>
+In-Reply-To: <20230512205255.551974164@linutronix.de>
+References: <20230512205255.551974164@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168422820378.404.3480586870507701580.tip-bot2@tip-bot2>
+Message-ID: <168422820351.404.11737048171121591047.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,17 +72,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     5107e3ebb868d99872e1b64b054ccfcdad79d5d7
-Gitweb:        https://git.kernel.org/tip/5107e3ebb868d99872e1b64b054ccfcdad79d5d7
+Commit-ID:     ba831b7b1a517ba7f25d6fa9736a8092d07b0c74
+Gitweb:        https://git.kernel.org/tip/ba831b7b1a517ba7f25d6fa9736a8092d07b0c74
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 12 May 2023 23:06:58 +02:00
+AuthorDate:    Fri, 12 May 2023 23:07:00 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 15 May 2023 13:44:47 +02:00
 
-x86/smpboot: Cleanup topology_phys_to_logical_pkg()/die()
+cpu/hotplug: Mark arch_disable_smp_support() and bringup_nonboot_cpus() __init
 
-Make topology_phys_to_logical_pkg_die() static as it's only used in
-smpboot.c and fixup the kernel-doc warnings for both functions.
+No point in keeping them around.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
@@ -89,71 +89,52 @@ Tested-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 Tested-by: Helge Deller <deller@gmx.de> # parisc
 Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
-Link: https://lore.kernel.org/r/20230512205255.493750666@linutronix.de
+Link: https://lore.kernel.org/r/20230512205255.551974164@linutronix.de
 ---
- arch/x86/include/asm/topology.h |  3 ---
- arch/x86/kernel/smpboot.c       | 10 ++++++----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ arch/x86/kernel/smpboot.c | 4 ++--
+ kernel/cpu.c              | 2 +-
+ kernel/smp.c              | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
-index 458c891..2ba5758 100644
---- a/arch/x86/include/asm/topology.h
-+++ b/arch/x86/include/asm/topology.h
-@@ -139,7 +139,6 @@ static inline int topology_max_smt_threads(void)
- int topology_update_package_map(unsigned int apicid, unsigned int cpu);
- int topology_update_die_map(unsigned int dieid, unsigned int cpu);
- int topology_phys_to_logical_pkg(unsigned int pkg);
--int topology_phys_to_logical_die(unsigned int die, unsigned int cpu);
- bool topology_is_primary_thread(unsigned int cpu);
- bool topology_smt_supported(void);
- #else
-@@ -149,8 +148,6 @@ topology_update_package_map(unsigned int apicid, unsigned int cpu) { return 0; }
- static inline int
- topology_update_die_map(unsigned int dieid, unsigned int cpu) { return 0; }
- static inline int topology_phys_to_logical_pkg(unsigned int pkg) { return 0; }
--static inline int topology_phys_to_logical_die(unsigned int die,
--		unsigned int cpu) { return 0; }
- static inline int topology_max_die_per_package(void) { return 1; }
- static inline int topology_max_smt_threads(void) { return 1; }
- static inline bool topology_is_primary_thread(unsigned int cpu) { return true; }
 diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 352f0ce..bca9692 100644
+index bca9692..8eb7721 100644
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -288,6 +288,7 @@ bool topology_smt_supported(void)
+@@ -1269,9 +1269,9 @@ unreg_nmi:
+ }
  
  /**
-  * topology_phys_to_logical_pkg - Map a physical package id to a logical
-+ * @phys_pkg:	The physical package id to map
-  *
-  * Returns logical package id or -1 if not found
+- * arch_disable_smp_support() - disables SMP support for x86 at runtime
++ * arch_disable_smp_support() - Disables SMP support for x86 at boottime
   */
-@@ -304,15 +305,17 @@ int topology_phys_to_logical_pkg(unsigned int phys_pkg)
- 	return -1;
- }
- EXPORT_SYMBOL(topology_phys_to_logical_pkg);
-+
- /**
-  * topology_phys_to_logical_die - Map a physical die id to logical
-+ * @die_id:	The physical die id to map
-+ * @cur_cpu:	The CPU for which the mapping is done
-  *
-  * Returns logical die id or -1 if not found
-  */
--int topology_phys_to_logical_die(unsigned int die_id, unsigned int cur_cpu)
-+static int topology_phys_to_logical_die(unsigned int die_id, unsigned int cur_cpu)
+-void arch_disable_smp_support(void)
++void __init arch_disable_smp_support(void)
  {
--	int cpu;
--	int proc_id = cpu_data(cur_cpu).phys_proc_id;
-+	int cpu, proc_id = cpu_data(cur_cpu).phys_proc_id;
- 
- 	for_each_possible_cpu(cpu) {
- 		struct cpuinfo_x86 *c = &cpu_data(cpu);
-@@ -323,7 +326,6 @@ int topology_phys_to_logical_die(unsigned int die_id, unsigned int cur_cpu)
- 	}
- 	return -1;
+ 	disable_ioapic_support();
  }
--EXPORT_SYMBOL(topology_phys_to_logical_die);
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index f4a2c58..c0d859c 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -1502,7 +1502,7 @@ int bringup_hibernate_cpu(unsigned int sleep_cpu)
+ 	return 0;
+ }
  
- /**
-  * topology_update_package_map - Update the physical to logical package map
+-void bringup_nonboot_cpus(unsigned int setup_max_cpus)
++void __init bringup_nonboot_cpus(unsigned int setup_max_cpus)
+ {
+ 	unsigned int cpu;
+ 
+diff --git a/kernel/smp.c b/kernel/smp.c
+index ab3e5da..71dce74 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -892,7 +892,7 @@ EXPORT_SYMBOL(setup_max_cpus);
+  * SMP mode to <NUM>.
+  */
+ 
+-void __weak arch_disable_smp_support(void) { }
++void __weak __init arch_disable_smp_support(void) { }
+ 
+ static int __init nosmp(char *str)
+ {
