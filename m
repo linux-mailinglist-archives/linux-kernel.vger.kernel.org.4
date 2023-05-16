@@ -2,243 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F17E7056DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D887056E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjEPTPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S229535AbjEPTQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEPTPp (ORCPT
+        with ESMTP id S229522AbjEPTQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:15:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FDA49EF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684264499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=5L1aJYtcbR7dHch+1g8syxuuSJfOlW1pxYhUzrmVLTw=;
-        b=IsnFrOg9Q/WVv2Bsr+abbocaRKO2iBSXaqMn2PeCQ0ydqVrGJv1Ngh1nbvGYK9mxUCgIZz
-        ncZbNkxZg4zX3lJVSDxFQvSSgqhuHLGbhpNRoKNkFrCMdYhPTFTID0NyDQr2bkNPt2TLzs
-        6DIbfjx+ODnKD9w5Z3mkOBZcvs3qNNg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-228-Cgpq0UWTNzKc8Fd-rELAiA-1; Tue, 16 May 2023 15:14:52 -0400
-X-MC-Unique: Cgpq0UWTNzKc8Fd-rELAiA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B70751C060CB;
-        Tue, 16 May 2023 19:14:50 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.9.87])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D0B8F2166B31;
-        Tue, 16 May 2023 19:14:44 +0000 (UTC)
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Oleg Nesterov <oleg@redhat.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Brian Cain <bcain@quicinc.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Stafford Horne <shorne@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Wander Lairson Costa <wander@redhat.com>,
+        Tue, 16 May 2023 15:16:03 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4849B525D;
+        Tue, 16 May 2023 12:16:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684264561; x=1715800561;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kFUQ6MboftdOLOEvZid5f2b59TWc3NhFgO6Ggzr+aXU=;
+  b=lxpzhrY+TPvyXsk1sFUsJIe4TxXGMtmX7BbxQMTKceHyDLmgfeNeJNyA
+   dHqMrEx9nH8l121ACHSXlM/+NvQdXJ+tQnOnWUmio7e1+LPDCRMUuGAwc
+   DK6+RnycM6wKfAaU02Qh76v3twxPwdqjJNeikGMzJjNEkrXScOQDJl6j+
+   oCLMsyDdAuTALRljo+6yvzR484V1/2jc/gcRAT90F/EXFsdFju19eH9Lf
+   eQlVBC8kZqhw5wW8Dm8ogtDW9w8N64c6Kv1r2wmnfVtXJ4Cx2bar9c+Ej
+   A4sE34Y/GsRprMch3buw55qEOvIKRHVydYjV14mdFTYPeO81L+L2bR2i1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="340941498"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="340941498"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 12:16:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="678966984"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="678966984"
+Received: from unisar-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.219.243])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 12:15:52 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id D219F10C8C1; Tue, 16 May 2023 22:15:49 +0300 (+03)
+Date:   Tue, 16 May 2023 22:15:49 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrei Vagin <avagin@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Cc:     Hu Chunyu <chuhu@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [PATCH v9] kernel/fork: beware of __put_task_struct calling context
-Date:   Tue, 16 May 2023 16:14:41 -0300
-Message-Id: <20230516191441.34377-1-wander@redhat.com>
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
+ stepping into unaccepted memory
+Message-ID: <20230516191549.tjub26jvlqymp27x@box.shutemov.name>
+References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
+ <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
+ <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
+ <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com>
+ <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under PREEMPT_RT, __put_task_struct() indirectly acquires sleeping
-locks. Therefore, it can't be called from an non-preemptible context.
+On Tue, May 16, 2023 at 08:35:27PM +0200, Ard Biesheuvel wrote:
+> On Tue, 16 May 2023 at 20:27, Dave Hansen <dave.hansen@intel.com> wrote:
+> >
+> > On 5/16/23 11:08, Ard Biesheuvel wrote:
+> > >> But, this approach does not work for unaccepted memory. For TDX, a load
+> > >> from unaccepted memory will not lead to a recoverable exception within
+> > >> the guest. The guest will exit to the VMM where the only recourse is to
+> > >> terminate the guest.
+> > >>
+> > > Does this mean that the kernel maps memory before accepting it? As
+> > > otherwise, I would assume that such an access would page fault inside
+> > > the guest before triggering an exception related to the unaccepted
+> > > state.
+> >
+> > Yes, the kernel maps memory before accepting it (modulo things like
+> > DEBUG_PAGEALLOC).
+> >
+> 
+> OK, and so the architecture stipulates that prefetching or other
+> speculative accesses must never deliver exceptions to the host
+> regarding such ranges?
+> 
+> If this all works as it should, then I'm ok with leaving this here,
+> but I imagine we may want to factor out some arch specific policy here
+> in the future, as I don't think this would work the same on ARM.
 
-One practical example is splat inside inactive_task_timer(), which is
-called in a interrupt context:
+Even if other architectures don't need this, it is harmless: we just
+accept one unit ahead of time.
 
-CPU: 1 PID: 2848 Comm: life Kdump: loaded Tainted: G W ---------
- Hardware name: HP ProLiant DL388p Gen8, BIOS P70 07/15/2012
- Call Trace:
- dump_stack_lvl+0x57/0x7d
- mark_lock_irq.cold+0x33/0xba
- ? stack_trace_save+0x4b/0x70
- ? save_trace+0x55/0x150
- mark_lock+0x1e7/0x400
- mark_usage+0x11d/0x140
- __lock_acquire+0x30d/0x930
- lock_acquire.part.0+0x9c/0x210
- ? refill_obj_stock+0x3d/0x3a0
- ? rcu_read_lock_sched_held+0x3f/0x70
- ? trace_lock_acquire+0x38/0x140
- ? lock_acquire+0x30/0x80
- ? refill_obj_stock+0x3d/0x3a0
- rt_spin_lock+0x27/0xe0
- ? refill_obj_stock+0x3d/0x3a0
- refill_obj_stock+0x3d/0x3a0
- ? inactive_task_timer+0x1ad/0x340
- kmem_cache_free+0x357/0x560
- inactive_task_timer+0x1ad/0x340
- ? switched_from_dl+0x2d0/0x2d0
- __run_hrtimer+0x8a/0x1a0
- __hrtimer_run_queues+0x91/0x130
- hrtimer_interrupt+0x10f/0x220
- __sysvec_apic_timer_interrupt+0x7b/0xd0
- sysvec_apic_timer_interrupt+0x4f/0xd0
- ? asm_sysvec_apic_timer_interrupt+0xa/0x20
- asm_sysvec_apic_timer_interrupt+0x12/0x20
- RIP: 0033:0x7fff196bf6f5
-
-Instead of calling __put_task_struct() directly, we defer it using
-call_rcu(). A more natural approach would use a workqueue, but since
-in PREEMPT_RT, we can't allocate dynamic memory from atomic context,
-the code would become more complex because we would need to put the
-work_struct instance in the task_struct and initialize it when we
-allocate a new task_struct.
-
-Changelog
-=========
-
-v1:
-* Initial implementation fixing the splat.
-
-v2:
-* Isolate the logic in its own function.
-* Fix two more cases caught in review.
-
-v3:
-* Change __put_task_struct() to handle the issue internally.
-
-v4:
-* Explain why call_rcu() is safe to call from interrupt context.
-
-v5:
-* Explain why __put_task_struct() doesn't conflict with
-  put_task_sruct_rcu_user.
-
-v6:
-* As per Sebastian's review, revert back the implementation of v2
-  with a distinct function.
-* Add a check in put_task_struct() to warning when called from a
-  non-sleepable context.
-* Address more call sites.
-
-v7:
-* Fix typos.
-* Add an explanation why the new function doesn't conflict with
-  delayed_free_task().
-
-v8:
-* Bring back v5.
-* Fix coding style.
-
-v9:
-* Reorganize to not need ___put_task_struct() by Oleg's suggestion.
-
-Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-Reported-by: Hu Chunyu <chuhu@redhat.com>
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
-Suggested-by: Valentin Schneider <vschneid@redhat.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Paul McKenney <paulmck@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Luis Goncalves <lgoncalv@redhat.com>
----
- include/linux/sched/task.h | 28 +++++++++++++++++++++++++++-
- kernel/fork.c              |  8 ++++++++
- 2 files changed, 35 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index d6c48163c6de..9bcb9535d4e1 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -112,10 +112,36 @@ static inline struct task_struct *get_task_struct(struct task_struct *t)
- }
- 
- extern void __put_task_struct(struct task_struct *t);
-+extern void __put_task_struct_rcu_cb(struct rcu_head *rhp);
- 
- static inline void put_task_struct(struct task_struct *t)
- {
--	if (refcount_dec_and_test(&t->usage))
-+	if (!refcount_dec_and_test(&t->usage))
-+		return;
-+
-+	/*
-+	 * under PREEMPT_RT, we can't call put_task_struct
-+	 * in atomic context because it will indirectly
-+	 * acquire sleeping locks.
-+	 *
-+	 * call_rcu() will schedule delayed_put_task_struct_rcu()
-+	 * to be called in process context.
-+	 *
-+	 * __put_task_struct() is called when
-+	 * refcount_dec_and_test(&t->usage) succeeds.
-+	 *
-+	 * This means that it can't "conflict" with
-+	 * put_task_struct_rcu_user() which abuses ->rcu the same
-+	 * way; rcu_users has a reference so task->usage can't be
-+	 * zero after rcu_users 1 -> 0 transition.
-+	 *
-+	 * delayed_free_task() also uses ->rcu, but it is only called
-+	 * when it fails to fork a process. Therefore, there is no
-+	 * way it can conflict with put_task_struct().
-+	 */
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
-+		call_rcu(&t->rcu, __put_task_struct_rcu_cb);
-+	else
- 		__put_task_struct(t);
- }
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 08969f5aa38d..fd3bb4a554c4 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -846,6 +846,14 @@ void __put_task_struct(struct task_struct *tsk)
- }
- EXPORT_SYMBOL_GPL(__put_task_struct);
- 
-+void __put_task_struct_rcu_cb(struct rcu_head *rhp)
-+{
-+	struct task_struct *task = container_of(rhp, struct task_struct, rcu);
-+
-+	__put_task_struct(task);
-+}
-+EXPORT_SYMBOL_GPL(__put_task_struct_rcu_cb);
-+
- void __init __weak arch_task_cache_init(void) { }
- 
- /*
 -- 
-2.40.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
