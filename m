@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5D670540F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D785C705410
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjEPQiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S231474AbjEPQiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjEPQhx (ORCPT
+        with ESMTP id S231430AbjEPQiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:37:53 -0400
+        Tue, 16 May 2023 12:38:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDA51FD8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:37:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0547903E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:37:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AC68632E2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D3EEC433D2;
-        Tue, 16 May 2023 16:37:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DD8863C72
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536DBC433EF;
+        Tue, 16 May 2023 16:37:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684255025;
-        bh=14jDO9HnlH/eygMDTDhZy7erQpDiEI1dolQOiBip1yU=;
+        s=korg; t=1684255057;
+        bh=n/CufBhtZJbOluCwHEqr8pt/TxblYMYei/Q+meIjPsM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rI0ZRx06/UDTBq8eyEAuntFS7SsHA/Xpgxqm7NKCxBNrqLFq6rXMH3V8Q0Bjau/wN
-         7CCm87MOaG+Pu6HqwR4x8XeQm93sRb4Ic90l3SAw2wZSqBglALufC6is7yZSTtH9GI
-         TIZfB3Da3t0qg7CAglTbRFy15ZLJAZiGZ0bk+L4k=
-Date:   Tue, 16 May 2023 18:37:02 +0200
+        b=FYl2YraIervuRrPH6uP1VQs9OA6++0xKd2D7dH9LFvJSPKERmKlx/qWcvDsAOnPP/
+         UTnj5vm4LUEYFb0vBgWDZEHkHgsfw3Brw8zXyJHfgCoRGlPCbYhp0dBqtuwy8zhWa4
+         vUbKQ2R4NeF4BmWUqT1c/r/GMTJ73vbm2cC2hJM0=
+Date:   Tue, 16 May 2023 18:37:34 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
         patches@opensource.cirrus.com
 Subject: Re: [PATCH 5/5] debugfs: Add debugfs_create_const_str()
-Message-ID: <2023051651-pebble-simmering-58b8@gregkh>
+Message-ID: <2023051614-dingo-quicksand-ad6d@gregkh>
 References: <20230516160753.32317-1-rf@opensource.cirrus.com>
  <20230516160753.32317-6-rf@opensource.cirrus.com>
 MIME-Version: 1.0
@@ -98,13 +98,10 @@ On Tue, May 16, 2023 at 05:07:53PM +0100, Richard Fitzgerald wrote:
 > +					    const char **value)
 > +{
 > +	debugfs_create_str(name, mode & ~0222, parent, (char **)value);
+> +}
 
-You just "know" it's safe to do this?  There is nothing in
-debugfs_create_str() that would prevent future changes from violating
-the "const" here, which makes this very unsafe to maintain over time.
-
-This feels backwards, why not make debugfs_create_str() take the const
-pointer instead?
+Also, we need a user of the new function in order to be able to add it,
+otherwise I'll just delete it eventually :)
 
 thanks,
 
