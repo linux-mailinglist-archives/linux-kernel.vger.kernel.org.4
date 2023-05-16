@@ -2,256 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FF87052F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022CD705439
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234283AbjEPP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S229655AbjEPQmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbjEPP7T (ORCPT
+        with ESMTP id S229580AbjEPQmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:59:19 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C33A3C3A;
-        Tue, 16 May 2023 08:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ob168EbNhBOuu69e/l93yyaDIB0BV0qDazF+6NUVlQ8=; b=FJjO9yOpReZalrwGyDgRow1B7x
-        nN9apPqU/60YdU6EpDayca3uS8/GUgj0pHkS7zlpMk1BafE6hHWpT3oAsuinl6sOpJUXusuTeCg47
-        bKCP43+DgL/fuqpBHB1ycVtL7/v5hnkOmm+bAxH4Ien+BW/zFjfOGfn0keU72zueQVEA=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:43294 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pyx4s-0000mi-TG; Tue, 16 May 2023 11:59:08 -0400
-Date:   Tue, 16 May 2023 11:59:06 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Lech Perczak <lech.perczak@camlingroup.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lech Perczak <l.perczak@camlintechnologies.com>,
-        Tomasz =?UTF-8?Q?Mo=C5=84?= <tomasz.mon@camlingroup.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof =?UTF-8?Q?Drobi=C5=84ski?= 
-        <krzysztof.drobinski@camlingroup.com>, hugo@hugovil.com
-Message-Id: <20230516115906.9d93685696ae7dc02faff752@hugovil.com>
-In-Reply-To: <a27271d5-6d28-d994-b06f-905eea0514aa@camlingroup.com>
-References: <20230515160206.2801991-1-hugo@hugovil.com>
-        <2023051551-quickstep-outshine-5526@gregkh>
-        <20230515125155.bf6d64c292ba96f4f6971ac0@hugovil.com>
-        <a27271d5-6d28-d994-b06f-905eea0514aa@camlingroup.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        Tue, 16 May 2023 12:42:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BF1A5F1;
+        Tue, 16 May 2023 09:41:58 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GEbKCS025457;
+        Tue, 16 May 2023 15:49:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=7GmFsIyYLDO0Uzcku7fTuqy+8j8iq7zS8tmiHeE4lcc=;
+ b=VzSFcI0YfkS4VIZbc1BI674coEvoMgqz7DzKjPMFkw/VZQ/rccifC0Moryt1gp5fWcsB
+ YKTQSvytDItLpE1hcVDqdZmohgPk0geWqWtU69h2RWo73ubo8ay+DtyGV4JR9jjIhzLH
+ s0yGqxhfT2E1pcZKpaGbuZMJIQRGy+LjRvQBWgByLrw0E9ZrK73mZZw72byQPLNNkvy+
+ Gq3csGT7H5iNL4PdQnGsb1186Fj386fMDNSUcEB5v6+6GY/EFp0jthd2qkUBfCiQwxdO
+ otdHvEMToBLZ1p8Ac1F5yNedwx5ycELPlY67fRtWmKAf70ULSxDI+fNGOWyBSRSQN9UU dA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qm6r3rxay-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 15:49:18 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GFnHZQ003434
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 15:49:17 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 16 May 2023 08:49:17 -0700
+Date:   Tue, 16 May 2023 08:49:16 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>, <linux-mmc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc8280xp: Add SDC2 and enable on
+ CRD
+Message-ID: <20230516154916.GA606695@hu-bjorande-lv.qualcomm.com>
+References: <20230509030136.1524860-1-quic_bjorande@quicinc.com>
+ <20230509030136.1524860-2-quic_bjorande@quicinc.com>
+ <0855c1ea-2104-c7ab-e775-1340dac21c58@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <0855c1ea-2104-c7ab-e775-1340dac21c58@linaro.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: znyBCV67pOdHq29Cz0OLiUJUPV6Sp56j
+X-Proofpoint-GUID: znyBCV67pOdHq29Cz0OLiUJUPV6Sp56j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_08,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 mlxscore=0 spamscore=0 phishscore=0
+ clxscore=1015 bulkscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160134
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
-Subject: Re: [RFC PATCH] Revert
- "sc16is7xx: Separate GPIOs from modem control lines"
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 10:50:11 +0200
-Lech Perczak <lech.perczak@camlingroup.com> wrote:
-
-> Hi Hugo,
->=20
-> Please see my answers inline.
->=20
-> W dniu 15.05.2023 o=A018:51, Hugo Villeneuve pisze:
-> > Hi Greg,
-> >
-> > On Mon, 15 May 2023 18:20:02 +0200
-> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> >
-> >> On Mon, May 15, 2023 at 12:02:07PM -0400, Hugo Villeneuve wrote:
-> >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >>>
-> >>> This reverts commit 679875d1d8802669590ef4d69b0e7d13207ebd61.
-> >>>
-> >>> Because of this commit, it is no longer possible to use the 16 GPIO
-> >>> lines as dedicated GPIOs on the SC16IS752.
-> >>>
-> >>> Reverting it makes it work again.
-> >>>
-> >>> The log message of the original commit states:
-> >>>     "Export only the GPIOs that are not shared with hardware modem
-> >>>     control lines"
-> >>>
-> >>> But there is no explanation as to why this decision was taken to
-> >>> permanently set the function of the GPIO lines as modem control
-> >>> lines. AFAIK, there is no problem with using these lines as GPIO or m=
-odem
-> >>> control lines.
-> >>>
-> >>> Maybe after reverting this commit, we could define a new
-> >>> device-tree property named, for example,
-> >>> "use-modem-control-lines", so that both options can be supported.
-> >>>
-> >>> Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control
-> >>> lines")
-> >> Please do not line-wrap these lines.
-> > Ok.
-> >
-> >> Nor is a blank line needed here.
-> > Ok.
-> >
-> >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >>> ---
-> >>>  drivers/tty/serial/sc16is7xx.c | 14 ++++----------
-> >>>  1 file changed, 4 insertions(+), 10 deletions(-)
-> >>>
-> >>> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16=
-is7xx.c
-> >>> index 5bd98e4316f5..25f1b2f6ec51 100644
-> >>> --- a/drivers/tty/serial/sc16is7xx.c
-> >>> +++ b/drivers/tty/serial/sc16is7xx.c
-> >>> @@ -306,7 +306,6 @@ struct sc16is7xx_devtype {
-> >>>     char    name[10];
-> >>>     int     nr_gpio;
-> >>>     int     nr_uart;
-> >>> -   int     has_mctrl;
-> >>>  };
-> >>>
-> >>>  #define SC16IS7XX_RECONF_MD                (1 << 0)
-> >>> @@ -447,35 +446,30 @@ static const struct sc16is7xx_devtype sc16is74x=
-_devtype =3D {
-> >>>     .name           =3D "SC16IS74X",
-> >>>     .nr_gpio        =3D 0,
-> >>>     .nr_uart        =3D 1,
-> >>> -   .has_mctrl      =3D 0,
-> >>>  };
-> >>>
-> >>>  static const struct sc16is7xx_devtype sc16is750_devtype =3D {
-> >>>     .name           =3D "SC16IS750",
-> >>> -   .nr_gpio        =3D 4,
-> >>> +   .nr_gpio        =3D 8,
-> >> I think this one line change is all you really need here, right?  the
-> >> otner changes do nothing in this patch, so you should just create a new
-> >> one changing this value.  Oh, and this one:
-> >>
-> >>>     .nr_uart        =3D 1,
-> >>> -   .has_mctrl      =3D 1,
-> >>>  };
-> >>>
-> >>>  static const struct sc16is7xx_devtype sc16is752_devtype =3D {
-> >>>     .name           =3D "SC16IS752",
-> >>> -   .nr_gpio        =3D 0,
-> >>> +   .nr_gpio        =3D 8,
-> >> right?
-> >>
-> >> Don't mess with the has_mctrl stuff, that's not relevant here.
-> > Sorry, I just noticed that simply reverting commit 679875d1d880 is not =
-sufficient (and will not compile). We must also revert part of commit:
-> > 21144bab4f11 ("sc16is7xx: Handle modem status lines").
-> >
-> > The problem is that the commit 679875d1d880 was incomplete, and it was =
-(unfortunately) completed by integrating it in commit 21144bab4f11 ("sc16is=
-7xx: Handle modem status lines"). The relevant change was only these 5 new =
-lines, burried deeply into the second commit:
-> Just as you noticed, this was required to support full set of flow contro=
-l lines on this device.
-> The commit you're trying to revert was a preparation for it. Disabling ha=
-s_mctrl will break it.
-> I kindly suggest to suggest a fix, instead of hurrying a revert, and wait=
-ing for a proper fix later.
-
-Hi Lech,
-the [RFC] in the subject was there to discuss about a possible revert, and/=
-or maybe a possible fix that would allow both modes to be supported. I am n=
-ot hurrying anything and I am certainly not waiting for a later fix, as I v=
-ery much want to help and maybe submit such a fix myself.
-
-But the reality is that commits 679875d1d880/21144bab4f11 broke userspace b=
-y forcing GPIOs as modem control lines. I understand that reverting these p=
-atches could also potentially break things for applications depending on th=
-ese patches. I am simply wondering what is the proper course of action here=
-: revert patches and work on a fix to support both modes, or skip revert an=
-d work on a fix (my preference)?
-
-> > @@ -1353,9 +1452,17 @@ static int sc16is7xx_probe(struct device *dev,
-> >                 sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFCR_REG,
-> >                                      SC16IS7XX_EFCR_RXDISABLE_BIT |
-> >                                      SC16IS7XX_EFCR_TXDISABLE_BIT);
+On Tue, May 16, 2023 at 03:22:41AM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 9.05.2023 05:01, Bjorn Andersson wrote:
+> > The CRD has Micro SD slot, introduce the necessary DeviceTree nodes for
+> > enabling this.
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 80 +++++++++++++++++++++++
+> >  arch/arm64/boot/dts/qcom/sc8280xp.dtsi    | 39 +++++++++++
+> >  2 files changed, 119 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > index 5b25d54b9591..f83411e0e7f8 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > @@ -308,6 +308,13 @@ vreg_l1c: ldo1 {
+> >  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> >  		};
+> >  
+> > +		vreg_l6c: ldo6 {
+> > +			regulator-name = "vreg_l6c";
+> > +			regulator-min-microvolt = <1800000>;
+> > +			regulator-max-microvolt = <2960000>;
+> > +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> > +		};
 > > +
-> > +               /* Use GPIO lines as modem status registers */
-> > +               if (devtype->has_mctrl)
-> > +                       sc16is7xx_port_write(&s->p[i].port,
-> > +                                            SC16IS7XX_IOCONTROL_REG,
-> > +                                            SC16IS7XX_IOCONTROL_MODEM_=
-BIT);
+> >  		vreg_l7c: ldo7 {
+> >  			regulator-name = "vreg_l7c";
+> >  			regulator-min-microvolt = <2504000>;
+> > @@ -318,6 +325,13 @@ vreg_l7c: ldo7 {
+> >  						   RPMH_REGULATOR_MODE_HPM>;
+> >  		};
+> >  
+> > +		vreg_l9c: ldo9 {
+> > +			regulator-name = "vreg_l9c";
+> > +			regulator-min-microvolt = <2960000>;
+> > +			regulator-max-microvolt = <2960000>;
+> > +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> Generally I ask people to add the missing regulator-allow-set-load,
+> but in case of the RPMh driver, should we also consider allowing LPM?
+> 
+
+I prefer to avoid LPM and dynamic load management, because I don't think
+we're doing a good enough job across the kernel to ensure we get back to
+HPM when needed.
+
+At some point this needs to be re-evaluated though.
+
+> > +		};
 > > +
-> >
-> > Therefore, I should also remove these lines if we go forward with a rev=
-ert of the patch (should I add another tag "Fixes..." in that case?).
-> >
-> > And what do you think of my proposal to maybe replace has_mctrl with a =
-device tree property so that both modes can be fully supported?
-> I think the proper solution here, is not to invent a new device tree prop=
-erty for every single use case.
-> I would start by looking for other drivers, if, and how they handle simil=
-ar cases.
-> For example, imx-serial driver respects "uart-has-rtscts" property, as do=
- a lot of other controllers built into SoC-s.
-> On the other hand, other devices which can also provide GPIOs, respect "g=
-pio-controller" property.
+> >  		vreg_l13c: ldo13 {
+> >  			regulator-name = "vreg_l13c";
+> >  			regulator-min-microvolt = <3072000>;
+> > @@ -600,6 +614,18 @@ &remoteproc_nsp0 {
+> >  	status = "okay";
+> >  };
+> >  
+> > +&sdc2 {
+> > +	cd-gpios = <&tlmm 131 GPIO_ACTIVE_LOW>;
+> > +	pinctrl-names = "default", "sleep";
+> > +	pinctrl-0 = <&sdc2_default_state>;
+> > +	pinctrl-1 = <&sdc2_sleep_state>;
+> pinctrl-n
+> pinctrl-names
+> 
+> please
 
-I think that testing the presence of the "uart-has-rtscts" to force GPIOs a=
-s modem control lines would make a lot of sense.
+That's ugly, but I see the symmetry to other -# vs -names
 
-> According to SC16IS752 datasheet [1], respecting one of those should be e=
-nough,
-> as GPIOs can be enabled in groups of four pins even for dual UART version.
-> Every group matches a single port, so probably this can be probably selec=
-ted per UART even on dual-port versions.
+> > +	vmmc-supply = <&vreg_l9c>;
+> > +	vqmmc-supply = <&vreg_l6c>;
+> > +	no-sdio;
+> > +	no-mmc;
+> > +	status = "okay";
+> > +};
+> > +
+> >  &uart17 {
+> >  	compatible = "qcom,geni-debug-uart";
+> >  
+> > @@ -842,6 +868,60 @@ wake-n-pins {
+> >  		};
+> >  	};
+> >  
+> > +	sdc2_default_state: sdc2-default-state {
+> > +		clk-pins {
+> > +			pins = "sdc2_clk";
+> > +			drive-strength = <16>;
+> > +			bias-disable;
+> > +		};
+> > +
+> > +		cmd-pins {
+> > +			pins = "sdc2_cmd";
+> > +			drive-strength = <16>;
+> > +			bias-pull-up;
+> > +		};
+> > +
+> > +		data-pins {
+> > +			pins = "sdc2_data";
+> > +			drive-strength = <16>;
+> > +			bias-pull-up;
+> > +		};
+> > +
+> > +		card-detect-pins {
+> > +			pins = "gpio131";
+> > +			function = "gpio";
+> > +			drive-strength = <2>;
+> > +			bias-disable;
+> > +		};
+> > +	};
+> > +
+> > +	sdc2_sleep_state: sdc2-sleep-state {
+> > +		clk-pins {
+> > +			pins = "sdc2_clk";
+> > +			drive-strength = <2>;
+> > +			bias-disable;
+> > +		};
+> > +
+> > +		cmd-pins {
+> > +			pins = "sdc2_cmd";
+> > +			drive-strength = <2>;
+> > +			bias-pull-up;
+> > +		};
+> > +
+> > +		data-pins {
+> > +			pins = "sdc2_data";
+> > +			drive-strength = <2>;
+> > +			bias-pull-up;
+> > +		};
+> > +
+> > +		card-detect-pins {
+> > +			pins = "gpio131";
+> > +			function = "gpio";
+> > +			drive-strength = <2>;
+> > +			bias-disable;
+> > +		};
+> > +	};
+> That's totally SoC-specific, modulo the CD pin which can have
+> its own separate node and label
+> 
 
-I am trying to see how we could set "uart-has-rtscts" for only UART channel=
- A or B in the device tree, but cannot find any example or documentation ab=
-out that. How do you propose to do it?
+The drive-strength and bias properties are board specific. Also, at this
+time the CRD is the only board I'm aware of having the SD-card slot.
 
-=46rom what I understand, the property "uart-has-rtscts" can be set only fo=
-r the whole chip (channels A and B)...
+I suggest that we move it out of here once there's another user...
 
-Hugo.
+> > +
+> >  	tpad_default: tpad-default-state {
+> >  		int-n-pins {
+> >  			pins = "gpio182";
+> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > index 8fa9fbfe5d00..21dfb48d923c 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+> > @@ -2815,6 +2815,45 @@ data-pins {
+> >  			};
+> >  		};
+> >  
+> > +		sdc2: mmc@8804000 {
+> > +			compatible = "qcom,sc8280xp-sdhci", "qcom,sdhci-msm-v5";
+> > +			reg = <0 0x08804000 0 0x1000>;
+> > +
+> > +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "hc_irq", "pwr_irq";
+> > +
+> > +			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
+> > +				 <&gcc GCC_SDCC2_APPS_CLK>,
+> > +				 <&rpmhcc RPMH_CXO_CLK>;
+> > +			clock-names = "iface", "core", "xo";
+> > +			resets = <&gcc GCC_SDCC4_BCR>;
+> 4?
+> 
 
+That's a typo. Thanks.
 
-> I'll be more than happy to assist with that.
->=20
-> >
-> > Thank you,
-> > Hugo.
-> >
-> [1] https://www.nxp.com/docs/en/data-sheet/SC16IS752_SC16IS762.pdf
->=20
-> --=20
-> Pozdrawiam/With kind regards,
-> Lech Perczak
->=20
-> Sr. Software Engineer
-> Camlin Technologies Poland Limited Sp. z o.o.
-> Strzegomska 54,
-> 53-611 Wroclaw
-> Tel:     (+48) 71 75 000 16
-> Email:   lech.perczak@camlingroup.com
-> Website: http://www.camlingroup.com
->=20
->=20
+> > +			interconnects = <&aggre2_noc MASTER_SDCC_2 0 &mc_virt SLAVE_EBI1 0>,
+> > +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_SDCC_2 0>;
+> > +			interconnect-names = "sdhc-ddr","cpu-sdhc";
+> > +			iommus = <&apps_smmu 0x4e0 0x0>;
+> > +			power-domains = <&rpmhpd SC8280XP_CX>;
+> > +			operating-points-v2 = <&sdc2_opp_table>;
+> > +			bus-width = <4>;
+> > +			dma-coherent;
+> > +
+> > +			status = "disabled";
+> > +
+> > +			sdc2_opp_table: opp-table {
+> > +				compatible = "operating-points-v2";
+> > +
+> > +				opp-100000000 {
+> > +					opp-hz = /bits/ 64 <100000000>;
+> > +					required-opps = <&rpmhpd_opp_low_svs>;
+> You specified interconnects, but no bw values.. was that on purpose?
+> 
 
+Assumed the driver did something clever, when I didn't see anything for
+the other boards I looked at either. Will reconsider.
 
---=20
-Hugo Villeneuve
+> Other than these nits, lgtm
+> (generally, my dt sources don't even have sdhci to compare)
+> 
+
+Thanks,
+Bjorn
+
+> Konrad
+> > +				};
+> > +
+> > +				opp-202000000 {
+> > +					opp-hz = /bits/ 64 <202000000>;
+> > +					required-opps = <&rpmhpd_opp_svs_l1>;
+> > +				};
+> > +			};
+> > +		};
+> > +
+> >  		usb_0_qmpphy: phy@88eb000 {
+> >  			compatible = "qcom,sc8280xp-qmp-usb43dp-phy";
+> >  			reg = <0 0x088eb000 0 0x4000>;
