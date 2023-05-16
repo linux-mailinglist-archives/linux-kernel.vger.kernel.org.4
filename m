@@ -2,109 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A97D70549B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C9B70549D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjEPRAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
+        id S229486AbjEPRBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjEPRAV (ORCPT
+        with ESMTP id S229498AbjEPRBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:00:21 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A36D8689
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:59:37 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxvOp3tmNkfzcJAA--.15797S3;
-        Wed, 17 May 2023 00:59:35 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx87R0tmNksMhjAA--.39626S2;
-        Wed, 17 May 2023 00:59:33 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     suijingfeng <15330273260@189.cn>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/drm_vblank.c: avoid unsigned int to signed int cast
-Date:   Wed, 17 May 2023 00:59:31 +0800
-Message-Id: <20230516165931.2989639-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 16 May 2023 13:01:13 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81ABA5F1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:00:44 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ae3fe67980so7185495ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684256441; x=1686848441;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A2isPeHLFTut2+mOKdMyVDlP/q2NZewEWxVxxvIO/Yc=;
+        b=eRKpjGAcT4ydGtuypR1jvNliTZGpV2leuaDZz83tI20QdbCsZ7qXlYJUXHwpqdpUTN
+         6Qy2YUPnnA7AWrC+94F4nqBjrZ4kI8UjNKQHxif2A8NSP6GfdYx3gUsse5n/WdIqAPyA
+         AnZQbtAdXEWZTmfJXrVtTd25lMZm1XQQ6Ff21a5A7IqpfcMntLfPDtJI/LtLiLCzCXHf
+         BoXaKUGKWYpTpIgM/Tw25G4wh/mrwxeBQmxbZlbmQOoLVFWQfoSI10UGYfz5ukUD9K2m
+         QFytZRFjh8VlGLdt314vkZlNBcBy013jMZtyX3IZpdnraSwkMPaIzA8ubz6xYuJZW12q
+         /c7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684256441; x=1686848441;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A2isPeHLFTut2+mOKdMyVDlP/q2NZewEWxVxxvIO/Yc=;
+        b=fyrc9iWszfud7+j6R6sfCdpTzTiaaBS+NT5aVhkPFnYKL0f28tGPuD/zOlyivqzxPJ
+         o7DzGkGE+qmWSk7q5nTEQfcqvPAyWl8bSoZxMCmmKseIEDxAKlMT/uephbEJiqakzPCe
+         RTzB9Upj4sIO0X9g04oG92al+rzVFUMBaFKF0+OSQ3uUYkmIte8p7xLX1cUQXrC9iVfl
+         6gbamz1pjCc6eKf4sjSq6WehtkwMgM77OZyP8OnuOwBD7iVjP+LHFV+6damJV3AvD5CW
+         JN5b6jCbxT/tHeY5tiherEbOn/AwlwyukZaRzP549A20LuEmdc1Rwb+1FIvS4CqAiZM5
+         xicw==
+X-Gm-Message-State: AC+VfDwvXvuZfFOuP1BLKrCTepGsXdyMhaBpAEXrp/YFc//F2SVUErkm
+        Lqlq8mcMC1xWT+pKAys8l0Oj+w==
+X-Google-Smtp-Source: ACHHUZ5Oj+Q36rLinLQtgeWgi/+xRXp4Qu5QFFdXKuJd7rG3YFE70e/wjN6HQkclYeSkPaxJbjPcqg==
+X-Received: by 2002:a17:903:32cc:b0:1ad:cba5:5505 with SMTP id i12-20020a17090332cc00b001adcba55505mr26320003plr.14.1684256441196;
+        Tue, 16 May 2023 10:00:41 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm15716212plt.290.2023.05.16.10.00.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 10:00:39 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Julien Stephan <jstephan@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh@kernel.org, chunkuang.hu@kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: phy: add mediatek mipi csi driver v
+ 0.5
+In-Reply-To: <1853f049-4f00-b7f0-973a-2c4e7b0b2634@linaro.org>
+References: <20230515090551.1251389-1-jstephan@baylibre.com>
+ <20230515090551.1251389-2-jstephan@baylibre.com>
+ <ab9aa30f-82d7-1d14-5561-e19ff10af0b0@linaro.org>
+ <4yppinkucchwnwtnnpbqdn4bejmntjq3q6mx6es55f2pwyce3c@qdhdks47lpyt>
+ <1853f049-4f00-b7f0-973a-2c4e7b0b2634@linaro.org>
+Date:   Tue, 16 May 2023 10:00:39 -0700
+Message-ID: <7h353w2oug.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx87R0tmNksMhjAA--.39626S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tFWDAw1rtFWktw47Ww4fAFb_yoW8Ww4DpF
-        srtryqkr4Fya40yasrCF1fAFy5Xasxt3W2yrWDu34akF1YqF13AFyFyr47WFWUX3ZFka4a
-        yrsrXF1Fq3WUuaDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
-        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
-        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
-        AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
-        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both mode->crtc_htotal and mode->crtc_vtotal are u16 type,
-mode->crtc_htotal * mode->crtc_vtotal will results a unsigned type.
-Using a u32 is enough to store the result, but considering that the
-result will be casted to u64 soon after. We use a u64 type directly.
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
 
-So there no need to cast it to signed type and cast back then.
+> On 16/05/2023 11:41, Julien Stephan wrote:
+>> On Tue, May 16, 2023 at 10:07:47AM +0200, Krzysztof Kozlowski wrote:
+>>> On 15/05/2023 11:05, Julien Stephan wrote:
+>>>> From: Florian Sylvestre <fsylvestre@baylibre.com>
+>>>>
+>>>> This adds the bindings, for the MIPI CD-PHY module v 0.5 embedded in
+>>>> some Mediatek soc, such as the mt8365
+>>>>
+>>>> Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
+>>>> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+>>>
+>>> What are the changes? IOW: changelog here or in cover letter.
+>>>
+>> Hi Krzysztof,
+>> I added a changelog in the cover letter, but I will try to be more
+>> descritpive next time. Changes from v1 are mainly style issues fixed
+>> (mostly from your first review)
+>
+> What do you mean by "in cover letter"? There is no cover letter.
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/gpu/drm/drm_vblank.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Julien, your cover letter[1] was sent to a a different list of
+recipients than the patches, and most important for this thread, it was
+*not* sent to the devictree list. So I'm guessing that's why Krzysztof
+doesn't see it in his devicetree review queue.  Generally, you should
+have the same list of recipients for the cover letter as the patches
+since reviewers/maintainers generally filter mail based on which mailing
+lists are in to/cc.
 
-diff --git a/drivers/gpu/drm/drm_vblank.c b/drivers/gpu/drm/drm_vblank.c
-index 877e2067534f..d99c404b181b 100644
---- a/drivers/gpu/drm/drm_vblank.c
-+++ b/drivers/gpu/drm/drm_vblank.c
-@@ -622,7 +622,7 @@ void drm_calc_timestamping_constants(struct drm_crtc *crtc,
- 
- 	/* Valid dotclock? */
- 	if (dotclock > 0) {
--		int frame_size = mode->crtc_htotal * mode->crtc_vtotal;
-+		u64 frame_size = mode->crtc_htotal * mode->crtc_vtotal;
- 
- 		/*
- 		 * Convert scanline length in pixels and video
-@@ -630,7 +630,7 @@ void drm_calc_timestamping_constants(struct drm_crtc *crtc,
- 		 * in nanoseconds:
- 		 */
- 		linedur_ns  = div_u64((u64) mode->crtc_htotal * 1000000, dotclock);
--		framedur_ns = div_u64((u64) frame_size * 1000000, dotclock);
-+		framedur_ns = div_u64(frame_size * 1000000, dotclock);
- 
- 		/*
- 		 * Fields of interlaced scanout modes are only half a frame duration.
--- 
-2.25.1
+>> 
+>>> Subject: you have some multiple spaces.
+>>>
+>>> Subject: drop driver. Bindings are not for drivers.
+>>>
+>>>> ---
+>>>>  .../phy/mediatek,phy-mipi-csi-0-5.yaml        | 62 +++++++++++++++++++
+>>>>  MAINTAINERS                                   |  6 ++
+>>>>  2 files changed, 68 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml b/Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..5aa8c0b41cdf
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
+>>>> @@ -0,0 +1,62 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-Only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/phy/mediatek,phy-mipi-csi-0-5.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Mediatek Sensor Interface MIPI CSI CD-PHY
+>>>> +
+>>>> +maintainers:
+>>>> +  - Julien Stephan <jstephan@baylibre.com>
+>>>> +  - Andy Hsieh <andy.hsieh@mediatek.com>
+>>>> +
+>>>> +description:
+>>>> +  The SENINF CD-PHY is a set of CD-PHY connected to the SENINF CSI-2
+>>>> +  receivers. The number of PHYs depends on the SoC model.
+>>>> +  Depending on the soc model, each PHYs can support CDPHY or DPHY only
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - mediatek,phy-mipi-csi-0-5
+>>>
+>>> SoC based compatibles. 0-5 is odd.
+>>>
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  '#phy-cells':
+>>>> +    const: 0
+>>>> +
+>>>> +  mediatek,is_cdphy:
+>>>
+>>> No underscores in node names.
+>>>
+>>>> +    description:
+>>>> +      Specify if the current phy support CDPHY configuration
+>>>
+>>> Why this cannot be implied from compatible? Add specific compatibles.
+>>>
+>>>
+>> This cannot be implied by compatible because the number of phys depends
+>> on the soc and each phy can be either D-PHY only or CD-PHY capable.
+>> For example mt8365 has 2 phy: CSI0 and CSI1. CSI1 is DPHY only and CSI0 is CD-PHY
+>
+> So it is SoC specific so why it cannot be implied by compatible? I don't
+> understand. You will have SoC specific compatibles, right? or you just
+> ignored my comments here?
 
+Julien, I think you had SoC specific compatibles in an earlier version
+but then changed it to be generic based on reviewer feedback.  However,
+that earlier version of the driver was trying to do a bunch of SoC
+specific logic internally and support multiple SoCs.  You've now greatly
+simplified the driver, with only a few SoC specific decisions needed.
+These can be implied by the driver based SoC specific compatible, as
+Krzysztof suggests, so you should just go back to having SoC specific
+compatibles.
+
+Kevin
+
+[1] https://lore.kernel.org/linux-mediatek/20230515090551.1251389-1-jstephan@baylibre.com/#r
