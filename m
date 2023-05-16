@@ -2,143 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C8A704562
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F067070455B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 08:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjEPGi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 02:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S230221AbjEPGeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 02:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjEPGiz (ORCPT
+        with ESMTP id S230054AbjEPGd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 02:38:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9101FD4;
-        Mon, 15 May 2023 23:38:54 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G6c1f8024124;
-        Tue, 16 May 2023 06:38:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=9DmXpqDg3O9x9sNFjmzLOnR7Rix1h8qN/8nG3xKpvRY=;
- b=UEsj2VKSJ1H9Xp0n1zHRNCf1ZNlcPgij2sZ94uPNQg1kjt8BJQWspIVdjmiD0L7iGvpJ
- YMilIL/ilwe1K1YSCHZxN6d5Cazwnd5+mzBh/nBAttSs74qTuvo+Qlr6YJBXQcfTiG1K
- Z5HTi3QPkat/739riWjX22ij51vvyUvOqMp1I/a9jlo1tOPQVjP8GUPbxfSKTjnj0uxO
- x1Nd0qf7c3RW4/drx+NMKH2Nvl48Dy/oWHlZCR4L83+D6iruAl2IZIliiMCXCAgygcPA
- T6M8cTEJyFwxOFdmJ+ThK6wfSw3p0KCJ25TyJ1Hz0Q7DvEBGqNM33kVts/tNUI1qyAsb nQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm3ms1qy9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 06:38:47 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34G6cV4M027450;
-        Tue, 16 May 2023 06:38:46 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm3ms1qvp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 06:38:46 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G3nLnr002047;
-        Tue, 16 May 2023 06:33:43 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdseb6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 06:33:43 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34G6XdHJ62521808
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 06:33:39 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9875D20040;
-        Tue, 16 May 2023 06:33:39 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1CF7B20043;
-        Tue, 16 May 2023 06:33:38 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.179.16.42])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 16 May 2023 06:33:38 +0000 (GMT)
-Date:   Tue, 16 May 2023 08:33:36 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-s390@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] drivers: use new capable_any functionality
-Message-ID: <ZGMjwGTDgCGrfsC8@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20230511142535.732324-1-cgzones@googlemail.com>
- <20230511142535.732324-5-cgzones@googlemail.com>
+        Tue, 16 May 2023 02:33:58 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFA71FD4;
+        Mon, 15 May 2023 23:33:56 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34G6XhTC061465;
+        Tue, 16 May 2023 01:33:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684218823;
+        bh=kQRrE7NQZFThfXtU1mqcmhZYEzl2mdVQGQNER6/T2C0=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=Sil2Z57zIaLO+SgeLTzPZaxtl3XHObFirJgsO7Lpx0evRCQK3xO0FQ958WeRRKe8J
+         myieRPQ33oWhT+d4qYPdIm4RBmByO7Xsj6++saNDI2bzJb3zvLwB/HQmGkrsz+C16y
+         /QIFLsz83hRme9bc3EJ4Vl80zbnU74t8cPx+gGF4=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34G6XhhE026382
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 16 May 2023 01:33:43 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
+ May 2023 01:33:42 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 16 May 2023 01:33:42 -0500
+Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34G6XdN3016858;
+        Tue, 16 May 2023 01:33:39 -0500
+Message-ID: <728c0165-3caa-de09-2493-e7225a78b77a@ti.com>
+Date:   Tue, 16 May 2023 12:03:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511142535.732324-5-cgzones@googlemail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xqf_N-JoXc2UVfYLwyAFExMe35oo7Cp0
-X-Proofpoint-ORIG-GUID: PZdVErVtm-1oMWtVtghhxQof6lFPLe0D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_02,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- priorityscore=1501 mlxlogscore=999 adultscore=0 malwarescore=0
- impostorscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160056
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH] arm64: dts: ti: k3-j7200: correct num-lanes requested for
+ PCIe
+Content-Language: en-US
+To:     Achal Verma <a-verma1@ti.com>
+References: <20230516062212.2635948-1-a-verma1@ti.com>
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230516062212.2635948-1-a-verma1@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 04:25:28PM +0200, Christian Göttsche wrote:
-> Use the new added capable_any function in appropriate cases, where a
-> task is required to have any of two capabilities.
-> 
-> Reorder CAP_SYS_ADMIN last.
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
-> v4:
->    Additional usage in kfd_ioctl()
-> v3:
->    rename to capable_any()
-> ---
->  drivers/gpu/drm/amd/amdkfd/kfd_chardev.c | 3 +--
->  drivers/net/caif/caif_serial.c           | 2 +-
->  drivers/s390/block/dasd_eckd.c           | 2 +-
->  3 files changed, 3 insertions(+), 4 deletions(-)
-...
-> diff --git a/drivers/s390/block/dasd_eckd.c b/drivers/s390/block/dasd_eckd.c
-> index ade1369fe5ed..67d1058bce1b 100644
-> --- a/drivers/s390/block/dasd_eckd.c
-> +++ b/drivers/s390/block/dasd_eckd.c
-> @@ -5370,7 +5370,7 @@ static int dasd_symm_io(struct dasd_device *device, void __user *argp)
->  	char psf0, psf1;
->  	int rc;
->  
-> -	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_RAWIO))
-> +	if (!capable_any(CAP_SYS_RAWIO, CAP_SYS_ADMIN))
->  		return -EACCES;
->  	psf0 = psf1 = 0;
+Achal,
 
-For s390 part:
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+On 16/05/23 11:52, Achal Verma wrote:
+> From: Matt Ranostay <mranostay@ti.com>
+> 
+> J7200 has a limited 2x support for PCIe, and the properties should be
+> updated as such.
+
+According to J7200 Datasheet at [0], the SoC supports up to x4 PCIe lanes. Could
+you please clarify where the lanes are documented to be 2x?
+
+[0]: https://www.ti.com/lit/ds/symlink/dra821u-q1.pdf
+
+> 
+> Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> Signed-off-by: Achal Verma <a-verma1@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+> index ef352e32f19d..5e62b431d6e8 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+> @@ -729,7 +729,7 @@ pcie1_rc: pcie@2910000 {
+>  		device_type = "pci";
+>  		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
+>  		max-link-speed = <3>;
+> -		num-lanes = <4>;
+> +		num-lanes = <2>;
+>  		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
+>  		clocks = <&k3_clks 240 6>;
+>  		clock-names = "fck";
+> @@ -757,7 +757,7 @@ pcie1_ep: pcie-ep@2910000 {
+>  		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
+>  		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
+>  		max-link-speed = <3>;
+> -		num-lanes = <4>;
+> +		num-lanes = <2>;
+>  		power-domains = <&k3_pds 240 TI_SCI_PD_EXCLUSIVE>;
+>  		clocks = <&k3_clks 240 6>;
+>  		clock-names = "fck";
+
+-- 
+Regards,
+Siddharth.
