@@ -2,221 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2722370484E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAF970485D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjEPI5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S231484AbjEPJAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjEPI5b (ORCPT
+        with ESMTP id S229554AbjEPJAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:57:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E0D2738
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:57:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 316F81FD88;
-        Tue, 16 May 2023 08:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684227447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=Z7Z17UxwlPZXAFlulVYyXcdhXoFSKT89glSYZBLFJ7s=;
-        b=spYdVKPjDgzF7j+X6HgjFuBngEzQOJfDn61kr4+qcrvucrxbWQOqjsz2XVy+UHFPmR4RQm
-        fk0CK5p8kCxjxHJ7Pjy8PwR5xjatqt/wHFJx2GTeOjHa8gCYkiTVHFSKuBuWX1IAMGxS4b
-        MODkFgV9Bwmh+Om+5B149DVFeEpI12M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684227447;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=Z7Z17UxwlPZXAFlulVYyXcdhXoFSKT89glSYZBLFJ7s=;
-        b=Wx8Nm2Lcj/TeCb3cjebdMYgwl295oqu7IwhnRLMXegMq4km5vCxQ23qk2gOIIVNQ2rXmWB
-        +to/vxDrx3CJQtAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1CB24138F5;
-        Tue, 16 May 2023 08:57:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id v8L4BXdFY2T7OQAAMHmgww
-        (envelope-from <chrubis@suse.cz>); Tue, 16 May 2023 08:57:27 +0000
-Date:   Tue, 16 May 2023 10:58:29 +0200
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     ltp@lists.linux.it, linux-kernel@vger.kernel.org,
-        libc-alpha@sourceware.org
-Cc:     lwn@wn.net, akpm@inux-foundation.org, torvalds@linux-foundation.org
-Subject: The Linux Test Project has been released for MAY 2023
-Message-ID: <ZGNFtfP2ioTEEpC3@yuki>
+        Tue, 16 May 2023 05:00:15 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FA8270C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:00:13 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-305f0491e62so13426140f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684227612; x=1686819612;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=wrFkte/bezt1PlNhFCGqqPcTWG4E53z6ADYV3K7fF3g=;
+        b=sjp+lL/oyBSGysWhOvH+HyKbaqlOkgM4gPDAx6wEodMzeHJ7CIwWV/D6Czgf7g5b4y
+         3pq0iP4PbZbdtl8nXHy5xEuKwlzOhXlby6wZroKbsZnYXMmr6DQMnSKyM9IHVwYeLosI
+         jzIxHuQExAJ6cdYicbzRPbpf7WMkkR2x9chwjgwmPU2lkF8Fu83tw5V6qQrDhhyB8kHF
+         IoWtbsPD1K3bFtjyChL9/r2atKzi9e9kn9FPjoT1lWrWrBBDbxYKieGQWaiyYI2fqkVv
+         om0/lULQwVmA5ddQZOJTYP0du+5eivl6xsSLSUcY8vxUUwHlPYdzqj3Py8lnvOcrE9jL
+         v2MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684227612; x=1686819612;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wrFkte/bezt1PlNhFCGqqPcTWG4E53z6ADYV3K7fF3g=;
+        b=I//Ab6sUhMs9Kqr+/rwZQGf2DxY5qfFCqhkT2VpL+qeKZA8H+NOek8TLfoWPq1NGcW
+         SAWQZbN7Reb7bQUHHWz2toXKCBm7karhSbOG4h1YEEX22triclCe74G7aK9NvlSIkrB2
+         CgEFBbzIM+51NqCvwCcAsXrUxFTQWdgo7u+BzSIf3PywehQKTLX0Y1CLhfZcYRsoMF1B
+         jg+mrr9zDF1Ld8A52nm6/JsLTpdf1TOoDPO2eZg6wixEIcvX+SCcnoQSTfQ2goBD2zFv
+         1CPYcpiy3tLaTfPw6NCaxOHQdh0Pr3y7273x2v/y23BgCXbZQIbqrXWl7j6jSWF92xyI
+         4nyw==
+X-Gm-Message-State: AC+VfDxEhrXsFPijd6dlTKS8/4wpMx5/STbsdIMc/c9t6X7kFO1rcwN7
+        +7aMsQQg+PxD8jm6f1wlfvWkvg==
+X-Google-Smtp-Source: ACHHUZ5bSlYDSBtrIk3ZZo2GUz0L3bCKdlDXlaw/wT8THT4atVNx1A2nmPcmuGErziRjmwMbrF+ZaQ==
+X-Received: by 2002:a5d:42ca:0:b0:306:3b78:fe31 with SMTP id t10-20020a5d42ca000000b003063b78fe31mr23654611wrr.69.1684227611789;
+        Tue, 16 May 2023 02:00:11 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:86be:97a:a043:77a8? ([2a01:e0a:982:cbb0:86be:97a:a043:77a8])
+        by smtp.gmail.com with ESMTPSA id s14-20020a1cf20e000000b003f4285629casm1532562wmc.42.2023.05.16.02.00.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 02:00:11 -0700 (PDT)
+Message-ID: <aa22c05d-9db7-eff1-d203-cb795359252b@linaro.org>
+Date:   Tue, 16 May 2023 11:00:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v4 01/13] dt-bindings: clk: g12a-clkc: export VCLK2_SEL
+ and add CTS_ENCL clock ids
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Dave Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Nicolas Belin <nbelin@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-phy@lists.infradead.org
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org>
+ <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-1-2592c29ea263@linaro.org>
+ <5cb38be4-a27f-dc1a-cbb9-c195505a9e7c@linaro.org>
+ <9fa0662e-8854-05f9-da7f-ec8e08d2badf@linaro.org>
+ <d5c030f9-2f4d-25cc-b922-d00f5033ac37@linaro.org>
+ <6228670c-3e06-3061-f304-a2c641962ffa@linaro.org>
+ <9cba6384-123b-1cd1-ed02-08365a0ed529@linaro.org>
+ <2fabe721-7434-43e7-bae5-088a42ba128d@app.fastmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <2fabe721-7434-43e7-bae5-088a42ba128d@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good news everyone,
+On 16/05/2023 10:44, Arnd Bergmann wrote:
+> On Mon, May 15, 2023, at 18:22, neil.armstrong@linaro.org wrote:
+>> On 15/05/2023 18:15, Krzysztof Kozlowski wrote:
+>>> On 15/05/2023 18:13, Krzysztof Kozlowski wrote:
+>>>
+>>> Also one more argument maybe not relevant here but for other cases -
+>>> this makes literally impossible to include the clock ID in DTS in the
+>>> same kernel revision, because you must not merge driver branch to DTS
+>>> branch. SoC folks were complaining about this many times.
+>>
+>> Actually we handle this very simply by having such patches merged in a immutable
+>> branch merged in the clock and DT pull-requests, it worked perfectly so far
+>> and neither Stephen or Arnd complained about that.
+> 
+> It's usually benign if you just add a new clk at the end of the binding
+> header, as that doesn't touch the internal header file in the same
+> commit. I'm certainly happier about drivers that just use numbers from
+> a datasheet instead of having to come up with numbers to stick in a binding
+> because the hardware is entirely irregular, but there is usually no point
+> trying to complain about bad hardware to the driver authors -- I unsterstand
+> you are just trying to make things work.
+> 
+> I agree with Krzysztof that using the same identifiers in the local
+> header and in the binding is just making your life harder for no
+> reason, and if you are the only ones doing it this way, it would
+> help to change it. Maybe just add a namespace prefix to all the internal
+> macros so the next time you move one into the documented bindings you
+> can do it with the same immutable branch hack but not include the
+> driver changes in the dt branch.
 
-the Linux Test Project test suite stable release for *May 2023* has been
-released.
+Ack, I'll try to find a simple intermediate solution to avoid this situation.
 
-Since the last release 199 patches by 33 authors were merged.
+Thanks,
+Neil
 
-Patch review is what most of the projects struggle with and LTP is no
-different. If you can spare some effort helping with the patch review is more
-than welcomed.
+> 
+>      Arnd
 
-NOTABLE CHANGES
-===============
-
-* New tests
-  - kvm_svm01 aka CVE-2021-3653
-  - cgroup_core03 test case for the cgroup kill
-  - hugetlb32 regression test for:
-    - ba9c1201beaa (mm/hugetlb: clear compound_nr before freeing gigantic pages)
-    - a01f43901cfb (hugetlb: be sure to free demoted CMA pages to CMA)
-  - mmap20 test for mmap() with MAP_SHARED_VALIDATE
-  - mqnotify03 aka CVE-2021-38604
-  - mprotect05 regression test for:
-    - 2fcd07b7ccd5 (mm/mprotect: Fix successful vma_merge() of next in do_mprotect_pkey())
-  - fsconfig03 aka CVE-2022-0185
-  - madvise11 regression test for:
-    - d4ae9916ea29 (mm: soft-offline: close the race against page allocation)
-  - mount07 test case for MS_NOSYMFOLLOW
-
-* Increased coverage
-  - NFS tests now run on btrfs, ext4 and xfs
-  - setpgid were rewritten and increased coverage in a few corner cases
-  - ioctl01 added more termios coverage
-
-* fs_fill test was fixed on 256+ CPUs
-
-* loongarch support was added
-
-+ The usual amount of fixes and cleanups
-
-NOTABLE CHANGES IN NETWORK TESTS
-================================
-brought to you by Petr Vorel
-
-- NFS tests now run on btrfs, ext4, xfs
-  (might be extended to more filesystems later)
-- nfs08.sh a new test for NFS cache invalidation
-
-RUNLTP-NG
-=========
-
-* The new runltp-ng was finally included in the previous release tarball
-  - https://github.com/linux-test-project/runltp-ng/#readme
-  - https://www.youtube.com/watch?v=JMeJBt3S7B0
-
-* There were no changes done in this release, however parallel text execution
-  is being worked on, possibly there would be preview ready for the next release
-
-REMOVED TESTS
-=============
-
-* tomoyo testsuite which is maintained elsewhere by tomoyo devs
-
-* execltp script which was unmaintained for years
-
-DOWNLOAD AND LINKS
-==================
-
-The latest version of the test-suite contains 3000+ tests for the Linux
-and can be downloaded at:
-
-https://github.com/linux-test-project/ltp/releases/tag/20230516
-
-The project pages as well as GIT repository are hosted on GitHub:
-
-https://github.com/linux-test-project/ltp
-http://linux-test-project.github.io/
-
-If you ever wondered how to write a LTP testcase, don't miss our developer
-documentation at:
-
-https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines
-
-https://github.com/linux-test-project/ltp/wiki/C-Test-API
-
-https://github.com/linux-test-project/ltp/wiki/C-Test-Network-API
-
-https://github.com/linux-test-project/ltp/wiki/Shell-Test-API
-
-https://github.com/linux-test-project/ltp/wiki/C-Test-Case-Tutorial
-
-https://github.com/linux-test-project/ltp/wiki/BuildSystem
-
-Patches, new tests, bugs, comments or questions should go to to our mailing
-list at ltp@lists.linux.it.
-
-CREDITS
-=======
-
-Many thanks to the people contributing to this release:
-
-git shortlog -s -e -n 20230127..
-
-    58  Petr Vorel <pvorel@suse.cz>
-    20  Andrea Cervesato via ltp <ltp@lists.linux.it>
-    19  Yang Xu <xuyang2018.jy@fujitsu.com>
-    15  Martin Doucha <mdoucha@suse.cz>
-    11  Andrea Cervesato <andrea.cervesato@suse.com>
-    11  Edward Liaw <edliaw@google.com>
-    10  Wei Gao <wegao@suse.com>
-     8  Avinesh Kumar <akumar@suse.de>
-     5  Cyril Hrubis <chrubis@suse.cz>
-     5  Teo Couprie Diaz <teo.coupriediaz@arm.com>
-     4  Li Wang <liwang@redhat.com>
-     3  Hao Ge <gehao@kylinos.cn>
-     3  Ping Fang <pifang@redhat.com>
-     3  Richard Palethorpe <rpalethorpe@suse.com>
-     3  Tarun Sahu <tsahu@linux.ibm.com>
-     2  Hao Zeng <zenghao@kylinos.cn>
-     2  Leo Yu-Chi Liang <ycliang@andestech.com>
-     2  Sowmya Indranna <reachmesowmyati@gmail.com>
-     1  Andrei Gherzan <andrei.gherzan@canonical.com>
-     1  Ashwin Dayanand Kamat via ltp <ltp@lists.linux.it>
-     1  David Hildenbrand <david@redhat.com>
-     1  Enze Li <lienze@kylinos.cn>
-     1  Fabrice Fontaine <fontaine.fabrice@gmail.com>
-     1  Frank He <hexiaoxiao@kylinos.cn>
-     1  Hui Min Mina Chou <minachou@andestech.com>
-     1  Jan Stancek <jstancek@redhat.com>
-     1  Liam R. Howlett <Liam.Howlett@oracle.com>
-     1  Mahesh Kumar G <maheshkumar657g@gmail.com>
-     1  Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
-     1  Paulson Raja L <paulson@zilogic.com>
-     1  Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-     1  Vignesh Raman <vignesh.raman@collabora.com>
-     1  William Roche <william.roche@oracle.com>
-
-
-And also thanks to patch reviewers:
-
-git log 20230127.. | grep -Ei '(reviewed|acked)-by:' | sed 's/.*by: //' | sort | uniq -c | sort -n -r
-
-     68 Cyril Hrubis <chrubis@suse.cz>
-     60 Petr Vorel <pvorel@suse.cz>
-     36 Richard Palethorpe <rpalethorpe@suse.com>
-     35 Li Wang <liwang@redhat.com>
-      7 Jan Stancek <jstancek@redhat.com>
-      4 Avinesh Kumar <akumar@suse.de>
-      3 Yang Xu <xuyang2018.jy@fujitsu.com>
-      2 Andrea Cervesato <andrea.cervesato@suse.com>
-      1 Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-
--- 
-Cyril Hrubis
-chrubis@suse.cz
