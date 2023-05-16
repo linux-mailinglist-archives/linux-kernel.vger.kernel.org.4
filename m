@@ -2,93 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE5C7053F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0957053EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjEPQeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S230423AbjEPQd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjEPQdq (ORCPT
+        with ESMTP id S230152AbjEPQdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:33:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22141BCD;
-        Tue, 16 May 2023 09:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1684254733; i=j.neuschaefer@gmx.net;
-        bh=fhB7hXqPlLyhvg8cmuKZg4nTLKqqIf4hFaLjTAmDR8E=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=WCKv0kSCq8cZdcodj3bzJzACl4VUx0N8jIRRLDx6AZWncDeaknHBQ5nP0eVYnCTxp
-         6fsbLxswW3YliTBP2l+jyje57qJGgPy81P3h231K9Wp8Y0nyU8CVCoxcD3tatY5bu7
-         FfGSz1VbwzQtNSTW63A+AAmbzuU5zRdOeMKg8S63XdKKPLRuHqQYu4nhaWKGUmOlRh
-         2wm3hFDjfV8vnq7vnoX++qTaeehQG1WstXLXkrAp+sNV2llu33a3OvtCcG2IM4FTB4
-         hGp2yJajFlFUXH+JElvq6qMEZ1iu56Hooa6evB3SyqoDt4iJDtsdnyQg097NKKYS+L
-         vQquKptUrnA8g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([89.1.59.32]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M6Udt-1q5HFt3Faz-006u37; Tue, 16
- May 2023 18:32:12 +0200
-Date:   Tue, 16 May 2023 18:32:09 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] pinctrl: wpcm450: elax return value check for IRQ
- get
-Message-ID: <ZGOwCSPH68DJN/NC@probook>
-References: <cover.1684220962.git.mazziesaccount@gmail.com>
- <2d89de999a1d142efbd5eb10ff31cca12309e66d.1684220962.git.mazziesaccount@gmail.com>
+        Tue, 16 May 2023 12:33:06 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6899EC5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:32:19 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso26457806a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684254738; x=1686846738;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FKXutpug0K0rcLgauEj/wEuCLazV6EJGkQmsisOUf5w=;
+        b=jJIIbp3H9JJ6wWbsM7XKZXuYodA6rnUXuRhjMf3Sn8FEme6Yp3WAaetKy/Y9MILkNy
+         Imp8f0JIs8WdxijCepidzoWoddj3Qva4UwEP5mmeu7vRf5bRV7m7/KERO69O66okqiCs
+         y6ujX5vJ9/236eznfNB9rfNsr2PCFz/3XazVMlWZrqrmhivNIO9hcEo9w5FkuN3TniXW
+         PAPeBpHz5jHEkTBarFOlivmnBsa05IyX6LKlHhRvEmLjDu3dXpyrO8aT7OxCNOhH/8QV
+         gWozqb7sCI5l71FHes+dGvC6py47jZ/v1NyIkERfANYP+8glyhs1nHHXdViqnA+TuO1p
+         fiNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684254738; x=1686846738;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKXutpug0K0rcLgauEj/wEuCLazV6EJGkQmsisOUf5w=;
+        b=EMT8uwX4mgMCvl9PhJHx6NX0oDI1XUAr+tPIcEuCet3mWx/Y80WyL2vDJP0TzqCnrn
+         7YCPfDrFDSAz59VwgiwiJinF/TWHqxRNQH8NvbPZV5JP68jsPLuN/sR1z7NceGfLCxY7
+         fxSsA5+er5o7s2Bdp7sp4Pwq0tQEwsXwaYgtBoRYDP17P/bViS8Rz3rVfGKvoF/qAJJl
+         oOLL3anSEvfsQiv8r4/mx1qsdq7SY6RRKKiotHEEMf6mkqFndiVHTuneXjba8X8vP5jf
+         od+dj3eFAeb9pBsxssCH0THh57yNSqxkbweF86f9ITWVNe+GYEnlQKpV/kLpiY9TVcE0
+         wD5A==
+X-Gm-Message-State: AC+VfDxvmS04jips2y5owAFmTgovmLIwJw/draHSnMc3FPIR5hXsI3Jo
+        GOtT+mzjVm0tNqppMbvrIJ6mPQ==
+X-Google-Smtp-Source: ACHHUZ64wWKpPBDs7UQNr4OLIsM9BNXBaHD+PYxr3NwuMYgRbdM1sHJOfIIROgwr0koAW1/Gj9wsVg==
+X-Received: by 2002:a17:906:fe07:b0:953:8249:1834 with SMTP id wy7-20020a170906fe0700b0095382491834mr34033983ejb.16.1684254738364;
+        Tue, 16 May 2023 09:32:18 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id my14-20020a1709065a4e00b0096643397aeesm11088233ejc.184.2023.05.16.09.32.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 09:32:17 -0700 (PDT)
+Message-ID: <b2d8cb74-9675-d449-971d-016a1df66ba6@linaro.org>
+Date:   Tue, 16 May 2023 18:32:17 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WrLvMy0clVxWGHYm"
-Content-Disposition: inline
-In-Reply-To: <2d89de999a1d142efbd5eb10ff31cca12309e66d.1684220962.git.mazziesaccount@gmail.com>
-X-Provags-ID: V03:K1:kb9Ha+Yx98MCgnViJRbJ5mV8EzgVqSMWDyckGXEBHPEckS2yxtX
- WLxGHbQHHyww6R6Ovfb1I6+MLs6unjVXcHPN9cTB2qUyLT2OCQV4a0EnroagIj69QDhNiwQ
- +/Vn/78OKHy4brwPcnbpJc03GQ7dSWBsQWsx+Fe8NIAEyAT9HzZ3hdQy/WQNO1Ec+/rSljD
- BU7HzvqPeijKqg+zAILnw==
-UI-OutboundReport: notjunk:1;M01:P0:eqLG+MfPsvo=;dsn+3nEr9xMgnpHyFWJxZLNYN5d
- GY31/ESf0RyFHD0Wsp5dR+6FvUvf8ls2+02yNc1I2OnqO2S6w+9e/u7Qsm3ag2yMUuidMmHZe
- MrPhjAT2f2zHNIqKcehCtR7r4DZiPS4PxM1pl5J470ceF/tu+JZM+F6MMdtg14K+qSIGQlutQ
- 5xt8LAjzsKAlC3PqG8lw2hu2tB1mAuFsZfzw30NulhTGl1PvfesyWE9eSoLCk7oi85iJgKMTi
- yX50PkGycHbQ4CxFjMCbqPypmZt1W+tvEOBDTadB+HuQn6XPevTpezXUlgyqwxndqX7L/bwWO
- PlEfuD270YU708j3ci6G5HldGNA+bMgF40SFGDCbUzEGDezwqTiuVXJNulxdVq1ldILAmygiM
- lXSfJCjR8r1O3Djv6vssLn02B4NtgPa0mLAtCQ0qHFxV27VbCFxTyhSAY2Cp/yEOZ+A1DwCvO
- iKIfSyBPQropa3WL8AKS6EuF175T5xPOzUJHtjhP4+OZgsIPQVbYmozwTnXUbDSwSI7L5JoZg
- qCD37EJqugrU2l874OdAy9M1yVK8Ju9HsPeLxU2Tvl3bnLZ1oLWEeFxhGGu+TxenEdz8ZefMM
- pVc2VtXX4y6dZKbFv25tzyY4JWgxnCITXQfQcDFy8oPsRucV3DVXwmRnbBu8RpS2z4M9hYGaY
- QWJdFql4bakNJzQ03Fky11IDGzakxsCSlSTV9zvg2ZSLU9LA2F4hqjTcP0F9PbQlGkpQFswY8
- V61c8E3mMNh8Nwx9acEZX731LSLhNHST2xA47cI5nKlsLKCkMTmHEa5oqHwenSq856CLVG/z+
- uXjIksinveoOI/IsthUbBTEUy+5PZhl774qIjlxgacPc5ovl4zxUOh/qJGJ0ratCbtsvYVG4c
- gl2sL6cFa1cJq8BZrlu6Bnwkt7SnTGiIpUclJ8hvqyB+vymjLCUmmHu7pAJENNej8JcvaLCBH
- G92iqg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: dts: marvell: add missing cache properties
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230421223159.115412-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230421223159.115412-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,114 +79,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---WrLvMy0clVxWGHYm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-> [PATCH v4 4/7] pinctrl: wpcm450: elax return value check for IRQ get
-
-Typo ("elax") in the subject line.
-
->
-On Tue, May 16, 2023 at 10:13:14AM +0300, Matti Vaittinen wrote:
-> fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
-> special error case where device-tree based IRQ mapping fails can't no
-> longer be reliably detected from this return value. This yields a
-> functional change in the driver where the mapping failure is treated as
-> an error.
->=20
-> The mapping failure can occur for example when the device-tree IRQ
-> information translation call-back(s) (xlate) fail, IRQ domain is not
-> found, IRQ type conflicts, etc. In most cases this indicates an error in
-> the device-tree and special handling is not really required.
->=20
-> One more thing to note is that ACPI APIs do not return zero for any
-> failures so this special handling did only apply on device-tree based
-> systems.
->=20
-> Drop the special (no error, just skip the IRQ) handling for DT mapping
-> failures as these can no longer be separated from other errors at driver
-> side.
->=20
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->=20
+On 22/04/2023 00:31, Krzysztof Kozlowski wrote:
+> As all level 2 and level 3 caches are unified, add required
+> cache-unified properties to fix warnings like:
+> 
+>   ac5-98dx35xx-rd.dtb: l2-cache: 'cache-unified' is a required property
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
->=20
-> The special handling in this driver was added when fixing a problem
-> where returning zero from fwnode_irq_get[_byname]() was treated as
-> succes yielding zero being used as a valid IRQ by the driver.
-> f4a31facfa80 ("pinctrl: wpcm450: Correct the fwnode_irq_get() return valu=
-e check")
-> The commit message does not mention if choosing not to abort the probe
-> on device-tree mapping failure (as is done on other errors) was chosen
-> because: a) Abort would have broken some existing setup. b) Because skipp=
-ing
-> an IRQ on failure is "the right thing to do", or c) because it sounded li=
-ke
-> a way to minimize risk of breaking something.
->=20
-> If the reason is a) - then I'd appreciate receiving some more
-> information and a suggestion how to proceed (if possible). If the reason
-> is b), then it might be best to just skip the IRQ instead of aborting
-> the probe for all errors on IRQ getting. Finally, in case of c), well,
-> by acking this change you will now accept the risk :)
->=20
-> The first patch of the series changes the fwnode_irq_get() so this depends
-> on the first patch of the series and should not be applied alone.
+> 
+> Please take the patch via sub-arch SoC tree.
 
-Thanks for investigating this!
+Hi Andrew and Gregory,
 
-It's not a), because there are no existing setups that rely on broken
-IRQs connected to this pinctrl/GPIO controller.
+Could you grab this one?
 
-I suspect b) or c), but I'll let Andy give a more definite answer.
+Best regards,
+Krzysztof
 
-> ---
->  drivers/pinctrl/nuvoton/pinctrl-wpcm450.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c b/drivers/pinctrl/=
-nuvoton/pinctrl-wpcm450.c
-> index 2d1c1652cfd9..f9326210b5eb 100644
-> --- a/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-> +++ b/drivers/pinctrl/nuvoton/pinctrl-wpcm450.c
-> @@ -1106,8 +1106,6 @@ static int wpcm450_gpio_register(struct platform_de=
-vice *pdev,
->  			irq =3D fwnode_irq_get(child, i);
->  			if (irq < 0)
->  				break;
-> -			if (!irq)
-> -				continue;
-> =20
->  			girq->parents[i] =3D irq;
->  			girq->num_parents++;
-
-Anyway, this looks good to me.
-
-Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-
---WrLvMy0clVxWGHYm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmRjr+cACgkQCDBEmo7z
-X9sWzA//bZZ5OxVZ8EtxzPSK/eibQZfgmPiYXqXgsEMjpRZwcPXskSEwCPtOtf6m
-iRl8ElSCbpvjpPbtjnUWp8s4OcehmR6WvMwY9kSj2rlzojAi5Q3vypAPJKi1l/qn
-X/XFvUt7H21kj2uxfvCF2MTpIimfc+52YDyE2f1JZgcczkSaRzL4fc1EtQMpW2BQ
-/OekLcM7OV9iebAFdptvQiRJIMFPCTL0G7RQKoWrCvoB+TaKBR/FDRYyLIOtzbYe
-r3KCfb1b9ocP4FERIOXPWaeaFmk5cX6fDw3+UOr9w7h1UzKzRYGE+f2eQ9s2kPzy
-kP6Cy6wJ5u1MbnqBDiw1+zZhLTDcP4g2wwWVNMVZdwspVfs5zpdSOwzcYRAhRQeY
-0uy9tJ1HxveapA9WLQCrpEi09c3M3T3rHM8Ico04tpsqSmELqgvFhNaaULcBqQij
-mmQD8nMmJJD2bGVxHl23JtpFFjgK0kDM7TmAxfpbBJc3MSf8cWaOpcZYrsOPmYaI
-fCXIwzCt3eLMkz3/biTv4ORaXEjxuEn5a2c83DLNCiDIOBcZdXkewdorw+PJdxES
-xoM8/2zc7jondgdJv/OMRccXi/AFHybz0pt46gT049vHNvKvBVH1DawYqKIVQb/T
-4O0q+GgQhYRTCb3iz8ZPVEJoGcYiqi4J/xUpx7UAMNY8fYCUsUU=
-=yzDe
------END PGP SIGNATURE-----
-
---WrLvMy0clVxWGHYm--
