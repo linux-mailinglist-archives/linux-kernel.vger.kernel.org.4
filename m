@@ -2,135 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5877049A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6F07049A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbjEPJrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S231892AbjEPJsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjEPJrt (ORCPT
+        with ESMTP id S231921AbjEPJsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:47:49 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8846A2D54
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:47:48 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f475366522so45446665e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:47:48 -0700 (PDT)
+        Tue, 16 May 2023 05:48:09 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1752D62;
+        Tue, 16 May 2023 02:48:05 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so24971550a12.1;
+        Tue, 16 May 2023 02:48:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1684230467; x=1686822467;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LuCmupldNDLkF77f3sCWGieBR1qjxcQ+SEaYQ4NIG+w=;
-        b=1s2dNkcV3V2lTSZ/WA4ezzBe3qdAMQKTrwCCtYuBgbTDiR1MTtvugZZQiJnhXfrjiy
-         gs+lKnogO8Q5FR+dx/8+lbsMPpp98l0kJu0iST6AYjmggHsL5Org/GRTjyjXGs8SSn4O
-         kY7HaBmT67EZZmKKgya9XyeyfYeR2iT6k3nnmB3TjaTq5WSForGjfRsWqZswRlmJRXfc
-         kYErI60hHfJzMtKZe3SqL3OMgxlVUmYKaU2lqtgYFmi56fmXkfX1ef6loXLH0xE+0P0v
-         sK7MGi23MppsP0ZNRYnAij39FR3vgnadZqvUGK6exHJLaQheOO8oXxWR1+kQJcHOBkDB
-         2kSQ==
+        d=gmail.com; s=20221208; t=1684230484; x=1686822484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bvja6u6ZFGfnkLgz3Y8JuncRIU7gT8PI/VykX029Ek8=;
+        b=TC7kZ/eTedXqDpQDxFKtRdYmJcctfLX6NTMRBtAufhESfjfZFEbqTOwHLyakOCtvW0
+         AMBh812gNA/G0aj8rpTd6aE2NMZwOWYIQ+dEhHCfRIT7f+UR/e+BwhnodvdfqbO+wb6U
+         eRsVzFQ9r9dSTvVsd8slJf/AXpUgm3neL8HFRbZ6TvzwrSj9eaa80Kd5Ae0mH3g38KWb
+         0rxQElUd98LPtTocedpBmQtSgxVDb+DXoUfIwerj3++n+SHfyWBHYYoVGZYZH8cc1Rp/
+         iCPK5pJKUn4uSOhWWDOrnur3lpeS2sVYd3XMEmKfCashfPiPR9u8n5okyWqkkRdaFWdM
+         /zpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684230467; x=1686822467;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LuCmupldNDLkF77f3sCWGieBR1qjxcQ+SEaYQ4NIG+w=;
-        b=DExVhgMs3PXPiy1M42Bvk9nUk22+w373thWAbiJwVnYHmDuWmWpvwXainFu7DLzen+
-         Zs/XeOBac1/bT3PCzruA5FnJfl4OI0n6p6QDGow3iizd43LG4XzSckdOvHGE1D704mIA
-         HgRHMswZrvYMMq8g1X+wIh8hvgEsjfs8dqlmKcSbaHSINSSaVApQWIGAiJ2UKi5Nl+Xv
-         HIDLQJd4nUfuOTKZXACK+2N6CyXSOhxRTqL++bs3PuptgFbeAo9dT6sykolo9Zxwg7MY
-         uOd+YtSaZ512N7IWUc+GwS2fTRcw7chcYjHY5I34I5uDDzumFibEM4HLDqRmpOOXsCpe
-         J+rA==
-X-Gm-Message-State: AC+VfDw9cgO49HABX1GanCB2kSb8aSEBngaf6ZF4wCQTgggTOIX0Wjia
-        QUGT3v7kr4LANHbcwJpcqL1LSg==
-X-Google-Smtp-Source: ACHHUZ4+tzEo3gPqnbs2wABAQGZqLY1keg0SlW82sTVq9wrN09r0Vxrbws0a9FFnjZGPZ4qgLDqh0g==
-X-Received: by 2002:a05:600c:22c8:b0:3f4:2328:b5c2 with SMTP id 8-20020a05600c22c800b003f42328b5c2mr21336732wmg.35.1684230466855;
-        Tue, 16 May 2023 02:47:46 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:1834:efa8:a69b:82c? ([2a02:578:8593:1200:1834:efa8:a69b:82c])
-        by smtp.gmail.com with ESMTPSA id n12-20020a05600c294c00b003f4069417absm1714542wmd.24.2023.05.16.02.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 02:47:46 -0700 (PDT)
-Message-ID: <238b5d83-cfb1-ce99-8e1c-b69b8d65ed91@tessares.net>
-Date:   Tue, 16 May 2023 11:47:45 +0200
+        d=1e100.net; s=20221208; t=1684230484; x=1686822484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bvja6u6ZFGfnkLgz3Y8JuncRIU7gT8PI/VykX029Ek8=;
+        b=hc1+fk5sUeJputphOQr8sq4JyNowBSk4JxBVKqUYZHtuaRmD2ZdFRm1hf7rsB9wAY5
+         N06vP12tIKBvUkRXoE4Pm/8vUIA70wm/Vwzz1+Qm7O1i4oj2QSU1ksUpZDDyAcWaI9A1
+         58wKKrxS9N5aNjPM16lPgWt0ykng/42sF2HTaD5GfSdIc3qUX5/Cmxv4vMF9O+pbNTq+
+         QcZWUAH8Jn7k46s8At7wqpT3MFFRb+PtF9T5wFQTHe23VFn7bxDdGXTvdCP0jqTrNIOE
+         Lpypp0d3uXiG3oI8ukYCt+KLmhaiSPb+M0wroyK1B/Br+k4XYlmQ1oJNTYCew2vWmOFl
+         1t7A==
+X-Gm-Message-State: AC+VfDyAaEnDkaYc3cCo2w+cLpHyOzPH11723jnGw22viL3gc9c7NS+c
+        gCVHw9IAcbk+KSf6DXcqM7V7V8/UVNIsCqtzD/I=
+X-Google-Smtp-Source: ACHHUZ58Xk+LnHJqjDTQuzlbH9AZ2ZBiLiSzhynrpP51aJp6KZ9Hq9kWwdgsjYeQWqA2BDUz86yph1wPMeprS3aKpgQ=
+X-Received: by 2002:aa7:d943:0:b0:510:47a3:e775 with SMTP id
+ l3-20020aa7d943000000b0051047a3e775mr6274132eds.41.1684230483965; Tue, 16 May
+ 2023 02:48:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Reported-by checkpatch warning from v6.4-rc1
-Content-Language: en-GB
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        linux-kernel@vger.kernel.org, Philip Li <philip.li@intel.com>,
-        kernel test robot <lkp@intel.com>
-References: <ZGKFV/FGu3oDNMV1@francesco-nb.int.toradex.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <ZGKFV/FGu3oDNMV1@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230516071830.8190-1-zegao@tencent.com> <20230516071830.8190-3-zegao@tencent.com>
+ <20230516091820.GB2587705@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230516091820.GB2587705@hirez.programming.kicks-ass.net>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Tue, 16 May 2023 17:47:52 +0800
+Message-ID: <CAD8CoPDFp2_+D6nykj6mu_Pr57iN+8jO-kgA_FRrcxD8C7YU+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] fprobe: make fprobe_kprobe_handler recursion free
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Ze Gao <zegao@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Francesco,
+Precisely, these that are called within kprobe_busy_{begin, end},
+which the previous patch does not resolve.
+I will refine the commit message to make it clear.
 
-On 15/05/2023 21:17, Francesco Dolcini wrote:
-> Hello,
-> starting from commit d6ccdd678e45 ("checkpatch: check for misuse of the link tags")
-> any Reported-by: tag not followed by a Closes trigger a warning, even if
-> we have a Link: tag afterward.
+FYI, details can checked out here:
+    Link: https://lore.kernel.org/linux-trace-kernel/20230516132516.c902edc=
+f21028874a74fb868@kernel.org/
 
-The warning you are mentioning below is likely due to commit
-44c31888098a ("checkpatch: allow Closes tags with links") instead I think.
+Regards,
+Ze
 
-This commit is linked to the modification of the documentation allowing
-the Closes tag, see commit 0d828200ad56 ("docs: process: allow Closes
-tags with links") for more details.
-
-Initially, the intension was to allow using the Closes tags with links
-to public bugs trackers because in 6.3, checkpatch was displaying
-warnings when it was used while it was fine before. But it turned out
-that this Closes tag can be useful for bots tracking bugs reported on
-public mailing lists. As explained in [1] and [2], various bug trackers
-can use this tag to trigger some actions. It is then helpful to use the
-Closes tag each time a commit fixes a bug reported somewhere.
-
-[1]
-https://lore.kernel.org/all/20230314-doc-checkpatch-closes-tag-v4-0-d26d1fa66f9f@tessares.net/T/
-[2] https://docs.kernel.org/process/submitting-patches.html
-
-> Example:
-> 
-> WARNING: Reported-by: should be immediately followed by Closes: with a URL to the report
-> #8:
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202305152341.oiSjRpv6-lkp@intel.com/
-> total: 0 errors, 1 warnings, 8 lines checked
-The warning is saying to replace the "Link:" tag by a "Closes:" one
-here. Is it an issue to do that here?
-
-I guess it means that the kernel test robot should then suggest to use
-the "Closes:" tag. I can report an issue on their bugs tracker.
-
-> From what I can understand it was not in the intention of that patch,
-> and Link: is still fine to be used.
-
-Note that Checkpatch cannot cover all cases: it gives you
-recommendations but they can be ignored (and documented in the commit
-message) if they don't make sense in your case. Here, it looks like you
-should use the Closes tag but it might be fine to use the Link tag if a
-commit doesn't fully fix the reported issue for example.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+On Tue, May 16, 2023 at 5:18=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Tue, May 16, 2023 at 03:18:28PM +0800, Ze Gao wrote:
+> > Current implementation calls kprobe related functions before doing
+> > ftrace recursion check in fprobe_kprobe_handler, which opens door
+> > to kernel crash due to stack recursion if preempt_count_{add, sub}
+> > is traceable.
+>
+> Which preempt_count*() are you referring to? The ones you just made
+> _notrace in the previous patch?
