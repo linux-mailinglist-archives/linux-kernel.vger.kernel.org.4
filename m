@@ -2,205 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5289E7048D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6427E7048DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbjEPJQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S232031AbjEPJRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbjEPJQh (ORCPT
+        with ESMTP id S232000AbjEPJQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:16:37 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817D24EDD;
-        Tue, 16 May 2023 02:15:45 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bc5197d33so25225555a12.1;
-        Tue, 16 May 2023 02:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684228495; x=1686820495;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tWRz/dtuEAlvoTpK4wwHN8J++rGj37sontn+jndrmPM=;
-        b=Ecx6GH5pLKCyWaPjaCt8A98NT9jc7KikKMZl+YDWl70ubboIGL4S+BMYdWGAYxvx77
-         owY7/HOmWSQVbfvLaY1YlTQqVx3TOeD8MBIpwCc+9SW6I6/4dMEqUgOoPlfUR1FoYI66
-         CeueIUpF20fcplgX1d38vKT6tjt2MzuURE+9X0B2X+k2RPwudeiYHAYFQZrEL+6YcvZV
-         Ggl9zhjQp9Ztl/yz1TzBjaqLXW/8JNlS1kW6qo+9F8hLTREOhbe1n5lHCwIXu5/+9/6j
-         w8BE2bPiM9DYXwbhFW3KcFLebmBPSLhFqXZLUrq686lAUmxjlC5lwMctJ+tK1JVffaFR
-         VD4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684228495; x=1686820495;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tWRz/dtuEAlvoTpK4wwHN8J++rGj37sontn+jndrmPM=;
-        b=CtjdMsim2wXMvVdI216aoCNDDWirGZZlT2Xq8hzwQjmq2Wss7SLzzshXA6/nvvvTm2
-         65Aam9j7+gfh2HPRMNilV13YDwLTUhaorR/oGld2kKdZ3QK3FtnPDHKiVlaYBh7f16x5
-         MUGKGgpdTCJ5MaJnXR/ouBXlVozEw6Rk1BJwq4EPPLifnXHrMaBmsBfZNe5AxtJO9v8c
-         rL4xDBVfFWVnmUtnoLdlyGf0gu0X+YapUeS5EqCFPBfbwfWFUrIHb0dvIdZr4IqbxXWC
-         4a1SaSvx8VUGzmxa2dCfhD8tQfVlCKif+O3n0y3UkJEJuPkSv2aTcLR8nXlrTN71cujj
-         E8aA==
-X-Gm-Message-State: AC+VfDxpyzYPOT6jir9vSweGHlypAAStdDTlLoWi9zwDZaGpFgKu38LD
-        8IhaFsY0d2xfCyKaisRHqEs=
-X-Google-Smtp-Source: ACHHUZ72S8q+djK5XS8l8jM00K5FNc0ejOx8zT3psl9bAI6+DgUhqL04tf2ZZiw3IgdChZKZczUyNQ==
-X-Received: by 2002:a17:906:9b89:b0:96a:6939:11af with SMTP id dd9-20020a1709069b8900b0096a693911afmr15263419ejc.50.1684228494940;
-        Tue, 16 May 2023 02:14:54 -0700 (PDT)
-Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id kz23-20020a17090777d700b009659fed3612sm10589445ejc.24.2023.05.16.02.14.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 02:14:54 -0700 (PDT)
-Date:   Tue, 16 May 2023 11:14:52 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Peter De Schrijver <pdeschrijver@nvidia.com>, jonathanh@nvidia.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefank@nvidia.com
-Subject: Re: [PATCH v4 5/6] dt-bindings: Add support for tegra186-bpmp DRAM
- MRQ GSCs
-Message-ID: <ZGNJjFOUFZ2rYu5X@orome>
-References: <20230511132048.1122075-1-pdeschrijver@nvidia.com>
- <20230511132048.1122075-6-pdeschrijver@nvidia.com>
- <80ff83ab-d5e9-7a00-1099-a752330ef28d@linaro.org>
+        Tue, 16 May 2023 05:16:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61C91720
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:16:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3E90636B2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:15:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C2ADC433D2;
+        Tue, 16 May 2023 09:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684228532;
+        bh=U6y3925vAkGSTn35sRSDGfUP0WGwMaGFa9+WDRyDGYA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aKdnaR7prRfXN3CcQ3sPI5JcWTQg+MdRsUK/nnCtwy4crSz7qKEgLCg2FlD3CSpvd
+         PHHVgQy57MpvI2o37ij0FhyAkEBlqjw7guK02cTWAGR4tYfjBVemVw9GdlyO4Y82LL
+         RhpRPcRSwxo/sivGoVPpXwvR/RdKZ+SeFAt6myh+yR+3+9G3DkwW+5/kiKm0vdtW9f
+         KzUTt6xR+jI1204+tcfPngSWf6FzjLnUFEzO/fHE+ClfP9UzM1WPauwmS8AYI3HFa0
+         6WM/hu4+yYmk5XmA9do1O+GnatoVN29GsciZuSsvZ6kQixWIjnJn6Kn1bQu3V6jgiG
+         6o++Z3VFTAmUQ==
+Date:   Tue, 16 May 2023 11:15:23 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Sebastian Siewior <bigeasy@linutronix.de>
+Cc:     Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+Subject: Re: [PATCH v6 19/21] timer: Implement the hierarchical pull model
+Message-ID: <ZGNJq_ZITmZ5YciL@localhost.localdomain>
+References: <20230510072817.116056-1-anna-maria@linutronix.de>
+ <20230510072817.116056-20-anna-maria@linutronix.de>
+ <ZFty1fNMlnuLk4qF@localhost.localdomain>
+ <20230515101936.3amAvw0T@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9J2Kz8gt9fDKhsNu"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <80ff83ab-d5e9-7a00-1099-a752330ef28d@linaro.org>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230515101936.3amAvw0T@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Mon, May 15, 2023 at 12:19:36PM +0200, Sebastian Siewior a écrit :
+> On 2023-05-10 12:32:53 [+0200], Frederic Weisbecker wrote:
+> > In the case of !PREEMPT_RT, I suppose it's impossible for the target
+> > CPU to be offline. You checked above tmc->online and in-between the
+> > call to timer_lock_remote_bases(), the path is BH-disabled, this prevents
+> > stop_machine from running and from setting the CPU as offline.
+> 
+> I think you refer to the last one invoked from takedown_cpu(). This does
+> not matter, see below.
+> 
+> What bothers me is that _current_ CPU is check for cpu_is_offline() and
+> not the variable 'cpu'. Before the check timer_expire_remote() is
+> invoked on 'cpu' and not on current.
 
---9J2Kz8gt9fDKhsNu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oh right!
 
-On Fri, May 12, 2023 at 08:45:22AM +0200, Krzysztof Kozlowski wrote:
-> On 11/05/2023 15:20, Peter De Schrijver wrote:
-> > Add memory-region property to the tegra186-bpmp binding to support
-> > DRAM MRQ GSCs.
->=20
-> Use subject prefixes matching the subsystem (which you can get for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching).
->=20
-> >=20
-> > Co-developed-by: Stefan Kristiansson <stefank@nvidia.com>
-> > Signed-off-by: Stefan Kristiansson <stefank@nvidia.com>
-> > Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-> > ---
-> >  .../firmware/nvidia,tegra186-bpmp.yaml        | 37 +++++++++++++++++--
-> >  1 file changed, 34 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/firmware/nvidia,tegra186=
--bpmp.yaml b/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpm=
-p.yaml
-> > index 833c07f1685c..f3e02c9d090d 100644
-> > --- a/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.y=
-aml
-> > +++ b/Documentation/devicetree/bindings/firmware/nvidia,tegra186-bpmp.y=
-aml
-> > @@ -57,8 +57,11 @@ description: |
-> >    "#address-cells" or "#size-cells" property.
-> > =20
-> >    The shared memory area for the IPC TX and RX between CPU and BPMP are
-> > -  predefined and work on top of sysram, which is an SRAM inside the
-> > -  chip. See ".../sram/sram.yaml" for the bindings.
-> > +  predefined and work on top of either sysram, which is an SRAM inside=
- the
-> > +  chip, or in normal SDRAM.
-> > +  See ".../sram/sram.yaml" for the bindings for the SRAM case.
-> > +  See "../reserved-memory/nvidia,tegra264-bpmp-shmem.yaml" for binding=
-s for
-> > +  the SDRAM case.
-> > =20
-> >  properties:
-> >    compatible:
-> > @@ -81,6 +84,11 @@ properties:
-> >      minItems: 2
-> >      maxItems: 2
-> > =20
-> > +  memory-region:
-> > +    description: phandle to reserved memory region used for IPC between
-> > +      CPU-NS and BPMP.
-> > +    maxItems: 1
-> > +
-> >    "#clock-cells":
-> >      const: 1
-> > =20
-> > @@ -115,10 +123,15 @@ properties:
-> > =20
-> >  additionalProperties: false
-> > =20
-> > +oneOf:
-> > +  - required:
-> > +      - memory-region
-> > +  - required:
-> > +      - shmem
-> > +
-> >  required:
-> >    - compatible
-> >    - mboxes
-> > -  - shmem
-> >    - "#clock-cells"
-> >    - "#power-domain-cells"
-> >    - "#reset-cells"
-> > @@ -184,3 +197,21 @@ examples:
-> >              #thermal-sensor-cells =3D <1>;
-> >          };
-> >      };
-> > +
-> > +  - |
-> > +    #include <dt-bindings/mailbox/tegra186-hsp.h>
-> > +
-> > +    bpmp {
-> > +        compatible =3D "nvidia,tegra186-bpmp";
-> > +        interconnects =3D <&mc TEGRA186_MEMORY_CLIENT_BPMPR &emc>,
-> > +                        <&mc TEGRA186_MEMORY_CLIENT_BPMPW &emc>,
-> > +                        <&mc TEGRA186_MEMORY_CLIENT_BPMPDMAR &emc>,
-> > +                        <&mc TEGRA186_MEMORY_CLIENT_BPMPDMAW &emc>;
-> > +        interconnect-names =3D "read", "write", "dma-mem", "dma-write";
-> > +        mboxes =3D <&hsp_top1 TEGRA_HSP_MBOX_TYPE_DB
-> > +                            TEGRA_HSP_DB_MASTER_BPMP>;
-> > +        memory-region =3D <&dram_cpu_bpmp_mail>;
->=20
-> I am not sure if difference with one property justifies new example...
+> 
+> > However in PREEMPT_RT, ksoftirqd (or timersd) is preemptible, so it seems
+> > that it could happen in theory. And that could create a locking imbalance.
+> 
+> The ksoftirqd thread is part of smpboot_park_threads(). They have to
+> stop running and clean up before the machinery continues bringing down
+> the CPU (that is before takedown_cpu()). On the way down we have:
+> - tmigr_cpu_offline() followed by
+> - smpboot_park_threads().
+> 
+> So ksoftirqd (preempted or not) finishes before. This is for the
+> _target_ CPU.
 
-It makes sense in this case, in my opinion, because both memory-region
-and shmem properties are mutually exclusive, so this is a good way to
-make sure both validation paths are tested.
+Ok I forgot about the smpboot cleanup part.
 
-Thierry
+> 
+> After the "tmc->online" check the lock is dropped and this is invoked
+> from run_timer_softirq(). That means that _this_ CPU could get preempted
+> (by an IRQ for instance) at this point, and once the CPU gets back here,
+> the remote CPU (as specified in `cpu') can already be offline by the
+> time timer_lock_remote_bases() is invoked.
+> 
+> So RT or not, this is racy.
 
---9J2Kz8gt9fDKhsNu
-Content-Type: application/pgp-signature; name="signature.asc"
+Well, all CPUs must schedule to stop machine on take_cpu_down().
 
------BEGIN PGP SIGNATURE-----
+So:
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRjSYwACgkQ3SOs138+
-s6HJeA//V9jHTmp8k/QOCnT9ZE9dGCF6Ng9NBjuIxqan2up3nyUTy8UBwXnai5UP
-mop1HVvUeyfzHFo481s8QN9Luj5O94MaQuI14GeO+tmMAhQXiK7XPPOwpalrFgRn
-Y0FY1wb33xwRVfDat4AdrB/WFwRX5XpN0Is084sBCyQMXVcNDcoGq/4S9hOLF53Y
-YByRM6Np74N0Me30CgTEfWzOZ0s25D5YinlEB0TEVdShXlfdQdaKvNkv/j/4xQvp
-MMhV7QlVa/16EjftOvNPodJVmxauxa0nwSYWyP5Ia2xZRk1/DF54CWtETf5Dvca4
-1+mcMhuwtyPePkq88KtQorUSS6Pp8Nrey0YPPlrQxQDbw/M492fxDV7HFwhqmhfq
-sKcFohb/2767aEPDQld2Zr9yYvAeBZLSPmrqpyM+Ae3Aaz2yCkvbocCeYn1dKLGK
-T9pv6WPTQ5T1LKwwoyMjM/qhvN5r/bCdYYWjjRr4bRm7vR04QIqWfowckTdedfyq
-ZuvUEUtMEI1ckK8t3sJYkfM9GgmkNp4QhKxd2wPLmAPGWWkH1qBFmtW0ZGPQSThl
-nlaNMryce8HiL9d+LtNoHY9Dm/qGAhKINfmVkF2VOgP21QGyJl7OkHjRW7ILBRaf
-PGWK31d9loM3wm8XKsTp1J2NpAruywcDHT44yZXn2nHzpmTEiNw=
-=OXT8
------END PGP SIGNATURE-----
+  //CPU 1                            //CPU 2
+  softirq()
+     tmigr_handle_remote_cpu()
+        LOCK(tmc->lock)
+           if (!tmc->online)
+              UNLOCK(tmc->lock)
+              return;
+                                     cpu_down()
+                                        tmigr_cpu_offline()
+                                           LOCK(tmc->lock)
+                                           tmc->online = 0
+                                           UNLOCK(tmc->lock)
+                                        stop_machine()
+                                           //wait for CPU 1  
+                                           poll on MULTI_STOP_PREPARE
+        if (cpu_is_offline(2))
+           //not possible
+   //end of softirq
+   stop_machine()
+                                           set MULTI_STOP_PREPARE
+                                           ...
+                                           set_cpu_online(0)
 
---9J2Kz8gt9fDKhsNu--
+
+Things should be fine on !RT but I may easily be missing something.
+
+As for RT it should be fine as well as you pointed out since CPU 1
+can be preempted but the CPU still needs to park the kthreads before joining
+the stop machine party.
+
+> 
+> > My suggestion would be to unconditionally lock the bases, you already checked if
+> > !tmc->online before. The remote CPU may have gone down since then because the
+> > tmc lock has been relaxed but it should be rare enough that you don't care
+> > about optimizing with a lockless check. So you can just lock the bases,
+> > lock the tmc and check again if tmc->online. If not then you can just ignore
+> > the tmigr_new_timer_up call and propagation.
+> 
+> Regardless the previous point, this still looks odd as you pointed out.
+> The return code is ignored and the two functions perform lock + unlock
+> depending on it.
+
+Agreed!
