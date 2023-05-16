@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7631705B27
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282DA705B28
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjEPXRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
+        id S231371AbjEPXRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjEPXRT (ORCPT
+        with ESMTP id S231334AbjEPXRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:17:19 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAC376BE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:17:18 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-61b40562054so702416d6.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:17:18 -0700 (PDT)
+        Tue, 16 May 2023 19:17:23 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F2549E3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:17:20 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f4eb166122so1862221cf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684279037; x=1686871037;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eTpBn23vcjve8G08XVjCHY4GXuZt06y6RVhsJ8JMX9U=;
-        b=FLh2NEiN9QNcdiyVKTAWkAoNC4XFKMfFRMIp/dPADD+t83CgTEbSoSzZ1I+pvBh9wC
-         8v8gj5Y8L8HluUXo8UYS8Ua+arqIvpKE2doy4Vqej+emZlvnJRiJBLTFvHK8p2KrQOKk
-         yTlkumjBAnkfoh01UE4UAQrLR+wbuWroRvgbg=
+        d=broadcom.com; s=google; t=1684279039; x=1686871039;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PuafX0vBpdnjFlzucFixRnFUEp1XtZIYQHLEY07rZ98=;
+        b=TquJi/hIOriKMxnCTVwwUN5dUfUcyyxq1ALsYW5Arem2DVD98Q3ekIk3BV+Csfm4Oy
+         aLlO2bfi7icpfrxQ7Q9gSwbspQC4v0jS9ahy4CibMD84c+vQHEhwROS7Aqlxbd/meXXt
+         OsB3pL9oRsEo1qxy2+kLIHN5/vtveU4BqZ7pQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684279037; x=1686871037;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eTpBn23vcjve8G08XVjCHY4GXuZt06y6RVhsJ8JMX9U=;
-        b=FSpV+vUjMbjJ2YT7jj1iImXpqVD61qZZl2h0oCSwghHTj57Ht3kWQP26NxBFeeibWV
-         zXO+bFzUdG5LRbqLmXUu2X2L05WBLDO/FC6N4XqLceraJ51EpprEpskIAquXzyvar1rF
-         nhtGGfjCu1H3o1PUKIrqzjyDZh/qAi4NqugcEFy2xXjxWNgLvUNlz3My2C10CH6T6IZb
-         4kNZdTF3UU0kwzlz7CrxnZT2yvkf62fsZPFWSoK1yp7/c4gYIn/UMN7LbRi2Gv706dRh
-         kFg2jS7QvhrSgAhglxCHpMROMTLFtioWEXcq6jUfa3XuTf+s6Ry7p0ddWhqmEkqro239
-         rT3Q==
-X-Gm-Message-State: AC+VfDwH6Skp9rEqYnRpqQEhJHiPNXP3Y58V9XbSg+YJkJ3mXF89uEbq
-        B24deWm8IemQTD0V9e7+BpC6GiLdav6mU4Whmf4=
-X-Google-Smtp-Source: ACHHUZ5x62otsy7dId73jHILkiGUJt3YJDrjeBX9MTqIY6EmkMsJOoUFPaOpMEnpRWMdhpLMAKWkcA==
-X-Received: by 2002:a05:6214:2501:b0:5f4:357c:3bf5 with SMTP id gf1-20020a056214250100b005f4357c3bf5mr70621371qvb.13.1684279037115;
-        Tue, 16 May 2023 16:17:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684279039; x=1686871039;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PuafX0vBpdnjFlzucFixRnFUEp1XtZIYQHLEY07rZ98=;
+        b=lLjMtQKxdknihtdvw+g7gHTbwlKgJQiO4TwcMNJ+2uLRgTavrDuTMq591Mx2Lau9iS
+         0LvIoEzDhxkx9mQXTTtb0CstzzytB1IZf+OVKWR/tMpECdYWbLWusdoL7gQushwzGr5d
+         ry6sQ88i/yNbKeBmeHM/TwuSbXTtlV6KWIRNaH6i07mOuxAZ20gd64OAyBzp092HeVKf
+         fCE7ry1+o0lIDMszTgNqy1mFEcGO1RLjZGFO2gO7itqYGwylGIgtqreDI9oUooTB9xXB
+         we6kFpVPITA3femzU6esE5bwHZvf2ENCTIiazixoVjOcf15asPGBq5qAFyWokhR9rK05
+         qzqQ==
+X-Gm-Message-State: AC+VfDy2flnbRxBdE25MzYI8glHXgVLJ4HCPTtF4Mnk/ehsnsOgQ8x5t
+        hX5heWK9mlFp/RIY7+QLZ6639P2oJ3gsp+CZZQI=
+X-Google-Smtp-Source: ACHHUZ7XrlDjzlLyY4kzwBLGAUOlMn2/lzn0Z7DPhPf5w5KKVTQfb7GGsgEA/WyR339B5ezOJQNj3g==
+X-Received: by 2002:ad4:5aa5:0:b0:616:4c4b:c9b9 with SMTP id u5-20020ad45aa5000000b006164c4bc9b9mr68809605qvg.37.1684279039458;
+        Tue, 16 May 2023 16:17:19 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g17-20020a0cf851000000b0061b7784b3basm5495427qvo.84.2023.05.16.16.17.15
+        by smtp.gmail.com with ESMTPSA id g17-20020a0cf851000000b0061b7784b3basm5495427qvo.84.2023.05.16.16.17.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 16:17:16 -0700 (PDT)
+        Tue, 16 May 2023 16:17:19 -0700 (PDT)
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
 To:     netdev@vger.kernel.org
 Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
@@ -59,57 +59,101 @@ Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next 0/3] WAKE_FILTER for Broadcom PHY
-Date:   Tue, 16 May 2023 16:17:10 -0700
-Message-Id: <20230516231713.2882879-1-florian.fainelli@broadcom.com>
+Subject: [PATCH net-next 1/3] net: phy: Add pluming for ethtool_{get,set}_rxnfc
+Date:   Tue, 16 May 2023 16:17:11 -0700
+Message-Id: <20230516231713.2882879-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230516231713.2882879-1-florian.fainelli@broadcom.com>
+References: <20230516231713.2882879-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ba680b05fbd7c5ec"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        boundary="000000000000de095d05fbd7c5fd"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000ba680b05fbd7c5ec
+--000000000000de095d05fbd7c5fd
 Content-Transfer-Encoding: 8bit
 
-This patch series adds support for WAKE_FILTER to the Broadcom PHY with
-the narrow use case of being able to program a custom Ethernet MAC DA to
-be waking up from.
+Ethernet MAC drivers supporting Wake-on-LAN using programmable filters
+(WAKE_FILTER) typically configure such programmable filters using the
+ethtool::set_rxnfc API and with a sepcial RX_CLS_FLOW_WAKE to indicate
+the filter is also wake-up capable.
 
-This is currently useful for Set-top-box applications where we might
-want to wake-up from select multicast MAC DA pertaining to mDNS for
-instance (Wake-on-Cast typically).
+In order to offer the same functionality for capable Ethernet PHY
+drivers, wire-up the ethtool::{get,set}_rxnfc APIs within the PHY
+library.
 
-The approach taken here is the same as what has been pioneered and
-proposed before for the GENET and SYSTEMPORT drivers.
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ drivers/net/phy/phy.c | 19 +++++++++++++++++++
+ include/linux/phy.h   |  8 ++++++++
+ 2 files changed, 27 insertions(+)
 
-Thanks!
-
-Florian Fainelli (3):
-  net: phy: Add pluming for ethtool_{get,set}_rxnfc
-  net: phy: broadcom: Add support for WAKE_FILTER
-  net: bcmgenet: Interrogate PHY for WAKE_FILTER programming
-
- .../net/ethernet/broadcom/genet/bcmgenet.c    |  12 ++
- drivers/net/phy/bcm-phy-lib.c                 | 147 +++++++++++++++++-
- drivers/net/phy/bcm-phy-lib.h                 |   6 +
- drivers/net/phy/broadcom.c                    |  15 ++
- drivers/net/phy/phy.c                         |  19 +++
- include/linux/phy.h                           |   8 +
- 6 files changed, 206 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/net/phy/phy.c b/drivers/net/phy/phy.c
+index 0c0df38cd1ab..15c03fb5aab4 100644
+--- a/drivers/net/phy/phy.c
++++ b/drivers/net/phy/phy.c
+@@ -1683,3 +1683,22 @@ int phy_ethtool_nway_reset(struct net_device *ndev)
+ 	return ret;
+ }
+ EXPORT_SYMBOL(phy_ethtool_nway_reset);
++
++int phy_ethtool_get_rxnfc(struct phy_device *phydev,
++			  struct ethtool_rxnfc *nfc, u32 *rule_locs)
++{
++	if (phydev->drv && phydev->drv->get_rxnfc)
++		return phydev->drv->get_rxnfc(phydev, nfc, rule_locs);
++
++	return -EOPNOTSUPP;
++}
++EXPORT_SYMBOL(phy_ethtool_get_rxnfc);
++
++int phy_ethtool_set_rxnfc(struct phy_device *phydev, struct ethtool_rxnfc *nfc)
++{
++	if (phydev->drv && phydev->drv->set_rxnfc)
++		return phydev->drv->set_rxnfc(phydev, nfc);
++
++	return -EOPNOTSUPP;
++}
++EXPORT_SYMBOL(phy_ethtool_set_rxnfc);
+diff --git a/include/linux/phy.h b/include/linux/phy.h
+index e0df8b3c2bdb..3de9ac620088 100644
+--- a/include/linux/phy.h
++++ b/include/linux/phy.h
+@@ -1069,6 +1069,10 @@ struct phy_driver {
+ 	int (*get_sqi)(struct phy_device *dev);
+ 	/** @get_sqi_max: Get the maximum signal quality indication */
+ 	int (*get_sqi_max)(struct phy_device *dev);
++	/* Used for WAKE_FILTER programming only */
++	int (*get_rxnfc)(struct phy_device *dev,
++			 struct ethtool_rxnfc *nfc, u32 *rule_locs);
++	int (*set_rxnfc)(struct phy_device *dev, struct ethtool_rxnfc *nfc);
+ 
+ 	/* PLCA RS interface */
+ 	/** @get_plca_cfg: Return the current PLCA configuration */
+@@ -1920,6 +1924,10 @@ int phy_ethtool_set_plca_cfg(struct phy_device *phydev,
+ 			     struct netlink_ext_ack *extack);
+ int phy_ethtool_get_plca_status(struct phy_device *phydev,
+ 				struct phy_plca_status *plca_st);
++int phy_ethtool_get_rxnfc(struct phy_device *phydev,
++			  struct ethtool_rxnfc *nfc, u32 *rule_locs);
++int phy_ethtool_set_rxnfc(struct phy_device *phydev,
++			  struct ethtool_rxnfc *nfc);
+ 
+ static inline int phy_package_read(struct phy_device *phydev, u32 regnum)
+ {
 -- 
 2.34.1
 
 
---000000000000ba680b05fbd7c5ec
+--000000000000de095d05fbd7c5fd
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -180,14 +224,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJHi1Smvc60CtyaX
-djjjBmrPZgNhipGU1pcMAhY4yGlVMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDUxNjIzMTcxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDnNfziWyNCujHO0
+vWLxtSWxp6j1PwwDSbeSnZLfMZLmMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUxNjIzMTcxOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAJozB2E9QAlnB18P0FjHUQtsXhyNQQKK0z
-xA6sr+n85zfuVNar9Sj2OEcmqUge+ufvsjfG9tbBT9YvvlnbCALdwkl07vfcDqeUt03NAJzVCtHh
-DjB/uHzrZgDuVsjr8YhIvXhb3FT27HNUfRpww+W5o9KCzb3vM7rJRQwcTSDqy0xnlcllEXTlt1TP
-wsVBd/NP84AjDHivH/M7Qt+6EbkFFBgBAesrSxT+3gKCXE61Cy1WEcvRd6VCM7xU7J/ryEjBI36B
-PHkKZowiW17BdGBRFSVNrFHVd3WEiZqTK5qlBDp1wyRppNItJL44XrUBrUbx/BUV3yWz1FOEn8uf
-gcz7
---000000000000ba680b05fbd7c5ec--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCJHAgMz5Lc/x0uBopSWIe4E7OmWaeMr3TG
+GVg5O0zi/+D0DqFlsJeZAv0wuLjHXtPfaEdVkiH1uO/rZDqGY+oHoO37Jxjs18yZKNn6wmM6/hbX
+YZvGv2oc2LLpbLl4zL8njCRTWdrP3piD3kAQCWBhHngjEm1gREs4xzbXyJOh8xMck2YDiD3krA7W
+1xDJR/PUPVmYYLgVvT3FuD+4YxH3Mjrxs/7VrIp16p4oyPzCaSqlXC+Kf/QdVCcYDy90CWG9IYy4
+wcGU65Dk2nNo52qN1N3fX//ZUhW2vLh87lsUAKV9UvwaD6gffHGjXoAUaH5aJhYDeo241BXS+uNg
+Erbj
+--000000000000de095d05fbd7c5fd--
