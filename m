@@ -2,141 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09270704814
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BB670481C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjEPIpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
+        id S230362AbjEPIq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjEPIpM (ORCPT
+        with ESMTP id S231389AbjEPIq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:45:12 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E4019BD;
-        Tue, 16 May 2023 01:45:11 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 522B65810AF;
-        Tue, 16 May 2023 04:45:08 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 16 May 2023 04:45:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684226708; x=1684233908; bh=u/
-        Wz5MhNACKrizGF564GZclX7WtuKcDjHIIc2sgb46k=; b=LZwQORTPNRSuxtpmnd
-        ncA/M0GDtg3dh7wxSU7uqTrOJWQ0JudOtVmLMg6+XYJJN7JkkhOaqWr9JMUJ1LYN
-        qlsXhsVFZwKdFi7LcqNMpziHyx+mheLQlbmWNeBmG7grA0HCXVgHp5i5BFWTv7Zk
-        c6MbjEN04eqMeNz2WPg04ABVYJiNbL2d4kHKuk9xBc/be9SRSFSG3sdJ2P+YmXuM
-        sWJERm3eaXVLB70uKqLNxSMUjmQZH6ZZra9iVh2PASs3OS1MyTeDVJMwZ8sqRMtF
-        jVJTgCxreoiAubEYMI1cLq2h2/KsLcGqMlxUJTbEv7GhFoqyI5CridlFzwyCyASg
-        t9Aw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684226708; x=1684233908; bh=u/Wz5MhNACKri
-        zGF564GZclX7WtuKcDjHIIc2sgb46k=; b=dIM0d/rWDZRxe7l2yHA8Ys/6jAjJ1
-        jzn5PVRh0UI3hEhDGSbYeitApDeupBmoKf8Z9yRSFCrmvoM7bvYQ3l15E7isPivU
-        Cl+5R+XQQCgSYMG/DRxE/H01o6IhPDbLn9fEsKAlOzn2y4vEsgLxNVmB5WNNJZ9h
-        93ORydUw+VR3p9D5ITaAuZuQ7rIwHhvawr06BPgUH40iOl0/7UbJYdV7H0cNSn6U
-        sAliTsQlKy3hNA7w4PU7Rf87KgM8UDglyqB3tAmaTM+4RSnE+H/GmMrPd/buYSlM
-        w4deceGtaJ8L0m5z3S2tBm5Z7Pt35x0TcDCS+QcRR/N8CCnn3GO4dySDQ==
-X-ME-Sender: <xms:k0JjZHYINi_B2oYrUdT0aJgPICFzDz-f3r20UBg6F9qO6G1GhhxfXw>
-    <xme:k0JjZGa6WQ40P-MeUsiDH97ab1HHMRq3UjfkwX3sF4ds5FYVgY4rFUEwYEt861uJ2
-    WyKDPTJfKgrJkbVQkg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:k0JjZJ9ZFPvUQMdXbAcgS7dLsrFIbc8_NFycwgYtMqV52neATnsIkA>
-    <xmx:k0JjZNpupvUMEJJbur4eJj0b5lnHQ5_2TRz-gy8bZxP9efgBLd7hDw>
-    <xmx:k0JjZCrTsJg_ZlDnOiKui63PzKX-TM63SjAnwzZ8wbPJHvFGGygA7w>
-    <xmx:lEJjZKB3kWYt21PwpKFT5sM6_1Q5NhXKizj5u523ggsCHuQu0KNR9Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8FDBDB60086; Tue, 16 May 2023 04:45:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
-Mime-Version: 1.0
-Message-Id: <2fabe721-7434-43e7-bae5-088a42ba128d@app.fastmail.com>
-In-Reply-To: <9cba6384-123b-1cd1-ed02-08365a0ed529@linaro.org>
-References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org>
- <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-1-2592c29ea263@linaro.org>
- <5cb38be4-a27f-dc1a-cbb9-c195505a9e7c@linaro.org>
- <9fa0662e-8854-05f9-da7f-ec8e08d2badf@linaro.org>
- <d5c030f9-2f4d-25cc-b922-d00f5033ac37@linaro.org>
- <6228670c-3e06-3061-f304-a2c641962ffa@linaro.org>
- <9cba6384-123b-1cd1-ed02-08365a0ed529@linaro.org>
-Date:   Tue, 16 May 2023 10:44:44 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Jerome Brunet" <jbrunet@baylibre.com>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Kevin Hilman" <khilman@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Dave Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        "Sam Ravnborg" <sam@ravnborg.org>
-Cc:     "Nicolas Belin" <nbelin@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH v4 01/13] dt-bindings: clk: g12a-clkc: export VCLK2_SEL and add
- CTS_ENCL clock ids
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 16 May 2023 04:46:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0138C3C01;
+        Tue, 16 May 2023 01:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684226786; x=1715762786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QL+tBUOtTekpizs4IA8GnqHOaksmnf7OGlafEadIZKE=;
+  b=OEcqNsWrVv2FC+6h2Y+KVOOC4l53dj47UVtMB/12/oc286jn+TlMPOQk
+   QvC4AwzOyDGj6MKkrAXEJfi4fOv3sf8LQ+gC1ar1lavByXLzL4DYHB4Da
+   MGteMyQZtZcGMZCrmWSxpjtDKbX6LiF361fXBfrzOPLIaABF45h3Ecqno
+   emKAazza6x52//bFnnfPb01D06GgT+B4+og3h+4G9VNSbbtmHD1C9jLhv
+   UXYhMJSRf4nzjefOFPLRZ762bXWMcvJcRauMIhA8Tm6sbV1CjeHavGg6L
+   lxRza39jkJn0TDqkqNPzOg7UEsYJlU3+gijJ+aEm28X+YyID0sHaioRod
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="351454167"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="351454167"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 01:46:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="704312325"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="704312325"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 May 2023 01:46:07 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pyqJq-0007H4-1m;
+        Tue, 16 May 2023 08:46:06 +0000
+Date:   Tue, 16 May 2023 16:45:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        catalin.marinas@arm.com, conor+dt@kernel.org, davidgow@google.com,
+        gsomlo@gmail.com, gerg@linux-m68k.org, hal.feng@starfivetech.com,
+        hasegawa-hitomi@fujitsu.com, j.neuschaefer@gmx.net, joel@jms.id.au,
+        kernel@esmil.dk, krzk@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org, p.zabel@pengutronix.de,
+        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org
+Subject: Re: [PATCH v14 8/8] soc: amd: Add support for AMD Pensando SoC
+ Controller
+Message-ID: <202305161642.PZQ4S8o2-lkp@intel.com>
+References: <20230515181606.65953-9-blarson@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515181606.65953-9-blarson@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023, at 18:22, neil.armstrong@linaro.org wrote:
-> On 15/05/2023 18:15, Krzysztof Kozlowski wrote:
->> On 15/05/2023 18:13, Krzysztof Kozlowski wrote:
->> 
->> Also one more argument maybe not relevant here but for other cases -
->> this makes literally impossible to include the clock ID in DTS in the
->> same kernel revision, because you must not merge driver branch to DTS
->> branch. SoC folks were complaining about this many times.
->
-> Actually we handle this very simply by having such patches merged in a immutable
-> branch merged in the clock and DT pull-requests, it worked perfectly so far
-> and neither Stephen or Arnd complained about that.
+Hi Brad,
 
-It's usually benign if you just add a new clk at the end of the binding
-header, as that doesn't touch the internal header file in the same
-commit. I'm certainly happier about drivers that just use numbers from
-a datasheet instead of having to come up with numbers to stick in a binding
-because the hardware is entirely irregular, but there is usually no point
-trying to complain about bad hardware to the driver authors -- I unsterstand
-you are just trying to make things work.
+kernel test robot noticed the following build warnings:
 
-I agree with Krzysztof that using the same identifiers in the local
-header and in the binding is just making your life harder for no
-reason, and if you are the only ones doing it this way, it would
-help to change it. Maybe just add a namespace prefix to all the internal
-macros so the next time you move one into the documented bindings you
-can do it with the same immutable branch hack but not include the
-driver changes in the dt branch.
+[auto build test WARNING on e922ba281a8d84f640d8c8e18a385d032c19e185]
 
-    Arnd
+url:    https://github.com/intel-lab-lkp/linux/commits/Brad-Larson/dt-bindings-arm-add-AMD-Pensando-boards/20230516-032312
+base:   e922ba281a8d84f640d8c8e18a385d032c19e185
+patch link:    https://lore.kernel.org/r/20230515181606.65953-9-blarson%40amd.com
+patch subject: [PATCH v14 8/8] soc: amd: Add support for AMD Pensando SoC Controller
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230516/202305161642.PZQ4S8o2-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/48a90df35083d2f3788e171ff0af01ddc8cd871b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Brad-Larson/dt-bindings-arm-add-AMD-Pensando-boards/20230516-032312
+        git checkout 48a90df35083d2f3788e171ff0af01ddc8cd871b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/soc/amd/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305161642.PZQ4S8o2-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/soc/amd/pensando-ctrl.c: In function 'penctrl_ioctl':
+>> drivers/soc/amd/pensando-ctrl.c:91:36: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      91 |         if (copy_from_user(tx_buf, (void __user *)msg->tx_buf, msg->len)) {
+         |                                    ^
+   drivers/soc/amd/pensando-ctrl.c:114:26: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     114 |         if (copy_to_user((void __user *)msg->rx_buf, rx_buf, msg->len))
+         |                          ^
+
+
+vim +91 drivers/soc/amd/pensando-ctrl.c
+
+    34	
+    35	static long
+    36	penctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+    37	{
+    38		void __user *in_arg = (void __user *)arg;
+    39		struct penctrl_device *penctrl;
+    40		u8 tx_buf[PENCTRL_MAX_MSG_LEN];
+    41		u8 rx_buf[PENCTRL_MAX_MSG_LEN];
+    42		struct spi_transfer t[2] = {};
+    43		struct penctrl_spi_xfer *msg;
+    44		struct spi_device *spi;
+    45		unsigned int num_msgs;
+    46		struct spi_message m;
+    47		u32 size;
+    48		int ret;
+    49	
+    50		/* Check for a valid command */
+    51		if (_IOC_TYPE(cmd) != PENCTRL_IOC_MAGIC)
+    52			return -ENOTTY;
+    53	
+    54		if (_IOC_NR(cmd) > PENCTRL_IOC_MAXNR)
+    55			return -ENOTTY;
+    56	
+    57		if (((_IOC_DIR(cmd) & _IOC_READ)) && !access_ok(in_arg, _IOC_SIZE(cmd)))
+    58			return -EFAULT;
+    59	
+    60		if (((_IOC_DIR(cmd) & _IOC_WRITE)) && !access_ok(in_arg, _IOC_SIZE(cmd)))
+    61			return -EFAULT;
+    62	
+    63		/* Get a reference to the SPI device */
+    64		penctrl = filp->private_data;
+    65		if (!penctrl)
+    66			return -ESHUTDOWN;
+    67	
+    68		spi = spi_dev_get(penctrl->spi);
+    69		if (!spi)
+    70			return -ESHUTDOWN;
+    71	
+    72		/* Verify and prepare SPI message */
+    73		size = _IOC_SIZE(cmd);
+    74		num_msgs = size / sizeof(struct penctrl_spi_xfer);
+    75		if (num_msgs > 2 || size == 0 || size % sizeof(struct penctrl_spi_xfer)) {
+    76			ret = -EINVAL;
+    77			goto out_unlock;
+    78		}
+    79		msg = memdup_user((struct penctrl_spi_xfer *)arg, size);
+    80		if (IS_ERR(msg)) {
+    81			ret = PTR_ERR(msg);
+    82			goto out_unlock;
+    83		}
+    84		if (msg->len > PENCTRL_MAX_MSG_LEN) {
+    85			ret = -EINVAL;
+    86			goto out_unlock;
+    87		}
+    88	
+    89		t[0].tx_buf = tx_buf;
+    90		t[0].len = msg->len;
+  > 91		if (copy_from_user(tx_buf, (void __user *)msg->tx_buf, msg->len)) {
+    92			ret = -EFAULT;
+    93			goto out_unlock;
+    94		}
+    95		if (num_msgs > 1) {
+    96			msg++;
+    97			if (msg->len > PENCTRL_MAX_MSG_LEN) {
+    98				ret = -EINVAL;
+    99				goto out_unlock;
+   100			}
+   101			t[1].rx_buf = rx_buf;
+   102			t[1].len = msg->len;
+   103		}
+   104		spi_message_init_with_transfers(&m, t, num_msgs);
+   105	
+   106		/* Perform the transfer */
+   107		mutex_lock(&spi_lock);
+   108		ret = spi_sync(spi, &m);
+   109		mutex_unlock(&spi_lock);
+   110	
+   111		if (ret || (num_msgs == 1))
+   112			goto out_unlock;
+   113	
+   114		if (copy_to_user((void __user *)msg->rx_buf, rx_buf, msg->len))
+   115			ret = -EFAULT;
+   116	
+   117	out_unlock:
+   118		spi_dev_put(spi);
+   119		return ret;
+   120	}
+   121	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
