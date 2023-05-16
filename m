@@ -2,547 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C69B704B68
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1D7704B44
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbjEPLBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
+        id S232512AbjEPLAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbjEPLBL (ORCPT
+        with ESMTP id S232008AbjEPLAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:01:11 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2EC271E;
-        Tue, 16 May 2023 04:01:07 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAeLX6032354;
-        Tue, 16 May 2023 11:00:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=ZtgDOhBDS3o2TG3vg2wGFifODNpfUCbvU5LzXUKg5Ok=;
- b=TEF5+bZN8uVfLnpc0EgxMf6Oz/mwqhk++kpwQpbO59mA008jg3IP8Si9Z5/pvq4uHT39
- Exjb1ZPAXDUDZl/rppaj2ntA8aoLTXqM/tArYbGYtUTtZYM/dAbxe69WHDBvNJaAMn/a
- ZQDglewfb8i7bJIwStGDwb1wpaNlgv7amLY1ZP9blHHV86Xhda9ge3QZpUkYcq6k6MxE
- dTacxqdZVuliLjUIoFvWSsmy0sCmt8htF6CEO1pbpBz0u6cffkvAF4xfKuXg6TttY5kt
- ZSE8l2N0pzRpWBv8xViCioefkQndSZMjr0Trc760Y5V08wgfB7nN8FYqUD0zM635XgUu 7w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7fba2jw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:49 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAf849003275;
-        Tue, 16 May 2023 11:00:49 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7fba2he-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:48 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G2wIsf009276;
-        Tue, 16 May 2023 11:00:46 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdsjqx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:46 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB0h1a52429108
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:00:43 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 19F582004D;
-        Tue, 16 May 2023 11:00:43 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1ED020040;
-        Tue, 16 May 2023 11:00:42 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:00:42 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH v4 04/41] comedi: add HAS_IOPORT dependencies
-Date:   Tue, 16 May 2023 13:00:00 +0200
-Message-Id: <20230516110038.2413224-5-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+        Tue, 16 May 2023 07:00:20 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C4B173D;
+        Tue, 16 May 2023 04:00:15 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id D2C5E61DFA903;
+        Tue, 16 May 2023 13:00:01 +0200 (CEST)
+Message-ID: <3ef9259f-f778-d18c-6fc6-97aab9e9f9fc@molgen.mpg.de>
+Date:   Tue, 16 May 2023 13:00:01 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] Bluetooth: hci_qca: Add support for Qualcomm Bluetooth
+ SoC QCA2066
+To:     Tim Jiang <quic_tjiang@quicinc.com>
+Cc:     marcel@holtmann.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_bgodavar@quicinc.com, quic_hemantg@quicinc.com,
+        mka@chromium.org
+References: <20230516104102.30775-1-quic_tjiang@quicinc.com>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230516104102.30775-1-quic_tjiang@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: PfOe94ZofebWgI4mIkqzcNON60aIcvXT
-X-Proofpoint-ORIG-GUID: BBJVb8q2G4V6D7vW8V6zFOmLzGGKIJF2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- adultscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 spamscore=0 clxscore=1011
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+Dear Tim,
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
-Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
-      per-subsystem patches may be applied independently
 
- drivers/comedi/Kconfig | 103 +++++++++++++++++++++++++++--------------
- 1 file changed, 68 insertions(+), 35 deletions(-)
+Thank you for your patch.
 
-diff --git a/drivers/comedi/Kconfig b/drivers/comedi/Kconfig
-index 9af280735cba..7a8d402f05be 100644
---- a/drivers/comedi/Kconfig
-+++ b/drivers/comedi/Kconfig
-@@ -67,6 +67,7 @@ config COMEDI_TEST
- 
- config COMEDI_PARPORT
- 	tristate "Parallel port support"
-+	depends on HAS_IOPORT
- 	help
- 	  Enable support for the standard parallel port.
- 	  A cheap and easy way to get a few more digital I/O lines. Steal
-@@ -79,6 +80,7 @@ config COMEDI_PARPORT
- config COMEDI_SSV_DNP
- 	tristate "SSV Embedded Systems DIL/Net-PC support"
- 	depends on X86_32 || COMPILE_TEST
-+	depends on HAS_IOPORT
- 	help
- 	  Enable support for SSV Embedded Systems DIL/Net-PC
- 
-@@ -89,6 +91,7 @@ endif # COMEDI_MISC_DRIVERS
- 
- menuconfig COMEDI_ISA_DRIVERS
- 	bool "Comedi ISA and PC/104 drivers"
-+	depends on ISA
- 	help
- 	  Enable comedi ISA and PC/104 drivers to be built
- 
-@@ -100,7 +103,8 @@ if COMEDI_ISA_DRIVERS
- 
- config COMEDI_PCL711
- 	tristate "Advantech PCL-711/711b and ADlink ACL-8112 ISA card support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Advantech PCL-711 and 711b, ADlink ACL-8112
- 
-@@ -161,8 +165,9 @@ config COMEDI_PCL730
- 
- config COMEDI_PCL812
- 	tristate "Advantech PCL-812/813 and ADlink ACL-8112/8113/8113/8216"
-+	depends on HAS_IOPORT
- 	select COMEDI_ISADMA if ISA_DMA_API
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Advantech PCL-812/PG, PCL-813/B, ADLink
- 	  ACL-8112DG/HG/PG, ACL-8113, ACL-8216, ICP DAS A-821PGH/PGL/PGL-NDA,
-@@ -173,8 +178,9 @@ config COMEDI_PCL812
- 
- config COMEDI_PCL816
- 	tristate "Advantech PCL-814 and PCL-816 ISA card support"
-+	depends on HAS_IOPORT
- 	select COMEDI_ISADMA if ISA_DMA_API
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Advantech PCL-814 and PCL-816 ISA cards
- 
-@@ -183,8 +189,9 @@ config COMEDI_PCL816
- 
- config COMEDI_PCL818
- 	tristate "Advantech PCL-718 and PCL-818 ISA card support"
-+	depends on HAS_IOPORT
- 	select COMEDI_ISADMA if ISA_DMA_API
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Advantech PCL-818 ISA cards
- 	  PCL-818L, PCL-818H, PCL-818HD, PCL-818HG, PCL-818 and PCL-718
-@@ -203,7 +210,7 @@ config COMEDI_PCM3724
- 
- config COMEDI_AMPLC_DIO200_ISA
- 	tristate "Amplicon PC212E/PC214E/PC215E/PC218E/PC272E"
--	select COMEDI_AMPLC_DIO200
-+	depends on COMEDI_AMPLC_DIO200
- 	help
- 	  Enable support for Amplicon PC212E, PC214E, PC215E, PC218E and
- 	  PC272E ISA DIO boards
-@@ -255,7 +262,8 @@ config COMEDI_DAC02
- 
- config COMEDI_DAS16M1
- 	tristate "MeasurementComputing CIO-DAS16/M1DAS-16 ISA card support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 	help
- 	  Enable support for Measurement Computing CIO-DAS16/M1 ISA cards.
-@@ -265,7 +273,7 @@ config COMEDI_DAS16M1
- 
- config COMEDI_DAS08_ISA
- 	tristate "DAS-08 compatible ISA and PC/104 card support"
--	select COMEDI_DAS08
-+	depends on COMEDI_DAS08
- 	help
- 	  Enable support for Keithley Metrabyte/ComputerBoards DAS08
- 	  and compatible ISA and PC/104 cards:
-@@ -278,8 +286,9 @@ config COMEDI_DAS08_ISA
- 
- config COMEDI_DAS16
- 	tristate "DAS-16 compatible ISA and PC/104 card support"
-+	depends on HAS_IOPORT
- 	select COMEDI_ISADMA if ISA_DMA_API
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 	help
- 	  Enable support for Keithley Metrabyte/ComputerBoards DAS16
-@@ -296,7 +305,8 @@ config COMEDI_DAS16
- 
- config COMEDI_DAS800
- 	tristate "DAS800 and compatible ISA card support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Keithley Metrabyte DAS800 and compatible ISA cards
- 	  Keithley Metrabyte DAS-800, DAS-801, DAS-802
-@@ -308,8 +318,9 @@ config COMEDI_DAS800
- 
- config COMEDI_DAS1800
- 	tristate "DAS1800 and compatible ISA card support"
-+	depends on HAS_IOPORT
- 	select COMEDI_ISADMA if ISA_DMA_API
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for DAS1800 and compatible ISA cards
- 	  Keithley Metrabyte DAS-1701ST, DAS-1701ST-DA, DAS-1701/AO,
-@@ -323,7 +334,8 @@ config COMEDI_DAS1800
- 
- config COMEDI_DAS6402
- 	tristate "DAS6402 and compatible ISA card support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for DAS6402 and compatible ISA cards
- 	  Computerboards, Keithley Metrabyte DAS6402 and compatibles
-@@ -402,7 +414,8 @@ config COMEDI_FL512
- 
- config COMEDI_AIO_AIO12_8
- 	tristate "I/O Products PC/104 AIO12-8 Analog I/O Board support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 	help
- 	  Enable support for I/O Products PC/104 AIO12-8 Analog I/O Board
-@@ -456,8 +469,9 @@ config COMEDI_ADQ12B
- 
- config COMEDI_NI_AT_A2150
- 	tristate "NI AT-A2150 ISA card support"
-+	depends on HAS_IOPORT
- 	select COMEDI_ISADMA if ISA_DMA_API
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for National Instruments AT-A2150 cards
- 
-@@ -466,7 +480,8 @@ config COMEDI_NI_AT_A2150
- 
- config COMEDI_NI_AT_AO
- 	tristate "NI AT-AO-6/10 EISA card support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for National Instruments AT-AO-6/10 cards
- 
-@@ -497,7 +512,7 @@ config COMEDI_NI_ATMIO16D
- 
- config COMEDI_NI_LABPC_ISA
- 	tristate "NI Lab-PC and compatibles ISA support"
--	select COMEDI_NI_LABPC
-+	depends on COMEDI_NI_LABPC
- 	help
- 	  Enable support for National Instruments Lab-PC and compatibles
- 	  Lab-PC-1200, Lab-PC-1200AI, Lab-PC+.
-@@ -561,7 +576,7 @@ endif # COMEDI_ISA_DRIVERS
- 
- menuconfig COMEDI_PCI_DRIVERS
- 	tristate "Comedi PCI drivers"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  Enable support for comedi PCI drivers.
- 
-@@ -710,7 +725,8 @@ config COMEDI_ADL_PCI8164
- 
- config COMEDI_ADL_PCI9111
- 	tristate "ADLink PCI-9111HR support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for ADlink PCI9111 cards
- 
-@@ -720,7 +736,7 @@ config COMEDI_ADL_PCI9111
- config COMEDI_ADL_PCI9118
- 	tristate "ADLink PCI-9118DG, PCI-9118HG, PCI-9118HR support"
- 	depends on HAS_DMA
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for ADlink PCI-9118DG, PCI-9118HG, PCI-9118HR cards
- 
-@@ -729,7 +745,8 @@ config COMEDI_ADL_PCI9118
- 
- config COMEDI_ADV_PCI1710
- 	tristate "Advantech PCI-171x and PCI-1731 support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Advantech PCI-1710, PCI-1710HG, PCI-1711,
- 	  PCI-1713 and PCI-1731
-@@ -773,7 +790,8 @@ config COMEDI_ADV_PCI1760
- 
- config COMEDI_ADV_PCI_DIO
- 	tristate "Advantech PCI DIO card support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 	help
- 	  Enable support for Advantech PCI DIO cards
-@@ -786,7 +804,7 @@ config COMEDI_ADV_PCI_DIO
- 
- config COMEDI_AMPLC_DIO200_PCI
- 	tristate "Amplicon PCI215/PCI272/PCIe215/PCIe236/PCIe296 DIO support"
--	select COMEDI_AMPLC_DIO200
-+	depends on COMEDI_AMPLC_DIO200
- 	help
- 	  Enable support for Amplicon PCI215, PCI272, PCIe215, PCIe236
- 	  and PCIe296 DIO boards.
-@@ -814,7 +832,8 @@ config COMEDI_AMPLC_PC263_PCI
- 
- config COMEDI_AMPLC_PCI224
- 	tristate "Amplicon PCI224 and PCI234 support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Amplicon PCI224 and PCI234 AO boards
- 
-@@ -823,7 +842,8 @@ config COMEDI_AMPLC_PCI224
- 
- config COMEDI_AMPLC_PCI230
- 	tristate "Amplicon PCI230 and PCI260 support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 	help
- 	  Enable support for Amplicon PCI230 and PCI260 Multifunction I/O
-@@ -842,7 +862,7 @@ config COMEDI_CONTEC_PCI_DIO
- 
- config COMEDI_DAS08_PCI
- 	tristate "DAS-08 PCI support"
--	select COMEDI_DAS08
-+	depends on COMEDI_DAS08
- 	help
- 	  Enable support for PCI DAS-08 cards.
- 
-@@ -929,7 +949,8 @@ config COMEDI_CB_PCIDAS64
- 
- config COMEDI_CB_PCIDAS
- 	tristate "MeasurementComputing PCI-DAS support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 	help
- 	  Enable support for ComputerBoards/MeasurementComputing PCI-DAS with
-@@ -953,7 +974,8 @@ config COMEDI_CB_PCIDDA
- 
- config COMEDI_CB_PCIMDAS
- 	tristate "MeasurementComputing PCIM-DAS1602/16, PCIe-DAS1602/16 support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 	help
- 	  Enable support for ComputerBoards/MeasurementComputing PCI Migration
-@@ -973,7 +995,8 @@ config COMEDI_CB_PCIMDDA
- 
- config COMEDI_ME4000
- 	tristate "Meilhaus ME-4000 support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Meilhaus PCI data acquisition cards
- 	  ME-4650, ME-4670i, ME-4680, ME-4680i and ME-4680is
-@@ -1031,7 +1054,7 @@ config COMEDI_NI_670X
- 
- config COMEDI_NI_LABPC_PCI
- 	tristate "NI Lab-PC PCI-1200 support"
--	select COMEDI_NI_LABPC
-+	depends on COMEDI_NI_LABPC
- 	help
- 	  Enable support for National Instruments Lab-PC PCI-1200.
- 
-@@ -1053,6 +1076,7 @@ config COMEDI_NI_PCIDIO
- config COMEDI_NI_PCIMIO
- 	tristate "NI PCI-MIO-E series and M series support"
- 	depends on HAS_DMA
-+	depends on HAS_IOPORT
- 	select COMEDI_NI_TIOCMD
- 	select COMEDI_8255
- 	help
-@@ -1074,7 +1098,8 @@ config COMEDI_NI_PCIMIO
- 
- config COMEDI_RTD520
- 	tristate "Real Time Devices PCI4520/DM7520 support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for Real Time Devices PCI4520/DM7520
- 
-@@ -1114,7 +1139,8 @@ if COMEDI_PCMCIA_DRIVERS
- 
- config COMEDI_CB_DAS16_CS
- 	tristate "CB DAS16 series PCMCIA support"
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	help
- 	  Enable support for the ComputerBoards/MeasurementComputing PCMCIA
- 	  cards DAS16/16, PCM-DAS16D/12 and PCM-DAS16s/16
-@@ -1124,7 +1150,7 @@ config COMEDI_CB_DAS16_CS
- 
- config COMEDI_DAS08_CS
- 	tristate "CB DAS08 PCMCIA support"
--	select COMEDI_DAS08
-+	depends on COMEDI_DAS08
- 	help
- 	  Enable support for the ComputerBoards/MeasurementComputing DAS-08
- 	  PCMCIA card
-@@ -1134,6 +1160,7 @@ config COMEDI_DAS08_CS
- 
- config COMEDI_NI_DAQ_700_CS
- 	tristate "NI DAQCard-700 PCMCIA support"
-+	depends on HAS_IOPORT
- 	help
- 	  Enable support for the National Instruments PCMCIA DAQCard-700 DIO
- 
-@@ -1142,6 +1169,7 @@ config COMEDI_NI_DAQ_700_CS
- 
- config COMEDI_NI_DAQ_DIO24_CS
- 	tristate "NI DAQ-Card DIO-24 PCMCIA support"
-+	depends on HAS_IOPORT
- 	select COMEDI_8255
- 	help
- 	  Enable support for the National Instruments PCMCIA DAQ-Card DIO-24
-@@ -1151,7 +1179,7 @@ config COMEDI_NI_DAQ_DIO24_CS
- 
- config COMEDI_NI_LABPC_CS
- 	tristate "NI DAQCard-1200 PCMCIA support"
--	select COMEDI_NI_LABPC
-+	depends on COMEDI_NI_LABPC
- 	help
- 	  Enable support for the National Instruments PCMCIA DAQCard-1200
- 
-@@ -1160,6 +1188,7 @@ config COMEDI_NI_LABPC_CS
- 
- config COMEDI_NI_MIO_CS
- 	tristate "NI DAQCard E series PCMCIA support"
-+	depends on HAS_IOPORT
- 	select COMEDI_NI_TIO
- 	select COMEDI_8255
- 	help
-@@ -1172,6 +1201,7 @@ config COMEDI_NI_MIO_CS
- 
- config COMEDI_QUATECH_DAQP_CS
- 	tristate "Quatech DAQP PCMCIA data capture card support"
-+	depends on HAS_IOPORT
- 	help
- 	  Enable support for the Quatech DAQP PCMCIA data capture cards
- 	  DAQP-208 and DAQP-308
-@@ -1248,12 +1278,14 @@ endif # COMEDI_USB_DRIVERS
- 
- config COMEDI_8254
- 	tristate
-+	depends on HAS_IOPORT
- 
- config COMEDI_8255
- 	tristate
- 
- config COMEDI_8255_SA
- 	tristate "Standalone 8255 support"
-+	depends on HAS_IOPORT
- 	select COMEDI_8255
- 	help
- 	  Enable support for 8255 digital I/O as a standalone driver.
-@@ -1285,7 +1317,7 @@ config COMEDI_KCOMEDILIB
- 	  called kcomedilib.
- 
- config COMEDI_AMPLC_DIO200
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	tristate
- 
- config COMEDI_AMPLC_PC236
-@@ -1294,7 +1326,7 @@ config COMEDI_AMPLC_PC236
- 
- config COMEDI_DAS08
- 	tristate
--	select COMEDI_8254
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 
- config COMEDI_ISADMA
-@@ -1302,7 +1334,8 @@ config COMEDI_ISADMA
- 
- config COMEDI_NI_LABPC
- 	tristate
--	select COMEDI_8254
-+	depends on HAS_IOPORT
-+	depends on COMEDI_8254
- 	select COMEDI_8255
- 
- config COMEDI_NI_LABPC_ISADMA
--- 
-2.39.2
+Am 16.05.23 um 12:41 schrieb Tim Jiang:
+> This patch adds support for QCA2066 firmware patch and nvm downloading.
 
+Could you please elaborate, what new features are needed for this as you 
+add common functions?
+
+Please document the datasheet.
+
+> Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+> ---
+>   drivers/bluetooth/btqca.c   | 77 ++++++++++++++++++++++++++++++++++++-
+>   drivers/bluetooth/btqca.h   |  4 ++
+>   drivers/bluetooth/hci_qca.c |  8 +++-
+>   3 files changed, 87 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
+> index fd0941fe8608..bd028387cd02 100644
+> --- a/drivers/bluetooth/btqca.c
+> +++ b/drivers/bluetooth/btqca.c
+> @@ -205,6 +205,48 @@ static int qca_send_reset(struct hci_dev *hdev)
+>   	return 0;
+>   }
+>   
+> +static int qca_read_fw_board_id(struct hci_dev *hdev, u16 *bid)
+> +{
+> +	u8 cmd;
+> +	struct sk_buff *skb;
+> +	struct edl_event_hdr *edl;
+> +	int err = 0;
+> +	int bid_len;
+> +
+> +	bt_dev_dbg(hdev, "QCA read board ID");
+> +
+> +	cmd = EDL_GET_BID_REQ_CMD;
+> +	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CMD_LEN,
+> +				&cmd, 0, HCI_INIT_TIMEOUT);
+> +	if (IS_ERR(skb)) {
+> +		err = PTR_ERR(skb);
+> +		bt_dev_err(hdev, "Reading QCA board ID failed (%d)", err);
+> +		return err;
+> +	}
+> +
+> +	edl = skb_pull_data(skb, sizeof(*edl));
+> +	if (!edl) {
+> +		bt_dev_err(hdev, "QCA read board ID with no header");
+> +		err = -EILSEQ;
+> +		goto out;
+> +	}
+> +
+> +	if (edl->cresp != EDL_CMD_REQ_RES_EVT ||
+> +	    edl->rtype != EDL_GET_BID_REQ_CMD) {
+> +		bt_dev_err(hdev, "QCA Wrong packet: %d %d", edl->cresp, edl->rtype);
+> +		err = -EIO;
+> +		goto out;
+> +	}
+> +
+> +	bid_len = edl->data[0];
+> +	*bid = (edl->data[1] << 8) + edl->data[2];
+> +	bt_dev_info(hdev, "%s: bid len = %x, bid = %x", __func__, bid_len, *bid);
+> +
+> +out:
+> +	kfree_skb(skb);
+> +	return err;
+> +}
+> +
+>   int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
+>   {
+>   	struct sk_buff *skb;
+> @@ -574,6 +616,30 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
+>   }
+>   EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
+>   
+> +static void qca_generate_nvm_name(struct hci_dev *hdev, char *fwname,
+> +		   size_t max_size, struct qca_btsoc_version ver, u16 bid)
+> +{
+> +	u8 rom_ver = 0;
+> +	u32 soc_ver;
+
+Any reason to fix the size of the variables?
+
+> +	const char *variant;
+> +
+> +	soc_ver = get_soc_ver(ver.soc_id, ver.rom_ver);
+> +	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
+> +
+> +	if ((ver.soc_id & 0x0000ff00) == QCA_HSP_GF_SOC_ID)  /* hsp gf chip */
+> +		variant = "g";
+> +	else
+> +		variant = "";
+> +
+> +	if (bid == 0x0)
+> +		snprintf(fwname, max_size, "qca/hpnv%02x%s.bin", rom_ver, variant);
+> +	else
+> +		snprintf(fwname, max_size, "qca/hpnv%02x%s.%x",
+> +				rom_ver, variant, bid);
+
+Use consistent line wrapping?
+
+> +
+> +	bt_dev_info(hdev, "%s: nvm name is %s", __func__, fwname);
+> +}
+> +
+>   int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   		   enum qca_btsoc_type soc_type, struct qca_btsoc_version ver,
+>   		   const char *firmware_name)
+> @@ -582,6 +648,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   	int err;
+>   	u8 rom_ver = 0;
+>   	u32 soc_ver;
+> +	u16 boardid = 0;
+>   
+>   	bt_dev_dbg(hdev, "QCA setup on UART");
+>   
+> @@ -604,6 +671,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   	if (qca_is_wcn399x(soc_type)) {
+>   		snprintf(config.fwname, sizeof(config.fwname),
+>   			 "qca/crbtfw%02x.tlv", rom_ver);
+> +	} else if (soc_type == QCA_QCA2066) {
+> +		snprintf(config.fwname, sizeof(config.fwname),
+> +			 "qca/hpbtfw%02x.tlv", rom_ver);
+>   	} else if (soc_type == QCA_QCA6390) {
+>   		snprintf(config.fwname, sizeof(config.fwname),
+>   			 "qca/htbtfw%02x.tlv", rom_ver);
+> @@ -631,6 +701,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   	/* Give the controller some time to get ready to receive the NVM */
+>   	msleep(10);
+>   
+> +	if (soc_type == QCA_QCA2066)
+> +		qca_read_fw_board_id(hdev, &boardid);
+> +
+>   	/* Download NVM configuration */
+>   	config.type = TLV_TYPE_NVM;
+>   	if (firmware_name)
+> @@ -644,7 +717,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   			snprintf(config.fwname, sizeof(config.fwname),
+>   				 "qca/crnv%02x.bin", rom_ver);
+>   		}
+> -	}
+> +	} else if (soc_type == QCA_QCA2066)
+> +		qca_generate_nvm_name(hdev, config.fwname, sizeof(config.fwname),
+> +				ver, boardid);
+
+The coding style requires { } around branches, once it’s used in any branch.
+
+>   	else if (soc_type == QCA_QCA6390)
+>   		snprintf(config.fwname, sizeof(config.fwname),
+>   			 "qca/htnv%02x.bin", rom_ver);
+> diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
+> index b884095bcd9d..7c9b3464ae4a 100644
+> --- a/drivers/bluetooth/btqca.h
+> +++ b/drivers/bluetooth/btqca.h
+> @@ -13,6 +13,7 @@
+>   #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
+>   #define EDL_GET_BUILD_INFO_CMD		(0x20)
+>   #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
+> +#define EDL_GET_BID_REQ_CMD		(0x23)
+>   #define EDL_PATCH_CONFIG_CMD		(0x28)
+>   #define MAX_SIZE_PER_TLV_SEGMENT	(243)
+>   #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
+> @@ -48,6 +49,8 @@
+>   
+>   #define QCA_FW_BUILD_VER_LEN		255
+>   
+> +#define QCA_HSP_GF_SOC_ID		0x1200
+> +
+>   
+>   enum qca_baudrate {
+>   	QCA_BAUDRATE_115200 	= 0,
+> @@ -145,6 +148,7 @@ enum qca_btsoc_type {
+>   	QCA_WCN3990,
+>   	QCA_WCN3998,
+>   	QCA_WCN3991,
+> +	QCA_QCA2066,
+>   	QCA_QCA6390,
+>   	QCA_WCN6750,
+>   	QCA_WCN6855,
+> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> index 1b064504b388..ec24ce451568 100644
+> --- a/drivers/bluetooth/hci_qca.c
+> +++ b/drivers/bluetooth/hci_qca.c
+> @@ -1729,7 +1729,7 @@ static int qca_setup(struct hci_uart *hu)
+>   	bt_dev_info(hdev, "setting up %s",
+>   		qca_is_wcn399x(soc_type) ? "wcn399x" :
+>   		(soc_type == QCA_WCN6750) ? "wcn6750" :
+> -		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
+> +		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390/QCA2066");
+>   
+>   	qca->memdump_state = QCA_MEMDUMP_IDLE;
+>   
+> @@ -1874,6 +1874,11 @@ static const struct qca_device_data qca_soc_data_qca6390 __maybe_unused = {
+>   	.num_vregs = 0,
+>   };
+>   
+> +static const struct qca_device_data qca_soc_data_qca2066 = {
+> +	.soc_type = QCA_QCA2066,
+> +	.num_vregs = 0,
+> +};
+> +
+>   static const struct qca_device_data qca_soc_data_wcn6750 __maybe_unused = {
+>   	.soc_type = QCA_WCN6750,
+>   	.vregs = (struct qca_vreg []) {
+> @@ -2364,6 +2369,7 @@ static const struct of_device_id qca_bluetooth_of_match[] = {
+>   	{ .compatible = "qcom,wcn3998-bt", .data = &qca_soc_data_wcn3998},
+>   	{ .compatible = "qcom,wcn6750-bt", .data = &qca_soc_data_wcn6750},
+>   	{ .compatible = "qcom,wcn6855-bt", .data = &qca_soc_data_wcn6855},
+> +	{ .compatible = "qcom,qca2066-bt", .data = &qca_soc_data_qca2066},
+
+Sort it?
+
+>   	{ /* sentinel */ }
+>   };
+>   MODULE_DEVICE_TABLE(of, qca_bluetooth_of_match);
+
+
+Kind regards,
+
+Paul
