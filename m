@@ -2,119 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DE6704BC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF56704C4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232677AbjEPLGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
+        id S232228AbjEPL0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbjEPLF6 (ORCPT
+        with ESMTP id S232119AbjEPL0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:05:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7516A69
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:03:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12034637DD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:02:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E050DC433D2;
-        Tue, 16 May 2023 11:02:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684234943;
-        bh=t7FUbmszHOiSynp4eWcee6aa0ZPkc5hy3XpDJUTIt9A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FjQkQ/176/JsQs7294dTtu6jXCDb+fJV8W0/VBIYPEz8+UB+doz12DcN7y+37ixLz
-         XkEVf3/yR4zWBrH8wnViMveP8H36C7qVzbeuWr0PD4ZmERJXVmLVdnCVB4VeWi62+Y
-         e/KsGSJcYwGWi/ZIHLhN5fqQ2Az3SG9K0XOFZw3I=
-Date:   Tue, 16 May 2023 13:02:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ekaterina Esina <eesina@astralinux.ru>
-Cc:     Rob Springer <rspringer@google.com>,
-        Todd Poynor <toddpoynor@google.com>,
-        Ben Chan <benchan@chromium.org>, Richard Yeh <rcy@google.com>,
-        John Joseph <jnjoseph@google.com>,
-        Simon Que <sque@chromium.org>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH 5.10] staging: gasket: interrupt: Clean interrupt_data
- after free
-Message-ID: <2023051640-trustless-gluten-a7b8@gregkh>
-References: <20230515122950.100564-1-eesina@astralinux.ru>
- <2023051546-churn-obstinate-20af@gregkh>
- <ba0ad96d-6515-66e3-e140-cd7c3999577e@astralinux.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba0ad96d-6515-66e3-e140-cd7c3999577e@astralinux.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 07:26:11 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72808A9;
+        Tue, 16 May 2023 04:26:10 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1019F5C0040;
+        Tue, 16 May 2023 07:03:24 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 16 May 2023 07:03:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684235004; x=1684321404; bh=oG
+        PUyY4yOz1WGHHszNYUVcNjTWFW5iDK/V4m5UVgnR4=; b=u0dLgjR28/VUWc9UXa
+        1ieJatFzXqFB2OTuWSJKHAEFcbw2GG7e+VB91wwXsIluDMoImUF+Wlns5DPtpTEn
+        bK9WxIW9Aqz3b3sD2whWE7t1rTiy3JEblbfK/BIPAaBP7HrBVInFfW+uNgr0C5bG
+        7P3zzCHMmLMMzoZGMFF3eT4SQ53ltUAs89/iIInqTeQiw2MbKqGSXIPQNxozfTkP
+        anaRtkULBQcsJ4vHkCCwshC9tvHzVTY3EKJ9BYdplmZfylN0zKKxrgj3A26wxf7t
+        L16ftbfQEoPo8xQt9hH9+ZagOp9Pcqwxtu6VfPhlnPtIGfUylSNCtEV3iydHQ0RL
+        7tNg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684235004; x=1684321404; bh=oGPUyY4yOz1WG
+        HHszNYUVcNjTWFW5iDK/V4m5UVgnR4=; b=d1bhxwARlVsUGSNkdNQwEG+OzSCgY
+        rWtF/JWFxjiD1UZkLCww3i0xPEcoOZ4epcRYG4Kb3yWqwmlr/sTxCbWCrF1iHATv
+        gHt/Um0FXfZ7okpgekmRj+e8buh2LzmYAPx4vHciNWQt0pQM8+4dtzsBn4FwH7qA
+        hJNdqSy3YlXf5zXRHY0ilBh9sJ+X83XOTVh7OZJU1FrUoJNyfPWJNsp+VkFA97ur
+        6TyVKaH8nTlSa1P6jlFRSkTAnV92njIwu2dXAZ48wLToGqHkH3FX73RtVl8Da+ew
+        Nj2UHR3sBxODQiTGsbiHTufF13fsM90kphJazsYoe1p13xj9NLzSxtF5g==
+X-ME-Sender: <xms:-mJjZBHz4LwqB9dwBPD_0kW5iN4br5CTjqrUyClEA_CKLiNDSVu4Sw>
+    <xme:-mJjZGXgyp_PhaxgHTFIGJQoW3qUoj1wuR5_PD9IEfe2ZwgwaLmCutYCD4qCltHCx
+    XSsRXKkOcOppOSI1vc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgfeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:-mJjZDKheLkxkYltH5LKHOrq6dIOmLUfGPaozLyw6CHt817keEY1MQ>
+    <xmx:-mJjZHH6KpQzZWUL48pz0mRNzu3_rf4lrs01I4o7H65gr4GKJ7QWJQ>
+    <xmx:-mJjZHXsvc0LbcwxEoE5UdpEgP5ckkIZIDbNPtCXXRT3CgMht-LcMA>
+    <xmx:_GJjZAbSoNXXu3RyqGk2TISdgK6tRgCUi67z4178MnSkgsDiDlJJvw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5C737B60086; Tue, 16 May 2023 07:03:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
+Mime-Version: 1.0
+Message-Id: <bc5118f2-8982-46ff-bc75-d0c71475e909@app.fastmail.com>
+In-Reply-To: <20230515181606.65953-9-blarson@amd.com>
+References: <20230515181606.65953-1-blarson@amd.com>
+ <20230515181606.65953-9-blarson@amd.com>
+Date:   Tue, 16 May 2023 13:03:01 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Brad Larson" <blarson@amd.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        linux-spi@vger.kernel.org,
+        "Adrian Hunter" <adrian.hunter@intel.com>, alcooperx@gmail.com,
+        "Andy Shevchenko" <andy.shevchenko@gmail.com>,
+        brendan.higgins@linux.dev,
+        "Brian Norris" <briannorris@chromium.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "David Gow" <davidgow@google.com>, gsomlo@gmail.com,
+        "Greg Ungerer" <gerg@linux-m68k.org>,
+        "Hal Feng" <hal.feng@starfivetech.com>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        "Krzysztof Kozlowski" <krzk@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
+        "Lee Jones" <lee.jones@linaro.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Samuel Holland" <samuel@sholland.org>,
+        "Serge Semin" <fancer.lancer@gmail.com>, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com,
+        "Tom Lendacky" <thomas.lendacky@amd.com>,
+        "Tony Huang" <tonyhuang.sunplus@gmail.com>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>, vaishnav.a@ti.com,
+        "Walker Chen" <walker.chen@starfivetech.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v14 8/8] soc: amd: Add support for AMD Pensando SoC Controller
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 01:44:06PM +0300, Ekaterina Esina wrote:
-> 
-> 
-> On 15.05.2023 16:02, Greg Kroah-Hartman wrote:
-> > On Mon, May 15, 2023 at 03:29:50PM +0300, Esina Ekaterina wrote:
-> > > Add interrupt_data = NULL after kfree(interrupt_data) in
-> > > gasket_interrupt_init. It is needed to avoid double free
-> > > in gasket_interrupt_cleanup, there is a check for NULL
-> > > before kfree(interrupt_data).
-> > > 
-> > > Found by Astra Linux on behalf of Linux Verification Center
-> > > (linuxtesting.org) with SVACE.
-> > > 
-> > > Fixes: 9a69f5087ccc ("drivers/staging: Gasket driver framework + Apex driver")
-> > > Signed-off-by: Esina Ekaterina <eesina@astralinux.ru>
-> > > ---
-> > >   drivers/staging/gasket/gasket_interrupt.c | 2 ++
-> > >   1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/staging/gasket/gasket_interrupt.c b/drivers/staging/gasket/gasket_interrupt.c
-> > > index 864342acfd86..48b664b9134a 100644
-> > > --- a/drivers/staging/gasket/gasket_interrupt.c
-> > > +++ b/drivers/staging/gasket/gasket_interrupt.c
-> > > @@ -337,6 +337,7 @@ int gasket_interrupt_init(struct gasket_dev *gasket_dev)
-> > >   			sizeof(*interrupt_data->eventfd_ctxs), GFP_KERNEL);
-> > >   	if (!interrupt_data->eventfd_ctxs) {
-> > >   		kfree(interrupt_data);
-> > > +		interrupt_data = NULL;
-> > >   		return -ENOMEM;
-> > >   	}
-> > > @@ -346,6 +347,7 @@ int gasket_interrupt_init(struct gasket_dev *gasket_dev)
-> > >   	if (!interrupt_data->interrupt_counts) {
-> > >   		kfree(interrupt_data->eventfd_ctxs);
-> > >   		kfree(interrupt_data);
-> > > +		interrupt_data = NULL;
-> > >   		return -ENOMEM;
-> > >   	}
-> > > -- 
-> > > 2.40.1
-> > 
-> > Also, your tool is wrong, this is not a correct fix at all.
-> > 
-> > How did you test it?  Why is your tool spitting out incorrect code?  Why
-> > are you not verifying it's output before asking others to do so?
-> > 
-> > Please don't do this anymore, it's wasteful on our side, right?  Please
-> > take the time to review existing changes for problems, that would be
-> > more useful overall to everyone.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> I apologize, there is a mistake. It should've been
-> gasket_dev->interrupt_data = NULL istead of interrupt_data = NULL
+On Mon, May 15, 2023, at 20:16, Brad Larson wrote:
+> The Pensando SoC controller is a SPI connected companion device
+> that is present in all Pensando SoC board designs.  The essential
+> board management registers are accessed on chip select 0 with
+> board mgmt IO support accessed using additional chip selects.
+>
+> Signed-off-by: Brad Larson <blarson@amd.com>
 
-Which implies that your tools are broken, right?  Please do better
-testing before sending anymore patches.
+Hi Brad,
 
-greg k-h
+I'm sorry I wasn't paying enough attention to this driver as the
+past 13 revisions went by.
+
+> v10 changes:
+> - Different driver implementation specific to this Pensando controller device.
+> - Moved to soc/amd directory under new name based on guidance.  This driver is
+>   of no use to any design other than all Pensando SoC based cards.
+> - Removed use of builtin_driver, can be built as a module.
+
+it looks like this was a fundamental change that I failed to see.
+
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +menu "AMD Pensando SoC drivers"
+> +
+> +config AMD_PENSANDO_CTRL
+> +	tristate "AMD Pensando SoC Controller"
+> +	depends on SPI_MASTER=y
+> +	depends on (ARCH_PENSANDO && OF) || COMPILE_TEST
+> +	default ARCH_PENSANDO
+> +	select REGMAP_SPI
+> +	select MFD_SYSCON
+> +	help
+> +	  Enables AMD Pensando SoC controller device support.  This is a SPI
+> +	  attached companion device in all Pensando SoC board designs which
+> +	  provides essential board control/status registers and management IO
+> +	  support.
+
+So generally speaking, I don't want custom user interfaces in
+drivers/soc. It looks like this one has internal interfaces for
+a reset controller and the regmap, so those parts are fine, but
+I'm confused about the purpose of the ioctl interface:
+
+> +static long
+> +penctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+> +{
+
+> +	if (num_msgs > 1) {
+> +		msg++;
+> +		if (msg->len > PENCTRL_MAX_MSG_LEN) {
+> +			ret = -EINVAL;
+> +			goto out_unlock;
+> +		}
+> +		t[1].rx_buf = rx_buf;
+> +		t[1].len = msg->len;
+> +	}
+> +	spi_message_init_with_transfers(&m, t, num_msgs);
+
+This seems to be just a passthrough of user space messages, which
+is what the spidev driver already provides, but using a different
+ioctl interface. I don't really want any user-level interfaces
+in drivers/soc as a rule, but having one that duplicates existing
+functionality seems particularly wrong.
+
+Can you explain what the purpose is? Is this about serializing
+access between the in-kernel reset control and the user-side
+access?
+
+Also, can you explain why this needs a low-lever user interface
+in the first place, rather than something that can be expressed
+using high-level abstractions as you already do with the reset
+control?
+
+All of the above should be part of the changelog text to get a
+driver like this merged. I don't think we can get a quick
+solution here though, so maybe you can start by removing the
+ioctl side and having the rest of the driver in drivers/reset?
+
+     Arnd
