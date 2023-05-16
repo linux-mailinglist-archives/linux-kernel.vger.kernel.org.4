@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A05A70DBE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 14:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0CF7130E6
+	for <lists+linux-kernel@lfdr.de>; Sat, 27 May 2023 02:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236728AbjEWMBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 23 May 2023 08:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        id S235731AbjE0Aga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 26 May 2023 20:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbjEWMBO (ORCPT
+        with ESMTP id S229901AbjE0Ag2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 23 May 2023 08:01:14 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DEF118
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:01:13 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50be17a1eceso1457703a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 23 May 2023 05:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684843271; x=1687435271;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwDgLKuZAoJyLnwNBTa9Plj4tI2jTn00PeEyIRBeY3M=;
-        b=UlTc6dBhYhV5+FwOb+RSPI2rk8Q3qpFgLR3evPzNE3qoSA/1Tv938oYhaUah40zsTJ
-         f5TXQMK2Cs079ySx+YpwdRWznI362VlsBkVu90B+Ov9nuERDJwdJYMfohfmTSI2+kDdI
-         scPtnFlwU4iUXY9LM6WpBfRQbFpdHeGc4hMcAFqULPVX1fZW3lDlnnbfO1JqByHkrWWK
-         3iO8KQPZs0CPPK/LLdsYu6zc5ox+KJMKgleV+yRLT7U3LAyno33h5A9o/0CfapwLHQDI
-         veiFgFew6wafBYy17ZumPHmrNo9K9VFsHBpJb7AfKpU3Gm3sGMXUvay7WEwp5nxFryVv
-         cQlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684843271; x=1687435271;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UwDgLKuZAoJyLnwNBTa9Plj4tI2jTn00PeEyIRBeY3M=;
-        b=Yh/dd1G/z+NjXze+LsaOqkcjAydnQlIrN9dFTa1iN4HbBLgUfWPko+deYOvPXEztFM
-         rWxIbdQbjNPIMTXz0V9+LJDZzfFa7J79XpUnVfccIBwzk/ouAgNpvFlzVOsRNNkBmQur
-         2GWQUaDhliXaKu+jt8oI97iHUi5qLGE/xLrEMhkGIcXkHtqBySuGI2W3ydutb2hChrbC
-         W7kmCiG+ViJCgxggUKkloYTN9IBRGukEIIe3kW+zjtUoTXBXnRzpp0ExctdgUcHQ7c2d
-         FbpvSyK01pYTpm6up9Rk1cUG8gyxvjQ9fjvKeMuaRoSGYF5rVVan6Jrj9ORtsQyksSlX
-         r7/g==
-X-Gm-Message-State: AC+VfDw9ms5QiPzaE5aZlq5d3qNWdZMnCx8pD8d89FSNSOtDi3DC79tn
-        Dlgc01QEg+edyxgF/JklUN8yhQ==
-X-Google-Smtp-Source: ACHHUZ40CX09dMi0e735PDRKFRNtfgI4LS6imtI87HuWDsDYP/q8KqRU12dipkCjnKzQegYx3Zmfiw==
-X-Received: by 2002:a17:906:d550:b0:966:4bb3:df63 with SMTP id cr16-20020a170906d55000b009664bb3df63mr15157840ejc.63.1684843271141;
-        Tue, 23 May 2023 05:01:11 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id t20-20020a17090616d400b009662c57b4ffsm4397666ejd.96.2023.05.23.05.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 May 2023 05:01:10 -0700 (PDT)
-Date:   Tue, 23 May 2023 14:01:09 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, Weili Qian <qianweili@huawei.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Tom Rix <trix@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH V6 09/21] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <20230523-7263e5220667fd82a462afc7@orel>
-References: <20230515054928.2079268-1-sunilvl@ventanamicro.com>
- <20230515054928.2079268-10-sunilvl@ventanamicro.com>
+        Fri, 26 May 2023 20:36:28 -0400
+Received: from mail.posokab.go.id (mail.posokab.go.id [36.91.28.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4E134;
+        Fri, 26 May 2023 17:36:24 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.posokab.go.id (Postfix) with ESMTP id 9744C104858F;
+        Tue, 16 May 2023 07:35:02 +0000 (UTC)
+Received: from mail.posokab.go.id ([127.0.0.1])
+        by localhost (mail.posokab.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id BKlFPG8q-u0J; Tue, 16 May 2023 07:35:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.posokab.go.id (Postfix) with ESMTP id 88CA1F836D3;
+        Tue, 16 May 2023 02:34:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.posokab.go.id 88CA1F836D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mail.posokab.go.id;
+        s=FD81C132-DAB5-11EB-B2BB-FC8C3A52EF8C; t=1684204461;
+        bh=rDx/k9KkPI/Uq3UDPUpjfenG3LJkQYh+gD252HVmnTE=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=Gb3GABM0OVjIktQiv1yoVsjtb93QHwILhuFEtkJxqGh83yKUGjm/L2bc/0veKuDcJ
+         yIvlA1yHHNrJwL95K4I5P2tb5HVFmLZDLevoD6hiNNaM+6TkB4suLszP5kt5hxGLAf
+         a9HquFnrhL05qBjYlhCgtEsrcPUy3DoLTNmTy95utkhrjtitBLzZt7/4+2KkmiJiSO
+         e7T1i1e80JjavEP/3Bo+AUp9419pJJMbI5TLnLFRTuWAibqKARMuWvdjp/H+I3Xppj
+         qn7ZbxhqB3LNSuzVOs2tN+l1ffmIhVpZlUsR506IvgxeIFpBHwVRdJFf57foTpGsK/
+         5cXNseyxJQ1vw==
+X-Virus-Scanned: amavisd-new at mail.posokab.go.id
+Received: from mail.posokab.go.id ([127.0.0.1])
+        by localhost (mail.posokab.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RSv5E8pJspP0; Tue, 16 May 2023 02:34:21 +0000 (UTC)
+Received: from [192.168.1.13] (unknown [176.42.143.19])
+        by mail.posokab.go.id (Postfix) with ESMTPSA id 47171E9741E;
+        Tue, 16 May 2023 00:44:19 +0000 (UTC)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515054928.2079268-10-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Darlehensangebote
+To:     Recipients <roy@mail.posokab.go.id>
+From:   "Darlehensangebote" <roy@mail.posokab.go.id>
+Date:   Tue, 16 May 2023 03:37:12 +0300
+Reply-To: bryandav381@gmail.com
+Message-Id: <20230516004420.47171E9741E@mail.posokab.go.id>
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L4,RCVD_IN_SBL,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,URIBL_SBL_A autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [176.42.143.19 listed in zen.spamhaus.org]
+        *  0.1 URIBL_SBL_A Contains URL's A record listed in the Spamhaus SBL
+        *      blocklist
+        *      [URIs: mail.posokab.go.id]
+        *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?36.91.28.163>]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  0.0 RCVD_IN_MSPIKE_L4 RBL: Bad reputation (-4)
+        *      [36.91.28.163 listed in bl.mailspike.net]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [bryandav381[at]gmail.com]
+        *  0.0 T_SPF_HELO_PERMERROR SPF: test of HELO record failed
+        *      (permerror)
+        *  0.0 T_SPF_PERMERROR SPF: test of record failed (permerror)
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blocklisted
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 11:19:16AM +0530, Sunil V L wrote:
-> RINTC structures in the MADT provide mapping between the hartid
-> and the CPU. This is required many times even at run time like
-> cpuinfo. So, instead of parsing the ACPI table every time, cache
-> the RINTC structures and provide a function to get the correct
-> RINTC structure for a given cpu.
-> 
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  arch/riscv/include/asm/acpi.h | 10 ++++++++
->  arch/riscv/kernel/acpi.c      | 45 +++++++++++++++++++++++++++++++++++
->  arch/riscv/kernel/setup.c     |  4 ++++
->  3 files changed, 59 insertions(+)
+PROSPECT RAPID SERVICE LOAN COMPANY bietet:
+A. 2 % und 3 % weltweiter privater Barkredit und Projektfinanzierung.
+B. Weltweiter Handel mit Kryptow=E4hrungen.
+C. Finanzielle Bankinstrumente wie Bankgarantie (BG) und mittelfristige Sch=
+uldverschreibungen (MTN) auf leicht gew=FCrzter ? Lease- und Fresh Cut (FC)=
+-Basis.
+D. Offene weltweite Mandats-/Beraterpositionen werden mit einer Provision v=
+on 3 % f=FCr jedes initiierte und erfolgreich abgeschlossene Gesch=E4ft ver=
+mittelt.
 
+Interessierte Bewerber f=FCr Finanzdienstleistungen sollten sich f=FCr unse=
+re Anh=E4nge/Kreditantragsformulare an uns wenden. Das Angebot gilt sowohl =
+f=FCr zertifizierte als auch f=FCr nicht zertifizierte Bewerber
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Wir sind hier, um Ihre finanziellen Bed=FCrfnisse zu erf=FCllen
+
+Mit freundlichen Gr=FC=DFen,
+Bryan David,
+Leitender Finanzberater.
+PROSPECT RAPID SERVICE LOAN COMPANY.
