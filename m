@@ -2,225 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563A0705B54
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A3C705B56
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjEPX2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S230491AbjEPX3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEPX2W (ORCPT
+        with ESMTP id S229456AbjEPX3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:28:22 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8312D5E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:28:20 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-6238200c584so764796d6.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:28:20 -0700 (PDT)
+        Tue, 16 May 2023 19:29:12 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B22F5
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:29:11 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3f389c21fe8so1674291cf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684279699; x=1686871699;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FtPfD9ExEFxFi1hWs9ibqo40KA2OASbEAUanONhrIPI=;
-        b=cLwpdBzd8SZOIKgVjJRLISzX4lRq0/SW7cURqvBNvLUbaQqiNn7/RvDJE1ExhQeLrr
-         F2lVG+Gkj7ptjw1G/YQBR63wxzZom85C1Tvz1ZJ+dzRo3EanspiCPztYtSNbkawi9Yeb
-         dQJy7hxkHp2aAvr6GmU4hBUZBEPsx4O0feXNo=
+        d=broadcom.com; s=google; t=1684279751; x=1686871751;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=G2dp/iVfI4DNMzpYvsCvIbrbSMRlz7tQRNJhamoiBv8=;
+        b=YMHi95uh/qj6JB2RFl4QEl5ZMzeVTySIVpbHrEZWlGrEmVu++4O5Tyavf2x/uOwU47
+         qC5spcjoA6azKVPD3QGoNMqJiizdgiaB+J7QQTIrYUw60pdDZZXiq0LWSJHgQ3zqTUni
+         11MU2Zgr7CW/ZulzVljARELnAWuNUQZlwuVMA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684279699; x=1686871699;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FtPfD9ExEFxFi1hWs9ibqo40KA2OASbEAUanONhrIPI=;
-        b=JKBfMcISygISTMmF2DnDhrmGW+Dl34bU5sUk8257+BfUpgXt8TA+aRTHv3YSNV0UJM
-         ZI+3nTX5468QrWory7PXAHLsD4ZYxIwc37dHTt6DKSsjmrX3eHeE4Q1CT4jMBmyC3L/r
-         8Gij1PRcXQqt7/8SeKwGwAARjQHFBLrCEkgl34R0EjahMOA7SuLROMCqVBexhk0Q2zit
-         25se7/X+S9IvTPIfVFs297snvjhKDjpr0mtBGGMOxBH1kqvqNQ+6XWHgiPmv6EwiK9NX
-         PokFPDykt63alZ5HUAwyd5f1qqjYVsEFaOVXDfpjKNZZVGUG83m4eJYAG+o+vBCyfAwv
-         VIkA==
-X-Gm-Message-State: AC+VfDxsAL/EVnojk2nWczPpbwEVYBkVvFhsa2n7F6Ftm/bsadhgiaXv
-        8mEpXObjEK6JiYjZkgVp6QnEKZItlM2TE7aBCVvl19j54BiEvtKTYs95CFaQysYz8N+mZAqxzd+
-        2IwESUurVBefHZ5eeC79DcfX1swLEE/gG0SoiYKq60aUQ95oGVRj0Q82eBXEmUb1A9+/VDyUkr6
-        3HwZfsa0BVHPjT2I4ULA==
-X-Google-Smtp-Source: ACHHUZ4sHhC468dw4b343RpyoHMyaU9XRDHtUVNad5E/xBp3kROBJIRbq02FblVZy2g/iHsWY6WFtA==
-X-Received: by 2002:ad4:5cce:0:b0:5fe:dffc:fefa with SMTP id iu14-20020ad45cce000000b005fedffcfefamr59915478qvb.41.1684279698987;
-        Tue, 16 May 2023 16:28:18 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m5-20020a0c9d05000000b005ef442226bbsm5960126qvf.8.2023.05.16.16.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 16:28:18 -0700 (PDT)
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Subject: [PATCH] MAINTAINERS: Replace my email address
-Date:   Tue, 16 May 2023 16:28:05 -0700
-Message-Id: <20230516232806.2922593-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1684279751; x=1686871751;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G2dp/iVfI4DNMzpYvsCvIbrbSMRlz7tQRNJhamoiBv8=;
+        b=fR7oCUUGsU0tYntOdt0YMFQBtDGN3LU/+RV1oxBfzyy89dmvR4Pbpyr8Hc+SkXfWnz
+         jhSLRglRh1J2qvnZHgpBGCd36TfQEBHGDHPDByQFNk5ZAxEZfFnJdm3EMYVP32eXJmQc
+         366m2VTV1tB9gU9k3w7KrwifIwGEMPjJBNNsCuPucluap/LyCe7aLX80/RaZAx/cklB8
+         lSZk5s1fK1U8xiX8aL86Jxrqnkt1YOr8g+xTEb3KmMQ/B1Qht/y8aA5UE+aiKNUEDB3v
+         b6Qw79D3vTvUFDxP2BHinGS6cSSG75HX+jvFGPVIRtJZ2SgFcFJDAXSXds9RZf3BsUBc
+         l3GA==
+X-Gm-Message-State: AC+VfDzO3dFulkZuSyIgoX3ls5hmDLV/3INOLd6ZaPuM27Q4ZqVPw7z4
+        HivuHURxU4WDsZMvJV/mePOfrg==
+X-Google-Smtp-Source: ACHHUZ5DmiuKQjM9wTn275JvQBY2PsSpy/LWmtri8g2O/JDDC64DISndVoC8ZmVdHlTiwywotdtBQw==
+X-Received: by 2002:ac8:5c4f:0:b0:3f4:eff6:65c with SMTP id j15-20020ac85c4f000000b003f4eff6065cmr35018026qtj.4.1684279750952;
+        Tue, 16 May 2023 16:29:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id x2-20020a05620a12a200b0075931fd621dsm211256qki.42.2023.05.16.16.29.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 16:29:10 -0700 (PDT)
+Message-ID: <194e2b7a-52c6-5962-b0df-8f8939a95e41@broadcom.com>
+Date:   Tue, 16 May 2023 16:29:07 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] staging: vchiq_arm: mark vchiq_platform_init() static
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Umang Jain <umang.jain@ideasonboard.com>,
+        Adrien Thierry <athierry@redhat.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230516202603.560554-1-arnd@kernel.org>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230516202603.560554-1-arnd@kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002f6daa05fbd7ed3e"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        boundary="000000000000466ad405fbd7f01d"
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000002f6daa05fbd7ed3e
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+--000000000000466ad405fbd7f01d
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Switch to the corporate email address for Broadcom related entries.
+On 5/16/23 13:25, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This function has no callers from other files, and the declaration
+> was removed a while ago, causing a W=1 warning:
+> 
+> drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:465:5: error: no previous prototype for 'vchiq_platform_init'
+> 
+> Marking it static solves this problem but introduces a new warning
+> since gcc determines that 'g_fragments_base' is never initialized
+> in some kernel configurations:
+> 
+> In file included from include/linux/string.h:254,
+>                   from include/linux/bitmap.h:11,
+>                   from include/linux/cpumask.h:12,
+>                   from include/linux/mm_types_task.h:14,
+>                   from include/linux/mm_types.h:5,
+>                   from include/linux/buildid.h:5,
+>                   from include/linux/module.h:14,
+>                   from drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:8:
+> In function 'memcpy_to_page',
+>      inlined from 'free_pagelist' at drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:433:4:
+> include/linux/fortify-string.h:57:33: error: argument 2 null where non-null expected [-Werror=nonnull]
+> include/linux/highmem.h:427:9: note: in expansion of macro 'memcpy'
+>    427 |         memcpy(to + offset, from, len);
+>        |         ^~~~~~
+> 
+> Add a NULL pointer check for this in addition to the static annotation
+> to avoid both.
+> 
+> Fixes: 89cc4218f640 ("staging: vchiq_arm: drop unnecessary declarations")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
----
-All,
-
-I intend to take this via the new Broadcom ARM SoC pull request to
-minimize the risk of conflicts with changes to these entries that might
-be queued up. Thanks!
-
- MAINTAINERS | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e2fd64c2ebdc..58af49115b98 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3896,7 +3896,7 @@ S:	Supported
- F:	drivers/net/ethernet/broadcom/b44.*
- 
- BROADCOM B53/SF2 ETHERNET SWITCH DRIVER
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- L:	netdev@vger.kernel.org
- L:	openwrt-devel@lists.openwrt.org (subscribers-only)
- S:	Supported
-@@ -3907,7 +3907,7 @@ F:	include/linux/dsa/brcm.h
- F:	include/linux/platform_data/b53.h
- 
- BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-rpi-kernel@lists.infradead.org (moderated for non-subscribers)
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -3921,7 +3921,7 @@ N:	bcm283*
- N:	raspberrypi
- 
- BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITECTURE
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- M:	Ray Jui <rjui@broadcom.com>
- M:	Scott Branden <sbranden@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-@@ -3960,7 +3960,7 @@ F:	Documentation/devicetree/bindings/pinctrl/brcm,bcm4908-pinctrl.yaml
- F:	drivers/pinctrl/bcm/pinctrl-bcm4908.c
- 
- BROADCOM BCM5301X ARM ARCHITECTURE
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- M:	Hauke Mehrtens <hauke@hauke-m.de>
- M:	Rafał Miłecki <zajec5@gmail.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-@@ -3972,7 +3972,7 @@ F:	arch/arm/boot/dts/bcm953012*
- F:	arch/arm/mach-bcm/bcm_5301x.c
- 
- BROADCOM BCM53573 ARM ARCHITECTURE
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- M:	Rafał Miłecki <rafal@milecki.pl>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -3987,7 +3987,7 @@ S:	Maintained
- F:	drivers/usb/gadget/udc/bcm63xx_udc.*
- 
- BROADCOM BCM7XXX ARM ARCHITECTURE
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
-@@ -4007,7 +4007,7 @@ BROADCOM BCMBCA ARM ARCHITECTURE
- M:	William Zhang <william.zhang@broadcom.com>
- M:	Anand Gore <anand.gore@broadcom.com>
- M:	Kursad Oney <kursad.oney@broadcom.com>
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- M:	Rafał Miłecki <rafal@milecki.pl>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -4048,7 +4048,7 @@ S:	Maintained
- F:	drivers/cpufreq/bmips-cpufreq.c
- 
- BROADCOM BMIPS MIPS ARCHITECTURE
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-mips@vger.kernel.org
- S:	Maintained
-@@ -4116,7 +4116,7 @@ F:	drivers/net/wireless/broadcom/brcm80211/
- 
- BROADCOM BRCMSTB GPIO DRIVER
- M:	Doug Berger <opendmb@gmail.com>
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- S:	Supported
- F:	Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
-@@ -4175,7 +4175,7 @@ F:	drivers/spi/spi-bcm63xx-hsspi.c
- F:	drivers/spi/spi-bcmbca-hsspi.c
- 
- BROADCOM ETHERNET PHY DRIVERS
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	netdev@vger.kernel.org
- S:	Supported
-@@ -4186,7 +4186,7 @@ F:	include/linux/brcmphy.h
- 
- BROADCOM GENET ETHERNET DRIVER
- M:	Doug Berger <opendmb@gmail.com>
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	netdev@vger.kernel.org
- S:	Supported
-@@ -4270,7 +4270,7 @@ F:	drivers/firmware/broadcom/*
- 
- BROADCOM PMB (POWER MANAGEMENT BUS) DRIVER
- M:	Rafał Miłecki <rafal@milecki.pl>
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-@@ -4330,7 +4330,7 @@ F:	include/linux/platform_data/brcmnand.h
- BROADCOM STB PCIE DRIVER
- M:	Jim Quinlan <jim2101024@gmail.com>
- M:	Nicolas Saenz Julienne <nsaenz@kernel.org>
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	linux-pci@vger.kernel.org
- S:	Maintained
-@@ -4338,7 +4338,7 @@ F:	Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
- F:	drivers/pci/controller/pcie-brcmstb.c
- 
- BROADCOM SYSTEMPORT ETHERNET DRIVER
--M:	Florian Fainelli <f.fainelli@gmail.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
- R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
- L:	netdev@vger.kernel.org
- S:	Supported
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
-2.34.1
+Florian
 
 
---0000000000002f6daa05fbd7ed3e
+--000000000000466ad405fbd7f01d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -291,14 +196,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILx6/BdlBcvEfCcu
-gWeaip9TwqoHVikvt1VKHnC6OVvLMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDUxNjIzMjgxOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPWoFqzvNwOqJuuH
+mE5mk6Hfh+v36IV72eUK7mzhO3DhMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUxNjIzMjkxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCiBs/5vM0gL/bC+B0s1oUukoIfRmXSuaBL
-Y3PQIDRh1nXjIq4Smfgf39VE1CjT9De4VVMQkU22s1YfWWCXPHcFCCbcMhXIHs3+BDSWZkUDvza4
-wyv75pPMZEr5wsr3elz6OrrY1RVlUZBTcSdH4y+WNI/suYCgJcTW2Ao4epXrm7xDCuA8QVGmpWlW
-IuLPH2dSp4DQP+svW3ZEijVpwMTYlR+in021DDJCrXy2P4oxcKMdrF1cJaDz/wh9V6gSHbL53EWd
-1Hgla1huldSTMR3TayK0wl1frwhyTGX64ck0ClrUbaBv0FVW7qgSHrHp1O9BOQJL36FU6yxJLKyf
-LCYT
---0000000000002f6daa05fbd7ed3e--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBiwLIEOcX339NdLVhzuAdu8HferGo9KmzV
+7WilDw+ETVQfmL2Y23oUF4soyD6HlUdplojABZJ7srCUnZ4XNneYaaksrUeXtACPtMODRI4duG51
+mNGd/HwLB6DVyjO5Sp+Mzlucpu8JP21RHFNvFufGGQQhzQoWftaX0NAkrYO/iFP+B3v4NHB5wphP
+eWhgvA9M1WyQRzPJKEmuuDmpbnnKN3heWOD0M2nB1QtP5N3uIw0tUQ69QnW/ODRVa6ABWZJLLtM8
+W+g8DayaB+7Y2XNf2pGZvHJR0pda4PM6PxKLYwo4jyXKeEvFKesCvB73bnqTOcmMlFa3kJQCOu37
+Rght
+--000000000000466ad405fbd7f01d--
