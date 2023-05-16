@@ -2,90 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72261704448
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 06:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6088704446
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 06:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjEPENy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 00:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S229844AbjEPERE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 00:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjEPENu (ORCPT
+        with ESMTP id S229595AbjEPERC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 00:13:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFA2130
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 21:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684210382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p249AUCyOn+avTIqZrVK1ogk3k6y7lStqJYRaHHwRL8=;
-        b=RG4YLCfIXwXM6kVoRmT02kJp/rAPC08Ybbh/jPJUP7xEt0bpS6IRDQOIj0HMc763BTbOsd
-        C2BDh1Ud4UBLgpdex2bx/DxaDxDynn9Te4M+kE/gfrNcw7iYUKMU/aX4x7gHh5Y3xId4/g
-        Nh9nM29xXBuycNxbwBS4iIW1Cow7hnE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-448-ds3fMqBPN4CXbFtUuhZsDA-1; Tue, 16 May 2023 00:13:01 -0400
-X-MC-Unique: ds3fMqBPN4CXbFtUuhZsDA-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3062e5d0cd3so5312433f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 21:13:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684210380; x=1686802380;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p249AUCyOn+avTIqZrVK1ogk3k6y7lStqJYRaHHwRL8=;
-        b=bT6Ds+8fF3oh9pU/6lr6L4usz4kHHHmAqGW4BwARkkI1LMd/zB8yujTWDrlnD31cyo
-         vEJdsUmYVeUJEtu5vlfB+ooreXepqRz2BkeldqYsGP7CxsDsGN0VpEYR8y7o8gLyIX05
-         H6TQshjU2w2ziVqXJF9/jLut8SK4pxERWhBk2lN5n1DP5LGXlBlAZkC7zb+h8azrA375
-         vqCQ8fH9BoKDyszYr6pIdzd9ZnvDlAxKP8DsQFI9H+T7jBW9SUI+IH9eLESJxgjVt1WM
-         Kmnx+G9njQKCOM3i9nETVqjM81iOGR1y/T2nVGCtP3jZ/JyQ0pZplvfZ3XFwfhqQr1pn
-         eh7A==
-X-Gm-Message-State: AC+VfDy6xPjMKGeeqhvRcD4PHNDYheWpu339pnNnqKcNOyS7NZDjVliW
-        ZBIXm4Xw6NKgrEN99B0+lKpLb29wFd2vcKpoFM7rBLrA0H6CpRyjhlqIXLCFHIRUI8HFRfgw6mI
-        d1WU5YOl32UBjYTijGHTQQ8VP
-X-Received: by 2002:a5d:594e:0:b0:307:8691:1ea5 with SMTP id e14-20020a5d594e000000b0030786911ea5mr21650387wri.26.1684210380059;
-        Mon, 15 May 2023 21:13:00 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7H1AJI3NBhLEY2iVQia+EcKFbxTad+7L3OHQXq8IrXlYUpjX6KWFyz1nHm1Dqsau8LN35wbw==
-X-Received: by 2002:a5d:594e:0:b0:307:8691:1ea5 with SMTP id e14-20020a5d594e000000b0030786911ea5mr21650380wri.26.1684210379747;
-        Mon, 15 May 2023 21:12:59 -0700 (PDT)
-Received: from redhat.com ([2.52.26.5])
-        by smtp.gmail.com with ESMTPSA id i18-20020a5d5592000000b00307acec258esm1075667wrv.3.2023.05.15.21.12.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 21:12:59 -0700 (PDT)
-Date:   Tue, 16 May 2023 00:12:55 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, maxime.coquelin@redhat.com,
-        alvaro.karsz@solid-run.com, eperezma@redhat.com,
-        xuanzhuo@linux.alibaba.com, david.marchand@redhat.com,
-        netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next V2 1/2] virtio-net: convert rx mode setting to
- use workqueue
-Message-ID: <20230516000829-mutt-send-email-mst@kernel.org>
-References: <20230413121525-mutt-send-email-mst@kernel.org>
- <CACGkMEunn1Z3n8yjVaWLqdV502yjaCBSAb_LO4KsB0nuxXmV8A@mail.gmail.com>
- <20230414031947-mutt-send-email-mst@kernel.org>
- <CACGkMEtutGn0CoJhoPHbzPuqoCLb4OCT6a_vB_WPV=MhwY0DXg@mail.gmail.com>
- <20230510012951-mutt-send-email-mst@kernel.org>
- <CACGkMEszPydzw_MOUOVJKBBW_8iYn66i_9OFvLDoZMH34hMx=w@mail.gmail.com>
- <20230515004422-mutt-send-email-mst@kernel.org>
- <CACGkMEv+Q2UoBarNOzKSrc3O=Wb2_73O2j9cZXFdAiLBm1qY-Q@mail.gmail.com>
- <20230515061455-mutt-send-email-mst@kernel.org>
- <CACGkMEt8QkK1PnTrRUjDbyJheBurdibr4--Es8P0Y9NZM659pQ@mail.gmail.com>
+        Tue, 16 May 2023 00:17:02 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F8DF3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 21:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684210619; x=1715746619;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wmir26GwVgTrsojJMnObMCl0oeyf0jYtqzbx1GJCRfc=;
+  b=DK4z4K0EgvJdBIuM3PwmCrZF8y9Rf/sTBRZElBIuliYFSsn/1GSf6HP+
+   j4lTaNELfAAgr67HmU22KSp0gULXjaZJIn1255EGRBuitWwotO78+d/2L
+   xfnUPbXHWJgY4bnLAUlxXlWin57DtSaVIjllfsKwuLKeZEZYHF3prl5DS
+   ob4MrIU4zm1mFs101AAabgVrn93azytsE/Yu+0kuwRJduAsc89FgSOtw1
+   2N+gkG4M6T3ieXTnWnq7Oq5sU97/zhev8IO5Wu6z2db+gehDDcesVD8cD
+   RTH6gOhjL5oodjKRnZuAVJ2hlnUC1SdjcKnCMhhdhYT3hvx6Zb/0nA0ja
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="350212693"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="350212693"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 21:16:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="704239952"
+X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
+   d="scan'208";a="704239952"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 15 May 2023 21:16:52 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pym7H-0006x8-2W;
+        Tue, 16 May 2023 04:16:51 +0000
+Date:   Tue, 16 May 2023 12:16:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse:
+ cast removes address space '__iomem' of expression
+Message-ID: <202305161215.GH1XW3Ih-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEt8QkK1PnTrRUjDbyJheBurdibr4--Es8P0Y9NZM659pQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,129 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 10:44:45AM +0800, Jason Wang wrote:
-> On Mon, May 15, 2023 at 6:17 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Mon, May 15, 2023 at 01:13:33PM +0800, Jason Wang wrote:
-> > > On Mon, May 15, 2023 at 12:45 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Mon, May 15, 2023 at 09:05:54AM +0800, Jason Wang wrote:
-> > > > > On Wed, May 10, 2023 at 1:33 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > >
-> > > > > > On Mon, Apr 17, 2023 at 11:40:58AM +0800, Jason Wang wrote:
-> > > > > > > On Fri, Apr 14, 2023 at 3:21 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > >
-> > > > > > > > On Fri, Apr 14, 2023 at 01:04:15PM +0800, Jason Wang wrote:
-> > > > > > > > > Forget to cc netdev, adding.
-> > > > > > > > >
-> > > > > > > > > On Fri, Apr 14, 2023 at 12:25 AM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Thu, Apr 13, 2023 at 02:40:26PM +0800, Jason Wang wrote:
-> > > > > > > > > > > This patch convert rx mode setting to be done in a workqueue, this is
-> > > > > > > > > > > a must for allow to sleep when waiting for the cvq command to
-> > > > > > > > > > > response since current code is executed under addr spin lock.
-> > > > > > > > > > >
-> > > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > > > >
-> > > > > > > > > > I don't like this frankly. This means that setting RX mode which would
-> > > > > > > > > > previously be reliable, now becomes unreliable.
-> > > > > > > > >
-> > > > > > > > > It is "unreliable" by design:
-> > > > > > > > >
-> > > > > > > > >       void                    (*ndo_set_rx_mode)(struct net_device *dev);
-> > > > > > > > >
-> > > > > > > > > > - first of all configuration is no longer immediate
-> > > > > > > > >
-> > > > > > > > > Is immediate a hard requirement? I can see a workqueue is used at least:
-> > > > > > > > >
-> > > > > > > > > mlx5e, ipoib, efx, ...
-> > > > > > > > >
-> > > > > > > > > >   and there is no way for driver to find out when
-> > > > > > > > > >   it actually took effect
-> > > > > > > > >
-> > > > > > > > > But we know rx mode is best effort e.g it doesn't support vhost and we
-> > > > > > > > > survive from this for years.
-> > > > > > > > >
-> > > > > > > > > > - second, if device fails command, this is also not
-> > > > > > > > > >   propagated to driver, again no way for driver to find out
-> > > > > > > > > >
-> > > > > > > > > > VDUSE needs to be fixed to do tricks to fix this
-> > > > > > > > > > without breaking normal drivers.
-> > > > > > > > >
-> > > > > > > > > It's not specific to VDUSE. For example, when using virtio-net in the
-> > > > > > > > > UP environment with any software cvq (like mlx5 via vDPA or cma
-> > > > > > > > > transport).
-> > > > > > > > >
-> > > > > > > > > Thanks
-> > > > > > > >
-> > > > > > > > Hmm. Can we differentiate between these use-cases?
-> > > > > > >
-> > > > > > > It doesn't look easy since we are drivers for virtio bus. Underlayer
-> > > > > > > details were hidden from virtio-net.
-> > > > > > >
-> > > > > > > Or do you have any ideas on this?
-> > > > > > >
-> > > > > > > Thanks
-> > > > > >
-> > > > > > I don't know, pass some kind of flag in struct virtqueue?
-> > > > > >         "bool slow; /* This vq can be very slow sometimes. Don't wait for it! */"
-> > > > > >
-> > > > > > ?
-> > > > > >
-> > > > >
-> > > > > So if it's slow, sleep, otherwise poll?
-> > > > >
-> > > > > I feel setting this flag might be tricky, since the driver doesn't
-> > > > > know whether or not it's really slow. E.g smartNIC vendor may allow
-> > > > > virtio-net emulation over PCI.
-> > > > >
-> > > > > Thanks
-> > > >
-> > > > driver will have the choice, depending on whether
-> > > > vq is deterministic or not.
-> > >
-> > > Ok, but the problem is, such booleans are only useful for virtio ring
-> > > codes. But in this case, virtio-net knows what to do for cvq. So I'm
-> > > not sure who the user is.
-> > >
-> > > Thanks
-> >
-> > Circling back, what exactly does the architecture you are trying
-> > to fix look like? Who is going to introduce unbounded latency?
-> > The hypervisor?
-> 
-> Hypervisor is one of the possible reason, we have many more:
-> 
-> Hardware device that provides virtio-pci emulation.
-> Userspace devices like VDUSE.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+commit: b8431920391d36c273f63a29eab0dfc7e884dd17 remoteproc: k3-dsp: Add support for IPC-only mode for all K3 DSPs
+date:   1 year, 2 months ago
+config: arm64-randconfig-s031-20230515 (https://download.01.org/0day-ci/archive/20230516/202305161215.GH1XW3Ih-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b8431920391d36c273f63a29eab0dfc7e884dd17
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b8431920391d36c273f63a29eab0dfc7e884dd17
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
 
-So let's start by addressing VDUSE maybe?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305161215.GH1XW3Ih-lkp@intel.com/
 
-> > If so do we not maybe want a new feature bit
-> > that documents this? Hypervisor then can detect old guests
-> > that spin and decide what to do, e.g. prioritise cvq more,
-> > or fail FEATURES_OK.
-> 
-> We suffer from this for bare metal as well.
-> 
-> But a question is what's wrong with the approach that is used in this
-> patch? I've answered that set_rx_mode is not reliable, so it should be
-> fine to use workqueue. Except for this, any other thing that worries
-> you?
-> 
-> Thanks
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse: cast removes address space '__iomem' of expression
 
-It's not reliable for other drivers but has been reliable for virtio.
-I worry some software relied on this.
-You are making good points though ... could we get some
-maintainer's feedback on this?
+vim +/__iomem +432 drivers/remoteproc/ti_k3_dsp_remoteproc.c
 
-> >
-> > > >
-> > > >
-> > > > > > --
-> > > > > > MST
-> > > > > >
-> > > >
-> >
+   402	
+   403	/*
+   404	 * This function implements the .get_loaded_rsc_table() callback and is used
+   405	 * to provide the resource table for a booted DSP in IPC-only mode. The K3 DSP
+   406	 * firmwares follow a design-by-contract approach and are expected to have the
+   407	 * resource table at the base of the DDR region reserved for firmware usage.
+   408	 * This provides flexibility for the remote processor to be booted by different
+   409	 * bootloaders that may or may not have the ability to publish the resource table
+   410	 * address and size through a DT property. This callback is invoked only in
+   411	 * IPC-only mode.
+   412	 */
+   413	static struct resource_table *k3_dsp_get_loaded_rsc_table(struct rproc *rproc,
+   414								  size_t *rsc_table_sz)
+   415	{
+   416		struct k3_dsp_rproc *kproc = rproc->priv;
+   417		struct device *dev = kproc->dev;
+   418	
+   419		if (!kproc->rmem[0].cpu_addr) {
+   420			dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
+   421			return ERR_PTR(-ENOMEM);
+   422		}
+   423	
+   424		/*
+   425		 * NOTE: The resource table size is currently hard-coded to a maximum
+   426		 * of 256 bytes. The most common resource table usage for K3 firmwares
+   427		 * is to only have the vdev resource entry and an optional trace entry.
+   428		 * The exact size could be computed based on resource table address, but
+   429		 * the hard-coded value suffices to support the IPC-only mode.
+   430		 */
+   431		*rsc_table_sz = 256;
+ > 432		return (struct resource_table *)kproc->rmem[0].cpu_addr;
+   433	}
+   434	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
