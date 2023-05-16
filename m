@@ -2,87 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860AD705AFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE4B705B00
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjEPXEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
+        id S230500AbjEPXHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjEPXE3 (ORCPT
+        with ESMTP id S229658AbjEPXHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:04:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3019E8A58;
-        Tue, 16 May 2023 16:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684278251; x=1715814251;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cpPm6dizOpzAe28lnc0LmN8v78c+WYJi5K9EK5t9WLY=;
-  b=KSUTvuueFoNx9XjI7Bpn/I1jsAy5yZyB8a0csukopTuILsJ1O8L7WVFI
-   DE/BdMRX1+VirZlGkyzMo9bmF/STjap5SB4pDBkpFPeid81xxxm/PGrcq
-   MsqVKNss69vEjF00TtxgpOu1qjJk41UYIj45TDeFFX+XVijOAeaS37nlI
-   IFp/rttL9tFH969dEiEJvttr+bR+AeH0fShnWWgcxprDTZH29wTnTME/s
-   04JwIWopKLAs+Rf5yBLmqvE7w96bIa2RuXjGtQZn8THLTpPrB5diH44yS
-   7w3E+xiPBJPMAD89UU5I7yIvgdmCiTdMEKG+RniCTfwXudxBui+Np5Bdu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="351640962"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="351640962"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 16:04:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="875825066"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="875825066"
-Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 16:04:04 -0700
-Message-ID: <24a961b4-5385-0949-045b-c3da137042a2@intel.com>
-Date:   Tue, 16 May 2023 16:04:04 -0700
+        Tue, 16 May 2023 19:07:32 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162535B5;
+        Tue, 16 May 2023 16:07:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=x8NCOC5dNuO+EeXO7vXVX1hNNhgjTbmodd02OhrRIPE=; b=46DEdGL7nKcLjwLiOUZcBe+ekZ
+        GU31yD15KNjcweKnMTxXy//ryiuocE3/bzYP1Dzm5jCFKdjC+EvP/bqfeE4Eqzq3wP22GbdlKWMMq
+        TburDrLdmpn8jQ5C8cxssVXl9ijTbZOPZNsNvQbok3yKXkYQ/tFEoUkZaRBc+CnsTOnXW7PD8uWPf
+        0mmaJB7TYHfN2Bb8W77jBsT1sWMbIG6kN2/UV3mmWzlQ5Lxh7z8TYaYzLHREOnZ4fvp7JS+XSuWqi
+        U44uI8vPdfcIIzNOLYgssAsGwaLtO3hOg132lQr23qor+57G570UVp3Yp1E5qsf7mCIj6L+eL7pR2
+        HVo3TqDw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pz3lQ-007Oz5-2O;
+        Tue, 16 May 2023 23:07:28 +0000
+Date:   Tue, 16 May 2023 16:07:28 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Joel Granados <j.granados@samsung.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-kernel@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH v3 0/6] sysctl: Remove register_sysctl_table from parport
+Message-ID: <ZGQMsKiZUZg+5mFb@bombadil.infradead.org>
+References: <CGME20230516162915eucas1p2fdfc03a04f6fe55373e491b97660c8bc@eucas1p2.samsung.com>
+ <20230516162903.3208880-1-j.granados@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
- stepping into unaccepted memory
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
- <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
- <20230516183352.5fvmqca34cjcv462@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230516183352.5fvmqca34cjcv462@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516162903.3208880-1-j.granados@samsung.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,25 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 11:33, Kirill A. Shutemov wrote:
-> For context: there's a way configure TDX environment to trigger #VE on
-> such accesses and it is default. But Linux requires such #VEs to be
-> disabled as it opens attack vector from the host to the guest: host can
-> pull any private page from under kernel at any point and trigger such #VE.
-> If it happens in just a right time in syscall gap or NMI entry code it can
-> be exploitable.
+On Tue, May 16, 2023 at 06:28:57PM +0200, Joel Granados wrote:
+> This is part of the general push to deprecate register_sysctl_paths and
+> register_sysctl_table. Parport driver uses the "CHILD" pointer
+> in the ctl_table structure to create its directory structure. We move to
+> the newer register_sysctl call and remove the pointer madness.
+> 
+> I have separated the parport into 5 patches to clarify the different
+> changes needed for the 3 calls to register_sysctl_paths. I can squash
+> them together if need be.
+> 
+> We no longer export the register_sysctl_table call as parport was the
+> last user from outside proc_sysctl.c. Also modified documentation slightly
+> so register_sysctl_table is no longer mentioned.
+> 
+> V2:
+> * Added a return error value when register fails
+> * Made sure to free the memory on error when calling parport_proc_register
+> * Added a bloat-o-meter output to measure bloat
+> * Replaced kmalloc with kzalloc
+> * Added comments about testing
+> * Improved readability when using snprintf
 
-I'm kinda uncomfortable with saying it's exploitable.
+Thanks, applied and pushed!
 
-It really boils down to not wanting to deal with managing a new IST
-exception.  While the NMI IST implementation is about as good as we can
-get it, I believe there are still holes in it (even if we consider only
-how it interacts with #MC).  The more IST users we add, the more holes
-there are.
-
-You add the fact that an actual adversary can induce the exceptions
-instead of (rare and mostly random) radiation that causes #MC, and it
-makes me want to either curl up in a little ball or pursue a new career.
-
-So, exploitable?  Dunno.  Do I want to touch an #VE/IST implementation?
-No way, not with a 10 foot pole.
+  Luis
