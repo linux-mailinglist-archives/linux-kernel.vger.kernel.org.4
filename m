@@ -2,141 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8D0705554
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1668A705557
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjEPRr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
+        id S231965AbjEPRsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjEPRru (ORCPT
+        with ESMTP id S231702AbjEPRsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:47:50 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD399EE4;
-        Tue, 16 May 2023 10:47:40 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 9F99D581012;
-        Tue, 16 May 2023 13:47:39 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 16 May 2023 13:47:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684259259; x=1684266459; bh=7R
-        Tlb4yPLwyEbMekf/kZ3q59ewoUpiiohu1ETmUvaCM=; b=tjSVD2GDDI6vJ83hu2
-        J0wG8DQCFOFbtD4wryKKIsm8NrKyYWw9AxEpnAygm+AGD4nEF+j2mlJ4DdXq8T7f
-        5QNxCwjCLFwN4LQVkqurLDF0jW1A9Zzz9wuP8KmJ+dOKMC7ySN2l+XD2DB+vAURd
-        6HwY0kPm0vBIX61vZDEmsG6v4odA+Wveqknzg8HJe84D9+Q/i7EzXkxjhIOGsu4K
-        Bn3sr+SEQpMQKfLLbdVTMEAMgMrfED9RHqZwlTkKYfdLgHhBCfQNds8ESPs0wA5+
-        2AzSXtwnhzkb+RBCBVRlsb6shv5c3exsHtDbboEghfnX3UvEDusXCS9pSl0ALX42
-        +Xyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684259259; x=1684266459; bh=7RTlb4yPLwyEb
-        Mekf/kZ3q59ewoUpiiohu1ETmUvaCM=; b=ciFx69qJrZA7yv8A1zotpocAWV1mM
-        DnUP6xkiq9u2k7Phst28yF9pOYB+p24imZJrUwwQF6DaQRUyeCdMCHTN6yVxU/vW
-        Zix27X67pchamsczOqs7J0fQmHu0V5swPms3kpa35adfR5aXURViqtvoRoUWTY5a
-        VGrXwUFJRCfHN/YuNMUZDl9wn8yBTKr7VBmb16uia+BCMsXDlQJp7yj7UMvHEfiR
-        Ebny8zc51oZx4GRbyjokzwqbrXLiBKtObXTWrW3CD5SJCpHHNRnP+f9Dsand+SZT
-        dzhYqpvdJUL8oVoDvA2y4v+/D77Af1UZoXejTAWumnmNa1AN9KFpUQmtQ==
-X-ME-Sender: <xms:usFjZCA3j9sz5nEwWZIq3UmHGzVX3xq8hC-A-CyhlzVMMgSHRPetnQ>
-    <xme:usFjZMhU9wDkNkUa9Ko0jRxG-mz1cmyQTN0VunBG3IHeRNAXPCCPbQ8JGk1HmTj-P
-    f3ZVSWUacwY2BBQoXA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehledgudduiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevveeggeffjeeuieduheefhfehgfdujeetjeelueejjeffueeiudefveff
-    hffhffenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:u8FjZFkhOy80RxQ2BWUV-rzLx8Zo0OByuLOXpQ4jyTEMZULNY_5y-w>
-    <xmx:u8FjZAyVEm27DrMzOgnM0JctyZqlH4gGlGXk57isUu1T4RYHJk6Jhg>
-    <xmx:u8FjZHQCJi6yyLlJWVSjFUgZE57E9obBOYfWMJ-aSBO-TYSVuDEPwA>
-    <xmx:u8FjZIQ8wbnEjbEjDbQYJgfmKy2oTUwCRajab8gsJFAROe09ddfnLQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E6956B60086; Tue, 16 May 2023 13:47:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <0d6d0620-ab14-47ba-90cd-5bce317ac1eb@app.fastmail.com>
-In-Reply-To: <f5c92eb1-83af-4f99-71f5-b7a3e8be1d13@suse.de>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-8-schnelle@linux.ibm.com>
- <f5c92eb1-83af-4f99-71f5-b7a3e8be1d13@suse.de>
-Date:   Tue, 16 May 2023 19:47:18 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Dave Airlie" <airlied@redhat.com>,
-        "Gerd Hoffmann" <kraxel@redhat.com>,
-        "Dave Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Albert Ou" <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        spice-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>
-Subject: Re: [PATCH v4 07/41] drm: handle HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 13:48:14 -0400
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB087DBF;
+        Tue, 16 May 2023 10:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=WuwLzoPe50r5og7BLUtbSp+J5xPioNFelvYHJR4Aa7I=; b=wKQxH/2lssHzfY4uos4gmmjwg1
+        ACeyMFeHTS0av97awKhfo5zX2D4p59o2g0cOyrOfKe+fYWYb995HUokiBGH9dRKs5kiE2LTgmY2Tj
+        8pCn9oIkxfJHSbi00djouGPJf5mnCliZLuz+l8J2jhjisXEK+8WpNb39LglCOhvZvXv8cWT71VXv1
+        0j4mBHUGt9C5/yOywEt2UOI1KcJHX743EF3zyYY7qjzeOWPEGWXsJeaePbsWBXSD3L5LVYRDIXuLv
+        ZbMcly5AAetLvCqEplfm9gMhH0LuSrk+VBAX8jUsHenrZQCJpb5xTVWmTkSHLvSFVgeQzWNpBnkgO
+        D/UC1hzQ==;
+Received: from [2001:4d48:ad59:1403::16a3] (helo=earth.li)
+        by the.earth.li with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1pyylq-00GMrn-OZ; Tue, 16 May 2023 18:47:34 +0100
+Date:   Tue, 16 May 2023 18:47:29 +0100
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>, andy.shevchenko@gmail.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: [PATCH v3 2/5] pinctrl: axp209: Add support for GPIO3 on the AXP209
+Message-ID: <dde40307f0ebc23b9841c32e702b481ab5193dc4.1684258957.git.noodles@earth.li>
+References: <cover.1683719613.git.noodles@earth.li>
+ <cover.1684258957.git.noodles@earth.li>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1684258957.git.noodles@earth.li>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023, at 19:13, Thomas Zimmermann wrote:
->
-> Am 16.05.23 um 13:00 schrieb Niklas Schnelle:
->> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
->> not being declared. We thus need to add HAS_IOPORT as dependency for
->> those drivers using them. In the bochs driver there is optional MMIO
->> support detected at runtime, warn if this isn't taken when
->> HAS_IOPORT is not defined.
->> 
->> There is also a direct and hard coded use in cirrus.c which according to
->> the comment is only necessary during resume.  Let's just skip this as
->> for example s390 which doesn't have I/O port support also doesen't
->> support suspend/resume.
->> 
->> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
->> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
->> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->> ---
->> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
->>        per-subsystem patches may be applied independently
->> 
->>   drivers/gpu/drm/qxl/Kconfig   |  1 +
->>   drivers/gpu/drm/tiny/bochs.c  | 17 +++++++++++++++++
->>   drivers/gpu/drm/tiny/cirrus.c |  2 ++
->
-> There are more invocations in gma500. See[1]
->
-> [1] 
-> https://elixir.bootlin.com/linux/v6.3/source/drivers/gpu/drm/gma500/cdv_device.c#L30
+The AXP209 device has a 4th GPIO which has a slightly different register
+setup, where the control + status bits are held in a single register
+rather than sharing AXP20X_GPIO20_SS with GPIOs 0-2.
 
-GMA500 already has "depends on X86", so I don't think
-any changes are needed there -- x86 is already highly dependent
-on I/O ports for a number of reasons.
+Signed-off-by: Jonathan McDowell <noodles@earth.li>
+---
+ drivers/pinctrl/pinctrl-axp209.c | 42 ++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-     Arnd
+diff --git a/drivers/pinctrl/pinctrl-axp209.c b/drivers/pinctrl/pinctrl-axp209.c
+index 0bc1b381a2b8..b3ba25435c34 100644
+--- a/drivers/pinctrl/pinctrl-axp209.c
++++ b/drivers/pinctrl/pinctrl-axp209.c
+@@ -30,6 +30,11 @@
+ #define AXP20X_GPIO_FUNCTION_OUT_HIGH	1
+ #define AXP20X_GPIO_FUNCTION_INPUT	2
+ 
++#define AXP20X_GPIO3_FUNCTIONS		GENMASK(2, 1)
++#define AXP20X_GPIO3_FUNCTION_OUT_LOW	0
++#define AXP20X_GPIO3_FUNCTION_OUT_HIGH	2
++#define AXP20X_GPIO3_FUNCTION_INPUT	4
++
+ #define AXP20X_FUNC_GPIO_OUT		0
+ #define AXP20X_FUNC_GPIO_IN		1
+ #define AXP20X_FUNC_LDO			2
+@@ -73,6 +78,7 @@ static const struct pinctrl_pin_desc axp209_pins[] = {
+ 	PINCTRL_PIN(0, "GPIO0"),
+ 	PINCTRL_PIN(1, "GPIO1"),
+ 	PINCTRL_PIN(2, "GPIO2"),
++	PINCTRL_PIN(3, "GPIO3"),
+ };
+ 
+ static const struct pinctrl_pin_desc axp22x_pins[] = {
+@@ -130,6 +136,14 @@ static int axp20x_gpio_get(struct gpio_chip *chip, unsigned int offset)
+ 	unsigned int val;
+ 	int ret;
+ 
++	/* AXP209 has GPIO3 status sharing the settings register */
++	if (offset == 3) {
++		ret = regmap_read(pctl->regmap, AXP20X_GPIO3_CTRL, &val);
++		if (ret)
++			return ret;
++		return !!(val & BIT(0));
++	}
++
+ 	ret = regmap_read(pctl->regmap, AXP20X_GPIO20_SS, &val);
+ 	if (ret)
+ 		return ret;
+@@ -144,6 +158,17 @@ static int axp20x_gpio_get_direction(struct gpio_chip *chip,
+ 	unsigned int val;
+ 	int reg, ret;
+ 
++	/* AXP209 GPIO3 settings have a different layout */
++	if (offset == 3) {
++		ret = regmap_read(pctl->regmap, AXP20X_GPIO3_CTRL, &val);
++		if (ret)
++			return ret;
++		if (val & AXP20X_GPIO3_FUNCTION_INPUT)
++			return GPIO_LINE_DIRECTION_IN;
++
++		return GPIO_LINE_DIRECTION_OUT;
++	}
++
+ 	reg = axp20x_gpio_get_reg(offset);
+ 	if (reg < 0)
+ 		return reg;
+@@ -184,6 +209,15 @@ static void axp20x_gpio_set(struct gpio_chip *chip, unsigned int offset,
+ 	struct axp20x_pctl *pctl = gpiochip_get_data(chip);
+ 	int reg;
+ 
++	/* AXP209 has GPIO3 status sharing the settings register */
++	if (offset == 3) {
++		regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CTRL,
++				   AXP20X_GPIO3_FUNCTIONS,
++				   value ? AXP20X_GPIO3_FUNCTION_OUT_HIGH :
++				   AXP20X_GPIO3_FUNCTION_OUT_LOW);
++		return;
++	}
++
+ 	reg = axp20x_gpio_get_reg(offset);
+ 	if (reg < 0)
+ 		return;
+@@ -200,6 +234,14 @@ static int axp20x_pmx_set(struct pinctrl_dev *pctldev, unsigned int offset,
+ 	struct axp20x_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
+ 	int reg;
+ 
++	/* AXP209 GPIO3 settings have a different layout */
++	if (offset == 3) {
++		return regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CTRL,
++				   AXP20X_GPIO3_FUNCTIONS,
++				   config == AXP20X_MUX_GPIO_OUT ? AXP20X_GPIO3_FUNCTION_OUT_LOW :
++				   AXP20X_GPIO3_FUNCTION_INPUT);
++	}
++
+ 	reg = axp20x_gpio_get_reg(offset);
+ 	if (reg < 0)
+ 		return reg;
+-- 
+2.39.2
+
