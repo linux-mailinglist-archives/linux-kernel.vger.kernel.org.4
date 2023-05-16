@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5905270525E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0492705264
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbjEPPiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S233935AbjEPPit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbjEPPiT (ORCPT
+        with ESMTP id S233916AbjEPPio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:38:19 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474DC6199;
-        Tue, 16 May 2023 08:38:17 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GD50rY032459;
-        Tue, 16 May 2023 17:37:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=selector1;
- bh=yaiXGJIEjJ0GT5upQDWDY3dTnGhq9SL8ZecEEkPwAWw=;
- b=Qz6YrZHmAHrMLNKIB8RLTUdRTZtja2RPXr2UO5KBSFgP3f0jXfqfklBLoXdqHSnWo8Im
- 7UyajHkn1ibeGJa8lQzc+KaSineJiC0jn6McZVqquknCA2FoNBzGt8Ou82HmKHguIxK0
- AxyxOIra8lnbIPO5+jppENRRjRfRk7Vs6U6HeAlZV0j1di46YXtbXQ2TfrDwbwSYCT8w
- pE7MxAk2k7rJHbwJ/Cyo8BpG8urKnr/1I3QiO/T7J+HYS0f8ep6ZnqC3GSsoVtc7YBPb
- kOxN5jZ5eEt0BGIM4+5m0nreDfQmiHOK2aiJA2Z/T8SUHPppqjryb/jEqHUvgz1qD0kY zw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qhyyhav80-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 17:37:39 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 953A010002A;
-        Tue, 16 May 2023 17:37:38 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 85E80233017;
-        Tue, 16 May 2023 17:37:38 +0200 (CEST)
-Received: from [192.168.8.15] (10.48.0.39) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 16 May
- 2023 17:37:37 +0200
-Message-ID: <919aaa61015366e82b5a9ec918189c01031d3399.camel@foss.st.com>
-Subject: Re: [Linux-stm32] [PATCH 1/3] irqchip/stm32-exti: Add STM32MP15xx
- IWDG2 EXTI to GIC map
-From:   Antonio Borneo <antonio.borneo@foss.st.com>
-To:     Marek Vasut <marex@denx.de>, <linux-arm-kernel@lists.infradead.org>
-CC:     <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        "Richard Cochran" <richardcochran@gmail.com>,
-        <linux-kernel@vger.kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>
-Date:   Tue, 16 May 2023 17:37:36 +0200
-In-Reply-To: <20230511001949.179521-1-marex@denx.de>
-References: <20230511001949.179521-1-marex@denx.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 
+        Tue, 16 May 2023 11:38:44 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BE97A94
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:38:40 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f51ea3a062so594011cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684251520; x=1686843520;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=N2CRyxNmsdznR8/fBUCCYBNG767y6htOcJe+Dq978O0=;
+        b=ky99+SCHVfnCmAJnGMGv+XVy+Y/5w5Oriop+D60VXZbCJ46gh+BY4W/UCSx8Jw6A1Y
+         WeM0aEvIRgrM2jDStmfPFfmthOHniHIbD6BBAkMqS2rRLZbeZZIgdXCCOoRBUnvSevIu
+         mGuNBL4Mr3wXiwPb659vYj/tqLRCY8VqO+w/QgMqd5eX9Uw6OGg4SA2MO9aKFK9RIRvU
+         tNCGIHM+6q9QmYMsDDHzkOg7i/4XX2pKHtb2C+hHmMlevY63HKwLMDWrQseSHQPXXPBX
+         PZhvWIyZ0rkWNQ7lzVI/RMghiVJsnssJd/v656xW56cjCjuc8HUMmcZXCCBDdfbZ3RxZ
+         SnvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684251520; x=1686843520;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N2CRyxNmsdznR8/fBUCCYBNG767y6htOcJe+Dq978O0=;
+        b=RUJTbGmrGV5Zr2MLhuxJhveU5ihIFsVz9Q27IEpSQR08wUw2trYA6hB6IBxsTUjdf5
+         iwmtQx6s+qHV/nZ0OUBEHjmH92Bi/mYid4NdLCXAEa4POLvuSWCXGp61Fqxtja4yhc1y
+         DR+1hAVHTD7Qjtts/uEPYGBHGjMCZZDnpuJaB++FR8660psQJi28ULsY0Nt9VxorAlpy
+         iuwBOfX5ERCW8qWWcoo6Ebqqc3/Mful93IR4nJNVaTPm/RmEmTW7GD0K6q9UHlw3gW7I
+         kwIQK2bI+ERrVD9P2x/uZw0oduwhS87C0fz0pV0v037dvAlSgosNb46Tf1r/h74YwJXF
+         kQgA==
+X-Gm-Message-State: AC+VfDzUuh3n3VufGetgU598l7R8EEBNMJ/D4T9hou/AgJ1MHtBBjV7s
+        gqIJbixr3uuaETO2Fpwtd77YI1KPCK3rkFDmHQqy1w==
+X-Google-Smtp-Source: ACHHUZ6fQp/lKGz1+t36Q6XsaElEPIWiVg1TuKslqyo6sEc8QdbtTlLU6AEW4d5yZVI5PwZB9goyJxoyJD4Dogeldhw=
+X-Received: by 2002:ac8:4e86:0:b0:3f5:4eb4:414f with SMTP id
+ 6-20020ac84e86000000b003f54eb4414fmr44516qtp.13.1684251519819; Tue, 16 May
+ 2023 08:38:39 -0700 (PDT)
 MIME-Version: 1.0
-X-Originating-IP: [10.48.0.39]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_08,2023-05-16_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230515165917.1306922-1-ltykernel@gmail.com> <20230515165917.1306922-4-ltykernel@gmail.com>
+ <20230516094048.GE2587705@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230516094048.GE2587705@hirez.programming.kicks-ass.net>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 16 May 2023 08:38:28 -0700
+Message-ID: <CAAH4kHZvSDNeRsiCCJ-DyBEj2MxGdmGuZeuofL0y=RP19cqfVw@mail.gmail.com>
+Subject: Re: [RFC PATCH V6 03/14] x86/sev: Add AMD sev-snp enlightened guest
+ support on hyperv
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, pangupta@amd.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-05-11 at 02:19 +0200, Marek Vasut wrote:
-> The EXTI interrupt 46 is mapped to GIC interrupt 151. Add the
-> missing mapping, which is used for IWDG2 pretimeout interrupt
-> and wake up source.
->=20
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Richard Cochran <richardcochran@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-watchdog@vger.kernel.org
-> ---
-> =C2=A0drivers/irqchip/irq-stm32-exti.c | 1 +
-> =C2=A01 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32=
--exti.c
-> index 6a3f7498ea8ea..f684be77ba378 100644
-> --- a/drivers/irqchip/irq-stm32-exti.c
-> +++ b/drivers/irqchip/irq-stm32-exti.c
-> @@ -208,6 +208,7 @@ static const u8 stm32mp1_desc_irq[] =3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0[31] =3D 53,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0[32] =3D 82,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0[33] =3D 83,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0[46] =3D 151,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0[47] =3D 93,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0[48] =3D 138,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0[50] =3D 139,
+>
+> WTF is this supposed to do and why is this the right way to achieve the
+> desired result?
+>
+> Your changelog gives me 0 clues -- guess how much I then care about your
+> patches?
 
-Hi Marek,
+Excuse me? No. This is incredibly rude and violates the community code
+of conduct. Please review examples of creating a positive environment
+here https://docs.kernel.org/process/code-of-conduct.html
 
-thanks for the patch.
-
-Reviewed-by: Antonio Borneo <antonio.borneo@foss.st.com>
+-- 
+-Dionna Glaze, PhD (she/her)
