@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA050705672
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A079670566F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjEPS4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
+        id S229871AbjEPSz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjEPS4G (ORCPT
+        with ESMTP id S229823AbjEPSzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:56:06 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE01FD4;
-        Tue, 16 May 2023 11:55:54 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-61b58779b93so131986136d6.0;
-        Tue, 16 May 2023 11:55:54 -0700 (PDT)
+        Tue, 16 May 2023 14:55:54 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF4D83E3;
+        Tue, 16 May 2023 11:55:40 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55a14807e4cso249689787b3.1;
+        Tue, 16 May 2023 11:55:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684263353; x=1686855353;
+        d=gmail.com; s=20221208; t=1684263339; x=1686855339;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4Gk842cjdG4K5CczpFcCYjTPpnd2QPxUhAOZdTaJ7C0=;
-        b=gagBmnpbS1yHWXR+HM/UDTCaKNAyPZNX4WHVuvsFZwaRkrafAciWV4Pl5SUzzs4KLT
-         vpR8q1ffO7YMmhHt+W/qvuSd+NyuKc7WQHgM9a0mUduSKSoc/GziJARj/smayteIgRTv
-         XU3EbITFlRaqcczRPQsXZ2kB8gmsOn4c7XGjFmU3lFCm83upVX+mBviZLXzpbibDQ5oh
-         6xUGqdT1naBHzHqIDbqD/4hCNc9wYDCSl2D4kx8kB0+nYaougBbrMDv9PVsBvdloDseY
-         z0UKWGq5+7clKCG2WY0hzTT9kjJFkGSqTv1SBIsamsMb9U4kB5QmPEFBSajeJdGs0a0H
-         GX/A==
+        bh=7zjhKxXZ2gpvpHSpguCPEqJAmKWOCbduBitIzKKEQiU=;
+        b=O30FOywTZfkbog0liQGZBCRx+U3VmxOGahGSzjoTlQWmLi0A4z9CQaiUUqUyWWpO9d
+         DkovN5OC88Lo4lJ57fd9+xtllYJl1+8nPm+GUN91fhLAjeKuycV0C7JRcJyQ86gfRRmg
+         gW9mTKWaIR0vQc2wi3rfrmG7efUgNIEy/ihXAhAU7GV5He6M42iSHW4cPcQbQflGvsQh
+         bRc0gOvzeHNRItOrsPozm9A0Ga8mCVat6dQUeZFFv2+ojcdJqb631MB+bPAZTg5EF7sM
+         IMYRxLC8+oPaptNKAUnIjhJDT0OAfMhUwGU3H4HCdtYwhOySql2zGowxMXq6HVJ4EQH1
+         xhAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684263353; x=1686855353;
+        d=1e100.net; s=20221208; t=1684263339; x=1686855339;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4Gk842cjdG4K5CczpFcCYjTPpnd2QPxUhAOZdTaJ7C0=;
-        b=KDmIEi5NwRC0kQmwG/aOclrqUe7gAfZ1X6m7cXaTpaFGotiejGESMVD5/ApkA6MhWO
-         qC9Bxwoz7LZAZal/5I+oeHCO2LsGyVKe9eIN+FGemr3kKRGXSK+0boByyq9AjUnNkuEz
-         NI+EXr14+/ResAU89b4QfI5qZTWV0GZcTcisqPdsKeeL7yMLGAo24B3nVFisucrHbv5m
-         FSPqjfaF4WCREO5vN3sU+oKSX7JP8oFbQeTkycUhf7DonnrvBbXrlO2VPL7h1IV8d9Pe
-         ZKCmBja81Cr/sBDW27nIjk4jtrmpTXyQ4CgdQsZOo4tZ17VNiHHLgOp/2nS0aPuMf+O6
-         0XUg==
-X-Gm-Message-State: AC+VfDy274LmV2rGlFdQ4TwfOr7oIYcdIUP4uuXz6uvgZxsMTUSG2lsa
-        JH01XN6uN5IL+oPktTfR/vp7omaagsFPt4rshAw=
-X-Google-Smtp-Source: ACHHUZ7XAuPsG6Afx/bxFCgAWWhfY5B3L0rYnlnXe6OigWDX0i0D/785g4aZkS7MVjXZ1JEywIz1S9SrhlPBBJAjQNc=
-X-Received: by 2002:a05:6214:dab:b0:5a9:1bd5:375e with SMTP id
- h11-20020a0562140dab00b005a91bd5375emr66252019qvh.21.1684263353143; Tue, 16
- May 2023 11:55:53 -0700 (PDT)
+        bh=7zjhKxXZ2gpvpHSpguCPEqJAmKWOCbduBitIzKKEQiU=;
+        b=lEmEzaYJanVm14TdiWFgnOCXeOhfQcSJZRDlC59vzErQzTxyBTr1DwUidCtkmOkha1
+         +8pMMAezH8JkBUVAdsXSKZdTNmj+93PgIg6OdET86KvvFyihDAnzHIyVTOBc33l/db92
+         QpLew5vwazURMuyxg6TdN27fSyM/sPChYZZ0cbWsv9cx6cXpXigsgHffCBcNjdDzNMy1
+         x8wvM2Qyyteu0HIm6yIcAcQxmyq0ShyaFpvbZ+ngHz0zwpuGeGmgneSPi/FrJVtN+1kv
+         hA/6mP5kTbpdQoIzDeuiB+ZlqhH/pcFV7WO0tL61zOz1WpWWgmcJCJfyjk9kd5O008Ca
+         hc3Q==
+X-Gm-Message-State: AC+VfDyQGR7Y7cnPGh3EAI5hnRZ+zwW4v9dYVStcWFYyF7ajOVxX39se
+        bzzkXsZHeh9BWnmGevmEp7dETIbdpynpdvhhiD0=
+X-Google-Smtp-Source: ACHHUZ7UduhEioLlYF8Ao9DNhUH22GYELG+g8RTz2z48/XuswuxdY2B1i/TlyfXagmKsE1kCaXPxaYPUNT9E8zO9jgA=
+X-Received: by 2002:a0d:ffc1:0:b0:561:3fb7:1333 with SMTP id
+ p184-20020a0dffc1000000b005613fb71333mr9294631ywf.43.1684263338914; Tue, 16
+ May 2023 11:55:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1683719613.git.noodles@earth.li> <cover.1684258957.git.noodles@earth.li>
- <dde40307f0ebc23b9841c32e702b481ab5193dc4.1684258957.git.noodles@earth.li>
-In-Reply-To: <dde40307f0ebc23b9841c32e702b481ab5193dc4.1684258957.git.noodles@earth.li>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 16 May 2023 21:55:17 +0300
-Message-ID: <CAHp75Vdca-dAzVnoxjDtNKGo+EV-DVT3iRccVgQ4GbsMwU5uYw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] pinctrl: axp209: Add support for GPIO3 on the AXP209
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <CAAQoYRm3766SG7+VuwVzu_xH8aWihoKWMEp8xQGNgJ6oOtC9+g@mail.gmail.com>
+ <CAAQoYRmXdMp7b2r+yCRUtGrbfQH-Cb8gMAVo7YscuQEM5kgajw@mail.gmail.com>
+In-Reply-To: <CAAQoYRmXdMp7b2r+yCRUtGrbfQH-Cb8gMAVo7YscuQEM5kgajw@mail.gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Tue, 16 May 2023 20:55:28 +0200
+Message-ID: <CAKR-sGdiLzZ7iVbLmz1uPwYoUXQZ2qGwmCBAq_-OKXfVT=Pj-A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new binding
+To:     liao jaime <jaimeliao.tw@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,125 +74,354 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 8:47=E2=80=AFPM Jonathan McDowell <noodles@earth.li=
-> wrote:
->
-> The AXP209 device has a 4th GPIO which has a slightly different register
-> setup, where the control + status bits are held in a single register
-> rather than sharing AXP20X_GPIO20_SS with GPIOs 0-2.
+Hi Jaime,
 
-LGTM,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+I've reproduced the issue on a Comtrend VR-3032u (MX30LF1G08AA). After
+forcing it to check block protection (it's not supported on that
+device), the NAND controller stops reading/writing anything.
 
-> Signed-off-by: Jonathan McDowell <noodles@earth.li>
-> ---
->  drivers/pinctrl/pinctrl-axp209.c | 42 ++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
+@Florian is it possible that low level ops (GET_FEATURES/SET_FEATURES)
+aren't supported on BCM63268 NAND controllers and this is causing the
+issue?
+
+Best regards,
+=C3=81lvaro.
+
+El mi=C3=A9, 26 abr 2023 a las 9:24, liao jaime (<jaimeliao.tw@gmail.com>) =
+escribi=C3=B3:
 >
-> diff --git a/drivers/pinctrl/pinctrl-axp209.c b/drivers/pinctrl/pinctrl-a=
-xp209.c
-> index 0bc1b381a2b8..b3ba25435c34 100644
-> --- a/drivers/pinctrl/pinctrl-axp209.c
-> +++ b/drivers/pinctrl/pinctrl-axp209.c
-> @@ -30,6 +30,11 @@
->  #define AXP20X_GPIO_FUNCTION_OUT_HIGH  1
->  #define AXP20X_GPIO_FUNCTION_INPUT     2
+> Hi =C3=81lvaro
 >
-> +#define AXP20X_GPIO3_FUNCTIONS         GENMASK(2, 1)
-> +#define AXP20X_GPIO3_FUNCTION_OUT_LOW  0
-> +#define AXP20X_GPIO3_FUNCTION_OUT_HIGH 2
-> +#define AXP20X_GPIO3_FUNCTION_INPUT    4
-> +
->  #define AXP20X_FUNC_GPIO_OUT           0
->  #define AXP20X_FUNC_GPIO_IN            1
->  #define AXP20X_FUNC_LDO                        2
-> @@ -73,6 +78,7 @@ static const struct pinctrl_pin_desc axp209_pins[] =3D =
-{
->         PINCTRL_PIN(0, "GPIO0"),
->         PINCTRL_PIN(1, "GPIO1"),
->         PINCTRL_PIN(2, "GPIO2"),
-> +       PINCTRL_PIN(3, "GPIO3"),
->  };
+> In nand_scan_tail(), each manufacturer init function call will be execute=
+.
+> In macronix_nand_init(), block protect will be execute after flash detect=
+.
+> I have validate MX30LF1G18AC in Linux kernel v5.15.
+> I didn't got situation "device hangs"  on my side.
+> BP is to prevent incorrect operations.
+> Please check the controller settings for tracing this issue.
 >
->  static const struct pinctrl_pin_desc axp22x_pins[] =3D {
-> @@ -130,6 +136,14 @@ static int axp20x_gpio_get(struct gpio_chip *chip, u=
-nsigned int offset)
->         unsigned int val;
->         int ret;
+> Thanks
+> Jaime
 >
-> +       /* AXP209 has GPIO3 status sharing the settings register */
-> +       if (offset =3D=3D 3) {
-> +               ret =3D regmap_read(pctl->regmap, AXP20X_GPIO3_CTRL, &val=
-);
-> +               if (ret)
-> +                       return ret;
-> +               return !!(val & BIT(0));
-> +       }
-> +
->         ret =3D regmap_read(pctl->regmap, AXP20X_GPIO20_SS, &val);
->         if (ret)
->                 return ret;
-> @@ -144,6 +158,17 @@ static int axp20x_gpio_get_direction(struct gpio_chi=
-p *chip,
->         unsigned int val;
->         int reg, ret;
->
-> +       /* AXP209 GPIO3 settings have a different layout */
-> +       if (offset =3D=3D 3) {
-> +               ret =3D regmap_read(pctl->regmap, AXP20X_GPIO3_CTRL, &val=
-);
-> +               if (ret)
-> +                       return ret;
-> +               if (val & AXP20X_GPIO3_FUNCTION_INPUT)
-> +                       return GPIO_LINE_DIRECTION_IN;
-> +
-> +               return GPIO_LINE_DIRECTION_OUT;
-> +       }
-> +
->         reg =3D axp20x_gpio_get_reg(offset);
->         if (reg < 0)
->                 return reg;
-> @@ -184,6 +209,15 @@ static void axp20x_gpio_set(struct gpio_chip *chip, =
-unsigned int offset,
->         struct axp20x_pctl *pctl =3D gpiochip_get_data(chip);
->         int reg;
->
-> +       /* AXP209 has GPIO3 status sharing the settings register */
-> +       if (offset =3D=3D 3) {
-> +               regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CTRL,
-> +                                  AXP20X_GPIO3_FUNCTIONS,
-> +                                  value ? AXP20X_GPIO3_FUNCTION_OUT_HIGH=
- :
-> +                                  AXP20X_GPIO3_FUNCTION_OUT_LOW);
-> +               return;
-> +       }
-> +
->         reg =3D axp20x_gpio_get_reg(offset);
->         if (reg < 0)
->                 return;
-> @@ -200,6 +234,14 @@ static int axp20x_pmx_set(struct pinctrl_dev *pctlde=
-v, unsigned int offset,
->         struct axp20x_pctl *pctl =3D pinctrl_dev_get_drvdata(pctldev);
->         int reg;
->
-> +       /* AXP209 GPIO3 settings have a different layout */
-> +       if (offset =3D=3D 3) {
-> +               return regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CTRL=
+> >
+> > Hello YouChing and Jaime,
+> >
+> > I still didn't get any feedback from you (or Macronix) on this issue.
+> > Did you have time to look into it?
+> >
+> > Thanks,
+> > =C3=81lvaro.
+> >
+> > El vie, 24 mar 2023 a las 18:04, =C3=81lvaro Fern=C3=A1ndez Rojas
+> > (<noltari@gmail.com>) escribi=C3=B3:
+> > >
+> > > Hi Miqu=C3=A8l,
+> > >
+> > > 2023-03-24 15:36 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>=
+:
+> > > > Hi =C3=81lvaro,
+> > > >
+> > > > + YouChing and Jaime from Macronix
+> > > > TLDR for them: there is a misbehavior since Mason added block
+> > > > protection support. Just checking if the blocks are protected seems=
+ to
+> > > > misconfigure the chip entirely, see below. Any hints?
+> > >
+> > > Could it be that the NAND is stuck expecting a read 0x00 command whic=
+h
+> > > isn=E2=80=99t sent after getting the features?
+> > >
+> > > >
+> > > > noltari@gmail.com wrote on Fri, 24 Mar 2023 15:15:47 +0100:
+> > > >
+> > > >> Hi Miqu=C3=A8l,
+> > > >>
+> > > >> 2023-03-24 14:45 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.c=
+om>:
+> > > >> > Hi =C3=81lvaro,
+> > > >> >
+> > > >> > noltari@gmail.com wrote on Fri, 24 Mar 2023 12:21:11 +0100:
+> > > >> >
+> > > >> >> El vie, 24 mar 2023 a las 11:49, Miquel Raynal
+> > > >> >> (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+> > > >> >> >
+> > > >> >> > Hi =C3=81lvaro,
+> > > >> >> >
+> > > >> >> > noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
+> > > >> >> >
+> > > >> >> > > Hi Miqu=C3=A8l,
+> > > >> >> > >
+> > > >> >> > > El vie, 24 mar 2023 a las 10:40, Miquel Raynal
+> > > >> >> > > (<miquel.raynal@bootlin.com>) escribi=C3=B3:
+> > > >> >> > > >
+> > > >> >> > > > Hi =C3=81lvaro,
+> > > >> >> > > >
+> > > >> >> > > > noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +010=
+0:
+> > > >> >> > > >
+> > > >> >> > > > > Add new "mxic,disable-block-protection" binding documen=
+tation.
+> > > >> >> > > > > This binding allows disabling block protection support =
+for
+> > > >> >> > > > > those
+> > > >> >> > > > > devices not
+> > > >> >> > > > > supporting it.
+> > > >> >> > > > >
+> > > >> >> > > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltar=
+i@gmail.com>
+> > > >> >> > > > > ---
+> > > >> >> > > > >  Documentation/devicetree/bindings/mtd/nand-macronix.tx=
+t | 3
+> > > >> >> > > > > +++
+> > > >> >> > > > >  1 file changed, 3 insertions(+)
+> > > >> >> > > > >
+> > > >> >> > > > > diff --git
+> > > >> >> > > > > a/Documentation/devicetree/bindings/mtd/nand-macronix.t=
+xt
+> > > >> >> > > > > b/Documentation/devicetree/bindings/mtd/nand-macronix.t=
+xt
+> > > >> >> > > > > index ffab28a2c4d1..03f65ca32cd3 100644
+> > > >> >> > > > > --- a/Documentation/devicetree/bindings/mtd/nand-macron=
+ix.txt
+> > > >> >> > > > > +++ b/Documentation/devicetree/bindings/mtd/nand-macron=
+ix.txt
+> > > >> >> > > > > @@ -16,6 +16,9 @@ in children nodes.
+> > > >> >> > > > >  Required NAND chip properties in children mode:
+> > > >> >> > > > >  - randomizer enable: should be "mxic,enable-randomizer=
+-otp"
+> > > >> >> > > > >
+> > > >> >> > > > > +Optional NAND chip properties in children mode:
+> > > >> >> > > > > +- block protection disable: should be
+> > > >> >> > > > > "mxic,disable-block-protection"
+> > > >> >> > > > > +
+> > > >> >> > > >
+> > > >> >> > > > Besides the fact that nowadays we prefer to see binding
+> > > >> >> > > > conversions
+> > > >> >> > > > to
+> > > >> >> > > > yaml before adding anything, I don't think this will fly.
+> > > >> >> > > >
+> > > >> >> > > > I'm not sure exactly what "disable block protection" mean=
+s, we
+> > > >> >> > > > already have similar properties like "lock" and
+> > > >> >> > > > "secure-regions",
+> > > >> >> > > > not
+> > > >> >> > > > sure they will fit but I think it's worth checking.
+> > > >> >> > >
+> > > >> >> > > As explained in 2/2, commit 03a539c7a118 introduced a regre=
+ssion
+> > > >> >> > > on
+> > > >> >> > > Sercomm H500-s (BCM63268) OpenWrt devices with Macronix
+> > > >> >> > > MX30LF1G18AC
+> > > >> >> > > which hangs the device.
+> > > >> >> > >
+> > > >> >> > > This is the log with block protection disabled:
+> > > >> >> > > [    0.495831] bcm6368_nand 10000200.nand: there is not val=
+id maps
+> > > >> >> > > for
+> > > >> >> > > state default
+> > > >> >> > > [    0.504995] nand: device found, Manufacturer ID: 0xc2, C=
+hip ID:
+> > > >> >> > > 0xf1
+> > > >> >> > > [    0.511526] nand: Macronix MX30LF1G18AC
+> > > >> >> > > [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, pag=
+e size:
+> > > >> >> > > 2048, OOB size: 64
+> > > >> >> > > [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB =
+total,
+> > > >> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+> > > >> >> > > [    0.535912] Bad block table found at page 65472, version=
+ 0x01
+> > > >> >> > > [    0.544268] Bad block table found at page 65408, version=
+ 0x01
+> > > >> >> > > [    0.954329] 9 fixed-partitions partitions found on MTD d=
+evice
+> > > >> >> > > brcmnand.0
+> > > >> >> > > ...
+> > > >> >> > >
+> > > >> >> > > This is the log with block protection enabled:
+> > > >> >> > > [    0.495095] bcm6368_nand 10000200.nand: there is not val=
+id maps
+> > > >> >> > > for
+> > > >> >> > > state default
+> > > >> >> > > [    0.504249] nand: device found, Manufacturer ID: 0xc2, C=
+hip ID:
+> > > >> >> > > 0xf1
+> > > >> >> > > [    0.510772] nand: Macronix MX30LF1G18AC
+> > > >> >> > > [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, pag=
+e size:
+> > > >> >> > > 2048, OOB size: 64
+> > > >> >> > > [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB =
+total,
+> > > >> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+> > > >> >> > > [    0.539687] Bad block table not found for chip 0
+> > > >> >> > > [    0.550153] Bad block table not found for chip 0
+> > > >> >> > > [    0.555069] Scanning device for bad blocks
+> > > >> >> > > [    0.601213] CPU 1 Unable to handle kernel paging request=
+ at
+> > > >> >> > > virtual
+> > > >> >> > > address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
+> > > >> >> > > *** Device hangs ***
+> > > >> >> > >
+> > > >> >> > > Enabling macronix_nand_block_protection_support() makes the=
+ device
+> > > >> >> > > unable to detect the bad block table and hangs it when tryi=
+ng to
+> > > >> >> > > scan
+> > > >> >> > > for bad blocks.
+> > > >> >> >
+> > > >> >> > Please trace nand_macronix.c and look:
+> > > >> >> > - are the get_features and set_features really supported by t=
+he
+> > > >> >> >   controller driver?
+> > > >> >>
+> > > >> >> This is what I could find by debugging:
+> > > >> >> [    0.494993] bcm6368_nand 10000200.nand: there is not valid m=
+aps for
+> > > >> >> state default
+> > > >> >> [    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip =
+ID:
+> > > >> >> 0xf1
+> > > >> >> [    0.512077] nand: Macronix MX30LF1G18AC
+> > > >> >> [    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page si=
+ze:
+> > > >> >> 2048, OOB size: 64
+> > > >> >> [    0.523928] bcm6368_nand 10000200.nand: detected 128MiB tota=
+l,
+> > > >> >> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+> > > >> >> [    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
+> > > >> >> [    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
+> > > >> >> [    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+> > > >> >> [    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURE=
+S =3D
+> > > >> >> 0x00
+> > > >> >> [    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+> > > >> >> [    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURE=
+S =3D
+> > > >> >> 0x00
+> > > >> >> [    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
+> > > >> >> [    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURE=
+S =3D
+> > > >> >> 0x00
+> > > >> >> [    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
+> > > >> >> [    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURE=
+S =3D
+> > > >> >> 0x00
+> > > >> >> [    0.594657] nand: nand_get_features: addr=3Da0 subfeature_pa=
+ram=3D[00
+> > > >> >> 00 00 00] -> 0
+> > > >> >> [    0.602341] macronix_nand_block_protection_support:
+> > > >> >> ONFI_FEATURE_ADDR_MXIC_PROTECTION=3D0
+> > > >> >> [    0.610548] macronix_nand_block_protection_support: !=3D
+> > > >> >> MXIC_BLOCK_PROTECTION_ALL_LOCK
+> > > >> >> [    0.624760] Bad block table not found for chip 0
+> > > >> >> [    0.635542] Bad block table not found for chip 0
+> > > >> >> [    0.640270] Scanning device for bad blocks
+> > > >> >>
+> > > >> >> I don't know how to tell if get_features / set_features is real=
+ly
+> > > >> >> supported...
+> > > >> >
+> > > >> > Looks like your driver does not support exec_op but the core pro=
+vides a
+> > > >> > get/set_feature implementation.
+> > > >>
+> > > >> According to Florian, low level should be supported on brcmnand
+> > > >> controllers >=3D 4.0
+> > > >> Also:
+> > > >> https://github.com/nomis/bcm963xx_4.12L.06B_consumer/blob/e2f23ddb=
+b20bf75689372b6e6a5a0dc613f6e313/shared/opensource/include/bcm963xx/63268_m=
+ap_part.h#L1597
+> > > >
+> > > > Just to be sure, you're using a mainline controller driver, not thi=
+s
+> > > > one?
+> > >
+> > > Yes, this was just to prove that the HW I=E2=80=99m using has get/set=
+ features support.
+> > > I=E2=80=99m using OpenWrt, so it=E2=80=99s linux v5.15 driver.
+> > >
+> > > >
+> > > >> >
+> > > >> >>
+> > > >> >> > - what is the state of the locking configuration in the chip =
+when
+> > > >> >> > you
+> > > >> >> >   boot?
+> > > >> >>
+> > > >> >> Unlocked, I guess...
+> > > >> >> How can I check that?
+> > > >> >
+> > > >> > It's in your dump, the chip returns 0, meaning it's all unlocked=
 ,
-> +                                  AXP20X_GPIO3_FUNCTIONS,
-> +                                  config =3D=3D AXP20X_MUX_GPIO_OUT ? AX=
-P20X_GPIO3_FUNCTION_OUT_LOW :
-> +                                  AXP20X_GPIO3_FUNCTION_INPUT);
-> +       }
-> +
->         reg =3D axp20x_gpio_get_reg(offset);
->         if (reg < 0)
->                 return reg;
-> --
-> 2.39.2
->
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+> > > >> > apparently.
+> > > >>
+> > > >> Well, I can read/write the device if block protection isn=E2=80=99=
+t disabled,
+> > > >> so I guess we can confirm it=E2=80=99s unlocked=E2=80=A6
+> > > >>
+> > > >> >
+> > > >> >> > - is there anything that locks the device by calling mxic_nan=
+d_lock()
+> > > >> >> > ?
+> > > >> >
+> > > >> > So nobody locks the device I guess? Did you add traces there?
+> > > >>
+> > > >> It doesn=E2=80=99t get to the point that it enabled the lock/unloc=
+k functions
+> > > >> since it fails when checking if feature is 0x38, so there=E2=80=99=
+s no point
+> > > >> in adding those traces=E2=80=A6
+> > > >
+> > > > Right, it returns before setting these I guess.
+> > > >
+> > > >>
+> > > >> >
+> > > >> >> > - finding no bbt is one thing, hanging is another, where is i=
+t
+> > > >> >> > hanging
+> > > >> >> >   exactly? (offset in nand/ and line in the code)
+> > > >> >>
+> > > >> >> I've got no idea...
+> > > >> >
+> > > >> > You can use ftrace or just add printks a bit everywhere and try =
+to get
+> > > >> > closer and closer.
+> > > >>
+> > > >> I think that after trying to get the feature it just start reading
+> > > >> nonsense from the NAND and at some point it hangs due to that garb=
+age=E2=80=A6
+> > > >
+> > > > It should refuse to mount the device somehow, but in no case the ke=
+rnel
+> > > > should hang.
+> > >
+> > > Yes, I think that this is a side effect (maybe a different bug somewh=
+ere else).
+> > >
+> > > >
+> > > >> Is it posible that the NAND starts behaving like this after gettin=
+g
+> > > >> the feature due to some specific config of my device?
+> > > >>
+> > > >> >
+> > > >> > I looked at the patch, I don't see anything strange. Besides, I =
+have a
+> > > >> > close enough datasheet and I don't see what could confuse the de=
+vice.
+> > > >> >
+> > > >> > Are you really sure this patch is the problem? Is the WP pin wir=
+ed on
+> > > >> > your design?
+> > > >>
+> > > >> There=E2=80=99s no WP pin in brcmnand controllers < 7.0
+> > > >
+> > > > What about the chip?
+> > >
+> > > Maybe it has a GPIO controlling that, but I don=E2=80=99t have that i=
+nfo=E2=80=A6
+> > >
+> > > >
+> > > > Thanks,
+> > > > Miqu=C3=A8l
+> > > >
