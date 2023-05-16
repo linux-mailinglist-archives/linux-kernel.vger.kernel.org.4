@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D785C705410
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B744F705411
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 18:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbjEPQiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 12:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
+        id S229643AbjEPQin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 12:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbjEPQiB (ORCPT
+        with ESMTP id S230296AbjEPQil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 12:38:01 -0400
+        Tue, 16 May 2023 12:38:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0547903E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:37:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA44A27A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 09:38:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DD8863C72
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:37:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 536DBC433EF;
-        Tue, 16 May 2023 16:37:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 713AC6195F
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:38:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F90C433D2;
+        Tue, 16 May 2023 16:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684255057;
-        bh=n/CufBhtZJbOluCwHEqr8pt/TxblYMYei/Q+meIjPsM=;
+        s=korg; t=1684255090;
+        bh=dhqQYzWFNVPsltSxPc2EbWQIo9paw/tUwKkGvL/3FTs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FYl2YraIervuRrPH6uP1VQs9OA6++0xKd2D7dH9LFvJSPKERmKlx/qWcvDsAOnPP/
-         UTnj5vm4LUEYFb0vBgWDZEHkHgsfw3Brw8zXyJHfgCoRGlPCbYhp0dBqtuwy8zhWa4
-         vUbKQ2R4NeF4BmWUqT1c/r/GMTJ73vbm2cC2hJM0=
-Date:   Tue, 16 May 2023 18:37:34 +0200
+        b=r/RpAgH+iCUUdpY8KsJ4HAXV86tjahpWbBhMDeAKQsU39PpCCF2onr7JaRzAZ4BH0
+         SWLefnjiR/HpQb9ZV4ZB5yix2KE0Gf0+onsUJWkCQlrNBTjAFO9c/eD10z3i2CcvVl
+         aPRFXJg1XbUS/8jKmF+3aaKt2LbLgigjJiNBsNck=
+Date:   Tue, 16 May 2023 18:38:08 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
         patches@opensource.cirrus.com
 Subject: Re: [PATCH 5/5] debugfs: Add debugfs_create_const_str()
-Message-ID: <2023051614-dingo-quicksand-ad6d@gregkh>
+Message-ID: <2023051642-unlisted-cough-49f7@gregkh>
 References: <20230516160753.32317-1-rf@opensource.cirrus.com>
  <20230516160753.32317-6-rf@opensource.cirrus.com>
 MIME-Version: 1.0
@@ -100,8 +100,9 @@ On Tue, May 16, 2023 at 05:07:53PM +0100, Richard Fitzgerald wrote:
 > +	debugfs_create_str(name, mode & ~0222, parent, (char **)value);
 > +}
 
-Also, we need a user of the new function in order to be able to add it,
-otherwise I'll just delete it eventually :)
+And you didn't include a version for when CONFIG_DEBUG_FS is not
+enabled, which would cause anyone who used this function, to break the
+build :(
 
 thanks,
 
