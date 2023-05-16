@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1177042DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62EC7042DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjEPBZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
+        id S229621AbjEPBZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjEPBZF (ORCPT
+        with ESMTP id S229514AbjEPBZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:25:05 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A121BEF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:25:04 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-33569035746so1640175ab.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1684200304; x=1686792304;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+efH+wqHkT7+fyuI18fo7OAWpc4YEP1OK/0TkaDdqhI=;
-        b=iaQ65w2VFr/eYZpJulNIgQiLDQn05zHgQc7a7ZRIWYdlPcEuq3rv/2F+iPwlzoRxrS
-         C2EyGH0JuE+fmBeaAYdWeUBRBtB6goptsRpDQ5jfufiSWRLfh6Sd/wybx4aIvxydta0k
-         Xuk/y+Z6K6p8bYpLGA/CqHgTxqSqh1N7K0eb0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684200304; x=1686792304;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+efH+wqHkT7+fyuI18fo7OAWpc4YEP1OK/0TkaDdqhI=;
-        b=RH7Ngm0srBfjJk/eRXbcf5+OVDwDwH+hjppztyV6rgOQH4XAV4z8fu9U2/mG6PObjY
-         m8Kzpx7MQK+n3Lg96QR8RlNP6sw7wztvw+gcLVfBLeWnkeXw7kG6Uh8ktQXyhkgwMlch
-         ZAML16wZanRf3b20T3BxuJMjtW3Z9noiJBwJKvdSjPzqgy7ekPQJIf4vkYChSLCz4Yp0
-         BhcP2pCeOxdAuXFOWYyCUXnwd8v81c2NywLDS6pgeHwVl+ymwrkVrdpREEGA0iFIRxbd
-         JazlHkV2ofuWIVN2erW1ZMPykCB7s0CtTF2i0iIuiVca7NdfvzmzkQXeNAxS7zi++Yvp
-         S/kQ==
-X-Gm-Message-State: AC+VfDy60jv36cVtPlNQfhBqcuRXMkpj198fS6dX+UrwTRsqwazzDM6c
-        uFeY2PiUm0nLvvKUCdQtQj33eJWtAYeKbuLU40M=
-X-Google-Smtp-Source: ACHHUZ4qiOpmikVK+acNLXYo7sXRdIyQ18cwYvi62CnMqTTbBlCQFXLf0hSW8w7axt3wtnFqXTZXZg==
-X-Received: by 2002:a05:6e02:f53:b0:331:832b:fb90 with SMTP id y19-20020a056e020f5300b00331832bfb90mr581043ilj.2.1684200303908;
-        Mon, 15 May 2023 18:25:03 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m1-20020a02c881000000b0041407c67451sm7470760jao.165.2023.05.15.18.25.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 18:25:03 -0700 (PDT)
-Message-ID: <7226d16c-095d-2c0f-56dc-5240baf15fa2@linuxfoundation.org>
-Date:   Mon, 15 May 2023 19:25:02 -0600
+        Mon, 15 May 2023 21:25:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27C71FDC;
+        Mon, 15 May 2023 18:25:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8864C633E5;
+        Tue, 16 May 2023 01:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E39C433D2;
+        Tue, 16 May 2023 01:25:49 +0000 (UTC)
+Date:   Mon, 15 May 2023 21:25:46 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, Ze Gao <zegao@tencent.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] fprobe: make fprobe_kprobe_handler recursion free
+Message-ID: <20230515212546.7a467a1f@gandalf.local.home>
+In-Reply-To: <6c428b9f74090b2780b67ca498c45aa5e8c38c44.1684120990.git.zegao@tencent.com>
+References: <cover.1684120990.git.zegao@tencent.com>
+        <6c428b9f74090b2780b67ca498c45aa5e8c38c44.1684120990.git.zegao@tencent.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 6.1 000/239] 6.1.29-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230515161721.545370111@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230515161721.545370111@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 10:24, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.29 release.
-> There are 239 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.29-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Mon, 15 May 2023 11:26:39 +0800
+Ze Gao <zegao2021@gmail.com> wrote:
 
-Compiled and booted on my test system. No dmesg regressions.
+> Current implementation calls kprobe related functions before doing
+> ftrace recursion check in fprobe_kprobe_handler, which opens door
+> to kernel crash due to stack recursion if preempt_count_{add, sub}
+> is traceable.
+> 
+> Refactor the common part out of fprobe_kprobe_handler and fprobe_
+> handler and call ftrace recursion detection at the very beginning,
+> and also mark these functions notrace so that the whole fprobe_k-
+> probe_handler is free from recusion. And
+> 
+> Signed-off-by: Ze Gao <zegao@tencent.com>
+> ---
+>  kernel/trace/fprobe.c | 61 +++++++++++++++++++++++++++++++------------
+>  1 file changed, 45 insertions(+), 16 deletions(-)
+> 
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 9abb3905bc8e..ad9a36c87ad9 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
+>  	char data[];
+>  };
+>  
+> -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> -			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> +static inline notrace void __fprobe_handler(unsigned long ip, unsigned long
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-thanks,
--- Shuah
+FYI, if you look in kernel/trace/Makefile you'll see:
+
+ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+
+Which removes the flags to add tracing. So there's no reason to add
+"notrace" here, as all functions in this directory are by default "notrace".
+
+-- Steve
+
+
+> +		parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
+>  	struct fprobe_rethook_node *fpr;
+>  	struct rethook_node *rh = NULL;
+>  	struct fprobe *fp;
+>  	void *entry_data = NULL;
+> -	int bit, ret;
+> +	int ret;
+>  
+>  	fp = container_of(ops, struct fprobe, ops);
+> -	if (fprobe_disabled(fp))
+> -		return;
+> -
+> -	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> -	if (bit < 0) {
+> -		fp->nmissed++;
+> -		return;
+> -	}
+>  
+>  	if (fp->exit_handler) {
+>  		rh = rethook_try_get(fp->rethook);
+>  		if (!rh) {
+>  			fp->nmissed++;
+> -			goto out;
+> +			return;
+>  		}
+>  		fpr = container_of(rh, struct fprobe_rethook_node, node);
+>  		fpr->entry_ip = ip;
+> @@ -61,23 +53,60 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  		else
+>  			rethook_hook(rh, ftrace_get_regs(fregs), true);
+>  	}
+>
