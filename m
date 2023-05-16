@@ -2,160 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22207042E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9DE7042E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjEPB1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S229650AbjEPBa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjEPB1w (ORCPT
+        with ESMTP id S229524AbjEPBaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:27:52 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615696A6B
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:27:49 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f00d41df22so1409543e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:27:49 -0700 (PDT)
+        Mon, 15 May 2023 21:30:24 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C9010F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:30:23 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-3357ea1681fso3214765ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 18:30:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684200467; x=1686792467;
+        d=linuxfoundation.org; s=google; t=1684200622; x=1686792622;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nTgYLuA9A9QIzBfKyR+OtnbBepNacp9tevci+hgaznc=;
-        b=noAYfQQpLyERkrCP3s8F1J1fUiP9Uup6GoUEmR6hUfaOSQmH3G1PXJCPTggI+aGCxJ
-         0wfH9TOYDUMEDjAWBxFqbWVqRkK0GaR4ZRHLGdbiU5FWGx1SrvL58AThoZQYW9yWbkLg
-         gCUKR/jgb4Rve8GVQNLsRZVcYjQQ7untlIwHqxhqILKJVEeT92JXZM1Yc8Qdd99IUHOP
-         klSCyPyvhjufMDKnauW+ycDyqiiCjbCan0WOalKO/NRAvPN7dLlDQH8JAcFxN/qqQYYP
-         SUPYakbKyFuxNyMI9E0Qi6xtOxd40QP9+VO41befRPl8EdPBjzBK483rLhuxgP0AF1pg
-         C8kQ==
+        bh=UVHnUIJWgu5B9c3GLUqRjUfbsWVf3ceFNu26vMPD94I=;
+        b=U7IUelUOQMiqu6XmHrkSmtLo1ts+0gK2GWfpo43p0rgqXFxoR96alZvuiF86gN0EKl
+         cbSzE5SCdA5fZp+99/nTyC7DsFhK6NSo0lRNx3zJMfElZdvIc+r/TwhP42InAi9Kg0FV
+         Gmd6v/a7MLjbcLKcex3k+tWarkBlKR2EPU5Kc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684200467; x=1686792467;
+        d=1e100.net; s=20221208; t=1684200622; x=1686792622;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nTgYLuA9A9QIzBfKyR+OtnbBepNacp9tevci+hgaznc=;
-        b=DtIVxeYFE0izSg4i9gEHWFSATVKzvpnyXVLY/7ozKq0tBvM9lTcCEMmWeUfN01kE13
-         KNt0UHNGx64MY/+74DDRphX33s27GdSLLYb88LpWoXheDHWkTxACkZeJfHr6aFL0e0DB
-         E3AvDVPX33mjNFVhOZTDJ9eaH4QPEFOFo1Sv7b2Npe1gpp2LSwE/YSsmW9MzDkvvXBHx
-         ZCrLuvnIo5TvkwasIfQ5F99R8lsgOj26JiKcLnuz9QLSOakVNB8SSpOhZMeDmlqMzx1Q
-         0Cv98RDLk5hNlMFhe8LTNecH3W0lPT0ZXpqEl87HlLK4MKn9+owkxFIjl2vh65g2Oiyj
-         tpvg==
-X-Gm-Message-State: AC+VfDyCKRKhcFLQSsZKmchcpeTT3I7XlQsXSocaBXCeWMmsbMTqQ8TU
-        LRXgjv7EBkdde2A1SWNPiMKdUg==
-X-Google-Smtp-Source: ACHHUZ7nMJtjojvQzwCdIe3knUwEEfaDB0GS1SyGPCOamQAeFXTLFmH/VkF9R1kKZSwHaFjA999A1Q==
-X-Received: by 2002:a05:6512:3990:b0:4ef:ef1d:a987 with SMTP id j16-20020a056512399000b004efef1da987mr6746251lfu.25.1684200467628;
-        Mon, 15 May 2023 18:27:47 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id n2-20020a195502000000b004f3789c8bd5sm1079540lfe.132.2023.05.15.18.27.46
+        bh=UVHnUIJWgu5B9c3GLUqRjUfbsWVf3ceFNu26vMPD94I=;
+        b=Oc9HPD0bX/MyAVKNuIotBGiaKL/viKV55jrKM6WL8CCyseta9NdVZ7OLYloB9DrVAf
+         ZKzNIaOFvGAp/xJk1v/11NJxsFMh+M/MLBBvbGWvyG9YP0fsBoKLy3tlKPCa9m98JtZt
+         x7iWn5H7xg7Rixj/j8HEFcfdTabQU+7cd4Y6TIP6/5dIRtQqrvcagBHGLBUevZd17z8D
+         djCBPqxmOlez/QnenJuyVKnIDCsxnAYGJspHq1j59ZH6pbRQR+wSl5UzPQwSI/fSmmI9
+         Qs0veYWD6RcGl4T+1acWTOvQrHP8dAUOLBMpIOwssUW/nWnQWhdDcFzDePKteyC3jPZG
+         NVaw==
+X-Gm-Message-State: AC+VfDxKBj45rixhzxk0lcXPsIGeIeKdPCSAAeNFAMUfEvJlJgB7p66H
+        Kl/Mmlqtu0x1vf3ONHCvZtgs+A==
+X-Google-Smtp-Source: ACHHUZ4CpY87zIekDbcb4isU2iclMy4ONult/VJKgANjWIil2QvPH58pR928VEqWdN+QYp4EHtGQag==
+X-Received: by 2002:a6b:3117:0:b0:76c:7342:dde6 with SMTP id j23-20020a6b3117000000b0076c7342dde6mr765163ioa.0.1684200622564;
+        Mon, 15 May 2023 18:30:22 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id m20-20020a026d14000000b00418b836f89bsm628708jac.63.2023.05.15.18.30.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 18:27:47 -0700 (PDT)
-Message-ID: <20bd79c1-6c38-f1ed-1661-6fa4c308c5c5@linaro.org>
-Date:   Tue, 16 May 2023 03:27:46 +0200
+        Mon, 15 May 2023 18:30:22 -0700 (PDT)
+Message-ID: <6219ed8b-af51-4fbd-c8cc-0aa88c26fa7a@linuxfoundation.org>
+Date:   Mon, 15 May 2023 19:30:21 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] clk: qcom: smd-rpm: conditionally enable scaling before
- doing handover
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 5.10 000/381] 5.10.180-rc1 review
 Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230506-rpmcc-scaling-handover-v1-1-374338a8dfd9@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230506-rpmcc-scaling-handover-v1-1-374338a8dfd9@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230515161736.775969473@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230515161736.775969473@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/15/23 10:24, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.180 release.
+> There are 381 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.180-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
+Compiled and booted on my test system. No dmesg regressions.
 
-On 6.05.2023 22:10, Luca Weiss wrote:
-> On older platforms like msm8226, msm8974 and msm8916 the driver in the
-> downstream kernel enables scaling first before doing the handover of the
-> clocks.
-> 
-> While this normally doesn't seem to cause noticeable problems, on
-> apq8026-asus-sparrow this causes the device to immediately reboot,
-> perhaps due to older rpm firmware that becomes unhappy.
-> 
-> On newer platforms the order has swapped and enabling scaling is done
-> after the handover, so let's introduce this behavior only conditionally
-> for msm8226 and msm8974 for now.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-Did you give this a spin on some 8974? I think hammerhead had
-issues around rpmcc in the past..
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Konrad
->  drivers/clk/qcom/clk-smd-rpm.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-> index 887b945a6fb7..6d5476afc4d1 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -178,6 +178,7 @@ struct clk_smd_rpm_req {
->  struct rpm_smd_clk_desc {
->  	struct clk_smd_rpm **clks;
->  	size_t num_clks;
-> +	bool scaling_before_handover;
->  };
->  
->  static DEFINE_MUTEX(rpm_smd_clk_lock);
-> @@ -693,6 +694,7 @@ static struct clk_smd_rpm *msm8974_clks[] = {
->  static const struct rpm_smd_clk_desc rpm_clk_msm8974 = {
->  	.clks = msm8974_clks,
->  	.num_clks = ARRAY_SIZE(msm8974_clks),
-> +	.scaling_before_handover = true,
->  };
->  
->  static struct clk_smd_rpm *msm8976_clks[] = {
-> @@ -1318,6 +1320,12 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->  	rpm_smd_clks = desc->clks;
->  	num_clks = desc->num_clks;
->  
-> +	if (desc->scaling_before_handover) {
-> +		ret = clk_smd_rpm_enable_scaling(rpm);
-> +		if (ret)
-> +			goto err;
-> +	}
-> +
->  	for (i = 0; i < num_clks; i++) {
->  		if (!rpm_smd_clks[i])
->  			continue;
-> @@ -1329,9 +1337,11 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->  			goto err;
->  	}
->  
-> -	ret = clk_smd_rpm_enable_scaling(rpm);
-> -	if (ret)
-> -		goto err;
-> +	if (!desc->scaling_before_handover) {
-> +		ret = clk_smd_rpm_enable_scaling(rpm);
-> +		if (ret)
-> +			goto err;
-> +	}
->  
->  	for (i = 0; i < num_clks; i++) {
->  		if (!rpm_smd_clks[i])
-> 
-> ---
-> base-commit: dd9e11d6477a52ede9ebe575c83285e79e823889
-> change-id: 20230506-rpmcc-scaling-handover-a63029ed9d13
-> 
-> Best regards,
+thanks,
+-- Shuah
