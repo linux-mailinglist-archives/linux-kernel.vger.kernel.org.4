@@ -2,170 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8801705606
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B72705607
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjEPSdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
+        id S229799AbjEPSdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjEPSdJ (ORCPT
+        with ESMTP id S229460AbjEPSda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:33:09 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB1859CB
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:33:02 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-552621bdbbbso1743692eaf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684261982; x=1686853982;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XH0y+GTalSRtMGbisTzJJVpaGWPePAl2Mpmnaf9OUxE=;
-        b=HWtc9Z02lS5k5RwvWtOlHK0AD+3B3Pw9wAMNhzPLQ4YEsoZKA5DdHsmgUcj1cL8MC+
-         atLMYF70U4BpQbVqCbdf/3cqlw96HaRmbFKOOxWsKonFoPkMNQXUKWkozXk9Pf6LlhD6
-         sI2s5nM0Bvamx7XZf7s3kjYsMxObm/E1jRg+c8eBfvanYc7IUX0QLHEPgvVLHJMjFO3s
-         VxhptOF7iCgcfDt8hAEs6aVqCnMbFPfv3kyzAo8CetwBTutWBcWfQUPRkhta+UKB46FC
-         wHSm9zVsmOmgSYNu0Q8uF9vXPBIaD3suk4c7GJY2yWWsSZq+ZSn+WZaVi6lXwsziQGUm
-         JM+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684261982; x=1686853982;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XH0y+GTalSRtMGbisTzJJVpaGWPePAl2Mpmnaf9OUxE=;
-        b=CXEpC29vNl8HEWAuLgqL2tAxaxCR1KguQqkFgHs1ir+7k5BGb0wkPhBOVwP7+2rfB9
-         ZwFDW8xckm7z8Fwgof57btPKpm8tLbhTLnnifCMx2Ux7lvHmPiZTx3wuEb2X9qeLyDJ0
-         ibsbI77UF4wrf5eMIROcwy/D4Qhd/xLx5Ju+75owpEMJ1ixX5gMLX7j6Oja9SSF6/W2I
-         qIopw3onJopqEULUd73N9BZ7Z1Vh1OiuAErmi5hzNxyXH1hzWIwDt3NFqvpBFDg7y8XV
-         U/oay6NMGQVB+lgFLZNF656o/pfqJaqUzDvjUbEMWm4QhNM0acEfQAKIUWbcFjMBDF7d
-         Lvpw==
-X-Gm-Message-State: AC+VfDytNac0KXlLnTMCwlMfInD7RvKaIvFly1oS5A9l1E4fXyJdT3pz
-        Q9BSKdTd1nidncmRTu6mwyffdyhFWRw/cw==
-X-Google-Smtp-Source: ACHHUZ4KYXgPdS1EVNlQmkfSKCXh4Ru9AlZkruYSiPyUYZFjrzO/n2EK403329umZkZimGHSkdNUtg==
-X-Received: by 2002:a4a:91cf:0:b0:54c:723b:36a8 with SMTP id e15-20020a4a91cf000000b0054c723b36a8mr11420813ooh.4.1684261981716;
-        Tue, 16 May 2023 11:33:01 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id m12-20020a056820034c00b00545442d89b3sm3140411ooe.23.2023.05.16.11.33.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 11:33:01 -0700 (PDT)
-From:   arnaldo.melo@gmail.com
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 39808403B5; Tue, 16 May 2023 15:32:59 -0300 (-03)
-Date:   Tue, 16 May 2023 15:32:59 -0300
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1 fyi] tools headers UAPI: Sync s390 syscall table file
- that wires up the memfd_secret syscall
-Message-ID: <ZGPMW0p++D1Jdvf6@kernel.org>
+        Tue, 16 May 2023 14:33:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AA476BA
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:33:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEE13632ED
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE016C433D2;
+        Tue, 16 May 2023 18:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684262005;
+        bh=a7PTnqs0YEm7IsOGAlvOif0wre27TfjbZbHFQy0cnwU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=rEa9im+Rl2Y/r0Y6FeNozIBqp5Zuk3+/eyERtBc0g5sI+ih30RXMoSsu+sN+tFfxj
+         9HYfjcxHwxe4tLNtYzuGQQKP7uJISNhwhIR5r940lyJs0DQ770/NPseu81MkSQ8tUS
+         AWipO7RjPqGElhY9WCcGeXysVrsGE74TCy7htWmf9XGXYaN7EDigzEZhkU0M+caz7S
+         xPDu42RfMh0+W81Ae7ymp1R40QOC7UBEcqeKuobuDrxg1sUwHIJIPoFumo6HONtOnc
+         KgFpGqblHmIDsVHvHFTry7WJwknjXOjeyjjgYlGV0LRUtIfMXxQ5EmPMyzTizphM3S
+         ECk+e3H1+1ENA==
+Message-ID: <3c7d7d0b-b859-8921-952c-870c9474969c@kernel.org>
+Date:   Tue, 16 May 2023 21:33:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] phy: ti: gmii-sel: Allow parent to not be syscon node
+Content-Language: en-US
+To:     Andrew Davis <afd@ti.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230515195922.617243-1-afd@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230515195922.617243-1-afd@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+Hi Andrew,
 
-- Arnaldo
+On 15/05/2023 22:59, Andrew Davis wrote:
+> If the parent node is not a syscon type, then fallback and check
+> if we can get a regmap from our own node. This no longer forces
+> us to make the parent of this node a syscon node when that might
+> not be appropriate.
 
-Full explanation:
+Trying to understand the motive for this and if it is better to
+introduce a "syscon = <&syscon_node>" property instead which
+makes it fool proof for all cases.
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+> 
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>  drivers/phy/ti/phy-gmii-sel.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/phy/ti/phy-gmii-sel.c b/drivers/phy/ti/phy-gmii-sel.c
+> index 8c667819c39a..1e67ed9a5cf6 100644
+> --- a/drivers/phy/ti/phy-gmii-sel.c
+> +++ b/drivers/phy/ti/phy-gmii-sel.c
+> @@ -435,9 +435,12 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
+>  
+>  	priv->regmap = syscon_node_to_regmap(node->parent);
+>  	if (IS_ERR(priv->regmap)) {
+> -		ret = PTR_ERR(priv->regmap);
+> -		dev_err(dev, "Failed to get syscon %d\n", ret);
+> -		return ret;
+> +		priv->regmap = device_node_to_regmap(node);
+> +		if (IS_ERR(priv->regmap)) {
+> +			ret = PTR_ERR(priv->regmap);
+> +			dev_err(dev, "Failed to get syscon %d\n", ret);
+> +			return ret;
+> +		}
+>  	}
+>  
+>  	ret = phy_gmii_sel_init_ports(priv);
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
-
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick the changes in these csets:
-
-  7608f70adcb1ea69 ("s390: wire up memfd_secret system call")
-
-That add support for this new syscall in tools such as 'perf trace'.
-
-For instance, this is now possible (adapted from the x86_64 test output):
-
-  # perf trace -v -e memfd_secret
-  event qualifier tracepoint filter: (common_pid != 13375 && common_pid != 3713) && (id == 447)
-  ^C#
-
-That is the filter expression attached to the raw_syscalls:sys_{enter,exit}
-tracepoints.
-
-  $ grep memfd_secret tools/perf/arch/x86/entry/syscalls/syscall_64.tbl
-  447    common  memfd_secret            sys_memfd_secret
-  $
-
-This addresses this perf build warnings:
-
-  Warning: Kernel ABI header at 'tools/perf/arch/s390/entry/syscalls/syscall.tbl' differs from latest version at 'arch/s390/kernel/syscalls/syscall.tbl'
-  diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
-
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/arch/s390/entry/syscalls/syscall.tbl | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/perf/arch/s390/entry/syscalls/syscall.tbl b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-index 799147658dee20dd..b68f47541169f9af 100644
---- a/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-+++ b/tools/perf/arch/s390/entry/syscalls/syscall.tbl
-@@ -449,7 +449,7 @@
- 444  common	landlock_create_ruleset	sys_landlock_create_ruleset	sys_landlock_create_ruleset
- 445  common	landlock_add_rule	sys_landlock_add_rule		sys_landlock_add_rule
- 446  common	landlock_restrict_self	sys_landlock_restrict_self	sys_landlock_restrict_self
--# 447 reserved for memfd_secret
-+447  common	memfd_secret		sys_memfd_secret		sys_memfd_secret
- 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
- 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
- 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
 -- 
-2.39.2
-
+cheers,
+-roger
