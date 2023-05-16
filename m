@@ -2,155 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFB5704E2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D64704E50
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbjEPMye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:54:34 -0400
+        id S233289AbjEPM41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:56:27 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbjEPMyZ (ORCPT
+        with ESMTP id S233244AbjEPM4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:54:25 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843BD10CE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:54:12 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230516125409epoutp01fd7db36dfd5d11cdb2ec89cafd5fb913~foNtS2ixo0521405214epoutp01h
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:54:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230516125409epoutp01fd7db36dfd5d11cdb2ec89cafd5fb913~foNtS2ixo0521405214epoutp01h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1684241649;
-        bh=6JRRr1+XPYnCycfuWh2BMBee/RDKqp/hKWRZyJw+S4Q=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=JwY8tKErI+wHr/A3AWkLuQdEIskeqZ6Lh2bq2AGOzYtPfLAc19ghfUTF0bIZ2zyTR
-         6l5r2zqtnVXVLvh1PHLeoqFuchm0MVMtyVqIA/8HMco9HUE3WyQEqEH6VonWfbnZ62
-         5bsrP2CgXroYdq/Xpyx7AsRxcZXuImPhqWU1/z6k=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230516125408epcas2p4405684b63b34acd3e7d7acf5cd39627e~foNsUoA2K0840908409epcas2p4F;
-        Tue, 16 May 2023 12:54:08 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QLGQS0xzbz4x9Q0; Tue, 16 May
-        2023 12:54:08 +0000 (GMT)
-X-AuditID: b6c32a46-8b7ff7000001438d-59-64637cf0299b
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        49.AA.17293.0FC73646; Tue, 16 May 2023 21:54:08 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE:(2) [PATCH v2 02/14] block: bio-integrity: modify
- bio_integrity_add_page()
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     "hch@lst.de" <hch@lst.de>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "kbusch@kernel.org" <kbusch@kernel.org>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
-        "kch@nvidia.com" <kch@nvidia.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230512134323.GA32242@lst.de>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230516125407epcms2p82f3323c8b869b8517408adb451413e6c@epcms2p8>
-Date:   Tue, 16 May 2023 21:54:07 +0900
-X-CMS-MailID: 20230516125407epcms2p82f3323c8b869b8517408adb451413e6c
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIJsWRmVeSWpSXmKPExsWy7bCmue6HmuQUg9NvmS1W3+1ns3h5SNNi
-        5eqjTBaLbmxjsvjbdY/JYtKha4wWT6/OYrLYe0vb4vKuOWwWy4//Y7JY9/o9i8XvH3PYHHg8
-        zt/byOKxeYWWx+WzpR6bVnWyeUxYdIDRY/fNBjaP3uZ3bB4fn95i8ejbsorR4/MmOY/2A91M
-        AdxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QJcr
-        KZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgrMC/SKE3OLS/PS9fJSS6wMDQyMTIEK
-        E7Izlt5Yx1ZwTrzixMWdjA2M58W6GDk5JARMJOas72XsYuTiEBLYwShxb0sDUxcjBwevgKDE
-        3x3CIKawQITE951BIOVCAkoS59bMYoQIG0jc6jUHCbMJ6En8XDKDDSQsIiArcWVFPUiYWeAT
-        s8T/dwYQi3glZrQ/ZYGwpSW2L98KNoVTQEdi6kJ7iLCGxI9lvcwQtqjEzdVv2WHs98fmM0LY
-        IhKt985C1QhKPPi5GyouKXHo0FewCyQE8iU2HAiECNdIvF1+AKpEX+Jax0YWiO98Jea8jwAJ
-        swioSiy6vQxqk4vEzL9HmSCO15ZYtvA1M0g5s4CmxPpd+hDDlSWO3GKBqOCT6Dj8lx3mvYaN
-        v7Gyd8x7wgTRqiaxqMloAqPyLEQAz0KyahbCqgWMzKsYxVILinPTU4uNCozgcZqcn7uJEZx2
-        tdx2ME55+0HvECMTB+MhRgkOZiUR3vaZ8SlCvCmJlVWpRfnxRaU5qcWHGE2BnpzILCWanA9M
-        /Hkl8YYmlgYmZmaG5kamBuZK4rzStieThQTSE0tSs1NTC1KLYPqYODilGphuM2fvVPg5kyVZ
-        ivuM17VEJccbp8yOvPe6YbEq0PpWA3ePQFhFh3rrIZ3Uz6LB7RvN+p0uvLl30mdzU98rrW1p
-        kdcvHmeZeW5qMUvdtBcebt4RmTxfvSalPt/4Vqhj74xfd8/Vreqa0ZRlkL3w4TTN66tYRFyW
-        fAkP3VYyP1N1Sd4f5oT8P/3Sls8X2h47Y+zzecX9QLHIXSraj1iMdD1/euew/mppT3Gc38N4
-        /PaaJwZxEfX17UcSp73TfeY3SX2NUL+B2LYCXp5Uzpl/62YHF2y1s46dlFCpffDqaZZlP3e9
-        m+DN2Mwjdi05Q0ei9eHE4NjXlX8fRstyvF/zKFjzc9iPzwddvqY232Kqs1NiKc5INNRiLipO
-        BAAQqgdnRAQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
-References: <20230512134323.GA32242@lst.de>
-        <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
-        <20230510084854epcms2p756a3e1055399ead6bf539d3419c74c3e@epcms2p7>
-        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p8>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 16 May 2023 08:56:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B742691
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 05:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684241691;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dmTy7RERLTTlHMDvbmWoaYSTmqTCStLXSnB9hgIg4f0=;
+        b=BYDN4fKx2dQpO8j11g36uxkfu9q4E/eJYeYljtqwnLDwLzlpzCgFqyuVZR6o2ipyiydFjH
+        Xygqwf5t6gAaiy8/1yES/fJU4OB5SwLK7drgFQh+g1Nk1BzRrB+SJSbCZaF7NoC32hzO9X
+        040J02LIPN47kyVwFKZ+ULFe+hmxzNg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-626-z_NlnuGROBOnKL3k1Ydrsw-1; Tue, 16 May 2023 08:54:47 -0400
+X-MC-Unique: z_NlnuGROBOnKL3k1Ydrsw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C8652808E75;
+        Tue, 16 May 2023 12:54:46 +0000 (UTC)
+Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA0EDC15BA0;
+        Tue, 16 May 2023 12:54:44 +0000 (UTC)
+Date:   Tue, 16 May 2023 20:54:41 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        hch@infradead.org, agordeev@linux.ibm.com,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
+        deller@gmx.de, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v5 RESEND 01/17] asm-generic/iomap.h: remove
+ ARCH_HAS_IOREMAP_xx macros
+Message-ID: <ZGN9EZyoshL9cDE8@MiWiFi-R3L-srv>
+References: <20230515090848.833045-1-bhe@redhat.com>
+ <20230515090848.833045-2-bhe@redhat.com>
+ <ZGMfl5KW9sXkhT8n@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGMfl5KW9sXkhT8n@kernel.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Hi Jinyoung,
->
->can you work a bit on the commit log and especially the subject line?
->
->I'd word this as something like:
->
->=22Subject: bio-integrity: create multi-page bvecs in bio_integrity_add_pa=
-ge()
->
->Allow bio_integrity_add_page to create multi-page bvecs, just like
->the bio payloads. =C2=A0This=20simplifies=20adding=20larger=20payloads,=20=
-and=20fixes=0D=0A>support=20for=20non-tiny=20workloads=20with=20nvme,=20whi=
-ch=20stopped=20using=20scatterlist=0D=0A>for=20metadata=20a=20while=20ago=
-=22=0D=0A>=0D=0A=0D=0AHi.=20Christoph.=20I=20checked=20late.=0D=0A=0D=0AOK.=
-=20I=20will=20revise=20it=20like=20that.=0D=0A=0D=0A>It=20should=20probably=
-=20also=20mentioned=20somewhere=20that=20you=20did=20an=20audit=20to=0D=0A>=
-ensure=20all=20drivers=20and=20the=20core=20code=20is=20fine=20with=20these=
-=20multi-page=0D=0A>segments.=20=C2=A0If=20it's=20not,=20this=20patch=20sho=
-uld=20only=20be=20added=20after=20that=0D=0A>has=20been=20made=20the=20case=
-.=0D=0A=0D=0ARegardless=20of=20a=20single-page=20or=20a=20multi-page=20conf=
-iguration,=0D=0Ablock_rq_count_integrity_sg()=20and=20block_rq_map_integry_=
-sg()=20check=0D=0Athe=20pages=20included=20in=20the=20bip=20to=20create=20a=
-=20segment=20for=20sg.=0D=0ASo...=20there=20doesn't=20seem=20to=20be=20a=20=
-problem=20yet.=0D=0A=0D=0AFirst,=20the=20nvme=20device=20that=20supports=20=
-fips=20was=20tested=20using=20the=20above=0D=0Afunctions,=20and=20it=20was=
-=20also=20checked=20with=20the=20dix=20of=20scsi_debug=20turned=20on.=0D=0A=
-I=20am=20also=20trying=20to=20test=20the=20sas=20device=20that=20supports=
-=20sed.=20It=20seems=20that=0D=0Aa=20problem=20occurs=20while=20going=20thr=
-ough=20the=20laid=20controller=20(mpt3sas=20driver).=0D=0AIt=20works=20norm=
-ally=20in=20DIF=20mode,=20but=20protection=20error=20occurs=20when=20DIX=20=
-mode=0D=0Ais=20forcibly=20activated.=20Of=20course,=20the=20same=20is=20hap=
-pening=20in=20the=20original=20code.=0D=0AI=20will=20check=20additionally=
-=20and=20be=20careful=20not=20to=20cause=20any=20problems.=0D=0A=0D=0A>=0D=
-=0A>I=20think=20the=20extra=20arguments=20struct=20is=20a=20bit=20overcompl=
-iated,=20and=20mostly=0D=0A>due=20to=20me=20making=20the=20existing=20code=
-=20to=20weird=20things=20in=20the=20low-level=0D=0A>helpers.=20=C2=A0With=
-=20the=20=22rationalize=20the=20flow=20in=20bio_add_page=20and=20friends=22=
-=0D=0A>series=20I=20just=20sent=20out,=20I=20think=20we=20can=20drop=20the=
-=20previous=20patch=20and=0D=0A>simplify=20this=20one=20down=20to:=0D=0A=0D=
-=0AI=20tried=20not=20to=20make=20a=20big=20change=20from=20the=20existing=
-=20logic.=20So=20I=20added=0D=0Astruct=20unnecessarily.=20I=20thought=20it=
-=20would=20be=20a=20problem=20if=20I=20added=20=0D=0Aconditions=20to=20the=
-=20callers=20and=20made=20them=20call=20the=20common=20code.=0D=0AThank=20y=
-ou=20for=20solving=20this=20part.=0D=0AIf=20your=20code=20merges,=20I=20wil=
-l=20modify=20it=20accordingly=20and=20proceed.=0D=0A=0D=0ABest=20Regards,=
-=0D=0AJinyoung.=0D=0A
+On 05/16/23 at 09:15am, Mike Rapoport wrote:
+> Hi,
+> 
+> On Mon, May 15, 2023 at 05:08:32PM +0800, Baoquan He wrote:
+> > Let's use '#define ioremap_xx' and "#ifdef ioremap_xx" instead.
+> > 
+> > For each architecture to remove defined ARCH_HAS_IOREMAP_xx macros in
+> 
+> This sentence seems to be stale.
+
+Right, will remove this, thanks a lot for careful reviewing.
+
+> 
+> > To remove defined ARCH_HAS_IOREMAP_xx macros in <asm/io.h> of each ARCH,
+> > the ARCH's own ioremap_wc|wt|np definition need be above
+> > "#include <asm-generic/iomap.h>. Otherwise the redefinition error would
+> > be seen during compiling. So the relevant adjustments are made to avoid
+> > compiling error:
+> > 
+> >   loongarch:
+> >   - doesn't include <asm-generic/iomap.h>, defining ARCH_HAS_IOREMAP_WC
+> >     is redundant, so simply remove it.
+> > 
+> >   m68k:
+> >   - selected GENERIC_IOMAP, <asm-generic/iomap.h> has been added in
+> >     <asm-generic/io.h>, and <asm/kmap.h> is included above
+> >     <asm-generic/iomap.h>, so simply remove ARCH_HAS_IOREMAP_WT defining.
+> > 
+> >   mips:
+> >   - move "#include <asm-generic/iomap.h>" below ioremap_wc definition
+> >     in <asm/io.h>
+> > 
+> >   powerpc:
+> >   - remove "#include <asm-generic/iomap.h>" in <asm/io.h> because it's
+> >     duplicated with the one in <asm-generic/io.h>, let's rely on the
+> >     latter.
+> > 
+> >   x86:
+> >   - selected GENERIC_IOMAP, remove #include <asm-generic/iomap.h> in
+> >     the middle of <asm/io.h>. Let's rely on <asm-generic/io.h>.
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Cc: loongarch@lists.linux.dev
+> > Cc: linux-m68k@lists.linux-m68k.org
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > Cc: x86@kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-arch@vger.kernel.org
+> 
+> Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> 
+> > ---
+> >  arch/loongarch/include/asm/io.h     | 2 --
+> >  arch/m68k/include/asm/io_mm.h       | 2 --
+> >  arch/m68k/include/asm/kmap.h        | 2 --
+> >  arch/mips/include/asm/io.h          | 5 ++---
+> >  arch/powerpc/include/asm/io.h       | 9 +--------
+> >  arch/x86/include/asm/io.h           | 5 -----
+> >  drivers/net/ethernet/sfc/io.h       | 2 +-
+> >  drivers/net/ethernet/sfc/siena/io.h | 2 +-
+> >  include/asm-generic/iomap.h         | 6 +++---
+> >  9 files changed, 8 insertions(+), 27 deletions(-)
+> > 
+> > diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
+> > index 545e2708fbf7..5fef1246c6fb 100644
+> > --- a/arch/loongarch/include/asm/io.h
+> > +++ b/arch/loongarch/include/asm/io.h
+> > @@ -5,8 +5,6 @@
+> >  #ifndef _ASM_IO_H
+> >  #define _ASM_IO_H
+> >  
+> > -#define ARCH_HAS_IOREMAP_WC
+> > -
+> >  #include <linux/kernel.h>
+> >  #include <linux/types.h>
+> >  
+> > diff --git a/arch/m68k/include/asm/io_mm.h b/arch/m68k/include/asm/io_mm.h
+> > index d41fa488453b..6a0abd4846c6 100644
+> > --- a/arch/m68k/include/asm/io_mm.h
+> > +++ b/arch/m68k/include/asm/io_mm.h
+> > @@ -26,8 +26,6 @@
+> >  #include <asm/virtconvert.h>
+> >  #include <asm/kmap.h>
+> >  
+> > -#include <asm-generic/iomap.h>
+> > -
+> >  #ifdef CONFIG_ATARI
+> >  #define atari_readb   raw_inb
+> >  #define atari_writeb  raw_outb
+> > diff --git a/arch/m68k/include/asm/kmap.h b/arch/m68k/include/asm/kmap.h
+> > index dec05743d426..4efb3efa593a 100644
+> > --- a/arch/m68k/include/asm/kmap.h
+> > +++ b/arch/m68k/include/asm/kmap.h
+> > @@ -4,8 +4,6 @@
+> >  
+> >  #ifdef CONFIG_MMU
+> >  
+> > -#define ARCH_HAS_IOREMAP_WT
+> > -
+> >  /* Values for nocacheflag and cmode */
+> >  #define IOMAP_FULL_CACHING		0
+> >  #define IOMAP_NOCACHE_SER		1
+> > diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> > index cc28d207a061..477773328a06 100644
+> > --- a/arch/mips/include/asm/io.h
+> > +++ b/arch/mips/include/asm/io.h
+> > @@ -12,8 +12,6 @@
+> >  #ifndef _ASM_IO_H
+> >  #define _ASM_IO_H
+> >  
+> > -#define ARCH_HAS_IOREMAP_WC
+> > -
+> >  #include <linux/compiler.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/types.h>
+> > @@ -25,7 +23,6 @@
+> >  #include <asm/byteorder.h>
+> >  #include <asm/cpu.h>
+> >  #include <asm/cpu-features.h>
+> > -#include <asm-generic/iomap.h>
+> >  #include <asm/page.h>
+> >  #include <asm/pgtable-bits.h>
+> >  #include <asm/processor.h>
+> > @@ -210,6 +207,8 @@ void iounmap(const volatile void __iomem *addr);
+> >  #define ioremap_wc(offset, size)					\
+> >  	ioremap_prot((offset), (size), boot_cpu_data.writecombine)
+> >  
+> > +#include <asm-generic/iomap.h>
+> > +
+> >  #if defined(CONFIG_CPU_CAVIUM_OCTEON)
+> >  #define war_io_reorder_wmb()		wmb()
+> >  #else
+> > diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
+> > index f1e657c9bbe8..67a3fb6de498 100644
+> > --- a/arch/powerpc/include/asm/io.h
+> > +++ b/arch/powerpc/include/asm/io.h
+> > @@ -3,11 +3,6 @@
+> >  #define _ASM_POWERPC_IO_H
+> >  #ifdef __KERNEL__
+> >  
+> > -#define ARCH_HAS_IOREMAP_WC
+> > -#ifdef CONFIG_PPC32
+> > -#define ARCH_HAS_IOREMAP_WT
+> > -#endif
+> > -
+> >  /*
+> >   */
+> >  
+> > @@ -732,9 +727,7 @@ static inline void name at					\
+> >  #define writel_relaxed(v, addr)	writel(v, addr)
+> >  #define writeq_relaxed(v, addr)	writeq(v, addr)
+> >  
+> > -#ifdef CONFIG_GENERIC_IOMAP
+> > -#include <asm-generic/iomap.h>
+> > -#else
+> > +#ifndef CONFIG_GENERIC_IOMAP
+> >  /*
+> >   * Here comes the implementation of the IOMAP interfaces.
+> >   */
+> > diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
+> > index e9025640f634..76238842406a 100644
+> > --- a/arch/x86/include/asm/io.h
+> > +++ b/arch/x86/include/asm/io.h
+> > @@ -35,9 +35,6 @@
+> >    *  - Arnaldo Carvalho de Melo <acme@conectiva.com.br>
+> >    */
+> >  
+> > -#define ARCH_HAS_IOREMAP_WC
+> > -#define ARCH_HAS_IOREMAP_WT
+> > -
+> >  #include <linux/string.h>
+> >  #include <linux/compiler.h>
+> >  #include <linux/cc_platform.h>
+> > @@ -212,8 +209,6 @@ void memset_io(volatile void __iomem *, int, size_t);
+> >  #define memcpy_toio memcpy_toio
+> >  #define memset_io memset_io
+> >  
+> > -#include <asm-generic/iomap.h>
+> > -
+> >  /*
+> >   * ISA space is 'always mapped' on a typical x86 system, no need to
+> >   * explicitly ioremap() it. The fact that the ISA IO space is mapped
+> > diff --git a/drivers/net/ethernet/sfc/io.h b/drivers/net/ethernet/sfc/io.h
+> > index 30439cc83a89..07f99ad14bf3 100644
+> > --- a/drivers/net/ethernet/sfc/io.h
+> > +++ b/drivers/net/ethernet/sfc/io.h
+> > @@ -70,7 +70,7 @@
+> >   */
+> >  #ifdef CONFIG_X86_64
+> >  /* PIO is a win only if write-combining is possible */
+> > -#ifdef ARCH_HAS_IOREMAP_WC
+> > +#ifdef ioremap_wc
+> >  #define EFX_USE_PIO 1
+> >  #endif
+> >  #endif
+> > diff --git a/drivers/net/ethernet/sfc/siena/io.h b/drivers/net/ethernet/sfc/siena/io.h
+> > index 30439cc83a89..07f99ad14bf3 100644
+> > --- a/drivers/net/ethernet/sfc/siena/io.h
+> > +++ b/drivers/net/ethernet/sfc/siena/io.h
+> > @@ -70,7 +70,7 @@
+> >   */
+> >  #ifdef CONFIG_X86_64
+> >  /* PIO is a win only if write-combining is possible */
+> > -#ifdef ARCH_HAS_IOREMAP_WC
+> > +#ifdef ioremap_wc
+> >  #define EFX_USE_PIO 1
+> >  #endif
+> >  #endif
+> > diff --git a/include/asm-generic/iomap.h b/include/asm-generic/iomap.h
+> > index 08237ae8b840..196087a8126e 100644
+> > --- a/include/asm-generic/iomap.h
+> > +++ b/include/asm-generic/iomap.h
+> > @@ -93,15 +93,15 @@ extern void __iomem *ioport_map(unsigned long port, unsigned int nr);
+> >  extern void ioport_unmap(void __iomem *);
+> >  #endif
+> >  
+> > -#ifndef ARCH_HAS_IOREMAP_WC
+> > +#ifndef ioremap_wc
+> >  #define ioremap_wc ioremap
+> >  #endif
+> >  
+> > -#ifndef ARCH_HAS_IOREMAP_WT
+> > +#ifndef ioremap_wt
+> >  #define ioremap_wt ioremap
+> >  #endif
+> >  
+> > -#ifndef ARCH_HAS_IOREMAP_NP
+> > +#ifndef ioremap_np
+> >  /* See the comment in asm-generic/io.h about ioremap_np(). */
+> >  #define ioremap_np ioremap_np
+> >  static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
+> > -- 
+> > 2.34.1
+> > 
+> > 
+> 
+> -- 
+> Sincerely yours,
+> Mike.
+> 
+
