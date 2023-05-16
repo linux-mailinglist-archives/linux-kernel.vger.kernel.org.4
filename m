@@ -2,91 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAEC704F45
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7A4704F4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbjEPN06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S233433AbjEPN30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbjEPN0q (ORCPT
+        with ESMTP id S231624AbjEPN3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:26:46 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4453C06
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:26:41 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-559de1d36a9so198812437b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:26:41 -0700 (PDT)
+        Tue, 16 May 2023 09:29:22 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7AC30D2;
+        Tue, 16 May 2023 06:29:21 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-643557840e4so15179009b3a.2;
+        Tue, 16 May 2023 06:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684243600; x=1686835600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fGagm1vXHI1PkP46CvbXLMsj7cO3QztZA8duCtTtb9o=;
-        b=BBDLr2yOIkdn9JKzHqYWUkrKaIfjzbMkTadnGY1ZOnmf9QF4/c1936OfgcGm3G63Fa
-         ow5K2+8E5csy8HO2ALThpbGKKexPNId0nennqUcuP64RY1HSRZtCffZ0OlxWkTZpTZfU
-         UfP5WmGBzrzweooe5c9/D9b5skt21fDxqqaAXbdFWtVu6cBJhdFf/IxS8NlBDz0soFo2
-         DMNBYaXY4XcELgmk9tOIFcO+mmOBXQ/Utq7FER7OurDYa5dJVYRdY1m+WNGdJ3C9Dn3U
-         dAQFrsr7Dkqr3L17JEWZDI4NdKXuweMdEDuUX05tSg/dR8xEwVTHcboJ1kbtHc9s+K8t
-         joMg==
+        d=gmail.com; s=20221208; t=1684243761; x=1686835761;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3wrNPJ1N98rVkDqpmYGeRIPO4+D5MBPm+JHAP5bi0lI=;
+        b=SjRtJegJE4MAr3atEsh5GrsX4kXV3ummaSZDrZ73xCZ/6kfoKd46bGOkXMQZb54Jj1
+         4puqH8dQO7OZTsvvpSjwvp8K8RfvAP0ko13wSCMifnh2TWHbJUGJLXQ/SwjbP2NGtYzN
+         DUQOEPhwWew1+J81Mb7HdX2Hwg81LxoND9KpbzHdgaS79Kwvj7KLzNg7AagAewAiIgqO
+         d3Ng/7OU1xOn9AUAnpP5r9+hDoVNWvzD5kWguU2cqii3HaJO1JZb1lTSsNydYYFw8/IM
+         Ag7PWA5GTd9PB/B0/ZMc+TocjtWwMxfu3E9cmVPYea2NRcT9areWz+DrQhiDX2w2i3aR
+         BUiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684243600; x=1686835600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fGagm1vXHI1PkP46CvbXLMsj7cO3QztZA8duCtTtb9o=;
-        b=EEvf7G5sh4ArTJ9dXAiqD4Kr3YO9+klRCiWcM1lOug/Ott985byGnxkO3lwlptgoml
-         /TDDMB8Q5R4vb/hR/+yPP05oGEVKRncaFqS3CmvdRfLB7qQHZhmL7fa+sGhx3YpZgEq+
-         eCSC7ncsgtWGncvCQjaqFYqAby4uVy5d/CJNtK2XIFnFBVmk2xdi4E5nsBt3k8Wb7CO8
-         IxJGursjTi8NPg0lKa5dYFWdJqerZm52JdpNibKa8Kizt0/Tw1j+uKrBrQz4vRUE6OMQ
-         rvnn9CBIFFmYRWkcPiFGAyYOtJFHgrfO13g+D8LMcq5ST1TlfeSNSyRc81ku10yJqgnj
-         X7+A==
-X-Gm-Message-State: AC+VfDxh3iTjIZGsZTikmMhF3SuBfbZbzY2DQid08mAzwT/n4BtAGF2W
-        7h+yAipdlh51ZOQgJTxtHjbZ8/seB6dzWoCAPRgKIg==
-X-Google-Smtp-Source: ACHHUZ7LfAT/h2IDwvGEtGcDXQaR7qhOni6QpToaDztdO6FuXnQFiEK4SxBy4djuaTxTZzIOEeabxbQAAZ9Ql1yj9F8=
-X-Received: by 2002:a81:6e8b:0:b0:561:206a:ee52 with SMTP id
- j133-20020a816e8b000000b00561206aee52mr9950068ywc.24.1684243600338; Tue, 16
- May 2023 06:26:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684243761; x=1686835761;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3wrNPJ1N98rVkDqpmYGeRIPO4+D5MBPm+JHAP5bi0lI=;
+        b=VX/8P+3YNZ3aZ4+0pSGeQ+/hxhofAYdkNTJBe4V1ZciIPwSE9mGcWNQBJgMjiz0umU
+         mMt30o2w2j7jeNaaCXFMnjVK6luwjipk8i+mZFLkPYtpbSJ7oV2TKGYUwjAVkInXm5K1
+         /nB/tJx/9WzS/4vvWT8LisGrfcpmeJ6+Jq2jyVVudSkabg5FZL/yy19MBIJEpwQxYR2T
+         JqluFYry85OzZaw41CDkYE4cWdx7vomXWQBqhZQ/tE3nlUNaAOMfbqnXiGLxhiunF+8f
+         pkhePQfN7vKW7w9LgCby9I8r0gXauV3niRFOh8uc779uhWsPv5o2dA/r4C6J9Er4JXj6
+         JI0g==
+X-Gm-Message-State: AC+VfDxYhaTTJmM4qh/pbEX0lHPfG+M3lHLQSND3CE3522vQvFFC0a7E
+        gKiVSoaDFkTlXVij0zuBeiC+pHO/P14=
+X-Google-Smtp-Source: ACHHUZ7DPpDU7B5C2wwyP8aaXoM7xL1h9DVr5nZxlgJlahgICYkqDuYBEUd17Bm2S0qNhqXqre3jMw==
+X-Received: by 2002:a05:6a00:801:b0:63d:2260:f7d with SMTP id m1-20020a056a00080100b0063d22600f7dmr52997270pfk.8.1684243760730;
+        Tue, 16 May 2023 06:29:20 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-8.three.co.id. [180.214.232.8])
+        by smtp.gmail.com with ESMTPSA id g25-20020a62e319000000b006414289ab69sm13379952pfh.52.2023.05.16.06.29.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 06:29:20 -0700 (PDT)
+Message-ID: <30df7ad7-3b8b-c578-b153-7bf0a38fa0cc@gmail.com>
+Date:   Tue, 16 May 2023 20:29:04 +0700
 MIME-Version: 1.0
-References: <20230513113510.177666-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230513113510.177666-1-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 16 May 2023 15:26:29 +0200
-Message-ID: <CACRpkdboE8yp+TvR=UaTSL2r+k739D-fQuk3+152h84_TYs3Lg@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: qcom: sc8180x: gracefully handle missing IO
- memory resource
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v2 0/4] Documentation fixes for Mellanox mlx5 devlink
+ info
+Content-Language: en-US
+To:     Linux Networking <netdev@vger.kernel.org>,
+        Remote Direct Memory Access Kernel Subsystem 
+        <linux-rdma@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Gal Pressman <gal@nvidia.com>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+References: <20230510035415.16956-1-bagasdotme@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230510035415.16956-1-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13, 2023 at 1:35=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On 5/10/23 10:54, Bagas Sanjaya wrote:
+> Here are fixes for mlx5 devlink info documentation. The first fixes
+> htmldocs warnings on the mainline, while the rest is formatting fixes.
+> 
+> Changes since v1 [1]:
+> 
+>   * Pick up Reviewed-by tags from Leon Romanovsky
+>   * Rebase on current net tree
+> 
+> [1]: https://lore.kernel.org/linux-doc/20230503094248.28931-1-bagasdotme@gmail.com/
+> 
+> Bagas Sanjaya (4):
+>   Documentation: net/mlx5: Wrap vnic reporter devlink commands in code
+>     blocks
+>   Documentation: net/mlx5: Use bullet and definition lists for vnic
+>     counters description
+>   Documentation: net/mlx5: Add blank line separator before numbered
+>     lists
+>   Documentation: net/mlx5: Wrap notes in admonition blocks
+> 
+>  .../ethernet/mellanox/mlx5/devlink.rst        | 60 ++++++++++++-------
+>  1 file changed, 37 insertions(+), 23 deletions(-)
+> 
 
-> If device was probed with incorrect DT or ACPI tables, the IO memory
-> resource would be missing and driver would derefernce NULL pointer in
-> sc8180x_pinctrl_add_tile_resources().  Add simplep check if IO memory
-> resource was provided to silence Smatch warning:
->
->   drivers/pinctrl/qcom/pinctrl-sc8180x.c:1664 sc8180x_pinctrl_add_tile_re=
-sources() error: potentially dereferencing uninitialized 'mres'.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi jon,
 
-Patch applied as non-urgent fix.
+If there is no response from mellanox and/or netdev maintainers,
+would you like to review and pick this series up?
 
-Yours,
-Linus Walleij
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
