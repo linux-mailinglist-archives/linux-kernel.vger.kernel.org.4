@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49847052A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7488870529E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234119AbjEPPrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S233985AbjEPPq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbjEPPrX (ORCPT
+        with ESMTP id S233481AbjEPPq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:47:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CBF9EC2;
-        Tue, 16 May 2023 08:46:59 -0700 (PDT)
+        Tue, 16 May 2023 11:46:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B067F8A6A;
+        Tue, 16 May 2023 08:46:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D40DB63278;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87F1C63B8E;
+        Tue, 16 May 2023 15:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8394C4339E;
         Tue, 16 May 2023 15:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0851EC433A0;
-        Tue, 16 May 2023 15:46:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684251980;
-        bh=RmbFIhpMNElq8ZkpNfEGRuhnV3uNnxxGxG17h/UHJGw=;
+        s=k20201202; t=1684251984;
+        bh=QS657WnsM8vdXz+21VxN72PAoIydoXyXYs6qMuHutIE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=atImyQCL9jgkPIb7HW0By+bWCRzkUSWQ8RVamtL4cFJzOUPUmO+faoEujXoK+Si5a
-         zx2WlozINWvxSz+xwAglfp8G2uB9FBan4qsDVnAWPBUU1vD+GoUszoNWjHVLtiVcPZ
-         UujkQhv8ULrWuc2TGKi16vpgj2Qq+iUlbtprJqAH/3/j1+uc26xynSbh5cU035CW+I
-         cFfcdAfxPiJuLxjgiKfthyG2t8VGJX//4ONUV6834gMa0UYqdWF9H8tVGctW3+O3kz
-         WNOxNYFvjg+BA+yjighlvpQOozjJF4UwCQM7YuQ1RIqh4yYcXfA7sB0hFK3lHZAjVr
-         nPQW6GxUJD41w==
+        b=htRLSIukiytswKjvEU7b5krt5Y3Y7ljURy8QF8CGb+x2h1ssvwjVk6Pwqv4ut3Esw
+         CB1OiulX7s10M9KVGVETJOiHcuxpyhee8hUZkmO5UEaMi+KR8LO8hYWzalhm3RlHqo
+         09xGWJMYFj2+fN7HqZvVXQrPQTX7Y7qmuRJ61d3Y/JHUn94ohkbZ4djv+Oyi/Mtl+w
+         XedetTwh9Y23tsy+DfBDvhPwgSkMUwAXkk+Ad6STis8PVcvL9li3Po/5JkWHc9yLNX
+         Yq2AjCQlVGQybK9eMHfvOn6iETC5ttftvRPasbRn7XnG8UUlUFRX/e9rR3DVFZu0bl
+         cIvS1mbMNeQRw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Russell King <linux@armlinux.org.uk>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -46,16 +46,16 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Kees Cook <keescook@chromium.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 01/16] ARM: dma-mapping: hide unused dma_contiguous_early_fixup function
-Date:   Tue, 16 May 2023 17:45:50 +0200
-Message-Id: <20230516154605.517690-2-arnd@kernel.org>
+Subject: [PATCH 02/16] ARM: traps: hide unused functions on NOMMU
+Date:   Tue, 16 May 2023 17:45:51 +0200
+Message-Id: <20230516154605.517690-3-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516154605.517690-1-arnd@kernel.org>
 References: <20230516154605.517690-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,40 +66,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The dma_contiguous_early_fixup() function is a global __weak stub
-with an arm specific override, but the declaration is in an #ifdef.
+A couple of functions in this file are only used on MMU-enabled
+builds, and never even declared otherwise, causing these build
+warnings:
 
-If CONFIG_DMA_CMA is disabled, there is no caller and no prototype,
-which adds a warning for the definition:
+arch/arm/kernel/traps.c:759:6: error: no previous prototype for '__pte_error' [-Werror=missing-prototypes]
+arch/arm/kernel/traps.c:764:6: error: no previous prototype for '__pmd_error' [-Werror=missing-prototypes]
+arch/arm/kernel/traps.c:769:6: error: no previous prototype for '__pgd_error' [-Werror=missing-prototypes]
 
-arm/mm/dma-mapping.c:261:13: error: no previous prototype for 'dma_contiguous_early_fixup' [-Werror=missing-prototypes]
-
-Enclose the definition in the same #ifdef as the prototype to avoid
-that and save a few bytes of .init.text.
+Protect these in an #ifdef to avoid the warnings and save a little
+bit of .text space.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mm/dma-mapping.c | 2 ++
+ arch/arm/kernel/traps.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-index b4a33358d2e9..bc4ed5ce3e00 100644
---- a/arch/arm/mm/dma-mapping.c
-+++ b/arch/arm/mm/dma-mapping.c
-@@ -258,12 +258,14 @@ static struct dma_contig_early_reserve dma_mmu_remap[MAX_CMA_AREAS] __initdata;
+diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+index 40c7c807d67f..3bad79db5d6e 100644
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -756,6 +756,7 @@ void __readwrite_bug(const char *fn)
+ }
+ EXPORT_SYMBOL(__readwrite_bug);
  
- static int dma_mmu_remap_num __initdata;
- 
-+#ifdef CONFIG_DMA_CMA
- void __init dma_contiguous_early_fixup(phys_addr_t base, unsigned long size)
++#ifdef CONFIG_MMU
+ void __pte_error(const char *file, int line, pte_t pte)
  {
- 	dma_mmu_remap[dma_mmu_remap_num].base = base;
- 	dma_mmu_remap[dma_mmu_remap_num].size = size;
- 	dma_mmu_remap_num++;
+ 	pr_err("%s:%d: bad pte %08llx.\n", file, line, (long long)pte_val(pte));
+@@ -770,6 +771,7 @@ void __pgd_error(const char *file, int line, pgd_t pgd)
+ {
+ 	pr_err("%s:%d: bad pgd %08llx.\n", file, line, (long long)pgd_val(pgd));
  }
 +#endif
  
- void __init dma_contiguous_remap(void)
+ asmlinkage void __div0(void)
  {
 -- 
 2.39.2
