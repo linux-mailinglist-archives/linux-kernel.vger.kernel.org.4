@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012497058D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6537058DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjEPU2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
+        id S229796AbjEPU3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjEPU2X (ORCPT
+        with ESMTP id S229736AbjEPU3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:28:23 -0400
+        Tue, 16 May 2023 16:29:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806C21720;
-        Tue, 16 May 2023 13:28:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8160E97;
+        Tue, 16 May 2023 13:29:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 012F46323D;
-        Tue, 16 May 2023 20:28:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA0F1C433D2;
-        Tue, 16 May 2023 20:28:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16FE461B95;
+        Tue, 16 May 2023 20:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DE4C433EF;
+        Tue, 16 May 2023 20:28:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684268899;
-        bh=NY3pXFEnN0WJe0yBQU+o0uO1sA0r+4fxb6XsPtlNtYk=;
+        s=k20201202; t=1684268940;
+        bh=EDUXvpFm3oqJxXTKWuHtRcqYUh4Z5+wpsxniEd1SNNM=;
         h=From:To:Cc:Subject:Date:From;
-        b=Qm+bILKu/42MWX6Rgro5G2hcqvVaVeIw9nyiFm9tO1KaDXBbDvnjOaN/CO4KPIbt4
-         L01u/BgdYMuqo3Ksqyk2uQ2nhDfubznD78gf+NgZCPhgMbexgXVOYXg68tBy8vNEUG
-         hnow4jUmrdvJ+htOJbOh2GfReHHT3vx8qVCvX08MM5A4uYzTM77f4hnU1iOXWbsGiI
-         Rkexv8XuPs7SHi/Q5aMUi++XCrs9HE9KStM5F18mQLyGchjtix6Nvk9vrzYNNhnubZ
-         VQCI9ZyDRrj2ulzjpIqBhsxM6CRxfFeJD93WVHwqVRlOm0GZYX96QBQ9Zf7WGTNVgP
-         DuWKOWrX9Rn2g==
+        b=u6M22LySijck3w31eghLndGmrhlfpYacS+co8kUi9aEqP1Lig1QlZcwlbNKLsVCL3
+         4jgjt7WtoZ2pcROHtcznqo7Z/oMVF7lp5azJZcaMKC2rNWejeLgRNbLetz58qr/x04
+         /sBcoCNP5mTZ6JLpzDptnHu66pxK04FZZPAvIkgMVntvrAaGp/aBTQiVcwSQqkkLzv
+         rPuV+SDbHs7qVPmEyqKu7e8mGjQ+yAgtabPuSuFWLq6l1d60AUb+LR7F/aHxGoVtPi
+         8MyZy7Zyk32rrLnIlMHfqIn/cSc91eU00svjwLYRoOddp6mSTRWDYqJPfX/yK1wONE
+         QWU1fiCe+87gw==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Antonino Daplas <adaplas@gmail.com>, Helge Deller <deller@gmx.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] fbdev: i810: include i810_main.h in i810_dvt.c
-Date:   Tue, 16 May 2023 22:28:09 +0200
-Message-Id: <20230516202814.561262-1-arnd@kernel.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] crypto: aegis: add header for internal prototypes
+Date:   Tue, 16 May 2023 22:28:48 +0200
+Message-Id: <20230516202855.561496-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,45 +55,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Building with W=1 shows that a header needs to be included to
-make the prototypes visible:
+gcc warns if prototypes are only visible to the caller but
+not the callee:
 
-drivers/video/fbdev/i810/i810_dvt.c:194:6: error: no previous prototype for 'round_off_xres' [-Werror=missing-prototypes]
-drivers/video/fbdev/i810/i810_dvt.c:233:6: error: no previous prototype for 'i810fb_encode_registers' [-Werror=missing-prototypes]
-drivers/video/fbdev/i810/i810_dvt.c:245:6: error: no previous prototype for 'i810fb_fill_var_timings' [-Werror=missing-prototypes]
-drivers/video/fbdev/i810/i810_dvt.c:279:5: error: no previous prototype for 'i810_get_watermark' [-Werror=missing-prototypes]
+crypto/aegis128-neon-inner.c:134:6: warning: no previous prototype for 'crypto_aegis128_init_neon' [-Wmissing-prototypes]
+crypto/aegis128-neon-inner.c:164:6: warning: no previous prototype for 'crypto_aegis128_update_neon' [-Wmissing-prototypes]
+crypto/aegis128-neon-inner.c:221:6: warning: no previous prototype for 'crypto_aegis128_encrypt_chunk_neon' [-Wmissing-prototypes]
+crypto/aegis128-neon-inner.c:270:6: warning: no previous prototype for 'crypto_aegis128_decrypt_chunk_neon' [-Wmissing-prototypes]
+crypto/aegis128-neon-inner.c:316:5: warning: no previous prototype for 'crypto_aegis128_final_neon' [-Wmissing-prototypes]
 
-Adding the header leads to another warning from a mismatched
-prototype, so fix this as well:
-
-drivers/video/fbdev/i810/i810_dvt.c:280:5: error: conflicting types for 'i810_get_watermark'; have 'u32(struct fb_var_screeninfo *,
+The prototypes cannot be in the regular aegis.h, as the inner neon code
+cannot include normal kernel headers. Instead add a new header just for
+the functions provided by this file.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/video/fbdev/i810/i810_dvt.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ crypto/aegis-neon.h          | 17 +++++++++++++++++
+ crypto/aegis128-neon-inner.c |  1 +
+ crypto/aegis128-neon.c       | 12 +-----------
+ 3 files changed, 19 insertions(+), 11 deletions(-)
+ create mode 100644 crypto/aegis-neon.h
 
-diff --git a/drivers/video/fbdev/i810/i810_dvt.c b/drivers/video/fbdev/i810/i810_dvt.c
-index b4b3670667ab..2082b5c92e8f 100644
---- a/drivers/video/fbdev/i810/i810_dvt.c
-+++ b/drivers/video/fbdev/i810/i810_dvt.c
-@@ -14,6 +14,7 @@
+diff --git a/crypto/aegis-neon.h b/crypto/aegis-neon.h
+new file mode 100644
+index 000000000000..61e5614b45de
+--- /dev/null
++++ b/crypto/aegis-neon.h
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#ifndef _AEGIS_NEON_H
++#define _AEGIS_NEON_H
++
++void crypto_aegis128_init_neon(void *state, const void *key, const void *iv);
++void crypto_aegis128_update_neon(void *state, const void *msg);
++void crypto_aegis128_encrypt_chunk_neon(void *state, void *dst, const void *src,
++					unsigned int size);
++void crypto_aegis128_decrypt_chunk_neon(void *state, void *dst, const void *src,
++					unsigned int size);
++int crypto_aegis128_final_neon(void *state, void *tag_xor,
++			       unsigned int assoclen,
++			       unsigned int cryptlen,
++			       unsigned int authsize);
++
++#endif
+diff --git a/crypto/aegis128-neon-inner.c b/crypto/aegis128-neon-inner.c
+index 7de485907d81..b6a52a386b22 100644
+--- a/crypto/aegis128-neon-inner.c
++++ b/crypto/aegis128-neon-inner.c
+@@ -16,6 +16,7 @@
+ #define AEGIS_BLOCK_SIZE	16
  
- #include "i810_regs.h"
- #include "i810.h"
-+#include "i810_main.h"
+ #include <stddef.h>
++#include "aegis-neon.h"
  
- struct mode_registers std_modes[] = {
- 	/* 640x480 @ 60Hz */
-@@ -276,7 +277,7 @@ void i810fb_fill_var_timings(struct fb_var_screeninfo *var)
- 	var->upper_margin = total - (yres + var->lower_margin + var->vsync_len);
- }
+ extern int aegis128_have_aes_insn;
  
--u32 i810_get_watermark(struct fb_var_screeninfo *var,
-+u32 i810_get_watermark(const struct fb_var_screeninfo *var,
- 		       struct i810fb_par *par)
- {
- 	struct mode_registers *params = &par->regs;
+diff --git a/crypto/aegis128-neon.c b/crypto/aegis128-neon.c
+index a7856915ec85..9ee50549e823 100644
+--- a/crypto/aegis128-neon.c
++++ b/crypto/aegis128-neon.c
+@@ -7,17 +7,7 @@
+ #include <asm/neon.h>
+ 
+ #include "aegis.h"
+-
+-void crypto_aegis128_init_neon(void *state, const void *key, const void *iv);
+-void crypto_aegis128_update_neon(void *state, const void *msg);
+-void crypto_aegis128_encrypt_chunk_neon(void *state, void *dst, const void *src,
+-					unsigned int size);
+-void crypto_aegis128_decrypt_chunk_neon(void *state, void *dst, const void *src,
+-					unsigned int size);
+-int crypto_aegis128_final_neon(void *state, void *tag_xor,
+-			       unsigned int assoclen,
+-			       unsigned int cryptlen,
+-			       unsigned int authsize);
++#include "aegis-neon.h"
+ 
+ int aegis128_have_aes_insn __ro_after_init;
+ 
 -- 
 2.39.2
 
