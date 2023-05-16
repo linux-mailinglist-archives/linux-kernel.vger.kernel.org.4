@@ -2,188 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D167055AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E627055AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbjEPSI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S231544AbjEPSJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEPSIy (ORCPT
+        with ESMTP id S230163AbjEPSJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:08:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDDAA7;
-        Tue, 16 May 2023 11:08:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D960C63B92;
-        Tue, 16 May 2023 18:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4098AC433AC;
-        Tue, 16 May 2023 18:08:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684260532;
-        bh=EuLTL0z0cItgFiTcg+BNi9m4MmZo8uZTaS650kq9lR4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eqrkQFx6rhRJujq4VWj4FzAyNGWYXTRwwDgyA5V3A+MHAv5k+HnqxBOF4OIy8cZkJ
-         wlr/nGLB9U0awyzmtcWNdiQ3locGkyOpSlHrOTZrHPz7cdw7STS6cmzLETt17aRQUZ
-         fkQu/Cq+SFiadTqPuOBZ5gStXcB2xqJYRpSp+bJKGfBGn7le4a7xeNDV1zbX5ztiGx
-         i1ohR7qwbhExdzokVQagdx9ZsrS2RI8U+e8S3buraBXpfYStZQ09HaTMP8x2/bNuzr
-         NG/f2QhWBJ8vXT5AilkZk2rYXxj5Eqo367bSvv+7iOHdMvmmK+W+kd5ieeRNFAJzFQ
-         tQ3jSabpkTbMQ==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ac770a99e2so154913331fa.3;
-        Tue, 16 May 2023 11:08:52 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwLdyjqtT8PSkYRcIWAXcU1EZICFlgoMXj7Son0qzc2L/F9DwpZ
-        Z+GdwTcmNpEkK6AVXWE5deDt4V+Lqu4G4Gfe8pc=
-X-Google-Smtp-Source: ACHHUZ5+shXS/oY0pTS/6qckGGB5Nhpshb8lVSqz1yNpZtyaX4Fz38IBjMuv/6+PbSqztZeXv7E5jFQB3se1sORtPTk=
-X-Received: by 2002:a2e:9056:0:b0:2a8:bf35:3b7 with SMTP id
- n22-20020a2e9056000000b002a8bf3503b7mr7472306ljg.32.1684260530160; Tue, 16
- May 2023 11:08:50 -0700 (PDT)
+        Tue, 16 May 2023 14:09:35 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF9518C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:09:33 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-55a20a56a01so249010657b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:09:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684260572; x=1686852572;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HOOCBtnPBFwUcTzbyrJ0D+u8r9EEiyuqpPeng26UuJw=;
+        b=qmxo71Iu51dxFxvJUFwzFuvE5d4/yYabhhGeWleeEm4S88WH1eWl0ErD0jyC4E4Yw4
+         kTAlQonYg0MmNr6Lvn8vC+nHf2rA+KvFG+LWsMiS0LBHhEFghvMt8DKhK8ViUaFADlfy
+         LgUNrPAHtqz0J/rOZuJLs6YHWWXNsyH5TMAwK2hQG+K+7JuqIl6X4+iOmZri0mYKJrkS
+         vQfel+hfcdz3pLMvRD+0xBDdGTGaN9gCNPp4eRf3Yiy7WW9bTH+Nxd6snpjBwcr6/LXB
+         F2T46T91x4YRYJakVsZrBKMVK9YMbm7l+sLh1ogMnYSjVAI8XOFtNd3Ghx0Ot/yr84ca
+         nAaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684260572; x=1686852572;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HOOCBtnPBFwUcTzbyrJ0D+u8r9EEiyuqpPeng26UuJw=;
+        b=h/qBafDNhpMlbtEr9D3DhCnLOPC/sxp12vBh1G3U/T7pKD9Hn+l+oIXMtiFmKQBeve
+         3i2VgB1OFbB8Q7oXmlCbv/t3DaI3tnKCE/CWqB9XBGTZ9eHpsystLV8oKvLtAq2Lj0fq
+         ZWtWQr0ARWt2WqGHUPebX6zFp8LhTBtZoiP0t6AiSL2gLYhGw1JDWhIYGGc5PPf2Xzd5
+         kN+ehGux1cRVu1ODIjGfHvyAkuogCLxP5oevMbe41Lf8A4MGDWcsmdSli9DerOnhN4Di
+         zkvgYmAOsvNiswvea7MPAI3LM2t44z2MP9y6rsIIfQOFqF8A5gDuLEuD5jw9LYO7L6n8
+         STmw==
+X-Gm-Message-State: AC+VfDw9xiJFJkZHKgqGt2qql6LvXtgxIrxoXi96gmBISLqRNOWyuRPQ
+        5CYofIS/a+tm9gbvgumxEi4oEGSD58HEB886Cha/tQ==
+X-Google-Smtp-Source: ACHHUZ7XF6q2Bm1/49+wSfDCry1UkLwKzxIvfA8o0ztp9zAXasmfZmqYoLT5ce/cEdz0K4L4NDqNhKlG99yf44fNy44=
+X-Received: by 2002:a81:6c45:0:b0:561:bae4:c377 with SMTP id
+ h66-20020a816c45000000b00561bae4c377mr255712ywc.14.1684260572560; Tue, 16 May
+ 2023 11:09:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com> <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
-In-Reply-To: <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 16 May 2023 20:08:37 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
-Message-ID: <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
-Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
- stepping into unaccepted memory
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
+References: <20230426-stmpe-dt-bindings-v4-0-36fdd53d9919@linaro.org>
+ <20230426-stmpe-dt-bindings-v4-1-36fdd53d9919@linaro.org> <CAMRc=MdsBiV3AvzSPtCuR58w0N9z7o+hUrBDtXUC4a++pECb8w@mail.gmail.com>
+ <CACRpkdaJrB1f13LB4aHSWys63448a4NQZORgwdk8z=C8qe-BDA@mail.gmail.com> <CAMRc=Mf+RsU6PT7fwm=r9OLbmxNjiv9Ru8HEfpMEAqDN5-0Qig@mail.gmail.com>
+In-Reply-To: <CAMRc=Mf+RsU6PT7fwm=r9OLbmxNjiv9Ru8HEfpMEAqDN5-0Qig@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 16 May 2023 20:09:21 +0200
+Message-ID: <CACRpkdbCiEtiXkhaoUMCqeqcOaTYu0hSp0cDTy8NzzwitfQL+g@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: gpio: Convert STMPE GPIO to YAML schema
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 14 May 2023 at 00:04, Kirill A. Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
+On Tue, May 16, 2023 at 5:34=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
+> On Thu, May 11, 2023 at 10:39=E2=80=AFPM Linus Walleij <linus.walleij@lin=
+aro.org> wrote:
+> >
+> > On Thu, May 11, 2023 at 4:58=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev=
+.pl> wrote:
+> >
+> > > Applied, thanks!
+> >
+> > That works ... but patch 2/2 depends on this one. (uses $ref).
+> > You'd have to give Lee an immutable branch that he can pull
+> > before applying patch 2/2 so he has the dependency, or let him
+> > apply both.
+> >
+> > Yours,
+> > Linus Walleij
 >
-> load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
-> The unwanted loads are typically harmless. But, they might be made to
-> totally unrelated or even unmapped memory. load_unaligned_zeropad()
-> relies on exception fixup (#PF, #GP and now #VE) to recover from these
-> unwanted loads.
+> Sure:
 >
-> But, this approach does not work for unaccepted memory. For TDX, a load
-> from unaccepted memory will not lead to a recoverable exception within
-> the guest. The guest will exit to the VMM where the only recourse is to
-> terminate the guest.
+> The following changes since commit ac9a78681b921877518763ba0e89202254349d=
+1b:
 >
+>   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
+> tags/v6.4-stmpe-gpio
+>
+> for you to fetch changes up to 6c19974d1e83fba2cca1cbea2fbf250f093eb5ed:
+>
+>   dt-bindings: gpio: Convert STMPE GPIO to YAML schema (2023-05-11
+> 16:58:04 +0200)
 
-Does this mean that the kernel maps memory before accepting it? As
-otherwise, I would assume that such an access would page fault inside
-the guest before triggering an exception related to the unaccepted
-state.
+Hey cool :D
 
-> There are two parts to fix this issue and comprehensively avoid access
-> to unaccepted memory. Together these ensure that an extra "guard" page
-> is accepted in addition to the memory that needs to be used.
->
-> 1. Implicitly extend the range_contains_unaccepted_memory(start, end)
->    checks up to end+unit_size if 'end' is aligned on a unit_size
->    boundary.
-> 2. Implicitly extend accept_memory(start, end) to end+unit_size if 'end'
->    is aligned on a unit_size boundary.
->
-> Side note: This leads to something strange. Pages which were accepted
->            at boot, marked by the firmware as accepted and will never
->            _need_ to be accepted might be on unaccepted_pages list
->            This is a cue to ensure that the next page is accepted
->            before 'page' can be used.
->
-> This is an actual, real-world problem which was discovered during TDX
-> testing.
->
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-> ---
->  drivers/firmware/efi/unaccepted_memory.c | 35 ++++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->
-> diff --git a/drivers/firmware/efi/unaccepted_memory.c b/drivers/firmware/efi/unaccepted_memory.c
-> index bb91c41f76fb..3d1ca60916dd 100644
-> --- a/drivers/firmware/efi/unaccepted_memory.c
-> +++ b/drivers/firmware/efi/unaccepted_memory.c
-> @@ -37,6 +37,34 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
->         start -= unaccepted->phys_base;
->         end -= unaccepted->phys_base;
->
-> +       /*
-> +        * load_unaligned_zeropad() can lead to unwanted loads across page
-> +        * boundaries. The unwanted loads are typically harmless. But, they
-> +        * might be made to totally unrelated or even unmapped memory.
-> +        * load_unaligned_zeropad() relies on exception fixup (#PF, #GP and now
-> +        * #VE) to recover from these unwanted loads.
-> +        *
-> +        * But, this approach does not work for unaccepted memory. For TDX, a
-> +        * load from unaccepted memory will not lead to a recoverable exception
-> +        * within the guest. The guest will exit to the VMM where the only
-> +        * recourse is to terminate the guest.
-> +        *
-> +        * There are two parts to fix this issue and comprehensively avoid
-> +        * access to unaccepted memory. Together these ensure that an extra
-> +        * "guard" page is accepted in addition to the memory that needs to be
-> +        * used:
-> +        *
-> +        * 1. Implicitly extend the range_contains_unaccepted_memory(start, end)
-> +        *    checks up to end+unit_size if 'end' is aligned on a unit_size
-> +        *    boundary.
-> +        *
-> +        * 2. Implicitly extend accept_memory(start, end) to end+unit_size if
-> +        *    'end' is aligned on a unit_size boundary. (immediately following
-> +        *    this comment)
-> +        */
-> +       if (!(end % unit_size))
-> +               end += unit_size;
-> +
->         /* Make sure not to overrun the bitmap */
->         if (end > unaccepted->size * unit_size * BITS_PER_BYTE)
->                 end = unaccepted->size * unit_size * BITS_PER_BYTE;
-> @@ -84,6 +112,13 @@ bool range_contains_unaccepted_memory(phys_addr_t start, phys_addr_t end)
->         start -= unaccepted->phys_base;
->         end -= unaccepted->phys_base;
->
-> +       /*
-> +        * Also consider the unaccepted state of the *next* page. See fix #1 in
-> +        * the comment on load_unaligned_zeropad() in accept_memory().
-> +        */
-> +       if (!(end % unit_size))
-> +               end += unit_size;
-> +
->         /* Make sure not to overrun the bitmap */
->         if (end > unaccepted->size * unit_size * BITS_PER_BYTE)
->                 end = unaccepted->size * unit_size * BITS_PER_BYTE;
-> --
-> 2.39.3
->
+Lee if you pull this in you can apply 2/2 on top if it checks out.
+
+Yours,
+Linus Walleij
