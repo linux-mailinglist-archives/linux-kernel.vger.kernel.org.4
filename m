@@ -2,165 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8B4705139
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334F5705140
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbjEPOt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S232526AbjEPOwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjEPOtZ (ORCPT
+        with ESMTP id S232016AbjEPOwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:49:25 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF96101
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:49:24 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f38824a025so1826901cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:49:24 -0700 (PDT)
+        Tue, 16 May 2023 10:52:08 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25F244AD
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:52:05 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-7576deacbd6so608606385a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:52:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684248564; x=1686840564;
+        d=google.com; s=20221208; t=1684248725; x=1686840725;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rOyuxQWRj7mBxcG4uzXJBTcD+VFjWgiMqfEKYgz0FxE=;
-        b=Lz0TiqncdRoXeVjHg44OrLFE2qLcXpMeVi+QvnvDEREwT9C5xa+IqBu3GpPJCqw/Q2
-         CvlsVAr7+c0jqQC6ixXNANzKotTrwahGzP3+29GAM9ONPuJ7OWs8jSoRbhD2was1U3n+
-         lq3Y3ZwbsHYzT7dydr5i4WwmqlaNitZcKehrbdbtUk8DNeVT6/wJpMlnArEPxJpE+LQW
-         H9wGLfgaZVg0P6YGffsllV7wPquF4UpgSo32ORWhhZCX/blykpQ8/Dyw9yiLslVYoylD
-         E9/uqMDbmSjtjYCyzQ6bWrs0qRSNfZG6nldBlho4sNyOqiyEAcrfscCpm3D/+lcafV0f
-         JnkQ==
+        bh=X6zHo6bWXc/84vWZVuKR/6I8EjwUwKr00I4It6PliM0=;
+        b=WGthoJEw+t7ttdWbkPOLshmqOtTY3VzK2cL7/uzCVD+xXSxhHJ0Wn8mg9/DbEYAuo4
+         1G5k5vbe7N1/rsFV25W3nT90pCbpL8svBESkaWNRXxqzgsLIB0qfV1R7A4WTz1hOvohE
+         GWxNfh6MybmQ+gXds1pETj6pJZ6uBiITKJckEyH8TiKkAcLihvS+Yd9DesDQ/MpeXJEq
+         OD/YTIcO1PYVqwqzaYCb1588uNl427U+8W65u3tqv/WIzHc4Fnc9TNCQgI38JWYn+ULD
+         2c35iO23WgwkJNm/dnnz1qu8U8f8+LVXI54DUs6dc+pZ6jir8+GvB5VPJ8ukqJfiy8S6
+         Z7cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684248564; x=1686840564;
+        d=1e100.net; s=20221208; t=1684248725; x=1686840725;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rOyuxQWRj7mBxcG4uzXJBTcD+VFjWgiMqfEKYgz0FxE=;
-        b=OGXn2nPFqrCitTDk0Dq9Zazxdgl+WIa0sUnI3RvOgGrDmBYa5Ejj0PFYnHHAmZVRDm
-         G6SHOdeU0ZJBhm3mCon3+hGrSV73zKVJrduhgE8qGUajUP9tcuLRcdywm48oQK8H3kMB
-         WX9rDgeYEpmLMVTzk9qA0aKCePa6L/Sq8qvktnZQUAVIhEtzVUfU4O0n9E0Jfuq1exet
-         SdNglFUEMiArQYX6QlrZ9FDvMik/hNw+3tDwrYwB8NOturksE88Z77zTPttrH0aYFX5y
-         t+w8HKIX4Nj530tkFblIkB++ZtfMbmK9dZyAVlSJDAL/sZjFl7C8zqu7C7iu1ZOIW1MF
-         13Gw==
-X-Gm-Message-State: AC+VfDwF2wUiqutEt/KH7Eq2uaOQkuZIRmH0I9aybZUujj5aibIGhVmZ
-        NOabPh+Z9rkmdPyarSwb5Lfsewe9kUO7+3/yfwjPHQ==
-X-Google-Smtp-Source: ACHHUZ5Yx61E/0FENVw2X66LL20VU83PcKIKc/B5iWAVRpCnrBdFVFUdFJqIPdT+Gyld7wf+dHsBbFnV8b1PCO4uHwc=
-X-Received: by 2002:a05:622a:1a24:b0:3bf:e4e0:26a0 with SMTP id
- f36-20020a05622a1a2400b003bfe4e026a0mr368805qtb.14.1684248563679; Tue, 16 May
- 2023 07:49:23 -0700 (PDT)
+        bh=X6zHo6bWXc/84vWZVuKR/6I8EjwUwKr00I4It6PliM0=;
+        b=OtZgPBArfoStylnlOqj49miQGypz0dGzrOR9fyy/buCNhH+EPoQw0/L/EZXM1E76hC
+         QsM5wg1o5nSq1OO+tfc4oOucj7sXqMrMxNlStNuYFdlB09nZSMcqsmeuQY5axATcssCC
+         T/uL4hCC5OE2M+vGTF+MiZZQvRuYWSnY0urAWTwZKrWPt9hA2fS+W5X2IBAKVt2O2upE
+         NafkhYu7OPAAZ5lv8mhysJ/9pZugvPDRNyNO1q3yR+jFv2GzkDyv4qkjCpn0ksAe9N9j
+         I2qNtP+9mzQ8LAMqPPiF4JoIeb+anPwy/soTpOgN5JotL5h829kGLdGCBA1CVPD4VUOa
+         Nm2Q==
+X-Gm-Message-State: AC+VfDwGY7Y4Q3v6+9fHwYpYzstoIfSSWtd0aIV31NhHujCoJggFyUPN
+        mAuoMC5tCk7ONExmqV720Xux3C4qzA7bcHBZR96MDw==
+X-Google-Smtp-Source: ACHHUZ40oD9cViZWTRMJZNhLFQIwCH35iwip2jSEtirhaBtc647aaHYUYXLxnKF7BFi2Nsd1eN7GBPk3bIOFB2Tbx8M=
+X-Received: by 2002:a05:6214:1c4b:b0:56e:bfda:a14f with SMTP id
+ if11-20020a0562141c4b00b0056ebfdaa14fmr71315780qvb.9.1684248724907; Tue, 16
+ May 2023 07:52:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-8-peternewman@google.com> <3816ccf6-4f74-6406-5ca0-580743efa2a1@intel.com>
-In-Reply-To: <3816ccf6-4f74-6406-5ca0-580743efa2a1@intel.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Tue, 16 May 2023 16:49:10 +0200
-Message-ID: <CALPaoCj76eMTF+VPT8_52_D+fKpWt2ENcyavJ4aooCOo9TYKFw@mail.gmail.com>
-Subject: Re: [PATCH v1 7/9] x86/resctrl: Assign HW RMIDs to CPUs for soft RMID
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-22-masahiroy@kernel.org>
+ <93s3n008-7oon-30rq-5219-5r244919r38q@syhkavp.arg> <CABCJKuf91O4OtBQ62CRuCYHWrENdvjnzHdyH135qCt24rX4Lsg@mail.gmail.com>
+ <CAK7LNAT_MakkY3hMaCJE=iFFc27tM-Xjw1fC_SQX8WycQRmouw@mail.gmail.com>
+In-Reply-To: <CAK7LNAT_MakkY3hMaCJE=iFFc27tM-Xjw1fC_SQX8WycQRmouw@mail.gmail.com>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Tue, 16 May 2023 07:51:29 -0700
+Message-ID: <CABCJKueexnq=hE2L3uFQt5WeS2_mFckK9NHagFfU-peTnwMNeA@mail.gmail.com>
+Subject: Re: [PATCH v5 21/21] kbuild: implement CONFIG_TRIM_UNUSED_KSYMS
+ without recursion
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nicolas Pitre <nico@fluxnic.net>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
-
-On Thu, May 11, 2023 at 11:40=E2=80=AFPM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
-> On 4/21/2023 7:17 AM, Peter Newman wrote:
-> > +     /* Locate the cacheinfo for this CPU's L3 cache. */
-> > +     for (i =3D 0; i < ci->num_leaves; i++) {
-> > +             if (ci->info_list[i].level =3D=3D 3 &&
-> > +                 (ci->info_list[i].attributes & CACHE_ID)) {
-> > +                     l3ci =3D &ci->info_list[i];
-> > +                     break;
-> > +             }
-> > +     }
-> > +     WARN_ON(!l3ci);
-> > +
-> > +     if (!l3ci)
-> > +             return 0;
+On Mon, May 15, 2023 at 7:16=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
 >
-> You can use "if (WARN_ON(..))"
-
-Thanks, I'll look for the other changes in the series which would
-benefit from this.
-
-
-> > +     rmid =3D 0;
-> > +     for_each_cpu(i, &l3ci->shared_cpu_map) {
-> > +             if (i =3D=3D cpu)
-> > +                     break;
-> > +             rmid++;
-> > +     }
-> > +
-> > +     return rmid;
-> > +}
->
-> I do not see any impact to the (soft) RMIDs that can be assigned to monit=
-or
-> groups, yet from what I understand a generic "RMID" is used as index to M=
-BM state.
-> Is this correct? A hardware RMID and software RMID would thus share the
-> same MBM state. If this is correct I think we need to work on making
-> the boundaries between hard and soft RMID more clear.
-
-The only RMID-indexed state used by soft RMIDs right now is
-mbm_state::soft_rmid_bytes. The other aspect of the boundary is
-ensuring that nothing will access the hard RMID-specific state for a
-soft RMID.
-
-The remainder of the mbm_state is only accessed by the software
-controller, which you suggested that I disable.
-
-The arch_mbm_state is accessed only through resctrl_arch_rmid_read()
-and resctrl_arch_reset_rmid(), which are called by __mon_event_count()
-or the limbo handler.
-
-__mon_event_count() is aware of soft RMIDs, so I would just need to
-ensure the software controller is disabled and never put any RMIDs on
-the limbo list. To be safe, I can also add
-WARN_ON_ONCE(rdt_mon_soft_rmid) to the rmid-indexing of the mbm_state
-arrays in the software controller and before the
-resctrl_arch_rmid_read() call in the limbo handler to catch if they're
-ever using soft RMIDs.
-
--Peter
-
-
-
->
-> > +
-> >  static void clear_closid_rmid(int cpu)
-> >  {
-> >       struct resctrl_pqr_state *state =3D this_cpu_ptr(&pqr_state);
-> > @@ -604,7 +636,12 @@ static void clear_closid_rmid(int cpu)
-> >       state->default_rmid =3D 0;
-> >       state->cur_closid =3D 0;
-> >       state->cur_rmid =3D 0;
-> > -     wrmsr(MSR_IA32_PQR_ASSOC, 0, 0);
-> > +     state->hw_rmid =3D 0;
-> > +
-> > +     if (static_branch_likely(&rdt_soft_rmid_enable_key))
-> > +             state->hw_rmid =3D determine_hw_rmid_for_cpu(cpu);
-> > +
-> > +     wrmsr(MSR_IA32_PQR_ASSOC, state->hw_rmid, 0);
-> >  }
+> On Tue, May 16, 2023 at 7:54=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
+e.com> wrote:
+> > A while ago there
+> > was a suggestion of adding an option to LLD that allows one to pass a
+> > list of symbols to preserve in relocatable LTO links, which would
+> > allow us to better optimize vmlinux.o. However, I haven't had a chance
+> > to look into this deeper than this proof of concept:
 > >
-> >  static int resctrl_online_cpu(unsigned int cpu)
+> > https://reviews.llvm.org/D142163
 >
-> Reinette
+>
+> Interesting.
+>
+> But, scripts/generate_initcall_order.pl is still needed, right?
+>
+> --lto-export-symbol-list is a list of symbols,
+> but it does not specify the correct order?
+
+Correct, the patch doesn't take the order of the list into account.
+
+Sami
