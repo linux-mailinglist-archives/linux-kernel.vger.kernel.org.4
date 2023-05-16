@@ -2,164 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5387F7050AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449867050AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 16:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbjEPO14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 10:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S233812AbjEPO1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 10:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbjEPO1z (ORCPT
+        with ESMTP id S233743AbjEPO1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 10:27:55 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB5A10EF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:27:53 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34GERQ6x021073;
-        Tue, 16 May 2023 09:27:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684247246;
-        bh=lpX4f3FYDc/f2/ohxeOyjtIJE6ptK1Vg4huuCjKL5Tk=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=LuEwcE8dRqG+EZV8TY7G+mfWoiR7yvIz+8Fq/yWXWh5bdaG/RmUsqkxHZbayj8LmU
-         5RuwDKIThnR/f+297rKP75x48G4Lov0fwnvtQvUKXIwZfE7KQBUqDZ1Kw50ddNoUHm
-         u/E3YFo8eX7x0WAJ4yzHyzKogRlfrvXQ9THYfTXA=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34GERQUm055246
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 May 2023 09:27:26 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 16
- May 2023 09:27:25 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 16 May 2023 09:27:25 -0500
-Received: from [10.249.133.231] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34GERAEw082338;
-        Tue, 16 May 2023 09:27:11 -0500
-Message-ID: <b2f4eed1-ba19-fc0e-3cf0-a0dfa2e0f2af@ti.com>
-Date:   Tue, 16 May 2023 19:57:08 +0530
+        Tue, 16 May 2023 10:27:23 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF422195
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:27:20 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33539445684so35277085ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 07:27:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684247240; x=1686839240;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fEdNI2ivYxOT1+ehWt92KVPedJERHmit4xqcWHC12Fc=;
+        b=aTYhY/LX1HExDMLCs3xzjPar8jgD3zkMxzfJiYaeQbRzhxzYZ2ob6zX8UMqbsD5Qwb
+         qVEfY1wNRPVv6GGR66dYJsg2ROBNrcOwTnk0pIEfMaUU/Zc3yP35w3eCLcNZbsEdN0I3
+         66H54mBVmgxFiE9DESPxGi+Nx/2uekfeaY+T7nGffBRVUF6q1zG1YizMNnrj7NXc32QT
+         p6gAva5Hu0VGEtsxSjVnU81fAEcP/cnKtCBJ2n5m3awwQA3xeqrQIjJR9h1ndua0vEyy
+         o6I1hRsMDy1tdco7i6Jm0jIrV4p5q2MQ+srBvCbg2eoe4KHZRX3xeD+Nq3ck5ukEiMAV
+         rsaA==
+X-Gm-Message-State: AC+VfDzaZw5q79qFO52dir9Aaalm8u0G0iyemXEljryFwHvU1ka+M0G3
+        aB9gascscTtSvKLM3ul4QpCbRRTdO/xV7A6TLsj/s03a6Umt
+X-Google-Smtp-Source: ACHHUZ5ntS4dKyRbs/lNewwEt+atIVkoR5+v3/EYXMrsVGZwJu5BXxjfMh71AdRlLC3A/vGmMWyNjR1EC0CzbhRMsmzz1yM7ZmR/
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 2/8] drm/bridge: tfp410: Set input_bus_flags in
- atomic_check
-Content-Language: en-US
-To:     <neil.armstrong@linaro.org>, Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Francesco Dolcini <francesco@dolcini.it>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230509093036.3303-1-a-bhatia1@ti.com>
- <20230509093036.3303-3-a-bhatia1@ti.com>
- <3045292e-5801-74c5-5a6b-6e4c5802a035@linaro.org>
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <3045292e-5801-74c5-5a6b-6e4c5802a035@linaro.org>
+X-Received: by 2002:a5d:9da0:0:b0:76f:e71e:5f9d with SMTP id
+ ay32-20020a5d9da0000000b0076fe71e5f9dmr2354070iob.1.1684247240261; Tue, 16
+ May 2023 07:27:20 -0700 (PDT)
+Date:   Tue, 16 May 2023 07:27:20 -0700
+In-Reply-To: <2023051628-thumb-boaster-5680@gregkh>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000078459205fbd05edf@google.com>
+Subject: Re: [syzbot] [usb?] memory leak in class_create
+From:   syzbot <syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+Hello,
 
-On 16-May-23 12:55, Neil Armstrong wrote:
-> On 09/05/2023 11:30, Aradhya Bhatia wrote:
->> From: Nikhil Devshatwar <nikhil.nd@ti.com>
->>
->> input_bus_flags are specified in drm_bridge_timings (legacy) as well
->> as drm_bridge_state->input_bus_cfg.flags
->>
->> The flags from the timings will be deprecated. Bridges are supposed
->> to validate and set the bridge state flags from atomic_check.
->>
->> Implement atomic_check hook for the same.
->>
->> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
->> ---
->>
->> Notes:
->>      changes from v4:
->>      * fix a warning Reported-by: kernel test robot <lkp@intel.com>
->>
->>      changes from v5:
->>      * Moved the return statement here from patch 4 (where it was added
->>        by mistake).
->>
->>   drivers/gpu/drm/bridge/ti-tfp410.c | 16 ++++++++++++++++
->>   1 file changed, 16 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/bridge/ti-tfp410.c
->> b/drivers/gpu/drm/bridge/ti-tfp410.c
->> index 7dacc7e03eee..631ae8f11a77 100644
->> --- a/drivers/gpu/drm/bridge/ti-tfp410.c
->> +++ b/drivers/gpu/drm/bridge/ti-tfp410.c
->> @@ -228,6 +228,21 @@ static u32 *tfp410_get_input_bus_fmts(struct
->> drm_bridge *bridge,
->>       return input_fmts;
->>   }
->>   +static int tfp410_atomic_check(struct drm_bridge *bridge,
->> +                   struct drm_bridge_state *bridge_state,
->> +                   struct drm_crtc_state *crtc_state,
->> +                   struct drm_connector_state *conn_state)
->> +{
->> +    struct tfp410 *dvi = drm_bridge_to_tfp410(bridge);
->> +
->> +    /*
->> +     * There might be flags negotiation supported in future.
->> +     * Set the bus flags in atomic_check statically for now.
->> +     */
->> +    bridge_state->input_bus_cfg.flags = dvi->timings.input_bus_flags;
-> 
-> A newline here before return would look better
-Yup! Will add one.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> 
->> +    return 0;
->> +}
->> +
->>   static const struct drm_bridge_funcs tfp410_bridge_funcs = {
->>       .attach        = tfp410_attach,
->>       .detach        = tfp410_detach,
->> @@ -238,6 +253,7 @@ static const struct drm_bridge_funcs
->> tfp410_bridge_funcs = {
->>       .atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
->>       .atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
->>       .atomic_get_input_bus_fmts = tfp410_get_input_bus_fmts,
->> +    .atomic_check = tfp410_atomic_check,
->>   };
->>     static const struct drm_bridge_timings tfp410_default_timings = {
-> 
-> With that fixed:
-> 
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reported-and-tested-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
 
-Thank you!
+Tested on:
 
+commit:         22b8cc3e Merge tag 'x86_mm_for_6.4' of git://git.kerne..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+console output: https://syzkaller.appspot.com/x/log.txt?x=16eedb6e280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c317b48f2c445e87
+dashboard link: https://syzkaller.appspot.com/bug?extid=e7afd76ad060fa0d2605
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17ed8b21280000
 
-Regards
-Aradhya
+Note: testing is done by a robot and is best-effort only.
