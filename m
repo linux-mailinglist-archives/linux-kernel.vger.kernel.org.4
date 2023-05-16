@@ -2,177 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917517043A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE6C7043C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbjEPCyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 22:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S229733AbjEPDBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 23:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjEPCyQ (ORCPT
+        with ESMTP id S229665AbjEPDBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 22:54:16 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4658772A6;
-        Mon, 15 May 2023 19:54:09 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-3318961b385so4671305ab.1;
-        Mon, 15 May 2023 19:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684205648; x=1686797648;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtKA4eT8yj93tAAG41WBzq6N9lG9sUaUVzM+cNzwt40=;
-        b=dxuyT+qbv4dqQFqXMkQkvzY9uDbHAKYJMe6sJF+Bysx7Kc2QD+IYsILNbX7beFcBzp
-         0CT55qh7u10RYQc0zvn1mhb33zqodA+sJy6d8XYl7r3CydFg1hRDBm/pO07sI1ha9vtF
-         Lv7Y78tGN4EwYh9M3QTPytdzI7J7rc3fIVoaEf+5FV92S43glSdYv3jjkE5ADsAN9aCp
-         Y3Bxk7Cpjt0/IZZb1LBmzXm367HHwjbVIbWt+XiBotil2ycIpNRA0QrxSsC7vYBVUPOB
-         T/REGUpTBqeoyZvPrCV85SF0yRpkYxh/WYzPAUkZyI/dsor6/rgs17Ps93iVTgM56P/1
-         Z0EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684205648; x=1686797648;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dtKA4eT8yj93tAAG41WBzq6N9lG9sUaUVzM+cNzwt40=;
-        b=FV2qJWXQPJMyCcmDWuTwMs/xCgIWt3A8WJI7H3oCbIgaNvQxkcSD9DSU4AjimPtQRT
-         nNuXkv93uM1Fcg8LYu6W0gxI/Amt0upyGW2X5w81rC41FMqCeBifrsJv9A96m9N5AAoI
-         JxRQ7VGDUW976sq0z/T1jf6ap+WA4Rq8CWqQdEiAHu3FvlvJFwB9VRwfdE15EYY4xRHo
-         TXq+ndASdszICi72NgdCtO23Dly7yN38xd3GAF92chEFrNznKtF4AsUUaUIRSg7kB8yS
-         4lc/41udQgaCvAjhosdX0641D6jhBa1edPQOIJ1gPNQ3kttDSDJqbVZf54zm2+zzEtu+
-         5zVA==
-X-Gm-Message-State: AC+VfDykKYbbPdTNcWtoeEeuquywEuep7BCQQorxPHiynzMn+0jqlbpF
-        AsTHGCjjaIXdl6pljfQYpUA=
-X-Google-Smtp-Source: ACHHUZ7K3cPbqubQIkjOAz+WA04TCWjc3F+K0Kms7k8utB5Fd+jilycbwjSjLl46bAaWzT0p49OQvQ==
-X-Received: by 2002:a05:6602:2c4f:b0:76c:4e64:2a20 with SMTP id x15-20020a0566022c4f00b0076c4e642a20mr921907iov.9.1684205648189;
-        Mon, 15 May 2023 19:54:08 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id h2-20020a02b602000000b0041844cb2c2dsm4225712jam.115.2023.05.15.19.54.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 19:54:07 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH] scsi: qla2xxx: Replace all non-returning strlcpy with strscpy
-Date:   Tue, 16 May 2023 02:54:04 +0000
-Message-ID: <20230516025404.2843867-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+        Mon, 15 May 2023 23:01:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA014233
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684206020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AEAd3D4zy/iD7bH1Yo/MWqtNt/Zaten+LoJ4wRMWN0U=;
+        b=Il98YbjcOUfeXU8DHTM0vMYPc2JFFY7p0SLJQP9D7Cu8Oep3XkFEqOq4NGfvnyNlXPI9qp
+        e0Fo/vuTFoKINZqNSNc2MYrYeOZA7Yb2aHz7UPh/XVYIE4pj7bQLyw9jdb2Z8cpZFRW68c
+        ly8B5BG5evAtTYKh7rBRwRNNyj8dlhM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-331-4FWlob5xMauTLOaaeX6gTA-1; Mon, 15 May 2023 23:00:15 -0400
+X-MC-Unique: 4FWlob5xMauTLOaaeX6gTA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 968591C09500;
+        Tue, 16 May 2023 03:00:14 +0000 (UTC)
+Received: from localhost (ovpn-12-32.pek2.redhat.com [10.72.12.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B316714171B6;
+        Tue, 16 May 2023 03:00:13 +0000 (UTC)
+Date:   Tue, 16 May 2023 11:00:10 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        horms@kernel.org, thunder.leizhen@huawei.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5] arm64: kdump: simplify the reservation behaviour of
+ crashkernel=,high
+Message-ID: <ZGLxul+c4vYQBn27@MiWiFi-R3L-srv>
+References: <20230407022419.19412-1-bhe@redhat.com>
+ <20230414143413.GA27911@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414143413.GA27911@willie-the-truck>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
+Hi Will,
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+On 04/14/23 at 03:34pm, Will Deacon wrote:
+> Hi,
+> 
+> On Fri, Apr 07, 2023 at 10:24:19AM +0800, Baoquan He wrote:
+> > On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
+> > suitable memory region top down. If the 'xM' of crashkernel high memory
+> > is reserved from high memory successfully, it will try to reserve
+> > crashkernel low memory later accoringly. Otherwise, it will try to search
+> > low memory area for the 'xM' suitable region. Please see the details in
+> > Documentation/admin-guide/kernel-parameters.txt.
+> 
+> [...]
+> 
+> >  arch/arm64/mm/init.c | 44 ++++++++++++++++++++++++++++++++++----------
+> >  1 file changed, 34 insertions(+), 10 deletions(-)
+> 
+> I tried to apply this, but smatch is unhappy with the result:
+> 
+>   | arch/arm64/mm/init.c:153 reserve_crashkernel() error: uninitialized symbol 'search_base'.
+> 
+> I _think_ this is a false positive, but I must say that the control flow
+> in reserve_crashkernel() is extremely hard to follow so I couldn't be
+> sure. If the static checker is struggling, then so will humans!
+> 
+> Ideally, this would all be restructured to make it easier to follow,
+> but in the short term we need something to squash the warning.
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- drivers/scsi/qla2xxx/qla_init.c |    8 ++++----
- drivers/scsi/qla2xxx/qla_mr.c   |   20 ++++++++++----------
- 2 files changed, 14 insertions(+), 14 deletions(-)
+I tried to refactor the code as you suggested, while it seems not easy
+to do. The complexity comes from several cases which need be handled.
+I try my best to write a document with the things I think important to
+help understand the code. Please help check if it helps or we just having
+the current code is fine.
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index ec0423ec6681..e831d14a4044 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -4861,7 +4861,7 @@ qla2x00_set_model_info(scsi_qla_host_t *vha, uint8_t *model, size_t len,
- 		if (use_tbl &&
- 		    ha->pdev->subsystem_vendor == PCI_VENDOR_ID_QLOGIC &&
- 		    index < QLA_MODEL_NAMES)
--			strlcpy(ha->model_desc,
-+			strscpy(ha->model_desc,
- 			    qla2x00_model_name[index * 2 + 1],
- 			    sizeof(ha->model_desc));
- 	} else {
-@@ -4869,14 +4869,14 @@ qla2x00_set_model_info(scsi_qla_host_t *vha, uint8_t *model, size_t len,
- 		if (use_tbl &&
- 		    ha->pdev->subsystem_vendor == PCI_VENDOR_ID_QLOGIC &&
- 		    index < QLA_MODEL_NAMES) {
--			strlcpy(ha->model_number,
-+			strscpy(ha->model_number,
- 				qla2x00_model_name[index * 2],
- 				sizeof(ha->model_number));
--			strlcpy(ha->model_desc,
-+			strscpy(ha->model_desc,
- 			    qla2x00_model_name[index * 2 + 1],
- 			    sizeof(ha->model_desc));
- 		} else {
--			strlcpy(ha->model_number, def,
-+			strscpy(ha->model_number, def,
- 				sizeof(ha->model_number));
- 		}
- 	}
-diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
-index f726eb8449c5..083f94e43fba 100644
---- a/drivers/scsi/qla2xxx/qla_mr.c
-+++ b/drivers/scsi/qla2xxx/qla_mr.c
-@@ -691,7 +691,7 @@ qlafx00_pci_info_str(struct scsi_qla_host *vha, char *str, size_t str_len)
- 	struct qla_hw_data *ha = vha->hw;
- 
- 	if (pci_is_pcie(ha->pdev))
--		strlcpy(str, "PCIe iSA", str_len);
-+		strscpy(str, "PCIe iSA", str_len);
- 	return str;
- }
- 
-@@ -1850,21 +1850,21 @@ qlafx00_fx_disc(scsi_qla_host_t *vha, fc_port_t *fcport, uint16_t fx_type)
- 			phost_info = &preg_hsi->hsi;
- 			memset(preg_hsi, 0, sizeof(struct register_host_info));
- 			phost_info->os_type = OS_TYPE_LINUX;
--			strlcpy(phost_info->sysname, p_sysid->sysname,
-+			strscpy(phost_info->sysname, p_sysid->sysname,
- 				sizeof(phost_info->sysname));
--			strlcpy(phost_info->nodename, p_sysid->nodename,
-+			strscpy(phost_info->nodename, p_sysid->nodename,
- 				sizeof(phost_info->nodename));
- 			if (!strcmp(phost_info->nodename, "(none)"))
- 				ha->mr.host_info_resend = true;
--			strlcpy(phost_info->release, p_sysid->release,
-+			strscpy(phost_info->release, p_sysid->release,
- 				sizeof(phost_info->release));
--			strlcpy(phost_info->version, p_sysid->version,
-+			strscpy(phost_info->version, p_sysid->version,
- 				sizeof(phost_info->version));
--			strlcpy(phost_info->machine, p_sysid->machine,
-+			strscpy(phost_info->machine, p_sysid->machine,
- 				sizeof(phost_info->machine));
--			strlcpy(phost_info->domainname, p_sysid->domainname,
-+			strscpy(phost_info->domainname, p_sysid->domainname,
- 				sizeof(phost_info->domainname));
--			strlcpy(phost_info->hostdriver, QLA2XXX_VERSION,
-+			strscpy(phost_info->hostdriver, QLA2XXX_VERSION,
- 				sizeof(phost_info->hostdriver));
- 			preg_hsi->utc = (uint64_t)ktime_get_real_seconds();
- 			ql_dbg(ql_dbg_init, vha, 0x0149,
-@@ -1909,9 +1909,9 @@ qlafx00_fx_disc(scsi_qla_host_t *vha, fc_port_t *fcport, uint16_t fx_type)
- 	if (fx_type == FXDISC_GET_CONFIG_INFO) {
- 		struct config_info_data *pinfo =
- 		    (struct config_info_data *) fdisc->u.fxiocb.rsp_addr;
--		strlcpy(vha->hw->model_number, pinfo->model_num,
-+		strscpy(vha->hw->model_number, pinfo->model_num,
- 			ARRAY_SIZE(vha->hw->model_number));
--		strlcpy(vha->hw->model_desc, pinfo->model_description,
-+		strscpy(vha->hw->model_desc, pinfo->model_description,
- 			ARRAY_SIZE(vha->hw->model_desc));
- 		memcpy(&vha->hw->mr.symbolic_name, pinfo->symbolic_name,
- 		    sizeof(vha->hw->mr.symbolic_name));
+Thanks
+Baoquan
 
