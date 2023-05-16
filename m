@@ -2,582 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9DE704FF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3DE704FFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbjEPNyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S233691AbjEPNzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbjEPNyo (ORCPT
+        with ESMTP id S233835AbjEPNzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:54:44 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C393B7ECF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:54:20 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id a1e0cc1a2514c-783eb14ae3cso186939241.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684245258; x=1686837258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VhWShmDJ2D9NIRvijbp0Qn/QaA9taQvDt1a8RmXcogw=;
-        b=O57DIxjy1Xc3sNHH0MrW/WE8dMYKOZhPCEm95bbd6gXjAe7C3Hf9/JdwDat3Qo+I6C
-         QJh2GRdeODfjeM691TTXSLJ7YtOPMzeQX8AcJsWpVQ2O9ts95Bd0HBHISkK1GnlfyHns
-         ntIZg//0TjIvnp7qNpfiOSMkkW1MqAPn7LP7hKDQF5MiVNG6KAu1Pir6d3RnL8BVUpOY
-         46WTugftDmyMr2PvjeXEuFKd/MS8TRoBpBdueHya/lVJNlnn+eii7FUN7pRj7Oxh9xSk
-         gKNyXY94vWKQg0KJI2sa6KCO7cIPNYoOyZkxoiNgsHNrRh6JXg7g8vPxPSeybyzSu5MB
-         +3kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684245258; x=1686837258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VhWShmDJ2D9NIRvijbp0Qn/QaA9taQvDt1a8RmXcogw=;
-        b=Eg0jFbDHUr4WB2Cot58zQdEk/9dxha1snJrWfmOqV+5keJGjm+t7HUx4dAi5ODsw0W
-         0bOJmAhF4secAD34yuWo29S8P+kx6bNMflrsFctTyfgDLHhhC+12md4R4eCOIiKOYAR5
-         yivTuAXsWtoDXhHGdjg77DyIW6Mskey7+OF/VRRyciZ07wGw2N2gIaOoP4M/JbG+QqHD
-         ZnlE7LrShzotVOMWF/r9WYbQWW9gWnldHZifAzfnOKxUDLz/CZaMKziP5u/573hxiTzs
-         QR46wdMKwsWwbT+13i7bOQTHUg0zZ9Gu3d6E4dEdgKxPNl9qh+oGswY9aSp/HiJ8DbD2
-         b1qQ==
-X-Gm-Message-State: AC+VfDzp3UhUz44mWO2FqvI7f8m+eV5bTs7ZvcPB21M5u1Lv8mpWvRKK
-        BYn1ltYM9hYOlPU9pUgP5ltbxR6jc3p6KMqPDqFmaA==
-X-Google-Smtp-Source: ACHHUZ6PPXq7zfVMp+g4ZtdyK7QvqxUi0r8kPWInCXLO7YN83y3cyeiX80bd2YkHWnNP+WAscugxKswDI1eA0AvyprA=
-X-Received: by 2002:a67:f3cb:0:b0:434:4deb:e89 with SMTP id
- j11-20020a67f3cb000000b004344deb0e89mr14769682vsn.12.1684245257777; Tue, 16
- May 2023 06:54:17 -0700 (PDT)
+        Tue, 16 May 2023 09:55:14 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2087.outbound.protection.outlook.com [40.107.237.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED05213B;
+        Tue, 16 May 2023 06:55:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mNPQMbRvjp3sqHLZT9o6w3Ubwa4CjqkWZBbejX60kjYEntDDTK2l34c60lOoDHy0ZMvPYcqMGpzEXZAL+9EWZYq7uim736V9kCowq5HFv/rhk0pigrmOKgDxpHU8g7n4DguBHf1S5M2nsmw9B326s0ZOBZwlwfbAho66ZOI4JUGQT9wtBJXjdvJ7F90Zh89y7Xvo6/7yCKaTd6EhYmohsu/i2ZVsUYNClcbfCZbixVuERxfhIuIJdCqcz/3SCuhFSUvS2r7ary+rkrEo3qDYIwi4e6d+aR266RauG5Gh2bsugGlqRbNmWF6J457VPJMXXcJRRGTjuCvd2tPz79bk0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=F5JW2Mhi40zgUhuTvwACpEkGADKW8YatpqyhR23tZwQ=;
+ b=btBpwDWcpvKiq0FGTT4KeFZFmWW+aXasZZt7Tf3JiUvKb88V++nRuXeX7GWwp5ltJ8xesOATBI9pHLSjah2KaxI7xKZFgWVjY8hqMturoZ2EQyVMrMnV1v8D6xet25NEb1WBC+ZUMNAZjqYPFp5mZT3ubfff0azz+ESUre+5LrpufIRsgVH0PjPeqvRzm/snTQalztoPrrkmpgOfX0SCZeQ+srF8rw0vJZreWYDmnXbqaCmAJUP7BUD1aV7IwvbfY8/7nayx1arFkopM6SzPZWd0VeRaFVMzBzhdx/vEXvQ73oCrTphL83Oa/e/LZ8BkyO3wspDpkSHyeK3tBZXcGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=lists.linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F5JW2Mhi40zgUhuTvwACpEkGADKW8YatpqyhR23tZwQ=;
+ b=HFHubtDYEFMc8HPdPspxzRg0/ULhckHhRAB9R8NNOlI8/q3AfHGpiZLmGXi7yiSnLelKHUm4CLiqebRi9KnrRhLmoHnTR6SlmAvMAmRZTPzCHVBV7ixGN/4AN2B/jtb51XShoF//KTb9GyIB/mbjIIRdJZQijVgWIPZd4s+1wa2YqZZ6KJT/iootin5CHZN9MVKubECWgaQOWcq9VMiwiOsFfWqsn7k2grCq3/txIrf3p1Uv2j+P/7Ix3VfNHWutkIO2B5x/QASZ0SCrdOi7I1tCWjkvx81VNInJv8Q5j7D3pNFooWlVPKQ5svrrDn1mYuIZEHLCZYGTdciHS2Y0/w==
+Received: from MW4PR04CA0172.namprd04.prod.outlook.com (2603:10b6:303:85::27)
+ by BL0PR12MB4931.namprd12.prod.outlook.com (2603:10b6:208:17e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Tue, 16 May
+ 2023 13:55:09 +0000
+Received: from CO1NAM11FT044.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::e8) by MW4PR04CA0172.outlook.office365.com
+ (2603:10b6:303:85::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
+ Transport; Tue, 16 May 2023 13:55:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT044.mail.protection.outlook.com (10.13.175.188) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.16 via Frontend Transport; Tue, 16 May 2023 13:55:07 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 16 May 2023
+ 06:54:56 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 16 May
+ 2023 06:54:55 -0700
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Tue, 16 May
+ 2023 06:54:54 -0700
+From:   Feng Liu <feliu@nvidia.com>
+To:     <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Bodong Wang <bodong@nvidia.com>, "Feng Liu" <feliu@nvidia.com>,
+        Jiri Pirko <jiri@nvidia.com>
+Subject: [PATCH v1] virtio_pci: Optimize virtio_pci_device structure size
+Date:   Tue, 16 May 2023 09:54:46 -0400
+Message-ID: <20230516135446.16266-1-feliu@nvidia.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-References: <20230515161721.545370111@linuxfoundation.org>
-In-Reply-To: <20230515161721.545370111@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 16 May 2023 19:24:06 +0530
-Message-ID: <CA+G9fYu6ZOu_We2GMP0sFnSovOsqd6waW7oKS-Y1VPrjdibu5Q@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/239] 6.1.29-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Michal Clapinski <mclapinski@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        LTP List <ltp@lists.linux.it>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Rudi Heitbaum <rudi@heitbaum.com>,
-        ZhangPeng <zhangpeng362@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT044:EE_|BL0PR12MB4931:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f96c80f-6b1a-44da-b5c9-08db561528aa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gBK/EMsCUHssBdjFpdXK8li7uRTlvyhoD+I2eggtgz8aYmxL6LPe2zK9CaWl8blN6rBQYRVpJI0aMTZ5TMmx9gneP2E/0+AosOdpB7SYAU1WRuo5pZfKFKVEN2AjycCzGgmrZgRG4HN/Qq/8I8P7pW4DfPdhJG6kSp65O8HLkMt89zy2X85PUHL4tJsssObR0UceG85ZAys3kjR+Vc72MkRMUZ3qjTblBRliy+1/rWpZxV2z+YG7TKUidhfrknTkems1CG4BEMPFJgZ4j+ZLOFjz9dRLeqkNJ7TkeJrelqpwshL1bgLDqzmdwMxjysSxD31NeaqxgRStnt3YTln4YKkgUSuBiOAvsAF0vHHPpIQoy1f31zOlVoqlWce+e8jt6MoblmH7AqxfXWVh9q1ie4589UJkRCXATJpXvZ2A7NMVQUdK9MfLTN+cFlnS7utQ2l8BjOfT/egzCFHu9fVtgtXTgqe9gjKYmO/HXij+SUdXUFUaNM9IsEX6qOCWork/dE0IAQEH7LT4SJrw5UP4UXxvOyfLJtHVKEUxvwI9Wo8+pQ6GDG6b9iTHSzilDnn67pxXHIchDyofXPCF1APFjKG5lXjZMo/nq4GCvGsMVlss5XZBuPBrG06ET4jKUBfhtujGOQynQ5be5hkH1AtxVFjPEoZjB4wRags5mjo1c33SEQOJDvZ6CYBgazOWEp1hWaR46VMZZPjPra8xHRb3qcIh54KzxTfUxFKU4V4AkyKUIaIZH/9RRniYEh74iW+2j5VcqINJujkjVvQbpMurGg==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199021)(40470700004)(36840700001)(46966006)(36756003)(86362001)(7696005)(110136005)(54906003)(316002)(4326008)(70206006)(70586007)(478600001)(40480700001)(82310400005)(5660300002)(8936002)(2906002)(8676002)(6666004)(41300700001)(7636003)(82740400003)(356005)(36860700001)(336012)(186003)(2616005)(426003)(1076003)(26005)(107886003)(83380400001)(47076005)(66899021)(40460700003)(21314003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 13:55:07.8072
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f96c80f-6b1a-44da-b5c9-08db561528aa
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT044.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4931
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 at 22:31, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.29 release.
-> There are 239 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.29-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Improve the size of the virtio_pci_device structure, which is commonly
+used to represent a virtio PCI device. A given virtio PCI device can
+either of legacy type or modern type, with the
+struct virtio_pci_legacy_device occupying 32 bytes and the
+struct virtio_pci_modern_device occupying 88 bytes. Make them a union,
+thereby save 32 bytes of memory as shown by the pahole tool. This
+improvement is particularly beneficial when dealing with numerous
+devices, as it helps conserve memory resources.
+
+Before the modification, pahole tool reported the following:
+struct virtio_pci_device {
+[...]
+        struct virtio_pci_legacy_device ldev;            /*   824    32 */
+        /* --- cacheline 13 boundary (832 bytes) was 24 bytes ago --- */
+        struct virtio_pci_modern_device mdev;            /*   856    88 */
+
+        /* XXX last struct has 4 bytes of padding */
+[...]
+        /* size: 1056, cachelines: 17, members: 19 */
+[...]
+};
+
+After the modification, pahole tool reported the following:
+struct virtio_pci_device {
+[...]
+        union {
+                struct virtio_pci_legacy_device ldev;    /*   824    32 */
+                struct virtio_pci_modern_device mdev;    /*   824    88 */
+        };                                               /*   824    88 */
+[...]
+	/* size: 1024, cachelines: 16, members: 18 */
+[...]
+};
+
+Signed-off-by: Feng Liu <feliu@nvidia.com>
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+---
+ drivers/virtio/virtio_pci_common.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
+index 23112d84218f..4b773bd7c58c 100644
+--- a/drivers/virtio/virtio_pci_common.h
++++ b/drivers/virtio/virtio_pci_common.h
+@@ -45,9 +45,10 @@ struct virtio_pci_vq_info {
+ struct virtio_pci_device {
+ 	struct virtio_device vdev;
+ 	struct pci_dev *pci_dev;
+-	struct virtio_pci_legacy_device ldev;
+-	struct virtio_pci_modern_device mdev;
+-
++	union {
++		struct virtio_pci_legacy_device ldev;
++		struct virtio_pci_modern_device mdev;
++	};
+ 	bool is_legacy;
+ 
+ 	/* Where to read and clear interrupt */
+-- 
+2.37.1 (Apple Git-137.1)
 
-
-Results from Linaro=E2=80=99s test farm.
-Regressions on arm64, arm, x86_64, and i386.
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-We have recently upgraded our selftest sources to stable-rc 6.3 and
-running on stable rc 6.1 kernel.
-
-List of test regressions:
-=3D=3D=3D=3D=3D=3D=3D=3D
-kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-kselftest-memfd
-  - memfd_memfd_test
-
-kselftest-rseq
-  - rseq_basic_test
-
- kselftest-kvm
-  - kvm_hyperv_features
-  - kvm_xapic_state_test
-
-ltp-commands
-  - mkfs01_ntfs_sh
-
-Details:
-=3D=3D=3D=3D=3D
-
-# selftests: membarrier: membarrier_test_single_thread
-# TAP version 13
-# 1..18
-# Bail out! sys membarrier MEMBARRIER_CMD_GET_REGISTRATIONS test:
-flags =3D 0, errno =3D 22
-# # Planned tests !=3D run tests (18 !=3D 0)
-# # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-not ok 1 selftests: membarrier: membarrier_test_single_thread # exit=3D1
-# selftests: membarrier: membarrier_test_multi_thread
-# TAP version 13
-# 1..16
-# ok 1 sys_membarrier available
-# ok 2 sys membarrier invalid command test: command =3D -1, flags =3D 0,
-errno =3D 22. Failed as expected
-# ok 3 sys membarrier MEMBARRIER_CMD_QUERY invalid flags test: flags =3D
-1, errno =3D 22. Failed as expected
-# ok 4 sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED not registered
-failure test: flags =3D 0, errno =3D 1
-# ok 5 sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED_SYNC_CORE not
-registered failure test: flags =3D 0, errno =3D 1
-# ok 6 sys membarrier MEMBARRIER_CMD_GLOBAL test: flags =3D 0
-# ok 7 sys membarrier MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED test: flags=
- =3D 0
-# Bail out! sys membarrier MEMBARRIER_CMD_GET_REGISTRATIONS test:
-flags =3D 0, errno =3D 22
-# # Planned tests !=3D run tests (16 !=3D 7)
-# # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
-not ok 2 selftests: membarrier: membarrier_test_multi_thread # exit=3D1
-
-=3D=3D=3D=3D=3D=3D=3D=3D
-
-kselftest: Running tests in memfd
-TAP version 13
-1..3
-# selftests: memfd: memfd_test
-# Aborted
-not ok 1 selftests: memfd: memfd_test # exit=3D134
-
-=3D=3D=3D=3D=3D=3D=3D=3D
-
-kselftest: Running tests in rseq
-TAP version 13
-1..9
-# selftests: rseq: basic_test
-# basic_test: rseq.h:204: rseq_current_node_id: Assertion
-`rseq_node_id_available()' failed.
-# ./kselftest/runner.sh: line 35:  1709 Aborted
-         /usr/bin/timeout --foreground \"$kselftest_timeout\" $1
-not ok 1 selftests: rseq: basic_test # exit=3D134
-# selftests: rseq: basic_percpu_ops_test
-# spinlock
-# percpu_list
-ok 2 selftests: rseq: basic_percpu_ops_test
-# selftests: rseq: basic_percpu_ops_mm_cid_test
-# spinlock
-# percpu_list
-ok 3 selftests: rseq: basic_percpu_ops_mm_cid_test
-# selftests: rseq: param_test
-ok 4 selftests: rseq: param_test
-# selftests: rseq: param_test_benchmark
-ok 5 selftests: rseq: param_test_benchmark
-# selftests: rseq: param_test_compare_twice
-ok 6 selftests: rseq: param_test_compare_twice
-# selftests: rseq: param_test_mm_cid
-# Error: cpu id getter unavailable
-not ok 7 selftests: rseq: param_test_mm_cid # exit=3D255
-# selftests: rseq: param_test_mm_cid_benchmark
-# Error: cpu id getter unavailable
-not ok 8 selftests: rseq: param_test_mm_cid_benchmark # exit=3D255
-# selftests: rseq: param_test_mm_cid_compare_twice
-# Error: cpu id getter unavailable
-not ok 9 selftests: rseq: param_test_mm_cid_compare_twice # exit=3D255
-
-=3D=3D=3D=3D=3D=3D
-
-# selftests: kvm: hyperv_features
-# Testing access to Hyper-V specific MSRs
-# =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
-#   x86_64/hyperv_features.c:498: false
-#   pid=3D1043 tid=3D1043 errno=3D4 - Interrupted system call
-#      1 0x0000000000403722: ?? ??:0
-#      2 0x00007fc1e890157a: ?? ??:0
-#      3 0x00007fc1e890162f: ?? ??:0
-#      4 0x00000000004037c4: ?? ??:0
-#   Failed guest assert: !vector at x86_64/hyperv_features.c:58
-# MSR =3D 40000118, arg1 =3D d, arg2 =3D 0
-not ok 10 selftests: kvm: hyperv_features # exit=3D254
-
-# selftests: kvm: xapic_state_test
-# =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
-#   x86_64/xapic_state_test.c:147: apic_id =3D=3D expected
-#   pid=3D2175 tid=3D2175 errno=3D4 - Interrupted system call
-#      1 0x0000000000402bac: ?? ??:0
-#      2 0x00000000004025ba: ?? ??:0
-#      3 0x00007f0040cd457a: ?? ??:0
-#      4 0x00007f0040cd462f: ?? ??:0
-#      5 0x0000000000402624: ?? ??:0
-#   APIC_ID not set back to xAPIC format; wanted =3D 1000000, got =3D 1
-not ok 46 selftests: kvm: xapic_state_test # exit=3D254
-
-=3D=3D=3D=3D
-
-tst_device.c:93:[  147.226163] loop0: detected capacity change from 0 to 61=
-4400
- TINFO: Found free device 0 '/dev/loop0'
-mkfs01 1 TINFO: timeout per run is 0h 50m 0s
-mkfs01 1 TPASS: 'mkfs -t ntfs  /dev/loop0 ' passed.
-mkfs01 2 TINFO: Mounting device: mount -t ntfs /dev/loop0
-/scratch/ltp-zKu0Zn6L6o/LTP_mkfs01.ULVi9nN6XF/mntpoint
-modprobe: FATAL: Module fuse not found in directory /lib/modules/6.2.16-rc1
-ntfs-3g-mount: fuse device is missing, try 'modprobe fuse' as root
-mkfs01 2 TBROK: Failed to mount device ntfs type: mount exit =3D 21
-[  166.420602] I/O error, dev loop0, sector 614272 op 0x0:(READ) flags
-0x80700 phys_seg 1 prio class 2
-
-Steps to reproduce:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-# To install tuxrun on your system globally:
-# sudo pip3 install -U tuxrun=3D=3D0.42.0
-#
-# See https://tuxrun.org/ for complete documentation.
-
-tuxrun   \
- --runtime podman   \
- --device qemu-x86_64   \
- --boot-args rw   \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq4UnS1BC=
-krcnT51kVe9rFF0k1/bzImage
-  \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq4UnS1B=
-CkrcnT51kVe9rFF0k1/modules.tar.xz
-  \
- --rootfs https://storage.tuxboot.com/debian/bookworm/amd64/rootfs.ext4.xz =
-  \
- --parameters SKIPFILE=3Dskipfile-lkft.yaml   \
- --parameters KSELFTEST=3Dhttps://storage.tuxsuite.com/public/linaro/lkft/b=
-uilds/2PeR5CFkuV3xkzzYLrOV8JHT9ie/kselftest.tar.xz
-  \
- --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
- --tests kselftest-membarrier   \
- --timeouts boot=3D15
-
-Test log links and details,
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-membarrier: test_multi_thread:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
- - https://lkft.validation.linaro.org/scheduler/job/6427965#L1776
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020997/suite/kselftest-membarrier/test/mem=
-barrier_membarrier_test_multi_thread/history/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17021028/suite/kselftest-membarrier/test/mem=
-barrier_membarrier_test_multi_thread/details/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020997/suite/kselftest-membarrier/tests/
-
-
-memfd_test:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020879/suite/kselftest-memfd/test/memfd_me=
-mfd_test/history/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17007742/suite/kselftest-memfd/tests/
-
-rseq_basic_test:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020993/suite/kselftest-rseq/test/rseq_basi=
-c_test/history/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020993/suite/kselftest-rseq/test/rseq_basi=
-c_test/log
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020993/suite/kselftest-rseq/test/rseq_basi=
-c_test/details/
-
-
-kvm: kvm_hyperv_features and kvm_xapic_state_test:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020070/suite/kselftest-kvm/test/kvm_hyperv=
-_features/history/
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020070/suite/kselftest-kvm/test/kvm_hyperv=
-_features/log
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17020070/suite/kselftest-kvm/test/kvm_xapic_=
-state_test/history/
-
-ltp-commands: mkfs01_ntfs_sh:
-=3D=3D=3D=3D=3D=3D=3D=3D
- - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.=
-1.28-240-gb82733c0ff99/testrun/17019910/suite/ltp-commands/test/mkfs01_ntfs=
-_sh/history/
-
-## Build
-* kernel: 6.1.29-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.1.y
-* git commit: b82733c0ff99435bb7eb5ed4ea2e1c1fd69e7ebb
-* git describe: v6.1.28-240-gb82733c0ff99
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.2=
-8-240-gb82733c0ff99
-
-## Test Regressions (compared to v6.1.28)
-
-* bcm2711-rpi-4-b, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* bcm2711-rpi-4-b, kselftest-memfd
-  - memfd_memfd_test
-
-* dragonboard-410c, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* dragonboard-410c, kselftest-memfd
-  - memfd_memfd_test
-
-* fvp-aemva, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* fvp-aemva, kselftest-memfd
-  - memfd_memfd_test
-
-* i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* i386, kselftest-memfd
-  - memfd_memfd_test
-
-* juno-r2, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* juno-r2, kselftest-memfd
-  - memfd_memfd_test
-
-* qemu-arm64, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu-arm64, kselftest-memfd
-  - memfd_memfd_test
-
-* qemu-armv7, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu-i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu-i386, kselftest-memfd
-  - memfd_memfd_test
-
-* qemu-x86_64, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu-x86_64, kselftest-memfd
-  - memfd_memfd_test
-
-* qemu_i386, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_i386, kselftest-memfd
-  - memfd_memfd_test
-
-* qemu_x86_64, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* qemu_x86_64, kselftest-memfd
-  - memfd_memfd_test
-
-* x15, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* x15, kselftest-rseq
-  - rseq_basic_test
-
-* x15, ltp-commands
-  - mkfs01_ntfs_sh
-
-* x86, kselftest-kvm
-  - kvm_hyperv_features
-  - kvm_xapic_state_test
-
-* x86, kselftest-membarrier
-  - membarrier_membarrier_test_multi_thread
-  - membarrier_membarrier_test_single_thread
-
-* x86, kselftest-memfd
-  - memfd_memfd_test
-
-* x86, kselftest-rseq
-  - rseq_basic_test
-  - rseq_run_param_test_sh
-
-* x86-kasan, ltp-commands
-  - mkfs01_ntfs_sh
-
-
-## Metric Regressions (compared to v6.1.28)
-
-## Test Fixes (compared to v6.1.28)
-
-## Metric Fixes (compared to v6.1.28)
-
-## Test result summary
-total: 161145, pass: 139501, fail: 3428, skip: 17949, xfail: 267
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 150 passed, 1 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 38 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 16 total, 15 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
