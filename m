@@ -2,198 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A41F704C0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CA4704C0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbjEPLNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
+        id S232921AbjEPLNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbjEPLNB (ORCPT
+        with ESMTP id S232883AbjEPLMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:13:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC81961A8
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:11:40 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QLD4d0XttzsSDh;
-        Tue, 16 May 2023 19:08:33 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 19:10:31 +0800
-CC:     <yangyicong@hisilicon.com>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <linuxarm@huawei.com>,
-        <prime.zeng@huawei.com>, <wangjie125@huawei.com>
-Subject: Re: [PATCH] sched/fair: Don't balance migration disabled tasks
-To:     Valentin Schneider <vschneid@redhat.com>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <linux-kernel@vger.kernel.org>
-References: <20230313065759.39698-1-yangyicong@huawei.com>
- <xhsmhilf2m3k4.mognet@vschneid.remote.csb>
- <4968738b-940a-1207-0cea-3aea52c6e33e@huawei.com>
- <xhsmh7cvgnbdf.mognet@vschneid.remote.csb>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <12a7c650-bc44-bd5a-1506-67260ab8e21e@huawei.com>
-Date:   Tue, 16 May 2023 19:10:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 16 May 2023 07:12:45 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2668065B6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:11:24 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3078c092056so7495246f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1684235439; x=1686827439;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ioKORldIiYtB2SsGKnyxrBw0xwGmK5RidmBBlL5Ztds=;
+        b=40g2ESP3KvxEEYuVtdIXFyMVaWbC1e7CZd1xVEqbSAkTCEUtoem9DC0tYoJW4uRXQQ
+         48Qixe8+UYVFllhjeqX3m45D+820Ig2NvrNRGs8DfDLYZ9vA0+x6IXrTjuaHU0kWXZ9A
+         bABF4AKGh1gBzJXTQ+FNckD3xPvPwQ1bLpwxOO1db1fVd4JD+X/dezTBXDH5FjB2CfKv
+         bnXBsmhqLKIU3MTz1z/sPbI/ycX0KrIn7uB4K5GitA6vUtVrqju8pKahtdpWmOFZnCxM
+         n2339rx66eyunXwUWDFq1Q00DEJjnwPDFSHWTFs6CZBLHP44V80PV+YU1gUpBdvnpcmU
+         OaEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684235439; x=1686827439;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ioKORldIiYtB2SsGKnyxrBw0xwGmK5RidmBBlL5Ztds=;
+        b=JwJqS0UWrbkMls/jyKAk+HuB7ewKcGpR0Tm5b14kZcCoZr4FhmpxU6FDYcNH4MUOFn
+         f6XoERXa7cuDccD61jwucQnfJSnJ6BJDY6Gp/nd9X7wjCEMKd9+i9G+/wLyHSO6hMdQP
+         et62uGNiZJIuUOv2JDnvXzoA0I5kVcw30X4k+6hhXCchX9oNQ8TpvdVBoBJB63aJhdwd
+         4kLjA6NgAIfn9isCbIGcfrkD7a8SXsHyYDUb8oHiA4MURPfMc9dVYEr7MWbnf4ShkHao
+         hDbk81/BEZtEcrjsN3fEinPU/SR+BAQ+ZFzRUEXpbCfuoCcnVgze8diG+n8idWPRscSm
+         RHvQ==
+X-Gm-Message-State: AC+VfDyXX1PgjExSDs1juOqRo2+Gtne4ejpCPHs9tA37KN2IR2hh6n86
+        i816PDMbSYX5xAMvQ6HDueQCqg==
+X-Google-Smtp-Source: ACHHUZ5R6+MuvE6h14q57HcZGLB0AA9F4N+zYdvtEsrXQsbxZuCoO7tuvAUaio+gGs0oh0bRHN7INA==
+X-Received: by 2002:adf:f344:0:b0:308:d687:c1f9 with SMTP id e4-20020adff344000000b00308d687c1f9mr10930163wrp.63.1684235439550;
+        Tue, 16 May 2023 04:10:39 -0700 (PDT)
+Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id c5-20020a5d63c5000000b003090cb7a9e6sm2262351wrw.31.2023.05.16.04.10.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 04:10:38 -0700 (PDT)
+Message-ID: <ceda3aab-067a-caf3-2f95-5724ef1b18d0@monstr.eu>
+Date:   Tue, 16 May 2023 13:10:37 +0200
 MIME-Version: 1.0
-In-Reply-To: <xhsmh7cvgnbdf.mognet@vschneid.remote.csb>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 23/23] arm64: zynqmp: Add phase tags marking
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        Tanmay Shah <tanmay.shah@amd.com>,
+        Vishal Sagar <vishal.sagar@amd.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <cover.1683034376.git.michal.simek@amd.com>
+ <48b554aef75d11e6ad2ef7d21f22accb35432112.1683034376.git.michal.simek@amd.com>
+From:   Michal Simek <monstr@monstr.eu>
+In-Reply-To: <48b554aef75d11e6ad2ef7d21f22accb35432112.1683034376.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Valentin,
 
-On 2023/3/16 20:12, Valentin Schneider wrote:
-> On 16/03/23 17:13, Yicong Yang wrote:
->> Hi Valentin,
->>
->> On 2023/3/15 23:34, Valentin Schneider wrote:
->>> That cpumask check should cover migration_disabled tasks, unless they
->>> haven't gone through migrate_disable_switch() yet
->>> (p->migration_disabled == 1, but the cpus_ptr hasn't been touched yet).
->>>
->>> Now, if that's the case, the task has to be src_rq's current (since it
->>> hasn't switched out), which means can_migrate_task() should exit via:
->>>
->>>         if (task_on_cpu(env->src_rq, p)) {
->>>                 schedstat_inc(p->stats.nr_failed_migrations_running);
->>>                 return 0;
->>>         }
->>>
->>> and thus not try to detach_task(). With that in mind, I don't get how your
->>> splat can happen, nor how the change change can help (a remote task p could
->>> execute migrate_disable() concurrently with can_migrate_task(p)).
->>>
->>
->> I see, for migrate disabled tasks, if !p->on_cpu the migration can be avoid by
->> the cpus_ptr check and if p->on_cpu migration can be avoid by the task_on_cpu()
->> check. So this patch won't help.
->>
+
+On 5/2/23 15:35, Michal Simek wrote:
+> bootph-all as phase tag was added to dt-schema
+> (dtschema/schemas/bootph.yaml) to cover U-Boot challenges with DT.
+> That's why add it also to Linux to be aligned with bootloader requirement.
 > 
-> Right.
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
 > 
->>> I'm a bit confused here, detach_tasks() happens entirely with src_rq
->>> rq_lock held, so there shouldn't be any surprises.
->>>
->>
->> Since it's a arm64 machine, could the WARN_ON_ONCE() test be false positive?
->> I mean the update of p->migration_disabled is not observed by the balance
->> CPU and trigger this warning incorrectly.
->>
+> ---
+>   arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi    |  6 ++++++
+>   arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts |  3 +++
+>   arch/arm64/boot/dts/xilinx/zynqmp.dtsi            | 12 ++++++++++++
+>   3 files changed, 21 insertions(+)
 > 
-> Since the balance CPU holds the src_rq's rq_lock for the entire duration of
-> detach_tasks(), the actual value of p->migration_disabled shouldn't matter.
-> 
-> Either p has been scheduled out while being migration_disabled, in which
-> case its ->cpus_ptr has been updated, or p is still running, in which case
-> can_migrate_task() should return false (p->on_cpu). But from your report,
-> we're somehow not seeing one of these.
-> 
->>> Can you share any extra context? E.g. exact HEAD of your tree, maybe the
->>> migrate_disable task in question if you have that info.
->>>
->>
->> We met this on our internal version based on 6.1-rc4, the scheduler is not
->> patched. We also saw this in previous version like 6.0. This patch is applied
->> since 6.2 so we haven't seen this recently, but as you point out this patch doesn't
->> solve the problem.
-> 
-> Could you try to reproduce this on an unpatched upstream kernel?
-> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
+> index 581221fdadf1..719ea5d5ae88 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
+> @@ -11,30 +11,35 @@
+>   #include <dt-bindings/clock/xlnx-zynqmp-clk.h>
+>   / {
+>   	pss_ref_clk: pss_ref_clk {
+> +		bootph-all;
+>   		compatible = "fixed-clock";
+>   		#clock-cells = <0>;
+>   		clock-frequency = <33333333>;
+>   	};
+>   
+>   	video_clk: video_clk {
+> +		bootph-all;
+>   		compatible = "fixed-clock";
+>   		#clock-cells = <0>;
+>   		clock-frequency = <27000000>;
+>   	};
+>   
+>   	pss_alt_ref_clk: pss_alt_ref_clk {
+> +		bootph-all;
+>   		compatible = "fixed-clock";
+>   		#clock-cells = <0>;
+>   		clock-frequency = <0>;
+>   	};
+>   
+>   	gt_crx_ref_clk: gt_crx_ref_clk {
+> +		bootph-all;
+>   		compatible = "fixed-clock";
+>   		#clock-cells = <0>;
+>   		clock-frequency = <108000000>;
+>   	};
+>   
+>   	aux_ref_clk: aux_ref_clk {
+> +		bootph-all;
+>   		compatible = "fixed-clock";
+>   		#clock-cells = <0>;
+>   		clock-frequency = <27000000>;
+> @@ -43,6 +48,7 @@ aux_ref_clk: aux_ref_clk {
+>   
+>   &zynqmp_firmware {
+>   	zynqmp_clk: clock-controller {
+> +		bootph-all;
+>   		#clock-cells = <1>;
+>   		compatible = "xlnx,zynqmp-clk";
+>   		clocks = <&pss_ref_clk>, <&video_clk>, <&pss_alt_ref_clk>,
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> index 78ff6a9b3144..8afdf4408a78 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> @@ -243,17 +243,20 @@ tpm@0 { /* slm9670 - U144 */
+>   
+>   &i2c1 {
+>   	status = "okay";
+> +	bootph-all;
+>   	clock-frequency = <400000>;
+>   	scl-gpios = <&gpio 24 GPIO_ACTIVE_HIGH>;
+>   	sda-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+>   
+>   	eeprom: eeprom@50 { /* u46 - also at address 0x58 */
+> +		bootph-all;
+>   		compatible = "st,24c64", "atmel,24c64"; /* st m24c64 */
+>   		reg = <0x50>;
+>   		/* WP pin EE_WP_EN connected to slg7x644092@68 */
+>   	};
+>   
+>   	eeprom_cc: eeprom@51 { /* required by spec - also at address 0x59 */
+> +		bootph-all;
+>   		compatible = "st,24c64", "atmel,24c64"; /* st m24c64 */
+>   		reg = <0x51>;
+>   	};
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> index d01d4334c95f..51b8349dcacd 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> @@ -127,6 +127,7 @@ rproc_1_fw_image: memory@3ef00000 {
+>   	};
+>   
+>   	zynqmp_ipi: zynqmp_ipi {
+> +		bootph-all;
+>   		compatible = "xlnx,zynqmp-ipi-mailbox";
+>   		interrupt-parent = <&gic>;
+>   		interrupts = <0 35 4>;
+> @@ -136,6 +137,7 @@ zynqmp_ipi: zynqmp_ipi {
+>   		ranges;
+>   
+>   		ipi_mailbox_pmu1: mailbox@ff9905c0 {
+> +			bootph-all;
+>   			reg = <0x0 0xff9905c0 0x0 0x20>,
+>   			      <0x0 0xff9905e0 0x0 0x20>,
+>   			      <0x0 0xff990e80 0x0 0x20>,
+> @@ -152,6 +154,7 @@ ipi_mailbox_pmu1: mailbox@ff9905c0 {
+>   	dcc: dcc {
+>   		compatible = "arm,dcc";
+>   		status = "disabled";
+> +		bootph-all;
+>   	};
+>   
+>   	pmu {
+> @@ -177,8 +180,10 @@ zynqmp_firmware: zynqmp-firmware {
+>   			compatible = "xlnx,zynqmp-firmware";
+>   			#power-domain-cells = <1>;
+>   			method = "smc";
+> +			bootph-all;
+>   
+>   			zynqmp_power: zynqmp-power {
+> +				bootph-all;
+>   				compatible = "xlnx,zynqmp-power";
+>   				interrupt-parent = <&gic>;
+>   				interrupts = <0 35 4>;
+> @@ -258,6 +263,7 @@ r5f-1 {
+>   
+>   	amba: axi {
+>   		compatible = "simple-bus";
+> +		bootph-all;
+>   		#address-cells = <2>;
+>   		#size-cells = <2>;
+>   		ranges;
+> @@ -699,6 +705,7 @@ pcie_intc: legacy-interrupt-controller {
+>   		};
+>   
+>   		qspi: spi@ff0f0000 {
+> +			bootph-all;
+>   			compatible = "xlnx,zynqmp-qspi-1.0";
+>   			status = "disabled";
+>   			clock-names = "ref_clk", "pclk";
+> @@ -745,6 +752,7 @@ sata: ahci@fd0c0000 {
+>   		};
+>   
+>   		sdhci0: mmc@ff160000 {
+> +			bootph-all;
+>   			compatible = "xlnx,zynqmp-8.9a", "arasan,sdhci-8.9a";
+>   			status = "disabled";
+>   			interrupt-parent = <&gic>;
+> @@ -759,6 +767,7 @@ sdhci0: mmc@ff160000 {
+>   		};
+>   
+>   		sdhci1: mmc@ff170000 {
+> +			bootph-all;
+>   			compatible = "xlnx,zynqmp-8.9a", "arasan,sdhci-8.9a";
+>   			status = "disabled";
+>   			interrupt-parent = <&gic>;
+> @@ -851,6 +860,7 @@ ttc3: timer@ff140000 {
+>   		};
+>   
+>   		uart0: serial@ff000000 {
+> +			bootph-all;
+>   			compatible = "xlnx,zynqmp-uart", "cdns,uart-r1p12";
+>   			status = "disabled";
+>   			interrupt-parent = <&gic>;
+> @@ -861,6 +871,7 @@ uart0: serial@ff000000 {
+>   		};
+>   
+>   		uart1: serial@ff010000 {
+> +			bootph-all;
+>   			compatible = "xlnx,zynqmp-uart", "cdns,uart-r1p12";
+>   			status = "disabled";
+>   			interrupt-parent = <&gic>;
+> @@ -982,6 +993,7 @@ zynqmp_dpdma: dma-controller@fd4c0000 {
+>   		};
+>   
+>   		zynqmp_dpsub: display@fd4a0000 {
+> +			bootph-all;
+>   			compatible = "xlnx,zynqmp-dpsub-1.7";
+>   			status = "disabled";
+>   			reg = <0x0 0xfd4a0000 0x0 0x1000>,
 
-Sorry for the late reply. Yes it can be reproduced on the upstream kernel (tested below on
-6.4-rc1). Since it happens occasionally with the normal setup, I wrote a test kthread
-with migration enable/disable periodically:
+Applied.
+M
 
-static int workload_func(void *data)
-{
-	cpumask_var_t cpumask;
-	int i;
-
-	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL))
-		return -ENOMEM;
-
-	for (i = 0; i < 8; i++)
-		cpumask_set_cpu(i, cpumask);
-
-	set_cpus_allowed_ptr(current, cpumask);
-	free_cpumask_var(cpumask);	
-
-	while (!kthread_should_stop()) {
-		migrate_disable();
-		mdelay(1000);
-		cond_resched();
-		migrate_enable();
-		mdelay(1000);
-	}
-
-	return -1;
-}
-
-Launching this and bind another workload to the same CPU it's currently running like
-`taskset -c $workload_cpu stress-ng -c 1` will trigger the issue. In fact, the problem
-is not because of the migration disable mechanism which works well, but because the
-balancing policy after found all the tasks on the source CPU are pinned. With below
-debug print added:
-
-@@ -8527,6 +8527,20 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
-        if (kthread_is_per_cpu(p))
-                return 0;
-
-+       if (is_migration_disabled(p)) {
-+               if (!p->on_cpu && cpumask_test_cpu(env->dst_cpu, p->cpus_ptr))
-+                       pr_err("dst_cpu %d on_cpu %d cpus_ptr %*pbl cpus_mask %*pbl",
-+                               env->dst_cpu, p->on_cpu, cpumask_pr_args(p->cpus_ptr),
-+                               cpumask_pr_args(&p->cpus_mask));
-+       }
-+
-        if (!cpumask_test_cpu(env->dst_cpu, p->cpus_ptr)) {
-                int cpu;
-
-I got below output:
-
-[  686.135619] dst_cpu 1 on_cpu 0 cpus_ptr 1 cpus_mask 0-7
-[  686.148809] ------------[ cut here ]------------
-[  686.169505] WARNING: CPU: 64 PID: 0 at kernel/sched/core.c:3210 set_task_cpu+0x190/0x250
-[  686.186537] Modules linked in: kthread_workload(O) bluetooth rfkill xt_CHECKSUM iptable_mangle xt_conntrack ipt_REJECT nf_reject_ipv4 ip6table_filter ip6_tables iptable_filter ib_isert iscsi_target_mod ib_ipoib ib_umad rpcrdma ib_iser libiscsi scsi_transport_iscsi crct10dif_ce hns_roce_hw_v2 arm_spe_pmu sbsa_gwdt sm4_generic sm4 xts ecb hisi_hpre hisi_uncore_l3c_pmu hisi_uncore_hha_pmu hisi_uncore_ddrc_pmu hisi_trng_v2 rng_core hisi_uncore_pmu spi_dw_mmio hisi_zip hisi_sec2 hisi_qm uacce hclge hns3 hnae3 hisi_sas_v3_hw hisi_sas_main libsas [last unloaded: kthread_workload(O)]
-[  686.293937] CPU: 64 PID: 0 Comm: swapper/64 Tainted: G           O       6.4.0-rc1-migration-race-debug+ #24
-[  686.314616] Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B211.01 11/10/2021
-[  686.333285] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  686.347930] pc : set_task_cpu+0x190/0x250
-[...]
-
-It shows that we're going to balance the task to its current CPU (CPU 1) rather than
-the balancer CPU (CPU 64). It's because we're going to find a new dst_cpu if the task
-on the src_cpu is pinned, and the new_dst_cpu happens to be the task's current CPU.
-
-So the right way to solve this maybe avoid selecting the src_cpu as the new_dst_cpu and
-below patch works to solve this issue.
-
-@@ -8550,7 +8564,7 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
-
-                /* Prevent to re-select dst_cpu via env's CPUs: */
-                for_each_cpu_and(cpu, env->dst_grpmask, env->cpus) {
--                       if (cpumask_test_cpu(cpu, p->cpus_ptr)) {
-+                       if (cpumask_test_cpu(cpu, p->cpus_ptr) && cpu != env->src_cpu) {
-                                env->flags |= LBF_DST_PINNED;
-                                env->new_dst_cpu = cpu;
-                                break;
-
-Thanks,
-Yicong
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
+TF-A maintainer - Xilinx ZynqMP/Versal/Versal NET SoCs
 
