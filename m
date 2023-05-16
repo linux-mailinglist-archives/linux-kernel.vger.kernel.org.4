@@ -2,199 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5F5704C56
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2801704C5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjEPL1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S232927AbjEPLbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjEPL1U (ORCPT
+        with ESMTP id S232007AbjEPLbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:27:20 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3617940EE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:27:14 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id CD4207F8E;
-        Tue, 16 May 2023 19:27:11 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 16 May
- 2023 19:27:11 +0800
-Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 16 May
- 2023 19:27:11 +0800
-Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
- EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
- 15.00.1497.044; Tue, 16 May 2023 19:27:11 +0800
-From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-CC:     Song Shuai <suagrfillet@gmail.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "palmer@rivosinc.com" <palmer@rivosinc.com>,
-        "Leyfoon Tan" <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: Bug report: kernel paniced when system hibernates
-Thread-Topic: Bug report: kernel paniced when system hibernates
-Thread-Index: AQHZh9g1UxpK4+O/SUareMzY680B/K9cp3zQ//+SAICAAIakoA==
-Date:   Tue, 16 May 2023 11:27:10 +0000
-Message-ID: <7578a14b360542159ee360482e7cc579@EXMBX066.cuchost.com>
-References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
- <5902235c8f5046be9cbd7411955ec43e@EXMBX066.cuchost.com>
- <CAHVXubg-v=Xe4LQ-bTbf3=FN4cpdBU+xrX7qm8GnUNrmvKDkSQ@mail.gmail.com>
-In-Reply-To: <CAHVXubg-v=Xe4LQ-bTbf3=FN4cpdBU+xrX7qm8GnUNrmvKDkSQ@mail.gmail.com>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [60.53.70.89]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 16 May 2023 07:31:08 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0EFA3;
+        Tue, 16 May 2023 04:31:06 -0700 (PDT)
+Received: from localhost ([31.220.116.19]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MjSLi-1qR1tm3nb8-00kxiO; Tue, 16 May 2023 13:30:45 +0200
+Date:   Tue, 16 May 2023 13:30:44 +0200
+From:   Andreas Klinger <ak@it-klinger.de>
+To:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] Support Honeywell mprls0025pa pressure sensor
+Message-ID: <ZGNpZM137jF5yzie@arbad>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:cuJ/hjWHsow+mdx6wrGYPyytnGBpB+Zd0/DOI6U/oIqhk9jvo4f
+ PAh4zEOTYkpDhpsI7JesdcNb410QJHZVy3Bf03BNhj6ULjj2flxCdO7DCHfUdDMOpwom98S
+ zux/oE3/XO+yhjUryFKsZgAFL7ApNpG+r0XW2qLC9Legj9N6BvGpqe+jw/YtzVyoOm1/Rbr
+ wotpPhcxJ9qdXHVWVFr+Q==
+UI-OutboundReport: notjunk:1;M01:P0:6fCnHimARAE=;Dmk1XRyKRN34Tnn2XfwUIfchPpF
+ u+DpNpUbFuscVUq4EIC+fmsB05VIO1nc5qWyS6R0CZZAj+X/sfRmUG7Ord2kWSpaued4sh6lL
+ jEZA3Ukncozm696ybyqFQ/v0z7zka+XcZMZSbjyGQZ29B6swz7WXuapTGLULTARWIr3FNTkkz
+ PymiccSfd4+SbsOL7y/FNO9WQnlwfYY1tgYsFySpOXZ910BNe9p+Bfa9mAeXW/ZMKRnEU5pmj
+ LdkBGQPh4iT0SSab3xaRO1ndNwOE8QIjwCa+CFXLeO2qw6Rj55QmBygWKHch+TL2O/ZHokhG+
+ NX5jkI9TKyysox6Xkys6L1XHh9bDpLJstk2IG/Ie2NKyEMfUbSnqDW85hjDVx+sQ3pZD9JyvT
+ RybjfSMdnxnZSG/nvsNIZbBB/XALnJND7qeQEUwdzmekf1ULbOgQhfbvzs+rd9aBfEWGxEH2N
+ zOmpN8XxLMpm8SBhtb2pjl+Dob8obQuKcq7Mgy94xUiT4aisvP3DjZXXPx5kgOnKIAxeYwi1t
+ dH4GSW5J+D79SxKuB/rxxDcCgNnWknYXMQCvAT23v42IaA30cGI3NIDqyNao4Q66zSdJw4cjy
+ W69xHADnhtNeg3aXVbBfEOT+V5DO+M+iGSmtH+3OyZ7h3nQzced0UFGpIhcdRNgPXQnAD4KL+
+ iTWAUY/PSFogSRrV6te/mk3eJ2wFiSnaxqSgmK+f/g==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQWxleGFuZHJlIEdoaXRp
-IDxhbGV4Z2hpdGlAcml2b3NpbmMuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBNYXkgMTYsIDIwMjMg
-NzoxNSBQTQ0KPiBUbzogSmVlSGVuZyBTaWEgPGplZWhlbmcuc2lhQHN0YXJmaXZldGVjaC5jb20+
-DQo+IENjOiBTb25nIFNodWFpIDxzdWFncmZpbGxldEBnbWFpbC5jb20+OyByb2JoQGtlcm5lbC5v
-cmc7IEFuZHJldyBKb25lcyA8YWpvbmVzQHZlbnRhbmFtaWNyby5jb20+OyBhbnVwQGJyYWluZmF1
-bHQub3JnOw0KPiBwYWxtZXJAcml2b3NpbmMuY29tOyBMZXlmb29uIFRhbiA8bGV5Zm9vbi50YW5A
-c3RhcmZpdmV0ZWNoLmNvbT47IE1hc29uIEh1byA8bWFzb24uaHVvQHN0YXJmaXZldGVjaC5jb20+
-OyBQYXVsIFdhbG1zbGV5DQo+IDxwYXVsLndhbG1zbGV5QHNpZml2ZS5jb20+OyBDb25vciBEb29s
-ZXkgPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPjsgR3VvIFJlbiA8Z3VvcmVuQGtlcm5lbC5v
-cmc+OyBsaW51eC0NCj4gcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2VybmVsQHZn
-ZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogQnVnIHJlcG9ydDoga2VybmVsIHBhbmljZWQg
-d2hlbiBzeXN0ZW0gaGliZXJuYXRlcw0KPiANCj4gSGkgSmVlSGVuZywNCj4gDQo+IE9uIFR1ZSwg
-TWF5IDE2LCAyMDIzIGF0IDExOjU14oCvQU0gSmVlSGVuZyBTaWENCj4gPGplZWhlbmcuc2lhQHN0
-YXJmaXZldGVjaC5jb20+IHdyb3RlOg0KPiA+DQo+ID4gSGkgU29uZywNCj4gPg0KPiA+IFRoYW5r
-cyBmb3IgdGhlIGludmVzdGlnYXRpb24uIEluZGVlZCwgdGhlIGV4cG9zdXJlIG9mIHRoZSBQTVAg
-cmVzZXJ2ZWQgcmVnaW9uIHRvIHRoZSBrZXJuZWwgcGFnZSB0YWJsZSBpcyBjYXVzaW5nIHRoZSBw
-cm9ibGVtLg0KPiA+IEhlcmUgaXMgdGhlIHNpbWlsYXIgcmVwb3J0OiBodHRwczovL2dyb3Vwcy5n
-b29nbGUuY29tL3UvMC9hL2dyb3Vwcy5yaXNjdi5vcmcvZy9zdy1kZXYvYy9JVFh3YUtmQTZ6OA0K
-PiANCj4gSU1PLCB3ZSBzaG91bGQgZGlzY3VzcyB0aGUga2VybmVsIHJlbGF0ZWQgc3R1ZmYgb24g
-dGhlIGxpbnV4IHJpc2N2IE1MLA0KPiBJJ20gbm90IHN1YnNjcmliZWQgdG8gdGhlIGdyb3VwIGFi
-b3ZlIGFuZCB5b3UgZGlkIG5vdCBhbnN3ZXIgbXkgbGFzdA0KPiBkaXJlY3QgZW1haWxzIHJlZ2Fy
-ZGluZyB0aGlzIHByb2JsZW0gZWl0aGVyLg0KSGkgQWxleCwgaXQncyBzdHJhbmdlIHRoYXQgSSBo
-YXZlbid0IHJlY2VpdmVkIGEgcmVwbHkgZnJvbSB5b3UuIFNlZW1zIGxpa2UgSSBoYXZlIGZvcmdv
-dCB0byB1cGRhdGUgdG8gdGhlIG1haWxpbmcgbGlzdC4NCkJ5IHRoZSB3YXksIHRoZSByZWFzb24g
-aGliZXJuYXRpb24gZmFpbGVkIHdpdGggdGhlIHJlY2VudCBwYWdlIHRhYmxlIGlzIGJlY2F1c2Ug
-ZHVyaW5nIHRoZSBpbml0aWF0aW9uIG9mIHRoZSBoaWJlcm5hdGlvbiBwcm9jZXNzLCB0aGUgaGli
-ZXJuYXRpb24gY29yZSBhY2Nlc3NlcyB0aGUgcGFnZSB0YWJsZSB0byBjaGVjayBpZiB0aGUgcGFn
-ZSBjYW4gYmUgc2F2ZWQuIFNpbmNlIHRoZSBwYWdlIGlzIHJlc2VydmVkIGFuZCBpcyBhdmFpbGFi
-bGUgdG8gdGhlIHBhZ2UgdGFibGUsIHRoZSBrZXJuZWwgdHJpZXMgdG8gYWNjZXNzIHRoZSBQTVAg
-cmVnaW9uLCB3aGljaCBjYXVzZXMgYSBrZXJuZWwgcGFuaWMuIFRoZSBjb2RlIGNhbiBiZSBmb3Vu
-ZCB1bmRlcjoNCi9rZXJuZWwvcG93ZXIvc25hcHNob3QuYy8gbGluZSAjMTM0MA0KaWYgKFBhZ2VS
-ZXNlcnZlZChwYWdlKSAmJiAoIWtlcm5lbF9wYWdlX3ByZXNlbnQocGFnZSkgfHwgcGZuX2lzX25v
-c2F2ZShwZm4pKSkNCklmIHRoZSB2aXJ0dWFsIG1lbW9yeSBpcyBtYXBwZWQgdG8gdGhlIGtlcm5l
-bCBwYWdlIHRhYmxlLCB0aGVuIGhpYmVybmF0aW9uIGNvcmUgd2lsbCB0cnkgdG8gYWNjZXNzIHRo
-ZSBwYWdlLg0KDQo+IFRoYW5rcywNCj4gDQo+IEFsZXgNCj4gDQo+ID4NCj4gPiBUaGFua3MNCj4g
-PiBSZWdhcmRzDQo+ID4gSmVlIEhlbmcNCj4gPg0KPiA+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdl
-LS0tLS0NCj4gPiA+IEZyb206IFNvbmcgU2h1YWkgPHN1YWdyZmlsbGV0QGdtYWlsLmNvbT4NCj4g
-PiA+IFNlbnQ6IFR1ZXNkYXksIE1heSAxNiwgMjAyMyA1OjI0IFBNDQo+ID4gPiBUbzogYWxleGdo
-aXRpQHJpdm9zaW5jLmNvbTsgcm9iaEBrZXJuZWwub3JnOyBBbmRyZXcgSm9uZXMgPGFqb25lc0B2
-ZW50YW5hbWljcm8uY29tPjsgYW51cEBicmFpbmZhdWx0Lm9yZzsNCj4gPiA+IHBhbG1lckByaXZv
-c2luYy5jb207IEplZUhlbmcgU2lhIDxqZWVoZW5nLnNpYUBzdGFyZml2ZXRlY2guY29tPjsgTGV5
-Zm9vbiBUYW4gPGxleWZvb24udGFuQHN0YXJmaXZldGVjaC5jb20+OyBNYXNvbiBIdW8NCj4gPiA+
-IDxtYXNvbi5odW9Ac3RhcmZpdmV0ZWNoLmNvbT47IFBhdWwgV2FsbXNsZXkgPHBhdWwud2FsbXNs
-ZXlAc2lmaXZlLmNvbT47IENvbm9yIERvb2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+
-Ow0KPiBHdW8NCj4gPiA+IFJlbiA8Z3VvcmVuQGtlcm5lbC5vcmc+DQo+ID4gPiBDYzogbGludXgt
-cmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0K
-PiA+ID4gU3ViamVjdDogQnVnIHJlcG9ydDoga2VybmVsIHBhbmljZWQgd2hlbiBzeXN0ZW0gaGli
-ZXJuYXRlcw0KPiA+ID4NCj4gPiA+IERlc2NyaXB0aW9uIG9mIHByb2JsZW06DQo+ID4gPg0KPiA+
-ID4gVGhlIGxhdGVzdCBoaWJlcm5hdGlvbiBzdXBwb3J0WzFdIG9mIFJJU0MtViBMaW51eCBwcm9k
-dWNlZCBhIGtlcm5lbCBwYW5pYy4NCj4gPiA+IFRoZSBlbnRpcmUgbG9nIGhhcyBiZWVuIHBvc3Rl
-ZCBhdCB0aGlzIGxpbms6IGh0dHBzOi8vdGVybWJpbi5jb20vc3BobCAuDQo+ID4gPg0KPiA+ID4g
-SG93IHJlcHJvZHVjaWJsZToNCj4gPiA+DQo+ID4gPiBZb3UgY2FuIHJlcHJvZHVjZSBpdCB3aXRo
-IHRoZSBmb2xsb3dpbmcgc3RlcCA6DQo+ID4gPg0KPiA+ID4gMS4gcHJlcGFyZSB0aGUgZW52aXJv
-bm1lbnQgd2l0aA0KPiA+ID4gLSBRZW11LXZpcnQgdjguMC4wICh3aXRoIE9wZW5TYmkgdjEuMikN
-Cj4gPiA+IC0gTGludXggdjYuNC1yYzENCj4gPiA+DQo+ID4gPiAyLiBzdGFydCB0aGUgUWVtdSB2
-aXJ0DQo+ID4gPiBgYGBzaA0KPiA+ID4gJCBjYXQgfi84X3Jpc2N2L3N0YXJ0X2xhdGVzdC5zaA0K
-PiA+ID4gIyEvYmluL2Jhc2gNCj4gPiA+IC9ob21lL3NvbmcvOF9yaXNjdi8zX2FjcGkvcWVtdS9v
-b28vdXNyL2xvY2FsL2Jpbi9xZW11LXN5c3RlbS1yaXNjdjY0IFwNCj4gPiA+IC1zbXAgMiAtbSA0
-RyAtbm9ncmFwaGljIC1tYWNoaW5lIHZpcnQgXA0KPiA+ID4gLWtlcm5lbCAvaG9tZS9zb25nLzlf
-bGludXgvbGludXgvMDBfcnZfdGVzdC9hcmNoL3Jpc2N2L2Jvb3QvSW1hZ2UgXA0KPiA+ID4gLWFw
-cGVuZCAicm9vdD0vZGV2L3ZkYSBybyBlYXlseWNvbj11YXJ0ODI1MCxtbWlvLDB4MTAwMDAwMDAN
-Cj4gPiA+IGVhcmx5X2lvcmVtYXBfZGVidWcgY29uc29sZT10dHlTMCBsb2dsZXZlbD04IG1lbWJs
-b2NrPWRlYnVnDQo+ID4gPiBub19jb25zb2xlX3N1c3BlbmQgYXVkaXQ9MCAzIiBcDQo+ID4gPiAt
-ZHJpdmUgZmlsZT0vaG9tZS9zb25nLzhfcmlzY3YvZmVkb3JhL3N0YWdlNC1kaXNrLmltZyxmb3Jt
-YXQ9cmF3LGlkPWhkMCBcDQo+ID4gPiAtZGV2aWNlIHZpcnRpby1ibGstZGV2aWNlLGRyaXZlPWhk
-MCBcDQo+ID4gPiAtZHJpdmUgZmlsZT0vaG9tZS9zb25nLzhfcmlzY3YvZmVkb3JhL2FkaXNrLnFj
-b3cyLGZvcm1hdD1xY293MixpZD1oZDEgXA0KPiA+ID4gLWRldmljZSB2aXJ0aW8tYmxrLWRldmlj
-ZSxkcml2ZT1oZDEgXA0KPiA+ID4gLWdkYiB0Y3A6OjEyMzYgIy1TDQo+ID4gPiBgYGANCj4gPiA+
-IDMuIGV4ZWN1dGUgaGliZXJuYXRpb24NCj4gPiA+DQo+ID4gPiBgYGBzaA0KPiA+ID4gc3dhcG9u
-IC9kZXYvdmRiMiAjIHRoaXMgaXMgbXkgc3dhcCBkaXNrDQo+ID4gPg0KPiA+ID4gZWNobyBkaXNr
-ID4gL3N5cy9wb3dlci9zdGF0ZQ0KPiA+ID4gYGBgDQo+ID4gPg0KPiA+ID4gNC4gVGhlbiB5b3Ug
-d2lsbCBlbmNvdW50ZXIgdGhlIGtlcm5lbCBwYW5pYyBsb2dnZWQgaW4gdGhlIGFib3ZlIGxpbmsN
-Cj4gPiA+DQo+ID4gPg0KPiA+ID4gT3RoZXIgSW5mb3JtYXRpb246DQo+ID4gPg0KPiA+ID4gQWZ0
-ZXIgbXkgaW5pdGlhbCBhbmQgaW5jb21wbGV0ZSBkaWctdXAsIHRoZSBjb21taXQgKDMzMzUwNjhm
-ODcyMQ0KPiA+ID4gInJpc2N2OiBVc2UgUFVEL1A0RC9QR0QgcGFnZXMgZm9yIHRoZSBsaW5lYXIg
-bWFwcGluZyIpWzJdDQo+ID4gPiBpcyBjbG9zZWx5IHJlbGF0ZWQgdG8gdGhpcyBwYW5pYy4gVGhp
-cyBjb21taXQgdXNlcyByZS1kZWZpbmVkDQo+ID4gPiBgTUlOX01FTUJMT0NLX0FERFJgIHRvIGRp
-c2NvdmVyIHRoZSBlbnRpcmUgc3lzdGVtIG1lbW9yeQ0KPiA+ID4gYW5kIGV4dGVuZHMgdGhlIGB2
-YV9wYV9vZmZzZXRgIGZyb20gYGtlcm5lbF9tYXAucGh5c19hZGRyYCB0bw0KPiA+ID4gYHBoeXNf
-cmFtX2Jhc2VgIGZvciBsaW5lYXIgbWVtb3J5IG1hcHBpbmcuDQo+ID4gPg0KPiA+ID4gSWYgdGhl
-IGZpcm13YXJlIGRlbGl2ZXJlZCB0aGUgZmlybXdhcmUgbWVtb3J5IHJlZ2lvbiAobGlrZTogYSBQ
-TVANCj4gPiA+IHByb3RlY3RlZCByZWdpb24gaW4gT3BlblNiaSkgd2l0aG91dCAibm8tbWFwIiBw
-cm9wcmlldHksDQo+ID4gPiB0aGlzIGNvbW1pdCB3aWxsIHJlc3VsdCBpbiBmaXJtd2FyZSBtZW1v
-cnkgYmVpbmcgZGlyZWN0bHkgbWFwcGVkIGJ5DQo+ID4gPiBgY3JlYXRlX2xpbmVhcl9tYXBwaW5n
-X3BhZ2VfdGFibGUoKWAuDQo+ID4gPg0KPiA+ID4gV2UgY2FuIHNlZSB0aGUgbWFwcGluZyB2aWEg
-cHRkdW1wIDoNCj4gPiA+IGBgYGMNCj4gPiA+IC0tLVsgTGluZWFyIG1hcHBpbmcgXS0tLQ0KPiA+
-ID4gMHhmZjYwMDAwMDAwMDAwMDAwLTB4ZmY2MDAwMDAwMDIwMDAwMCAweDAwMDAwMDAwODAwMDAw
-MDAgMk0gUE1EIEQgQSBHDQo+ID4gPiAuIC4gVyBSIFYgLS0tLS0tLS0tLS0tLSB0aGUgZmlybXdh
-cmUgbWVtb3J5DQo+ID4gPiAweGZmNjAwMDAwMDAyMDAwMDAtMHhmZjYwMDAwMDAwYzAwMDAwIDB4
-MDAwMDAwMDA4MDIwMDAwMCAxME0gUE1EIEQgQSBHIC4gLiAuIFIgVg0KPiA+ID4gMHhmZjYwMDAw
-MDAwYzAwMDAwLTB4ZmY2MDAwMDAwMTAwMDAwMCAweDAwMDAwMDAwODBjMDAwMDAgNE0gUE1EIEQg
-QSBHIC4gLiBXIFIgVg0KPiA+ID4gMHhmZjYwMDAwMDAxMDAwMDAwLTB4ZmY2MDAwMDAwMTYwMDAw
-MCAweDAwMDAwMDAwODEwMDAwMDAgNk0gUE1EIEQgQSBHIC4gLiAuIFIgVg0KPiA+ID4gMHhmZjYw
-MDAwMDAxNjAwMDAwLTB4ZmY2MDAwMDA0MDAwMDAwMCAweDAwMDAwMDAwODE2MDAwMDAgMTAwMk0g
-UE1EIEQgQQ0KPiA+ID4gRyAuIC4gVyBSIFYNCj4gPiA+IDB4ZmY2MDAwMDA0MDAwMDAwMC0weGZm
-NjAwMDAxMDAwMDAwMDAgMHgwMDAwMDAwMGMwMDAwMDAwIDNHIFBVRCBEIEEgRyAuIC4gVyBSIFYN
-Cj4gPiA+IC0tLVsgTW9kdWxlcy9CUEYgbWFwcGluZyBdLS0tDQo+ID4gPiAtLS1bIEtlcm5lbCBt
-YXBwaW5nIF0tLS0NCj4gPiA+IDB4ZmZmZmZmZmY4MDAwMDAwMC0weGZmZmZmZmZmODBhMDAwMDAg
-MHgwMDAwMDAwMDgwMjAwMDAwIDEwTSBQTUQgRCBBIEcgLiBYIC4gUiBWDQo+ID4gPiAweGZmZmZm
-ZmZmODBhMDAwMDAtMHhmZmZmZmZmZjgwYzAwMDAwIDB4MDAwMDAwMDA4MGMwMDAwMCAyTSBQTUQg
-RCBBIEcgLiAuIC4gUiBWDQo+ID4gPiAweGZmZmZmZmZmODBjMDAwMDAtMHhmZmZmZmZmZjgwZTAw
-MDAwIDB4MDAwMDAwMDA4MGUwMDAwMCAyTSBQTUQgRCBBIEcgLiAuIFcgUiBWDQo+ID4gPiAweGZm
-ZmZmZmZmODBlMDAwMDAtMHhmZmZmZmZmZjgxNDAwMDAwIDB4MDAwMDAwMDA4MTAwMDAwMCA2TSBQ
-TUQgRCBBIEcgLiAuIC4gUiBWDQo+ID4gPiAweGZmZmZmZmZmODE0MDAwMDAtMHhmZmZmZmZmZjgx
-ODAwMDAwIDB4MDAwMDAwMDA4MTYwMDAwMCA0TSBQTUQNCj4gPiA+IGBgYA0KPiA+ID4NCj4gPiA+
-IEluIHRoZSBoaWJlcm5hdGlvbiBwcm9jZXNzLCBgc3dzdXNwX3NhdmUoKWAgY2FsbHMNCj4gPiA+
-IGBjb3B5X2RhdGFfcGFnZXMoJmNvcHlfYm0sICZvcmlnX2JtKWAgdG8gY29weSB0aGVzZSB0d28g
-bWVtb3J5DQo+ID4gPiBiaXRtYXBzLA0KPiA+ID4gdGhlIE9vcHMobG9hZCBhY2Nlc3MgZmF1bHQp
-IG9jY3VycmVkIHdoaWxlIGNvcHlpbmcgdGhlIHBhZ2Ugb2YNCj4gPiA+IFBBR0VfT0ZGU0VUICh3
-aGljaCBtYXBzIHRoZSBmaXJtd2FyZSBtZW1vcnkpLg0KPiA+ID4NCj4gPiA+IEkgYWxzbyBkaWQg
-dHdvIG90aGVyIHRlc3RzOg0KPiA+ID4gVGVzdDE6DQo+ID4gPg0KPiA+ID4gVGhlIGhpYmVybmF0
-aW9uIHdvcmtzIHdlbGwgaW4gdGhlIGtlcm5lbCB3aXRoIHRoZSBjb21taXQgMzMzNTA2OGY4NzIx
-DQo+ID4gPiByZXZlcnRlZCBhdCBsZWFzdCBpbiB0aGUgY3VycmVudCBlbnZpcm9ubWVudC4NCj4g
-PiA+DQo+ID4gPiBUZXN0MjoNCj4gPiA+DQo+ID4gPiBJIGJ1aWx0IGEgc2ltcGxlIGtlcm5lbCBt
-b2R1bGUgdG8gc2ltdWxhdGUgdGhlIGFjY2VzcyBvZiB0aGUgdmFsdWUgb2YNCj4gPiA+IGBQQUdF
-X09GRlNFVGAgYWRkcmVzcywgYW5kIHRoZSBzYW1lIHBhbmljIG9jY3VycmVkIHdpdGggdGhlIGxv
-YWQNCj4gPiA+IGFjY2VzcyBmYXVsdC4NCj4gPiA+IFNvIGhpYmVybmF0aW9uIHNlZW1zIG5vdCB0
-aGUgb25seSBjYXNlIHRvIHRyaWdnZXIgdGhpcyBwYW5pYy4NCj4gPiA+DQo+ID4gPiBGaW5hbGx5
-LCBzaG91bGQgd2UgYWx3YXlzIGxlYXZlIHRoZSBmaXJtd2FyZSBtZW1vcnkgd2l0aA0KPiA+ID4g
-YE1FTUJMT0NLX05PTUFQYCBmbGFnIGJ5IHNvbWUgZWZmb3J0cyBmcm9tIExpbnV4IG9yIE9wZW5T
-YmkgKGF0IGxlYXN0DQo+ID4gPiBpbiB0aGUgY3VycmVudCBlbnZpcm9ubWVudCkgb3IgYW55IG90
-aGVyIHN1Z2dlc3Rpb25zPw0KPiA+ID4NCj4gPiA+IFBsZWFzZSBjb3JyZWN0IG1lIGlmIEknbSB3
-cm9uZy4NCj4gPiA+DQo+ID4gPiBbMV06IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3IvMjAyMzAz
-MzAwNjQzMjEuMTAwODM3My01LWplZWhlbmcuc2lhQHN0YXJmaXZldGVjaC5jb20NCj4gPiA+IFsy
-XTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIzMDMyNDE1NTQyMS4yNzE1NDQtNC1hbGV4
-Z2hpdGlAcml2b3NpbmMuY29tDQo+ID4gPg0KPiA+ID4gLS0NCj4gPiA+IFRoYW5rcywNCj4gPiA+
-IFNvbmcNCg==
+Support Honeywell mprls0025pa pressure sensor.
+
+This patch series adds support for Honeywell mprls0025pa pressure sensor series.
+There are a variety of sensors with different pressure ranges supported.
+
+Changes in v5:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - add Reviewd-by tag
+  - preserve formating in description
+- Patch 2: "iio: pressure: Honeywell mprls0025pa pressure sensor"
+  - make use of div_s64_rem()
+  - document calculation
+  - reorder includes
+  - use NANO from units.h
+- Patch 3: "MAINTAINERS: Add Honeywell mprls0025pa sensor"
+  - no changes
+
+Changes in v4:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - change line length to 80 characters
+  - make vdd-supply mandatory
+- Patch 2: "iio: pressure: Honeywell mprls0025pa pressure sensor"
+  - change line length to 80 characters
+  - change regulator vcc to devm_regulator_get_enable()
+  - switch to probe_new
+  - many changes from the review
+- Patch 3: "MAINTAINERS: Add Honeywell mprls0025pa sensor"
+  - no changes
+
+Changes in v3:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - fix errors while doing dt_binding_check
+  - add vdd-supply
+- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
+  - change to _RAW interface
+  - add transfer function
+  - add regulator
+  - move to device_property_xxx functions
+  - many more changes from the feedbacks
+- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
+  - change file names
+
+Changes in v2:
+- Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
+  - change the global sensor decription of mpr to the specific sensor
+    mprls0025pa
+  - change compatible string
+  - rename the file to honeywell,mprls0025pa.yaml
+  - honeywell,pmin-pascal and honeywell,pmax-pascal: add unit pascal to property
+    names 
+  - add new property honeywell,transfer-function
+- Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
+  - no change so far
+  - will be changed and send out as new version when the dt definition is
+    settled down
+- Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
+  - no change so far
+
+Andreas Klinger (3):
+  dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor
+  iio: pressure: Honeywell mprls0025pa pressure sensor
+  MAINTAINERS: Add Honeywell mprls0025pa sensor
+
+ .../iio/pressure/honeywell,mprls0025pa.yaml   | 104 ++++
+ MAINTAINERS                                   |   7 +
+ drivers/iio/pressure/Kconfig                  |  13 +
+ drivers/iio/pressure/Makefile                 |   1 +
+ drivers/iio/pressure/mprls0025pa.c            | 450 ++++++++++++++++++
+ 5 files changed, 575 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
+ create mode 100644 drivers/iio/pressure/mprls0025pa.c
+
+
+base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
+-- 
+2.30.2
