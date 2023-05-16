@@ -2,166 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2112B70593A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC0070593E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 23:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjEPVBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 17:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36402 "EHLO
+        id S230264AbjEPVCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 17:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjEPVBu (ORCPT
+        with ESMTP id S230191AbjEPVCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 17:01:50 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D4630E0;
-        Tue, 16 May 2023 14:01:49 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GKpQGe012395;
-        Tue, 16 May 2023 21:01:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=ttVoZ1MTEot2EPQSmKoMu+nXb5zpPDeIHDthXMvspNo=;
- b=FBcQfqeJBsI+MboplIbzkrfIBX1AejVskGWwzf7r17VRKGdeQYNIudS8mz1Bec/Ff0+r
- 0HkSv/hjOp6NZhw0VmiEPxS99y2FCFJp+QS/92z7OWCjga4MRWCiFczRyCDysfySYnM+
- IPJF346rK4fRRn/YcnsK8F+LXkObl7FiqDOrRfxAnZ+YLVhHIU2G6KLu8pMI4uHoTKd3
- dGOc3dSXxx0KNGbreL2Hcs4Xr8JbolaO8/hJMy27tJbd/jKFzxyATg9hGjLv/q0uudFY
- x926siKwiy1i5NIXSYVETKCx3qqzaOtxczOZWOdH9bk3otpwCyufxdDGIpqa5yqmD6I+ HA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmcc60mvq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 21:01:45 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34GL1jo5019058
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 21:01:45 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 16 May 2023 14:01:44 -0700
-Date:   Tue, 16 May 2023 14:01:43 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Flush RSC sleep & wake votes
-Message-ID: <20230516210143.GB606695@hu-bjorande-lv.qualcomm.com>
-References: <20230512150425.3171122-1-quic_bjorande@quicinc.com>
- <f6ecd66b-e207-0ed9-0ff3-1febfdf5bce9@linaro.org>
- <20230515023828.jqrrqkit5ygovimp@ripper>
- <1ecd0cba-296e-b036-f59e-f679c771ae9f@linaro.org>
+        Tue, 16 May 2023 17:02:14 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679247292
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:02:13 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ab032d9266so1521885ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 14:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684270933; x=1686862933;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e4gb25Ei0JSEmyaarjaFRwAmoHZeJNXvUZ7mQGmJMkM=;
+        b=KtyRC9F1fE4nz8CrqDbA2xaYHOUBWDoNH74nB2uDcEebJO2VwplriHX7LlB09nU3G6
+         YEGNUg62dGFEI4no7AG3GW9J9lI/ZY4XPoDo6M0Rkq8hKgaouJ+v7vi0a45NctboVC/I
+         NSeJx6HcEkLywbA2pd4HCmOIKTzRc699Uyuv0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684270933; x=1686862933;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e4gb25Ei0JSEmyaarjaFRwAmoHZeJNXvUZ7mQGmJMkM=;
+        b=cDQ/hfimitCD8diNlGBna3pguWs73hWS7+vowPyPDIw+dy/lgo3yu/f+mj6sEYiCsT
+         W1FO7aa5VfTYSZ8kjnrE5i9ehgtAO0ZhXhyPlGv09ttvZe5Exy7GixxNu3lW6BZsWKdX
+         uZYsV+TcZP1frWtxA1ebUB/7fqUrubnb2CKjZeQB0Wc0KC3YRpKKySdbm8VBD3o4w173
+         /5HA4x/zd0vi6Ei0UiHg4Wzs1rLbyeETzT+cjJvVAfwsbjdnMf6X7mna5ySMwXW16Uix
+         U61+SiPOiz1sObdtvx/d7uogooaOFwSSGO9hvcBSTK4cQ+92Hrm0v4oqBdIZ+oXseAPp
+         LMpA==
+X-Gm-Message-State: AC+VfDxhASzqNu1Ar1vEYXm0rZTVX7/Nfx0nFA2qqFR20fpGyNqiOvpk
+        2kA/LjjpYOTy8TuVesQs5C6R8w==
+X-Google-Smtp-Source: ACHHUZ7KotVRk+nJvBcqkyJKzbRGNTueF40ja0SXderHguWoH0vVOUylN9pvJx4d8nNrjCwTTD4G+g==
+X-Received: by 2002:a17:902:e545:b0:1ac:544c:12f4 with SMTP id n5-20020a170902e54500b001ac544c12f4mr45522015plf.2.1684270932915;
+        Tue, 16 May 2023 14:02:12 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id ji1-20020a170903324100b001a9b7584824sm15940769plb.159.2023.05.16.14.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 14:02:12 -0700 (PDT)
+Date:   Tue, 16 May 2023 14:02:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <202305161401.F1E3ACFAC@keescook>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+ <202305111525.67001E5C4@keescook>
+ <ZF6Ibvi8U9B+mV1d@moria.home.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1ecd0cba-296e-b036-f59e-f679c771ae9f@linaro.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FFoqmScspeWgJR1o5ov0jG0IZPJyt6jr
-X-Proofpoint-ORIG-GUID: FFoqmScspeWgJR1o5ov0jG0IZPJyt6jr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_12,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- phishscore=0 suspectscore=0 mlxscore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160178
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZF6Ibvi8U9B+mV1d@moria.home.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 11:34:45AM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 15.05.2023 04:38, Bjorn Andersson wrote:
-> > On Sat, May 13, 2023 at 11:09:07AM +0200, Konrad Dybcio wrote:
-> >>
-> >>
-> >> On 12.05.2023 17:04, Bjorn Andersson wrote:
-> >>> The rpmh driver will cache sleep and wake votes until the cluster
-> >>> power-domain is about to enter idle, to avoid unnecessary writes. So
-> >>> associate the apps_rsc with the cluster pd, so that it can be notified
-> >>> about this event.
-> >>>
-> >>> Without this, only AMC votes are being commited.
-> >> Ouch.
-> >>
-> >> Should we make this required: in bindings and add it to all
-> >> platforms?
-> >>
+On Fri, May 12, 2023 at 02:41:50PM -0400, Kent Overstreet wrote:
+> On Thu, May 11, 2023 at 03:28:40PM -0700, Kees Cook wrote:
+> > On Wed, May 10, 2023 at 03:05:48PM +0000, Johannes Thumshirn wrote:
+> > > On 09.05.23 18:56, Kent Overstreet wrote:
+> > > > +/**
+> > > > + * vmalloc_exec - allocate virtually contiguous, executable memory
+> > > > + * @size:	  allocation size
+> > > > + *
+> > > > + * Kernel-internal function to allocate enough pages to cover @size
+> > > > + * the page level allocator and map them into contiguous and
+> > > > + * executable kernel virtual space.
+> > > > + *
+> > > > + * For tight control over page level allocator and protection flags
+> > > > + * use __vmalloc() instead.
+> > > > + *
+> > > > + * Return: pointer to the allocated memory or %NULL on error
+> > > > + */
+> > > > +void *vmalloc_exec(unsigned long size, gfp_t gfp_mask)
+> > > > +{
+> > > > +	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> > > > +			gfp_mask, PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS,
+> > > > +			NUMA_NO_NODE, __builtin_return_address(0));
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(vmalloc_exec);
+> > > 
+> > > Uh W+X memory reagions.
+> > > The 90s called, they want their shellcode back.
 > > 
-> > I though this was an optimization and in the absence of this callback
-> > the driver would just write out wake and sleep sets as well. But per the
-> > current implementation (and perhaps some underlying cause?) it is indeed
-> > required, if you care about power consumption.
-> Hm.. since it's not strictly required for operation, would something
-> like this be fitting?:
-> 
-
-I don't think it's required for operation, but the current
-implementation does require it.
-
-So I think we should either require it in the binding to mimic the
-implementation, or the implementation should handle either case (only
-with a performance impact)
-
-> oneOf:
->   - required:
->       [...]
->       - power-domains
-> 
->   - required:
->       [...]
->     deprecated: true
-> 
-> (if it even works this way)
-
-I don't think it's worth supporting the combinations.
-
-Regards,
-Bjorn
-
-> 
-> Konrad
+> > Just to clarify: the kernel must never create W+X memory regions. So,
+> > no, do not reintroduce vmalloc_exec().
 > > 
-> >>>
-> >>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> >>> ---
-> >> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
-> >>
-> > 
-> > The Fixes sounds reasonable.
-> > 
-> > Thanks,
-> > Bjorn
-> > 
-> >> Konrad
-> >>>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 +
-> >>>  1 file changed, 1 insertion(+)
-> >>>
-> >>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> >>> index 8fa9fbfe5d00..5c68f2182c2f 100644
-> >>> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> >>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> >>> @@ -3982,6 +3982,7 @@ apps_rsc: rsc@18200000 {
-> >>>  			qcom,tcs-config = <ACTIVE_TCS  2>, <SLEEP_TCS   3>,
-> >>>  					  <WAKE_TCS    3>, <CONTROL_TCS 1>;
-> >>>  			label = "apps_rsc";
-> >>> +			power-domains = <&CLUSTER_PD>;
-> >>>  
-> >>>  			apps_bcm_voter: bcm-voter {
-> >>>  				compatible = "qcom,bcm-voter";
+> > Dynamic code areas need to be constructed in a non-executable memory,
+> > then switched to read-only and verified to still be what was expected,
+> > and only then made executable.
+> 
+> So if we're opening this up to the topic if what an acceptible API would
+> look like - how hard is this requirement?
+> 
+> The reason is that the functions we're constructing are only ~50 bytes,
+> so we don't want to be burning a full page per function (particularly
+> for the 64kb page architectures...)
+
+For something that small, why not use the text_poke API?
+
+-- 
+Kees Cook
