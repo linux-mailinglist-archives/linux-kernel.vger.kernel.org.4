@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F49705913
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C04705919
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjEPUqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S229888AbjEPUsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEPUqb (ORCPT
+        with ESMTP id S229456AbjEPUsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:46:31 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87E5196;
-        Tue, 16 May 2023 13:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684269991; x=1715805991;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ty6WENYnRqV4osNeJaXPDMsSfcnlueg4+2VirsKRiyc=;
-  b=axif19YAEn890t2nA04e1FB3gE3PkVEwiQPsmDcTB0D9o+vYrSiuaD8E
-   tB521vbEsWr40eB6RBS9uot8aqQStFnycgXldtgbdpSLL3/MHOi6nHy1Y
-   UHkcqP6tWqRV9xnwPf17ErOAgZBkzcrpxZ0lLpYFRLJJAowL48GnkskgA
-   tywjeRN/FgIViYR5tmYgaASRbUO8NO+IaUHfkNRYqBJFo5WXDQskthdHL
-   +0NatLp0RLtyZ9+7zG2L7PHRCmOd488sO1IViIrfnz2eJ7+Csyr6PUxWM
-   YIX1BU6+E+n1i6xKoZLOsYD+yLGZRYNi3Q/Lockbe89z5+y+8unoeWJUr
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="336136887"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="336136887"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:46:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="734434783"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="734434783"
-Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:46:23 -0700
-Message-ID: <5c7e7ebc-7898-0b4e-3c59-e9b8d2b2f197@intel.com>
-Date:   Tue, 16 May 2023 13:46:23 -0700
+        Tue, 16 May 2023 16:48:43 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FEBE45
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:48:42 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64359d9c531so10901781b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684270122; x=1686862122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qKaehGbAc8k6lY0qnWn8D9TG/mOHGPGNlxmLWsJ8N2Y=;
+        b=m6g7gvRdMU7jCzC8ARN7/pLJ8/l0HGcYN/ecQrFL8r6qefKpx+LlryT1s0VBLOvMZ/
+         8NGvHStpsS98vJ+5X8QuR+LLHskGF4taS+69JCYVhI4JGkbJjHZiVnom/4YDXAnLj1P4
+         OLWTwUgV6aPnyWwNie4y3u1jK4ODcfvyk3iII=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684270122; x=1686862122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qKaehGbAc8k6lY0qnWn8D9TG/mOHGPGNlxmLWsJ8N2Y=;
+        b=D6pTci4ukuGUk4daLkL5Z+K2uUoUwoKapo3dJT+Wg3fQ4i2nNJIHYNMBYgQ9h1s0ro
+         RDATM90VV4QRHS/sUCMAS4iEew6cBSJEydaqUWW/agf4ymkleVG0nVIrlO/cD55rqDL2
+         MImEcJAT7Rs6y/BK4HXFx9EJrnHccp/+qWL5ODhyi3h7SNqtPcqcwo04OHgrzRf6zvR9
+         4ObDpmrQLGuO7Yidwzfgt3Pz7pXvvZiSNVoeXH32VNWtaDGOQPSRtiNuYk3sLgrqw+e1
+         qyeiL+LsHJ6y+QO83no4zX+vEx6QHJTRWGz4uEAnHUNyF33jj3RtJ7chvSxcXVhRZjl9
+         gs9A==
+X-Gm-Message-State: AC+VfDyXBqEMvJeNGiHNWe8eZ2ufdEH8tK/EqvoDqDiYlHH3OoJJ+0fE
+        h3nHY9hd/hb4tLk2TTWgYv1FRw==
+X-Google-Smtp-Source: ACHHUZ5ctGEO5DTWH2umfiLzjQSQOYpVnHxq7Fzxd0iVp6cTAQyPJzA4ndkUWCok1pjUTqLN+PoZKQ==
+X-Received: by 2002:a05:6a00:189a:b0:646:7234:cbfc with SMTP id x26-20020a056a00189a00b006467234cbfcmr43536436pfh.27.1684270121976;
+        Tue, 16 May 2023 13:48:41 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p24-20020a62ab18000000b0063b5776b073sm13857047pff.117.2023.05.16.13.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 13:48:40 -0700 (PDT)
+Date:   Tue, 16 May 2023 13:48:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Luca Stefani <luca.stefani.ge1@gmail.com>
+Cc:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
+        tony.luck@intel.com, gpiccoli@igalia.com, catalin.marinas@arm.com,
+        will@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, linus.walleij@linaro.org,
+        linux-gpio@vger.kernel.org, srinivas.kandagatla@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 09/18] soc: qcom: Add qcom's pstore minidump driver
+ support
+Message-ID: <202305161347.80204C1A0E@keescook>
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-10-git-send-email-quic_mojha@quicinc.com>
+ <e25723bf-be85-b458-a84c-1a45392683bb@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] procfs: consolidate arch_report_meminfo declaration
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-References: <20230516195834.551901-1-arnd@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230516195834.551901-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e25723bf-be85-b458-a84c-1a45392683bb@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,26 +78,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 12:57, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, May 09, 2023 at 06:06:26PM +0200, Luca Stefani wrote:
 > 
-> The arch_report_meminfo() function is provided by four architectures,
-> with a __weak fallback in procfs itself. On architectures that don't
-> have a custom version, the __weak version causes a warning because
-> of the missing prototype.
+> On 03/05/23 19:02, Mukesh Ojha wrote:
+> > This driver was inspired from the fact pstore ram region should be
+> > fixed and boot firmware need to have awarness about this region,
+> > so that it will be persistent across boot. But, there are many
+> > QCOM SoC which does not support warm boot from hardware but they
+> > have minidump support from the software, and for them, there is
+> > no need of this pstore ram region to be fixed, but at the same
+> > time have interest in the pstore frontends. So, this driver
+> > get the dynamic reserved region from the ram and register the
+> > ramoops platform device.
+> > 
+> >   +---------+     +---------+   +--------+     +---------+
+> >   | console |     | pmsg    |   | ftrace |     | dmesg   |
+> >   +---------+     +---------+   +--------+     +---------+
+> >         |             |             |              |
+> >         |             |             |              |
+> >         +------------------------------------------+
+> >                            |
+> >                           \ /
+> >                    +----------------+
+> >              (1)   |pstore frontends|
+> >                    +----------------+
+> >                            |
+> >                           \ /
+> >                   +------------------- +
+> >              (2)  | pstore backend(ram)|
+> >                   +--------------------+
+> >                            |
+> >                           \ /
+> >                   +--------------------+
+> >              (3)  |qcom_pstore_minidump|
+> >                   +--------------------+
+> >                            |
+> >                           \ /
+> >                     +---------------+
+> >              (4)    | qcom_minidump |
+> >                     +---------------+
+> > 
+> > This driver will route all the pstore front data to the stored
+> > in qcom pstore reserved region and the reason of showing an
+> > arrow from (3) to (4) as qcom_pstore_minidump driver will register
+> > all the available frontends region with qcom minidump driver
+> > in upcoming patch.
+> > 
+> > Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> [...]
+> > +static struct qcom_ramoops_config default_ramoops_config = {
+> > +	.mem_type = 2,
+> > +	.record_size = 0x0,
+> > +	.console_size = 0x200000,
+> > +	.ftrace_size = 0x0,
+> > +	.pmsg_size = 0x0,
+> > +};
 > 
-> Remove the architecture specific prototypes and instead add one
-> in linux/proc_fs.h.
+> This is effectively hard-cording the configuration of ramoops.
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/parisc/include/asm/pgtable.h    | 3 ---
->  arch/powerpc/include/asm/pgtable.h   | 3 ---
->  arch/s390/include/asm/pgtable.h      | 3 ---
->  arch/s390/mm/pageattr.c              | 1 +
->  arch/x86/include/asm/pgtable.h       | 1 +
->  arch/x86/include/asm/pgtable_types.h | 3 ---
+> Since the memory range is dynamic and by itself doesn't impose any
+> limitation this should be configurable in the device-tree, like a standard
+> ramoops entry backed by a memory range.
+> 
+> I think this should provide the same interface/knobs as pstore-ram does,
+> unless there's some known limitations to minidump, in which case those
+> should be expressed.
 
-Looks sane.  Thanks Arnd!
+Yeah, I had the same thought reading this myself. Beyond that, it looks
+fine as a way to let pstore know about a new RAM backend.
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com> # for arch/x86
+-Kees
+
+-- 
+Kees Cook
