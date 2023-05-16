@@ -2,267 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A634704453
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 06:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B80704455
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 06:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjEPE1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 00:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S229887AbjEPE2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 00:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjEPE1n (ORCPT
+        with ESMTP id S229822AbjEPE2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 00:27:43 -0400
-Received: from mail.nsr.re.kr (unknown [210.104.33.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478513C27;
-        Mon, 15 May 2023 21:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1684211140; c=relaxed/relaxed; h=content-type:date:from:message-id:mime-version:subject:to; bh=HBi/8JzYkQRXK7f+rKqRBFiLUILZNW6t5000hG5Ul+A=; b=nveoYEfcSjttc/uXCF5SmU1wRpkm05yD4XL1v76BXptApTCwDvvbrCsskON+CLng5nioUvWorgyywHkaF2sLHqaL/d1UY6JDHxdWtWi0Oiyv88rQHIXCJLbsWXnvz0Hl6ilzPH0kV/i9IfZf1qVf2vvnRGo0uhiheCAjIRKfJ2vuGTkzlEQukukG9v8qovHQpbujjRcI800dtxs1Tb0BV2xT7OW39IEzM4453+GWCCJDZVtykeGRWwwaACIrbcmFY9126298VxuysFvxiTM88Oec+gkcCmKzmZWsygUDfqW1k0jy6xwMRUn8Ej7G/grYuEc38muTWsRw32dca8z4Xw==
-Received: from 210.104.33.70 (nsr.re.kr)
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128 bits))
-        by mail.nsr.re.kr with SMTP; Tue, 16 May 2023 13:25:25 +0900
-Received: from 192.168.155.188 ([192.168.155.188])
-          by mail.nsr.re.kr (Crinity Message Backbone-7.0.1) with SMTP ID 195;
-          Tue, 16 May 2023 13:27:12 +0900 (KST)
-From:   Dongsoo Lee <letrhee@nsr.re.kr>
-To:     'Eric Biggers' <ebiggers@kernel.org>
-Cc:     linux-crypto@vger.kernel.org,
-        'Herbert Xu' <herbert@gondor.apana.org.au>,
-        "'David S. Miller'" <davem@davemloft.net>,
-        'Thomas Gleixner' <tglx@linutronix.de>,
-        'Ingo Molnar' <mingo@redhat.com>,
-        'Borislav Petkov' <bp@alien8.de>,
-        'Dave Hansen' <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "'H. Peter Anvin'" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        'Dongsoo Lee' <letrhee@gmail.com>
-References: <20230428110058.1516119-1-letrhee@nsr.re.kr> <20230428231952.GA3150@sol.localdomain>
-In-Reply-To: <20230428231952.GA3150@sol.localdomain>
-Subject: RE: [PATCH 0/3] crypto: LEA block cipher implementation
-Date:   Tue, 16 May 2023 13:27:12 +0900
-Message-ID: <000b01d987ae$af907700$0eb16500$@nsr.re.kr>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="ks_c_5601-1987"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQHK1YbJb9NIiePFBRS96VOevnCZtwH6THbqr2nfm4A=
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Tue, 16 May 2023 00:28:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF72A40D9;
+        Mon, 15 May 2023 21:28:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 857B362317;
+        Tue, 16 May 2023 04:28:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBA9C4339C;
+        Tue, 16 May 2023 04:28:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684211292;
+        bh=B40QBc2Bt3WTy6hcM1whqz8LPgSBg6wuocgJLZD/Zks=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fKrws8+B5QGNG4YsOCnUCjatWtzmAAeBTc64BS/GDe6TxbrrQQw/+7hY1TPgUdPW+
+         l5trkAagzobLaMQsTPa0kWxpzo2q9Tdf7zswDem7L8YZkk/xNLt+Dc6X/tlIAghDwF
+         Cd77NDn2eQeJzCaCT2wUYRZ5lkj058Q5Sgy1yUzr36P2l/5fQ8wXMa23rZCFIACpUc
+         Xrrn1W8xKP2S8cUNpsmd1hjGyKW36cD9k75Aa0/g3JC49MhtAzGwz7UkwcHEDxBgyK
+         4UZf4myxlZcDLlmqc1JnfbGS0Ms2coZ/E31M8LSOhosJwrACyhUHDjYgZZBryut7n7
+         awVm4SJajHb0Q==
+Date:   Tue, 16 May 2023 13:28:06 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ze Gao <zegao@tencent.com>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] rehook, fprobe: mark rethook related functions
+ notrace
+Message-Id: <20230516132806.886543f000d93e0c2b26a2f3@kernel.org>
+In-Reply-To: <238bad4335d029072ca6000fb404f47376197f39.1684120990.git.zegao@tencent.com>
+References: <cover.1684120990.git.zegao@tencent.com>
+        <238bad4335d029072ca6000fb404f47376197f39.1684120990.git.zegao@tencent.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your kind review and sorry for taking a bit of time to
-respond.
+On Mon, 15 May 2023 11:26:41 +0800
+Ze Gao <zegao2021@gmail.com> wrote:
 
-We expect that the first application of the patch would be disk =
-encryption
-on the Gooroom platform ('Gooroom' is a Korean word, meaning 'cloud') =
-[1].
-Currently, the Gooroom platform uses AES-XTS for disk encryption. The =
-main
-reason for submitting this patch is to make disk encryption with LEA =
-(e.g.
-LEA-XTS) available in it.
+> These functions are already marked as NOKPROBE to prevent recusion and
+> we have the same reason to blacklist them if rethook is used with fprobe,
+> since they are beyond the recursion-free region ftrace can guard.
+> 
+> Signed-off-by: Ze Gao <zegao@tencent.com>
+> ---
+>  arch/riscv/kernel/probes/rethook.c | 4 ++--
+>  arch/s390/kernel/rethook.c         | 6 +++---
+>  arch/x86/kernel/rethook.c          | 8 +++++---
+>  kernel/trace/rethook.c             | 8 ++++----
 
-The Gooroom platform is a government-driven Debian-based Linux =
-distribution
-in South Korea. In Korea, there are many crypto companies that want to
-bundle Linux into their products and sell them. They create their own
-Gooroom platforms by modifying the original Gooroom platform for their
-services. (Of course, the Gooroom platform is not mandatory, and =
-companies
-wishing to use Linux are free to choose an appropriate distribution.) =
-BTW,
-in Korea, many crypto companies want to use LEA, because LEA is one of =
-the
-block ciphers of the KCMVP, a validation program for commercial crypto =
-S/W
-to be delivered to the Korean government.
+Except for the kernel/trace/rethook.c, those looks good to me.
+Could you drop notrace from kernel/trace/rethook.c? As Steve mentioned
+all functions in that file is automatically notraced.
 
-The Linux Crypto API already has another Korean block cipher, ARIA, also
-one of the block ciphers of the KCVMP. However, LEA is more widely used
-than ARIA in industry nowadays, because LEA is one of the lightweight
-cryptography standard of ISO/IEC [2] and performs well on low-end =
-devices
-that support 32-bit operations. So we think they are complementary to =
-each
-other.
-LEA also performs slightly better in Generic C and AVX2 instruction
-implementations than ARIA. While there is no AVX512 instruction
-implementation of LEA yet, it is expected that the techniques used in =
-the
-AVX2 implementation can also be applied to AVX512. Rather, using 512-bit
-registers and rotation instructions, LEA is expected to show even better
-performance in AVX512 than in AVX2.
+Thank you,
 
-Performance comparisons of the two ciphers on a Ryzen R9 5950X using the
-tcrypt module are shown below. Please note that this CPU does not =
-support
-GFNI and AVX512, so the results on ARIA may show less efficiency =
-compared
-to the ones offered by the current Linux kernel. The experiments on LEA
-were done with the version that we are currently working on.
+>  4 files changed, 14 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/probes/rethook.c b/arch/riscv/kernel/probes/rethook.c
+> index 5c27c1f50989..803c412a1bea 100644
+> --- a/arch/riscv/kernel/probes/rethook.c
+> +++ b/arch/riscv/kernel/probes/rethook.c
+> @@ -8,14 +8,14 @@
+>  #include "rethook.h"
+>  
+>  /* This is called from arch_rethook_trampoline() */
+> -unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
+> +unsigned long __used notrace arch_rethook_trampoline_callback(struct pt_regs *regs)
+>  {
+>  	return rethook_trampoline_handler(regs, regs->s0);
+>  }
+>  
+>  NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+>  
+> -void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
+> +void notrace arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
+>  {
+>  	rhn->ret_addr = regs->ra;
+>  	rhn->frame = regs->s0;
+> diff --git a/arch/s390/kernel/rethook.c b/arch/s390/kernel/rethook.c
+> index af10e6bdd34e..ad52119826c1 100644
+> --- a/arch/s390/kernel/rethook.c
+> +++ b/arch/s390/kernel/rethook.c
+> @@ -3,7 +3,7 @@
+>  #include <linux/kprobes.h>
+>  #include "rethook.h"
+>  
+> -void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mcount)
+> +void notrace arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mcount)
+>  {
+>  	rh->ret_addr = regs->gprs[14];
+>  	rh->frame = regs->gprs[15];
+> @@ -13,7 +13,7 @@ void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mc
+>  }
+>  NOKPROBE_SYMBOL(arch_rethook_prepare);
+>  
+> -void arch_rethook_fixup_return(struct pt_regs *regs,
+> +void notrace arch_rethook_fixup_return(struct pt_regs *regs,
+>  			       unsigned long correct_ret_addr)
+>  {
+>  	/* Replace fake return address with real one. */
+> @@ -24,7 +24,7 @@ NOKPROBE_SYMBOL(arch_rethook_fixup_return);
+>  /*
+>   * Called from arch_rethook_trampoline
+>   */
+> -unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs)
+> +unsigned long notrace arch_rethook_trampoline_callback(struct pt_regs *regs)
+>  {
+>  	return rethook_trampoline_handler(regs, regs->gprs[15]);
+>  }
+> diff --git a/arch/x86/kernel/rethook.c b/arch/x86/kernel/rethook.c
+> index 8a1c0111ae79..1f7cef86f73d 100644
+> --- a/arch/x86/kernel/rethook.c
+> +++ b/arch/x86/kernel/rethook.c
+> @@ -64,7 +64,8 @@ NOKPROBE_SYMBOL(arch_rethook_trampoline);
+>  /*
+>   * Called from arch_rethook_trampoline
+>   */
+> -__used __visible void arch_rethook_trampoline_callback(struct pt_regs *regs)
+> +__used __visible void notrace arch_rethook_trampoline_callback(struct pt_regs
+> +		*regs)
+>  {
+>  	unsigned long *frame_pointer;
+>  
+> @@ -104,7 +105,7 @@ NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+>  STACK_FRAME_NON_STANDARD_FP(arch_rethook_trampoline);
+>  
+>  /* This is called from rethook_trampoline_handler(). */
+> -void arch_rethook_fixup_return(struct pt_regs *regs,
+> +void notrace arch_rethook_fixup_return(struct pt_regs *regs,
+>  			       unsigned long correct_ret_addr)
+>  {
+>  	unsigned long *frame_pointer = (void *)(regs + 1);
+> @@ -114,7 +115,8 @@ void arch_rethook_fixup_return(struct pt_regs *regs,
+>  }
+>  NOKPROBE_SYMBOL(arch_rethook_fixup_return);
+>  
+> -void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mcount)
+> +void notrace arch_rethook_prepare(struct rethook_node *rh, struct pt_regs
+> +		*regs, bool mcount)
+>  {
+>  	unsigned long *stack = (unsigned long *)regs->sp;
+>  
+> diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+> index 60f6cb2b486b..e551e86d3927 100644
+> --- a/kernel/trace/rethook.c
+> +++ b/kernel/trace/rethook.c
+> @@ -127,7 +127,7 @@ static void free_rethook_node_rcu(struct rcu_head *head)
+>   * Return back the @node to @node::rethook. If the @node::rethook is already
+>   * marked as freed, this will free the @node.
+>   */
+> -void rethook_recycle(struct rethook_node *node)
+> +void notrace rethook_recycle(struct rethook_node *node)
+>  {
+>  	lockdep_assert_preemption_disabled();
+>  
+> @@ -194,7 +194,7 @@ void rethook_hook(struct rethook_node *node, struct pt_regs *regs, bool mcount)
+>  NOKPROBE_SYMBOL(rethook_hook);
+>  
+>  /* This assumes the 'tsk' is the current task or is not running. */
+> -static unsigned long __rethook_find_ret_addr(struct task_struct *tsk,
+> +static unsigned long notrace __rethook_find_ret_addr(struct task_struct *tsk,
+>  					     struct llist_node **cur)
+>  {
+>  	struct rethook_node *rh = NULL;
+> @@ -256,7 +256,7 @@ unsigned long rethook_find_ret_addr(struct task_struct *tsk, unsigned long frame
+>  }
+>  NOKPROBE_SYMBOL(rethook_find_ret_addr);
+>  
+> -void __weak arch_rethook_fixup_return(struct pt_regs *regs,
+> +void __weak notrace arch_rethook_fixup_return(struct pt_regs *regs,
+>  				      unsigned long correct_ret_addr)
+>  {
+>  	/*
+> @@ -268,7 +268,7 @@ void __weak arch_rethook_fixup_return(struct pt_regs *regs,
+>  }
+>  
+>  /* This function will be called from each arch-defined trampoline. */
+> -unsigned long rethook_trampoline_handler(struct pt_regs *regs,
+> +unsigned long notrace rethook_trampoline_handler(struct pt_regs *regs,
+>  					 unsigned long frame)
+>  {
+>  	struct llist_node *first, *node = NULL;
+> -- 
+> 2.40.1
+> 
 
-- 256-bit key, 4096 bytes
-  - aes-aesni
-    - ecb enc   1,637 cycles
-    - ecb dec   1,608 cycles
-    - ctr enc   1,649 cycles
-  - aria-generic
-    - ecb enc 235,293 cycles
-    - ecb dec 237,949 cycles
-    - ctr enc 240,754 cycles
-  - lea-generic
-    - ecb enc  31,945 cycles
-    - ecb dec  50,511 cycles
-    - ctr enc  33,942 cycles
-  - aria-avx2
-    - ecb enc  9,807 cycles
-    - ecb dec 10,203 cycles
-    - ctr enc 10,038 cycles
-  - lea-avx2
-    - ecb enc  5,784 cycles
-    - ecb dec  7,423 cycles
-    - ctr enc  6,136 cycles
 
-In general, it's obvious that the hardware-accelerated AES is the best
-performer. However, there exist not only environments where the =
-hardware-
-accelerated AES is not supported, but also situations where AES is not
-preferred for various reasons. In these cases, if someone wants to =
-encrypt
-using a block cipher, LEA could be an alternative.
-
-Apart from this, we also have implemented LEA in lightweight =
-environments
-such as 8-bit AVR and 16-bit MSP [3]. Only the assembly implementation =
-of
-LEA with AVX2 was submitted because the main goal was x86_64 as =
-mentioned
-earlier. If LEA were to be included in the Linux kernel, it would be
-possible to modify and supplement the submission with lightweight
-implementations to provide efficient encryption on low-performance =
-devices.
-
-Although the designers of LEA did not provide test vectors in their =
-paper
-[5], the ISO/IEC standard [2] and the KS standard [4] do. Furthermore, =
-the
-Block Cipher LEA Specification("=BA=ED=B7=CF=BE=CF=C8=A3 LEA =
-=B1=D4=B0=DD=BC=AD", written in Korean)
-document on the LEA introduction page [6] and the Wikipedia article on =
-LEA
-[7] show the same test vectors as in the standards.
-The test vectors for ECB, CBC, CTR, and GCM modes included in the =
-testmgr
-module are taken from the KCMVP Cryptographic Algorithm Verification
-Criteria V3.0("KCMVP =B0=CB=C1=F5=B4=EB=BB=F3 =
-=BE=CF=C8=A3=BE=CB=B0=ED=B8=AE=C1=F2 =B0=CB=C1=F5=B1=E2=C1=D8 V3.0", =
-written in
-Korean) [8]. Test vectors for the XTS mode were generated by ourselves, =
-and
-we crosschecked them using Crypto++ [9] and testmgr on Linux.
-
-[1] https://github.com/gooroom https://www.gooroom.kr/
-[2] ISO/IEC 29192-2:2019, Information security - Lightweight =
-cryptography -
-Part 2: Block ciphers.
-[3]
-https://github.com/cryptolu/FELICS/tree/master/block_ciphers/source/ciphe=
-rs/
-LEA_128_128_v01/source
-[4] KS X 3246, 128-bit block cipher LEA.
-[5] Hong, Deukjo, et al. "LEA: A 128-bit block cipher for fast =
-encryption
-on common processors.", WISA 2013.
-[6] https://seed.kisa.or.kr/kisa/algorithm/EgovLeaInfo.do
-[7] https://en.wikipedia.org/wiki/LEA_(cipher)
-[8] https://seed.kisa.or.kr/kisa/kcmvp/EgovVerification.do
-[9] https://www.cryptopp.com/
-
-+) We applied the optimization technique introduced in your the other
-review to our decryption code. So, could you please let us know how to
-state that fact clearly?
-
------Original Message-----
-From: Eric Biggers <ebiggers@kernel.org>=20
-Sent: Saturday, April 29, 2023 8:20 AM
-To: Dongsoo Lee <letrhee@nsr.re.kr>
-Cc: linux-crypto@vger.kernel.org; Herbert Xu =
-<herbert@gondor.apana.org.au>;
-David S. Miller <davem@davemloft.net>; Thomas Gleixner
-<tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Borislav Petkov
-<bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>; =
-x86@kernel.org;
-H. Peter Anvin <hpa@zytor.com>; linux-kernel@vger.kernel.org; David S.
-Miller <abc@test.nsr.re.kr>; Dongsoo Lee <letrhee@gmail.com>
-Subject: Re: [PATCH 0/3] crypto: LEA block cipher implementation
-
-Hi Dongsoo,
-
-On Fri, Apr 28, 2023 at 08:00:55PM +0900, Dongsoo Lee wrote:
-> The Korean e-government framework contains various cryptographic=20
-> applications, and KCMVP-validated cryptographic module should be used=20
-> according to the government requirements. The ARIA block cipher, which =
-
-> is already included in Linux kernel, has been widely used as a=20
-> symmetric key cipher. However, the adoption of LEA increase rapidly=20
-> for new applications.
->=20
-> By adding LEA to the Linux kernel, Dedicated device drivers that=20
-> require LEA encryption can be provided without additional crypto
-implementation.
-> An example of an immediately applicable use case is disk encryption=20
-> using cryptsetup.
->=20
-> The submitted implementation includes a generic C implementation that=20
-> uses 32-bit ARX operations, and an optimized implementation for the
-> x86_64 environment.
-
-Can you elaborate further on the use case for this cipher?  Your
-description above is very vague.  What is the actual use case when so =
-many
-other ciphers already exist, including much better studied ones?  Are
-people being required to use this cipher, and if so under what =
-situations?
-There is also already another "national pride" block cipher from Korea
-(ARIA); do we really need another one?
-
-BTW, in 2018, I investigated LEA and various other ciphers as options =
-for
-storage encryption on ARM processors without the crypto extensions.  We
-ended up not selecting LEA for several different reasons (e.g. see
-https://lore.kernel.org/r/20180507232000.GA194688@google.com), and we =
-later
-created Adiantum for the use case.  But, it sounds like "storage =
-encryption
-on processors without crypto instructions" isn't the use case you have =
-in
-mind at all anyway, seeing as the only assembly code you're providing is
-for x86_64.
-What sort of use case do you actually have in mind?  Is this perhaps a =
-PhD
-thesis type of thing that won't actually be used in a real world
-application?
-
-IIRC, one of the issues with LEA was that the LEA paper doesn't provide
-test vectors, so I couldn't be certain that I had actually implemented =
-the
-algorithm correctly.  It sounds like there are now test vectors =
-available.
-How confident are you that they actually match the original algorithm?
-
-> The implementation has been tested with kernel module tcrypt.ko and=20
-> has passed the selftest using test vectors for KCMVP[4]. The path also =
-
-> test with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS enabled.
-
-There is a KASAN out-of-bounds error in lea_set_key() when running the =
-self-
-tests.
-
-- Eric
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
