@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE4D70488F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3254770487F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjEPJK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S231838AbjEPJKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjEPJJ7 (ORCPT
+        with ESMTP id S231183AbjEPJJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 16 May 2023 05:09:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93192D4A;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9AD2D7F;
         Tue, 16 May 2023 02:09:56 -0700 (PDT)
-Date:   Tue, 16 May 2023 09:09:52 -0000
+Date:   Tue, 16 May 2023 09:09:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684228193;
+        s=2020; t=1684228194;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Xe7vykULyAimhkCYWFGM1K9JJh+AEtiKAusB000oAME=;
-        b=HV8WyFdoAWdkFxujle3oWDQNEc0l/hr6ohLjD100n7GT+QvROI/CzKjParqFz8uAgbMQgZ
-        k2M42/ac00chyj0n1alsYJFTaHyMzUv7VjXOVXBNG7cKmGmuXkQ/9FNVoSoVo4/MVyTeRQ
-        mv/fSmVuxxE1VmFgcVyvctnDF23Se+kZTGZxkjjRCh5M2i8hyxRYGHH887IH7yHJS4vLwH
-        LZVb8yRFS549ItL4dNPxP4Sb/4A3OMjkdkClBgDcD73LVWSWQBuav10+39dqs9bWQXrfqj
-        z+xK9bTKXSnxqVSkujiDhF+yxM3JsWfCa0P+dGwjs8mW2+bK1i2gIh6VQE0Q6A==
+        bh=696lBPZ0E7Ky3WNzJYp8aRcVPxvYq/pZKvShQXB/sW0=;
+        b=FrKpfgRt0pku/1t/5eQU/khiTM40EvgQkNtAhDi+IvrAylTpK24O2g0uzCk4kl2Fji7mWS
+        yff7YiQciJWc7zroWOHEh/QKyQMWWyKbZdBtsQtO/GmPaMeTOcBhXtBd3+2kzQOCTKGYA9
+        1IQPq+yCfetNF+/JUtv4V/WPpyhNPlLOYYDYu/U4o7NmqqP7B4YpaVCZQYSqxpKvKY+Mrr
+        MCIvperF5RvjVwszldw0tZ7Q4eshAYsL97h/MMAB7LO4HqFMVW47AT1sRL626hgFjAAy5Z
+        UvxTB6Vo9hhaM6E3vmTH6baKeQT293AqqP5nFIy5oItJxCFJfZHffPW2kSrCnw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684228193;
+        s=2020e; t=1684228194;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Xe7vykULyAimhkCYWFGM1K9JJh+AEtiKAusB000oAME=;
-        b=a02Vco9ORKLejImcfrCop+ztEjjjXToBD8S49IGOavwLS9jQ0wkS+Bqaic81Wo77o1Ly3e
-        W1hxD17hYVE60rCA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+        bh=696lBPZ0E7Ky3WNzJYp8aRcVPxvYq/pZKvShQXB/sW0=;
+        b=KnaLwSkOxGiaEc7Ikq18XUTMZHV1eKnWiPKXPZuo90VbuqFujMl2F69DhZ26F/XEI4R+Iz
+        C/CZ0RmhZu0piUCA==
+From:   "tip-bot2 for David Woodhouse" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] x86/smpboot/64: Implement
- arch_cpuhp_init_parallel_bringup() and enable it
-Cc:     David Woodhouse <dwmw@amazon.co.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
+Subject: [tip: smp/core] x86/smpboot: Support parallel startup of secondary CPUs
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Brian Gerst <brgerst@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Michael Kelley <mikelley@microsoft.com>,
         Oleksandr Natalenko <oleksandr@natalenko.name>,
         Helge Deller <deller@gmx.de>,
         "Guilherme G. Piccoli" <gpiccoli@igalia.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230512205257.467571745@linutronix.de>
-References: <20230512205257.467571745@linutronix.de>
+In-Reply-To: <20230512205257.411554373@linutronix.de>
+References: <20230512205257.411554373@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168422819281.404.9214856180312931022.tip-bot2@tip-bot2>
+Message-ID: <168422819355.404.16336847409734430711.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -73,239 +73,260 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the smp/core branch of tip:
 
-Commit-ID:     0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6
-Gitweb:        https://git.kernel.org/tip/0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 12 May 2023 23:07:56 +02:00
+Commit-ID:     7e75178a0950c5ceffa2ca3225701b69752f7d3a
+Gitweb:        https://git.kernel.org/tip/7e75178a0950c5ceffa2ca3225701b69752f7d3a
+Author:        David Woodhouse <dwmw@amazon.co.uk>
+AuthorDate:    Fri, 12 May 2023 23:07:55 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 15 May 2023 13:45:05 +02:00
+CommitterDate: Mon, 15 May 2023 13:45:04 +02:00
 
-x86/smpboot/64: Implement arch_cpuhp_init_parallel_bringup() and enable it
+x86/smpboot: Support parallel startup of secondary CPUs
 
-Implement the validation function which tells the core code whether
-parallel bringup is possible.
+In parallel startup mode the APs are kicked alive by the control CPU
+quickly after each other and run through the early startup code in
+parallel. The real-mode startup code is already serialized with a
+bit-spinlock to protect the real-mode stack.
 
-The only condition for now is that the kernel does not run in an encrypted
-guest as these will trap the RDMSR via #VC, which cannot be handled at that
-point in early startup.
+In parallel startup mode the smpboot_control variable obviously cannot
+contain the Linux CPU number so the APs have to determine their Linux CPU
+number on their own. This is required to find the CPUs per CPU offset in
+order to find the idle task stack and other per CPU data.
 
-There was an earlier variant for AMD-SEV which used the GHBC protocol for
-retrieving the APIC ID via CPUID, but there is no guarantee that the
-initial APIC ID in CPUID is the same as the real APIC ID. There is no
-enforcement from the secure firmware and the hypervisor can assign APIC IDs
-as it sees fit as long as the ACPI/MADT table is consistent with that
-assignment.
+To achieve this, export the cpuid_to_apicid[] array so that each AP can
+find its own CPU number by searching therein based on its APIC ID.
 
-Unfortunately there is no RDMSR GHCB protocol at the moment, so enabling
-AMD-SEV guests for parallel startup needs some more thought.
+Introduce a flag in the top bits of smpboot_control which indicates that
+the AP should find its CPU number by reading the APIC ID from the APIC.
 
-Intel-TDX provides a secure RDMSR hypercall, but supporting that is outside
-the scope of this change.
+This is required because CPUID based APIC ID retrieval can only provide the
+initial APIC ID, which might have been overruled by the firmware. Some AMD
+APUs come up with APIC ID = initial APIC ID + 0x10, so the APIC ID to CPU
+number lookup would fail miserably if based on CPUID. Also virtualization
+can make its own APIC ID assignements. The only requirement is that the
+APIC IDs are consistent with the APCI/MADT table.
 
-Fixup announce_cpu() as e.g. on Hyper-V CPU1 is the secondary sibling of
-CPU0, which makes the @cpu == 1 logic in announce_cpu() fall apart.
+For the boot CPU or in case parallel bringup is disabled the control bits
+are empty and the CPU number is directly available in bit 0-23 of
+smpboot_control.
 
-[ mikelley: Reported the announce_cpu() fallout
+[ tglx: Initial proof of concept patch with bitlock and APIC ID lookup ]
+[ dwmw2: Rework and testing, commit message, CPUID 0x1 and CPU0 support ]
+[ seanc: Fix stray override of initial_gs in common_cpu_up() ]
+[ Oleksandr Natalenko: reported suspend/resume issue fixed in
+  x86_acpi_suspend_lowlevel ]
+[ tglx: Make it read the APIC ID from the APIC instead of using CPUID,
+  	split the bitlock part out ]
 
-Originally-by: David Woodhouse <dwmw@amazon.co.uk>
+Co-developed-by: Thomas Gleixner <tglx@linutronix.de>
+Co-developed-by: Brian Gerst <brgerst@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 Tested-by: Helge Deller <deller@gmx.de> # parisc
 Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com> # Steam Deck
-Link: https://lore.kernel.org/r/20230512205257.467571745@linutronix.de
+Link: https://lore.kernel.org/r/20230512205257.411554373@linutronix.de
 ---
- arch/x86/Kconfig             |  3 +-
- arch/x86/kernel/cpu/common.c |  6 +--
- arch/x86/kernel/smpboot.c    | 87 ++++++++++++++++++++++++++++-------
- 3 files changed, 75 insertions(+), 21 deletions(-)
+ arch/x86/include/asm/apic.h    |  2 +-
+ arch/x86/include/asm/apicdef.h |  5 ++-
+ arch/x86/include/asm/smp.h     |  6 +++-
+ arch/x86/kernel/acpi/sleep.c   |  9 ++++-
+ arch/x86/kernel/apic/apic.c    |  2 +-
+ arch/x86/kernel/head_64.S      | 61 +++++++++++++++++++++++++++++++++-
+ arch/x86/kernel/smpboot.c      |  2 +-
+ 7 files changed, 83 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index c140a73..953823f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -274,8 +274,9 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HOTPLUG_PARALLEL			if SMP && X86_64
- 	select HOTPLUG_SMT			if SMP
--	select HOTPLUG_SPLIT_STARTUP		if SMP
-+	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 640fd18..7cc44eb 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2128,11 +2128,7 @@ static inline void setup_getcpu(int cpu)
- }
+diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+index 030f5fb..98c32aa 100644
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -55,6 +55,8 @@ extern int local_apic_timer_c2_ok;
+ extern int disable_apic;
+ extern unsigned int lapic_timer_period;
  
- #ifdef CONFIG_X86_64
--static inline void ucode_cpu_init(int cpu)
--{
--	if (cpu)
--		load_ucode_ap();
--}
-+static inline void ucode_cpu_init(int cpu) { }
++extern int cpuid_to_apicid[];
++
+ extern enum apic_intr_mode_id apic_intr_mode;
+ enum apic_intr_mode_id {
+ 	APIC_PIC,
+diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
+index 68d213e..bf546df 100644
+--- a/arch/x86/include/asm/apicdef.h
++++ b/arch/x86/include/asm/apicdef.h
+@@ -138,7 +138,8 @@
+ #define		APIC_EILVT_MASKED	(1 << 16)
  
- static inline void tss_setup_ist(struct tss_struct *tss)
- {
+ #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
+-#define APIC_BASE_MSR	0x800
++#define APIC_BASE_MSR		0x800
++#define APIC_X2APIC_ID_MSR	0x802
+ #define XAPIC_ENABLE	(1UL << 11)
+ #define X2APIC_ENABLE	(1UL << 10)
+ 
+@@ -162,6 +163,7 @@
+ #define APIC_CPUID(apicid)	((apicid) & XAPIC_DEST_CPUS_MASK)
+ #define NUM_APIC_CLUSTERS	((BAD_APICID + 1) >> XAPIC_DEST_CPUS_SHIFT)
+ 
++#ifndef __ASSEMBLY__
+ /*
+  * the local APIC register structure, memory mapped. Not terribly well
+  * tested, but we might eventually use this one in the future - the
+@@ -435,4 +437,5 @@ enum apic_delivery_modes {
+ 	APIC_DELIVERY_MODE_EXTINT	= 7,
+ };
+ 
++#endif /* !__ASSEMBLY__ */
+ #endif /* _ASM_X86_APICDEF_H */
+diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
+index c6d5b65..4206077 100644
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -200,4 +200,10 @@ extern unsigned long apic_mmio_base;
+ 
+ #endif /* !__ASSEMBLY__ */
+ 
++/* Control bits for startup_64 */
++#define STARTUP_READ_APICID	0x80000000
++
++/* Top 8 bits are reserved for control */
++#define STARTUP_PARALLEL_MASK	0xFF000000
++
+ #endif /* _ASM_X86_SMP_H */
+diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+index 1328c22..6dfecb2 100644
+--- a/arch/x86/kernel/acpi/sleep.c
++++ b/arch/x86/kernel/acpi/sleep.c
+@@ -16,6 +16,7 @@
+ #include <asm/cacheflush.h>
+ #include <asm/realmode.h>
+ #include <asm/hypervisor.h>
++#include <asm/smp.h>
+ 
+ #include <linux/ftrace.h>
+ #include "../../realmode/rm/wakeup.h"
+@@ -127,7 +128,13 @@ int x86_acpi_suspend_lowlevel(void)
+ 	 * value is in the actual %rsp register.
+ 	 */
+ 	current->thread.sp = (unsigned long)temp_stack + sizeof(temp_stack);
+-	smpboot_control = smp_processor_id();
++	/*
++	 * Ensure the CPU knows which one it is when it comes back, if
++	 * it isn't in parallel mode and expected to work that out for
++	 * itself.
++	 */
++	if (!(smpboot_control & STARTUP_PARALLEL_MASK))
++		smpboot_control = smp_processor_id();
+ #endif
+ 	initial_code = (unsigned long)wakeup_long64;
+ 	saved_magic = 0x123456789abcdef0L;
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index d3f6c18..209c505 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -2380,7 +2380,7 @@ static int nr_logical_cpuids = 1;
+ /*
+  * Used to store mapping between logical CPU IDs and APIC IDs.
+  */
+-static int cpuid_to_apicid[] = {
++int cpuid_to_apicid[] = {
+ 	[0 ... NR_CPUS - 1] = -1,
+ };
+ 
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index f99e9ab..9cd77d3 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -24,7 +24,9 @@
+ #include "../entry/calling.h"
+ #include <asm/export.h>
+ #include <asm/nospec-branch.h>
++#include <asm/apicdef.h>
+ #include <asm/fixmap.h>
++#include <asm/smp.h>
+ 
+ /*
+  * We are not able to switch in one step to the final KERNEL ADDRESS SPACE
+@@ -234,8 +236,67 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	ANNOTATE_NOENDBR // above
+ 
+ #ifdef CONFIG_SMP
++	/*
++	 * For parallel boot, the APIC ID is read from the APIC, and then
++	 * used to look up the CPU number.  For booting a single CPU, the
++	 * CPU number is encoded in smpboot_control.
++	 *
++	 * Bit 31	STARTUP_READ_APICID (Read APICID from APIC)
++	 * Bit 0-23	CPU# if STARTUP_xx flags are not set
++	 */
+ 	movl	smpboot_control(%rip), %ecx
++	testl	$STARTUP_READ_APICID, %ecx
++	jnz	.Lread_apicid
++	/*
++	 * No control bit set, single CPU bringup. CPU number is provided
++	 * in bit 0-23. This is also the boot CPU case (CPU number 0).
++	 */
++	andl	$(~STARTUP_PARALLEL_MASK), %ecx
++	jmp	.Lsetup_cpu
++
++.Lread_apicid:
++	/* Check whether X2APIC mode is already enabled */
++	mov	$MSR_IA32_APICBASE, %ecx
++	rdmsr
++	testl	$X2APIC_ENABLE, %eax
++	jnz	.Lread_apicid_msr
++
++	/* Read the APIC ID from the fix-mapped MMIO space. */
++	movq	apic_mmio_base(%rip), %rcx
++	addq	$APIC_ID, %rcx
++	movl	(%rcx), %eax
++	shr	$24, %eax
++	jmp	.Llookup_AP
++
++.Lread_apicid_msr:
++	mov	$APIC_X2APIC_ID_MSR, %ecx
++	rdmsr
++
++.Llookup_AP:
++	/* EAX contains the APIC ID of the current CPU */
++	xorq	%rcx, %rcx
++	leaq	cpuid_to_apicid(%rip), %rbx
++
++.Lfind_cpunr:
++	cmpl	(%rbx,%rcx,4), %eax
++	jz	.Lsetup_cpu
++	inc	%ecx
++#ifdef CONFIG_FORCE_NR_CPUS
++	cmpl	$NR_CPUS, %ecx
++#else
++	cmpl	nr_cpu_ids(%rip), %ecx
++#endif
++	jb	.Lfind_cpunr
++
++	/*  APIC ID not found in the table. Drop the trampoline lock and bail. */
++	movq	trampoline_lock(%rip), %rax
++	movl	$0, (%rax)
++
++1:	cli
++	hlt
++	jmp	1b
+ 
++.Lsetup_cpu:
+ 	/* Get the per cpu offset for the given CPU# which is in ECX */
+ 	movq	__per_cpu_offset(,%rcx,8), %rdx
+ #else
 diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 4b97373..660709e 100644
+index 51122f0..4b97373 100644
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -58,6 +58,7 @@
- #include <linux/overflow.h>
- #include <linux/stackprotector.h>
- #include <linux/cpuhotplug.h>
-+#include <linux/mc146818rtc.h>
+@@ -996,7 +996,7 @@ static int do_boot_cpu(int apicid, int cpu, struct task_struct *idle)
+ 	if (IS_ENABLED(CONFIG_X86_32)) {
+ 		early_gdt_descr.address = (unsigned long)get_cpu_gdt_rw(cpu);
+ 		initial_stack  = idle->thread.sp;
+-	} else {
++	} else if (!(smpboot_control & STARTUP_PARALLEL_MASK)) {
+ 		smpboot_control = cpu;
+ 	}
  
- #include <asm/acpi.h>
- #include <asm/cacheinfo.h>
-@@ -75,7 +76,7 @@
- #include <asm/fpu/api.h>
- #include <asm/setup.h>
- #include <asm/uv/uv.h>
--#include <linux/mc146818rtc.h>
-+#include <asm/microcode.h>
- #include <asm/i8259.h>
- #include <asm/misc.h>
- #include <asm/qspinlock.h>
-@@ -128,7 +129,6 @@ int arch_update_cpu_topology(void)
- 	return retval;
- }
- 
--
- static unsigned int smpboot_warm_reset_vector_count;
- 
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
-@@ -226,16 +226,43 @@ static void notrace start_secondary(void *unused)
- 	 */
- 	cr4_init();
- 
--#ifdef CONFIG_X86_32
--	/* switch away from the initial page table */
--	load_cr3(swapper_pg_dir);
--	__flush_tlb_all();
--#endif
-+	/*
-+	 * 32-bit specific. 64-bit reaches this code with the correct page
-+	 * table established. Yet another historical divergence.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32)) {
-+		/* switch away from the initial page table */
-+		load_cr3(swapper_pg_dir);
-+		__flush_tlb_all();
-+	}
-+
- 	cpu_init_exception_handling();
- 
- 	/*
--	 * Synchronization point with the hotplug core. Sets the
--	 * synchronization state to ALIVE and waits for the control CPU to
-+	 * 32-bit systems load the microcode from the ASM startup code for
-+	 * historical reasons.
-+	 *
-+	 * On 64-bit systems load it before reaching the AP alive
-+	 * synchronization point below so it is not part of the full per
-+	 * CPU serialized bringup part when "parallel" bringup is enabled.
-+	 *
-+	 * That's even safe when hyperthreading is enabled in the CPU as
-+	 * the core code starts the primary threads first and leaves the
-+	 * secondary threads waiting for SIPI. Loading microcode on
-+	 * physical cores concurrently is a safe operation.
-+	 *
-+	 * This covers both the Intel specific issue that concurrent
-+	 * microcode loading on SMT siblings must be prohibited and the
-+	 * vendor independent issue`that microcode loading which changes
-+	 * CPUID, MSRs etc. must be strictly serialized to maintain
-+	 * software state correctness.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_64))
-+		load_ucode_ap();
-+
-+	/*
-+	 * Synchronization point with the hotplug core. Sets this CPUs
-+	 * synchronization state to ALIVE and spin-waits for the control CPU to
- 	 * release this CPU for further bringup.
- 	 */
- 	cpuhp_ap_sync_alive();
-@@ -918,9 +945,9 @@ static int wakeup_secondary_cpu_via_init(int phys_apicid, unsigned long start_ei
- /* reduce the number of lines printed when booting a large cpu count system */
- static void announce_cpu(int cpu, int apicid)
- {
-+	static int width, node_width, first = 1;
- 	static int current_node = NUMA_NO_NODE;
- 	int node = early_cpu_to_node(cpu);
--	static int width, node_width;
- 
- 	if (!width)
- 		width = num_digits(num_possible_cpus()) + 1; /* + '#' sign */
-@@ -928,10 +955,10 @@ static void announce_cpu(int cpu, int apicid)
- 	if (!node_width)
- 		node_width = num_digits(num_possible_nodes()) + 1; /* + '#' */
- 
--	if (cpu == 1)
--		printk(KERN_INFO "x86: Booting SMP configuration:\n");
--
- 	if (system_state < SYSTEM_RUNNING) {
-+		if (first)
-+			pr_info("x86: Booting SMP configuration:\n");
-+
- 		if (node != current_node) {
- 			if (current_node > (-1))
- 				pr_cont("\n");
-@@ -942,11 +969,11 @@ static void announce_cpu(int cpu, int apicid)
- 		}
- 
- 		/* Add padding for the BSP */
--		if (cpu == 1)
-+		if (first)
- 			pr_cont("%*s", width + 1, " ");
-+		first = 0;
- 
- 		pr_cont("%*s#%d", width - num_digits(cpu), " ", cpu);
--
- 	} else
- 		pr_info("Booting Node %d Processor %d APIC 0x%x\n",
- 			node, cpu, apicid);
-@@ -1236,6 +1263,36 @@ void __init smp_prepare_cpus_common(void)
- 	set_cpu_sibling_map(0);
- }
- 
-+#ifdef CONFIG_X86_64
-+/* Establish whether parallel bringup can be supported. */
-+bool __init arch_cpuhp_init_parallel_bringup(void)
-+{
-+	/*
-+	 * Encrypted guests require special handling. They enforce X2APIC
-+	 * mode but the RDMSR to read the APIC ID is intercepted and raises
-+	 * #VC or #VE which cannot be handled in the early startup code.
-+	 *
-+	 * AMD-SEV does not provide a RDMSR GHCB protocol so the early
-+	 * startup code cannot directly communicate with the secure
-+	 * firmware. The alternative solution to retrieve the APIC ID via
-+	 * CPUID(0xb), which is covered by the GHCB protocol, is not viable
-+	 * either because there is no enforcement of the CPUID(0xb)
-+	 * provided "initial" APIC ID to be the same as the real APIC ID.
-+	 *
-+	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-+	 * implemented seperately in the low level startup ASM code.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-+		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
-+		return false;
-+	}
-+
-+	smpboot_control = STARTUP_READ_APICID;
-+	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
-+	return true;
-+}
-+#endif
-+
- /*
-  * Prepare for SMP bootup.
-  * @max_cpus: configured maximum number of CPUs, It is a legacy parameter
