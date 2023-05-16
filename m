@@ -2,79 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0465B704775
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CC970477A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjEPIL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
+        id S231461AbjEPIMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 04:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjEPILY (ORCPT
+        with ESMTP id S230454AbjEPIL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:11:24 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE540C1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 01:11:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VinPRLs_1684224678;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VinPRLs_1684224678)
-          by smtp.aliyun-inc.com;
-          Tue, 16 May 2023 16:11:19 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     perex@perex.cz
-Cc:     tiwai@suse.com, pierre-louis.bossart@linux.intel.com,
-        lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        daniel.baluta@nxp.com, kai.vehmanen@linux.intel.com,
-        broonie@kernel.org, sound-open-firmware@alsa-project.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] ASoC: SOF: ipc4-topology: Fix an unsigned comparison which can never be negative
-Date:   Tue, 16 May 2023 16:11:16 +0800
-Message-Id: <20230516081116.71370-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 16 May 2023 04:11:56 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4E010EF;
+        Tue, 16 May 2023 01:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684224715; x=1715760715;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4PmBifolSayMyjTDCnehOHENnUmjyS1+9ipEjl7yTUA=;
+  b=f/oHd5HciG8h24RZBMLPQiJzEWQEdh+DB0IhsPVj/zjI1dIM0ujf/4dy
+   +/lqTY5T+N1cP9725v31CWFI6yE3QFG6+8UcR0Y51PbtRNAINLOc4Ly1w
+   qX7dKlqeirr9rMVah47gDTZwMwWwhosCHXekP+tIBw0ZjiL6yYUtyIw8N
+   EpLG6IbvJ2hehWyjFFzVebu0oLb2rbeiFKUcDYWQ0kI/zfQ62SgiKUOue
+   a1+u2gH29ME/tqrOAl6vRHMqTCHw919WKXw3qHEbB0jZ7iY6gGK7WChrC
+   iqoffNrhzZ7UBGh6Top4ebGVWqq/LrQkexG5qtaJN4v+H+huHZVRmHnAo
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="335960725"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="335960725"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 01:11:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="1031208455"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="1031208455"
+Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([143.185.115.141])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 01:11:52 -0700
+Message-ID: <1d425030407e11d776070e8ef12ce51dac3e0147.camel@intel.com>
+Subject: Re: [PATCH v3] media: uapi: v4l: Intel metadata format update
+From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
+To:     Sakari Ailus <sakari.ailus@intel.com>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        evgeni.raikhel@intel.com, demisrael@gmail.com
+Date:   Tue, 16 May 2023 11:11:49 +0300
+In-Reply-To: <ZGIp7E94eAW7UFSP@valkosipuli.retiisi.eu>
+References: <7e0e6a37eee28185ec2fbd4f1d42569c8da6726d.camel@intel.com>
+         <ZGIp7E94eAW7UFSP@valkosipuli.retiisi.eu>
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value from the call to sof_ipc4_get_valid_bits() is int.
-However, the return value is being assigned to an unsigned
-int variable 'out_ref_valid_bits', so making it an int.
+On Mon, 2023-05-15 at 15:47 +0300, Sakari Ailus wrote:
+> Hi Dmitry,
+> =
 
-Eliminate the following warning:
-./sound/soc/sof/ipc4-topology.c:1537:6-24: WARNING: Unsigned expression compared with zero: out_ref_valid_bits < 0
+> On Sun, May 14, 2023 at 12:36:50PM +0300, Dmitry Perchanov wrote:
+> > Update metadata structure for Intel RealSense UVC/MIPI cameras.
+> > Compliant to Intel Configuration version 3.
+> > =
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4985
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- sound/soc/sof/ipc4-topology.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> > Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
+> =
 
-diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
-index dce2f8f7f518..d82ac5701eb2 100644
---- a/sound/soc/sof/ipc4-topology.c
-+++ b/sound/soc/sof/ipc4-topology.c
-@@ -1381,8 +1381,8 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
- 	void **ipc_config_data;
- 	int *ipc_config_size;
- 	u32 **data;
--	int ipc_size, ret;
--	u32 out_ref_rate, out_ref_channels, out_ref_valid_bits;
-+	int ipc_size, ret, out_ref_valid_bits;
-+	u32 out_ref_rate, out_ref_channels;
- 	u32 deep_buffer_dma_ms = 0;
- 	int output_fmt_index;
- 
--- 
-2.20.1.7.g153144c
+> Could you reply my comments on v2 and use my @intel.com address going
+> forward?
+It's done.
+Thanks.
+> =
+
+> Thanks.
+> =
+
+
+---------------------------------------------------------------------
+Intel Israel (74) Limited
+
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
 
