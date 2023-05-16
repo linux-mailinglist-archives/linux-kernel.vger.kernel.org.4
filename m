@@ -2,164 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450957054D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 737157054D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjEPRRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
+        id S231424AbjEPRRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjEPRRW (ORCPT
+        with ESMTP id S229602AbjEPRRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:17:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2D8FC;
-        Tue, 16 May 2023 10:17:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D75F63D09;
-        Tue, 16 May 2023 17:17:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 695A0C433A8;
-        Tue, 16 May 2023 17:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684257440;
-        bh=WElwajV57R1ZF+d3DvmtrkbIt4Bk9tb18ajBvlQX0oQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GmVJv/QRb6t7cFLx7+N00ZvbnoIHiXNmN/tOo0s7PCbTU9QPqYTS/8eTyZOGVoj/E
-         rD9sLojkUUHKGso1uxKjepTnvgrevfCdJm7IMTmOp/wGIIcPeHN8OLHWrTnNINtbiK
-         u3N3WaIiX2G8ZjkiD8GqAaJeh98dFFpZKS0ij/ig41IY9jbk/eEZarHO0eopMZB9nX
-         2wadUj4Q2HOqXZ8lA/uzmN1YBjAETaGy8hoyiP/xeWGv9+WxGDMXE/WbOrh/oGr3oy
-         Gk6hisncCPi+yD4LI1Zrfk8qza6qjaN229bTLbsmVKIG/yJqm4wJKUiYUv4xD+zIzV
-         q0CUtjsFlzYbw==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4eed764a10cso16462018e87.0;
-        Tue, 16 May 2023 10:17:20 -0700 (PDT)
-X-Gm-Message-State: AC+VfDywOI302zEQotX5DNmTOXoB83AiGITALWEc2/XBe6/29w5vDjC+
-        DntdIZo1oQSwKeK3aBTTea29BUUbIh626z/BVsY=
-X-Google-Smtp-Source: ACHHUZ4VMVquCoFbXiDWYhR8Guy+zOWzA/fxaWPI3piMmQSNzbFag9YgignmrUhRLyODzAtSO/Hosm6vdBHv78s5Fw0=
-X-Received: by 2002:a19:ad45:0:b0:4f2:7b64:f16f with SMTP id
- s5-20020a19ad45000000b004f27b64f16fmr3971449lfd.52.1684257438252; Tue, 16 May
- 2023 10:17:18 -0700 (PDT)
+        Tue, 16 May 2023 13:17:51 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F65FC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:17:49 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-3330afe3d2fso6985ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 10:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684257469; x=1686849469;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SUCGnNc5xR+rtR6/oclnI6VxbaAmUhSdHpmLK65pxbU=;
+        b=WP5U2wcaWsXv3Oxoo+zTyEmgwNIWhgsTSSxIxDMkJZqg5hZecSQqIPqI1NTw9MusGz
+         2ThXuPD/y3/78xJmYaS2UYqVuu6WbJ4PnkQ3uzYs9OXsqVU0Qn42GXYhsGmFHpIBsKmd
+         wzRwG3yFvhv0I7WBrAk6kp/kHbXB4gfVxgm10i7uVsT68TxrJKTAhNEaOBLarIAGufGP
+         WSYuWnCyyxOmFMFe7If+iXXK6MVHiDjiOHnXySXpuOJOPx6KdaxCWvaH1Gqryg0fNZzN
+         B5O3duafvb+V2xsCgkgvy+7lvULJwXruppNnFcB0n2mM3f6cbPOgNKFlN50Y4PUIT+iG
+         WLqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684257469; x=1686849469;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SUCGnNc5xR+rtR6/oclnI6VxbaAmUhSdHpmLK65pxbU=;
+        b=lwrBpp6EhO+/2+DBZ6Dm9sr/06IaK6ZJW4W9wouT8bQEo77Z3IMHcnrD+Ul7FRVtck
+         ZAdJWk6onA0dmLJOFczoA6O8X67sjsQhsquQ25yu9fANlCKePlpz7T1LEwyJe/Ib0TKF
+         V6HkJgz90jkZhkI05QIQWsV9U/Jf/6pqsYXx40qWdRyL9QyYRVd+QYXz9msl4b9cx8ln
+         JxKTD3TDIwVBA65csot+x1PaCCDtE/icVAYkUh48EH4SCJEt/0B1yysCzvibjjza+xIc
+         4JReMFCULzdMFMRXk3kNZQzZbrXSknV6D7CvY5Bge7vnl8laTmglRZNNUtBRidzqPG9H
+         cOag==
+X-Gm-Message-State: AC+VfDz8s3e1gVzWxyVPadHD2TBIPtcDG8XbnHFKAWRuR9uO5ZjGW4dX
+        IehP141LhAtOvvCrHBPnK7RehuobU8Cvbl8YVn1lng==
+X-Google-Smtp-Source: ACHHUZ6gw/3CUJN+4WOAb0a0uaF2zNQt+KzQYCtFUHkL3fwoTY4WQlhtoW4+Jk7cJ2/qxzHrkJ3w6PM5smMOWN62R6A=
+X-Received: by 2002:a05:6e02:1c25:b0:331:948c:86f3 with SMTP id
+ m5-20020a056e021c2500b00331948c86f3mr248377ilh.19.1684257468980; Tue, 16 May
+ 2023 10:17:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230516160642.523862-1-arnd@kernel.org>
-In-Reply-To: <20230516160642.523862-1-arnd@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 16 May 2023 19:17:07 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFTYo0HvP3izv2tgewCBT37LG0hgXKvn8zSmNfB0kUFHQ@mail.gmail.com>
-Message-ID: <CAMj1kXFTYo0HvP3izv2tgewCBT37LG0hgXKvn8zSmNfB0kUFHQ@mail.gmail.com>
-Subject: Re: [PATCH 00/15] arm64: address -Wmissing-prototype warnings
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
+References: <20230414172922.812640-1-rananta@google.com> <20230414172922.812640-3-rananta@google.com>
+ <ZF5uRWtvhhqZSQCa@linux.dev>
+In-Reply-To: <ZF5uRWtvhhqZSQCa@linux.dev>
+From:   Raghavendra Rao Ananta <rananta@google.com>
+Date:   Tue, 16 May 2023 10:17:37 -0700
+Message-ID: <CAJHc60yJogVr8BwQX1jugZpyDnzdYYpRe1BPto-R9ufLoCzUqQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/7] KVM: arm64: Implement __kvm_tlb_flush_vmid_range()
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-efi@vger.kernel.org, kvmarm@lists.linux.dev
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 at 18:06, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> This addresses all arm64 specific protype warnings. As with the arm32
-> patches, the majority of them  should be straightforward, either adding
-> an #include statement to get the right header, or ensuring that an unused
-> global function is left out of the build when the prototype is hidden.
->
-> The ones that are a bit awkward are those that just add a prototype to
-> shut up the warning, but the prototypes are never used for calling the
-> function because the only caller is in assembler code. I tried to come
-> up with other ways to shut up the compiler, and ideally this would be
-> triggered by the 'asmlinkage' keyword as Ard suggested in the past, but
-> I could not come up with a way to do this.
->
-> All of the warnings have to be addressed in some form before the
-> warning can be enabled by default.
->
->     Arnd
->
-> Link: https://people.kernel.org/arnd/missing-prototype-warnings-in-the-kernel
->
+Hi Oliver,
 
-For the record, as I mentioned a while ago, I think it is a bit
-disappointing that we cannot teach the compiler that 'asmlinkage'
-functions don't need a prototype. But I don't have any objections to
-these changes, so
+On Fri, May 12, 2023 at 9:50=E2=80=AFAM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> Hi Raghavendra,
+>
+> On Fri, Apr 14, 2023 at 05:29:17PM +0000, Raghavendra Rao Ananta wrote:
+> > Define  __kvm_tlb_flush_vmid_range() (for VHE and nVHE)
+> > to flush a range of stage-2 page-tables using IPA in one go.
+> > If the system supports FEAT_TLBIRANGE, the following patches
+> > would conviniently replace global TLBI such as vmalls12e1is
+> > in the map, unmap, and dirty-logging paths with ripas2e1is
+> > instead.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_asm.h   |  3 +++
+> >  arch/arm64/kvm/hyp/nvhe/hyp-main.c | 11 +++++++++
+> >  arch/arm64/kvm/hyp/nvhe/tlb.c      | 39 ++++++++++++++++++++++++++++++
+> >  arch/arm64/kvm/hyp/vhe/tlb.c       | 35 +++++++++++++++++++++++++++
+> >  4 files changed, 88 insertions(+)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/=
+kvm_asm.h
+> > index 43c3bc0f9544d..33352d9399e32 100644
+> > --- a/arch/arm64/include/asm/kvm_asm.h
+> > +++ b/arch/arm64/include/asm/kvm_asm.h
+> > @@ -79,6 +79,7 @@ enum __kvm_host_smccc_func {
+> >       __KVM_HOST_SMCCC_FUNC___pkvm_init_vm,
+> >       __KVM_HOST_SMCCC_FUNC___pkvm_init_vcpu,
+> >       __KVM_HOST_SMCCC_FUNC___pkvm_teardown_vm,
+> > +     __KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_range,
+> >  };
+> >
+> >  #define DECLARE_KVM_VHE_SYM(sym)     extern char sym[]
+> > @@ -225,6 +226,8 @@ extern void __kvm_flush_vm_context(void);
+> >  extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
+> >  extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr=
+_t ipa,
+> >                                    int level);
+> > +extern void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> > +                                     phys_addr_t start, phys_addr_t en=
+d);
+> >  extern void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu);
+> >
+> >  extern void __kvm_timer_set_cntvoff(u64 cntvoff);
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nv=
+he/hyp-main.c
+> > index 728e01d4536b0..81d30737dc7c9 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> > @@ -125,6 +125,16 @@ static void handle___kvm_tlb_flush_vmid_ipa(struct=
+ kvm_cpu_context *host_ctxt)
+> >       __kvm_tlb_flush_vmid_ipa(kern_hyp_va(mmu), ipa, level);
+> >  }
+> >
+> > +static void
+> > +handle___kvm_tlb_flush_vmid_range(struct kvm_cpu_context *host_ctxt)
+> > +{
+> > +     DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> > +     DECLARE_REG(phys_addr_t, start, host_ctxt, 2);
+> > +     DECLARE_REG(phys_addr_t, end, host_ctxt, 3);
+> > +
+> > +     __kvm_tlb_flush_vmid_range(kern_hyp_va(mmu), start, end);
+> > +}
+> > +
+> >  static void handle___kvm_tlb_flush_vmid(struct kvm_cpu_context *host_c=
+txt)
+> >  {
+> >       DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
+> > @@ -315,6 +325,7 @@ static const hcall_t host_hcall[] =3D {
+> >       HANDLE_FUNC(__kvm_vcpu_run),
+> >       HANDLE_FUNC(__kvm_flush_vm_context),
+> >       HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa),
+> > +     HANDLE_FUNC(__kvm_tlb_flush_vmid_range),
+> >       HANDLE_FUNC(__kvm_tlb_flush_vmid),
+> >       HANDLE_FUNC(__kvm_flush_cpu_context),
+> >       HANDLE_FUNC(__kvm_timer_set_cntvoff),
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tl=
+b.c
+> > index d296d617f5896..d2504df9d38b6 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
+> > @@ -109,6 +109,45 @@ void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *m=
+mu,
+> >       __tlb_switch_to_host(&cxt);
+> >  }
+> >
+> > +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
+> > +                             phys_addr_t start, phys_addr_t end)
+> > +{
+> > +     struct tlb_inv_context cxt;
+> > +     unsigned long pages, stride;
+> > +
+> > +     /*
+> > +      * Since the range of addresses may not be mapped at
+> > +      * the same level, assume the worst case as PAGE_SIZE
+> > +      */
+> > +     stride =3D PAGE_SIZE;
+> > +     start =3D round_down(start, stride);
+> > +     end =3D round_up(end, stride);
+> > +     pages =3D (end - start) >> PAGE_SHIFT;
+> > +
+> > +     if (!system_supports_tlb_range() || pages >=3D MAX_TLBI_RANGE_PAG=
+ES) {
+> > +             __kvm_tlb_flush_vmid(mmu);
+> > +             return;
+> > +     }
+> > +
+> > +     dsb(ishst);
+>
+> Due to some concerns w.r.t. the imprecision of the architecture for
+> synchronizing with the table walkers, these preamble barriers were
+> upgraded to dsb(ish) in commit 7e1b2329c205 ("KVM: arm64: nvhe:
+> Synchronise with page table walker on TLBI"). Good news is, the magic is
+> behind __tlb_switch_to_guest(), so just drop these barriers when you
+> rebase the series onto a 6.4 rc.
+>
+Thanks for the info! I'll rebase the series and take care of this.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-
->
-> Arnd Bergmann (15):
->   arm64: xor-neon: mark xor_arm64_neon_*() static
->   arm64: add scs_patch_vmlinux prototype
->   arm64: avoid prototype warnings for syscalls
->   arm64: move cpu_suspend_set_dbg_restorer() prototype to header
->   arm64: spectre: provide prototypes for internal functions
->   arm64: kvm: add prototypes for functions called in asm
->   arm64: cpuidle: fix #ifdef for acpi functions
->   arm64: efi: add efi_handle_corrupted_x18 prototype
->   arm64: hide unused is_valid_bugaddr()
->   arm64: module-plts: inline linux/moduleloader.h
->   arm64: flush: include linux/libnvdimm.h
->   arm64: kaslr: add kaslr_early_init() declaration
->   arm64: signal: include asm/exception.h
->   arm64: move early_brk64 prototype to header
->   arm64: add alt_cb_patch_nops prototype
->
->  arch/arm64/include/asm/alternative.h     |  3 +++
->  arch/arm64/include/asm/archrandom.h      |  2 ++
->  arch/arm64/include/asm/compat.h          |  2 ++
->  arch/arm64/include/asm/efi.h             |  2 ++
->  arch/arm64/include/asm/hw_breakpoint.h   |  8 ++++++++
->  arch/arm64/include/asm/kvm_asm.h         | 18 ++++++++++++++++++
->  arch/arm64/include/asm/scs.h             |  1 +
->  arch/arm64/include/asm/spectre.h         | 16 ++++++++++++++++
->  arch/arm64/include/asm/syscall_wrapper.h |  4 ++++
->  arch/arm64/include/asm/traps.h           |  2 ++
->  arch/arm64/kernel/cpuidle.c              |  2 +-
->  arch/arm64/kernel/hw_breakpoint.c        |  8 --------
->  arch/arm64/kernel/module-plts.c          |  1 +
->  arch/arm64/kernel/signal.c               |  1 +
->  arch/arm64/kernel/traps.c                |  3 ++-
->  arch/arm64/lib/xor-neon.c                |  8 ++++----
->  arch/arm64/mm/fault.c                    |  3 ---
->  arch/arm64/mm/flush.c                    |  1 +
->  18 files changed, 68 insertions(+), 17 deletions(-)
->
+- Raghavendra
 > --
-> 2.39.2
->
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Oliver Upton <oliver.upton@linux.dev>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Zenghui Yu <yuzenghui@huawei.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Suren Baghdasaryan <surenb@google.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-efi@vger.kernel.org
-> Cc: kvmarm@lists.linux.dev
->
+> Thanks,
+> Oliver
