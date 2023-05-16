@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909F07046CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32D17046D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjEPHqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S231360AbjEPHr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbjEPHqF (ORCPT
+        with ESMTP id S230393AbjEPHr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:46:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2D3449B;
-        Tue, 16 May 2023 00:46:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18E3662850;
-        Tue, 16 May 2023 07:46:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE33C433D2;
-        Tue, 16 May 2023 07:45:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684223160;
-        bh=DWVQGg8BOQg1TC5mQhyL5M5QVn3UeUKSLvymNtkvcT4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c4TkzfttZpQk0Ptc+5OqMy617FPzeTD+h9izO2F78CbvIexZDfGN86mXf7dEkoxa9
-         h+lGw7DZfar/rMhiBdMV4WCAtrfSzoEHviL4BQsivRZF2nzHS6ZauNO62pFMsNyyFL
-         AteyHMEc3rleqpNvRDnhzy77+P+WDF7n10KIosEBEWyuPIDs9/UsoqZh4aj3MMuZza
-         bJM3xkdKlERWL9lHGePfDyU0EOfg70bLlL5XYtvIJalyVwTF6WxBKZ/z8Zb6jT28xc
-         VAay31rGQE1qLGmb8S1LUUoYgAhMPhbg/2H3rsouC0ngqss5jB13ErcvDHW8pvuGMV
-         nc42AQEJ4z8Hg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-wireless@vger.kernel.org,
-        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH] wifi: b43: fix incorrect __packed annotation
-Date:   Tue, 16 May 2023 09:45:42 +0200
-Message-Id: <20230516074554.1674536-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Tue, 16 May 2023 03:47:26 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B8930F8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:47:22 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64388cf3263so9784159b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1684223242; x=1686815242;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Zbdg58IBW7s4N+TghS0ZUxIL6roid6tTvsWGzD5zozY=;
+        b=MpcBhR0RWvYDa3Mid6OCuEv+4qN5aJSGfXNpa9S5guSHbCWy8fjrc858mX3EDrGWgt
+         1S74f4DXgDuP/GOlyO6WhrJx+3X+yNRU8VQwd+79uyhJPD3xTYT/356HAGspsNbQh792
+         jas/mUtj1PZ8BjaKuyk+1V8MM3X8mjyyN1ujcD4cl10W3pBu27/nZjE0mygr6w7hrDd0
+         Yx0jQicbl0Wn4DXgIouzWiKKSA5GWwhvhHYuWJnZjOp5fAedTOadouAvEXb9ixsT7zxb
+         KgEqSCEVlboZrIIx5W53q7SMaVf5OKIvKbC0MdrsbsBsg9NqxhKnGIm4AJmxJznpAEIn
+         On2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684223242; x=1686815242;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zbdg58IBW7s4N+TghS0ZUxIL6roid6tTvsWGzD5zozY=;
+        b=QRfLkvMJZ1HrJCc7fH9fAYvMx/f9/u9QNsDu9JgrY3/3qbDuX5HcWlQhajP8mHq03H
+         zzEB8EohuRyOXQgzdVxV9ADf2rTnFzHSGqZuY/VuyWr+vAm0rKeeg18wJAjbPZXYVcBL
+         uysLBfxV9LSEZs+CxRJciI+eCvJE3zKvUj8NojWBZ6WuCFvzpd649MKro5srVhPdizov
+         88Am2x6cNmn8WL0NQ37vUAIqQP2e8igE+QHqZ9PnoTLtToG3Clu5BevSHsdLHe9DjncR
+         3wRrWjQtWztxXS1httP6fvHneucJyf04ypv4Epwo3qd6Kj7XXRigvQQucuVld2GQtT9L
+         9IfA==
+X-Gm-Message-State: AC+VfDzGQzGn8QgxZQFGkA7+wbr2871T+HKuKlQ3pMsUcEiOVG4+/OSf
+        Pu1Um2gb1W0aoz7AZEPhl56wNg==
+X-Google-Smtp-Source: ACHHUZ5kOHm53/fpKiobhMW6lfXHCo/g+Q1KeaY9D5cUsEabofat9LGZHyAVjmgRZKyA3rZmxwS5qg==
+X-Received: by 2002:a05:6a20:7354:b0:101:1d1d:43a4 with SMTP id v20-20020a056a20735400b001011d1d43a4mr31893987pzc.15.1684223242172;
+        Tue, 16 May 2023 00:47:22 -0700 (PDT)
+Received: from [10.70.247.178] ([139.177.225.232])
+        by smtp.gmail.com with ESMTPSA id p19-20020a63f453000000b005287b22ea8esm12991287pgk.88.2023.05.16.00.47.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 00:47:21 -0700 (PDT)
+Message-ID: <fd8bda4b-32ee-d06d-af77-12e30e70c0bf@bytedance.com>
+Date:   Tue, 16 May 2023 15:47:16 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+From:   Gang Li <ligang.bdlg@bytedance.com>
+Subject: Re: [QUESTION FOR ARM64 TLB] performance issue and implementation
+ difference of TLB flush
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <2eb026b8-9e13-2b60-9e14-06417b142ac9@bytedance.com>
+ <ZEokfJSM9a4ZZvQv@FVFF77S0Q05N>
+ <369d1be2-d418-1bfb-bfc2-b25e4e542d76@bytedance.com>
+ <9d976db8-b800-ad84-9c67-0afb942934d9@bytedance.com>
+ <ZFpZAGeEXomG/eKS@FVFF77S0Q05N.cambridge.arm.com>
+Content-Language: en-US
+In-Reply-To: <ZFpZAGeEXomG/eKS@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi,
 
-clang warns about an unpacked structure inside of a packed one:
+On 2023/5/9 22:30, Mark Rutland wrote:
+> For example, early in D8.13 we have the rule:
+> 
+> | R_SQBCS
+> |
+> |   When address translation is enabled, a translation table entry for an
+> |   in-context translation regime that does not cause a Translation fault, an
+> |   Address size fault, or an Access flag fault is permitted to be cached in a
+> |   TLB or intermediate TLB caching structure as the result of an explicit or
+> |   speculative access.
+> 
 
-drivers/net/wireless/broadcom/b43/b43.h:654:4: error: field data within 'struct b43_iv' is less aligned than 'union (unnamed union at /home/arnd/arm-soc/drivers/net/wireless/broadcom/b43/b43.h:651:2)' and is usually due to 'struct b43_iv' being packed, which can lead to unaligned accesses [-Werror,-Wunaligned-access]
+Thanks a lot!
 
-The problem here is that the anonymous union has the default alignment
-from its members, apparently because the original author mixed up the
-placement of the __packed attribute by placing it next to the struct
-member rather than the union definition. As the struct itself is
-also marked as __packed, there is no need to mark its members, so just
-move the annotation to the inner type instead.
+I looked up the x86 manual and found that the x86 TLB cache mechanism is
+similar to arm64 (but the x86 guys haven't reply me yet):
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/wireless/broadcom/b43/b43.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Intel® 64 and IA-32 Architectures Software Developer Manuals:
+> 4.10.2.3 Details of TLB Use
+> Subject to the limitations given in the previous paragraph, the
+> processor may cache a translation for any linear address, even if that
+> address is not used to access memory. For example, the processor may
+> cache translations required for prefetches and for accesses that result
+> from speculative execution that would never actually occur in the
+> executed code path.
 
-diff --git a/drivers/net/wireless/broadcom/b43/b43.h b/drivers/net/wireless/broadcom/b43/b43.h
-index 9fc7c088a539..67b4bac048e5 100644
---- a/drivers/net/wireless/broadcom/b43/b43.h
-+++ b/drivers/net/wireless/broadcom/b43/b43.h
-@@ -651,7 +651,7 @@ struct b43_iv {
- 	union {
- 		__be16 d16;
- 		__be32 d32;
--	} data __packed;
-+	} __packed data;
- } __packed;
- 
- 
--- 
-2.39.2
+Both architectures have similar TLB cache policies, why arm64 flush all
+and x86 flush local in ghes_map and ghes_unmap?
 
+I think flush all may be unnecessary.
+
+1. Before accessing ghes data. Each CPU needs to call ghes_map, which
+will create the mapping and flush their own TLb to make sure the current
+CPU is using the latest mapping.
+
+2. And there is no need to flush all in ghes_unmap, because the ghes_map
+of other CPUs will flush their own TLBs before accessing the memory.
+
+What do you think?
+
+Thanks,
+Gang Li.
