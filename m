@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89771705647
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0D270564B
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjEPSqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S229719AbjEPSrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjEPSqt (ORCPT
+        with ESMTP id S230158AbjEPSrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:46:49 -0400
-Received: from out-42.mta1.migadu.com (out-42.mta1.migadu.com [IPv6:2001:41d0:203:375::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489F81B5
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:46:45 -0700 (PDT)
-Date:   Tue, 16 May 2023 18:46:39 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684262803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CK/p0lkmv/Tqb9sGLpB8/chiSJ3ZIxj/h3TTrpNfdf0=;
-        b=qSWvpu06QCE5s64r+PVFlGYriE800M/aXScyB5KM89Zg+oqn7rzUouemstYn358I7LD1ls
-        5WoW4Zx7WP9gKceNrz60JC7iLfhmswWhHyFEygWlweByUM2sU2vgpUySPZT08qooY1NQMA
-        h9lbI4NSqmSwKFYh1/3EXybhLdC436w=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] KVM: arm64: Use TLBI range-based intructions for
- unmap
-Message-ID: <ZGPPj1AXS0Uah2Ug@linux.dev>
-References: <20230414172922.812640-1-rananta@google.com>
- <20230414172922.812640-8-rananta@google.com>
- <ZF5xLrr2tEYdLL1i@linux.dev>
- <CAJHc60wUu3xB4J8oJ+FCxerDad1TzZLCMgHYGFfv0K-hzC0qmw@mail.gmail.com>
+        Tue, 16 May 2023 14:47:31 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBDD26B8;
+        Tue, 16 May 2023 11:47:13 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 734BB993;
+        Tue, 16 May 2023 18:47:13 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 734BB993
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1684262833; bh=obidCeCWF2KGB0qky+83Ie4e7z76fxG96v1p7sOnKgc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=UwDh5+r5O+CJ/HU2EnwCRTcitbQ95ZmeKnWjlv+4WTk7p17CB+R0/deYSJDsmiOC9
+         eu3obp2YJ8RpueOL1DpR8p2wfZpcue3u8h4cLYwHIq+eG81giYT8RsKlhbjzHaZI5O
+         63iU6XLss723Sqc+3PXUQwW7glqkKJf2wCmRGvnlRxjdI8Jb2IXJ0tbjBsvWDy8yJr
+         RVcHL+spTFb50sSf8LAD5+IENxZsRHtGqxdhOkvTd/1H1KYq0m/XFe7VOo8iDbmWgJ
+         8brbFol4TZ2FAvy9UFIJpzP6pNd6NDDgi/aoX8ToHcOfH6DilUZDcdDRjj0v1YpNQr
+         bPkR1j3VHAe8w==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] docs: quickly-build-trimmed-linux: various small
+ fixes and improvements
+In-Reply-To: <6f4684b9a5d11d3adb04e0af3cfc60db8b28eeb2.1684140700.git.linux@leemhuis.info>
+References: <6f4684b9a5d11d3adb04e0af3cfc60db8b28eeb2.1684140700.git.linux@leemhuis.info>
+Date:   Tue, 16 May 2023 12:47:12 -0600
+Message-ID: <87r0rgazbj.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJHc60wUu3xB4J8oJ+FCxerDad1TzZLCMgHYGFfv0K-hzC0qmw@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -60,40 +51,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 10:21:33AM -0700, Raghavendra Rao Ananta wrote:
-> On Fri, May 12, 2023 at 10:02 AM Oliver Upton <oliver.upton@linux.dev> wrote:
-> > >  int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
-> > >  {
-> > > +     int ret;
-> > > +     struct stage2_unmap_data unmap_data = {
-> > > +             .pgt = pgt,
-> > > +             /*
-> > > +              * If FEAT_TLBIRANGE is implemented, defer the individial PTE
-> > > +              * TLB invalidations until the entire walk is finished, and
-> > > +              * then use the range-based TLBI instructions to do the
-> > > +              * invalidations. Condition this upon S2FWB in order to avoid
-> > > +              * a page-table walk again to perform the CMOs after TLBI.
-> > > +              */
-> > > +             .skip_pte_tlbis = system_supports_tlb_range() &&
-> > > +                                     stage2_has_fwb(pgt),
-> >
-> > Why can't the underlying walker just call these two helpers directly?
-> > There are static keys behind these...
-> >
-> I wasn't aware of that. Although, I tried to look into the
-> definitions, but couldn't understand how static keys are at play here.
-> By any chance are you referring to the alternative_has_feature_*()
-> implementations when checking for cpu capabilities?
+Thorsten Leemhuis <linux@leemhuis.info> writes:
 
-Ah, right, these were recently changed to rely on alternative patching
-in commit 21fb26bfb01f ("arm64: alternatives: add alternative_has_feature_*()").
-Even still, the significance remains as the alternative patching
-completely eliminates a conditional branch on the presence of a
-particular feature.
+> * improve the short description of localmodconfig in the step-by-step
+>   guide while fixing its broken first sentence
+>
+> * briefly mention immutable Linux distributions
+>
+> * use '--shallow-exclude=v6.0' throughout the document
+>
+> * instead of "git reset --hard; git checkout ..." use "git checkout
+>   --force ..." in the step-by-step guide: this matches the TLDR and is
+>   one command less to execute. This led to a few small adjustments to
+>   the text and the flow in the surrounding area.
+>
+> * fix two thinkos in the section explaining full git clones
+>
+> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+> ---
+>
+> Hi. Let me know if you would have prefered this as five seperate
+> commits. Ciao, Thorsten
 
-Initializing a local with the presence/absence of a feature defeats such
-an optimization.
+That would be kind of silly; one patch for a set of fixups like this is
+fine. 
 
--- 
-Thanks,
-Oliver
+>  .../quickly-build-trimmed-linux.rst           | 49 ++++++++++---------
+>  1 file changed, 27 insertions(+), 22 deletions(-)
+
+Applied, thanks.
+
+jon
