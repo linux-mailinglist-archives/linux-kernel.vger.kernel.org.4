@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1668A705557
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C0670555C
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 19:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbjEPRsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 13:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
+        id S231367AbjEPRs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 13:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbjEPRsO (ORCPT
+        with ESMTP id S231888AbjEPRsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 13:48:14 -0400
+        Tue, 16 May 2023 13:48:17 -0400
 Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB087DBF;
-        Tue, 16 May 2023 10:47:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF55A5FA;
+        Tue, 16 May 2023 10:48:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
         s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
         Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=WuwLzoPe50r5og7BLUtbSp+J5xPioNFelvYHJR4Aa7I=; b=wKQxH/2lssHzfY4uos4gmmjwg1
-        ACeyMFeHTS0av97awKhfo5zX2D4p59o2g0cOyrOfKe+fYWYb995HUokiBGH9dRKs5kiE2LTgmY2Tj
-        8pCn9oIkxfJHSbi00djouGPJf5mnCliZLuz+l8J2jhjisXEK+8WpNb39LglCOhvZvXv8cWT71VXv1
-        0j4mBHUGt9C5/yOywEt2UOI1KcJHX743EF3zyYY7qjzeOWPEGWXsJeaePbsWBXSD3L5LVYRDIXuLv
-        ZbMcly5AAetLvCqEplfm9gMhH0LuSrk+VBAX8jUsHenrZQCJpb5xTVWmTkSHLvSFVgeQzWNpBnkgO
-        D/UC1hzQ==;
+        bh=NwKDN2wROXKQZ2KQl5DJ4omg17om01ewgOzriNwmhpQ=; b=o+eKAF4DKB2NXA4uiJKvdRv4++
+        Rhk2UnZpDCeIDcXdP+wEiy5AcER6TtBerveeVkIIR1OiDsycPHvIu3aWyITi6aLtW+M8LAaWr0YWy
+        UJU8MWqHXB7xKYFhijtrpDkyIgtAyDwOfbNoxk6xcaVrsGtJm0rUwjncKRcmClVz//zAZHHweN/Np
+        icdWOhYK0mogyr4MgscWYZTT1q3NzZsSY/0ya+nVeMlxzCzzQy5wxanxeWPBilJe44lyJtz8qnfL5
+        eeHiTS+WNBw3vpeN0djduxrE11+zVEENRY4i3sl8ETBjwBmV5GqKYJQX6ie1UGvfmjGyrqenq3NrT
+        jRnNIjlA==;
 Received: from [2001:4d48:ad59:1403::16a3] (helo=earth.li)
         by the.earth.li with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <noodles@earth.li>)
-        id 1pyylq-00GMrn-OZ; Tue, 16 May 2023 18:47:34 +0100
-Date:   Tue, 16 May 2023 18:47:29 +0100
+        id 1pyym9-00GMu0-L7; Tue, 16 May 2023 18:47:53 +0100
+Date:   Tue, 16 May 2023 18:47:47 +0100
 From:   Jonathan McDowell <noodles@earth.li>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -45,8 +45,8 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-gpio@vger.kernel.org
-Subject: [PATCH v3 2/5] pinctrl: axp209: Add support for GPIO3 on the AXP209
-Message-ID: <dde40307f0ebc23b9841c32e702b481ab5193dc4.1684258957.git.noodles@earth.li>
+Subject: [PATCH v3 3/5] ARM: dts: sun5i: chip: Enable bluetooth
+Message-ID: <08eb325e3332441ea102da109acb22557d12de89.1684258957.git.noodles@earth.li>
 References: <cover.1683719613.git.noodles@earth.li>
  <cover.1684258957.git.noodles@earth.li>
 MIME-Version: 1.0
@@ -63,103 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AXP209 device has a 4th GPIO which has a slightly different register
-setup, where the control + status bits are held in a single register
-rather than sharing AXP20X_GPIO20_SS with GPIOs 0-2.
+The C.H.I.P has an rtl8723bs device with the bluetooth interface hooked
+up on UART3. Support for this didn't exist in mainline when the DTS was
+initially added, but it does now, so enable it.
 
 Signed-off-by: Jonathan McDowell <noodles@earth.li>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/pinctrl/pinctrl-axp209.c | 42 ++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ arch/arm/boot/dts/sun5i-r8-chip.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/pinctrl/pinctrl-axp209.c b/drivers/pinctrl/pinctrl-axp209.c
-index 0bc1b381a2b8..b3ba25435c34 100644
---- a/drivers/pinctrl/pinctrl-axp209.c
-+++ b/drivers/pinctrl/pinctrl-axp209.c
-@@ -30,6 +30,11 @@
- #define AXP20X_GPIO_FUNCTION_OUT_HIGH	1
- #define AXP20X_GPIO_FUNCTION_INPUT	2
- 
-+#define AXP20X_GPIO3_FUNCTIONS		GENMASK(2, 1)
-+#define AXP20X_GPIO3_FUNCTION_OUT_LOW	0
-+#define AXP20X_GPIO3_FUNCTION_OUT_HIGH	2
-+#define AXP20X_GPIO3_FUNCTION_INPUT	4
+diff --git a/arch/arm/boot/dts/sun5i-r8-chip.dts b/arch/arm/boot/dts/sun5i-r8-chip.dts
+index fd37bd1f3920..4192c23848c3 100644
+--- a/arch/arm/boot/dts/sun5i-r8-chip.dts
++++ b/arch/arm/boot/dts/sun5i-r8-chip.dts
+@@ -255,6 +255,12 @@ &uart3 {
+ 	pinctrl-0 = <&uart3_pg_pins>,
+ 		    <&uart3_cts_rts_pg_pins>;
+ 	status = "okay";
 +
- #define AXP20X_FUNC_GPIO_OUT		0
- #define AXP20X_FUNC_GPIO_IN		1
- #define AXP20X_FUNC_LDO			2
-@@ -73,6 +78,7 @@ static const struct pinctrl_pin_desc axp209_pins[] = {
- 	PINCTRL_PIN(0, "GPIO0"),
- 	PINCTRL_PIN(1, "GPIO1"),
- 	PINCTRL_PIN(2, "GPIO2"),
-+	PINCTRL_PIN(3, "GPIO3"),
++	bluetooth {
++		compatible = "realtek,rtl8723bs-bt";
++		device-wake-gpios = <&axp_gpio 3 GPIO_ACTIVE_HIGH>;
++		host-wake-gpios = <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 */
++	};
  };
  
- static const struct pinctrl_pin_desc axp22x_pins[] = {
-@@ -130,6 +136,14 @@ static int axp20x_gpio_get(struct gpio_chip *chip, unsigned int offset)
- 	unsigned int val;
- 	int ret;
- 
-+	/* AXP209 has GPIO3 status sharing the settings register */
-+	if (offset == 3) {
-+		ret = regmap_read(pctl->regmap, AXP20X_GPIO3_CTRL, &val);
-+		if (ret)
-+			return ret;
-+		return !!(val & BIT(0));
-+	}
-+
- 	ret = regmap_read(pctl->regmap, AXP20X_GPIO20_SS, &val);
- 	if (ret)
- 		return ret;
-@@ -144,6 +158,17 @@ static int axp20x_gpio_get_direction(struct gpio_chip *chip,
- 	unsigned int val;
- 	int reg, ret;
- 
-+	/* AXP209 GPIO3 settings have a different layout */
-+	if (offset == 3) {
-+		ret = regmap_read(pctl->regmap, AXP20X_GPIO3_CTRL, &val);
-+		if (ret)
-+			return ret;
-+		if (val & AXP20X_GPIO3_FUNCTION_INPUT)
-+			return GPIO_LINE_DIRECTION_IN;
-+
-+		return GPIO_LINE_DIRECTION_OUT;
-+	}
-+
- 	reg = axp20x_gpio_get_reg(offset);
- 	if (reg < 0)
- 		return reg;
-@@ -184,6 +209,15 @@ static void axp20x_gpio_set(struct gpio_chip *chip, unsigned int offset,
- 	struct axp20x_pctl *pctl = gpiochip_get_data(chip);
- 	int reg;
- 
-+	/* AXP209 has GPIO3 status sharing the settings register */
-+	if (offset == 3) {
-+		regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CTRL,
-+				   AXP20X_GPIO3_FUNCTIONS,
-+				   value ? AXP20X_GPIO3_FUNCTION_OUT_HIGH :
-+				   AXP20X_GPIO3_FUNCTION_OUT_LOW);
-+		return;
-+	}
-+
- 	reg = axp20x_gpio_get_reg(offset);
- 	if (reg < 0)
- 		return;
-@@ -200,6 +234,14 @@ static int axp20x_pmx_set(struct pinctrl_dev *pctldev, unsigned int offset,
- 	struct axp20x_pctl *pctl = pinctrl_dev_get_drvdata(pctldev);
- 	int reg;
- 
-+	/* AXP209 GPIO3 settings have a different layout */
-+	if (offset == 3) {
-+		return regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CTRL,
-+				   AXP20X_GPIO3_FUNCTIONS,
-+				   config == AXP20X_MUX_GPIO_OUT ? AXP20X_GPIO3_FUNCTION_OUT_LOW :
-+				   AXP20X_GPIO3_FUNCTION_INPUT);
-+	}
-+
- 	reg = axp20x_gpio_get_reg(offset);
- 	if (reg < 0)
- 		return reg;
+ &usb_otg {
 -- 
 2.39.2
 
