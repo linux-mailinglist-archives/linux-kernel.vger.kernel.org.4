@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4338C704F7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B54C704F80
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbjEPNkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S233681AbjEPNkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232637AbjEPNkF (ORCPT
+        with ESMTP id S233656AbjEPNkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:40:05 -0400
+        Tue, 16 May 2023 09:40:08 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D1C90;
-        Tue, 16 May 2023 06:40:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89142CA;
+        Tue, 16 May 2023 06:40:06 -0700 (PDT)
 Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GDbVUV010413;
-        Tue, 16 May 2023 13:39:04 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GDbZaI011013;
+        Tue, 16 May 2023 13:39:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=xxJNztKTA3zJhhkcN32/bFUs1HImmaNEsFHe415i7oU=;
- b=LfMJkjnItHquO9QBhQCuB+HQMFJ2YV3xRU3iyf7si+hyu7LX5a9mqrTmtNiMNi3XMidR
- mRKGvjR7Qn7/BKIvTkMllGzOeKO//K4cw3wNno1wTFhUye/H/tKrJqGM5fAIrQZbt1I+
- IybTEklcxpq0MYumV00szsgVu9qcB0X6MmlLZ/ug67iVGJxS3/ZIHdHb7atf+zhJJBoe
- stI9liHbN7W6EjwDnpRTW/HGrWtUFrUpu6mJuiniECX08XX6QDAedkgNXvdIVcC1Jyo2
- BUGd32n6pn8bGvK8MQNP/qK14sjTOvSgExFkPkbOrMxyqhkzKwGkLKkThci+wZULZpoJ qQ== 
+ bh=KQEQEFbumEsDNKL38NwfbWvV/XWByejTyz8oeYut8Q0=;
+ b=TW3NlfUOx7A0joi2/uojCjxrSuMiZab0UZmy7SrEmrUl2YMBP85Z40eji0hMDv2loGzV
+ 2SAeJbBMvbRIZQiM3WNRcVJOGTFsw2FcddkIEIg6YA1irtNFqowlH7ooz8B7EzgFBCXT
+ nBK9VoW7YAOfGfyBRYQkQeQLG5zHHODXz4i00UeXBoLVQSpZdH86sxclXRJgLOOVl3Dt
+ kaPkvIZDWi7KOgRICG0vXdjGkWbeDQj3wnB6t3cv+PkCOoRR8NDTIxlfy7bAaB/spr9p
+ 2fgD1eVD26poqtMzc9wDE646nM1TObqSBLFMg24spqLgCjwsmoFm4RgdSoP/FBlt6Gbm 2g== 
 Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8h655j7-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8h655m1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 13:39:03 +0000
+        Tue, 16 May 2023 13:39:08 +0000
 Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G4UV0P012372;
-        Tue, 16 May 2023 13:38:21 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sp4h-1
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G5LLil028625;
+        Tue, 16 May 2023 13:38:22 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sp4g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 16 May 2023 13:38:21 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GDcJ5Y39453362
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GDcJfC17957414
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 16 May 2023 13:38:19 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1F6E220043;
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C43A2004B;
         Tue, 16 May 2023 13:38:19 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0330E20040;
-        Tue, 16 May 2023 13:38:19 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F105920040;
+        Tue, 16 May 2023 13:38:18 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
         Tue, 16 May 2023 13:38:18 +0000 (GMT)
 Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-        id AD1ADE0803; Tue, 16 May 2023 15:38:18 +0200 (CEST)
+        id B0648E081B; Tue, 16 May 2023 15:38:18 +0200 (CEST)
 From:   Sven Schnelle <svens@linux.ibm.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -62,22 +62,22 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Andy Lutomirski <luto@kernel.org>
 Cc:     linux-s390@vger.kernel.org, hca@linux.ibm.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] entry: move the exit path to header files
-Date:   Tue, 16 May 2023 15:38:09 +0200
-Message-Id: <20230516133810.171487-2-svens@linux.ibm.com>
+Subject: [PATCH 2/2] entry: move the enter path to header files
+Date:   Tue, 16 May 2023 15:38:10 +0200
+Message-Id: <20230516133810.171487-3-svens@linux.ibm.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516133810.171487-1-svens@linux.ibm.com>
 References: <20230516133810.171487-1-svens@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KKQzG2VSrvRZYV0pS2-7zbMQJnaS2n_k
-X-Proofpoint-ORIG-GUID: KKQzG2VSrvRZYV0pS2-7zbMQJnaS2n_k
+X-Proofpoint-GUID: 5SxnUMWZzuC7Od8wZRdo27VWoJAXjWva
+X-Proofpoint-ORIG-GUID: 5SxnUMWZzuC7Od8wZRdo27VWoJAXjWva
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-16_06,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=843
- priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1011 malwarescore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=605
+ priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015 malwarescore=0
  phishscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
  bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305160114
@@ -95,416 +95,309 @@ move them to include/linux/entry-common.h.
 
 Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 ---
- include/linux/entry-common.h | 182 ++++++++++++++++++++++++++++++++++-
- kernel/entry/common.c        | 168 --------------------------------
- 2 files changed, 179 insertions(+), 171 deletions(-)
+ include/linux/entry-common.h | 123 +++++++++++++++++++++++++++++++++--
+ kernel/entry/common.c        | 113 --------------------------------
+ 2 files changed, 118 insertions(+), 118 deletions(-)
 
 diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-index d95ab85f96ba..b409fbcbd3ac 100644
+index b409fbcbd3ac..cada155bf316 100644
 --- a/include/linux/entry-common.h
 +++ b/include/linux/entry-common.h
-@@ -7,8 +7,13 @@
- #include <linux/syscalls.h>
- #include <linux/seccomp.h>
- #include <linux/sched.h>
--
-+#include <linux/livepatch.h>
- #include <asm/entry-common.h>
-+#include <linux/context_tracking.h>
-+#include <linux/resume_user_mode.h>
-+#include <linux/tick.h>
-+
-+#include <trace/events/syscalls.h>
+@@ -15,6 +15,8 @@
  
+ #include <trace/events/syscalls.h>
+ 
++bool syscall_user_dispatch(struct pt_regs *regs);
++
  /*
   * Define dummy _TIF work flags if not defined by the architecture or for
-@@ -291,7 +296,7 @@ void exit_to_user_mode(void);
-  * make the final state transitions. Interrupts must stay disabled between
-  * return from this function and the invocation of exit_to_user_mode().
+  * disabled functionality.
+@@ -103,7 +105,7 @@ static __always_inline void arch_enter_from_user_mode(struct pt_regs *regs) {}
+  * done between establishing state and enabling interrupts. The caller must
+  * enable interrupts before invoking syscall_enter_from_user_mode_work().
   */
--void syscall_exit_to_user_mode_work(struct pt_regs *regs);
-+static void syscall_exit_to_user_mode_work(struct pt_regs *regs);
+-void enter_from_user_mode(struct pt_regs *regs);
++static void enter_from_user_mode(struct pt_regs *regs);
  
  /**
-  * syscall_exit_to_user_mode - Handle work before returning to user mode
-@@ -350,7 +355,7 @@ void irqentry_enter_from_user_mode(struct pt_regs *regs);
-  * Interrupt exit is not invoking #1 which is the syscall specific one time
-  * work.
+  * syscall_enter_from_user_mode_prepare - Establish state and enable interrupts
+@@ -120,7 +122,7 @@ void enter_from_user_mode(struct pt_regs *regs);
+  * This is invoked when there is extra architecture specific functionality
+  * to be done between establishing state and handling user mode entry work.
   */
--void irqentry_exit_to_user_mode(struct pt_regs *regs);
-+static void irqentry_exit_to_user_mode(struct pt_regs *regs);
+-void syscall_enter_from_user_mode_prepare(struct pt_regs *regs);
++static void syscall_enter_from_user_mode_prepare(struct pt_regs *regs);
  
- #ifndef irqentry_state
  /**
-@@ -465,4 +470,175 @@ irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs);
+  * syscall_enter_from_user_mode_work - Check and handle work before invoking
+@@ -145,7 +147,7 @@ void syscall_enter_from_user_mode_prepare(struct pt_regs *regs);
+  *     ptrace_report_syscall_entry(), __secure_computing(), trace_sys_enter()
+  *  2) Invocation of audit_syscall_entry()
   */
- void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t irq_state);
+-long syscall_enter_from_user_mode_work(struct pt_regs *regs, long syscall);
++static long syscall_enter_from_user_mode_work(struct pt_regs *regs, long syscall);
  
-+static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
-+					    unsigned long ti_work)
+ /**
+  * syscall_enter_from_user_mode - Establish state and check and handle work
+@@ -164,7 +166,7 @@ long syscall_enter_from_user_mode_work(struct pt_regs *regs, long syscall);
+  * Returns: The original or a modified syscall number. See
+  * syscall_enter_from_user_mode_work() for further explanation.
+  */
+-long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall);
++static long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall);
+ 
+ /**
+  * local_irq_enable_exit_to_user - Exit to user variant of local_irq_enable()
+@@ -281,7 +283,7 @@ void arch_do_signal_or_restart(struct pt_regs *regs);
+  * non-instrumentable.
+  * The caller has to invoke syscall_exit_to_user_mode_work() before this.
+  */
+-void exit_to_user_mode(void);
++static void exit_to_user_mode(void);
+ 
+ /**
+  * syscall_exit_to_user_mode_work - Handle work before returning to user mode
+@@ -640,5 +642,116 @@ static __always_inline void irqentry_exit_to_user_mode(struct pt_regs *regs)
+ 	__exit_to_user_mode();
+ }
+ 
++static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
 +{
-+	/*
-+	 * Before returning to user space ensure that all pending work
-+	 * items have been completed.
-+	 */
-+	while (ti_work & EXIT_TO_USER_MODE_WORK) {
++	arch_enter_from_user_mode(regs);
++	lockdep_hardirqs_off(CALLER_ADDR0);
 +
-+		local_irq_enable_exit_to_user(ti_work);
++	CT_WARN_ON(__ct_state() != CONTEXT_USER);
++	user_exit_irqoff();
 +
-+		if (ti_work & _TIF_NEED_RESCHED)
-+			schedule();
-+
-+		if (ti_work & _TIF_UPROBE)
-+			uprobe_notify_resume(regs);
-+
-+		if (ti_work & _TIF_PATCH_PENDING)
-+			klp_update_patch_state(current);
-+
-+		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
-+			arch_do_signal_or_restart(regs);
-+
-+		if (ti_work & _TIF_NOTIFY_RESUME)
-+			resume_user_mode_work(regs);
-+
-+		/* Architecture specific TIF work */
-+		arch_exit_to_user_mode_work(regs, ti_work);
-+
-+		/*
-+		 * Disable interrupts and reevaluate the work flags as they
-+		 * might have changed while interrupts and preemption was
-+		 * enabled above.
-+		 */
-+		local_irq_disable_exit_to_user();
-+
-+		/* Check if any of the above work has queued a deferred wakeup */
-+		tick_nohz_user_enter_prepare();
-+
-+		ti_work = read_thread_flags();
-+	}
-+
-+	/* Return the latest work state for arch_exit_to_user_mode() */
-+	return ti_work;
-+}
-+
-+
-+static void exit_to_user_mode_prepare(struct pt_regs *regs)
-+{
-+	unsigned long ti_work;
-+
-+	lockdep_assert_irqs_disabled();
-+
-+	/* Flush pending rcuog wakeup before the last need_resched() check */
-+	tick_nohz_user_enter_prepare();
-+
-+	ti_work = read_thread_flags();
-+	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
-+		ti_work = exit_to_user_mode_loop(regs, ti_work);
-+
-+	arch_exit_to_user_mode_prepare(regs, ti_work);
-+
-+	/* Ensure that the address limit is intact and no locks are held */
-+	addr_limit_user_check();
-+	kmap_assert_nomap();
-+	lockdep_assert_irqs_disabled();
-+	lockdep_sys_exit();
-+}
-+
-+/*
-+ * If SYSCALL_EMU is set, then the only reason to report is when
-+ * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall
-+ * instruction has been already reported in syscall_enter_from_user_mode().
-+ */
-+static inline bool report_single_step(unsigned long work)
-+{
-+	if (work & SYSCALL_WORK_SYSCALL_EMU)
-+		return false;
-+
-+	return work & SYSCALL_WORK_SYSCALL_EXIT_TRAP;
-+}
-+
-+static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
-+{
-+	bool step;
-+
-+	/*
-+	 * If the syscall was rolled back due to syscall user dispatching,
-+	 * then the tracers below are not invoked for the same reason as
-+	 * the entry side was not invoked in syscall_trace_enter(): The ABI
-+	 * of these syscalls is unknown.
-+	 */
-+	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
-+		if (unlikely(current->syscall_dispatch.on_dispatch)) {
-+			current->syscall_dispatch.on_dispatch = false;
-+			return;
-+		}
-+	}
-+
-+	audit_syscall_exit(regs);
-+
-+	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
-+		trace_sys_exit(regs, syscall_get_return_value(current, regs));
-+
-+	step = report_single_step(work);
-+	if (step || work & SYSCALL_WORK_SYSCALL_TRACE)
-+		ptrace_report_syscall_exit(regs, step);
-+}
-+
-+/*
-+ * Syscall specific exit to user mode preparation. Runs with interrupts
-+ * enabled.
-+ */
-+static __always_inline void syscall_exit_to_user_mode_prepare(struct pt_regs *regs)
-+{
-+	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
-+	unsigned long nr = syscall_get_nr(current, regs);
-+
-+	CT_WARN_ON(ct_state() != CONTEXT_KERNEL);
-+
-+	if (IS_ENABLED(CONFIG_PROVE_LOCKING)) {
-+		if (WARN(irqs_disabled(), "syscall %lu left IRQs disabled", nr))
-+			local_irq_enable();
-+	}
-+
-+	rseq_syscall(regs);
-+
-+	/*
-+	 * Do one-time syscall specific work. If these work items are
-+	 * enabled, we want to run them exactly once per syscall exit with
-+	 * interrupts enabled.
-+	 */
-+	if (unlikely(work & SYSCALL_WORK_EXIT))
-+		syscall_exit_work(regs, work);
-+}
-+
-+static __always_inline void __syscall_exit_to_user_mode_work(struct pt_regs *regs)
-+{
-+	syscall_exit_to_user_mode_prepare(regs);
-+	local_irq_disable_exit_to_user();
-+	exit_to_user_mode_prepare(regs);
-+}
-+
-+static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
-+{
-+	__syscall_exit_to_user_mode_work(regs);
-+}
-+
-+/* See comment for exit_to_user_mode() in entry-common.h */
-+static __always_inline void __exit_to_user_mode(void)
-+{
 +	instrumentation_begin();
-+	trace_hardirqs_on_prepare();
-+	lockdep_hardirqs_on_prepare();
++	kmsan_unpoison_entry_regs(regs);
++	trace_hardirqs_off_finish();
 +	instrumentation_end();
-+
-+	user_enter_irqoff();
-+	arch_exit_to_user_mode();
-+	lockdep_hardirqs_on(CALLER_ADDR0);
 +}
 +
-+
-+static __always_inline void irqentry_exit_to_user_mode(struct pt_regs *regs)
++static __always_inline void enter_from_user_mode(struct pt_regs *regs)
 +{
-+	instrumentation_begin();
-+	exit_to_user_mode_prepare(regs);
-+	instrumentation_end();
++	__enter_from_user_mode(regs);
++}
++
++static __always_inline void exit_to_user_mode(void)
++{
 +	__exit_to_user_mode();
 +}
 +
++static inline __always_inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
++{
++	if (unlikely(audit_context())) {
++		unsigned long args[6];
 +
++		syscall_get_arguments(current, regs, args);
++		audit_syscall_entry(syscall, args[0], args[1], args[2], args[3]);
++	}
++}
++
++static __always_inline long syscall_trace_enter(struct pt_regs *regs, long syscall,
++				unsigned long work)
++{
++	long ret = 0;
++
++	/*
++	 * Handle Syscall User Dispatch.  This must comes first, since
++	 * the ABI here can be something that doesn't make sense for
++	 * other syscall_work features.
++	 */
++	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
++		if (syscall_user_dispatch(regs))
++			return -1L;
++	}
++
++	/* Handle ptrace */
++	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
++		ret = ptrace_report_syscall_entry(regs);
++		if (ret || (work & SYSCALL_WORK_SYSCALL_EMU))
++			return -1L;
++	}
++
++	/* Do seccomp after ptrace, to catch any tracer changes. */
++	if (work & SYSCALL_WORK_SECCOMP) {
++		ret = __secure_computing(NULL);
++		if (ret == -1L)
++			return ret;
++	}
++
++	/* Either of the above might have changed the syscall number */
++	syscall = syscall_get_nr(current, regs);
++
++	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT))
++		trace_sys_enter(regs, syscall);
++
++	syscall_enter_audit(regs, syscall);
++
++	return ret ? : syscall;
++}
++
++static __always_inline long
++__syscall_enter_from_user_work(struct pt_regs *regs, long syscall)
++{
++	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
++
++	if (work & SYSCALL_WORK_ENTER)
++		syscall = syscall_trace_enter(regs, syscall, work);
++
++	return syscall;
++}
++
++static __always_inline long syscall_enter_from_user_mode_work(struct pt_regs *regs, long syscall)
++{
++	return __syscall_enter_from_user_work(regs, syscall);
++}
++
++static __always_inline  long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall)
++{
++	long ret;
++
++	__enter_from_user_mode(regs);
++
++	instrumentation_begin();
++	local_irq_enable();
++	ret = __syscall_enter_from_user_work(regs, syscall);
++	instrumentation_end();
++
++	return ret;
++}
++
++static __always_inline void syscall_enter_from_user_mode_prepare(struct pt_regs *regs)
++{
++	__enter_from_user_mode(regs);
++	instrumentation_begin();
++	local_irq_enable();
++	instrumentation_end();
++}
+ 
  #endif
 diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index be61332c66b5..66af971c3fe4 100644
+index 66af971c3fe4..3bd528bb5d47 100644
 --- a/kernel/entry/common.c
 +++ b/kernel/entry/common.c
-@@ -123,19 +123,6 @@ noinstr void syscall_enter_from_user_mode_prepare(struct pt_regs *regs)
- 	instrumentation_end();
- }
+@@ -15,119 +15,6 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/syscalls.h>
  
--/* See comment for exit_to_user_mode() in entry-common.h */
--static __always_inline void __exit_to_user_mode(void)
+-/* See comment for enter_from_user_mode() in entry-common.h */
+-static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
 -{
+-	arch_enter_from_user_mode(regs);
+-	lockdep_hardirqs_off(CALLER_ADDR0);
+-
+-	CT_WARN_ON(__ct_state() != CONTEXT_USER);
+-	user_exit_irqoff();
+-
 -	instrumentation_begin();
--	trace_hardirqs_on_prepare();
--	lockdep_hardirqs_on_prepare();
+-	kmsan_unpoison_entry_regs(regs);
+-	trace_hardirqs_off_finish();
 -	instrumentation_end();
--
--	user_enter_irqoff();
--	arch_exit_to_user_mode();
--	lockdep_hardirqs_on(CALLER_ADDR0);
 -}
 -
- void noinstr exit_to_user_mode(void)
- {
- 	__exit_to_user_mode();
-@@ -144,153 +131,6 @@ void noinstr exit_to_user_mode(void)
- /* Workaround to allow gradual conversion of architecture code */
- void __weak arch_do_signal_or_restart(struct pt_regs *regs) { }
- 
--static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
--					    unsigned long ti_work)
+-void noinstr enter_from_user_mode(struct pt_regs *regs)
 -{
--	/*
--	 * Before returning to user space ensure that all pending work
--	 * items have been completed.
--	 */
--	while (ti_work & EXIT_TO_USER_MODE_WORK) {
+-	__enter_from_user_mode(regs);
+-}
 -
--		local_irq_enable_exit_to_user(ti_work);
+-static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
+-{
+-	if (unlikely(audit_context())) {
+-		unsigned long args[6];
 -
--		if (ti_work & _TIF_NEED_RESCHED)
--			schedule();
--
--		if (ti_work & _TIF_UPROBE)
--			uprobe_notify_resume(regs);
--
--		if (ti_work & _TIF_PATCH_PENDING)
--			klp_update_patch_state(current);
--
--		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
--			arch_do_signal_or_restart(regs);
--
--		if (ti_work & _TIF_NOTIFY_RESUME)
--			resume_user_mode_work(regs);
--
--		/* Architecture specific TIF work */
--		arch_exit_to_user_mode_work(regs, ti_work);
--
--		/*
--		 * Disable interrupts and reevaluate the work flags as they
--		 * might have changed while interrupts and preemption was
--		 * enabled above.
--		 */
--		local_irq_disable_exit_to_user();
--
--		/* Check if any of the above work has queued a deferred wakeup */
--		tick_nohz_user_enter_prepare();
--
--		ti_work = read_thread_flags();
+-		syscall_get_arguments(current, regs, args);
+-		audit_syscall_entry(syscall, args[0], args[1], args[2], args[3]);
 -	}
--
--	/* Return the latest work state for arch_exit_to_user_mode() */
--	return ti_work;
 -}
 -
--static void exit_to_user_mode_prepare(struct pt_regs *regs)
+-static long syscall_trace_enter(struct pt_regs *regs, long syscall,
+-				unsigned long work)
 -{
--	unsigned long ti_work;
--
--	lockdep_assert_irqs_disabled();
--
--	/* Flush pending rcuog wakeup before the last need_resched() check */
--	tick_nohz_user_enter_prepare();
--
--	ti_work = read_thread_flags();
--	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
--		ti_work = exit_to_user_mode_loop(regs, ti_work);
--
--	arch_exit_to_user_mode_prepare(regs, ti_work);
--
--	/* Ensure that the address limit is intact and no locks are held */
--	addr_limit_user_check();
--	kmap_assert_nomap();
--	lockdep_assert_irqs_disabled();
--	lockdep_sys_exit();
--}
--
--/*
-- * If SYSCALL_EMU is set, then the only reason to report is when
-- * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall
-- * instruction has been already reported in syscall_enter_from_user_mode().
-- */
--static inline bool report_single_step(unsigned long work)
--{
--	if (work & SYSCALL_WORK_SYSCALL_EMU)
--		return false;
--
--	return work & SYSCALL_WORK_SYSCALL_EXIT_TRAP;
--}
--
--static void syscall_exit_work(struct pt_regs *regs, unsigned long work)
--{
--	bool step;
+-	long ret = 0;
 -
 -	/*
--	 * If the syscall was rolled back due to syscall user dispatching,
--	 * then the tracers below are not invoked for the same reason as
--	 * the entry side was not invoked in syscall_trace_enter(): The ABI
--	 * of these syscalls is unknown.
+-	 * Handle Syscall User Dispatch.  This must comes first, since
+-	 * the ABI here can be something that doesn't make sense for
+-	 * other syscall_work features.
 -	 */
 -	if (work & SYSCALL_WORK_SYSCALL_USER_DISPATCH) {
--		if (unlikely(current->syscall_dispatch.on_dispatch)) {
--			current->syscall_dispatch.on_dispatch = false;
--			return;
--		}
+-		if (syscall_user_dispatch(regs))
+-			return -1L;
 -	}
 -
--	audit_syscall_exit(regs);
+-	/* Handle ptrace */
+-	if (work & (SYSCALL_WORK_SYSCALL_TRACE | SYSCALL_WORK_SYSCALL_EMU)) {
+-		ret = ptrace_report_syscall_entry(regs);
+-		if (ret || (work & SYSCALL_WORK_SYSCALL_EMU))
+-			return -1L;
+-	}
 -
--	if (work & SYSCALL_WORK_SYSCALL_TRACEPOINT)
--		trace_sys_exit(regs, syscall_get_return_value(current, regs));
+-	/* Do seccomp after ptrace, to catch any tracer changes. */
+-	if (work & SYSCALL_WORK_SECCOMP) {
+-		ret = __secure_computing(NULL);
+-		if (ret == -1L)
+-			return ret;
+-	}
 -
--	step = report_single_step(work);
--	if (step || work & SYSCALL_WORK_SYSCALL_TRACE)
--		ptrace_report_syscall_exit(regs, step);
+-	/* Either of the above might have changed the syscall number */
+-	syscall = syscall_get_nr(current, regs);
+-
+-	if (unlikely(work & SYSCALL_WORK_SYSCALL_TRACEPOINT))
+-		trace_sys_enter(regs, syscall);
+-
+-	syscall_enter_audit(regs, syscall);
+-
+-	return ret ? : syscall;
 -}
 -
--/*
-- * Syscall specific exit to user mode preparation. Runs with interrupts
-- * enabled.
-- */
--static void syscall_exit_to_user_mode_prepare(struct pt_regs *regs)
+-static __always_inline long
+-__syscall_enter_from_user_work(struct pt_regs *regs, long syscall)
 -{
 -	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
--	unsigned long nr = syscall_get_nr(current, regs);
 -
--	CT_WARN_ON(ct_state() != CONTEXT_KERNEL);
+-	if (work & SYSCALL_WORK_ENTER)
+-		syscall = syscall_trace_enter(regs, syscall, work);
 -
--	if (IS_ENABLED(CONFIG_PROVE_LOCKING)) {
--		if (WARN(irqs_disabled(), "syscall %lu left IRQs disabled", nr))
--			local_irq_enable();
--	}
--
--	rseq_syscall(regs);
--
--	/*
--	 * Do one-time syscall specific work. If these work items are
--	 * enabled, we want to run them exactly once per syscall exit with
--	 * interrupts enabled.
--	 */
--	if (unlikely(work & SYSCALL_WORK_EXIT))
--		syscall_exit_work(regs, work);
+-	return syscall;
 -}
 -
--static __always_inline void __syscall_exit_to_user_mode_work(struct pt_regs *regs)
+-long syscall_enter_from_user_mode_work(struct pt_regs *regs, long syscall)
 -{
--	syscall_exit_to_user_mode_prepare(regs);
--	local_irq_disable_exit_to_user();
--	exit_to_user_mode_prepare(regs);
+-	return __syscall_enter_from_user_work(regs, syscall);
 -}
 -
--void syscall_exit_to_user_mode_work(struct pt_regs *regs)
+-noinstr long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall)
 -{
--	__syscall_exit_to_user_mode_work(regs);
--}
+-	long ret;
 -
- __visible noinstr void syscall_exit_to_user_mode(struct pt_regs *regs)
- {
- 	instrumentation_begin();
-@@ -304,14 +144,6 @@ noinstr void irqentry_enter_from_user_mode(struct pt_regs *regs)
- 	__enter_from_user_mode(regs);
- }
- 
--noinstr void irqentry_exit_to_user_mode(struct pt_regs *regs)
--{
+-	__enter_from_user_mode(regs);
+-
 -	instrumentation_begin();
--	exit_to_user_mode_prepare(regs);
+-	local_irq_enable();
+-	ret = __syscall_enter_from_user_work(regs, syscall);
 -	instrumentation_end();
+-
+-	return ret;
+-}
+-
+-noinstr void syscall_enter_from_user_mode_prepare(struct pt_regs *regs)
+-{
+-	__enter_from_user_mode(regs);
+-	instrumentation_begin();
+-	local_irq_enable();
+-	instrumentation_end();
+-}
+-
+-void noinstr exit_to_user_mode(void)
+-{
 -	__exit_to_user_mode();
 -}
 -
- noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
- {
- 	irqentry_state_t ret = {
+ /* Workaround to allow gradual conversion of architecture code */
+ void __weak arch_do_signal_or_restart(struct pt_regs *regs) { }
+ 
 -- 
 2.39.2
 
