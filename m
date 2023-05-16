@@ -2,91 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8887049A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0384A7048E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjEPJqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S232101AbjEPJRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjEPJqd (ORCPT
+        with ESMTP id S232084AbjEPJRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:46:33 -0400
-X-Greylist: delayed 902 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 02:46:30 PDT
-Received: from mail.inventec.com (mail.inventec.com [218.32.67.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C570F2;
-        Tue, 16 May 2023 02:46:30 -0700 (PDT)
-Received: from IEC1-EX2016-03.iec.inventec (10.15.2.59) by
- IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 16 May 2023 17:15:47 +0800
-Received: from IEC1-MSE-FE2.inventec.com (10.1.254.204) by
- IEC1-EX2016-03.iec.inventec (10.15.2.59) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 16 May 2023 17:15:47 +0800
-Received: from IEC1-EX2016-02.iec.inventec (IEC1-EX2016-02.iec.inventec [10.1.254.221])
-        by IEC1-MSE-FE2.inventec.com with ESMTP id 34G9FhJO052455;
-        Tue, 16 May 2023 17:15:43 +0800 (GMT-8)
-        (envelope-from Chen.PJ@inventec.com)
-Received: from IEC1-EX2016-01.iec.inventec (10.15.2.58) by
- IEC1-EX2016-02.iec.inventec (10.1.254.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 16 May 2023 17:15:43 +0800
-Received: from IEC1-EX2016-01.iec.inventec ([fe80::ad9c:c1af:d29:f80d]) by
- IEC1-EX2016-01.iec.inventec ([fe80::ad9c:c1af:d29:f80d%7]) with mapi id
- 15.01.2507.021; Tue, 16 May 2023 17:15:43 +0800
-From:   =?big5?B?Q2hlbi5QSiCzr6xmpfQgVEFP?= <Chen.PJ@inventec.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        "Andrew Jeffery" <andrew@aj.id.au>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     =?big5?B?WWUuVmljILitpnSyTSBUQU8=?= <ye.vic@inventec.com>,
-        =?big5?B?SHVhbmcuQWxhbmcgtsCtXq2mIFRBTw==?= 
-        <Huang.Alang@inventec.com>
-Subject: [PATCH] dt-bindings: arm: aspeed: add Inventec starscream-bmc
-Thread-Topic: [PATCH] dt-bindings: arm: aspeed: add Inventec starscream-bmc
-Thread-Index: AQHZh9b9H4korMyllESFK0bWK7oT/Q==
-Date:   Tue, 16 May 2023 09:15:43 +0000
-Message-ID: <c5dd9b64b4754da8b11efefd97527a4f@inventec.com>
-References: <28f0ce0a82464083ae24f9ef2f598425@inventec.com>
-In-Reply-To: <28f0ce0a82464083ae24f9ef2f598425@inventec.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-imapappendstamp: IEC1-EX2016-01.iec.inventec (15.01.2507.021)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [10.6.245.192]
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Tue, 16 May 2023 05:17:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DD25596;
+        Tue, 16 May 2023 02:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OBCPnu+BGgk3Cuo/WyqzF95R9vjNP+oDEXn6EOL1COY=; b=lcr10CU58+Jlc6aMR4VdoWQDzU
+        gfmE+pQ0R2xS9GUIF3mYGcJolDhMlwgK+pyi4K47xEFvl8zzXP2LsKocJQRnvsUqEaBGg8DIJFtYe
+        tB8AfT8e3/r1pfkeX77oiVWDWfTzLeYwA8mkfMpgo9FqvsEkKFutAaTP4C0iQym+AtcgP+uiP6aA4
+        RrlILmh7I5FHd203lw31XCkm+ljoMJb8uZh0ccyaTu42TaOPqNV09hU7GImexwdwEn4r2OQVnMbpm
+        paN7hUtaAtOMbUyOkTaWhz64qNT4rzhooZIdDBINYUJbVklaZKGe/IdQZYtFGp2HAMDJTwG/rwt65
+        lhhGPQyA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pyqmf-00482M-RS; Tue, 16 May 2023 09:15:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 63E8630008D;
+        Tue, 16 May 2023 11:15:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E722C20118D79; Tue, 16 May 2023 11:15:48 +0200 (CEST)
+Date:   Tue, 16 May 2023 11:15:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Ze Gao <zegao@tencent.com>
+Subject: Re: [PATCH v2 2/4] fprobe: make fprobe_kprobe_handler recursion free
+Message-ID: <20230516091548.GA2587705@hirez.programming.kicks-ass.net>
+References: <20230516071830.8190-1-zegao@tencent.com>
+ <20230516071830.8190-3-zegao@tencent.com>
 MIME-Version: 1.0
-X-MAIL: IEC1-MSE-FE2.inventec.com 34G9FhJO052455
-X-TM-SNTS-SMTP: 3DB4FA82B12A3F874D9AD0E6CE5DB7C7CED8E01020EE1E34F6EC7C0C85E61F382000:8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516071830.8190-3-zegao@tencent.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RG9jdW1lbnQgdGhlIG5ldyBjb21wYXRpYmxlcyB1c2VkIG9uIEludmVudGVjIHN0YXJzY3JlYW0t
-Ym1jDQoNClNpZ25lZC1vZmYtYnk6IENoZW4gUEogPENoZW4ucGpAaW52ZW50ZWMuY29tPg0KLS0t
-DQogRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlh
-bWwgfCAxICsNCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCg0KZGlmZiAtLWdpdCBh
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXNwZWVkL2FzcGVlZC55YW1s
-IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlh
-bWwNCmluZGV4IDFiNTg1ZTU1NDc5MS4uZmI0Y2U1ZGYyZmEwIDEwMDY0NA0KLS0tIGEvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9hc3BlZWQvYXNwZWVkLnlhbWwNCisrKyBi
-L0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vYXNwZWVkL2FzcGVlZC55YW1s
-DQpAQCAtODIsNiArODIsNyBAQCBwcm9wZXJ0aWVzOg0KICAgICAgICAgICAgICAgLSBpYm0sZXZl
-cmVzdC1ibWMNCiAgICAgICAgICAgICAgIC0gaWJtLHJhaW5pZXItYm1jDQogICAgICAgICAgICAg
-ICAtIGlibSx0YWNvbWEtYm1jDQorICAgICAgICAgICAgICAtIGludmVudGVjLHN0YXJzY3JlYW0t
-Ym1jDQogICAgICAgICAgICAgICAtIGludmVudGVjLHRyYW5zZm9ybWVyLWJtYw0KICAgICAgICAg
-ICAgICAgLSBqYWJpbCxyYnAtYm1jDQogICAgICAgICAgICAgICAtIG51dmlhLGRjLXNjbS1ibWMN
-Ci0tIA0KMi4yNS4xDQoNCg==
+On Tue, May 16, 2023 at 03:18:28PM +0800, Ze Gao wrote:
+
+> +static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> +		struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> +{
+> +	struct fprobe *fp;
+> +	int bit;
+> +
+> +	fp = container_of(ops, struct fprobe, ops);
+> +	if (fprobe_disabled(fp))
+> +		return;
+> +
+> +	/* recursion detection has to go before any traceable function and
+> +	 * all functions before this point should be marked as notrace
+> +	 */
+> +	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> +	if (bit < 0) {
+> +		fp->nmissed++;
+> +		return;
+> +	}
+> +	__fprobe_handler(ip, parent_ip, ops, fregs);
+>  	ftrace_test_recursion_unlock(bit);
+> +
+>  }
+>  NOKPROBE_SYMBOL(fprobe_handler);
+>  
+>  static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  				  struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
+> -	struct fprobe *fp = container_of(ops, struct fprobe, ops);
+> +	struct fprobe *fp;
+> +	int bit;
+> +
+> +	fp = container_of(ops, struct fprobe, ops);
+> +	if (fprobe_disabled(fp))
+> +		return;
+> +
+> +	/* recursion detection has to go before any traceable function and
+> +	 * all functions called before this point should be marked as notrace
+> +	 */
+> +	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> +	if (bit < 0) {
+> +		fp->nmissed++;
+> +		return;
+> +	}
+
+Please don't use this comment style; multi line comments go like:
+
+	/*
+	 * Multi line comment ...
+	 *                    ... is symmetric.
+	 */
+
+Same for your next patch.
