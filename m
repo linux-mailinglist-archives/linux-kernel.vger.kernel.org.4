@@ -2,172 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424E67043CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DAC7043CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjEPDCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 23:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S229702AbjEPDDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 23:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjEPDBz (ORCPT
+        with ESMTP id S229538AbjEPDCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 23:01:55 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CCB5BAA;
-        Mon, 15 May 2023 20:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684206114; x=1715742114;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=MOEY1/ItYTH0aATSPtlgrgH76Uuienatc9+jVCCKu7s=;
-  b=P3AbF7jL9r7Y/fu24c4BY4L6xeuiJdjo/a45ZfB50o1vqYcVxXiNfhhh
-   raCaevvmsdMtve/uj8bD4s4kCyPWhdCOv0VJx7zPPKf1pP7l8sG3qoQt1
-   aF4NmG7juEjBtJ6mUdXl84UDImSqA+wKQvKsutpyfGLme0n+O3AEAOcNr
-   RDZDPo6P78mFYsenrJzSGaFwXLcEXEnEuy9raltplnA33Kz7r50azO+d5
-   LTN9DYLNopt8nT3yfyDYQdbCyY0yhvczDMVTTS3D37ITcIG2QXFTi0Rv2
-   finioKPbPvp6KpRYP0ef4oIaq1PXw8YLFg0AIq11ONlNtCcazBjWugIcy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="437708300"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="437708300"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 20:01:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="770859772"
-X-IronPort-AV: E=Sophos;i="5.99,277,1677571200"; 
-   d="scan'208";a="770859772"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga004.fm.intel.com with ESMTP; 15 May 2023 20:01:54 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 15 May 2023 20:01:54 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 15 May 2023 20:01:54 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.47) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 15 May 2023 20:01:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oM5nt1M/3U3vZiikGrk7UJbuehuub/ErUO6iDgFbtyVwd0YaLP6+wqOnCxRZmC0aQwlZKYZUmaSWUwp12no/4Hl3JHI36gw4wXKQ3h0bKQHZ+qo3TKeZqVVXLvy75O1K9c9AB5s38UapFsp7H9654uTYsr+gVuhfgrLbH4iZXVkgzNB0aG0UhGy+/sFFnIverduOrz37wqsiJRRXku7vkhqPRG+voESNvL8z2CEnu9FwKmP7Yq8yXBAkgBWLs3Wwh1jpHN0HUkxiKk2zJqbf00ea+GmQTyaHDHb/qxo/v5vIyc+edLAu96d9sUf7Wie57SV8rCufXGInBpy5mZhkvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yldc9p2LJzaTPY277qdHdyDKLZs30+ePqDOXBlmxixg=;
- b=ls5qez8O1+cWTNc/FdkIK5EZI7p07NEI+8uJg8Ld2kQiArDGlT80IBXTNhtBRBFcSq+K0F5QMiFtX+Flftudpe78XBQVNvSSaCsgdZkoTfYLg2rJcxAtebyt12jUx5IFxHC5wWr93GaXKTOgBe6tCmKqT9ypGRJojrlvYGmkOs9q+MHZjFsUME6BCFv+ttoBgmdyQDkw80ZhiVEqsWcQ3mE1UsyzxioP7Yklm9bmvCWAgVVvMi2y6R5dR4k6uYK5xdlqk9+cnzKH+JNSHVrZeDjgyPH8cP9NNT04zlJ63E4AD8aJgG7PWFb2EroHg2//DQVmLSbF9L0ePS8PAgls4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
- by MW5PR11MB5812.namprd11.prod.outlook.com (2603:10b6:303:193::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Tue, 16 May
- 2023 03:01:50 +0000
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::b4cb:1f70:7e2a:c4f5]) by PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::b4cb:1f70:7e2a:c4f5%2]) with mapi id 15.20.6387.030; Tue, 16 May 2023
- 03:01:50 +0000
-Date:   Tue, 16 May 2023 11:01:38 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-CC:     <kvm@vger.kernel.org>, Jiaan Lu <jiaan.lu@intel.com>,
-        Zhang Chen <chen.zhang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v2 02/11] KVM: x86: Advertise CPUID.7.2.EDX and
- RRSBA_CTRL support
-Message-ID: <ZGLyEhKH+MoCY/R4@chao-email>
-References: <20230414062545.270178-1-chao.gao@intel.com>
- <20230414062545.270178-3-chao.gao@intel.com>
- <a88b2504-b79b-83d6-383e-a948f9da662b@intel.com>
- <ZGLkvlx5W0JStTjD@chao-email>
- <9c75663c-6363-34e7-8341-d8f719365768@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <9c75663c-6363-34e7-8341-d8f719365768@intel.com>
-X-ClientProxiedBy: SG2PR01CA0153.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::33) To PH8PR11MB6780.namprd11.prod.outlook.com
- (2603:10b6:510:1cb::11)
+        Mon, 15 May 2023 23:02:43 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F63B6581;
+        Mon, 15 May 2023 20:02:40 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso24679600a12.2;
+        Mon, 15 May 2023 20:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684206159; x=1686798159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xRflamDYeWG+dwnKCN6fDmXchdmQ0hXXUg/f9uPeMuY=;
+        b=Qm/1ER7wHWb0P4lNl5uRyhGhPoafIXVefvVQ587Pbjiog1kXtVz6ACLNM06p+XOYSU
+         smFyGvGg+cr6vN7ET8xBmyz31UGOcw5o/y6eRzo4Ll8mvQsT8t/jGmwLODRpHIV1IJau
+         F1DNEkUsphDSLw4P0Eg/qW5rS3WO5n1V5QRybYRUK3RHhjj8E4DyrQNDAG1pjEiSoJmj
+         kx1oypv1r2QHylMPFhgOT3N/kT0pyWVvhrZGwLFVE6b5PCXmgvxswpFQSp2Y6jpkiMjW
+         EBEigNKekJJIOQVExsYyVn17jIlhMZuA6JVsTYRLPcUvc6WBw3kZbq8ZEEJnrRxRyWh4
+         ZiXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684206159; x=1686798159;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xRflamDYeWG+dwnKCN6fDmXchdmQ0hXXUg/f9uPeMuY=;
+        b=MjB+TvKCBimTjpFGQo3DW9uqpa6lQnCCLpGi6YJwHxTyreNg/bV55JMBsPB/kJAI3s
+         GP2MDZfS/GTLGlh5+uJPnMwIF5dcQjjg8loXyp0AqguXe4iimEzr+KR3u9AAxdko9a65
+         XgiylvEKbxbHERRm8r7WDPKCAozmfI9t0NqkVsbKy3N7jNOxhUjPrxLuucOI+s3+8j4Q
+         v+DjublUzJZsr4u48DaH3s96omzgZHf169f91R5ooBicX9hy7XBEsxJWnye20QFQpNGD
+         c8dUTsCu02OTZ3wBxHyrBC8PWdxX1Hnq7lCQN04tcRV4lOSZRWyWhM/AHkWjc6X/uITP
+         htwA==
+X-Gm-Message-State: AC+VfDzJMD5PKhS2KKBQMypkOX9Qgwq9GeQBmZb2Y2noCCCGI7+J/3ru
+        bQ4q55z5A5jjPO1T6PIJg1rQhQhiLbkLUm70q0k=
+X-Google-Smtp-Source: ACHHUZ75Cz/kTErHMOdHx5ncgauHg0G5XNNw7JhIFLb64p+kn+SMbq9o34lKt9yzv+vv4f12h7zUegC5o5W9IyMxtH0=
+X-Received: by 2002:a17:906:da86:b0:960:ddba:e5c3 with SMTP id
+ xh6-20020a170906da8600b00960ddbae5c3mr28508381ejb.32.1684206159081; Mon, 15
+ May 2023 20:02:39 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6780:EE_|MW5PR11MB5812:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4ea99e1-0993-436b-cb35-08db55b9e4ea
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zmsgjsg+3eDMgqM6jTFpLBy7z/NSaK1Ws6LGuRPt9oxYEttmv983a2U/0Hyl3LMSgjzQYhMWeIlNuUEK2X4L4MtfnfuHqotWGBxfbLbO738ikqdJVKP4zEEoLhr4ZuDyWeTSnM8akMFmTuDKfLUQrZGSuQsb7MrxWWVkGgUXB+Rm5JtLAnpsjj50uq3pTieDr+EoMcsQTUynBCwO+aAeO5PUjKWkqiFDrZRtnTu9IweQ/YCDqGySm3GbgXzzevd3C8h70W7BznlGpfcbqgZzqO6Z3a5Bv7i4k4HFxUnJO1klycSxrPgFUeYuhi2ZHAXkxXbxNHKrs2kkIEqTWENMQVxjIvW80NfOftgU1IufdkPd3iBZDXhhUd7ZP9o9aIf5HW6fCyHJtFMawNnmq8BNT2D6Cg6x5Ti49T04zBHmGpMqAik8PxvmKY5do/a87gGNiuhKhzJesyj9batqwcU4OHlH/v6uh+zAJIgAQSix2UOZSg5zoZDtVqg616JQqZppVzJm6R4nsoTa5RtDRiBircFI/hnog65GxpNxZqY06SuAQT0M4SNzvTg55aRuRVrP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6780.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(136003)(39860400002)(366004)(376002)(396003)(451199021)(6666004)(316002)(54906003)(6486002)(66476007)(66556008)(4326008)(6636002)(38100700002)(66946007)(33716001)(478600001)(186003)(6506007)(44832011)(82960400001)(5660300002)(7416002)(6862004)(41300700001)(8676002)(8936002)(9686003)(6512007)(26005)(4744005)(2906002)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?61i98dhUVBMx3z8zWZbX3R9s8tCdMNEdoKhii0hgJrh/US/ydAuCm+sBdJwF?=
- =?us-ascii?Q?wp+zZ2Rp+sH1yzLIGdFVPcsDSM0I9KsUoambCejaiJaUwEFeMfDswICXtSIQ?=
- =?us-ascii?Q?kj2gTxOQpKW+f+xvmBJvJJXSJ8pwXNciFm1qvygBY6dCQQN4eMxxjTBarUpQ?=
- =?us-ascii?Q?Ob/XSeZJ7Ha6obVMldSCAYR94EknHNXQtyimwbMEMOGv277ORPIt/1CKxRl1?=
- =?us-ascii?Q?5hw7lkIxg8duO5FOeDPAcd+k+zz7TMC3So9nmoi1zA/xZOTF/hnRGn2z543i?=
- =?us-ascii?Q?OkgrHGD7dVA7eKr1ph63HpP43Tmn8OAQKmXK/HtC4weVQHq6zI2MROYQsd6j?=
- =?us-ascii?Q?VUddTGUIb+jaD5IJ0UL3r9qS04G8NrGX6D3Tk6taG+nXFw1M60v7uVpwtzAp?=
- =?us-ascii?Q?IscivYgeADqGEXTHMoBgrnkATUGd1vZTzF6KLKCJOBWRFlShofQLGssO9tBL?=
- =?us-ascii?Q?L52ri90/4eApXixk7xAsNedtOZNZnptRadNapKVpitVZ40cr+eOIhvxO7+fU?=
- =?us-ascii?Q?JEkPkAhpe4iner/F15EKvmKJb2AMjIczfNX2F990sOVLyq7C861rfUDNax5Y?=
- =?us-ascii?Q?MnfLiwsq3GH10SGEJ7PQJhwzQik0+uBomjBIYxLN5RMtM2PwEjfwVmMOc2hg?=
- =?us-ascii?Q?mrRBSmCdV2Iz/fPzjC4vLyt9LQtd5fBb8Fs/RYH2sEIZ0iJxQYiSgX2CiT4e?=
- =?us-ascii?Q?xO6QuSgXcOJ9ju6M4IELtFP1ACHQbExJ6/lKh2nvwdKA7i3fRTZZ8UMFns14?=
- =?us-ascii?Q?HPpEg5agzti/K3xLbUm5IUW+yvCPFNkDwPZUx4rrY1JrmjXqsC5xACvSDa8f?=
- =?us-ascii?Q?IRPP12VTysyvLdnBtbhiympXCYLOwKoEx7q7jAnPpboBruFXecJt1+DKGghL?=
- =?us-ascii?Q?8izjJNYtDHTP0CUP/F5Yy/vdu1oFNMmQZ+bzaZ+3M5bMF1Df6oLmLFdv7yff?=
- =?us-ascii?Q?04BOw6rdIKJWf+S5qQ0GLOZuCK63qp0aFh5Q9BXPu6+CBG/ZFOoY54zluT8y?=
- =?us-ascii?Q?QKCmAjWOBuOckCgS/StdMN5byrDdmumvwTKbvIJKSe2Bh5Dje5J6szot75ZD?=
- =?us-ascii?Q?NHFlkZuzVghiyz8a15NW10VbVV0YeIUp3t73/llS1GCpWxvTLMuvZ7DqVH8w?=
- =?us-ascii?Q?N4wSwjuuDPU2+NWRcqMOdRxqJjZt0XNJgBcHWXk7kIi8VMMpfmp6FQcVTHBz?=
- =?us-ascii?Q?2t7AjLMGuhM9c+YYU1yLvKrNjmsb+OLFpe9mMuec6yR6xLDNxJaP59/AoJdy?=
- =?us-ascii?Q?7e7oMYRvUzCdTUveDs6kVrU5PnCa8s1JaQK2fCHrDbYjcgK3v1AWlZZrjDOj?=
- =?us-ascii?Q?xfCX0hIF79Mrnau3FoG8sK6f7o6z9LKL2Uz4+RNtKivlOe0zqIvvpqBwAU9N?=
- =?us-ascii?Q?n/UOxrWbDMkz0+oTp6fAAqjFvVPItG3UvdFYtudWUmFVivVegW/iD1zsqbYd?=
- =?us-ascii?Q?3ekJ/Z10rUtgfCgkNmJ/OUjMLhv6sTbs978xZVjUGrLTlY6KEpiHlJSzwfx3?=
- =?us-ascii?Q?tdbmIfKFAFZ9UvkZ9ZrOGkW79dGsyKivrWZsOLxfUbCLPo0AJJcG9LFRh5O7?=
- =?us-ascii?Q?S5FNdaemiVW2EC6cKtvOTmvWZCrQHb0matjO+Su2?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4ea99e1-0993-436b-cb35-08db55b9e4ea
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6780.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 03:01:50.2830
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2WQwXcLhVxrrhfKcgLPBkhwi+CtfrBc9swVN+kWHwBUS7woRxqrG7Ad7/wN16Dbd2+RJSn3dAL9N2XmSyB2xZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5812
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1684120990.git.zegao@tencent.com> <6c428b9f74090b2780b67ca498c45aa5e8c38c44.1684120990.git.zegao@tencent.com>
+ <20230515212546.7a467a1f@gandalf.local.home>
+In-Reply-To: <20230515212546.7a467a1f@gandalf.local.home>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Tue, 16 May 2023 11:02:27 +0800
+Message-ID: <CAD8CoPC-q23cytkzdPwBVAXKBS-B-Dpya3dWroftvQD6iN414g@mail.gmail.com>
+Subject: Re: [PATCH 2/4] fprobe: make fprobe_kprobe_handler recursion free
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, Ze Gao <zegao@tencent.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 10:22:22AM +0800, Xiaoyao Li wrote:
->> > I think we need to fix this bug at first.
->> 
->> I have no idea how to fix the "bug" without intercepting the MSR. The
->> performance penalty makes me think intercepting the MSR is not a viable
->> solution.
+Hi Steven,
+
+On Tue, May 16, 2023 at 9:25=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
 >
->I thought correctness always takes higher priority over performance.
+> On Mon, 15 May 2023 11:26:39 +0800
+> Ze Gao <zegao2021@gmail.com> wrote:
+>
+> > Current implementation calls kprobe related functions before doing
+> > ftrace recursion check in fprobe_kprobe_handler, which opens door
+> > to kernel crash due to stack recursion if preempt_count_{add, sub}
+> > is traceable.
+> >
+> > Refactor the common part out of fprobe_kprobe_handler and fprobe_
+> > handler and call ftrace recursion detection at the very beginning,
+> > and also mark these functions notrace so that the whole fprobe_k-
+> > probe_handler is free from recusion. And
+> >
+> > Signed-off-by: Ze Gao <zegao@tencent.com>
+> > ---
+> >  kernel/trace/fprobe.c | 61 +++++++++++++++++++++++++++++++------------
+> >  1 file changed, 45 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> > index 9abb3905bc8e..ad9a36c87ad9 100644
+> > --- a/kernel/trace/fprobe.c
+> > +++ b/kernel/trace/fprobe.c
+> > @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
+> >       char data[];
+> >  };
+> >
+> > -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> > -                        struct ftrace_ops *ops, struct ftrace_regs *fr=
+egs)
+> > +static inline notrace void __fprobe_handler(unsigned long ip, unsigned=
+ long
+>
+>
+> FYI, if you look in kernel/trace/Makefile you'll see:
+>
+> ccflags-remove-$(CONFIG_FUNCTION_TRACER) +=3D $(CC_FLAGS_FTRACE)
+>
+> Which removes the flags to add tracing. So there's no reason to add
+> "notrace" here, as all functions in this directory are by default "notrac=
+e".
 
-It is generally true. however, there are situations where we should make
-trade-offs between correctness and other factors (like performance):
+Thanks for your valuable info, which I missed before. I'll send v2 to
+remove those
+unnecessary notrace annotations, and use the same trick for rethook too.
 
-E.g., instructions without control bits, to be 100% compliant with CPU
-spec, in theory, VMMs can trap/decode every instruction and inject #UD
-if a guest tries to use some instructions it shouldn't.
+BTW,  I think we can mark rethook routines decls notrace in
+include/linux/rethook.h,
+which helps to remind developers of other arch(s) this important info.
+What do you think of it?
+
+Regards,
+Ze
