@@ -2,277 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0180370464E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F8770464F
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjEPH1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S231313AbjEPH1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjEPH07 (ORCPT
+        with ESMTP id S231209AbjEPH1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:26:59 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1220011C;
-        Tue, 16 May 2023 00:26:56 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so24256520a12.2;
-        Tue, 16 May 2023 00:26:55 -0700 (PDT)
+        Tue, 16 May 2023 03:27:36 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9B592
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:27:35 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-643912bca6fso10785607b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:27:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684222014; x=1686814014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1684222054; x=1686814054;
+        h=content-transfer-encoding:in-reply-to:cc:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TKdo4MaiBN2b3CtstowQ7vu81lZz1hw49Wy9fx/PYjY=;
-        b=j9Ha4Y6EMSL50wdL/5kaGEolLVmaZCdgVYeuY75TwVBqwny4PaWLeu4iziex01xYf4
-         Nd62f0WXrdDoTlj5JBCXLYyyrmgbXE66FWPB0O0u9OnNFwXevyohn9n3fMMtc3jP999N
-         was38FffkERSxyFljF+u6HI1cxaw8uKsGeQ6mUWrr2ho5APSH75aR9vAo+IndNVkFz7T
-         wl580kRtlbhu3NTMQcXGiAt2rKLIURp2xuYZrCWaUgaXIWoKdiebz66Xc7qinK5JUyID
-         t5NltsKDGLrpvlEUXY3FgroVJPigwvisLfGWGIj/Nk1CwVufjsLbe1SeH8+2zVVtiinl
-         qWDA==
+        bh=3VrihHlX4gfqH1aDetunLHoNMhaVXNYRIMdChx9m30s=;
+        b=C5zki00OG/Di/cP+PHSnsCOkSCPbwkL4V81xLbfY4pVggsLfdhYrskvUIALYYFgql6
+         4gJqNkWTfTYZofZdCzKb3LABW4xcuqkL4A3fOK6hOUmEKUn0PhouTh/3QB8i4JSyqlQq
+         G25+HtHqiwNVmHPkr/4aORinBDAQE+ckCW+eriH7AfPr+AWdFHjnou/WxnrZdFJB93Mr
+         52XHHE9BUlRe9djIkCBmR4vQfSg3BKd7LAdz+zhw6NY+EwkbNUPlMUny45/n/13ORKCR
+         nuL5XG90LWPhvKwXDYjv3Asc4n8XdNsePhSv/KTlkHc9VHMzCfRbR5iz5y68/ZvPd1xk
+         tdgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684222014; x=1686814014;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TKdo4MaiBN2b3CtstowQ7vu81lZz1hw49Wy9fx/PYjY=;
-        b=hYlACAcvAFWjIv9XouHzZnyaaWPV9zmTD9y37cs+7j9cRNzbcemkLRuDeXMGNSY3Em
-         gVEzOWsBKAMAoGRMGchztzb1sMzF6rShndyH5p2d0Mdho9bkJNWcN30IGAFXRAUbco58
-         Vo1CzIaiLILQQs6pv0ktXH8jdBrVZPv+8Nm8nisQXWN2mKfgeeDYMcShctJw8KVBdZuM
-         VvJozFpYIE9i7L9nBRW2F0jO68Kea33UYYa3QerEaPAi4/XE1uoyD+0+YQzYrONjd2ih
-         jSiWMx4xGILnm4AkbUZeMUvIottVGjUfIYgKlJgVHr9HNfUWbwGg+VAk98+SDp9UsFvm
-         8zjQ==
-X-Gm-Message-State: AC+VfDzYV8btyUerqKyprxSgx4dNiyYUPuYORax2+Jayre7CaZwMiz5e
-        ArCbuCOfqhY4ugzImseFQeZysIzD/jh01yv6OfpoqdZE89dXAA==
-X-Google-Smtp-Source: ACHHUZ4lWZ9gH1gHWnnNjHviGAG3lgUn3oeL1L+7+6iobLu34Q93nj/lrZRX41u3rdIuWHYjad5Vo4xDTyFd71EA1sA=
-X-Received: by 2002:aa7:df11:0:b0:505:4f7:8a50 with SMTP id
- c17-20020aa7df11000000b0050504f78a50mr27120560edy.5.1684222014179; Tue, 16
- May 2023 00:26:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684222054; x=1686814054;
+        h=content-transfer-encoding:in-reply-to:cc:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3VrihHlX4gfqH1aDetunLHoNMhaVXNYRIMdChx9m30s=;
+        b=ZDYRfKzCfl/4MiKp7zSC1Zk+znpU050SitLLNV+JpAHHA3Nj3OpHKx/UdOKR9rimfC
+         E1BBUi9uHnuoU0iqBNzExOTIp2Etg96YSiZ9Z8620ksokguPxRoVeDiHBxoo6a/xkxVm
+         atL5YSU83m6J6Bv2oTPu1S6JZy+yLCjXXUKzgWkIn+pCUwUCI4lGrCloWoi0EATmtknZ
+         BN7J/JpNV5O/Bai66P8vpO1LrniDXOesMb3k2sqsb0v//EqWtI9HcGmcjzLA5+vwx3IS
+         btNWaXwkpqEN6izJhR4b5w2raarCo5EuyP2xr7Rcsx6M5Z5QS24RUbRuBwYYYOy1I/9W
+         rtCg==
+X-Gm-Message-State: AC+VfDyyM671hBNV/UFWOsBY+FYXYR7NnM3n3lAxeBWOREULptuxuGWq
+        kJtYKT9MiYG6BOpt0mmk4yYnTw==
+X-Google-Smtp-Source: ACHHUZ4Ij3/JcncsA3FDxe3yhdEY6/kPht/VxPatiLCmVCATaxIua2fY071UHEQt47R+beIWtFjjAA==
+X-Received: by 2002:a05:6a00:1821:b0:644:d77:a2c5 with SMTP id y33-20020a056a00182100b006440d77a2c5mr50250878pfa.29.1684222054509;
+        Tue, 16 May 2023 00:27:34 -0700 (PDT)
+Received: from [10.200.9.178] ([139.177.225.227])
+        by smtp.gmail.com with ESMTPSA id s26-20020aa7829a000000b0063b6cccd5dcsm12429514pfm.194.2023.05.16.00.27.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 00:27:34 -0700 (PDT)
+Message-ID: <4e40b88c-4419-56df-d720-177cf76e95a6@bytedance.com>
+Date:   Tue, 16 May 2023 15:27:29 +0800
 MIME-Version: 1.0
-References: <cover.1684120990.git.zegao@tencent.com> <238bad4335d029072ca6000fb404f47376197f39.1684120990.git.zegao@tencent.com>
- <20230516132806.886543f000d93e0c2b26a2f3@kernel.org>
-In-Reply-To: <20230516132806.886543f000d93e0c2b26a2f3@kernel.org>
-From:   Ze Gao <zegao2021@gmail.com>
-Date:   Tue, 16 May 2023 15:26:42 +0800
-Message-ID: <CAD8CoPBzvFxmRaiXZ=WrvYUaz78NY=1z_dZ03EAJUw9wPrkSoA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] rehook, fprobe: mark rethook related functions notrace
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ze Gao <zegao@tencent.com>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH 09/10] maple_tree: Rework mas_wr_slot_store() to be
+ cleaner and more efficient.
+To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+References: <20230515131757.60035-1-zhangpeng.00@bytedance.com>
+ <20230515131757.60035-10-zhangpeng.00@bytedance.com>
+ <20230515180147.hgwk2vccsph7poxa@revolver>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+Cc:     Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        maple-tree@lists.infradead.org
+In-Reply-To: <20230515180147.hgwk2vccsph7poxa@revolver>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
 
-Thanks for your review. I've applied the makefile trick to arch files
-specific to rethook just as
-mentioned by Steven. And here is the link:
 
-https://lore.kernel.org/linux-trace-kernel/20230516071830.8190-2-zegao@tenc=
-ent.com/T/#m503e513071e82d5234d80a1b9e15eb126e334608
+在 2023/5/16 02:01, Liam R. Howlett 写道:
+> * Peng Zhang <zhangpeng.00@bytedance.com> [230515 09:18]:
+>> The code of mas_wr_slot_store() is messy, make it clearer and concise,
+>> and add comments. In addition, get whether the two gaps are empty to
+>> avoid calling mas_update_gap() all the time.
+> 
+> Please drop the cases from the comments.  These aren't that complicated
+> to need diagrams.
+> 
+> Case 1: Overwriting the range and over a part of the next range
+> Case 2: Overwriting a part of the range and over the entire next range
+> 
+>>
+>> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+>> ---
+>>   lib/maple_tree.c | 79 +++++++++++++++++++++++++++---------------------
+>>   1 file changed, 44 insertions(+), 35 deletions(-)
+>>
+>> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+>> index 538e49feafbe4..d558e7bcb6da8 100644
+>> --- a/lib/maple_tree.c
+>> +++ b/lib/maple_tree.c
+>> @@ -4190,53 +4190,62 @@ static inline bool mas_wr_node_store(struct ma_wr_state *wr_mas)
+>>    * @wr_mas: the maple write state
+>>    *
+>>    * Return: True if stored, false otherwise
+>> + *
+>> + * Case 1:
+>> + *                       r_min   r_max    lmax
+>> + *                 +-------+-------+-------+
+>> + * original range: |       |offset | end   |
+>> + *                 +-----------------------+
+>> + *                         +-----------+
+>> + * overwrite:              |           |
+>> + *                         +-----------+
+>> + *                        index       last
+>> + *
+>> + * Case 2:
+>> + *                       r_min   r_max    lmax
+>> + *                 +-------+-------+-------+
+>> + * original range: |       |offest | end   |
+>> + *                 +-------+---------------+
+>> + *                             +-----------+
+>> + * overwrite:                  |           |
+>> + *                             +-----------+
+>> + *                           index        last
+>>    */
+>>   static inline bool mas_wr_slot_store(struct ma_wr_state *wr_mas)
+>>   {
+>>   	struct ma_state *mas = wr_mas->mas;
+>> -	unsigned long lmax; /* Logical max. */
+>>   	unsigned char offset = mas->offset;
+>> +	unsigned char offset_end = wr_mas->offset_end;
+>> +	unsigned long lmax = wr_mas->end_piv; /* Logical max. */
+>> +	bool gap = false;
+>>   
+>> -	if ((wr_mas->r_max > mas->last) && ((wr_mas->r_min != mas->index) ||
+>> -				  (offset != wr_mas->node_end)))
+>> -		return false;
+>> -
+>> -	if (offset == wr_mas->node_end - 1)
+>> -		lmax = mas->max;
+>> -	else
+>> -		lmax = wr_mas->pivots[offset + 1];
+>> -
+>> -	/* going to overwrite too many slots. */
+>> -	if (lmax < mas->last)
+>> +	if (offset_end - offset != 1)
+>>   		return false;
+>>   
+>> -	if (wr_mas->r_min == mas->index) {
+>> -		/* overwriting two or more ranges with one. */
+>> -		if (lmax == mas->last)
+>> -			return false;
+>> -
+>> -		/* Overwriting all of offset and a portion of offset + 1. */
+>> +	if (mas->index == wr_mas->r_min && mas->last < lmax) {
+>> +		/* Case 1 */
+>> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset);
+>> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
+>>   		rcu_assign_pointer(wr_mas->slots[offset], wr_mas->entry);
+>>   		wr_mas->pivots[offset] = mas->last;
+>> -		goto done;
+>> -	}
+>> -
+>> -	/* Doesn't end on the next range end. */
+>> -	if (lmax != mas->last)
+>> +	} else if (mas->index > wr_mas->r_min && mas->last == lmax) {
+>> +		/* Case 2 */
+>> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset);
+>> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
+>> +		rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
+>> +		wr_mas->pivots[offset] = mas->index - 1;
+> 
+> These two lines need to be in opposite order to ensure a reader sees
+> either the value or the previous value.  If you overwrite something with
+> a new value, it is possible that a reader looking for the next range
+> will get the value stored at offset (but not entry).
+Please think again, did you think wrong?
+It doesn't happen, swapping the order introduces the problem.
+If we update the pivot first, it will cause a part of the value
+of the range indexed by offset to change to the value of the
+range indexed by offset+1, which is illegal.
 
-Unnecessary notrace annotations have been dropped in this new series.
+My assignment order remains the same as the previous version.
 
-Thank you,
-Ze
-
-On Tue, May 16, 2023 at 12:28=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.=
-org> wrote:
->
-> On Mon, 15 May 2023 11:26:41 +0800
-> Ze Gao <zegao2021@gmail.com> wrote:
->
-> > These functions are already marked as NOKPROBE to prevent recusion and
-> > we have the same reason to blacklist them if rethook is used with fprob=
-e,
-> > since they are beyond the recursion-free region ftrace can guard.
-> >
-> > Signed-off-by: Ze Gao <zegao@tencent.com>
-> > ---
-> >  arch/riscv/kernel/probes/rethook.c | 4 ++--
-> >  arch/s390/kernel/rethook.c         | 6 +++---
-> >  arch/x86/kernel/rethook.c          | 8 +++++---
-> >  kernel/trace/rethook.c             | 8 ++++----
->
-> Except for the kernel/trace/rethook.c, those looks good to me.
-> Could you drop notrace from kernel/trace/rethook.c? As Steve mentioned
-> all functions in that file is automatically notraced.
->
-> Thank you,
->
-> >  4 files changed, 14 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/probes/rethook.c b/arch/riscv/kernel/pro=
-bes/rethook.c
-> > index 5c27c1f50989..803c412a1bea 100644
-> > --- a/arch/riscv/kernel/probes/rethook.c
-> > +++ b/arch/riscv/kernel/probes/rethook.c
-> > @@ -8,14 +8,14 @@
-> >  #include "rethook.h"
-> >
-> >  /* This is called from arch_rethook_trampoline() */
-> > -unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *=
-regs)
-> > +unsigned long __used notrace arch_rethook_trampoline_callback(struct p=
-t_regs *regs)
-> >  {
-> >       return rethook_trampoline_handler(regs, regs->s0);
-> >  }
-> >
-> >  NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-> >
-> > -void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *re=
-gs, bool mcount)
-> > +void notrace arch_rethook_prepare(struct rethook_node *rhn, struct pt_=
-regs *regs, bool mcount)
-> >  {
-> >       rhn->ret_addr =3D regs->ra;
-> >       rhn->frame =3D regs->s0;
-> > diff --git a/arch/s390/kernel/rethook.c b/arch/s390/kernel/rethook.c
-> > index af10e6bdd34e..ad52119826c1 100644
-> > --- a/arch/s390/kernel/rethook.c
-> > +++ b/arch/s390/kernel/rethook.c
-> > @@ -3,7 +3,7 @@
-> >  #include <linux/kprobes.h>
-> >  #include "rethook.h"
-> >
-> > -void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *reg=
-s, bool mcount)
-> > +void notrace arch_rethook_prepare(struct rethook_node *rh, struct pt_r=
-egs *regs, bool mcount)
-> >  {
-> >       rh->ret_addr =3D regs->gprs[14];
-> >       rh->frame =3D regs->gprs[15];
-> > @@ -13,7 +13,7 @@ void arch_rethook_prepare(struct rethook_node *rh, st=
-ruct pt_regs *regs, bool mc
-> >  }
-> >  NOKPROBE_SYMBOL(arch_rethook_prepare);
-> >
-> > -void arch_rethook_fixup_return(struct pt_regs *regs,
-> > +void notrace arch_rethook_fixup_return(struct pt_regs *regs,
-> >                              unsigned long correct_ret_addr)
-> >  {
-> >       /* Replace fake return address with real one. */
-> > @@ -24,7 +24,7 @@ NOKPROBE_SYMBOL(arch_rethook_fixup_return);
-> >  /*
-> >   * Called from arch_rethook_trampoline
-> >   */
-> > -unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs)
-> > +unsigned long notrace arch_rethook_trampoline_callback(struct pt_regs =
-*regs)
-> >  {
-> >       return rethook_trampoline_handler(regs, regs->gprs[15]);
-> >  }
-> > diff --git a/arch/x86/kernel/rethook.c b/arch/x86/kernel/rethook.c
-> > index 8a1c0111ae79..1f7cef86f73d 100644
-> > --- a/arch/x86/kernel/rethook.c
-> > +++ b/arch/x86/kernel/rethook.c
-> > @@ -64,7 +64,8 @@ NOKPROBE_SYMBOL(arch_rethook_trampoline);
-> >  /*
-> >   * Called from arch_rethook_trampoline
-> >   */
-> > -__used __visible void arch_rethook_trampoline_callback(struct pt_regs =
-*regs)
-> > +__used __visible void notrace arch_rethook_trampoline_callback(struct =
-pt_regs
-> > +             *regs)
-> >  {
-> >       unsigned long *frame_pointer;
-> >
-> > @@ -104,7 +105,7 @@ NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-> >  STACK_FRAME_NON_STANDARD_FP(arch_rethook_trampoline);
-> >
-> >  /* This is called from rethook_trampoline_handler(). */
-> > -void arch_rethook_fixup_return(struct pt_regs *regs,
-> > +void notrace arch_rethook_fixup_return(struct pt_regs *regs,
-> >                              unsigned long correct_ret_addr)
-> >  {
-> >       unsigned long *frame_pointer =3D (void *)(regs + 1);
-> > @@ -114,7 +115,8 @@ void arch_rethook_fixup_return(struct pt_regs *regs=
-,
-> >  }
-> >  NOKPROBE_SYMBOL(arch_rethook_fixup_return);
-> >
-> > -void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *reg=
-s, bool mcount)
-> > +void notrace arch_rethook_prepare(struct rethook_node *rh, struct pt_r=
-egs
-> > +             *regs, bool mcount)
-> >  {
-> >       unsigned long *stack =3D (unsigned long *)regs->sp;
-> >
-> > diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
-> > index 60f6cb2b486b..e551e86d3927 100644
-> > --- a/kernel/trace/rethook.c
-> > +++ b/kernel/trace/rethook.c
-> > @@ -127,7 +127,7 @@ static void free_rethook_node_rcu(struct rcu_head *=
-head)
-> >   * Return back the @node to @node::rethook. If the @node::rethook is a=
-lready
-> >   * marked as freed, this will free the @node.
-> >   */
-> > -void rethook_recycle(struct rethook_node *node)
-> > +void notrace rethook_recycle(struct rethook_node *node)
-> >  {
-> >       lockdep_assert_preemption_disabled();
-> >
-> > @@ -194,7 +194,7 @@ void rethook_hook(struct rethook_node *node, struct=
- pt_regs *regs, bool mcount)
-> >  NOKPROBE_SYMBOL(rethook_hook);
-> >
-> >  /* This assumes the 'tsk' is the current task or is not running. */
-> > -static unsigned long __rethook_find_ret_addr(struct task_struct *tsk,
-> > +static unsigned long notrace __rethook_find_ret_addr(struct task_struc=
-t *tsk,
-> >                                            struct llist_node **cur)
-> >  {
-> >       struct rethook_node *rh =3D NULL;
-> > @@ -256,7 +256,7 @@ unsigned long rethook_find_ret_addr(struct task_str=
-uct *tsk, unsigned long frame
-> >  }
-> >  NOKPROBE_SYMBOL(rethook_find_ret_addr);
-> >
-> > -void __weak arch_rethook_fixup_return(struct pt_regs *regs,
-> > +void __weak notrace arch_rethook_fixup_return(struct pt_regs *regs,
-> >                                     unsigned long correct_ret_addr)
-> >  {
-> >       /*
-> > @@ -268,7 +268,7 @@ void __weak arch_rethook_fixup_return(struct pt_reg=
-s *regs,
-> >  }
-> >
-> >  /* This function will be called from each arch-defined trampoline. */
-> > -unsigned long rethook_trampoline_handler(struct pt_regs *regs,
-> > +unsigned long notrace rethook_trampoline_handler(struct pt_regs *regs,
-> >                                        unsigned long frame)
-> >  {
-> >       struct llist_node *first, *node =3D NULL;
-> > --
-> > 2.40.1
-> >
->
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+>> +		mas->offset++; /* Keep mas accurate. */
+>> +	} else {
+>>   		return false;
+>> +	}
+>>   
+>> -	/* Overwriting a portion of offset and all of offset + 1 */
+>> -	if ((offset + 1 < mt_pivots[wr_mas->type]) &&
+>> -	    (wr_mas->entry || wr_mas->pivots[offset + 1]))
+>> -		wr_mas->pivots[offset + 1] = mas->last;
+>> -
+>> -	rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
+>> -	wr_mas->pivots[offset] = mas->index - 1;
+>> -	mas->offset++; /* Keep mas accurate. */
+>> -
+>> -done:
+>>   	trace_ma_write(__func__, mas, 0, wr_mas->entry);
+>> -	mas_update_gap(mas);
+>> +	/*
+>> +	 * Only update gap when the new entry is empty or there is an empty
+>> +	 * entry in the original two ranges.
+>> +	 */
+>> +	if (!wr_mas->entry || gap)
+>> +		mas_update_gap(mas);
+>>   	return true;
+>>   }
+>>   
+>> @@ -4418,7 +4427,7 @@ static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
+>>   	if (new_end == wr_mas->node_end + 1 && mas_wr_append(wr_mas))
+>>   		return;
+>>   
+>> -	if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
+>> +	if (new_end == wr_mas->node_end && mas_wr_slot_store(wr_mas))
+>>   		return;
+>>   	else if (mas_wr_node_store(wr_mas))
+>>   		return;
+>> -- 
+>> 2.20.1
+>>
+> 
