@@ -2,113 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166D270486B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE53670486E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 11:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjEPJEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 05:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
+        id S231743AbjEPJGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 05:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjEPJEG (ORCPT
+        with ESMTP id S229554AbjEPJGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 05:04:06 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EA5359D;
-        Tue, 16 May 2023 02:04:04 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6439bbc93b6so9793189b3a.1;
-        Tue, 16 May 2023 02:04:04 -0700 (PDT)
+        Tue, 16 May 2023 05:06:47 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DB8C4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:06:45 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so20894858a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 02:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684227844; x=1686819844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QTk2JB5qtzjtXmG2THpqKvL1Vp4cb43nlo//b+FiHNU=;
-        b=WHl/nuvVrGlgDNxCguiV3msHTZ+gcgELdJktTyHIG9RwULWoTU1mUv33rZvuEI5LaT
-         EHYeOfGFJw1HBlP2i6nYuw2MCupCMxTKNPc4H3C1rGIf7XPgOdhYIxUvQ+Ga/KY/MRFa
-         NvUxlyKOX2PEtBLCPW2ZHXUamaRCp9kM2etEkDABgUGEpdFXeZNLVC55yh7w9bMpk16z
-         5IrLttMq1V68PGMsIwRsvC+qxZOuEFXV8ytpKuj/q5D4p+WDVDLO+4RhCIG+oYau3Fsh
-         slSBNM3NN/atSVPgxkKFA77tLBmVC8xx0KWp2dXDMzZrfNsdlB9TpHPshlMbyQQT+zGe
-         8k4A==
+        d=linaro.org; s=google; t=1684228003; x=1686820003;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WfR5x7lYlGZxQEhgIr7ehFRWybZSX2Ee6e6eJ8QySGY=;
+        b=hvOWGF/FhwNQBPa6krRzcpKhHdtUfi7ZJ5kDslFuENrTh00ATMGwvIrItcmF7b7+nT
+         z8UWvCIFVVnxs6C2l/7+ULaSKddSfYBWdl+kr3+n1DXe1hExwO4CpRDRgnw3miH32How
+         XbmP8kNjcbfK5uDg2yKOMMm9yvQUepl3otYxRJ8JBugbG3nnuupT/2LFLNbclAN4/Bn3
+         c+QRh8Gh19YGm+m6YMDI/GI2IuG4n5wwrOjNRRqk3IxwxaPlZjPUGbrdq3vHO9LyIfz4
+         SJxndrkwQ/g4hnQrJrH2aUXV2oytN7lBIA3mEhkfqUN32wEY7ys6gkUUc3va5EqwiALT
+         rmaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684227844; x=1686819844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QTk2JB5qtzjtXmG2THpqKvL1Vp4cb43nlo//b+FiHNU=;
-        b=ACkTbQ+oSMfel2t+zYTfQXpwly1Wj0DtEz5mwNrD34N+PL08x2HMFM9pOsiIkzJB+N
-         N3iWZlo7476KPeLzS+lV4/sEzWMq2wc85r4LZKfs3dRf7Sv4DzjgCRvHIkhZhOUafac/
-         kLgQ7xE6bLl4keip1nB6y+TIloCToK2PwlEWIrfpAmhJG3N0PjFKaF8pCnb9PoPUjUaX
-         mR7opSp5uhoQxmnDpJMYb2WcwOmmZ7OOwshOSVDskTeDWoaaViWPawM9DfzqNf3V243X
-         cQORIq8aLrIRZ3SRDrgshQhbYDucEbfOF83GetytMKjFpiVJ2zJq2+q7w3IAumLVC2r0
-         b3gg==
-X-Gm-Message-State: AC+VfDyp20y56AUiv/KMMAOe1Z96tpOV0QM7acDSCbepF5OcVX4CKHSZ
-        4/nJqz8Pht+gUrQNSZ+D5cg=
-X-Google-Smtp-Source: ACHHUZ5Ow2hobAcRBw44vduy5I8IXSjDVZiiBpG3JqSvK6rJj85BKwlk5a/iaDmkrvtbavbRA0JMYg==
-X-Received: by 2002:a05:6a00:139b:b0:64c:b8bd:4192 with SMTP id t27-20020a056a00139b00b0064cb8bd4192mr4391563pfg.6.1684227844083;
-        Tue, 16 May 2023 02:04:04 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-73.three.co.id. [180.214.233.73])
-        by smtp.gmail.com with ESMTPSA id c7-20020aa78c07000000b00643864d03dfsm13491103pfd.171.2023.05.16.02.04.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 02:04:03 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 1E6B910621C; Tue, 16 May 2023 16:03:59 +0700 (WIB)
-Date:   Tue, 16 May 2023 16:03:59 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/246] 6.3.3-rc1 review
-Message-ID: <ZGNG/72qJIgzJU8P@debian.me>
-References: <20230515161722.610123835@linuxfoundation.org>
+        d=1e100.net; s=20221208; t=1684228003; x=1686820003;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WfR5x7lYlGZxQEhgIr7ehFRWybZSX2Ee6e6eJ8QySGY=;
+        b=DBROjSIAIADXFY0saMxb1rHy6UiKgdPo1CJLfqY+bXvVuzgyg7O/999cUkC8FE+lJC
+         qALjetiF4ed619B4Ads6D/N2lgrV1EMxZvq/xVVJjk/IxnG6rBuDfCvyXcbfIdhNg1ha
+         cHZkQ17AWh4gXWm99a1/anVCpj3W31qychHyoVxVp0PSEbeE8FE1bd4hmkuEzaevakhH
+         1DthVb+GXeRwIYixhV6dCsaSSaycT8jZAc3H0riTJYjedYasIepblAuswJtxDmDo/Uot
+         1WKuzWt0l9Om+wg8HMqeaTXKsesFlb2NVc0DYOc/i2w41zMN1ldpaGHGP46KQlxA+C0s
+         Jt/A==
+X-Gm-Message-State: AC+VfDwuAzjmuFlUkXOPGgnsFtYYrLUaTBLywW3pKeRdzb14T9vLHeSY
+        QlWm8tQSxskZPoMThr31S1WpWA==
+X-Google-Smtp-Source: ACHHUZ7QHeXISFZJrF36Tge1qRT3h5Ie2KasB8KSTNRVYPo6emVX2nmGRkC2/597xXYyRrgbjxN4wQ==
+X-Received: by 2002:a17:907:846:b0:965:e5cf:bb35 with SMTP id ww6-20020a170907084600b00965e5cfbb35mr32739005ejb.22.1684228003549;
+        Tue, 16 May 2023 02:06:43 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
+        by smtp.gmail.com with ESMTPSA id my37-20020a1709065a6500b0094f44bdf7acsm10738310ejc.57.2023.05.16.02.06.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 02:06:43 -0700 (PDT)
+Message-ID: <cca446b3-9b92-3191-ae0d-1bd7e552c90f@linaro.org>
+Date:   Tue, 16 May 2023 11:06:41 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FjM7r4gpLPMzwX0D"
-Content-Disposition: inline
-In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1] Documentation/process: add soc maintainer handbook
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Conor Dooley <conor@kernel.org>, soc@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Olof Johansson <olof@lixom.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org
+References: <20230515-geometry-olympics-b0556ff8a5f7@spud>
+ <cf1c6b8c-8a3f-eca1-948f-e41946d4c34c@linaro.org>
+ <20230516-grader-dejected-df65cdc584b3@wendy>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230516-grader-dejected-df65cdc584b3@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 16/05/2023 10:57, Conor Dooley wrote:
+> On Tue, May 16, 2023 at 10:31:19AM +0200, Krzysztof Kozlowski wrote:
+>> On 15/05/2023 21:20, Conor Dooley wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> Arnd suggested that adding maintainer handbook for the SoC "subsystem"
+>>> would be helpful in trying to bring on board maintainers for the various
+>>> new platforms cropping up in RISC-V land.
+>>>
+>>> Add a document briefly describing the role of the SoC subsystem and some
+>>> basic advice for (new) platform maintainers.
+>>>
+>>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+>>> +devicetree ABI stability
+>>> +~~~~~~~~~~~~~~~~~~~~~~~~
+>>> +
+>>> +Perhaps one of the most important things to highlight is that dt-bindings
+>>> +document the ABI between the devicetree and the kernel.  Once dt-bindings have
+>>> +been merged (and appear in a release of the kernel) they are set in stone, and
+>>> +any changes made must be compatible with existing devicetrees.  This means that,
+>>> +when changing properties, a "new" kernel must still be able to handle an old
+>>> +devicetree.  For many systems the devicetree is provided by firmware, and
+>>> +upgrading to a newer kernel cannot cause regressions.  Ideally, the inverse is
+>>> +also true, and a new devicetree will also be compatible with an old kernel,
+>>> +although this is often not possible.
+>>
+>> I would prefer to skip it and instead: enhance
+>> Documentation/devicetree/bindings/ABI.rst and then reference it here.
+> 
+> Sure.
+> 
+>>> +Driver branch dependencies
+>>> +~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> +
+>>> +A common problem is synchronizing changes between device drivers and devicetree
+>>> +files, even if a change is compatible in both directions, this may require
+>>> +coordinating how the changes get merged through different maintainer trees.
+>>> +
+>>> +Usually the branch that includes a driver change will also include the
+>>> +corresponding change to the devicetree binding description, to ensure they are
+>>> +in fact compatible.  This means that the devicetree branch can end up causing
+>>> +warnings in the "make dtbs_check" step.  If a devicetree change depends on
+>>> +missing additions to a header file in include/dt-bindings/, it will fail the
+>>> +"make dtbs" step and not get merged.
+>>> +
+>>> +There are multiple ways to deal with this:
+>>> +
+>>> + - Avoid defining custom macros in include/dt-bindings/ for hardware constants
+>>> +   that can be derived from a datasheet -- binding macros in header file should
+>>> +   only be used as a last resort if there is no natural way to define a binding
+>>> +
+>>> + - Use literal values in the devicetree file in place of macros even when a
+>>> +   header is required, and change them to the named representation in a
+>>> +   following release
+>>
+>> I actually prefer such solution:
+>>
+>>  - Duplicate defines in the devicetree file hidden by #ifndef section
+>> and remove them later in a following release
+>>
+>> We can keep both, but mine above leads to cleaner changes in DTS file.
+> 
+> I think all of the options involved are either a bit ugly, or a bit of a
+> pain in the hole.
+> 
+>>> + - Defer the devicetree changes to a release after the binding and driver have
+>>> +   already been merged
+>>> +
+>>> + - Change the bindings in a shared immutable branch that is used as the base for
+>>> +   both the driver change and the devicetree changes
+>>
+>> The policy told to me some time ago was that no merges from driver
+>> branch or tree are allowed towards DTS branch, even if they come only
+>> with binding header change. There are exceptions for this, e.g. [1], but
+>> that would mean we need to express here rules for cross-tree merges.
+> 
+> I've got away with having an immutable branch for dt-binding headers!
 
---FjM7r4gpLPMzwX0D
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Of course, all is in an immutable branch, but in which tree?
 
-On Mon, May 15, 2023 at 06:23:32PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.3 release.
-> There are 246 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+I talk about a case when driver tree, e.g. different clock maintainer,
+takes the binding.
 
-Successfully compiled and installed bindeb-pkgs on my computer (Acer
-Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+> That said, Arnd did actually have a look at this (and suggested some
+> changes) before I sent it & did not cry fowl about this section. IIRC,
+> this is actually his wording, not mine.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
---=20
-An old man doll... just what I always wanted! - Clara
+Best regards,
+Krzysztof
 
---FjM7r4gpLPMzwX0D
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGNG+QAKCRD2uYlJVVFO
-o6juAP9xTqCt/zT62kgR73+EU8saRPUDGrw9AYhB9u+KZQE3CQD/YcSeUbymw8oK
-rbqjAZUqc6mASFYGqTc689ljFxzg0AI=
-=ArBj
------END PGP SIGNATURE-----
-
---FjM7r4gpLPMzwX0D--
