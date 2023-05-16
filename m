@@ -2,227 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F8770464F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083A9704656
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjEPH1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S231149AbjEPH1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjEPH1g (ORCPT
+        with ESMTP id S231320AbjEPH1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:27:36 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9B592
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:27:35 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-643912bca6fso10785607b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 00:27:35 -0700 (PDT)
+        Tue, 16 May 2023 03:27:43 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AE111C;
+        Tue, 16 May 2023 00:27:41 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64395e741fcso14245429b3a.2;
+        Tue, 16 May 2023 00:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684222054; x=1686814054;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3VrihHlX4gfqH1aDetunLHoNMhaVXNYRIMdChx9m30s=;
-        b=C5zki00OG/Di/cP+PHSnsCOkSCPbwkL4V81xLbfY4pVggsLfdhYrskvUIALYYFgql6
-         4gJqNkWTfTYZofZdCzKb3LABW4xcuqkL4A3fOK6hOUmEKUn0PhouTh/3QB8i4JSyqlQq
-         G25+HtHqiwNVmHPkr/4aORinBDAQE+ckCW+eriH7AfPr+AWdFHjnou/WxnrZdFJB93Mr
-         52XHHE9BUlRe9djIkCBmR4vQfSg3BKd7LAdz+zhw6NY+EwkbNUPlMUny45/n/13ORKCR
-         nuL5XG90LWPhvKwXDYjv3Asc4n8XdNsePhSv/KTlkHc9VHMzCfRbR5iz5y68/ZvPd1xk
-         tdgQ==
+        d=gmail.com; s=20221208; t=1684222061; x=1686814061;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMkkuioWkC+udXRloS+HK40vtfIEidS3uoOdvaB5NUg=;
+        b=WiDWT2zI2xlQvDkBOyqZDLIiQ+/FbhgU3cgCIgCAKHDrRdhRg3kGM02F3deXcEbHXo
+         yjnzuyxgn4H5yyy4sDf9sfL1wWfh7wWLV1evTmc7L01WpgYzRmbZO9mnRkUzWXeOKXQf
+         4bIqpkaiNA3uSn35cxCG+YRzMVbjDzbU5M27v4wdqho+lp+aTla4Z+7xiKOxrrfyrurd
+         EP5Y8u5KaaOHgiVjpNvPx+XQG5zYl0JprYnafva1fV+xwhS0D0kJlBz92iO/Goj+NCAl
+         s3a5onKS+8xBItoWEOMzbeu7zkXk5piLEdcH11iSuijIv5pJzFA/b0P7aRxGpm+figaR
+         n/3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684222054; x=1686814054;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3VrihHlX4gfqH1aDetunLHoNMhaVXNYRIMdChx9m30s=;
-        b=ZDYRfKzCfl/4MiKp7zSC1Zk+znpU050SitLLNV+JpAHHA3Nj3OpHKx/UdOKR9rimfC
-         E1BBUi9uHnuoU0iqBNzExOTIp2Etg96YSiZ9Z8620ksokguPxRoVeDiHBxoo6a/xkxVm
-         atL5YSU83m6J6Bv2oTPu1S6JZy+yLCjXXUKzgWkIn+pCUwUCI4lGrCloWoi0EATmtknZ
-         BN7J/JpNV5O/Bai66P8vpO1LrniDXOesMb3k2sqsb0v//EqWtI9HcGmcjzLA5+vwx3IS
-         btNWaXwkpqEN6izJhR4b5w2raarCo5EuyP2xr7Rcsx6M5Z5QS24RUbRuBwYYYOy1I/9W
-         rtCg==
-X-Gm-Message-State: AC+VfDyyM671hBNV/UFWOsBY+FYXYR7NnM3n3lAxeBWOREULptuxuGWq
-        kJtYKT9MiYG6BOpt0mmk4yYnTw==
-X-Google-Smtp-Source: ACHHUZ4Ij3/JcncsA3FDxe3yhdEY6/kPht/VxPatiLCmVCATaxIua2fY071UHEQt47R+beIWtFjjAA==
-X-Received: by 2002:a05:6a00:1821:b0:644:d77:a2c5 with SMTP id y33-20020a056a00182100b006440d77a2c5mr50250878pfa.29.1684222054509;
-        Tue, 16 May 2023 00:27:34 -0700 (PDT)
-Received: from [10.200.9.178] ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id s26-20020aa7829a000000b0063b6cccd5dcsm12429514pfm.194.2023.05.16.00.27.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 00:27:34 -0700 (PDT)
-Message-ID: <4e40b88c-4419-56df-d720-177cf76e95a6@bytedance.com>
-Date:   Tue, 16 May 2023 15:27:29 +0800
+        d=1e100.net; s=20221208; t=1684222061; x=1686814061;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sMkkuioWkC+udXRloS+HK40vtfIEidS3uoOdvaB5NUg=;
+        b=UHN+NLe5fNDRC/2KNLTd88LIikKeYZvMB4HJkdhOB6KxvUvN7AVSlI4AsvC6KPpWXO
+         6pAHa0M2u4CfMY85geT5gGP0ECagSTWiWdWePD55togzHkSbhdTUNm0UzFXYX0Uz0bKe
+         owV74usILk7W3+0wu0vt2iK/v+YMoQZO4fh8GbUC+zH4bgkYHPd7fbThDWprwUbJKbPt
+         pjdWdMKZoFrPo4jkmT8Tbwc6Hu4pIpZftyz71YNRjMkBkf5kUOaZG8DcldRIDV4ldupL
+         Pihjj2jc9TzJI0XI51rUP9eMFbEoGeNNdyAMZW0NSw4NvVMWkb/eBmaIBGu7+BbrLMoW
+         L5tw==
+X-Gm-Message-State: AC+VfDzKJkkR5bwbAi/a3F+77O9k+//x3ytcvCzuSNVfqrALX8q2ZEE0
+        T/Y9zXaVzMIyZiTXCcuVFOA=
+X-Google-Smtp-Source: ACHHUZ74rnoX13f+ip9crIOWfq+6SjW8iqq3ldmHjj2wBSe350Z+Ops2E1y7tLdOMQ+xPt34CGZlcg==
+X-Received: by 2002:a05:6a00:14ce:b0:640:f313:efba with SMTP id w14-20020a056a0014ce00b00640f313efbamr49839859pfu.19.1684222060775;
+        Tue, 16 May 2023 00:27:40 -0700 (PDT)
+Received: from Gentoo (n220246252240.netvigator.com. [220.246.252.240])
+        by smtp.gmail.com with ESMTPSA id d22-20020aa78e56000000b00646e7d2b5a7sm12689091pfr.112.2023.05.16.00.27.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 00:27:40 -0700 (PDT)
+Date:   Tue, 16 May 2023 15:27:34 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [RESEND,PATCH 3/3] arm64: dts: qcom: sm8250-xiaomi-elish: remove
+ redundant empty line
+Message-ID: <ZGMwZiPI3eCGdoS8@Gentoo>
+References: <20230516062657.28616-1-lujianhua000@gmail.com>
+ <20230516062657.28616-3-lujianhua000@gmail.com>
+ <95f257ae-0b9d-a002-7074-a476fbc5bc98@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH 09/10] maple_tree: Rework mas_wr_slot_store() to be
- cleaner and more efficient.
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-References: <20230515131757.60035-1-zhangpeng.00@bytedance.com>
- <20230515131757.60035-10-zhangpeng.00@bytedance.com>
- <20230515180147.hgwk2vccsph7poxa@revolver>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-Cc:     Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        maple-tree@lists.infradead.org
-In-Reply-To: <20230515180147.hgwk2vccsph7poxa@revolver>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95f257ae-0b9d-a002-7074-a476fbc5bc98@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 16, 2023 at 09:11:28AM +0200, Krzysztof Kozlowski wrote:
+> On 16/05/2023 08:26, Jianhua Lu wrote:
+> > Remove a redundant empty line introduced by
+> >   commit 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
+> 
+> So you resent my patches just to add a comment? Not even as a dependency
+> of something? Please, no.
 
+Acked, I will split this patch to new series.
+> 
+> > 
+> > Fixes: 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
+> 
+> It's not a bug. Drop fixes tag.
 
-在 2023/5/16 02:01, Liam R. Howlett 写道:
-> * Peng Zhang <zhangpeng.00@bytedance.com> [230515 09:18]:
->> The code of mas_wr_slot_store() is messy, make it clearer and concise,
->> and add comments. In addition, get whether the two gaps are empty to
->> avoid calling mas_update_gap() all the time.
+Acked
 > 
-> Please drop the cases from the comments.  These aren't that complicated
-> to need diagrams.
 > 
-> Case 1: Overwriting the range and over a part of the next range
-> Case 2: Overwriting a part of the range and over the entire next range
-> 
->>
->> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
->> ---
->>   lib/maple_tree.c | 79 +++++++++++++++++++++++++++---------------------
->>   1 file changed, 44 insertions(+), 35 deletions(-)
->>
->> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->> index 538e49feafbe4..d558e7bcb6da8 100644
->> --- a/lib/maple_tree.c
->> +++ b/lib/maple_tree.c
->> @@ -4190,53 +4190,62 @@ static inline bool mas_wr_node_store(struct ma_wr_state *wr_mas)
->>    * @wr_mas: the maple write state
->>    *
->>    * Return: True if stored, false otherwise
->> + *
->> + * Case 1:
->> + *                       r_min   r_max    lmax
->> + *                 +-------+-------+-------+
->> + * original range: |       |offset | end   |
->> + *                 +-----------------------+
->> + *                         +-----------+
->> + * overwrite:              |           |
->> + *                         +-----------+
->> + *                        index       last
->> + *
->> + * Case 2:
->> + *                       r_min   r_max    lmax
->> + *                 +-------+-------+-------+
->> + * original range: |       |offest | end   |
->> + *                 +-------+---------------+
->> + *                             +-----------+
->> + * overwrite:                  |           |
->> + *                             +-----------+
->> + *                           index        last
->>    */
->>   static inline bool mas_wr_slot_store(struct ma_wr_state *wr_mas)
->>   {
->>   	struct ma_state *mas = wr_mas->mas;
->> -	unsigned long lmax; /* Logical max. */
->>   	unsigned char offset = mas->offset;
->> +	unsigned char offset_end = wr_mas->offset_end;
->> +	unsigned long lmax = wr_mas->end_piv; /* Logical max. */
->> +	bool gap = false;
->>   
->> -	if ((wr_mas->r_max > mas->last) && ((wr_mas->r_min != mas->index) ||
->> -				  (offset != wr_mas->node_end)))
->> -		return false;
->> -
->> -	if (offset == wr_mas->node_end - 1)
->> -		lmax = mas->max;
->> -	else
->> -		lmax = wr_mas->pivots[offset + 1];
->> -
->> -	/* going to overwrite too many slots. */
->> -	if (lmax < mas->last)
->> +	if (offset_end - offset != 1)
->>   		return false;
->>   
->> -	if (wr_mas->r_min == mas->index) {
->> -		/* overwriting two or more ranges with one. */
->> -		if (lmax == mas->last)
->> -			return false;
->> -
->> -		/* Overwriting all of offset and a portion of offset + 1. */
->> +	if (mas->index == wr_mas->r_min && mas->last < lmax) {
->> +		/* Case 1 */
->> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset);
->> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
->>   		rcu_assign_pointer(wr_mas->slots[offset], wr_mas->entry);
->>   		wr_mas->pivots[offset] = mas->last;
->> -		goto done;
->> -	}
->> -
->> -	/* Doesn't end on the next range end. */
->> -	if (lmax != mas->last)
->> +	} else if (mas->index > wr_mas->r_min && mas->last == lmax) {
->> +		/* Case 2 */
->> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset);
->> +		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
->> +		rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
->> +		wr_mas->pivots[offset] = mas->index - 1;
-> 
-> These two lines need to be in opposite order to ensure a reader sees
-> either the value or the previous value.  If you overwrite something with
-> a new value, it is possible that a reader looking for the next range
-> will get the value stored at offset (but not entry).
-Please think again, did you think wrong?
-It doesn't happen, swapping the order introduces the problem.
-If we update the pivot first, it will cause a part of the value
-of the range indexed by offset to change to the value of the
-range indexed by offset+1, which is illegal.
-
-My assignment order remains the same as the previous version.
-
-> 
->> +		mas->offset++; /* Keep mas accurate. */
->> +	} else {
->>   		return false;
->> +	}
->>   
->> -	/* Overwriting a portion of offset and all of offset + 1 */
->> -	if ((offset + 1 < mt_pivots[wr_mas->type]) &&
->> -	    (wr_mas->entry || wr_mas->pivots[offset + 1]))
->> -		wr_mas->pivots[offset + 1] = mas->last;
->> -
->> -	rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
->> -	wr_mas->pivots[offset] = mas->index - 1;
->> -	mas->offset++; /* Keep mas accurate. */
->> -
->> -done:
->>   	trace_ma_write(__func__, mas, 0, wr_mas->entry);
->> -	mas_update_gap(mas);
->> +	/*
->> +	 * Only update gap when the new entry is empty or there is an empty
->> +	 * entry in the original two ranges.
->> +	 */
->> +	if (!wr_mas->entry || gap)
->> +		mas_update_gap(mas);
->>   	return true;
->>   }
->>   
->> @@ -4418,7 +4427,7 @@ static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
->>   	if (new_end == wr_mas->node_end + 1 && mas_wr_append(wr_mas))
->>   		return;
->>   
->> -	if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
->> +	if (new_end == wr_mas->node_end && mas_wr_slot_store(wr_mas))
->>   		return;
->>   	else if (mas_wr_node_store(wr_mas))
->>   		return;
->> -- 
->> 2.20.1
->>
+> Best regards,
+> Krzysztof
 > 
