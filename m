@@ -2,269 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62391704821
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 10:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9017049F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjEPIrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 04:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S232214AbjEPKCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjEPIrX (ORCPT
+        with ESMTP id S231163AbjEPKCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 04:47:23 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2999019BD;
-        Tue, 16 May 2023 01:47:22 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f13bfe257aso15868515e87.3;
-        Tue, 16 May 2023 01:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684226840; x=1686818840;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=pIs7xrpXMUe39rrvrGOq+duHo9PtLlvjA/J+15gmNUM=;
-        b=c/mlcl+sDW2dCiuSBhRV0vh1HdyD/q5u+7JcwUfC0prnFCZGvu5XVOY2kFCgPiE1TP
-         n3l9jjx/CLiwAWkj4jW7uFKBurZ2Gu01FfclJZiRMjmkwqtEvpUDjtyfWC2dvFznQRJK
-         fciX6lJxS8kmKV/vCgNSWsUNVnpytxqGFFVQADkFmcROFhYI2gnlNeMtsBtTEiickae2
-         4867l05/oQWrOEFFMXFRgDwfuRDwxKavpYtVtsaOAOlkxO3LYmYuHu/TywKnGSOvosJq
-         Rj03H2JL8srZbQPLf5V2LAoUPRMPjcVf+uogFqQkVZOO2XOz6tzazhKNMlg0MsvSa3d6
-         /XTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684226840; x=1686818840;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pIs7xrpXMUe39rrvrGOq+duHo9PtLlvjA/J+15gmNUM=;
-        b=bKoUq5p+2+WJQAiOhfwUBxPVieRfjPCTrvkkmwZ7PPpImxEJJb9Q/VRY0zPA1nQ1lh
-         +TxGIhOeGyGFgnIO1C3of/dPrPe0Pks/gwRm9MT7k9WGl+jM/aK1cnDCRcqTa3Nl7Vsa
-         W22hJXTooITq7cENRXgsZ7i292fvos5ArMDdajbzEjjgRtqbmPmAVHCKP53ypvIXsMEL
-         g8K1KoUtZvQD/0w+dBhMJLbUzLsZnxjvEaODGgjcdTomJk3TTj/I/vjk9SQpzHdS5iwq
-         Xmtwvplas9nC4TQMrVCcnvqkJbmHA9ydKEZRhSwtKTB4iGUyDyFUFHRFsm10ZhQYNCgb
-         5YVw==
-X-Gm-Message-State: AC+VfDxGFPrU+MsMNUrKkMHheEiycW0eQEN/efrdG+fCDUIqqoZ1kO3H
-        0bJPCLY4fG5h6NkH1RhHZTwrAiTLg0Loqg==
-X-Google-Smtp-Source: ACHHUZ6eGlsrqTErXAX7ikC8ZXUz16DB7kO0+AP6R4MKOd88jLadIORj03U/3MHBGIl2VpjKYVG4yQ==
-X-Received: by 2002:ac2:5a03:0:b0:4ed:c7cc:6f12 with SMTP id q3-20020ac25a03000000b004edc7cc6f12mr6675761lfn.34.1684226840062;
-        Tue, 16 May 2023 01:47:20 -0700 (PDT)
-Received: from [100.119.125.242] (93-80-67-66.broadband.corbina.ru. [93.80.67.66])
-        by smtp.gmail.com with ESMTPSA id o8-20020ac24348000000b004d5a6dcb94fsm2900210lfl.33.2023.05.16.01.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 01:47:19 -0700 (PDT)
-Message-ID: <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
-Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment
- option
-From:   Ivan Mikhaylov <fr0st61te@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Paul Fertser <fercerpav@gmail.com>
-Date:   Tue, 16 May 2023 11:47:17 +0000
-In-Reply-To: <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
-References: <20230509143504.30382-1-fr0st61te@gmail.com>
-         <20230509143504.30382-4-fr0st61te@gmail.com>
-         <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
-         <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
-         <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
-         <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
-         <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 
+        Tue, 16 May 2023 06:02:53 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7AAE58;
+        Tue, 16 May 2023 03:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684231372; x=1715767372;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=L/LNoqs1tISEtlbcw7xR+7RlMB79xqPMCNJdcg7oGJ0=;
+  b=jKsg9IxZX7QHh2sZotnIDJkHGJ6zjiXV1VmQHLvmIBi8CZbYk3hYCMw1
+   vSfPClL2Vc4vPY96QHn2vVTUHOW4LkqydyaUMSg7LBgJn+bdn9YGOMj89
+   CKHDt5j0zyH8lGF8iKi05oHhUYBWnP3PW+qJeK0GdAxtLUP48koUEnLED
+   HV0owvQKN2q4dwd96wnOrDpRGdrksuaZfJm0UtBd+m7+NaoC23oTVBs/6
+   NKED20CG4Ya8AeVydTA9nRxhltS+MaN5CG2AdZUOG/v4334X2vv2Z/gYe
+   jKUEVyqgbU4Q1L4vqBElauKybWHRB2trxgfUWZMJazQolMKA8aHWoTMEq
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="437778282"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="437778282"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 03:02:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="770977447"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="770977447"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga004.fm.intel.com with ESMTP; 16 May 2023 03:02:52 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 03:02:52 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 03:02:51 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 03:02:51 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 16 May 2023 03:02:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=beMbRf6nvxtyUR3rxYr9xn5I7iJ37wMpR5MPiCWFCiscbT4El1A5TZY8IIaE4GNwv23vDvtjuzuV4dfsYzi6h/a/1g8fJq4KT8Xek3qY9xIOKTsk3enxrd0/ge37gQNmo+cAxjC5dBeR1FCnMSfJ5aG3D77vtdl9TRY9iJP3pSG/KMccXfpv/XFG1sI0e5rT+OVzYLShcGlciMKRqHOmN/pvxjw2Dv04tm1zZ29RyEKoQG/3mdpWgBs2/Kprgg/0M8XgCmRjiJ1so5tDkX8FZjDyWw9gscss6EvVCaVVX7l8u771Nj/DOKTw0np9yVMtY25z3JyDJ8DDArBCCnL5jA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hru+np02JJfkgaLRRMYDC7UyI4+C5LvTpxsG9EUVoEo=;
+ b=kaOhKHFtTmgzkRECYfNF8A7QcqMVlKvgH2WLbBRoDQHuRIG0anyPa0GD9tP3vyNRXhsZAmgZ80nQBRsYbRhDchbalBlqf6jm7UvxUcTHY9G2X1EXv6l6/BYTG4hePLRqrl+nKJhHNemfZsp6XRxeF36eGdxNqZ1fkLk4O/FkV+O77sSf2FOPQAvbT87kOkhkKvwbBuMXFK3ZQ7Jx7fUp65m9bzy1dyhe5XPPTSQm+0vXOc3FX8kD8rrdo+VS9S+n5Ar7jjkPzBSOP9G+azeAeR0KKRIhJqC8XLCvjcwlfHJfEf9H1nrvfcYA93tnLU4o93uyMrId7wneJ5SQFjilEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH7PR11MB5957.namprd11.prod.outlook.com (2603:10b6:510:1e0::14)
+ by SA1PR11MB6735.namprd11.prod.outlook.com (2603:10b6:806:25e::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
+ 2023 10:02:48 +0000
+Received: from PH7PR11MB5957.namprd11.prod.outlook.com
+ ([fe80::c190:aae6:9019:1ac8]) by PH7PR11MB5957.namprd11.prod.outlook.com
+ ([fe80::c190:aae6:9019:1ac8%6]) with mapi id 15.20.6387.030; Tue, 16 May 2023
+ 10:02:47 +0000
+Date:   Tue, 16 May 2023 17:37:42 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, <kvm@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 03/28] drm/i915/gvt: Verify hugepages are contiguous
+ in physical address space
+Message-ID: <ZGNO5gYKOhhnslsp@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230513003600.818142-1-seanjc@google.com>
+ <20230513003600.818142-4-seanjc@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230513003600.818142-4-seanjc@google.com>
+X-ClientProxiedBy: SG2PR01CA0192.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::21) To PH7PR11MB5957.namprd11.prod.outlook.com
+ (2603:10b6:510:1e0::14)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR11MB5957:EE_|SA1PR11MB6735:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5613010-340a-4755-8fa8-08db55f4b38c
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aINCX1nmUTyJPWligkw4mBkQpDPoYC2t2m6j+EJiO0zsCX1X2bbMpRUr8wZZ4lDTWaS1kyClVD5dT5mo7YDfXugR5CpI6L1GWkZXjnVIXC1TJAryfrZ/jgnyg6Eehx1xPsyVm6oSqtHunk4FYIsHNKlzj+RvEyosN2g9eSGkqEsQ2xlzTNlfr8gMmYZZVvDFFw0TBXpV0edu7O3q3tm80sQO+sVEhmgw4XiaUvTOupz3APWtdFTYebl0hB7f4UNhi33NCNZuoREyiN+V+UXD6sZ1SZ+l5eGc2EZhoFl6t9mX4ga2xbYl761SA1+fS9679oRJWowd5oEjJmxv2x4a1aueMSyyC3JrcWRTVEjhV+Bi7qmZ5Tp8cJYPodYu/eo1xsO9UcYQHBNMD/o+wE1URHg8PiREnbkydU0mVq6O5J9g5WlWskUj3bLN51YD7HaHDOhEMj9Wrns946dCC2biHxd/9VWLC1t+oOgP9LOS7ppJyRTg/zYOaU9M81ny/j9gYuNaIXR2NTOvoZCqpc1VvkzQR6SFnaWO2ttmYDOK1ls=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB5957.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(346002)(136003)(376002)(39860400002)(451199021)(54906003)(316002)(478600001)(66476007)(6916009)(66946007)(66556008)(966005)(4326008)(6486002)(86362001)(15650500001)(5660300002)(8676002)(8936002)(6666004)(3450700001)(82960400001)(2906002)(41300700001)(38100700002)(6512007)(26005)(186003)(6506007)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?prfZnhYPtA6Y2yRV/GDaVNxR8UzNtSzl4Qo+NSa2OvotFhnKQqjOQbL5ZwES?=
+ =?us-ascii?Q?K9qGnq8S83YZb+rAfNXNYIrU0Bam5Tvu8WbSCQcCZQI/+TIs15BUxajtNKbs?=
+ =?us-ascii?Q?1iriPrM6QR6rCQgncsEz0aft8HxPyb5lhLKdyrPDk1QkcNolxzNpsFRifqv5?=
+ =?us-ascii?Q?8ZTsQ/hoUXwq4Mq14xE4+dLX00FaevIibiTHX3OprSl3nNMDcGyXj2ktPKI4?=
+ =?us-ascii?Q?MOzzQuWNIANwhoZ5Fvd4O1j5qCbAwHe2jwyOTvEG57eG9bllwhg7ijJu/Mmm?=
+ =?us-ascii?Q?U+drwfOxhJTs6GuAqyo5qY6xJJCAw+Qpfwo/h/rxmEJhvE2ETeiQA68+/xGs?=
+ =?us-ascii?Q?96U9wM/4GmuiTxqp56BnYXlcMoKD8Vhf7yatpnl+5i8DjIMXv0iLeLJVtAxX?=
+ =?us-ascii?Q?Nn7/BDRZNu/YDKNAWcuHDQEPQkZwcpTrnawGAF6nI//4JpJsQKGkG68CqkIa?=
+ =?us-ascii?Q?mecHOuOuMKMnvapgMEctjy5IO/NpDowulQW0UgENwS6NzhMIn4wlmTTj4ls7?=
+ =?us-ascii?Q?qEtt7f4Qk7/72wmp/o9u58kMhLrrGZRL97RP40LtlQjHHKBPBsheN2gC8qYB?=
+ =?us-ascii?Q?y5OiV+QYpDOuzrO//Tr6sLd/UNGixTbX+79FbjS7isoGdrl3Iez8f+kNpC9K?=
+ =?us-ascii?Q?A2Fom0izZZ2YaI8nQGH4+ysR5FGw/aia14p+XgkPhjMhca5vW7qxAxB+9q9v?=
+ =?us-ascii?Q?d8aXJ7IgSw/QwhKgKBiAB4hSzvtzY5qXsdKI35bg0TADCtqqPRCHUYMlRpnz?=
+ =?us-ascii?Q?UZ2JlveKab/5C+AS2XKMM5PbgqoWm1uHqjbGD2H8iHUEl0dJYYeduljwhX8O?=
+ =?us-ascii?Q?vVF2jBZfofqNqg8aJlNPlNGeBuHORVsBwPAFwlhKWAgtBdTTxgoFsSPMKlKb?=
+ =?us-ascii?Q?CXVF6S2MvHKc1VZGWfxLyievc3hgjXzqbKWkwDAIGr9PR45a5NZm9ODKo50m?=
+ =?us-ascii?Q?AsogaKAAye238NWXespOqrYsgmjFnVIcRzFHu9hN+V5O2fW/kawmfUNV7mgc?=
+ =?us-ascii?Q?P46Q0XyGn6hYvZBCZ2PTX+Ph9J5Toj8h1E7I41/rvy5k8emud1BtVRFgcIp/?=
+ =?us-ascii?Q?uCXkaW1+fe7Ioq3jnvCfKzqYoSx0ki9l6Ul4nJrGjOQrA96i0JcstmHsVj0G?=
+ =?us-ascii?Q?zvI/p3EphVP7b8n22/pN69dXnyMSOQqZCJ18U/peqttkPyyjJp75gA1ehSVq?=
+ =?us-ascii?Q?C6mbTAVSsE3dyeJkPP3oEO0g64eBxRWlWIRp45G/XJyarKrflrgAjybIaM6Q?=
+ =?us-ascii?Q?QMcQWUvxY/a8jOw+3/99YEdF3RgAoG7wJILy/nFso5vyQc/Gh7c3DucQ5wx3?=
+ =?us-ascii?Q?eTXCcc/+DdSAtM2l5rbSe5VIGJUDcc5VYlwBq4h3Hz+VNHcbC4DP6hNvFXrS?=
+ =?us-ascii?Q?sz5NWvhUoL8LcDh8pPv0IpNCiG7XzOUtBA1tZrJjRIlTW9vKbQnwx4LhuuYr?=
+ =?us-ascii?Q?29pRr4P7rdtx/P7371prZiDb9Cwov/yOGXGs91dn3tlujvW5gYSjFj4V2j5k?=
+ =?us-ascii?Q?u24Imt71sf5JbM7AR0UHumgjzaUNV804agSWQu0FwcDS1xO8youOr7AB72PL?=
+ =?us-ascii?Q?hGd82X8QVCp8sEkbKeLOKlPmsnpyaoIc3DOKGe0o?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5613010-340a-4755-8fa8-08db55f4b38c
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB5957.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 10:02:47.7741
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i/Z9cOk3TFAdjdJnNPm09nxImOZnjk2ZxcG/emC9vvSc9k1y6CHkfTJ+qiRDjSo40BJmBhakVVKNGwhDG8pp1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6735
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-05-12 at 11:24 +0200, Krzysztof Kozlowski wrote:
-> On 12/05/2023 13:28, Ivan Mikhaylov wrote:
-> > On Fri, 2023-05-12 at 08:22 +0200, Krzysztof Kozlowski wrote:
-> > > On 11/05/2023 01:31, Ivan Mikhaylov wrote:
-> > > > On Wed, 2023-05-10 at 16:48 +0200, Krzysztof Kozlowski wrote:
-> > > > > On 09/05/2023 16:35, Ivan Mikhaylov wrote:
-> > > > > > Add the mac-address-increment option for specify MAC
-> > > > > > address
-> > > > > > taken
-> > > > > > by
-> > > > > > any other sources.
-> > > > > >=20
-> > > > > > Signed-off-by: Paul Fertser <fercerpav@gmail.com>
-> > > > > > Signed-off-by: Ivan Mikhaylov <fr0st61te@gmail.com>
-> > > > > > ---
-> > > > > > =C2=A0.../devicetree/bindings/net/ethernet-controller.yaml=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > > > > > | 8
-> > > > > > ++++++++
-> > > > > > =C2=A01 file changed, 8 insertions(+)
-> > > > > >=20
-> > > > > > diff --git
-> > > > > > a/Documentation/devicetree/bindings/net/ethernet-
-> > > > > > controller.yaml
-> > > > > > b/Documentation/devicetree/bindings/net/ethernet-
-> > > > > > controller.yaml
-> > > > > > index 00be387984ac..6900098c5105 100644
-> > > > > > --- a/Documentation/devicetree/bindings/net/ethernet-
-> > > > > > controller.yaml
-> > > > > > +++ b/Documentation/devicetree/bindings/net/ethernet-
-> > > > > > controller.yaml
-> > > > > > @@ -34,6 +34,14 @@ properties:
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 minItems: 6
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 6
-> > > > > > =C2=A0
-> > > > > > +=C2=A0 mac-address-increment:
-> > > > > > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/int3=
-2
-> > > > > > +=C2=A0=C2=A0=C2=A0 description:
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Specifies the MAC address incre=
-ment to be added to
-> > > > > > the
-> > > > > > MAC
-> > > > > > address.
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Should be used in cases when th=
-ere is a need to use
-> > > > > > MAC
-> > > > > > address
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 different from one obtained by =
-any other level, like
-> > > > > > u-
-> > > > > > boot
-> > > > > > or the
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NC-SI stack.
-> > > > >=20
-> > > > > We don't store MAC addresses in DT, but provide simple
-> > > > > placeholder
-> > > > > for
-> > > > > firmware or bootloader. Why shall we store static "increment"
-> > > > > part of
-> > > > > MAC address? Can't the firmware give you proper MAC address?
-> > > > >=20
-> > > > > Best regards,
-> > > > > Krzysztof
-> > > > >=20
-> > > >=20
-> > > > Krzysztof, maybe that's a point to make commit message with
-> > > > better
-> > > > explanation from my side. At current time there is at least two
-> > > > cases
-> > > > where I see it's possible to be used:
-> > > >=20
-> > > > 1. NC-SI
-> > > > 2. embedded
-> > > >=20
-> > > > At NC-SI level there is Get Mac Address command which provides
-> > > > to
-> > > > BMC
-> > > > mac address from the host which is same as host mac address, it
-> > > > happens
-> > > > at runtime and overrides old one.
-> > > >=20
-> > > > Also, this part was also to be discussed 2 years ago in this
-> > > > thread:
-> > > > https://lore.kernel.org/all/OF8E108F72.39D22E89-ON00258765.001E46EB=
--00258765.00251157@ibm.com/
-> > >=20
-> > > Which was not sent to Rob though...
-> > >=20
-> > >=20
-> > > >=20
-> > > > Where Milton provided this information:
-> > > >=20
-> > > > DTMF spec DSP0222 NC-SI (network controller sideband interface)
-> > > > is a method to provide a BMC (Baseboard management controller)
-> > > > shared
-> > > > access to an external ethernet port for comunication to the
-> > > > management
-> > > > network in the outside world.=C2=A0 The protocol describes ethernet
-> > > > packets=20
-> > > > that control selective bridging implemented in a host network
-> > > > controller
-> > > > to share its phy.=C2=A0 Various NIC OEMs have added a query to find
-> > > > out
-> > > > the=20
-> > > > address the host is using, and some vendors have added code to
-> > > > query
-> > > > host
-> > > > nic and set the BMC mac to a fixed offset (current hard coded
-> > > > +1
-> > > > from
-> > > > the host value).=C2=A0 If this is compiled in the kernel, the NIC
-> > > > OEM is
-> > > > recognised and the BMC doesn't miss the NIC response the
-> > > > address is
-> > > > set
-> > > > once each time the NCSI stack reinitializes.=C2=A0 This mechanism
-> > > > overrides
-> > > > any mac-address or local-mac-address or other assignment.
-> > > >=20
-> > > > DSP0222
-> > > > https://www.dmtf.org/documents/pmci/network-controller-sideband-int=
-erface-nc-si-specification-110
-> > > >=20
-> > > >=20
-> > > > In embedded case, sometimes you have different multiple
-> > > > ethernet
-> > > > interfaces which using one mac address which increments or
-> > > > decrements
-> > > > for particular interface, just for better explanation, there is
-> > > > patch
-> > > > with explanation which providing them such way of work:
-> > > > https://github.com/openwrt/openwrt/blob/master/target/linux/generic=
-/pending-5.15/682-of_net-add-mac-address-increment-support.patch
-> > > >=20
-> > > > In their rep a lot of dts using such option.
-> > >=20
-> > > None of these explain why this is property of the hardware. I
-> > > understand
-> > > that this is something you want Linux to do, but DT is not for
-> > > that
-> > > purpose. Do not encode system policies into DT and what above
-> > > commit
-> > > says is a policy.
-> > >=20
-> >=20
-> > Krzysztof, okay then to which DT subsystem it should belong? To
-> > ftgmac100 after conversion?
->=20
-> To my understanding, decision to add some numbers to MAC address does
-> not look like DT property at all. Otherwise please help me to
-> understand
-> - why different boards with same device should have different
-> offset/value?
->=20
-> Anyway, commit msg also lacks any justification for this.
->=20
-> Best regards,
-> Krzysztof
->=20
+hi Sean
 
-Krzysztof, essentially some PCIe network cards have like an additional
-*MII interface which connects directly to a BMC (separate SoC for
-managing a motherboard) and by sending special ethernet type frames
-over that connection (called NC-SI) the BMC can obtain MAC, get link
-parameters etc. So it's natural for a vendor to allocate two MACs per
-such a board with PCIe card intergrated, with one MAC "flashed into"
-the network card, under the assumption that the BMC should
-automatically use the next MAC. So it's the property of the hardware as
-the vendor designs it, not a matter of usage policy.
+Do you think it's necessary to double check that struct page pointers
+are also contiguous?
 
-Also at the nvmem binding tree is "nvmem-cell-cells" which is literally
-the same as what was proposed but on different level.
+And do you like to also include a fix as below, which is to remove the
+warning in vfio_device_container_unpin_pages() when npage is 0?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/D=
-ocumentation/devicetree/bindings/nvmem?id=3D7e2805c203a6c8dc85c1cfda205161e=
-d39ae82d5
+@ -169,7 +173,8 @@ static int gvt_pin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
+        *page = base_page;
+        return 0;
+ err:
+-       gvt_unpin_guest_page(vgpu, gfn, npage * PAGE_SIZE);
++       if (npage)
++               gvt_unpin_guest_page(vgpu, gfn, npage * PAGE_SIZE);
+        return ret;
+ }
 
+BTW, I've sent a separate fix for vfio_iommu_type1_pin_pages() to ensure
+struct page is a valid address.
+https://lore.kernel.org/lkml/20230516093007.15234-1-yan.y.zhao@intel.com/
 
-Thanks.
+On Fri, May 12, 2023 at 05:35:35PM -0700, Sean Christopherson wrote:
+> When shadowing a GTT entry with a 2M page, verify that the pfns are
+> contiguous, not just that the struct page pointers are contiguous.  The
+> memory map is virtual contiguous if "CONFIG_FLATMEM=y ||
+> CONFIG_SPARSEMEM_VMEMMAP=y", but not for "CONFIG_SPARSEMEM=y &&
+> CONFIG_SPARSEMEM_VMEMMAP=n", so theoretically KVMGT could encounter struct
+> pages that are virtually contiguous, but not physically contiguous.
+> 
+> In practice, this flaw is likely a non-issue as it would cause functional
+> problems iff a section isn't 2M aligned _and_ is directly adjacent to
+> another section with discontiguous pfns.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  drivers/gpu/drm/i915/gvt/kvmgt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+> index de675d799c7d..429f0f993a13 100644
+> --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
+> +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+> @@ -161,7 +161,7 @@ static int gvt_pin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
+>  
+>  		if (npage == 0)
+>  			base_page = cur_page;
+> -		else if (base_page + npage != cur_page) {
+> +		else if (page_to_pfn(base_page) + npage != page_to_pfn(cur_page)) {
+>  			gvt_vgpu_err("The pages are not continuous\n");
+>  			ret = -EINVAL;
+>  			npage++;
+> -- 
+> 2.40.1.606.ga4b1b128d6-goog
+> 
