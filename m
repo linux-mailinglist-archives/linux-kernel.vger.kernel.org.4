@@ -2,143 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B003704A27
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845F8704A29
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231873AbjEPKKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
+        id S231777AbjEPKKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbjEPKJ7 (ORCPT
+        with ESMTP id S232148AbjEPKK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:09:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910D12719;
-        Tue, 16 May 2023 03:09:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F16C16374A;
-        Tue, 16 May 2023 10:09:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93DF8C4339E;
-        Tue, 16 May 2023 10:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684231784;
-        bh=UzWc5Lwm75FxyK+w8YmzHI/DvA777osEnR4l5zmjBh4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OaXk2JUlwNc9953eKu4k6Tz88/RHcSQ8rAN8NQIWm6MZ7UtyQPb+nTSAEsZhCXBVf
-         +XANWEmW4zXYMNZvFxACRsTpj47X29nqAcf9nIfyqGzYR3tsiiwqtLonq1fVvXFLwY
-         EaqnQpFCrX5dV0ZfIPMxoNV5xeYCcHKO5+xnaYQnjMmLtEiCoDYZMRML44IgvRNpXN
-         8ji3D//H6icA/jIND8ED/ofji+rWgN/sytWNwUR3Q0pRQi+0zQTOsE51S3fyJwOn8f
-         EcpwXoYvQBP9mBGIYa2llUd5CdqZ3WeOFo/1knvE6ImJ46qrJ7FHALZW92M/3m+xfW
-         a0TNvvur6xjTQ==
-Date:   Tue, 16 May 2023 11:09:36 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org,
-        vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
-Message-ID: <20230516100936.GF10825@google.com>
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
- <86o7mpmvqq.wl-maz@kernel.org>
- <20230512153933.GH68926@ediswmail.ad.cirrus.com>
- <86mt29mt2m.wl-maz@kernel.org>
- <20230515112554.GA10825@google.com>
- <86h6scmzf7.wl-maz@kernel.org>
+        Tue, 16 May 2023 06:10:29 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B63E4;
+        Tue, 16 May 2023 03:10:03 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 1D1CA30001199;
+        Tue, 16 May 2023 12:10:01 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 0F00D1CCAE8; Tue, 16 May 2023 12:10:01 +0200 (CEST)
+Date:   Tue, 16 May 2023 12:10:01 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>
+Subject: Re: [PATCH v2 1/2] PCI: pciehp: Add support for async hotplug with
+ native AER and DPC/EDR
+Message-ID: <20230516101001.GA18952@wunner.de>
+References: <20230418210526.36514-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20230418210526.36514-2-Smita.KoralahalliChannabasappa@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <86h6scmzf7.wl-maz@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230418210526.36514-2-Smita.KoralahalliChannabasappa@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023, Marc Zyngier wrote:
-
-> On Mon, 15 May 2023 12:25:54 +0100,
-> Lee Jones <lee@kernel.org> wrote:
-> > 
-> > On Fri, 12 May 2023, Marc Zyngier wrote:
-> > 
-> > > On Fri, 12 May 2023 16:39:33 +0100,
-> > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > > > 
-> > > > On Fri, May 12, 2023 at 04:10:05PM +0100, Marc Zyngier wrote:
-> > > > > On Fri, 12 May 2023 13:28:35 +0100,
-> > > > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > > > > > 
-> > > > > > The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> > > > > > (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> > > > > > for portable applications. It provides a high dynamic range, stereo
-> > > > > > DAC for headphone output, two integrated Class D amplifiers for
-> > > > > > loudspeakers, and two ADCs for wired headset microphone input or
-> > > > > > stereo line input. PDM inputs are provided for digital microphones.
-> > > > > > 
-> > > > > > The IRQ chip provides IRQ functionality both to other parts of the
-> > > > > > cs42l43 device and to external devices that wish to use its IRQs.
-> > > > > 
-> > > > > Sorry, but this isn't much of an interrupt controller driver. A modern
-> > > > > interrupt controller driver is firmware-driven (DT or ACPI, pick your
-> > > > > poison), uses irq domains, and uses the irqchip API.
-> > > > > 
-> > > > 
-> > > > Apologies but I really need a little help clarifying the issues
-> > > > here. I am totally happy to fix things up but might need a couple
-> > > > pointers.
-> > > > 
-> > > > 1) uses the irqchip API / uses irq domains
-> > > > 
-> > > > The driver does use both the irqchip API and domains, what
-> > > > part of the IRQ API are we not using that we should be?
-> > > > 
-> > > > The driver registers an irq domain using
-> > > > irq_domain_create_linear.  It requests its parent IRQ using
-> > > > request_threaded_irq. It passes IRQs onto the devices requesting
-> > > > IRQs from it using handle_nested_irq and irq_find_mapping.
-> > > > 
-> > > > Is the objection here that regmap is making these calls for us,
-> > > > rather than them being hard coded into this driver?
-> > > 
-> > > That's one of the reasons. Look at the existing irqchip drivers: they
-> > > have nothing in common with yours. The regmap irqchip abstraction may
-> > > be convenient for what you are doing, but the result isn't really an
-> > > irqchip driver. It is something that is a small bit of a larger device
-> > > and not an interrupt controller driver on its own. The irqchip
-> > > subsystem is there for "first class" interrupt controllers.
-> > 
-> > I'm not aware of another subsystem that deals with !IRQChip level IRQ
-> > controllers.  Where do simple or "second class" interrupt controllers
-> > go?
+On Tue, Apr 18, 2023 at 09:05:25PM +0000, Smita Koralahalli wrote:
+> According to Section 6.7.6 of PCIe Base Specification [1], async removal
+> with DPC and EDR may be unexpected and may result in a Surprise Down error.
+> This error is just a side effect of hot remove. Most of the time, these
+> errors will be abstract to the OS as current systems rely on Firmware-First
+> model for AER and DPC, where the error handling (side effects of async
+> remove) and other necessary HW sequencing actions is taken care by the FW
+> and is abstract to the OS. However, FW-First model poses issues while
+> rolling out updates or fixing bugs as the servers need to be brought down
+> for firmware updates.
 > 
-> This isn't an interrupt controller. This is internal signalling, local
-> to a single component that has been artificially broken into discrete
-> bits, including an interrupt controller. The only *real* interrupts
-> here are the GPIOs.
-> 
-> I'm happy to see an interrupt controller for the GPIOs. But the rest
-> is just internal muck that doesn't really belong here. Where should it
+> Add support for async hot-plug with native AER and DPC/EDR. Here, OS is
+> responsible for handling async add and remove along with handling of AER
+> and DPC events which are generated as a side-effect of async remove.
 
-You should have been a poet! =;-)
+I think you can probably leave out the details about Firmware-First.
+Pointing to 6.7.6 and the fact that Surprise Down Errors may occur as
+an expected side-effect of surprise removal is sufficient.  They should
+be treated as such.
 
-> go? Together with the rest of the stuff that manages the block as a
-> whole. Which looks like the MFD subsystem to me.
+You also want to point out what you're trying to achieve here, i.e. get
+rid of irritating log messages and a 1 sec delay while pciehp waits for
+DPC recovery.
 
-Very well.  Let's see this "muck" in a patch please!
 
--- 
-Lee Jones [李琼斯]
+> Please note that, I have provided explanation why I'm not setting the
+> Surprise Down bit in uncorrectable error mask register in AER.
+> https://lore.kernel.org/all/fba22d6b-c225-4b44-674b-2c62306135ed@amd.com/
+
+Add an explanation to the commit message that masking Surprise Down Errors
+was explored as an alternative approach, but scrapped due to the odd
+behavior that masking only avoids the interrupt, but still records an
+error per PCIe r6.0.1 sec 6.2.3.2.2.  That stale error is going to be
+reported the next time some error other than Surprise Down is handled.
+
+
+> Also, while testing I noticed PCI_STATUS and PCI_EXP_DEVSTA will be set
+> on an async remove and will not be cleared while the device is brought
+> down. I have included clearing them here in order to mask any kind of
+> appearance that there was an error and as well duplicating our BIOS
+> functionality. I can remove if its not necessary.
+
+Which bits are set exactly?  Can you constrain the register write to
+those bits?
+
+
+> +static void dpc_handle_surprise_removal(struct pci_dev *pdev)
+> +{
+> +	if (pdev->dpc_rp_extensions && dpc_wait_rp_inactive(pdev))
+> +		return;
+
+Emit an error message here?
+
+
+> +	/*
+> +	 * According to Section 6.7.6 of the PCIe Base Spec 6.0, since async
+> +	 * removal might be unexpected, errors might be reported as a side
+> +	 * effect of the event and software should handle them as an expected
+> +	 * part of this event.
+> +	 */
+
+I'd move that code comment to into dpc_handler() above the
+"if (dpc_is_surprise_removal(pdev))" check.
+
+
+> +	pci_aer_raw_clear_status(pdev);
+> +	pci_clear_surpdn_errors(pdev);
+> +
+> +	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_STATUS,
+> +			      PCI_EXP_DPC_STATUS_TRIGGER);
+> +}
+
+Do you need a "wake_up_all(&dpc_completed_waitqueue);" at the end
+of the function to wake up a pciehp handler waiting for DPC recovery?
+
+
+> +static bool dpc_is_surprise_removal(struct pci_dev *pdev)
+> +{
+> +	u16 status;
+> +
+> +	pci_read_config_word(pdev, pdev->aer_cap + PCI_ERR_UNCOR_STATUS, &status);
+> +
+> +	if (!(status & PCI_ERR_UNC_SURPDN))
+> +		return false;
+> +
+
+You need an additional check for pdev->is_hotplug_bridge here.
+
+And you need to read PCI_EXP_SLTCAP and check for PCI_EXP_SLTCAP_HPS.
+
+Return false if either of them isn't set.
+
+
+> +	dpc_handle_surprise_removal(pdev);
+> +
+> +	return true;
+> +}
+
+A function named "..._is_..." should not have any side effects.
+So move the dpc_handle_surprise_removal() call down into dpc_handler()
+before the "return IRQ_HANDLED;" statement.
+
+
+What about ports which support AER but not DPC?  Don't you need to
+amend aer.c in that case?  I suppose you don't have hardware without
+DPC to test that?
+
+Thanks,
+
+Lukas
