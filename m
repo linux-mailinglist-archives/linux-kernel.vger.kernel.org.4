@@ -2,162 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263BE704272
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD51E70426D
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343511AbjEPAvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 20:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S245746AbjEPAuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 20:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjEPAvi (ORCPT
+        with ESMTP id S229515AbjEPAuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 20:51:38 -0400
-Received: from sender3-of-o58.zoho.com (sender3-of-o58.zoho.com [136.143.184.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC583A8D;
-        Mon, 15 May 2023 17:51:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684198218; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=hphAUb1s8tX8hoJbMUmmfcNUb1PoPVaYFfxM1JcuwOqJSMqAu3Cf9GuDL8sH8Ph4Iku5EaEMXegCiyxsIjiAqkc9RLNsR0E3F/R6AciymiJeo1/qrueHuZc9Nuu8ZLL9sBKs66AP5MZ1u32G3ILl+r4EkO6GvDwJCt2LKiMb9xU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1684198218; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=/IA3SYIOXiJVvtltmF1oS40g7D1vsHlc33a3m3c4dYE=; 
-        b=BEws52Pr7aOM51bDXrUNU3+uq47fmQbwtrJ2v0F+Vf7EUmqMpM8eIQF/IpE62pi9ima+zsHSd/5nB5+fecpHfVxoFlYQRxzmGJaldb3eaHk9PabfWDbXrotuNZ4tWSa2OjG7cSC9MCgLlFNQ5RvsupXyN6m/vBI0yDaencX9QK4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684198218;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=/IA3SYIOXiJVvtltmF1oS40g7D1vsHlc33a3m3c4dYE=;
-        b=rU+BidODcYu9UNy/1pm+b1nnzJ0hj6vpNb7jQlv+rDxqdC7EzYlS8M3rLTrLEOfm
-        VGrXKkPT/jpUVQC5CYE7uwIdDdIoMVbveYRvaZniBHVVodkknwdb2qtUs8QY/P31t9l
-        tWHXSzcpyiWBcclgUYyP2o8wyujG/JSm7knPq3dc=
-Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1684198216755684.180617738419; Mon, 15 May 2023 17:50:16 -0700 (PDT)
-Message-ID: <890440e0-5da3-84f1-26c1-6b7d856ba7c7@apertussolutions.com>
-Date:   Mon, 15 May 2023 20:50:13 -0400
+        Mon, 15 May 2023 20:50:50 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D052330FA;
+        Mon, 15 May 2023 17:50:47 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxJulm02JkyPoIAA--.15418S3;
+        Tue, 16 May 2023 08:50:46 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxddFl02JkZfVhAA--.37515S3;
+        Tue, 16 May 2023 08:50:45 +0800 (CST)
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
+ <20230426071045.20753-3-zhuyinbo@loongson.cn> <ZFkPZhF8QqScXAmH@surfacebook>
+ <049c871d-c658-24c1-91e6-701098f5fc28@loongson.cn>
+ <16913b76-0256-492a-ec90-d367f2b52cc3@loongson.cn>
+ <ZGH4SPsu40Mt-Z8f@surfacebook>
+ <109a8453-2172-a2ee-8672-8efb489e3dd9@loongson.cn>
+ <CAHp75VemyP8-yBS494zQLiQqnH+SPPjxVsrn1J-Rbj9=SqRm1g@mail.gmail.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <c2fab3d8-4026-45f4-5c90-f85d2b39b6c3@loongson.cn>
+Date:   Tue, 16 May 2023 08:50:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
- early measurements
+In-Reply-To: <CAHp75VemyP8-yBS494zQLiQqnH+SPPjxVsrn1J-Rbj9=SqRm1g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Ross Philipson <ross.philipson@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        ardb@kernel.org, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
-        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
-        trenchboot-devel@googlegroups.com
-References: <ZFxiJF373HCwZLKE@gondor.apana.org.au>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-In-Reply-To: <ZFxiJF373HCwZLKE@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxddFl02JkZfVhAA--.37515S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZrW7Zr17tw4fZw45uryxuFg_yoWDCrX_Zr
+        4akF1xCrWUJ3ykGr1kZws3GFWDua1UJ390qF4vqr45Z3srGF48GF1Du3Zag3Z8Ka45XFnx
+        Cr45WF4jkr1avjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        w7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF
+        6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14
+        v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY
+        64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7
+        Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+        kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UC_M3UUUUU=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/23 23:33, Herbert Xu wrote:
-> Ross Philipson <ross.philipson@oracle.com> wrote:
->>
->> +static void __sha_transform(u32 *digest, const char *data)
->> +{
->> +       u32 ws[SHA1_WORKSPACE_WORDS];
->> +
->> +       sha1_transform(digest, data, ws);
->> +
->> +       memzero_explicit(ws, sizeof(ws));
->> +}
->> +
->> +void early_sha1_init(struct sha1_state *sctx)
->> +{
->> +       sha1_init(sctx->state);
->> +       sctx->count = 0;
->> +}
->> +
->> +void early_sha1_update(struct sha1_state *sctx,
->> +                      const u8 *data,
->> +                      unsigned int len)
->> +{
->> +       unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
->> +
->> +       sctx->count += len;
->> +
->> +       if (likely((partial + len) >= SHA1_BLOCK_SIZE)) {
->> +               int blocks;
->> +
->> +               if (partial) {
->> +                       int p = SHA1_BLOCK_SIZE - partial;
->> +
->> +                       memcpy(sctx->buffer + partial, data, p);
->> +                       data += p;
->> +                       len -= p;
->> +
->> +                       __sha_transform(sctx->state, sctx->buffer);
->> +               }
->> +
->> +               blocks = len / SHA1_BLOCK_SIZE;
->> +               len %= SHA1_BLOCK_SIZE;
->> +
->> +               if (blocks) {
->> +                       while (blocks--) {
->> +                               __sha_transform(sctx->state, data);
->> +                               data += SHA1_BLOCK_SIZE;
->> +                       }
->> +               }
->> +               partial = 0;
->> +       }
->> +
->> +       if (len)
->> +               memcpy(sctx->buffer + partial, data, len);
->> +}
->> +
->> +void early_sha1_final(struct sha1_state *sctx, u8 *out)
->> +{
->> +       const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
->> +       unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
->> +       __be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
->> +       __be32 *digest = (__be32 *)out;
->> +       int i;
->> +
->> +       sctx->buffer[partial++] = 0x80;
->> +       if (partial > bit_offset) {
->> +               memset(sctx->buffer + partial, 0x0, SHA1_BLOCK_SIZE - partial);
->> +               partial = 0;
->> +
->> +               __sha_transform(sctx->state, sctx->buffer);
->> +       }
->> +
->> +       memset(sctx->buffer + partial, 0x0, bit_offset - partial);
->> +       *bits = cpu_to_be64(sctx->count << 3);
->> +       __sha_transform(sctx->state, sctx->buffer);
->> +
->> +       for (i = 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
->> +               put_unaligned_be32(sctx->state[i], digest++);
->> +
->> +       *sctx = (struct sha1_state){};
->> +}
+
+
+在 2023/5/15 下午9:54, Andy Shevchenko 写道:
+> On Mon, May 15, 2023 at 3:01 PM zhuyinbo <zhuyinbo@loongson.cn> wrote:
+>> 在 2023/5/15 下午5:15, andy.shevchenko@gmail.com 写道:
+>>> Mon, May 15, 2023 at 04:14:00PM +0800, zhuyinbo kirjoitti:
+>>>> 在 2023/5/11 下午3:18, zhuyinbo 写道:
+>>>>> 在 2023/5/8 下午11:04, andy.shevchenko@gmail.com 写道:
 > 
-> If we're going to add SHA1 then this should go into lib/crypto
-> just like SHA2.
+> ...
+> 
+>>>>>>> +config SPI_LOONGSON_CORE
+>>>>>>> +    tristate "Loongson SPI Controller Core Driver Support"
+>>>>>>
+>>>>>> Does it need to be visible to the user?
+>>>>
+>>>> I try to set it invisible that by removing the SPI_LOONGSON_CORE Kconfig
+>>>> or removing "tristate "Loongson SPI Controller Core Driver Support" that
+>>>> will cause spi-core driver doesn't be compiled or compiled fail issue,
+>>>> so I will still set it visible to the user.
+>>>
+>>> Making a symbol selectable only can be achieved by removing the description
+>>> (near to tristate directive), have you tried that?
+>>
+>> Is it like this ?
+> 
+> Yes.
 
-As mentioned before, this patch mimicked an early version for SHA2. We 
-were remiss in not keeping it aligned with how the SHA2 evolved. I will 
-take a closer look, but these wrappers may be able to go away and be 
-reduced to just an include as SHA2 does these days.
 
-v/r,
-dps
+okay, I got it.
+
+Thanks.
+> 
+
