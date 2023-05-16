@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883D87043A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82527043A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 04:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjEPCxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 22:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
+        id S229795AbjEPCyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 22:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjEPCxu (ORCPT
+        with ESMTP id S229643AbjEPCyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 22:53:50 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECDB4C17;
-        Mon, 15 May 2023 19:53:48 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-334f64c91aeso24588595ab.2;
-        Mon, 15 May 2023 19:53:48 -0700 (PDT)
+        Mon, 15 May 2023 22:54:02 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1CD4EC2;
+        Mon, 15 May 2023 19:53:59 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-76c4e1fe1d7so232651539f.3;
+        Mon, 15 May 2023 19:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684205628; x=1686797628;
+        d=gmail.com; s=20221208; t=1684205639; x=1686797639;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PPK335sb4Cf31lJbZCxsHRj3PEm/5gZa6oNqr83Lzyw=;
-        b=JogALCqy2cPwzHHhxfINXnYvM4vYAoJddwJgLf7BB5tI/43dNo45SpNpjzuoOne7rA
-         5P9WaVe3v9bEj/hdij4ez3dLu4Ro40GcKi/tOuvs4I87vp/eVD+MFYijwH7vFM4S+aw4
-         WQGgTE/W+Uj+1+gXjw1jbbcuzQx5htG0WeVuCxBebWfdVEj+L/KWsT7BPvNXniAf9aYK
-         E7FuKddBuyGgfniD2Towkix3Wqds9yjeIx+d0lQhQTpfDK8Ek45h/BzN+hUILZwoeNHs
-         dGVsmtPMfsBS5ef32//ggs74w/HQC+qGXxinu7a/NWnE7PUkD6CVxmXvHILVLGFYFwo3
-         6+mw==
+        bh=ZFByrw5eK0isgrvCD9DVFcZpgpzm03TFArtZkAeD2ws=;
+        b=Bp7GzSHXNEJ8kfX0U5h45Gedo11Mnj2MITlGSQTDimBPdTjA6GoL/j/9GCT/qnDM9Y
+         8U8ry7ZW/yk+/IrUV9HdcavH3ZBKT53efSwK/xdtz2c1Oy/BhSkjaTLDkprRbBB2xvej
+         rmzt7C5VpdqtpmftUctxyHNGUAXSwuxU2ThhXe9dIhG9QdFKZXHnPnm6WwOiCAJce1Ah
+         P2pUCu+JpDLlmW+cTNrR9SKsR1KG4cRj9AifTLlA89i5A3y6B9daYkXy5K93+XOgkgm5
+         aMlkTYM99otUB8rO9CftNoGv1cD5VGBR7ztV5CQEql3RQZJdcJHR+WSQqMqSjB+t/WB9
+         HMrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684205628; x=1686797628;
+        d=1e100.net; s=20221208; t=1684205639; x=1686797639;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PPK335sb4Cf31lJbZCxsHRj3PEm/5gZa6oNqr83Lzyw=;
-        b=jE8gEf0nAR14FyEXCVzRrQRyBL5MiCP/yDt9Xk0dFVkzO8HNKM+7aRav6qHPLhLnGT
-         /BR0cYd0FSq/kNOMndGT8tmvfBsimaX4kDEgvO2ZohXy8Ls94eC3nCvHgHQELlive+TE
-         gOO5KJ7eY94csRV7GcgrxiRxcBc2S1Ss+KYuvh4yXqcxR9Pxx2f00IH/UWxiAPBevmen
-         KYo+mCrU22XFntQBUHs1jgfyXMa3DDPXvB2rdcYqU4GeRtGdGLi6/bw9BhqwJm3NKuMO
-         GADTy8Fppq4ApTGfxYrH1P7nIt+utEU2ahF7PB6FE3mu1vvxQVeacw56oycAtdxcoeoE
-         oCNA==
-X-Gm-Message-State: AC+VfDxhvGGHJ+J4+BKbJjSMT2AWAROS7wmQnc1aQ+tCumuqeG6jxQdD
-        KjQTsA90nqd0cMNXfszE/fo=
-X-Google-Smtp-Source: ACHHUZ4ct61Y0xN8dW0ABXsS/m04wf32vXiZfpsDBTi3wLsxXM5N+wUkrOluqNG14nrVsixQMV1Jlw==
-X-Received: by 2002:a92:d8cb:0:b0:331:2e7b:9efa with SMTP id l11-20020a92d8cb000000b003312e7b9efamr22051000ilo.19.1684205627983;
-        Mon, 15 May 2023 19:53:47 -0700 (PDT)
+        bh=ZFByrw5eK0isgrvCD9DVFcZpgpzm03TFArtZkAeD2ws=;
+        b=jJ8plTrh6r6MZDrGNjBTfsm0FvI3NXicSonE4DymBELqyiVGhdUZke6x3Ab8qQ245i
+         aVcMoodQ8/k61kSfevdKP50hOS2TNDdabkgzAzoZRPg+4LzLFGoUie8Z99eGjlq1vIBt
+         M967Rbj9IpN0wlzFGYOYiyfht6Zi64BrjBZosEgL/5fyRRx9/6Ol5vz0YDb2U1B3MotL
+         2L1n4r+Wn8W5r7xH+oeJHALebTdbdzU3XPilGp0FIQo4jz5IjZXbLJl+Dx3pHXJB6gAy
+         kdyM6y91+0StimN7DkBVtvakmwMttKKrczYX48dYZ4P6mele3dCw5Kk64z305sX1+nI+
+         /Dag==
+X-Gm-Message-State: AC+VfDyXMHBOWye4aLFzqAzSaFU1rwoCVbBpTSWCPc7oZgKE12HK8Cnb
+        JuMOtrSQNXhn/ylp/zO/99F18B0UXKxeow==
+X-Google-Smtp-Source: ACHHUZ6BddaBD2jpqDQpipGoNP18GOfYr8ixEIl9lAJxZyMnKRRFf6+4NwprQTJ/2nswn8cmNBADuw==
+X-Received: by 2002:a5d:870f:0:b0:76c:73f6:b3cf with SMTP id u15-20020a5d870f000000b0076c73f6b3cfmr1092645iom.10.1684205639168;
+        Mon, 15 May 2023 19:53:59 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id u1-20020a02aa81000000b00418849c2ea7sm2784139jai.122.2023.05.15.19.53.47
+        by smtp.gmail.com with ESMTPSA id a2-20020a6b6602000000b0076c750dc780sm3856979ioc.29.2023.05.15.19.53.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 19:53:47 -0700 (PDT)
+        Mon, 15 May 2023 19:53:58 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com
 Cc:     linux-hardening@vger.kernel.org,
         Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mike Christie <michael.christie@oracle.com>,
-        Maurizio Lombardi <mlombard@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH] scsi: target: Replace all non-returning strlcpy with strscpy
-Date:   Tue, 16 May 2023 02:53:22 +0000
-Message-ID: <20230516025322.2804923-1-azeemshaikh38@gmail.com>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH] scsi: qla4xxx: Replace all non-returning strlcpy with strscpy
+Date:   Tue, 16 May 2023 02:53:55 +0000
+Message-ID: <20230516025355.2835898-1-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -87,114 +87,81 @@ No return values were used, so direct replacement is safe.
 
 Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- drivers/target/iscsi/iscsi_target_parameters.c |    4 ++--
- drivers/target/iscsi/iscsi_target_util.c       |    4 ++--
- drivers/target/target_core_configfs.c          |   10 +++++-----
- drivers/target/target_core_device.c            |    6 +++---
- 4 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/scsi/qla4xxx/ql4_mbx.c |    8 ++++----
+ drivers/scsi/qla4xxx/ql4_os.c  |   14 +++++++-------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_parameters.c b/drivers/target/iscsi/iscsi_target_parameters.c
-index 557516c642c3..5b90c22ee3dc 100644
---- a/drivers/target/iscsi/iscsi_target_parameters.c
-+++ b/drivers/target/iscsi/iscsi_target_parameters.c
-@@ -726,8 +726,8 @@ static int iscsi_add_notunderstood_response(
+diff --git a/drivers/scsi/qla4xxx/ql4_mbx.c b/drivers/scsi/qla4xxx/ql4_mbx.c
+index cd71074f3abe..249f1d7021d4 100644
+--- a/drivers/scsi/qla4xxx/ql4_mbx.c
++++ b/drivers/scsi/qla4xxx/ql4_mbx.c
+@@ -1611,8 +1611,8 @@ int qla4xxx_get_chap(struct scsi_qla_host *ha, char *username, char *password,
+ 		goto exit_get_chap;
  	}
- 	INIT_LIST_HEAD(&extra_response->er_list);
  
--	strlcpy(extra_response->key, key, sizeof(extra_response->key));
--	strlcpy(extra_response->value, NOTUNDERSTOOD,
-+	strscpy(extra_response->key, key, sizeof(extra_response->key));
-+	strscpy(extra_response->value, NOTUNDERSTOOD,
- 		sizeof(extra_response->value));
+-	strlcpy(password, chap_table->secret, QL4_CHAP_MAX_SECRET_LEN);
+-	strlcpy(username, chap_table->name, QL4_CHAP_MAX_NAME_LEN);
++	strscpy(password, chap_table->secret, QL4_CHAP_MAX_SECRET_LEN);
++	strscpy(username, chap_table->name, QL4_CHAP_MAX_NAME_LEN);
+ 	chap_table->cookie = cpu_to_le16(CHAP_VALID_COOKIE);
  
- 	list_add_tail(&extra_response->er_list,
-diff --git a/drivers/target/iscsi/iscsi_target_util.c b/drivers/target/iscsi/iscsi_target_util.c
-index 26dc8ed3045b..dc1ac5a0f806 100644
---- a/drivers/target/iscsi/iscsi_target_util.c
-+++ b/drivers/target/iscsi/iscsi_target_util.c
-@@ -1321,7 +1321,7 @@ void iscsit_collect_login_stats(
- 		if (conn->param_list)
- 			intrname = iscsi_find_param_from_key(INITIATORNAME,
- 							     conn->param_list);
--		strlcpy(ls->last_intr_fail_name,
-+		strscpy(ls->last_intr_fail_name,
- 		       (intrname ? intrname->value : "Unknown"),
- 		       sizeof(ls->last_intr_fail_name));
+ exit_get_chap:
+@@ -1732,8 +1732,8 @@ int qla4xxx_get_uni_chap_at_index(struct scsi_qla_host *ha, char *username,
+ 		goto exit_unlock_uni_chap;
+ 	}
  
-@@ -1360,7 +1360,7 @@ void iscsit_fill_cxn_timeout_err_stats(struct iscsit_session *sess)
- 		return;
+-	strlcpy(password, chap_table->secret, MAX_CHAP_SECRET_LEN);
+-	strlcpy(username, chap_table->name, MAX_CHAP_NAME_LEN);
++	strscpy(password, chap_table->secret, MAX_CHAP_SECRET_LEN);
++	strscpy(username, chap_table->name, MAX_CHAP_NAME_LEN);
  
- 	spin_lock_bh(&tiqn->sess_err_stats.lock);
--	strlcpy(tiqn->sess_err_stats.last_sess_fail_rem_name,
-+	strscpy(tiqn->sess_err_stats.last_sess_fail_rem_name,
- 			sess->sess_ops->InitiatorName,
- 			sizeof(tiqn->sess_err_stats.last_sess_fail_rem_name));
- 	tiqn->sess_err_stats.last_sess_failure_type =
-diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index 74b67c346dfe..936e5ff1b209 100644
---- a/drivers/target/target_core_configfs.c
-+++ b/drivers/target/target_core_configfs.c
-@@ -649,7 +649,7 @@ static void dev_set_t10_wwn_model_alias(struct se_device *dev)
- 	 * here without potentially breaking existing setups, so continue to
- 	 * truncate one byte shorter than what can be carried in INQUIRY.
- 	 */
--	strlcpy(dev->t10_wwn.model, configname, INQUIRY_MODEL_LEN);
-+	strscpy(dev->t10_wwn.model, configname, INQUIRY_MODEL_LEN);
+ 	rval = QLA_SUCCESS;
+ 
+diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
+index ee6d784c095c..b2a3988e1e15 100644
+--- a/drivers/scsi/qla4xxx/ql4_os.c
++++ b/drivers/scsi/qla4xxx/ql4_os.c
+@@ -798,9 +798,9 @@ static int qla4xxx_get_chap_list(struct Scsi_Host *shost, uint16_t chap_tbl_idx,
+ 			continue;
+ 
+ 		chap_rec->chap_tbl_idx = i;
+-		strlcpy(chap_rec->username, chap_table->name,
++		strscpy(chap_rec->username, chap_table->name,
+ 			ISCSI_CHAP_AUTH_NAME_MAX_LEN);
+-		strlcpy(chap_rec->password, chap_table->secret,
++		strscpy(chap_rec->password, chap_table->secret,
+ 			QL4_CHAP_MAX_SECRET_LEN);
+ 		chap_rec->password_length = chap_table->secret_len;
+ 
+@@ -6052,8 +6052,8 @@ static int qla4xxx_get_bidi_chap(struct scsi_qla_host *ha, char *username,
+ 		if (!(chap_table->flags & BIT_6)) /* Not BIDI */
+ 			continue;
+ 
+-		strlcpy(password, chap_table->secret, QL4_CHAP_MAX_SECRET_LEN);
+-		strlcpy(username, chap_table->name, QL4_CHAP_MAX_NAME_LEN);
++		strscpy(password, chap_table->secret, QL4_CHAP_MAX_SECRET_LEN);
++		strscpy(username, chap_table->name, QL4_CHAP_MAX_NAME_LEN);
+ 		ret = 0;
+ 		break;
+ 	}
+@@ -6281,8 +6281,8 @@ static void qla4xxx_get_param_ddb(struct ddb_entry *ddb_entry,
+ 
+ 	tddb->tpgt = sess->tpgt;
+ 	tddb->port = conn->persistent_port;
+-	strlcpy(tddb->iscsi_name, sess->targetname, ISCSI_NAME_SIZE);
+-	strlcpy(tddb->ip_addr, conn->persistent_address, DDB_IPADDR_LEN);
++	strscpy(tddb->iscsi_name, sess->targetname, ISCSI_NAME_SIZE);
++	strscpy(tddb->ip_addr, conn->persistent_address, DDB_IPADDR_LEN);
  }
  
- static ssize_t emulate_model_alias_store(struct config_item *item,
-@@ -675,7 +675,7 @@ static ssize_t emulate_model_alias_store(struct config_item *item,
- 	if (flag) {
- 		dev_set_t10_wwn_model_alias(dev);
- 	} else {
--		strlcpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
-+		strscpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
- 			sizeof(dev->t10_wwn.model));
- 	}
- 	da->emulate_model_alias = flag;
-@@ -1426,7 +1426,7 @@ static ssize_t target_wwn_vendor_id_store(struct config_item *item,
+ static void qla4xxx_convert_param_ddb(struct dev_db_entry *fw_ddb_entry,
+@@ -7781,7 +7781,7 @@ static int qla4xxx_sysfs_ddb_logout(struct iscsi_bus_flash_session *fnode_sess,
+ 		goto exit_ddb_logout;
  	}
  
- 	BUILD_BUG_ON(sizeof(dev->t10_wwn.vendor) != INQUIRY_VENDOR_LEN + 1);
--	strlcpy(dev->t10_wwn.vendor, stripped, sizeof(dev->t10_wwn.vendor));
-+	strscpy(dev->t10_wwn.vendor, stripped, sizeof(dev->t10_wwn.vendor));
+-	strlcpy(flash_tddb->iscsi_name, fnode_sess->targetname,
++	strscpy(flash_tddb->iscsi_name, fnode_sess->targetname,
+ 		ISCSI_NAME_SIZE);
  
- 	pr_debug("Target_Core_ConfigFS: Set emulated T10 Vendor Identification:"
- 		 " %s\n", dev->t10_wwn.vendor);
-@@ -1482,7 +1482,7 @@ static ssize_t target_wwn_product_id_store(struct config_item *item,
- 	}
- 
- 	BUILD_BUG_ON(sizeof(dev->t10_wwn.model) != INQUIRY_MODEL_LEN + 1);
--	strlcpy(dev->t10_wwn.model, stripped, sizeof(dev->t10_wwn.model));
-+	strscpy(dev->t10_wwn.model, stripped, sizeof(dev->t10_wwn.model));
- 
- 	pr_debug("Target_Core_ConfigFS: Set emulated T10 Model Identification: %s\n",
- 		 dev->t10_wwn.model);
-@@ -1538,7 +1538,7 @@ static ssize_t target_wwn_revision_store(struct config_item *item,
- 	}
- 
- 	BUILD_BUG_ON(sizeof(dev->t10_wwn.revision) != INQUIRY_REVISION_LEN + 1);
--	strlcpy(dev->t10_wwn.revision, stripped, sizeof(dev->t10_wwn.revision));
-+	strscpy(dev->t10_wwn.revision, stripped, sizeof(dev->t10_wwn.revision));
- 
- 	pr_debug("Target_Core_ConfigFS: Set emulated T10 Revision: %s\n",
- 		 dev->t10_wwn.revision);
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index 90f3f4926172..b7ac60f4a219 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -789,10 +789,10 @@ struct se_device *target_alloc_device(struct se_hba *hba, const char *name)
- 	xcopy_lun->lun_tpg = &xcopy_pt_tpg;
- 
- 	/* Preload the default INQUIRY const values */
--	strlcpy(dev->t10_wwn.vendor, "LIO-ORG", sizeof(dev->t10_wwn.vendor));
--	strlcpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
-+	strscpy(dev->t10_wwn.vendor, "LIO-ORG", sizeof(dev->t10_wwn.vendor));
-+	strscpy(dev->t10_wwn.model, dev->transport->inquiry_prod,
- 		sizeof(dev->t10_wwn.model));
--	strlcpy(dev->t10_wwn.revision, dev->transport->inquiry_rev,
-+	strscpy(dev->t10_wwn.revision, dev->transport->inquiry_rev,
- 		sizeof(dev->t10_wwn.revision));
- 
- 	return dev;
+ 	if (!strncmp(fnode_sess->portal_type, PORTAL_TYPE_IPV6, 4))
 
