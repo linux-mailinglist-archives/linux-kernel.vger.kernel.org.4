@@ -2,93 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FB07056F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2467056ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjEPTUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S229702AbjEPTR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjEPTUk (ORCPT
+        with ESMTP id S229551AbjEPTR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:20:40 -0400
-X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 12:20:37 PDT
-Received: from p3plwbeout18-03.prod.phx3.secureserver.net (p3plsmtp18-03-2.prod.phx3.secureserver.net [173.201.193.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4938A48
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:20:37 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.144])
-        by :WBEOUT: with ESMTP
-        id z0BCpnWAIkHboz0BDpqF5e; Tue, 16 May 2023 12:17:51 -0700
-X-CMAE-Analysis: v=2.4 cv=RqEAkAqK c=1 sm=1 tr=0 ts=6463d6df
- a=wXHyRMViKMYRd//SnbHIqA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=3-RhneuVAAAA:8
- a=FXvPX3liAAAA:8 a=IfMCuqTOASDaTjgOz58A:9 a=QEXdDO2ut3YA:10
- a=VLVLkjT_5ZicWzSuYqSo:22 a=UObqyxdv-6Yh2QiB9mM_:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  z0BCpnWAIkHbo
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.87])
-        by smtp12.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1pz0BC-00069X-P0; Tue, 16 May 2023 20:17:51 +0100
-Message-ID: <74ebf1cd-ce00-1aa2-8258-1bd336dc8470@squashfs.org.uk>
-Date:   Tue, 16 May 2023 20:17:49 +0100
+        Tue, 16 May 2023 15:17:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E447AB8;
+        Tue, 16 May 2023 12:17:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B12EA63374;
+        Tue, 16 May 2023 19:17:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC783C433EF;
+        Tue, 16 May 2023 19:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684264674;
+        bh=yr0uqH5L7lcw6Bon72OOti1I9caZ3nRhsMf6+olPitc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=M80Sd3FJPgGUW2mIUfNeFY2PFR3PUEibBoOnCrGE6B1x4FOQ6uT5DsZIx0iRtsKyv
+         VK6p9g5aB81JFKLtm7UI5S33uSCeBwYAe6xCW6hRHllXnsN+ElmCc9I8fsxUx43UwO
+         2sCnuQgbQ3tPrYrc/PWX1SK/PmHLwZS0Ql8HMeBZlzUVU8vhhI6oHoX1VwBv0sTzEx
+         WXN+0a9nMlqDJHf3i/qUYEHB5PJm0h0feCj7AW2itoj67OUlGxrqYTZ/I/A/c7Kyoq
+         FSB3B9NSfEI+1vHtrBrP3byMnMPGZmw7kv8PI01CBNOk0cw+Idn+4bMjsQ0GPxOCAL
+         sUhFI/ucJBBmg==
+Date:   Tue, 16 May 2023 14:17:52 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Shuai Xue <xueshuai@linux.alibaba.com>,
+        Robin Murphy <robin.murphy@arm.com>, yangyicong@huawei.com,
+        will@kernel.org, baolin.wang@linux.alibaba.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, rdunlap@infradead.org,
+        mark.rutland@arm.com, zhuo.song@linux.alibaba.com,
+        linux-cxl@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Message-ID: <ZGPW4JzOOUT4ksMf@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] squashfs: cache partial compressed blocks
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     hch@lst.de, linux-kernel@vger.kernel.org,
-        squashfs-devel@lists.sourceforge.net, kernel@axis.com
-References: <20230510-squashfs-cache-v3-1-9f56ffd43f03@axis.com>
-Content-Language: en-GB
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20230510-squashfs-cache-v3-1-9f56ffd43f03@axis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfEUwdQfatenP11ZzINr6M1WgmS4p0TUxmmj+czk55tvdi7gTstxoQO/M4AtIzSSSKxwDw6xuG577GBuhklCwY6PjWKPLDylJDSFNhIyqMTMAOT+6Zx1l
- YmS697hzzVEm9Py3o+DQSFh+uCkJAlMcAbv4wd0yC5nUmA+STbd/jyYAd3Kgjwc1vnw4NnAqMAbd3NasYG/pQTS1TP7nyrD0sLo=
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230516160304.00000544@Huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 09:22, Vincent Whitchurch wrote:
-> Before commit 93e72b3c612adcaca1 ("squashfs: migrate from ll_rw_block
-> usage to BIO"), compressed blocks read by squashfs were cached in the
-> page cache, but that is not the case after that commit.  That has lead
-> to squashfs having to re-read a lot of sectors from disk/flash.
+On Tue, May 16, 2023 at 04:03:04PM +0100, Jonathan Cameron wrote:
+> 
+> PCI folks, Question below directed at you. Please take a look.
+> +CC linux-cxl because a similar question is going to bite us shortly
+> if we want CXL PMUs to work well on RP or Switch ports.
+> 
+> > >> +static int dwc_pcie_ras_des_discover(struct dwc_pcie_pmu_priv *priv)
+> > >> +{
+> > >> +    int index = 0;
+> > >> +    struct pci_dev *pdev = NULL;
+> > >> +    struct dwc_pcie_rp_info *rp_info;
+> > >> +
+> > >> +    INIT_LIST_HEAD(&priv->rp_infos);
+> > >> +
+> > >> +    /* Match the rootport with VSEC_RAS_DES_ID */
+> > >> +    for_each_pci_dev(pdev) {  
+> > > 
+> > > Does the PCI layer not offer a more robust mechanism for this?
+> > > (PCI fixups come to mind, but I don't actually know whether that
+> > > would be a viable approach or not.)   
+> > 
+> > I am afraid not yet. Jonathan try to add a PMU service but it is
+> > not merged into mainline.
 >
-> For example, the first sectors of every metadata block need to be read
-> twice from the disk.  Once partially to read the length, and a
-> second time to read the block itself.  Also, in linear reads of large
-> files, the last sectors of one data block are re-read from disk when
-> reading the next data block, since the compressed blocks are of variable
-> sizes and not aligned to device blocks.  This extra I/O results in a
-> degrade in read performance of, for example, ~16% in one scenario on my
-> ARM platform using squashfs with dm-verity and NAND.
->
-> Since the decompressed data is cached in the page cache or squashfs'
-> internal metadata and fragment caches, caching _all_ compressed pages
-> would lead to a lot of double caching and is undesirable.  But make the
-> code cache any disk blocks which were only partially requested, since
-> these are the ones likely to include data which is needed by other file
-> system blocks.  This restores read performance in my test scenario.
->
-> The compressed block caching is only applied when the disk block size is
-> equal to the page size, to avoid having to deal with caching sub-page
-> reads.
->
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> I wouldn't read much into that 'failure'.  We never persisted with
+> that driver because it was for an old generation of hardware.
+> Mostly the aim with that was to explore the area of PCIe PMU in
+> general rather than to get the support upstream. Some of the
+> counters on that hardware were too small to be of much use anyway :)
+> 
+> Grabbing just relevant functions..
+> 
+> Bjorn, we need to figure out a way forwards for this sort of case
+> and I'd appreciate your input on the broad brush question of 'how
+> should it be done'?
+> 
+> This is a case where a PCIe port (RP here) correctly has the PCIe
+> class code so binds to the pcie_port driver, but has a VSEC (others
+> examples use DOE, or DVSEC) that provides extended functionality.
+> The referred to PCIe PMU from our older Hisilicon platforms did it
+> by adding another service driver - that probably doesn't extend
+> well.
+> 
+> The approach used here is to separately walk the PCI topology and
+> register the devices.  It can 'maybe' get away with that because no
+> interrupts and I assume resets have no nasty impacts on it because
+> the device is fairly simple.  In general that's not going to work.
+> CXL does a similar trick (which I don't much like, but too late
+> now), but we've also run into the problem of how to get interrupts
+> if not the main driver.
 
-Reviewed-by: Phillip Lougher <phillip@squashfs.org.uk>
+Yes, this is a real problem.  I think the "walk all PCI devices
+looking for one we like" approach is terrible because it breaks a lot
+of driver model assumptions (no device ID to autoload module via udev,
+hotplug doesn't work, etc), but we don't have a good alternative right
+now.
 
+I think portdrv is slightly better because at least it claims the
+device in the usual way and gives a way for service drivers to
+register with it.  But I don't really like that either because it
+created a new weird /sys/bus/pci_express hierarchy full of these
+sub-devices that aren't really devices, and it doesn't solve the
+module load and hotplug issues.
 
+I would like to have portdrv be completely built into the PCI core and
+not claim Root Ports or Switch Ports.  Then those devices would be
+available via the usual driver model for driver loading and binding
+and for hotplug.
+
+Bjorn
