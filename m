@@ -2,185 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE89704ED6
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1E7704EDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjEPNJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S233145AbjEPNJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbjEPNJ0 (ORCPT
+        with ESMTP id S233006AbjEPNJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:09:26 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4700BBD;
-        Tue, 16 May 2023 06:09:23 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so5473158b3a.0;
-        Tue, 16 May 2023 06:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684242563; x=1686834563;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=JnI2mCTgjLo9sKDeUzzDpzJIwWSO6LoMJa5F9uksNBE=;
-        b=LSxpzNIphCX4pdKDAYRhRH09p5YyLtm9cdJSaSlo84MLRIqXWrTEFHI1F86TQye0V6
-         1ts0UmaJhmUZo2SNSqNjxMIDlJ2X48cecPF03fG0SQ0PAcaUAYmq3PLTUBqtZaOgkOTz
-         ot14jzU8Td/a+Mb7GYRqxcgncsVIWmTDRC0XfVsnyG3R8I2SCarQ28hLJUD7oBcuGmXn
-         Y8+YPKd8fEpJ4NoiQL/a0bjNrsf1z+9v9N2LaK9rNIbghD3PhKMV+3KKNkzMaDIjceRb
-         tOp/rF0KRDqyjGion2UzHUvuNJ7gWlsmsyWdAmpahQJ+XjKB/gt9/i15TuOXtA0tNzuV
-         XHwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684242563; x=1686834563;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JnI2mCTgjLo9sKDeUzzDpzJIwWSO6LoMJa5F9uksNBE=;
-        b=fDiuJRxgxit5LXU2IBF9bhT1VPF9KS3J+av5lZvCMQ4fkceZcszSjsMvcCp3W6MXxU
-         xbQGWMH/3UC3NPyhVzoZcbSGHkfS/frZ/Sz+ELKxx/DNGOGOJD2pszExxM1Xi42HcUis
-         XuiBv2hxnuHKVK16ozGM1u3zNC2IkryGiDFmMfpoLzaoTZuhaQPpyn0YDc59IMZYFC+S
-         z9G9LY52s6v7LSxAQjGusYTsj5yckwQCY6m2I6HLaB2nYef/sJS58V/XONbkzuR1xGrO
-         Z0eeTzPstVy+gzN5cqnjBggIpcxrt9qKmqAvSz9LdxGs46l5361AKXdpZelnwcEgH7GF
-         kfFQ==
-X-Gm-Message-State: AC+VfDzjgsvPI6pwuLFvbOfK847sDLivtzq/lnJ/4ZTUeaJZ3zRdVnl1
-        miFRQpQzeZcWxbhjbSyPkARZdsMgYdvh6mulX/0=
-X-Google-Smtp-Source: ACHHUZ5+Nhs4AlA41VRX7XHReaGKnGgZl0brEkEPSTE8PDEC4sfbygO22G292BwjZGl/f+FmG+dJAgmuStgvDpfJwKU=
-X-Received: by 2002:a17:903:1ca:b0:1ad:bccc:af77 with SMTP id
- e10-20020a17090301ca00b001adbcccaf77mr25885743plh.18.1684242562600; Tue, 16
- May 2023 06:09:22 -0700 (PDT)
+        Tue, 16 May 2023 09:09:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5BBE5A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:09:37 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GD8soS007201;
+        Tue, 16 May 2023 13:09:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=nxzlSFyM1UfLWBpMcq3UIm35aq+DbuE26Lnn/akAZ+I=;
+ b=nW7C0Bg4E1f/rxu6QWAzs8Zyyf+NOTjzz6ZVecIAT439ZQoCQIGytyYXmqVu+xn6bSqQ
+ jTuUeF18T8dwd8m1ACLpLT8H5wDP5wIxA3uKNGdpdZD4dCDQohQ4tNSv2XGsPAsKJqzY
+ LBrp5WUYLJHLmX0J0wcUKEMJg0fk+NAnD2YKPqNr8VwPS8AlgaeHCb0c9MmWmO4czlfl
+ o/oTX6Tdq9cmluqUYxs5WhxebvZ/mhCVjlHATtfiy41L3ehI6YWmC0ykQUlufmdIdMMw
+ Tf5IuyGHjNcW7NMW5zLnvUwssu9tU4GVIInxElVL/tfZajB+IDPHkOTEMKmvihzbiRC6 nw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm9akafr6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 13:09:23 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G1c0nk027917;
+        Tue, 16 May 2023 13:09:19 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sn5f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 13:09:19 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GD9FAk9437940
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 May 2023 13:09:15 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B7BC20049;
+        Tue, 16 May 2023 13:09:15 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45F2D20043;
+        Tue, 16 May 2023 13:09:13 +0000 (GMT)
+Received: from tarunpc (unknown [9.199.157.25])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 16 May 2023 13:09:12 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        muchun.song@linux.dev, mike.kravetz@oracle.com,
+        aneesh.kumar@linux.ibm.com, sidhartha.kumar@oracle.com,
+        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
+        jaypatel@linux.ibm.com
+Subject: Re: [PATCH v2] mm/folio: Avoid special handling for order value 0
+ in folio_set_order
+In-Reply-To: <ZGJo4UhdyakGFwP7@casper.infradead.org>
+References: <20230515170809.284680-1-tsahu@linux.ibm.com>
+ <ZGJo4UhdyakGFwP7@casper.infradead.org>
+Date:   Tue, 16 May 2023 18:39:11 +0530
+Message-ID: <87fs7wqv7s.fsf@linux.ibm.com>
 MIME-Version: 1.0
-From:   =?UTF-8?B?UGF1bG8gUGF2YcSNacSH?= <pavacic.p@gmail.com>
-Date:   Tue, 16 May 2023 15:09:11 +0200
-Message-ID: <CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com>
-Subject: [PATCH v2] dt-bindings: display: panel: add panel-mipi-dsi-bringup
-To:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        robh+dt@kernel.org, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: aBal4JNQ1_zjIOHk7A1PNZgOgWx31HNL
+X-Proofpoint-ORIG-GUID: aBal4JNQ1_zjIOHk7A1PNZgOgWx31HNL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_06,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 mlxscore=0 suspectscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160110
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dt-bindings documentation for panel-mipi-dsi-bringup which currently
-supports fannal,c3004 panel. Also added fannal to vendor-prefixes.
+Hi Mathew,
 
-v2 changelog:
-  - revised driver title, now describes purpose
-  - revised description, now describes hw
-  - revised maintainers, now has only 1 mail
-  - removed diacritics from commit/commit author
-  - properties/compatible is now enum
-  - compatible using only lowercase
-  - revised dts example
-  - modified MAINTAINERS in this commit (instead of driver commit)
-  - dt_bindings_check checked yml
-  - checkpatch warning fixed
+Matthew Wilcox <willy@infradead.org> writes:
 
-Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
----
- .../display/panel/panel-mipi-dsi-bringup.yaml | 54 +++++++++++++++++++
- .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
- MAINTAINERS                                   |  6 +++
- 3 files changed, 62 insertions(+)
- create mode 100644
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bringup.yaml
+> On Mon, May 15, 2023 at 10:38:09PM +0530, Tarun Sahu wrote:
+>> @@ -1951,9 +1950,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>>  	struct page *p;
+>>  
+>>  	__folio_clear_reserved(folio);
+>> -	__folio_set_head(folio);
+>> -	/* we rely on prep_new_hugetlb_folio to set the destructor */
+>> -	folio_set_order(folio, order);
+>>  	for (i = 0; i < nr_pages; i++) {
+>>  		p = folio_page(folio, i);
+>>  
+>> @@ -1999,6 +1995,9 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>>  		if (i != 0)
+>>  			set_compound_head(p, &folio->page);
+>>  	}
+>> +	__folio_set_head(folio);
+>> +	/* we rely on prep_new_hugetlb_folio to set the destructor */
+>> +	folio_set_order(folio, order);
+>
+> This makes me nervous, as I said before.  This means that
+> compound_head(tail) can temporarily point to a page which is not marked
+> as a head page.  That's different from prep_compound_page().  You need to
+> come up with some good argumentation for why this is safe, and no amount
+> of testing you do can replace it -- any race in this area will be subtle.
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bringup.yaml
-b/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bringup.yaml
-new file mode 100644
-index 000000000000..c9e2b545657e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bringup.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/panel-mipi-dsi-bringup.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MIPI DSI Bringup Panel Porting Bindings
-+
-+description: |
-+  MIPI DSI Bringup Panel porting bindings to be used for a collection of panels
-+  from different manufacturers which don't require backlight control from the
-+  driver and have a single reset pin which is required to be passed as an
-+  argument.
-+
-+maintainers:
-+  - Paulo Pavacic <pavacic.p@gmail.com>
-+
-+allOf:
-+  - $ref: panel-common.yaml#
-+
-+properties:
-+
-+  compatible:
-+    enum:
-+      # compatible must be listed in alphabetical order, ordered by compatible.
-+      # The description in the comment is mandatory for each compatible.
-+
-+        # Fannal 480x800 panel
-+      - fannal,c3004
-+
-+  reg: true
-+  reset-gpios: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - reset-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    //example on IMX8MM where GPIO pin 9 is used as a reset pin
-+    mipi_dsi@32e10000 {
-+        panel@0 {
-+            compatible = "fannal,c3004";
-+            reg = <0>;
-+            pinctrl-0 = <&pinctrl_mipi_dsi_rst>;
-+            pinctrl-names = "default";
-+            reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
-+        };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 82d39ab0231b..f962750f630a 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -462,6 +462,8 @@ patternProperties:
-     description: Facebook
-   "^fairphone,.*":
-     description: Fairphone B.V.
-+  "^fannal,.*":
-+    description: Fannal Electronics Co., Ltd
-   "^faraday,.*":
-     description: Faraday Technology Corporation
-   "^fastrax,.*":
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0ad886d3163..46f988ee60bd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6566,6 +6566,12 @@ T:    git git://anongit.freedesktop.org/drm/drm-misc
- F:    Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
- F:    drivers/gpu/drm/tiny/panel-mipi-dbi.c
+IIUC, I am certain that it is safe to move these calls and agree with what
+Mike said. Here is my reasoning:
 
-+DRM DRIVER FOR MIPI DSI BRINGUP
-+M:    Paulo Pavacic <pavacic.p@gmail.com>
-+S:    Maintained
-+C:    mipi-dsi-bringup:matrix.org
-+F:    Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bringup.yaml
-+
- DRM DRIVER FOR MSM ADRENO GPU
- M:    Rob Clark <robdclark@gmail.com>
- M:    Abhinav Kumar <quic_abhinavk@quicinc.com>
--- 
-2.40.1
+When we get pages from CMA allocator for gigantic folio, page refcount
+for each pages is 1.
+page_cache_get_speculative (now folio_try_get_rcu) can take reference to
+any of these pages before prep_compound_gigantic_folio explicitly freeze
+refcount of these pages. With this race condition there are 2 possible situation.
+
+...
+		if (!demote) {
+			if (!page_ref_freeze(p, 1)) {
+				pr_warn("HugeTLB page can not be used due to unexpected inflated ref count\n");
+				goto out_error;
+			}
+		} else {
+			VM_BUG_ON_PAGE(page_count(p), p);
+		}
+		if (i != 0)
+			set_compound_head(p, &folio->page);
+	}
+...
+
+1. In the current code, before freezing refcount of nth (hence, n+th)
+tail page, folio_try_get_rcu might try to take nth tail page reference,
+so refcount will be increased of the nth tail page not the head page
+(as compound head is not yet set for nth tail page). and once this
+happens, nth iteration of loop will cause error and
+prep_compound_gigantic_folio will fail.
+
+So, setting the PG_head at the starting of for-loop or at the end won't
+have any difference to this flow.
+
+2. If reference for the head page is taken by folio_try_get_rcu before
+freezing it, prep_compound_gigantic_page will fail, but before PG_head
+and folio_order of head page is cleared in error path, the caller of
+folio_try_get_rcu path will find that this page is head page and might
+try to operate on its tail pages while these tail pages are invalid.
+
+Hence, It will be safer if we call __folio_set_head and folio_set_order
+after freezing the tail page refcount.
+
+~Tarun
