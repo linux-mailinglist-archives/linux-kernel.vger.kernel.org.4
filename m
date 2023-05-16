@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74DA704F36
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02151704F39
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbjEPNYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S233660AbjEPNYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjEPNYh (ORCPT
+        with ESMTP id S233651AbjEPNYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:24:37 -0400
+        Tue, 16 May 2023 09:24:50 -0400
 Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2061.outbound.protection.outlook.com [40.107.104.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97633C06
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:24:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370293A9D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:24:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fc8MW+XX4MyQ7xl7HurBSjGto5t4PcpZ3gy1bsL0gaPpEGo6Cy2xUv731T5Zh3sYpso3CB/GXH0ePqsZwt6RSQPHXBJx7uLWkjbI4CrP7+se3hypJhNokQF0MMQbQcEMD9738nEzr6Og0KsH21KyGeivIMduG0HzhBWqJEpatTPTCnn8XBu+KS1BdNTgn3gKUAUoOAMRV7TBK2oMtDw3h1uf6Q8Uoznua2g5uNzt8DWmHN3Vz+sGNl8m8ujL+Ngf7JEeTBTQErhDknzeyT/yuaf8AnoNjJf+4rv2OMfYNn77q/eYkJXBzqT7NwMDE34dAJIKQfMk3D1/F+m5FK5aFw==
+ b=RDoebli8+vzuZocTQEIC2hWIukLGhuN7KErIQ8nLtMftOoboe3op9C/mTeXsbpplAFOEtoZPlmCP4ZKkvZKmLKe6ace24EVkxGdei8v1Or2mFCfkPZfSzjs7Uk1QCltjFc4YwWadi4aMmV/QXMhqIvA3EzvZ70XkQC8+0WurZ2vcS5VQxNpaIEyE4eebOis9AC4UYNIK0eIO5KddjNpsqhKbk71SKswUD0M/ZKRaX3RmqNpZT26U9ksw45IFz0ni8eF4pSD0+YAcMzhBMwoFbnrk3otLbSdOtY/OcH3qc5/QK6X1/h0wz2VDleBHQ75FHh/me1cugC/k3ML1r+Ouqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YOlNlxW1utziA5jo+UMHtHC8Fr6/606iUvgR2FPKOeY=;
- b=HKT8+23fydzPCxk+XrLioQpeYm844rIkBM4F8RCfM/NDNGlrawq67PNRDzS1BazNBoWDfaDpQQ0omPP3tDXtgjyotkeghIwffKkDQ1lXRaieO0oaEnzv1vdOV8wUHdHig4c8ngD9iSxCHzWqUFeFwpB7KJPfWrn5odcO2tgzeKOiYiJNlDtDpj/pBgDpvSeRtKaq4T8QdV851HscOlZ/2XCUJj119VlyhDZ8marVrrWQnIZCkEPz1aOIwDIn1iS/tXi4d1esD51J23PT+KpMWj32qdnb0ONxO2kYOiEBGnobxN61TbNSmwbfnrxryYSpn/ox6CzQ7wppRaBow7cBjQ==
+ bh=OXAvWKaynpHsAI1tgqGNwCOSqmltsAuQnpT0Am+tucc=;
+ b=YZ1f2nsWjtIS1UeAh/ZYJL6u/ol+ouQX60pU0pnEq2FrXB5WCVJ6C5xmsqBDo3ClzaXfCay9mH8HEXtWzQ+EQCM1wy5CtmFvI1rviJjAphkMqYUHrkJwIO8KcYIvgnStrS3FQohDCXf/LWqyaknIC6G7A41eLuR7DrqJUt5wpHSN5HBETFtmFt6k45byyP04Rbn+ltaJf+9BS1hJFPvuVrtbRcTzojfcHo9/Z/hTy6D4qN6dQVkQNzeJ1lLsr6l2ba+410w/70mVWt+yLnWhpJm+cn7EBDrp/FRPH9dUr2JRpVat0a1V3CzboCeDDrfDWmR3FckAvx29IE+wSopdYA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YOlNlxW1utziA5jo+UMHtHC8Fr6/606iUvgR2FPKOeY=;
- b=I3hPqOXlh+gzbZM99LeM7ExEClIJkWlaOGaQ1UaiSTVJgLX4FjQfifwbdc4+9LSJUZJcpXfoVq644O2v5j37R7wbisiwAEkP8kERf+63DFM1b0QpIMqrRacDaBjkk7E9M/GVzOP8OW73Hcl8OyG81Vfjlsdqq556MZsteFIeuHo=
+ bh=OXAvWKaynpHsAI1tgqGNwCOSqmltsAuQnpT0Am+tucc=;
+ b=l0Je9Z2/+lCH8LHuOYAhhqJSE3w09bTFef0BdmyTvoRnbEWzIgz/vTfmo6NDSxSFxp/UtpUhM9CNPKolLVVo6o8kHyp/m66ubCI5lpa054KDMuA5tf1rEiM1OX89XW9/Dgx3kU6oCVFzh06K1MBGzVT2v3gm5uIa16yBTzjKUl4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com (2603:10a6:803:61::28)
  by DU0PR04MB9635.eurprd04.prod.outlook.com (2603:10a6:10:31f::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 13:24:23 +0000
+ 2023 13:24:25 +0000
 Received: from VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::42e1:4216:edc6:52a9]) by VI1PR04MB5151.eurprd04.prod.outlook.com
  ([fe80::42e1:4216:edc6:52a9%7]) with mapi id 15.20.6387.030; Tue, 16 May 2023
- 13:24:23 +0000
+ 13:24:25 +0000
 From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
 To:     broonie@kernel.org, alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
         lgirdwood@gmail.com, peter.ujfalusi@linux.intel.com,
         yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
         kai.vehmanen@linux.intel.com, daniel.baluta@gmail.com
-Subject: [RESEND PATCH 0/2] Improve support for sof_ipc{3|4}_bytes_ext_put
-Date:   Tue, 16 May 2023 16:23:59 +0300
-Message-Id: <20230516132401.205563-1-daniel.baluta@oss.nxp.com>
+Subject: [RESEND PATCH 1/2] ASoC: sof: Improve sof_ipc3_bytes_ext_put function
+Date:   Tue, 16 May 2023 16:24:00 +0300
+Message-Id: <20230516132401.205563-2-daniel.baluta@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230516132401.205563-1-daniel.baluta@oss.nxp.com>
+References: <20230516132401.205563-1-daniel.baluta@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: AS4P195CA0032.EURP195.PROD.OUTLOOK.COM
  (2603:10a6:20b:65a::6) To VI1PR04MB5151.eurprd04.prod.outlook.com
  (2603:10a6:803:61::28)
@@ -60,53 +62,62 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VI1PR04MB5151:EE_|DU0PR04MB9635:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9dc5fd21-e1db-4e05-8464-08db5610dceb
+X-MS-Office365-Filtering-Correlation-Id: d32730dd-eca8-4ebd-22a7-08db5610de13
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 32PuJLa0abtMExCTpeM07edaP09MYJX/Oz7GUXjU7GtFk4hgyWmj/Za1pLA/suCS0txMgIiqdBwh8Ftx4g+l22T80u/s5OJt0pe86kJeu4UiQCoxVenSVyYVXbXNRIddET2IzwYoqFYR0QC4HjgUU7IJmbx/i0m1Oup0wDF5qFZnm1VxqbpSUF90SSeKJ8/oGESMOVCoyveV+0fSf6j0noCcj/+ZSAezYvZuKwUxrkaQlNOd9oCo5AT31teWKCXQ5wT93yERwCTq6NO4Ttxw+m7qI2QUBU1jkKFobwvLGSagf2iFu3q1H1WgeaPjAAxAdMBFl+KEBwHQgPRgYK8t85O3vvOryhkOczfPrfrAB8ODpBGIUEY6xAUL5YWZdY7WrhHRTNpo6K645ef4CC9xD3C+dcTmPFRjHW7ROhFKQ9k8jk02kynhyievxETlhePKPFir7RFuGOC203AE4/bFMd7nmvxfN+2FyyPN3Mxdk5dgdvORjFm1nlBJuOvMal7a1wxbNBVRgH1a+Aj6Gw5k5nQIhXidGG6SEvtIfhcq6TM65lMdFok0ev0YGIS4h+FP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(366004)(39860400002)(451199021)(83380400001)(66476007)(66946007)(2616005)(52116002)(1076003)(6486002)(478600001)(8936002)(66556008)(44832011)(7416002)(6666004)(186003)(5660300002)(4744005)(86362001)(2906002)(8676002)(6512007)(4326008)(316002)(6506007)(38100700002)(41300700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 8WEZqJMY+C7hvnW9j57PyzeGRiNk1yEt6VX5qoVspeKIzpmMCLC1tJQZ2dpd7Uzd9tv1GFjR/g/kxoYXPzQ4Q7AIPJjAssNTlRWe7aesZBUD41RQ1K4KY5DvURwwDuQFv3vuI9iYLbg3JfAKN9FFNlrqpPdLhRCcDox+85vui0v+ZICf/XVvoXZg4mKuZL4PX7c6AXdQ1dSVUV8IWtxPXVoXBAZpHRihFR+E/FHqZoP6aaYx+fEs9gfDQsWm8+oJhh5IiM1bID57PHPjUwU68J5VOltJFpM7jsHbGirNNDncn84FpNKYM0cf5B3I1Vzi4F/Jkfl7OgAnOT8cjbwTowLbojJ/bI2km8UxNN+Ry27YLCDLxdZol5cvsJ7yXgs6VzsCUVrCEru9TwfB7MOQX5qPJck0aWy19p9QeEutdRwACyygQdTZXD5ltaUXwX7lN9Nn7q6LURWGeFxFQjcrA+G3pb9QHFT+OU4kohNo0Z847488Wk6+ZzJ2SU5K2Sq2Da9aQQADw3q4D4VFkPHo2a54YTWh7mwcWcAY+cyxVLnSLqUsRkfKaPqoApenfnZt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5151.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(366004)(39860400002)(451199021)(83380400001)(66574015)(66476007)(66946007)(2616005)(52116002)(1076003)(6486002)(478600001)(8936002)(66556008)(44832011)(7416002)(6666004)(186003)(5660300002)(86362001)(2906002)(8676002)(6512007)(4326008)(316002)(6506007)(38100700002)(41300700001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5lEhslWjCrC6t9+obWai+pPMBNEYRf8LounP++O7K9qKZiZ0JQX78S1FDwNZ?=
- =?us-ascii?Q?GfEpgYrUPDUHrE2qyW//laFnXuYbVYTjV/8xGyoNUzDJ+gJP/nSLM+eb8866?=
- =?us-ascii?Q?bbUMC+HfcItbqf7dTU69JM+bixcGT4ZP58IeyJADyFSiu+hhAr+mw94u4LqL?=
- =?us-ascii?Q?7rgZU/pHBq3Oo68ahJD/aCAky8W5xA/iVEai5MKFqivOhf4izm3bvQpFZjyH?=
- =?us-ascii?Q?vgUb002OgXwCS6jsEICEl6Oug8rspQsC6s89+yuSQo0IzdPi0nrz/32Ksjte?=
- =?us-ascii?Q?knmej1ar25CxXl/JMv6f15gWHDRnnxnLR/V5BxEUI+CObr/TG89zfd20iaq+?=
- =?us-ascii?Q?ILfqSPI3EUQlK2Lb+BvtWM6l0JERguOXASKZvIxRKKX91lUU1N/rRXwB+/Ha?=
- =?us-ascii?Q?6PT6LCQI8HbU/UlAOWN+P2A/5/skI1M77gnHLCk6Y4FJpR7jPWzGb+AdC4LE?=
- =?us-ascii?Q?IL+BMEzlsn+S4+qwqk5J3lHZ1j697zcnnCKHgm9FfSdsKzZI3mfDrdTcGtR+?=
- =?us-ascii?Q?w7pI8Z1j2LE4Y+DQGq7Xd75KetxAZ2GRejhQwEpvSDg+R6aIIEAbCYn5FkG0?=
- =?us-ascii?Q?4qOFp8RCY76PqFySXsxLk9OvY45R6g2QffUt+sQb9iKV/pySf2ISCGrz8ujN?=
- =?us-ascii?Q?FR1FmsydvwDGqgfMxsENH05Nl/Uvq3MXGgZXOvAoM72S8hys9rBlHTzOz/fP?=
- =?us-ascii?Q?zYN81dILJfGPCPKQ3A5NV7c+qO9kvxzeIeuhgL2Un9D+o+f/Y+rd2/7Ybo0p?=
- =?us-ascii?Q?B20AfTUAThfVnshg8ez7wDgPWmMLW8ZVO7iRF+GjxCG9+Ze82aelc2S+1f2l?=
- =?us-ascii?Q?dT6ysJ9wt+zlpHmWq01XX8P9N1HhozO1EZkMiilnghAWIE2lYEcu9J2ka29z?=
- =?us-ascii?Q?sLAITj3YlVKHmkA3XCul9wIqPlE0o1gKESLwNpKSunp3vMt/i5yqL1cK0MXQ?=
- =?us-ascii?Q?fG2vMhcme5wJ+pX3hLlHdMZpztUP4kfZ37jypj19X8HA7ZxKcl6CpfQoW4Ch?=
- =?us-ascii?Q?wcAwmOGC0KKOP1Du9wMRHwIaMwPNcYCACWTX2Fyh7blT2kPpQ7SC6Jja7U2V?=
- =?us-ascii?Q?suNuS4pEk/Lm81XR7LZnBDiBdkld6bVULhRP3lm82tvYTY/ZqSxoajUdbz2j?=
- =?us-ascii?Q?vc3TRFJGyt5PSNeVs+Yi08mfkGOY3BYiazUq4uDdrLV0QCiK0KCTLt9Upr1X?=
- =?us-ascii?Q?Lizf/IIOb1hmpxSj1JDJxnTclhLkFzcQjTwFMoimqxyiGZGXNxF0Of7qS+k6?=
- =?us-ascii?Q?Gz84/KBOwGLqrfNQJdk6HOpSV6SmqfA4WApYY7UGG7qOJ4KGkwqC+NBju8kj?=
- =?us-ascii?Q?NqFuxuhGIYa+SkdZXlzhYrZk5wAw0UhXkdbsLSdxHlaHi1JFKA47FZIdxmHY?=
- =?us-ascii?Q?f1WbiroA0qXmeDyEaFrm79DKMZZ7oBnoqul9JmEBWGGY2USUvD1YQ7kV9Sxf?=
- =?us-ascii?Q?5cy1X3qocfsCYwOnKoOu89J+ydT1JREeI/ZyuzYoFdTUy4O42aqBgfD/gZBN?=
- =?us-ascii?Q?AhGky2kPeciGDjeaYfYTIBTupRhN/N+8Mtz6I8JiCC4Mke7B8nloQDsIPzzG?=
- =?us-ascii?Q?G05TKLdpMGq1tbC+lrPSTpNQia67/+r6f2cqMlJZdaEtti1+sN6bS494Hk6A?=
- =?us-ascii?Q?Jn8mqqxit/qlODeIEoq+6Tx3y0ri5mjtMNjuTxBhwJb0ztNs9xMdRcdPra2g?=
- =?us-ascii?Q?zmbEXg=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1RIdVV1RHNRNWZyeC9wYituYUlsRzhiUUpKNFlPU3Q5MVpXcy9BMUpqYmdw?=
+ =?utf-8?B?bk5lclVXTjN5ck5KWU5IWkh5eUxFcVZoT1hrd0tpemNQOEsveUNWU2taV1Zr?=
+ =?utf-8?B?NXE2L3VUN0MrVkJ2ZUVUaFdVcHVtSE80Mk9kR2ZaTzl1aU5mNkxuUGRNQm9a?=
+ =?utf-8?B?QTNOazYyY1ZNNmp2eW02RmlKQVdBNUxmWHRPQXdCeUFQTk1BVWcrUC8rQ0Zh?=
+ =?utf-8?B?ZTkzTE5BMDZPbCs5MTk5S21NY3pneld1Mlh3aUhuMG1IQTBCTHM4cVltR0pr?=
+ =?utf-8?B?Njd0YjZCaTNVWTZGY1BhOW10QWQyTnJXVXNoV0dYSTdJVnJNSFRicDI0UHVt?=
+ =?utf-8?B?VlFBMThobi9PRk5FRGZMd1Y0QzhKbW80ZXZDbU10U2xtREMrZVV1bjdxVEJi?=
+ =?utf-8?B?VU9Ic3BOalpqdlJlVE15S0lXQWZZQUlqRzh4WWhZeXcrd040U01aK20wbHZv?=
+ =?utf-8?B?dS93UlN1a295NWhKZFkrWWxCaDEwMXgzRnNIbHQweW5SNGtPajRSSEthbU9P?=
+ =?utf-8?B?S0dPemU5K1JkTVZMUHNrTWRqZ1VERWlSejFuUXhobHFJeFE1cWVoYTRvd1hw?=
+ =?utf-8?B?MDJlbUdiei83MlRjd055S2FFZGlnSmJOcUhrbmhmYjEzMFlsNllEbUNRVmp2?=
+ =?utf-8?B?ZjhxQnF2SlNwSUg5cUl2b3VpTmFmWkRJRVZIVlBBaCtNWFgzM3RvMXRXMSt4?=
+ =?utf-8?B?aHhycnZZVnFlVFBSSDN5L3BKdXg3bE1OV1Q0VTUxQjJiVXJtaStNRFNXOE5i?=
+ =?utf-8?B?emp5UEhZd29mMDUveGwyd0ppRDlyL1RTek9hbmJML1JFN0J0RzFrVWp6TitO?=
+ =?utf-8?B?UGsxN1NFbGZabS9pYytjbXU3c2FaNEJqVGQ1NnR2NmMvWWd6bVVPMnFJaVRH?=
+ =?utf-8?B?L2EwdXpDYlFiTjhZRm1PRlQwUDlocHJIdGRiR2lDTXNyQ3Z1S1BlNE1sVDlE?=
+ =?utf-8?B?UUE3Qkp5MEl2bDRRT21UZXRDMklpbkI3a0NpeW9xM2RLUGtLWDBiSW40c08x?=
+ =?utf-8?B?QkpLUGFTQjFSZlFwYm95M2J5eXhVV2NQWnVOQlJLN0tuRDByTm5JVFFRT1k4?=
+ =?utf-8?B?UXlPRWZtcVJlV2tiMmRjeVZLY3VORW84VlM1NWNGekk4Z2xTZlV5anViaUda?=
+ =?utf-8?B?VGdWU3ROeTN0WkJKbEVRdzZtc1FmZ0hBaWRPWHQ3OEoxR3FZZmRsM04zeGNU?=
+ =?utf-8?B?Ui9GNkVtMFBLdlFNcTVRZ1RuUWpKWDlqNDFSTGVMM2tTWXFEemRiME9Da0Z2?=
+ =?utf-8?B?dnFjT3MrWGxGTjRLSHJ2Sm8vVWxZaFJRSUdpTFh3VUQ0Mm5CMjAxZTVoNnRT?=
+ =?utf-8?B?bmlMZHJDaHpaWVhxYkVpU3NFM2hwTGMyeTk5Kzd3VHhJbVpwc2RjZGR0TGFp?=
+ =?utf-8?B?VVB0RC9BdDU3TWYrQlhpdUlOVGJjN3RnenIvWUQ0NmhBdWlmOFg2RWJqQzhD?=
+ =?utf-8?B?L21mTjBtVVU5RW5aNkFTTmhqVnBiMjR5VWNsdUhQQ1RsUGlFS3RPUGVzUDNF?=
+ =?utf-8?B?OHU1RU9hbjRDMWUrTzN3MVFRZnRPSHN4WEJHR0xNQWY4UHBYR3pmL0RmdURX?=
+ =?utf-8?B?WG9mbU1sVENMNkw1WW5MbWlLMzhyM0tvTXVpRkdrK3Fydk5acDFBcFpSb3hX?=
+ =?utf-8?B?SExKc0ZnYXUwUlUweVAvUHlVMkJ2SUh2ZVZYVnFDc3FGTDltNHpBVXFGNUZo?=
+ =?utf-8?B?ay8xZW1oa3lZak42SW4xMDd4UFdzanMrS1RaMW1JaWl1TVlPaTBLMldZU3Iy?=
+ =?utf-8?B?SFBHSE5SQ2hIc3RFWHQzdVVVc2R4K1BQQi94ckJCUFhaczgySzU2NHFEUkZi?=
+ =?utf-8?B?ODVMQmRhWGpCbUxBMW56WE52c1lEWWduS2VhUEUya05aMlc0citZOFd6ZEh0?=
+ =?utf-8?B?VDEzeWk0NHR2b3BIUEJTSHpnSTNHczUwS2FRZDg0YVQzOVB5SUlEMW1jYStB?=
+ =?utf-8?B?d1M3bFk3azA2TFROb1dlU2pSTGJXcFNyZ1U0Tk4xeXQvNjBaYjVNR0NPYUR5?=
+ =?utf-8?B?RWNMYlV5NW5RTjhpN2RNVFpwVDJTcDhTdzlkbGFhcVZWWHRldTJyaUc3Rnp2?=
+ =?utf-8?B?UlpxTndoNEpTUjlPcm9WTVJhdUtabURpNzFZUG8yVzYwZW5Yc1loWWI3T2RQ?=
+ =?utf-8?B?VllhZXdZSS9zTmRHek52MjJVdHA0aEhtanVmQndkd0pyNlQvZXVEMTl2aXVP?=
+ =?utf-8?B?QitibTNobzNTUWIyQm9Mb1J5L0lpL1lZWmdka1NnS2hUK0tmUjE0TEUxM2g1?=
+ =?utf-8?B?WmVzMGwydTNSdGNXQkdBMEh3WURBPT0=?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9dc5fd21-e1db-4e05-8464-08db5610dceb
+X-MS-Exchange-CrossTenant-Network-Message-Id: d32730dd-eca8-4ebd-22a7-08db5610de13
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5151.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 13:24:23.2477
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 13:24:25.1001
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aSfwT8nugtzMhFkglZKVdnBtL3qE1G0MahhAJJjcThE7PiPuMPd3EhCS+CoBZz+KwLVhj08CU9RPKnGEnSYqTg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: hu3VSr9ahasiJwwl1olRNPS60UJ11lnKyUuhPqNrFHZzLxphaErIsQi3DJiGOWmnhAyDogfl2PYsSW9YGvzJtA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9635
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -117,23 +128,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Baluta <daniel.baluta@nxp.com>
+From: Paul Olaru <paul.olaru@nxp.com>
 
-This patch series provides better handling of cases where sending
-a data blob to FW results in a validation error.
+The function is improved in the way that if the firmware returns a
+validation error on the newly sent bytes, then the kernel will
+automatically restore to the old bytes value for a given kcontrol.
 
-In this case we restore to the last good known value instead of keeping
-the data that firwmare rejected.
+This way, if the firmware rejects a data blob then the kernel will also
+reject it, instead of saving it for the next suspend/resume cycle. The
+old behaviour is that the kernel would save it anyway and on next
+firmware boot it would apply the previously-rejected configuration,
+leading to errors during playback.
 
-Paul Olaru (2):
-  ASoC: sof: Improve sof_ipc3_bytes_ext_put function
-  ASoC: sof: Improve sof_ipc4_bytes_ext_put function
+Additionally, the function also saves previously validated
+configurations, so that if the firmware does end up rejecting a new
+bytes value the kernel can send an old, previously-valid configuration.
 
+Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Signed-off-by: Paul Olaru <paul.olaru@nxp.com>
+Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
+---
  sound/soc/sof/ipc3-control.c | 54 ++++++++++++++++++++++++++++++++----
- sound/soc/sof/ipc4-control.c | 39 +++++++++++++++++++++++---
  sound/soc/sof/sof-audio.h    |  1 +
- 3 files changed, 84 insertions(+), 10 deletions(-)
+ 2 files changed, 49 insertions(+), 6 deletions(-)
 
+diff --git a/sound/soc/sof/ipc3-control.c b/sound/soc/sof/ipc3-control.c
+index ad040e7bb850..a8deec7dc021 100644
+--- a/sound/soc/sof/ipc3-control.c
++++ b/sound/soc/sof/ipc3-control.c
+@@ -96,6 +96,26 @@ static int sof_ipc3_set_get_kcontrol_data(struct snd_sof_control *scontrol,
+ 	cdata->elems_remaining = 0;
+ 
+ 	ret = iops->set_get_data(sdev, cdata, cdata->rhdr.hdr.size, set);
++	if (!set)
++		goto unlock;
++
++	/* It is a set-data operation, and we have a backup that we can restore */
++	if (ret < 0) {
++		if (!scontrol->old_ipc_control_data)
++			goto unlock;
++		/*
++		 * Current ipc_control_data is not valid, we use the last known good
++		 * configuration
++		 */
++		memcpy(scontrol->ipc_control_data, scontrol->old_ipc_control_data,
++		       scontrol->max_size);
++		kfree(scontrol->old_ipc_control_data);
++		scontrol->old_ipc_control_data = NULL;
++		/* Send the last known good configuration to firmware */
++		ret = iops->set_get_data(sdev, cdata, cdata->rhdr.hdr.size, set);
++		if (ret < 0)
++			goto unlock;
++	}
+ 
+ unlock:
+ 	if (lock)
+@@ -351,6 +371,7 @@ static int sof_ipc3_bytes_ext_put(struct snd_sof_control *scontrol,
+ 	struct sof_ipc_ctrl_data *cdata = scontrol->ipc_control_data;
+ 	struct snd_soc_component *scomp = scontrol->scomp;
+ 	struct snd_ctl_tlv header;
++	int ret = -EINVAL;
+ 
+ 	/*
+ 	 * The beginning of bytes data contains a header from where
+@@ -381,31 +402,52 @@ static int sof_ipc3_bytes_ext_put(struct snd_sof_control *scontrol,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (copy_from_user(cdata->data, tlvd->tlv, header.length))
+-		return -EFAULT;
++	if (!scontrol->old_ipc_control_data) {
++		/* Create a backup of the current, valid bytes control */
++		scontrol->old_ipc_control_data = kmemdup(scontrol->ipc_control_data,
++							 scontrol->max_size, GFP_KERNEL);
++		if (!scontrol->old_ipc_control_data)
++			return -ENOMEM;
++	}
++
++	if (copy_from_user(cdata->data, tlvd->tlv, header.length)) {
++		ret = -EFAULT;
++		goto err_restore;
++	}
+ 
+ 	if (cdata->data->magic != SOF_ABI_MAGIC) {
+ 		dev_err_ratelimited(scomp->dev, "Wrong ABI magic 0x%08x\n", cdata->data->magic);
+-		return -EINVAL;
++		goto err_restore;
+ 	}
+ 
+ 	if (SOF_ABI_VERSION_INCOMPATIBLE(SOF_ABI_VERSION, cdata->data->abi)) {
+ 		dev_err_ratelimited(scomp->dev, "Incompatible ABI version 0x%08x\n",
+ 				    cdata->data->abi);
+-		return -EINVAL;
++		goto err_restore;
+ 	}
+ 
+ 	/* be->max has been verified to be >= sizeof(struct sof_abi_hdr) */
+ 	if (cdata->data->size > scontrol->max_size - sizeof(struct sof_abi_hdr)) {
+ 		dev_err_ratelimited(scomp->dev, "Mismatch in ABI data size (truncated?)\n");
+-		return -EINVAL;
++		goto err_restore;
+ 	}
+ 
+ 	/* notify DSP of byte control updates */
+-	if (pm_runtime_active(scomp->dev))
++	if (pm_runtime_active(scomp->dev)) {
++		/* Actually send the data to the DSP; this is an opportunity to validate the data */
+ 		return sof_ipc3_set_get_kcontrol_data(scontrol, true, true);
++	}
+ 
+ 	return 0;
++
++err_restore:
++	/* If we have an issue, we restore the old, valid bytes control data */
++	if (scontrol->old_ipc_control_data) {
++		memcpy(cdata->data, scontrol->old_ipc_control_data, scontrol->max_size);
++		kfree(scontrol->old_ipc_control_data);
++		scontrol->old_ipc_control_data = NULL;
++	}
++	return ret;
+ }
+ 
+ static int _sof_ipc3_bytes_ext_get(struct snd_sof_control *scontrol,
+diff --git a/sound/soc/sof/sof-audio.h b/sound/soc/sof/sof-audio.h
+index a090a9eb4828..5d5eeb1a1a6f 100644
+--- a/sound/soc/sof/sof-audio.h
++++ b/sound/soc/sof/sof-audio.h
+@@ -362,6 +362,7 @@ struct snd_sof_control {
+ 	size_t priv_size; /* size of private data */
+ 	size_t max_size;
+ 	void *ipc_control_data;
++	void *old_ipc_control_data;
+ 	int max; /* applicable to volume controls */
+ 	u32 size;	/* cdata size */
+ 	u32 *volume_table; /* volume table computed from tlv data*/
 -- 
 2.25.1
 
