@@ -2,163 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74CE70424E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20262704253
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 02:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245646AbjEPAaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 20:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S245668AbjEPAeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 20:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245526AbjEPAaX (ORCPT
+        with ESMTP id S231416AbjEPAeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 20:30:23 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287516E9D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:30:22 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f1fe1208a4so12543055e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 17:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684197020; x=1686789020;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VMLZvhZl8R40+PTJHjbAYABuk78m5EzXCQRws3AxxY0=;
-        b=jGhApS3SfXW13d+BB0qGQux7Pi55dj0i3E0t4Zpaj7hZZk7PgZ5Tt3Qj68eun3Zjs+
-         tlj35LDmQmj6sPc5VIIIZcB69GTazV48L78k/I974ohHlcyylF9/QIyYDGQlktV8VWci
-         lCl7dbCG3M0jYlMYHDL8trM0WnIp8rfUxKzVceFqVmgGL2JMJZr/ghMoRIo+yZqdpQec
-         T8+7AHo+gKYRAGO26TjRhnJC7ozbWwh1vTOCODQ24/phZqTzQLOwHQ66btfqwwH+qeIJ
-         TL/t2fZYmiFaElHkooVdyjDAuYQrkWbqcD5QBSIuyjuiE+e1PwEesNg74gQnmjKLeRKs
-         ZwNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684197020; x=1686789020;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VMLZvhZl8R40+PTJHjbAYABuk78m5EzXCQRws3AxxY0=;
-        b=kRjnRJDqtqQML6qM4xmZapcZvcWab9prlL1HZkMfU50PJ6L3x9mk6qg4SdoUjNQJbq
-         fTi2HA4QIQnfyNzDhVszwR1hAg6C87cqkYdxdqm8ql7GE4akdYCimktVAnU37V8jnvWT
-         Fvq88zorqmDrVwNefbbi7Q6NJ8UGnoH1k8xdbR43eg3TKucheoPEUbtnpzlArHlG2W/h
-         xkSq8nJ3oXX26lmpZRa9g8futluhugDrIz2wpWXEPBq1rO6ZDZcIlk/ACVmam6cY2XVM
-         fHmVU0H7k9Rc9Po052M3Z00dJInar6WtuoJQgfRmaLh7OtsLe0UaBj2JorKlqr2tcI8s
-         dyuQ==
-X-Gm-Message-State: AC+VfDx/Wfbmr65vq2pGfm+ZwU3Iboe96HBW5KurYYGP7WxveyXMFtrx
-        JLZVNAzE1Xl5UzKSn68EhzDDmQ==
-X-Google-Smtp-Source: ACHHUZ7alVvp8Qkv+AnzzYOiJhdWHEN9BD/GuLDds8xJ6n0yrgdESq0d5++rzQprBktZPbJy4rM0GQ==
-X-Received: by 2002:ac2:4c8a:0:b0:4dd:af29:92c1 with SMTP id d10-20020ac24c8a000000b004ddaf2992c1mr6210602lfl.44.1684197020372;
-        Mon, 15 May 2023 17:30:20 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id v7-20020a056512048700b004eb09820adbsm2774544lfq.105.2023.05.15.17.30.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 17:30:19 -0700 (PDT)
-Message-ID: <38dc17a1-a39e-7c1f-3377-beca19a01df2@linaro.org>
-Date:   Tue, 16 May 2023 02:30:18 +0200
+        Mon, 15 May 2023 20:34:20 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E883E2;
+        Mon, 15 May 2023 17:34:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKy0l0Rgnz4x1f;
+        Tue, 16 May 2023 10:34:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684197256;
+        bh=jJKZfJCxepyKL6BZvZjgIYbio3EXugpuplEPBrwz7/Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WWO0CnVk0k6VJayG5o4Sv3TbIU/5ZXEQQzJSavQX2T7EmQlR3lcDOy0ymGMIp918O
+         wc1oK56AvvO4UHxn5e4SrQaT1tDy7Lo2DmhLigXzt5tPfMWgBsAi2WLcl8i6OPz9gX
+         74iFmCpmQVi0wWI5nI/+vjTEbV9iFErdh030Uj5Y1BmwelK45jz5KYS3KAsDOpBnVw
+         HTyJMWaM/iE7lDhdbd6rVRlQdqET9ZMPzhAz1o9hlCSI/dNslZL6OiHsYSZvtqd6/R
+         8z2Ar/7T0eyjHMFLModSI7+st1BjQFtnC0kNP5n67eORsEtPoio219A8nL2eQothrT
+         HtVaPJDgTVhPQ==
+Date:   Tue, 16 May 2023 10:34:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: linux-next: manual merge of the tip tree with the perf tree
+Message-ID: <20230516103413.21e34bb6@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc7180-lite: Fix SDRAM freq for
- misidentified sc7180-lite boards
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230515171929.1.Ic8dee2cb79ce39ffc04eab2a344dde47b2f9459f@changeid>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230515171929.1.Ic8dee2cb79ce39ffc04eab2a344dde47b2f9459f@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/9XmPjZAkgv_9cK5=I92F2ve";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/9XmPjZAkgv_9cK5=I92F2ve
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 16.05.2023 02:19, Douglas Anderson wrote:
-> In general, the three SKUs of sc7180 (lite, normal, and pro) are
-> handled dynamically.
-> 
-> The cpufreq table in sc7180.dtsi includes the superset of all CPU
-> frequencies. The "qcom-cpufreq-hw" driver in Linux shows that we can
-> dynamically detect which frequencies are actually available on the
-> currently running CPU and then we can just enable those ones.
-> 
-> The GPU is similarly dynamic. The nvmem has a fuse in it (see
-> "gpu_speed_bin" in sc7180.dtsi) that the GPU driver can use to figure
-> out which frequencies to enable.
-> 
-> There is one part, however, that is not so dynamic. The way SDRAM
-> frequency works in sc7180 is that it's tied to cpufreq. At the busiest
-> cpufreq operating points we'll pick the top supported SDRAM frequency.
-> They ramp down together.
-> 
-> For the "pro" SKU of sc7180, we only enable one extra cpufreq step.
-> That extra cpufreq step runs SDRAM at the same speed as the step
-> below. Thus, for normal and pro things are OK. There is no sc7180-pro
-> device tree snippet.
-> 
-> For the "lite" SKU if sc7180, however, things aren't so easy. The
-> "lite" SKU drops 3 cpufreq entries but can still run SDRAM at max
-> frequency. That messed things up with the whole scheme. This is why we
-> added the "sc7180-lite" fragment in commit 8fd01e01fd6f ("arm64: dts:
-> qcom: sc7180-lite: Tweak DDR/L3 scaling on SC7180-lite").
-> 
-> When the lite scheme came about, it was agreed that the WiFi SKUs of
-> lazor would _always_ be "lite" and would, in fact, be the only "lite"
-> devices. Unfortunately, this decision changed and folks didn't realize
-> that it would be a problem. Specifically, some later lazor WiFi-only
-> devices were built with "pro" CPUs.
-> 
-> Building WiFi-only lazor with "pro" CPUs isn't the end of the world.
-> The SDRAM will ramp up a little sooner than it otherwise would, but
-> aside from a small power hit things work OK. One problem, though, is
-> that the SDRAM scaling becomes a bit quirky. Specifically, with the
-> current tables we'll max out SDRAM frequency at 2.1GHz but then
-> _lower_ it at 2.2GHz / 2.3GHz only to raise it back to max for 2.4GHz
-> and 2.55GHz.
-> 
-> Let's at least fix this so that the SDRAM frequency doesn't go down in
-> that quirky way. On true "lite" SKUs this change will be a no-op
-> because the operating points we're touching are disabled. This change
-> is only useful when a board that thinks it has a "lite" CPU actually
-> has a "normal" or "pro" one stuffed.
-> 
-> Fixes: 8fd01e01fd6f ("arm64: dts: qcom: sc7180-lite: Tweak DDR/L3 scaling on SC7180-lite")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-I'd love it if you wrote a book detailing all the crazy stories like
-this one, given it was probably not a one-off :P
+Today's linux-next merge of the tip tree got conflicts in:
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: <stable@vger.kernel.org>
+  tools/perf/arch/x86/include/arch-tests.h
+  tools/perf/arch/x86/tests/arch-tests.c
 
-Konrad
-> 
->  arch/arm64/boot/dts/qcom/sc7180-lite.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-> index d8ed1d7b4ec7..4b306a59d9be 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-> @@ -16,3 +16,11 @@ &cpu6_opp11 {
->  &cpu6_opp12 {
->  	opp-peak-kBps = <8532000 23347200>;
->  };
-> +
-> +&cpu6_opp13 {
-> +	opp-peak-kBps = <8532000 23347200>;
-> +};
-> +
-> +&cpu6_opp14 {
-> +	opp-peak-kBps = <8532000 23347200>;
-> +};
+between commit:
+
+  ae4aa00a1a93 ("perf test: Move x86 hybrid tests to arch/x86")
+
+from the perf tree and commit:
+
+  78075d947534 ("perf test: Add selftest to test IBS invocation via core pm=
+u events")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/perf/arch/x86/include/arch-tests.h
+index 33d39c1d3e64,93d3b8877baa..000000000000
+--- a/tools/perf/arch/x86/include/arch-tests.h
++++ b/tools/perf/arch/x86/include/arch-tests.h
+@@@ -11,7 -11,7 +11,8 @@@ int test__intel_pt_pkt_decoder(struct t
+  int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
+  int test__bp_modify(struct test_suite *test, int subtest);
+  int test__x86_sample_parsing(struct test_suite *test, int subtest);
+ +int test__hybrid(struct test_suite *test, int subtest);
++ int test__amd_ibs_via_core_pmu(struct test_suite *test, int subtest);
+ =20
+  extern struct test_suite *arch_tests[];
+ =20
+diff --cc tools/perf/arch/x86/tests/arch-tests.c
+index 147ad0638bbb,b5c85ab8d92e..000000000000
+--- a/tools/perf/arch/x86/tests/arch-tests.c
++++ b/tools/perf/arch/x86/tests/arch-tests.c
+@@@ -22,15 -22,7 +22,16 @@@ struct test_suite suite__intel_pt =3D=20
+  DEFINE_SUITE("x86 bp modify", bp_modify);
+  #endif
+  DEFINE_SUITE("x86 Sample parsing", x86_sample_parsing);
+ +static struct test_case hybrid_tests[] =3D {
+ +	TEST_CASE_REASON("x86 hybrid event parsing", hybrid, "not hybrid"),
+ +	{ .name =3D NULL, }
+ +};
+ +
+ +struct test_suite suite__hybrid =3D {
+ +	.desc =3D "x86 hybrid",
+ +	.test_cases =3D hybrid_tests,
+ +};
++ DEFINE_SUITE("AMD IBS via core pmu", amd_ibs_via_core_pmu);
+ =20
+  struct test_suite *arch_tests[] =3D {
+  #ifdef HAVE_DWARF_UNWIND_SUPPORT
+@@@ -44,6 -36,6 +45,7 @@@
+  	&suite__bp_modify,
+  #endif
+  	&suite__x86_sample_parsing,
+ +	&suite__hybrid,
++ 	&suite__amd_ibs_via_core_pmu,
+  	NULL,
+  };
+
+--Sig_/9XmPjZAkgv_9cK5=I92F2ve
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRiz4UACgkQAVBC80lX
+0Gx9uQf9HAgAsNAks3QIleoDP1VicNEYP+pSm+QqukYQm/DfRe55vkNrJ/x1I2Zm
+l5NQuX+UsSzhekf4kdwujDBm4aNwPpU6zotWLdsyFkF9hMq4K5UeKKxF4/ku2nIp
+iHS/q0qsC6IkqmTQIrM2zs1NPegDSul32omImwYi5BAIv+3et4t5NzxMgIsSXr88
+7AZT79qw5Pg0tLgpyyC0h5HMyN0chMCrWqRo1Mp7bxv+QeJRyAz38CyJNd+Asjpv
+Fe2nWp32fzmySckGjEPQzzzm1l58Gk0dG0WEaF+va4NTx6IUiKTedWfWgN4HZe0i
+trQuj24XqSnFbuobyoZBNIp5CWpqsw==
+=iGU2
+-----END PGP SIGNATURE-----
+
+--Sig_/9XmPjZAkgv_9cK5=I92F2ve--
