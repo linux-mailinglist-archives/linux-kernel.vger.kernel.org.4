@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00999704C19
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE39704C18
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 13:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232791AbjEPLPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 07:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
+        id S232779AbjEPLPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 07:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbjEPLPF (ORCPT
+        with ESMTP id S232984AbjEPLOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 07:15:05 -0400
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A316A4D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:14:43 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3063891d61aso13339985f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:14:43 -0700 (PDT)
+        Tue, 16 May 2023 07:14:40 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F786E9E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:13:57 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so21629845e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 04:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1684235571; x=1686827571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zhe8/xrQVpvl5wOQHXySxU5sp+vX+3ZhJIxKiYSK2KQ=;
-        b=IDq0FyVbmG4rtF/Espvot2T3WSYf6pKtvJhWtcjdzESN8velyFzXAVVZlrpIupqPY5
-         e2nmeeQreDfd8de6uzer/IgBIKTjWAjAcpM2/GMytIQTriki5Rm9L2TgGe/RQo9XFiOp
-         oUV9vmwAqNNgIh6aZbs5NAP8fvIb37EIegO9qzr3kaH5QX1RgADa7YiHqgSCTQbHdlsE
-         Ipyb9KD1f85p00m1GMENOPr9q28YKIgOMgWjQXQhOeWsf97SYaCVCA3pj4VIUqVFEcMa
-         l5yjL3bcffajTD2P1zWBtx0PvXMC2ECUlSKimdoDXHv4iirWkmSSAMagCHBM1R4xm617
-         R7+A==
+        d=monstr-eu.20221208.gappssmtp.com; s=20221208; t=1684235584; x=1686827584;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+XLBZYDOlju9+mAa1IeI6xdw8ojmUnCJJZY2yhbQHc8=;
+        b=im25hgLtoQevbBKEIbJaGnRpqPZiE8VGfYJ1LVySDj+T8OchmdOjoVCWynDrHYNmk/
+         +rHUe/ocWIR+caY2pWxF090qTbUrqE92IGfrPqWOtduVKDyULQoLagVP9SygHovJpVQw
+         a5V+jI49MkzwDfkHpt+iA2rwHnc71HRJYwzFo7qbEamx2P/0g7HznyRj1+sTI3AEH9zo
+         S32uLT1Ujv4ASYPOMDn15niWjuWJLp5HDDQli9Cmkb6btqt31eq/vMWkYzy+sQdTEO9X
+         vbHKO28hNU7ahyBVb5GUew0Fu71ShPHaRA9/TbUrlqOd6Otu2Tu1GlQBahEb2WBdJulj
+         Kflg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684235571; x=1686827571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zhe8/xrQVpvl5wOQHXySxU5sp+vX+3ZhJIxKiYSK2KQ=;
-        b=WIfSH0wOrZOnspdLsT8etgAVNV3ZLD/sXdDl3IDFSBP0xHEA0adQCHcV/+a0Amf6OF
-         RX7zPsjObcVM50Uag/n4EPvGWjVbEpWN+hvvsT0kJOQCFafeXaHodVDdRmr4t4DwxV8y
-         gi43enLaPtTBrDbS74oH5+HdrR+hv+L6x2Vmz7iNzAaGcmqLWm7ysYRnVVdt35T+U+wa
-         ax2jsyEYgjlITYMhwViJNqiBXShZQ2fTjxe4cukFL4IO0LzNfC7IWITfGMHvyjJrN4iW
-         1u8sPuvfKfc1DtzzDVHM4J24Cu1F4bC3zntzWE8xX3mKpQGjzlhxvmQ+0MoOKoVWRmde
-         1cbw==
-X-Gm-Message-State: AC+VfDydnYlbcLt860SMGFxx7I2rDa4O5XtiihUD+3PeLBSb9HqW7NCl
-        AciFRvvwfAi2JQXAx9KYZEVJK6I6JcVy/pMwzxJ5vw==
-X-Google-Smtp-Source: ACHHUZ5oBkyExOi35OAar5P7cLuup4TgVrXKpnOTdWpEBypBtucnlN31tQwzzrnCEhdFE1Ejp9ccV5ssBmfqj0MuHyU=
-X-Received: by 2002:adf:dec6:0:b0:2cf:f279:378f with SMTP id
- i6-20020adfdec6000000b002cff279378fmr24852351wrn.44.1684235571552; Tue, 16
- May 2023 04:12:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684235584; x=1686827584;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+XLBZYDOlju9+mAa1IeI6xdw8ojmUnCJJZY2yhbQHc8=;
+        b=EU1ZOtQBGDJ/6iQdSUQJhi5rf7qZzeII/56LEcMm63F9kYoqe/Ug/1a4F7bWkQjw3P
+         sZltmhzt0lP6nuh9L68QjkOrmoaal61dhCfXnDkiS4pPdGGSgw7cx9JmgaU53RlPj7g7
+         FrZfZAOzQ91YZUVS4TQ0EwvPBr0gPmN1oreVWuxJxyexku5CaLZLQy0Y8803ub0cK4Bw
+         h3HLk0X0D21Ub2UIF6RgjzDRiPL/9rpiEhRCC3Re9mEGlgIKNOXR9QwgGPG9Uign97+Q
+         2r1AuGdJruFj3VHsKSCiwbfoXWPV8gZGSOD+9nQ4ykdLbS9NcsE8V3tJJQGmL2UBQ0bP
+         JrGQ==
+X-Gm-Message-State: AC+VfDx2WIcbfBGZg6YgiT+AZraZ60IladFWrGqMZbYLXXrfKPWyXvcA
+        w3S5VjXD5a7UYDRdNHVScRKVJQ==
+X-Google-Smtp-Source: ACHHUZ5ijRtVbd+5lLEB6Hao8XoYKXtIjM/5Ro3eesJunbAxyGf9wXb6cAjfOrobWxk/5EGg2suNrg==
+X-Received: by 2002:a05:600c:2294:b0:3f4:2a69:409 with SMTP id 20-20020a05600c229400b003f42a690409mr16923922wmf.11.1684235583839;
+        Tue, 16 May 2023 04:13:03 -0700 (PDT)
+Received: from [192.168.0.105] (nat-35.starnet.cz. [178.255.168.35])
+        by smtp.gmail.com with ESMTPSA id q4-20020a7bce84000000b003f420667807sm1983577wmj.11.2023.05.16.04.13.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 04:13:03 -0700 (PDT)
+Message-ID: <eae6b1e9-6a21-7409-7ed3-a80d13bf0312@monstr.eu>
+Date:   Tue, 16 May 2023 13:13:02 +0200
 MIME-Version: 1.0
-References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
-In-Reply-To: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 16 May 2023 13:12:40 +0200
-Message-ID: <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     robh@kernel.org, Andrew Jones <ajones@ventanamicro.com>,
-        anup@brainfault.org, palmer@rivosinc.com,
-        jeeheng.sia@starfivetech.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] ARM: zynq: dts: Add SCL & SDA GPIO entries for recovery
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, git@xilinx.com
+Cc:     Chirag Parekh <chiragp@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <5eb73d1150648e782795e35c30fccb983b3e0db7.1683035557.git.michal.simek@amd.com>
+From:   Michal Simek <monstr@monstr.eu>
+In-Reply-To: <5eb73d1150648e782795e35c30fccb983b3e0db7.1683035557.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,159 +78,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
 
-On Tue, May 16, 2023 at 11:24=E2=80=AFAM Song Shuai <suagrfillet@gmail.com>=
- wrote:
->
-> Description of problem:
->
-> The latest hibernation support[1] of RISC-V Linux produced a kernel panic=
-.
-> The entire log has been posted at this link: https://termbin.com/sphl .
->
-> How reproducible:
->
-> You can reproduce it with the following step :
->
-> 1. prepare the environment with
-> - Qemu-virt v8.0.0 (with OpenSbi v1.2)
-> - Linux v6.4-rc1
->
-> 2. start the Qemu virt
-> ```sh
-> $ cat ~/8_riscv/start_latest.sh
-> #!/bin/bash
-> /home/song/8_riscv/3_acpi/qemu/ooo/usr/local/bin/qemu-system-riscv64 \
-> -smp 2 -m 4G -nographic -machine virt \
-> -kernel /home/song/9_linux/linux/00_rv_test/arch/riscv/boot/Image \
-> -append "root=3D/dev/vda ro eaylycon=3Duart8250,mmio,0x10000000
-> early_ioremap_debug console=3DttyS0 loglevel=3D8 memblock=3Ddebug
-> no_console_suspend audit=3D0 3" \
-> -drive file=3D/home/song/8_riscv/fedora/stage4-disk.img,format=3Draw,id=
-=3Dhd0 \
-> -device virtio-blk-device,drive=3Dhd0 \
-> -drive file=3D/home/song/8_riscv/fedora/adisk.qcow2,format=3Dqcow2,id=3Dh=
-d1 \
-> -device virtio-blk-device,drive=3Dhd1 \
-> -gdb tcp::1236 #-S
-> ```
-> 3. execute hibernation
->
-> ```sh
-> swapon /dev/vdb2 # this is my swap disk
->
-> echo disk > /sys/power/state
-> ```
->
-> 4. Then you will encounter the kernel panic logged in the above link
->
->
-> Other Information:
->
-> After my initial and incomplete dig-up, the commit (3335068f8721
-> "riscv: Use PUD/P4D/PGD pages for the linear mapping")[2]
-> is closely related to this panic. This commit uses re-defined
-> `MIN_MEMBLOCK_ADDR` to discover the entire system memory
-> and extends the `va_pa_offset` from `kernel_map.phys_addr` to
-> `phys_ram_base` for linear memory mapping.
->
-> If the firmware delivered the firmware memory region (like: a PMP
-> protected region in OpenSbi) without "no-map" propriety,
-> this commit will result in firmware memory being directly mapped by
-> `create_linear_mapping_page_table()`.
->
-> We can see the mapping via ptdump :
-> ```c
-> ---[ Linear mapping ]---
-> 0xff60000000000000-0xff60000000200000 0x0000000080000000 2M PMD D A G
-> . . W R V ------------- the firmware memory
-> 0xff60000000200000-0xff60000000c00000 0x0000000080200000 10M PMD D A G . =
-. . R V
-> 0xff60000000c00000-0xff60000001000000 0x0000000080c00000 4M PMD D A G . .=
- W R V
-> 0xff60000001000000-0xff60000001600000 0x0000000081000000 6M PMD D A G . .=
- . R V
-> 0xff60000001600000-0xff60000040000000 0x0000000081600000 1002M PMD D A
-> G . . W R V
-> 0xff60000040000000-0xff60000100000000 0x00000000c0000000 3G PUD D A G . .=
- W R V
-> ---[ Modules/BPF mapping ]---
-> ---[ Kernel mapping ]---
-> 0xffffffff80000000-0xffffffff80a00000 0x0000000080200000 10M PMD D A G . =
-X . R V
-> 0xffffffff80a00000-0xffffffff80c00000 0x0000000080c00000 2M PMD D A G . .=
- . R V
-> 0xffffffff80c00000-0xffffffff80e00000 0x0000000080e00000 2M PMD D A G . .=
- W R V
-> 0xffffffff80e00000-0xffffffff81400000 0x0000000081000000 6M PMD D A G . .=
- . R V
-> 0xffffffff81400000-0xffffffff81800000 0x0000000081600000 4M PMD
-> ```
->
-> In the hibernation process, `swsusp_save()` calls
-> `copy_data_pages(&copy_bm, &orig_bm)` to copy these two memory
-> bitmaps,
-> the Oops(load access fault) occurred while copying the page of
-> PAGE_OFFSET (which maps the firmware memory).
 
-I'm not saying that the hibernation process is in fault here, but
-that's weird that it is trying to access pages that are not available
-to the kernel: this region is mapped in the page table so that we can
-use a 1GB page, but it is reserved so that it is not added to the
-kernel memory pool.
+On 5/2/23 15:52, Michal Simek wrote:
+> From: Chirag Parekh <chiragp@xilinx.com>
+> 
+> Wire i2c pinmuxing gpio recovery for zc702.
+> 
+> Signed-off-by: Chirag Parekh <chiragp@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>   arch/arm/boot/dts/zynq-zc702.dts | 19 ++++++++++++++++++-
+>   1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/zynq-zc702.dts b/arch/arm/boot/dts/zynq-zc702.dts
+> index d23201ba8cd7..6efdbca9d3ef 100644
+> --- a/arch/arm/boot/dts/zynq-zc702.dts
+> +++ b/arch/arm/boot/dts/zynq-zc702.dts
+> @@ -5,6 +5,7 @@
+>    */
+>   /dts-v1/;
+>   #include "zynq-7000.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+>   
+>   / {
+>   	model = "Xilinx ZC702 board";
+> @@ -106,8 +107,11 @@ &gpio0 {
+>   &i2c0 {
+>   	status = "okay";
+>   	clock-frequency = <400000>;
+> -	pinctrl-names = "default";
+> +	pinctrl-names = "default", "gpio";
+>   	pinctrl-0 = <&pinctrl_i2c0_default>;
+> +	pinctrl-1 = <&pinctrl_i2c0_gpio>;
+> +	scl-gpios = <&gpio0 50 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+> +	sda-gpios = <&gpio0 51 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>   
+>   	i2c-mux@74 {
+>   		compatible = "nxp,pca9548";
+> @@ -298,6 +302,19 @@ conf {
+>   		};
+>   	};
+>   
+> +	pinctrl_i2c0_gpio: i2c0-gpio {
+> +		mux {
+> +			groups = "gpio0_50_grp", "gpio0_51_grp";
+> +			function = "gpio0";
+> +		};
+> +
+> +		conf {
+> +			groups = "gpio0_50_grp", "gpio0_51_grp";
+> +			slew-rate = <0>;
+> +			io-standard = <1>;
+> +		};
+> +	};
+> +
+>   	pinctrl_sdhci0_default: sdhci0-default {
+>   		mux {
+>   			groups = "sdio0_2_grp";
 
->
-> I also did two other tests:
-> Test1:
->
-> The hibernation works well in the kernel with the commit 3335068f8721
-> reverted at least in the current environment.
->
-> Test2:
->
-> I built a simple kernel module to simulate the access of the value of
-> `PAGE_OFFSET` address, and the same panic occurred with the load
-> access fault.
-> So hibernation seems not the only case to trigger this panic.
->
-> Finally, should we always leave the firmware memory with
-> `MEMBLOCK_NOMAP` flag by some efforts from Linux or OpenSbi (at least
-> in the current environment) or any other suggestions?
->
+Applied.
+M
 
-I actually removed this flag a few years ago, and I have to admit that
-I need to check if that's necessary: the goal of commit 3335068f8721
-("riscv: Use PUD/P4D/PGD pages for the linear mapping") is to expose
-the "right" start of DRAM so that we can align virtual and physical
-addresses on a 1GB boundary.
-
-So I have to check if a nomap region is actually added as a
-memblock.memory.regions[] or not: if yes, that's perfect, let's add
-the nomap attributes to the PMP regions, otherwise, I don't think that
-is a good solution.
-
-And a last word: Mike Rapoport recently gave a speech [1] where he
-states that mapping the linear mapping with hugepages does not give
-rise to better performance so *maybe* reverting this commit may be a
-solution too as it may not provide the expected benefits (even though
-I'd rather have it and another benefit of mapping the linear mapping
-with 1GB hugepages is that it is faster to boot, but that needs to be
-measured).
-
-[1] https://lwn.net/Articles/931406/
-
-> Please correct me if I'm wrong.
->
-> [1]: https://lore.kernel.org/r/20230330064321.1008373-5-jeeheng.sia@starf=
-ivetech.com
-> [2]: https://lore.kernel.org/r/20230324155421.271544-4-alexghiti@rivosinc=
-.com
->
-> --
-> Thanks,
-> Song
-
-Thanks for the thorough report!
-
-Alex
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP/Versal ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal/Versal NET SoCs
+TF-A maintainer - Xilinx ZynqMP/Versal/Versal NET SoCs
