@@ -2,140 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B776B704FB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFAA704FB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233741AbjEPNon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S233753AbjEPNpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbjEPNok (ORCPT
+        with ESMTP id S233749AbjEPNo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:44:40 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2058.outbound.protection.outlook.com [40.107.101.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881D3525D;
-        Tue, 16 May 2023 06:44:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FHvsaf149tBlhPyu+C/PevQFBW81t36q5+jnLpn1Zs0grgOOj577xHiG+LQl3XqtuS6t7k642fklJKLdxE0vH6rYaUuiQt8Z+5qofv18TF40Dfe3TKebq7STGqqwAp5RqHXquoL5Yg9DFTMAwIvceRwTXLJo5qFK91xw2MN4AeEkI7zXE+wmKn2wnlIoGlmJt+/Zbjduqup1wV3VW0qh0oTiUhwBC5SS8bYK9a0yeqGP9Psw4MFlvxgvDn6bcbtFbHBV3gao4thHeWOpYKDUPXznswPhDH2m+bRAweLtCSkaOfPwLPZuDImx6n63j5vuxd5SUL/ztkF8jy4kYW1vlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6bJa6E6eDgtaMyswwzYiaoMdryfEoowiKttxI4B/Ado=;
- b=FREjGlqITFS6+8kjUnoZc2uanLAQzPFtYYgknGCsVHbWHATZxllFtBBtAUO6RVD3odMezgC7L9I6YEMBpPATLJECQ+sTT7CwJK0y6f5pZJoMkpwC8faF4PbnyQAYTyQQNSzFZQjSXiGvF7TIHsMzGZV9CxeMFIfKiegTNydOWLJHiLKk0Riw1xCTqbpAn6GHlpJz/x46h746vynfgr6MuAn15H2vdcPmEutptVeCO4oE9Y05/NMHQt+9ZuyO6Nn5HSjQ4QtPtb5I7hUkUzY+MnC3Dy3UkUUkl5b2SmklPkID9MFq8Vg5Drdkr6BeQAoWavrHhtcGIwm2WlRQTEPhtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6bJa6E6eDgtaMyswwzYiaoMdryfEoowiKttxI4B/Ado=;
- b=HFoyWRMv+iV4Vjdo/MAm7RkyvBqZJ581d8Ipydtlu7JOLNUdNYWZBXQDb+kHs1/FDYafH/gWw2o1q9glHQ8MA36ECDG5j/xgEbAe4+ktgh6ZBOAANwuo3zsEmmyziK8mORhQrUP0ZJC7Bw6Fz2K7mmUXOrluQb7Mw6D5HuRLwfU=
-Received: from MW4PR04CA0379.namprd04.prod.outlook.com (2603:10b6:303:81::24)
- by IA0PR12MB7776.namprd12.prod.outlook.com (2603:10b6:208:430::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.32; Tue, 16 May
- 2023 13:44:36 +0000
-Received: from CO1NAM11FT103.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::4) by MW4PR04CA0379.outlook.office365.com
- (2603:10b6:303:81::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
- Transport; Tue, 16 May 2023 13:44:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT103.mail.protection.outlook.com (10.13.174.252) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.15 via Frontend Transport; Tue, 16 May 2023 13:44:35 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
- 2023 08:44:33 -0500
-From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Moritz Fischer <mdf@kernel.org>, Tom Rix <trix@redhat.com>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fpga@vger.kernel.org>
-Subject: [PATCH] fpga: xilinx: Switch Michal Simek's email to new one
-Date:   Tue, 16 May 2023 15:44:30 +0200
-Message-ID: <32514756730c7412018c26b0bb140647f9e9d414.1684244666.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 16 May 2023 09:44:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EA0527D;
+        Tue, 16 May 2023 06:44:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A207962D8A;
+        Tue, 16 May 2023 13:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F690C433EF;
+        Tue, 16 May 2023 13:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684244695;
+        bh=Kc4UDWZqFktIdi1DCD/O416Zm6tX8Fx011gBD1KfKa4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YrfgKMIa0swCsAsINez8dyJNlienqHZK/6EYJUaA4nsToQQMDD9jA1cS95X3NZnlr
+         VA2/HT3tP84uoZB2oHU5TTVnzV681cuc9MM7M0Kdc5ELMlJV0tiuyS4s4RMkZYHmGZ
+         1qfLlBDjb3NBd2gwKLvgoF21jyTwAYZOpM3tQtf+XmtUtS+/8KD8La+7tPaQqNt7A7
+         +DX36S5C2UmXEG+R9Zh1opi0gV2XK8eprI74qL4UbY4RairVTa0xAeBga4gpXVn79L
+         O8Sqyr7GTdNoWTMY3futkvbcetWv44WLGr95vj/nbj62ba6PffUmrgNcsFgZKdGcOs
+         3t9JjmQy7WlfA==
+Date:   Tue, 16 May 2023 14:44:49 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>, broonie@kernel.org
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
+ fpsimd_release_task
+Message-ID: <20230516134447.GB30894@willie-the-truck>
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1403; i=michal.simek@amd.com; h=from:subject:message-id; bh=li8QXRWBfUDOE4dvYAKV4dmIdsh5IWKuIySLSQ26CLs=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhpTkjt0rlKy8ZrAyR605Ma2NV01m7/xZjxd4z1JS+fUgP /DDHNakjlgWBkEmBlkxRRZpmytn9lbOmCJ88bAczBxWJpAhDFycAjARJg+GBS3ZSj/yReyP3zp2 b0/UP4cOgybXNob5oSvvlHoX3exT1SxR+pm4165Q/uphAA==
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT103:EE_|IA0PR12MB7776:EE_
-X-MS-Office365-Filtering-Correlation-Id: b53ef5aa-4d28-4c67-1634-08db5613afb6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D9lzE1BPuqCzc/Leg7sGf30qrDJAkZeVJ6mRyhSy8D9pwNs6j0F0DDUQ9iUp0TnHWs9h4HsxE44c+RDtb8ZQ9c1qF10x9hC4tGjJuiyGQRUiLxy0VKUw8k5GqjVRPo7A9yiKMpVAPDymGSYhVxHJSajvkefh/41ySIKs/JmGGzPedshQDu0cRihP8YKPEf/KfiaS5NJj33svnSe4A/KU03DLR9Wo5YnCqiIdoE+pHFLs/NzbE43DOWm0P/yM/ddTppdw2ss2Vk6Ez4KNuqdObQYqqf1tj5naaqZWKWUuXoqI87uswlZSI9DrHIsHQPCmXo1wAiXE/insYG8BXQPyWHCu+/euKH9SvOMnVCBWzaOGZ/dClnlg8rWqDHR9+Eoc9L7WfqUuzLFpKVAeGHnyuhtxvR5Wgdqg6M121OY1KesQWTrzFNj2Loq+gI7I8Lw4FoxVtxSZxZIxc1jtwyroQc+xxeBPhCoWV0MkGjfwBlweyLacYIryleA54KnsuJNvwGt07mqTlFFujFbL7XKoG0u7yvCe0zuC1zmRSZ8Iy3uZo14Hx4fyVXLdcmkXReJUcgLIoUqP2wp+iqljLOtC93mcAufFSQRibAWVO9ZE8Sssw4NcEVPQIbqL7Gt73Yzm0sP5iLJ2nNRLt2XBKv72JfD0r3+d7wkKCsT0qm+kaiMvvW0lvHkVoV0dKLc5Ha4Y/H4dGtPHA2IAWWPaiV1TJwB1oVAKWoiQJNNeZslk0GTzbCCj9yDapAppnzZ20wC+Zkgk0eUI3n8Q71Ln7tVh9It95vGnvsn01v83a0I3hAQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(136003)(376002)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(4326008)(478600001)(70586007)(70206006)(316002)(110136005)(54906003)(86362001)(36756003)(83380400001)(336012)(36860700001)(186003)(426003)(16526019)(2616005)(26005)(44832011)(8676002)(8936002)(5660300002)(2906002)(41300700001)(82310400005)(40480700001)(82740400003)(47076005)(81166007)(356005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 13:44:35.3806
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b53ef5aa-4d28-4c67-1634-08db5613afb6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT103.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7776
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@xilinx.com is still working but better to switch to new amd.com after
-AMD/Xilinx acquisition.
+Hi Naresh,
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+> Following kernel BUG noticed while running selftests arm64 fp-stress
+> running stable rc kernel versions 6.1.29-rc1 and 6.3.3-rc1.
 
- drivers/fpga/xilinx-pr-decoupler.c | 2 +-
- drivers/fpga/zynq-fpga.c           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Is there a known-good build so that we could attempt a bisection?
 
-diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
-index b76d85449b8f..4d6ef2dd766e 100644
---- a/drivers/fpga/xilinx-pr-decoupler.c
-+++ b/drivers/fpga/xilinx-pr-decoupler.c
-@@ -184,5 +184,5 @@ module_platform_driver(xlnx_pr_decoupler_driver);
- 
- MODULE_DESCRIPTION("Xilinx Partial Reconfiguration Decoupler");
- MODULE_AUTHOR("Moritz Fischer <mdf@kernel.org>");
--MODULE_AUTHOR("Michal Simek <michal.simek@xilinx.com>");
-+MODULE_AUTHOR("Michal Simek <michal.simek@amd.com>");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index ae0da361e6c6..730586b32c10 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -656,6 +656,6 @@ static struct platform_driver zynq_fpga_driver = {
- module_platform_driver(zynq_fpga_driver);
- 
- MODULE_AUTHOR("Moritz Fischer <moritz.fischer@ettus.com>");
--MODULE_AUTHOR("Michal Simek <michal.simek@xilinx.com>");
-+MODULE_AUTHOR("Michal Simek <michal.simek@amd.com>");
- MODULE_DESCRIPTION("Xilinx Zynq FPGA Manager");
- MODULE_LICENSE("GPL v2");
--- 
-2.36.1
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> # selftests: arm64: fp-stress
+> # TAP version 13
+> # 1..80
+> # # 8 CPUs, 3 SVE VLs, 3 SME VLs, SME2 absent
+> # # Will run for 10s
+> ...
+> 
+> # # ZA-VL-32-4: PID: 1091
+> # # [  263.834190]
+> ==================================================================
+> [  263.834270] BUG: KFENCE: memory corruption in fpsimd_release_task+0x28/0x50
+> [  263.834270]
+> ZA-V[  263.834419] Corrupted memory at 0x00000000d9c0a375 [ ! ! ! ! !
+> ! . . . . . . . . . . ] (in kfence-#158):
+> L-64-[  263.834929]  fpsimd_release_task+0x28/0x50
+> [  263.835074]  arch_release_task_struct+0x1c/0x30
+> [  263.835221]  __put_task_struct+0x164/0x220
+> [  263.835336]  delayed_put_task_struct+0x60/0x128
+> 4: [  263.835484]  rcu_core+0x318/0x950
+> [  263.835632]  rcu_core_si+0x1c/0x30
+> [  263.835770]  __do_softirq+0x110/0x3d8
+> Stre[  263.835874]  run_ksoftirqd+0x40/0xe0
+> [  263.835994]  smpboot_thread_fn+0x1d0/0x260
+> [  263.836105]  kthread+0xec/0x190
+> [  263.836221]  ret_from_fork+0x10/0x20
+> [  263.836342]
+> ami[  263.836393] kfence-#158: 0x00000000c8819329-0x000000009e00cc22,
+> size=546, cache=kmalloc-1k
+> [  263.836393]
+> [  263.836527] allocated by task 1112 on cpu 5 at 252.422888s:
+> [  263.836697]  do_sme_acc+0xa8/0x230
+> ng m[  263.836821]  el0_sme_acc+0x40/0xa0
+> [  263.836966]  el0t_64_sync_handler+0xa8/0xf0
+> [  263.837114]  el0t_64_sync+0x190/0x198
 
+Mark -- given that this is an SME allocation, please can you take a look?
+I think the implication of the kfence report is that we're writing beyond
+the end of 'task->thread.sme_state' at some point and corrupting the
+redzone.
+
+There are two reports here, so hopefully it's not too hard to repro.
+
+Will
