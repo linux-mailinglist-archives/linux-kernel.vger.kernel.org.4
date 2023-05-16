@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBF3705AE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 00:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B40F705AE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjEPW64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 18:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S231182AbjEPXCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjEPW6y (ORCPT
+        with ESMTP id S229814AbjEPXCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 18:58:54 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6468213E;
-        Tue, 16 May 2023 15:58:53 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75795493bceso13399285a.3;
-        Tue, 16 May 2023 15:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684277932; x=1686869932;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=obGFfPSstGK57Wl5NPoD/AZ7KNFXNho09WEyyfqv2LU=;
-        b=ZREduQEloKwVflWTdkehKcRky45p76piWosa/r2L3QZuhh+WYc+abP9gftaMGTaEem
-         LRTCRiVJoBKPcIwrDVfFVSWWpt/8hPDwuiw1TONJ7uayYLu5hlW0TBrcXQ5J/5Qy0ksP
-         ZaRUOFswF/L8PY9ff2/QEHB+njQrWLVjnJkUPMmxXsFKv+e6QnGnQmBqhWMDCI5HAdqL
-         LObPBCArRSRNRbEIa414alNX+0R5kDj+FiIOHXSqACjmJw4CigbQzwos3E/c9p/C0rnG
-         He7j9UP5DkZYKo07NNJ6yltATbG4QWMSqcZK3sLpYrtOcu7hNLxRXi+a/asNp0xKPlpk
-         n8kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684277932; x=1686869932;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=obGFfPSstGK57Wl5NPoD/AZ7KNFXNho09WEyyfqv2LU=;
-        b=OzqN89SNwH2aobvRV0Oz6kTgnjimtJ8ED32wqCms8T4dBB3qsC4TRd1bIvVQjkHsmE
-         Chsg0bghmbbQdhDl8udg6xfg/Rfn0R7smYM4wMHjxamMRHBk+iI5T2eo+UJ1tq+cz6hn
-         AW/aVG0Rz5ZV7LwUiapy0Mv8xrLIlihw2TzqHZCE4yxe95LeAVjf2M7Na4Hfnce9JVJg
-         vnQ3xarz+mxE8QGP6T4pn2K2q1XOL5c7bp/GkQNJY+PGWspbvd5+V0Mml43vpMOusODD
-         ZdEFUdW4QQKpAt/qyhzrfnu++h7uO1QDdEd72AeG3n/1W9fh+h0I93xQtk4eM6r357E+
-         4v7w==
-X-Gm-Message-State: AC+VfDxcytBO7Ojvh9aozeWpjbLYiUNqz53dDypNAl02vrW/Q5pAq2YW
-        Q22oqdlyPW6rJmN7O3shoQ==
-X-Google-Smtp-Source: ACHHUZ7EoxhVmn5BFmrFzf7EWlm1hXe4pOL/+n4vASsU4cidJmHbNqLd5o5gJUF0ldKFgbwmChZKcg==
-X-Received: by 2002:ad4:5cce:0:b0:5ee:e4f8:c7e5 with SMTP id iu14-20020ad45cce000000b005eee4f8c7e5mr60470935qvb.41.1684277932388;
-        Tue, 16 May 2023 15:58:52 -0700 (PDT)
-Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:45b7:59dd:1e6c:1110])
-        by smtp.gmail.com with ESMTPSA id r17-20020a0ccc11000000b00623813aa1d5sm533307qvk.89.2023.05.16.15.58.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 15:58:52 -0700 (PDT)
-Date:   Tue, 16 May 2023 15:58:46 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Vlad Buslov <vladbu@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-Message-ID: <ZGQKpuRujwFTyzgJ@C02FL77VMD6R.googleapis.com>
-References: <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
- <20230510161559.2767b27a@kernel.org>
- <ZF1SqomxfPNfccrt@C02FL77VMD6R.googleapis.com>
- <20230511162023.3651970b@kernel.org>
- <ZF1+WTqIXfcPAD9Q@C02FL77VMD6R.googleapis.com>
- <ZF2EK3I2GDB5rZsM@C02FL77VMD6R.googleapis.com>
- <ZGK1+3CJOQucl+Jw@C02FL77VMD6R.googleapis.com>
- <20230516122205.6f198c3e@kernel.org>
- <87y1lojbus.fsf@nvidia.com>
- <20230516145010.67a7fa67@kernel.org>
+        Tue, 16 May 2023 19:02:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E442972B6;
+        Tue, 16 May 2023 16:02:43 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3AB98660322D;
+        Wed, 17 May 2023 00:02:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684278162;
+        bh=zxx/0uLHIiU/dV4bb646/T74e4BDMJ4Bb1ejBv5KV0w=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kduFv+PCqztIKtviaxymKsO7g3OzFC6kl3N+qEgVpTWLRW7wRfH7HlRuJhfPhzYOY
+         gGUPzcy6uK1oC6LzCB6PDtyeQkPj2A8fGIdHeyElTpUvWZ9GzXHvxC+j82HQw6h5cO
+         vR4R2Pb7NhKORf16ioZaS6VFPVuE76pNzbp/+XqKAo+SVah6G24U9SbuUh50r/uUT8
+         FNf9Dkh+7Xg4fvBnG+f9B0tiWAQC+ppFPPCjOoNQvKl4SslOGs4w5rIFAADAP5Tq2i
+         T+TIlGtUWNQc1+QWEghzYxjamLLwnlHQHHUWeIUCehI/vsOejaLf0PXmtM3kR2hF3o
+         Sqtc/4rU0Xz6g==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     jic23@kernel.org, lars@metafoo.de, heiko@sntech.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sebastian.reichel@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, gustavo.padovan@collabora.com,
+        serge.broslavsky@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH 0/7] RK3588 ADC support
+Date:   Wed, 17 May 2023 04:30:44 +0530
+Message-Id: <20230516230051.14846-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516145010.67a7fa67@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 02:50:10PM -0700, Jakub Kicinski wrote:
-> > > Vlad, could you please clarify how you expect the unlocked filter
-> > > operations to work when the qdisc has global state?  
-> > 
-> > Jakub, I didn't account for per-net_device pointer usage by miniqp code
-> > hence this bug. I didn't comment on the fix because I was away from my
-> > PC last week but Peilin's approach seems reasonable to me. When Peilin
-> > brought up the issue initially I also tried to come up with some trick
-> > to contain the changes to miniqp code instead of changing core but
-> > couldn't think of anything workable due to the limitations already
-> > discussed in this thread. I'm open to explore alternative approaches to
-> > solving this issue, if that is what you suggest.
-> 
-> Given Peilin's investigation I think fix without changing core may
-> indeed be hard. I'm not sure if returning -EBUSY when qdisc refcnt
-> is elevated will be appreciated by the users, do we already have
-> similar behavior in other parts of TC?
+This patch series adds ADC support for RK3588 and updates
+the DT bindings for the same.
 
-Seems like trying to delete an "in-use" cls_u32 filter returns -EBUSY:
+To test ADC support on Rock 5B board, a voltage divider circuit
+was created using the gpio pin 22 ( SARADC_IN4 ) and few more
+tests were ran for testing the buffer and trigger using the
+iio_generic_buffer tool.
 
-net/sched/cls_u32.c:
+Shreeya Patel (7):
+  iio: adc: rockchip_saradc: Add support for RK3588
+  iio: adc: rockchip_saradc: Make use of devm_clk_get_enabled
+  iio: adc: rockchip_saradc: Use of_device_get_match_data
+  iio: adc: rockchip_saradc: Match alignment with open parenthesis
+  iio: adc: rockchip_saradc: Use dev_err_probe
+  arm64: dts: rockchip: Add DT node for ADC support in RK3588
+  dt-bindings: iio: adc: Add rockchip,rk3588-saradc string
 
-	if (ht->refcnt == 1) {
-		u32_destroy_hnode(tp, ht, extack);
-	} else {
-		NL_SET_ERR_MSG_MOD(extack, "Can not delete in-use filter");
-		return -EBUSY;
-	}
+ .../bindings/iio/adc/rockchip-saradc.yaml     |   1 +
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  12 +
+ drivers/iio/adc/rockchip_saradc.c             | 260 ++++++++++--------
+ 3 files changed, 164 insertions(+), 109 deletions(-)
 
-Thanks,
-Peilin Ye
+-- 
+2.30.2
 
