@@ -2,141 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3D270590E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F49705913
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjEPUoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S229616AbjEPUqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjEPUo2 (ORCPT
+        with ESMTP id S229456AbjEPUqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:44:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C191FFE;
-        Tue, 16 May 2023 13:44:27 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 254A8660298C;
-        Tue, 16 May 2023 21:44:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684269866;
-        bh=I7KXLZTgJ4zrYUvvkCc2P3Hif13L3bHyvvcy0tpFK7Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n6jzj8Us9bbAb9V52JGJDcSLdCSo8H4iZU+wTPIeq/ReQ8uLNRP3yRtJfT+IRhVmm
-         36yTeG5KbLiU4r2RxggQ8SreivmjO/1rrIrgGQ/YyYfrIhhn4aN5S4it+Wl68qsq3Y
-         RnAAuE5I5c10697VoNp0HpFJ6KjsmCY/gGSB+G0jmQSj88DcdOwkKiF25ZA/6by6pB
-         VBFTo7D6DS1e28YzCvhBHblOZl0QmgrcPP0UkAo8K9TnS8rWN06/V7g8UjIiteqXN8
-         bJGyWAuJiC5V5AOxK/OxEYHYyadXCM7ydFUtuePmZsEU8qdQmfrRtraC0OM+IJ2mEk
-         JjZdM+iQJnCTg==
-Received: by mercury (Postfix, from userid 1000)
-        id 4BCCE10623DF; Tue, 16 May 2023 22:44:23 +0200 (CEST)
-Date:   Tue, 16 May 2023 22:44:23 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: hide unused usbfs_notify_suspend/resume functions
-Message-ID: <20230516204423.ffnkpj3sxqjqcf6k@mercury.elektranox.org>
-References: <20230516202103.558301-1-arnd@kernel.org>
+        Tue, 16 May 2023 16:46:31 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87E5196;
+        Tue, 16 May 2023 13:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684269991; x=1715805991;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ty6WENYnRqV4osNeJaXPDMsSfcnlueg4+2VirsKRiyc=;
+  b=axif19YAEn890t2nA04e1FB3gE3PkVEwiQPsmDcTB0D9o+vYrSiuaD8E
+   tB521vbEsWr40eB6RBS9uot8aqQStFnycgXldtgbdpSLL3/MHOi6nHy1Y
+   UHkcqP6tWqRV9xnwPf17ErOAgZBkzcrpxZ0lLpYFRLJJAowL48GnkskgA
+   tywjeRN/FgIViYR5tmYgaASRbUO8NO+IaUHfkNRYqBJFo5WXDQskthdHL
+   +0NatLp0RLtyZ9+7zG2L7PHRCmOd488sO1IViIrfnz2eJ7+Csyr6PUxWM
+   YIX1BU6+E+n1i6xKoZLOsYD+yLGZRYNi3Q/Lockbe89z5+y+8unoeWJUr
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="336136887"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="336136887"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:46:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="734434783"
+X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
+   d="scan'208";a="734434783"
+Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 13:46:23 -0700
+Message-ID: <5c7e7ebc-7898-0b4e-3c59-e9b8d2b2f197@intel.com>
+Date:   Tue, 16 May 2023 13:46:23 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5xcgqfv34dhd5wj5"
-Content-Disposition: inline
-In-Reply-To: <20230516202103.558301-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] procfs: consolidate arch_report_meminfo declaration
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-parisc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org
+References: <20230516195834.551901-1-arnd@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230516195834.551901-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---5xcgqfv34dhd5wj5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Tue, May 16, 2023 at 10:17:42PM +0200, Arnd Bergmann wrote:
+On 5/16/23 12:57, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The declaration is in an #ifdef, which causes warnings when building
-> with 'make W=3D1' and without CONFIG_PM:
->=20
-> drivers/usb/core/devio.c:742:6: error: no previous prototype for 'usbfs_n=
-otify_suspend'
-> drivers/usb/core/devio.c:747:6: error: no previous prototype for 'usbfs_n=
-otify_resume'
->=20
-> Use the same #ifdef check around the function definitions to avoid
-> the warnings and slightly shrink the USB core.
->=20
-> Fixes: 7794f486ed0b ("usbfs: Add ioctls for runtime power management")
+> 
+> The arch_report_meminfo() function is provided by four architectures,
+> with a __weak fallback in procfs itself. On architectures that don't
+> have a custom version, the __weak version causes a warning because
+> of the missing prototype.
+> 
+> Remove the architecture specific prototypes and instead add one
+> in linux/proc_fs.h.
+> 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
+>  arch/parisc/include/asm/pgtable.h    | 3 ---
+>  arch/powerpc/include/asm/pgtable.h   | 3 ---
+>  arch/s390/include/asm/pgtable.h      | 3 ---
+>  arch/s390/mm/pageattr.c              | 1 +
+>  arch/x86/include/asm/pgtable.h       | 1 +
+>  arch/x86/include/asm/pgtable_types.h | 3 ---
 
-I have no clue why I'm CC'd, but patch LGTM:
+Looks sane.  Thanks Arnd!
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/usb/core/devio.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index e501a03d6c70..1622ad35428d 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -738,6 +738,7 @@ static int driver_resume(struct usb_interface *intf)
->  	return 0;
->  }
-> =20
-> +#ifdef CONFIG_PM
->  /* The following routines apply to the entire device, not interfaces */
->  void usbfs_notify_suspend(struct usb_device *udev)
->  {
-> @@ -756,6 +757,7 @@ void usbfs_notify_resume(struct usb_device *udev)
->  	}
->  	mutex_unlock(&usbfs_mutex);
->  }
-> +#endif
-> =20
->  struct usb_driver usbfs_driver =3D {
->  	.name =3D		"usbfs",
-> --=20
-> 2.39.2
->=20
-
---5xcgqfv34dhd5wj5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj6yYACgkQ2O7X88g7
-+pp0OQ//ZQss/5uMjQhEjQpfxrBJo5eLerF64z8T+gqnbV1wM6ae+NMmOpDpd8/U
-rd19ODVBYvA98Hv7MTWrTfD5vQZ0s11q5yuEgJIQjKMxEzhi549A8Kv0c3/ehRSB
-doALXrcqogFTbT0etk7nN/2ViRUQc4GAi2AERUG81ZXknBwIRMWjTVsF9UlZ0LFD
-6LNpo1rnpC+f7iu21WcznTrjUxsQD9K0v5BSSXga265V4Smay62Z1GEYxWT2ouws
-xtiE21k2az/6Jty3YLiuxW6v09SOjxlOWiNRP3ImvE4gzRu8w/1Dr9da6L5CMAKZ
-KPOe9rXuRsZHU9kAdCZm6CiyCYCenSWQ0zXz2qmVhEVbtZ83ob9o/sLHas5FjcZX
-87u5IxGXaPqG6jGn+XphlTLBn2Ba8G5ZK9bQeo9EWKWNUh2iEm/vCb4Znvmyeycq
-c8nqDAk1K6waUZxbjQBmxG7dJoR27lcjCcImwWQqerRtmiywVnM5w8YRrhWiWv25
-0H03nZHdbYXauYSaM1+G1RZJcgrIsHQk9biANauo6Gf8EOr5FeFuloXuWECiaWjR
-vB2bhCCkLLzbX5Cf3F+kc7vc6DYKFS1R776VArrIYcQ7Nb0NxunhhvBHKA4Jj9rv
-AKndSA5CHyLqcx694goFaHGRmhpeH8lDz1VLGSQC7jPFw22KT1E=
-=JcHR
------END PGP SIGNATURE-----
-
---5xcgqfv34dhd5wj5--
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com> # for arch/x86
