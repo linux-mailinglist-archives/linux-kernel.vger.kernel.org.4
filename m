@@ -2,117 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E787F70523F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2130705247
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 17:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbjEPPeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 11:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55180 "EHLO
+        id S232460AbjEPPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 11:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233862AbjEPPed (ORCPT
+        with ESMTP id S232476AbjEPPfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 11:34:33 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE567EF0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:34:31 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-77d456fa0dbso4735138241.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 08:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684251270; x=1686843270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YvdEFRzutnbNOOurn60T1w5qVmFLZEprgNl0tF1OCLU=;
-        b=tZVNSEGczk6kIRbArRY4cT/mlLGwGfeFEZC4vS6WmlRMOls5d8PmqRrLKMEDSZ7GMO
-         eJfDXy/lUNmgKxKOYPOirx0QdqTi2brRnvQas/Q5iwI1OY8cu634PHz2WZkYLlRJ5DM3
-         wpOjIXL0HnUomCYNJemdDzBpvfWBBuIytX4NppipIL0y0B/tY0P3UZeGK341HTCTLTRT
-         A7zGY3V4+y+0ors7BTT9n3iEnkvkbkSUZvXKu7foGVRPGUjZ8YSkUHn5tyfMzgz0D4oR
-         xxIJxVa8F9xH0YeMWc1g+w2j3KWD5t6Ud8hg85Tgt5vTk3utd/0jzDJl93mHAhoZJdgl
-         4Nbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684251270; x=1686843270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YvdEFRzutnbNOOurn60T1w5qVmFLZEprgNl0tF1OCLU=;
-        b=SckAL9ylyg8Nuxu971FmLgPqxMGZuMHPFMvOEzbt7uanuROzEO3PS81py2+uoJJ4X+
-         oThQxfUHALe6rJ+sIpcIbEQXqsQUXCUSotLDYvuS7N6xURw/AFD+z2aYAIYuXloLCWNP
-         c9zXiL3D4zbjCfMOo7KR6y5lUTlm3I6TYZSb15Z/dRUBIAa1mkDr1hUiLVxyUh4m3uag
-         mKSlvEeaNo4ik64yrYpxOSivVWS19m8drcEev8AXBnL9hwizhQtHwpfnsaoBm7R5uuRR
-         7kHMYbJ8e6XJP1ZtC6ycjVN7JZfzEm9OvqxRP6eGbdGGumvEW2vvFwJ9W1/dE2YMdEyL
-         izoQ==
-X-Gm-Message-State: AC+VfDynGgq92/KWUoNQ9VC05o+TJdLcjavc3UA6JADvMsIXru/RdnPA
-        GaYsbiypSN6deCz9jDLQBMGPMIkELWZFUVL5g3lE0w==
-X-Google-Smtp-Source: ACHHUZ5sCb0e2/K3Uf+Pa17albTb/UYZ+MkMOgqzIyHbPaxLBkNnJDii6OJqSgfWeqRTkGUNL2gYv09etbeSxK8EXMo=
-X-Received: by 2002:a67:ee55:0:b0:434:711e:e2c4 with SMTP id
- g21-20020a67ee55000000b00434711ee2c4mr15531301vsp.14.1684251270212; Tue, 16
- May 2023 08:34:30 -0700 (PDT)
+        Tue, 16 May 2023 11:35:17 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2025FEB;
+        Tue, 16 May 2023 08:35:14 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GCFQCb014872;
+        Tue, 16 May 2023 17:35:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=V8TfW2yFnFlBR+PvqUa/5jzNo/cIcHh5MaXp9eIlTJ0=;
+ b=CiEp9jCFXi2uLnNtBtVkNxzsc9LPbjKVTr0lFBQTtUvt5lMIKrFSPAL/HDZTVqdq8MfD
+ YD8JtbfU4ZXTmMO9Up+NXwCaWpcSBEPS+aD+7syTXvQf/MQpnCaNo5LvpHXb0bQ6CRtX
+ 46LYdk96aUZDAPWVuMu2gmHUTN7DZhndcg4qV2HXpbM7dG4u5FXjpcYE8JvEu0BcPHMC
+ vpmSH8wLyvaZnBmwC/CIF5HsGfMOABj/kxUrbqA2/QKDECTsqGXCa0ahfxBSMD4490Py
+ InCTP4UHaWFaKNfBUVn5nxOclcmlAuRrCKJ/7lR/UE31vjrry/JPQDRbKwPJCfsOK18c pg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qkhp0hu5m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 17:35:04 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0C13E10002A;
+        Tue, 16 May 2023 17:35:02 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 27D1423300B;
+        Tue, 16 May 2023 17:35:02 +0200 (CEST)
+Received: from [10.252.0.230] (10.252.0.230) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 16 May
+ 2023 17:35:01 +0200
+Message-ID: <20c010da-7245-7acf-db2f-991ee2975ea2@foss.st.com>
+Date:   Tue, 16 May 2023 17:35:00 +0200
 MIME-Version: 1.0
-References: <20230426-stmpe-dt-bindings-v4-0-36fdd53d9919@linaro.org>
- <20230426-stmpe-dt-bindings-v4-1-36fdd53d9919@linaro.org> <CAMRc=MdsBiV3AvzSPtCuR58w0N9z7o+hUrBDtXUC4a++pECb8w@mail.gmail.com>
- <CACRpkdaJrB1f13LB4aHSWys63448a4NQZORgwdk8z=C8qe-BDA@mail.gmail.com>
-In-Reply-To: <CACRpkdaJrB1f13LB4aHSWys63448a4NQZORgwdk8z=C8qe-BDA@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 16 May 2023 17:34:19 +0200
-Message-ID: <CAMRc=Mf+RsU6PT7fwm=r9OLbmxNjiv9Ru8HEfpMEAqDN5-0Qig@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: gpio: Convert STMPE GPIO to YAML schema
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Lee Jones <lee@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 4/4] ARM: dts: stm32: fix m4_rproc references to use
+ SCMI
+Content-Language: en-US
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230512093926.661509-1-arnaud.pouliquen@foss.st.com>
+ <20230512093926.661509-5-arnaud.pouliquen@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230512093926.661509-5-arnaud.pouliquen@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.252.0.230]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_08,2023-05-16_01,2023-02-09_01
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:39=E2=80=AFPM Linus Walleij <linus.walleij@linar=
-o.org> wrote:
->
-> On Thu, May 11, 2023 at 4:58=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.p=
-l> wrote:
->
-> > Applied, thanks!
->
-> That works ... but patch 2/2 depends on this one. (uses $ref).
-> You'd have to give Lee an immutable branch that he can pull
-> before applying patch 2/2 so he has the dependency, or let him
-> apply both.
->
-> Yours,
-> Linus Walleij
+Hi Arnaud
 
-Sure:
+On 5/12/23 11:39, Arnaud Pouliquen wrote:
+> Fixes stm32mp15*-scmi DTS files introduced in [1]:
+> This patch fixes the node which uses the MCU reset and adds the
+> missing HOLD_BOOT which is also handled by the SCMI reset service.
+> 
+> This change cannot be applied as a fix on commit [1], the management
+> of the hold boot impacts also the stm32_rproc driver.
+> 
+> [1] 'commit 5b7e58313a77 ("ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)")'
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b=
-:
+I just ran YAML validation on your DT patches and it fails. I added your 
+DT patches + dt-binding one (just for the test). I got the following issue:
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dtb: m4@10000000: 
+st,syscfg-holdboot: False schema does not allow [[7, 268, 1]]
+	From schema: 
+/local/home/frq08678/STLINUX/kernel/my-kernel/stm32/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
 
-are available in the Git repository at:
+Do I miss another dt-binding update not present in this series ?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
-tags/v6.4-stmpe-gpio
+alex
 
-for you to fetch changes up to 6c19974d1e83fba2cca1cbea2fbf250f093eb5ed:
+>   arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 6 ++++--
+>   arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 6 ++++--
+>   arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 6 ++++--
+>   arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 6 ++++--
+>   4 files changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+> index e539cc80bef8..134788e64265 100644
+> --- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+> +++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
+> @@ -55,8 +55,10 @@ &mdma1 {
+>   	resets = <&scmi_reset RST_SCMI_MDMA>;
+>   };
+>   
+> -&mlahb {
+> -	resets = <&scmi_reset RST_SCMI_MCU>;
+> +&m4_rproc {
+> +	resets = <&scmi_reset RST_SCMI_MCU>,
+> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+> +	reset-names =  "mcu_rst", "hold_boot";
+>   };
+>   
+>   &rcc {
+> diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+> index 97e4f94b0a24..c42e658debfb 100644
+> --- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+> +++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
+> @@ -61,8 +61,10 @@ &mdma1 {
+>   	resets = <&scmi_reset RST_SCMI_MDMA>;
+>   };
+>   
+> -&mlahb {
+> -	resets = <&scmi_reset RST_SCMI_MCU>;
+> +&m4_rproc {
+> +	resets = <&scmi_reset RST_SCMI_MCU>,
+> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+> +	reset-names =  "mcu_rst", "hold_boot";
+>   };
+>   
+>   &rcc {
+> diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+> index 9cf0a44d2f47..7a56ff2d4185 100644
+> --- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+> +++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
+> @@ -60,8 +60,10 @@ &mdma1 {
+>   	resets = <&scmi_reset RST_SCMI_MDMA>;
+>   };
+>   
+> -&mlahb {
+> -	resets = <&scmi_reset RST_SCMI_MCU>;
+> +&m4_rproc {
+> +	resets = <&scmi_reset RST_SCMI_MCU>,
+> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+> +	reset-names =  "mcu_rst", "hold_boot";
+>   };
+>   
+>   &rcc {
+> diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+> index 3b9dd6f4ccc9..119874dd91e4 100644
+> --- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+> +++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
+> @@ -66,8 +66,10 @@ &mdma1 {
+>   	resets = <&scmi_reset RST_SCMI_MDMA>;
+>   };
+>   
+> -&mlahb {
+> -	resets = <&scmi_reset RST_SCMI_MCU>;
+> +&m4_rproc {
+> +	resets = <&scmi_reset RST_SCMI_MCU>,
+> +		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
+> +	reset-names =  "mcu_rst", "hold_boot";
+>   };
+>   
+>   &rcc {
 
-  dt-bindings: gpio: Convert STMPE GPIO to YAML schema (2023-05-11
-16:58:04 +0200)
-
-Bart
