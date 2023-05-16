@@ -2,128 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2223704AE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EC8704AF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 12:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbjEPKmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 06:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        id S232406AbjEPKni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 06:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjEPKmA (ORCPT
+        with ESMTP id S229664AbjEPKng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 06:42:00 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C80DBE;
-        Tue, 16 May 2023 03:41:59 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34G8VOmT026320;
-        Tue, 16 May 2023 05:41:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=vAMh92l5h6Q7hcEh6WFWIgGftgCfxqWmMEVQrJ7Twmo=;
- b=GLaW26NG5Cj9mCLHLw9+IpvJmezaDN8LtyneTOQ9fOY33z71QwCmX3APWVoL2xdasX1h
- 9dJGd4etzg4pdAU2aM8oQqU0W3KpmL/yqoffLhmSBUCn6zANCtCyFzV+kvHTQwKtKeOT
- 8IZ4rwiLO1URvD940rPXeSGlhkju4vEjWSDD5OuvWeWAVACUNqxsNzf/jlaU84L9FhEn
- UllOpj0Jq12/6OZixxWy9B5Bt9JIyt6s9NC8saGsQTUCIXWGHPMydkynQFbk+H0vPZXq
- DoE00yt1TXPBa+1zK0uTspqYQwq8Vti/x8epmnwcgw4cLNqTVKVYCK/80lDvJO+Z4QPk TA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qj6ymv753-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 05:41:15 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 16 May
- 2023 05:41:14 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Tue, 16 May 2023 05:41:14 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2CC28B38;
-        Tue, 16 May 2023 10:41:14 +0000 (UTC)
-Date:   Tue, 16 May 2023 10:41:14 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Lee Jones <lee@kernel.org>
-CC:     Marc Zyngier <maz@kernel.org>, <broonie@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <tglx@linutronix.de>,
-        <linus.walleij@linaro.org>, <vkoul@kernel.org>,
-        <lgirdwood@gmail.com>, <yung-chuan.liao@linux.intel.com>,
-        <sanyog.r.kale@intel.com>, <pierre-louis.bossart@linux.intel.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
-Message-ID: <20230516104114.GU68926@ediswmail.ad.cirrus.com>
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
- <86o7mpmvqq.wl-maz@kernel.org>
- <20230512153933.GH68926@ediswmail.ad.cirrus.com>
- <86mt29mt2m.wl-maz@kernel.org>
- <20230515112554.GA10825@google.com>
- <86h6scmzf7.wl-maz@kernel.org>
- <20230516100936.GF10825@google.com>
+        Tue, 16 May 2023 06:43:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50C2E8;
+        Tue, 16 May 2023 03:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aFE52arMbeuGVCs81HtFqwlRw7vUUbocXdncBereG0Q=; b=FkkqeXjyINXcZ0dn67fZnclgj5
+        cM/jyQTU2OOfVb/EiYFiDE06liJQP27KDAcpUH/jvL5QV5T8XRtCJzU+4kg1GW4V/NzKuN4GPJCdQ
+        0sqkIOfozkG/6bRoKC331l4E55SrRg5QgVT5Oax7JRzQ8FaceCgUVhX3+9fgImj0uvsScOdj/gykc
+        BiRVVw7g07fwYDhA/dioi9Gx9dHD4NjilKqhgdxQMUfWU0+KUYPlLl+nB8lai821mGMHryLvk+NSQ
+        Eh+gOFJ/bYjCd1MgOmvB2ulDNpaXZcyForWW7zbsHFkP4U9F6xTP8XOIUJ9iT/VeLM4yXgttg5d8o
+        HZ+p+e2A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pys7y-00C5WG-2z;
+        Tue, 16 May 2023 10:41:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D21DF30008D;
+        Tue, 16 May 2023 12:41:52 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A9E932013503C; Tue, 16 May 2023 12:41:52 +0200 (CEST)
+Date:   Tue, 16 May 2023 12:41:52 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michel Lespinasse <michel@lespinasse.org>
+Subject: Re: [PATCH 00/23] arch: allow pte_offset_map[_lock]() to fail
+Message-ID: <20230516104152.GH2587705@hirez.programming.kicks-ass.net>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+ <ZFs0k2rrLPH9A/UU@casper.infradead.org>
+ <d7f3c7b2-25b8-ef66-98a8-43d68f4499f@google.com>
+ <ZFz1j1slZHCQmwMJ@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230516100936.GF10825@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: gMHOED3BHFVkCy5V-NwvIXEY6a_cTz6p
-X-Proofpoint-ORIG-GUID: gMHOED3BHFVkCy5V-NwvIXEY6a_cTz6p
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZFz1j1slZHCQmwMJ@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 11:09:36AM +0100, Lee Jones wrote:
-> On Tue, 16 May 2023, Marc Zyngier wrote:
-> > On Mon, 15 May 2023 12:25:54 +0100,
-> > Lee Jones <lee@kernel.org> wrote:
-> > > On Fri, 12 May 2023, Marc Zyngier wrote:
-> > > > On Fri, 12 May 2023 16:39:33 +0100,
-> > > > Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
-> > > I'm not aware of another subsystem that deals with !IRQChip level IRQ
-> > > controllers.  Where do simple or "second class" interrupt controllers
-> > > go?
-> > 
-> > This isn't an interrupt controller. This is internal signalling, local
-> > to a single component that has been artificially broken into discrete
-> > bits, including an interrupt controller. The only *real* interrupts
-> > here are the GPIOs.
-> > 
+On Thu, May 11, 2023 at 03:02:55PM +0100, Matthew Wilcox wrote:
 
-I would question this statement a little, they are fixed function
-IRQs sure but they are still real interrupts. These are lines which
-receive a signal and on an edge they set a stick status bit, which
-causes another signal to generate an edge, they have registers
-which let you mask events, if it walks like a duck and all. The
-only difference between this and a "real" interrupt is whether the
-chip designer or the board designer was the person who decided
-where the wire was connected.
+> We also talked about moving x86 to always RCU-free page tables in
+> order to make accessing /proc/$pid/smaps lockless.  I believe Michel
+> is going to take a swing at this project.
 
-> > I'm happy to see an interrupt controller for the GPIOs. But the rest
-> > is just internal muck that doesn't really belong here. Where should it
-
-Internal-ish, granted many of them are primarily useful to the
-device itself. But it is very easy to construct situations where
-say knowing the speaker thermals are high, or that a jack has
-been inserted are useful outside of the CODEC driver itself.
-
-> > go? Together with the rest of the stuff that manages the block as a
-> > whole. Which looks like the MFD subsystem to me.
-> 
-> Very well.  Let's see this "muck" in a patch please!
-
-Groovy I will do a re-spin moving the IRQ stuff to the MFD and
-lets see where we get to.
-
-Thank you all for your help in reviewing this so far.
-
-Thanks,
-Charles
+Shouldn't be too controversial I think -- effectively everybody already
+has it enabled because everybody builds with KVM enabled.
