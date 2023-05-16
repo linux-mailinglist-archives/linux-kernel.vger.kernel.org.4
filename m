@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487837058AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D627058AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 22:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjEPUWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 16:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
+        id S230398AbjEPUWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 16:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjEPUVx (ORCPT
+        with ESMTP id S230391AbjEPUWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 16:21:53 -0400
+        Tue, 16 May 2023 16:22:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862819034;
-        Tue, 16 May 2023 13:21:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5FE1725
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 13:22:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0440663620;
-        Tue, 16 May 2023 20:21:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ABAAC433EF;
-        Tue, 16 May 2023 20:21:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 770E061B89
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:22:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD2DC433EF;
+        Tue, 16 May 2023 20:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684268498;
-        bh=bIicD6gRU90W8lIoeCPzUX3DM76ZJNapL2GUNon+oYc=;
+        s=k20201202; t=1684268554;
+        bh=Sh10PzN7ZGeNFJszxNxgJ0E4uvWBGu9WxbiTupf53mU=;
         h=From:To:Cc:Subject:Date:From;
-        b=ZmqwHBJQbGjxtCnjYVmgoNPMHvdH3Sk8FKUccNpdIPHjNwR1R6jeSZuWBTf5c/8CB
-         gfdIWCqrVH9j1En9uWb9amUM2zyHPtmNNrdviVXyraoUXVMkU+WG2eYhjRnoyGgqJD
-         xT8zoZYYhRKDnmC9tr7zLyo7S8sWOq7T0rZSRLYOi/5twWbh3ddNw4MAVM/RzezIzl
-         MUFSJeg0qdydkXR0AYJHygwU7tIc1dHNWSm13r5i/9NrkPQw+rTdKIeQrOoCPNjqUm
-         AMJhDZWQ2f/GN/Fl1nuQk+q7ZLk7dOChocIVEVPxMm7RZc67LGi+JuU7zRfJpd2LP3
-         GPCGmELN8gOGQ==
+        b=Zh/dgpPcEs+o9AL1H8lM5HSqjawjI5bMYxJrMPI42rxMnxJV4sI2x3sQ5XfW+oJAe
+         Rubf1FaIIRWM0IgV1Y0nYU55mJ0inHPbfpOzo26n0okvA6b1rFfgleurYIQ0K8UH5H
+         bEWWorUSeS/s4nB4GiQBwy9CuU7zkle/Two5mBCPj7/S6etptTCcHQa7u8i+OBa5HZ
+         7Exq9SgkmzDAo5kBnQZ7W6gilABLIQIrfMuvLvhd6QZdVUfTOiaoR3eouRs6gSl5UU
+         e6IUJSWf+gJmQ7B9WEbMQ7Q7dDVte9DSzMvNhidYbXr8uGCaULaBfWf+VzVwNy+qx/
+         QHvzLE48u09mA==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Harvey Hunt <harveyhuntnexus@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-mips@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: rawnand: ingenic: fix empty stub helper definitions
-Date:   Tue, 16 May 2023 22:21:24 +0200
-Message-Id: <20230516202133.559488-1-arnd@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Carlos Chinea <carlos.chinea@nokia.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Jianglei Nie <niejianglei2021@163.com>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Wang Qing <wangqing@vivo.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Miaoqian Lin <linmq006@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] hsi: fix ssi_waketest() declaration
+Date:   Tue, 16 May 2023 22:22:07 +0200
+Message-Id: <20230516202226.559733-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,57 +61,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-A few functions provide an empty interface definition when
-CONFIG_MTD_NAND_INGENIC_ECC is disabled, but they are accidentally
-defined as global functions in the header:
+The ssi_waketest() function definition causes a 'make W=1' warning
+because the declaration is hidden away in ssi_protocol.c:
 
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:39:5: error: no previous prototype for 'ingenic_ecc_calculate'
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:46:5: error: no previous prototype for 'ingenic_ecc_correct'
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:53:6: error: no previous prototype for 'ingenic_ecc_release'
-drivers/mtd/nand/raw/ingenic/ingenic_ecc.h:57:21: error: no previous prototype for 'of_ingenic_ecc_get'
+drivers/hsi/controllers/omap_ssi_core.c:147:6: error: no previous prototype for 'ssi_waketest'
 
-Turn them into 'static inline' definitions instead.
+Move it into a header file instead.
 
-Fixes: 15de8c6efd0e ("mtd: rawnand: ingenic: Separate top-level and SoC specific code")
+Fixes: dc7bf5d71868 ("HSI: Introduce driver for SSI Protocol")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/mtd/nand/raw/ingenic/ingenic_ecc.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/hsi/clients/ssi_protocol.c      | 2 --
+ drivers/hsi/controllers/omap_ssi_core.c | 1 +
+ include/linux/hsi/ssi_protocol.h        | 1 +
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h
-index 2cda439b5e11..017868f59f22 100644
---- a/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h
-+++ b/drivers/mtd/nand/raw/ingenic/ingenic_ecc.h
-@@ -36,25 +36,25 @@ int ingenic_ecc_correct(struct ingenic_ecc *ecc,
- void ingenic_ecc_release(struct ingenic_ecc *ecc);
- struct ingenic_ecc *of_ingenic_ecc_get(struct device_node *np);
- #else /* CONFIG_MTD_NAND_INGENIC_ECC */
--int ingenic_ecc_calculate(struct ingenic_ecc *ecc,
-+static inline int ingenic_ecc_calculate(struct ingenic_ecc *ecc,
- 			  struct ingenic_ecc_params *params,
- 			  const u8 *buf, u8 *ecc_code)
- {
- 	return -ENODEV;
- }
+diff --git a/drivers/hsi/clients/ssi_protocol.c b/drivers/hsi/clients/ssi_protocol.c
+index 38e572faff43..da6a7abd584f 100644
+--- a/drivers/hsi/clients/ssi_protocol.c
++++ b/drivers/hsi/clients/ssi_protocol.c
+@@ -32,8 +32,6 @@
+ #include <linux/hsi/hsi.h>
+ #include <linux/hsi/ssi_protocol.h>
  
--int ingenic_ecc_correct(struct ingenic_ecc *ecc,
-+static inline int ingenic_ecc_correct(struct ingenic_ecc *ecc,
- 			struct ingenic_ecc_params *params, u8 *buf,
- 			u8 *ecc_code)
- {
- 	return -ENODEV;
- }
+-void ssi_waketest(struct hsi_client *cl, unsigned int enable);
+-
+ #define SSIP_TXQUEUE_LEN	100
+ #define SSIP_MAX_MTU		65535
+ #define SSIP_DEFAULT_MTU	4000
+diff --git a/drivers/hsi/controllers/omap_ssi_core.c b/drivers/hsi/controllers/omap_ssi_core.c
+index 26f2c3c01297..84ba8b875199 100644
+--- a/drivers/hsi/controllers/omap_ssi_core.c
++++ b/drivers/hsi/controllers/omap_ssi_core.c
+@@ -17,6 +17,7 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/dmaengine.h>
+ #include <linux/delay.h>
++#include <linux/hsi/ssi_protocol.h>
+ #include <linux/seq_file.h>
+ #include <linux/scatterlist.h>
+ #include <linux/interrupt.h>
+diff --git a/include/linux/hsi/ssi_protocol.h b/include/linux/hsi/ssi_protocol.h
+index 2d6f3cfa7dea..972434daa000 100644
+--- a/include/linux/hsi/ssi_protocol.h
++++ b/include/linux/hsi/ssi_protocol.h
+@@ -24,6 +24,7 @@ int ssip_slave_stop_tx(struct hsi_client *master);
+ void ssip_reset_event(struct hsi_client *master);
  
--void ingenic_ecc_release(struct ingenic_ecc *ecc)
-+static inline void ingenic_ecc_release(struct ingenic_ecc *ecc)
- {
- }
+ int ssip_slave_running(struct hsi_client *master);
++void ssi_waketest(struct hsi_client *cl, unsigned int enable);
  
--struct ingenic_ecc *of_ingenic_ecc_get(struct device_node *np)
-+static inline struct ingenic_ecc *of_ingenic_ecc_get(struct device_node *np)
- {
- 	return ERR_PTR(-ENODEV);
- }
+ #endif /* __LINUX_SSIP_SLAVE_H__ */
+ 
 -- 
 2.39.2
 
