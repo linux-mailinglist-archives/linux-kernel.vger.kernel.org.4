@@ -2,134 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFA2705B37
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0423A705B3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 01:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjEPXT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 19:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S230500AbjEPXUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 19:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjEPXTY (ORCPT
+        with ESMTP id S229501AbjEPXUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 19:19:24 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023E476AC
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:19:18 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96b0235c10bso5111966b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684279157; x=1686871157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nwSoMyRdpmQIpvOJRBbBbU+dtgHHa8BVGaeM9DGLkfs=;
-        b=XV8v15tX+PZVEafm8KvnxAaUQqH3DataU3UD+G++s6faFUIzXTXCNUoDb9m0VlfCQI
-         eGN4ioACbazld0HLNFuNm7gQ6dbfcNc28blvMdsHDOwxVvOrzgHWkEGRUOtICDGyfGe+
-         y+ZburXTEyfHh/B6vgZObfltJUXk86CLrYG7Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684279157; x=1686871157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nwSoMyRdpmQIpvOJRBbBbU+dtgHHa8BVGaeM9DGLkfs=;
-        b=YlKkdhQq+vr33qxx+N/MIMDKEN3zHv49CwrgLEPlkEUbbwXJQGbnpzYH5fZovDXzcl
-         k7cV9A51WX3jM5J57w8HK4ILozVerVjJbOUSF8jqge/EerQSuYbelAMfo+uVV1ZOO/GP
-         FnW+IkEZ0q4C78XYxfTXCz4g4d2JO//FxVTRth4evLLiLidsm7tIXBqmd1mdATsSNKie
-         a1mHMmQRzGaYN5lP6jcuudcU73z6G6GInoJr9ZZi274lDL3plyB7OixJIMjAwG4l0/QD
-         NbKlxSovhDMadIUeoXArWHyqOHQrZSQUxFwX5itUrqhxPo3biUAzobOCINw5/rwPWhq1
-         1O3Q==
-X-Gm-Message-State: AC+VfDyMNijkl6ZWlNoISaqSTunTitMhOAyWNQLJtn8rzZB6RZV+6aAB
-        HLh/0HwPbLl8eSIh9OJ2UJejBWDqHpQJfTmThAfC5A==
-X-Google-Smtp-Source: ACHHUZ60o1CtsVnga/vSI7yTJ3kCDUwUVrQIAAy42Ge/Z705ttDlWgK2bgIRDUNnWgTaio7HX16Eyg==
-X-Received: by 2002:a17:907:7f94:b0:969:e9ec:9a0 with SMTP id qk20-20020a1709077f9400b00969e9ec09a0mr32127707ejc.77.1684279157049;
-        Tue, 16 May 2023 16:19:17 -0700 (PDT)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id i19-20020a170906265300b0096595cc0810sm11536995ejc.72.2023.05.16.16.19.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 16:19:16 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-966287b0f72so7934366b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 16:19:16 -0700 (PDT)
-X-Received: by 2002:a17:907:25c1:b0:965:819b:1e73 with SMTP id
- ae1-20020a17090725c100b00965819b1e73mr33977651ejc.59.1684279155930; Tue, 16
- May 2023 16:19:15 -0700 (PDT)
+        Tue, 16 May 2023 19:20:52 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979D49C9;
+        Tue, 16 May 2023 16:20:51 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-146-199-nat.elisa-mobile.fi [85.76.146.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QLXKQ3PMZz49QNk;
+        Wed, 17 May 2023 02:20:42 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1684279248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=seOEz2BUuUJDwHDfga6nqBUNG6PNWEy1dGh4SRXgLTQ=;
+        b=vubJ+vh+AAqSjg4T3PF2bHeiGx7aqjnyM2rzkh2ewCLkCB1BOHqeLRqJ3Dv7z3zpXo4GXi
+        edy/OAIm2DWs0Wv+MrcCM2kBZfQZ6K3x/WEJvlTQm8D7tfgaYljPeirI2ASfM+guSBCcZ2
+        eBygnoDXOugUMmuGyYY66XZSF5Ny29fxQ0Dc7w2OeS5zPg05fG7eX+4tcf6vU+kGTQCcZ0
+        lss16cnq24vT/N+pGaITw84JBy4a0/kIuvj2A3KxxDhV7j1zvZ651t/U0D545Z63h1CrBb
+        OBPcfjz5TeOxrKhjVb91NreyZ5dvTkjyyRnyPJs29+FIRGJnpg7ypjyW37nmPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1684279248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=seOEz2BUuUJDwHDfga6nqBUNG6PNWEy1dGh4SRXgLTQ=;
+        b=VcTEXgPCls/wG1otMxjZiq+IuzmD2PxI23rQm+6/lPXDJHzUJDFPNiV1a3n6IBHB+R1hpD
+        8Dg20tW+b2wcUNrk/B23U/InpLszKeYowgBADlCaIQxM8ZqEoiyCydtrMvH1WkJJi9HlmC
+        8qZstW2BGRkdxZrP+MigdThMdi/rcsILeZn++Kg15JSfC3UrE3PWOlHDhHVmlgZH/TR8kT
+        cxKFxvKfm2SBxntB/VutoWtYpzPZ/ICz0WfG0x5F5PY6YoprVW50exfz/BKOhh+LP7S2bf
+        WcrWSAOWnrnchwsmGpypvjZL9HJGk7W/MQC2YZE0i9mKUwkUCTyhCi2or2T90A==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1684279248; a=rsa-sha256;
+        cv=none;
+        b=bzLjwDhwijixa8zRtXfem87/f+tUyHzAlRhjMD6q+IQnr/0J/+6NaGZJ+Odm1v/reCATCQ
+        w7+EndQbujq1P18o/tmu5K/XF5YoY7UNH/e8rqPg9W6m/Xlrzf4sKYHox0QvxzsSh7LCCp
+        Lr/TAAEO3rCyr+ihvqMCh5nYFZeWuxuG53jiEe8LALa9Rbk27nDnkvMYTWWIWU6J28xAAd
+        8jiSDzJhXgEm7Y0Gd9YFupdvCP8Qb/pWDF4QXIEAKq8oTUBv6wLH8MSQujN2H3ksS5wVqe
+        COjsJ9AwMtjd1oHXDjxxarSea3PqYNNnFT2w7d2yCx0fHu45gv5EtrzSsEVw/g==
+Date:   Wed, 17 May 2023 02:20:40 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     soc@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 08/13] ARM: omap2: fix missing tick_broadcast() prototype
+Message-ID: <20230516232040.GD271152@darkstar.musicnaut.iki.fi>
+References: <20230516153109.514251-1-arnd@kernel.org>
+ <20230516153109.514251-9-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20230516164947.86543-1-adobriyan@gmail.com> <20230516164947.86543-2-adobriyan@gmail.com>
- <20230516143910.ad39ddb949ca29d3a7cfdba1@linux-foundation.org>
-In-Reply-To: <20230516143910.ad39ddb949ca29d3a7cfdba1@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 16 May 2023 16:18:59 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wizmGie-9SznxRraSEAAQ7OHmyR0y0foWEDF35M7dfJEw@mail.gmail.com>
-Message-ID: <CAHk-=wizmGie-9SznxRraSEAAQ7OHmyR0y0foWEDF35M7dfJEw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] auto: add "auto" keyword as alias for __auto_type
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516153109.514251-9-arnd@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 2:39=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> It is pretty cool and could get used a lot.  Cc Linus for his thoughts?
+On Tue, May 16, 2023 at 05:31:04PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> omap2 contains a hack to define tick_broadcast() on non-SMP
+> configurations in place of the normal SMP definition. This one
+> causes a warning because of a missing prototype:
+> 
+> arch/arm/mach-omap2/board-generic.c:44:6: error: no previous prototype for 'tick_broadcast'
+> 
+> Make sure to always include the header with the declaration.
+> 
+> Fixes: d86ad463d670 ("ARM: OMAP2+: Fix regression for using local timer on non-SMP SoCs")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I'm not against it, although I'm also not convinced we need / want to
-convert existing users of typeof().
+Acked-by: Aaro Koskinen <aaro.koskinen@iki.fi>
 
-The reason we use typeof is that that has always worked in gcc, and
-__auto_type is relatively "new" in contrast.
-
-But we require at least gcc-5.1 anyway, so it should be fine.
-
-Note that mindless conversions can be dangerous: using "typeof(x)" in
-macros may end up feeling a bit verbose, and "auto" can appear nicer,
-but the auto use needs to be *very* careful about integer promotions.
-
-For example, in
-
-  #define WRAPPER(c) do { \
-        typeof(c) __c =3D (c);
-        ...
-
-it is very obvious what the type is.
-
-But while using
-
-   #define WRAPPER(c) do { \
-        auto __c =3D (c);
-
-gives you the same result with less redundancy (no need to state 'c'
-twice), if you *ever* then happen to make that an integer expression
-that is not *just* 'c' - even a trivial one - suddenly 'var' goes from
-'char' to 'int' because of the integer expression.
-
-So __auto_type (and I agree that if we use it, we should probably just
-wrap it in an 'auto' #define, since the legacy 'auto' keyword is
-useless) can result in simpler and more obvious code, but it can also
-lead to subtle type issues that are easy to then overlook.
-
-The above is not an argument against 'auto', but it's one reason I'm
-not convinced some mindless "convert existing uses of __typeof__" is a
-good idea even if it might make some of them more legible.
-
-But I have nothing against people starting to use it in new code.
-
-And no, I don't think we should do that
-
-    KBUILD_CFLAGS +=3D -Dauto=3D__auto_type
-
-in the Makefile as Alexey suggests.
-
-I think this is a 'compiler_types.h' kind of thing, and goes along
-with all the other "simplied syntax" things we do (ie we redefine
-'inline', we add "__weak" etc etc etc).
-
-                  Linus
+> ---
+>  arch/arm/mach-omap2/board-generic.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/mach-omap2/board-generic.c b/arch/arm/mach-omap2/board-generic.c
+> index 853409b341a3..7aa41841edd4 100644
+> --- a/arch/arm/mach-omap2/board-generic.c
+> +++ b/arch/arm/mach-omap2/board-generic.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/of_platform.h>
+>  #include <linux/irqdomain.h>
+>  #include <linux/clocksource.h>
+> +#include <linux/clockchips.h>
+>  
+>  #include <asm/setup.h>
+>  #include <asm/mach/arch.h>
+> -- 
+> 2.39.2
+> 
