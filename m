@@ -2,128 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26D9704E39
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F2B704DFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 14:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjEPMy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 08:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S232947AbjEPMpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 08:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233136AbjEPMyg (ORCPT
+        with ESMTP id S232206AbjEPMpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 08:54:36 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CDE619B;
-        Tue, 16 May 2023 05:54:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684241666; x=1715777666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p0He5tvXte4d1JieMjl6lshdqriX6UhheHjawnPStNw=;
-  b=mkPTIPL7qDoyTx3qt1qARcNjHKuuBs4P0JzQIb+KTS2MvtN28yhXJq8e
-   17O9JlUIH2JS5W4uq/Be8PEqj7I1lsE2OrtoDOtWYs7OSyDbRplKprJhs
-   o/1A/7ZYRSB3yz4W/Be+yXyzY8YTc7BqlyyHC01SM7hOsghPlOlLI3b9Z
-   2ZxoAdbaFT3eWkEvPxBgdjmhbiQuD6Ai/Sj8MKvGw9vN53kmCxF+8DB8o
-   qZRQG67B9IiMjOulpFPPwmHYojssLfY64upgApmimxhE1LX8Xm694CACx
-   E96l3KreGakWfdzMI30ywxNLwpm5qy9V70EDfAYUEYT1VxSQatWU6s45F
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="340833564"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="340833564"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 05:54:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="678835489"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="678835489"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 05:54:07 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id A5109120279;
-        Tue, 16 May 2023 15:44:34 +0300 (EEST)
-Date:   Tue, 16 May 2023 12:44:34 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Tue, 16 May 2023 08:45:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62B3122;
+        Tue, 16 May 2023 05:45:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3CD62B8A;
+        Tue, 16 May 2023 12:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 066ABC433D2;
+        Tue, 16 May 2023 12:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684241129;
+        bh=wjM5oFomx6xoKxCytECad7mDyvM6ZglQgt1r7YdvqSg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EjIElkh1dbl64L4hjcPt0hAtGCMeFxcXVv79SZjRxpA3/kycFGSC/HiqBv1MPYBSX
+         BPkPIJ/DMnT8u4HfuN3g44KSV8XxONANbYDmKmMIlcsq8JCQNMKQ7Iv+4QcljTo1wU
+         6GkpXxq5FtgOyJvNMfT5w5qacJ/6LvIV4//kqtJMF9s5Q6/Dg31zzY/UeprDembQcE
+         BfcFl4nve9uHdba/MPV5YwOxC+3J8aGNwCYJzc0t53sD1jgZt0hIP5yNbnSXNSyqnd
+         tm5EJ7qjiADFS7yeS8ZD3+Cfi9xlVnD/T8iet3/nGhDRGcut6iX0z9RgVR1O4xwEi+
+         o6D1ynTkpAq7Q==
+Date:   Tue, 16 May 2023 20:45:17 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
-Message-ID: <ZGN6sjseR/GHs2dM@kekkonen.localdomain>
-References: <20230426115114.156696-1-tomi.valkeinen@ideasonboard.com>
- <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
+        Felipe Balbi <balbi@kernel.org>,
+        "open list:CADENCE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH v3 1/2] dt-binding: cdns,usb3: Fix cdns,on-chip-buff-size
+ type
+Message-ID: <20230516124517.GH767028@dragon>
+References: <20230515162053.2825405-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230426115114.156696-7-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230515162053.2825405-1-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Moi,
+On Mon, May 15, 2023 at 12:20:52PM -0400, Frank Li wrote:
+> In cdns3-gadget.c, 'cdns,on-chip-buff-size' was read using
+> device_property_read_u16(). It resulted in 0 if a 32bit value was used
+> in dts. This commit fixes the dt binding doc to declare it as u16.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 68989fe1c39d ("dt-bindings: usb: Convert cdns-usb3.txt to YAML schema")
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Thanks for the update.
+Applied both and will send them as fixes for v6.4-rc through arm-soc tree.
 
-On Wed, Apr 26, 2023 at 02:51:12PM +0300, Tomi Valkeinen wrote:
-> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index 256d55bb2b1d..80de6c3a6492 100644
-> --- a/drivers/media/i2c/Kconfig
-> +++ b/drivers/media/i2c/Kconfig
-> @@ -1611,4 +1611,25 @@ config VIDEO_THS7303
->  
->  endmenu
->  
-> +#
-> +# Video serializers and deserializers (e.g. FPD-Link)
-> +#
-> +
-> +menu "Video serializers and deserializers"
-> +
-> +config VIDEO_DS90UB960
-> +	tristate "TI FPD-Link III/IV Deserializers"
-> +	depends on OF && I2C && VIDEO_DEV
-> +	select I2C_ATR
-> +	select MEDIA_CONTROLLER
-> +	select OF_GPIO
-
-I think GPIOLIB would be more appropriate. OF as such should be fine as
-ACPI support probably requires something else, too.
-
-> +	select REGMAP_I2C
-> +	select V4L2_FWNODE
-> +	select VIDEO_V4L2_SUBDEV_API
-> +	help
-> +	  Device driver for the Texas Instruments DS90UB960
-> +	  FPD-Link III Deserializer and DS90UB9702 FPD-Link IV Deserializer.
-> +
-> +endmenu
-> +
-
--- 
-Kind regards,
-
-Sakari Ailus
+Shawn
