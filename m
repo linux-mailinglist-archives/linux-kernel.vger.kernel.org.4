@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7FE7055F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 420107055F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjEPS1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
+        id S231577AbjEPS1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjEPS1b (ORCPT
+        with ESMTP id S229633AbjEPS1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:27:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08C49E;
-        Tue, 16 May 2023 11:27:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684261650; x=1715797650;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=h1IC5Du4s+rB6lI+ZptTZERfabS0oTlbNW5MVGmb3FA=;
-  b=Eq3EzPCUE/j5/hyIH+5inO79UjRCxodnSfG2mqrrJ7odbyg4hTUkNxcv
-   H1OzcJQ03K2muavEDZ6s9B5+vAZC1H8Bq2oXBnGLUrICJmX85J1bqAz4i
-   G/9Aa/VGsArQKcBkJkhd8ZzBpnORT2vzjAj+zvMw3VNvutRq+qs0M0OHq
-   Rs6DtBWAUzJOtRaueViEcrA5IamvYuD1DEQZ2erF+wIgMy1jkowSR68+C
-   Dqo0sR+N2uVf8pKtrDH+YPelVXC+ws3SuImaF4RE1KHB6g+PAW2kYaPtz
-   R5FLSGGnSpXEFOFlldYYEOwS01r3X+8qQIuXlNmx4SUVbSfukmzEuCeXx
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="351587627"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="351587627"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 11:27:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="771162721"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="771162721"
-Received: from mtpanu-mobl1.amr.corp.intel.com (HELO [10.212.203.6]) ([10.212.203.6])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 11:27:16 -0700
-Message-ID: <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com>
-Date:   Tue, 16 May 2023 11:27:16 -0700
+        Tue, 16 May 2023 14:27:33 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467C23C0C;
+        Tue, 16 May 2023 11:27:24 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 9BC9737C;
+        Tue, 16 May 2023 18:27:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 9BC9737C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1684261642; bh=eN2ihpB81pubM9V7Ow/ieCvi6pmkxFrLrOBSx1pwDUM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=a6XcpakvTlccL8bwSblV8FiFyb/HkCs9Vy/4i8xreg5JjcGZ5cPr3A0uDLQmOI/P9
+         K9iKOp4B+zREyNda5EUmsQT5eo+sMYJTsz4M7VL/PxWk/+1YvTzapczKp2N+P39uNt
+         NfZdFmiphHXX3QX1XOBdhThKP7PWCb8qlgyg0XpccAMQjBq/9seQgpzFlowUfMAVGg
+         JmK4Cer43S+0ZlRVEBkmibN+7vh/A2n2nFBhW25YfZKYWOSenPKrTaWZ8rWo1HSTYr
+         +dpewPVgPdylhdlmRlAW442YFdgyK8f2YI4qmGfvSMHQNKa8zo7Y2yqkjK5PeJEwwi
+         6iZbSQvtzLTgQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Remote Direct Memory Access Kernel Subsystem 
+        <linux-rdma@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: Re: [PATCH net v2 4/4] Documentation: net/mlx5: Wrap notes in
+ admonition blocks
+In-Reply-To: <20230510035415.16956-5-bagasdotme@gmail.com>
+References: <20230510035415.16956-1-bagasdotme@gmail.com>
+ <20230510035415.16956-5-bagasdotme@gmail.com>
+Date:   Tue, 16 May 2023 12:27:21 -0600
+Message-ID: <874joccet2.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
- stepping into unaccepted memory
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
- <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 11:08, Ard Biesheuvel wrote:
->> But, this approach does not work for unaccepted memory. For TDX, a load
->> from unaccepted memory will not lead to a recoverable exception within
->> the guest. The guest will exit to the VMM where the only recourse is to
->> terminate the guest.
->>
-> Does this mean that the kernel maps memory before accepting it? As
-> otherwise, I would assume that such an access would page fault inside
-> the guest before triggering an exception related to the unaccepted
-> state.
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-Yes, the kernel maps memory before accepting it (modulo things like
-DEBUG_PAGEALLOC).
+> Wrap note paragraphs in note:: directive as it better fit for the
+> purpose of noting devlink commands.
+>
+> Fixes: f2d51e579359b7 ("net/mlx5: Separate mlx5 driver documentation into multiple pages")
+> Fixes: cf14af140a5ad0 ("net/mlx5e: Add vnic devlink health reporter to representors")
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  .../ethernet/mellanox/mlx5/devlink.rst             | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
 
+So these changes seem harmless, but the Fixes: tags seem completely
+inappropriate here.  This is format tweaking, not a bug fix.
+
+Thanks,
+
+jon
