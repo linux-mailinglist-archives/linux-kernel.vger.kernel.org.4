@@ -2,144 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6B3704F97
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677ED704FAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 15:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbjEPNmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 09:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
+        id S233732AbjEPNoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 09:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbjEPNm0 (ORCPT
+        with ESMTP id S232557AbjEPNoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 09:42:26 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ECE5B8A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:42:21 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f42711865eso65386015e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 06:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684244540; x=1686836540;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RIvTcNlwAmPNpObBbfvPw1SrNayKQmgyhgtXRTbsW0o=;
-        b=x9+y61j4a/rAqAPb1vGX/7FNSeS8qKNMAkz5A+EfN2PlplrNAb/IRWBIMaEIZ3cPJI
-         QV75FLyklyjKqWPSxT8eq7Jh00z3BEhRFKWlLjnoXgH43+L/NhvEgUdROmkwTPN/isql
-         TBIALmXNNjepZplPEpN9J4QaiP88m12Yb81TkDLmdSLCHI7Le8roh5vofYHC8Z1lAJVn
-         3e/b0VHr/3BhisQZXuYE2xHzasHy8RHY0UOtKa9lVNvj3xD77VDo/qtEjGdUsd1qThGj
-         e4a9cQOpdrOn7epnbZpSY4/nD3KOzTH2hcRKr0pi04OvJ3UAaYVRx4yrZdA+8BxMxv1Y
-         kyXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684244540; x=1686836540;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIvTcNlwAmPNpObBbfvPw1SrNayKQmgyhgtXRTbsW0o=;
-        b=kjMbQ/6ofp0Zf4jJII9ZI7gokjpYw0MKazI8UCxZbBqDu/+//qJUEP+cUq9LYd0EJ3
-         SMC3hd3DX9vod/L6ZViDv7uxy2gOMJKxouVNMTcBCknGQ2iaEFmNNdmc26yyLiXncXXQ
-         hfAgBSGGY2z7kbO0DFTxTQ1dxSUhvCQy33ztASEAE7jIy2G3NgpNUTK2ena6ay3DFQ+S
-         xBjW3qSgPNiOevAN0b9pQE0voYvsWm/nMz7dQzEWbNN1qq8xbxABWG9eT4mwGjfygnyg
-         /kH5ijzY1QiG5FIIvIMMGBf4mQqq5FAjzPp/77AVAwlIYgTHmzz5+ae8Oqp9svjbh2CF
-         8acw==
-X-Gm-Message-State: AC+VfDwKvDwLSpjIDzJnGFSxZGtFf2yNKNptrRXZSzbbbxdw1RoBSfth
-        J0CPN8c6rfMBBq2iOVVKIX7CRw==
-X-Google-Smtp-Source: ACHHUZ6Qej44yGCIdrpInYjzHIJscOEjjkfM4eL+VuKHu1Ub2WB/gSILNqOM8VjDJvJ/EH6SR69hPg==
-X-Received: by 2002:a5d:43c4:0:b0:2f0:2dfe:e903 with SMTP id v4-20020a5d43c4000000b002f02dfee903mr29013651wrr.69.1684244540172;
-        Tue, 16 May 2023 06:42:20 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id v17-20020adff691000000b00307c0afc030sm2761242wrp.4.2023.05.16.06.42.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 06:42:19 -0700 (PDT)
-Message-ID: <d244f5f3-a4a0-c9ac-2f78-49baeb8ef3d3@linaro.org>
-Date:   Tue, 16 May 2023 14:42:18 +0100
+        Tue, 16 May 2023 09:44:14 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2060f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::60f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E745A4480;
+        Tue, 16 May 2023 06:44:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PofgylACpicavGeHhW+J3shLKh+oNvI0PZnFS5lJ170bZenD3NP0+QukU/DoKxvrHUvnwAvnXHMkYnAE34kyK6b0WJnGhOOM4ISJLj55TG0s8gllK2ZeSr52jYzz9WwI9aCABePj+EpTuR9E/66z2+uIY/+uUR9IaepxoWXAUSMVcE19d6Jue8BIz8p3tEYEnze7vQ4Qt+Pqyh1F8zBxaUxVaS479dffUx0TwALrpLl/eEB+QRntpI7YyLKBD981oWOcHx/zrPrm/whXv4JdLTiLqsXwXx1YhZaYHsYrVDTSbh/8k2oU3N3o94yCtmEQGYc6hc1Vz/7pgGtYLMzjEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rryHag/rmpAwINWli3YL5cIcfkvpSBV7QXNP57KKiW8=;
+ b=K8VNMzcSVuxL6P2QrEAzZgNrotu7KdWYZY4SwehB1z6d/T+zFcHTBTh+FJbMD7pKu4MuZXDY3CBopjCY68Oh76gy0yTXlf3QWT7rUBW1H+S4SuJnDBG2/UX3525aQtGEapVATO4JuoPSEPDO/8lvM1UfOe4LrUvpBIutSb1niZ6UaTjNuQnVmhcAC15JKZMJ2BKg9WmzbTPPvXjwlmMa1sunodI3EBoKw8Dc4+MJ9+7Sx24mkL0eQAdvTasS19krn07YGPGU4R6+B8HcbkAK0O3wS17oJiQmV57ygiG6sZ8tZX++0anImYfNNvyNuTfK5L9Dl6kfgTqHUzuOFNrwnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rryHag/rmpAwINWli3YL5cIcfkvpSBV7QXNP57KKiW8=;
+ b=5FsAiFI/4TGxr1TYyFyeB49u10CIDpFCP8go3TvMjylJnGFgZO6t859kgvInAItGNTNqN77tHN6lfjAAPCQPMbxrTatODNjqv4EE1hztERi2yhs8DrXvuGFvaw2vUIqJuQWWjXl3jrpVnL341W/Ld0bFPHaBFUFL1iJ+H6k6qiw=
+Received: from MW4PR03CA0041.namprd03.prod.outlook.com (2603:10b6:303:8e::16)
+ by CYYPR12MB8750.namprd12.prod.outlook.com (2603:10b6:930:be::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
+ 2023 13:44:09 +0000
+Received: from CO1NAM11FT077.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8e:cafe::61) by MW4PR03CA0041.outlook.office365.com
+ (2603:10b6:303:8e::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
+ Transport; Tue, 16 May 2023 13:44:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT077.mail.protection.outlook.com (10.13.175.55) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.15 via Frontend Transport; Tue, 16 May 2023 13:44:09 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
+ 2023 08:44:03 -0500
+From:   Michal Simek <michal.simek@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+        <michal.simek@xilinx.com>, <git@xilinx.com>
+CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH] cpuidle: zynq: Switch Michal Simek's email to new one
+Date:   Tue, 16 May 2023 15:43:18 +0200
+Message-ID: <b8dea1ca696f1b91e8ec59d53a427016af2ccb07.1684244595.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: clock: qcom,gcc-sm8250: add missing
- bi_tcxo_ao clock
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20230516105241.30091-1-krzysztof.kozlowski@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230516105241.30091-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=699; i=michal.simek@amd.com; h=from:subject:message-id; bh=EKOp4hj4L+YUQX6sdCYpqVEYOalByt85C/Wa2TpQJzU=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhpTkjuL3svb3T37h3nxXasLK5hKRja4d1mtr9k1XTApLK DGbNXlmRywLgyATg6yYIou0zZUzeytnTBG+eFgOZg4rE8gQBi5OAZhI3BqG2exXWJKn3Pv5NX9/ auNGvyn7bjx7uophfrlTkPqSi4GGoUsnqConL7JvnPXBAQA=
+X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT077:EE_|CYYPR12MB8750:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf713f47-7ef0-4e33-de90-08db5613a04e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pEonYpYHu+CL/2MJly0NqrpnekTUsYkbejktltWaELr/Ek/BFNfZPWo5M84TOTgu+1IgAWBnagTRIsaSph77UYxHFpUBNlJth1QQ8dKLKfKwFq2xr9xQbQwraAoMph9irJXUS8LcQvqB3puDPgX6TQCU/Vg7PcaZSEnHlKIVoh3rwib/v+ByjPIda7oiMUyQGecbbfhdlfe0sEC0L9MF7VfnA/1peL5/m8eo1p7qsBsn7jA7w1743aRfVaLQBqzQziuEJJKItbJhfZkQC4xcaSqi4CreBmuk/35RMewAwwe32/7Tm6O/4unso3ibdb2uRp0bJaCtpP8pbVO0qzFJp1HrFAGrvdTyG2MsBrBiZMD7gJiSx74UxObpZ3JaXIdRIG4uf6YMkpvHYbZUfnB7Cf+uJqdOlfEVDBlJ6LV128KAygAncJLl8uKgpWtwfYASm6r5hRks9jP4tOz9R3UZzjdgmUBwC7tqY5l4BViCgmi/SXnBsb/01vhasQNEJpmZpXhkoEB+iQzU+h2L8qXu8J6aQzPkEVf0fhcDH2JVl4TKgWGrPc4ztoFIwScUCEM0fU1g6VVL89pxcquCS4GwZc8yBVQtVLlm8/A1PYBXTJu+D66+kK7z9UKFea8jorBkggRFmhI3h6//kRD2VLR/YOkv3og+94jMIcXrV1EXBbjowlnUFya6tA/NE94hE5cJ/75HJ6T38ApiPWRxmKoclWCVdJuAZPzMKXHNGSWdzDP4EzkqJ8r9Q9OC2D0D2eUPc5tsmxTYoVhKEZGiB0NGIL7w8MN83B7qb7uy+S1zIkw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(336012)(426003)(26005)(36860700001)(478600001)(186003)(16526019)(40480700001)(86362001)(6666004)(47076005)(4326008)(70206006)(70586007)(82740400003)(54906003)(2616005)(83380400001)(110136005)(5660300002)(44832011)(2906002)(40460700003)(41300700001)(81166007)(356005)(316002)(4744005)(82310400005)(8936002)(8676002)(36756003)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 13:44:09.5229
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf713f47-7ef0-4e33-de90-08db5613a04e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT077.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8750
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 11:52, Krzysztof Kozlowski wrote:
-> The initial SM8250 GCC driver added in commit 3e5770921a88 ("clk: qcom:
-> gcc: Add global clock controller driver for SM8250") already consumed it
-> on the clock.  This fixes warnings like:
-> 
->    sm8250-xiaomi-elish-csot.dtb: clock-controller@100000: clock-names: ['bi_tcxo', 'bi_tcxo_ao', 'sleep_clk'] is too long
-> 
-> Fixes: 98394efb48f5 ("dt-bindings: clock: Add SM8250 GCC clock bindings")
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes in v2:
-> 1. Re-word commit msg and fixes tag (Konrad)
-> 2. Add tags
-> ---
->   Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
-> index b752542ee20c..ead6665b9a45 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
-> @@ -23,11 +23,13 @@ properties:
->     clocks:
->       items:
->         - description: Board XO source
-> +      - description: Board active XO source
->         - description: Sleep clock source
->   
->     clock-names:
->       items:
->         - const: bi_tcxo
-> +      - const: bi_tcxo_ao
->         - const: sleep_clk
->   
->   required:
-> @@ -47,8 +49,9 @@ examples:
->         compatible = "qcom,gcc-sm8250";
->         reg = <0x00100000 0x1f0000>;
->         clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +               <&rpmhcc RPMH_CXO_CLK_A>,
->                  <&sleep_clk>;
-> -      clock-names = "bi_tcxo", "sleep_clk";
-> +      clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
->         #clock-cells = <1>;
->         #reset-cells = <1>;
->         #power-domain-cells = <1>;
+@xilinx.com is still working but better to switch to new amd.com after
+AMD/Xilinx acquisition.
 
-LGTM
+Signed-off-by: Michal Simek <michal.simek@amd.com>
+---
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+ drivers/cpuidle/cpuidle-zynq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/cpuidle-zynq.c b/drivers/cpuidle/cpuidle-zynq.c
+index a79610e723b3..89448ae4845c 100644
+--- a/drivers/cpuidle/cpuidle-zynq.c
++++ b/drivers/cpuidle/cpuidle-zynq.c
+@@ -11,7 +11,7 @@
+  * #1 wait-for-interrupt
+  * #2 wait-for-interrupt and RAM self refresh
+  *
+- * Maintainer: Michal Simek <michal.simek@xilinx.com>
++ * Maintainer: Michal Simek <michal.simek@amd.com>
+  */
+ 
+ #include <linux/init.h>
+-- 
+2.36.1
+
