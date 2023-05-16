@@ -2,118 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5BE7042AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686457042B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 03:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjEPBL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 21:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S229489AbjEPBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 21:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjEPBL4 (ORCPT
+        with ESMTP id S229483AbjEPBOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 21:11:56 -0400
-X-Greylist: delayed 13636 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 May 2023 18:11:55 PDT
-Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5BC5B89;
-        Mon, 15 May 2023 18:11:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684199480; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=MBzvm1i6w5sH9qB90XtoDWPnzsiAxVMUrAquePUtEQUay8xbP0iEIehH0iPtU12UTXFc28TsN9kguT53KvIFyS3QxYQLKSq/b/VvZX/9+gxbOveV0vrFfiX9SsUZ/xXRBZcDJeo3y0/s458GrjtaGfZep0soRKQ/1gYW0nUMwgY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1684199480; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=3D1ZcgeS6gbmfb74g6qO4yIjzREqLwPUB74IkVK5hiE=; 
-        b=YF0ONQkmYu/eFV5tXlTxRET1MLUVYXbWjX/NIjEFLhR0ptkGKcf8OYNw05swr0LDdSVxPgil0QL3EW1H/Q7c+oGqLvutx5KVN/307co3cHGAEemhiLb2ky5VGvxbCGTjIuy085hZqgkaqUxhn/E/Kgz399vEdGjVysdZRytYeDQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=apertussolutions.com;
-        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-        dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684199480;
-        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=3D1ZcgeS6gbmfb74g6qO4yIjzREqLwPUB74IkVK5hiE=;
-        b=eF0JQ9HC29IQT8CAesMjHLcuTjhmoFhWidAgpxW3cr1t79/ekq1bo+RHa/KvmrCe
-        5CkfzqSd3qdahwWqDR0UCseja3klsydvIUs4gvHt5/jhTfSQx+HsVi651NXwAbQo2G/
-        z41V1Az7BhP9riZUaoopJicuZsK4Yg7xxfBeBGww=
-Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
-        with SMTPS id 1684199478060628.8578234862518; Mon, 15 May 2023 18:11:18 -0700 (PDT)
-Message-ID: <7ff17d2b-7030-fbbd-c495-b43583e3f9e7@apertussolutions.com>
-Date:   Mon, 15 May 2023 21:11:15 -0400
+        Mon, 15 May 2023 21:14:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32A810EA;
+        Mon, 15 May 2023 18:14:06 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QKyrL6wxqzsRhT;
+        Tue, 16 May 2023 09:12:02 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 16 May
+ 2023 09:14:01 +0800
+Subject: Re: [PATCH net-next] octeontx2-pf: Add support for page pool
+To:     Ratheesh Kannoth <rkannoth@marvell.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+References: <20230515055607.651799-1-rkannoth@marvell.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <c50a0969-4b17-f2c2-6ad6-b085b8ac4043@huawei.com>
+Date:   Tue, 16 May 2023 09:14:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 07/14] x86: Secure Launch kernel early boot stub
+In-Reply-To: <20230515055607.651799-1-rkannoth@marvell.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Ross Philipson <ross.philipson@oracle.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        ardb@kernel.org, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-8-ross.philipson@oracle.com>
- <20230512112623.GE14461@srcf.ucam.org>
- <98decbe9-846a-6d36-aa7a-f906a19fa6cf@oracle.com>
-From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
-In-Reply-To: <98decbe9-846a-6d36-aa7a-f906a19fa6cf@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/23 12:17, Ross Philipson wrote:
-> On 5/12/23 07:26, Matthew Garrett wrote:
->> On Thu, May 04, 2023 at 02:50:16PM +0000, Ross Philipson wrote:
->>
->>> +static void sl_find_event_log(struct slr_table *slrt)
->>
->> If this is called after the EFI stub then we're presumably
->> post-ExitBootServices and we're copied the TPM event log into a
->> configuration table so it's available to the runtime kernel. That also
->> means that we should be adding all further measurements to the Final
->> Events Table rather than the initial event log. How's that handled here,
->> both in terms of ensuring further events (generated by firmware or by
->> us) get added to the right place, and in terms of ensuring the event
->> logs the kernel has later on were covered appropriately? Or is the SL
->> event log an entirely different thing that can be merged in later
->> because it only covers the DRTM PCRs?
+On 2023/5/15 13:56, Ratheesh Kannoth wrote:
+> Page pool for each rx queue enhance rx side performance
+> by reclaiming buffers back to each queue specific pool. DMA
+> mapping is done only for first allocation of buffers.
+> As subsequent buffers allocation avoid DMA mapping,
+> it results in performance improvement.
+
+Any performance data to share here?
+
+....
+> @@ -1170,15 +1199,24 @@ void otx2_free_aura_ptr(struct otx2_nic *pfvf, int type)
+>  	/* Free SQB and RQB pointers from the aura pool */
+>  	for (pool_id = pool_start; pool_id < pool_end; pool_id++) {
+>  		iova = otx2_aura_allocptr(pfvf, pool_id);
+> +		pool = &pfvf->qset.pool[pool_id];
+>  		while (iova) {
+>  			if (type == AURA_NIX_RQ)
+>  				iova -= OTX2_HEAD_ROOM;
+>  
+>  			pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
+> -			dma_unmap_page_attrs(pfvf->dev, iova, size,
+> -					     DMA_FROM_DEVICE,
+> -					     DMA_ATTR_SKIP_CPU_SYNC);
+> -			put_page(virt_to_page(phys_to_virt(pa)));
+> +			page = virt_to_page(phys_to_virt(pa));
+
+virt_to_page() seems ok for order-0 page allocated from page
+pool as it does now, but it may break for order-1+ page as
+page_pool_put_page() expects head page of compound page or base
+page. Maybe add a comment for that or use virt_to_head_page()
+explicitly.
+
+> +
+> +			if (pool->page_pool) {
+> +				page_pool_put_page(pool->page_pool, page, size, true);
+
+page_pool_put_full_page() seems more appropriate here, as the
+PP_FLAG_DMA_SYNC_DEV flag is not set, even if it is set, it seems
+the whole page need to be synced instead of a frag.
+
+
+> +			} else {
+> +				dma_unmap_page_attrs(pfvf->dev, iova, size,
+> +						     DMA_FROM_DEVICE,
+> +						     DMA_ATTR_SKIP_CPU_SYNC);
+> +
+> +				put_page(page);
+> +			}
+> +
+>  			iova = otx2_aura_allocptr(pfvf, pool_id);
+>  		}
+>  	}
+> @@ -1196,6 +1234,8 @@ void otx2_aura_pool_free(struct otx2_nic *pfvf)
+>  		pool = &pfvf->qset.pool[pool_id];
+>  		qmem_free(pfvf->dev, pool->stack);
+>  		qmem_free(pfvf->dev, pool->fc_addr);
+> +		page_pool_destroy(pool->page_pool);
+> +		pool->page_pool = NULL;
+>  	}
+>  	devm_kfree(pfvf->dev, pfvf->qset.pool);
+>  	pfvf->qset.pool = NULL;
+> @@ -1279,8 +1319,10 @@ static int otx2_aura_init(struct otx2_nic *pfvf, int aura_id,
+>  }
+>  
+>  static int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
+> -			  int stack_pages, int numptrs, int buf_size)
+> +			  int stack_pages, int numptrs, int buf_size,
+> +			  int type)
+>  {
+> +	struct page_pool_params pp_params = { 0 };
+>  	struct npa_aq_enq_req *aq;
+>  	struct otx2_pool *pool;
+>  	int err;
+> @@ -1324,6 +1366,22 @@ static int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
+>  	aq->ctype = NPA_AQ_CTYPE_POOL;
+>  	aq->op = NPA_AQ_INSTOP_INIT;
+>  
+> +	if (type != AURA_NIX_RQ) {
+> +		pool->page_pool = NULL;
+> +		return 0;
+> +	}
+> +
+> +	pp_params.flags = PP_FLAG_PAGE_FRAG | PP_FLAG_DMA_MAP;
+> +	pp_params.pool_size = numptrs;
+> +	pp_params.nid = NUMA_NO_NODE;
+> +	pp_params.dev = pfvf->dev;
+> +	pp_params.dma_dir = DMA_FROM_DEVICE;
+> +	pool->page_pool = page_pool_create(&pp_params);
+> +	if (!pool->page_pool) {
+> +		netdev_err(pfvf->netdev, "Creation of page pool failed\n");
+> +		return -EFAULT;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1358,7 +1416,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
+>  
+>  		/* Initialize pool context */
+>  		err = otx2_pool_init(pfvf, pool_id, stack_pages,
+> -				     num_sqbs, hw->sqb_size);
+> +				     num_sqbs, hw->sqb_size, AURA_NIX_SQ);
+>  		if (err)
+>  			goto fail;
+>  	}
+> @@ -1421,7 +1479,7 @@ int otx2_rq_aura_pool_init(struct otx2_nic *pfvf)
+>  	}
+>  	for (pool_id = 0; pool_id < hw->rqpool_cnt; pool_id++) {
+>  		err = otx2_pool_init(pfvf, pool_id, stack_pages,
+> -				     num_ptrs, pfvf->rbsize);
+> +				     num_ptrs, pfvf->rbsize, AURA_NIX_RQ);
+>  		if (err)
+>  			goto fail;
+>  	}
+
+...
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> index 7045fedfd73a..df5f45aa6980 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+> @@ -217,9 +217,10 @@ static bool otx2_skb_add_frag(struct otx2_nic *pfvf, struct sk_buff *skb,
+>  		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
+>  				va - page_address(page) + off,
+>  				len - off, pfvf->rbsize);
+> -
+> +#ifndef CONFIG_PAGE_POOL
+
+Most driver does 'select PAGE_POOL' in config when adding page
+pool support, is there any reason it does not do it here?
+
+>  		otx2_dma_unmap_page(pfvf, iova - OTX2_HEAD_ROOM,
+>  				    pfvf->rbsize, DMA_FROM_DEVICE);
+> +#endif
+>  		return true;
+>  	}
+>  
+> @@ -382,6 +383,8 @@ static void otx2_rcv_pkt_handler(struct otx2_nic *pfvf,
+>  	if (pfvf->netdev->features & NETIF_F_RXCSUM)
+>  		skb->ip_summed = CHECKSUM_UNNECESSARY;
+>  
+> +	skb_mark_for_recycle(skb);
+> +
+>  	napi_gro_frags(napi);
+>  }
+>  
+> @@ -1180,11 +1183,14 @@ bool otx2_sq_append_skb(struct net_device *netdev, struct otx2_snd_queue *sq,
+>  }
+>  EXPORT_SYMBOL(otx2_sq_append_skb);
+>  
+> -void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+> +void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq, int qidx)
+>  {
+>  	struct nix_cqe_rx_s *cqe;
+>  	int processed_cqe = 0;
+> +	struct otx2_pool *pool;
+> +	struct page *page;
+>  	u64 iova, pa;
+> +	u16 pool_id;
+>  
+>  	if (pfvf->xdp_prog)
+>  		xdp_rxq_info_unreg(&cq->xdp_rxq);
+> @@ -1192,6 +1198,9 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+>  	if (otx2_nix_cq_op_status(pfvf, cq) || !cq->pend_cqe)
+>  		return;
+>  
+> +	pool_id = otx2_get_pool_idx(pfvf, AURA_NIX_RQ, qidx);
+> +	pool = &pfvf->qset.pool[pool_id];
+> +
+>  	while (cq->pend_cqe) {
+>  		cqe = (struct nix_cqe_rx_s *)otx2_get_next_cqe(cq);
+>  		processed_cqe++;
+> @@ -1205,8 +1214,14 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+>  		}
+>  		iova = cqe->sg.seg_addr - OTX2_HEAD_ROOM;
+>  		pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
+> -		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize, DMA_FROM_DEVICE);
+> -		put_page(virt_to_page(phys_to_virt(pa)));
+> +		page = virt_to_page(phys_to_virt(pa));
+> +
+> +		if (pool->page_pool) {
+> +			page_pool_put_page(pool->page_pool, page, pfvf->rbsize, true);
+> +		} else {
+> +			otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize, DMA_FROM_DEVICE);
+> +			put_page(page);
+> +		}
+
+Maybe add a helper for the above as there is a similiar code block
+in the otx2_free_aura_ptr()
+
+
 > 
-> This is a good point. At this point it is really something we 
-> overlooked. We will have to revisit this and figure out the best way to 
-> find the final event log depending on how things booted.
-
-I believe Ross misunderstood what you were asking for here. There are 
-two reasons this is not possible or desired. The first reason is that on 
-Intel, the DRTM log is not initialized by TrenchBoot code in the 
-preamble. It is only responsible for allocating a buffer and recording 
-the location in the TXT structures. When the SINIT ACM is executed, it 
-will initialize the log and record the measurement that CPU sent 
-directly to the TPM and then the measurements the ACM makes of the 
-environment. If you pointed at the SRTM log, then the ACM would write 
-over existing log, which I don't think you want. Now if you pointed at 
-the tail end of the SRTM log, you would still end up with a second, 
-separate log that just happens to be memory adjacent. The second reason 
-is more from a trusted computing perspective, these are two different 
-trust chains starting from two different Roots of Trust reflecting two 
-different temporal states of the system, i.e. freshness. Typically this 
-is were most will point out the need to have a measure of the resident 
-firmware, i.e. SMM. To address that, should Intel to publish the spec 
-for interacting with PPAM[1], TrenchBoot will be able to finally close 
-the SMM gap, giving runtime validation of SMM.
-
-[1] 
-https://www.intel.com/content/dam/www/central-libraries/us/en/documents/drtm-based-computing-whitepaper.pdf
-
-v/r,
-dps
