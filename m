@@ -2,86 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6BD7057ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19FC7057F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjEPTvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S229669AbjEPTvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjEPTu6 (ORCPT
+        with ESMTP id S229585AbjEPTvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:50:58 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EF019A7
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:50:55 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5208be24dcbso10513865a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684266655; x=1686858655;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lsVpd25y2UfIYmy92zRzM4OcUZ302mvg/5EXsXmtSwA=;
-        b=UXJCDwRPf+VMxuUx1hPCVMQIGTgGB+nZ/DfJxYzeBsmbckCVRZFB0Jb0IEu1/ZQZ0P
-         sdq45g8RsnKrolytupambK66HEuV2wyzt+PFKRmuYbf4XYGTAGQKEXEm9A0OHlGgO4fN
-         61YQmAi4KSRMz59MBqhluIa6skCKhhPcpk6qi53uxgm41m9Yjy06LoqamMs2evIbElWZ
-         f8KGK/98GXG4VKyIf3NtOtFJiIPqb1L0qTJsm1PqohJ9zAjWUbCjIfR+L4rmt5bEwdwV
-         3fLLjuriNvYNhwKRc+g1Pic2geHuDa3OqHq327xSA3opeUVfC0aDHyjE0HhxTkYLIxgo
-         dJJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684266655; x=1686858655;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lsVpd25y2UfIYmy92zRzM4OcUZ302mvg/5EXsXmtSwA=;
-        b=eiPSpVj5OFy1iN4/mJF8iYxLN/4O+x8z0QqK2NHF+L17zc6Ty4cvshaHVz1jf8vke7
-         ElsybxUe5Prtd9TCnB/ST3hJGD3U3oJf3Bb/XHA1V9JFqsbQJ/hEb3iGEmgYEOqLa1yb
-         MAbMhMoWuYe2Wwmhdt5MWpqcF+wN83M5Fpuz0Jt7XFAtDNkiiKjJ2pYBTDcJeEtypluq
-         ao+U1wo369pwhIYUm/43gKDnzCVP6V2CbLonvCgMmeBJZ+6glFCkN+UnF434A+B0L5te
-         O6Np6/nBZY7MXipEEqhlCOuu9HDUZ5Fv66pf4mQQkRbOARDIRe8IE3S8rX7iORX3vAUW
-         SANg==
-X-Gm-Message-State: AC+VfDx1TMk3dnElVClVp4SF9b1WfaS3NYbaPT2bvk7xKxkPIwwQSZ08
-        HxfmFKg4sHreS6PpHdJJF/5+390t9us=
-X-Google-Smtp-Source: ACHHUZ4TwYpZMtj+jBAFthSHMtdAp50UKGy25FHHjqCdqMTL37U8KZW9ahwZExD7zHWo6H5BpB/Zmg==
-X-Received: by 2002:a05:6a20:7d83:b0:100:a6ba:ba1b with SMTP id v3-20020a056a207d8300b00100a6baba1bmr40240287pzj.51.1684266654782;
-        Tue, 16 May 2023 12:50:54 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t24-20020a63dd18000000b0053071b00c49sm10369702pgg.23.2023.05.16.12.50.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 12:50:54 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 16 May 2023 12:50:52 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.4-rc2
-Message-ID: <ef156fb3-ead6-41f2-9938-fb7ba458c292@roeck-us.net>
-References: <CAHk-=wj3jDtVCi2LqyijGzut2cq=AkPrAMfF0+6gtZ1WB6ruWQ@mail.gmail.com>
+        Tue, 16 May 2023 15:51:38 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9C5BD76B1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:51:31 -0700 (PDT)
+Received: (qmail 845160 invoked by uid 1000); 16 May 2023 15:51:30 -0400
+Date:   Tue, 16 May 2023 15:51:30 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
+Message-ID: <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-36-schnelle@linux.ibm.com>
+ <2023051643-overtime-unbridle-7cdd@gregkh>
+ <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wj3jDtVCi2LqyijGzut2cq=AkPrAMfF0+6gtZ1WB6ruWQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 01:03:27PM -0700, Linus Torvalds wrote:
-> It's Mother's Day, which obviously means that you can surprise her
-> with a brand new kernel. And you're in luck, since I just happened to
-> push out the very newest one: 6.4-rc2 is out there in all the usual
-> places.
+On Tue, May 16, 2023 at 06:44:34PM +0200, Arnd Bergmann wrote:
+> On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
+> > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
+> 
+> >>  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
+> >>  /* Support PCI only */
+> >>  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> >>  {
+> >> -	return inl(uhci->io_addr + reg);
+> >> +	return UHCI_IN(inl(uhci->io_addr + reg));
+> >>  }
+> >>  
+> >>  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
+> >>  {
+> >> -	outl(val, uhci->io_addr + reg);
+> >> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+> >
+> > I'm confused now.
+> >
+> > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
+> >
+> > But if it isn't, then these are just no-ops that do nothing?  So then
+> > the driver will fail to work?  Why have these stubs at all?
+> >
+> > Why not just not build the driver at all if this option is not enabled?
+> 
+> If I remember correctly, the problem here is the lack of
+> abstractions in the uhci driver, it instead supports all
+> combinations of on-chip non-PCI devices using readb()/writeb()
+> and PCI devices using inb()/outb() in a shared codebase.
 
-Build results:
-	total: 152 pass: 152 fail: 0
-Qemu test results:
-	total: 520 pass: 520 fail: 0
+Isn't that an abstraction?  A single set of operations (uhci_readl(), 
+uhci_writel(), etc.) that always does the right sort of I/O even when 
+talking to different buses?
 
-Guenter
+So I'm not sure what you mean by "the lack of abstractions".
+
+> A particularly tricky combination is a kernel that supports on-chip
+> UHCI as well as CONFIG_USB_PCI (for EHCI/XHCI) but does not support
+> I/O ports because of platform limitations. The trick is to come up
+> with a set of changes that doesn't have to rewrite the entire logic
+> but also doesn't add an obscene number of #ifdef checks.
+
+Indeed, in a kernel supporting that tricky combination the no-op code 
+would be generated.  But it would never execute at runtime because the 
+uhci_has_pci_registers(uhci) test would always return 0, and so the 
+driver wouldn't fail.
+
+> That said, there is a minor problem with the empty definition
+> 
+> +#define UHCI_OUT(x)
+> 
+> I think this should be "do { } while (0)" to avoid warnings
+> about empty if/else blocks.
+
+I'm sure Niklas wouldn't mind making such a change.  But do we really 
+get such warnings?  Does the compiler really think that this kind of 
+(macro-expanded) code:
+
+	if (uhci_has_pci_registers(uhci))
+		;
+	else if (uhci_is_aspeed(uhci))
+		writel(val, uhci->regs + uhci_aspeed_reg(reg));
+
+deserves a warning?  I write stuff like that fairly often; it's a good 
+way to showcase a high-probability do-nothing pathway at the start of a 
+series of conditional cases.  And I haven't noticed any complaints from 
+the compiler.
+
+Alan Stern
