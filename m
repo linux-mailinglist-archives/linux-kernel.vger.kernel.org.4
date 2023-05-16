@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 304037043E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF68B7043E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 05:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjEPDND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 23:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
+        id S229889AbjEPDQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 23:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEPDNB (ORCPT
+        with ESMTP id S229502AbjEPDQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 23:13:01 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C6A65B4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:13:00 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-62135cf0adcso39502076d6.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:13:00 -0700 (PDT)
+        Mon, 15 May 2023 23:16:29 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB0765AD
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:16:25 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ab0c697c84so103743175ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 20:16:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684206779; x=1686798779;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RllGWZ4DaU1HnlvuJFnMhFPh8NZt7oPNf60Dp85Uygs=;
-        b=KRB8Dugc/4arKm55u1U1HMU9yLQwqZlq3mMM9q6zbfmnnzJpSQHVEnkDy6oTNXQ77E
-         2avWMKLy/XFTuIvCvPoO9VNK+SAhu/ML6sE57C9kd3F4felE7u6TazmLSM9PCugeM/jZ
-         HOdoTAiTxMzCNnRi7z3zYfZyPz3xpovnvPUPsqXTH/Jfy1Oyq6XVrywssreeM/jjsF1s
-         hOIuFV+hNbw9jpPjpVWZntmuQVe+C3IRoH/Nt8WqrGdDsX1GATs1p3lk7vqGKqipStZG
-         3reKUfvcDX8VFKywt3uIhG6PR3J38TiEB6GCz17mYUbkeKv6EWHxhnuhE5Hx7TSdtycl
-         3E9w==
+        d=bytedance.com; s=google; t=1684206985; x=1686798985;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WgtD6NWn+yBw7bCSBz6q/JMuhsMH9v6AcBcOE2Ac/FU=;
+        b=d3u7Oa9Bgv2nPkzbBtkLeZfQ6NonojKT6HDw4rH5DO7A/Fc1RDMOQNH1HYXPAXIvL9
+         gVwE12SdoEoazAUejjI26GczAv0kNxnT2sk3AwkfabuAtRiLEKYobWoTzhzRmf1yZD/i
+         akatatQJ7DfG41KD7QZiFZBptLLuezlzAVq4DO9zj0CXaW7d7GO6pi3L5xxK9pjc++LG
+         eSxrBk8j7CRreZMUkRoVr+50hTqKoU7AiYeov7G2XEkVuunz2qNp80k3OPnOCWIlgigR
+         BPTT5Cnrf2J+vOesWfqA6doBuAt+MGOvwI3vZyo4+2tzKS6YYsJ5kPbsqwW8bnyjHgn8
+         x8wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684206779; x=1686798779;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RllGWZ4DaU1HnlvuJFnMhFPh8NZt7oPNf60Dp85Uygs=;
-        b=Sw2jmU7Ley8LhLAkouuS5QiR6kfPLiDtue/Tw/8zOVRYTJRGhpYL3mJYhCCbbAzMuT
-         ahM1iiRDYjM4wrXegqgdbmIXvSlWD8UFK2iAzZHu9IHbN5erOcKaTDN2tGXFKx258REl
-         VEMhAzFkNYvLNXOQ+Ox4a3Wk7DeAaAbuwQO4Kd/6V+lKENwWcnjlovHTwSJyungdpP/a
-         Qgie9yWLWcwH1vfzDoHzrUJcXlWtNVQkm0Hh6jzRzQL5TDglhmUpO+iFNKZG3vUqDOgX
-         UMZPZE9TVkaNjQog3FZw0+4yfhOG+fHbwuYfdbeQd2Z0BAqhKqMX68sH9RdtXPgdifzd
-         3pQA==
-X-Gm-Message-State: AC+VfDxOlH0pQ4lKSxWG6nI1NE3Py2gMSu1DmkMt9uBDI6/7zphXyz49
-        oJjCF0vY+OHSizY++sL/e8ID17YJ/69P6yFmmdTv30vXACDuSbzf7XjoTY0yHf8=
-X-Google-Smtp-Source: ACHHUZ6BDSWA0d0LCkYI84mfMecurWgNaLJ2UFz/UFNSQeduQ872yGnRDB920D9EnWjeo8DWGm0n6D5z6dC7XNCXcgU=
-X-Received: by 2002:a05:6214:e46:b0:621:2641:c656 with SMTP id
- o6-20020a0562140e4600b006212641c656mr39757641qvc.31.1684206779197; Mon, 15
- May 2023 20:12:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684206985; x=1686798985;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WgtD6NWn+yBw7bCSBz6q/JMuhsMH9v6AcBcOE2Ac/FU=;
+        b=D9BKmjNSOqWY6ks3jw/ZedWScDV4rqwaNIP+smCUCK6BT5e8PGFDBtWluVX0Xb5S5g
+         2gq1lCdI0aITNJ69PmFhysqyWhiFReJska3L1KcvrpUm+MMhb9YC+4MSgKLoreBSl1id
+         1c8wBDh/IH41XCEkisQdK5SKawH4c+mWc2sJORX/d81QqzxJzoQ/yEomianKPojSkieu
+         woffZJKwISkXs1RW5+1R8EzB8D07hKohkw5tC+WipYJC9zg8y2viwO/5dMaSzUl2xIYv
+         Mm+qJRLaH7Miyxl0FR8/Pq0Cr9oxiDwPESD86Qa71UwXymdJvrM/2GpzwybXgh2QF/yb
+         z79Q==
+X-Gm-Message-State: AC+VfDy989TfS0LMuiqv3aJ8CFveL1kQg+4EoBS0CfGQEo7dBBxm/xc9
+        s9Zp65vkkGJKGwAiQuk4LtOpqg==
+X-Google-Smtp-Source: ACHHUZ4jctqSgC3lzNkJy+uVZdxEdM4N6x3K7ATaLKzbLOLrls8GqOGYgbDiaxuhoHzg9Oa3X4kVOQ==
+X-Received: by 2002:a17:902:a503:b0:1ae:197f:dba9 with SMTP id s3-20020a170902a50300b001ae197fdba9mr6390946plq.2.1684206985109;
+        Mon, 15 May 2023 20:16:25 -0700 (PDT)
+Received: from [10.70.247.178] ([139.177.225.232])
+        by smtp.gmail.com with ESMTPSA id iy3-20020a170903130300b001a68d45e52dsm14247279plb.249.2023.05.15.20.16.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 20:16:24 -0700 (PDT)
+Message-ID: <b30aa10f-7abc-11a0-552d-56fc88d534f7@bytedance.com>
+Date:   Tue, 16 May 2023 11:16:18 +0800
 MIME-Version: 1.0
-References: <cover.1683688960.git.nicolinc@nvidia.com> <CABQgh9FL4ssQjBJM52_kb0aBVVPb_9Wc0Q+NL1PaQO=2LYBHCA@mail.gmail.com>
- <ZGJWgFVJDWxVpiBE@Asurada-Nvidia>
-In-Reply-To: <ZGJWgFVJDWxVpiBE@Asurada-Nvidia>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Date:   Tue, 16 May 2023 11:12:44 +0800
-Message-ID: <CABQgh9FMGPnUpz6tc6c27i6nT0Lcs9YQMoO=V40Fi2inJiCh-A@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] Add Nested Translation Support for SMMUv3
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     jgg@nvidia.com, robin.murphy@arm.com, will@kernel.org,
-        eric.auger@redhat.com, kevin.tian@intel.com,
-        baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        alex.williamson@redhat.com, yi.l.liu@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+From:   Gang Li <ligang.bdlg@bytedance.com>
+Subject: Re: [QUESTION FOR ARM64 TLB] performance issue and implementation
+ difference of TLB flush
+To:     x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Cc:     Will Deacon <will@kernel.org>,
+        Tomasz Nowicki <tomasz.nowicki@linaro.org>,
+        Laura Abbott <lauraa@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <2eb026b8-9e13-2b60-9e14-06417b142ac9@bytedance.com>
+ <ZEokfJSM9a4ZZvQv@FVFF77S0Q05N>
+ <369d1be2-d418-1bfb-bfc2-b25e4e542d76@bytedance.com>
+ <8d8c2ed5-c29b-8ea6-84b3-3335d0682d0d@bytedance.com>
+Content-Language: en-US
+In-Reply-To: <8d8c2ed5-c29b-8ea6-84b3-3335d0682d0d@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,93 +86,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 at 23:58, Nicolin Chen <nicolinc@nvidia.com> wrote:
->
-> Hi Zhangfei,
->
-> On Mon, May 15, 2023 at 06:00:26PM +0800, Zhangfei Gao wrote:
->
-> > I rebased on these two branches and did some basic tests.
-> >
-> > The basic functions work after backport
-> > iommufd: Add IOMMU_PAGE_RESPONSE
-> > iommufd: Add device fault handler support
-> >
-> > https://github.com/Linaro/linux-kernel-warpdrive/tree/uacce-devel-6.4
-> > https://github.com/Linaro/qemu/tree/iommufd-6.4-nesting-smmuv3-v2
->
-> Thanks for testing!
->
-> > However when debugging hotplug PCI device, it still does not work,
-> > Segmentation fault same as 6.2.
-> >
-> > guest kernel
-> > CONFIG_HOTPLUG_PCI_PCIE=y
-> >
-> > boot guest (this info does not appear in 6.2)
-> > qemu-system-aarch64: -device
-> > vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
-> > Failed to set data -1
-> > qemu-system-aarch64: -device
-> > vfio-pci,host=0000:76:00.1,bus=pci.1,addr=0x0,id=acc1,iommufd=iommufd0:
-> > failed to set device data
->
-> Hmm.. I wonder what fails the set_dev_data ioctl...
-Simply debug, it is because dev_data.sid=0, causing
-arm_smmu_set_dev_user_data fail
+Hi all!
 
-hw/arm/smmu-common.c
-smmu_dev_set_iommu_device
-.sid = smmu_get_sid(sdev)
-smmu_dev_set_iommu_device dev_data.sid=0
+On 2023/5/5 20:28, Gang Li wrote:
+> Hi,
+> 
+> I found that in `ghes_unmap` protected by spinlock, arm64 and x86 have
+> different strategies for flushing tlb.
+> 
+> # arm64 call trace:
+> ```
+> holding a spin lock
+> ghes_unmap
+>   clear_fixmap
+>    __set_fixmap
+>     flush_tlb_kernel_range
+> ```
+> 
+> # x86 call trace:
+> ```
+> holding a spin lock
+> ghes_unmap
+>   clear_fixmap
+>    __set_fixmap
+>     mmu.set_fixmap
+>      native_set_fixmap
+>       __native_set_fixmap
+>        set_pte_vaddr
+>         set_pte_vaddr_p4d
+>          __set_pte_vaddr
+>           flush_tlb_one_kernel
+> ```
+>
+> arm64 broadcast TLB invalidation in ghes_unmap, because TLB entry can be
+> allocated regardless of whether the CPU explicitly accesses memory.
+> 
+> Why doesn't x86 broadcast TLB invalidation in ghes_unmap? Is there any
+> difference between x86 and arm64 in TLB allocation and invalidation 
+> strategy?
+> 
 
-drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-arm_smmu_set_dev_user_data
-u32 sid_user = user->sid;
-if (!sid_user) return -EINVAL;
+I found this in Intel® 64 and IA-32 Architectures Software Developer
+Manuals:
 
->
-> > $ sudo nc -U /tmp/qmpm_1.socket
-> > (qemu) info pci
-> > (qemu) device_del acc1
-> >
-> > guest:
-> > qemu-system-aarch64: IOMMU_IOAS_UNMAP failed: No such file or directory
-> > qemu-system-aarch64: vfio_container_dma_unmap(0xaaaae1fc0380,
-> > 0x8000000000, 0x10000) = -2 (No such file or directory)
->
-From ex-email reply
-(Eric) In qemu arm virt machine 0x8000000000 matches the PCI MMIO region.
-(Yi) Currently, iommufd kernel part doesn't support mapping device BAR MMIO.
-This is a known gap.
+> 4.10.2.3 Details of TLB Use
+> Subject to the limitations given in the previous paragraph, the
+> processor may cache a translation for any linear address, even if that
+> address is not used to access memory. For example, the processor may
+> cache translations required for prefetches and for accesses that result
+> from speculative execution that would never actually occur in the
+> executed code path.
 
-> This is resulted from the following commit that we should
-> drop later:
->
-> commit c4fd2efd7c02dd30491adf676c1b0aed67656f36
-> Author: Yi Liu <yi.l.liu@intel.com>
-> Date:   Thu Apr 27 05:47:03 2023 -0700
->
->     vfio/container: Skip readonly pages
->
->     This is a temparary solution for Intel platform due to an errata in
->     which readonly pages in second stage page table is exclusive with
->     nested support.
->
->     Signed-off-by: Yi Liu <yi.l.liu@intel.com>
->
->
-> > qemu-system-aarch64: Failed to unset data -1
-> > Segmentation fault (core dumped).  // also happened in 6.2
->
-> Hmm, would it be possible for you to run the test again by
-> adding the following tracers to your QEMU command?
->     --trace "iommufd*" \
->     --trace "smmu*" \
->     --trace "vfio_*" \
->     --trace "pci_*"
->
+Both x86 and arm64 can cache TLB for prefetches and speculative
+execution. Then why are their flush policies different?
 
-Have sent you the log directly, since it is too big.
-
-Thanks
+Thanks,
+Gang Li
