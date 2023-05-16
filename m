@@ -2,125 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D887056E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311F07056EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 21:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjEPTQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 15:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S229666AbjEPTRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 15:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjEPTQD (ORCPT
+        with ESMTP id S229631AbjEPTR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 15:16:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4849B525D;
-        Tue, 16 May 2023 12:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684264561; x=1715800561;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kFUQ6MboftdOLOEvZid5f2b59TWc3NhFgO6Ggzr+aXU=;
-  b=lxpzhrY+TPvyXsk1sFUsJIe4TxXGMtmX7BbxQMTKceHyDLmgfeNeJNyA
-   dHqMrEx9nH8l121ACHSXlM/+NvQdXJ+tQnOnWUmio7e1+LPDCRMUuGAwc
-   DK6+RnycM6wKfAaU02Qh76v3twxPwdqjJNeikGMzJjNEkrXScOQDJl6j+
-   oCLMsyDdAuTALRljo+6yvzR484V1/2jc/gcRAT90F/EXFsdFju19eH9Lf
-   eQlVBC8kZqhw5wW8Dm8ogtDW9w8N64c6Kv1r2wmnfVtXJ4Cx2bar9c+Ej
-   A4sE34Y/GsRprMch3buw55qEOvIKRHVydYjV14mdFTYPeO81L+L2bR2i1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="340941498"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="340941498"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 12:16:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="678966984"
-X-IronPort-AV: E=Sophos;i="5.99,278,1677571200"; 
-   d="scan'208";a="678966984"
-Received: from unisar-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.219.243])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 12:15:52 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D219F10C8C1; Tue, 16 May 2023 22:15:49 +0300 (+03)
-Date:   Tue, 16 May 2023 22:15:49 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCHv11 6/9] efi/unaccepted: Avoid load_unaligned_zeropad()
- stepping into unaccepted memory
-Message-ID: <20230516191549.tjub26jvlqymp27x@box.shutemov.name>
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <20230513220418.19357-7-kirill.shutemov@linux.intel.com>
- <CAMj1kXG488uW=dpvbfvdN1fMZVJ3kCZQoW3UVQJW1F2VEXyxHg@mail.gmail.com>
- <6fe42f66-819c-f2c8-176b-759c1c5a9cf5@intel.com>
- <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
+        Tue, 16 May 2023 15:17:29 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777973A81
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:17:27 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-55a010774a5so212473047b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 12:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684264646; x=1686856646;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NznzujyOJyNbnjSaoz9CRaFsnChHQPszQ2ixGOczZrc=;
+        b=NwMpZ+r4QJ/cUpYDi0gsuyYSS0blzpn4/pHjC7ud/sM1GUt6nG4ke/JtOgCZKKMsBn
+         Qw9SlDRtgA+Jj9QXPYeNgmfot9rAgXeYa53Yi2QCO69sI6BAS1UOhccVAlg8dQ2NjfjH
+         2rXoN18JNZcaiAeHnyduMOTQ+aFdzBby7mAgHBdszpwtmRWi1IEbnq28UTQ0zYXrvIwr
+         rgNb3hejJXpwyCTgjaVuFHkPzsW1k/pplmbbiPTUeoi7Pp8KbjGEKVPU9Toti2s3T4f1
+         CjlUO/hi9Tu5zIVnhiqz5Z3keeJ9LZgviTE9u2YE5jYO7xfDiUODLEJaz/xQVPg8Lafh
+         xm7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684264646; x=1686856646;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NznzujyOJyNbnjSaoz9CRaFsnChHQPszQ2ixGOczZrc=;
+        b=GC+dpsABNCCgqCzP5SjwdjQRmIyADeUoDu9k5MviPI9du9VqrOJvIQYTTpj+/Qb733
+         NHDptAH/a0TxWz7mA3pWwuAiYYPxUVc+JiApkqej6wHnbrNnJD7/vgdD1M+3wHKmMICE
+         7GhgO2fUfagdkt1ahxIz22spFENUi1btjHczKAE7C2gXzY7WUc91x40z5FOjChbaG89g
+         QkMUFbHbgs1ejE4tTn2EcUDj1xFGf+W5dtiULifsxXKUAxc11IhdERspxrkuKshjD2/q
+         D8CQoYWJ86QxIFCJmYYc+Rm7PepqcqFiSb+VFZhmWyFLzm4d8lw5u0Hpk+P6+5w0hrZV
+         WVAg==
+X-Gm-Message-State: AC+VfDzYnfwS77D3g8lJSqNjVMaT+SV+v0vUP8Fwkk6lDWpByY66Mv2P
+        743q5yaH3yel9Iegs2dYGrjSYnJgCGhTfEXN2nyviQ==
+X-Google-Smtp-Source: ACHHUZ4fN6ZvOHVMrjpM38dbrTF0vq9ndvGzrrcTvQuObM37IZqpp9d3swNrt6OnWc5xKOZXJLqNXPG/9NwnyDG/1d0=
+X-Received: by 2002:a81:c214:0:b0:561:8c2f:d050 with SMTP id
+ z20-20020a81c214000000b005618c2fd050mr2528895ywc.15.1684264646646; Tue, 16
+ May 2023 12:17:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHE7_PrW44Y073=4orY6yVST+CHEA7KCo_0z_uRLew6fQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1683628357.git.quic_schowdhu@quicinc.com>
+ <343182748e12b6a4ac57d336405c50e36fc5520c.1683628357.git.quic_schowdhu@quicinc.com>
+ <CAA8EJpp2x2OEB2sg+caKmjkDYJp_NJ9mXo85FxTZr-9zRXHNhw@mail.gmail.com> <7d397e67-5d56-4975-98af-1ac9746c07f4@app.fastmail.com>
+In-Reply-To: <7d397e67-5d56-4975-98af-1ac9746c07f4@app.fastmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 16 May 2023 22:17:15 +0300
+Message-ID: <CAA8EJpoMGyAJBTw1-=+NT=ysy+cpc4EpJSv1SABJVh2BscdJ+g@mail.gmail.com>
+Subject: Re: [PATCH V6 1/3] dt-bindings: sram: qcom,imem: Add Boot Stat region
+ within IMEM
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 08:35:27PM +0200, Ard Biesheuvel wrote:
-> On Tue, 16 May 2023 at 20:27, Dave Hansen <dave.hansen@intel.com> wrote:
+On Tue, 16 May 2023 at 11:16, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, May 9, 2023, at 13:35, Dmitry Baryshkov wrote:
+> > On Tue, 9 May 2023 at 13:53, Souradeep Chowdhury
+> > <quic_schowdhu@quicinc.com> wrote:
+> >>
+> >> All Qualcomm bootloaders log useful timestamp information related
+> >> to bootloader stats in the IMEM region. Add the child node within
+> >> IMEM for the boot stat region containing register address and
+> >> compatible string.
 > >
-> > On 5/16/23 11:08, Ard Biesheuvel wrote:
-> > >> But, this approach does not work for unaccepted memory. For TDX, a load
-> > >> from unaccepted memory will not lead to a recoverable exception within
-> > >> the guest. The guest will exit to the VMM where the only recourse is to
-> > >> terminate the guest.
-> > >>
-> > > Does this mean that the kernel maps memory before accepting it? As
-> > > otherwise, I would assume that such an access would page fault inside
-> > > the guest before triggering an exception related to the unaccepted
-> > > state.
-> >
-> > Yes, the kernel maps memory before accepting it (modulo things like
-> > DEBUG_PAGEALLOC).
-> >
-> 
-> OK, and so the architecture stipulates that prefetching or other
-> speculative accesses must never deliver exceptions to the host
-> regarding such ranges?
-> 
-> If this all works as it should, then I'm ok with leaving this here,
-> but I imagine we may want to factor out some arch specific policy here
-> in the future, as I don't think this would work the same on ARM.
+> > I might have a minor vote here. Is there any reason why you have to
+> > instantiate the device from DT?
+> > It looks like a software interface. Ideally software should not be
+> > described in DT (e.g. this can be instantiated from imem
+> > driver-to-be).
+>
+> There is nothing wrong with describing firmware in DT, if that
+> firmware is part of the platform, we do that for a lot of
+> other bits of firmware.
+>
+> However, in this specific case, many things are wrong with the
+> implementation, and neither the DT binding nor the driver
+> makes sense to me in its current state.
+>
+> >> +  "^stats@[0-9a-f]+$":
+> >> +    type: object
+> >> +    description:
+> >> +      Imem region dedicated for storing timestamps related
+> >> +      information regarding bootstats.
+> >> +
+> >> +    additionalProperties: false
+> >> +
+> >> +    properties:
+> >> +      compatible:
+> >> +        items:
+> >> +          - enum:
+> >> +              - qcom,sm8450-bootstats
+> >> +          - const: qcom,imem-bootstats
+> >> +
+> >> +      reg:
+> >> +        maxItems: 1
+>
+> If I understand this right, this "qcom,imem-bootstats"
+> device serves as an indirection to store additional
+> properties of the system in a memory area, but the description
+> of that area is more complex than its contents, which
+> makes no sense to me.
+>
+> Just create a binding for a firmware node in the devicetree
+> itself, and put the values in properties of that. The first
+> stage firmware can still use the same interface, but the
+> actual loader that assembles the DT can get it out of that
+> and store it in the properties. With that done, there is also
+> no need for a kernel driver, as userspace can just get the
+> values from /sys/firmware/devicetree/ directly.
 
-Even if other architectures don't need this, it is harmless: we just
-accept one unit ahead of time.
+This sounds good, except the always-present issue of the devices which
+have already been released. Usually we can not expect a bootloader
+update for these devices.
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+With best wishes
+Dmitry
