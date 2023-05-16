@@ -2,158 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E5B7055EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FCC705657
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbjEPS0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S230236AbjEPStT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbjEPSZy (ORCPT
+        with ESMTP id S229791AbjEPStP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:25:54 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32066E9D
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:25:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9BBCC21FC4;
-        Tue, 16 May 2023 18:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684261551; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rnEOKM6Uzt/actmg7zEiIw7A6rReXqMZszIGv86v3Sc=;
-        b=hVKBHkEfp0G9WWvqDJIdHuFRXQZMHBevK/kn/dSawYU4vH2GOG6M/k8315ldc28XvmzHt7
-        JVVV+17V5fs2C8MT3gspinafb6B59kjzf+39pBAGAxZXwHkDOEZsIMRYRfYjKtd/j48MOe
-        Ucek+oi57i2nKNml/BL1ltcex4CV/Ug=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684261551;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rnEOKM6Uzt/actmg7zEiIw7A6rReXqMZszIGv86v3Sc=;
-        b=tm91uIeD7vPtoub1sk+jMCmayoC3m/C8kJoTmIIOUbi0fGm7KoJe0U8e8lMF9s+yzr6liW
-        Ai4d6LArAkKNwxBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CD65E138F5;
-        Tue, 16 May 2023 18:25:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mLsJL67KY2TeVQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 16 May 2023 18:25:50 +0000
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: [PATCH v5 3/3] mm,page_owner: Filter out stacks by a threshold counter
-Date:   Tue, 16 May 2023 20:25:37 +0200
-Message-Id: <20230516182537.3139-4-osalvador@suse.de>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230516182537.3139-1-osalvador@suse.de>
-References: <20230516182537.3139-1-osalvador@suse.de>
+        Tue, 16 May 2023 14:49:15 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B52E4F;
+        Tue, 16 May 2023 11:49:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R9V+oMIGoGNwxnxCkTl+o6tp4hWkwrGDvGJAOtwfAf6Xnps28RyQYpyVNQDrny56r1dVXOdQLGgBt69aUqbnvYjQFqSflx/rVHZpVpjf178HtKCG18d1NoUWzYDSyvmDJXfnKg8MEXWbv4GhQMyEwsW+xdWKHxgssQawWUpyino1cWQwcvvI6Y4iclXpOJzlbLxGh/ULhcXkZikA0WHqWVgY9MX14I1ZkChGJ0BpCp8RidfmkBbMejCfuW76g/SOrg2YRHvRavGcBv9+IyJMvOVATMlZjEEXoQaAuYfxK5o2qkkMbqs2daKz4tYW28bXn4I3p7fA8gLuQJjvouHHlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tgJQGW92H9EgAFzAMCemC5nx7QQbXKO/jsvUv1+gn1E=;
+ b=k27a3ogko0zlSejSj/muFo2FQW0Bel87fXWpJk1LMusMJTBT+eGzcABprzqhfllr0ir2/0KqadXiGbIeyWIFFqXorcnh9VkBoDWNexuWpPPg3BUNtSVF8Cpk82ZfFN7XayFSYRdygnqPXmb+vo4HWl7uPy60unE+JyRSpbZh097ByYl3hqREfQygMC4/e4w9fZZlkvdhygU1YkBmWFPGts43lxR074+8+aLFJ0tKQpPnEykeegkFmkq0EvABy15D78GqRDfjvCx1vxDS9At2NHNo/PCyoJBsG+2mAu9p6AGY336ZUsInxKj3IURYUIQr2KU7u978MVR2zdxXEvrHLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tgJQGW92H9EgAFzAMCemC5nx7QQbXKO/jsvUv1+gn1E=;
+ b=kE8GmghiCRALdm20Y02ZHRDQuPABMkHsV+79hi1rcifj82Bpkvb9IokkdfxnDruSgCFwQSzwFG9MDEMAnalTAR8GXmfKP7isAG3Ym1p0sY57vFWpjIbEw7UwoJAhL0K/WWdSNr3A3W+WZsmabnoVWLZs3XcpHiueoqq/0WK8ZX0=
+Received: from BN0PR02CA0030.namprd02.prod.outlook.com (2603:10b6:408:e4::35)
+ by SJ0PR12MB6736.namprd12.prod.outlook.com (2603:10b6:a03:47a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
+ 2023 18:49:11 +0000
+Received: from BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e4:cafe::23) by BN0PR02CA0030.outlook.office365.com
+ (2603:10b6:408:e4::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.31 via Frontend
+ Transport; Tue, 16 May 2023 18:49:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT108.mail.protection.outlook.com (10.13.176.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.17 via Frontend Transport; Tue, 16 May 2023 18:49:10 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 16 May
+ 2023 13:49:07 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <heikki.krogerus@linux.intel.com>, <rafael@kernel.org>,
+        <ajayg@nvidia.com>, <andriy.shevchenko@linux.intel.com>
+CC:     <linux-i2c@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <Evan.Quan@amd.com>, <Lijo.Lazar@amd.com>,
+        <Sanket.Goswami@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH 0/2] Adjust logic for power_supply_is_system_supplied()
+Date:   Tue, 16 May 2023 13:25:39 -0500
+Message-ID: <20230516182541.5836-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT108:EE_|SJ0PR12MB6736:EE_
+X-MS-Office365-Filtering-Correlation-Id: 939e87f7-0116-4298-8d60-08db563e3c6e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AOhsuuI6ROzamXj1yQVZpGDRCQ5wVDjaV3QizDnMDTYogjsvCqnL1pC7FMecm7JD/0uaQpwK1wcgbbGmn8oT96KS3Ll2pmNaYRab+7BWOZ3as+GLe5+w6Nt1v5Tml7IxTHUQV6jPjhLxRS3hDOLvC0MOEd/dbgN4QF2HJbQB/2pfTKe2LILDP8Hif91IEAXacn3tb6U5YhG93n/TApyOjkZ8R8r+u/+RHtn0cCsXypMIuJm/Mmsl+X8kOYbxSO6Xg1Qj/zQmyCfryVfEysJ/e+zrkU4+4oBCdOgyjLN+PU7da4bgx6Mr9vd52R0qG65gG16NNg8ixLrAPDa2+y/dDkQjF47Vpqs2SJODTNq87K+T0vbWaaWGa+h1fWvTjYfhI+Ex51tOitgBDEep+lsTZvnHacJoEfQpO3vU8jsnoG9n1MJ96X9cKpjtXTBzB/KHTwllKwF5VVSmMKQd/JN+wsEXZxYqzVTrabC+GjEzNnyuYOLJysG16EvQ5+0fRDyZDtK8WkX9nVLnuv6fL+rcRgH4f9KukSwZSqt4ave0xYJyCry2ihTvxSKQhwbx6VrfTveQfE84iUawyl4hQB+A08bLHh2t3TkhJFHOt7ZbtwBZ6B9/i7CDalqM+cOPwviTwi6G9ItAN/tboOq5P12Rm52mDoPszqg0n04OsRI0xAW9A8ZI6hiHh3iEip/gFMtOmA/O221yBCJOrIhHeZ/9V4orAX3xOI1Ih1gQeCCap1PiyBVvfeCp3lBgXdg2BztiEodEwJGQQv0uuAoNZ7CzlC/uD7xD9q3dtKhZpy2coPQ=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199021)(36840700001)(40470700004)(46966006)(7696005)(86362001)(54906003)(82740400003)(16526019)(41300700001)(186003)(1076003)(4744005)(47076005)(36756003)(26005)(2906002)(8936002)(8676002)(336012)(426003)(2616005)(110136005)(44832011)(478600001)(5660300002)(6666004)(4326008)(36860700001)(83380400001)(70586007)(40480700001)(316002)(70206006)(81166007)(82310400005)(356005)(40460700003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 18:49:10.4427
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 939e87f7-0116-4298-8d60-08db563e3c6e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT108.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6736
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We want to be able to filter out the output on a threshold basis,
-in this way we can get rid of a lot of noise and focus only on those
-stacks which have an allegedly high counter.
+Some systems don't provide any ACPI power supplies, but drivers use
+the function power_supply_is_system_supplied() to make policy decisions.
 
-We can control the threshold value by a new file called
-'page_owner_threshold', which is 0 by default.
+This logic works fine until a new device is added to the system that
+provides a UCSI power supply. This power supply doesn't power the system
+but the logic assumes it does.
 
-Signed-off-by: Oscar Salvador <osalvador@suse.de>
----
- lib/stackdepot.c |  5 ++++-
- mm/page_owner.c  | 21 +++++++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
+This series adjusts the logic so that these power supplies are not
+considered when making these policy decisions.
 
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index c4af2e946500..7053221ce1d8 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -488,6 +488,9 @@ static struct stack_record *stack_depot_getstack(depot_stack_handle_t handle)
- }
- 
- #ifdef CONFIG_PAGE_OWNER
-+
-+extern unsigned long page_owner_stack_threshold;
-+
- void *stack_start(struct seq_file *m, loff_t *ppos)
- {
- 	unsigned long *table = m->private;
-@@ -543,7 +546,7 @@ int stack_print(struct seq_file *m, void *v)
- 
- 	if (!stack->size || stack->size < 0 ||
- 	    stack->size > PAGE_SIZE || stack->handle.valid != 1 ||
--	    refcount_read(&stack->count) < 1)
-+	    refcount_read(&stack->count) < page_owner_stack_threshold)
- 		return 0;
- 
- 	buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 2d97f6b34ea6..28c519fc9372 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -743,6 +743,23 @@ const struct file_operations page_owner_stack_operations = {
- 	.release        = seq_release,
- };
- 
-+unsigned long page_owner_stack_threshold;
-+
-+int page_owner_threshold_get(void *data, u64 *val)
-+{
-+	*val = page_owner_stack_threshold;
-+	return 0;
-+}
-+
-+int page_owner_threshold_set(void *data, u64 val)
-+{
-+	page_owner_stack_threshold = val;
-+	return 0;
-+}
-+
-+DEFINE_SIMPLE_ATTRIBUTE(proc_page_owner_threshold, &page_owner_threshold_get,
-+			&page_owner_threshold_set, "%llu");
-+
- static int __init pageowner_init(void)
- {
- 	if (!static_branch_unlikely(&page_owner_inited)) {
-@@ -755,6 +772,10 @@ static int __init pageowner_init(void)
- 
- 	debugfs_create_file("page_owner_stacks", 0400, NULL, NULL,
- 			     &page_owner_stack_operations);
-+	debugfs_create_file("page_owner_threshold", 0600, NULL, NULL,
-+			    &proc_page_owner_threshold);
-+
-+	page_owner_stack_threshold = 0;
- 
- 	return 0;
- }
+Mario Limonciello (2):
+  power: supply: Use the scope of power supplies to tell if power is
+    system supplied
+  usb: typec: ucsi: Don't create power supplies for dGPUs
+
+ drivers/i2c/busses/i2c-designware-pcidrv.c | 13 ++++++++++++-
+ drivers/i2c/busses/i2c-nvidia-gpu.c        |  3 +++
+ drivers/power/supply/power_supply_core.c   |  8 ++++++--
+ drivers/usb/typec/ucsi/psy.c               | 14 ++++++++++++++
+ 4 files changed, 35 insertions(+), 3 deletions(-)
+
 -- 
-2.35.3
+2.34.1
 
