@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8DD670463B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28C870463E
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 09:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjEPHXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 03:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S231245AbjEPHXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 03:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjEPHXj (ORCPT
+        with ESMTP id S231271AbjEPHXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 03:23:39 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1041FDA;
-        Tue, 16 May 2023 00:23:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G8nsiheXoTISNCxBkvlkSEm/a5217s6u5+GpG9uj6gcYZ7iAu6Ws1w7gEWO007eHmadQpD/0SyKjAaf/L9aKEv3Ulo/h2+vUBA2xEhU+z/QSM2+AELHabiht2X4NDSc+VVfylYXomBnoZKBt4oxBzPVzD5iJoR9Agwe8ot16//m99zhxCjwXVTcPlAwja4zED1Gp/jyD3powd2fsWImklv4lw5dWdt5WUBGH12J0Icw8a/I03t2tzJij6ueAmbPGvYshUfBNRhNoid1spWEQRtunAM6ycis+2N1ipV2rZ/R9eVeDMX+aXgfp85rNkdB0NhwSZJqxcAwXlc7OZpvtgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3geK7NR9lBIv80N4tnf1PAW2j9w6pm7HGbzbn1x4Zic=;
- b=gU1nwV9QjCTnUcxPoi8NxjBCsYYfqD7Zg61mDouzCtLntz1CS4XY+ZDuCynqx7X67eExPg485MECNg6I/zWas8vRv6TGQ/WGWfqmnv1BjBxOw4KbOa+fsXieF6lDKl/kIBmIn9I4ciROCjEk4Sl3cp4U2oivz6YmyLUs16eIvvqnky1xUfyecz6OFaQNMAvFFsNGas+OHqt6wzvOLVgWeC1n+YyeR1sfCBU5KBZM8X0l+vZW8Vj4EsMHu5Pa+n+8sVZyo5v0z2bljq+Qe8uomwSt5D0XruGWii7Z5IXqPICpHCSIE+CZqL7Hvbsy8NP4KNEtzLYFKiTv6IasH68LKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3geK7NR9lBIv80N4tnf1PAW2j9w6pm7HGbzbn1x4Zic=;
- b=BNdekOVVlaz9R3hbEVOdG+mChNnkfr77xvUBsYXGvcZ4t+MnqorDszEGMcMDB2pm79AU5hvVgwr28UzFJacbhdQf+MxdNAVhFWC7c24bp8Yj076FrNFYwbiAjM4+p/TjQAtzfYxDj/6Zs7qYkwDcPexGdVoqorxW5wwLqAAoX8Jhtb0lE0m+4UCJBmAhJb0U9XnOdne83af1leKM6she991Ot2npgQ1ihOjrQhtVeU7bXbd1dFDTbLzQElC9H5oJSyXHclxL0PWpN3+DGo9lbs6z149ic8pcnDFu00fLzyQbp4GXSLiknNbBBo2/IqBRu7dH836Wjdep5QFO64HCYw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by IA0PR12MB8746.namprd12.prod.outlook.com (2603:10b6:208:490::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Tue, 16 May
- 2023 07:23:35 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::66d8:40d2:14ed:7697]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::66d8:40d2:14ed:7697%3]) with mapi id 15.20.6387.032; Tue, 16 May 2023
- 07:23:35 +0000
-Date:   Tue, 16 May 2023 10:23:28 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, mlxsw@nvidia.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] mlxfw: Replace zero-length array with
- DECLARE_FLEX_ARRAY() helper
-Message-ID: <ZGMvcIWSEVo/qyfl@shredder>
-References: <ZGKGiBxP0zHo6XSK@work>
+        Tue, 16 May 2023 03:23:43 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5C33C39;
+        Tue, 16 May 2023 00:23:41 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24e5d5782edso12779521a91.0;
+        Tue, 16 May 2023 00:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684221821; x=1686813821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f2Ewl+pzg/EYDV9r41yW9nhxUrQsVL1ApvJ69sMnczM=;
+        b=VQkVb+02i1KNhzRkzyci+tox0yM++34UNlwgqEx8OxnHHIB684ZDNdWovTy5hFMJ/b
+         42oE6l5qGNqwcaWjs+hcKcY6vrROIuoiuLl3KN5dmULOYVFPkWuiv/DKL5+gzwdG7Ajc
+         3s8rEs2S65LHobPaciEXG4HgU+LMDCPI2kQU5AUQY3QEaGYjmPOKrVeGR68Vo+slZ1cn
+         wU80uJBr9kiONoRiT4m/bCaSMgkMip/tKkRIQ225fHy99civYxw3t8ZSKQCFzilA33lp
+         EEVi/mZvIFA6BIHel8L16Xf00chCPqgOeiuad91ItHrfCqMJ0y9eG0HEOkZmw7Y00HxQ
+         a4Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684221821; x=1686813821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f2Ewl+pzg/EYDV9r41yW9nhxUrQsVL1ApvJ69sMnczM=;
+        b=XnHAjco8JJIa4ORZAwFi55fSLftBKGOm7NaHVz5cqtw8Hp4TGHdxSeuuH5HHibf8Us
+         FVAjbdMQGxYSRc4vgLWaHyzs3lOMZWv0tCvsoxva/tRNP5cZ2CvwSNH8nY+N7+mDrEhL
+         EL/ZUAVwGfspgly/859IB9b0B+SvnSOvXBLGlHirL3eN3OBhqj7B/zUJ7eGoWyeIekNr
+         ULS4toBHfnm+imITPGeRea+JZisF4NgAFOexG7k1Wu8ysNxWaa3NTayI7zPLVPkRLRK7
+         3sPoQbJK8k0oMB7frF6pMgW/ZcKH6vf6Nqsef0FnvIYEW/uGOxll68NqR/PZueaIA73l
+         9K3g==
+X-Gm-Message-State: AC+VfDy8gdQzXLomZCccz+IDntpTOlbWIqBeCSFkxcMHbabLazWAhOTA
+        RYnse0ufGxany/oJ3/qodjo=
+X-Google-Smtp-Source: ACHHUZ4QF2JwPYLHFWHCVTLi2c0EzFmHWCbSSwBGXI/vFZK+Deo05KCNHg8C3rqdvl6/JlCBlnXrgw==
+X-Received: by 2002:a17:90b:1e4b:b0:24e:1f5:2e05 with SMTP id pi11-20020a17090b1e4b00b0024e01f52e05mr37999296pjb.13.1684221820806;
+        Tue, 16 May 2023 00:23:40 -0700 (PDT)
+Received: from Gentoo (n220246252240.netvigator.com. [220.246.252.240])
+        by smtp.gmail.com with ESMTPSA id fz5-20020a17090b024500b00252d960a8dfsm933923pjb.16.2023.05.16.00.23.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 00:23:40 -0700 (PDT)
+Date:   Tue, 16 May 2023 15:23:33 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [RESEND,PATCH 1/3] arm64: dts: qcom: sm8250-xiaomi-elish-boe:
+ fix panel compatible
+Message-ID: <ZGMvdfY28gNofo2C@Gentoo>
+References: <20230516062657.28616-1-lujianhua000@gmail.com>
+ <912d7db5-3bb2-cbc6-ed98-eb1dd40f9fbd@linaro.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZGKGiBxP0zHo6XSK@work>
-X-ClientProxiedBy: MRXP264CA0022.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:15::34) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|IA0PR12MB8746:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ec9f390-28bc-4164-cc55-08db55de75b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RYLNSI+wRj9UKpTOSOlDJ3DfMPg+koN5HsIEPNwVrXxS1g4Mb9ROEo7wWhE8fXNcIuTq8ub8zHuVCqAORFMIMlymvLTa8lkFz1XVrW2V2N/jfoF6F/iWoe8oXO4Il5pj9rlSLUNWt3zEsGhd7QQPRE/H7G9MWs7s9DNC0OqnTaI6idAjbIkhVQ5cTLPI/lqkswnmcU7BrTEgbCLGZC+rVcHejX/rjjJkOaWdtt3d4wtO80jwPEWDZ0FJZALUyMe3LTGIug5wCkSnyoy9aInQRWpg5JkTWlbWSplIws37Hf1Ws2mKjiZ/2IG6cVlo3QDkwxf/y+U3Mu3Pm0IAf+Pc9KvXyLk0ZneDO787Ahis7cy3IZzYVvb3JL2nanVBMU24OeSbAb2yfAWaif+NogP15hr51pBSinwzYuLTWCeNPQJOR2UHI5omjQg9Ia6hrhxR/rj6ibG+Zh2d8JOg8j4nBfwa/XuDgg7+FGbNLDdwgi1XDHsPSoWb9ivQgFX0jmzt751XqMP4n/EbbxG0BE+RRlWy0l0SQsSJIyl/kLXQMFRsCnRzq5zL9JXZgGQGQAFA0EsXPZYl+RdqLTtKlMQBKlmHbtLnK8tC+EE7qPtxtcSVf9jOMnsNNWlxFFIwZ+6g8QOdOhcu9/zuYIWenlLIYw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199021)(26005)(83380400001)(4744005)(2906002)(186003)(6506007)(9686003)(6512007)(966005)(86362001)(33716001)(5660300002)(6486002)(8676002)(6666004)(478600001)(54906003)(38100700002)(8936002)(66476007)(41300700001)(316002)(4326008)(66946007)(6916009)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3Wy/JU54Q/OBbCvI1jzezvM6GDr564x//Xh1oKD9vBZ7dG9x2lwPXyrDsOXK?=
- =?us-ascii?Q?Hmht6PGeg5WXSZDrnfd44dMvN2/LVcEq6kk1P9PBoBMquMta3C06PP6jy+3x?=
- =?us-ascii?Q?PGqe+351tFdZwE7vF/Q6Wp/0n+X9nc6yQ7KkIxeWoiJZSLSONNFglPoy9XMu?=
- =?us-ascii?Q?2NDwnZEG/Spk5hvkVdWKaUw1eE+th3mwfxV+S8QHc3KFyxDcz7t3wjfbWggj?=
- =?us-ascii?Q?8gcbgu9lrrHgeX9jwFzYJyefx6QcaeEgAKVgR8OFEKCgWkJ9tvy5ufob6QVb?=
- =?us-ascii?Q?SxsPYrFXDT7bY2oeD2g0u8x0aUW0tYBOJDeQ9k0sNQ92l7lkYmBa31+PbR4i?=
- =?us-ascii?Q?qNgmPgE1OznQVDGevLGAyDAm3eFLhkydFnaupqXuCvUkbW1zkylDsM+DEhS8?=
- =?us-ascii?Q?47IOHPUzVkKI+kFLvd+Oz2kGyc9ugp9nx6NrfOLmKNbizjJGkTBZ+A7xBAEp?=
- =?us-ascii?Q?pvo6cXaMv7576/HUlzCyUCGT3Hx2xE7va98tgbKKvaphXZU5RHzsnIIrLjjd?=
- =?us-ascii?Q?owNsFfV13bYLsYpoPudaKIhdX+2zWAnZTJ8YabC+pUaOn4uzDuIoMiV+YnWA?=
- =?us-ascii?Q?J9Tr+QW4Q1V4aoYOOeUixpeFq+YYJIrVkUn7/dCej9+b3pWCKbbDnMXfXFl2?=
- =?us-ascii?Q?psZ7Is9SU8Ir7N16g5DoFKG/47HoSOcfIhDJ/VxT/oAnQ6aaW3d+22JR08x/?=
- =?us-ascii?Q?Ny/nFFiUEbl6IlPafvuvUOvrhtLYXXzvY0mwCJIzNUoYZBi63mvbOCzEIMmS?=
- =?us-ascii?Q?ullokCJAvpD86Dk1oc4S/tYzGzyve/W07TD6rFBJG6lC2M3y3FwAUpF5t63B?=
- =?us-ascii?Q?xtEUrU9rORg8pUhAUEiBSs6RPqstqqRmLGJCaYHj5+3CFqjN2b/hyCDiSS9+?=
- =?us-ascii?Q?2jpLVlYyFVtp7OQTASrhrwbaBs3FloTL6sRVXKLMEOf5wvitv5ngFUN+pFEO?=
- =?us-ascii?Q?0XL/2VARjfFTLOHAL2Tkccy9QTqxpn9phApT9vJmho4gi44VVshpgyZdPGi5?=
- =?us-ascii?Q?057o/DKhM0CTU1F5TaSQsS5xYB9h0lkm78GBJYt4esehPyBXdQDxZFwLsYA7?=
- =?us-ascii?Q?sUsfREolQe8ZUhiAqUDl7VfGnGRludMjbODvHoY2QOmGyJ15DUjv9LGWyxef?=
- =?us-ascii?Q?UZUCV39piOcjio5Souvl8653jf2qgPNB8Z4M02/fMi/Zdlo2mEQFHXCIEnhn?=
- =?us-ascii?Q?ffAX5KVjJY/OAQBe3nEochOXH2oUak73lORspMJYecbIr+vfi0wtGNK/Ma0i?=
- =?us-ascii?Q?Me6lcPCfZnfNUQgQSiNy9qlHN8m4/IV9R9MawJW14s7HHbwhMhAkeIBxLJSO?=
- =?us-ascii?Q?yscgzq/wtOUM/4IulkIMXlSSnZ7rcbITvPwuHIEVnJxbSHBGwizykev3GcmF?=
- =?us-ascii?Q?WfSODuKITrwsfc3RxsmauH3c87jCXCrVnuRUCWhp1opbeqslaYPyHekFu6rR?=
- =?us-ascii?Q?9Ab0Vh08gYT18RLJEe4El0kPcQsORuvqgnxbhr7NH0HHrWRh28lDsHYYEpgu?=
- =?us-ascii?Q?duVM6ZTw3QzboM3mxub83K/vUxuQTTguq5MEBwHEeCHlisR0iuJMFDdbBhWc?=
- =?us-ascii?Q?M/v/QnMtnhZXNBzRmVFp082ReRkP/e7IeM2WUTcT?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ec9f390-28bc-4164-cc55-08db55de75b8
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2023 07:23:35.0641
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Plt99/jNFRc2YzlQgC9Mk8PhUBGmg1y5ooijI8oIAFthZyjCE29nHxsLi9L9iW7ZAFoTFsbGrPciwDPQHllgiA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8746
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <912d7db5-3bb2-cbc6-ed98-eb1dd40f9fbd@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 01:22:48PM -0600, Gustavo A. R. Silva wrote:
-> Zero-length arrays are deprecated and we are moving towards adopting
-> C99 flexible-array members, instead. So, replace zero-length arrays
-> declarations alone in structs with the new DECLARE_FLEX_ARRAY()
-> helper macro.
+On Tue, May 16, 2023 at 09:01:35AM +0200, Krzysztof Kozlowski wrote:
+> On 16/05/2023 08:26, Jianhua Lu wrote:
+> > From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > The bindings expect "novatek,nt36523" fallback in the panel compatible:
+> > 
+> >   sm8250-xiaomi-elish-boe.dtb: panel@0: compatible: ['xiaomi,elish-boe-nt36523'] is too shor
+> > 
+> > Fixes: 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
 > 
-> This helper allows for flexible-array members alone in structs.
-> 
-> Link: https://github.com/KSPP/linux/issues/193
-> Link: https://github.com/KSPP/linux/issues/285
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> I think there is no need to resend my patches. They are marked in
+> patchwork. Unless I am not responsive to something, please rather avoid
+> doing that.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Tested-by: Ido Schimmel <idosch@nvidia.com>
+Acked
+> 
+> Best regards,
+> Krzysztof
+> 
