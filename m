@@ -2,80 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C17670565B
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C09B705661
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 20:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbjEPSuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 14:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
+        id S229750AbjEPSyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 14:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjEPSun (ORCPT
+        with ESMTP id S229595AbjEPSyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 14:50:43 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1643583D3;
-        Tue, 16 May 2023 11:50:20 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Tue, 16 May 2023 14:54:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C981FD4
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 11:54:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 7F19B993;
-        Tue, 16 May 2023 18:50:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7F19B993
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1684263019; bh=ibkUbwXECOWHvgYrHiViIEJkr8d0p+v+RXwTy/K0kv4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=qABC7JX+cRblLRFIknPK+kmPtplswE3kcNgZg+GdRAKJ4YBpWKbsFhwgoirAPh4oH
-         KVGyOoi0Cp2sTe/jymlWhG2fPXNMs60M+HuMKxYRaWG1TSsVBgQpajP5sCqpDIn8Ez
-         1Erf9E6GqzuUllJdW0JGv3Ys+/CZK4+i4eVpTpBA9dhgr83ERCtlAVfD4ugzYIK4n/
-         FiqWWEaCKVA44ryesHEXVVeQ5Aw9CLeAnppU55zecBUn1TR583i1GLUlHWrl2Vm+U2
-         biqwks9vcrtiMkW/9dyBzJ/NQe4elNsaI5IkVC4bE+rc4obY46fCdN6jpnCiwnGz1D
-         Es4k9DLrM8HaQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Ram Pai <linuxram@us.ibm.com>,
-        Peng Tao <bergwolf@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] Documentation/filesystems: sharedsubtree: add section
- headings
-In-Reply-To: <20230508055938.6550-1-rdunlap@infradead.org>
-References: <20230508055938.6550-1-rdunlap@infradead.org>
-Date:   Tue, 16 May 2023 12:50:18 -0600
-Message-ID: <87mt24az6d.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3776E630AB
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B413C433D2;
+        Tue, 16 May 2023 18:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684263243;
+        bh=Y29ciGsqbYK4aeA9R00cOYH1MS2t61zQJwlFBgifawk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jssn2VyKDq8zz69hFz2NfP+8chmdjxly5blQwS/tntPZ9RwClaVaC995/sMQSeCx8
+         3m43c0bXxAJE+s9JxQ3Voj70RSGKPchFcJx21ZEbiFCVn9mGyeFTS5NveVXbsxftix
+         mkL4+jw+jx4/ScXe/1q821JhDxTVCes+lZcd4GsKfsZnPHYLRKh4S0xv4fF6/6HATA
+         iK0VCyIY63Sei//q2cV+0vojQc5uTomXokd87DNDxT8llhERXxJD59oWXCONw49Ljg
+         8ey4WhM0+5A71CDFxQbXx6yKIxZiQoNQz2f77eaaaThwNeCgPpXlkxzW5BkhgVuDrl
+         bjEwS6pAQiDhg==
+Received: by pali.im (Postfix)
+        id AEDEBA47; Tue, 16 May 2023 20:54:00 +0200 (CEST)
+Date:   Tue, 16 May 2023 20:54:00 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Kumar Gala <galak@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] powerpc: allow PPC_EARLY_DEBUG_CPM only when SERIAL_CPM=y
+Message-ID: <20230516185400.urjy6y3kh4grbagt@pali>
+References: <20230516152854.22465-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230516152854.22465-1-rdunlap@infradead.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
-
-> Several of the sections are missing underlines. This makes the
-> generated contents have missing entries, so add the underlines.
->
-> Fixes: 16c01b20ae05 ("doc/filesystems: more mount cleanups")
-> Fixes: 9cfcceea8f7e ("[PATCH] Complete description of shared subtrees.")
+On Tuesday 16 May 2023 08:28:54 Randy Dunlap wrote:
+> In a randconfig with CONFIG_SERIAL_CPM=m and
+> CONFIG_PPC_EARLY_DEBUG_CPM=y, there is a build error:
+> ERROR: modpost: "udbg_putc" [drivers/tty/serial/cpm_uart/cpm_uart.ko] undefined!
+> 
+> Prevent the build error by allowing PPC_EARLY_DEBUG_CPM only when
+> SERIAL_CPM=y.
+> 
+> Fixes: c374e00e17f1 ("[POWERPC] Add early debug console for CPM serial ports.")
 > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: Ram Pai <linuxram@us.ibm.com>
-> Cc: Peng Tao <bergwolf@gmail.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Scott Wood <scottwood@freescale.com>
+> Cc: Kumar Gala <galak@kernel.crashing.org>
+> Cc: "Pali Rohár" <pali@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: linuxppc-dev@lists.ozlabs.org
+
+Looks good,
+
+Reviewed-by: Pali Rohár <pali@kernel.org>
+
 > ---
->  Documentation/filesystems/sharedsubtree.rst |    4 ++++
->  1 file changed, 4 insertions(+)
-
-Applied, thanks.
-
-jon
+>  arch/powerpc/Kconfig.debug |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff -- a/arch/powerpc/Kconfig.debug b/arch/powerpc/Kconfig.debug
+> --- a/arch/powerpc/Kconfig.debug
+> +++ b/arch/powerpc/Kconfig.debug
+> @@ -240,7 +240,7 @@ config PPC_EARLY_DEBUG_40x
+>  
+>  config PPC_EARLY_DEBUG_CPM
+>  	bool "Early serial debugging for Freescale CPM-based serial ports"
+> -	depends on SERIAL_CPM
+> +	depends on SERIAL_CPM=y
+>  	help
+>  	  Select this to enable early debugging for Freescale chips
+>  	  using a CPM-based serial port.  This assumes that the bootwrapper
