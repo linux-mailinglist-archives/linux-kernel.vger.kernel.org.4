@@ -2,109 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252F0706BD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFDD706BD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjEQOzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S229712AbjEQO4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjEQOzj (ORCPT
+        with ESMTP id S231238AbjEQO4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:55:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD49019
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:55:12 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-510d8d7f8eeso937234a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:55:12 -0700 (PDT)
+        Wed, 17 May 2023 10:56:30 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425716186
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:56:06 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so65402455e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:56:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684335310; x=1686927310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wuaNZ4qT3VnOSKAHjsPxE9vvu/wKdQkttBJHmfbu46M=;
-        b=YLMSz5sCr/yKeJHAUxPSPb2tqXm+IZeIWiqfkhSTMOozshLHws0by/v1Kw9Vv7Jq70
-         IhkQvQUKHEDdv+MrPToptJnmeA+wbR3t7mft04XND43+PMHjblOr8oFPvbd5f3FG+FnW
-         4mBmN6WiaPqEZIlQaYjqWSKqMpX0c6tk4ySutPkgaxORQ0uygdC2dX+1bs60O0LjwUo8
-         y8NNuVuVbwE/4uuq/R9AXdjWGFYftW4uryXSYj1yBZ/cGnyLMUAzsPvheG2cXkv5ZmqQ
-         ZPO6RGrlTLip3EjkwXcWsfH2Bb7rHkCU0SivjsSTSjpZ5d9HCRSo/QwiToxIwOMGpKwM
-         5GLg==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1684335364; x=1686927364;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qy01pDU5gpvvu40QdwUDSi9Rn8BJ+AlfGupuASEwzFs=;
+        b=jaU0MTMcpsi5e11qScCf/2APvXYvWwIWHm5HZITAA/TYgvG+TzWJjw1k9KkADFndAl
+         hGog+rgFaQ6At23WsARj/362a3S0xlbQkZQsvjRnc11X4h1HUeDg5CdotjmZoIAuqJmR
+         /mpGK2vT0D9xt4tdnsNet9liylvPFg5KI6l+v6OgfkVl6IFoJXVsHhhUZVdoOjN0TsNS
+         0l7+1u5NRev4Ky5IwSHIV2yfOI4lwuQ99UD0OVY6ifa1QaXiQ76VTsiB2hiS2Wr9kJur
+         W+58TcD/EI3VxnCU77BXtx8wIHmn1c8cnGJzuF2/8eV9ZoOXltrVxeg61GmtC0asAWz8
+         BtOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335310; x=1686927310;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wuaNZ4qT3VnOSKAHjsPxE9vvu/wKdQkttBJHmfbu46M=;
-        b=K9eNDy+s6BXl5Td5XotCjHobhgrauabAylWSqRCnd4N/Qz9vbbWwX31IxgsT3SyYCJ
-         eH6pejPhLv1cmWrpIMZ6qg9y8+gdOXWNdRxYN0d5rEMjpzgFbONSs/6//N4i7p6Ikl7s
-         C6/P9h1XGR0PHYGdFPF/v0UaFEVTclvuwMN0luU4nAqoasCCRlEQMnp3N9DlAarQGWV2
-         jta6+505zLptChh2+xF+Z1jAJFJ5g6G+B8IhTjf79a+sWm3ROD4r+u+ftMRy4yIeET9e
-         ++iozyxmslMNPTZKess2vkzm0UUAj7DA2UVL0+hkiX71fRhZy4uSVbEp2YlNCCsTpeDH
-         ZAuw==
-X-Gm-Message-State: AC+VfDzbYuqrZvEsT53w7JvPdipGP60xtBow4/LVHFrTqRyPX3jyTGca
-        SU6lW3IJeM+RG4WnhNgXyeSs3w==
-X-Google-Smtp-Source: ACHHUZ7aBr3hTmUS/LPx8wWBXM9iju8dtYni/FIkn1fHA2UCheSCYCr+4Vq8hjAbA7eI7zTa6dqUEA==
-X-Received: by 2002:a17:907:9347:b0:94f:322d:909c with SMTP id bv7-20020a170907934700b0094f322d909cmr34154508ejc.34.1684335309988;
-        Wed, 17 May 2023 07:55:09 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id ta26-20020a1709078c1a00b009663b1addb0sm12334186ejc.224.2023.05.17.07.55.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 07:55:09 -0700 (PDT)
-Message-ID: <a82e553b-c21d-0955-be77-77028806b314@linaro.org>
-Date:   Wed, 17 May 2023 16:55:08 +0200
+        d=1e100.net; s=20221208; t=1684335364; x=1686927364;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qy01pDU5gpvvu40QdwUDSi9Rn8BJ+AlfGupuASEwzFs=;
+        b=LjyxXVia4VXhTTtbUoQDGhVXmsIXI0UXgeurY2BOdVfGXlcV+aoErrUfawHfce602q
+         ISzEJc45/it7cYBegXJAuidY5xFozBTqPjskMrO6oW90WCeC8tTtz4dUqgJ0ApGlOR1v
+         M6ygmOY620w6sz7Ff9hsjFq7tEOuJCq3gNIpTpIJpaBhqYnHtTi/Q92OqhlhgMw2HHur
+         dvbPuPZgOC7ZJt43nx7gM25RjtO/eVzTm+gYIKX3SkICOvWJ2Dit/yc0FZB0rg1DeOct
+         mFZComBNxMwM8RdonB3d17D+YkfnoAdFEptNTyJrv3Z0Qmhx9Ba0FteoGS8Bzsndn1RB
+         8YYw==
+X-Gm-Message-State: AC+VfDysMdmNa7o9RG+REfMEZaai+ok3TaL2sa1rhHEd+GxjNeLYfTdq
+        6bye8hT0Xr22tq/GUj2VWDFPfMIstjoqIKn6bPWCdg==
+X-Google-Smtp-Source: ACHHUZ5AL12iNPyGhfApc5Ia9Kgnuj/3cquvZ8Z2EKmlj5mtSIfji76qS3UA0nS1hCYb3SYhjSn2nKXlugh0ZzWWuYY=
+X-Received: by 2002:a1c:f613:0:b0:3f3:3cba:2f2d with SMTP id
+ w19-20020a1cf613000000b003f33cba2f2dmr2096949wmc.7.1684335364254; Wed, 17 May
+ 2023 07:56:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 2/5] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250
- support
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
- <20230516213308.2432018-3-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516213308.2432018-3-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
+ <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
+ <CAHVXubj92O_dwGShOJgrYezqk2pA2NtFyhNFbAPyhn7=PztK6Q@mail.gmail.com> <20230517-preacher-primer-f41020b3376a@wendy>
+In-Reply-To: <20230517-preacher-primer-f41020b3376a@wendy>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Wed, 17 May 2023 16:55:53 +0200
+Message-ID: <CAHVXubhMLgb54_7zV2yFuGPoMKCkUXwozHbDvghc7kQqNLK-JA@mail.gmail.com>
+Subject: Re: Bug report: kernel paniced when system hibernates
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Song Shuai <suagrfillet@gmail.com>, robh@kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>, anup@brainfault.org,
+        palmer@rivosinc.com, jeeheng.sia@starfivetech.com,
+        leyfoon.tan@starfivetech.com, mason.huo@starfivetech.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 23:33, Bhupesh Sharma wrote:
-> Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
-> 
-> On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
-> needs to be set first to 'enable' the eud module.
-> 
-> So, update the dt-bindings to accommodate the third register
+On Wed, May 17, 2023 at 1:28=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> Hey Alex,
+>
+> On Wed, May 17, 2023 at 10:58:02AM +0200, Alexandre Ghiti wrote:
+> > On Tue, May 16, 2023 at 1:12=E2=80=AFPM Alexandre Ghiti <alexghiti@rivo=
+sinc.com> wrote:
+>
+> > > On Tue, May 16, 2023 at 11:24=E2=80=AFAM Song Shuai <suagrfillet@gmai=
+l.com> wrote:
+> > > I actually removed this flag a few years ago, and I have to admit tha=
+t
+> > > I need to check if that's necessary: the goal of commit 3335068f8721
+> > > ("riscv: Use PUD/P4D/PGD pages for the linear mapping") is to expose
+> > > the "right" start of DRAM so that we can align virtual and physical
+> > > addresses on a 1GB boundary.
+> > >
+> > > So I have to check if a nomap region is actually added as a
+> > > memblock.memory.regions[] or not: if yes, that's perfect, let's add
+> > > the nomap attributes to the PMP regions, otherwise, I don't think tha=
+t
+> > > is a good solution.
+> >
+> > So here is the current linear mapping without nomap in openSBI:
+> >
+> > ---[ Linear mapping ]---
+> > 0xff60000000000000-0xff60000000200000    0x0000000080000000         2M
+> > PMD     D A G . . W R V
+> > 0xff60000000200000-0xff60000000e00000    0x0000000080200000        12M
+> > PMD     D A G . . . R V
+> >
+> > And below the linear mapping with nomap in openSBI:
+> >
+> > ---[ Linear mapping ]---
+> > 0xff60000000080000-0xff60000000200000    0x0000000080080000      1536K
+> > PTE     D A G . . W R V
+> > 0xff60000000200000-0xff60000000e00000    0x0000000080200000        12M
+> > PMD     D A G . . . R V
+> >
+> > So adding nomap does not misalign virtual and physical addresses, it
+> > prevents the usage of 1GB page for this area though, so that's a
+> > solution, we just lose this 1GB page here.
+> >
+> > But even though that may be the fix, I think we also need to fix that
+> > in the kernel as it would break compatibility with certain versions of
+> > openSBI *if* we fix openSBI...So here are a few solutions:
+> >
+> > 1. we can mark all "mmode_resv" nodes in the device tree as nomap,
+> > before the linear mapping is established (IIUC, those nodes are added
+> > by openSBI to advertise PMP regions)
+> >     -> This amounts to the same fix as opensbi and we lose the 1GB huge=
+page.
+>
+> AFAIU, losing the 1 GB hugepage is a regression, which would make this
+> not an option, right?
 
+Not sure this is a real regression, I'd rather avoid it, but as
+mentioned in my first answer, Mike Rapoport showed that it was making
+no difference performance-wise...
 
-> +    maxItems: 3
->  
->    interrupts:
->      description: EUD interrupt
-> @@ -52,6 +56,38 @@ required:
->  
->  additionalProperties: false
->  
-> +allOf:
-> +  - if:
+>
+> > 2. we can tweak pfn_is_nosave function to *not* save pfn corresponding
+> > to PMP regions
+> >     -> We don't lose the 1GB hugepage \o/
+> > 3. we can use register_nosave_region() to not save the "mmode_resv"
+> > regions (x86 does that
+> > https://elixir.bootlin.com/linux/v6.4-rc1/source/arch/x86/kernel/e820.c=
+#L753)
+> >     -> We don't lose the 1GB hugepage \o/
+> > 4. Given JeeHeng pointer to
+> > https://elixir.bootlin.com/linux/v6.4-rc1/source/kernel/power/snapshot.=
+c#L1340,
+> > we can mark those pages as non-readable and make the hibernation
+> > process not save those pages
+> >     -> Very late-in-the-day idea, not sure what it's worth, we also
+> > lose the 1GB hugepage...
+>
+> Ditto here re: introducing another regression.
+>
+> > To me, the best solution is 3 as it would prepare for other similar
+> > issues later, it is similar to x86 and it allows us to keep 1GB
+> > hugepages.
+> >
+> > I have been thinking, and to me nomap does not provide anything since
+> > the kernel should not address this memory range, so if it does, we
+> > must fix the kernel.
+> >
+> > Let me know what you all think, I'll be preparing a PoC of 3 in the mea=
+ntime!
+>
+> #3 would probably get my vote too. It seems like you could use it
+> dynamically if there was to be a future other provider of "mmode_resv"
+> regions, rather than doing something location-specific.
+>
+> We should probably document these opensbi reserved memory nodes though
+> in a dt-binding or w/e if we are going to be relying on them to not
+> crash!
 
-If there is going to be new version - put it before additionalProperties
-above, just like in example-schema.
+Yes, you're right, let's see what Atish and Anup think!
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks for your quick answers Conor and Song, really appreciated!
 
-Best regards,
-Krzysztof
+Alex
 
+>
+> Thanks for working on this,
+> Conor.
+>
