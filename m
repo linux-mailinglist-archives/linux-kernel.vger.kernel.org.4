@@ -2,278 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A9A706F32
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37101706F35
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjEQRRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S229564AbjEQRSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEQRRt (ORCPT
+        with ESMTP id S229473AbjEQRSL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:17:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86F540E5;
-        Wed, 17 May 2023 10:17:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F55063A19;
-        Wed, 17 May 2023 17:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9F2C433AA;
-        Wed, 17 May 2023 17:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684343866;
-        bh=ErTs2NiRHbpeeRXWKhTdBGrEoF7hZR6iDkEby2P5O1w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qXMK9Xn+ujHLceW0GDROzRsCVgW2DTxvHbrNmpQFUkllgvbvJuDSa17AjTbnZE29p
-         YpfsrzRqvf2ko/HJjROTE39A9kaz9iVb+s67V3h0clE9+abw9QKNGFw90VwYU+/eN2
-         ssxrOsVhDw4rNyzK2Q+E1N4XAN+3urPPtXN/ndvAEZQGKHVaoNlrk4PDQY1c6RzZx3
-         mvl/lirs3ZFKGXjoMCiLVtfqI/SyVIVwpTmj5++dBEMmSjCVViMIQ613lHtVVpmgue
-         lgpZBPZK5cA2xONumtZ7p3lV6ZyZqyRp9Mb6Tx4CfyzUNUp/gE5RtjgBWJPqVZshlK
-         Fo4UfpDW2ty7Q==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4efe8991b8aso1342939e87.0;
-        Wed, 17 May 2023 10:17:46 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzfBBKCJD4lFuoFc8YDbe429hqiyKh7TXZrbXn7VKDqD12Q4ANM
-        tBVVbuS1HKWhzxaWQbVbgbXsuNL95zmU8GkESfg=
-X-Google-Smtp-Source: ACHHUZ7hjiPlfmJ4fd5LA+ijEeVkQnxqnIy9ecroPhUAbdorcz+8joMwXm5VQFLXLTJQXJfkQO29kZngct25alejZBI=
-X-Received: by 2002:ac2:4c02:0:b0:4ed:d216:8217 with SMTP id
- t2-20020ac24c02000000b004edd2168217mr470621lfq.11.1684343864675; Wed, 17 May
- 2023 10:17:44 -0700 (PDT)
+        Wed, 17 May 2023 13:18:11 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3C740E5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:18:06 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so1297983e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684343885; x=1686935885;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t/W+xyRZOrFaXXUosMsho+Wtkn3dRl1nHYsHDumTX8E=;
+        b=M7E8jA+AmNT97OdIY8EZEME/eE+/AXzah9OG3V8PaBGWJidzVYSF79fCHwsuldXoEW
+         3wVSO7Pe4WzDijxQujtsuoTQFfCyLlAVfYjPn4s0+18O3QY5mga3S5tAt6SC8I4bMZrJ
+         OeC0ztHE27ts2V4VdqDV6AK/zAFJ+oMde7kJbDBkuVMXBr9aAWumVVbtWOxpVoDjm7gP
+         dwocPRjQB6ttH9S2QDR+xLBBKpZ+lJMb2Tm0seZVVK1YzEHdbqpDAWfcxHZ7um/TcF1c
+         xXeKo9YrExNsV4ek9RCSFvP5fKVLXHZKOP38BHUoFgWjNEqFoVvdQ1dAxUUqHqQPRzA1
+         38YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684343885; x=1686935885;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t/W+xyRZOrFaXXUosMsho+Wtkn3dRl1nHYsHDumTX8E=;
+        b=HYp+FopNI3TlU3XYo+VMItq6m4m1g88/5Xey6nZSvxI1Njl/u5PRWSxyrLZyQZE9n6
+         /bl1oaPo9kr891eupLCi5FKjgfPoV3keFUWfHNHED217VUm66RPrhUyAaWIudToC0M/l
+         diO+gw6JVa+L1yK0P3hkEztnK73A6Mj2BpJosd98Pg2Zte2ZQ5Qok1C/o/H++/OOEEtl
+         H64OM8pUTjyIsvGzpYRReNYfi1ge6FnoMKkOZ42RVEHKgpIu1aGCGUCEe0jbBj1ju0e/
+         dzqj7bIKRMCdXI3BYkIR9KVpvKv/NMPNS9885ATDaPhM5cvdbdYmo5qqPuiXHQU5Awfq
+         vYxw==
+X-Gm-Message-State: AC+VfDzzJgfRTuCi7VgMrcAdF20/DAD3q16NgcbwaU1Prdq8na61fm4P
+        nz4PZyCP3KuR1hNB9vqYVXUK3g==
+X-Google-Smtp-Source: ACHHUZ7qL3cLZD9LGj91BXwss6hJFPqDLP8pRWU4pQowx5XVm0GxnZn5iAX20K55cchMNdGFcvo7wg==
+X-Received: by 2002:a05:6512:75:b0:4ec:8816:f4fc with SMTP id i21-20020a056512007500b004ec8816f4fcmr481324lfo.6.1684343885003;
+        Wed, 17 May 2023 10:18:05 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id j18-20020ac24552000000b004f140788184sm1038284lfm.289.2023.05.17.10.18.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 10:18:04 -0700 (PDT)
+Message-ID: <f6a491ce-57ad-66c8-8fa2-933bf208adac@linaro.org>
+Date:   Wed, 17 May 2023 19:18:01 +0200
 MIME-Version: 1.0
-References: <20230517153812.2010174-1-anisse@astier.eu>
-In-Reply-To: <20230517153812.2010174-1-anisse@astier.eu>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 17 May 2023 19:17:33 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHgRpEjxXFk5TZSwtCYC1_0Ph+ZrS71=JKbNcvV08xFSA@mail.gmail.com>
-Message-ID: <CAMj1kXHgRpEjxXFk5TZSwtCYC1_0Ph+ZrS71=JKbNcvV08xFSA@mail.gmail.com>
-Subject: Re: [PATCH v2] efivarfs: expose used and total size
-To:     Anisse Astier <anisse@astier.eu>
-Cc:     linux-efi@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jeremy Kerr <jk@ozlabs.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anisse Astier <an.astier@criteo.com>, lennart@poettering.net,
-        Richard Hughes <hughsient@gmail.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH][next] media: venus: hfi_cmds: Replace fake flex-array
+ with flexible-array member
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <ZGQn63U4IeRUiJWb@work>
+ <8f9ca4a1-26ee-cd37-6c15-abdc832d77b3@linaro.org>
+In-Reply-To: <8f9ca4a1-26ee-cd37-6c15-abdc832d77b3@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 at 17:38, Anisse Astier <anisse@astier.eu> wrote:
->
-> From: Anisse Astier <an.astier@criteo.com>
->
-> When writing EFI variables, one might get errors with no other message
-> on why it fails. Being able to see how much is used by EFI variables
-> helps analyzing such issues.
->
-> Since this is not a conventionnal filesystem, block size is
-> intentionnally set to 1 instead of PAGE_SIZE.
->
-> x86 quirks of reserved size are taken into account; so that available
-> and free size can be different, further helping debugging space issues.
->
-> With this patch, one can see the remaining space in EFI variable storage
-> via efivarfs, like this:
->
->    $ df -h /sys/firmware/efi/efivars/
->    Filesystem      Size  Used Avail Use% Mounted on
->    efivarfs        176K  106K   66K  62% /sys/firmware/efi/efivars
->
-> Signed-off-by: Anisse Astier <an.astier@criteo.com>
 
-Thanks - I've queued this up now for v6.5
 
-> ---
-> Notes:
->
-> Patch isn't split per subsystem intentionally, for better understanding
-> of intent; I don't think it's necessary, but split could be trivial in
-> an another version.
->
-> Changes since v1:
->  - update commit message to show how it can be used in userspace
->  - add comments to explain the values put in f_bsize, f_blocks, f_bfree
->    and f_bavail
->  - rebase on top v6.4-rc2
->
-> Thanks to Christan Brauner for the review.
->
-> Regards,
->
-> Anisse
->
-> ---
->  arch/x86/platform/efi/quirks.c |  8 ++++++++
->  drivers/firmware/efi/efi.c     |  1 +
->  drivers/firmware/efi/vars.c    | 12 ++++++++++++
->  fs/efivarfs/super.c            | 36 +++++++++++++++++++++++++++++++++-
->  include/linux/efi.h            | 10 ++++++++++
->  5 files changed, 66 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/platform/efi/quirks.c b/arch/x86/platform/efi/quirks.c
-> index b0b848d6933a..587fa51230e2 100644
-> --- a/arch/x86/platform/efi/quirks.c
-> +++ b/arch/x86/platform/efi/quirks.c
-> @@ -114,6 +114,14 @@ void efi_delete_dummy_variable(void)
->                                      EFI_VARIABLE_RUNTIME_ACCESS, 0, NULL);
->  }
->
-> +u64 efi_reserved_space(void)
-> +{
-> +       if (efi_no_storage_paranoia)
-> +               return 0;
-> +       return EFI_MIN_RESERVE;
-> +}
-> +EXPORT_SYMBOL_GPL(efi_reserved_space);
-> +
->  /*
->   * In the nonblocking case we do not attempt to perform garbage
->   * collection if we do not have enough free space. Rather, we do the
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index abeff7dc0b58..d0dfa007bffc 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -211,6 +211,7 @@ static int generic_ops_register(void)
->         generic_ops.get_variable = efi.get_variable;
->         generic_ops.get_next_variable = efi.get_next_variable;
->         generic_ops.query_variable_store = efi_query_variable_store;
-> +       generic_ops.query_variable_info = efi.query_variable_info;
->
->         if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE)) {
->                 generic_ops.set_variable = efi.set_variable;
-> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-> index bfc5fa6aa47b..e9dc7116daf1 100644
-> --- a/drivers/firmware/efi/vars.c
-> +++ b/drivers/firmware/efi/vars.c
-> @@ -245,3 +245,15 @@ efi_status_t efivar_set_variable(efi_char16_t *name, efi_guid_t *vendor,
->         return status;
->  }
->  EXPORT_SYMBOL_NS_GPL(efivar_set_variable, EFIVAR);
-> +
-> +efi_status_t efivar_query_variable_info(u32 attr,
-> +                                       u64 *storage_space,
-> +                                       u64 *remaining_space,
-> +                                       u64 *max_variable_size)
-> +{
-> +       if (!__efivars->ops->query_variable_info)
-> +               return EFI_UNSUPPORTED;
-> +       return __efivars->ops->query_variable_info(attr, storage_space,
-> +                       remaining_space, max_variable_size);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(efivar_query_variable_info, EFIVAR);
-> diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-> index 482d612b716b..c27de959cb5b 100644
-> --- a/fs/efivarfs/super.c
-> +++ b/fs/efivarfs/super.c
-> @@ -13,6 +13,7 @@
->  #include <linux/ucs2_string.h>
->  #include <linux/slab.h>
->  #include <linux/magic.h>
-> +#include <linux/statfs.h>
->
->  #include "internal.h"
->
-> @@ -23,8 +24,41 @@ static void efivarfs_evict_inode(struct inode *inode)
->         clear_inode(inode);
->  }
->
-> +static int efivarfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-> +{
-> +       u64 storage_space, remaining_space, max_variable_size;
-> +       efi_status_t status;
-> +       const u32 attr = (EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS |
-> +        EFI_VARIABLE_RUNTIME_ACCESS);
-> +
-> +       buf->f_type = dentry->d_sb->s_magic;
-> +       /*
-> +        * This is not a normal filesystem, so no point in pretending it has a block
-> +        * size; we declare f_bsize to 1, so that we can then report the exact value
-> +        * sent by EFI QueryVariableInfo in f_blocks and f_bfree
-> +        */
-> +       buf->f_bsize = 1;
-> +       buf->f_namelen = NAME_MAX;
-> +
-> +       status = efivar_query_variable_info(attr, &storage_space, &remaining_space,
-> +                                           &max_variable_size);
-> +       if (status != EFI_SUCCESS)
-> +               return efi_status_to_err(status);
-> +       buf->f_blocks = storage_space;
-> +       buf->f_bfree = remaining_space;
-> +       /*
-> +        * In f_bavail we declare the free space that the kernel will allow writing
-> +        * when the storage_paranoia x86 quirk is active. To use more, users
-> +        * should boot the kernel with efi_no_storage_paranoia.
-> +        */
-> +       if (remaining_space > efi_reserved_space())
-> +               buf->f_bavail = remaining_space - efi_reserved_space();
-> +       else
-> +               buf->f_bavail = 0;
-> +       return 0;
-> +}
->  static const struct super_operations efivarfs_ops = {
-> -       .statfs = simple_statfs,
-> +       .statfs = efivarfs_statfs,
->         .drop_inode = generic_delete_inode,
->         .evict_inode = efivarfs_evict_inode,
->  };
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index 7aa62c92185f..d2b686191870 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -703,6 +703,7 @@ static inline void efi_enter_virtual_mode (void) {}
->  extern efi_status_t efi_query_variable_store(u32 attributes,
->                                              unsigned long size,
->                                              bool nonblocking);
-> +extern u64 efi_reserved_space(void);
->  #else
->
->  static inline efi_status_t efi_query_variable_store(u32 attributes,
-> @@ -711,6 +712,10 @@ static inline efi_status_t efi_query_variable_store(u32 attributes,
->  {
->         return EFI_SUCCESS;
->  }
-> +static inline u64 efi_reserved_space(void)
-> +{
-> +       return 0;
-> +}
->  #endif
->  extern void __iomem *efi_lookup_mapped_addr(u64 phys_addr);
->
-> @@ -1042,6 +1047,7 @@ struct efivar_operations {
->         efi_set_variable_t *set_variable;
->         efi_set_variable_t *set_variable_nonblocking;
->         efi_query_variable_store_t *query_variable_store;
-> +       efi_query_variable_info_t *query_variable_info;
->  };
->
->  struct efivars {
-> @@ -1087,6 +1093,10 @@ efi_status_t efivar_set_variable_locked(efi_char16_t *name, efi_guid_t *vendor,
->  efi_status_t efivar_set_variable(efi_char16_t *name, efi_guid_t *vendor,
->                                  u32 attr, unsigned long data_size, void *data);
->
-> +efi_status_t efivar_query_variable_info(u32 attr, u64 *storage_space,
-> +                                       u64 *remaining_space,
-> +                                       u64 *max_variable_size);
-> +
->  #if IS_ENABLED(CONFIG_EFI_CAPSULE_LOADER)
->  extern bool efi_capsule_pending(int *reset_type);
->
-> --
-> 2.34.1
->
+On 17.05.2023 04:11, Konrad Dybcio wrote:
+> 
+> 
+> On 17.05.2023 03:03, Gustavo A. R. Silva wrote:
+>> One-element arrays are deprecated, and we are replacing them with flexible
+>> array members instead. So, replace one-element arrays with flexible-array
+>> members in struct hfi_sys_set_resource_pkt, and refactor the rest of
+>> the code, accordingly.
+>>
+>> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+>> routines on memcpy() and help us make progress towards globally
+>> enabling -fstrict-flex-arrays=3 [1].
+>>
+>> The only binary differences seen before/after changes are the
+>> following:
+>>
+>>      17ba:      mov    %rbx,%rdi
+>>      17bd:      call   17c2 <pkt_sys_set_resource+0x42>
+>>                         17be: R_X86_64_PLT32    __tsan_write4-0x4
+>> -    17c2:      movl   $0x14,(%rbx)
+>> +    17c2:      movl   $0x10,(%rbx)
+>>      17c8:      lea    0x4(%rbx),%rdi
+>>      17cc:      call   17d1 <pkt_sys_set_resource+0x51>
+>>                         17cd: R_X86_64_PLT32    __tsan_write4-0x4
+>>
+>> which is expected once this accounts for the following line of code
+>> at  drivers/media/platform/qcom/venus/hfi_cmds.c:73
+>>
+>> 73         pkt->hdr.size = sizeof(*pkt);
+>>
+>> and as *pkt is of type struct hfi_sys_set_resource_pkt, sizeof(*pkt) is
+>> reduced by 4 bytes, due to the flex-array transformation.
+>>
+>> Link: https://github.com/KSPP/linux/issues/79
+>> Link: https://github.com/KSPP/linux/issues/293
+>> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+>> ---
+>>  drivers/media/platform/qcom/venus/hfi_cmds.c | 2 +-
+>>  drivers/media/platform/qcom/venus/hfi_cmds.h | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+>> index 3f74d518ad08..7c82e212434e 100644
+>> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
+>> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+>> @@ -83,7 +83,7 @@ int pkt_sys_set_resource(struct hfi_sys_set_resource_pkt *pkt, u32 id, u32 size,
+>>  		res->size = size;
+>>  		res->mem = addr;
+>>  		pkt->resource_type = HFI_RESOURCE_OCMEM;
+>> -		pkt->hdr.size += sizeof(*res) - sizeof(u32);
+>> +		pkt->hdr.size += sizeof(*res);
+>>  		break;
+>>  	}
+>>  	case VIDC_RESOURCE_NONE:
+>> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
+>> index ba74d03eb9cd..dd9c5066442d 100644
+>> --- a/drivers/media/platform/qcom/venus/hfi_cmds.h
+>> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
+>> @@ -56,7 +56,7 @@ struct hfi_sys_set_resource_pkt {
+>>  	struct hfi_pkt_hdr hdr;
+>>  	u32 resource_handle;
+>>  	u32 resource_type;
+>> -	u32 resource_data[1];
+>> +	u32 resource_data[];
+> Would making this an u32* be a better resolution?
+Nevermind, I overthought this by thinking in the terms of its size
+and not the data within the struct...
+
+Maybe struct_size could be used instead of subtracting sizeof(u32)
+though?
+
+Konrad
+> 
+> Konrad
+>>  };
+>>  
+>>  struct hfi_sys_release_resource_pkt {
