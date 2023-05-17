@@ -2,123 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB418706D94
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D03706E43
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjEQQDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S229751AbjEQQg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjEQQDB (ORCPT
+        with ESMTP id S229609AbjEQQg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:03:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA591706;
-        Wed, 17 May 2023 09:03:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 17 May 2023 12:36:26 -0400
+Received: from tiger.tulip.relay.mailchannels.net (tiger.tulip.relay.mailchannels.net [23.83.218.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189527AB2;
+        Wed, 17 May 2023 09:36:22 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 0BD2F142370;
+        Wed, 17 May 2023 16:36:19 +0000 (UTC)
+Received: from pdx1-sub0-mail-a245.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 30CA8142440;
+        Wed, 17 May 2023 16:36:18 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1684341378; a=rsa-sha256;
+        cv=none;
+        b=8TBJJLNQPn2h1nvnLjuoogxoWhcqu1X6n6bqAKhXQXHU4o1ue0LHLr8Z077YAC1CyrJPbG
+        gvvEd+1tUAu53nx/gEiVPwjd6hJWz1Q40AZx6upEyBZV50bevrlZH8P9v7YIF7vMTZgtGg
+        evoF39Bg3REUKV3Tb/PEq8xp/Sitz/SFSWkN8vwST8pLLsRJNj0JK9MD3oo/mYxwjhurL+
+        6DSsamsKLCiJTD9GR1HfrLkzM+EAXUh+eSvboAjrqPnzIpiVEoOS+nmsw79rrjBQkUYL8n
+        HTnbLbHh4GUphxw4mzpK8Wr+P5lX4wik9bzmIaHP1kgAvGCGphAn7RnOA2Rn3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1684341378;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=lyiRfuaV6vZjIMI62a7F2smJjyomKoQQVaxcFOW0RMU=;
+        b=p5Rkn0Eb9Katw9I3hrYPtNJcumec0+M6R11t/o+cCCKkEaP7OFukpzM+xs4rcSvAZa+1T+
+        B48psbdNnByI9iUnnUviJ/QpomUkBg1MeDD3brWRKfjdOhIxHcEPRyNumjYX2BN9cyyvQS
+        kS9Flp0aDYgI+FRiZDxizov3h4yOmIak0mhFtcinpiDYKxhlxjSvuuzsBXlyjMlbeo1Ib+
+        FbwclrKYsp6NaLDhuZOBl9yGLf8MKM1tEMLkt1gU5ptW6KKkMZ6I87xyHl9AQkMNpjfkVn
+        BwwIFLo+1hLlnDAC2ZC39c/h1rMN1ilK3G60tMrnBs0v8TmrjaSw8l3akAh9HQ==
+ARC-Authentication-Results: i=1;
+        rspamd-5cdf8fd7d9-qfmcz;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Illustrious-Average: 21cc3ecd1ea00827_1684341378774_1935386030
+X-MC-Loop-Signature: 1684341378774:2797499641
+X-MC-Ingress-Time: 1684341378774
+Received: from pdx1-sub0-mail-a245.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.120.163.35 (trex/6.8.1);
+        Wed, 17 May 2023 16:36:18 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1B98644BC;
-        Wed, 17 May 2023 16:02:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04BEAC433D2;
-        Wed, 17 May 2023 16:02:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684339379;
-        bh=XEUGLjgsvQzAyDLKC/1cWemgrt9p4X70cKwfQqfNFVM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=HRIrO/lvsge46jtx3D/H5ni/QHrwKrq+SQbPcWG3gfZaAb0LI4MU0eeaPh8eGezoa
-         eKMW44oZXF2MVrmMTK6JEhL9V9WW4TJSa/xrFVwyIeWkTky7xJAvm45RXgQ8Oe5KCr
-         eOJZpp4wblXyIhuUksLv/Wp3yP0r5ixHunJzxn02L22Zx+1or1j1ZnFoOf4U9b9q6z
-         GxpjHFiKPBj2eRjX0sHjDSdTTaaTQkRmlKCCwPWcTjmxupgYPiO7GtMnP4+HeJjdDP
-         lJvPtuzxrv9ZvBtMMHGIj/uMqUhiFh1NyNdHJ2enAlodykiOMNBG2iGtYNPsIQ7QC+
-         j4wcboCC7NIaA==
-Date:   Wed, 17 May 2023 11:02:57 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Rajat Jain <rajatja@chromium.org>,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linux-pci@vger.kernel.org,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        Oliver O 'Halloran <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCHv2 pci-next 2/2] PCI/AER: Rate limit the reporting of the
- correctable errors
-Message-ID: <ZGT6sTOtk+WY3aYt@bhelgaas>
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a245.dreamhost.com (Postfix) with ESMTPSA id 4QLzJJ4jRWz3P;
+        Wed, 17 May 2023 09:36:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1684341377;
+        bh=lyiRfuaV6vZjIMI62a7F2smJjyomKoQQVaxcFOW0RMU=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=XgRrMz+u0P8x1yYoJtc4xEPAgSrWVfT2hFfBYeCARaEMzRO19A8+JWvdOseSpTwBN
+         8aSNiaPoCjOMI2bwl3syscqc+WPtRH1i9ol7PfTumYO1ZfxGdSeRJIxMPXi40TJmO+
+         39m1pirdAxEICt0SkmDFzCO3D5/YXqYtyThKdgWGyplhxi3OBomm0RaLGKyZogowSG
+         teu6jqWKVvfCa43KqvgPFFjeoBcA3UUT7MVxdKEEC+HDsRbv0VWupXS4DYl3m31U8M
+         pOGaV/SWew6e03dlVR2xtXwqDsmxXsQUwY627LjPtYCmCmXRgwoqoeXBGDwGOip6cl
+         wDcgwvY73D3Sw==
+Date:   Wed, 17 May 2023 09:03:10 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@ACULAB.COM,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        =?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@igalia.com>,
+        libc-alpha@sourceware.org, Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Florian Weimer <fweimer@redhat.com>
+Subject: Re: [RFC PATCH 1/4] rseq: Add sched_state field to struct rseq
+Message-ID: <43ssw4ghx52wpw2klzyi35ioc4fr5g2givcc7sdxcyndytghsd@z4j6vdwvmn4d>
+References: <20230517152654.7193-1-mathieu.desnoyers@efficios.com>
+ <20230517152654.7193-2-mathieu.desnoyers@efficios.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANEJEGsE6KS484iSLkKV8hx2nNThZGfaaz+u+R-A3X5nRev6Gg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230517152654.7193-2-mathieu.desnoyers@efficios.com>
+User-Agent: NeoMutt/20230407
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 04:46:03PM -0700, Grant Grundler wrote:
-> On Fri, Apr 7, 2023 at 12:46 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, Apr 07, 2023 at 11:53:27AM -0700, Grant Grundler wrote:
-> > > On Thu, Apr 6, 2023 at 12:50 PM Bjorn Helgaas <helgaas@kernel.org>
-> > wrote:
-> > > > On Fri, Mar 17, 2023 at 10:51:09AM -0700, Grant Grundler wrote:
-> > > > > From: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> > > > >
-> > > > > There are many instances where correctable errors tend to inundate
-> > > > > the message buffer. We observe such instances during thunderbolt PCIe
-> > > > > tunneling.
-> > > ...
-> >
-> > > > >               if (info->severity == AER_CORRECTABLE)
-> > > > > -                     pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
-> > > > > -                             info->first_error == i ? " (First)" :
-> > "");
-> > > > > +                     pci_info_ratelimited(dev, "   [%2d]
-> > %-22s%s\n", i, errmsg,
-> > > > > +                                          info->first_error == i ?
-> > " (First)" : "");
-> > > >
-> > > > I don't think this is going to reliably work the way we want.  We have
-> > > > a bunch of pci_info_ratelimited() calls, and each caller has its own
-> > > > ratelimit_state data.  Unless we call pci_info_ratelimited() exactly
-> > > > the same number of times for each error, the ratelimit counters will
-> > > > get out of sync and we'll end up printing fragments from error A mixed
-> > > > with fragments from error B.
-> > >
-> > > Ok - what I'm reading between the lines here is the output should be
-> > > emitted in one step, not multiple pci_info_ratelimited() calls. if the
-> > > code built an output string (using sprintnf()), and then called
-> > > pci_info_ratelimited() exactly once at the bottom, would that be
-> > > sufficient?
-> > >
-> > > > I think we need to explicitly manage the ratelimiting ourselves,
-> > > > similar to print_hmi_event_info() or print_extlog_rcd().  Then we can
-> > > > have a *single* ratelimit_state, and we can check it once to determine
-> > > > whether to log this correctable error.
-> > >
-> > > Is the rate limiting per call location or per device? From above, I
-> > > understood rate limiting is "per call location".  If the code only
-> > > has one call location, it should achieve the same goal, right?
-> >
-> > Rate-limiting is per call location, so yes, if we only have one call
-> > location, that would solve it.  It would also have the nice property
-> > that all the output would be atomic so it wouldn't get mixed with
-> > other stuff, and it might encourage us to be a little less wordy in
-> > the output.
-> >
-> 
-> +1 to all of those reasons. Especially reducing the number of lines output.
-> 
-> I'm going to be out for the next week. If someone else (Rajat Kendalwal
-> maybe?) wants to rework this to use one call location it should be fairly
-> straight forward. If not, I'll tackle this when I'm back (in 2 weeks
-> essentially).
+On Wed, 17 May 2023, Mathieu Desnoyers wrote:
 
-Ping?  Really hoping to merge this for v6.5.
+>Expose the "on-cpu" state for each thread through struct rseq to allow
+>adaptative mutexes to decide more accurately between busy-waiting and
+>calling sys_futex() to release the CPU, based on the on-cpu state of the
+>mutex owner.
 
-Bjorn
+Oh yeah moving the spin stuff out of the kernel is much nicer.
+
+>It is only provided as an optimization hint, because there is no
+>guarantee that the page containing this field is in the page cache, and
+>therefore the scheduler may very well fail to clear the on-cpu state on
+>preemption. This is expected to be rare though, and is resolved as soon
+>as the task returns to user-space.
+>
+>The goal is to improve use-cases where the duration of the critical
+>sections for a given lock follows a multi-modal distribution, preventing
+>statistical guesses from doing a good job at choosing between busy-wait
+>and futex wait behavior.
+>
+>Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+>Cc: Jonathan Corbet <corbet@lwn.net>
+>Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
+>Cc: Carlos O'Donell <carlos@redhat.com>
+>Cc: Florian Weimer <fweimer@redhat.com>
+>Cc: libc-alpha@sourceware.org
+>---
+> include/linux/sched.h     | 12 ++++++++++++
+> include/uapi/linux/rseq.h | 17 +++++++++++++++++
+> kernel/rseq.c             | 14 ++++++++++++++
+> 3 files changed, 43 insertions(+)
+
+Ie: previous efforts
+
+  kernel/futex.c             |  675 ++++++++++++++++++++++++++++++++++++++------
+  kernel/futex.c             |  572 ++++++++++++++++++++++++++++++++++++-------------
+
+Thanks,
+Davidlohr
