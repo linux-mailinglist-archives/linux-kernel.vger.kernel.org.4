@@ -2,111 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE7270727E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52519707281
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjEQToN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        id S229903AbjEQTpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjEQToH (ORCPT
+        with ESMTP id S230077AbjEQTox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:44:07 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054811B7;
-        Wed, 17 May 2023 12:44:07 -0700 (PDT)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id E6C4C8624E;
-        Wed, 17 May 2023 21:44:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1684352645;
-        bh=IE0HGdKCuoH9lgoiitzVjdPvmo8bKfxPWC16LngE2Ek=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EYQj4CHVH/GJDtvMmmjufwX0FtN5j1I/FGHXrvyAA5Y94rmeQulI89AouflwEaSK/
-         8radGsCmSblsxZZd0Jz31Qh5FBNY4I5G7Pv1Odm5k1diI/ZyKwHP/aI0sioP4HJ+zA
-         uP5PSUXKMg52sE8EfjHwrExcSoRGhJ8pctchFNp60Z4xYfVLEAqgo0osMARXkdYU8K
-         M1B8DwZw4MNBIzKnUN7SPHCwPPg8AMjl8Ru+TUtm48a1C79njbw882HLJNXryo2Erf
-         ywvAsYwiWoq2vUg99VaW9ZLpSW0cTiK6JNFklwVkmSiWZmpVXwykQn5jI3ZqXOdpzR
-         JzZqT8bOyb/pA==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v2 3/3] ARM: dts: stm32: Add IWDG2 EXTI interrupt mapping and mark as wakeup source
-Date:   Wed, 17 May 2023 21:43:49 +0200
-Message-Id: <20230517194349.105745-3-marex@denx.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230517194349.105745-1-marex@denx.de>
-References: <20230517194349.105745-1-marex@denx.de>
+        Wed, 17 May 2023 15:44:53 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C9240D4;
+        Wed, 17 May 2023 12:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=uRn5jY22yg/grNtbC+Tg4kXWRa2p3rPCDtHdGv1KI5M=; b=s
+        qRxIcJ6vuRm9doZ4eNPugrtGBiFVBL+9R0zAVWVFmlUvZn1wjnpcKr2QIzNufuvkAz4y4YyeBWXSf
+        i0/cBmyy8bMp1HuTIRzOl1S8rgHuByC/W9mhE9SacLobZj1t0YZaVHc2x9jlZ3DB+l6/rvntTAfms
+        tcQJ4zpd4lJ+/MtU=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:36992 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pzN4l-0001n2-71; Wed, 17 May 2023 15:44:43 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 17 May 2023 15:44:07 -0400
+Message-Id: <20230517194406.4125912-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: [RFC PATCH] serial: sc16is7xx: fix broken port 0 uart init
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IWDG2 is capable of generating pre-timeout interrupt, which can be used
-to wake the system up from suspend to mem. Add the EXTI interrupt mapping
-and mark the IWDG2 as wake up source.
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Antonio Borneo <antonio.borneo@foss.st.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-watchdog@vger.kernel.org
----
-V2: No change
----
- arch/arm/boot/dts/stm32mp151.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+While experimenting with rs485 configuration on a SC16IS752 dual UART,
+I found that the sc16is7xx_config_rs485() function was called only for
+the second port (index 1, channel B), causing initialization problems
+for the first port.
 
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 664825418c32c..accbeef4df6da 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1541,6 +1541,8 @@ iwdg2: watchdog@5a002000 {
- 			reg = <0x5a002000 0x400>;
- 			clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
- 			clock-names = "pclk", "lsi";
-+			interrupts-extended = <&exti 46 IRQ_TYPE_LEVEL_HIGH>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
+For the sc16is7xx driver, port->membase and port->mapbase are not set,
+and their default values are 0. And we set port->iobase to the device
+index. This means that when the first device is registered using the
+uart_add_one_port() function, the following values will be in the port
+structure:
+    port->membase = 0
+    port->mapbase = 0
+    port->iobase  = 0
+
+Therefore, the function uart_configure_port() in serial_core.c will
+exit early because of the following check:
+	/*
+	 * If there isn't a port here, don't do anything further.
+	 */
+	if (!port->iobase && !port->mapbase && !port->membase)
+		return;
+
+Typically, I2C and SPI drivers do not set port->membase and
+port->mapbase. But I found that the max310x driver sets
+port->membase to ~0 (all ones). By implementing the same change in our
+driver, uart_configure_port() is now correctly executed.
+
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+
+I am not sure if this change is the best long-term solution to this
+problem, and maybe uart_configure_port() itself could be modified to
+take into account the fact that some devices have all three *base
+values set to zero?
+
+Also, many drivers use port->iobase as an index, is it the correct way
+to use it?
+
+For example, for our driver, there was
+commit 5da6b1c079e6 ("sc16is7xx: Set iobase to device index") with the
+following explanation:
+    "Set the .iobase value to the relative index within the device to allow
+    infering the order through sysfs."
+
+ drivers/tty/serial/sc16is7xx.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+index 1a3143331c1f..3e0e63498052 100644
+--- a/drivers/tty/serial/sc16is7xx.c
++++ b/drivers/tty/serial/sc16is7xx.c
+@@ -1432,6 +1432,7 @@ static int sc16is7xx_probe(struct device *dev,
+ 		s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
+ 		s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
+ 		s->p[i].port.iobase	= i;
++		s->p[i].port.membase	= (void __iomem *)~0;
+ 		s->p[i].port.iotype	= UPIO_PORT;
+ 		s->p[i].port.uartclk	= freq;
+ 		s->p[i].port.rs485_config = sc16is7xx_config_rs485;
 -- 
-2.39.2
+2.30.2
 
