@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E7C706F14
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF29706F17
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjEQRK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
+        id S229697AbjEQRLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEQRKY (ORCPT
+        with ESMTP id S229449AbjEQRLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:10:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9748E198E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684343378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O77FUeBqVv09R6tDA90nsHnvloA7B+EnHXU7+4rYNQ0=;
-        b=fPvpzaO2Gk6R4KtWGq9DCQNxCSK+V7Rz2DIt96VfJivyaN77ps4Z7pQrfiu8emViFPvvzK
-        ng34wrILNepk+/dbOE45zyGaYvgzdc9GhAPOa/XcxkGiFlrcjpufQyzTChxEFWYIerRcqs
-        zhLwhk2gI+gfJvtxj3KGteUHwPDiaNk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-221-3nq0b3zjNVGGhTxPrHkZdA-1; Wed, 17 May 2023 13:09:37 -0400
-X-MC-Unique: 3nq0b3zjNVGGhTxPrHkZdA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC7AB185A7A4;
-        Wed, 17 May 2023 17:09:36 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.8])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 22B9EC15BA0;
-        Wed, 17 May 2023 17:09:32 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 17 May 2023 19:09:22 +0200 (CEST)
-Date:   Wed, 17 May 2023 19:09:18 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mike Christie <michael.christie@oracle.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        nicolas.dichtel@6wind.com,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, konrad.wilk@oracle.com,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
-Message-ID: <20230517170917.GA17016@redhat.com>
-References: <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
- <48842e92-835e-bc3f-7118-48b8f415f532@leemhuis.info>
- <CAHk-=wicXCNR1bBioaAiBqEDgv-CoQD9z2RsM2VOTPzkK0xr8g@mail.gmail.com>
- <20230515-vollrausch-liebgeworden-2765f3ca3540@brauner>
- <CAHk-=wgXJ5VS1iBkfsG=HDjsyhn5XYDKt5xhQcNuz-e7VKyg8A@mail.gmail.com>
- <122b597e-a5fa-daf7-27bb-6f04fa98d496@oracle.com>
- <CAHk-=wgTpRDwS+F0Gd6+bM+TEh+x4Aiz8EBDTnTm3Q4TFdWOww@mail.gmail.com>
- <87cz30s20y.fsf@email.froward.int.ebiederm.org>
- <20230516183757.GA1286@redhat.com>
- <87mt24ox2d.fsf@email.froward.int.ebiederm.org>
+        Wed, 17 May 2023 13:11:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6C4198E;
+        Wed, 17 May 2023 10:11:02 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HER0rV005335;
+        Wed, 17 May 2023 17:10:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6q0xArWpEZhT4d+9ngBTBg23xYZkBDXNGbPrCv/UF5o=;
+ b=KdezF0FyvbncMVobwMtegc5q1dTxViZnRhGmGcY6hlJItNZVXeMZNl/aid2gEbskgR0s
+ fp5BeLPE9aayGA8hyAG8N6rgHNC6UX0CqxKatExsXkAVRYfQOsqzkHhmt3aZ2pT+8XD4
+ JOCIB+CwnJvCWP7sGFhMFQVayFsUcfCPMMaHPd1+jxUlSkrSU7Zi6heq/jPK+Hc6D/32
+ ZFolJMIroUT6+Ax0iGvc0P+XfZObVH4FHRvrHOM3FRAvzqKzJ2DYD5XnqPq7hLfScHrn
+ iTGdj4PN5UYOE7n3codfpDDmwlrJmWWAqc2LHXDrFB+m1mMSyAoGRSCAH9ueoEqRlRKH qQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmbk7b5ey-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 17:10:34 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34HHAXIU025352
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 17:10:33 GMT
+Received: from [10.110.32.16] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 17 May
+ 2023 10:10:32 -0700
+Message-ID: <8e4bde65-fe66-853b-8b87-f3b230a384df@quicinc.com>
+Date:   Wed, 17 May 2023 10:10:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mt24ox2d.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] accel/qaic: initialize ret variable to 0
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, <trix@redhat.com>,
+        <ogabbay@kernel.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <jacek.lawrynowicz@linux.intel.com>,
+        <stanislaw.gruszka@linux.intel.com>, <quic_pkanojiy@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20230517165605.16770-1-quic_jhugo@quicinc.com>
+Content-Language: en-US
+From:   Carl Vanderlip <quic_carlv@quicinc.com>
+In-Reply-To: <20230517165605.16770-1-quic_jhugo@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: O9dRqlgI_OB5q-Zuwbc59rWGZDx8R7un
+X-Proofpoint-ORIG-GUID: O9dRqlgI_OB5q-Zuwbc59rWGZDx8R7un
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ adultscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0 suspectscore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305170140
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,86 +82,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/16, Eric W. Biederman wrote:
->
-> Oleg Nesterov <oleg@redhat.com> writes:
->
-> >> There is this bit in complete_signal when SIGKILL is delivered to any
-> >> thread in the process.
-> >>
-> >> 			t = p;
-> >> 			do {
-> >> 				task_clear_jobctl_pending(t, JOBCTL_PENDING_MASK);
-> >> 				sigaddset(&t->pending.signal, SIGKILL);
-> >> 				signal_wake_up(t, 1);
-> >> 			} while_each_thread(p, t);
-> >
-> > That is why the latest version adds try_set_pending_sigkill(). No, no,
-> > it is not that I think this is a good idea.
->
-> I see that try_set_pending_sigkill in the patch now.
->
-> That try_set_pending_sigkill just keeps the process from reporting
-> that it has exited, and extend the process exit indefinitely.
->
-> SIGNAL_GROUP_EXIT has already been set, so the KILL signal was
-> already delivered and the process is exiting.
+On 5/17/2023 9:56 AM, Jeffrey Hugo wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> clang static analysis reports
+> drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
+>    value returned to caller [core.uninitialized.UndefReturn]
+>          return ret;
+>          ^~~~~~~~~~
+> 
+>>From a code analysis of the function, the ret variable is only set some
+> of the time but is always returned.  This suggests ret can return
+> uninitialized garbage. However BO allocation will ensure ret is always
+> set in reality.
+> 
+> Initialize ret to 0 to silence the warning.
+> 
+> Fixes: ff13be830333 ("accel/qaic: Add datapath")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> [jhugo: Reword commit text]
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> ---
+>   drivers/accel/qaic/qaic_data.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
+> index 8ab26e64b231..e42c1f9ffff8 100644
+> --- a/drivers/accel/qaic/qaic_data.c
+> +++ b/drivers/accel/qaic/qaic_data.c
+> @@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
+>   	struct qaic_bo *bo = to_qaic_bo(obj);
+>   	unsigned long offset = 0;
+>   	struct scatterlist *sg;
+> -	int ret;
+> +	int ret = 0;
+>   
+>   	if (obj->import_attach)
+>   		return -EINVAL;
 
-Agreed, that is why I said I don't think try_set_pending_sigkill() is
-a good idea.
 
-And again, the same is true for the threads created by
-create_io_thread(). get_signal() from io_uring/ can dequeue a pending
-SIGKILL and return, but that is all.
+LGTM
 
-> >> For clarity that sigaddset(&t->pending.signal, SIGKILL);  Really isn't
-> >> setting SIGKILL pending,
-> >
-> > Hmm. it does? Nevermind.
->
-> The point is that what try_set_pending_sigkill in the patch is doing is
-> keeping the "you are dead exit now" flag, from being set.
->
-> That flag is what fatal_signal_pending always tests, because we can only
-> know if a fatal signal is pending if we have performed short circuit
-> delivery on the signal.
->
-> The result is the effects of the change are mostly what people expect.
-> The difference the semantics being changed aren't what people think they
-> are.
->
-> AKA process exit is being ignored for the thread, not that SIGKILL is
-> being blocked.
-
-Sorry, I don't understand. I just tried to say that
-sigaddset(&t->pending.signal, SIGKILL) really sets SIGKILL pending.
-Nevermind.
-
-> > Although I never understood this logic.
-
-I meant I never really liked how io-threads play with signals,
-
-> I can't even understand the usage
-> > of lower_32_bits() in create_io_thread().
->
-> As far as I can tell lower_32_bits(flags) is just defensive programming
-
-Cough. but this is ugly. Or I missed something.
-
-> or have just populated .flags directly.
-
-Exactly,
-
-> Then .exit_signal
-> could have been set to 0.
-
-Exactly.
-
--------------------------------------------------------------------------------
-OK. It doesn't matter. I tried to read the whole thread and got lost.
-
-IIUC, Mike is going to send the next version? So I think we can delay
-the further discussions until then.
-
-Oleg.
-
+Reviewed-by: Carl Vanderlip <quic_carlv@quicinc.com>
