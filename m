@@ -2,276 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA47D70659E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5DC7065BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjEQKwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S229769AbjEQK4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjEQKwA (ORCPT
+        with ESMTP id S229560AbjEQK4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:52:00 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74232693
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:51:58 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-783b92ddbb0so230827241.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684320718; x=1686912718;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K68spFKIKZoUj/u+dxWKi6iespfIus5YPpt+sPI5BAk=;
-        b=gaSx/KJEbVdXCm7o/GGmHxE3VcjqXe6bQMLu/vUTeMyNffkt0cDVa7Gw1P0JFCmib1
-         5WcL5+466LOVs18rf3VOpEf343lNyS2/95PEgy5GNy+UXanryA9ogq3nC1euTZO7oFlm
-         TbBpNYZQaDZtjTVqAnqX79Y5Lx5jsPYEFEy3HHMB7pl6lz91DAUqQukOKF5n6+4W/rWc
-         Lb/0yZv5qZYPoVhvQ0zNNb2urvLZcBE3qtHCeQ/OkwF2Kwq/0Ug3IpFZp5s99GDQ4O7+
-         6qdZpZzW50IBQWUgyNdeRoDJQfsk0k/ZORynTIZNAhqT/qm2LvK3GmT5P0R5nJGK8zaT
-         YlvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684320718; x=1686912718;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K68spFKIKZoUj/u+dxWKi6iespfIus5YPpt+sPI5BAk=;
-        b=ivw0WGxlua97G/3bvz42vinzeyuM0mZl2lq0xPJV6AxnHWrmDJolP3dQJnJTCVhalB
-         Mv6djqhmGNrqTufDtN7PFM1Ik0NGqEm8sSShsy599g2tprSFWd4SLMk+KbElfmjHl4B/
-         8OwfothtbUYx8DccsE/DUNmssK/fWhfDHkizzTwODClrmGJgeATFiBQkQx9V/iTt88UT
-         QzAQAGSY1tL6Z8WUWj5lefokSp+0zkhWsR9ChXuoRupjUZuCTRahqG7Nk50DdJY5I7GW
-         v97s0FxoD77TpQ4BPcUbdJ1AKACmdB8/iN/60iRSRR3baN3l8w79I5fj9u1vnNWOJr0u
-         aD+Q==
-X-Gm-Message-State: AC+VfDxHSk10xqzzp50sHqZB5ZPz5KwjlYgjJSlRxA1nwzhatCwzKjtu
-        JOw5kSHhuye4HiS5SLV4N8W1CZsT+OETupONihbxfA==
-X-Google-Smtp-Source: ACHHUZ66rJjWNZYq6nJTNc5AlzcXHzV+tCYVzjeXTglFFAJUnYEJ4O+6IgHtb+C9DuStZ08IHaLIBUE34tcTBCAklwA=
-X-Received: by 2002:a67:f3cb:0:b0:434:6b92:51b1 with SMTP id
- j11-20020a67f3cb000000b004346b9251b1mr14878092vsn.16.1684320717825; Wed, 17
- May 2023 03:51:57 -0700 (PDT)
+        Wed, 17 May 2023 06:56:12 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2FC61AD;
+        Wed, 17 May 2023 03:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684320946; x=1715856946;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2GwP0EBEDbG45Z2SltddVm37Yre0XLhXksBVbeUJhz4=;
+  b=UlfRVvA4qojoAyO8WYg5SBTEPrcxCZOa1UajckSLYJihTLF4K70Xnw24
+   o+lVvmcB+LLxFxdnmZMHSNY35saP8ukBHsN3WiiB34eri2CVaJuOg5nTC
+   icHnWczxtfMaIHZNs36mXA5//6azurrjCFaPMTo/xrRlTrsUvTiMdXs11
+   z9T23rm5A6MDebIgvLfijxqjwzJ/hiX7tFS05+zsOmnfICCnF7WiRzJQC
+   aYsYrPazRfjyY8jpiRLzEEQU/Vx9SKgN3AA/ezPw+HmuHZSbTln4Hmt3c
+   w0navcZYnqdJwZRf1JgIJUDUpUAewIc1QDUKNC+cXV7qVRDqCItS4OVs0
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="438071545"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="438071545"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 03:52:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="734650831"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="734650831"
+Received: from lnstern-mobl1.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.221.185])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 03:52:42 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Dean Luick <dean.luick@cornelisnetworks.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 0/9] PCI: Improve PCIe Capability RMW concurrency control
+Date:   Wed, 17 May 2023 13:52:26 +0300
+Message-Id: <20230517105235.29176-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com> <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
-In-Reply-To: <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
-From:   =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
-Date:   Wed, 17 May 2023 12:51:46 +0200
-Message-ID: <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        akpm@linux-foundation.org, jeffxu@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000018f2fb05fbe17ac1"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000018f2fb05fbe17ac1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+PCI Express Capability RMW accessors don't properly protect against
+concurrent access. Link Control Register is written by a number of
+things in the kernel in a RMW fashion without any concurrency control.
+This could in the unlucky case lead to losing one of the updates. One
+of the most obvious path which can race with most of the other LNKCTL
+RMW operations seems to be ASPM policy sysfs write which triggers
+LNKCTL update. Similarly, Root Control Register can be concurrently
+accessed by AER and PME.
 
-On Wed, May 17, 2023 at 12:41=E2=80=AFAM Dave Hansen <dave.hansen@intel.com=
-> wrote:
->
-> On 5/16/23 00:06, Stephen R=C3=B6ttger wrote:
-> > On Mon, May 15, 2023 at 4:28=E2=80=AFPM Dave Hansen <dave.hansen@intel.=
-com> wrote:
-> >>
-> >> On 5/15/23 06:05, jeffxu@chromium.org wrote:
-> >>> We're using PKU for in-process isolation to enforce control-flow inte=
-grity
-> >>> for a JIT compiler. In our threat model, an attacker exploits a
-> >>> vulnerability and has arbitrary read/write access to the whole proces=
-s
-> >>> space concurrently to other threads being executed. This attacker can
-> >>> manipulate some arguments to syscalls from some threads.
-> >>
-> >> This all sounds like it hinges on the contents of PKRU in the attacker
-> >> thread.
-> >>
-> >> Could you talk a bit about how the attacker is prevented from running
-> >> WRPKRU, XRSTOR or compelling the kernel to write to PKRU like at sigre=
-turn?
-> >
-> > (resending without html)
-> >
-> > Since we're using the feature for control-flow integrity, we assume
-> > the control-flow is still intact at this point. I.e. the attacker
-> > thread can't run arbitrary instructions.
->
-> Can't run arbitrary instructions, but can make (pretty) arbitrary syscall=
-s?
+Make pcie_capability_clear_and_set_word() (and other RMW accessors that
+call it) to use a per device spinlock to protect the RMW operations to
+the Capability Registers that require locking. Convert open-coded
+LNKCTL RMW operations to use pcie_capability_clear_and_set_word() to
+benefit from the locking.
 
-The threat model is that the attacker has arbitrary read/write, while other
-threads run in parallel. So whenever a regular thread performs a syscall an=
-d
-takes a syscall argument from memory, we assume that argument can be attack=
-er
-controlled.
-Unfortunately, the line is a bit blurry which syscalls / syscall arguments =
-we
-need to assume to be attacker controlled. We're trying to approach this by
-roughly categorizing syscalls+args:
-* how commonly used is the syscall
-* do we expect the argument to be taken from writable memory
-* can we restrict the syscall+args with seccomp
-* how difficult is it to restrict the syscall in userspace vs kernel
-* does the syscall affect our protections (e.g. change control-flow or pkey=
-)
+As for LNKCTL2, all current users are safe so I left those changes to
+be part of PCIe bandwidth control work I'll send separately later. It
+will add LNKCTL2 RMW ops that require locking.
 
-Using munmap as an example:
-* it's a very common syscall (nearly every seccomp filter will allow munmap=
-)
-* the addr argument will come from memory
-* unmapping pkey-tagged pages breaks our assumptions
-* it's hard to restrict in userspace since we'd need to keep track of all
-  address ranges that are unsafe to unmap and hook the syscall to perform t=
-he
-  validation on every call in the codebase.
-* it's easy to validate in kernel with this patch
+I went with the wrapper approach I suggested to Lukas even if I
+personally feel it's over-engineering for a case that doesn't current
+exist in the kernel code. That, however, is contained in the first
+patch so it can be easily changed without affecting the other patches.
 
-For most other syscalls, they either don't affect the control-flow, are eas=
-y to
-avoid and block with seccomp or we can add validation in userspace (e.g. on=
-ly
-install signal handlers at program startup).
+I felt better to do these as fixes first before altering code related
+to duplicated ASPM code in drivers. Replacing the custom ASPM code in
+drivers with calls to core will not necessarily yield the same states
+as previously even if disabling ASPM becomes always possible because
+re-enabling ASPM would still be prohibited (some drivers do disable and
+enable ASPM back later). Thus, the ASPM "cleanups" would have higher
+regression potential.
 
-> > * For JIT code, we're going to scan it for wrpkru instructions before
-> > writing it to executable memory
->
-> ... and XRSTOR, right?
+The series is based on top of the "PCI/ASPM: Handle link retraining
+race" patch I sent earlier but is not yet applied.
 
-Right. We=E2=80=99ll just have a list of allowed instructions that the JIT =
-compiler can
-emit.
+v2:
+- Keep the RMW ops caller API the same
+- Make pcie_capability_clear_and_set_word() a wrapper that uses
+  locked/unlocked variant based on the capability reg
+- Extracted LNKCTL2 changes out from this series to keep this purely
+  a series which fixes something (LNKCTL2 RMW lock is necessary only
+  when PCIe BW control is introduced).
+- Added Fixes tags (it's a bit rathole but yeah, they're there now).
+- Renamed cap_lock to pcie_cap_lock
+- Changed ath1* to clear the ASPMC field before setting it
 
->
-> > * For regular code, we only use wrpkru around short critical sections
-> > to temporarily enable write access
-> >
-> > Sigreturn is a separate problem that we hope to solve by adding pkey
-> > support to sigaltstack
->
-> What kind of support were you planning to add?
 
-We=E2=80=99d like to allow registering pkey-tagged memory as a sigaltstack.=
- This would
-allow the signal handler to run isolated from other threads. Right now, the
-main reason this doesn=E2=80=99t work is that the kernel would need to chan=
-ge the pkru
-state before storing the register state on the stack.
+Ilpo Järvinen (9):
+  PCI: Add locking to RMW PCI Express Capability Register accessors
+  PCI: pciehp: Use RMW accessors for changing LNKCTL
+  PCI/ASPM: Use RMW accessors for changing LNKCTL
+  drm/amdgpu: Use RMW accessors for changing LNKCTL
+  drm/radeon: Use RMW accessors for changing LNKCTL
+  net/mlx5: Use RMW accessors for changing LNKCTL
+  wifi: ath11k: Use RMW accessors for changing LNKCTL
+  wifi: ath12k: Use RMW accessors for changing LNKCTL
+  wifi: ath10k: Use RMW accessors for changing LNKCTL
 
-> I was thinking that an attacker with arbitrary write access would wait
-> until PKRU was on the userspace stack and *JUST* before the kernel
-> sigreturn code restores it to write a malicious value.  It could
-> presumably do this with some asynchronous mechanism so that even if
-> there was only one attacker thread, it could change its own value.
+ drivers/gpu/drm/amd/amdgpu/cik.c              | 36 +++++------------
+ drivers/gpu/drm/amd/amdgpu/si.c               | 36 +++++------------
+ drivers/gpu/drm/radeon/cik.c                  | 36 +++++------------
+ drivers/gpu/drm/radeon/si.c                   | 37 +++++-------------
+ .../ethernet/mellanox/mlx5/core/fw_reset.c    |  9 +----
+ drivers/net/wireless/ath/ath10k/pci.c         |  9 +++--
+ drivers/net/wireless/ath/ath11k/pci.c         | 10 +++--
+ drivers/net/wireless/ath/ath12k/pci.c         | 10 +++--
+ drivers/pci/access.c                          | 20 ++++++++--
+ drivers/pci/hotplug/pciehp_hpc.c              | 12 ++----
+ drivers/pci/pcie/aspm.c                       | 39 ++++++++-----------
+ drivers/pci/probe.c                           |  1 +
+ include/linux/pci.h                           | 34 +++++++++++++++-
+ 13 files changed, 128 insertions(+), 161 deletions(-)
 
-I=E2=80=99m not sure I follow the details, can you give an example of an as=
-ynchronous
-mechanism to do this? E.g. would this be the kernel writing to the memory i=
-n a
-syscall for example?
+-- 
+2.30.2
 
-> Also, the kernel side respect for PKRU is ... well ... rather weak.
-> It's a best effort and if we *happen* to be in a kernel context where
-> PKRU is relevant, we can try to respect PKRU.  But there are a whole
-> bunch of things like get_user_pages_remote() that just plain don't have
-> PKRU available and can't respect it at all.
->
-> I think io_uring also greatly expanded how common "remote" access to
-> process memory is.
->
-> So, overall, I'm thrilled to see another potential user for pkeys.  It
-> sounds like there's an actual user lined up here, which would be
-> wonderful.  But, I also want to make sure we don't go to the trouble to
-> build something that doesn't actually present meaningful, durable
-> obstacles to an attacker.
->
-> I also haven't more than glanced at the code.
-
---00000000000018f2fb05fbe17ac1
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPoQYJKoZIhvcNAQcCoIIPkjCCD44CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz7MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-2DeNJUdew/schvbvw4wolIIwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYm
-aHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYI
-KwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2Nh
-L2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei
-6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNv
-bS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAEWztMCBdTNW
-CGPLcNM/ovJHsl+VF/BsKdiiwJoodyWO9fmhOgEVex1vfc+njM0bkWC0b4U08iUPP91eksCFGhhi
-cCchsXpkAzfcKPJ7OsFd7J4xQUQPpi02r1P7Y9UKLa8nsNChf9ck1GAz1Skb77r1JWgSlHOcyuVZ
-UQ/JuUVMf/XW7flFfNybswGgFmfnBvDW1qrqBPHpEFmWeNYXISpFQj0UWyGmykQGKi8q44IPy5Qg
-uId+alGaBDlL5OAZQtmhRyh1MVd2wtgvGEfNGDGq603urx17nwEvM1gjSmOgnhEigOhhHH7DOeyt
-5zPYLaKguxLWPGXlZ0UUjA7lH3gxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
-ExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENB
-IDIwMjACEAGkX4MOebzHzp8Y/d5NuOkwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIE
-IKe26MzTodEX8ApXSda7lXK6EbvML4Nu13ijWG20U2XaMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-BwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUxNzEwNTE1OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
-ZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQow
-CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCuxh4kos5kFnK2j8eu
-Fbrtyu6uKFJrwL1r46N5vYcVKk3Hc+GAZmfIYkGvXiN7LX4fTNyf2sEkGrpLWCteIMJL5orIuwQ3
-Qotgq+Xdfb2aWXBsnXtXIwjDCgRN3JwQQnwCO8a5/YsVCuSeBIXD+vR8+Tm8/hOJo6WXoLWLn7Pc
-w1cYZhoBM2ziCjC7VEvo0c/EjDHIRordEKr40+kYz9Mmid6833w6b1zxgFklbqnB1ksXhVKo7J16
-5JnrMtOraFkEUFHnlZ81+5FqhqVn1f7tsI2Ww/jbuR/jSgAAEqdHShe6NoPCS8M+mEgLbVia8+6g
-NUP34ZqKQKSPKpQ3lCYn
---00000000000018f2fb05fbe17ac1--
