@@ -2,120 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63EF705E61
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BE6705E6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjEQDwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 23:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S232107AbjEQD6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 23:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjEQDwR (ORCPT
+        with ESMTP id S229595AbjEQD57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 23:52:17 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C6A271B;
-        Tue, 16 May 2023 20:52:16 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25343f0c693so165524a91.3;
-        Tue, 16 May 2023 20:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684295536; x=1686887536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AUXFRmo2MSjUiP3pz0lzOFDLD9CCDZHx5JZ6kXK49MA=;
-        b=YTS0qcj/hG4UhEBJb3/I8+r3muMeN3UAkFTzlWc4pOy86nF2hlfHA7HHcNw0QA7WdU
-         ysiWX5b8G7mWmzoet7jUv0bFKWPXaFJCHGreU3hWRcOHCJ91BupPc//853th0Mt1i532
-         qPVklvWPJCLhju91sHhOKM0X9nff7OeDHtkF66UZ29B5Evjc+jmIXfyoqPHMdDShJ3BQ
-         ZHYT50y+Y8kahR3mv8MVczj1df2eQup+P8Y/Dbss7EWF7wkJWVFSve4Qw47huUc9Zif2
-         We61ylGUJVMi4FZGqwYlGVTiwjh33TAlQiujlpl/9sUV7YLcaMxo4EeSI5ailX3IuKHP
-         Wdsw==
+        Tue, 16 May 2023 23:57:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB630FE
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684295830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SF1C6Ii/3dDFs+yLRzrDuFD5U/ERayv1kcGi9vPuHdM=;
+        b=e5twVMP550f8gYzLK3CdWA7vjrZxo4F3XfxVup5K88RhlF6NEwtX0HuoEL+meQqBhtxEPm
+        75V+uonGSFJK/pyB9HWOjcnsVnJW4ZKgrTQQRfP6eBE1kCynlxGctsJfTULODQy2VyJaNM
+        qJgiZik6MKHaCIVzHatnEt+7wBcxXTc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-594-m82V8dvKP7SM5QKWHhTiXA-1; Tue, 16 May 2023 23:57:09 -0400
+X-MC-Unique: m82V8dvKP7SM5QKWHhTiXA-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3078b9943d6so68646f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:57:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684295536; x=1686887536;
+        d=1e100.net; s=20221208; t=1684295828; x=1686887828;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AUXFRmo2MSjUiP3pz0lzOFDLD9CCDZHx5JZ6kXK49MA=;
-        b=b4OabB9Ija9US2/g4w2cqTTV7Xr4FUK4c3+i9SZzF37U8UTiMUHR8WgE5NIxFTlCh6
-         TD2D/iS5HyOI396Juvd37jBYk7kCr7bf+lps2IB4h0i+i0Tr8NTIuExaNeoNbnpkPclW
-         g4KUQ/Yonb07SYu7jqp58Ph37cWNgohbqoucRiFvTkxpYyQQKqw0Eg8YcgbswB3MMykz
-         ETmroYOQBxeK4+4RqJEX815tAqYPmS+LVeBL+kXWgD8rTl9UvqtrVqgUAarPXgFVYUSC
-         XeCS8xEZQbUb0TjM49eKfqoRSASt/bAkD1/ubmLvQHRdTaSYWEUqMVyr+8wy5Iq7ZCsv
-         jgOA==
-X-Gm-Message-State: AC+VfDzF/FWHfynifFB7EQWssD9NJ9gqnQ36DSQQpfwCZ7p48491SIeJ
-        AUnuv1h2oLa+Mm5SgsY7cLkL0UUluFg=
-X-Google-Smtp-Source: ACHHUZ5FxCBS+0YcXJo3FhDTsN4EFNwO8RkcXyTXtu4z6LvH4lM5z60eFxhe/fPZQebwejl0so7hAg==
-X-Received: by 2002:a17:90b:350:b0:250:1905:ae78 with SMTP id fh16-20020a17090b035000b002501905ae78mr39147491pjb.15.1684295535825;
-        Tue, 16 May 2023 20:52:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t17-20020a639551000000b00519c3475f21sm14303276pgn.46.2023.05.16.20.52.14
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SF1C6Ii/3dDFs+yLRzrDuFD5U/ERayv1kcGi9vPuHdM=;
+        b=c0mag2H0qxnLWTmiycrmr0zGodCW/nLj6emc1X2fe1SG0KRIYQ1qDoANcJNc/pxonr
+         Ux7ACfAmX9Nf7NjTZmd0GpITeoAHZ74ZiBcsMub+gmxxSwETVjzc9zmK+QVqjIsd13pD
+         oMMD/sOVlePZSsj+Sv2QnAzrTAYc15k9VQiaKOI3hR8EcZu6hab9kkOLMX5Wa7pSIbIF
+         gradsLJf7KKSvPGBTwY9QBWYK+F4qYlnZ/Sw1eiianmVTeK8wvGyqZqdwrFFBKs5x5Se
+         RXGFL0DJsxQkKeUt29qrDG+fo/X3FF4tQ93dcr1cr4efmIFJ7QbtFFc4APGyLGysURzb
+         7jkQ==
+X-Gm-Message-State: AC+VfDzNSE6fU1AMzOHR7b5h/mcOFP4TOXvGlO4+cGyVqwK3xbsH6vM+
+        yD8Jf4pdCWBfv6OFmDOGreglpJHYKMveQYlB+2ZLAo+DzKIvClUkEXBrD2Qt07dekXIQRK6F30v
+        mx4s6hnGABxZ0r29bbml2V0xowFnqr0lO
+X-Received: by 2002:adf:fe05:0:b0:306:f6c:1063 with SMTP id n5-20020adffe05000000b003060f6c1063mr27718186wrr.38.1684295827944;
+        Tue, 16 May 2023 20:57:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6tMdwniV2/Yl2o/aQZF/VVc4cBdt1RKQYwGpF5htMgQeuGGC6Mzgt027tn3iFNOt3EKaEyjA==
+X-Received: by 2002:adf:fe05:0:b0:306:f6c:1063 with SMTP id n5-20020adffe05000000b003060f6c1063mr27718177wrr.38.1684295827638;
+        Tue, 16 May 2023 20:57:07 -0700 (PDT)
+Received: from redhat.com ([2.52.6.43])
+        by smtp.gmail.com with ESMTPSA id l7-20020a5d5267000000b002fe96f0b3acsm1409753wrc.63.2023.05.16.20.57.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 20:52:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 16 May 2023 20:52:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 000/282] 5.4.243-rc1 review
-Message-ID: <739bd109-b32d-46f1-b382-e55f34efc11a@roeck-us.net>
-References: <20230515161722.146344674@linuxfoundation.org>
+        Tue, 16 May 2023 20:57:07 -0700 (PDT)
+Date:   Tue, 16 May 2023 23:57:04 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>
+Cc:     stefanha@redhat.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v2 0/2] virtio: abstract virtqueue related methods
+Message-ID: <20230516235541-mutt-send-email-mst@kernel.org>
+References: <20230517025424.601141-1-pizhenwei@bytedance.com>
+ <20230516234444-mutt-send-email-mst@kernel.org>
+ <8f3ca136-0276-49ca-d703-715c83cff557@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230515161722.146344674@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <8f3ca136-0276-49ca-d703-715c83cff557@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 06:26:18PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.243 release.
-> There are 282 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, May 17, 2023 at 11:51:03AM +0800, zhenwei pi wrote:
 > 
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
 > 
+> On 5/17/23 11:46, Michael S. Tsirkin wrote:
+> > On Wed, May 17, 2023 at 10:54:22AM +0800, zhenwei pi wrote:
+> > > v1 -> v2:
+> > > - Suggested by MST, use fast path for vring based performance
+> > > sensitive API.
+> > > - Reduce changes in tools/virtio.
+> > > 
+> > > Add test result(no obvious change):
+> > > Before:
+> > > time ./vringh_test --parallel
+> > > Using CPUS 0 and 191
+> > > Guest: notified 10036893, pinged 68278
+> > > Host: notified 68278, pinged 3093532
+> > > 
+> > > real	0m14.463s
+> > > user	0m6.437s
+> > > sys	0m8.010s
+> > > 
+> > > After:
+> > > time ./vringh_test --parallel
+> > > Using CPUS 0 and 191
+> > > Guest: notified 10036709, pinged 68347
+> > > Host: notified 68347, pinged 3085292
+> > > 
+> > > real	0m14.196s
+> > > user	0m6.289s
+> > > sys	0m7.885s
+> > > 
+> > > v1:
+> > > Hi,
+> > > 
+> > > 3 weeks ago, I posted a proposal 'Virtio Over Fabrics':
+> > > https://lists.oasis-open.org/archives/virtio-comment/202304/msg00442.html
+> > > 
+> > > Jason and Stefan pointed out that a non-vring based virtqueue has a
+> > > chance to overwrite virtqueue instead of using vring virtqueue.
+> > > 
+> > > Then I try to abstract virtqueue related methods in this series, the
+> > > details changes see the comment of patch 'virtio: abstract virtqueue related methods'.
+> > > 
+> > > Something is still remained:
+> > > - __virtqueue_break/__virtqueue_unbreak is supposed to use by internal
+> > >    virtio core, I'd like to rename them to vring_virtqueue_break
+> > >    /vring_virtqueue_unbreak. Is this reasonable?
+> > 
+> > Why? These just set a flag?
+> > 
+> 
+> Rename '__virtqueue_break' to 'vring_virtqueue_break', to make symbols
+> exported from virtio_ring.ko have unified prefix 'vring_virtqueue_xxx'.
 
-Build results:
-	total: 159 pass: 159 fail: 0
-Qemu test results:
-	total: 455 pass: 454 fail: 1
-Failed tests:
-	arm:sabrelite:multi_v7_defconfig:mtd2:mem256:net,default:imx6dl-sabrelite:rootfs
+I just do not see why you need these callbacks at all.
 
-As far as I can see, the second SPI interface fails to instantiate.
+> > > - virtqueue_get_desc_addr/virtqueue_get_avail_addr/virtqueue_get_used_addr
+> > >    /virtqueue_get_vring is vring specific, I'd like to rename them like
+> > >    vring_virtqueue_get_desc_addr. Is this reasonable?
+> > > - there are still some functions in virtio_ring.c with prefix *virtqueue*,
+> > >    for example 'virtqueue_add_split', just keep it or rename it to
+> > >    'vring_virtqueue_add_split'?
+> > > zhenwei pi (2):
+> > >    virtio: abstract virtqueue related methods
+> > >    tools/virtio: implement virtqueue in test
+> > > 
+> > >   drivers/virtio/virtio_ring.c | 285 +++++-----------------
+> > >   include/linux/virtio.h       | 441 +++++++++++++++++++++++++++++++----
+> > >   include/linux/virtio_ring.h  |  26 +++
+> > >   tools/virtio/linux/virtio.h  | 355 +++++++++++++++++++++++++---
+> > >   4 files changed, 807 insertions(+), 300 deletions(-)
+> > > 
+> > > -- 
+> > > 2.20.1
+> > 
+> 
+> -- 
+> zhenwei pi
 
-[   21.491528] spi_imx 2008000.spi: bitbang start failed with -22
-
-There are also various new warnings in clock code.
-
-[   21.492631] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:986 clk_core_disable+0x124/0x2e4
-[   21.497524] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:845 clk_core_unprepare+0x268/0x388
-
-The warnings in clock code are gone after reverting all changes introducing
-PM support for imx spi code. The boot failure is gone after reverting the
-gpio conversion. In total, I reverted the following patches to fix the
-boot and warning problems.
-
-d6fcaa127cc6 Revert "spi: imx/fsl-lpspi: Convert to GPIO descriptors"
-9783b21b591d Revert "spi: imx: enable runtime pm support"
-4a8bdbf7462b Revert "spi: spi-imx: using pm_runtime_resume_and_get instead of pm_runtime_get_sync"
-e6c5f497ff35 Revert "spi: imx: Don't skip cleanup in remove's error path"
-d6ea758df74f Revert "spi: imx: fix runtime pm support for !CONFIG_PM"
-b9dbd028c970 Revert "spi: imx: fix reference leak in two imx operations"
-
-Is this really 5.4 material ?
-
-Guenter
