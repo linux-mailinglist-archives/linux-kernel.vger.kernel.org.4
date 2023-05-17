@@ -2,61 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13377064B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546E17064B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjEQJzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S229456AbjEQJ4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjEQJzf (ORCPT
+        with ESMTP id S230055AbjEQJ4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:55:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98100A6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:55:34 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pzDsW-0005cr-K3; Wed, 17 May 2023 11:55:28 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DC2AA1C6F22;
-        Wed, 17 May 2023 09:55:27 +0000 (UTC)
-Date:   Wed, 17 May 2023 11:55:27 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] driver core: Call pm_runtime_put_sync() only after
- device_remove()
-Message-ID: <20230517-amigo-depth-00436cd21520-mkl@pengutronix.de>
-References: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
- <CAJZ5v0gNPt=rq+pQtmoGL5nxzDQboOK4d6h7=NoY=LueVhZjAQ@mail.gmail.com>
- <20230511103923.hvibdyo5ges4bab2@pengutronix.de>
- <ZFzWCey825wSlr2v@hovoldconsulting.com>
- <CAJZ5v0jvJT4JkHtO3RCUEzkfawxLCwR=QO2Y2CsL=cYN9s4hXw@mail.gmail.com>
- <ZF3tUQFTeILXV_VT@hovoldconsulting.com>
- <20230512184925.d7w3j4r7oajtpsxi@pengutronix.de>
- <ZGSQEapCl5HfQpY8@hovoldconsulting.com>
+        Wed, 17 May 2023 05:56:06 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968044209;
+        Wed, 17 May 2023 02:56:01 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b33c72686so365541a12.1;
+        Wed, 17 May 2023 02:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684317361; x=1686909361;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ayYNauh9YOj0YuMbIMh+fZvBeOH7YM6wlBBt72xWnhI=;
+        b=jMRIWYqEgbvXYuhnGgk45LlPtJB67tD2df9o2Ef8nY5Jr4Ct1wQHVwKLRD9CiiyPTp
+         vwZIarGqWvB31/jkH3HYZJrisEb5hiAYr0aRHxZaG2qKAKBvdpu96EQOUvOvoaZ/77jN
+         jSTX5FpZR4VrOTGZcixeEQl2R5mBefwz7Hc1RSC9dJmhnHO2UU/iTPzALJo9PQHrIv8N
+         FLpDWANJRIM/d/5A/JCoycDb0JWOKp33gZwPSmwst7YdCF7C6RCKq2G9YlhmRdCpTujM
+         nSEb1/B4OsOb6440+nWy930mTxBFZzdiFOJMRVtLbHSsZUbvV4a3+Na5veQHeO87/Qw9
+         Zbcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684317361; x=1686909361;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ayYNauh9YOj0YuMbIMh+fZvBeOH7YM6wlBBt72xWnhI=;
+        b=GQxwvZ0Kv9elNv3N1tUx89JaIN7eHXJ2U+Blk3iIxiFrVk5ig+exiolGBUynwCUZ8x
+         sMLm9Oz5eepY2pZoRlSwrTyMYQJ/CJAJy8meqB4qRRZdUMuT/2OHhP2CExy3kfuThtJR
+         2Pvp5HJaQvXtz9NgjqkgMNfe17+7peG5mTCBXGD8MTQImffDk5GacEmpqzU6M1kd77gT
+         QLT1C3foGUySUfLKc9PTkkre2WnwUzWsN+1teWB/BSAqexgssVZXEZD0GX51j02rVWtH
+         ApE06e2E+ErI7S/4S4SJyEJBmvUTgZoo4snX5jr+zT90C5TxZezmFihowsYwrbsCLUEB
+         UjHw==
+X-Gm-Message-State: AC+VfDyoiyFmccAy4OujUipJQu07m2dydwsuBKwssNTWosD0C303TfUF
+        uzT0c8kcgxOHghkGpvjkQrw=
+X-Google-Smtp-Source: ACHHUZ5hXvFTup24JPN1NmOVtxyJWdFuwnnZ/SrTyzOet8dUUnQEq+IxV3mh5Y9b2PKgrA8uzhrQWQ==
+X-Received: by 2002:a17:903:120d:b0:1a5:2993:8aa6 with SMTP id l13-20020a170903120d00b001a529938aa6mr47905055plh.63.1684317360866;
+        Wed, 17 May 2023 02:56:00 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902eccb00b001a6c15cad12sm667642plh.166.2023.05.17.02.55.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 02:56:00 -0700 (PDT)
+Message-ID: <851f6305-2145-d756-91e3-55ab89bfcd42@gmail.com>
+Date:   Wed, 17 May 2023 17:55:45 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3wt7jlt2pkr75bmw"
-Content-Disposition: inline
-In-Reply-To: <ZGSQEapCl5HfQpY8@hovoldconsulting.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [RFC PATCH V6 02/14] x86/sev: Add Check of #HV event in path
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, pangupta@amd.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-3-ltykernel@gmail.com>
+ <20230516093225.GD2587705@hirez.programming.kicks-ass.net>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <20230516093225.GD2587705@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,57 +89,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/16/2023 5:32 PM, Peter Zijlstra wrote:
+>> --- a/arch/x86/entry/entry_64.S
+>> +++ b/arch/x86/entry/entry_64.S
+>> @@ -1019,6 +1019,15 @@ SYM_CODE_END(paranoid_entry)
+>>    * R15 - old SPEC_CTRL
+>>    */
+>>   SYM_CODE_START_LOCAL(paranoid_exit)
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +	/*
+>> +	 * If a #HV was delivered during execution and interrupts were
+>> +	 * disabled, then check if it can be handled before the iret
+>> +	 * (which may re-enable interrupts).
+>> +	 */
+>> +	mov     %rsp, %rdi
+>> +	call    check_hv_pending
+>> +#endif
+>>   	UNWIND_HINT_REGS
+>>   
+>>   	/*
+>> @@ -1143,6 +1152,15 @@ SYM_CODE_START(error_entry)
+>>   SYM_CODE_END(error_entry)
+>>   
+>>   SYM_CODE_START_LOCAL(error_return)
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +	/*
+>> +	 * If a #HV was delivered during execution and interrupts were
+>> +	 * disabled, then check if it can be handled before the iret
+>> +	 * (which may re-enable interrupts).
+>> +	 */
+>> +	mov     %rsp, %rdi
+>> +	call    check_hv_pending
+>> +#endif
+>>   	UNWIND_HINT_REGS
+>>   	DEBUG_ENTRY_ASSERT_IRQS_OFF
+>>   	testb	$3, CS(%rsp)
+> Oh hell no... do now you're adding unconditional calls to every single
+> interrupt and nmi exit path, with the grand total of 0 justification.
+> 
 
---3wt7jlt2pkr75bmw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 17.05.2023 10:28:01, Johan Hovold wrote:
-> Right, but we do have drivers that have CONFIG_PM as an explicit
-> dependency.
->=20
-> > In the end something like 72362dcdf654 ("can: mcp251xfd:
-> > mcp251xfd_unregister(): simplify runtime PM handling") might be an
-> > approach. But IMHO it's more complicated than it should be and honestly
-> > I'm not sure if it's safe and correct this way.
->=20
-> Yeah, unfortunately runtime PM is fairly underspecified so we end up
-> with this multitude of implementations, many of which are broken in
-> various ways. A smaller API with documented best-practices may have
-> helped, but that's not where we are right now.
->=20
-> Looks like 72362dcdf654 ("can: mcp251xfd: mcp251xfd_unregister():
-> simplify runtime PM handling") introduces yet another way to do things,
-> and which will break if anyone enables (or tries to use this pattern in
-> another driver with) autosuspend...
-
-ACK - I think in that driver it works, as the runtime PM is resumed
-during interface up and suspended in interface down. IMHO autosuspend
-would not bring any benefits here...
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---3wt7jlt2pkr75bmw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRkpIwACgkQvlAcSiqK
-BOhzbAf8DWsOJ0mjyWBBY0Q+gWS12dT8Rvj/nRDr0prMJppQqSwDt5fMVojtTcPO
-tn520MDhPhYdS00ufsnJj7hHfjBHEs/UAtJcqOqNGvAaY9KSG0f3T4SfBEfwDUF3
-YEAjr7fSYfl1MFfx815+m3kGse1nd4VMclqa0fsucc5z+0bO7MnhAszj22cXKPHZ
-JztBSMB3MFa+YlhCU5uXTumqemLK8oUjyI9HOuyc+uO6QM7rKcnkKeNnz+4xS1Gc
-HrgBZcpBqFie8qOO2K9FQbyXU00iJxRc12iteaX77Prsau9kXfbIdpEr3Plo/KXU
-X+mLuXKrYuC1GAlHX6RPtP2xyU/LiQ==
-=J+hB
------END PGP SIGNATURE-----
-
---3wt7jlt2pkr75bmw--
+Sorry to Add check inside of check_hv_pending(). Will move the check 
+before calling check_hv_pending() in the next version. Thanks.
