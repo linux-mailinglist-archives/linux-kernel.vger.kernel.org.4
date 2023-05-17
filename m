@@ -2,87 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769E0706C6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE698706C6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjEQPPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S230301AbjEQPQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjEQPPr (ORCPT
+        with ESMTP id S231411AbjEQPQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:15:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A913A5DE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:15:23 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 999F4660574E;
-        Wed, 17 May 2023 16:15:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684336521;
-        bh=JXHlQGqLZnwEd+1ywgBD3qSPq+lFVpm0deC33quGJxg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hU6gxKKpauEvIDnRRvhNe5X+xvq1mbElAP7P78bkk/hHN4XTRExPEbV+YZ3Pzhtid
-         kKq19X8KSghlsJ399B8CEZafU6kvVxFno7r6UGH+R2DBgq8QUdvrC6qDrCyhdhl0CW
-         Q/Jy9PIGGy4HAtAzB/Pzto/dUnSC2l4QAe9h/LsXsJ/Yz8XirEyQfAtP8CzMgjG8T0
-         j6bPn2QLepvjETscRoG1aV4+9GcnZTs3VzscIdM88AxfkjKOPTHeImTgIBFTHTx6zq
-         tWvrb/HDXVO7OY2eRSXaPzukoqLGZp4l27t/Yl50Ec2cXqRak34CuP/WjdzTV3iKzT
-         oMYE3MMzvdNew==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     lgirdwood@gmail.com
-Cc:     broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        nfraprado@collabora.com, wenst@chromium.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH] ASoC: mediatek: mt8192-mt6359: Remove " Jack" from Headphone pin name
-Date:   Wed, 17 May 2023 17:15:16 +0200
-Message-Id: <20230517151516.343037-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 17 May 2023 11:16:26 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7B9CA;
+        Wed, 17 May 2023 08:16:05 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pzIsS-0007mi-By; Wed, 17 May 2023 17:15:44 +0200
+Message-ID: <48deb3fa-1784-a08d-aa8c-93ccf63a4aba@leemhuis.info>
+Date:   Wed, 17 May 2023 17:15:43 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
+ drm_kms_helper_poll_disable during suspend
+Content-Language: en-US, de-DE
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Janne Grunau <j@jannau.net>, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+        daniel@ffwll.ch, neil.armstrong@linaro.org, tony.luck@intel.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
+        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com,
+        regressions@lists.linux.dev, zongmin zhou <zhouzongmin@kylinos.cn>
+References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
+ <20230420200148.GD3280@jannau.net>
+ <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
+ <1682386644754589.204.seg@mailgw>
+ <1186d62a5fe7f2aa6e06f06a3dc7605c0072f1eb.camel@kylinos.cn>
+ <CAA8EJppmUtuhAF+VHPh3Q8tNYp1m4T6P7dZ0wYZ8Vzwo0DF6cg@mail.gmail.com>
+ <6599319fea8ed1e3d6968e5b986661f0cf175902.camel@kylinos.cn>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <6599319fea8ed1e3d6968e5b986661f0cf175902.camel@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684336567;aea88f7a;
+X-HE-SMSGID: 1pzIsS-0007mi-By
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function jack_kctl_name_gen() will remove the redundant " Jack" from
-the name, if present, and then it will add it back, so that all of
-the controls are named "(pin-name) Jack".
+Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+for once, to make this easily accessible to everyone.
 
-Remove " Jack" from the Headphone pin name to spare some CPU cycles.
+Dmitry, was any progress made to address this regression? Doesn't look
+like it, but I strongly suspect I'm missing something, as I'm not really
+sure if I properly understood this thread. It sounded a bit like
+a4e771729a51 should be reverted for now until all
+drm_kms_helper_poll_disable() calls have been verified. Is that right?
+Or did somebody already verify and fix all of them with bugs?
 
-This commit brings no functional changes.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+#regzbot poke
 
-diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-index 5e163e23a207..4e0d5bf12b47 100644
---- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-@@ -46,7 +46,7 @@ struct mt8192_mt6359_priv {
- /* Headset jack detection DAPM pins */
- static struct snd_soc_jack_pin mt8192_jack_pins[] = {
- 	{
--		.pin = "Headphone Jack",
-+		.pin = "Headphone",
- 		.mask = SND_JACK_HEADPHONE,
- 	},
- 	{
--- 
-2.40.1
-
+On 28.04.23 03:17, zongmin zhou wrote:
+> On Wed, 2023-04-26 at 16:10 +0300, Dmitry Baryshkov wrote:
+>> On Wed, 26 Apr 2023 at 12:09, zongmin zhou <zhouzongmin@kylinos.cn>
+>> wrote:
+>>> On Sun, 2023-04-23 at 22:51 +0200, Janne Grunau wrote:
+>>>> On 2023-04-20 23:07:01 +0300, Dmitry Baryshkov wrote:
+>>>>> On Thu, 20 Apr 2023 at 23:01, Janne Grunau <j@jannau.net>
+>>>>> wrote:
+>>>>>>
+>>>>>> On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
+>>>>>>> When drivers call drm_kms_helper_poll_disable from
+>>>>>>> their device suspend implementation without enabled output
+>>>>>>> polling before,
+>>>>>>> following warning will be reported,due to work->func not be
+>>>>>>> initialized:
+>>>>>>
+>>>>>> we see the same warning with the wpork in progress kms driver
+>>>>>> for
+>>>>>> apple
+>>>>>> silicon SoCs. The connectors do not need to polled so the
+>>>>>> driver
+>>>>>> never
+>>>>>> calls drm_kms_helper_poll_init().
+>>>>>>
+>>>>>>> [   55.141361] WARNING: CPU: 3 PID: 372 at
+>>>>>>> kernel/workqueue.c:3066 __flush_work+0x22f/0x240
+>>>>>>> [   55.141382] Modules linked in: nls_iso8859_1
+>>>>>>> snd_hda_codec_generic ledtrig_audio snd_hda_intel
+>>>>>>> snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec
+>>>>>>> snd_hda_core
+>>>>>>> snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event
+>>>>>>> snd_rawmidi
+>>>>>>> snd_seq intel_rapl_msr intel_rapl_common bochs
+>>>>>>> drm_vram_helper
+>>>>>>> drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul
+>>>>>>> snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3
+>>>>>>> aesni_intel drm_kms_helper joydev input_leds syscopyarea
+>>>>>>> crypto_simd snd cryptd sysfillrect sysimgblt mac_hid
+>>>>>>> serio_raw
+>>>>>>> soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp
+>>>>>>> parport drm ramoops reed_solomon pstore_blk pstore_zone
+>>>>>>> efi_pstore virtio_rng ip_tables x_tables autofs4
+>>>>>>> hid_generic
+>>>>>>> usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse
+>>>>>>> virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover
+>>>>>>> virtio_blk xhci_pci_renesas failover
+>>>>>>> [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not
+>>>>>>> tainted
+>>>>>>> 6.2.0-rc6+ #16
+>>>>>>> [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9,
+>>>>>>> 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org
+>>>>>>> 04/01/2014
+>>>>>>> [   55.141435] Workqueue: events_unbound async_run_entry_fn
+>>>>>>> [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
+>>>>>>> [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff
+>>>>>>> ff
+>>>>>>> 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff
+>>>>>>> ff
+>>>>>>> 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2
+>>>>>>> 54
+>>>>>>> d8 00 66 90 90 90 90 90 90
+>>>>>>> [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
+>>>>>>> [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000
+>>>>>>> RCX:
+>>>>>>> ffffffff9b72bcbe
+>>>>>>> [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001
+>>>>>>> RDI:
+>>>>>>> ff3ea01e4265e330
+>>>>>>> [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000
+>>>>>>> R09:
+>>>>>>> 8080808080808080
+>>>>>>> [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f
+>>>>>>> R12:
+>>>>>>> ff3ea01e4265e330
+>>>>>>> [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80
+>>>>>>> R15:
+>>>>>>> 0000000000000001
+>>>>>>> [   55.141455] FS:  0000000000000000(0000)
+>>>>>>> GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
+>>>>>>> [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0:
+>>>>>>> 0000000080050033
+>>>>>>> [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005
+>>>>>>> CR4:
+>>>>>>> 0000000000771ee0
+>>>>>>> [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000
+>>>>>>> DR2:
+>>>>>>> 0000000000000000
+>>>>>>> [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0
+>>>>>>> DR7:
+>>>>>>> 0000000000000400
+>>>>>>> [   55.141466] PKRU: 55555554
+>>>>>>> [   55.141467] Call Trace:
+>>>>>>> [   55.141469]  <TASK>
+>>>>>>> [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
+>>>>>>> [   55.141478]  ? mptcp_seq_show+0xe0/0x180
+>>>>>>> [   55.141484]  __cancel_work_timer+0x124/0x1b0
+>>>>>>> [   55.141487]  cancel_delayed_work_sync+0x17/0x20
+>>>>>>> [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40
+>>>>>>> [drm_kms_helper]
+>>>>>>> [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90
+>>>>>>> [drm_kms_helper]
+>>>>>>> [   55.141531]  ? __pm_runtime_resume+0x64/0x90
+>>>>>>> [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
+>>>>>>> [   55.141540]  pci_pm_suspend+0x8b/0x1b0
+>>>>>>> [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
+>>>>>>> [   55.141547]  dpm_run_callback+0x4c/0x160
+>>>>>>> [   55.141550]  __device_suspend+0x14c/0x4c0
+>>>>>>> [   55.141553]  async_suspend+0x24/0xa0
+>>>>>>> [   55.141555]  async_run_entry_fn+0x34/0x120
+>>>>>>> [   55.141557]  process_one_work+0x21a/0x3f0
+>>>>>>> [   55.141560]  worker_thread+0x4e/0x3c0
+>>>>>>> [   55.141563]  ? __pfx_worker_thread+0x10/0x10
+>>>>>>> [   55.141565]  kthread+0xf2/0x120
+>>>>>>> [   55.141568]  ? __pfx_kthread+0x10/0x10
+>>>>>>> [   55.141570]  ret_from_fork+0x29/0x50
+>>>>>>> [   55.141575]  </TASK>
+>>>>>>> [   55.141575] ---[ end trace 0000000000000000 ]---
+>>>>>>>
+>>>>>>> Fixes: a4e771729a51 ("drm/probe_helper: sort out
+>>>>>>> poll_running
+>>>>>>> vs poll_enabled")
+>>>>>>> Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
+>>>>>>> ---
+>>>>>>>  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
+>>>>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/gpu/drm/drm_probe_helper.c
+>>>>>>> b/drivers/gpu/drm/drm_probe_helper.c
+>>>>>>> index 8127be134c39..ac72b18e2257 100644
+>>>>>>> --- a/drivers/gpu/drm/drm_probe_helper.c
+>>>>>>> +++ b/drivers/gpu/drm/drm_probe_helper.c
+>>>>>>> @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct
+>>>>>>> drm_device *dev)
+>>>>>>>       if (dev->mode_config.poll_running)
+>>>>>>>               drm_kms_helper_disable_hpd(dev);
+>>>>>>>
+>>>>>>> -     cancel_delayed_work_sync(&dev-
+>>>>>>>> mode_config.output_poll_work);
+>>>>>>> +     if (dev->mode_config.poll_enabled)
+>>>>>>> +             cancel_delayed_work_sync(&dev-
+>>>>>>>> mode_config.output_poll_work);
+>>>>>>
+>>>>>> Checking for dev->mode_config.poll_enabled at the start of
+>>>>>> the
+>>>>>> function
+>>>>>> and return early if it is not true looks more in style with
+>>>>>> the
+>>>>>> rest of
+>>>>>> drm_probe_helper.c.
+>>>>>
+>>>>> I think it is an error to call drm_kms_helper_poll_disable() if
+>>>>> polling was not initialized. So, in my opinion the fix should
+>>>>> go to
+>>>>> the drm_mode_config_helper_suspend() / _resume() instead.
+>>>>> Please
+>>>>> add a
+>>>>> guard there using dev->mode_config.poll_enabled.
+>>>>
+>>>> While I tend to agree to the sentiment I do not think this is the
+>>>> correct fix in this situation. drm_kms_helper_poll_disable had
+>>>> the
+>>>> check since at least 2014. a4e771729a51 is a regression. If we
+>>>> want
+>>>> to
+>>>> change the behavior it should be done explicitly and after
+>>>> verifying
+>>>> all
+>>>> drm_kms_helper_poll_disable() calls.
+>>>>
+>>>> #regzbot ^introduced a4e771729a51
+>>>>
+>>>> ciao
+>>>> Janne
+>>>
+>>> Dear Janne:
+>>>
+>>> I agree with you like I mentioned on last letter.
+>>> Thanks for your time.
+>>>
+>>>
+>>> Dear Dmitry:
+>>>
+>>> Is there anything else I can do?
+>>> Looking forward to your reply.
+>>
+>> If it is a common consensus, I'm fine with your approach.
+>>
+> Dear Dmitry:
+> 
+> Ok.Thanks for your reply.
+> 
+> Best regards!
+> 
+> 
