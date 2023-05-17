@@ -2,129 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D8B706B21
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7B8706B25
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjEQObm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S231941AbjEQObt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbjEQObj (ORCPT
+        with ESMTP id S231891AbjEQObr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:31:39 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C8A768C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:31:34 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64390dc0a7fso49821b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:31:34 -0700 (PDT)
+        Wed, 17 May 2023 10:31:47 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C3FD7;
+        Wed, 17 May 2023 07:31:45 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-33179bbb900so2038505ab.3;
+        Wed, 17 May 2023 07:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684333894; x=1686925894;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sWvt0pedQunu8y2B0dtBKUYcryiAQ5WtFEwu7jjInYQ=;
-        b=MIV2fh6ELNK78jb9gvMfIOe2uEDfrKxtE2ojMULHIRLz4i4iXtzCLNratojT9TW1Ua
-         b083dw3ij/fH38M2P57SwErE1GLSf7Nykqpp3IItLlbiuHL/b+hTuR/RtKTlEEax4TdT
-         A6GQF1F/qzVJtLfNcuJxNQ16YErrIGoNCD51yBr6RM320MA6uYsn2HFmk8JpMj3n/gd8
-         4VFUq+IRKpmxneADrWO88/f/TI7Jd4pbXRSxnbJRVXCv48fp/Ub3ltn7bflHguzEc1dk
-         AefzsUiSKAPmCZJuZ+JL751v5Jtk8gZ348B+0ktLYVnVS8tlFD6yzSthWJoxREptkOAD
-         3MKA==
+        d=gmail.com; s=20221208; t=1684333905; x=1686925905;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Lke+yCCOr0es05iyZ8RuBmLQLBA6r6BTGksr8bpRhM=;
+        b=Pg3W+iFAfOfGF+wIsN5Uto67nR/pcQc6Uen1eLfI1TK11t/dizUcJYkp+ZWuvaZKK3
+         ELrXjFINXmUMj+9i79RbuR+jVtjuM8O1IeCkmdJwBXAs/mdtvdyau5NF7yBfNKq5CmQE
+         QUM6vPyR3iFBKc3GYgn8o7dzml3cTVwX5okun5MRoT8iVK9Ee6RSrmim+TcQbSZ/9Yiz
+         +2BX8GUUI1JbezWuOPZuHNjSssy9b07q9rUKWQXJjYTQGF9AEvbMjPtrwtiICCzGtd1/
+         oSdH8v8H1IyOBs0HJ5W496m//a+TqdXu92147pWH+SgVuFoNwD3elpzseYH/biAF3enl
+         OKKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684333894; x=1686925894;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sWvt0pedQunu8y2B0dtBKUYcryiAQ5WtFEwu7jjInYQ=;
-        b=Bnv223D9aUA6s8JKnrys+vEXL213718WYOjisEh6XcyVmD4R0jPD2y4J1qp0+n4zcQ
-         OGRMSEOmGqb+BYx/4qmez4jhmujSFgNoZWzStFZOtvPoa+TCYpAiA1txW+SvWpLajRH2
-         CcQRqu90LvkCJlsZscczpzD9Qr6RqbyGK1vtlrwMXKqr22/06A+ya5Ccw+h7mBgmFZDp
-         GrxJ4nATulMdknsb9IMUdpuZ9WUvHVMZGcYAbBy3+JMVKPnaaGh8lFxC08HFshS0GIur
-         89EBL87RmQETIbGbm9rXyYlIS2jamAhNioKznMgeM2GoW8/XB6Yj1qxiE3QabZ8PNPLp
-         WXzw==
-X-Gm-Message-State: AC+VfDykdZNigEnXkZU3BjD9k8WBtmqQCyKZX9JuPPOGgorKDIlPxJcG
-        a6soq61VXkNoc2OgBMerPZU/NaNEbugkp96OPug=
-X-Google-Smtp-Source: ACHHUZ5ye1FEZZFsU4xlkJyo1mk/CmW5gKsew58ycKJPvNMps2pYFthAZO0QlSpEMEcJ4y0SPY4cBA==
-X-Received: by 2002:a05:6a20:8e15:b0:101:281c:494 with SMTP id y21-20020a056a208e1500b00101281c0494mr3079789pzj.27.1684333893627;
-        Wed, 17 May 2023 07:31:33 -0700 (PDT)
-Received: from [192.168.50.128] ([157.245.157.44])
-        by smtp.gmail.com with ESMTPSA id c16-20020aa78810000000b0063b7b811ce8sm15232130pfo.205.2023.05.17.07.31.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 07:31:33 -0700 (PDT)
-Message-ID: <4a512db8-cfca-80a5-ba62-780f56d014f6@gmail.com>
-Date:   Wed, 17 May 2023 22:31:21 +0800
+        d=1e100.net; s=20221208; t=1684333905; x=1686925905;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Lke+yCCOr0es05iyZ8RuBmLQLBA6r6BTGksr8bpRhM=;
+        b=AM69lx9xW6aCdRZ8Pje2JukGnC9UNs0ttRgKStCnRaBNsLfrjikxi//KeYKNhceGFm
+         vQAlkmdg68cbJ1ff8j/sVWPtIcdEShB3YzsBoP5NnAKJD7CJuSfsLP3gxoJrbu84HhuN
+         nWvC9EsTFBoLz6cZFJ3sB+5tI3ysaoLM512tMxA/mSOKTP5owo+4QMrSB1Ysbm7NqsAV
+         ANHyotZ1slc1fx9JpaL/+5XUiIHuOLHR+b5VdQPjJQlO91e+DOc7LeoX29kx6METuow9
+         1Smdv3Ej2Pg/3u2fiWv1j7UkqzINI3XilEqwW5PlBg2s8L7+/cWYrJ/nwCB5Pw0qJd18
+         om/A==
+X-Gm-Message-State: AC+VfDzKbyA1SX93+f14oacr5ELva7JbC/Uokplz61HD1haVPLPNZaEh
+        G3Z3VBMADg78S/5QtcgVnit+w+kV0nylXA==
+X-Google-Smtp-Source: ACHHUZ7J6AS3RReBuk7ob2oUgt6e1ky1TB7AAp3I0h6cavueIKN2LhKrBiKYKgYjUL+i0Gkr62fCbw==
+X-Received: by 2002:a92:da45:0:b0:325:d689:6cd7 with SMTP id p5-20020a92da45000000b00325d6896cd7mr2277338ilq.16.1684333904626;
+        Wed, 17 May 2023 07:31:44 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id 10-20020a920d0a000000b0032b399aafa5sm8416592iln.18.2023.05.17.07.31.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 07:31:44 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH] scsi: bnx2i: Replace all non-returning strlcpy with strscpy
+Date:   Wed, 17 May 2023 14:31:30 +0000
+Message-ID: <20230517143130.1519941-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [f2fs-dev] [PATCH 1/1] f2fs: pass I_NEW flag to trace event
-To:     Chao Yu <chao@kernel.org>, Wu Bo <bo.wu@vivo.com>
-Cc:     jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <45eb63c6-a147-776a-99b5-7ac06848ede8@kernel.org>
- <20230517035953.47810-1-bo.wu@vivo.com>
- <94958409-f726-9da6-3b9f-76efa022ee9d@kernel.org>
-Content-Language: en-US
-From:   Wu Bo <wubo.oduw@gmail.com>
-In-Reply-To: <94958409-f726-9da6-3b9f-76efa022ee9d@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/17 16:36, Chao Yu wrote:
-> On 2023/5/17 11:59, Wu Bo wrote:
->> On 2023/5/17 10:44, Chao Yu wrote:
->>> On 2023/5/16 20:07, Wu Bo wrote:
->>>> Modify the order between 'trace_f2fs_iget' & 'unlock_new_inode', so 
->>>> the
->>>> I_NEW can pass to the trace event when the inode initialised.
->>>
->>> Why is it needed? And trace_f2fs_iget() won't print inode->i_state?
->>
->> When connect a trace_probe to f2fs_iget, it will be able to determine 
->> whether
->> the inode is new initialised in order to do different process.
->
-> I didn't get it, you want to hook __tracepoint_f2fs_iget() w/ your own 
-> callback?
-Yes,  to use 'tracepoint_probe_register ' to register a probe at 
-trace_f2fs_iget
->
-> Thanks,
->
->>
->>>
->>> Thanks,
->>>
->>>>
->>>> Signed-off-by: Wu Bo <bo.wu@vivo.com>
->>>> ---
->>>>    fs/f2fs/inode.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
->>>> index cf4327ad106c..caf959289fe7 100644
->>>> --- a/fs/f2fs/inode.c
->>>> +++ b/fs/f2fs/inode.c
->>>> @@ -577,8 +577,8 @@ struct inode *f2fs_iget(struct super_block *sb,
->>>> unsigned long ino)
->>>>            file_dont_truncate(inode);
->>>>        }
->>>>    -    unlock_new_inode(inode);
->>>>        trace_f2fs_iget(inode);
->>>> +    unlock_new_inode(inode);
->>>>        return inode;
->>>>      bad_inode:
->>>
->>>
->>> _______________________________________________
->>> Linux-f2fs-devel mailing list
->>> Linux-f2fs-devel@lists.sourceforge.net
->>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
->>>
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
+
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
+
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ drivers/scsi/bnx2i/bnx2i_init.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/bnx2i/bnx2i_init.c b/drivers/scsi/bnx2i/bnx2i_init.c
+index 2b3f0c10478e..872ad37e2a6e 100644
+--- a/drivers/scsi/bnx2i/bnx2i_init.c
++++ b/drivers/scsi/bnx2i/bnx2i_init.c
+@@ -383,7 +383,7 @@ int bnx2i_get_stats(void *handle)
+ 	if (!stats)
+ 		return -ENOMEM;
+ 
+-	strlcpy(stats->version, DRV_MODULE_VERSION, sizeof(stats->version));
++	strscpy(stats->version, DRV_MODULE_VERSION, sizeof(stats->version));
+ 	memcpy(stats->mac_add1 + 2, hba->cnic->mac_addr, ETH_ALEN);
+ 
+ 	stats->max_frame_size = hba->netdev->mtu;
+
