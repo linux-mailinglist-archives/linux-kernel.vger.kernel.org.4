@@ -2,127 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AD5706F86
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA813706F8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjEQRet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S229886AbjEQRfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjEQReo (ORCPT
+        with ESMTP id S229566AbjEQRfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:34:44 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75F613E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:34:43 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f49bf0223cso10667435e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:34:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684344882; x=1686936882;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=45ckMM3KNq9UeTwXKcdVUueEtIZIan+RBbBzBSqyF0c=;
-        b=qQNzdv/V5iU4YCHC8hZOWE72gHmYGwyGnu9f665Z5OH3jCh0zjv5KWENiTIPALsUPF
-         JgcXbwnIoHYsMWrhBNG3Aw93917rhdG6lGA5mfW9B3LnyXMsXqYNnAt4POUkDXTVN8wM
-         GjmpQTaUYkCdmUl1K1WXXJdC99uvNCvq3sISXSdTVXE4xl/J9ncNyUayNEax/AMBOxmD
-         kcNr4/vgUwpp1R3a/S+ncEe3B3T83xRrJYCQ4BYBHABD+i7JhUgDl36Exl6quQtbn3uU
-         h0WJEjp+275rC3xdyniCWE0pCYjMF6Vas9Eqc+QIBaJ1+28P42CaCvf86Y3ODRUh5Si0
-         u5Gg==
+        Wed, 17 May 2023 13:35:42 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA5126A3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:35:40 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3383a678225so10260775ab.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:35:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684344882; x=1686936882;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=45ckMM3KNq9UeTwXKcdVUueEtIZIan+RBbBzBSqyF0c=;
-        b=MBtK0ytgnJ33rdTjaEenfLNOxKtAYhvUa9OYreHxeaN0V/CxXeYasTgC1+FQ8yjwe1
-         RDWTdBuCC+HZm75A10Qr9t5GSPHsv1DJ4badPLaGZPf/xibDVvvCWmoZX3x7G7vZz8Vq
-         YSDZ9SNvjMM9AzkJPHJ+z/t/nz1FJxOZXYflAA4Na53GrLouM26uo2jpzIQxQLtOaoz8
-         4XDY3qT6NBtZQ+opdyBJL2gEWfn7LFZYNTHW0N5K266jIwFafVhPTXlR4Nr/PBZZZ+FD
-         cP1XfVpekXNWNp+mpnZcSfO2nmPDcFwXb8HpMOn+Ktrl5tE3gWtMowDDcVAvNFFFZHVG
-         CV3w==
-X-Gm-Message-State: AC+VfDxnDipwwa+X+9oNXisTDQ3QJOdgG0gYi15jSHaghYYnlc5t0jrt
-        +yRb8Rkop8yK1KUfJ1MlaLdm3g==
-X-Google-Smtp-Source: ACHHUZ5mOfD64msDRSYPeroW5IbEzOp+QER3sRmrxIjX+IMK/isTilhVxkRBB40HND5Y1ez601Iy0w==
-X-Received: by 2002:adf:f108:0:b0:306:45ff:b527 with SMTP id r8-20020adff108000000b0030645ffb527mr1244713wro.45.1684344882209;
-        Wed, 17 May 2023 10:34:42 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e5-20020adffc45000000b0030630de6fbdsm3719871wrs.13.2023.05.17.10.34.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 10:34:40 -0700 (PDT)
-Date:   Wed, 17 May 2023 20:34:21 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Mia Lin <mimi05633@gmail.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: drivers/rtc/rtc-nct3018y.c:112 nct3018y_get_alarm_mode() error: we
- previously assumed 'alarm_enable' could be null (see line 96)
-Message-ID: <6ac4b277-b8ff-4ffa-8786-80f7709155e2@kili.mountain>
+        d=1e100.net; s=20221208; t=1684344939; x=1686936939;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aGQwNnU6wbVIzp4iz14/V7eAlLSmWR46eSYidn8u46M=;
+        b=MqDNnM/MmNQoM1hSfVNWXX12sV5QCWAQ+ukWQdXC/7375tH+pV+AUh3pPQP4a6o3ca
+         Z2ElNWh/kQYWA2+n/VkZX7OqW9FTLe6/yIKxQNjqDGgCDmFVdIsR8fR1hUsmxMLis+6J
+         0PE1LVXMb1OacMauI/lUaeFx3POnHK9Su2zeebmOtV7chTtSk1DecsaHp9VacMgLVJ8w
+         6vrTJnRFipLRHI8FAxUCqVyqX88DjPYgd923NL6lRVfnXyHmZ7YJPATtWC4GGBS+LCfh
+         kkY2o8CaE0pkSLcfm0QnmWyucd9nE9lrALTbwmjN/GLG8YLfAtYtLDbPeUZSzYu6dDQy
+         imjw==
+X-Gm-Message-State: AC+VfDzPbTqCpy9e06tgF413uuSTqcPtnNjtCmZrEgIdxlWVAo0oXoCi
+        hFhxa7TNwd+8jRWDnJDGCNNjXrghW3RlyN/wl4N/5vC62TYu
+X-Google-Smtp-Source: ACHHUZ58ceKj+7ueId84yjPKsorg5yhzD02C/g+j09rM3UikJgHxnAJ+xNcfdIlsYtvlxz5rguc9H+GNuyPSaAVcRqmIEybzk9Pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d950:0:b0:331:8e32:a36b with SMTP id
+ l16-20020a92d950000000b003318e32a36bmr1763043ilq.4.1684344939754; Wed, 17 May
+ 2023 10:35:39 -0700 (PDT)
+Date:   Wed, 17 May 2023 10:35:39 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d03b0805fbe71d55@google.com>
+Subject: [syzbot] [erofs?] general protection fault in erofs_bread (2)
+From:   syzbot <syzbot+bbb353775d51424087f2@syzkaller.appspotmail.com>
+To:     chao@kernel.org, huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiang@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
-commit: 5adbaed16cc63542057627642d2414f603f2db69 rtc: Add NCT3018Y real time clock driver
-config: microblaze-randconfig-m031-20230517
-compiler: microblaze-linux-gcc (GCC) 12.1.0
+Hello,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Closes: https://lore.kernel.org/r/202305180042.DEzW1pSd-lkp@intel.com/
+syzbot found the following issue on:
 
-smatch warnings:
-drivers/rtc/rtc-nct3018y.c:112 nct3018y_get_alarm_mode() error: we previously assumed 'alarm_enable' could be null (see line 96)
-drivers/rtc/rtc-nct3018y.c:112 nct3018y_get_alarm_mode() error: we previously assumed 'alarm_flag' could be null (see line 104)
+HEAD commit:    f1fcbaa18b28 Linux 6.4-rc2
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=114aa029280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6beb6ffe4f59ef2a
+dashboard link: https://syzkaller.appspot.com/bug?extid=bbb353775d51424087f2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13dd834e280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=167ef106280000
 
-vim +/alarm_enable +112 drivers/rtc/rtc-nct3018y.c
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4adf207e9d5e/disk-f1fcbaa1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9e7cce92f611/vmlinux-f1fcbaa1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cfd911b80f89/bzImage-f1fcbaa1.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a2583fbaaf14/mount_2.gz
 
-5adbaed16cc635 Mia Lin 2022-07-13   91  static int nct3018y_get_alarm_mode(struct i2c_client *client, unsigned char *alarm_enable,
-5adbaed16cc635 Mia Lin 2022-07-13   92  				   unsigned char *alarm_flag)
-5adbaed16cc635 Mia Lin 2022-07-13   93  {
-5adbaed16cc635 Mia Lin 2022-07-13   94  	int flags;
-5adbaed16cc635 Mia Lin 2022-07-13   95  
-5adbaed16cc635 Mia Lin 2022-07-13  @96  	if (alarm_enable) {
-                                                    ^^^^^^^^^^^^
-If these are NULL
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bbb353775d51424087f2@syzkaller.appspotmail.com
 
-5adbaed16cc635 Mia Lin 2022-07-13   97  		dev_dbg(&client->dev, "%s:NCT3018Y_REG_CTRL\n", __func__);
-5adbaed16cc635 Mia Lin 2022-07-13   98  		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_CTRL);
-5adbaed16cc635 Mia Lin 2022-07-13   99  		if (flags < 0)
-5adbaed16cc635 Mia Lin 2022-07-13  100  			return flags;
-5adbaed16cc635 Mia Lin 2022-07-13  101  		*alarm_enable = flags & NCT3018Y_BIT_AIE;
-5adbaed16cc635 Mia Lin 2022-07-13  102  	}
-5adbaed16cc635 Mia Lin 2022-07-13  103  
-5adbaed16cc635 Mia Lin 2022-07-13 @104  	if (alarm_flag) {
-                                                    ^^^^^^^^^^
+erofs: (device loop0): EXPERIMENTAL global deduplication feature in use. Use at your own risk!
+general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
+CPU: 0 PID: 4995 Comm: syz-executor235 Not tainted 6.4.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+RIP: 0010:erofs_bread+0x56/0x6d0 fs/erofs/data.c:38
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 15 06 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 23 49 8d bc 24 ca 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 82 05 00 00
+RSP: 0018:ffffc900034b7980 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffffc900034b7af8 RCX: 0000000000000000
+RDX: 0000000000000019 RSI: ffffffff83c1ea5f RDI: 00000000000000ca
+RBP: 0000000000000000 R08: 0000000000000001 R09: 000000000000003f
+R10: 000000000000000c R11: ffffffff81d50f12 R12: 0000000000000000
+R13: 0000000000000001 R14: ffff888019bd4000 R15: ffff888019bd4000
+FS:  0000555555bf6300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc664ae0ca0 CR3: 0000000020cc6000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ erofs_read_metadata+0xbb/0x490 fs/erofs/super.c:137
+ erofs_xattr_prefixes_init+0x3b1/0x590 fs/erofs/xattr.c:684
+ erofs_fc_fill_super+0x1734/0x2a80 fs/erofs/super.c:825
+ get_tree_bdev+0x44a/0x770 fs/super.c:1303
+ vfs_get_tree+0x8d/0x350 fs/super.c:1510
+ do_new_mount fs/namespace.c:3039 [inline]
+ path_mount+0x134b/0x1e40 fs/namespace.c:3369
+ do_mount fs/namespace.c:3382 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc664b09e5a
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd1310be98 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fc664b09e5a
+RDX: 0000000020000180 RSI: 0000000020000140 RDI: 00007ffd1310bea0
+RBP: 00007ffd1310bea0 R08: 00007ffd1310bee0 R09: 00000000000001d4
+R10: 0000000001000801 R11: 0000000000000286 R12: 0000000000000005
+R13: 0000555555bf62c0 R14: 00007ffd1310bee0 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:erofs_bread+0x56/0x6d0 fs/erofs/data.c:38
+Code: 48 c1 ea 03 80 3c 02 00 0f 85 15 06 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 23 49 8d bc 24 ca 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 82 05 00 00
+RSP: 0018:ffffc900034b7980 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffffc900034b7af8 RCX: 0000000000000000
+RDX: 0000000000000019 RSI: ffffffff83c1ea5f RDI: 00000000000000ca
+RBP: 0000000000000000 R08: 0000000000000001 R09: 000000000000003f
+R10: 000000000000000c R11: ffffffff81d50f12 R12: 0000000000000000
+R13: 0000000000000001 R14: ffff888019bd4000 R15: ffff888019bd4000
+FS:  0000555555bf6300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb0e8fdab10 CR3: 0000000020cc6000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 c1 ea 03          	shr    $0x3,%rdx
+   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   8:	0f 85 15 06 00 00    	jne    0x623
+   e:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  15:	fc ff df
+  18:	4c 8b 23             	mov    (%rbx),%r12
+  1b:	49 8d bc 24 ca 00 00 	lea    0xca(%r12),%rdi
+  22:	00
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	48 89 fa             	mov    %rdi,%rdx
+  31:	83 e2 07             	and    $0x7,%edx
+  34:	38 d0                	cmp    %dl,%al
+  36:	7f 08                	jg     0x40
+  38:	84 c0                	test   %al,%al
+  3a:	0f 85 82 05 00 00    	jne    0x5c2
 
-5adbaed16cc635 Mia Lin 2022-07-13  105  		dev_dbg(&client->dev, "%s:NCT3018Y_REG_ST\n", __func__);
-5adbaed16cc635 Mia Lin 2022-07-13  106  		flags =  i2c_smbus_read_byte_data(client, NCT3018Y_REG_ST);
-5adbaed16cc635 Mia Lin 2022-07-13  107  		if (flags < 0)
-5adbaed16cc635 Mia Lin 2022-07-13  108  			return flags;
-5adbaed16cc635 Mia Lin 2022-07-13  109  		*alarm_flag = flags & NCT3018Y_BIT_AF;
-5adbaed16cc635 Mia Lin 2022-07-13  110  	}
-5adbaed16cc635 Mia Lin 2022-07-13  111  
-5adbaed16cc635 Mia Lin 2022-07-13 @112  	dev_dbg(&client->dev, "%s:alarm_enable:%x alarm_flag:%x\n",
-5adbaed16cc635 Mia Lin 2022-07-13  113  		__func__, *alarm_enable, *alarm_flag);
-                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
-The debug code will crash.
 
-5adbaed16cc635 Mia Lin 2022-07-13  114  
-5adbaed16cc635 Mia Lin 2022-07-13  115  	return 0;
-5adbaed16cc635 Mia Lin 2022-07-13  116  }
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
