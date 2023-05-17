@@ -2,87 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD62706C35
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1C4706C38
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbjEQPH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S230320AbjEQPIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbjEQPHM (ORCPT
+        with ESMTP id S230119AbjEQPIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:07:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50419028;
-        Wed, 17 May 2023 08:06:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 483FE64879;
-        Wed, 17 May 2023 15:06:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D895C433D2;
-        Wed, 17 May 2023 15:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684335985;
-        bh=uj3yY1AQxYZ5vT1NpUTbFozGPyly3ykjZNUb52/KP+M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TB0P7qc7sqyKrutmMUYIP9Aryjc6+VsVHC5s/C8RCzKNIma73U9n6kIJX6vn8Q/+D
-         13wWhU9FrBZBi/uq/FNfUJP5NKdDCp/a/YhyDCS39U8VVEFxOeird1HkAqAKfnnnv/
-         wKEmyocF4G19gelpmZAeSIrfdJAKKzXgmkJbtPiYjebeH1NH1guklKHoaj/XEhytet
-         v2xao5IngygO7BCpJqhDUDIe7TgCu0bf+9/wFbuPXPChWUf4RrQBftA96Z1mQSQDyV
-         yZU1ud73567zxvHRXP++zc9lU0BvkaQqw6sX6HxCHPF/4BJmedLoZnmPquDCMs5p54
-         uiop1DizSRCzQ==
-Date:   Wed, 17 May 2023 08:06:24 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v5] dt-bindings: net: nxp,sja1105: document
- spi-cpol/cpha
-Message-ID: <20230517080624.672d52a2@kernel.org>
-In-Reply-To: <50cc1727-999f-9b7a-ef09-14461fa4ddfb@linaro.org>
-References: <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
-        <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
-        <20230515105035.kzmygf2ru2jhusek@skbuf>
-        <20230516201000.49216ca0@kernel.org>
-        <50cc1727-999f-9b7a-ef09-14461fa4ddfb@linaro.org>
+        Wed, 17 May 2023 11:08:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524D88A7D;
+        Wed, 17 May 2023 08:08:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684336088; x=1715872088;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=m3M2b/UpB2Fp67mqL0iGGBx6gX63ZHkbp9fZFhoFbDc=;
+  b=LNktfhyb5vDqIPrqV7/yvy2WlB865lqQnQZHhYPQWj/67OArkLyXzWMK
+   StJ5rhDaIBFFL8BehlI5pC4FsgqlZ70NoKwczxnYzsTT/zlzvC8B2PfZ+
+   LHv3wmRf5qhtZn6w8gSKazCdL2UWa7cgcKkweqhs+r10OhobZfZeGiURa
+   F3r6XB6hjqs4ZFq0tPa9vGCXOKnySo8GR315xpApPrCALnhwW+XY70lPp
+   dJ/9Ct9i5by0rgG5b2i297EZ9R5vUvWz3u8/az3LRAr52Lr+XwanlybU5
+   JoUCE26iayD3RC8EjFGgD5FEjPQR28JMqcguPGTEVzae5Fp5hjbQdDsdq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="354083128"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="354083128"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:07:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="652277994"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="652277994"
+Received: from cbrown-mobl1.amr.corp.intel.com (HELO [10.212.129.207]) ([10.212.129.207])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:07:07 -0700
+Message-ID: <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com>
+Date:   Wed, 17 May 2023 08:07:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+Content-Language: en-US
+To:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>
+Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+ <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+ <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+ <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
+ <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 10:26:38 +0200 Krzysztof Kozlowski wrote:
-> On 17/05/2023 05:10, Jakub Kicinski wrote:
-> > On Mon, 15 May 2023 13:50:35 +0300 Vladimir Oltean wrote:  
-> >> On Mon, May 15, 2023 at 09:45:25AM +0200, Krzysztof Kozlowski wrote:  
->  [...]  
-> >>
-> >> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>  
-> > 
-> > Is my instinct that this should go to net-next correct?  
+On 5/17/23 03:51, Stephen Röttger wrote:
+> On Wed, May 17, 2023 at 12:41 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>> Can't run arbitrary instructions, but can make (pretty) arbitrary syscalls?
 > 
-> It would be great missing net-next was pointed out by checkpatch.pl.
+> The threat model is that the attacker has arbitrary read/write, while other
+> threads run in parallel. So whenever a regular thread performs a syscall and
+> takes a syscall argument from memory, we assume that argument can be attacker
+> controlled.
+> Unfortunately, the line is a bit blurry which syscalls / syscall arguments we
+> need to assume to be attacker controlled. 
 
-FWIW, I'd have taken the patch as is. There isn't much the current
-build tester can do for dt-bindings, anyway. But thanks for the resend
-:)
+Ahh, OK.  So, it's not that the *attacker* can make arbitrary syscalls.
+It's that the attacker might leverage its arbitrary write to trick a
+victim thread into turning what would otherwise be a good syscall into a
+bad one with attacker-controlled content.
 
-I was wondering about checkpatch, too, but haven't come up with any
-great solution. The problem is kind of at an intersection of checkpatch
-and get_maintainer.
+I guess that makes the readv/writev-style of things a bad idea in this
+environment.
+
+>>> Sigreturn is a separate problem that we hope to solve by adding pkey
+>>> support to sigaltstack
+>>
+>> What kind of support were you planning to add?
+> 
+> We’d like to allow registering pkey-tagged memory as a sigaltstack. This would
+> allow the signal handler to run isolated from other threads. Right now, the
+> main reason this doesn’t work is that the kernel would need to change the pkru
+> state before storing the register state on the stack.
+> 
+>> I was thinking that an attacker with arbitrary write access would wait
+>> until PKRU was on the userspace stack and *JUST* before the kernel
+>> sigreturn code restores it to write a malicious value.  It could
+>> presumably do this with some asynchronous mechanism so that even if
+>> there was only one attacker thread, it could change its own value.
+> 
+> I’m not sure I follow the details, can you give an example of an asynchronous
+> mechanism to do this? E.g. would this be the kernel writing to the memory in a
+> syscall for example?
+
+I was thinking of all of the IORING_OP_*'s that can write to memory or
+aio(7).
