@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2639B706366
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739F470636F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjEQI55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S231163AbjEQI7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjEQI5v (ORCPT
+        with ESMTP id S231150AbjEQI7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:57:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D81E101;
-        Wed, 17 May 2023 01:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684313870; x=1715849870;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=i4ZR3iaeusalPkEACBO162RSA5D79eHRBor1gqPbdOM=;
-  b=L+jCO1c2RPlpCGzbJx2/Iimm3MtKyDqVofyknKuuX3cZKW9fB1AyHbwX
-   Ach+4xjywFq2jfBnHpaoc1EChayjFD4z17opezydB497vNOTlwFXrIcOE
-   8g0X5VSX8vr0U5/MMuzUhLvp2o8rKGZBV0/1j6ir69RtejItX27t3tLcj
-   og3GkRlmJsV26yWbHcWLhWAXSUydxCaqRhTIsH1YrH+6/a8lAjrGUX5Ce
-   Ms2kh9JulQ6Ak0pHbRFX6EpMVFExOxekxenfUNpCaccMO6W2heJVY7VBi
-   6NuP8R17FhtBWtEyj81lnrlWuj8CQiw9qUJrY8ACK7ElV2mHmxlMW+oqN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="349206070"
-X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
-   d="scan'208";a="349206070"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 01:57:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="771388557"
-X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
-   d="scan'208";a="771388557"
-Received: from pakurapo-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.50.207])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 01:57:46 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Antonino Daplas <adaplas@gmail.com>,
-        Helge Deller <deller@gmx.de>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fbdev: i810: include i810_main.h in i810_dvt.c
-In-Reply-To: <c28483ac-fbf3-494c-a634-d6edfb998d8f@app.fastmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230516202814.561262-1-arnd@kernel.org>
- <87lehngxbr.fsf@intel.com>
- <c28483ac-fbf3-494c-a634-d6edfb998d8f@app.fastmail.com>
-Date:   Wed, 17 May 2023 11:57:43 +0300
-Message-ID: <87ilcrgws8.fsf@intel.com>
+        Wed, 17 May 2023 04:59:20 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3704EC9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:58:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-25345ca8748so314393a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1684313926; x=1686905926;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T3VYFX4gN8A4+At0+49J9ZIglBWE8IjNo2KkSLdFPCQ=;
+        b=XPhv43rI0nh8/+jtGffT9p76SQOck8PZDUnIxRHnZMsE3Qep1humOo9QC7H7DEwyUg
+         uQnSEMjFhsDTRY0o1npR4s4RCq6NIBM5ytk8H88EDvEQ7g3fFBmsC1LS6sCnB//Jw+2o
+         EFERMFhvd8WEA9ErQnKZexTVzcXuTWZw6cjl3cd8JlSdYHydM3B5uWN8lI7jtb61um7s
+         0U5BygfKb0Bv4RVj3coa1KUSqizyDN/yPDA0JMchhB6FuvePorKAaAl34KrVonVa30fo
+         xt1Qz89NOCa0khCKydqOHY0yiQ1tSVa4iePs8XniWmYGwLeFcAovUT/t51B8tyKlivuk
+         MNgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684313926; x=1686905926;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T3VYFX4gN8A4+At0+49J9ZIglBWE8IjNo2KkSLdFPCQ=;
+        b=i7mMVNNV7r1+A1N53W/LjBho9knr8BWDfzWGYzRvvkSy4FPDfh91PlguicpZtTsHEl
+         tQCf3acNbisIL7hvwQKRQa+KYDSVfc/ld9zsW6aCFQSPh+eKvG1unnGoDYSE54UyXGBM
+         YPncK+ZLrHfNOjSJGnm/nUFi2pIj4KfrT/g59tqnz2/UNlfttO5BnK+Gwel1QmItc1fV
+         1b1U+uiJct8ZJX1jpJDuJMG9mRDufVWfj7JEz/fx0Px5Cb8gVXZq9QOif2RnE1BdEy+g
+         reVVBh8v5VySlnY4rmzUOOCbrzAFGVJMEECa0ZSZmJKRz4mCRhcCrrzbEgaPHtWIO3rC
+         0vAA==
+X-Gm-Message-State: AC+VfDwhQocq5Xm2JrMBNFJXjOFu9PESO8tScnu9KOVd/YgdIINxXBw7
+        cg8dX2XkDGxuxz1BiQHHu/Lq8Q==
+X-Google-Smtp-Source: ACHHUZ5OzFpipbAy1h25i/uNcKOZM0aG6gCIXztvd1dpil9APougs7VAsPCF+lIev/xq+KbbqcB5HQ==
+X-Received: by 2002:a17:90a:608f:b0:24e:3b69:a87f with SMTP id z15-20020a17090a608f00b0024e3b69a87fmr38040800pji.25.1684313926526;
+        Wed, 17 May 2023 01:58:46 -0700 (PDT)
+Received: from GL4FX4PXWL.bytedance.net ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id m18-20020a63ed52000000b0052c9d1533b6sm15056765pgk.56.2023.05.17.01.58.43
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 17 May 2023 01:58:46 -0700 (PDT)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     Liam.Howlett@oracle.com
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+Subject: [PATCH v2 00/10] Clean ups for maple tree
+Date:   Wed, 17 May 2023 16:57:59 +0800
+Message-Id: <20230517085809.86522-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023, "Arnd Bergmann" <arnd@arndb.de> wrote:
-> On Wed, May 17, 2023, at 10:46, Jani Nikula wrote:
->> On Tue, 16 May 2023, Arnd Bergmann <arnd@kernel.org> wrote:
->
->>>
->>> drivers/video/fbdev/i810/i810_dvt.c:280:5: error: conflicting types for 'i810_get_watermark'; have 'u32(struct fb_var_screeninfo *,
->>
->> Changes here look fine,
->>
->> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
->
-> Thanks!
->
->> but I think you should try CONFIG_FB_I810_GTF=y to get the same
->> mismatched prototype error for i810_get_watermark() in i810_gtf.c, and
->> add the const there while at it. R-b stands for that addition as well.
->
-> I'm fairly sure I looked at that and did not see a problem as
-> i810_main.h is already included in that file, it was added
-> in 2006 with commit a0aa7d063927 ("[PATCH] drivers/video/: possible
-> cleanups").
+Some clean ups, mainly to make the code of maple tree more concise.
+This patchset has passed the self-test.
 
-True that, my bad. (Which kind of puts the R-b above in doubt, but hey,
-at least I looked at it. ;)
+0006-0009 - Make mas_wr_modify() and its subfunctions clearer. Make the
+            store operation of maple tree more efficient in some cases.
 
-BR,
-Jani.
+Thanks Liam and Matthew.
 
->
->      Arnd
+Changes since v1:
+ - Rework mtree_alloc_{range,rrange}() instead of removing it. [01/10]
+ - Fix the arguments to __must_hold() instead of removing it. [03/10]
+ - Keep the fast path. Expand the compact code. [04/10]
+ - Drop "maple_tree: Wrap the replace operation with an inline
+   function.". [v1 06/10]
+ - Remove some comments. [07/10] [08/10]
+ - Avoid modifying wr_mas->offset_end in mas_wr_modify(). [09/10]
+ - Add a patch to relocate mas_empty_area_rev(). [10/10]
+
+Peng Zhang (10):
+  maple_tree: Rework mtree_alloc_{range,rrange}()
+  maple_tree: Drop mas_{rev_}alloc() and mas_fill_gap()
+  maple_tree: Fix the arguments to __must_hold()
+  maple_tree: Simplify mas_is_span_wr()
+  maple_tree: Make the code symmetrical in mas_wr_extend_null()
+  maple_tree: Add mas_wr_new_end() to calculate new_end accurately
+  maple_tree: Add comments and some minor cleanups to mas_wr_append()
+  maple_tree: Rework mas_wr_slot_store() to be cleaner and more
+    efficient.
+  maple_tree: Simplify and clean up mas_wr_node_store()
+  maple_tree: Relocate the declaration of mas_empty_area_rev().
+
+ include/linux/maple_tree.h |  12 +-
+ lib/maple_tree.c           | 455 +++++++++++++------------------------
+ 2 files changed, 160 insertions(+), 307 deletions(-)
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.20.1
+
