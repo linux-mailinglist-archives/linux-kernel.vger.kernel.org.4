@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E1F706F39
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EEB706F3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjEQRUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S229638AbjEQRVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjEQRUE (ORCPT
+        with ESMTP id S229445AbjEQRVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:20:04 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F0A272B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:20:03 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae4e49727eso11741245ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:20:03 -0700 (PDT)
+        Wed, 17 May 2023 13:21:00 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320ED3C30;
+        Wed, 17 May 2023 10:20:59 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f42c86543bso7478875e9.3;
+        Wed, 17 May 2023 10:20:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684344002; x=1686936002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gA4GEkw6Mvu6f7ZlzBV9HkqublrMhw+ZD7wnWlVurlY=;
-        b=Vn37ASA4fpooxlne/eIyFg3gzMwQTlgBd2XEo9pIoaSE1kWELMmWJq4+hNrPFq5v4P
-         XUZ0qY668TiAm9nplrMPSMSmzuUkoGOEo1OXg2dG8GN3A/Sh05uEB+ffFit62kBsjnm6
-         a831OyGVKX4xUslo0UUanQtanXugGGLXr3xsTMuoGcPGT1UII2znsBRvCIoYHz2v/biC
-         aJfB3gRszJSQJTBiawVNZ47wGDaVjf0PRN1kqaQtClOgyqRgUJkm+NlJYlE+sX9InNWh
-         OrNTWhqq2rqt2nAdN6TOgN+55p2R/XVbOUXT9OjXQGREKkfqy/HEK7bTFhX3izQMpkSe
-         r6Lg==
+        d=gmail.com; s=20221208; t=1684344057; x=1686936057;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HA+ixEOwCV4Hwwy5VjUh4gi4ftgl8VXHtW5tml/MLqE=;
+        b=fUZqBmeKT6KmMPjBLnquAOsfG4TxLX5U+yqd4jMj4CFMMPxPx5afekJgE9u3N60vFs
+         czRuwzlzqq0DJbKxeVpYWZcSNn2bWwMsAcNS4KH9J56AGvXDgoKRur/7XwWNtmJ6nzRY
+         OsQUioZJqLSVX5C13tPPiwxRz/VpXwHiOU4FKE0UA8ZK9v0oWINFMWEwPHNw+TRLo0JB
+         QV4RTp7oLWMayyEg72wa63GGOQ+Ga2bFwXZ2ZFm1mEZhcLA0y7eT0u2PWWemquHO5C3q
+         K1hp7fnCac5RZ85ATb61ffkpdjWaEZM8haCq9kVErKIrE+mcClLIASt/LwgP+5vQt/rA
+         D6ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684344002; x=1686936002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gA4GEkw6Mvu6f7ZlzBV9HkqublrMhw+ZD7wnWlVurlY=;
-        b=HomODkiRwGq5mW63qbU/2PZ2aKAX5+pirZSXSUupXJpFkrQaT/6Am3B1/68IqWDz+9
-         4h8hac3jEhiEEBzpnlAaihehu7i28srFQChDVl8yhNRy5dnh+msHKWPNc8oPFbqgX7Kh
-         3vqqtc0HjRQYSjB+Y9zPbYTZRMv5TUvCr5+15q1jwOzsRZT2VcP5+5JVbAmFK/wotFOy
-         PUc/YSbUZ1qboVaonBY5yDqzLEh/XJHtaQ0l/NWosKy3Fi3OdEVzKZ6FDLeU2Gmqha0Q
-         pZvScpWToJ512IBbnbX005iUNzjvCUM96nGcYVUWYIbtm52u6iVztaYxofJoz8ZPwpTA
-         Pn0Q==
-X-Gm-Message-State: AC+VfDy4yhnOF08jQ3++7S2Q5nDCoA7SM3WKWX+8mgO50ezeaQAolIkp
-        oLGgq3l5n7MwCc7y2smNnLWViS9KzvCL3PUeravwTA==
-X-Google-Smtp-Source: ACHHUZ5oaROI1i0tAOAu+6S33dZ4AKg8K7dRMzns2n8kWIagHNKeQSwfYLT50UbPDUsyy7EeEr7bk4iEJXyvdlmA5vg=
-X-Received: by 2002:a17:90a:be15:b0:23f:81c0:eadd with SMTP id
- a21-20020a17090abe1500b0023f81c0eaddmr335771pjs.47.1684344002532; Wed, 17 May
- 2023 10:20:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684344057; x=1686936057;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HA+ixEOwCV4Hwwy5VjUh4gi4ftgl8VXHtW5tml/MLqE=;
+        b=aSXAy8cuNse4AjtPhut7kdwMiZu7WwFFacFNYw2c2pNHL47Mfy78PE/solzKGSl3/z
+         A9Xkk34NQpthUT817x5IFcTGIDOJf+s7zLfjOOQQO5RCY3DrGrql0S4VepPVx7MMi0yC
+         iXSjAFVNSXpbqbuxGE+Hgs3CdbTmOdlGjdR/71uPyCVC+K96eqki/M75ilcGbZ8wi2WI
+         hI9IvTrQqVwyw07n7uTmq+LLmVhQFD9CTbzpo7DepKHmh9VsT76wQpfeWULiNE0bl0VM
+         Rt3ACBDW0EX2ypoenM9XIVmXZkISVPnF4qThU2Cmh8cciFafpfVChzqC62wh4+GrAjAB
+         BzMg==
+X-Gm-Message-State: AC+VfDwM69t9iCJiA4dcoP0AXmPCCXSE/qRlqmWFKeFGghZD2Ri3lSQ5
+        fzFxPRoO2xvfSjhceB0GTC4=
+X-Google-Smtp-Source: ACHHUZ42RsRkUPWyt7iyPDUgEzeLUAEWnTphTkFVUV2Ao1RrkLmyQ1485/W7O1jeZ5yWCPU6AKklrA==
+X-Received: by 2002:a7b:c318:0:b0:3f0:a08e:811b with SMTP id k24-20020a7bc318000000b003f0a08e811bmr29765842wmj.13.1684344057210;
+        Wed, 17 May 2023 10:20:57 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id y26-20020a7bcd9a000000b003f42a75ac2asm2891446wmj.23.2023.05.17.10.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 10:20:56 -0700 (PDT)
+Date:   Wed, 17 May 2023 18:20:55 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/2] mm/uffd: Fix vma operation where start addr cuts
+ part of vma
+Message-ID: <4a68aee6-68d9-4d17-bb7f-cda3910f6f1f@lucifer.local>
+References: <20230517150408.3411044-1-peterx@redhat.com>
+ <20230517150408.3411044-2-peterx@redhat.com>
 MIME-Version: 1.0
-References: <20230517115955.1078339-1-badhri@google.com> <c7f19b4e-469c-4e40-bd2e-e864ca5f7872@rowland.harvard.edu>
-In-Reply-To: <c7f19b4e-469c-4e40-bd2e-e864ca5f7872@rowland.harvard.edu>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Wed, 17 May 2023 10:19:25 -0700
-Message-ID: <CAPTae5JB2LLEF7ZNaJxMnF==8WCWoEYvmF_FK3F=BDq0Hko0xQ@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
-        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517150408.3411044-2-peterx@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +79,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 7:44=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
+On Wed, May 17, 2023 at 11:04:07AM -0400, Peter Xu wrote:
+> It seems vma merging with uffd paths is broken with either
+> register/unregister, where right now we can feed wrong parameters to
+> vma_merge() and it's found by recent patch which moved asserts upwards in
+> vma_merge() by Lorenzo Stoakes:
 >
-> On Wed, May 17, 2023 at 11:59:55AM +0000, Badhri Jagan Sridharan wrote:
-> > chipidea udc calls usb_udc_vbus_handler from udc_start gadget
-> > ops causing a deadlock. Avoid this by offloading usb_udc_vbus_handler
-> > processing.
+> https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
 >
-> Surely that is the wrong approach.
->
-> The real problem here is that usb_udc_vbus_handler() gets called from
-> within a udc_start routine.  But this is totally unnecessary, because
-> the UDC core will call usb_udc_connect_control_locked() itself, later on
-> during gadget_bind_driver().
+> The problem is in the current code base we didn't fixup "prev" for the case
+> where "start" address can be within the "prev" vma section.  In that case
+> we should have "prev" points to the current vma rather than the previous
+> one when feeding to vma_merge().
 
-Hi Alan,
-
-usb_udc_vbus_handler sets the udc->vbus flag as well apart from
-calling usb_udc_connect_control_locked().  So, removing usb_udc_vbus_handle=
-r
-from chip specific start callback might prevent the controller from
-starting.
-
-void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
-{
-struct usb_udc *udc =3D gadget->udc;
-
-mutex_lock(&udc->connect_lock);
-if (udc) {
-udc->vbus =3D status;
-usb_udc_connect_control_locked(udc);
-
-Thanks,
-Badhri
-
+This doesn't seem quite correct, perhaps - "where start is contained within vma
+but not clamped to its start. We need to convert this into case 4 which permits
+subdivision of prev by assigning vma to prev. As we loop, each subsequent VMA
+will be clamped to the start."
 
 >
-> So a proper solution would be simply to remove the unnecessary
-> usb_udc_vbus_handler() call from the chipidea driver (and similarly for
-> the max3420_udc driver).
+> This patch will eliminate the report and make sure vma_merge() calls will
+> become legal again.
 >
-> Similar changes may be needed in these drivers' udc_stop routines.
+> One thing to mention is that the "Fixes: 29417d292bd0" below is there only
+> to help explain where the warning can start to trigger, the real commit to
+> fix should be 69dbe6daf104.  Commit 29417d292bd0 helps us to identify the
+> issue, but unfortunately we may want to keep it in Fixes too just to ease
+> kernel backporters for easier tracking.
 >
-> Alan Stern
+> Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+> Cc: Mike Rapoport (IBM) <rppt@kernel.org>
+> Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
+> Reported-by: Mark Rutland <mark.rutland@arm.com>
+> Fixes: 29417d292bd0 ("mm/mmap/vma_merge: always check invariants")
+> Fixes: 69dbe6daf104 ("userfaultfd: use maple tree iterator to iterate VMAs")
+> Closes: https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
+> Cc: linux-stable <stable@vger.kernel.org>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  fs/userfaultfd.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 0fd96d6e39ce..17c8c345dac4 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -1459,6 +1459,8 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>
+>  	vma_iter_set(&vmi, start);
+>  	prev = vma_prev(&vmi);
+> +	if (vma->vm_start < start)
+> +		prev = vma;
+>
+>  	ret = 0;
+>  	for_each_vma_range(vmi, vma, end) {
+> @@ -1625,6 +1627,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>
+>  	vma_iter_set(&vmi, start);
+>  	prev = vma_prev(&vmi);
+> +	if (vma->vm_start < start)
+> +		prev = vma;
+> +
+>  	ret = 0;
+>  	for_each_vma_range(vmi, vma, end) {
+>  		cond_resched();
+> --
+> 2.39.1
+>
+
+Other than that looks good:-
+
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
