@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C924706F82
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837E0706F80
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjEQRdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S229833AbjEQRby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEQRdt (ORCPT
+        with ESMTP id S229456AbjEQRbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:33:49 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A4213E;
-        Wed, 17 May 2023 10:33:49 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aaef97652fso8943215ad.0;
-        Wed, 17 May 2023 10:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684344828; x=1686936828;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qrF5yS6cG4ArCsSyuJuqnjZQppR8Ovu5NwuC6zh+GBs=;
-        b=mf/xeozwy4EntcmgnD4pPDMN8dzeCKwtLCiyNgW9eJBuRUBalMBu0Hj+akcv2NwAC9
-         bdXjByYS5CNkn1dQbCCnGMxaYxCuYKviJqNtT7ya/CKs/LdPYd7oitHNHspQjrmkaj8R
-         BoyjwkpvEkZpSJg1vH2cRazt8Gw9nDWlQ8YtpudN4qhbrVUgmdlD1PI/fxxLtGWpD6T5
-         jOi8el1u64dOOQcvCWYSnxdCBw8t5MZ3tKPFfm1xbMjSdjhjBDv+05tdUuM7LOMgMyLx
-         pNIv7VvikRhkJogaNi4rRGM30V6jqjyVXV61s1AeiEWw887O5mKfPQsAKO/fHbDwCozx
-         ITSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684344828; x=1686936828;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qrF5yS6cG4ArCsSyuJuqnjZQppR8Ovu5NwuC6zh+GBs=;
-        b=a5jW3Jyo2fohlWyrmW5vLD52h/i3kYybsp7n9kPg7XvH3sVi4y2tSGFzi/BRBicC77
-         g8lVtnLJ+oq4NUOvx48zIOX2X+7pUz68OlfTRCqWlewGEEJOPGwR4iMJPN6AlbhhbrWR
-         nVeOD/W74XuexcPAMKYkJUVszK/gZPz1v/QOTcoSQJFonJONSYhWvI6lt8a5Ij2fRrbw
-         Me1WgvS9kS6SI5UH1DMSSFb/4EkIirjoEBt/EKhKFDieB6f4kxAwhI87LOwaJi5ISwQ1
-         sOCF6g3HX7/lX+vS/SZsGIr6Zc0kiWLDbxrFj5ra2WT47Skb/PNr+ak6rQNpmLxMv4Sx
-         oMVA==
-X-Gm-Message-State: AC+VfDybQ9EIQA/lPkOD4vRpZBteQLUQYjL2Pg8eS2ZqbVS63kyqZQiT
-        vB1HaZX0A9yj++KmqcUywqM=
-X-Google-Smtp-Source: ACHHUZ4CZb4AT1UxLVMjk/DEUYbokvO1qFAA3tOXwb6SBqUof8L9UoTbNHRmBw79wpN3jy7dGQzpUA==
-X-Received: by 2002:a17:903:2291:b0:1ad:f407:37d1 with SMTP id b17-20020a170903229100b001adf40737d1mr20360791plh.52.1684344828499;
-        Wed, 17 May 2023 10:33:48 -0700 (PDT)
-Received: from localhost.localdomain ([111.201.128.95])
-        by smtp.gmail.com with ESMTPSA id j2-20020a170902758200b001ac896ff65fsm17829000pll.129.2023.05.17.10.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 10:33:47 -0700 (PDT)
-From:   Yeqi Fu <asuk4.q@gmail.com>
-To:     rric@kernel.org, bp@alien8.de, tony.luck@intel.com
-Cc:     Yeqi Fu <asuk4.q@gmail.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] edac: Fix error checking
-Date:   Thu, 18 May 2023 01:31:11 +0800
-Message-Id: <20230517173111.365787-1-asuk4.q@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 17 May 2023 13:31:52 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A5C26A3;
+        Wed, 17 May 2023 10:31:50 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 370A61EC0666;
+        Wed, 17 May 2023 19:31:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1684344709;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jSLldGrlFeDLob0SjoV+tDw0C7NLfpHCaoN5cOY2jz4=;
+        b=pMZUdQSJF55h9VbGEMx3Xs57CkxQG7ExZK3q7hwHCUnBweJkpBQF6+bOsL1hPr+t2/MbW8
+        0ure1g3c1cAKuXP2E9p/7Ib1dNXoZyVr3vIASYySVudFPtwFi0FkSHs1iuKLV0FD8tywbM
+        puMrmiQtrXIMdVtZeRYiGci+Pr+wKaQ=
+Date:   Wed, 17 May 2023 19:31:45 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 01/20] x86: decompressor: Use proper sequence to take
+ the address of the GOT
+Message-ID: <20230517173145.GEZGUPgRTiUFB2GwgG@fat_crate.local>
+References: <20230508070330.582131-1-ardb@kernel.org>
+ <20230508070330.582131-2-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230508070330.582131-2-ardb@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functions edac_debugfs_create_file return ERR_PTR if an error
-occurs, and the appropriate way to verify for errors is to use the
-inline function IS_ERR. The patch will substitute the null-comparison
-with IS_ERR.
+Please fix all your subjects as explained here:
 
-Signed-off-by: Yeqi Fu <asuk4.q@gmail.com>
----
- drivers/edac/thunderx_edac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://kernel.org/doc/html/latest/process/maintainer-tip.html#patch-subject
 
-diff --git a/drivers/edac/thunderx_edac.c b/drivers/edac/thunderx_edac.c
-index 0bcd9f02c84a..b9c5772da959 100644
---- a/drivers/edac/thunderx_edac.c
-+++ b/drivers/edac/thunderx_edac.c
-@@ -481,7 +481,7 @@ static int thunderx_create_debugfs_nodes(struct dentry *parent,
- 		ent = edac_debugfs_create_file(attrs[i]->name, attrs[i]->mode,
- 					       parent, data, &attrs[i]->fops);
- 
--		if (!ent)
-+		if (IS_ERR(ent))
- 			break;
- 	}
- 
+On Mon, May 08, 2023 at 09:03:11AM +0200, Ard Biesheuvel wrote:
+> We don't actually use a global offset table (GOT) in the 32-bit
+
+Please use passive voice in your commit message: no "we" or "I", etc,
+and describe your changes in imperative mood.
+
+Personal pronouns are ambiguous in text, especially with
+so many parties/companies/etc developing the kernel so let's avoid them
+please.
+
+> diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
+> index 987ae727cf9f0d04..53cbee1e2a93efce 100644
+> --- a/arch/x86/boot/compressed/head_32.S
+> +++ b/arch/x86/boot/compressed/head_32.S
+> @@ -58,7 +58,7 @@ SYM_FUNC_START(startup_32)
+>  	leal	(BP_scratch+4)(%esi), %esp
+>  	call	1f
+>  1:	popl	%edx
+> -	addl	$_GLOBAL_OFFSET_TABLE_+(.-1b), %edx
+> +	leal	(_GLOBAL_OFFSET_TABLE_ - 1b)(%edx), %edx
+
+Yeah, that's a bit better.
+
+Thx.
+
 -- 
-2.37.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
