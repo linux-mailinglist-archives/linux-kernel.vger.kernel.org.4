@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E27707001
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE44706FF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjEQRwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
+        id S229964AbjEQRvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjEQRwR (ORCPT
+        with ESMTP id S229739AbjEQRu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:52:17 -0400
-X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 10:51:55 PDT
-Received: from p3plwbeout26-06.prod.phx3.secureserver.net (p3plsmtp26-06-2.prod.phx3.secureserver.net [216.69.139.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992ACD2F0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:51:55 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.144])
-        by :WBEOUT: with ESMTP
-        id zLGmp1uHj0mOMzLGnpNwyI; Wed, 17 May 2023 10:49:01 -0700
-X-CMAE-Analysis: v=2.4 cv=fPD8YbWe c=1 sm=1 tr=0 ts=6465138d
- a=wXHyRMViKMYRd//SnbHIqA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=3-RhneuVAAAA:8
- a=FXvPX3liAAAA:8 a=IfMCuqTOASDaTjgOz58A:9 a=QEXdDO2ut3YA:10
- a=VLVLkjT_5ZicWzSuYqSo:22 a=UObqyxdv-6Yh2QiB9mM_:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  zLGmp1uHj0mOM
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.87])
-        by smtp11.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1pzLGl-00032a-NG; Wed, 17 May 2023 18:49:00 +0100
-Message-ID: <5a2af52b-f8cc-7118-2d08-44bcba1b8fd4@squashfs.org.uk>
-Date:   Wed, 17 May 2023 18:48:58 +0100
+        Wed, 17 May 2023 13:50:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB381BE;
+        Wed, 17 May 2023 10:50:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8384F649A4;
+        Wed, 17 May 2023 17:50:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41460C433D2;
+        Wed, 17 May 2023 17:50:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684345856;
+        bh=Nj3X4eb32bJvjIobk6DnVqeRKQCfep3jBPFcL9HRAGM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ekOGNtS+hKr/Lrs4H+eqixvbP8ce/1VXpcwsOX9IXwd9nOfh2FKX9LuOdX2+uZi2G
+         b6X2xMu3XGRFmST2C0ef/DgOsKAgvv5H5B8lqgMrqgceWj8vMeeCoCEwrIy2VMPdM2
+         Kqu91bCe99yvjJgrVZwFV/hqbejVPsj3akyi6SyU5uDue0QkHa0msQ1OzQXie30g9b
+         7NF4Bqq1R0EQPbCDPkrstaMRYM6a/OzSvYPw0aU2sjMQ8O/yxKO9e3DJOV84ESnJBJ
+         p3b/4LqRC4DHiuW0NDwQRsgysTpfZVPF8ft7O6oHea00u9mpEEAiJOhsge4ndO+Ng6
+         QrcFmi6LCUDfg==
+Date:   Wed, 17 May 2023 18:50:51 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Ryan.Wanner@microchip.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        linus.walleij@linaro.org, ludovic.desroches@microchip.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: pinctrl: at91-pio4: Add push-pull
+ support
+Message-ID: <20230517-retaliate-sway-af7e15f8e80f@spud>
+References: <cover.1684313910.git.Ryan.Wanner@microchip.com>
+ <048a41d1dcb3da0e845986a73eaac61a54c69269.1684313910.git.Ryan.Wanner@microchip.com>
+ <20230517-arrogance-unroll-5e6770618364@spud>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4] squashfs: cache partial compressed blocks
-Content-Language: en-GB
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     hch@lst.de, linux-kernel@vger.kernel.org,
-        squashfs-devel@lists.sourceforge.net, kernel@axis.com
-References: <20230510-squashfs-cache-v4-1-3bd394e1ee71@axis.com>
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20230510-squashfs-cache-v4-1-3bd394e1ee71@axis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfGpzRkmGje/tWM/aDykcqxyBf07ZPvze2/+rTrdQ5k6OM4NpYy3RtVwEUq8mFpWAEfaZ9Gof11Y6IlxBKyZBI8UTO+wT+Hau4wqd/bi/w8jv6Bf3+LUB
- 1AAPwAAElMq8E6nfFI4GJ6QYM3v0njDeFMpKbSyMtqoOLwAchHYZtdoFLXonB+US5VBBMKmP89Cz2U0HiNtUwudIkAKM7oDoJVM=
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zCeDp95tAXyEvGVE"
+Content-Disposition: inline
+In-Reply-To: <20230517-arrogance-unroll-5e6770618364@spud>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 15:18, Vincent Whitchurch wrote:
-> Before commit 93e72b3c612adcaca1 ("squashfs: migrate from ll_rw_block
-> usage to BIO"), compressed blocks read by squashfs were cached in the
-> page cache, but that is not the case after that commit.  That has lead
-> to squashfs having to re-read a lot of sectors from disk/flash.
->
-> For example, the first sectors of every metadata block need to be read
-> twice from the disk.  Once partially to read the length, and a
-> second time to read the block itself.  Also, in linear reads of large
-> files, the last sectors of one data block are re-read from disk when
-> reading the next data block, since the compressed blocks are of variable
-> sizes and not aligned to device blocks.  This extra I/O results in a
-> degrade in read performance of, for example, ~16% in one scenario on my
-> ARM platform using squashfs with dm-verity and NAND.
->
-> Since the decompressed data is cached in the page cache or squashfs'
-> internal metadata and fragment caches, caching _all_ compressed pages
-> would lead to a lot of double caching and is undesirable.  But make the
-> code cache any disk blocks which were only partially requested, since
-> these are the ones likely to include data which is needed by other file
-> system blocks.  This restores read performance in my test scenario.
->
-> The compressed block caching is only applied when the disk block size is
-> equal to the page size, to avoid having to deal with caching sub-page
-> reads.
->
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-Reviewed-by: Phillip Lougher <phillip@squashfs.org.uk>
+--zCeDp95tAXyEvGVE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, May 17, 2023 at 06:38:28PM +0100, Conor Dooley wrote:
+> On Wed, May 17, 2023 at 01:54:05PM +0200, Ryan.Wanner@microchip.com wrote:
+> > From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> >=20
+> > Add generic push-pull support for pio4 driver.
+> >=20
+> > Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+>=20
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Whoops, incorrect vim macro, should have been:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 
+--zCeDp95tAXyEvGVE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGUT+wAKCRB4tDGHoIJi
+0iG6AQCYV9PvL5v/9KFf9yQnP4XLLrQuOsEwZn7ZL2HsmonBQgEAoBxWUxdrtXdj
+Ch1/FHMciUANAZbmgX6+cbSyEeDhzAY=
+=m2A7
+-----END PGP SIGNATURE-----
+
+--zCeDp95tAXyEvGVE--
