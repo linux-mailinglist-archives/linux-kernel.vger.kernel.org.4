@@ -2,75 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FC3706B10
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775EA706B05
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjEQO15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        id S231175AbjEQOZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjEQO1z (ORCPT
+        with ESMTP id S229669AbjEQOZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:27:55 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156B176A9;
-        Wed, 17 May 2023 07:27:54 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-965ddb2093bso127748266b.2;
-        Wed, 17 May 2023 07:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684333672; x=1686925672;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rN+Cdxh6bJMHZ3jVV+gRbD4cc8AdLQRaRy43VoXFPgY=;
-        b=GK/vTZFZrVXCsVbfVJieWLoH+vYxx1d0FLd12lg5wXTAGzxDqccz1SAz2+WbXHH0Gt
-         AE/pGUQowxD9Pii/WRS0PNmseW2fhwr9DUMMJ7FGK+JKI4QIdm/+kdQiquRsGmWCsv2P
-         Wzzrjgcw10041wQV5vMk2tgJzl770sj9Cw7akm28yQ2M8i3jdoXM4bHEwClTCZ9pf4xd
-         Pbu7fZjgWq7DsZ9xbsIuqryVXbe0CURRFAN+nCQlI6BzVg4/iIDfh6qCRvmmyNB8D4tl
-         lQOLlRUpne/JO4zYQvUlLbkuz13yQNGyiwZn6SlC1qkMRogLl3+2UPKxE+nK0cdDej09
-         DxgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684333672; x=1686925672;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rN+Cdxh6bJMHZ3jVV+gRbD4cc8AdLQRaRy43VoXFPgY=;
-        b=i6uNhSP1LDuogx3ZlAttyBFeJ14PNt5k42wV7IoJ6oU6him7eXYhCSvc6uTefoxWIU
-         3IA0dLayKk0xx/gP+3/PzY6dewNLtO1zNESXLhO1/4vAmQFQehEapXfqyheVqQtBqwgS
-         XcoMlC1e4uQvmiFEYvr1+ZG9ZQ/uNRZgpp621wTN0YQaE6rKXFgeI0uRDjIikPP9bpdt
-         9OkUoRCL9mDe7qGqa4LYYhxFUO47CHCBDwS0URcqmhWIq4KOu1XsYF/7Jre5ktNi0Qk+
-         /pNuNVxNkGIxvSjL7SfAv7rWioFXefqDBfmNeLv77CvgnFgot0Vq2kb9X7wzKRG4cDFx
-         budA==
-X-Gm-Message-State: AC+VfDyBnDCJG3BdXI+P2PXu9iEurG7EhAMjntaoSVSuztp0GVdkMW8X
-        MXKJhhtjDslBqegQ22Yc5Ck=
-X-Google-Smtp-Source: ACHHUZ7dhMAF8XkR2u2ayjygbCYCANZS+VTeA+yC2BUDEvaL8z6TanmI3GsASEE7RZHntBGigPkFBw==
-X-Received: by 2002:a17:906:9749:b0:96f:1b96:6147 with SMTP id o9-20020a170906974900b0096f1b966147mr367462ejy.55.1684333672252;
-        Wed, 17 May 2023 07:27:52 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::2eef? ([2620:10d:c092:600::2:46a1])
-        by smtp.gmail.com with ESMTPSA id z25-20020a17090674d900b0096ac3e01a35sm7054726ejl.130.2023.05.17.07.27.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 07:27:51 -0700 (PDT)
-Message-ID: <bedf7aff-2914-350a-43e3-04bb86bf9d5a@gmail.com>
-Date:   Wed, 17 May 2023 15:23:46 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Bug report] kernel panic: System is deadlocked on memory
+        Wed, 17 May 2023 10:25:27 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2054.outbound.protection.outlook.com [40.107.7.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FB2131;
+        Wed, 17 May 2023 07:25:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QzqOmrlNrqmZw36Ys0Vk+4zL7ihgarmEUAfDCpv1hMO2NFEnC1CFhXTddbtrjFeYzjhS9s4ddeOWwHrO4yQooFC1ckQJuShRcHQOlfrTjxKjyxy7MZQOYGxpW0P9FPSA+Rcv0tkphO1YBG9S+5VLjLszY3glJILRilRz5t1pH34oiMhlOd/vUUaYSW1fISvpmuzxQyZrdxL2PFF/pynLl6YQ+jwaDQN/yoGL1XlUIzE0toZH5DTb+YIJftGS3/f/0mRXM4bmhksYl0Ax1jmKHkcu8Phw+2DYjgZ+ngxcBePSeH0KhANOOBZlZKwdkmRcbubStTmg1cS7+Xis+ayOfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MeGK1jVV4yXBKIxT3F40WjJeg/KuApeWDVYYdN1Dmx8=;
+ b=nAAIDTBLL8X9bXZWFLcR6EFaYzXwwL6A5cwUzE1xaRLtj2j6huSP2MKBLX7pXzfIghG7/YPAwzZdB5xhPnPZYupkgArzpE2ajLNDi0XDzv2IBiZSktMYeDcy4u85i7aTXnPLTZ9sAEbfvT/09vHFXwSdnatzH1xzNlQQ2nWv5ZpuGCTb3QSuTstFZhREY55OCSymVmmmb/itUPDa8CzjFqSoVFgVnGZTXlMkl51SSmKI7Tk0g20p0x0eGm8OwfkxyeHpDkOnr2anEBAggdyXd94LtRvLReYDBTz/GbKoYgdFUnEC+E7Y70p+TBDYpa4t5Vwg7Ek882boME7v606b9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MeGK1jVV4yXBKIxT3F40WjJeg/KuApeWDVYYdN1Dmx8=;
+ b=ZjNbo50MgYH2xCYdW4ws94gaIxWkZhJtu9E9il0tvuc6oZQWASpb5sZeVXGvdYikODOO41FHcuLlC95sSd1wBU7fO9m1XUDSnW7rMwKraRZim/C6j/pD9xGY1hxKahGRNsUPzRH6i8vl2WO3ZPEUSBi4k3oPL2g7lr583FVk7eU=
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by PA4PR04MB7872.eurprd04.prod.outlook.com (2603:10a6:102:ce::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.34; Wed, 17 May
+ 2023 14:25:23 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.033; Wed, 17 May 2023
+ 14:25:22 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Subject: RE: [EXT] Re: [PATCH v5 0/3] dts: imx8qxp add cdns usb3 port
+Thread-Topic: [EXT] Re: [PATCH v5 0/3] dts: imx8qxp add cdns usb3 port
+Thread-Index: AQHZYLwz9foY+34alUyR/LPBJOX9ma8dkSYAgEFDlPA=
+Date:   Wed, 17 May 2023 14:25:22 +0000
+Message-ID: <AM6PR04MB4838A0B0FABE405800E00741887E9@AM6PR04MB4838.eurprd04.prod.outlook.com>
+References: <20230327145523.3121810-1-Frank.Li@nxp.com>
+ <20230406014422.GK11367@dragon>
+In-Reply-To: <20230406014422.GK11367@dragon>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     yang lan <lanyang0908@gmail.com>, axboe@kernel.dk,
-        sashal@kernel.org, dylany@fb.com, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <CAAehj2kcgtRta0ou6KQiyz33O4hf+_7jgndzV_neyQRj5BjSJQ@mail.gmail.com>
- <e3d7d8cf-5fc1-b956-fc48-0351f1ecfc08@gmail.com>
- <2023051714-chain-constrain-4ce4@gregkh>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <2023051714-chain-constrain-4ce4@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|PA4PR04MB7872:EE_
+x-ms-office365-filtering-correlation-id: 82a34d15-b491-4570-fd95-08db56e28ce2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9Cg7EE/QMK6/J+dnemuNrj3qXPoMOLrBy92/dJarlb7/BveQAHe3QXVQ6Rlai58AALPkABnFtHnk42KSPXK+BkVHHBtbfzmpvccfNRHrwrHmLGeB9qbImS6r6eCu8hBvyerBjImsR0/HEF7pmfNqKHszHGukJn8MnuuujLhuSMATDkRv5b+S+ugb04p4UebOOMxRAuDZyYIlWqHIPYb33lfQr70qF4PyGxWZHTCzfv5ZUgdybITuAwC/nIqeuNhXbNxknLY8NyxQtmplFdt6TdBqNc8nxrj6K9XwsirALejRxsUF9ovMoOWTHsOShdxwXKS5FXSY/Ga34PO2wEpJnPTWKPSTMYg+xqhdsJFc0D+fuwKDUxIcUpFAfLrF47F5tLz/HBkejf+iaRFYFJ63Ac2EyBlKtv6eefWeuiTt5WXzVqTh2kVdwUQgRwe9YfvqgfyXMFywqnC/iIOFBWclde/nNKPVNTBHmLgSaargzZ4OwCCfLS4I1dwGMX9yXxW9AMHNNoLPoW810jPOn9xfRp4XGLyTYDlTwn7u//MmzkJo0VbNb3B/LOXQ83QvAQpvb3VE5L81zopJFibv4BH91UOoGrqX/oe7k5FRGMKILsh+8zHmAofDgrrRnyApir8TgrgrErKnqpoDX5ImCpXMyQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(376002)(39860400002)(346002)(451199021)(76116006)(4326008)(66446008)(66556008)(64756008)(66476007)(5660300002)(66946007)(8676002)(8936002)(478600001)(54906003)(110136005)(4744005)(2906002)(7696005)(41300700001)(7416002)(44832011)(52536014)(316002)(71200400001)(26005)(6506007)(9686003)(55236004)(186003)(55016003)(38070700005)(122000001)(33656002)(86362001)(38100700002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IZr9fQ89Ui413BNxlOMA27h906q4P6ssMr8FRsgN1SFmoKGETgDiPvUe5su7?=
+ =?us-ascii?Q?eoCCMLiSOLM2B46uchpUrQibzXuY9xnLgsu9SqH6gsBadbmb02nOHf0uUwdV?=
+ =?us-ascii?Q?9jBS/G+fZKqWgMJqJgFODpl6MxXSrRv+pufa9ubegQ2qZZQbYSRZicvRf2WF?=
+ =?us-ascii?Q?EqDt566tP0SA6ngPCyF1YvQdZqi4nJ1GpOVuPTCeRWiFjVyDVfhMzij+j8xD?=
+ =?us-ascii?Q?dqGFPh+wEKzjGxmp/xE2s6/pDk/sY8xnlXlf2HMg1Ttrxmf2yCha7Aht4boD?=
+ =?us-ascii?Q?OgY7yAqhV8Q8XX4o/CTA7MATXNAHvJpp0rFRVLpPtA/eNTzQ/KSklTo2mqLt?=
+ =?us-ascii?Q?sFgWEpi0h8nMsLUS5/d89UAGSAniixpU43Pscyrx7WXcetN1CaP+Flzjm3ek?=
+ =?us-ascii?Q?7hJb+c9kwfxp79Q59P2mgXMCXQGfyCnxQ97ogiG/Kf7UIWFVZNOS8Dy40un9?=
+ =?us-ascii?Q?suu87ZcdOIJrAvaA2XdaMtGMWxSu0lw2Cyw/IXWmAokp7uJqfgxsI8Mx7hQW?=
+ =?us-ascii?Q?JKOoaCVoVHQ3huIzNnn8sfz+pJMm02P5i7r+ReIBZ+4oPRAN/Njn8BVUMhsb?=
+ =?us-ascii?Q?kegWWLDGAV66gZC4oOPaVkFA3ODj6lhc0MAkExbOmllNFRUOBM6ZPaVLQlJk?=
+ =?us-ascii?Q?RSW+EsMnS/zdy22JttpGJGACAD7DTKrmPaeYJ1a6S4BypGIa0OSZV9F6a5Z6?=
+ =?us-ascii?Q?DVZlZ5EpuB8t0mDNimM+BHQSWRyWiX2yH2jyW9Hl+ykgztPzyAq0ZeTN6Nnd?=
+ =?us-ascii?Q?jPoULoI5gqC98zxNbRyHAE3Ga3Lh9FXIRG0furrg1VOba3zOuO2Kg22F+GOX?=
+ =?us-ascii?Q?DGjOMoaiItSEc9hGKoGg9zkWHKLD9Q/y1JlnEuwMvBbSHKucq3RMDhLBy/QX?=
+ =?us-ascii?Q?IU8dj7AK+UVW+ZVPHoA9tOpxEkLxYPGZg1sNXytpNR5MX2wLFoOJpTPRf71G?=
+ =?us-ascii?Q?GBOj22QhvpM8qUD2GApc3y7Pspku9gWizXhRDOmF5s/h3Q3zD7E06nj8MhB6?=
+ =?us-ascii?Q?FOYCPreEwvtbIWRQGWHr4aDqIqHSOcE6WPEc/82hr9ZXABFdwygSsQr/JVoZ?=
+ =?us-ascii?Q?E+ScmEEoUsUkHYDl1qt5NyO7Vd7iDGA9IABAIMPpALDVRFgKhpznKQ1hJlqs?=
+ =?us-ascii?Q?kfGrlaKZY5GbP/f3fxwW/82sGhcsT9zhZYckO8vlqfGfbubWOMdZ/zC1kzUK?=
+ =?us-ascii?Q?v1VWcERcDqiE6zritT3lD8pDlpZ7cor0dKekbnxIE32pRb9SK9sVJZUrOXAx?=
+ =?us-ascii?Q?GXDONLVNIbVRLOU+c1rpxiIZk+YwSgGqVV1uMcckt290Xrv47dJqZ/JENmm0?=
+ =?us-ascii?Q?ZQTUbPsQgZnugwqYMsp8AegQZtdTeEGGIABfYZ/lRV1Pex1HoF/QisDZexN5?=
+ =?us-ascii?Q?cWBAcsv6kcPIO0BPEfi39pJvflaK0h0+4bvZDJJs/RL6zFPS04uge9mvzKWC?=
+ =?us-ascii?Q?IMJvP+5Ov8VnFyi+V5UPHIGNXQ1xjaGI9gzZvaKyirgpzWVoWLtJgBJ2Bg05?=
+ =?us-ascii?Q?ha4glG2d30cISRvccIj8IOunOzPfMC5XZ+ki55eFaIG8fpTmmyFJKGI/mXM1?=
+ =?us-ascii?Q?Hqu2AxgjU70jPfKgKnE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82a34d15-b491-4570-fd95-08db56e28ce2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 14:25:22.8858
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WA6VYHANcpUqeyiF5WdaGW9AE3d0Q0B6wvULx+zlFp8mnk7fM1+3cyBq0ZuAPsMlXRySbh9LtWdL5uv384b7Ig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7872
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,140 +127,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 15:05, Greg KH wrote:
-> On Wed, May 17, 2023 at 02:00:53PM +0100, Pavel Begunkov wrote:
->> On 5/17/23 13:02, yang lan wrote:
->>> Hi,
->>>
->>> We use our modified Syzkaller to fuzz the Linux kernel and found the
->>> following issue:
->>>
->>> Head Commit: f1b32fda06d2cfb8eea9680b0ba7a8b0d5b81eeb
->>> Git Tree: stable
->>>
->>> Console output: https://pastebin.com/raw/Ssz6eVA6
->>> Kernel config: https://pastebin.com/raw/BiggLxRg
->>> C reproducer: https://pastebin.com/raw/tM1iyfjr
->>> Syz reproducer: https://pastebin.com/raw/CEF1R2jg
->>>
->>> root@syzkaller:~# uname -a
->>> Linux syzkaller 5.10.179 #5 SMP PREEMPT Mon May 1 23:59:32 CST 2023
->>> x86_64 GNU/Linux
->>> root@syzkaller:~# gcc poc_io_uring_enter.c -o poc_io_uring_enter
->>> root@syzkaller:~# ./poc_io_uring_enter
->>> ...
->>> [  244.945440][ T3106]
->>> oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0-1,global_oom,task_memcg=/,task=dhclient,pid=4526,uid=0
->>> [  244.946537][ T3106] Out of memory: Killed process 4526 (dhclient)
->>> total-vm:20464kB, anon-rss:1112kB, file-rss:0kB, shmem-rss:0kB, UID:0
->>> pgtables:76kB oom_score_adj:0
->>> [  244.953740][ T9068] syz-executor.0 invoked oom-killer:
->>> gfp_mask=0xcc0(GFP_KERNEL), order=0, oom_score_adj=1000
->>> [  244.954411][ T9068] CPU: 0 PID: 9068 Comm: syz-executor.0 Not
->>> tainted 5.10.179 #5
->>> [  244.954903][ T9068] Hardware name: QEMU Standard PC (i440FX + PIIX,
->>> 1996), BIOS 1.12.0-1 04/01/2014
->>> [  244.955515][ T9068] Call Trace:
->>> [  244.955738][ T9068]  dump_stack+0x106/0x162
->>> [  244.956026][ T9068]  dump_header+0x117/0x6f8
->>> [  244.956315][ T9068]  ? ___ratelimit+0x1fc/0x430
->>> [  244.956621][ T9068]  oom_kill_process.cold.34+0x10/0x15
->>> [  244.956970][ T9068]  out_of_memory+0x122c/0x1540
->>> [  244.957283][ T9068]  ? oom_killer_disable+0x270/0x270
->>> [  244.957627][ T9068]  ? mutex_trylock+0x249/0x2c0
->>> [  244.957937][ T9068]  ? __alloc_pages_slowpath.constprop.104+0x9fa/0x2250
->>> [  244.958378][ T9068]  __alloc_pages_slowpath.constprop.104+0x1bec/0x2250
->>> [  244.958818][ T9068]  ? warn_alloc+0x130/0x130
->>> [  244.959117][ T9068]  ? find_held_lock+0x33/0x1c0
->>> [  244.959429][ T9068]  ? __alloc_pages_nodemask+0x3e8/0x6c0
->>> [  244.959789][ T9068]  ? lock_downgrade+0x6a0/0x6a0
->>> [  244.960104][ T9068]  ? lock_release+0x660/0x660
->>> [  244.960412][ T9068]  __alloc_pages_nodemask+0x5dd/0x6c0
->>> [  244.960762][ T9068]  ? __alloc_pages_slowpath.constprop.104+0x2250/0x2250
->>> [  244.961210][ T9068]  ? mark_held_locks+0xb0/0x110
->>> [  244.961531][ T9068]  alloc_pages_current+0x100/0x200
->>> [  244.961864][ T9068]  allocate_slab+0x302/0x490
->>> [  244.962166][ T9068]  ___slab_alloc+0x4eb/0x820
->>> [  244.962472][ T9068]  ? io_issue_sqe+0xf26/0x5d50
->>> [  244.962782][ T9068]  ? __slab_alloc.isra.78+0x64/0xa0
->>> [  244.963118][ T9068]  ? io_issue_sqe+0xf26/0x5d50
->>> [  244.963427][ T9068]  ? __slab_alloc.isra.78+0x8b/0xa0
->>> [  244.963762][ T9068]  __slab_alloc.isra.78+0x8b/0xa0
->>> [  244.964106][ T9068]  ? should_failslab+0x5/0x10
->>> [  244.964419][ T9068]  ? io_issue_sqe+0xf26/0x5d50
->>> [  244.964727][ T9068]  kmem_cache_alloc_trace+0x22a/0x270
->>> [  244.965077][ T9068]  io_issue_sqe+0xf26/0x5d50
->>> [  244.965379][ T9068]  ? io_write+0xf50/0xf50
->>> [  244.965662][ T9068]  ? io_submit_flush_completions+0x6a1/0x930
->>> [  244.966051][ T9068]  ? io_req_free_batch+0x710/0x710
->>> [  244.966380][ T9068]  ? allocate_slab+0x38c/0x490
->>> [  244.966690][ T9068]  __io_queue_sqe.part.124+0xb1/0xb00
->>> [  244.967036][ T9068]  ? kasan_unpoison_shadow+0x30/0x40
->>> [  244.967378][ T9068]  ? __kasan_kmalloc.constprop.10+0xc1/0xd0
->>> [  244.967760][ T9068]  ? io_issue_sqe+0x5d50/0x5d50
->>> [  244.968075][ T9068]  ? kmem_cache_alloc_bulk+0xe1/0x250
->>> [  244.968420][ T9068]  ? io_submit_sqes+0x1c47/0x7b00
->>> [  244.968744][ T9068]  io_submit_sqes+0x1c47/0x7b00
->>> [  244.969080][ T9068]  ? __x64_sys_io_uring_enter+0xcdd/0x11a0
->>> [  244.969456][ T9068]  __x64_sys_io_uring_enter+0xcdd/0x11a0
->>> [  244.969821][ T9068]  ? __io_uring_cancel+0x20/0x20
->>> [  244.970144][ T9068]  ? get_vtime_delta+0x23d/0x360
->>> [  244.970467][ T9068]  ? syscall_enter_from_user_mode+0x26/0x70
->>> [  244.970849][ T9068]  do_syscall_64+0x2d/0x70
->>> [  244.971136][ T9068]  entry_SYSCALL_64_after_hwframe+0x61/0xc6
->>> [  244.971514][ T9068] RIP: 0033:0x46a8c9
->>> [  244.971771][ T9068] Code: Unable to access opcode bytes at RIP 0x46a89f.
->>> [  244.972208][ T9068] RSP: 002b:00007f4d887e0c38 EFLAGS: 00000246
->>> ORIG_RAX: 00000000000001aa
->>> [  244.972747][ T9068] RAX: ffffffffffffffda RBX: 000000000057bf80
->>> RCX: 000000000046a8c9
->>> [  244.973253][ T9068] RDX: 0000000000000000 RSI: 00000000000051cd
->>> RDI: 0000000000000003
->>> [  244.973792][ T9068] RBP: 00000000004c9f3b R08: 0000000000000000
->>> R09: 0000000000000000
->>> [  244.974299][ T9068] R10: 0000000000000000 R11: 0000000000000246
->>> R12: 000000000057bf80
->>> [  244.974802][ T9068] R13: 00007ffd88d30d4f R14: 000000000057bf80
->>> R15: 00007ffd88d30f00
->>> [  244.980610][ T9068] Mem-Info:
->>> [  244.980840][ T9068] active_anon:166 inactive_anon:8300 isolated_anon:0
->>> [  244.980840][ T9068]  active_file:2 inactive_file:3 isolated_file:0
->>> [  244.980840][ T9068]  unevictable:0 dirty:0 writeback:0
->>> [  244.980840][ T9068]  slab_reclaimable:12481 slab_unreclaimable:279862
->>> [  244.980840][ T9068]  mapped:52225 shmem:6769 pagetables:446 bounce:0
->>> [  244.980840][ T9068]  free:9671 free_pcp:453 free_cma:0
->>> ...
->>> [  245.694692][ T2959] Kernel Offset: disabled
->>> [  245.695139][ T2959] Rebooting in 86400 seconds..
->>>
->>> Please let me know if I can provide any more information, and I hope I
->>> didn't mess up this bug report.
->>
->> I think we should backport the commit below. It'll somewhat
->> degrade perf but we probably don't care that much about 5.10.
->>
->>
->>
->> commit 91f245d5d5de0802428a478802ec051f7de2f5d6
->> Author: Jens Axboe <axboe@kernel.dk>
->> Date:   Tue Feb 9 13:48:50 2021 -0700
->>
->>      io_uring: enable kmemcg account for io_uring requests
->>      This puts io_uring under the memory cgroups accounting and limits for
->>      requests.
->>      Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>
-> 
-> this is already in the 5.10.y tree, so I don't think it will help much :(
+> >
+> > Frank Li (3):
+> >   dt-bindings: usb: cdns-imx8qm: add imx8qm cdns3 glue layer
+> >   arm64: dts: imx8qxp: add cadence usb3 support
+> >   arm64: dts: freescale: imx8qxp-mek: enable cadence usb3
+>=20
+> Applied two DTS patches, thanks!
 
-Oops, my stable tree was heavily outdated.
+Krzysztof Kozlowski:
 
-Then it should be triggerable for 6.4. We should tell slab to fail
-instead of oom'ing, sth like __GFP_NORETRY or __GFP_RETRY_MAYFAIL.
+di-bindings missed, Can you pick up this one?
 
-  * %__GFP_NORETRY: The VM implementation will try only very lightweight
-  * memory direct reclaim to get some memory under memory pressure (thus
-  * it can sleep). It will avoid disruptive actions like OOM killer...
-  
--- 
-Pavel Begunkov
+Best regards
+Frank Li
