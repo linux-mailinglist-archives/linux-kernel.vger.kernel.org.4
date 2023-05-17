@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CA5706AF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A04706AF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjEQOTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S230045AbjEQOUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231946AbjEQOSs (ORCPT
+        with ESMTP id S232107AbjEQOT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:18:48 -0400
+        Wed, 17 May 2023 10:19:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A4D3C3F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:18:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C4549C7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:19:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B754763B69
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:18:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7AFC4339B;
-        Wed, 17 May 2023 14:18:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2679F63EE8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:19:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F91C4339B;
+        Wed, 17 May 2023 14:19:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684333120;
-        bh=F0AZ9gGUCWLqZou45V0C72APsERo8cXab7RBwb7n0S4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tnbWQgtR+ovpmbCYc6D2SPzL48cQT5eHh1tAhCnhv1gqk0GxKxv9CurHupSMRjeoS
-         JZrqBmpPr74BAtIyhm5rC/LhWXYsyE4sPQPH+Acnyj1xHvdWEzs1nP/2h1/L53XNFT
-         BB7hgMyfOqikuc3PChI/fBrIGrdiu8jJFv6chHnGwxVorLJKcH2Me+UkWJTgbTiG9v
-         NrC/aH+U1aUMJ7saENasYVUUpgNyfRWa0mRbsRpiNT0JrnWH4ROufUCHkjY7Ys3xq9
-         rxpWvS1WoTErpOz9ANLBz6s6mGly06rglm6RpvE0PWy6eAus4R6oc100lZlpxIaj4W
-         xG54oO1xm8Iug==
-From:   Lee Jones <lee@kernel.org>
-To:     lee@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] mailmap: Add some mail mappings for Lee Jones
-Date:   Wed, 17 May 2023 15:18:29 +0100
-Message-ID: <20230517141833.360743-1-lee@kernel.org>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1684333195;
+        bh=a5GdT+Gc6cojyiH2uD2wUgdqNAz0P+GG+pbONDDq51Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QF90qzEarHBB84DjXmKAn0hFZOFl1Ud1AszbceBwnMONI43D6uxkl3cPk3xvnibsh
+         xe/RJeDS3C32hjsu+GC++DU70FEvkcuQFigjbE3TFgZh+Bdrb5AJitLuXF+mTjbdkb
+         3sUW0sr1TqVwDzW3XmlWOonixCWczD2ShKabNkMyH+6V60naJD7b9UAWDV6DetkLv4
+         YF44mM0SEu0d8mFHu8jusvinvDTKyvCYJS3bLiN7ZQBZRdXdc8AC15gYYZoWj4wRot
+         YdWgUyxZsslUUXqo2RtzxtD6RQVotdNTLtsTOdAaMT+337aGoWtn90kfkIvck1KU04
+         Phvm75+Thk66w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pzI0P-00FsMd-5D;
+        Wed, 17 May 2023 15:19:53 +0100
+Date:   Wed, 17 May 2023 15:19:52 +0100
+Message-ID: <86pm6zkpkn.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mostafa Saleh <smostafa@google.com>
+Cc:     oliver.upton@linux.dev, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com
+Subject: Re: [PATCH] KVM: arm64: Use BTI for pKVM
+In-Reply-To: <ZGSVLl90+YHNKWc9@google.com>
+References: <20230516141846.792193-1-smostafa@google.com>
+        <864jocmg75.wl-maz@kernel.org>
+        <ZGSVLl90+YHNKWc9@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: smostafa@google.com, oliver.upton@linux.dev, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, tabba@google.com, qperret@google.com, will@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com, suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com, gshan@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,28 +72,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent mails from being sent to old and unmonitored inboxes.
+On Wed, 17 May 2023 09:49:50 +0100,
+Mostafa Saleh <smostafa@google.com> wrote:
+> 
+> Hi Marc,
+> 
+> On Tue, May 16, 2023 at 04:47:10PM +0100, Marc Zyngier wrote:
+> > On Tue, 16 May 2023 15:18:46 +0100,
+> > Mostafa Saleh <smostafa@google.com> wrote:
+> > > 
+> > > CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+> > > However, the nvhe code doesn't make use of it as it doesn't map any
+> > > pages with Guarded Page(GP) bit.
+> > > 
+> > > This patch maps pKVM .text section with GP bit which matches the
+> > > kernel handling for BTI.
+> > 
+> > Why pKVM only? Surely we can benefit from it all over the nvhe code,
+> > right?
+> Yes, I will add it also for nvhe in v2.
+> 
+> > > 
+> > > A new flag is added to enum kvm_pgtable_prot: KVM_PGTABLE_PROT_GP_S1,
+> > > which represents BTI guarded page in hypervisor stage-1 page table.
+> > > 
+> > > Signed-off-by: Mostafa Saleh <smostafa@google.com>
+> > > ---
+> > >  arch/arm64/include/asm/kvm_pgtable.h | 3 +++
+> > >  arch/arm64/kvm/hyp/nvhe/setup.c      | 8 ++++++--
+> > >  arch/arm64/kvm/hyp/pgtable.c         | 6 ++++--
+> > >  3 files changed, 13 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> > > index 4cd6762bda80..5bcd06d664d3 100644
+> > > --- a/arch/arm64/include/asm/kvm_pgtable.h
+> > > +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> > > @@ -151,6 +151,7 @@ enum kvm_pgtable_stage2_flags {
+> > >   * @KVM_PGTABLE_PROT_W:		Write permission.
+> > >   * @KVM_PGTABLE_PROT_R:		Read permission.
+> > >   * @KVM_PGTABLE_PROT_DEVICE:	Device attributes.
+> > > + * @KVM_PGTABLE_PROT_GP_S1:	GP(guarded page) used for BTI in stage-1 only
+> > >   * @KVM_PGTABLE_PROT_SW0:	Software bit 0.
+> > >   * @KVM_PGTABLE_PROT_SW1:	Software bit 1.
+> > >   * @KVM_PGTABLE_PROT_SW2:	Software bit 2.
+> > > @@ -163,6 +164,8 @@ enum kvm_pgtable_prot {
+> > >  
+> > >  	KVM_PGTABLE_PROT_DEVICE			= BIT(3),
+> > >  
+> > > +	KVM_PGTABLE_PROT_GP_S1			= BIT(50),
+> > > +
+> > >  	KVM_PGTABLE_PROT_SW0			= BIT(55),
+> > >  	KVM_PGTABLE_PROT_SW1			= BIT(56),
+> > >  	KVM_PGTABLE_PROT_SW2			= BIT(57),
+> > > diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+> > > index 110f04627785..95f80e2b2946 100644
+> > > --- a/arch/arm64/kvm/hyp/nvhe/setup.c
+> > > +++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+> > > @@ -66,7 +66,7 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+> > >  {
+> > >  	void *start, *end, *virt = hyp_phys_to_virt(phys);
+> > >  	unsigned long pgt_size = hyp_s1_pgtable_pages() << PAGE_SHIFT;
+> > > -	enum kvm_pgtable_prot prot;
+> > > +	enum kvm_pgtable_prot prot = PAGE_HYP_EXEC;
+> > >  	int ret, i;
+> > >  
+> > >  	/* Recreate the hyp page-table using the early page allocator */
+> > > @@ -88,7 +88,11 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+> > >  	if (ret)
+> > >  		return ret;
+> > >  
+> > > -	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, PAGE_HYP_EXEC);
+> > > +	/* Hypervisor text is mapped as guarded pages(GP). */
+> > > +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && cpus_have_const_cap(ARM64_BTI))
+> > > +		prot |= KVM_PGTABLE_PROT_GP_S1;
+> > 
+> > Is there any reason why this isn't a final cap? I also dislike the
+> > IS_ENABLED(), but I can see that we don't have separate caps for
+> > in-kernel BTI and userspace visible BTI...
+> I was trying to make this close to EL1 code (system_supports_bti()),
+> I see in hypervisor cpus_have_const_cap is the same as cpus_have_final_cap.
 
-Signed-off-by: Lee Jones <lee@kernel.org>
----
- .mailmap | 4 ++++
- 1 file changed, 4 insertions(+)
+Ah, yes. If that's immaterial, then no need for a change.
 
-diff --git a/.mailmap b/.mailmap
-index 71127b2608d20..728a25b7abfb8 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -270,6 +270,10 @@ Krzysztof Kozlowski <krzk@kernel.org> <k.kozlowski@samsung.com>
- Krzysztof Kozlowski <krzk@kernel.org> <krzysztof.kozlowski@canonical.com>
- Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
- Kuogee Hsieh <quic_khsieh@quicinc.com> <khsieh@codeaurora.org>
-+Lee Jones <lee@kernel.org> <joneslee@google.com>
-+Lee Jones <lee@kernel.org> <lee.jones@canonical.com>
-+Lee Jones <lee@kernel.org> <lee.jones@linaro.org>
-+Lee Jones <lee@kernel.org> <lee@ubuntu.com>
- Leonard Crestez <leonard.crestez@nxp.com> Leonard Crestez <cdleonard@gmail.com>
- Leonardo Bras <leobras.c@gmail.com> <leonardo@linux.ibm.com>
- Leonard Göhrs <l.goehrs@pengutronix.de>
+> Yes, I don't see a way to distinguish if BTI was enabled for the kernel
+> in EL2 without CONFIG_ARM64_BTI_KERNEL.
+> 
+> > > +
+> > > +	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, prot);
+> > >  	if (ret)
+> > >  		return ret;
+> > >  
+> > > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > > index 3d61bd3e591d..028e198acd48 100644
+> > > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > > @@ -145,7 +145,8 @@ static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+> > >  	u64 type = (level == KVM_PGTABLE_MAX_LEVELS - 1) ? KVM_PTE_TYPE_PAGE :
+> > >  							   KVM_PTE_TYPE_BLOCK;
+> > >  
+> > > -	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI);
+> > > +	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI |
+> > > +		       KVM_PGTABLE_PROT_GP_S1);
+> > >  	pte |= FIELD_PREP(KVM_PTE_TYPE, type);
+> > >  	pte |= KVM_PTE_VALID;
+> > >  
+> > > @@ -378,7 +379,8 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot, kvm_pte_t *ptep)
+> > >  	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_AP, ap);
+> > >  	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_SH, sh);
+> > >  	attr |= KVM_PTE_LEAF_ATTR_LO_S1_AF;
+> > > -	attr |= prot & KVM_PTE_LEAF_ATTR_HI_SW;
+> > > +	attr |= prot & (KVM_PTE_LEAF_ATTR_HI_SW | KVM_PGTABLE_PROT_GP_S1);
+> > > +
+> > 
+> > You should probably check that the page is executable before blindly
+> > accepting to set the GP bit (don't accept it for non-exec pages).
+> Will do in v2.
+> 
+> > Another thing to check would be the state of SCTLR_EL2.BT, which I
+> > think we clear by construction, but it be worth having a look.
+> Yes, I see it is initialised by zero in ___kvm_hyp_init in hyp-init.S,
+> I believe this should be changed to 1 when BTI is enabled (as in
+> bti_enable() for EL1), I will update it.
+
+Yup, I'd like to see some level of consistency with what we do at EL1,
+at least so that we are all aligned on what we allow from an ABI
+perspective.
+
+Thanks,
+
+	M.
+
 -- 
-2.40.1.606.ga4b1b128d6-goog
-
+Without deviation from the norm, progress is not possible.
