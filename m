@@ -2,115 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286F4706500
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0359706505
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjEQKTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S230296AbjEQKVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjEQKTO (ORCPT
+        with ESMTP id S230205AbjEQKVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:19:14 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9943A80
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:19:12 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-77d53b41485so216078241.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684318751; x=1686910751;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OrHrY3AWtq70CRoLtNhxsvgCg243JPmz7/kyzBYJpQA=;
-        b=gx73QOkq3byJIA/Bb/mmsN9l7Oz6EDJzEum6sbZ3Du/ESMpCrjyioyH0N9FWcwijXM
-         +NyJZyziL7HGeGgIkhmTVFF0Qxb40NcFuFoneKGdSAjo/1DnKBfOyuTM4rRaYqLJGq7c
-         QIWiNpi/sxFZ5zHKF245m3qOEb4GeX48lYZ0jZ3ToNt2qfbLERFcdBQpsOuXB971LJJ7
-         gl2zBEpZdKtjmNHs5ZJTLJdlRa86JMIdfwyOCHNDFpkxpKv9op0twjBO9rBNxlovc578
-         foz1HwAK7hRLdoQVMoQIhAwfd/88fHF1+KlE0VSxD4KtH6Mjwt29JraZjX23m7C0xtsb
-         xSwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684318751; x=1686910751;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OrHrY3AWtq70CRoLtNhxsvgCg243JPmz7/kyzBYJpQA=;
-        b=Be3Vpga/FnPTrQ6y41ITqJLDlwMA5waxkQznhDfqCmZi5Dp9f6WTQ1+v46xQMkFS3B
-         Iy+kyCD9P8CovoJsrN8qMPIXOhp4Dk3owZj02ANIWLtEG2dRLVyu8/WELV3FVfrzyM05
-         uRwLMYFgsQ/bEtIRshxDDF5lo5CIisI9K+FyXbiskM73b2ZSMAdXGgTYKc1frrRV53VI
-         9XK+vl5aKCo03Yy0VW8X77IxDdxWSdzz6ytISvx6gfLWOHFquSoRdKs8cv5Gwbwj5u0S
-         12syVUSlrnwCHhKtvVZtDeO/RSQD32WJyaOj3pAd5w3nePWcvah+hRgfFiLaned3M2Dh
-         gBkg==
-X-Gm-Message-State: AC+VfDz3i3lyC7YiNRwKNbGRLC8C86eZhw3sa/OIE7QNfqMOw1DivKNQ
-        1GeaZAJlciqOdGhtqyvuktHS4zyS+M4RflM9wXalZQ==
-X-Google-Smtp-Source: ACHHUZ5Mb/NeiO/iDJb+RFsGn+oHgCv/thgz5utXRC5vjJkVkqjaX/1mVMnKg6tlXR15pAZMUKKT+mZqUv4DrifFGrs=
-X-Received: by 2002:a67:f94b:0:b0:436:5a8b:14e0 with SMTP id
- u11-20020a67f94b000000b004365a8b14e0mr4386138vsq.26.1684318751690; Wed, 17
- May 2023 03:19:11 -0700 (PDT)
+        Wed, 17 May 2023 06:21:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F2735A8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:21:20 -0700 (PDT)
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QLptd06ZhzqSKP;
+        Wed, 17 May 2023 18:16:56 +0800 (CST)
+Received: from huawei.com (10.67.175.85) by kwepemi500009.china.huawei.com
+ (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 17 May
+ 2023 18:21:17 +0800
+From:   Xia Fukun <xiafukun@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <prajnoha@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <xiafukun@huawei.com>
+Subject: [PATCH v6] kobject: Fix global-out-of-bounds in kobject_action_type()
+Date:   Wed, 17 May 2023 18:19:57 +0800
+Message-ID: <20230517101957.14655-1-xiafukun@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230517031856.19660-1-xiaoming.ding@mediatek.com>
- <ZGSDoVKKVqCkbaCB@infradead.org> <CAFA6WYO+AvnbuAdWyBAQ8HkLaOno7PXdsPb9SubxrGNvAm4UnQ@mail.gmail.com>
- <ZGSLiiK/JzD5KMd7@infradead.org> <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
- <ZGSgCZrg+RjAbGO1@infradead.org>
-In-Reply-To: <ZGSgCZrg+RjAbGO1@infradead.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 17 May 2023 15:49:00 +0530
-Message-ID: <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
-Subject: Re: [PATCH] tee: add FOLL_LONGTERM for CMA case when alloc shm
-To:     Christoph Hellwig <hch@infradead.org>,
-        Xiaoming Ding <xiaoming.ding@mediatek.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, fei.xu@mediatek.com,
-        srv_heupstream@mediatek.com, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.85]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500009.china.huawei.com (7.221.188.199)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 at 15:06, Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Wed, May 17, 2023 at 02:56:13PM +0530, Sumit Garg wrote:
-> > Do you mean a pinned user-space page can be paged out automatically?
->
-> No, pinned pages can't be paged out.
->
-> But a short term pin implies it will be release after a short delay,
-> and it is feasible for wait for the pin to go away.
+The following c language code can trigger KASAN's global variable
+out-of-bounds access error in kobject_action_type():
 
-Okay, I see. I would be interested to know the ranges for that short
-delay. I guess it may depend on how much memory pressure there is...
+int main() {
+    int fd;
+    char *filename = "/sys/block/ram12/uevent";
+    char str[86] = "offline";
+    int len = 86;
 
->
-> For a long term pin waiting is not an option, and anyone wanting to
-> do something with the pinned page that requires it to not be pinned
-> must simply give up.
->
-> > Just FYI, the underlying use-case for TEE registered shared memory is
-> > that the references to pinned pages are provided to TEE implementation
-> > to operate upon. This can happen over multiple syscalls and we want
-> > the pinned pages to be always in RAM as otherwise the physical
-> > addresses may change if they are paged out in between.
->
-> That's a very use clear case for a long term pin.
+    fd = open(filename, O_WRONLY);
+    if (fd == -1) {
+        printf("open");
+        exit(1);
+    }
 
-...however, thanks for the insights.
+    if (write(fd, str, len) == -1) {
+        printf("write");
+        exit(1);
+    }
 
-@Xiaoming,
+    close(fd);
+    return 0;
+}
 
-Please use the following fixes tag for the v2 along with extending the
-commit description regarding the reliability provided by the long term
-flag.
+Function kobject_action_type() receives the input parameters buf and count,
+where count is the length of the string buf.
 
-Fixes: 033ddf12bcf5 ("tee: add register user memory")
+In the use case we provided, count is 86, the count_first is 85.
+Buf points to a string with a length of 86, and its first seven
+characters are "offline".
+In line 87 of the code, kobject_actions[action] is the string "offline"
+with the length of 7,an out-of-boundary access will appear:
 
--Sumit
+kobject_actions[action][85].
+
+Use sysfs_match_string() to replace the fragile and convoluted loop.
+This function is well-tested for parsing sysfs inputs. Moreover, this
+modification will not cause any functional changes.
+
+Fixes: f36776fafbaa ("kobject: support passing in variables for synthetic uevents")
+Signed-off-by: Xia Fukun <xiafukun@huawei.com>
+---
+v5 -> v6:
+- Ensure that the following extensions remain effective:
+https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-uevent
+
+v4 -> v5:
+- Fixed build errors and warnings, and retested the patch.
+
+v3 -> v4:
+- Refactor the function to be more obviously correct and readable.
+---
+ include/linux/kobject.h |  3 +++
+ lib/kobject_uevent.c    | 30 +++++++++++++++++-------------
+ 2 files changed, 20 insertions(+), 13 deletions(-)
+
+diff --git a/include/linux/kobject.h b/include/linux/kobject.h
+index c392c811d9ad..9d3ecce3c4f6 100644
+--- a/include/linux/kobject.h
++++ b/include/linux/kobject.h
+@@ -32,6 +32,9 @@
+ #define UEVENT_NUM_ENVP			64	/* number of env pointers */
+ #define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
+ 
++/* the maximum length of the string contained in kobject_actions[] */
++#define UEVENT_KACT_STRSIZE		16
++
+ #ifdef CONFIG_UEVENT_HELPER
+ /* path to the userspace helper executed on an event */
+ extern char uevent_helper[];
+diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
+index 7c44b7ae4c5c..4030a928e9c6 100644
+--- a/lib/kobject_uevent.c
++++ b/lib/kobject_uevent.c
+@@ -66,7 +66,8 @@ static int kobject_action_type(const char *buf, size_t count,
+ 	enum kobject_action action;
+ 	size_t count_first;
+ 	const char *args_start;
+-	int ret = -EINVAL;
++	int i, ret = -EINVAL;
++	char kobj_act_buf[UEVENT_KACT_STRSIZE] = "";
+ 
+ 	if (count && (buf[count-1] == '\n' || buf[count-1] == '\0'))
+ 		count--;
+@@ -77,21 +78,24 @@ static int kobject_action_type(const char *buf, size_t count,
+ 	args_start = strnchr(buf, count, ' ');
+ 	if (args_start) {
+ 		count_first = args_start - buf;
++		if (count_first > UEVENT_KACT_STRSIZE)
++			goto out;
++
+ 		args_start = args_start + 1;
++		strncpy(kobj_act_buf, buf, count_first);
++		i = sysfs_match_string(kobject_actions, kobj_act_buf);
+ 	} else
+-		count_first = count;
++		i = sysfs_match_string(kobject_actions, buf);
+ 
+-	for (action = 0; action < ARRAY_SIZE(kobject_actions); action++) {
+-		if (strncmp(kobject_actions[action], buf, count_first) != 0)
+-			continue;
+-		if (kobject_actions[action][count_first] != '\0')
+-			continue;
+-		if (args)
+-			*args = args_start;
+-		*type = action;
+-		ret = 0;
+-		break;
+-	}
++	if (i < 0)
++		goto out;
++
++	action = i;
++	if (args)
++		*args = args_start;
++
++	*type = action;
++	ret = 0;
+ out:
+ 	return ret;
+ }
+-- 
+2.17.1
+
