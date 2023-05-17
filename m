@@ -2,145 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4D470620F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77073706213
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjEQIAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
+        id S230194AbjEQIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjEQH7H (ORCPT
+        with ESMTP id S230361AbjEQIAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:59:07 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A09E0;
-        Wed, 17 May 2023 00:59:05 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H7fJEa012013;
-        Wed, 17 May 2023 07:58:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=CMFx+/WSbZOvxzWO4+8ED//sUy5xmbKjuvEcGYhHqCI=;
- b=ZQHZ0+w5kYCbcP21nY+DRFTklLVMi0FRg80N5nlCrRKAo42OmlrJJ2GYZniUYNGeWMyL
- wRoSiIwJY5WvXvDwEqE7mST7cshDy0CeQl+woB5i6cF/SBDDus84dM18bOHcckI4r1Ht
- prCdMuBOJvcv0Sj8HnnNYH4nvQ5m7ey8xYMNRLF7nRk39pFsN6ge/MRCzgR2c7oYrj2a
- hwHPQiaetr8YcjF2aGf2mZUTI7DpY/sWVztopg6N4NsAHW1e0oT4jk9LOddsboM1cn82
- FQkE4hKKLOAp8xBhW27zTxXNDBHj3klPusggdalySyW3zJqWeBXBMLKnYtA7kflUQa6Z Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmt0msjbk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 07:58:34 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34H7updx004012;
-        Wed, 17 May 2023 07:58:33 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmt0msjan-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 07:58:33 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H6c4Zh025285;
-        Wed, 17 May 2023 07:58:31 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qj264spkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 07:58:31 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34H7wRRY54919460
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 07:58:27 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BEA6420040;
-        Wed, 17 May 2023 07:58:27 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B3F8E2004B;
-        Wed, 17 May 2023 07:58:26 +0000 (GMT)
-Received: from [9.179.22.107] (unknown [9.179.22.107])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 07:58:26 +0000 (GMT)
-Message-ID: <6a6f5552fac1427eafbca1288fe5d5cb0cb6a333.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 RESEND 10/17] s390: mm: Convert to GENERIC_IOREMAP
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Christoph Hellwig <hch@infradead.org>, Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Date:   Wed, 17 May 2023 09:58:26 +0200
-In-Reply-To: <ZGR15/aAYufCZ9qV@infradead.org>
-References: <20230515090848.833045-1-bhe@redhat.com>
-         <20230515090848.833045-11-bhe@redhat.com> <ZGR15/aAYufCZ9qV@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Wed, 17 May 2023 04:00:07 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D704E76;
+        Wed, 17 May 2023 01:00:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JGjITytBBwYBlTdWOv/o8uBK7FWCHAxUmq3UAu/yWdBAFxDSxN2HDOYhEpxne6860m/aWtcgu4LCN1Yw1q3VktY7xiKIY4qm6yYfQIEKko500Fq5xPBmIwAywwRX8wPH++uwsW7CdmwxFVGiN7wd8z6VVpiHO8pkhUwKVi2fFmc9cOvgaDQSP6XT0JbPJfg0YJQui63w30NFbNdRuqnpCwtgUXxL6Ef48j8gS2fhVwuB++KNqm/qHvM+NPE1zITNbnerI1WWELlClv/5++vxttAteD/tmdfFa6iY3MUnFDdicCtsBSRQn53abEt116KV9lZVNqJipMXqtvbIvb+qiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PSFUkbHoU23sFDkWeMb5RNj9vJHGz9+mn5rwbSMxnRg=;
+ b=EavJXw444snX8XDsaYwA69/ibgXnHOJ8IzgREcJBF9AHhu0/dRRAbNQgwIRH8RdLOTJrlgwrrQ7LIzi+aeR/YwB9/TjICEovFM39ZIVWfguimD1zNm4jb26hKumNnwyeXh/6t9DU/+rhR5YvuLFvy/chAt0xLmzuzcv61zA3oE+7X0YLr6WzZLF38Tr9TWwVSpOHLtdi/BwXhrjk7sFv/CnloxEIdwB+PNYDJHx227eQ4fsazpGtjrrHi3Dqj9x7EYwRxljSW6RvqN4f6AehT58id95tC9SfPqymva2qYbYbNPdhfjyUPwqBSn2/60wl578xuvPsdsq6ImkCXsY8jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PSFUkbHoU23sFDkWeMb5RNj9vJHGz9+mn5rwbSMxnRg=;
+ b=CKlVK1oO7baBhH+cjhV8kjJ3SGB/X0Z0SfQN/JnDUz62nxNRn3tde/uiuGQq3k2phFdU0u8VXbbLyjB+1mipiO8vkryDk2M9p7eT6KHyqtLDUeMWOcbyI7vSmLo1N4ulP6/PDFqDdvOXSXMarzB8mxPLV5iMOCotRQ92eExOilJn2GjKvlPxQ85hNo6LhyGWSvp2Rma4KqrfrvSB1cWKyTj4XzWuWYkWkv8MMnlg+HIZaLqthwxjRaPs1CzQCtrEM8QA3nFEyN0a9D23ioiAgjT+A27Kkk7kObnxOFZDloZxDdi4JiN3DDh/QWwDBkUmI6yPsNYNIPiGCJXn1GKHWg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ PH8PR12MB6962.namprd12.prod.outlook.com (2603:10b6:510:1bd::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24; Wed, 17 May
+ 2023 08:00:00 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::21ef:9d59:5b2d:f1e8]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::21ef:9d59:5b2d:f1e8%4]) with mapi id 15.20.6387.033; Wed, 17 May 2023
+ 08:00:00 +0000
+Message-ID: <986717de-89d7-0167-a09e-b1031bd9dde7@nvidia.com>
+Date:   Wed, 17 May 2023 08:59:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 6.3 000/246] 6.3.3-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+References: <20230515161722.610123835@linuxfoundation.org>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20230515161722.610123835@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0675.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:351::19) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: yHkOOiLn5K_XXg82H6WtpYBwMUNzSS4k
-X-Proofpoint-GUID: zbqUKTFztHSElm1UI7AZo0AwloZJ5dPG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 clxscore=1011 malwarescore=0 suspectscore=0 lowpriorityscore=0
- spamscore=0 phishscore=0 mlxscore=0 impostorscore=0 mlxlogscore=729
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170061
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|PH8PR12MB6962:EE_
+X-MS-Office365-Filtering-Correlation-Id: 077f7042-dba5-4117-f76e-08db56acb694
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7G90Yq2TQxa3eea1vTDzKky+qUzxZDmY2rJwIKUQcFpfA4OAUzlC1fFXzamxu5c7dwUESeqW/9ojAiRtlS867lNeqzM6Ovn7cFBcn1d32oab9waeZjRkQFW4nRfpxQ6yrN2w3Lco6JullOq/Cp+VwkP5VetPPhQaP5jJnipsFArpLRRSHZZfCGUHhWUh0LsvX07ZtYePQUYERu3f8+8IDDWJX+Mnnmb9rACHjYBO/KFgyRCvYWAZNUvTqlKZ3jfxSK7M06JrZ6Gdn2fCSesrpHscFi2rfPTN1NJE+r/3Ix1X+Kn2DAxr7CicTuOErejy9Dbb4TNKGxbcgXNaBKO/CfjTDK7qSFMa/37vkII25zTfxZcE/Gy48deXTpSqo7yKXJ8IIqEWhfJ70OW6wfvQ/biR5JI2cJMTki46aNLdLXL2y/S/X9AGh4HuvWiCMPk+oKF7tnI4lcLrZdybBJiWC95cBYXj5oARfNYA190DqeRdn5EKSBW55X/sEgAI36wsoJTeDxWPSF4O5EZe4SDngYcZ7r3kDBkXmPbSj6iPClLb1n12Xxpg1tzGbP0vmJYorJ0jAC+DZHa41UZAlqFnpVc7Zoh0C1gtGgX03CoQmtVFuevzAhJRYgg1f9oPBrVWaY2Yu7cWhvD4tHwtZgNM7DuxhoFkmhjK4RxOGbqlIX8KKgmiGpeMNpaDWE8J1r6V
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(396003)(376002)(136003)(346002)(451199021)(2616005)(6512007)(186003)(53546011)(2906002)(38100700002)(6506007)(31696002)(8676002)(8936002)(966005)(6666004)(7416002)(316002)(4326008)(41300700001)(5660300002)(66946007)(66476007)(36756003)(66556008)(6486002)(31686004)(478600001)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OEsrNVdJK1dQYmNTc2EzZjNNVVViK0EzMEF2bTFGazA5VFNVZFR2Q3pWNStj?=
+ =?utf-8?B?Nm5IT1Q2SGRVZTNJeCtZRXJiQTU4blNBYytJODhXVUZFbEZxd2Y3U2k2eGlH?=
+ =?utf-8?B?UGtYWllTRjhpeTFYcUhjT1ZoNENjTkZXcUFzWG16aUEvMnpaUkx3VkNseldC?=
+ =?utf-8?B?OEdVdFVQN3VSQTAyL0ZQMXErUktBeHpNTXZvV3RGOXBWTGFSRlVNdmxiVHBl?=
+ =?utf-8?B?dDRKWHpiWjlORXBJQWRMYWt4Mzc2QnJPUUxiOWoxRk1DV2drUG9GVnQ4ZkJl?=
+ =?utf-8?B?QzN1bkpiUVpCdEIxZFREWVB0OUIxMDcvVitQaHMzbHpQUEViQzlSMDNyRjRL?=
+ =?utf-8?B?YTJZa0RwRDR6ZU1ONVdza1E4NnRXeXoyOHkrYjdKSDdoaUhnNkJpaFJrb3py?=
+ =?utf-8?B?UG1TL1dQNGZTMWRzNEtlVmc5QUluejd1ZGtlWWJOaGJrZ3pTbm8vS1g0Tzkv?=
+ =?utf-8?B?UzUrTzNCaTE5NlFHRmlYaTllQUdLdFRJVDJjeFYxYlcrTVJoMExXSzNDS0VW?=
+ =?utf-8?B?N1h6Q2tnTnBNR2hqWjM1ajV4aG5GUGE1RjB3UmUvS3BsYWxQT010QVpGelJK?=
+ =?utf-8?B?dzR2RWtxVUdhNVZ1Z1FGZnhRS2x0Q3I0TThvV3A1Y3pKM2I0aE5yaGlCM3Bk?=
+ =?utf-8?B?Qk8wVHNvUkIzc2NRWGp2STY2eUJKOVJGdlJmRFNsNnlDMjU5M3o2eHFTbFYr?=
+ =?utf-8?B?V2hlL0JISURVRm5NRDBiem5rRXhKNzRkM2pMemwxQlRleVJ6NXp0Sk9IL2FK?=
+ =?utf-8?B?ZXNJUmY0dVZNN0tQNVpyTXJQR1loeTZMN2ZyR3VDb3VQUHd5bkg1R2lCU0li?=
+ =?utf-8?B?QWVEQlpJL2sxZHd5dEpFTXR4aXpMNG1qbzZuY1dyRmMxNXRRcUNiQzRha2hj?=
+ =?utf-8?B?dUJNa09sdjN5ZVROaGFYMEc0djBFcWZQZDVDS2x1V1BjV0hIOFFKSXZsTElG?=
+ =?utf-8?B?ZzRCOFpvSXpBRHNNRUI2eHFEQjFQeWdmMVJSaG4xQTJHLzZ0SVZpQWpEeFUy?=
+ =?utf-8?B?SGoxMWtoMkp6NXRzelM4VFl3SE5VUDJjQU5UQWJTS3FsSXBRb09GVnZuT1Fq?=
+ =?utf-8?B?Q2ozRTd2eWtRZHRCbWpTNDlnY0V5ajN5QWF3Z0tIVHJZeVZnTmw0bnFnKzZG?=
+ =?utf-8?B?MmxGU2Q2UGxaVWw5STQvVlBDOUVydFlVYVg5M2pqN0t1SCtNcXEwWEFmOXc1?=
+ =?utf-8?B?RU9BOXVFaXB0ck9Ma3k1VXNkSUxpTzBIQXJ6RkhJWXhqOTNFdUxkQlJ0dlhv?=
+ =?utf-8?B?ZVZXRSt4Tkp0SkRBZm1VTEkzWVRHQlJSMjUxN1dNclUvRUw5OUpnREtkQ0Ex?=
+ =?utf-8?B?YUdtYTZzOHozdFpkNHJtVU8wTzhqU3E5dTRJYnhkVXovNW5PR0tvdTd6OXZ6?=
+ =?utf-8?B?MUY3V3dGNXRGMHk1WlVzaFE2TkdTUUJvTk1UR3NhcWhkdTNIMjBhZjd2cHlI?=
+ =?utf-8?B?ak5iOCtRa0MzVkJ3RTJJWW5lblhqdnY2eXdXOElYei9BTHlvWGNPekJYUGp6?=
+ =?utf-8?B?OUdReU94V0hYSDk0b3ZkdStmQ2UwSTBKM1dFR09TYWxBcTdNdzdHZHBLSVB0?=
+ =?utf-8?B?L3RaRU5uLy91OHAzbEh6Mi9tb2ZIUEVuSC9KbGFZdHNuY3RCQmJReWowOHJO?=
+ =?utf-8?B?SFZRcyt3bmJPV0J3WWI3cEY0b2ZGRUxsSVZ1QTZ3aHdodkZpTHJqbldNM0VD?=
+ =?utf-8?B?WCtsbDBYczBsYUY4blZJUXFpbzA5L0MrQzFCK1IxeVVhV295Z1lDWlNUSnlx?=
+ =?utf-8?B?UVAwampWcnNxZUdJT0FlN05Wc1pzYnlXVS9wS3grZm5zRVNTM0xhL051V2hl?=
+ =?utf-8?B?aURId0xzMVFQV0JRVjY0NXdyZHQ4TC80VG9ORTVLOGNabmJzQlcxQXgzMFF4?=
+ =?utf-8?B?QkhGdU91dXFRellEWEdBMkMzUW00b3Q1bmpuTW9UcWhRbTExdnhxMHFTeDhi?=
+ =?utf-8?B?V0dXSzZyeVRwUEZtVjZjanpjdHAxK1B6bFVlbG83S2VpdndIN0VsZUFOSyt1?=
+ =?utf-8?B?RmtYUThEVVNKNFZDOE5yUDA0bmZ1OVFYUzNtQVpkWEhvTUlNbWdMQWQ0dm43?=
+ =?utf-8?B?VGl0RE9OczhtWlBwWEd5OWxkR1BIUzJTK29GMkVVZUdKNnJZQmhhMS9EZDVl?=
+ =?utf-8?B?TzFWY3gwZHFsVExWMjZ3dzFvU2FJSGFWRUE2QnZPVkxma01Ba0dpcjZHaTFP?=
+ =?utf-8?B?bUc0WlQ0Y25jN1B2ZWpBdCtGa3NVZTJTclYvdWZxN3VUc2QrdHpvUFAwSmt2?=
+ =?utf-8?B?TUZNdGJvenFhWUgrQ3JWVCtUWWFRPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 077f7042-dba5-4117-f76e-08db56acb694
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 08:00:00.4799
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eR54CqBwtC0UamtakFK/aNBZVr89FiXsuH8yTZZW7cJ/51bYLQ4rzcAIRkxS9gg8MyRFJIu0uYajH456xhCrIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6962
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-16 at 23:36 -0700, Christoph Hellwig wrote:
-> On Mon, May 15, 2023 at 05:08:41PM +0800, Baoquan He wrote:
-> > +#define ioremap_wc(addr, size)  \
-> > +	ioremap_prot((addr), (size), pgprot_val(pgprot_writecombine(PAGE_KERN=
-EL)))
->=20
-> I'd move this out of line and just apply mio_wb_bit_mask directly
-> instead of the unbox/box/unbox/box dance.
->=20
-> > +#define ioremap_wt(addr, size)  \
-> > +	ioremap_prot((addr), (size), pgprot_val(pgprot_writethrough(PAGE_KERN=
-EL)))
->=20
-> and just define this to ioremap_wc.  Note that defining _wt to _wc is
-> very odd and seems wrong, but comes from the existing code.  Maybe the
-> s390 maintainers can chime on on the background and we can add a comment
-> while we're at it.
 
-I'm a bit confused where you see ioremap_wt() defined to ioremap_wc()
-in the existing code? Our current definitions are:
+On 15/05/2023 17:23, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.3 release.
+> There are 246 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.3-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
 
-void __iomem *ioremap_wc(phys_addr_t addr, size_t size)
-{
-	return __ioremap(addr, size,
-pgprot_writecombine(PAGE_KERNEL));
-}
+All tests passing for Tegra ...
 
-void __iomem *ioremap_wt(phys_addr_t addr, size_t size)
-{
-	return __ioremap(addr, size,
-pgprot_writethrough(PAGE_KERNEL));
-}
+Test results for stable-v6.3:
+     10 builds:	10 pass, 0 fail
+     28 boots:	28 pass, 0 fail
+     130 tests:	130 pass, 0 fail
 
-Now if we don't have support for the enhanced PCI load/store
-instructions (memory I/O aka MIO) then yes this gets ignored and both
-.._wc() and .._wt() act the same but if we do have them
-pgprot_writecombine() / pgprot_writethrough() set respectively clear=20
-the mio_wb bit in the PTE. It's a bit odd here because the exact
-position of the bit is read from a firmware interface and could in
-theory change but other than that it looks fine to me and yes I agree
-that it would be odd and broken to define _wt to _wc.
+Linux version:	6.3.3-rc1-g5a952cfef67c
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                 tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                 tegra20-ventana, tegra210-p2371-2180,
+                 tegra210-p3450-0000, tegra30-cardhu-a04
 
-Thanks,
-Niklas
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+
+Jon
+
+-- 
+nvpublic
