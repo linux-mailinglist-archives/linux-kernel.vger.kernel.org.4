@@ -2,222 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AAE706D6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE74706D6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjEQPzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S231738AbjEQPzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjEQPzJ (ORCPT
+        with ESMTP id S231152AbjEQPzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:55:09 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB21F9EFE;
-        Wed, 17 May 2023 08:54:39 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HFbgL6023794;
-        Wed, 17 May 2023 15:54:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=quH8VXmd5CeU+FpHTIFuwsvOlHKMULhA66/ocioZmV8=;
- b=lWzk+IYQnopVLYQIMKqFo27eMhVvuWeEdHn7/vv0C+KFAZcPu0aP9ap9UISZuZ9HAL/1
- ygV8inde0IqpaGDpmFSM4OJC1w66DnVNxOKGX0RsrXBNxpCIAwsonAkhx2c/nEj/BoEF
- tZDLImmzFG+5L6mPDtWN5MpKx2/4uza0swcoiGT09PHY2aTZkGl46QMvGgKC3wQiDWgp
- tRDqB1YMlLNMeE1i9DkdxGZ9DNzi1wvQZERTbAMuQ2sacShR2Qb+E/N2OKArSsHnVtl7
- 3O4/wzi+ijU3PlM1EHisB+RMwN7kd5+QiXWOYne/s9rpcFe8P2Nhcq6puCsuRUW0H85K FQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qn0qd2yhs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 15:54:36 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34HE8eJX002923;
-        Wed, 17 May 2023 15:54:34 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3qj264svpw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 15:54:34 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HFsV906554204
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 15:54:31 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1419420043;
-        Wed, 17 May 2023 15:54:31 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A7DBE20040;
-        Wed, 17 May 2023 15:54:30 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 15:54:30 +0000 (GMT)
-Date:   Wed, 17 May 2023 17:54:28 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Viktor Mihajlovski <mihajlov@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-Subject: Re: [PATCH 5/5] s390/uv: Update query for secret-UVCs
-Message-ID: <20230517175428.14489c11@p-imbrenda>
-In-Reply-To: <20230512093153.206378-6-seiden@linux.ibm.com>
-References: <20230512093153.206378-1-seiden@linux.ibm.com>
-        <20230512093153.206378-6-seiden@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Wed, 17 May 2023 11:55:14 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B488A199F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:54:50 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so673117b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1684338889; x=1686930889;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VqX1+L4+iRC/6//fl7BCF6tG38LMWRZ7UpVHqcXvtHo=;
+        b=JGKnjzyPj1yEssux7zFloyRNMasBOSqJ7W+lf/3D8lfw+rAODKJnKmL7k3W8tDm9ll
+         VoTxafm/IrIRTp1+c0gsPiMvRDTOYUHSwdltSW1SPK6nlokjhLOrsxG9Uukl/U8J7xnH
+         4IgxSgyNIzzBNOmFFBw53smkbL+giZuvt0imM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684338889; x=1686930889;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VqX1+L4+iRC/6//fl7BCF6tG38LMWRZ7UpVHqcXvtHo=;
+        b=PdPFoG5bINvh/pMWBRap0Y1hktbpsCkE5i3MNOrp5oopew1e1Po9lXZa+FpamFIgab
+         B7Kybki9B2NerH54oYJh+dMXWPbvyhIhDnO+Aa4OBmCMSpvb9m96bk39FFhn1mSyX+J/
+         8++7IbodFSX80Oi0QNOw7L68kbkfBYRbtzX8IKiNcObEUkliWULxLpZw0OfVbRheFlkp
+         2pEmYUq5Zx8JSevwe9NSRMDXSHVrNeOBMvdEsX6ljKqGtWuHuFrSCJEBAOwLginQihKc
+         LUXZIrG6bG2AY3Kat/VXoSd4ettRQhbCl6qCZSYyKUfevJ0uVMHVw0c+/xFxtQOkZpHo
+         NUWQ==
+X-Gm-Message-State: AC+VfDxpWNGP8RFuk97FEtmY4F4yS8+r4qdJh02hA2Bg7KQtM51umWGi
+        j/aKQH4Uc9BeEbrxDs33jeNeqQ==
+X-Google-Smtp-Source: ACHHUZ7Ct+TgnsVcNwY1/C0PorXEMap0dQWRIaNrsotYLXgLw212xc98zMZsIW3KHkDaF0H1Pqr+wg==
+X-Received: by 2002:a05:6a20:7d8d:b0:101:166:863f with SMTP id v13-20020a056a207d8d00b001010166863fmr39625632pzj.23.1684338888614;
+        Wed, 17 May 2023 08:54:48 -0700 (PDT)
+Received: from ?IPV6:2600:8802:b00:4a48:98e2:8350:9124:862f? ([2600:8802:b00:4a48:98e2:8350:9124:862f])
+        by smtp.gmail.com with ESMTPSA id a9-20020a63e409000000b0050376cedb3asm15618046pgi.24.2023.05.17.08.54.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 08:54:48 -0700 (PDT)
+Message-ID: <011706c2-f0fb-42d2-81a9-7e5e4fbd784d@broadcom.com>
+Date:   Wed, 17 May 2023 08:54:46 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6OG3YAGErBNJIuQl1xdhfzkIriyhcJ7a
-X-Proofpoint-GUID: 6OG3YAGErBNJIuQl1xdhfzkIriyhcJ7a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- clxscore=1015 spamscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
- impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305170126
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH net-next 2/3] net: phy: broadcom: Add support for
+ WAKE_FILTER
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230516231713.2882879-1-florian.fainelli@broadcom.com>
+ <20230516231713.2882879-3-florian.fainelli@broadcom.com>
+ <a47d27e0-a8ef-4df0-aa45-623dda9e6412@lunn.ch>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <a47d27e0-a8ef-4df0-aa45-623dda9e6412@lunn.ch>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000294cf005fbe5b5ca"
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 11:31:53 +0200
-Steffen Eiden <seiden@linux.ibm.com> wrote:
+--000000000000294cf005fbe5b5ca
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> Update the query struct such that secret-UVC related
-> information can be parsed.
-> Add sysfs files for these new values.
+
+
+On 5/17/2023 5:49 AM, Andrew Lunn wrote:
+> On Tue, May 16, 2023 at 04:17:12PM -0700, Florian Fainelli wrote:
+>> Since the PHY is capable of matching any arbitrary Ethernet MAC
+>> destination as a programmable wake-up pattern, add support for doing
+>> that using the WAKE_FILTER and ethtool::rxnfc API.
 > 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> ---
->  arch/s390/boot/uv.c        |  4 ++++
->  arch/s390/include/asm/uv.h | 11 ++++++++++-
->  arch/s390/kernel/uv.c      | 40 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 54 insertions(+), 1 deletion(-)
+> Are there other actions the PHY can perform?
+
+Not really, it can match on a custom Ethernet MAC DA and that is pretty 
+much it, unless you use the WAKE_MAGIC or WAKE_MAGICSECURE where it can 
+match either or.
+
 > 
-> diff --git a/arch/s390/boot/uv.c b/arch/s390/boot/uv.c
-> index 0a077c0a2056..323b5cae3cf1 100644
-> --- a/arch/s390/boot/uv.c
-> +++ b/arch/s390/boot/uv.c
-> @@ -47,6 +47,10 @@ void uv_query_info(void)
->  		uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
->  		uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
->  		uv_info.supp_att_pflags = uvcb.supp_att_pflags;
-> +		uv_info.supp_add_secret_req_ver = uvcb.supp_add_secret_req_ver;
-> +		uv_info.supp_add_secret_pcf = uvcb.supp_add_secret_pcf;
-> +		uv_info.supp_secret_types = uvcb.supp_secret_types;
-> +		uv_info.max_secrets = uvcb.max_num_secrets;
->  	}
->  
->  #ifdef CONFIG_PROTECTED_VIRTUALIZATION_GUEST
-> diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
-> index 6180ac8909d5..eb2e11d8123f 100644
-> --- a/arch/s390/include/asm/uv.h
-> +++ b/arch/s390/include/asm/uv.h
-> @@ -135,7 +135,12 @@ struct uv_cb_qui {
->  	u64 reservedd8;				/* 0x00d8 */
->  	u64 supp_att_req_hdr_ver;		/* 0x00e0 */
->  	u64 supp_att_pflags;			/* 0x00e8 */
-> -	u8 reservedf0[256 - 240];		/* 0x00f0 */
-> +	u64 reservedf0;				/* 0x00f0 */
-> +	u64 supp_add_secret_req_ver;		/* 0x00f8 */
-> +	u64 supp_add_secret_pcf;		/* 0x0100 */
-> +	u64 supp_secret_types;			/* 0x0180 */
-> +	u16 max_num_secrets;			/* 0x0110 */
-> +	u8 reserved112[288 - 274];		/* 0x0112 */
+> For a MAC based filter, i expect there are other actions, like drop,
+> queue selection, etc. So using the generic RXNFC API makes some sense.
+> 
+>> ethtool -N eth0 flow-type ether dst 01:00:5e:00:00:fb loc 0 action -2
+>> ethtool -n eth0
+>> Total 1 rules
+>>
+>> Filter: 0
+>>          Flow Type: Raw Ethernet
+>>          Src MAC addr: 00:00:00:00:00:00 mask: FF:FF:FF:FF:FF:FF
+>>          Dest MAC addr: 01:00:5E:00:00:FB mask: 00:00:00:00:00:00
+>>          Ethertype: 0x0 mask: 0xFFFF
+>>          Action: Wake-on-LAN
+>> ethtool -s eth0 wol f
+> 
+> What i don't particularly like about this is its not vary
+> discoverable, since it is not part of:
+> 
+>            wol p|u|m|b|a|g|s|f|d...
+>                    Sets Wake-on-LAN options.  Not all devices support
+>                    this.  The argument to this option is a string of
+>                    characters specifying which options to enable.
+> 
+>                    p   Wake on PHY activity
+>                    u   Wake on unicast messages
+>                    m   Wake on multicast messages
+>                    b   Wake on broadcast messages
+>                    a   Wake on ARP
+>                    g   Wake on MagicPacket™
+>                    s   Enable SecureOn™ password for MagicPacket™
+>                    f   Wake on filter(s)
+>                    d   Disable (wake on  nothing).   This  option
+>                        clears all previous options.
+> 
+> If the PHY hardware is not generic, it only has one action, WoL, it
+> might be better to have this use the standard wol commands. Can it be
+> made to work under the 'f' option?
 
-I think it would be more readable and maintainable if you put the
-offsets in hex (i.e. reserved112[0x120 - 0x112])
+You actually need both, if you only configure the filter with 
+RX_CLS_FLOW_WAKE but forget to set the 'f' bit in wolopts, then the 
+wake-up will not occur because the PHY will not have been configured 
+with the correct matching mode.
 
-otherwise, something like this:
+This is how I originally designed it for SYSTEMPORT and this was copied 
+over to GENET and now to this PHY driver.
 
-u16 max_num_secrets;
-u16 reserved112[3]
-u64 reserved118;
+> 
+> The API to the PHY driver could then be made much more narrow, and you
+> would not need the comment this is supposed to only be used for WoL.
 
-(I know it was not in hex before, it was not necessarily nice as it was)
+I was initially considering that the 'sopass' field could become an 
+union since it is exactly the size of a MAC address (6 bytes) and you 
+could do something like:
 
->  } __packed __aligned(8);
->  
->  /* Initialize Ultravisor */
-> @@ -384,6 +389,10 @@ struct uv_info {
->  	unsigned long conf_dump_finalize_len;
->  	unsigned long supp_att_req_hdr_ver;
->  	unsigned long supp_att_pflags;
-> +	unsigned long supp_add_secret_req_ver;
-> +	unsigned long supp_add_secret_pcf;
-> +	unsigned long supp_secret_types;
-> +	unsigned short max_secrets;
->  };
->  
->  extern struct uv_info uv_info;
-> diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-> index 9f18a4af9c13..381444511bb7 100644
-> --- a/arch/s390/kernel/uv.c
-> +++ b/arch/s390/kernel/uv.c
-> @@ -587,6 +587,42 @@ static ssize_t uv_query_supp_att_pflags(struct kobject *kobj,
->  static struct kobj_attribute uv_query_supp_att_pflags_attr =
->  	__ATTR(supp_att_pflags, 0444, uv_query_supp_att_pflags, NULL);
->  
-> +static ssize_t uv_query_supp_add_secret_req_ver(struct kobject *kobj,
-> +						struct kobj_attribute *attr, char *page)
-> +{
-> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_add_secret_req_ver);
-> +}
-> +
-> +static struct kobj_attribute uv_query_supp_add_secret_req_ver_attr =
-> +	__ATTR(supp_add_secret_req_ver, 0444, uv_query_supp_add_secret_req_ver, NULL);
-> +
-> +static ssize_t uv_query_supp_add_secret_pcf(struct kobject *kobj,
-> +					    struct kobj_attribute *attr, char *page)
-> +{
-> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_add_secret_pcf);
-> +}
-> +
-> +static struct kobj_attribute uv_query_supp_add_secret_pcf_attr =
-> +	__ATTR(supp_add_secret_pcf, 0444, uv_query_supp_add_secret_pcf, NULL);
-> +
-> +static ssize_t uv_query_supp_secret_types(struct kobject *kobj,
-> +					  struct kobj_attribute *attr, char *page)
-> +{
-> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_secret_types);
-> +}
-> +
-> +static struct kobj_attribute uv_query_supp_secret_types_attr =
-> +	__ATTR(supp_secret_types, 0444, uv_query_supp_secret_types, NULL);
-> +
-> +static ssize_t uv_query_max_secrets(struct kobject *kobj,
-> +				    struct kobj_attribute *attr, char *page)
-> +{
-> +	return scnprintf(page, PAGE_SIZE, "%d\n", uv_info.max_secrets);
-> +}
-> +
-> +static struct kobj_attribute uv_query_max_num_secrets_attr =
-> +	__ATTR(max_secrets, 0444, uv_query_max_secrets, NULL);
-> +
->  static struct attribute *uv_query_attrs[] = {
->  	&uv_query_facilities_attr.attr,
->  	&uv_query_feature_indications_attr.attr,
-> @@ -600,6 +636,10 @@ static struct attribute *uv_query_attrs[] = {
->  	&uv_query_dump_cpu_len_attr.attr,
->  	&uv_query_supp_att_req_hdr_ver_attr.attr,
->  	&uv_query_supp_att_pflags_attr.attr,
-> +	&uv_query_supp_add_secret_req_ver_attr.attr,
-> +	&uv_query_supp_add_secret_pcf_attr.attr,
-> +	&uv_query_supp_secret_types_attr.attr,
-> +	&uv_query_max_num_secrets_attr.attr,
->  	NULL,
->  };
->  
+ethtool -s eth0 wol f mac 01:00:5E:00:00:FB
 
+but then we have some intersection with the 'u', 'm' and 'b' options 
+too, which are just short hand for specific MAC DAs. This felt a bit 
+like bending the framework for one specific PHY that supports that use 
+case, so I felt like RXNFC, although we only use a very narrow space 
+could be a better fit in case a more capable PHY came along in the future.
+-- 
+Florian
+
+--000000000000294cf005fbe5b5ca
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIIwlua/3vps7eQM9
+dnZg8SfQvpeZ/hLtqbioZJyp6jVRMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUxNzE1NTQ0OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQC6sj4kZNZEcG+R4Td0+eto5O3mSz6faIor
+ViJl2FV6rtDQWZjAgGMBwxWyjq9Kku+d/3LqH0LjELppybkMrKMhe/KkFHLH/7enUxr4hhwTuux2
+2iUxbUprSVdWlku+GmzNb5AZujQz2gF1K+aNQU6wN8qzUZRLPnfiOKM92YcPpJJGqwVoWy4HaQ7D
+JpA8kQt9Yfy8IRbJtU91MnUil4sVy5Mz3hxQmKNXPbBe25yjqDBRDzhqugnBTG0HM0uUeG/kxhwg
+IBZsCFIZY+iEp/zhTAmOjMBaG0Qw/o2cCU/q0xGnpNH5/6N0hBiQ2iYISUABBMT2w/2OL6Wdy2N9
+OYjx
+--000000000000294cf005fbe5b5ca--
