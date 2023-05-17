@@ -2,99 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE8A706D1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A83706D1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjEQPoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
+        id S231292AbjEQPoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjEQPn5 (ORCPT
+        with ESMTP id S231464AbjEQPoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:43:57 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC201558B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:43:55 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f4fc2a4622so6296081cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684338234; x=1686930234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/xeS9KwC8vW2y0J+xxczH/UzoaJDpNT/4GWb3cUgqXk=;
-        b=NSBvzMpq5pGZtSDvil9rUpMWJrztHiWlRnPH36fwzsewLZ3mIEFCC2DdNHo6G7SWvH
-         /5c8NN3nXBhzI7pCSPOESZo8D2Zzdt8gMbOTwxLgwy35KBRX3PD5s0puTlqgfTIlQZlI
-         1/82g13Qqbxd+Z+BQAwEPXsxaYg4rfnvYIbtY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684338234; x=1686930234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/xeS9KwC8vW2y0J+xxczH/UzoaJDpNT/4GWb3cUgqXk=;
-        b=TpBxijT9fCPKwI3By1GKpq+nnIMinhMdH7h2m0cGCrNlVNK6GYh/nUL/fS/0Gy0v/A
-         Iyksz5yq4XrYjGo+TMNDpN9bwbbktLXa79hqw5VmwLZ+7Oz1K8o1or9jg5KOomPsWmwl
-         mo8sWzZa1IpA9XBQ454wmmUH/eenqVOswpf04qebeNklfKX/O13U/5bTaJU9KWs75zB8
-         Y8jZQYXCbHRqPGx+nR9DYuqxqTPC85oHa+SvUFzXGm4sVZuXdJN2SGq5D+UaVKn7pqde
-         ZxWQXJ3JlbCJgdjth0+yLlYX6KPSdFvuFQh+Yj3o0it0O+wPq+ConWNGNCnRa4OfxMGj
-         HilA==
-X-Gm-Message-State: AC+VfDwk7txMw0bpDVpYrGe3/n9YfuCVcRo5o1+lCFeWCAoIYj7o3yxK
-        ZFzkAuAeP3t3GxrwAMg0rOffCBVoR/gXbT+pKTw=
-X-Google-Smtp-Source: ACHHUZ7UuhKImX14ei6WVrXCSunTftnebCAd8WmsYm+zQk+roHD9JGLYTDH5GpB/gYPWvM05BWoLLA==
-X-Received: by 2002:a05:622a:11c3:b0:3f5:3852:83c6 with SMTP id n3-20020a05622a11c300b003f5385283c6mr226499qtk.8.1684338234435;
-        Wed, 17 May 2023 08:43:54 -0700 (PDT)
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com. [209.85.160.173])
-        by smtp.gmail.com with ESMTPSA id g6-20020a37e206000000b007577c68be4csm686837qki.117.2023.05.17.08.43.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 08:43:53 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-3f396606ab0so207651cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:43:53 -0700 (PDT)
-X-Received: by 2002:a05:622a:144b:b0:3ef:31a5:13c with SMTP id
- v11-20020a05622a144b00b003ef31a5013cmr262636qtx.3.1684338233391; Wed, 17 May
- 2023 08:43:53 -0700 (PDT)
+        Wed, 17 May 2023 11:44:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E441558B;
+        Wed, 17 May 2023 08:44:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BD1D63860;
+        Wed, 17 May 2023 15:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4798C433EF;
+        Wed, 17 May 2023 15:44:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684338266;
+        bh=CWH2pztIOxMe+ekz7FPDOiiqxPpYYmkV6Bjtj8FaKhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S8yqKPipt+vunH2g5aUufq37y/MGQZ4ijZGLIT3VzuwM9BzjnhxDZz471LRMl4jXD
+         8ZpG4eUF8dr8JxX99DI1OaxcFhorHnv4oWxGM8C8TNz9Fdj9vKgsX/TwvEN1MroAoJ
+         sNc5C9I5qJDT5Mzh5bqUw499jLFaYAM67otU1Bl62J8WQfsEImW4sZ0PYuVoQVN+1Z
+         fgRDJMMz1IYy7a9GV87WnXxyv7DjvDLCrZF7P7iLTGM6yCCrNObF2i1vrxco+JfEXT
+         B2rZ417mW+tSWt7xZKCkfHnT8h7lmnqNksSLOUczAdTmQY5MAX60pTJGirG3bNKM2r
+         WDdi6PFoLVdRw==
+Date:   Wed, 17 May 2023 18:44:12 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        song@kernel.org
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <20230517154412.GC4967@kernel.org>
+References: <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+ <202305111525.67001E5C4@keescook>
+ <ZF6Ibvi8U9B+mV1d@moria.home.lan>
+ <202305161401.F1E3ACFAC@keescook>
+ <ZGPzocRpSlg+4vgN@moria.home.lan>
+ <ZGP54T0d89TMySsf@casper.infradead.org>
+ <ZGRmC2Qhe6oAHPIm@moria.home.lan>
+ <ZGTe6zFYL25fNwcw@kernel.org>
+ <ZGTiI49s8+YjBxVX@moria.home.lan>
 MIME-Version: 1.0
-References: <20230517124802.929751-1-arnd@kernel.org>
-In-Reply-To: <20230517124802.929751-1-arnd@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 17 May 2023 08:43:40 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X8pAgFUngLd475d9-zkF13Fzs35-O4tCSHR+jX4YBBXw@mail.gmail.com>
-Message-ID: <CAD=FV=X8pAgFUngLd475d9-zkF13Fzs35-O4tCSHR+jX4YBBXw@mail.gmail.com>
-Subject: Re: [PATCH] kdb: include kdb_private.h for function prototypes
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGTiI49s8+YjBxVX@moria.home.lan>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 17, 2023 at 10:18:11AM -0400, Kent Overstreet wrote:
+> On Wed, May 17, 2023 at 05:04:27PM +0300, Mike Rapoport wrote:
+> 
+> And I'm really curious why text_poke() is needed at all. Seems like we
+> could just use kmap_local() to create a temporary writeable mapping,
 
-On Wed, May 17, 2023 at 5:48=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
-te:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The kdb_kbd_cleanup_state() is called from another file through
-> the kdb_private.h file, but that is not included before the
-> definition, causing a W=3D1 warning:
->
-> kernel/debug/kdb/kdb_keyboard.c:198:6: error: no previous prototype for '=
-kdb_kbd_cleanup_state' [-Werror=3Dmissing-prototypes]
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  kernel/debug/kdb/kdb_keyboard.c | 2 ++
->  1 file changed, 2 insertions(+)
+On 64 bit kmap_local_page() is aliased to page_address() and does not map
+anything. text_poke() is needed to actually create a temporary writable
+mapping without touching page tables in vmalloc and/or direct map.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+-- 
+Sincerely yours,
+Mike.
