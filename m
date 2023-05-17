@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF767064FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 286F4706500
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjEQKTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S230268AbjEQKTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjEQKTE (ORCPT
+        with ESMTP id S230247AbjEQKTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:19:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C8435A8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684318695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VO8kS0tlMDmjStKGPZ02CpcX5eueZJZ6rX71I8VGfNg=;
-        b=ThL9vhalYBBO8id+jor9ijxVM9+9kZbJ7pyZR/o3FuOkSZt1ZnjLvFP3PnFlFzwgEDpv7+
-        eSLhI5ZndePkUJ5/Vyr4SB0T77G2Ujf0GgpjuswcDVvugZ4l8ERpZnZKBMdwS5yWW4S+gv
-        S93HbnkdnV1GcBjid1hKYdWRt7VqX7A=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-235-QEqQKo-NO0i_-s9H8Xtj5Q-1; Wed, 17 May 2023 06:18:14 -0400
-X-MC-Unique: QEqQKo-NO0i_-s9H8Xtj5Q-1
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-50de84a3861so609865a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:18:13 -0700 (PDT)
+        Wed, 17 May 2023 06:19:14 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9943A80
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:19:12 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-77d53b41485so216078241.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684318751; x=1686910751;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OrHrY3AWtq70CRoLtNhxsvgCg243JPmz7/kyzBYJpQA=;
+        b=gx73QOkq3byJIA/Bb/mmsN9l7Oz6EDJzEum6sbZ3Du/ESMpCrjyioyH0N9FWcwijXM
+         +NyJZyziL7HGeGgIkhmTVFF0Qxb40NcFuFoneKGdSAjo/1DnKBfOyuTM4rRaYqLJGq7c
+         QIWiNpi/sxFZ5zHKF245m3qOEb4GeX48lYZ0jZ3ToNt2qfbLERFcdBQpsOuXB971LJJ7
+         gl2zBEpZdKtjmNHs5ZJTLJdlRa86JMIdfwyOCHNDFpkxpKv9op0twjBO9rBNxlovc578
+         foz1HwAK7hRLdoQVMoQIhAwfd/88fHF1+KlE0VSxD4KtH6Mjwt29JraZjX23m7C0xtsb
+         xSwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684318693; x=1686910693;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VO8kS0tlMDmjStKGPZ02CpcX5eueZJZ6rX71I8VGfNg=;
-        b=Gh3GdE8ycFsJMkm1AFDwB3XTzjVHJXidpvlMIMpvfB9iZsl4BsKm1XVsILfvn9DwAP
-         yuuzthHYnhD4XDVWihSu0Rr5BsCsrH0rgnQ5N0r5jv8Pu3Qu5JNvqNUF9XCsgGbSSFtp
-         8/Fv7gK3cJBCKD37k3GGZn8sEGc4DWlqS1KoeY+B9S8ofgFP0I+ODdPajXonSVyojF4k
-         GeJYdrICpZZlrlDlBL7y9JSXREuKzJkPSyN8j5sszE6kdmDgqWWJl40D9GSvecQT8vpw
-         u6LY7F0W7NQxxi9lpvY7EYMxBe+wlpkTbep2O4bGCb3j9cXO2k5YIr96ihmtX4R7TdxN
-         G5Dg==
-X-Gm-Message-State: AC+VfDwjAuutHQl/kZ/YdzL3r5MrvxpgeLPDkdeCMsFzHCNHPVXfT8Rn
-        62Vw+849VDWyfHwPoDkg61fe5AMGp7xx7YCPo0fmcY7xxGHT/ADv0m76K9h1GTPeYsLWSKVEpce
-        oYZNMTNV7QWyqduBeypLlon+c
-X-Received: by 2002:aa7:d8c7:0:b0:50b:c4fb:770f with SMTP id k7-20020aa7d8c7000000b0050bc4fb770fmr1555034eds.34.1684318693040;
-        Wed, 17 May 2023 03:18:13 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4N949aPI7PbDK1bzrwrLZKfDGBjlleUFDD3GoCm+EHJRnE4sQd5PiK68L7e9P5jJuHW2iMPQ==
-X-Received: by 2002:aa7:d8c7:0:b0:50b:c4fb:770f with SMTP id k7-20020aa7d8c7000000b0050bc4fb770fmr1555016eds.34.1684318692692;
-        Wed, 17 May 2023 03:18:12 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id t21-20020aa7d715000000b0050bc041d2a8sm8956601edq.15.2023.05.17.03.18.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 03:18:12 -0700 (PDT)
-Message-ID: <b3175daa-956b-9311-d209-e5837dd3de2e@redhat.com>
-Date:   Wed, 17 May 2023 12:18:11 +0200
+        d=1e100.net; s=20221208; t=1684318751; x=1686910751;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OrHrY3AWtq70CRoLtNhxsvgCg243JPmz7/kyzBYJpQA=;
+        b=Be3Vpga/FnPTrQ6y41ITqJLDlwMA5waxkQznhDfqCmZi5Dp9f6WTQ1+v46xQMkFS3B
+         Iy+kyCD9P8CovoJsrN8qMPIXOhp4Dk3owZj02ANIWLtEG2dRLVyu8/WELV3FVfrzyM05
+         uRwLMYFgsQ/bEtIRshxDDF5lo5CIisI9K+FyXbiskM73b2ZSMAdXGgTYKc1frrRV53VI
+         9XK+vl5aKCo03Yy0VW8X77IxDdxWSdzz6ytISvx6gfLWOHFquSoRdKs8cv5Gwbwj5u0S
+         12syVUSlrnwCHhKtvVZtDeO/RSQD32WJyaOj3pAd5w3nePWcvah+hRgfFiLaned3M2Dh
+         gBkg==
+X-Gm-Message-State: AC+VfDz3i3lyC7YiNRwKNbGRLC8C86eZhw3sa/OIE7QNfqMOw1DivKNQ
+        1GeaZAJlciqOdGhtqyvuktHS4zyS+M4RflM9wXalZQ==
+X-Google-Smtp-Source: ACHHUZ5Mb/NeiO/iDJb+RFsGn+oHgCv/thgz5utXRC5vjJkVkqjaX/1mVMnKg6tlXR15pAZMUKKT+mZqUv4DrifFGrs=
+X-Received: by 2002:a67:f94b:0:b0:436:5a8b:14e0 with SMTP id
+ u11-20020a67f94b000000b004365a8b14e0mr4386138vsq.26.1684318751690; Wed, 17
+ May 2023 03:19:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] drm: panel-orientation-quirks: Change Air's quirk to
- support Air Plus
-Content-Language: en-US, nl
-To:     Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     stable@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230515184843.1552612-1-maccraft123mc@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230515184843.1552612-1-maccraft123mc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230517031856.19660-1-xiaoming.ding@mediatek.com>
+ <ZGSDoVKKVqCkbaCB@infradead.org> <CAFA6WYO+AvnbuAdWyBAQ8HkLaOno7PXdsPb9SubxrGNvAm4UnQ@mail.gmail.com>
+ <ZGSLiiK/JzD5KMd7@infradead.org> <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
+ <ZGSgCZrg+RjAbGO1@infradead.org>
+In-Reply-To: <ZGSgCZrg+RjAbGO1@infradead.org>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 17 May 2023 15:49:00 +0530
+Message-ID: <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
+Subject: Re: [PATCH] tee: add FOLL_LONGTERM for CMA case when alloc shm
+To:     Christoph Hellwig <hch@infradead.org>,
+        Xiaoming Ding <xiaoming.ding@mediatek.com>
+Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, fei.xu@mediatek.com,
+        srv_heupstream@mediatek.com, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,47 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 17 May 2023 at 15:06, Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Wed, May 17, 2023 at 02:56:13PM +0530, Sumit Garg wrote:
+> > Do you mean a pinned user-space page can be paged out automatically?
+>
+> No, pinned pages can't be paged out.
+>
+> But a short term pin implies it will be release after a short delay,
+> and it is feasible for wait for the pin to go away.
 
-On 5/15/23 20:48, Maya Matuszczyk wrote:
-> It turned out that Aya Neo Air Plus had a different board name than
-> expected.
-> This patch changes Aya Neo Air's quirk to account for that, as both
-> devices share "Air" in DMI product name.
-> 
-> Tested on Air claiming to be an Air Pro, and on Air Plus.
-> 
-> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+Okay, I see. I would be interested to know the ranges for that short
+delay. I guess it may depend on how much memory pressure there is...
 
-Thanks, patch looks good to me:
+>
+> For a long term pin waiting is not an option, and anyone wanting to
+> do something with the pinned page that requires it to not be pinned
+> must simply give up.
+>
+> > Just FYI, the underlying use-case for TEE registered shared memory is
+> > that the references to pinned pages are provided to TEE implementation
+> > to operate upon. This can happen over multiple syscalls and we want
+> > the pinned pages to be always in RAM as otherwise the physical
+> > addresses may change if they are paged out in between.
+>
+> That's a very use clear case for a long term pin.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+...however, thanks for the insights.
 
-I have just pushed this to drm-misc-fixes, so it should get
-send to Linus with the next drm-fixes pull-req.
+@Xiaoming,
 
-Regards,
+Please use the following fixes tag for the v2 along with extending the
+commit description regarding the reliability provided by the long term
+flag.
 
-Hans
+Fixes: 033ddf12bcf5 ("tee: add register user memory")
 
-
-
-
-> ---
->  drivers/gpu/drm/drm_panel_orientation_quirks.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> index b1a38e6ce2f8..0cb646cb04ee 100644
-> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-> @@ -179,7 +179,7 @@ static const struct dmi_system_id orientation_data[] = {
->  	}, {	/* AYA NEO AIR */
->  		.matches = {
->  		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
-> -		  DMI_MATCH(DMI_BOARD_NAME, "AIR"),
-> +		  DMI_MATCH(DMI_PRODUCT_NAME, "AIR"),
->  		},
->  		.driver_data = (void *)&lcd1080x1920_leftside_up,
->  	}, {	/* AYA NEO NEXT */
-
+-Sumit
