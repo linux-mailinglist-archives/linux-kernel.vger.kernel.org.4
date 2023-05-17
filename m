@@ -2,170 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA3B7062AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE2E7062AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjEQIX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S230144AbjEQIXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjEQIXw (ORCPT
+        with ESMTP id S230083AbjEQIX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:23:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FBB3AA3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684311789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VPgFwMHasDb9bvAH4GI6Rm6bz1uRxsTcEFjFfM1iNLQ=;
-        b=a90Ni1nWAFO+Z/9s3fhiYX5mqPX+0sjdrqhKno2w6FH58kLTqzzM9TmhXrsl2FZ9t1FaYb
-        ep9GYBLJ58omn87GHXYu6Fwx3ZWK85JcO3WTCTpt/Lk2Pvzes+QAjVut+q+USJPd+npMuR
-        U9T2k0P6RhXo16vLfTz2CcciGueg0Bg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-81-tIOK7K1fNKKSdffL_sWMCQ-1; Wed, 17 May 2023 04:23:08 -0400
-X-MC-Unique: tIOK7K1fNKKSdffL_sWMCQ-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3063a78f8a4so173611f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:23:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684311787; x=1686903787;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VPgFwMHasDb9bvAH4GI6Rm6bz1uRxsTcEFjFfM1iNLQ=;
-        b=hhJEjioGhIffQPDhUKChiwQfit5EDrkoXATnwb9j3ol3XQ6T/mndzkpw4rPYRZrvs/
-         6mztcn3bbY0isy5afGqV2NHbloAowDTHfUlh4kESvq1q5eB2Ru4jI4yiMVW24jcY4SVx
-         hBIHy/HQIX66/MDp1pcfPZUfe9g7absFn22X3iiqQumda1rWFku5s72UGf0WNdyRXIMS
-         2QJpBgMfTH5MuCIKP8jVeIx19WWKvit9dpMwRCguE7MMSFFmr3/zy5cKAmjUdbtqn3rq
-         +i5utfql3HpPxYJscVdf2rxxK8ZYV6gcuaGG+/yi9k3E58BioJtKj3MpOA5XNNfbQ//C
-         I0rw==
-X-Gm-Message-State: AC+VfDz06yTnZ9FUN/seEDApDafod1wWVo47zKfVpczlfx/tuX2tWkl3
-        FkgvnSXa6dxsPlvn7HYD8fWmZt5d33MGdEo0l4kcwTY6bA+vjaRK6WmDH9lIjtKhaLga5P+gfAs
-        MgyNncEL0r17bg+heRDmev8gIlIxTmCWQ
-X-Received: by 2002:a5d:51c4:0:b0:306:37ec:656c with SMTP id n4-20020a5d51c4000000b0030637ec656cmr28918909wrv.66.1684311786830;
-        Wed, 17 May 2023 01:23:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6M2uLU82YgDtnZphHrdIC+Rvaqz4YsdmT6TRA4ZG9SePYW6tS+JLljZ93sqdsd1l3FA7fDOg==
-X-Received: by 2002:a5d:51c4:0:b0:306:37ec:656c with SMTP id n4-20020a5d51c4000000b0030637ec656cmr28918891wrv.66.1684311786493;
-        Wed, 17 May 2023 01:23:06 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id z3-20020a5d6543000000b002fda1b12a0bsm1962102wrv.2.2023.05.17.01.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 01:23:06 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Dana Elfassy <delfassy@redhat.com>, eballetb@redhat.com,
-        dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Dana Elfassy <dangel101@gmail.com>
-Subject: Re: [PATCH] Input: tests: add test to cover all input_grab_device()
- function
-In-Reply-To: <20230516162412.461066-1-dangel101@gmail.com>
-References: <20230516162412.461066-1-dangel101@gmail.com>
-Date:   Wed, 17 May 2023 10:23:05 +0200
-Message-ID: <87a5y39xjq.fsf@minerva.mail-host-address-is-not-set>
+        Wed, 17 May 2023 04:23:27 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E27630F3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:23:25 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8DxI_D7jmRkf24JAA--.16430S3;
+        Wed, 17 May 2023 16:23:23 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_8v6jmRkkHBlAA--.42377S2;
+        Wed, 17 May 2023 16:23:23 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>, liyi <liyi@loongson.cn>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] drm/drm_atomic.h: fixup typos
+Date:   Wed, 17 May 2023 16:23:22 +0800
+Message-Id: <20230517082322.3230271-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dx_8v6jmRkkHBlAA--.42377S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZw1Utw1DCF15Cr1fKF4fuFg_yoWkKFX_C3
+        WIqw1kG3srA34vq347tan5KF929r92vF1kWw1rKrs8Jr1kJ3y3Cws8WFyFkFyUWw18Gry2
+        9FsxW343A3ZFqjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        C7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
+        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
+        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        CVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dana Elfassy <delfassy@redhat.com> writes:
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ include/drm/drm_atomic.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Hello Dana,
-
-Is great to see more input Kunit tests being added, thanks!
-
-> Currently input_grab_device() isn't covered by any tests
-> Thus, adding a test to cover the cases:
-> 1. The device is grabbed successfully
-> 2. Trying to grab a device that is already grabbed by another input
->    handle
->
-> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
-> ---
-
-I tested this and it worked for me:
-
-$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/input/tests/.kunitconfig
-...
-[09:36:42] Starting KUnit Kernel (1/1)...
-[09:36:42] ============================================================
-[09:36:43] ================= input_core (4 subtests) ==================
-[09:36:43] [PASSED] input_test_polling
-[09:36:43] [PASSED] input_test_timestamp
-[09:36:43] [PASSED] input_test_match_device_id
-[09:36:43] [PASSED] input_test_grab
-[09:36:43] =================== [PASSED] input_core ====================
-[09:36:43] ============================================================
-[09:36:43] Testing complete. Ran 4 tests: passed: 4
-[09:36:43] Elapsed time: 129.985s total, 5.005s configuring, 124.864s building, 0.062s running
-
->  drivers/input/tests/input_test.c | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/drivers/input/tests/input_test.c b/drivers/input/tests/input_test.c
-> index 25bbf51b5c87..cd4db365e9fa 100644
-> --- a/drivers/input/tests/input_test.c
-> +++ b/drivers/input/tests/input_test.c
-> @@ -124,10 +124,38 @@ static void input_test_match_device_id(struct kunit *test)
->  	KUNIT_ASSERT_FALSE(test, input_match_device_id(input_dev, &id));
->  }
->  
-> +
-> +static void input_test_grab(struct kunit *test)
-> +{
-> +	struct input_dev *input_dev = test->priv;
-> +	struct input_handle test_handle;
-> +	struct input_handler handler;
-> +	struct input_handle handle;
-> +	struct input_device_id id;
-> +	int res;
-> +
-> +	handler.name = "handler";
-> +	handler.id_table = &id;
-> +
-> +	handle.dev = input_get_device(input_dev);
-> +	handle.name = dev_name(&input_dev->dev);
-> +	handle.handler = &handler;
-> +	res = input_grab_device(&handle);
-> +	KUNIT_ASSERT_TRUE(test, input_grab_device(&handle));
-> +
-
-I think you need to add a input_put_device(input_dev) here ?
-
-Otherwise the reference counter won't be decremented.
-
-> +	test_handle.dev = input_get_device(input_dev);
-> +	test_handle.name = dev_name(&input_dev->dev);
-> +	test_handle.handler = &handler;
-> +
-
-I think you can just reuse the handle variable that was set-up before ?
-
-There's no need to another test_handle variable as far as I can tell.
-
-> +	res = input_grab_device(&test_handle);
-> +	KUNIT_ASSERT_EQ(test, res, -EBUSY);
-
-And here add an input_put_device(input_dev) call too.
-
-Other than that the patch looks good to me.
-
-Tested-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-
+diff --git a/include/drm/drm_atomic.h b/include/drm/drm_atomic.h
+index c023c682301b..0b5271cfb029 100644
+--- a/include/drm/drm_atomic.h
++++ b/include/drm/drm_atomic.h
+@@ -394,8 +394,7 @@ struct drm_atomic_state {
+ 	 *
+ 	 * Indicates whether or not this atomic state was duplicated using
+ 	 * drm_atomic_helper_duplicate_state(). Drivers and atomic helpers
+-	 * should use this to fixup normal  inconsistencies in duplicated
+-	 * states.
++	 * should use this to fixup inconsistencies in duplicated states.
+ 	 */
+ 	bool duplicated : 1;
+ 	struct __drm_planes_state *planes;
+@@ -412,7 +411,7 @@ struct drm_atomic_state {
+ 	 *
+ 	 * Used for signaling unbound planes/connectors.
+ 	 * When a connector or plane is not bound to any CRTC, it's still important
+-	 * to preserve linearity to prevent the atomic states from being freed to early.
++	 * to preserve linearity to prevent the atomic states from being freed too early.
+ 	 *
+ 	 * This commit (if set) is not bound to any CRTC, but will be completed when
+ 	 * drm_atomic_helper_commit_hw_done() is called.
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+2.25.1
 
