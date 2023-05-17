@@ -2,155 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF81170685F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B758A706864
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjEQMlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
+        id S230459AbjEQMlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjEQMlJ (ORCPT
+        with ESMTP id S230232AbjEQMlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:41:09 -0400
-Received: from DM4PR02CU001.outbound.protection.outlook.com (mail-centralusazon11012007.outbound.protection.outlook.com [52.101.63.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7862102;
-        Wed, 17 May 2023 05:41:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NZkGaTAvHMhozi3DhmzEK36drFBrZnJt/mhXvNDMPbRBCBztEMqfSvwyaHskPnVRkvc46KaJuqkxJO0MSqbps+KsWPqPb5CyMyg02ohF23+zlD0aKyaJmsEIi1RUTm5zDW0nhTuz6Sx+14XtKbxrWmwT0NulITiI3PpH77KdCWNE/lmjzPtPfcFhlHZ3oQ3KX1pYoc3jj4fUCvgdA/0rAVXFB6VexEvrj1goNQpzL+FsrgZ6mOXS8ef1rYYut/hW4yFIzrKLtjxsVZcbX8JwtyHHN117Wm0pvJ7MiSA3wbvgfV3UpuOlzbu0ZZI9lEEYZDr6oaHSRgVoSwXHD6xS9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uGE2F0xCFI851yDYlGsYBTTVnJCXNvv9EoD+tfrKcLA=;
- b=YCZmhlFmFH6g1D593iXnusUudiJcQpKkfGcTVjtWIZvEt58L2f6ce6fAWeQ67kQtQciFsbatOdLRw7nW5x9PXyQPePHGpcpHCwkdQBn49Gnn0oYZu3k5Aj7Fnb0ZbYNomc1ID0czb5GDRTgrihS5FTRTekoRIq6jX59hG4P3C3N9ZlxG7WH68wbZv/mzymV6h4mYbAjHmlGzmfTlXI3fkv++5KD5evAeUAjgYpPsE/BDNxvCY0lmdpwhKcQksbtCMtgU3Lm5GQbTPhktOnKV4H9/Kd8YT38JYAhKH8d2Z9EWxIDTU0qse2nwMUCYvX4g0XaPw2eurz+Wl+bbj+8yTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uGE2F0xCFI851yDYlGsYBTTVnJCXNvv9EoD+tfrKcLA=;
- b=hBjO55LNyjqmmQhe299HftizppW8j2iCFP4HjecM4N2aI/yJokeCTQjuTZec6rCRNASQJD8pTxmik+0690Radk8Ln3DIOQv+geZu3O6HswerpOn2tl/guN2st56Ih1Kb/uBOTg43yGAjUht93k+XEL16uk49hxNgrSpG2WKaV9k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com (2603:10b6:510:bd::5)
- by DM6PR05MB7100.namprd05.prod.outlook.com (2603:10b6:5:201::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
- 2023 12:41:00 +0000
-Received: from PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::5631:475a:58d4:cf66]) by PH0PR05MB8703.namprd05.prod.outlook.com
- ([fe80::5631:475a:58d4:cf66%6]) with mapi id 15.20.6387.030; Wed, 17 May 2023
- 12:41:00 +0000
-From:   Ajay Kaher <akaher@vmware.com>
-To:     yujie.liu@intel.com
-Cc:     akaher@vmware.com, amakhalov@vmware.com, chinglinyu@google.com,
-        er.ajay.kaher@gmail.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, lkp@intel.com,
-        mhiramat@kernel.org, namit@vmware.com, oe-lkp@lists.linux.dev,
-        rostedt@goodmis.org, shuah@kernel.org, srivatsa@csail.mit.edu,
-        srivatsab@vmware.com, tkundu@vmware.com, vsirnapalli@vmware.com
-Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-Date:   Wed, 17 May 2023 18:10:07 +0530
-Message-Id: <1684327207-19817-1-git-send-email-akaher@vmware.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <202305051619.9a469a9a-yujie.liu@intel.com>
-References: <202305051619.9a469a9a-yujie.liu@intel.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR08CA0039.namprd08.prod.outlook.com
- (2603:10b6:a03:117::16) To PH0PR05MB8703.namprd05.prod.outlook.com
- (2603:10b6:510:bd::5)
+        Wed, 17 May 2023 08:41:47 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD2E1FFC;
+        Wed, 17 May 2023 05:41:44 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HCbwaF024412;
+        Wed, 17 May 2023 12:41:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=4rXcL78Aoz/KapA9CBe6JT5xgTLh3UB8VZsi6jbe2vk=;
+ b=PeQ43KQpY/fXHVrfkPEJKsNtmWgii0t8W5lLK20JaS6tz0zPhS3gxzOqQCyEYSHKuDSQ
+ TJSTWFm8Mi8WengGXr6IUWQu7hNfKqR6OVa4efbXXiBgIZApI7rQDZFaKaqV4cdLf844
+ O1iAWsMajp9iEb/VGDkA+x5uzKW17Lsda2tpZGy2hzY9Ih1eODn8wBhsk0Qat7r6WxUs
+ ElPjKnyiEcDzW3yrnlLTRxeXOeiMHgEV4PM/T76ncJDEXsd0l6RWQqbP5TGk7vhqrv6a
+ /py1GUOR+WfrtVByeS7VZML8hsNcMQEwURCly4umDUy/p/G0YxJY0CBRM+zNJ2TvXv8D tg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmxvprjrf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 12:41:27 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HCdaAG004493;
+        Wed, 17 May 2023 12:41:26 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmxvprjpk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 12:41:26 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H2pWu0013154;
+        Wed, 17 May 2023 12:41:24 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qj264st55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 12:41:24 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HCfLAn4915808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 May 2023 12:41:22 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC5B52004E;
+        Wed, 17 May 2023 12:41:21 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB77120040;
+        Wed, 17 May 2023 12:41:20 +0000 (GMT)
+Received: from [9.171.70.117] (unknown [9.171.70.117])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 17 May 2023 12:41:20 +0000 (GMT)
+Message-ID: <db6db5d49e236548c26fbaa2e16462463814d7ff.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 38/41] video: handle HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>
+Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-fbdev@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Date:   Wed, 17 May 2023 14:41:20 +0200
+In-Reply-To: <87ba918b-214b-a58a-ecc4-17b0bd00e8f8@suse.de>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+         <20230516110038.2413224-39-schnelle@linux.ibm.com>
+         <87ba918b-214b-a58a-ecc4-17b0bd00e8f8@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR05MB8703:EE_|DM6PR05MB7100:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c09c434-e7ba-4588-2f6d-08db56d3f807
-X-LD-Processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G3liRa7U8M/IljwcuBgCZV1Ksv0nRR/CKtzOBaqCoCMTxONb50fqFSc/flLhwTKeQX6Su+VEDd/Yuwk+jtBU/Sq/1M/Y69EQjTjQkRYIjN9mI0z5+vaOIi1uMOl9OsuawXm2msZ4bVX7xaxJVia7CvgbHzQtlSx957yOSuqJg5siasZ73WJenHZGwu6SBckuq0JRJ/Ne1uyYRN2uIQoXDTkTHT32n/jh1p2WximKx6XKDPZItz0+T/CLUGoHVozv8WN1elThPC/JSVYKkGyKJ+1bvq+cY4PEjIwOknZLYFxDH9nJHiuRahwcJcbYUKOFuA1ruorDlKO64rTvEqtvPxz4MTl8GZQw8T7TcGGaQhHhJFHXdrUa+ZtmALpDdAxR0DZV8re/r2+rk5zVscBn+k10h5lbIZNOM96z0VhWjpPnKLrqogfxOXt1RY0WsCB0D7OVqp2asK5SSh9F4dRdC5Gak54rvzTCOmqF9RM6lb8h6KoJiY6ZyCSyyADYi4XKuGpt/8nRn5l57TQBIC2sCdQn9HNP3Nf27Fn8aFx3PfwZaIcBUL08G8Pr4nW1kS8r/49zE/e8+L/QoXLua5d22J6YuhrVfsDp9dVtlVFhd/p912FkXl/3/H4d1fkl2GuAVE4mhpezerCEmKC10RPusn0Nb6f8FiIzRm5dTf16i81wkC6cKiWJNkoE9NFu0Qy66iGRTqJd9laoJ273f/rN/vMc4Y++MOw4iexqywkME8fR0WHVN6pH62PpSxbb0xW4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR05MB8703.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(136003)(366004)(346002)(451199021)(83380400001)(966005)(52116002)(478600001)(6486002)(2616005)(6512007)(6506007)(26005)(186003)(107886003)(2906002)(8936002)(8676002)(7416002)(5660300002)(36756003)(41300700001)(6916009)(38350700002)(38100700002)(4326008)(66476007)(66556008)(66946007)(86362001)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xLXSeKd1VZhUOYw6rYJ9+7w+JT7xwgkT7QYPeNRW2GwDmbxTl1j0jvx793+F?=
- =?us-ascii?Q?CyK4vDxo3b7JveGOt84SpuYjCchNK20c7iTeoq7W5prS7TH3zgO/ro/wf/dD?=
- =?us-ascii?Q?AT9HaxDRiosMnO9vsbSi9Zgam7BqfAtKpv8FjZrZX/pHFQC6ZTVtrcSlUqXx?=
- =?us-ascii?Q?ht8OX3uJOAFD0l167HfFgTisSAcDct7FmoibkzcIN7Ipdu/MC8Qs0D7SIeXQ?=
- =?us-ascii?Q?RghS8DTD0+KD3tvD7/l7U5voDLcSC6A15m+RcUiuXVLzM4lIXToslMf+0na9?=
- =?us-ascii?Q?PVp3T9JBcESh2wwcP5C7xGUoqyx8OHhXzAiGMOE5oM0GoHKQwHmwPgs9so6m?=
- =?us-ascii?Q?UgnCJlVBeE4LvbfptSKYKUJVHahMX1KVK46vCdPiwkcpJbRpxlH4OrPn9mO/?=
- =?us-ascii?Q?YXEvcRD7cSXcmg5fs5qiiqPi3UfZvFhccUZ4ITmBXwRTTCkmMG1MDKVYKtC4?=
- =?us-ascii?Q?+zdFxX8w0dgT4BXQD3YcO1Jdj42idmc8tGNUOyBMWt7Z4jQuKwiz05h+wGYJ?=
- =?us-ascii?Q?U8asRhHEAgBS27C1MRUvKXzSFZqyUpraaYuYxy34dpc/LM2x92mhGrQ8Q7NW?=
- =?us-ascii?Q?4+QGOFQLXFjUqLZpr5tUA4ZTSDy4fp1MgSrfcWPBYNGW5YgAt/HODBlOh/NR?=
- =?us-ascii?Q?RdD9KZ+94EvqGQmWIgAAGUvYzZ6C6FY8ujVWladf4IkHHJhRPIAz/Po34oHz?=
- =?us-ascii?Q?QKWsRBCAg+XwsYdV9xXcbfOBSBnIOijIx0LCkRZS9NMwJroP83+PkdnGk/UJ?=
- =?us-ascii?Q?ftpTERY69bh7gO3tpYTy72ZYAA2x+sSHi+IiKWFuBe/MczDnUakV8e/Qky5N?=
- =?us-ascii?Q?5fz2eX0s2Ct0EeMQzqVUYP8atGD+T+nbctYRE+7aUgYq2OpWAtgDXdJs5CRB?=
- =?us-ascii?Q?5AJ4UL0vEWsugp/o/lqNUI4R8kgmE9XLXJTwfW1voam/f9a8FHN29dSZN9qz?=
- =?us-ascii?Q?+rFIncFiJamHu4cBYSgjmvtKH6D6Zb5nUhJQ+ssUdl18KLaZfd11zNaGQ4Xd?=
- =?us-ascii?Q?aIc5wy80feWNercPOu5HbgFPx9zmTRZr8apOd7Im3ydRXcR811irNH/mkPX/?=
- =?us-ascii?Q?1iqvexrSryRiv6tvaWvKMpZufWj/ab0wPJjFqPXCZuRArI6W9ybhYPRZOnSc?=
- =?us-ascii?Q?uwWIQfG9tSo8sTlqfS3P5bUB/YoUrLumfwpLHIJmmztBjdPSz1GPC9lIbM2/?=
- =?us-ascii?Q?ZiEhCjblXSoq6cv+qZAJdghuCcphRxgsBL+SaL8odbxU0OC12BEsZIV1kKPd?=
- =?us-ascii?Q?JCqIhz1fPxnPMsVUX2jLsByJk+yMlEAM/CNchH9zG+qVcziL9zVyjvipQwQS?=
- =?us-ascii?Q?WC7rMiUNT728U0sbWj9LTmGPtTkic/gfhvIEEqPQyJpB5TzCOw+JtdJ+TlGz?=
- =?us-ascii?Q?KZWUPqK5AS+ovwsqv27DmVAEktra45XJ9fEzqipMBT0u/bnkfiI4FQ/Ku5Sm?=
- =?us-ascii?Q?iPW0tnne641HmPLdzWOiFgzcwbn7etKzDUoVczO9fQfse56B379GAlYGSAlD?=
- =?us-ascii?Q?n2DOcc45k1/pd3lVtT0DrTgHEneS4JYTN2HAX4YYdgXm4zZkKzdEZUD+UD8E?=
- =?us-ascii?Q?C9ZL/Bf7sYwqNwn58rsEsLy6LHsfNZ4e9oG7QoAk?=
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c09c434-e7ba-4588-2f6d-08db56d3f807
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR05MB8703.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 12:41:00.4978
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zUMxzNnNf1fvwnab6q7ZTFDo7kSoChpWYc1tYGoYqpdNmUK1kCJS6rB8khixg8ZE48cUIEm6oSwOa2j7YLy3gQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR05MB7100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Fv8AV45wpM57H2AdwCW3pQ7xuCLTXciP
+X-Proofpoint-ORIG-GUID: qlt7I83N3LVQYDYq29k-Jl55JLicOqNJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 mlxscore=0 malwarescore=0 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305170103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> kernel test robot noticed "WARNING:at_fs/namei.c:#lookup_one_len" on:
->
-> commit: 2fe2002efb23a715f5eb7a58891ff85f4e37b084 ("[PATCH v2 8/9] eventfs: moving tracing/events to eventfs")
-> url: https://github.com/intel-lab-lkp/linux/commits/Ajay-Kaher/eventfs-introducing-struct-tracefs_inode/20230502-192949
-> base: https://git.kernel.org/cgit/linux/kernel/git/shuah/linux-kselftest.git next
-> patch link: https://lore.kernel.org/all/1683026600-13485-9-git-send-email-akaher@vmware.com/
-> patch subject: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
-.
-.
-.
->  49.752082][ T5878] eventfs_start_creating (fs/tracefs/inode.c:519) 
-> [ 49.757416][ T5878] eventfs_create_dir (fs/tracefs/event_inode.c:187 (discriminator 3)) 
-> [ 49.762488][ T5878] eventfs_root_lookup (fs/tracefs/event_inode.c:291) 
-> [ 49.767637][ T5878] __lookup_slow (fs/namei.c:1686) 
-> [ 49.772268][ T5878] walk_component (include/linux/fs.h:773 fs/namei.c:1704 fs/namei.c:1994) 
-> [ 49.777016][ T5878] link_path_walk+0x24e/0x3b0 
-> [ 49.783462][ T5878] ? path_init (fs/namei.c:2387) 
-> [ 49.788021][ T5878] path_openat (fs/namei.c:3711) 
-> [ 49.792463][ T5878] do_filp_open (fs/namei.c:3742) 
-> [ 49.797021][ T5878] ? __check_object_size (mm/memremap.c:107 mm/memremap.c:144) 
-> [ 49.803055][ T5878] do_sys_openat2 (fs/open.c:1348) 
-> [ 49.807740][ T5878] __x64_sys_openat (fs/open.c:1375) 
-> [ 49.812512][ T5878] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
-> [ 49.817068][ T5878] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120) 
-> [   49.823092][ T5878] RIP: 0033:0x7fcddb3b84e7
+On Tue, 2023-05-16 at 19:21 +0200, Thomas Zimmermann wrote:
+> Hi
+>=20
+> Am 16.05.23 um 13:00 schrieb Niklas Schnelle:
+> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friend=
+s
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them and guard inline code in headers.
+> >=20
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> > Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+> >        per-subsystem patches may be applied independently
+> >=20
+> >   drivers/video/console/Kconfig |  1 +
+> >   drivers/video/fbdev/Kconfig   | 21 +++++++++++----------
+> >   include/video/vga.h           |  8 ++++++++
+>=20
+> Those are 3 different things. It might be preferable to not handle them=
+=20
+> under the video/ umbrella.
+>=20
+> >   3 files changed, 20 insertions(+), 10 deletions(-)
+> >=20
+> > diff --git a/drivers/video/console/Kconfig b/drivers/video/console/Kcon=
+fig
+> > index 22cea5082ac4..64974eaa3ac5 100644
+> > --- a/drivers/video/console/Kconfig
+> > +++ b/drivers/video/console/Kconfig
+> > @@ -10,6 +10,7 @@ config VGA_CONSOLE
+> >   	depends on !4xx && !PPC_8xx && !SPARC && !M68K && !PARISC &&  !SUPER=
+H && \
+> >   		(!ARM || ARCH_FOOTBRIDGE || ARCH_INTEGRATOR || ARCH_NETWINDER) && \
+> >   		!ARM64 && !ARC && !MICROBLAZE && !OPENRISC && !S390 && !UML
+> > +	depends on HAS_IOPORT
+> >   	select APERTURE_HELPERS if (DRM || FB || VFIO_PCI_CORE)
+> >   	default y
+> >   	help
+> > diff --git a/drivers/video/fbdev/Kconfig b/drivers/video/fbdev/Kconfig
+> > index 96e91570cdd3..a56c57dd839b 100644
+> > --- a/drivers/video/fbdev/Kconfig
+> > +++ b/drivers/video/fbdev/Kconfig
+> > @@ -335,7 +335,7 @@ config FB_IMX
+> >  =20
+> >   config FB_CYBER2000
+> >   	tristate "CyberPro 2000/2010/5000 support"
+> > -	depends on FB && PCI && (BROKEN || !SPARC64)
+> > +	depends on FB && PCI && HAS_IOPORT && (BROKEN || !SPARC64)
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > @@ -429,6 +429,7 @@ config FB_FM2
+> >   config FB_ARC
+> >   	tristate "Arc Monochrome LCD board support"
+> >   	depends on FB && (X86 || COMPILE_TEST)
+> > +	depends on HAS_IOPORT
+> >   	select FB_SYS_FILLRECT
+> >   	select FB_SYS_COPYAREA
+> >   	select FB_SYS_IMAGEBLIT
+> > @@ -1332,7 +1333,7 @@ config FB_ATY_BACKLIGHT
+> >  =20
+> >   config FB_S3
+> >   	tristate "S3 Trio/Virge support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > @@ -1393,7 +1394,7 @@ config FB_SAVAGE_ACCEL
+> >  =20
+> >   config FB_SIS
+> >   	tristate "SiS/XGI display support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > @@ -1424,7 +1425,7 @@ config FB_SIS_315
+> >  =20
+> >   config FB_VIA
+> >   	tristate "VIA UniChrome (Pro) and Chrome9 display support"
+> > -	depends on FB && PCI && GPIOLIB && I2C && (X86 || COMPILE_TEST)
+> > +	depends on FB && PCI && GPIOLIB && I2C && HAS_IOPORT && (X86 || COMPI=
+LE_TEST)
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > @@ -1463,7 +1464,7 @@ endif
+> >  =20
+> >   config FB_NEOMAGIC
+> >   	tristate "NeoMagic display support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_MODE_HELPERS
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> > @@ -1493,7 +1494,7 @@ config FB_KYRO
+> >  =20
+> >   config FB_3DFX
+> >   	tristate "3Dfx Banshee/Voodoo3/Voodoo5 display support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_CFB_IMAGEBLIT
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> > @@ -1543,7 +1544,7 @@ config FB_VOODOO1
+> >  =20
+> >   config FB_VT8623
+> >   	tristate "VIA VT8623 support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > @@ -1558,7 +1559,7 @@ config FB_VT8623
+> >  =20
+> >   config FB_TRIDENT
+> >   	tristate "Trident/CyberXXX/CyberBlade support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > @@ -1581,7 +1582,7 @@ config FB_TRIDENT
+> >  =20
+> >   config FB_ARK
+> >   	tristate "ARK 2000PV support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > @@ -2195,7 +2196,7 @@ config FB_SSD1307
+> >  =20
+> >   config FB_SM712
+> >   	tristate "Silicon Motion SM712 framebuffer support"
+> > -	depends on FB && PCI
+> > +	depends on FB && PCI && HAS_IOPORT
+> >   	select FB_CFB_FILLRECT
+> >   	select FB_CFB_COPYAREA
+> >   	select FB_CFB_IMAGEBLIT
+> > diff --git a/include/video/vga.h b/include/video/vga.h
+> > index 947c0abd04ef..f4b806b85c86 100644
+> > --- a/include/video/vga.h
+> > +++ b/include/video/vga.h
+> > @@ -203,18 +203,26 @@ extern int restore_vga(struct vgastate *state);
+> >  =20
+> >   static inline unsigned char vga_io_r (unsigned short port)
+> >   {
+> > +#ifdef CONFIG_HAS_IOPORT
+> >   	return inb_p(port);
+> > +#else
+> > +	return 0xff;
+> > +#endif
+> >   }
+> >  =20
+> >   static inline void vga_io_w (unsigned short port, unsigned char val)
+> >   {
+> > +#ifdef CONFIG_HAS_IOPORT
+> >   	outb_p(val, port);
+> > +#endif
+> >   }
+> >  =20
+> >   static inline void vga_io_w_fast (unsigned short port, unsigned char =
+reg,
+> >   				  unsigned char val)
+> >   {
+> > +#ifdef CONFIG_HAS_IOPORT
+> >   	outw(VGA_OUT16VAL (val, reg), port);
+> > +#endif
+> >   }
+>=20
+> It feels wrong that these helpers silently do nothing. I'd enclose them=
+=20
+> in CONFIG_HAS_IOPORT entirely. The drivers that use them unconditionally=
+=20
+> would then fail to build.
+>=20
+> Best regards
+> Thomas
 
-Steve, locally I have reproduced this issue using:
-    lkp run job-cpu-100%-uprobe-60s.yaml
+Ok yeah, I was looking at the call sites like vga_w_fast() that use
+either an HAS_IOPORT dependent function or a writew() based one and so
+if I #ifdef the regbase !=3D NULL check we could end up with a NULL
+derference but I guess that is kind of what we want since clearly
+something is wrong if the driver tries to do I/O port access despite it
+not being available.
 
-And also fixed, I will include this fix as well in v3.
-
-Thanks to lkp, kernel test robot <yujie.liu@intel.com>.
-
--Ajay
-
+Thanks,
+Niklas
