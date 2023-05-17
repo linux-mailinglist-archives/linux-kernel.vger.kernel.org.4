@@ -2,225 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BC8707346
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25468707340
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjEQUnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
+        id S229739AbjEQUmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjEQUnS (ORCPT
+        with ESMTP id S229721AbjEQUmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:43:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338AC6195
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:42:50 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965e93f915aso229410166b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:42:50 -0700 (PDT)
+        Wed, 17 May 2023 16:42:31 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7320A30DE;
+        Wed, 17 May 2023 13:42:30 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-54fd9c0e435so555396eaf.2;
+        Wed, 17 May 2023 13:42:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684356168; x=1686948168;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CvCkfJyXdBizSrj+S1CIuIjHPj7mR2pZW70tMG5/ENw=;
-        b=k1ibNgQ1aq28Dhp9cGBlgSxQJ7lbc/VdbcXrDj0eAoSPCEx1xcoDbcgMCSEqtIEIKI
-         3GPic5hMCSaX21aJvzjbvjDyMc8l0sqejX2otxM8GSrW6JWPtr/4f8YtHld2rn1dnUBx
-         k+aSQCrSTdfmO5gim5Lnq9Ve8U1YlVehAWMGpz0+oufZ424aTfD8G852MYX5GuYYjS21
-         vsrdXtzfvgk/1X5CChW00yaz0QHjQVFPesWj0npLjj185JeKtvibvT3TRJg1tejKzou7
-         gemYCK9U2mfESleEXZ1k2GewsSh30YnAmHtuHgyWG99vSxr6pMWI54GUX+JThPbOoTqA
-         IbpQ==
+        d=gmail.com; s=20221208; t=1684356150; x=1686948150;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IKmc4/mY2T8M2vtBoa3KRIY5AIQ1sNsQWDEPH950Scs=;
+        b=eUGiJbnfLgkPtl6HyfdqGOEGxQmhF6+mgHDX4SBK74DqCsMAtewI0AtjeOiTs3oNqq
+         4DB7ue0e5qRJccB4bfIXxaZyaPoxol+uXIQfhHJf2LkbDwxCV9fMguKjOXpb4uQL3pPM
+         dIZKc1l6DfNpP4fum/8/L07J1kyQSb7rR03oaAfGT/fy2PpYT+WRXnIW8ODOgBYgOLhQ
+         MOpXPBwJ3D7sdNEXc0wsZlJ7/3dNQLaKOf68ifgkOjxwE0c1c8KECZ00ltgkejzykvx0
+         M0UXVwBqnwENbA8nfmusa/2ON7UtyaA6xxzfg87HGQX9qnEfLh9zntDfeFNqnAdiRyuO
+         ZNPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684356168; x=1686948168;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CvCkfJyXdBizSrj+S1CIuIjHPj7mR2pZW70tMG5/ENw=;
-        b=fxxGRtj3fG69azfbtCf00WE43HZp+u8ukA4DG4hRL2QPjEmCQLuvzJxqhlsAeflUss
-         zm0yaZWTYXhpRxGz+OEdom29x8IGEpDlooJ1nGKJRwFA2Ds+soN4C5hRuXX/5Mo4lVPd
-         wxdNlfuOVQlVtDI0Um4BKc967RkJnNrEGyMYC4y8bguOrQ71r3pr3MkeTfrpOLw5+STu
-         JsmbQMhr/QlKFz0UDGdWMX6N8i/wyfzlBvliuEL6e2RpHB4eDzIvaVoYvasz3lovEVE8
-         dqjKR+VujutHIsYaeuSe81e26zCTkh2Ow9XUHgwtRzBnekVLtrFUdc19KuQm4CYcu/Li
-         JW6A==
-X-Gm-Message-State: AC+VfDzeLNwy4o7vEc9W3+K8B8G5wmVD8v5KtlmCSeJeBy7f5j3KpipS
-        bywqzd+hCjZsuu5I2RxTHS+gf2UunzMWAhqIfnVBuQ==
-X-Google-Smtp-Source: ACHHUZ5kUTrtS3PDNiv88Mejxdsl502rh+r9lku+/B71PLDd2EJdDbwQfpLDEruHsoMoATzJa3F7uuidOinOVVG7Ia0=
-X-Received: by 2002:a17:907:9485:b0:96a:b12d:2fdf with SMTP id
- dm5-20020a170907948500b0096ab12d2fdfmr17122192ejc.12.1684356168500; Wed, 17
- May 2023 13:42:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684356150; x=1686948150;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IKmc4/mY2T8M2vtBoa3KRIY5AIQ1sNsQWDEPH950Scs=;
+        b=GgjIbS09KIBwqH8m0HTB1l/UEirfdmpscNCTHpm5rLqKNh2k5kMh38exAopZG3xx9x
+         KM3GDjFtBqhgbfG+xEZ0q9Z3U9GwHJjjrtLJiY3XMe+PY+9khTujD90AbuG71vJpuiHN
+         XFPMfhQ8uCoS9Ga1lkzGeVniu7vsOEd4/vZkC1GPv26vBP8NXK9uj8fV2EsX08m5e1i7
+         RfIH2FbsDz49codA5gUm31/IpgFe+5aVRgWa+ehkvRCPOYdo7IkfIUh12SHToJxN6L6z
+         1OEerayqx+vqPeD5K3JvEffRN4y1Kqusd2zwcSYx9eKhE0YZ/sR9g2dtOptuDtCZbZ/C
+         69Hw==
+X-Gm-Message-State: AC+VfDwFUnu71BSl97ib/AyzX0BUUM2U2kn2e+luBtJoEoDsRY1KMQiw
+        /6KdK3fgtKBfLrXp3W/hLKk=
+X-Google-Smtp-Source: ACHHUZ41+outjsfJKy4Z+3zXxQQv9yrO3qwXSk9TUPgATnMrC9PcekqE5qHFLmEcRTICyBwlKGf1sA==
+X-Received: by 2002:a05:6808:99c:b0:395:7577:1533 with SMTP id a28-20020a056808099c00b0039575771533mr39910oic.37.1684356149776;
+        Wed, 17 May 2023 13:42:29 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id q66-20020acac045000000b0038c0cf168afsm10424955oif.7.2023.05.17.13.42.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 13:42:29 -0700 (PDT)
+Message-ID: <6a8183b8-0e81-9f2f-f79f-74ca5beb3ef4@gmail.com>
+Date:   Wed, 17 May 2023 17:42:22 -0300
 MIME-Version: 1.0
-References: <CAJD7tkbHKQBoz7kn6ZjMTMoxLKYs7x9w4uRGWLvuyOogmBkZ_g@mail.gmail.com>
- <6AB7FF12-F855-4D5B-9F75-9F7D64823144@didiglobal.com>
-In-Reply-To: <6AB7FF12-F855-4D5B-9F75-9F7D64823144@didiglobal.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 17 May 2023 13:42:12 -0700
-Message-ID: <CAJD7tkaOMeeGNqm6nFyHgPhd9VpnCVqCAYCY725NoTohTMAnmw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] memcontrol: support cgroup level OOM protection
-To:     =?UTF-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
-        <chengkaitao@didiglobal.com>
-Cc:     "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        David Rientjes <rientjes@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 2/2] rust: sync: implement `AsRef<T>` for `Arc<T>`
+Content-Language: en-US
+To:     Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+References: <20230517200814.3157916-1-aliceryhl@google.com>
+ <20230517200814.3157916-2-aliceryhl@google.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230517200814.3157916-2-aliceryhl@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 3:01=E2=80=AFAM =E7=A8=8B=E5=9E=B2=E6=B6=9B Chengka=
-itao Cheng
-<chengkaitao@didiglobal.com> wrote:
->
-> At 2023-05-17 16:09:50, "Yosry Ahmed" <yosryahmed@google.com> wrote:
-> >On Wed, May 17, 2023 at 1:01=E2=80=AFAM =E7=A8=8B=E5=9E=B2=E6=B6=9B Chen=
-gkaitao Cheng
-> ><chengkaitao@didiglobal.com> wrote:
-> >>
-> >> At 2023-05-17 14:59:06, "Yosry Ahmed" <yosryahmed@google.com> wrote:
-> >> >+David Rientjes
-> >> >
-> >> >On Tue, May 16, 2023 at 8:20=E2=80=AFPM chengkaitao <chengkaitao@didi=
-global.com> wrote:
-> >> >>
-> >> >> Establish a new OOM score algorithm, supports the cgroup level OOM
-> >> >> protection mechanism. When an global/memcg oom event occurs, we tre=
-at
-> >> >> all processes in the cgroup as a whole, and OOM killers need to sel=
-ect
-> >> >> the process to kill based on the protection quota of the cgroup.
-> >> >>
-> >> >
-> >> >Perhaps this is only slightly relevant, but at Google we do have a
-> >> >different per-memcg approach to protect from OOM kills, or more
-> >> >specifically tell the kernel how we would like the OOM killer to
-> >> >behave.
-> >> >
-> >> >We define an interface called memory.oom_score_badness, and we also
-> >> >allow it to be specified per-process through a procfs interface,
-> >> >similar to oom_score_adj.
-> >> >
-> >> >These scores essentially tell the OOM killer the order in which we
-> >> >prefer memcgs to be OOM'd, and the order in which we want processes i=
-n
-> >> >the memcg to be OOM'd. By default, all processes and memcgs start wit=
-h
-> >> >the same score. Ties are broken based on the rss of the process or th=
-e
-> >> >usage of the memcg (prefer to kill the process/memcg that will free
-> >> >more memory) -- similar to the current OOM killer.
-> >>
-> >> Thank you for providing a new application scenario. You have described=
- a
-> >> new per-memcg approach, but a simple introduction cannot explain the
-> >> details of your approach clearly. If you could compare and analyze my
-> >> patches for possible defects, or if your new approach has advantages
-> >> that my patches do not have, I would greatly appreciate it.
-> >
-> >Sorry if I was not clear, I am not implying in any way that the
-> >approach I am describing is better than your patches. I am guilty of
-> >not conducting the proper analysis you are requesting.
->
-> There is no perfect approach in the world, and I also seek your advice wi=
-th
-> a learning attitude. You don't need to say sorry, I should say thank you.
->
-> >I just saw the thread and thought it might be interesting to you or
-> >others to know the approach that we have been using for years in our
-> >production. I guess the target is the same, be able to tell the OOM
-> >killer which memcgs/processes are more important to protect. The
-> >fundamental difference is that instead of tuning this based on the
-> >memory usage of the memcg (your approach), we essentially give the OOM
-> >killer the ordering in which we want memcgs/processes to be OOM
-> >killed. This maps to jobs priorities essentially.
->
-> Killing processes in order of memory usage cannot effectively protect
-> important processes. Killing processes in a user-defined priority order
-> will result in a large number of OOM events and still not being able to
-> release enough memory. I have been searching for a balance between
-> the two methods, so that their shortcomings are not too obvious.
-> The biggest advantage of memcg is its tree topology, and I also hope
-> to make good use of it.
+On 5/17/23 17:08, Alice Ryhl wrote:
+> [...]
+>   
+> +impl<T: ?Sized> AsRef<T> for Arc<T> {
+> +    fn as_ref(&self) -> &T {
+> +        self.deref()
+> +    }
+> +}
+> +
+>   impl<T: ?Sized> Clone for Arc<T> {
+>       fn clone(&self) -> Self {
+>           // INVARIANT: C `refcount_inc` saturates the refcount, so it cannot overflow to zero.
 
-For us, killing processes in a user-defined priority order works well.
-
-It seems like to tune memory.oom.protect you use oom_kill_inherit to
-observe how many times this memcg has been killed due to a limit in an
-ancestor. Wouldn't it be more straightforward to specify the priority
-of protections among memcgs?
-
-For example, if you observe multiple memcgs being OOM killed due to
-hitting an ancestor limit, you will need to decide which of them to
-increase memory.oom.protect for more, based on their importance.
-Otherwise, if you increase all of them, then there is no point if all
-the memory is protected, right?
-
-In this case, wouldn't it be easier to just tell the OOM killer the
-relative priority among the memcgs?
-
->
-> >If this approach works for you (or any other audience), that's great,
-> >I can share more details and perhaps we can reach something that we
-> >can both use :)
->
-> If you have a good idea, please share more details or show some code.
-> I would greatly appreciate it
-
-The code we have needs to be rebased onto a different version and
-cleaned up before it can be shared, but essentially it is as
-described.
-
-(a) All processes and memcgs start with a default score.
-(b) Userspace can specify scores for memcgs and processes. A higher
-score means higher priority (aka less score gets killed first).
-(c) The OOM killer essentially looks for the memcg with the lowest
-scores to kill, then among this memcg, it looks for the process with
-the lowest score. Ties are broken based on usage, so essentially if
-all processes/memcgs have the default score, we fallback to the
-current OOM behavior.
-
->
-> >>
-> >> >This has been brought up before in other discussions without much
-> >> >interest [1], but just thought it may be relevant here.
-> >> >
-> >> >[1]https://lore.kernel.org/lkml/CAHS8izN3ej1mqUpnNQ8c-1Bx5EeO7q5NOkh0=
-qrY_4PLqc8rkHA@mail.gmail.com/#t
->
-> --
-> Thanks for your comment!
-> chengkaitao
->
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
