@@ -2,223 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7558C7072FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D3B707300
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjEQU0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S229724AbjEQU2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjEQU0v (ORCPT
+        with ESMTP id S229706AbjEQU2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:26:51 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F73135AD;
-        Wed, 17 May 2023 13:26:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684355210; x=1715891210;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=y3Lpo6i1Ow+VK1b2cyEfFgMYbY83bMwZmtqUkDzDvbc=;
-  b=T79ohFZVn5Kf9Ds45hRvm/Y2Up0QN8Xtnjxt5BD+s0qB+wllNtfkUYs7
-   BiZOfVyF3Tj4C/ppPbf+A5hPjmvkuksivBobWO2BvB2SYVliSawscE961
-   v6Ernd4Qsqn7XYpwV/E+hC9pvSWCFnlOnDc0MdcszxzGHY5WvMR5VpTJa
-   v58go9NpOf9JG8VBJBEpnjp7pnuzh2szpz4O5em0hOGy62VIoxrjC9ujA
-   UHOe3HzVzBPwRkv/7tEeDIswqvjEx9HDR9d5/mlS8tH2x+6Kj2nvfbbXa
-   KMYw7oUKPeLhu1rAUGDIcqRMG39Vjrp7w1tuYUkHEBQ17AOoBhUqOqtdl
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="332234960"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="332234960"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 13:26:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="876162795"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="876162795"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 17 May 2023 13:26:49 -0700
-Received: from [10.251.17.142] (kliang2-mobl1.ccr.corp.intel.com [10.251.17.142])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Wed, 17 May 2023 16:28:31 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B011FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:28:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 17A81580AF7;
-        Wed, 17 May 2023 13:26:47 -0700 (PDT)
-Message-ID: <7b7a9c75-bf81-922f-42ea-8e99852f7a7a@linux.intel.com>
-Date:   Wed, 17 May 2023 16:26:47 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 00/15] Event, metric and metric group improvements
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20230517173805.602113-1-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230517173805.602113-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E302B22665;
+        Wed, 17 May 2023 20:28:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684355307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TsMoPVln3DJjIjic43H/HtxMvkVu6MN2Vg/Yi5CKxAc=;
+        b=lobWVl+tPn6RYkrzquAbpPUUU+0Xz3FGiQpyqiBgi6fEB88yTOvwta18Ms+4tl7A2QTPRX
+        B4ZuDUgOAEqOvEe4RVMEqqo2x8IcneYnAawRHzVJ/RMX8F2DbHJ0fc7W8iNuSkAPj45lm+
+        yZxF+FLgC6p0jHke+Snk3j6H/onTfYU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684355307;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TsMoPVln3DJjIjic43H/HtxMvkVu6MN2Vg/Yi5CKxAc=;
+        b=fyGYrSMmNoM1O7B5tvabbnmyStk5593LkcVqzur8fCsa9p7ej8JQ5PgkeHpVUVWRbEbxeK
+        mACeXQJmqBjcJICw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 582BB13478;
+        Wed, 17 May 2023 20:28:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3k41FOs4ZWSQCAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 17 May 2023 20:28:27 +0000
+Date:   Wed, 17 May 2023 22:28:26 +0200
+Message-ID: <87353u1z4l.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        Arnd Bergmann <arnd@arndb.de>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: emu10k1: fix 64-bit integer division
+In-Reply-To: <20230517201920.592909-1-arnd@kernel.org>
+References: <20230517201920.592909-1-arnd@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 May 2023 22:19:17 +0200,
+Arnd Bergmann wrote:
+> 
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Division of 64-bit values causes a link failure on 32-bit targets, depending
+> on compiler version and target architecture:
+> 
+> ERROR: modpost: "__divdi3" [sound/pci/emu10k1/snd-emu10k1.ko] undefined!
+> ERROR: modpost: "__udivdi3" [sound/pci/emu10k1/snd-emu10k1.ko] undefined!
+> 
+> Replace these with the safe div_u64() helpers.
+> 
+> Fixes: bb5ceb43b7bf ("ALSA: emu10k1: fix non-zero mixer control defaults in highres mode")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Another fix patch was already submitted and merged:
+ https://lore.kernel.org/r/20230517164800.3650699-1-oswald.buddenhagen@gmx.de
+
+Let me know if you still hit the issue with that patch.
 
 
-On 2023-05-17 1:37 p.m., Ian Rogers wrote:
-> Update Intel events to the latest at: https://github.com/intel/perfmon
-> TMA info metrics are renamed for consistency and a fix is added that
-> adds back in the Valkyrie metrics such as memory_bandwidth_total,
-> memory_bandwidth_read and memory_bandwidth_write on icelakex.
-> 
-> Add a new feature to perf list to show a description of a metricgroup
-> via a new metricgroups.json file, add this for the generated Intel
-> metrics. The descriptions looks like:
-> 
-> ```
-> $ perf list
-> ...
-> tma_frontend_bound_group: [Metrics contributing to tma_frontend_bound category]
->   tma_fetch_bandwidth
->        [This metric represents fraction of slots the CPU
->         was stalled due to Frontend bandwidth issues]
->   tma_fetch_latency
->        [This metric represents fraction of slots the CPU
->         was stalled due to Frontend latency issues]
-> ...
-> ```
-> 
-> v2/v3. Reword "Grouping from metrics spreadsheet" to "Grouping from
->        Top-down Microarchitecture Analysis Metrics spreadsheet" as
->        suggested by Kan Liang.
-> 
-> Ian Rogers (15):
->   perf vendor events intel: Update alderlake events/metrics
->   perf vendor events intel: Update broadwell variant events/metrics
->   perf vendor events intel: Update cascadelakex events/metrics
->   perf vendor events intel: Update elkhartlake events
->   perf vendor events intel: Update haswell(x) metrics
->   perf vendor events intel: Update icelake/icelakex events/metrics
->   perf vendor events intel: Update ivybridge/ivytown metrics
->   perf vendor events intel: Update jaketown metrics
->   perf vendor events intel: Update sandybridge metrics
->   perf vendor events intel: Update sapphirerapids events/metrics
->   perf vendor events intel: Update skylake/skylakex events/metrics
->   perf vendor events intel: Update snowridgex events
->   perf vendor events intel: Update tigerlake events/metrics
->   perf jevents: Add support for metricgroup descriptions
->   perf vendor events intel: Add metricgroup descriptions for all models
+thanks,
 
-Thanks Ian.
-
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-> 
->  tools/perf/builtin-list.c                     |   11 +-
->  .../arch/x86/alderlake/adl-metrics.json       | 1314 ++++++++--------
->  .../pmu-events/arch/x86/alderlake/cache.json  |    9 +
->  .../pmu-events/arch/x86/alderlake/memory.json |    6 +-
->  .../arch/x86/alderlake/metricgroups.json      |  122 ++
->  .../arch/x86/alderlaken/adln-metrics.json     |  276 ++--
->  .../arch/x86/alderlaken/metricgroups.json     |   26 +
->  .../arch/x86/broadwell/bdw-metrics.json       |  580 +++----
->  .../arch/x86/broadwell/floating-point.json    |   15 +
->  .../arch/x86/broadwell/metricgroups.json      |  107 ++
->  .../arch/x86/broadwellde/bdwde-metrics.json   |  556 +++----
->  .../arch/x86/broadwellde/floating-point.json  |   15 +
->  .../arch/x86/broadwellde/metricgroups.json    |  107 ++
->  .../arch/x86/broadwellx/bdx-metrics.json      |  796 ++++++----
->  .../arch/x86/broadwellx/floating-point.json   |   15 +
->  .../arch/x86/broadwellx/metricgroups.json     |  107 ++
->  .../arch/x86/cascadelakex/clx-metrics.json    | 1231 +++++++++------
->  .../arch/x86/cascadelakex/floating-point.json |   31 +
->  .../arch/x86/cascadelakex/metricgroups.json   |  114 ++
->  .../arch/x86/cascadelakex/pipeline.json       |   23 +-
->  .../arch/x86/elkhartlake/cache.json           |    7 +
->  .../arch/x86/elkhartlake/memory.json          |    2 +
->  .../arch/x86/elkhartlake/other.json           |   10 +
->  .../arch/x86/elkhartlake/pipeline.json        |    3 +
->  .../arch/x86/haswell/hsw-metrics.json         |  484 +++---
->  .../arch/x86/haswell/metricgroups.json        |  107 ++
->  .../arch/x86/haswellx/hsx-metrics.json        |  700 ++++++---
->  .../arch/x86/haswellx/metricgroups.json       |  107 ++
->  .../pmu-events/arch/x86/icelake/cache.json    |   18 +
->  .../arch/x86/icelake/icl-metrics.json         |  950 ++++++------
->  .../arch/x86/icelake/metricgroups.json        |  113 ++
->  .../arch/x86/icelakex/icx-metrics.json        | 1306 +++++++++-------
->  .../arch/x86/icelakex/metricgroups.json       |  114 ++
->  .../arch/x86/ivybridge/ivb-metrics.json       |  526 +++----
->  .../arch/x86/ivybridge/metricgroups.json      |  107 ++
->  .../arch/x86/ivytown/ivt-metrics.json         |  534 +++----
->  .../arch/x86/ivytown/metricgroups.json        |  107 ++
->  .../arch/x86/jaketown/jkt-metrics.json        |  224 +--
->  .../arch/x86/jaketown/metricgroups.json       |  100 ++
->  tools/perf/pmu-events/arch/x86/mapfile.csv    |   31 +-
->  .../arch/x86/sandybridge/metricgroups.json    |  100 ++
->  .../arch/x86/sandybridge/snb-metrics.json     |  222 +--
->  .../arch/x86/sapphirerapids/memory.json       |    6 +-
->  .../arch/x86/sapphirerapids/metricgroups.json |  118 ++
->  .../arch/x86/sapphirerapids/spr-metrics.json  | 1357 ++++++++++-------
->  .../sapphirerapids/uncore-interconnect.json   |    2 +-
->  .../x86/sapphirerapids/uncore-memory.json     |    8 +-
->  .../arch/x86/skylake/floating-point.json      |    8 +
->  .../arch/x86/skylake/metricgroups.json        |  113 ++
->  .../pmu-events/arch/x86/skylake/pipeline.json |   15 +-
->  .../arch/x86/skylake/skl-metrics.json         |  875 ++++++-----
->  .../arch/x86/skylakex/floating-point.json     |   31 +
->  .../arch/x86/skylakex/metricgroups.json       |  114 ++
->  .../arch/x86/skylakex/pipeline.json           |   23 +-
->  .../arch/x86/skylakex/skx-metrics.json        | 1183 ++++++++------
->  .../pmu-events/arch/x86/snowridgex/cache.json |    7 +
->  .../arch/x86/snowridgex/memory.json           |    2 +
->  .../pmu-events/arch/x86/snowridgex/other.json |   10 +
->  .../arch/x86/snowridgex/pipeline.json         |    3 +
->  .../x86/snowridgex/uncore-interconnect.json   |   14 +-
->  .../arch/x86/snowridgex/uncore-io.json        |    8 -
->  .../arch/x86/snowridgex/uncore-memory.json    |    7 +-
->  .../arch/x86/snowridgex/uncore-power.json     |    6 +-
->  .../pmu-events/arch/x86/tigerlake/cache.json  |   18 +
->  .../arch/x86/tigerlake/metricgroups.json      |  113 ++
->  .../arch/x86/tigerlake/pipeline.json          |    1 +
->  .../arch/x86/tigerlake/tgl-metrics.json       |  970 ++++++------
->  tools/perf/pmu-events/empty-pmu-events.c      |    5 +
->  tools/perf/pmu-events/jevents.py              |   49 +-
->  tools/perf/pmu-events/pmu-events.h            |    2 +
->  70 files changed, 9985 insertions(+), 6416 deletions(-)
->  create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/broadwell/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellde/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellx/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/haswell/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/haswellx/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/icelake/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/icelakex/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/ivybridge/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/ivytown/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/jaketown/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sandybridge/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/skylake/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/skylakex/metricgroups.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/tigerlake/metricgroups.json
-> 
+Takashi
