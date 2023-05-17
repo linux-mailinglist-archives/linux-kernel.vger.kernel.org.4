@@ -2,266 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BAB7068EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC527068F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbjEQNKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S231701AbjEQNKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjEQNKN (ORCPT
+        with ESMTP id S231698AbjEQNKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 May 2023 09:10:13 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDBE10EB
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:10:09 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba829e17aacso1012292276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:10:09 -0700 (PDT)
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555B11BC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:10:11 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-25343f0c693so509884a91.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684329009; x=1686921009;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ua/o5PzFklkBeJo1MA6CcWtIUHo5rMfHi+5Zb+6pjFY=;
-        b=pJPevUCkssDRW3kFLjN3FYAq0N4TwQLI7cKPt6IXXGvLdbdIeGdfppJ5KU7q0Ly9TL
-         lrhP+B+lETOmMP3qy1QLS9ZsgeIpl4sicxERDLs4qsHLML1LjVDaqY02HY42WoIGOaKt
-         zSMY7mczRbB5Gfhc37mEb8nYUiCxQ6GEbpcAETIy2ZMdbt0sEXJaopm1jZKaOFd2YVmo
-         w+VJmJatcJIdkzXeZk/X7DckqkgqaU1DRETvsHGmlNnPYU+3nL3GYHgkt5ElJlHTCAs7
-         y9V3W657R5InIpT0cLd9hF00bgd4S222BqR2g+pyKXCYPSgF1mCgcMFG3xwzRnkJSxi6
-         z15Q==
+        d=gmail.com; s=20221208; t=1684329011; x=1686921011;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+5kKVzXc1ddW+HM8Pa2gQRIWA34V+//pRWEjd4SIrrk=;
+        b=q9sUxQBexYe9V48hqcGeoqjkSpJX8XsZtD3X0LIWN9ZhwbGQGykoWqSLXMI857PGRs
+         gCrpz4e6yKCHl1AjFI/C294/QT7+uovQMhiXHLTRZCf/F9su4uQwRxd9wiQEc74owWur
+         /7e/w0PivY/ij7nXF/tOydgC8Qn7CyKFy0vmODbzc6be9S/3AmPTLM/RxwQNDGRjr2dI
+         aZzdzLRYNxldDZY7uvriBHHICTrnIT0M4MITkzMYsh7D0/xb1vEk4jODczzOclMYSqGU
+         bt/j7AG3rNFP6H5CFMge4XGO1hOsPFSebcaz6pyhvkCy73PAUVHrVcMTnEKsdedL0aYz
+         FRSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684329009; x=1686921009;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ua/o5PzFklkBeJo1MA6CcWtIUHo5rMfHi+5Zb+6pjFY=;
-        b=SEQlR7xCCphC+UASbyTSUluizWcVGhzdE/6sr+gxz9Ojlkcw6r8mvD7vHn2MnnT0Ax
-         3rLGLi3sopshH9nG3GATeZ5G5XCH70qwbk25nwKfCOfLc1Wef5DLFgkhH3DlApvX3GnL
-         1yFshLTBugohZ3dHuxsUwr07Lo80Z0fkTE3szA9AofxiylTW0XKttm0VNEuYqoRSXK++
-         9sI7bXeuETvEiVS7V5T/9m6EYsz+waztXcW6LfNXUoFMHxl8LKM33i44Cvi+3WR8v6No
-         qKl2uAD18/hi7vtLipZeuWjIk3w30pVg6OMZK2pQL+Ce6xDKFpGreO+9MiZS2P+hCgWQ
-         3Ggg==
-X-Gm-Message-State: AC+VfDxQgSOJ+Tz5TVlY3XjpPlq6lIouvONsx5i5pTOtf5NazHGyyAEe
-        yAZpw1z1WdMISRq5jElIxGCXVXYne/M2O5OkSbkczQ==
-X-Google-Smtp-Source: ACHHUZ47FQXY98Qflo1wF8CgWu6XEBolcpAYzih6FsOaMQHvGsur79J7qEmfEK9ScG3w0d5TGYkvmufYVEoQo0OdPC4=
-X-Received: by 2002:a25:4884:0:b0:b9d:fe06:1f5b with SMTP id
- v126-20020a254884000000b00b9dfe061f5bmr34522856yba.15.1684329008875; Wed, 17
- May 2023 06:10:08 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684329011; x=1686921011;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+5kKVzXc1ddW+HM8Pa2gQRIWA34V+//pRWEjd4SIrrk=;
+        b=kt9W07nY0QgOC+CKTOGuq3DHdbL6Hbdd5Iuo1UhFVgMC52P0n0p61VqAmluRFQGCog
+         XjUaS++z+Jjn3VN9EhS77sfVRN2unG500SigYGA/2qZIRAlwC9S/f6cSbQMC1ZxACanj
+         O/ximy9fe/evhJda1JOctyW3yYM6k7rx6Own5X5nivQwaVTDkmhDI0xxC31qnraeUVhh
+         fQa0b7VpMj0xKH3rPF3w3b+22SDjgfbzkANk7u9UCLzRkL1VgYdjkIgfK4lu8gBPpjdU
+         x3eL/oTIEJS82aqcw6w1OZ5wtMnfxEWeq98DIQGpr8mAULOWThM4ISZv6yF3WKFFcBRN
+         8E7A==
+X-Gm-Message-State: AC+VfDwNZiuUjcEPEw4mx2nAFQy0pEutlZi3PGvQ15xi0Oo/6SuWaX7D
+        184QNxkzbbPm8VwL86P5gysMHL6pPKleowuKWqU=
+X-Google-Smtp-Source: ACHHUZ7gQavplJEf5Suf8KTDCR92gDR1e5AE2C/sGwbSukSWMtUT4oUjK9xeHqdgGaTNYkWOKtSrXm9EXewRdC/ti6g=
+X-Received: by 2002:a17:90b:350:b0:250:1905:ae78 with SMTP id
+ fh16-20020a17090b035000b002501905ae78mr40489258pjb.15.1684329010517; Wed, 17
+ May 2023 06:10:10 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 17 May 2023 18:39:57 +0530
-Message-ID: <CA+G9fYszs5wPp+TWJeVZsdRjnBTXTa8i3YY3qV9SHbB1+R2+4Q@mail.gmail.com>
-Subject: next: qemu-arm64: kernel BUG at fs/inode.c:1763!
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
+References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-4-aford173@gmail.com>
+ <1c8997c7c72143d130ebbc9ba438cebddc9d35e0.camel@pengutronix.de>
+In-Reply-To: <1c8997c7c72143d130ebbc9ba438cebddc9d35e0.camel@pengutronix.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 17 May 2023 08:09:59 -0500
+Message-ID: <CAHCN7x+7QMiD6jeoHqTEcN+Rm22gddiqVDUO8ThVi4TnKER4iA@mail.gmail.com>
+Subject: Re: [PATCH V6 3/6] drm: bridge: samsung-dsim: Fetch
+ pll-clock-frequency automatically
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel crash noticed while booting qemu-arm64 kunit builds on
-Linux next version 6.4.0-rc2-next-20230517.
+On Wed, May 17, 2023 at 7:56=E2=80=AFAM Lucas Stach <l.stach@pengutronix.de=
+> wrote:
+>
+> Hi Adam,
+>
+> Am Montag, dem 15.05.2023 um 18:57 -0500 schrieb Adam Ford:
+> > Make the pll-clock-frequency optional.  If it's present, use it
+> > to maintain backwards compatibility with existing hardware.  If it
+> > is absent, read clock rate of "sclk_mipi" to determine the rate.
+> > Since it can be optional, change the message from an error to
+> > dev_info.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > ---
+> >  drivers/gpu/drm/bridge/samsung-dsim.c | 23 ++++++++++++++++-------
+> >  1 file changed, 16 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/br=
+idge/samsung-dsim.c
+> > index bf4b33d2de76..08266303c261 100644
+> > --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> > +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> > @@ -1712,11 +1712,11 @@ static const struct mipi_dsi_host_ops samsung_d=
+sim_ops =3D {
+> >  };
+> >
+> >  static int samsung_dsim_of_read_u32(const struct device_node *np,
+> > -                                 const char *propname, u32 *out_value)
+> > +                                 const char *propname, u32 *out_value,=
+ bool optional)
+> >  {
+> >       int ret =3D of_property_read_u32(np, propname, out_value);
+> >
+> > -     if (ret < 0)
+> > +     if (ret < 0 && !optional)
+> >               pr_err("%pOF: failed to get '%s' property\n", np, propnam=
+e);
+> >
+> >       return ret;
+> > @@ -1726,20 +1726,29 @@ static int samsung_dsim_parse_dt(struct samsung=
+_dsim *dsi)
+> >  {
+> >       struct device *dev =3D dsi->dev;
+> >       struct device_node *node =3D dev->of_node;
+> > +     struct clk *pll_clk;
+> >       int ret;
+> >
+> >       ret =3D samsung_dsim_of_read_u32(node, "samsung,pll-clock-frequen=
+cy",
+> > -                                    &dsi->pll_clk_rate);
+> > -     if (ret < 0)
+> > -             return ret;
+> > +                                    &dsi->pll_clk_rate, 1);
+> > +
+> > +     /* If it doesn't exist, read it from the clock instead of failing=
+ */
+> > +     if (ret < 0) {
+> > +             dev_info(dev, "Using sclk_mipi for pll clock frequency\n"=
+);
+>
+> While this is certainly helpful while debugging the driver, I don't
+> think it warrants a info print. Remove or downgrade to dev_dbg?
 
-WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781 __alloc_pages
-kernel BUG at fs/inode.c:1763!
-WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:128
-ct_kernel_exit.constprop.0+0xe0/0xe8
+I can move to dbg.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> On the other hand the changed driver behavior should be documented in
+> the devicetree binding by moving "samsung,pll-clock-frequency" into the
+> optional properties and spelling out which clock rate is used when the
+> property is absent.
 
-Detailed Crash log:
-=========
-<4>[  800.148388] ------------[ cut here ]------------
-<4>[  800.150072] WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781
-__alloc_pages+0x998/0x13e8
-<4>[  800.151978] Modules linked in:
-<4>[  800.153337] CPU: 1 PID: 1436 Comm: kunit_try_catch Tainted: G
-B            N 6.4.0-rc2-next-20230517 #1
-<4>[  800.154662] Hardware name: linux,dummy-virt (DT)
-<4>[  800.155921] pstate: 22400005 (nzCv daif +PAN -UAO +TCO -DIT
--SSBS BTYPE=--)
-<4>[  800.157079] pc : __alloc_pages+0x998/0x13e8
-<4>[  800.158148] lr : __kmalloc_large_node+0xc0/0x1b8
-<4>[  800.159238] sp : ffff80000b5e7aa0
-<4>[  800.160154] x29: ffff80000b5e7aa0 x28: 0000000000000000 x27:
-0000000000000000
-<4>[  800.161762] x26: ffff0000c4509f00 x25: ffff800008087a98 x24:
-ffffd0168ffa8460
-<4>[  800.163283] x23: 1ffff000016bcf74 x22: 0000000000040dc0 x21:
-0000000000000000
-<4>[  800.164813] x20: 0000000000000015 x19: 0000000000000000 x18:
-000000000000000b
-<4>[  800.166307] x17: 00000000bd2c963e x16: 00000000a2b18575 x15:
-0000000033b8949b
-<4>[  800.167831] x14: 000000006d0ad0a4 x13: 00000000e32f85f5 x12:
-ffff7000016bcfa1
-<4>[  800.169363] x11: 1ffff000016bcfa0 x10: ffff7000016bcfa0 x9 :
-000000000000f204
-<4>[  800.170928] x8 : 00000000f2000000 x7 : 00000000f2f2f2f2 x6 :
-00000000f3f3f3f3
-<4>[  800.172467] x5 : 0000000000040dc0 x4 : ffff0000c614e900 x3 :
-0000000000000000
-<4>[  800.173976] x2 : 0000000000000000 x1 : 0000000000000001 x0 :
-ffffd01696633000
-<4>[  800.175603] Call trace:
-<4>[  800.176314]  __alloc_pages+0x998/0x13e8
-<4>[  800.177355]  __kmalloc_large_node+0xc0/0x1b8
-<4>[  800.178401]  __kmalloc+0x158/0x1c0
-<4>[  800.179350]  handshake_req_alloc+0x70/0xb8
-<4>[  800.180510]  handshake_req_alloc_case+0xa4/0x188
-<4>[  800.181598]  kunit_try_run_case+0x88/0x120
-<4>[  800.182614]  kunit_generic_run_threadfn_adapter+0x38/0x60
-<4>[  800.183809]  kthread+0x194/0x1b0
-<4>[  800.184813]  ret_from_fork+0x10/0x20
-<4>[  800.185873] ---[ end trace 0000000000000000 ]---
-<6>[  800.202972]         ok 6 handshake_req_alloc excessive privsize
-<6>[  800.217425]         ok 7 handshake_req_alloc all good
-<6>[  800.219182]     # req_alloc API fuzzing: pass:7 fail:0 skip:0 total:7
-<6>[  800.222082]     ok 1 req_alloc API fuzzing
-<6>[  800.243148]     ok 2 req_submit NULL req arg
-<6>[  800.260195]     ok 3 req_submit NULL sock arg
-<6>[  800.274397]     ok 4 req_submit NULL sock->file
-<6>[  800.294631]     ok 5 req_lookup works
-<6>[  800.310289]     ok 6 req_submit max pending
-<6>[  800.326669]     ok 7 req_submit multiple
-<6>[  800.342645]     ok 8 req_cancel before accept
-<4>[  800.359161] ------------[ cut here ]------------
-<2>[  800.360659] kernel BUG at fs/inode.c:1763!
-<0>[  800.362464] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-<4>[  800.364079] Modules linked in:
-<4>[  800.364978] CPU: 0 PID: 9 Comm: kworker/0:1 Tainted: G    B   W
-      N 6.4.0-rc2-next-20230517 #1
-<4>[  800.366607] Hardware name: linux,dummy-virt (DT)
-<4>[  800.368282] Workqueue: events delayed_fput
-<4>[  800.369511] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT
--SSBS BTYPE=--)
-<4>[  800.370861] pc : iput+0x2c4/0x328
-<4>[  800.371839] lr : iput+0x3c/0x328
-<4>[  800.372882] sp : ffff800008107b50
-<6>[  800.375744]     ok 9 req_cancel after accept
-<4>[  800.376704] x29: ffff800008107b50 x28: ffffd016924f7400 x27:
-ffff0000c08d4da0
-<4>[  800.379288] x26: ffff0000c042f918 x25: ffff0000cc273918 x24:
-ffff0000cc273900
-<4>[  800.381160] x23: 0000000000000000 x22: ffff0000c042f9b8 x21:
-ffffd016924f7b40
-<4>[  800.383408] x20: ffff0000c042f880 x19: ffff0000c042f880 x18:
-000000000000000b
-<4>[  800.385535] x17: ffffd0168fb6f094 x16: ffffd0168fb6ee10 x15:
-ffffd0168fb6ebd4
-<4>[  800.387985] x14: ffffd0168f7d5de8 x13: ffffd0168f617f98 x12:
-ffff700001020f53
-<4>[  800.389672] x11: 1ffff00001020f52 x10: ffff700001020f52 x9 :
-ffffd0168fb67384
-<4>[  800.392442] x8 : ffff800008107a98 x7 : 0000000000000000 x6 :
-0000000000000008
-<4>[  800.395053] x5 : ffff800008107a58 x4 : 0000000000000001 x3 :
-dfff800000000000
-<4>[  800.397652] x2 : 0000000000000007 x1 : ffff0000c042f918 x0 :
-0000000000000060
-<4>[  800.400110] Call trace:
-<4>[  800.401352]  iput+0x2c4/0x328
-<4>[  800.402741]  dentry_unlink_inode+0x12c/0x240
-<4>[  800.404519]  __dentry_kill+0x16c/0x2b0
-<4>[  800.406047]  dput+0x24c/0x438
-<4>[  800.407331]  __fput+0x140/0x3b0
-<4>[  800.409152]  delayed_fput+0x64/0x80
-<4>[  800.410708]  process_one_work+0x3cc/0x7d0
-<4>[  800.413032]  worker_thread+0xa4/0x6a0
-<4>[  800.415041]  kthread+0x194/0x1b0
-<6>[  800.416283]     ok 10 req_cancel after done
-<4>[  800.416205]  ret_from_fork+0x10/0x20
-<0>[  800.419090] Code: 17ffffc4 97fffb54 17ffffd4 d65f03c0 (d4210000)
-<4>[  800.421577] ---[ end trace 0000000000000000 ]---
-<6>[  800.424335] note: kworker/0:1[9] exited with irqs disabled
-<6>[  800.428252] note: kworker/0:1[9] exited with preempt_count 1
-<4>[  800.435635] ------------[ cut here ]------------
-<4>[  800.436529] WARNING: CPU: 0 PID: 0 at
-kernel/context_tracking.c:128 ct_kernel_exit.constprop.0+0xe0/0xe8
-<4>[  800.439070] Modules linked in:
-<4>[  800.440326] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B D W
-    N 6.4.0-rc2-next-20230517 #1
-<4>[  800.442196] Hardware name: linux,dummy-virt (DT)
-<4>[  800.443408] pstate: 224003c5 (nzCv DAIF +PAN -UAO +TCO -DIT
--SSBS BTYPE=--)
-<4>[  800.445031] pc : ct_kernel_exit.constprop.0+0xe0/0xe8
-<4>[  800.446629] lr : ct_kernel_exit.constprop.0+0x20/0xe8
-<4>[  800.448263] sp : ffffd01694ed7cd0
-<4>[  800.449375] x29: ffffd01694ed7cd0 x28: 00000000437e90ac x27:
-0000000000000000
-<4>[  800.451354] x26: ffffd01694ef1e40 x25: 0000000000000000 x24:
-0000000000000000
-<4>[  800.453397] x23: ffffd01694ee2ba0 x22: 1ffffa02d29dafb4 x21:
-0000000000000000
-<4>[  800.455573] x20: ffffd01692f29c20 x19: ffff0000da667c20 x18:
-000000000000000b
-<4>[  800.457649] x17: 000000000055a8d0 x16: 000000006cbc159c x15:
-ffffd0168fb6865c
-<4>[  800.459662] x14: ffffd0168fb680ec x13: ffffd0168fb3b03c x12:
-ffff7a02d29daf81
-<4>[  800.461787] x11: 1ffffa02d29daf80 x10: ffff7a02d29daf80 x9 :
-dfff800000000000
-<4>[  800.463827] x8 : ffffd01694ed7c08 x7 : 0000000000000000 x6 :
-0000000000000008
-<4>[  800.465864] x5 : ffffd01694ed7bc8 x4 : 0000000000000001 x3 :
-dfff800000000000
-<4>[  800.467860] x2 : 4000000000000002 x1 : 4000000000000000 x0 :
-ffff2fea4773e000
-<4>[  800.469981] Call trace:
-<4>[  800.470946]  ct_kernel_exit.constprop.0+0xe0/0xe8
-<4>[  800.472535]  ct_idle_enter+0x10/0x20
-<4>[  800.473923]  default_idle_call+0x58/0x90
-<4>[  800.475213]  do_idle+0x304/0x388
-<4>[  800.476492]  cpu_startup_entry+0x2c/0x40
-<4>[  800.477885]  rest_init+0x120/0x128
-<4>[  800.478830]  arch_call_rest_init+0x1c/0x28
-<4>[  800.479961]  start_kernel+0x2f8/0x3c0
-<4>[  800.482015]  __primary_switched+0xc0/0xd0
-<4>[  800.483086] ---[ end trace 0000000000000000 ]---
-<6>[  800.487780]     ok 11 req_destroy works
-<6>[  800.488283] # Handshake API tests: pass:11 fail:0 skip:0 total:11
-<6>[  800.491161] # Totals: pass:17 fail:0 skip:0 total:17
-<6>[  800.495059] ok 75 Handshake API tests
-<6>[  800.514129] uart-pl011 9000000.pl011: no DMA platform data
+Once this series is accepted, I was planning on doing a binding patch
+which describes the items that are now optional followed by a patch to
+add DSI->HDMI for the Beacon boards.  I can see the value in putting
+the bindings patch in this series instead. I'll add it to the next
+revision to cover both items that are now optional.
 
-links,
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/history/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/tests/
+adam
 
-Steps to reproduce:
-=================
-# To install tuxrun on your system globally:
-# sudo pip3 install -U tuxrun==0.42.0
-#
-# See https://tuxrun.org/ for complete documentation.
-
-tuxrun   \
- --runtime podman   \
- --device qemu-arm64   \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/Image.gz
-  \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/modules.tar.xz
-  \
- --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2PeQhlPkvTmtoQVO1F0CQ7lAsm5/images/juno/lkft-tux-image-juno-20230511150149.rootfs.ext4.gz
-  \
- --parameters SKIPFILE=skipfile-lkft.yaml   \
- --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
- --tests kunit   \
- --timeouts boot=30
-
---
-Linaro LKFT
-https://lkft.linaro.org
+>
+> Regards,
+> Lucas
+>
+> > +             pll_clk =3D devm_clk_get(dev, "sclk_mipi");
+> > +             if (!IS_ERR(pll_clk))
+> > +                     dsi->pll_clk_rate =3D clk_get_rate(pll_clk);
+> > +             else
+> > +                     return PTR_ERR(pll_clk);
+> > +     }
+> >
+> >       ret =3D samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequ=
+ency",
+> > -                                    &dsi->burst_clk_rate);
+> > +                                    &dsi->burst_clk_rate, 0);
+> >       if (ret < 0)
+> >               return ret;
+> >
+> >       ret =3D samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequen=
+cy",
+> > -                                    &dsi->esc_clk_rate);
+> > +                                    &dsi->esc_clk_rate, 0);
+> >       if (ret < 0)
+> >               return ret;
+> >
+>
