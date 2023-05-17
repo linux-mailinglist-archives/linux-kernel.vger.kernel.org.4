@@ -2,117 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A127706121
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C762706129
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjEQH3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S230044AbjEQHa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjEQH30 (ORCPT
+        with ESMTP id S229843AbjEQHa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:29:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5436B1726;
-        Wed, 17 May 2023 00:29:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EF577204F8;
-        Wed, 17 May 2023 07:29:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684308561; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eii5ss2ocLxG8N7/nX823yY9WNM71xoVrkq3X6PC3iI=;
-        b=hQvUWIwV6dCGwuy3cNq5IQT6P4+C/VAVmwLb4GtYKRRH2ugi1jPXhCde+huPj1CQ4BTIvb
-        Mq7gF5pblxgfVMZ0MzePq08W3e416/qsT2eooe28/Ge9FinmDOZxJd/ttsaYqUU6FtLcXy
-        3WifwYteFwOXitONZ5p8n1bpd6ozBMk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684308561;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eii5ss2ocLxG8N7/nX823yY9WNM71xoVrkq3X6PC3iI=;
-        b=6b8pr7AgWnQi46BzKh0rbfqRBGeaL4LkESIM594OVIo6t6RKDV5ot9JIBptg6ZdgmCqX7G
-        5J23DXq7PolfGmDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D8A75139F5;
-        Wed, 17 May 2023 07:29:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id q0FVNFCCZGSmDQAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 17 May 2023 07:29:20 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 24F03A0735; Wed, 17 May 2023 09:29:20 +0200 (CEST)
-Date:   Wed, 17 May 2023 09:29:20 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-Message-ID: <20230517072920.bfs7gfo4whdmi6ay@quack3>
-References: <cover.1683235180.git.lstoakes@gmail.com>
- <20230515110315.uqifqgqkzcrrrubv@box.shutemov.name>
- <7f6dbe36-88f2-468e-83c1-c97e666d8317@lucifer.local>
- <ZGIhwZl2FbLodLrc@nvidia.com>
- <ad0053a4-fa34-4b95-a262-d27942b168fd@lucifer.local>
+        Wed, 17 May 2023 03:30:27 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED514EE0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:29:44 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-333eb36e510so3144995ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:29:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684308584; x=1686900584;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ADedZ/WY3YNjj9GmrcvwgF5LoClJPsLiHV4NF/cJ9c4=;
+        b=AlgU8M9AB3RXQQIvzTTtEwEGeh7L5RyUm7uXbdj5UjV7lBoDvxNOfEw8v1XNUNi+jE
+         mBh3UGPwo0adu+fHxV7Y3La8rm/z3DAb46U8u+l+Fjw7ezs5hBcJ8v0NuUzl7cDKNgm3
+         VFBMZ6EwYaLCyFQMWsM3N1JJ46fwPjkP7u2OsNWLKb2mKjoo1p4AN3MLxzO68HZ1T2eI
+         ByiTI3YlCixyuxntGAywa7x2KyPrLvdAp6Sc0kkwDyKHgNtjo4pw0AUGJy4jdIXqxE30
+         ZYc532aKP5hoXFD/TXmbL2hoDL3yedT14qSS3RZeuGLuoonYdvK/juNU9W7YexJIld1H
+         XTlg==
+X-Gm-Message-State: AC+VfDysfGmt1qrnyurh/y4K6SdaUfKr6iUBV5/hv7mQOSyCc8B+q2oD
+        AQAm5qiKMbQRg3ar1EmtLJ6rQP6FVWiWUCASa7fExPFGWb+9
+X-Google-Smtp-Source: ACHHUZ7LJjXOpQOsqlKq3oV+JyPcfCZoY5PZqcGiOy8X05BL06l5aRuXzswwhoVm671TanfyoyvAhIQ9lYGCYWT3wnDxhBlRx8Ku
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad0053a4-fa34-4b95-a262-d27942b168fd@lucifer.local>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+X-Received: by 2002:a92:ce90:0:b0:331:2d3a:2cf5 with SMTP id
+ r16-20020a92ce90000000b003312d3a2cf5mr993127ilo.2.1684308584059; Wed, 17 May
+ 2023 00:29:44 -0700 (PDT)
+Date:   Wed, 17 May 2023 00:29:44 -0700
+In-Reply-To: <0000000000000d7d6e05fb6bd2d7@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d8632905fbdea615@google.com>
+Subject: Re: [syzbot] [ext4?] KASAN: use-after-free Read in ext4_search_dir
+From:   syzbot <syzbot+34a0f26f0f61c4888ea4@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,42 +56,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 15-05-23 14:07:57, Lorenzo Stoakes wrote:
-> On Mon, May 15, 2023 at 09:12:49AM -0300, Jason Gunthorpe wrote:
-> > On Mon, May 15, 2023 at 12:16:21PM +0100, Lorenzo Stoakes wrote:
-> > > Jason will have some thoughts on this I'm sure. I guess the key question
-> > > here is - is it actually feasible for this to work at all? Once we
-> > > establish that, the rest are details :)
-> >
-> > Surely it is, but like Ted said, the FS folks are not interested and
-> > they are at least half the solution..
-> 
-> :'(
+syzbot has found a reproducer for the following issue on:
 
-Well, I'd phrase this a bit differently - it is a difficult sell to fs
-maintainers that they should significantly complicate writeback code / VFS
-with bounce page handling etc. for a thing that is not much used corner
-case. So if we can get away with forbiding long-term pins, then that's the
-easiest solution. Dealing with short-term pins is easier as we can just
-wait for unpinning which is implementable in a localized manner.
+HEAD commit:    f1fcbaa18b28 Linux 6.4-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1064d8fc280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=94af80bb8ddd23c4
+dashboard link: https://syzkaller.appspot.com/bug?extid=34a0f26f0f61c4888ea4
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1172c85a280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1694e5ce280000
 
-> > The FS also has to actively not write out the page while it cannot be
-> > write protected unless it copies the data to a stable page. The block
-> > stack needs the source data to be stable to do checksum/parity/etc
-> > stuff. It is a complicated subject.
-> 
-> Yes my sense was that being able to write arbitrarily to these pages _at
-> all_ was a big issue, not only the dirty tracking aspect.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2ddd2c9b7bc9/disk-f1fcbaa1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f999d7594125/vmlinux-f1fcbaa1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/eff89a0460f3/bzImage-f1fcbaa1.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/e79f7be33fee/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/0571f920dadd/mount_7.gz
 
-Yes.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+34a0f26f0f61c4888ea4@syzkaller.appspotmail.com
 
-> I guess at some level letting filesystems have such total flexibility as to
-> how they implement things leaves us in a difficult position.
+EXT4-fs (loop0): mounting ext3 file system using the ext4 subsystem
+EXT4-fs (loop0): 1 truncate cleaned up
+EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 r/w without journal. Quota mode: none.
+==================================================================
+BUG: KASAN: slab-out-of-bounds in ext4_search_dir+0xf2/0x1b0 fs/ext4/namei.c:1539
+Read of size 1 at addr ffff88801f58d3ed by task syz-executor303/4999
 
-I'm not sure what you mean by "total flexibility" here. In my opinion it is
-also about how HW performs checksumming etc.
+CPU: 0 PID: 4999 Comm: syz-executor303 Not tainted 6.4.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:351 [inline]
+ print_report+0x163/0x540 mm/kasan/report.c:462
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+ ext4_search_dir+0xf2/0x1b0 fs/ext4/namei.c:1539
+ ext4_find_inline_entry+0x4ba/0x5e0 fs/ext4/inline.c:1719
+ __ext4_find_entry+0x2b4/0x1b30 fs/ext4/namei.c:1612
+ ext4_lookup_entry fs/ext4/namei.c:1767 [inline]
+ ext4_lookup+0x17a/0x750 fs/ext4/namei.c:1835
+ lookup_open fs/namei.c:3470 [inline]
+ open_last_lookups fs/namei.c:3560 [inline]
+ path_openat+0x11e9/0x3170 fs/namei.c:3788
+ do_filp_open+0x234/0x490 fs/namei.c:3818
+ do_sys_openat2+0x13f/0x500 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_open fs/open.c:1380 [inline]
+ __se_sys_open fs/open.c:1376 [inline]
+ __x64_sys_open+0x225/0x270 fs/open.c:1376
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd8cce6ccf9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff8e028488 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 0000000000010c1d RCX: 00007fd8cce6ccf9
+RDX: 0000000000000000 RSI: 0000000000141042 RDI: 0000000020000100
+RBP: 0000000000000000 R08: 000000000001f210 R09: 00000000200012c0
+R10: 00007fd8bc65f000 R11: 0000000000000246 R12: 00007fff8e0284bc
+R13: 00007fff8e0284f0 R14: 00007fff8e0284d0 R15: 0000000000000004
+ </TASK>
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Allocated by task 4730:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:711
+ kmem_cache_alloc_bulk+0x3d2/0x4b0 mm/slub.c:4033
+ mt_alloc_bulk lib/maple_tree.c:164 [inline]
+ mas_alloc_nodes+0x3df/0x800 lib/maple_tree.c:1309
+ mas_node_count_gfp lib/maple_tree.c:1367 [inline]
+ mas_preallocate+0x131/0x350 lib/maple_tree.c:5781
+ vma_iter_prealloc mm/internal.h:1029 [inline]
+ __split_vma+0x1e0/0x7f0 mm/mmap.c:2253
+ do_vmi_align_munmap+0x4ac/0x1820 mm/mmap.c:2398
+ do_vmi_munmap+0x24a/0x2b0 mm/mmap.c:2530
+ mmap_region+0x811/0x2250 mm/mmap.c:2578
+ do_mmap+0x8c9/0xf70 mm/mmap.c:1394
+ vm_mmap_pgoff+0x1db/0x410 mm/util.c:543
+ ksys_mmap_pgoff+0x4f9/0x6d0 mm/mmap.c:1440
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 4730:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook mm/slub.c:1807 [inline]
+ slab_free mm/slub.c:3786 [inline]
+ kmem_cache_free_bulk+0x506/0x760 mm/slub.c:3904
+ mt_free_bulk lib/maple_tree.c:169 [inline]
+ mas_destroy+0x1c50/0x2310 lib/maple_tree.c:5836
+ mas_store_prealloc+0x351/0x460 lib/maple_tree.c:5766
+ vma_complete+0x1ec/0xb40 mm/mmap.c:585
+ __split_vma+0x7c2/0x7f0 mm/mmap.c:2290
+ do_vmi_align_munmap+0x4ac/0x1820 mm/mmap.c:2398
+ do_vmi_munmap+0x24a/0x2b0 mm/mmap.c:2530
+ mmap_region+0x811/0x2250 mm/mmap.c:2578
+ do_mmap+0x8c9/0xf70 mm/mmap.c:1394
+ vm_mmap_pgoff+0x1db/0x410 mm/util.c:543
+ ksys_mmap_pgoff+0x4f9/0x6d0 mm/mmap.c:1440
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88801f58d200
+ which belongs to the cache maple_node of size 256
+The buggy address is located 237 bytes to the right of
+ allocated 256-byte region [ffff88801f58d200, ffff88801f58d300)
+
+The buggy address belongs to the physical page:
+page:ffffea00007d6300 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1f58c
+head:ffffea00007d6300 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000010200 ffff888012e4d000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4730, tgid 4730 (S50sshd), ts 42005657182, free_ts 36967331489
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1731
+ prep_new_page mm/page_alloc.c:1738 [inline]
+ get_page_from_freelist+0x321c/0x33a0 mm/page_alloc.c:3502
+ __alloc_pages+0x255/0x670 mm/page_alloc.c:4768
+ alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+ allocate_slab mm/slub.c:1998 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3192
+ __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
+ kmem_cache_alloc_bulk+0x196/0x4b0 mm/slub.c:4026
+ mt_alloc_bulk lib/maple_tree.c:164 [inline]
+ mas_alloc_nodes+0x3df/0x800 lib/maple_tree.c:1309
+ mas_node_count_gfp lib/maple_tree.c:1367 [inline]
+ mas_preallocate+0x131/0x350 lib/maple_tree.c:5781
+ vma_iter_prealloc mm/internal.h:1029 [inline]
+ mmap_region+0x1342/0x2250 mm/mmap.c:2711
+ do_mmap+0x8c9/0xf70 mm/mmap.c:1394
+ vm_mmap_pgoff+0x1db/0x410 mm/util.c:543
+ ksys_mmap_pgoff+0x4f9/0x6d0 mm/mmap.c:1440
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1302 [inline]
+ free_unref_page_prepare+0x903/0xa30 mm/page_alloc.c:2564
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:2659
+ qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:185
+ kasan_quarantine_reduce+0x14b/0x160 mm/kasan/quarantine.c:292
+ __kasan_slab_alloc+0x23/0x70 mm/kasan/common.c:305
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:711
+ slab_alloc_node mm/slub.c:3451 [inline]
+ slab_alloc mm/slub.c:3459 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
+ kmem_cache_alloc_lru+0x11f/0x2e0 mm/slub.c:3482
+ __d_alloc+0x31/0x710 fs/dcache.c:1769
+ d_alloc fs/dcache.c:1849 [inline]
+ d_alloc_parallel+0xce/0x13a0 fs/dcache.c:2638
+ lookup_open fs/namei.c:3417 [inline]
+ open_last_lookups fs/namei.c:3560 [inline]
+ path_openat+0x90e/0x3170 fs/namei.c:3788
+ do_filp_open+0x234/0x490 fs/namei.c:3818
+ do_sys_openat2+0x13f/0x500 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_openat fs/open.c:1388 [inline]
+ __se_sys_openat fs/open.c:1383 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1383
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88801f58d280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801f58d300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88801f58d380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                                                          ^
+ ffff88801f58d400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801f58d480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
