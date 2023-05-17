@@ -2,134 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DADC706AA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036B4706AA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbjEQOLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S231642AbjEQOLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjEQOLW (ORCPT
+        with ESMTP id S231561AbjEQOLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:11:22 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C4876AC;
-        Wed, 17 May 2023 07:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684332679; x=1715868679;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=V85zZU9K+ebn9I4WS/QhOULxzw4WjXXhE4w7yyJEDSA=;
-  b=M4BLUXjQ/GGB18T3SomBZl4NIcr87elm2Qmfk4i1AwjxJh8cRQ3Lvfcn
-   je1kJDzuAQxMj9cEnDHZ2AljOKuOtFM9kp3SpLSurYmepHzpV9h/mSpTQ
-   kCG5IcFUF7IqIWf2e3U8ebWTD/J5M937JD+CnNNIIVmqW7PwA7F9jPNv9
-   q70GKOQlwXxqeXAlrQ+anDmou2po0IddmQ1gqeQKlJTENJaU7B1Kzngyo
-   6D3Pgx27qbHfu2RQa+++0QQ/UP0HqudlV1CaCIPUO0Vgef4y4iSB6YYt4
-   JiPnnDFXzZcPvi4jRx11mhbPMRLBBh1JABQlFnpHAc13a++Wx00K8IgT9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="349273294"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="349273294"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 07:11:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="734709640"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="734709640"
-Received: from rdealba-mobl.amr.corp.intel.com (HELO [10.209.16.101]) ([10.209.16.101])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 07:11:17 -0700
-Message-ID: <4aae458b-6919-2999-9293-028737c9a6e1@linux.intel.com>
-Date:   Wed, 17 May 2023 09:11:16 -0500
+        Wed, 17 May 2023 10:11:43 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5E961BE;
+        Wed, 17 May 2023 07:11:39 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3078a3f3b5fso830511f8f.0;
+        Wed, 17 May 2023 07:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684332698; x=1686924698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7e+r2uc4OmPDjJgVs7Z2mAj6c/sVqSu98zPAwKRes6Q=;
+        b=ZeOoZLCrH48x6d6nKsY+aXfSIgw2t6M/Eb3b5QzxJlkQsRW1sNU/aAVTzoH/hwKSwF
+         fEohluQLOPyJ1zXYbST44k8sQ2iCZ5sXvQHltD7KKXTJip/yrH3Gf4B8U+esfu6UFyHC
+         A1VnSx1DLs3WtYGzB80hIkVmu8oIGE0gDr9/qSKCB7geSyLLn0HfQXRgy90xuJdYRg9M
+         09jPvvegFJv5mg0oHHKmea3/Ym2RsDvHrKc8M7HEkkw5vk92M3Ql6EbClRNnNNrQUJGG
+         RD3fYI7Qhvm0i3Fk0BWYDFltbnJP2HdSwSsVVqIwAVU3EqTkzmTEoDM4I3jofUWltZUw
+         HYAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684332698; x=1686924698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7e+r2uc4OmPDjJgVs7Z2mAj6c/sVqSu98zPAwKRes6Q=;
+        b=ALkuy2NN7pj3NAUtPSGe/ixoF80/iDjFlLmcyZRZkETvEe9nPRdYeHAZIuV49UqQ+O
+         QdTfciXsoD9D+Vwyh+7D0dfWCJBMZQlniDNUL7uOwIgHZxtAfMFIvuhXoR54RPFirIak
+         yipiJYcgJN8fRppEVOLppj+7YQa1f+r3pEob49IkvZqim5gHjz1ccALdVEl2a3DTndmG
+         rP1aTmNl9voyZ045i/JlTVsJEcYtFTqgGAJNPwqiB9JLTspKSk3B3zPIz4m89U23OsXe
+         tIq8nAm7kSFitkezszxc2iQRep7i+9YETbbaXvgbwW6TsfBjw2Ly7KaU3aoTAzRHzw7p
+         wprw==
+X-Gm-Message-State: AC+VfDwBumJgfoL7/Y4wgjjyQBWPRXBm9jKDReJajemUOd6KFviAh5fF
+        blGwwDi0yaDaRy5pMo+bmC5bUhaKEotJph3/Z/VeaXg+Lhk=
+X-Google-Smtp-Source: ACHHUZ6T5VvF1IFuVPUJP7oTXLbsycEg7Y8ZRHU1N/T1coXjsDiqL9cXwRXyU5glly89GgPksLmyX6Z5nSFZoNjTeTs=
+X-Received: by 2002:adf:ed49:0:b0:307:82e3:70cd with SMTP id
+ u9-20020adfed49000000b0030782e370cdmr865690wro.14.1684332697598; Wed, 17 May
+ 2023 07:11:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
- <ZF6RMqElYZVMpWRt@surfacebook>
- <20230515101350.GS68926@ediswmail.ad.cirrus.com>
- <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
- <20230517101301.GV68926@ediswmail.ad.cirrus.com>
- <CAHp75VchpbiYcd2yaP1WTjX17P0hg3qON5JGAXu08aDVw6Ydkw@mail.gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <CAHp75VchpbiYcd2yaP1WTjX17P0hg3qON5JGAXu08aDVw6Ydkw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230516025404.2843867-1-azeemshaikh38@gmail.com> <yq1cz2zu42r.fsf@ca-mkp.ca.oracle.com>
+In-Reply-To: <yq1cz2zu42r.fsf@ca-mkp.ca.oracle.com>
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+Date:   Wed, 17 May 2023 10:11:26 -0400
+Message-ID: <CADmuW3U+AMVf5xDVTri4Mtyk1GnHf+E_6kPJcsNUSPjF05u7qQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: qla2xxx: Replace all non-returning strlcpy with strscpy
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        linux-hardening@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 16, 2023 at 9:42=E2=80=AFPM Martin K. Petersen
+<martin.petersen@oracle.com> wrote:
+>
+>
+> Azeem,
+>
+> > strlcpy() reads the entire source buffer first. This read may exceed
+> > the destination size limit. This is both inefficient and can lead to
+> > linear read overflows if a source string is not NUL-terminated [1]. In
+> > an effort to remove strlcpy() completely [2], replace strlcpy() here
+> > with strscpy(). No return values were used, so direct replacement is
+> > safe.
+>
+> Applied to 6.5/scsi-staging, thanks!
+>
 
-
-On 5/17/23 08:59, Andy Shevchenko wrote:
-> On Wed, May 17, 2023 at 1:13 PM Charles Keepax
-> <ckeepax@opensource.cirrus.com> wrote:
->> On Tue, May 16, 2023 at 10:03:45PM +0300, Andy Shevchenko wrote:
->>> On Mon, May 15, 2023 at 1:13 PM Charles Keepax
->>> <ckeepax@opensource.cirrus.com> wrote:
->>>> On Fri, May 12, 2023 at 10:19:14PM +0300, andy.shevchenko@gmail.com wrote:
->>>>> Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
->>>>>> +   if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
->>>>>> +           ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
->>>>>> +                                        0, 0, CS42L43_NUM_GPIOS);
->>>>>> +           if (ret) {
->>>>>> +                   dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
->>>>>> +                   goto err_pm;
->>>>>> +           }
->>>>>> +   }
->>>>>
->>>>> Besides the fact that we have a callback for this, why GPIO library can't
->>>>> handle this for you already?
->>>>
->>>> Apologies but I am not quite sure I follow you, in the device
->>>> tree case this will be handled by the GPIO library. But for ACPI
->>>> this information does not exist so has to be called manually, the
->>>> library does not necessarily know which values to call with,
->>>> although admittedly our case is trivial but not all are.
->>>
->>> Why can't the firmware provide this information? _DSD() is a part of
->>> ACPI v5.1 IIRC.
->>
->> I am very very far from confident we can guarantee that will be
->> present in the ACPI. The ACPI is typically made for and by the
->> Windows side.
-> 
-> Why? You may insist firmware vendors / OEMs to use that as a
-> requirement to the platforms that would like to use your chip. The
-> _DSD() is part of the specification, I don't see how the above can be
-> an argument.
-> 
-> The times when ACPI == Windows are quite behind.
-
-This is one of those Yogi Berra-isms: In theory, there is no difference
-between theory and practice. In practice there is.
-
-DSD is not really used indeed for audio devices. Even for SoundWire
-where we inked the requirement to use DSD in a MIPI standardization
-document, the only _DSD properties are for the manager side, the
-peripheral side information is not populated or mostly
-useless/incorrect. Most codec drivers hard-code the properties that were
-intended to be set in the DSDT.
-
-Unless there is firm evidence that the firmware does provide the
-required DSD properties we can assume it does not. We can't force the
-ecosystem to use DSD, even if it makes sense. it's frustrating but it is
-what it is.
+Thanks a lot for the quick response Martin (on this and other patches
+too). Just for my understanding, do you mind pointing me to the
+6.5/scsi-staging tree?
