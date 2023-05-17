@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF32707584
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:35:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD16707585
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjEQWfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S229550AbjEQWfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjEQWe7 (ORCPT
+        with ESMTP id S229493AbjEQWfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:34:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6665C4EFE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:34:58 -0700 (PDT)
+        Wed, 17 May 2023 18:35:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614BCAC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:35:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684362898; x=1715898898;
+  t=1684362902; x=1715898902;
   h=date:from:to:cc:subject:message-id;
-  bh=Rl2vJ728oiyMfvXAMq5u2tYgUTHIL+gWCkCxM4SQ73o=;
-  b=O2iXae1h73OLXS6thL+RV6Nlr96S0qwHYg8DdJqzQ8zVIE4+bxC6zrnt
-   vPa9LNtV+c51K/LxV43mQSFFLsMKUgtisMTblRNlvTZumkylDfhnv9nUG
-   rtRJ5pMu9XMMa6vToRJcMwig3Cdd8Z218EbKrXUt95bdQkfctXrcAc9he
-   FDufoF7Jwz3Y3mr+KIa3td1gao4qhIDUdOJ/sfNR+Tg0LwPYjSFTOhG+R
-   KryfwTh2bjAziQrafzGSk6sp/u2W8HR+jKEwfhtcjtaz6O2/1UwZbxj2W
-   Qaxvq7zOFhgOgVB4sQYfCs0UT/lHfqRxilhA+cMTc7oRYyis3DbM8UrM1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="350727854"
+  bh=gHKYqp62fyowHC3X7ExpJbaYCcpySJCuPjDZ6Dr2G8E=;
+  b=oB3lgmNvkPpm8NrmZJ/GTy+zk3BgDL7lGfdPzpK4XPTmJkX37c/+i4KQ
+   nPWStV4lOubhJjmMxqOLkRqlvFVz06DYoV6rbqYNJOtD6Bwo68DC6MEQg
+   5gupOY/VMO7S3qH3l9SiYnyz0EuWzY3KzrIn9fY58TctgCwUg+QXHpqIy
+   qiZETjVv9ntsi6e14lETI084SdN3KHB3nXTwZOSA9TbYGVr8S3QZilRJW
+   7cyofqkhUdcKC4EwyuP4gRWlDXHrT9bHIBIQV3YCa2AQlWj25J4C2Ox37
+   n8Zgc0HgfX2LuI89JSeLGZkHNmzDAlPaM17lKaG7KDQwYfr1rwHBHhGS2
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="349399922"
 X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="350727854"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 15:34:48 -0700
+   d="scan'208";a="349399922"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 15:34:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="791677353"
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="1031920951"
 X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="791677353"
+   d="scan'208";a="1031920951"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 May 2023 15:34:47 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 17 May 2023 15:34:47 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pzPjK-0009Hq-2c;
+        id 1pzPjK-0009Hk-2B;
         Wed, 17 May 2023 22:34:46 +0000
-Date:   Thu, 18 May 2023 06:34:06 +0800
+Date:   Thu, 18 May 2023 06:34:25 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- f220125b999b2c9694149c6bda2798d8096f47ed
-Message-ID: <20230517223406.tnW2J%lkp@intel.com>
+Subject: [tip:master] BUILD SUCCESS
+ f81d8f759e7f80c643027e631c586369836aac90
+Message-ID: <20230517223425.cuwbQ%lkp@intel.com>
 User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -61,13 +61,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree/branch: INFO setup_repo_specs: /db/releases/20230517200055/lkp-src/repo/*/tip
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: f220125b999b2c9694149c6bda2798d8096f47ed  x86/retbleed: Add __x86_return_thunk alignment checks
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: f81d8f759e7f80c643027e631c586369836aac90  Merge x86/cpu into tip/master
 
-elapsed time: 720m
+elapsed time: 722m
 
-configs tested: 237
-configs skipped: 105
+configs tested: 245
+configs skipped: 106
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -77,6 +77,7 @@ alpha                            allyesconfig   gcc
 alpha        buildonly-randconfig-r002-20230517   gcc  
 alpha                               defconfig   gcc  
 alpha                randconfig-r014-20230517   gcc  
+alpha                randconfig-r015-20230517   gcc  
 alpha                randconfig-r024-20230517   gcc  
 alpha                randconfig-r034-20230517   gcc  
 alpha                randconfig-r035-20230517   gcc  
@@ -121,11 +122,15 @@ hexagon              randconfig-r016-20230517   clang
 hexagon              randconfig-r035-20230517   clang
 hexagon              randconfig-r041-20230517   clang
 hexagon              randconfig-r045-20230517   clang
+i386                              allnoconfig   clang
 i386                             allyesconfig   gcc  
 i386                              debian-10.3   gcc  
 i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
 i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
 i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
 i386                          randconfig-a006   clang
 i386                          randconfig-a011   clang
 i386                          randconfig-a012   gcc  
@@ -140,6 +145,7 @@ ia64                      gensparse_defconfig   gcc
 ia64                 randconfig-r005-20230517   gcc  
 ia64                 randconfig-r012-20230517   gcc  
 ia64                 randconfig-r013-20230517   gcc  
+ia64                 randconfig-r014-20230517   gcc  
 ia64                 randconfig-r023-20230517   gcc  
 ia64                 randconfig-r036-20230517   gcc  
 loongarch                        allmodconfig   gcc  
@@ -181,6 +187,7 @@ nios2        buildonly-randconfig-r006-20230517   gcc
 nios2                               defconfig   gcc  
 nios2                randconfig-r003-20230517   gcc  
 nios2                randconfig-r004-20230517   gcc  
+nios2                randconfig-r011-20230517   gcc  
 nios2                randconfig-r013-20230517   gcc  
 nios2                randconfig-r023-20230517   gcc  
 nios2                randconfig-r025-20230517   gcc  
@@ -240,6 +247,7 @@ sh           buildonly-randconfig-r005-20230517   gcc
 sh           buildonly-randconfig-r006-20230517   gcc  
 sh                        dreamcast_defconfig   gcc  
 sh                   randconfig-r005-20230517   gcc  
+sh                   randconfig-r013-20230517   gcc  
 sh                   randconfig-r015-20230517   gcc  
 sh                   randconfig-r021-20230517   gcc  
 sh                   randconfig-r024-20230517   gcc  
