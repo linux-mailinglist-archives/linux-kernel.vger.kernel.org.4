@@ -2,85 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CA1706452
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9A370645B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjEQJlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
+        id S230060AbjEQJmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjEQJlK (ORCPT
+        with ESMTP id S229920AbjEQJmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:41:10 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BDA40E5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:41:09 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-77d049b9040so7760417241.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684316468; x=1686908468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sq/IFKZKyX+IB89ZbjKiv/ig5JK+qk3imm5iXCJqO0M=;
-        b=aFAnRY+Wr4q819ZMJgkWFYqS5RUrLhLJrp38gGW2sv9uwFge4rVzFDJZoyvPQKK8pk
-         Z0d+OOL1c5iJ/cb+p5gByrCB8FBdbg5lLfeBlts0ecdB9Yv43Y7st8joTAZBw0/L3Ti9
-         ADnb+TnxLDGDIO6dsxhm6BIWPkQpjzbMrznNSX1wUkzWiZnnOXnluhoQN1fzMmlGaUAB
-         8On4SyccEHXfJGrXod5WF5rG97jR4o+M9/z/hBc/VP96NBtZ5Vq9SyGloEeXM7YRodfx
-         9cMrtL9Jm6lFY3rLMGe/3/TKNjwS5LWooqftxGZ2XAorXmFKTpmO74Spbl3Y/EWiZJxv
-         VYYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684316468; x=1686908468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sq/IFKZKyX+IB89ZbjKiv/ig5JK+qk3imm5iXCJqO0M=;
-        b=kXdMxnsS+7nkRTXrbNIERzLUKOZ1/+mCDJ0VugF3P97tNw/1qHMlJttz8cutAQx7A3
-         FXaILXifhozedVF5msxYW96rW0G2/9PllsHYCR+E0q/8r+hH0FasKDrS632kU2e5DAU9
-         1AyrRJWNRtzA0XTqGZKaHmVU8yU58OeHxMAgisM/+8S48A28V4y0pPW2kfSZxypzX8ZU
-         Y+IRZkvoo4CiI0vP1bMM2cpqHfPFDo4aqOIhfnvFPUCq6lIAyTaHiyP+NDzbaS0X9L1W
-         jZ1VMt8W5Ls1YJLmLpYWUOaeDiMM2pyseexFsNPZK3DPAS1pAXb12kxSyETs95JAV4R5
-         qX7g==
-X-Gm-Message-State: AC+VfDwCkb5BP1FglGUjW3sA234EJ488R+mdj1phNKSJAhdOyPokMbqE
-        72HwplhSgBMcRCrFZckUFbkzImfC2Q1BNwF8r+Fb9A==
-X-Google-Smtp-Source: ACHHUZ4YjpyYlgvfo8KGHpgh0GWzkYCR851yUBN4sNRfUbMSZJJvvB0n+pjZsdRUpzebhyQvam7dxS44VOBGN+Fo6ls=
-X-Received: by 2002:a05:6102:578a:b0:436:213e:b76 with SMTP id
- dh10-20020a056102578a00b00436213e0b76mr537689vsb.1.1684316468682; Wed, 17 May
- 2023 02:41:08 -0700 (PDT)
+        Wed, 17 May 2023 05:42:19 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2E540E6;
+        Wed, 17 May 2023 02:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684316537; x=1715852537;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FeioifEDxdEGwYiM4iQLG5+TkZ9F3zFlGDG+wIqLuxE=;
+  b=0MR7kQaQd/1c76YvDpqyJMD8QU0JkKKKp1firltOxeQmpdmqk/yZALC3
+   Pr7ZeSRgScnTr5RJ70pTn1saSfq6AoQvXSMU+t9iIQdGmy23xRDpnxWtK
+   UgvtL78f67nMbR+Wy9fSnBbM/xNqwoizB2RqgjjSvWogQlcRJzsem2SNT
+   WQFmssDMO+bCsltiCXjUfxVm4uIXug64+zuY0sktMRZPF586SyiDRE7+Q
+   cP2NVsB6CeeZDxOxYXjkb+Tv0qjEcVi2Nqu2YqXqffUI3xTdil27mr6tp
+   kRPc/FlvA6l+0FzHRv+Kze1jIrwgZweubwr3jjTA7ky4XJS06adySLQrl
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,281,1677567600"; 
+   d="scan'208";a="211698232"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 02:42:16 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 17 May 2023 02:42:15 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 17 May 2023 02:42:11 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor.dooley@microchip.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v5 0/5] dt-bindings: clocks: at91: convert to yaml
+Date:   Wed, 17 May 2023 12:41:14 +0300
+Message-ID: <20230517094119.2894220-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230515174518.494907-1-afd@ti.com>
-In-Reply-To: <20230515174518.494907-1-afd@ti.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 17 May 2023 11:40:58 +0200
-Message-ID: <CAMRc=MeiAD2ZQ-uAyR2GfceEeL4qHu9apE8HnimZKokzsNAu0Q@mail.gmail.com>
-Subject: Re: [PATCH v3] gpio: tps65086: Use devm_gpiochip_add_data() to
- simplify remove path
-To:     Andrew Davis <afd@ti.com>
-Cc:     Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 7:45=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
->
-> Use devm version of gpiochip add function to handle removal for us.
->
-> While here update copyright and module author.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
+Hi,
 
-Applied, thanks!
+This series converts atmel clocks bindings (PMC and slow clock
+controller) to YAML. Along with it updated device trees to cope
+with the dt-binding requirements.
 
-Bart
+Thank you,
+Claudiu Beznea
+
+Changes in v4:
+- in patch 2/5: added "atmel,at91sam9x5-pmc", "syscon" to the list of
+  available compatibles
+
+Changes in v4:
+- changed the approach the compatibles are treated in patch 2/5 to avoid
+  having 2 enums on one items entry (thanks Conor for hint)
+  
+Changes in v3:
+- in patch 2/5:
+	- get rid of 1st "items" section and embedd it in the last compatible
+	  enum
+	- sort alphanumerically the compatibles in allOf
+- collected tags
+
+Changes in v2:
+- in patch 2/5:
+	- dropped quotes from $id and $schema
+	- get rid of 1st "items" sections corresponding to "atmel,at91sam9260-pmc",
+	  "syscon" compatible and move it to the proper enum
+	- ordered compatibles by name
+	- add description for #clock-cells
+	- remove blank lines
+	- keep order in required (same order that the properties were
+	  defined)
+	- dropped required from allOf
+
+- in patch 5/5:
+	- dropped quotes from $id and $schema
+	- drop first "items:" in compatible:oneOf section
+	- ordered compatibles by name
+	- moved additionalProperties after allOf
+	- dropped microchip,sama7g5-sckc from first allOf:if section
+	- moved "required" section from allOf to global "required" section
+	- dropped if:then from the last if:then:else in allOf
+
+Claudiu Beznea (5):
+  ARM: dts: at91: use clock-controller name for PMC nodes
+  dt-bindings: clocks: atmel,at91rm9200-pmc: convert to yaml
+  ARM: dts: at91: at91sam9n12: witch sckc to new clock bindings
+  ARM: dts: at91: use clock-controller name for sckc nodes
+  dt-bindings: clocks: at91sam9x5-sckc: convert to yaml
+
+ .../devicetree/bindings/clock/at91-clock.txt  |  58 -------
+ .../bindings/clock/atmel,at91rm9200-pmc.yaml  | 154 ++++++++++++++++++
+ .../bindings/clock/atmel,at91sam9x5-sckc.yaml |  70 ++++++++
+ arch/arm/boot/dts/at91rm9200.dtsi             |   2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g20.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g25.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g35.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi            |   4 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi            |  25 +--
+ arch/arm/boot/dts/at91sam9rl.dtsi             |   4 +-
+ arch/arm/boot/dts/at91sam9x25.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9x35.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi             |   4 +-
+ arch/arm/boot/dts/sam9x60.dtsi                |   4 +-
+ arch/arm/boot/dts/sama5d2.dtsi                |   4 +-
+ arch/arm/boot/dts/sama5d3.dtsi                |   4 +-
+ arch/arm/boot/dts/sama5d3_emac.dtsi           |   2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                |   4 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |   2 +-
+ 22 files changed, 253 insertions(+), 104 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/at91-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91rm9200-pmc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
+
+-- 
+2.34.1
+
