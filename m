@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455E2707363
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031AA70736A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjEQU4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S229626AbjEQU65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjEQU4A (ORCPT
+        with ESMTP id S229461AbjEQU6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:56:00 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E05109
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:55:57 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-6238200c584so5677446d6.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:55:57 -0700 (PDT)
+        Wed, 17 May 2023 16:58:55 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFD940EB
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:58:55 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-7576ae0f44bso26013385a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:58:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684356956; x=1686948956;
+        d=google.com; s=20221208; t=1684357134; x=1686949134;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7l9MfvQ1LbpXKb0qCojhn9qKDV5d5hFenRL1TmxbHH8=;
-        b=Knz462xVkWE5uNYmipkdgk4VEdCivx4Qe9rwo5X/nUFyg3XrKKiIsmpK9yuhPMI9OU
-         SKOqFs+UmuXugzt7fzDWL1C7sGJixkewhyWAiWjG79KCkHnz1XgjZB9aODSc/Q/x8Zg6
-         Ukw5t2KggPdqUYH3KI+JEwh/llo4wyYE9o2TxRZd2mgToaZxzbNao0i9b+QfpfEeV1Py
-         fzyKsRj55qKiaWa+7BLqkXhT+VaF/5FjRs6vwj7ByxlAlySX26GDQxXWDBQSXlGjGXH+
-         WExe4ciAlr845r0mKibJudKWldba433Mr5WAI2W26R+vBchsaH/zkOjQomCB7X4NYtHg
-         MG1Q==
+        bh=2czja4XHffo3nxVxoM69dFCyr+HErNl06rsEi0dap2c=;
+        b=Ll4EkCLwqXy2/czUUuAyJqaF6ONCFBCApEbnJf2pr3gTJjz2i0PPnm97/Wqjb70X/d
+         KxPrzvkUYJtPsM0CuEQV80wqinnQEH3i4dy4B25TUBrGne5ETg4+1gLm3AFAcKpNk2tQ
+         9t+ZBRJ9nGRttcWzG+001370aq9V6G76WqnOXBQ9f9l6z5C2ahHFhAPSrfIGkd+9AVqx
+         J3uH+EHcbcOBfaSPGUUG9UY1TGfFU1mAteenWUC9qmLBYNBl9BzwoasjrYsA1+hb3Smd
+         ZSBUoKIMoybcv9PLnKjS9UKJjPUKNhJziqlWDYkMQCYgpQw054OwUbbr5P/lvKYTYzxE
+         msKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684356956; x=1686948956;
+        d=1e100.net; s=20221208; t=1684357134; x=1686949134;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7l9MfvQ1LbpXKb0qCojhn9qKDV5d5hFenRL1TmxbHH8=;
-        b=RVtVPbE0nF+CRttj+w4XohVEHFzcBcUrLJ+Fj9SQsuR1sjwWtMgyPIeZIuN4Tnoqd0
-         49CrJtf2Fa8QvitxnkgawiAL4xCKEyxAWQvxJoRyP6Ns0d1HFPM9vNfwSKClHrpBMebF
-         MOc3uejyAal+jRD7KtPqnCFnHbk/CrP3nvBd5X4gxnVc4RnbLTq/DqvSBtpy95f5leMc
-         ZOOsEaDYckkAXJjwqx7iShk5qNNvOcxgav+A3aCOS0klGRtIAoKBzNHNXKmzRq2m0BbX
-         FVLJBve5vbp4ucyrkSDMXrRXu0VtCFpXZYuTCbbC+IeiDRUnXQGhLwLNjwPoq4XIcXWj
-         Jd+w==
-X-Gm-Message-State: AC+VfDwF/O6rq+ax556iwkLVdHlOEVocxFP3nhY8A8K8Ur4FbkO4mSHC
-        BniSUZlDAAM4+3teLlZLbhYlZo+pCHzB9DIfiLPgVg==
-X-Google-Smtp-Source: ACHHUZ7EzZ7+N7y4O+euuKGRkYMG6UCj/6BdUmLbOGmZXwRuqgxBnQv29cEUcaXtYHsAvKRarhyqSOUbj1gi/lQT7uQ=
-X-Received: by 2002:a05:6214:29ec:b0:5ce:6636:a45 with SMTP id
- jv12-20020a05621429ec00b005ce66360a45mr1839851qvb.25.1684356956521; Wed, 17
- May 2023 13:55:56 -0700 (PDT)
+        bh=2czja4XHffo3nxVxoM69dFCyr+HErNl06rsEi0dap2c=;
+        b=QoS+HUD8SISOL1/e0KIOMNFgKfF5A4JIYEB6lAdZTirB3zGzX6wXDD51wT4iRJqfT4
+         H/pIhH3T2bPVsNYGyFxDWYY6LhHMKeKY2zD856GsSpk12B3ZDyJ9U1OVCdKYdYH5j0AU
+         Y+Z8GXkCEDo4Ho0GeAHFdg9InC6h4pLSB+9fzZy6bqrbSTr3bwAmv/Lugu3xsQpUIQIY
+         BcogDXE/Twig4gnoLRnNSG95rJrQHfhBLaRS2lM5iRIVK65oJvIQZuDA4wJ93TxrgzHy
+         Y2pNO76h3cFE3EwUh9Q+Lmbq6oy38CpS/AtLv3KDdgIPiLiu6qtYIRx8csAqBLqZ40hh
+         huMQ==
+X-Gm-Message-State: AC+VfDxTHocyKfCJDS4W2mVeEczK4haM17PCqWX070HviwtoTJHWaDM6
+        rKI5BEB5h6wG6IM9HmLcl7vevGMVSfNV4du0vI0JmQpyNzjp/6Za9hI=
+X-Google-Smtp-Source: ACHHUZ5Yq1ysISuJWhzqdfHVNewGDtjE9+aw5f90jB+4wttwyxYN9d6rWZGXZEgFXztNUIY2fJJlcJRIaSnFwSUMpqY=
+X-Received: by 2002:a05:6214:e44:b0:5ea:9fc5:fcb1 with SMTP id
+ o4-20020a0562140e4400b005ea9fc5fcb1mr1897763qvc.9.1684357134134; Wed, 17 May
+ 2023 13:58:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-8-masahiroy@kernel.org>
-In-Reply-To: <20230514152739.962109-8-masahiroy@kernel.org>
+References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-9-masahiroy@kernel.org>
+In-Reply-To: <20230514152739.962109-9-masahiroy@kernel.org>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 17 May 2023 13:55:45 -0700
-Message-ID: <CAKwvOdnve7EAPzdTy1eMnGwYgXpNj+dFAwB-t+7PFASDiaM_iw@mail.gmail.com>
-Subject: Re: [PATCH v5 07/21] modpost: squash extable_mismatch_handler() into default_mismatch_handler()
+Date:   Wed, 17 May 2023 13:58:43 -0700
+Message-ID: <CAKwvOdk7u5Yj8+Y6WeSpdohz25Tcrpo9Gc9BuAhpbac7RibEjQ@mail.gmail.com>
+Subject: Re: [PATCH v5 08/21] modpost: pass 'tosec' down to default_mismatch_handler()
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
@@ -65,7 +65,7 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,173 +75,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sun, May 14, 2023 at 8:28=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
 rg> wrote:
 >
-> Merging these two reduces several lines of code. The extable section
-> mismatch is already distinguished by EXTABLE_TO_NON_TEXT.
+> default_mismatch_handler() does not need to compute 'tosec' because
+> it is calculated by the caller.
 >
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Pass it down to default_mismatch_handler() instead of calling
+> sec_name() twice.
 
 Thanks for the patch!
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
 >
->  scripts/mod/modpost.c | 84 ++++++++++++++-----------------------------
->  1 file changed, 26 insertions(+), 58 deletions(-)
+>  scripts/mod/modpost.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 >
 > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 0bda2f22c985..49357a716519 100644
+> index 49357a716519..2cc9c2a4aadc 100644
 > --- a/scripts/mod/modpost.c
 > +++ b/scripts/mod/modpost.c
-> @@ -881,27 +881,14 @@ enum mismatch {
->   * targeting sections in this array (white-list).  Can be empty.
->   *
->   * @mismatch: Type of mismatch.
-> - *
-> - * @handler: Specific handler to call when a match is found.  If NULL,
-> - * default_mismatch_handler() will be called.
-> - *
->   */
->  struct sectioncheck {
->         const char *fromsec[20];
->         const char *bad_tosec[20];
->         const char *good_tosec[20];
->         enum mismatch mismatch;
-> -       void (*handler)(const char *modname, struct elf_info *elf,
-> -                       const struct sectioncheck* const mismatch,
-> -                       Elf_Rela *r, Elf_Sym *sym, const char *fromsec);
-> -
->  };
+> @@ -1203,9 +1203,9 @@ static bool is_executable_section(struct elf_info *=
+elf, unsigned int secndx)
 >
-> -static void extable_mismatch_handler(const char *modname, struct elf_inf=
+>  static void default_mismatch_handler(const char *modname, struct elf_inf=
 o *elf,
-> -                                    const struct sectioncheck* const mis=
+>                                      const struct sectioncheck* const mis=
 match,
-> -                                    Elf_Rela *r, Elf_Sym *sym,
-> -                                    const char *fromsec);
-> -
->  static const struct sectioncheck sectioncheck[] =3D {
->  /* Do not reference init/exit code/data from
->   * normal code and data
-> @@ -974,7 +961,6 @@ static const struct sectioncheck sectioncheck[] =3D {
->         .bad_tosec =3D { ".altinstr_replacement", NULL },
->         .good_tosec =3D {ALL_TEXT_SECTIONS , NULL},
->         .mismatch =3D EXTABLE_TO_NON_TEXT,
-> -       .handler =3D extable_mismatch_handler,
->  }
->  };
->
-> @@ -1255,60 +1241,42 @@ static void default_mismatch_handler(const char *=
-modname, struct elf_info *elf,
->                      modname, tosym, tosec);
->                 break;
->         case EXTABLE_TO_NON_TEXT:
-> -               fatal("There's a special handler for this mismatch type, =
-we should never get here.\n");
-> +               warn("%s(%s+0x%lx): Section mismatch in reference to the =
-%s:%s\n",
-> +                    modname, fromsec, (long)r->r_offset, tosec, tosym);
-> +
-> +               if (match(tosec, mismatch->bad_tosec))
-> +                       fatal("The relocation at %s+0x%lx references\n"
-> +                             "section \"%s\" which is black-listed.\n"
-> +                             "Something is seriously wrong and should be=
- fixed.\n"
-> +                             "You might get more information about where=
- this is\n"
-> +                             "coming from by using scripts/check_extable=
-.sh %s\n",
-> +                             fromsec, (long)r->r_offset, tosec, modname)=
-;
-> +               else if (is_executable_section(elf, get_secindex(elf, sym=
-)))
-> +                       warn("The relocation at %s+0x%lx references\n"
-> +                            "section \"%s\" which is not in the list of\=
-n"
-> +                            "authorized sections.  If you're adding a ne=
-w section\n"
-> +                            "and/or if this reference is valid, add \"%s=
-\" to the\n"
-> +                            "list of authorized sections to jump to on f=
-ault.\n"
-> +                            "This can be achieved by adding \"%s\" to\n"
-> +                            "OTHER_TEXT_SECTIONS in scripts/mod/modpost.=
-c.\n",
-> +                            fromsec, (long)r->r_offset, tosec, tosec, to=
-sec);
-> +               else
-> +                       error("%s+0x%lx references non-executable section=
- '%s'\n",
-> +                             fromsec, (long)r->r_offset, tosec);
->                 break;
->         }
->  }
->
-> -static void extable_mismatch_handler(const char* modname, struct elf_inf=
-o *elf,
-> -                                    const struct sectioncheck* const mis=
-match,
-> -                                    Elf_Rela* r, Elf_Sym* sym,
-> -                                    const char *fromsec)
-> -{
-> -       const char* tosec =3D sec_name(elf, get_secindex(elf, sym));
-> -       Elf_Sym *tosym =3D find_elf_symbol(elf, r->r_addend, sym);
-> -       const char *tosym_name =3D sym_name(elf, tosym);
-> -
-> -       sec_mismatch_count++;
-> -
-> -       warn("%s(%s+0x%lx): Section mismatch in reference to the %s:%s\n"=
-,
-> -            modname, fromsec, (long)r->r_offset, tosec, tosym_name);
-> -
-> -       if (match(tosec, mismatch->bad_tosec))
-> -               fatal("The relocation at %s+0x%lx references\n"
-> -                     "section \"%s\" which is black-listed.\n"
-> -                     "Something is seriously wrong and should be fixed.\=
-n"
-> -                     "You might get more information about where this is=
-\n"
-> -                     "coming from by using scripts/check_extable.sh %s\n=
-",
-> -                     fromsec, (long)r->r_offset, tosec, modname);
-> -       else if (is_executable_section(elf, get_secindex(elf, sym)))
-> -               warn("The relocation at %s+0x%lx references\n"
-> -                    "section \"%s\" which is not in the list of\n"
-> -                    "authorized sections.  If you're adding a new sectio=
-n\n"
-> -                    "and/or if this reference is valid, add \"%s\" to th=
-e\n"
-> -                    "list of authorized sections to jump to on fault.\n"
-> -                    "This can be achieved by adding \"%s\" to\n"
-> -                    "OTHER_TEXT_SECTIONS in scripts/mod/modpost.c.\n",
-> -                    fromsec, (long)r->r_offset, tosec, tosec, tosec);
-> -       else
-> -               error("%s+0x%lx references non-executable section '%s'\n"=
-,
-> -                     fromsec, (long)r->r_offset, tosec);
-> -}
-> -
->  static void check_section_mismatch(const char *modname, struct elf_info =
-*elf,
->                                    Elf_Rela *r, Elf_Sym *sym, const char =
-*fromsec)
+> -                                    Elf_Rela *r, Elf_Sym *sym, const cha=
+r *fromsec)
+> +                                    Elf_Rela *r, Elf_Sym *sym, const cha=
+r *fromsec,
+> +                                    const char *tosec)
 >  {
->         const char *tosec =3D sec_name(elf, get_secindex(elf, sym));
->         const struct sectioncheck *mismatch =3D section_mismatch(fromsec,=
- tosec);
+> -       const char *tosec;
+>         Elf_Sym *to;
+>         Elf_Sym *from;
+>         const char *tosym;
+> @@ -1214,7 +1214,6 @@ static void default_mismatch_handler(const char *mo=
+dname, struct elf_info *elf,
+>         from =3D find_elf_symbol2(elf, r->r_offset, fromsec);
+>         fromsym =3D sym_name(elf, from);
 >
-> -       if (mismatch) {
-> -               if (mismatch->handler)
-> -                       mismatch->handler(modname, elf,  mismatch,
-> -                                         r, sym, fromsec);
-> -               else
-> -                       default_mismatch_handler(modname, elf, mismatch,
-> -                                                r, sym, fromsec);
-> -       }
-> +       if (!mismatch)
-> +               return;
-> +
-> +       default_mismatch_handler(modname, elf, mismatch, r, sym, fromsec)=
+> -       tosec =3D sec_name(elf, get_secindex(elf, sym));
+>         to =3D find_elf_symbol(elf, r->r_addend, sym);
+>         tosym =3D sym_name(elf, to);
+>
+> @@ -1276,7 +1275,7 @@ static void check_section_mismatch(const char *modn=
+ame, struct elf_info *elf,
+>         if (!mismatch)
+>                 return;
+>
+> -       default_mismatch_handler(modname, elf, mismatch, r, sym, fromsec)=
 ;
+> +       default_mismatch_handler(modname, elf, mismatch, r, sym, fromsec,=
+ tosec);
 >  }
 >
 >  static unsigned int *reloc_location(struct elf_info *elf,
