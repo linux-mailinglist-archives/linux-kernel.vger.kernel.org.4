@@ -2,102 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4529B70625A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D2A706254
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjEQIKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S230312AbjEQIKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjEQIKY (ORCPT
+        with ESMTP id S230154AbjEQIKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:10:24 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DD510EF;
-        Wed, 17 May 2023 01:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DTmEEM/+QduNUnxg8gEx0EXzPjAs6x+04O4FYgiiAdQ=; b=RdAX2d2XiqRvKxl2rKOGWzP4uK
-        jRMB6DlSpFvBHfPwXiFTnREXMRvZIa5vr9f+gheMapnqq4nwfC2b6p5bhhbus/OlCtASE4Ek2elUO
-        8GI3PuGvzy06pzPsguJHueg+BCCz0i6mWoY7F4ScVr8GnLeZ82DnAedMyOfIQs8SFXX6PnA7c5H2G
-        hJD8j5BpWjJ5ZQw0C0h1lV0VgyGju5Q0HBaPOZoAtiXKQX/J5THbxD/TLpDfiRnyh8O7Uujygh0YI
-        YZJ9K6yRQPpYU2m2mrMqPUp7c1Xe5xU1To/+dbrYoiqE7CO0CMJKS3W3CZzsCiqhHLOU1JmqfXDw1
-        5gYHPBMg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzCEj-008nbM-21;
-        Wed, 17 May 2023 08:10:17 +0000
-Date:   Wed, 17 May 2023 01:10:17 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-Message-ID: <ZGSL6Q8K5lh4Pdwp@infradead.org>
-References: <cover.1683235180.git.lstoakes@gmail.com>
- <20230515110315.uqifqgqkzcrrrubv@box.shutemov.name>
- <7f6dbe36-88f2-468e-83c1-c97e666d8317@lucifer.local>
- <ZGIhwZl2FbLodLrc@nvidia.com>
- <ad0053a4-fa34-4b95-a262-d27942b168fd@lucifer.local>
- <20230517072920.bfs7gfo4whdmi6ay@quack3>
- <d17c0fce-679b-4f5d-9a7c-6ff7e28ad4b2@lucifer.local>
- <ZGSFptUyOko+184t@infradead.org>
- <503e92f9-fbc2-422b-b0d4-f4cabe3f6802@lucifer.local>
+        Wed, 17 May 2023 04:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B785E10FA;
+        Wed, 17 May 2023 01:10:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5532364365;
+        Wed, 17 May 2023 08:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AFF46C433EF;
+        Wed, 17 May 2023 08:10:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684311020;
+        bh=EacTFV3aLR7vTof0FI3pduiKvEeTrK96jsFJrQ45l24=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YCqTP5ndTSWjRmYrFq/AEalgZbw5wjhjkV1RooII96IiqupB/GmlTVsQ/8PkQhNZX
+         rx4dF/dxOd93e8t6HANIe350AbUBX7e30YP8biIqoS7yHuVHwDbJ1RmaJwgiIfn3cN
+         DRqEbMt0s/MKBvlC7r3Jf6J1Jr19NfktQhWsawwBGprqnQLsutdicOE6tMODvg/bJS
+         9AXDdhWHeGqDt/UqUHdJMUGxmwSz+n5QerZyH8OwrDpdwtXAi6JRiP6u8EbvDo0iUT
+         dR81bJtq+j7woSPmS+J7i7lx3smoTLz14EOWGMvhe+lgan+3orwHQ5wVtJnjMikoyj
+         KlwukcffdN7fQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 95A21E5421C;
+        Wed, 17 May 2023 08:10:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <503e92f9-fbc2-422b-b0d4-f4cabe3f6802@lucifer.local>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] cassini: Fix a memory leak in the error handling path of
+ cas_init_one()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168431102060.18881.14691386988847658015.git-patchwork-notify@kernel.org>
+Date:   Wed, 17 May 2023 08:10:20 +0000
+References: <de2bb89d2c9c49198353c3d66fa9b67ce6c0f191.1684177731.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <de2bb89d2c9c49198353c3d66fa9b67ce6c0f191.1684177731.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jaswinder@infradead.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,23 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 08:55:27AM +0100, Lorenzo Stoakes wrote:
-> I'll try to take this in good faith because... yeah. I do get that, I mean
-> I literally created a repro for this situation and referenced in the commit
-> msg and comments this precise problem in my patch series that
-> addresses... this problem :P
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Mon, 15 May 2023 21:09:11 +0200 you wrote:
+> cas_saturn_firmware_init() allocates some memory using vmalloc(). This
+> memory is freed in the .remove() function but not it the error handling
+> path of the probe.
 > 
-> Perhaps I'm not being clear but it was simply my intent to highlight that
-> yes this is the primary problem but ALSO GUP writing to ostensibly 'clean'
-> pages 'behind the back' of a fs is _also_ a problem.
+> Add the missing vfree() to avoid a memory leak, should an error occur.
+> 
+> Fixes: fcaa40669cd7 ("cassini: use request_firmware")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> [...]
 
-Yes, it absolutely is a problem if that happens.  But we can just
-fix it in the kernel using the:
+Here is the summary with links:
+  - cassini: Fix a memory leak in the error handling path of cas_init_one()
+    https://git.kernel.org/netdev/net/c/412cd77a2c24
 
-   lock_page()
-   copy data
-   set_page_dirty_locked()
-   unlock_page();
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-pattern, and we should have covere every place that did in tree.
-But there's no good way to verify it except for regular code audits.
+
