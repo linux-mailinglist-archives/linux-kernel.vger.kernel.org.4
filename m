@@ -2,259 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FAF706C1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF48706C13
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjEQPFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbjEQPEp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231608AbjEQPEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 17 May 2023 11:04:45 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325B8AD3B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:25 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3078c092056so629235f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684335835; x=1686927835;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XZna8pJSuLGWyf+gz4k0SP+q2QXja3naQzgW+6vcrp4=;
-        b=VOiuLe3bG4vHmfbabe07F3nlpYx08FfV/3zQLCyMZi11R5cM1HKH5T65JN6ugqyHwi
-         G99lvNgNYrIk8eHNaql93JvIcv3h0iKEaBhgawogRCgZMmftz/RTh2Bf/JXFZ7nUlRzk
-         EK6wmUgGQj7vyyj5mggmdbjXb8QJLmSkQc7OE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335835; x=1686927835;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XZna8pJSuLGWyf+gz4k0SP+q2QXja3naQzgW+6vcrp4=;
-        b=kytnbw/P3JT+3g/5MAfwgNdMbHu/z+8Tldwb48wrJcigwtwIS5lovgBb630slN/Dnv
-         oEpWOG/YpHMRWamWB5wbQhLO8JuGH/68BJ2FYtvVdCdIkY18oBZF4URhS2L+tV+rZJ1E
-         +VOrT4EkJvpXF2eV+z5xdUPXDi6rY/iI/lx/LSJFIkLd+DzB/E3wOZ8G6x7xofjqYgNn
-         UPNXiCiER5sVuV5UgJ/8/OqEyKCD24Wh6ysKUilqJQ7hMSC9Nrpei540ok/a3vcUUDBZ
-         2m53Kw7R6HIPntSmiEOH7p7vTt5M1nlAi3oa9mwMCCrYTJSqb7I0x3ACwuNqhKLYJYRX
-         VFgA==
-X-Gm-Message-State: AC+VfDymaDs8MZC+7aJjkWr9ENmeuvOZFtLvAZX2k0Pxk3Qsa0KHAiQ6
-        ZaBzxQCXodTNS/wO1Ui4xMw+mAzlP6cr5i0jEhc=
-X-Google-Smtp-Source: ACHHUZ6T1L/yncZ7b+WXlzAW8H3qe+guQ3irQhoWzDHtSFqs+sp2uaTY/rDwi1XNPs007HDwmTeTjg==
-X-Received: by 2002:adf:ee89:0:b0:306:2979:8ab0 with SMTP id b9-20020adfee89000000b0030629798ab0mr1017312wro.24.1684335834709;
-        Wed, 17 May 2023 08:03:54 -0700 (PDT)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:e223:a0c2:d2c:c371])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b003047ea78b42sm3038211wrr.43.2023.05.17.08.03.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 08:03:54 -0700 (PDT)
-From:   Florent Revest <revest@chromium.org>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
-        anshuman.khandual@arm.com, joey.gouly@arm.com, mhocko@suse.com,
-        keescook@chromium.org, david@redhat.com, peterx@redhat.com,
-        izbyshev@ispras.ru, broonie@kernel.org, szabolcs.nagy@arm.com,
-        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com,
-        Florent Revest <revest@chromium.org>
-Subject: [PATCH v2 5/5] kselftest: vm: Add tests for no-inherit memory-deny-write-execute
-Date:   Wed, 17 May 2023 17:03:21 +0200
-Message-ID: <20230517150321.2890206-6-revest@chromium.org>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-In-Reply-To: <20230517150321.2890206-1-revest@chromium.org>
-References: <20230517150321.2890206-1-revest@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231478AbjEQPE2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 17 May 2023 11:04:28 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A20A26E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684335852; x=1715871852;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=N1BSP4Ia8BM8HI0rdakyWqbYxRwvAQiEFATJFkkYIKE=;
+  b=adqyOYn2Hpv2Qq2WHHmz9g7PGUqLsyufNuvRsmScQc6Mw7dwPX0B971H
+   TDB48/dkCRK/0fazpUHsxrYo3PE1uzOf05asKGCKsezfQSrhM1vGBW0hM
+   bs8hK73oiAHX2jN8gJFxQ5gThudTUawJFjvpuAvks2aHr7BA4Zxi0zvxv
+   GK6AuY9+kQo7PCxVkLB45e0iGJu1B132JbyzlmvxE0HbYFsa9oIH4YNb3
+   64xHBsOtSnOFAMKTJokHfu61uFHgQOjRn79AHvoTck6PfuKBwtyZo5hoj
+   XEK932Wmok6Y+y2MyEIxwUpNKEbz3KBwGEiY6OGdDkK2g6FrTmBMpt4ai
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="354081700"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="354081700"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:03:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="652277172"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="652277172"
+Received: from wopr.jf.intel.com ([10.54.75.136])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:03:23 -0700
+Message-ID: <38bf4bce7961c674b7ac798a8413cb1256eea8f4.camel@linux.intel.com>
+Subject: Re: [PATCH] MTD SPI-NOR: BUG FIX of divide by zero in new n_banks
+ value
+From:   Todd Brandt <todd.e.brandt@linux.intel.com>
+Reply-To: todd.e.brandt@linux.intel.com
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Todd Brandt <todd.e.brandt@intel.com>,
+        miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org
+Cc:     pratyush@kernel.org,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Date:   Wed, 17 May 2023 08:03:23 -0700
+In-Reply-To: <3ab922a4-255a-5aef-86ba-d906819f0f3a@linaro.org>
+References: <20230516225108.29194-1-todd.e.brandt@intel.com>
+         <3ab922a4-255a-5aef-86ba-d906819f0f3a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some tests to cover the new PR_MDWE_NO_INHERIT flag of the
-PR_SET_MDWE prctl.
+On Wed, 2023-05-17 at 08:10 +0100, Tudor Ambarus wrote:
+> Hi, Todd,
+> 
+> On 5/16/23 23:51, Todd Brandt wrote:
+> > While testing 6.4-rc1 on our Lenovo Thinkpad X1 I discovered
+> > that freeze, suspend, and shutdown, all hang the system. I bisected
+> > it to an addition made to the MTD spi-nor code.
+> > 
+> > The new "n_banks" value is being divided into without a proper
+> > check..
+> > Thus on certain systems this causes a divide by zero hang.
+> > 
+> > Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217448
+> > Fixes: 9d6c5d64f028 ("mtd: spi-nor: Introduce the concept of bank")
+> > Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
+> > ---
+> >  drivers/mtd/spi-nor/core.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-
+> > nor/core.c
+> > index 0bb0ad14a2fc..084117959be4 100644
+> > --- a/drivers/mtd/spi-nor/core.c
+> > +++ b/drivers/mtd/spi-nor/core.c
+> > @@ -2921,7 +2921,10 @@ static void spi_nor_late_init_params(struct
+> > spi_nor *nor)
+> >  	if (nor->flags & SNOR_F_HAS_LOCK && !nor->params->locking_ops)
+> >  		spi_nor_init_default_locking_ops(nor);
+> >  
+> > -	nor->params->bank_size = div64_u64(nor->params->size, nor-
+> > >info->n_banks);
+> > +	if (nor->info->n_banks > 0)
+> > +		nor->params->bank_size = div64_u64(nor->params->size,
+> > nor->info->n_banks);
+> > +	else
+> > +		nor->params->bank_size = 0;
+> >  }
+> >  
+> >  /**
+> 
+> Indeed, thanks for the report and patch. You probably use the
+> spi-nor-generic driver, don't you?
+> 
+> Can you try the following change instead?
 
-Signed-off-by: Florent Revest <revest@chromium.org>
----
- tools/testing/selftests/mm/mdwe_test.c | 95 ++++++++++++++++++++++++--
- 1 file changed, 89 insertions(+), 6 deletions(-)
+Yes, this also seems to fix things on the Lenovo Thinkpad X1, but the
+solution should be this AND the "if (nor->info->n_banks > 0)" patch. It
+doesn't hurt to check even if it's a very unlikely border case. It
+guarantees that the issue won't occur again even if somehow a struct
+instance is created uninitialized.
 
-diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
-index 91aa9c3099e7..9f08ed1b99ae 100644
---- a/tools/testing/selftests/mm/mdwe_test.c
-+++ b/tools/testing/selftests/mm/mdwe_test.c
-@@ -22,6 +22,8 @@
- 
- TEST(prctl_flags)
- {
-+	EXPECT_LT(prctl(PR_SET_MDWE, PR_MDWE_NO_INHERIT, 0L, 0L, 7L), 0);
-+
- 	EXPECT_LT(prctl(PR_SET_MDWE, 7L, 0L, 0L, 0L), 0);
- 	EXPECT_LT(prctl(PR_SET_MDWE, 0L, 7L, 0L, 0L), 0);
- 	EXPECT_LT(prctl(PR_SET_MDWE, 0L, 0L, 7L, 0L), 0);
-@@ -33,6 +35,66 @@ TEST(prctl_flags)
- 	EXPECT_LT(prctl(PR_GET_MDWE, 0L, 0L, 0L, 7L), 0);
- }
- 
-+FIXTURE(consecutive_prctl_flags) {};
-+FIXTURE_SETUP(consecutive_prctl_flags) {}
-+FIXTURE_TEARDOWN(consecutive_prctl_flags) {}
-+
-+FIXTURE_VARIANT(consecutive_prctl_flags)
-+{
-+	unsigned long first_flags;
-+	unsigned long second_flags;
-+	bool should_work;
-+};
-+
-+FIXTURE_VARIANT_ADD(consecutive_prctl_flags, same)
-+{
-+	.first_flags = PR_MDWE_REFUSE_EXEC_GAIN,
-+	.second_flags = PR_MDWE_REFUSE_EXEC_GAIN,
-+	.should_work = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(consecutive_prctl_flags, cant_disable_mdwe)
-+{
-+	.first_flags = PR_MDWE_REFUSE_EXEC_GAIN,
-+	.second_flags = 0,
-+	.should_work = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(consecutive_prctl_flags, cant_disable_mdwe_no_inherit)
-+{
-+	.first_flags = PR_MDWE_REFUSE_EXEC_GAIN | PR_MDWE_NO_INHERIT,
-+	.second_flags = 0,
-+	.should_work = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(consecutive_prctl_flags, can_lower_privileges)
-+{
-+	.first_flags = PR_MDWE_REFUSE_EXEC_GAIN | PR_MDWE_NO_INHERIT,
-+	.second_flags = PR_MDWE_REFUSE_EXEC_GAIN,
-+	.should_work = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(consecutive_prctl_flags, cant_gain_privileges)
-+{
-+	.first_flags = PR_MDWE_REFUSE_EXEC_GAIN,
-+	.second_flags = PR_MDWE_REFUSE_EXEC_GAIN | PR_MDWE_NO_INHERIT,
-+	.should_work = false,
-+};
-+
-+TEST_F(consecutive_prctl_flags, two_prctls)
-+{
-+	int ret;
-+
-+	EXPECT_EQ(prctl(PR_SET_MDWE, variant->first_flags, 0L, 0L, 0L), 0);
-+
-+	ret = prctl(PR_SET_MDWE, variant->second_flags, 0L, 0L, 0L);
-+	if (variant->should_work) {
-+		EXPECT_EQ(ret, 0);
-+	} else {
-+		EXPECT_NE(ret, 0);
-+	}
-+}
-+
- FIXTURE(mdwe)
- {
- 	void *p;
-@@ -45,28 +107,45 @@ FIXTURE_VARIANT(mdwe)
- {
- 	bool enabled;
- 	bool forked;
-+	bool inherit;
- };
- 
- FIXTURE_VARIANT_ADD(mdwe, stock)
- {
- 	.enabled = false,
- 	.forked = false,
-+	.inherit = false,
- };
- 
- FIXTURE_VARIANT_ADD(mdwe, enabled)
- {
- 	.enabled = true,
- 	.forked = false,
-+	.inherit = true,
- };
- 
--FIXTURE_VARIANT_ADD(mdwe, forked)
-+FIXTURE_VARIANT_ADD(mdwe, inherited)
- {
- 	.enabled = true,
- 	.forked = true,
-+	.inherit = true,
- };
- 
-+FIXTURE_VARIANT_ADD(mdwe, not_inherited)
-+{
-+	.enabled = true,
-+	.forked = true,
-+	.inherit = false,
-+};
-+
-+static bool executable_map_should_fail(const FIXTURE_VARIANT(mdwe) *variant)
-+{
-+	return variant->enabled && (!variant->forked || variant->inherit);
-+}
-+
- FIXTURE_SETUP(mdwe)
- {
-+	unsigned long mdwe_flags;
- 	int ret, status;
- 
- 	self->p = NULL;
-@@ -76,13 +155,17 @@ FIXTURE_SETUP(mdwe)
- 	if (!variant->enabled)
- 		return;
- 
--	ret = prctl(PR_SET_MDWE, PR_MDWE_REFUSE_EXEC_GAIN, 0L, 0L, 0L);
-+	mdwe_flags = PR_MDWE_REFUSE_EXEC_GAIN;
-+	if (!variant->inherit)
-+		mdwe_flags |= PR_MDWE_NO_INHERIT;
-+
-+	ret = prctl(PR_SET_MDWE, mdwe_flags, 0L, 0L, 0L);
- 	ASSERT_EQ(ret, 0) {
- 		TH_LOG("PR_SET_MDWE failed or unsupported");
- 	}
- 
- 	ret = prctl(PR_GET_MDWE, 0L, 0L, 0L, 0L);
--	ASSERT_EQ(ret, 1);
-+	ASSERT_EQ(ret, mdwe_flags);
- 
- 	if (variant->forked) {
- 		self->pid = fork();
-@@ -113,7 +196,7 @@ TEST_F(mdwe, mmap_READ_EXEC)
- TEST_F(mdwe, mmap_WRITE_EXEC)
- {
- 	self->p = mmap(NULL, self->size, PROT_WRITE | PROT_EXEC, self->flags, 0, 0);
--	if (variant->enabled) {
-+	if (executable_map_should_fail(variant)) {
- 		EXPECT_EQ(self->p, MAP_FAILED);
- 	} else {
- 		EXPECT_NE(self->p, MAP_FAILED);
-@@ -139,7 +222,7 @@ TEST_F(mdwe, mprotect_add_EXEC)
- 	ASSERT_NE(self->p, MAP_FAILED);
- 
- 	ret = mprotect(self->p, self->size, PROT_READ | PROT_EXEC);
--	if (variant->enabled) {
-+	if (executable_map_should_fail(variant)) {
- 		EXPECT_LT(ret, 0);
- 	} else {
- 		EXPECT_EQ(ret, 0);
-@@ -154,7 +237,7 @@ TEST_F(mdwe, mprotect_WRITE_EXEC)
- 	ASSERT_NE(self->p, MAP_FAILED);
- 
- 	ret = mprotect(self->p, self->size, PROT_WRITE | PROT_EXEC);
--	if (variant->enabled) {
-+	if (executable_map_should_fail(variant)) {
- 		EXPECT_LT(ret, 0);
- 	} else {
- 		EXPECT_EQ(ret, 0);
--- 
-2.40.1.606.ga4b1b128d6-goog
+You could probably just slim it down to a single if line instead of
+if/else since the default bank_size is zero by default:
+
++   if (nor->info->n_banks > 0)
++       nor->params->bank_size = div64_u64(nor->params->size, nor-
+>info->n_banks);
+
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+>                       index 0bb0ad14a2fc..37f750bd7bfb 100644
+> --- a/drivers/mtd/spi-nor/core.cdrivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.cdrivers/mtd/spi-nor/core.c
+> @@ -2018,6 +2018,7 @@ static const struct spi_nor_manufacturer
+> *manufacturers[] = {
+> 
+>  static const struct flash_info spi_nor_generic_flash = {
+>         .name = "spi-nor-generic",
+> +       .n_banks = 1,
+>         /*
+>          * JESD216 rev A doesn't specify the page size, therefore we
+> need a
+>          * sane default.
 
