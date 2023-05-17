@@ -2,228 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F2C705C7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660A0705C81
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjEQBfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 21:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
+        id S231464AbjEQBhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 21:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjEQBfH (ORCPT
+        with ESMTP id S229966AbjEQBhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 21:35:07 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0363C00
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684287306; x=1715823306;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=ImR7ZnaQnpW+4Q+UfaZGHlylZoHSYNv3hrclv8er6LE=;
-  b=MMC+CbEtdWHm/l2a1qhAXEhXNJi6ymCt7Gozj3ZjMt1GmRbdxBm7OysQ
-   NsJlZ+Grak3Busdkv4yxD0omKwlVXowP+POfRZZMBMVVXYAgqGXInXVfT
-   dqIVPUP8JlOdFV6RlaAjTJ4w0G6IXXslMeo3LflJtV6iFTa75g26zYGto
-   lGhtQazfEAzDEIlNy+wIgUe2gYcHjC7RtieldutzJgSyy7oDuDHAIE6Cd
-   2+OHqiEe833qEh4K6LazHdcUkh8XZYU7AxV2l+ajU7b/T2XJs4iR4bqex
-   JPiWyZqhbdNtn3Csaqj+YOOOapMe70NZ7Xd3Lp7xcYwL8y1MF2qvrL95l
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="415044329"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="415044329"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 18:35:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="845893594"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="845893594"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 18:35:03 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Arjan Van De Ven <arjan@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <jweiner@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [RFC 0/6] mm: improve page allocator scalability via splitting
- zones
-References: <20230511065607.37407-1-ying.huang@intel.com>
-        <ZF0ET82ajDbFrIw/@dhcp22.suse.cz>
-        <87r0rm8die.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ZGIUEqhSydAdvRFN@dhcp22.suse.cz>
-        <87jzx87h1d.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <3d77ca46-6256-7996-b0f5-67c414d2a8dc@redhat.com>
-Date:   Wed, 17 May 2023 09:34:00 +0800
-In-Reply-To: <3d77ca46-6256-7996-b0f5-67c414d2a8dc@redhat.com> (David
-        Hildenbrand's message of "Tue, 16 May 2023 12:30:21 +0200")
-Message-ID: <87bkij7ncn.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 16 May 2023 21:37:35 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD333C06
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:37:34 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-33164ec77ccso57265ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684287454; x=1686879454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QLugHt0XGPwYTpMjCAQObsffP9JpeGqJnJJt+CEzfkw=;
+        b=bVTAd5SO8NoTEqY8WvVpici8dg2AJF+dp7I0LnvvkPfdcwDNGaZNyd9AJHKI6atf4y
+         I9ui03BXIdH2uqHnitcgCBq151W6TYHraYtG2uM/cA42aUOG7SDWjT46iPhVHOLfQhpd
+         cLb4pgJrYFz7Z5x95Vtw17j5uuh9OE9rEnwI+PUr5ySb9Ls5pnIYhqFZhb0HxHid9mhm
+         +U6Es6zGE5ho/3P3faKVgUhZ6BhfRl6P4WvBQIV5PP0GUfkZwrDFuiCs1HQrGfB+L9bl
+         pxBmE0eDGdapX3w/SzQd370Pn2582BdELI3PnyXY8L5KR22eCiB0cF07R8UJxHQgFxV7
+         6erg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684287454; x=1686879454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QLugHt0XGPwYTpMjCAQObsffP9JpeGqJnJJt+CEzfkw=;
+        b=PHkB/Rb2hpGaix1x7x+gy8tgyNrVM43ukB+riNPMPaXiGkHRQR3bKMKJxvmia0AkkS
+         2FNSDXtybevJLdhPU7NA1sULVnEQS4h6RKO+un91JTGIwBkNMVBQ8KWkhqHQiyvxGGHV
+         LCZSzkAkyEDVxM0A9az/zVp1d+C5zpKEAhDbxaPlwJR9iXL0akZAR5lTrqqndm9jRsqc
+         BZWlwhHaPwnml6HFRsEUYivQD2ZeXeUqUNCCu2pereUoTjEln1tDy7kuCFD+398xCqMF
+         4cvRAX+kmaDkn8XnAw34593T6nyp+B7cyMra2MTmOGqIIGvZjKpkqqqeNsEaY0Z4ohjw
+         e3bA==
+X-Gm-Message-State: AC+VfDyRkXDM6BMMqO9sqQPpFoddDmZlEf97CnEvKlmu7vmN1ZjjkVst
+        rUXZbsZfvpIwH1cYyC/Ux9xXZ6C7UeJDGaOr66JTtJp0AiWA/feuYoh6/jYm
+X-Google-Smtp-Source: ACHHUZ6dZfD1Ix5kE87yhR1ityHzz0e/73f67Hdq1xOZtlUzUQebA+DIVW/8Pry1HP7JugJAoQpPKt/YljP3mLUFfFU=
+X-Received: by 2002:a05:6e02:1a4a:b0:331:948c:86f3 with SMTP id
+ u10-20020a056e021a4a00b00331948c86f3mr64152ilv.19.1684287453632; Tue, 16 May
+ 2023 18:37:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230512235755.1589034-1-pcc@google.com> <20230512235755.1589034-2-pcc@google.com>
+ <7471013e-4afb-e445-5985-2441155fc82c@redhat.com> <ZGJtJobLrBg3PtHm@arm.com> <91246137-a3d2-689f-8ff6-eccc0e61c8fe@redhat.com>
+In-Reply-To: <91246137-a3d2-689f-8ff6-eccc0e61c8fe@redhat.com>
+From:   Peter Collingbourne <pcc@google.com>
+Date:   Tue, 16 May 2023 18:37:22 -0700
+Message-ID: <CAMn1gO4cbEmpDzkdN10DyaGe=2Wg4Y19-v8gHRqgQoD4Bxd+cw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: Move arch_do_swap_page() call to before swap_free()
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
+        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "surenb@google.com" <surenb@google.com>,
+        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
+        <Kuan-Ying.Lee@mediatek.com>,
+        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        vincenzo.frascino@arm.com,
+        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        eugenis@google.com, Steven Price <steven.price@arm.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
-
-> On 16.05.23 11:38, Huang, Ying wrote:
->> Michal Hocko <mhocko@suse.com> writes:
->> 
->>> On Fri 12-05-23 10:55:21, Huang, Ying wrote:
->>>> Hi, Michal,
->>>>
->>>> Thanks for comments!
->>>>
->>>> Michal Hocko <mhocko@suse.com> writes:
->>>>
->>>>> On Thu 11-05-23 14:56:01, Huang Ying wrote:
->>>>>> The patchset is based on upstream v6.3.
->>>>>>
->>>>>> More and more cores are put in one physical CPU (usually one NUMA node
->>>>>> too).  In 2023, one high-end server CPU has 56, 64, or more cores.
->>>>>> Even more cores per physical CPU are planned for future CPUs.  While
->>>>>> all cores in one physical CPU will contend for the page allocation on
->>>>>> one zone in most cases.  This causes heavy zone lock contention in
->>>>>> some workloads.  And the situation will become worse and worse in the
->>>>>> future.
->>>>>>
->>>>>> For example, on an 2-socket Intel server machine with 224 logical
->>>>>> CPUs, if the kernel is built with `make -j224`, the zone lock
->>>>>> contention cycles% can reach up to about 12.7%.
->>>>>>
->>>>>> To improve the scalability of the page allocation, in this series, we
->>>>>> will create one zone instance for each about 256 GB memory of a zone
->>>>>> type generally.  That is, one large zone type will be split into
->>>>>> multiple zone instances.  Then, different logical CPUs will prefer
->>>>>> different zone instances based on the logical CPU No.  So the total
->>>>>> number of logical CPUs contend on one zone will be reduced.  Thus the
->>>>>> scalability is improved.
->>>>>
->>>>> It is not really clear to me why you need a new zone for all this rather
->>>>> than partition free lists internally within the zone? Essentially to
->>>>> increase the current two level system to 3: per cpu caches, per cpu
->>>>> arenas and global fallback.
->>>>
->>>> Sorry, I didn't get your idea here.  What is per cpu arenas?  What's the
->>>> difference between it and per cpu caches (PCP)?
->>>
->>> Sorry, I didn't give this much thought than the above. Essentially, we
->>> have 2 level system right now. Pcp caches should reduce the contention
->>> on the per cpu level and that should work reasonably well, if you manage
->>> to align batch sizes to the workload AFAIK. If this is not sufficient
->>> then why to add the full zone rather than to add another level that
->>> caches across a larger than a cpu unit. Maybe a core?
->>>
->>> This might be a wrong way around going for this but there is not much
->>> performance analysis about the source of the lock contention so I am
->>> mostly guessing.
->> I guess that the page allocation scalability will be improved if we
->> put
->> more pages in the per CPU caches, or add another level of cache for
->> multiple logical CPUs.  Because more page allocation requirements can be
->> satisfied without acquiring zone lock.
->> As other caching system, there are always cases that the caches are
->> drained and too many requirements goes to underlying slow layer (zone
->> here).  For example, if a workload needs to allocate a huge number of
->> pages (larger than cache size) in parallel, it will run into zone lock
->> contention finally.  The situation will became worse and worse if we
->> share one zone with more and more logical CPUs.  Which is the trend in
->> industry now.  Per my understanding, we can observe the high zone lock
->> contention cycles in kbuild test because of that.
->> So, per my understanding, to improve the page allocation scalability
->> in
->> bad situations (that is, caching doesn't work well enough), we need to
->> restrict the number of logical CPUs that share one zone.  This series is
->> an attempt for that.  Better caching can increase the good situations
->> and reduce the bad situations.  But it seems hard to eliminate all bad
->> situations.
->>  From another perspective, we don't install more and more memory for
->> each
->> logical CPU.  This makes it hard to enlarge the default per-CPU cache
->> size.
->> 
->>>>> I am also missing some information why pcp caches tunning is not
->>>>> sufficient.
->>>>
->>>> PCP does improve the page allocation scalability greatly!  But it
->>>> doesn't help much for workloads that allocating pages on one CPU and
->>>> free them in different CPUs.  PCP tuning can improve the page allocation
->>>> scalability for a workload greatly.  But it's not trivial to find the
->>>> best tuning parameters for various workloads and workload run time
->>>> statuses (workloads may have different loads and memory requirements at
->>>> different time).  And we may run different workloads on different
->>>> logical CPUs of the system.  This also makes it hard to find the best
->>>> PCP tuning globally.
->>>
->>> Yes this makes sense. Does that mean that the global pcp tuning is not
->>> keeping up and we need to be able to do more auto-tuning on local bases
->>> rather than global?
->> Similar as above, I think that PCP helps the good situations
->> performance
->> greatly, and splitting zone can help the bad situations scalability.
->> They are working at the different levels.
->> As for PCP auto-tuning, I think that it's hard to implement it to
->> resolve all problems (that is, makes PCP never be drained).
->> And auto-tuning doesn't sound easy.  Do you have some idea of how to
->> do
->> that?
+On Tue, May 16, 2023 at 5:31=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
 >
-> If we could avoid instantiating more zones and rather improve existing
-> mechanisms (PCP), that would be much more preferred IMHO. I'm sure
-> it's not easy, but that shouldn't stop us from trying ;)
+> On 15.05.23 19:34, Catalin Marinas wrote:
+> > On Sat, May 13, 2023 at 05:29:53AM +0200, David Hildenbrand wrote:
+> >> On 13.05.23 01:57, Peter Collingbourne wrote:
+> >>> diff --git a/mm/memory.c b/mm/memory.c
+> >>> index 01a23ad48a04..83268d287ff1 100644
+> >>> --- a/mm/memory.c
+> >>> +++ b/mm/memory.c
+> >>> @@ -3914,19 +3914,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >>>             }
+> >>>     }
+> >>> -   /*
+> >>> -    * Remove the swap entry and conditionally try to free up the swa=
+pcache.
+> >>> -    * We're already holding a reference on the page but haven't mapp=
+ed it
+> >>> -    * yet.
+> >>> -    */
+> >>> -   swap_free(entry);
+> >>> -   if (should_try_to_free_swap(folio, vma, vmf->flags))
+> >>> -           folio_free_swap(folio);
+> >>> -
+> >>> -   inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+> >>> -   dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
+> >>>     pte =3D mk_pte(page, vma->vm_page_prot);
+> >>> -
+> >>>     /*
+> >>>      * Same logic as in do_wp_page(); however, optimize for pages tha=
+t are
+> >>>      * certainly not shared either because we just allocated them wit=
+hout
+> >>> @@ -3946,8 +3934,21 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >>>             pte =3D pte_mksoft_dirty(pte);
+> >>>     if (pte_swp_uffd_wp(vmf->orig_pte))
+> >>>             pte =3D pte_mkuffd_wp(pte);
+> >>> +   arch_do_swap_page(vma->vm_mm, vma, vmf->address, pte, vmf->orig_p=
+te);
+> >>>     vmf->orig_pte =3D pte;
+> >>> +   /*
+> >>> +    * Remove the swap entry and conditionally try to free up the swa=
+pcache.
+> >>> +    * We're already holding a reference on the page but haven't mapp=
+ed it
+> >>> +    * yet.
+> >>> +    */
+> >>> +   swap_free(entry);
+> >>> +   if (should_try_to_free_swap(folio, vma, vmf->flags))
+> >>> +           folio_free_swap(folio);
+> >>> +
+> >>> +   inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+> >>> +   dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
+> >>> +
+> >>>     /* ksm created a completely new copy */
+> >>>     if (unlikely(folio !=3D swapcache && swapcache)) {
+> >>>             page_add_new_anon_rmap(page, vma, vmf->address);
+> >>> @@ -3959,7 +3960,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >>>     VM_BUG_ON(!folio_test_anon(folio) ||
+> >>>                     (pte_write(pte) && !PageAnonExclusive(page)));
+> >>>     set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
+> >>> -   arch_do_swap_page(vma->vm_mm, vma, vmf->address, pte, vmf->orig_p=
+te);
+> >>>     folio_unlock(folio);
+> >>>     if (folio !=3D swapcache && swapcache) {
+> >>
+> >>
+> >> You are moving the folio_free_swap() call after the folio_ref_count(fo=
+lio)
+> >> =3D=3D 1 check, which means that such (previously) swapped pages that =
+are
+> >> exclusive cannot be detected as exclusive.
+> >>
+> >> There must be a better way to handle MTE here.
+> >>
+> >> Where are the tags stored, how is the location identified, and when ar=
+e they
+> >> effectively restored right now?
+> >
+> > I haven't gone through Peter's patches yet but a pretty good descriptio=
+n
+> > of the problem is here:
+> > https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d434.ca=
+mel@mediatek.com/.
+> > I couldn't reproduce it with my swap setup but both Qun-wei and Peter
+> > triggered it.
+> >
+> > When a tagged page is swapped out, the arm64 code stores the metadata
+> > (tags) in a local xarray indexed by the swap pte. When restoring from
+> > swap, the arm64 set_pte_at() checks this xarray using the old swap pte
+> > and spills the tags onto the new page. Apparently something changed in
+> > the kernel recently that causes swap_range_free() to be called before
+> > set_pte_at(). The arm64 arch_swap_invalidate_page() frees the metadata
+> > from the xarray and the subsequent set_pte_at() won't find it.
+> >
+> > If we have the page, the metadata can be restored before set_pte_at()
+> > and I guess that's what Peter is trying to do (again, I haven't looked
+> > at the details yet; leaving it for tomorrow).
+>
+> Thanks for the details! I was missing that we also have a hook in
+> swap_range_free().
+>
+> >
+> > Is there any other way of handling this? E.g. not release the metadata
+> > in arch_swap_invalidate_page() but later in set_pte_at() once it was
+> > restored. But then we may leak this metadata if there's no set_pte_at()
+> > (the process mapping the swap entry died).
+>
+> That was my immediate thought: do we really have to hook into
+> swap_range_free() at all?
 
-I do think improving PCP or adding another level of cache will help
-performance and scalability.
+As I alluded to in another reply, without the hook in
+swap_range_free() I think we would either end up with a race or an
+effective memory leak in the arch code that maintains the metadata for
+swapped out pages, as there would be no way for the arch-specific code
+to know when it is safe to free it after swapin.
 
-And, I think that it has value too to improve the performance of zone
-itself.  Because there will be always some cases that the zone lock
-itself is contended.
+> And I also wondered why we have to do this
+> from set_pte_at() and not do this explicitly (maybe that's the other
+> arch_* callback on the swapin path).
 
-That is, PCP and zone works at different level, and both deserve to be
-improved.  Do you agree?
+I don't think it's necessary, as the set_pte_at() call sites for
+swapped in pages are known. I'd much rather do this via an explicit
+hook at those call sites, as the existing approach of implicit
+restoring seems too subtle and easy to be overlooked when refactoring,
+as we have seen with this bug. In the end we only have 3 call sites
+for the hook and hopefully the comments that I'm adding are sufficient
+to ensure that any new swapin code should end up with a call to the
+hook in the right place.
 
-> I did not look into the details of this proposal, but seeing the
-> change in include/linux/page-flags-layout.h scares me.
-
-It's possible for us to use 1 more bit in page->flags.  Do you think
-that will cause severe issue?  Or you think some other stuff isn't
-acceptable?
-
-> Further, I'm not so sure how that change really interacts with
-> hot(un)plug of memory ... on a quick glimpse I feel like this series
-> hacks the code such that such that the split works based on the boot
-> memory size ...
-
-Em..., the zone stuff is kind of static now.  It's hard to add a zone at
-run-time.  So, in this series, we determine the number of zones per zone
-type based on boot memory size.  This may be improved in the future via
-pre-allocate some empty zone instances during boot and hot-add some
-memory to these zones.
-
-> I agree with Michal that looking into auto-tuning PCP would be
-> preferred. If that can't be done, adding another layer might end up 
-> cleaner and eventually cover more use cases.
-
-I do agree that it's valuable to make PCP etc. cover more use cases.  I
-just think that this should not prevent us from optimizing zone itself
-to cover remaining use cases.
-
-> [I recall there was once a proposal to add a 3rd layer to limit
-> fragmenation to individual memory blocks; but the granularity was
-> rather small and there were also some concerns that I don't recall
-> anymore]
-
-Best Regards,
-Huang, Ying
+Peter
