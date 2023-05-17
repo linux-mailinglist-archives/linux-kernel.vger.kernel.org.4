@@ -2,92 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F4D70752C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB11170752F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjEQWN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        id S229899AbjEQWOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjEQWN0 (ORCPT
+        with ESMTP id S229483AbjEQWOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:13:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918A030F8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684361557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PQ4eY+QHN6MZUcecmxgnEyYB8n0iVk8zO1FGyd+f7WY=;
-        b=DnHunybGoQUBKx4lpeEtHTezb6C3zTGNUSRTEg5D5qOLTgGhI4Yr3bagL2g8NYKP3RqiZd
-        2Nf4oBeX2H8b4f6VrTfmpVLKmSyHgkeizmW2kqZnskEMkyIb1uHz8hk6H55IBVz2k9W8qH
-        yx5qMCFkf79WTd5EVcdu5FU+OccCMnw=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-261-iyrChCOoPrewwlFJbZ7szw-1; Wed, 17 May 2023 18:12:36 -0400
-X-MC-Unique: iyrChCOoPrewwlFJbZ7szw-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-61b6f717b6eso2518256d6.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:12:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684361556; x=1686953556;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQ4eY+QHN6MZUcecmxgnEyYB8n0iVk8zO1FGyd+f7WY=;
-        b=IKW2f+L7ZPPVq1ve0Xuc4BiCY25frY1bDUS1LP2dzFU6lIGrzoJMNLRp9NzzyvwAy3
-         Nl3W5gxhHNsW15y04cDyUkvTR23FlJmVeW/k5QH5dYGydUvMLB6+psvIAGjkmbxMVkiZ
-         aXFBC4MJ6jOHbDUXUZKwJ6yl9Q7M/FQ/Ri0Hw8p8elEpj+XjzAncEXELQgkuEpd4kVum
-         WOy6nRqaCha5AqdFsG1sX7s10jBDdfZ9S9yUpdS0enSZ+0KECtjYFJgeor3e6zIE1LXY
-         8+4Ven3Bl8iYF8M9X/Rohe/XD1BUeRpU3IgVPSO0MBRnWWRQYFb+adApnp40jVZa4Cgp
-         Dc5A==
-X-Gm-Message-State: AC+VfDwcfIv0+IpslcLnd2tpjD2PVBNYTPLZwcBnaZ+UsoXbfj2W7ClU
-        1XsuaEIwujaowHQr3yTQbzl1aTphoEHKqB3OwnNSuB0xPdwkaRAObXD5xezrnfDhw0mxOtbsWe5
-        r3JAwHttA+qBibSEtLT/7x1DU
-X-Received: by 2002:a05:6214:21a7:b0:616:73d9:b9d8 with SMTP id t7-20020a05621421a700b0061673d9b9d8mr7954309qvc.3.1684361556030;
-        Wed, 17 May 2023 15:12:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4IBdp4rAChvSgr7/T0wB6VEVMyIOGDgFjPF/1CWdQad7Ykw0oUGaxhyHzwZBHh/W1zQHQi7A==
-X-Received: by 2002:a05:6214:21a7:b0:616:73d9:b9d8 with SMTP id t7-20020a05621421a700b0061673d9b9d8mr7954268qvc.3.1684361555684;
-        Wed, 17 May 2023 15:12:35 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id mk1-20020a056214580100b0061b5a3d1d54sm54453qvb.87.2023.05.17.15.12.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 15:12:35 -0700 (PDT)
-Date:   Wed, 17 May 2023 18:12:33 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZGVRUeCWr8209m8d@x1n>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
+        Wed, 17 May 2023 18:14:48 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CE135A9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:14:46 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 92AFC2047B;
+        Thu, 18 May 2023 00:14:41 +0200 (CEST)
+Date:   Thu, 18 May 2023 00:14:38 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 1/8] drm/msm/dpu: add dsc blocks to the catalog of
+ MSM8998 and SC8180X
+Message-ID: <p6nsosacoukxi46wbrmd5btdvpyxy237uqzz2ixe746febdgr7@nqnmv3hmkx6y>
+References: <1684360919-28458-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684360919-28458-2-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <1684360919-28458-2-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,63 +50,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
-> On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
-> <axelrasmussen@google.com> wrote:
-> >
-> > So the basic way to use this new feature is:
-> >
-> > - On the new host, the guest's memory is registered with userfaultfd, in
-> >   either MISSING or MINOR mode (doesn't really matter for this purpose).
-> > - On any first access, we get a userfaultfd event. At this point we can
-> >   communicate with the old host to find out if the page was poisoned.
-> > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
-> >   so any future accesses will SIGBUS. Because the pte is now "present",
-> >   future accesses won't generate more userfaultfd events, they'll just
-> >   SIGBUS directly.
+DSC* in the title.
+
+On 2023-05-17 15:01:52, Kuogee Hsieh wrote:
+> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > 
-> I want to clarify the SIGBUS mechanism here when KVM is involved,
-> keeping in mind that we need to be able to inject an MCE into the
-> guest for this to be useful.
+> Some platforms have DSC blocks which have not been declared in the catalog.
+> Complete DSC 1.1 support for all platforms by adding the missing blocks to
+> MSM8998 and SC8180X.
 > 
-> 1. vCPU gets an EPT violation --> KVM attempts GUP.
-> 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
-> 3. KVM finds that GUP failed and returns -EFAULT.
+> Changes in v9:
+> -- add MSM8998 and SC8180x to commit titil
+
+title*
+
+(couldn't be caught in v9... because this changelog wasn't present then)
+
+- Marijn
+
 > 
-> This is different than if GUP found poison, in which case KVM will
-> actually queue up a SIGBUS *containing the address of the fault*, and
-> userspace can use it to inject an appropriate MCE into the guest. With
-> UFFDIO_SIGBUS, we are missing the address!
+> Changes in v10:
+> -- fix grammar at commit text
 > 
-> I see three options:
-> 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
-> this is pointless.
-> 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
-> UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
-> instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
-> accesses, just like how we get repeated signals for real poison.
-> 3. Use this in conjunction with the additional KVM EFAULT info that
-> Anish proposed (the first part of [1]).
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
+>  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
+>  2 files changed, 18 insertions(+)
 > 
-> I think option 3 is fine. :)
-
-Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
-
-Besides what James mentioned on "missing addr", I didn't quickly see what's
-the major difference comparing to the old hwpoison injection methods even
-without the addr requirement. If we want the addr for MCE then it's more of
-a question to ask.
-
-I also didn't quickly see why for whatever new way to inject a pte error we
-need to have it registered with uffd.  Could it be something like
-MADV_PGERR (even if MADV_HWPOISON won't suffice) so you can inject even
-without an userfault context (but still usable when uffd registered)?
-
-And it'll be alawys nice to have a cover letter too (if there'll be a new
-version) explaining the bits.
-
-Thanks,
-
--- 
-Peter Xu
-
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> index c0dd477..521cfd5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>  };
+>  
+> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
+> +};
+> +
+>  static const struct dpu_dspp_cfg msm8998_dspp[] = {
+>  	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
+>  		 &msm8998_dspp_sblk),
+> @@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+>  	.dspp = msm8998_dspp,
+>  	.pingpong_count = ARRAY_SIZE(msm8998_pp),
+>  	.pingpong = msm8998_pp,
+> +	.dsc_count = ARRAY_SIZE(msm8998_dsc),
+> +	.dsc = msm8998_dsc,
+>  	.intf_count = ARRAY_SIZE(msm8998_intf),
+>  	.intf = msm8998_intf,
+>  	.vbif_count = ARRAY_SIZE(msm8998_vbif),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> index e8057a1..fec1665 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> @@ -142,6 +142,15 @@ static const struct dpu_merge_3d_cfg sc8180x_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x83200),
+>  };
+>  
+> +static const struct dpu_dsc_cfg sc8180x_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_2", DSC_2, 0x80800, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_3", DSC_3, 0x80c00, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_4", DSC_4, 0x81000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_5", DSC_5, 0x81400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +};
+> +
+>  static const struct dpu_intf_cfg sc8180x_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x6a000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -206,6 +215,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
+>  	.mixer = sc8180x_lm,
+>  	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
+>  	.pingpong = sc8180x_pp,
+> +	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
+> +	.dsc = sc8180x_dsc,
+>  	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
+>  	.merge_3d = sc8180x_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sc8180x_intf),
+> -- 
+> 2.7.4
+> 
