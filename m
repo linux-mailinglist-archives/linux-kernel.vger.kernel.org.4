@@ -2,143 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B327062F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97937062F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjEQIdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47744 "EHLO
+        id S230453AbjEQIdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjEQIdC (ORCPT
+        with ESMTP id S230372AbjEQIcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:33:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886B94C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684312279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+87hwHfuK6j4i/fuLrmFREP9Nl0u0nKS6+0RzbNzN84=;
-        b=E56yK8ytufR/4rJ/3FDnncn+P7SIv8dnm0YmmnVij89ozy0EU94DTqULMewsbvmo+ivOfH
-        XkNKKCfRnse0UXlyXPsaFPt/yNtBwU558VzZc+H1oRbvBSvMUha8bJ2bKJkaS9ps2YE/dW
-        NjSKX7nZQmTTKkV1O81cdMayXJ/SDIg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-331--VCuSb-yMjmcHCtlF5cE3Q-1; Wed, 17 May 2023 04:31:17 -0400
-X-MC-Unique: -VCuSb-yMjmcHCtlF5cE3Q-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30479b764f9so181750f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:31:16 -0700 (PDT)
+        Wed, 17 May 2023 04:32:47 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EA81BF8;
+        Wed, 17 May 2023 01:32:04 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so11482877b3a.0;
+        Wed, 17 May 2023 01:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684312324; x=1686904324;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aM66uzmo09xcCOOPPJQfJ1239TmOWVAFAFF8/sMHxJk=;
+        b=M2qSdXX5XEjDy8173X1BQyXgfZWxgjnuDh7lfxjiN34F/rl1WyhGxThNwxIdFPtsgi
+         nhPYtEGotdFU9fABOYPGOTeViZPn+sN1y3rteMpv+9zSSQzw7owwr6XhSuDET29KJnOq
+         SzUYzqxXFajwPr4esZUy4N9FcQbLvXlr8ylsB7lxL7RoGg0D2Cm87JzFrSJX7jS0UwPA
+         dlcw9V+VDEpkWCQUUgj1K9sIRZYsY+jmgYL6aB5i38iX2uRMu4QukHiJrUUteaShveAp
+         ySYsz0PO1XP1ZSXkjtYxT0oH9gJHHhxkE8wyRfluXoTQIChsYGEjGNXB+UuKiLjqVtn/
+         1m2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684312276; x=1686904276;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1684312324; x=1686904324;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+87hwHfuK6j4i/fuLrmFREP9Nl0u0nKS6+0RzbNzN84=;
-        b=RNFsleV/I2aHT6ZSsMk2/qawwfqPueq1jXQMTikag/lvFcisDYAWFt8vwVJcyUxmQ2
-         oowW+3pw79WNw0pgHfcHZJ6Px5rTchhpOwyVI7MhIq924QRcUK2oiSVawfwSMB45Ghi2
-         eK98OLpdpAA+jfkClqE0Sz4wx92ti8T8FA7wjDJwIlgP31Bn0eLlMTPkDvgAskkWzTcc
-         PZuMTAtPTFoJKoX7zZpSXFO0yOBQT9CI4sVH+NCgP6u4sbWDu+iMpye3XtHKa4xZMIPS
-         dXFliiqcDqr42MzdqleqHVp2xtgwHrk3/AZAceTw7NRzkW4LnEnq6YWAU6Rm0rnTQh6O
-         uQlQ==
-X-Gm-Message-State: AC+VfDyECUdsctxxGCXkPpwpvM6db53GVOv1cq7eswEI8DczFuv7r2GS
-        YFu6NIKLgPdLWbsODtLLfq/UvzNdUx7m2wf0odsc+iKwfnO6rZ2uPg/hhr88dYpHmvbMiLp07Se
-        DutAe+TSBFxKeyoIV0T+Cc3fD
-X-Received: by 2002:a5d:5221:0:b0:2fb:703d:1915 with SMTP id i1-20020a5d5221000000b002fb703d1915mr26788400wra.43.1684312276039;
-        Wed, 17 May 2023 01:31:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5QaVKwS34M34vksP3fcVTyCM0DHux/DI1V9/o+0472vKaGysoi00ZT1X872bnMVy2FbYiUrw==
-X-Received: by 2002:a5d:5221:0:b0:2fb:703d:1915 with SMTP id i1-20020a5d5221000000b002fb703d1915mr26788385wra.43.1684312275770;
-        Wed, 17 May 2023 01:31:15 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:3900:757e:83f8:a99d:41ae? (p200300cbc7073900757e83f8a99d41ae.dip0.t-ipconnect.de. [2003:cb:c707:3900:757e:83f8:a99d:41ae])
-        by smtp.gmail.com with ESMTPSA id q28-20020a056000137c00b003078bb639bdsm1934194wrz.68.2023.05.17.01.31.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 01:31:15 -0700 (PDT)
-Message-ID: <86142559-f15c-938a-a0eb-1ea590cb5e91@redhat.com>
-Date:   Wed, 17 May 2023 10:31:14 +0200
+        bh=aM66uzmo09xcCOOPPJQfJ1239TmOWVAFAFF8/sMHxJk=;
+        b=Ld2ylL4LQkHm7qOz6DjR3UH8wwWYdlEe8cHQPFfHGUBw5EtJMW0qYYAWnNT7rDgF8g
+         s/ScyggPaDwpub0/lXoy8viD+V2DhKPrF2IZ2DOemD2elza7uuL0LOAI4XHc5JjLDdYb
+         ffB4ugOm2oR+F3FGwquCHA1WlzkcBIa1a/4eNlWhkssgqIWJ1Nvz96R0gKop2IWrTdbj
+         nmGu7huy48BegEvVZwUeoC+EMsfHVY/26KDqHgdyPeZtASGaS/TiNaQjLfId6PFOUR8y
+         QIFknrEIARI0I6/qaVLIfvDVFUMne/lXPBm+ss5SeJfS0C5MFvE3xZ3rVgWYLOchls9H
+         fMbQ==
+X-Gm-Message-State: AC+VfDxIVn/riSJTTICaWyCZ8MS6kXyVQOFO9KXpMQCqOuyTxdE2u3Q8
+        j31JTkiB0LvcZkVESLSR5FsyuZ4GYcW5T8m6GvU=
+X-Google-Smtp-Source: ACHHUZ4iyaYrxVZMxySGUTOPYWhxpLgFfi9ixRGluwwJJKuYvKkERWG25wDH/5UXmoUZ6NvcPCTfdzogMeS4zYeWaPw=
+X-Received: by 2002:a17:90a:1181:b0:24e:3413:c7ff with SMTP id
+ e1-20020a17090a118100b0024e3413c7ffmr1926164pja.7.1684312324177; Wed, 17 May
+ 2023 01:32:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] mm: Move arch_do_swap_page() call to before
- swap_free()
-Content-Language: en-US
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
-        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "surenb@google.com" <surenb@google.com>,
-        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
-        <chinwen.chang@mediatek.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
-        <Kuan-Ying.Lee@mediatek.com>,
-        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        vincenzo.frascino@arm.com,
-        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
-        eugenis@google.com, Steven Price <steven.price@arm.com>,
-        stable@vger.kernel.org
-References: <20230512235755.1589034-1-pcc@google.com>
- <20230512235755.1589034-2-pcc@google.com>
- <7471013e-4afb-e445-5985-2441155fc82c@redhat.com> <ZGJtJobLrBg3PtHm@arm.com>
- <91246137-a3d2-689f-8ff6-eccc0e61c8fe@redhat.com>
- <CAMn1gO4cbEmpDzkdN10DyaGe=2Wg4Y19-v8gHRqgQoD4Bxd+cw@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAMn1gO4cbEmpDzkdN10DyaGe=2Wg4Y19-v8gHRqgQoD4Bxd+cw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230511135632.78344-1-bstruempfel@ultratronik.de> <BN7PR12MB280217A4D088BE2D951B9A6DDC789@BN7PR12MB2802.namprd12.prod.outlook.com>
+In-Reply-To: <BN7PR12MB280217A4D088BE2D951B9A6DDC789@BN7PR12MB2802.namprd12.prod.outlook.com>
+From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
+Date:   Wed, 17 May 2023 10:31:53 +0200
+Message-ID: <CAEktqcsFUT=2236bj37xAbcFO750UxQrbPvi+jczZmS-hNJSdA@mail.gmail.com>
+Subject: Re: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
+To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
+Cc:     "bstruempfel@ultratronik.de" <bstruempfel@ultratronik.de>,
+        Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->>> Is there any other way of handling this? E.g. not release the metadata
->>> in arch_swap_invalidate_page() but later in set_pte_at() once it was
->>> restored. But then we may leak this metadata if there's no set_pte_at()
->>> (the process mapping the swap entry died).
->>
->> That was my immediate thought: do we really have to hook into
->> swap_range_free() at all?
-> 
-> As I alluded to in another reply, without the hook in
-> swap_range_free() I think we would either end up with a race or an
-> effective memory leak in the arch code that maintains the metadata for
-> swapped out pages, as there would be no way for the arch-specific code
-> to know when it is safe to free it after swapin.
-
-Agreed, hooking swap_range_free() is actually cleaner (also considering 
-COW-shared pages).
-
-> 
->> And I also wondered why we have to do this
->> from set_pte_at() and not do this explicitly (maybe that's the other
->> arch_* callback on the swapin path).
-> 
-> I don't think it's necessary, as the set_pte_at() call sites for
-> swapped in pages are known. I'd much rather do this via an explicit
-> hook at those call sites, as the existing approach of implicit
-> restoring seems too subtle and easy to be overlooked when refactoring,
-> as we have seen with this bug. In the end we only have 3 call sites
-> for the hook and hopefully the comments that I'm adding are sufficient
-> to ensure that any new swapin code should end up with a call to the
-> hook in the right place.
-
-
-Agreed, much cleaner, thanks!
-
--- 
-Thanks,
-
-David / dhildenb
-
+Am Mo., 15. Mai 2023 um 08:37 Uhr schrieb Mahapatra, Amit Kumar
+<amit.kumar-mahapatra@amd.com>:
+>
+> Hello,
+>
+> > -----Original Message-----
+> > From: Boerge Struempfel <boerge.struempfel@gmail.com>
+> > Sent: Thursday, May 11, 2023 7:27 PM
+> > Cc: boerge.struempfel@gmail.com; bstruempfel@ultratronik.de; Mark
+> > Brown <broonie@kernel.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
+> > Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; NXP
+> > Linux Team <linux-imx@nxp.com>; linux-spi@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+> > Subject: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
+> >
+> > CAUTION: This message has originated from an External Source. Please use
+> > proper judgment and caution when opening attachments, clicking links, or
+> > responding to this email.
+> >
+> >
+> > By default, the imx spi controller uses a high mosi line, whenever it is idle.
+> > This may not be desired in all use cases. For example neopixel leds can get
+> > confused and flicker due to misinterpreting the idle state.
+> > Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+> > can be overwritten on a per device basis.
+> >
+> > Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
+> > ---
+> >  drivers/spi/spi-imx.c        | 9 ++++++++-
+> >  drivers/spi/spi.c            | 2 ++
+> >  include/uapi/linux/spi/spi.h | 3 ++-
+> >  3 files changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
+> > 34e5f81ec431e..6acab2b4ffaa5 100644
+> > --- a/drivers/spi/spi-imx.c
+> > +++ b/drivers/spi/spi-imx.c
+> > @@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller
+> > *controller, struct spi_device  #define MX51_ECSPI_CONFIG_SCLKPOL(cs)  (1
+> > << ((cs & 3) +  4))  #define MX51_ECSPI_CONFIG_SBBCTRL(cs)  (1 << ((cs & 3) +
+> > 8))
+> >  #define MX51_ECSPI_CONFIG_SSBPOL(cs)   (1 << ((cs & 3) + 12))
+> > +#define MX51_ECSPI_CONFIG_DATACTL(cs)  (1 << ((cs & 3) + 16))
+> >  #define MX51_ECSPI_CONFIG_SCLKCTL(cs)  (1 << ((cs & 3) + 20))
+> >
+> >  #define MX51_ECSPI_INT         0x10
+> > @@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct
+> > spi_imx_data *spi_imx,
+> >                 cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
+> >         }
+> >
+> > +       if (spi->mode & SPI_MOSI_IDLE_LOW)
+> > +               cfg |= MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
+>
+> Kindly replace all occurrence of spi->chip_select with spi_get_chipselect(spi, 0)
+> https://github.com/torvalds/linux/commit/9e264f3f85a56cc109cc2d6010a48aa89d5c1ff1
+Thank you very much for noticing this. I have changed it for the next
+version of the patch.
+>
+> > +       else
+> > +               cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
+>
+> > +
+> >         if (spi->mode & SPI_CS_HIGH)
+> >                 cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
+> >         else
+> > @@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device
+> > *pdev)
+> >         spi_imx->controller->prepare_message = spi_imx_prepare_message;
+> >         spi_imx->controller->unprepare_message =
+> > spi_imx_unprepare_message;
+> >         spi_imx->controller->slave_abort = spi_imx_slave_abort;
+> > -       spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH |
+> > SPI_NO_CS;
+> > +       spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH
+> > | SPI_NO_CS |
+> > +                                        SPI_MOSI_IDLE_LOW;
+> >
+> >         if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
+> >             is_imx53_ecspi(spi_imx))
+> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c index
+> > 9291b2a0e8871..3ad538b317a84 100644
+> > --- a/drivers/spi/spi.c
+> > +++ b/drivers/spi/spi.c
+> > @@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller
+> > *ctlr, struct spi_device *spi,
+> >                 spi->mode |= SPI_LSB_FIRST;
+> >         if (of_property_read_bool(nc, "spi-cs-high"))
+> >                 spi->mode |= SPI_CS_HIGH;
+> > +       if (of_property_read_bool(nc, "spi-mosi-idle-low"))
+> > +               spi->mode |= SPI_MOSI_IDLE_LOW;
+> >
+> >         /* Device DUAL/QUAD mode */
+> >         if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) { diff --git
+> > a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h index
+> > 9d5f580597039..ca56e477d1619 100644
+> > --- a/include/uapi/linux/spi/spi.h
+> > +++ b/include/uapi/linux/spi/spi.h
+> > @@ -28,6 +28,7 @@
+> >  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with 8 wires */
+> >  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedance
+> > turnaround */
+> >  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on Rx only xfer
+> > */
+> > +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low when
+> > idle */
+> >
+> >  /*
+> >   * All the bits defined above should be covered by SPI_MODE_USER_MASK.
+> > @@ -37,6 +38,6 @@
+> >   * These bits must not overlap. A static assert check should make sure of
+> > that.
+> >   * If adding extra bits, make sure to increase the bit index below as well.
+> >   */
+> > -#define SPI_MODE_USER_MASK     (_BITUL(17) - 1)
+> > +#define SPI_MODE_USER_MASK     (_BITUL(18) - 1)
+> >
+> >  #endif /* _UAPI_SPI_H */
+> > --
+> > 2.25.1
+>
