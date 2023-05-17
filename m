@@ -2,142 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DAD7062E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182CB7062EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjEQIaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S229897AbjEQIbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjEQIaS (ORCPT
+        with ESMTP id S229993AbjEQIah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:30:18 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2116.outbound.protection.outlook.com [40.107.96.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BD86596;
-        Wed, 17 May 2023 01:29:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NBw3JTzqEeSiWpFSr/cWgbY1z2bi6ncLWZUzkmDK12BD9kdWHhfg2hGpmu8+H2rL6YhXUGKFnX2F3vKx0ns1gfrpw2xb6vPy4BoaIFCRe4N+2NbctFEplnLa0SkiALzM7LAxBelZ2EAauRPUlK6n0U+qxz27zZskV9hP/5zv2pwKpCtg8fx1QpXanamICp0rwRPmHJaPm5OSkxz/oxZt6VkscdJAqRYwjauz2hs8vUHGSBExMP6kDWD0247yQFAcDvkWDHuBN5dTwANz8aCaSxjij6UVEuv508tGCNq6ZXhGbDTueUNa5BwJIDlUAskl9ozvUoa7ZihAM4Al8Yod5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q3pzO2zaYpAMuHU9+cMXbAVG+llvsTkon0vceUq9Wb0=;
- b=iW+OhwZ8YE6G95q4CMUbn/PTRKQPZLchO6YspQ3L6K2Rtbbw7pkHyyB2KGIwLJ9nVoJEu7XDvuBbTOrJpnFQ06Zkso3TsihiD37SkXIP9QRFkR/07cTQ6nJRfGXc7KNTKiEWDA9cOwlTcGsBNyn1/SmT8HbyRX7/C3bIJ75nCDsHpIqNrm5Tf1qqhQvddw6SeAwnffjFqfXIWhDV+Bt3k006jhgETd7E5P+o3L53SDOMAw+nhdc04tefY53i8SldyPoJ+Oa/j+tY6IwmnnJUS7gRY25ajkiUV672XTE5KgrypXJVJ6IXX9HKf68qYFDs+TSlNoVgYVNjvG30HEuYJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 17 May 2023 04:30:37 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A17468A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:30:03 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-969f90d71d4so66502866b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:30:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q3pzO2zaYpAMuHU9+cMXbAVG+llvsTkon0vceUq9Wb0=;
- b=TIHzMhor5df7oBspXZKGIm4RInECAbbD5Z/Bvylkwxzkby5ngdnyD1uGsmIu8vZg35K11FNzi3hKLDCe7jlUdcG3/VM81KstHv0WcCUzBgZxvG20NIctGrGubygB6CN3xlFhljjeO5ty1XW1VTH0vkQhfU9cfTAbl+BovUR8PJA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH2PR13MB3831.namprd13.prod.outlook.com (2603:10b6:610:a3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Wed, 17 May
- 2023 08:29:42 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.033; Wed, 17 May 2023
- 08:29:42 +0000
-Date:   Wed, 17 May 2023 10:29:34 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     netdev@vger.kernel.org, Doug Berger <doug.berger@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] net: phy: broadcom: Register dummy IRQ handler
-Message-ID: <ZGSQbsaki8RmR51h@corigine.com>
-References: <20230516225640.2858994-1-f.fainelli@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516225640.2858994-1-f.fainelli@gmail.com>
-X-ClientProxiedBy: AM0PR04CA0021.eurprd04.prod.outlook.com
- (2603:10a6:208:122::34) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1684312202; x=1686904202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MBwHznQm8CzxpIL8Db7tiHw17drcLtBwGVeWtLImY5o=;
+        b=zDV5NJE6zxpmpAcAoalbbVYFRPnGI1edn47vzk7aPH+IpmmDVTkSOlB2gdA0e15c3O
+         q9BL3tKrQMe4I02nfkT7NnWVOCeTb/ul0kyzr4BaOfsi3shF4mycLxl1nbiVFLXHh5Cn
+         NYZgdhH272FVRbtJrOHThNi7W6Uw5Y5vTWEVcBSacmKR9ykRZMfEuKRLrUs/YAJS4Xdn
+         EjaDvQ+b1YsljmVlm9QW1JXtM8naOcjiaAHAq13ApNNA9Il/ccomoLbQmHNusetIxu6h
+         mTd8Wg2zMgjgOPTT5KhkdTlde7Yd8xGNVBLnn3Zmzy6czPu2D1/0+BBsRpQ/IIlr6Iqu
+         xmqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684312202; x=1686904202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MBwHznQm8CzxpIL8Db7tiHw17drcLtBwGVeWtLImY5o=;
+        b=jUBAtW9n2QPNd5QZiovWqZLZLyOPhPU/+d41WjAM7e4bepgspnA3qrdSxz8i7npiMR
+         A9Oyd44zmluVD9HFGfJI0lxHqumSVodanmBkrro+PNRTcfUUkNGPHpNESEyFyFfT0FOc
+         EF6PG2T0+Z3qRhcl9XScJqr4Xd0DedJ7buPn36JSsyehK4dvOEPpJQgmEW3b+rqgsl3c
+         oY806+lhbDmSzrA2jm7jqGIDVjJ6CJPhm1law4csQPsfi9o+CmS+tV/YjPTPGmc8OJrB
+         rPhmomiIxsMqZoZjfzEbiwHZc09LULxRFZC4R7Ua782hBmd+0cW7aL8s2IKKvW5XL3rQ
+         XmsQ==
+X-Gm-Message-State: AC+VfDxcjKnAFETNS5aKz5MN8EfaK2Nm5iFzIYUbmyz2I7a51xgvXqDZ
+        KxPHtXPNvWmEUOYF0pYr3gOcpg==
+X-Google-Smtp-Source: ACHHUZ5Yl86YlxSEGmlP2DUjKvLji+nG1QDh1NQclrC+wx7+FyYqE5GEM1fOSZuGX2PwoRo9m6iYDA==
+X-Received: by 2002:a17:907:2687:b0:94e:16d:4bf1 with SMTP id bn7-20020a170907268700b0094e016d4bf1mr33235409ejc.66.1684312202100;
+        Wed, 17 May 2023 01:30:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id fh3-20020a1709073a8300b009666523d52dsm12025206ejc.156.2023.05.17.01.30.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 01:30:01 -0700 (PDT)
+Message-ID: <03764be6-e8fc-c05f-3836-4979c3898995@linaro.org>
+Date:   Wed, 17 May 2023 10:30:00 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3831:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1ba0ac8-8a5a-4247-c326-08db56b0dcd0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yYDhgURdu3kNl0lQR3JLljMwfxHXmaTs+VpqymqYoj/dMzAUUAIxpGUQgX93Z4x3cIGxje8zbrEpOQXLgq54E5hVokXYMkIGVWCiBj8L/ZC7npOfwrho/k0rDGcg7tpllKQZGJ2PJe+nNm/JXQ5u2Z0EcwUiVh+y8+DTHk8/iIicjnn5bHMjbF2q/al4i+YuJf2Es8QX7oK5n/I1xgMhE5uhcxmqHhvKhmIXdEGe5/N8DKafc3vo8DikebgDxwuwUQM1armOXRC3W87gPgFHSl8An/dTzKjdQHjoHKjPEN3YOcnaGNMNqqcR2QzAtmaBRoH3V7HyurnjnxLr05FclkcJX/ggHdnzCXgG/d68oYzHfn0t372scwdnOrAsswof2jVEd9j0lRaxV+bcqpnEEGWL1Fuc7KoZDeatw9nirDxMyqBXHgyvKpS+s5a9oF1kVe+5wdKUVDpl4UFre6O3+OmVIS/CVnn1WC6DuQUVxqkLsKCnmkHsVjKEqZB09mfoMWzFWbtcAPg2rnqI+omx2B/du6YVkb4NMmuLztGjcldLVY3ztIbDjUQhwYPpfHiV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39830400003)(366004)(376002)(136003)(451199021)(8936002)(5660300002)(6486002)(8676002)(38100700002)(44832011)(54906003)(36756003)(7416002)(66476007)(66556008)(66946007)(316002)(4326008)(6916009)(478600001)(41300700001)(6666004)(4744005)(86362001)(2906002)(2616005)(186003)(6512007)(83380400001)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o5UNQ+9vQa4sMTXuaNK1NnMLw6r2kMNjR6li+32CwBR7IkOTrVsqSJsE53s7?=
- =?us-ascii?Q?e2BFP8z1qLPIwuo5cg5KTi1b2TjLZhSHGy5tFoZOr1GoHBmCn36jR6Tuy4UD?=
- =?us-ascii?Q?NGQYt31ocip4RF7phkYTcW9EjL4eGYYVT52uHM6aaWu7ckbL505MFiHOIrsN?=
- =?us-ascii?Q?JAuez7FyVWigTCCXJmwcds8NqRpmQeCp7BgoxkjbDuvpHS+5+lxk/Itdm9Rk?=
- =?us-ascii?Q?Dbhb2X+A84KUeZZeVBg2bQHbIzTwDPLq66d+s63KwWy3sbkbNGuFYVUW60rG?=
- =?us-ascii?Q?8t95buHQpBF+9dWxiTtgvgqSbh25YmKDeXH1VPTvp0XZcawlh4darRcIz8Jv?=
- =?us-ascii?Q?JnRnj4Skmsc8goitIZBHYPRTL6Jr63bY8ISrmcqT9Qme4FeIOyRCvW8Yiyyj?=
- =?us-ascii?Q?ELSxZ4LqdQJ68OwRhtytBkhV3tOspH/SyGGrK2UbJA52S+QHdMHcTPVH2eip?=
- =?us-ascii?Q?xevwmjHr10uIlC9Wt35045Xbh2wTtrYmd+yjjXtTxFYJSoARW7H5Xi6qQrz9?=
- =?us-ascii?Q?P8dhZ7NjlJIhOHUPe5VGUaBhOSIDPAUotUIKfDRLc+YJOdjxZiKrUOSdZtB9?=
- =?us-ascii?Q?uf9WgcMZ+h9+mkznqfRjT5pf8vAQFxALccpbh2ptGIZz2/LxYx35PTwbDaq0?=
- =?us-ascii?Q?WMpFaXx1kzEc4pIeNdR92EnxtQodw59w4bcTfNneQ2WMesLFzbnRtX7RyGK3?=
- =?us-ascii?Q?zqgAyX+9ZXErBmDqK+armerissgHjsR2m8iAr6a67fevlXh7R+YkyNQHlF5S?=
- =?us-ascii?Q?ZlBidB7imwr/PmJd6O+/wzuhE0+YApLThFzu+4Q1vS1V/4ny9MDi5dCIYhWu?=
- =?us-ascii?Q?iY6rmH8kOCVN+WQY3/nprTU+44/44wav3CgOFWJTeSiuVML6yHV7K34huu3W?=
- =?us-ascii?Q?0gEf262HUQMUfGiMnMGY5YHI28A25NgxHAgOVLdKqZI8CcFvBBgU1j510CH0?=
- =?us-ascii?Q?by56lUt97qhPwqVGIHOJCe02gUP/fs5zmxLp/KVRXVrEkisxkjX2LjJeI9PL?=
- =?us-ascii?Q?G5p26LhpAa4qupFaThWJDZSJZEEb47nsRovp1DX6NCAkjyG0OgbABOFx/CFX?=
- =?us-ascii?Q?tSfSsfaDs5rRXdaMPH8awIRmaGOp72LIVMIlW+LbW/+rnHeH0UErkTOyldyu?=
- =?us-ascii?Q?bsOMXCfWmxGOq7kxPvAI/Z+JwcFLiTsmVOnNijmomLwohbye+b7zh+qUmVhe?=
- =?us-ascii?Q?259lrAljsE45gwScTmV5iA1/Np7KiQi/KFp4AlFXNJv8/0uzI59LBsq/SbAp?=
- =?us-ascii?Q?skwwHGGcqunnMYzkgruXP24o65Aq46allhQJkEY2KzZfaHMn66nJ6QqOANjN?=
- =?us-ascii?Q?dXmIVUFlJaCYCSWbUu1DWjV2jB7hbu7UxF7KGRGb1eTJzeutd7+zRMEzWXHl?=
- =?us-ascii?Q?UjlPbE13wEsbqJ+iDJbvZYuO/lJmxuP10Z3PApXWu8tzlosFvPGukIozC2na?=
- =?us-ascii?Q?2X4M2BXoix1U2CjOAeJTYiNM3pX9MTpNQxvPctMUvpUjZxvY8ymsTOW44a0b?=
- =?us-ascii?Q?USLucAS5RLyNQBtWenI6YrmSeimqoX8PprP+jJ6Sp1gO/NeOtl7YqIzXmEfu?=
- =?us-ascii?Q?B5qa8q5XhB2fgIo1RioP9aIrppm/wOECxDEPGR32MuHlNeFgBtsW6J7ahbJv?=
- =?us-ascii?Q?zueQiHs/4ejQ/mY34ZwIARzzc/5MmBGn31LOcCsMjvJXvxzFVj63uvJffpqs?=
- =?us-ascii?Q?fu2Yzg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1ba0ac8-8a5a-4247-c326-08db56b0dcd0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 08:29:42.4773
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aeDdBxg8MEw0hiTb4+lX5zofxZq/W5Ozt+qO/XxaSai7oCF+et7Xae8aNajctbJ8I1E/rlywdt4h2AK3mJK5rLqhNTUcDLIMJI+LRHvDOdI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3831
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] dt-bindings: clock: ehrpwm: Remove unneeded syscon
+ compatible
+Content-Language: en-US
+To:     Andrew Davis <afd@ti.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230516184626.154892-1-afd@ti.com>
+ <20230516184626.154892-2-afd@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230516184626.154892-2-afd@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:56:39PM -0700, Florian Fainelli wrote:
-> From: Florian Fainelli <florian.fainelli@broadcom.com>
+On 16/05/2023 20:46, Andrew Davis wrote:
+> This node's register space is not accessed by any other node, which
+> is the traditional use for the "syscon" hint. It looks to have been
+> added here to make use of a Linux kernel helper syscon_node_to_regmap().
+> The Linux driver now uses a more appropriate helper that does not
+> require the hint, so let's remove it from the binding.
 > 
-> In order to have our interrupt descriptor fully setup, and in particular
-> the action, ensure that we register a full fledged interrupt handler.
-> This is in particular necessary for the kernel to properly manage early
-> wake-up scenarios and arm the wake-up interrupt, otherwise there would
-> be risks of missing the interrupt and leaving it in a state where it
-> would not be handled correctly at all, including for wake-up purposes.
-> 
-> Fixes: 8baddaa9d4ba ("net: phy: broadcom: Add support for Wake-on-LAN")
-> Suggested-by: Doug Berger <doug.berger@broadcom.com>
-> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
 
