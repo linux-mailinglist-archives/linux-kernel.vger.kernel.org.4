@@ -2,125 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF29706F17
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE5E706F1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjEQRLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S229761AbjEQROR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEQRLD (ORCPT
+        with ESMTP id S229558AbjEQROP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:11:03 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6C4198E;
-        Wed, 17 May 2023 10:11:02 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HER0rV005335;
-        Wed, 17 May 2023 17:10:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6q0xArWpEZhT4d+9ngBTBg23xYZkBDXNGbPrCv/UF5o=;
- b=KdezF0FyvbncMVobwMtegc5q1dTxViZnRhGmGcY6hlJItNZVXeMZNl/aid2gEbskgR0s
- fp5BeLPE9aayGA8hyAG8N6rgHNC6UX0CqxKatExsXkAVRYfQOsqzkHhmt3aZ2pT+8XD4
- JOCIB+CwnJvCWP7sGFhMFQVayFsUcfCPMMaHPd1+jxUlSkrSU7Zi6heq/jPK+Hc6D/32
- ZFolJMIroUT6+Ax0iGvc0P+XfZObVH4FHRvrHOM3FRAvzqKzJ2DYD5XnqPq7hLfScHrn
- iTGdj4PN5UYOE7n3codfpDDmwlrJmWWAqc2LHXDrFB+m1mMSyAoGRSCAH9ueoEqRlRKH qQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmbk7b5ey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 17:10:34 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34HHAXIU025352
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 17:10:33 GMT
-Received: from [10.110.32.16] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 17 May
- 2023 10:10:32 -0700
-Message-ID: <8e4bde65-fe66-853b-8b87-f3b230a384df@quicinc.com>
-Date:   Wed, 17 May 2023 10:10:25 -0700
+        Wed, 17 May 2023 13:14:15 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D5626B6;
+        Wed, 17 May 2023 10:14:13 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HHE9N1129523;
+        Wed, 17 May 2023 12:14:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684343649;
+        bh=rIqgp7czyztNTxjbeT0TWDy5/cpNONc7nlh+3hBbUYk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=U1Ec+9mkcyHnF7+AkMh0oVvZFhqsJJSCXedT55UfFHAzlLQnEYDYZpQczcQI31vcd
+         tdjzJYw+1HGx2OpaN4d7a803GvhobfdCNAgTU8j9TXSh84gk1Dftg0unvDoq5omEJU
+         qWV7a7zAmHkWNiwJQKAxNBK616OKvL0qRMIuXhuc=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HHE9J8125638
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 17 May 2023 12:14:09 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
+ May 2023 12:14:08 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 17 May 2023 12:14:08 -0500
+Received: from [10.250.35.184] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34HHE8ta001597;
+        Wed, 17 May 2023 12:14:08 -0500
+Message-ID: <40a828bc-c1f2-d865-72e5-2171338c6839@ti.com>
+Date:   Wed, 17 May 2023 12:14:08 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2] accel/qaic: initialize ret variable to 0
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, <trix@redhat.com>,
-        <ogabbay@kernel.org>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <jacek.lawrynowicz@linux.intel.com>,
-        <stanislaw.gruszka@linux.intel.com>, <quic_pkanojiy@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20230517165605.16770-1-quic_jhugo@quicinc.com>
+Subject: Re: [PATCH 2/2] dt-bindings: clock: ehrpwm: Remove unneeded syscon
+ compatible
 Content-Language: en-US
-From:   Carl Vanderlip <quic_carlv@quicinc.com>
-In-Reply-To: <20230517165605.16770-1-quic_jhugo@quicinc.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230516184626.154892-1-afd@ti.com>
+ <20230516184626.154892-2-afd@ti.com>
+ <373ce50d-37ab-5c25-c50b-20e4f6ae6859@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <373ce50d-37ab-5c25-c50b-20e4f6ae6859@ti.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: O9dRqlgI_OB5q-Zuwbc59rWGZDx8R7un
-X-Proofpoint-ORIG-GUID: O9dRqlgI_OB5q-Zuwbc59rWGZDx8R7un
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
- adultscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0 suspectscore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305170140
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/2023 9:56 AM, Jeffrey Hugo wrote:
-> From: Tom Rix <trix@redhat.com>
+On 5/16/23 11:36 PM, Vignesh Raghavendra wrote:
 > 
-> clang static analysis reports
-> drivers/accel/qaic/qaic_data.c:610:2: warning: Undefined or garbage
->    value returned to caller [core.uninitialized.UndefReturn]
->          return ret;
->          ^~~~~~~~~~
 > 
->>From a code analysis of the function, the ret variable is only set some
-> of the time but is always returned.  This suggests ret can return
-> uninitialized garbage. However BO allocation will ensure ret is always
-> set in reality.
+> On 17/05/23 00:16, Andrew Davis wrote:
+>> This node's register space is not accessed by any other node, which
+>> is the traditional use for the "syscon" hint.
 > 
-> Initialize ret to 0 to silence the warning.
+> Unfortunately that's not the case across SoCs. Eg AM65x See  TRM section
+> Table 5-582. CTRLMMR_EPWM0_CTRL Register Field Descriptions
 > 
-> Fixes: ff13be830333 ("accel/qaic: Add datapath")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> [jhugo: Reword commit text]
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> ---
->   drivers/accel/qaic/qaic_data.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
-> index 8ab26e64b231..e42c1f9ffff8 100644
-> --- a/drivers/accel/qaic/qaic_data.c
-> +++ b/drivers/accel/qaic/qaic_data.c
-> @@ -591,7 +591,7 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
->   	struct qaic_bo *bo = to_qaic_bo(obj);
->   	unsigned long offset = 0;
->   	struct scatterlist *sg;
-> -	int ret;
-> +	int ret = 0;
->   
->   	if (obj->import_attach)
->   		return -EINVAL;
 
+Not sure what version of the TRM you have, latest (Rev. E) has this
+register as Table 5-636.. but I found it and see your point here.
 
-LGTM
+> TB_CLKEN is clubbed with SYNCIN_SEL and ePWM tripzone configuration
+> signals which may require register to be shared with other drivers in future
+> 
 
-Reviewed-by: Carl Vanderlip <quic_carlv@quicinc.com>
+This looks to only be a problem in AM65x, all later devices we have fixed
+the issue and now group the clock enable bits all together.
+
+Do we actually expect this to be an issue and have a user of these
+other bits? If so then we modeled this region wrong in AM65x DT, these
+registers are not "tbclk gate registers" any more then they are to the
+other functions they provide. These registers should be a syscon node
+and then each function within should be a child node.
+
+syscon@4140 {
+	compatible = "ti,am654-epwm-crtl", "syscon";
+	reg = <0x4140 0x18>;
+
+	ehrpwm_tbclk: clock {
+		compatible = "ti,am654-ehrpwm-tbclk";
+		#clock-cells = <1>;
+	};
+
+	pwm_mux: mux-controller {
+		compatible = "mmio-mux";
+		#mux-control-cells = <1>;
+	};
+};
+
+Something like that. That way we do not give preference to one device
+and have to have it give out shared registers.
+
+Either that or split the binding compatible, one for AM65x with syscon
+and one for all later device compatibles that do not share the register:
+
+compatible:
+     oneOf:
+       - items:
+           - const: ti,am654-ehrpwm-tbclk
+           - const: syscon
+       - items:
+         - enum:
+           - ti,am64-epwm-tbclk
+           - ti,am62-epwm-tbclk
+
+Would rather the first option.
+
+Andrew
+
+> 
+>> It looks to have been
+>> added here to make use of a Linux kernel helper syscon_node_to_regmap().
+>> The Linux driver now uses a more appropriate helper that does not
+>> require the hint, so let's remove it from the binding.
+>>
+>> Signed-off-by: Andrew Davis <afd@ti.com>
+>> ---
+>>   .../devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml     | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+>> index 66765116aff5..64b8bce5962c 100644
+>> --- a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+>> @@ -16,7 +16,6 @@ properties:
+>>             - ti,am654-ehrpwm-tbclk
+>>             - ti,am64-epwm-tbclk
+>>             - ti,am62-epwm-tbclk
+>> -      - const: syscon
+>>   
+>>     "#clock-cells":
+>>       const: 1
+>> @@ -33,8 +32,8 @@ additionalProperties: false
+>>   
+>>   examples:
+>>     - |
+>> -    ehrpwm_tbclk: syscon@4140 {
+>> -        compatible = "ti,am654-ehrpwm-tbclk", "syscon";
+>> +    ehrpwm_tbclk: clock@4140 {
+>> +        compatible = "ti,am654-ehrpwm-tbclk";
+>>           reg = <0x4140 0x18>;
+>>           #clock-cells = <1>;
+>>       };
+> 
