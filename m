@@ -2,131 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3241D705D0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00421705D16
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjEQCTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41908 "EHLO
+        id S231593AbjEQCWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjEQCTA (ORCPT
+        with ESMTP id S231912AbjEQCWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:19:00 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B89A3A87
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:18:59 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ac770a99e2so1279941fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684289937; x=1686881937;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PiwfnxHpTyL1B4ayjglsH0C61007tFWAsNvE7dIFkrY=;
-        b=mu6X2ZUoQp+726STqGqjI0ZOiQpGbbIU7rq2AdIvry4lqNAzlMVFVmsEyYmwYITzp5
-         A7+LL3MbY6GXK3dQy00cdOUfJAWY4Ow6VX4Yf0RRFRSPnHvYvP0FG6E0FZNhX+HuZQ3d
-         goeTIrFpX0S2kYONiaFuqxMPkBIaJH8jHPRQDmTRXiuljr5tKgYCtoLnEKfiNd3es3XC
-         jxeYkG8i9MdO9Plrv2p54/ZgSVGcMLW/ApGkgeJDP4HwfRqJnc/ErPHOH8zE/eZs4Hp4
-         KK79O0IKAxXyrU2NozVLhlF4jai/eBTASoiqesubrA1SUcbt6IUh99oq6vOPhwD4cBvZ
-         v1aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684289937; x=1686881937;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PiwfnxHpTyL1B4ayjglsH0C61007tFWAsNvE7dIFkrY=;
-        b=MGVaZHKvC8rZA8Ou/bCrpMz9STPokhh71R09lNloa3AIqk7+KFYM+d9bZKkraRF1YJ
-         c6lWWYnfnDZ5qM3wrIZfokXExl1AT0G6ZM7Cu1GkkMfmN3DV8i3Q/sQeBpVuGfwRimDB
-         TYgpB2FTHjSAvxqFyaw8yWJJA4ulm8VxkPnDy4abP4U7vh+OZotj8dUIjprVyxoEPQZ/
-         9lRGlzfXF/ykqPQPjzlRfOwYWq+led8x8zly4UOdkBlS7lCpIc51Gj7NN6JNKo9ziB4h
-         3eSPU7IniE8scTZy2mESPeaUXpzyx96mXTztcNS9T/vpcSh0aCtBTS6ylBhpl+3pmHog
-         +rlA==
-X-Gm-Message-State: AC+VfDwz2v9//RGyFe4lR2786/BYtz7PshtvIxRSP3F0KENjpDs91CHh
-        oh5aIPSkRffiqH3afpeTORgEbA==
-X-Google-Smtp-Source: ACHHUZ7D+LOuI/MHSp0j2cZk14xGuFren+3QxYP0Kp6IpsCXfPo+KsUQD4fBUk5Qb5FWBNmZiVW0jQ==
-X-Received: by 2002:a2e:90ca:0:b0:2a7:f1e8:b08 with SMTP id o10-20020a2e90ca000000b002a7f1e80b08mr8368282ljg.19.1684289937496;
-        Tue, 16 May 2023 19:18:57 -0700 (PDT)
-Received: from [10.167.154.1] (public-gprs529629.centertel.pl. [31.61.188.30])
-        by smtp.gmail.com with ESMTPSA id z22-20020a2e9656000000b002af01da6c67sm384232ljh.32.2023.05.16.19.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 19:18:57 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 17 May 2023 04:18:50 +0200
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8550: Use the correct LLCC
- register scheme
-MIME-Version: 1.0
+        Tue, 16 May 2023 22:22:05 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B40155AD
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:43 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230517022140epoutp02bb12aa803138eb478c69d89f8c04f324~fzOweqZXI2346723467epoutp02i
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:21:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230517022140epoutp02bb12aa803138eb478c69d89f8c04f324~fzOweqZXI2346723467epoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1684290100;
+        bh=hh9AOH5Z6+Q4qtKEHWf8pxsRM/6yOBm4T7O51t8ive8=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=unfh36b9qzo/CN6fG5XUcxB0aKFBhS7a6gPH6YrvR7pMK0iD55tTctNNZTX6W4xUM
+         pulOPe5SgicyUsBpVTTDnAQ4QbUGWUPAwD/FM5uA5mHZEUM3aT2VFBXFeqK1fr1bp3
+         gLIypFt02uJ3i1YvSvnfFllwcMKTVqpZm/1cPJtw=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230517022139epcas2p2f6cb82e61bf97fbe82f527ea4fb2510f~fzOv_fE2O1659216592epcas2p2d;
+        Wed, 17 May 2023 02:21:39 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4QLcLC1v9zz4x9Q2; Wed, 17 May
+        2023 02:21:39 +0000 (GMT)
+X-AuditID: b6c32a47-e99fd70000002007-53-64643a335183
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F7.91.08199.33A34646; Wed, 17 May 2023 11:21:39 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH v2 08/14] scsi: add scsi_alloc_integrity_sgtables()
+ for integrity process
+Reply-To: j-young.choi@samsung.com
+Sender: Jinyoung CHOI <j-young.choi@samsung.com>
+From:   Jinyoung CHOI <j-young.choi@samsung.com>
+To:     "hch@lst.de" <hch@lst.de>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "kbusch@kernel.org" <kbusch@kernel.org>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "kch@nvidia.com" <kch@nvidia.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20230512135224.GE32242@lst.de>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230517022038epcms2p525403cf12b641f785647487c8b41a57c@epcms2p5>
+Date:   Wed, 17 May 2023 11:20:38 +0900
+X-CMS-MailID: 20230517022038epcms2p525403cf12b641f785647487c8b41a57c
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230517-topic-kailua-llcc-v1-2-d57bd860c43e@linaro.org>
-References: <20230517-topic-kailua-llcc-v1-0-d57bd860c43e@linaro.org>
-In-Reply-To: <20230517-topic-kailua-llcc-v1-0-d57bd860c43e@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684289932; l=1384;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=9WupzzHlTXR6Yx1uELACzjwgFEN+yOqghs8q/dMHZUU=;
- b=rFjT625Yg2dYY1oD64UITRGGu/MBYdyR/8rF4bL7kaslFDWb1Tds8XtFi8cYWb3v0dYnaS8oc
- AOCfXsDEx+VCRfOIOvSGgSBuj87pLKKbwZ1dY8CRC0910fhCY8F1KXs
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmma6xVUqKQcsbTovVd/vZLF4e0rRY
+        ufook8WiG9uYLP523WOymHToGqPF06uzmCz23tK2uLxrDpvF8uP/mCzWvX7PYvH7xxw2Bx6P
+        8/c2snhsXqHlcflsqcemVZ1sHhMWHWD02H2zgc2jt/kdm8fHp7dYPPq2rGL0+LxJzqP9QDdT
+        AHdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0OVK
+        CmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DC
+        hOyM4/9msxVc4ajo+vaZpYFxFUcXIyeHhICJxMdd91m7GLk4hAR2MEqcufKZpYuRg4NXQFDi
+        7w5hkBphgSSJGSfXsYPYQgJKEufWzGIEKREWMJC41WsOEmYT0JP4uWQGG0hYREBW4sqKepAw
+        s8AnZon/7wwgNvFKzGh/ygJhS0tsX76VEcTmFNCROLFjI1RcQ+LHsl5mCFtU4ubqt+ww9vtj
+        8xkhbBGJ1ntnoWoEJR783A0Vl5Q4dOgr2AkSAvkSGw4EQoRrJN4uPwBVoi9xrQNiFa+Ar8Sj
+        149ZQWwWAVWJruUXmCBqXCSW/2xjhDhfW2LZwtfMICOZBTQl1u/Sh5iuLHHkFgtEBZ9Ex+G/
+        7DAPNmz8jZW9Y94TJohWNYlFTUYTGJVnIcJ4FpJVsxBWLWBkXsUollpQnJueWmxUYAyP1uT8
+        3E2M4OSr5b6DccbbD3qHGJk4GA8xSnAwK4nwBvYlpwjxpiRWVqUW5ccXleakFh9iNAV6ciKz
+        lGhyPjD955XEG5pYGpiYmRmaG5kamCuJ80rbnkwWEkhPLEnNTk0tSC2C6WPi4JRqYDJ02fV5
+        ddvdK0/eMxy9FfC19p9R1uElnTeC2VrmKcWVb6jakG96sSjdwIcz2/3Lyu4j8Yk/fI4m3ZpQ
+        J5123OBwxZO/rw48fH/K+EOkcWNltnKUT7Pib4ej2QfaXczcmzb0Ltm1rUOTWXvywyP2vnc/
+        hm+IaJq0guthOYMam0Ok47q1/AUBTCIJXCqrPzecPD9R5cD8nb/fHax4Wr+R+WLXEclKVct/
+        syLDvNLc6r9XvOSV3nR7xbf1x6JTbxQbrJMU6uA7ctxf7V/yHme5/EI35v0ybw95F92d/yTr
+        2YtVdT+8tsUL9YhESje5XZ3qbybb9OPJxHCfsBPz1t58IvB54ZGNOte2u9Wq3Iva8kuJpTgj
+        0VCLuag4EQASSCZ0RwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
+References: <20230512135224.GE32242@lst.de>
+        <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
+        <20230510085607epcms2p3d2b2dfc5db42f77c41f570c361a41c6a@epcms2p3>
+        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p5>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During the ABI-breaking (for good reasons) conversion of the LLCC
-register description, SM8550 was not taken into account, resulting
-in LLCC being broken on any kernel containing the patch referenced
-in the fixes tag.
-
-Fix it by describing the regions properly.
-
-Fixes: ee13b5008707 ("qcom: llcc/edac: Fix the base address used for accessing LLCC banks")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 6e9bad8f6f33..70ae7e2e900a 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -3762,9 +3762,16 @@ gem_noc: interconnect@24100000 {
- 
- 		system-cache-controller@25000000 {
- 			compatible = "qcom,sm8550-llcc";
--			reg = <0 0x25000000 0 0x800000>,
-+			reg = <0 0x25000000 0 0x200000>,
-+			      <0 0x25200000 0 0x200000>,
-+			      <0 0x25400000 0 0x200000>,
-+			      <0 0x25600000 0 0x200000>,
- 			      <0 0x25800000 0 0x200000>;
--			reg-names = "llcc_base", "llcc_broadcast_base";
-+			reg-names = "llcc0_base",
-+				    "llcc1_base",
-+				    "llcc2_base",
-+				    "llcc3_base",
-+				    "llcc_broadcast_base";
- 			interrupts = <GIC_SPI 266 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-
--- 
-2.40.1
-
+>On Wed, May 10, 2023 at 05:56:07PM +0900, Jinyoung CHOI wrote:
+>> + =C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(WARN_ON_ONCE(=21prot_sdb))=20=
+=7B=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
+=A0=20=C2=A0/*=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0=20=C2=A0=20=C2=A0=20*=20This=20can=20happen=20if=20someone=20(e.g.=
+=20multipath)=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0=20=C2=A0=20=C2=A0=20*=20queues=20a=20command=20to=20a=20device=20on=
+=20an=20adapter=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0=20=C2=A0=20=C2=A0=20*=20that=20does=20not=20support=20DIX.=0D=0A>>=
+=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
+=A0=20*/=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
+=20=C2=A0=20=C2=A0return=20BLK_STS_IOERR;=0D=0A>=0D=0A>Nit:=20expand=20the=
+=20comment=20to=20take=20up=20all=2080=20characters=20now=20that=20you've=
+=0D=0A>unindented=20it.=0D=0A=0D=0AOK.=20I=20will=20fix=20it.=20Thank=20you=
+.=0D=0A=0D=0ABest=20Regards,=0D=0AJinyoung.
