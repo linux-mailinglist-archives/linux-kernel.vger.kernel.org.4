@@ -2,142 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58ACC706358
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A67D706350
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjEQIwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S230320AbjEQIuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231124AbjEQIwS (ORCPT
+        with ESMTP id S229455AbjEQIuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:52:18 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2087.outbound.protection.outlook.com [40.107.96.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979251FEC;
-        Wed, 17 May 2023 01:52:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H4SFenk+1V+m+W/H5Uap/LcX2WU3ciN/6eH2jYzEWZa23wS/DAgU9R1BNSwyRXZVE/VrNo/EbwYMHz7A9+dNiXsO7GP6a14e+jqLNJbYsw33qEdpkExrfHua9N+z9smjuJngZvpfiBMPWJCaNdPocHDohj8cb4H38IT40jApVmgrcwrcP5lSBJTRPHCB6JfFLCshDjK4QDBRIlPFkbwEchIzCDkPwjDKSpvMWex7zppXDW9iQ6EWOQmAql9XDOwkwxCy+EbK9PTh3ZHhBHNWq3T+SuJvvLnIKw5OG+XEa42pbBoa2z5jyx4zEwUBm6E+Fu0htEeIS1AkTOtm3/K49g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZwcRntYmYbW3mAzt8iDXDUEcE4tF72xVmuNhGy5xH8E=;
- b=N+A5aaT7Wjr3ytcFiWRvBw+st+AXflMo5qKeNYhvasrnTXsItabvRz87/tjwcLsJ2EHODvEzpEkMn+uBzH9ypIGk87XR3tJLUSG1HF7hRKZSM/b48c9DQQszwXuQ5DtQOuCH3trr1MVBsWuPHpKTyvmqgAUUCfMlbimf5mxdY47HDmungHRPLl3lWQBuiFIV6uMJQunIdSwvYsxksbJ9esfkHzpyqfwqKF8TTROcyQ52vSpfPOn5U6/H5Es8m38fSUtT/sw1aIPa5WBfxLi8eSk2vWWYrmVP3m9Mr5NhTTYuJbREnrt/xRb7WERB68UpPgg8fFmqgi+QMe45x02G7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=bytedance.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZwcRntYmYbW3mAzt8iDXDUEcE4tF72xVmuNhGy5xH8E=;
- b=rlMqBB+20ST1iyxPYTb2kpcY9Tao5pINbEEBWeOSA36R7kWWyJBIwY4OccNx7kPL2K74jkNqbT0F+pr9AYv0692b1SsY+4MvQImvifdSQjbrp1xSzgGtV2djcj4t2dEO2RutOM/zwj4WBcIhDyajTEjWw0Pia9WUTCjSAbV4FOrNwXm1c//r7GvDqheLnaqs59pT1F4d3Mq2YrE3uQGQYCK7LpnUz8yhbexP7iTWW36Q0O9MyswGj3v8669KDUFREqUBX9gkScPDl7jSa4Kh7U/jf++HaP5jUAwOK4VNwCQzbwREXnkNAwhY3SgZi2GM+YTukloSVodwafIMsE1nQA==
-Received: from DS7PR06CA0017.namprd06.prod.outlook.com (2603:10b6:8:2a::24) by
- PH7PR12MB5879.namprd12.prod.outlook.com (2603:10b6:510:1d7::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6387.33; Wed, 17 May 2023 08:52:13 +0000
-Received: from DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2a:cafe::f4) by DS7PR06CA0017.outlook.office365.com
- (2603:10b6:8:2a::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
- Transport; Wed, 17 May 2023 08:52:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT042.mail.protection.outlook.com (10.13.173.165) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.17 via Frontend Transport; Wed, 17 May 2023 08:52:12 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 17 May 2023
- 01:51:56 -0700
-Received: from fedora.nvidia.com (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 17 May
- 2023 01:51:52 -0700
-References: <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
- <20230510161559.2767b27a@kernel.org>
- <ZF1SqomxfPNfccrt@C02FL77VMD6R.googleapis.com>
- <20230511162023.3651970b@kernel.org>
- <ZF1+WTqIXfcPAD9Q@C02FL77VMD6R.googleapis.com>
- <ZF2EK3I2GDB5rZsM@C02FL77VMD6R.googleapis.com>
- <ZGK1+3CJOQucl+Jw@C02FL77VMD6R.googleapis.com>
- <20230516122205.6f198c3e@kernel.org> <87y1lojbus.fsf@nvidia.com>
- <20230516145010.67a7fa67@kernel.org>
- <ZGQKpuRujwFTyzgJ@C02FL77VMD6R.googleapis.com>
- <20230516173902.17745bd2@kernel.org>
-User-agent: mu4e 1.8.11; emacs 28.2
-From:   Vlad Buslov <vladbu@nvidia.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Peilin Ye <yepeilin.cs@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Jamal Hadi Salim" <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        "Peilin Ye" <peilin.ye@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-Date:   Wed, 17 May 2023 11:49:10 +0300
-In-Reply-To: <20230516173902.17745bd2@kernel.org>
-Message-ID: <87ttwbjq6y.fsf@nvidia.com>
+        Wed, 17 May 2023 04:50:04 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7EA125
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:50:01 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510d8b0163fso729a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684313400; x=1686905400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FV3cgaXrRim03Zv5RsIztXE6qsQTmKvePMx6UdbcnHo=;
+        b=u4+zZhJVd27DKctMsWsPOgOn1m9CFVQEw7gE9RPjW8DqJrnmKYJVldPqnEjDaEyNyC
+         3IbX7M/Iw+pdXmnG0dIPBnaSbVFe6yEcLwe9enb5VKTH/NZoj4lawv9Oi1ov8gXxg8UR
+         GRSC3itpJIDIfEgKM/vO1wgsvxuxQkvLSAgiMNeL87FsAGjJtPz0Lf2YukL8hq4Y/X1B
+         ZRI+9gpRrGgoec7HSGsnSUxUB85c/jCcUCeygMBvMNjqToZ991zTs/TtRu8EgowqtMUM
+         C0bUNN9TbO3J+IH58OegwuWnhEaQNfYB/EkJNsVeMtKTyNDRCgxCdu5Ojd/uOiTFAkg6
+         D6yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684313400; x=1686905400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FV3cgaXrRim03Zv5RsIztXE6qsQTmKvePMx6UdbcnHo=;
+        b=TTEkOROAJ5SQ7c7xpm1WzyM5dGxvA5AXeRlt7fWIx1EPAwWkilVebIAY5qU2VKE5Rz
+         pE+JZyjVDpb8ZQg19ye5FX3+TgwKK3MB5BeakZFHDdBi+T5O/R06VbUPuUiT6HQw4heK
+         8FNWYDS1DYqELewRWg5q31E5e9gclVzaXZiBceoGUINDx60lzqI0e2kMDr+BOBuxey7L
+         bnlfruFbjCpFcn8XEPjCx+mWJ2zbuI2zWtzrfHdLo/wac7Dxokslxvjxvs57ZyYxicbQ
+         Rbt6jnlqvdL1GPg/T2o+iLXajgwInsH4pQMRW8ADnj3yxvSslHUfiPZ7ztSLPZESDgCA
+         DK3g==
+X-Gm-Message-State: AC+VfDxh5jMIepSWDwYCL54s1hYsVyYh6cV71QhNFdePDp9UrwFqo6Sl
+        Xxz6ao35KVCKN3ZImOUERhhfLg==
+X-Google-Smtp-Source: ACHHUZ7iZT4/9Vl8NYIv57z1XhtnLw/lJOemGSIwTmff1YZitCRxWMZh6O31qgrB5k4+XuqNLgLtIA==
+X-Received: by 2002:a50:d59d:0:b0:502:2af:7b1d with SMTP id v29-20020a50d59d000000b0050202af7b1dmr59200edi.3.1684313399910;
+        Wed, 17 May 2023 01:49:59 -0700 (PDT)
+Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
+        by smtp.gmail.com with ESMTPSA id u15-20020adfed4f000000b00307c46f4f08sm2001145wro.79.2023.05.17.01.49.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 01:49:59 -0700 (PDT)
+Date:   Wed, 17 May 2023 08:49:50 +0000
+From:   Mostafa Saleh <smostafa@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     oliver.upton@linux.dev, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com
+Subject: Re: [PATCH] KVM: arm64: Use BTI for pKVM
+Message-ID: <ZGSVLl90+YHNKWc9@google.com>
+References: <20230516141846.792193-1-smostafa@google.com>
+ <864jocmg75.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT042:EE_|PH7PR12MB5879:EE_
-X-MS-Office365-Filtering-Correlation-Id: 822c5512-2fd1-4afd-b6fd-08db56b401ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BWu59jL3eC+40AXEdu01MHidPF+JD7xeo7fLQPOfRxvShfAjsSYPpcGFjWrTJBBxx1u3mYv2eB+yoAIo8sCKj8K+bBrJpKbXjv56bdNiZZl1HHeUE7kRTCcjsmR2e7vEERtEYPywzpZYt7vWsn/Yz3YhNVaF5qykBceSK/GKEJ3px0Og8zwDvEFMPS0AlPENp1GWsjth35P9CL8mWGc4Y0qy9twptXjutdSgrybhEvZ5s4gVd2byVLob8MdGAh5bTIQc41hcMjuS+ev0urJ8JtsxEZDjGZvH7yPX6xWAvm2c68lzz3HhLHJlhQ1SVPSx7FmgJTq8/RJjgPAx1LGo+GyqEyYrci2i21gwdhJvI4RV0F0EpK/hBiRaFy4HKucGE4tZPZgcDKkTfNCWy6F0iZTS7rD9yRKLZMjl+iDEU8wNCRAywYFt4sGhBLsecRjvSnJBcZURL2xxXrjDCKIPMFlu0bOthtUznqq22IUo6Xe+YLsYAmB99ts7vQ2uAQK/Cxd1g1o0nKKZlQqgU4nzd43aYDf2uGKpDTNf05VrH3ZBZgmO62OUVOOkxy+wmwcXnZ8Dc4984RPhjIo++bW/0C6hxXQAofVS792Z0uvNU1pzh49NMDngJh4oVtjNpemmkq/cj95uI3ULQdZPJPJA0VSwbOfj2HFV9qUY5fLHyzjA9J7In5G84DCWuBXfMBCHoLDajLdDz+hWWvU3NN/cOvGx+EoLwh1/J0tpwrgxOpw1ZYw9EJJ39ZEaR1YzrRgr
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(70586007)(4326008)(478600001)(6916009)(70206006)(316002)(54906003)(86362001)(36756003)(7696005)(47076005)(83380400001)(36860700001)(426003)(336012)(2616005)(16526019)(26005)(186003)(5660300002)(41300700001)(8936002)(7416002)(4744005)(2906002)(8676002)(40480700001)(6666004)(82310400005)(7636003)(82740400003)(356005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 08:52:12.9132
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 822c5512-2fd1-4afd-b6fd-08db56b401ff
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5879
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <864jocmg75.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 16 May 2023 at 17:39, Jakub Kicinski <kuba@kernel.org> wrote:
-> On Tue, 16 May 2023 15:58:46 -0700 Peilin Ye wrote:
->> > Given Peilin's investigation I think fix without changing core may
->> > indeed be hard. I'm not sure if returning -EBUSY when qdisc refcnt
->> > is elevated will be appreciated by the users, do we already have
->> > similar behavior in other parts of TC?  
->> 
->> Seems like trying to delete an "in-use" cls_u32 filter returns -EBUSY
->
-> I meant -EBUSY due to a race (another operation being in flight).
-> I think that's different.
+Hi Marc,
 
-I wonder if somehow leveraging existing tc_modify_qdisc() 'replay'
-functionality instead of returning error to the user would be a better
-approach? Currently the function is replayed when qdisc_create() returns
-EAGAIN. It should be trivial to do the same for qdisc_graft() result.
+On Tue, May 16, 2023 at 04:47:10PM +0100, Marc Zyngier wrote:
+> On Tue, 16 May 2023 15:18:46 +0100,
+> Mostafa Saleh <smostafa@google.com> wrote:
+> > 
+> > CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+> > However, the nvhe code doesn't make use of it as it doesn't map any
+> > pages with Guarded Page(GP) bit.
+> > 
+> > This patch maps pKVM .text section with GP bit which matches the
+> > kernel handling for BTI.
+> 
+> Why pKVM only? Surely we can benefit from it all over the nvhe code,
+> right?
+Yes, I will add it also for nvhe in v2.
 
+> > 
+> > A new flag is added to enum kvm_pgtable_prot: KVM_PGTABLE_PROT_GP_S1,
+> > which represents BTI guarded page in hypervisor stage-1 page table.
+> > 
+> > Signed-off-by: Mostafa Saleh <smostafa@google.com>
+> > ---
+> >  arch/arm64/include/asm/kvm_pgtable.h | 3 +++
+> >  arch/arm64/kvm/hyp/nvhe/setup.c      | 8 ++++++--
+> >  arch/arm64/kvm/hyp/pgtable.c         | 6 ++++--
+> >  3 files changed, 13 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+> > index 4cd6762bda80..5bcd06d664d3 100644
+> > --- a/arch/arm64/include/asm/kvm_pgtable.h
+> > +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> > @@ -151,6 +151,7 @@ enum kvm_pgtable_stage2_flags {
+> >   * @KVM_PGTABLE_PROT_W:		Write permission.
+> >   * @KVM_PGTABLE_PROT_R:		Read permission.
+> >   * @KVM_PGTABLE_PROT_DEVICE:	Device attributes.
+> > + * @KVM_PGTABLE_PROT_GP_S1:	GP(guarded page) used for BTI in stage-1 only
+> >   * @KVM_PGTABLE_PROT_SW0:	Software bit 0.
+> >   * @KVM_PGTABLE_PROT_SW1:	Software bit 1.
+> >   * @KVM_PGTABLE_PROT_SW2:	Software bit 2.
+> > @@ -163,6 +164,8 @@ enum kvm_pgtable_prot {
+> >  
+> >  	KVM_PGTABLE_PROT_DEVICE			= BIT(3),
+> >  
+> > +	KVM_PGTABLE_PROT_GP_S1			= BIT(50),
+> > +
+> >  	KVM_PGTABLE_PROT_SW0			= BIT(55),
+> >  	KVM_PGTABLE_PROT_SW1			= BIT(56),
+> >  	KVM_PGTABLE_PROT_SW2			= BIT(57),
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+> > index 110f04627785..95f80e2b2946 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/setup.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+> > @@ -66,7 +66,7 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+> >  {
+> >  	void *start, *end, *virt = hyp_phys_to_virt(phys);
+> >  	unsigned long pgt_size = hyp_s1_pgtable_pages() << PAGE_SHIFT;
+> > -	enum kvm_pgtable_prot prot;
+> > +	enum kvm_pgtable_prot prot = PAGE_HYP_EXEC;
+> >  	int ret, i;
+> >  
+> >  	/* Recreate the hyp page-table using the early page allocator */
+> > @@ -88,7 +88,11 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, PAGE_HYP_EXEC);
+> > +	/* Hypervisor text is mapped as guarded pages(GP). */
+> > +	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && cpus_have_const_cap(ARM64_BTI))
+> > +		prot |= KVM_PGTABLE_PROT_GP_S1;
+> 
+> Is there any reason why this isn't a final cap? I also dislike the
+> IS_ENABLED(), but I can see that we don't have separate caps for
+> in-kernel BTI and userspace visible BTI...
+I was trying to make this close to EL1 code (system_supports_bti()),
+I see in hypervisor cpus_have_const_cap is the same as cpus_have_final_cap.
+
+Yes, I don't see a way to distinguish if BTI was enabled for the kernel
+in EL2 without CONFIG_ARM64_BTI_KERNEL.
+
+> > +
+> > +	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, prot);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> > index 3d61bd3e591d..028e198acd48 100644
+> > --- a/arch/arm64/kvm/hyp/pgtable.c
+> > +++ b/arch/arm64/kvm/hyp/pgtable.c
+> > @@ -145,7 +145,8 @@ static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+> >  	u64 type = (level == KVM_PGTABLE_MAX_LEVELS - 1) ? KVM_PTE_TYPE_PAGE :
+> >  							   KVM_PTE_TYPE_BLOCK;
+> >  
+> > -	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI);
+> > +	pte |= attr & (KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI |
+> > +		       KVM_PGTABLE_PROT_GP_S1);
+> >  	pte |= FIELD_PREP(KVM_PTE_TYPE, type);
+> >  	pte |= KVM_PTE_VALID;
+> >  
+> > @@ -378,7 +379,8 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot, kvm_pte_t *ptep)
+> >  	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_AP, ap);
+> >  	attr |= FIELD_PREP(KVM_PTE_LEAF_ATTR_LO_S1_SH, sh);
+> >  	attr |= KVM_PTE_LEAF_ATTR_LO_S1_AF;
+> > -	attr |= prot & KVM_PTE_LEAF_ATTR_HI_SW;
+> > +	attr |= prot & (KVM_PTE_LEAF_ATTR_HI_SW | KVM_PGTABLE_PROT_GP_S1);
+> > +
+> 
+> You should probably check that the page is executable before blindly
+> accepting to set the GP bit (don't accept it for non-exec pages).
+Will do in v2.
+
+> Another thing to check would be the state of SCTLR_EL2.BT, which I
+> think we clear by construction, but it be worth having a look.
+Yes, I see it is initialised by zero in ___kvm_hyp_init in hyp-init.S,
+I believe this should be changed to 1 when BTI is enabled (as in
+bti_enable() for EL1), I will update it.
+
+Thanks,
+Mostafa
