@@ -2,136 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04704707181
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965E2707187
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjEQTI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S229885AbjEQTJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjEQTI4 (ORCPT
+        with ESMTP id S229882AbjEQTJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:08:56 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64871FFE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:08:55 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ae4e49727eso12886485ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:08:55 -0700 (PDT)
+        Wed, 17 May 2023 15:09:14 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F887AD0A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:10 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3f51ea3a062so34931cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684350535; x=1686942535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0VPi5GJ7kmLjbS0ChDvxnSbO/WFZryCQHS1zNojC1Jg=;
-        b=QAoKvlkXZAxsNAT7iJlbWuQC5CZ9lAmg+vD8qn89JEKx3i+Chbwjy34BBTAw3HenUM
-         95QJL8FLlicZ+roKErcDYlYs7dqg9pbjkYn1D++vPhog1nPSZ7JNL26LZYK2Jsy39vRj
-         K1OI4iaGO9d4YxchHs9cUQJDIpoyX0EpIlE3Y=
+        d=google.com; s=20221208; t=1684350549; x=1686942549;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wTCrNF1k6eLvgjFBEtoVOllbYMzqAXAFq2VPdBNe0PU=;
+        b=1RbKqgNlFVDn38jbjn+Xyf9v2PZkmr8NlkChy47jOU4d/MCsfICl4HNWXWC54W/pIG
+         1dofWJXAUWTCZsLtED0n1ndgNbYBCSAPo29fdxJKDrBAtQLgOX9f4pwZf9kS3ghxthb2
+         N0cN9RM3ETTW9YLxhlOsJZe46DUn6ZX78QPySHArvwB3zQoi3yo5ttMISt8BFPmlw110
+         S2XVBIeCofavikgM7slybu8BTtRWgBDobDNS6+35+preNvJmtRz207zhxdU79kZEcZuJ
+         wKIH702z053O+wSyqnfucxGZO8MfVQbrjAHBqACNkUsgYmu7+zNA5DF9+/qkjRd2vMvk
+         XikQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350535; x=1686942535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0VPi5GJ7kmLjbS0ChDvxnSbO/WFZryCQHS1zNojC1Jg=;
-        b=bkPyLR5kCb//g0c3OX5kaL23JibQEjQOTIGC/YqFLppXAlVAA5a5znqh+g6ARCXHd8
-         x/dzR55Sqv5uTw+g+2W9KUkWRfmdfeawIUN5usyo5mLENgJEw5sgjDbpvDIJuKEcWXI5
-         VptK+67BHHFynQ+OSopiesXSPG6WPmz/vpxtaqCupbaTU+e0Lu3IF538G9SBuiZGkA+A
-         7AESQq+IM/vf9/BY/2YVX1hqgCIf2/fVWkDlMnGwwtKVoGBG7vf8Mbv4H4JSCOTf3o5U
-         jNncMfQJIt1z4bkAvGdCKpAYuk0GGjqlWEIqCwnEnrgeikgjF6AZf0EGpC0Y1QAZKrqr
-         2nCQ==
-X-Gm-Message-State: AC+VfDzRmhHEwLXiG8SBvPITHyimwxcNzzvP7SWWZORiByeHKQpZLqUq
-        Rw3LJGuSjqOoneMILF6orLRSvg==
-X-Google-Smtp-Source: ACHHUZ4X5CjhFGFsKy9pS738nZl7R3AuPDeJNfdDh/ABCbUMCY6EEuqWdvHd5p+s0M+DHCZFWQDnHw==
-X-Received: by 2002:a17:903:d2:b0:1aa:fe40:6f96 with SMTP id x18-20020a17090300d200b001aafe406f96mr39969648plc.23.1684350535344;
-        Wed, 17 May 2023 12:08:55 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id bh3-20020a170902a98300b00192aa53a7d5sm18013091plb.8.2023.05.17.12.08.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 12:08:54 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Bill Wendling <morbo@google.com>,
-        Qing Zhao <qing.zhao@oracle.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] Compiler Attributes: Add __counted_by macro
-Date:   Wed, 17 May 2023 12:08:44 -0700
-Message-Id: <20230517190841.gonna.796-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1684350549; x=1686942549;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wTCrNF1k6eLvgjFBEtoVOllbYMzqAXAFq2VPdBNe0PU=;
+        b=hczapC1AEtsI0IiO88xRuFogDoHianEoaWaeCeGfy7u9Dp83WZwjwxsfUUFua151BY
+         SNGGo8cWyEW2um9+HO9A7vf4IV03q9Nw0gPW9Ax22Ayx10s2dRw+qQoY892Nfeqg7LwA
+         JEUzQdZsl4bHSpM5pjBwH/4kL/kdoIqz37hmKkzDu4/g7MMnYKUnkeOOtUDcgGZeQgw9
+         b6hC3k5VdtcWpWgEi+Y5FEBUks8Om/VhLj7Ev9GhSILHId4ny9PHjH+vVpVJaMB3YUfF
+         rrPr89Km/yVEkzrauyQ0lFQ/5s6oC2JfT/9xY4IXlFWwzJ8/9z8L9V7AF2TK3Mc/bpJs
+         M/Ow==
+X-Gm-Message-State: AC+VfDxOpOHpMVQhzo38u6JszZX74rbklC6aXfB7biW1hn2ULACQTNEr
+        MpWUPwcHQPMVcUTgBXoKr6zfwoyw9i66R3EXlAsqag==
+X-Google-Smtp-Source: ACHHUZ4vHFPYr3XteL6OVBxr3sfjSsd2NrUvpo8AQLiFMWwfzIDeniQtS3efGU7DsGoHFylfwTLFONOliqHDKMSojjg=
+X-Received: by 2002:a05:622a:181b:b0:3ef:3083:a437 with SMTP id
+ t27-20020a05622a181b00b003ef3083a437mr34609qtc.18.1684350549567; Wed, 17 May
+ 2023 12:09:09 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2258; h=from:subject:message-id; bh=yahvJN5DCdafW0sbh3khm99IcP//ArMckUf9/Rm/k1Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkZSY8EEJAxM5wyI9gvstGb7zmJRvApBqEZyE9Udmr DyS5k9aJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZGUmPAAKCRCJcvTf3G3AJrhjEA CHmN+3SQXNK++1nQr083pwerk7hnyxY/0CHVs/nd+VRVNIU4kbvdO/H/Hm3bs4+9THF5BAibH4f22f AF+mFhiS3xb8ADoFbZkKr9/fKhBnysCjg1A9p0ROOYVmQfGWe598FWh50dGb8yYBII2RRdKBtQ6C/I kcWGtEQhSY5BsRtfvEJJInQvoXaevjSM47tB9Re+tcHIG6S33Uba/07ek+0lVm3oydR/eumHn1HST/ /4VSivqreIggJen6dDe23s4U01qDbepY2T99mfcZs61U/DdONRUEzPdGo9jJLowtrVWpMOp3Qrrkay 4RiE9k0M+czZH3LIRANnchCZjRomfHUe6W8MwnZssrx8AY02Hf4z3g2ocsNVVWYlq0JaQiA2tjCJsk 0Cl53x+UTS1QGilWJQ+V6z2FzJVlYx0bfEp4nU375D3evPtqos0j7Z153C7igMkSJWwJdFQ/vfD4dO x51qKGl9f1x54XLlKVjOfKkh3h6Qx2mIXVYg5lzH/xxNunuphL24QBTI47jeMxmwg8ABMu6FamxKkf RhpsdZL2sGJtmiunsxqalimFqKyYWAtLl2V5ly+YNRtfhS8MgUud4SHAXFkO03Umx6rme9CqhA4tVS VUuPd+ULbQylFUrp/1QFDtTZvhtxg8byb3pEwkg22LzzulBTtz9JvDQ6CLLw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230407215406.768464-1-ndesaulniers@google.com> <168435014337.2056649.7592777028793700479.b4-ty@chromium.org>
+In-Reply-To: <168435014337.2056649.7592777028793700479.b4-ty@chromium.org>
+From:   Fangrui Song <maskray@google.com>
+Date:   Wed, 17 May 2023 12:08:58 -0700
+Message-ID: <CAFP8O3L_RsaTMJvT7hmjD6ON49uob9Fb4mWg8ZUav_Y-FCgTMA@mail.gmail.com>
+Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
+To:     Kees Cook <keescook@chromium.org>
+Cc:     ndesaulniers@google.com, masahiroy@kernel.org,
+        linux-kbuild@vger.kernel.org, nathan@kernel.org,
+        linux-hardening@vger.kernel.org, jpoimboe@kernel.org,
+        llvm@lists.linux.dev, mbenes@suse.cz, linux-kernel@vger.kernel.org,
+        trix@redhat.com, peterz@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In an effort to annotate all flexible array members with their run-time
-size information, the "element_count" attribute is being introduced by
-Clang[1] and GCC[2] in future releases. This annotation will provide
-the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
-to perform run-time bounds checking on otherwise unknown-size flexible
-arrays.
+On Wed, May 17, 2023 at 12:02=E2=80=AFPM Kees Cook <keescook@chromium.org> =
+wrote:
+>
+> On Fri, 7 Apr 2023 14:54:06 -0700, Nick Desaulniers wrote:
+> > -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 and
+> > Clang 3.2.  The minimum supported version of these according to
+> > Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Drop
+> > this cc-option check.
+> >
+> >
+>
+> Applied to for-next/hardening, thanks!
+>
+> [1/1] ubsan: remove cc-option test for UBSAN_TRAP
+>       https://git.kernel.org/kees/c/08e4044243a6
+>
+> --
+> Kees Cook
+>
+>
 
-Even though the attribute is under development, we can start the
-annotation process in the kernel. This requires defining a macro for
-it, even if we have to change the name of the actual attribute later.
-Since it is likely that this attribute may change its name to "counted_by"
-in the future (to better align with a future total bytes "sized_by"
-attribute), name the wrapper macro "__counted_by", which also reads more
-clearly (and concisely) in structure definitions.
+For this -fsanitize-undefined-trap-on-error, I think we need a v2 patch tha=
+t
+tries -fsanitize-trap=3Dall as well.
 
-[1] https://reviews.llvm.org/D148381
-[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+-fsanitize-undefined-trap-on-error has been deprecated in Clang for 8
+years, and at some point we will remove the option.
 
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Qing Zhao <qing.zhao@oracle.com>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Tom Rix <trix@redhat.com>
-Cc: llvm@lists.linux.dev
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v2: - update "Optional" comments
-v1: https://lore.kernel.org/all/20230504181636.never.222-kees@kernel.org/
----
- include/linux/compiler_attributes.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+GCC implements -fsanitize-trap=3Dall later, but
+-fsanitize-undefined-trap-on-error is documented as deprecated as
+well.
 
-diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-index e659cb6fded3..a92d8887e8f0 100644
---- a/include/linux/compiler_attributes.h
-+++ b/include/linux/compiler_attributes.h
-@@ -123,6 +123,19 @@
- # define __designated_init
- #endif
- 
-+/*
-+ * Optional: only supported since gcc >= 14
-+ * Optional: only supported since clang >= 17
-+ *
-+ *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
-+ * clang: https://reviews.llvm.org/D148381
-+ */
-+#if __has_attribute(__element_count__)
-+# define __counted_by(member)		__attribute__((__element_count__(member)))
-+#else
-+# define __counted_by(member)
-+#endif
-+
- /*
-  * Optional: only supported since clang >= 14.0
-  *
--- 
-2.34.1
 
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
