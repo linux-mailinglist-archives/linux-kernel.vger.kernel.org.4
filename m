@@ -2,141 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696CB706551
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5989770654E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjEQKdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        id S230133AbjEQKc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjEQKdF (ORCPT
+        with ESMTP id S229551AbjEQKc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:33:05 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A6449C9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:33:03 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5341737d7aeso493373a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684319583; x=1686911583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I+yMSRIvro+oycNAw5kvcuepkix/lZDUJXF17xDJqQs=;
-        b=r79UGOC27PdAxNjuhydpx7NpMnekSB4YkiixqH6+hR3Gn3K6V4tG7PdEPzQUuu3VwZ
-         RagVi1Ho5iB5GIKbC7A3u5cjAh+JUIpRyh/8EapJzQ2Cejk0drmRiq4NM+BIWMBLyS7Z
-         9PNyLcuQ4rDCtpC2LVUP5eejvj276UFY+yZk8cXHMXCyB07zS0DOX2bsuKDDJeUpvQBs
-         t1Lb+Eytf9VfC/Ck2ak8USU5L6Kd+Igx6iEEn4UChj5bx0AKMnm3UMgkgGEH2KSQP19A
-         iUXJeK81eLwgmFs5xr+cuhWT4MI0mjsrxyhv6H8OsvGXoBB8rRojw13sA3ac0knI8MZH
-         3hoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684319583; x=1686911583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I+yMSRIvro+oycNAw5kvcuepkix/lZDUJXF17xDJqQs=;
-        b=bSKavCeB+gxYrTpHRV5EzMAxlFpEPHTRCDo5OlG8/wfOA1njXe27UgwxEZr1cOyduJ
-         CDuEv6K87TyKtLaOZ8qMnT/iet+asbDFgXEi1Seq/vovfb2iarfzbcnyGS6eE1pz+mqS
-         0B9uYjnCs05IFBlLp6BWG/ETnfL3/3Csy3XGvFnfXBZY/qXgrugHJCv+trg8ydWS+7UL
-         Mk05dDlQZC7FRZ4Fc39v8URJcYwGOb+CFV0ygSmK3L3zJZkBItmdfLhKhXb8JKD0CwZx
-         mT2f1f9Ej4lCU8/QVqIjCUiwrj0n7d3jIL044Pn49hcb1+sg8r6b8sGw4Iw+vlQYc4gn
-         Gfbw==
-X-Gm-Message-State: AC+VfDwvtJMojrcD1UAj/vryGYEpnm3eo7gQXt255RSiwlxxaWxgXJEN
-        1wboenBHt58WtCAMxiT8MBiJD01spzOXAYwmowI1eA==
-X-Google-Smtp-Source: ACHHUZ5bej71Yrq9WYwKrmyFW3dhsSue92Dc+g42m5WumdLoNEzoGk9RNULOlBkJyOzvQxp9xBZQAMMICk3ItIE6ubM=
-X-Received: by 2002:a17:902:b593:b0:1ad:ea13:1918 with SMTP id
- a19-20020a170902b59300b001adea131918mr16342513pls.69.1684319582817; Wed, 17
- May 2023 03:33:02 -0700 (PDT)
+        Wed, 17 May 2023 06:32:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A111359F;
+        Wed, 17 May 2023 03:32:56 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1A7A6605877;
+        Wed, 17 May 2023 11:32:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684319574;
+        bh=yiNihgP3IrNI3loR/8a+ht/13x21xzVRUN2RDyTYeg4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SylBTcxfImZLgeZy1TmMJVYWvo1PI/aclIfEm7SGQAyttBoQapaytZ0swJcMwAvZh
+         bKfSaqLUB7e/bWNBbq6kjLMhK14dxPR4CLitPNZeNIcH9ppHS4EwwkNZM1AdOSupYH
+         OWiOQF+G4PrytuzEyPsbkUvSCV3RO/bjTTuFGSKgvlChe+xtpMgnRG+mTPr16D99t7
+         J7yW5TrrGcj9FUMWdikNzgmdA/WnF+U1LkcqnA6VqOAPPvMFU/Jp28qUBFSxWnIyCn
+         vZ4sOlggmFfKyiUuJKaO2Px7sfatKk652nV/RApQGUvCfpyw2rHDJFy51XkP0pYVAi
+         shjBqLWjhtCcA==
+Message-ID: <c5315454-a155-3842-00b7-08b6b8ff92e6@collabora.com>
+Date:   Wed, 17 May 2023 12:32:51 +0200
 MIME-Version: 1.0
-References: <20230407030741.3163220-1-badhri@google.com> <0cf8c588b701d7cf25ffe1a9217b81716e6a5c51.camel@alistair23.me>
- <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
-In-Reply-To: <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Wed, 17 May 2023 03:32:26 -0700
-Message-ID: <CAPTae5Kdd8kYdiFhGys9jrJnTQj30_ibJ1AGmBw1xwsXpDkqPw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Alistair <alistair@alistair23.me>, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Francesco Dolcini <francesco@dolcini.it>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 1/7] iio: adc: rockchip_saradc: Add support for RK3588
+To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
+        lars@metafoo.de, heiko@sntech.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, gustavo.padovan@collabora.com,
+        serge.broslavsky@collabora.com, Simon Xue <xxm@rock-chips.com>
+References: <20230516230051.14846-1-shreeya.patel@collabora.com>
+ <20230516230051.14846-2-shreeya.patel@collabora.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230516230051.14846-2-shreeya.patel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thorsten,
+Il 17/05/23 01:00, Shreeya Patel ha scritto:
+> Refactor conversion operation to support rk3588 saradc and
+> add separate start, read, powerdown in respective hooks.
+> 
+> Signed-off-by: Simon Xue <xxm@rock-chips.com>
+> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> ---
+>   drivers/iio/adc/rockchip_saradc.c | 127 +++++++++++++++++++++++++++---
+>   1 file changed, 115 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/rockchip_saradc.c b/drivers/iio/adc/rockchip_saradc.c
+> index 79448c5ffc2a..ac6fdf8e673b 100644
+> --- a/drivers/iio/adc/rockchip_saradc.c
+> +++ b/drivers/iio/adc/rockchip_saradc.c
+> @@ -38,10 +38,29 @@
+>   #define SARADC_TIMEOUT			msecs_to_jiffies(100)
+>   #define SARADC_MAX_CHANNELS		8
+>   
+> +/* v2 registers */
+> +#define SARADC2_CONV_CON		0x0
+> +#define SARADC_T_PD_SOC			0x4
+> +#define SARADC_T_DAS_SOC		0xc
+> +#define SARADC2_END_INT_EN		0x104
+> +#define SARADC2_ST_CON			0x108
+> +#define SARADC2_STATUS			0x10c
+> +#define SARADC2_END_INT_ST		0x110
+> +#define SARADC2_DATA_BASE		0x120
+> +
+> +#define SARADC2_EN_END_INT		BIT(0)
+> +#define SARADC2_START			BIT(4)
+> +#define SARADC2_SINGLE_MODE		BIT(5)
+> +
+> +struct rockchip_saradc;
+> +
+>   struct rockchip_saradc_data {
+>   	const struct iio_chan_spec	*channels;
+>   	int				num_channels;
+>   	unsigned long			clk_rate;
+> +	void (*start)(struct rockchip_saradc *info, int chn);
+> +	int (*read)(struct rockchip_saradc *info);
+> +	void (*power_down)(struct rockchip_saradc *info);
+>   };
+>   
+>   struct rockchip_saradc {
+> @@ -60,27 +79,77 @@ struct rockchip_saradc {
+>   	struct notifier_block nb;
+>   };
+>   
+> -static void rockchip_saradc_power_down(struct rockchip_saradc *info)
+> +static void rockchip_saradc_reset_controller(struct reset_control *reset);
+> +
+> +static void rockchip_saradc_start_v1(struct rockchip_saradc *info, int chn)
+> +{
+> +	/* 8 clock periods as delay between power up and start cmd */
+> +	writel_relaxed(8, info->regs + SARADC_DLY_PU_SOC);
+> +	/* Select the channel to be used and trigger conversion */
+> +	writel(SARADC_CTRL_POWER_CTRL | (chn & SARADC_CTRL_CHN_MASK) |
+> +	       SARADC_CTRL_IRQ_ENABLE, info->regs + SARADC_CTRL);
+> +}
+> +
+> +static void rockchip_saradc_start_v2(struct rockchip_saradc *info, int chn)
+> +{
+> +	int val;
+> +
+> +	if (info->reset)
+> +		rockchip_saradc_reset_controller(info->reset);
+> +
+> +	writel_relaxed(0xc, info->regs + SARADC_T_DAS_SOC);
+> +	writel_relaxed(0x20, info->regs + SARADC_T_PD_SOC);
+> +	val = SARADC2_EN_END_INT << 16 | SARADC2_EN_END_INT;
 
-Francesso  had shared the stack dump as well at
-https://lore.kernel.org/all/ZGMm2sxN6wW%2FEWrR@francesco-nb.int.toradex.com=
-/.
-I am working on a fix based on that. Going to share it in the next
-hour and would be requesting Franceso and others help to see if the
-regression goes away.
+What about using bitfield macros?
 
-Thanks,
-Badhri
+/* "LO" and "HI" may get a better name, if there's any possible one! */
+#define SARADC2_EN_END_INT_LO BIT(0)
+#define SARADC2_EN_END_INT_HI BIT(16)
+
+val = FIELD_PREP(SARADC_EN_END_INT_LO, 1);
+val |= FIELD_PREP(SARADC_EN_END_INT_HI, 1);
+writel ....
+
+Otherwise, if it's about two really "specular" instances, you can probably
+keep the current definition as SARADC2_EN_END_INT and do
+
+val = FIELD_PREP(SARADC_EN_END_INT, 1);
+val |= val << 16;
+writel ...
+
+/* note: high, low bits are unknown to me, I assumed it's 16 bits :-) */
+#define SARADC2_CONV_CHANNELS GENMASK(15, 0)
+
+val = FIELD_PREP(SARADC2_START, 1);
+val |= FIELD_PREP(SARADC2_SINGLE_MODE, 1);
+val |= FIELD_PREP(SARADC2_CONV_CHANNELS, chn);
+val |= val << 16;
+writel ...
 
 
-On Wed, May 17, 2023 at 3:23=E2=80=AFAM Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> [CCing Francesco Dolcini; and the regression list too, as it should be
-> in the loop for regressions:
-> https://docs.kernel.org/admin-guide/reporting-regressions.html]
->
-> On 16.05.23 14:53, Alistair wrote:
-> > On Fri, 2023-04-07 at 03:07 +0000, Badhri Jagan Sridharan wrote:
-> >> usb_udc_connect_control does not check to see if the udc has already
-> >> been started. This causes gadget->ops->pullup to be called through
-> >> usb_gadget_connect when invoked from usb_udc_vbus_handler even before
-> >> usb_gadget_udc_start is called. Guard this by checking for udc-
-> >>> started
-> >> in usb_udc_connect_control before invoking usb_gadget_connect.
-> > [...]
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
-> >> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> >
-> > This patch causes a kernel hang when trying to boot with the
-> > usb/chipidea/udc.c driver.
-> >
-> > The call stack below causes the hang:
-> >
-> >  - gadget_bind_driver(struct device *dev)
-> >     - mutex_lock(&udc->connect_lock);
-> >     - usb_gadget_udc_start_locked(struct usb_udc *udc)
-> >         - udc->gadget->ops->udc_start(udc->gadget, udc->driver)
-> >
-> > At which point we are calling ci_udc_start(..), but with the
-> > connect_lock mutex locked.
-> >
-> > ci_udc_start() then calls usb_udc_vbus_handler() which tries to lock
-> > the connect_lock while it's already locked. Resulting in a kernel hang.
-> >
-> > Reverting this patch fixes the hang.
->
-> Not my area of expertise, but I guess it might be the same error as this
-> one:
->
-> https://lore.kernel.org/all/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com=
-/
->
-> Francesco sent a revert on Friday, but no reaction from Badhri Jagan
-> Sridharan or Greg yet afaics.
->
-> https://lore.kernel.org/all/20230512131435.205464-1-francesco@dolcini.it/
->
-> Ciao, Thorsten
+> +	writel_relaxed(val, info->regs + SARADC2_END_INT_EN);
+> +	val = SARADC2_START | SARADC2_SINGLE_MODE | chn;
+> +	writel(val << 16 | val, info->regs + SARADC2_CONV_CON);
+> +}
+> +
+
+Cheers,
+Angelo
+
