@@ -2,95 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1F3707356
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455E2707363
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjEQUv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S229795AbjEQU4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjEQUv1 (ORCPT
+        with ESMTP id S229522AbjEQU4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:51:27 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E4A4EF8;
-        Wed, 17 May 2023 13:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=td3mHGkbZWK4bitS2wf7sSOv43WhAuUzx6ATNa2Tgf4=; b=ek
-        edixrKGZzWlRPN4admMXkmeIkDyls9+iPJOKFtXhNJMRqestd1tnzfFRCBZFNabqnlUDrCzXL3VCD
-        Z2aTEpbg8/j1FrMSret7OixMTIjsnjq3C1JbTLLbkw6NfDrDbJjn01GX5vnXrAuHd/7tifYZVEmVP
-        mu/65FFl91j8jLQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pzO7B-00DAiR-Ej; Wed, 17 May 2023 22:51:17 +0200
-Date:   Wed, 17 May 2023 22:51:17 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     alexis.lothore@bootlin.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        paul.arola@telus.com, scott.roberts@telus.com
-Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: enable support for
- 88E6361 switch
-Message-ID: <9a836863-c279-490f-a49a-de4db5de9fd4@lunn.ch>
-References: <20230517203430.448705-1-alexis.lothore@bootlin.com>
- <20230517203430.448705-3-alexis.lothore@bootlin.com>
+        Wed, 17 May 2023 16:56:00 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E05109
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:55:57 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-6238200c584so5677446d6.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684356956; x=1686948956;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7l9MfvQ1LbpXKb0qCojhn9qKDV5d5hFenRL1TmxbHH8=;
+        b=Knz462xVkWE5uNYmipkdgk4VEdCivx4Qe9rwo5X/nUFyg3XrKKiIsmpK9yuhPMI9OU
+         SKOqFs+UmuXugzt7fzDWL1C7sGJixkewhyWAiWjG79KCkHnz1XgjZB9aODSc/Q/x8Zg6
+         Ukw5t2KggPdqUYH3KI+JEwh/llo4wyYE9o2TxRZd2mgToaZxzbNao0i9b+QfpfEeV1Py
+         fzyKsRj55qKiaWa+7BLqkXhT+VaF/5FjRs6vwj7ByxlAlySX26GDQxXWDBQSXlGjGXH+
+         WExe4ciAlr845r0mKibJudKWldba433Mr5WAI2W26R+vBchsaH/zkOjQomCB7X4NYtHg
+         MG1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684356956; x=1686948956;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7l9MfvQ1LbpXKb0qCojhn9qKDV5d5hFenRL1TmxbHH8=;
+        b=RVtVPbE0nF+CRttj+w4XohVEHFzcBcUrLJ+Fj9SQsuR1sjwWtMgyPIeZIuN4Tnoqd0
+         49CrJtf2Fa8QvitxnkgawiAL4xCKEyxAWQvxJoRyP6Ns0d1HFPM9vNfwSKClHrpBMebF
+         MOc3uejyAal+jRD7KtPqnCFnHbk/CrP3nvBd5X4gxnVc4RnbLTq/DqvSBtpy95f5leMc
+         ZOOsEaDYckkAXJjwqx7iShk5qNNvOcxgav+A3aCOS0klGRtIAoKBzNHNXKmzRq2m0BbX
+         FVLJBve5vbp4ucyrkSDMXrRXu0VtCFpXZYuTCbbC+IeiDRUnXQGhLwLNjwPoq4XIcXWj
+         Jd+w==
+X-Gm-Message-State: AC+VfDwF/O6rq+ax556iwkLVdHlOEVocxFP3nhY8A8K8Ur4FbkO4mSHC
+        BniSUZlDAAM4+3teLlZLbhYlZo+pCHzB9DIfiLPgVg==
+X-Google-Smtp-Source: ACHHUZ7EzZ7+N7y4O+euuKGRkYMG6UCj/6BdUmLbOGmZXwRuqgxBnQv29cEUcaXtYHsAvKRarhyqSOUbj1gi/lQT7uQ=
+X-Received: by 2002:a05:6214:29ec:b0:5ce:6636:a45 with SMTP id
+ jv12-20020a05621429ec00b005ce66360a45mr1839851qvb.25.1684356956521; Wed, 17
+ May 2023 13:55:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517203430.448705-3-alexis.lothore@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-8-masahiroy@kernel.org>
+In-Reply-To: <20230514152739.962109-8-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 17 May 2023 13:55:45 -0700
+Message-ID: <CAKwvOdnve7EAPzdTy1eMnGwYgXpNj+dFAwB-t+7PFASDiaM_iw@mail.gmail.com>
+Subject: Re: [PATCH v5 07/21] modpost: squash extable_mismatch_handler() into default_mismatch_handler()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:34:30PM +0200, alexis.lothore@bootlin.com wrote:
-> From: Alexis Lothoré <alexis.lothore@bootlin.com>
-> 
-> Marvell 88E6361 is an 8-port switch derived from the
-> 88E6393X/88E9193X/88E6191X switches family. It can benefit from the
-> existing mv88e6xxx driver by simply adding the proper switch description in
-> the driver. Main differences with other switches from this
-> family are:
-> - 8 ports exposed (instead of 11): ports 1, 2 and 8 not available
-> - No 5GBase-x nor SFI/USXGMII support
+On Sun, May 14, 2023 at 8:28=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> Merging these two reduces several lines of code. The extable section
+> mismatch is already distinguished by EXTABLE_TO_NON_TEXT.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-So what exactly is supported for link modes?
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-The way you reuse the 6393 ops, are these differences actually
-enforced? It looks like mv88e6393x_phylink_get_caps() will allow
-2500BaseX, 5GBaseX and 10GBaseR for port 10.
+> ---
+>
+>  scripts/mod/modpost.c | 84 ++++++++++++++-----------------------------
+>  1 file changed, 26 insertions(+), 58 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 0bda2f22c985..49357a716519 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -881,27 +881,14 @@ enum mismatch {
+>   * targeting sections in this array (white-list).  Can be empty.
+>   *
+>   * @mismatch: Type of mismatch.
+> - *
+> - * @handler: Specific handler to call when a match is found.  If NULL,
+> - * default_mismatch_handler() will be called.
+> - *
+>   */
+>  struct sectioncheck {
+>         const char *fromsec[20];
+>         const char *bad_tosec[20];
+>         const char *good_tosec[20];
+>         enum mismatch mismatch;
+> -       void (*handler)(const char *modname, struct elf_info *elf,
+> -                       const struct sectioncheck* const mismatch,
+> -                       Elf_Rela *r, Elf_Sym *sym, const char *fromsec);
+> -
+>  };
+>
+> -static void extable_mismatch_handler(const char *modname, struct elf_inf=
+o *elf,
+> -                                    const struct sectioncheck* const mis=
+match,
+> -                                    Elf_Rela *r, Elf_Sym *sym,
+> -                                    const char *fromsec);
+> -
+>  static const struct sectioncheck sectioncheck[] =3D {
+>  /* Do not reference init/exit code/data from
+>   * normal code and data
+> @@ -974,7 +961,6 @@ static const struct sectioncheck sectioncheck[] =3D {
+>         .bad_tosec =3D { ".altinstr_replacement", NULL },
+>         .good_tosec =3D {ALL_TEXT_SECTIONS , NULL},
+>         .mismatch =3D EXTABLE_TO_NON_TEXT,
+> -       .handler =3D extable_mismatch_handler,
+>  }
+>  };
+>
+> @@ -1255,60 +1241,42 @@ static void default_mismatch_handler(const char *=
+modname, struct elf_info *elf,
+>                      modname, tosym, tosec);
+>                 break;
+>         case EXTABLE_TO_NON_TEXT:
+> -               fatal("There's a special handler for this mismatch type, =
+we should never get here.\n");
+> +               warn("%s(%s+0x%lx): Section mismatch in reference to the =
+%s:%s\n",
+> +                    modname, fromsec, (long)r->r_offset, tosec, tosym);
+> +
+> +               if (match(tosec, mismatch->bad_tosec))
+> +                       fatal("The relocation at %s+0x%lx references\n"
+> +                             "section \"%s\" which is black-listed.\n"
+> +                             "Something is seriously wrong and should be=
+ fixed.\n"
+> +                             "You might get more information about where=
+ this is\n"
+> +                             "coming from by using scripts/check_extable=
+.sh %s\n",
+> +                             fromsec, (long)r->r_offset, tosec, modname)=
+;
+> +               else if (is_executable_section(elf, get_secindex(elf, sym=
+)))
+> +                       warn("The relocation at %s+0x%lx references\n"
+> +                            "section \"%s\" which is not in the list of\=
+n"
+> +                            "authorized sections.  If you're adding a ne=
+w section\n"
+> +                            "and/or if this reference is valid, add \"%s=
+\" to the\n"
+> +                            "list of authorized sections to jump to on f=
+ault.\n"
+> +                            "This can be achieved by adding \"%s\" to\n"
+> +                            "OTHER_TEXT_SECTIONS in scripts/mod/modpost.=
+c.\n",
+> +                            fromsec, (long)r->r_offset, tosec, tosec, to=
+sec);
+> +               else
+> +                       error("%s+0x%lx references non-executable section=
+ '%s'\n",
+> +                             fromsec, (long)r->r_offset, tosec);
+>                 break;
+>         }
+>  }
+>
+> -static void extable_mismatch_handler(const char* modname, struct elf_inf=
+o *elf,
+> -                                    const struct sectioncheck* const mis=
+match,
+> -                                    Elf_Rela* r, Elf_Sym* sym,
+> -                                    const char *fromsec)
+> -{
+> -       const char* tosec =3D sec_name(elf, get_secindex(elf, sym));
+> -       Elf_Sym *tosym =3D find_elf_symbol(elf, r->r_addend, sym);
+> -       const char *tosym_name =3D sym_name(elf, tosym);
+> -
+> -       sec_mismatch_count++;
+> -
+> -       warn("%s(%s+0x%lx): Section mismatch in reference to the %s:%s\n"=
+,
+> -            modname, fromsec, (long)r->r_offset, tosec, tosym_name);
+> -
+> -       if (match(tosec, mismatch->bad_tosec))
+> -               fatal("The relocation at %s+0x%lx references\n"
+> -                     "section \"%s\" which is black-listed.\n"
+> -                     "Something is seriously wrong and should be fixed.\=
+n"
+> -                     "You might get more information about where this is=
+\n"
+> -                     "coming from by using scripts/check_extable.sh %s\n=
+",
+> -                     fromsec, (long)r->r_offset, tosec, modname);
+> -       else if (is_executable_section(elf, get_secindex(elf, sym)))
+> -               warn("The relocation at %s+0x%lx references\n"
+> -                    "section \"%s\" which is not in the list of\n"
+> -                    "authorized sections.  If you're adding a new sectio=
+n\n"
+> -                    "and/or if this reference is valid, add \"%s\" to th=
+e\n"
+> -                    "list of authorized sections to jump to on fault.\n"
+> -                    "This can be achieved by adding \"%s\" to\n"
+> -                    "OTHER_TEXT_SECTIONS in scripts/mod/modpost.c.\n",
+> -                    fromsec, (long)r->r_offset, tosec, tosec, tosec);
+> -       else
+> -               error("%s+0x%lx references non-executable section '%s'\n"=
+,
+> -                     fromsec, (long)r->r_offset, tosec);
+> -}
+> -
+>  static void check_section_mismatch(const char *modname, struct elf_info =
+*elf,
+>                                    Elf_Rela *r, Elf_Sym *sym, const char =
+*fromsec)
+>  {
+>         const char *tosec =3D sec_name(elf, get_secindex(elf, sym));
+>         const struct sectioncheck *mismatch =3D section_mismatch(fromsec,=
+ tosec);
+>
+> -       if (mismatch) {
+> -               if (mismatch->handler)
+> -                       mismatch->handler(modname, elf,  mismatch,
+> -                                         r, sym, fromsec);
+> -               else
+> -                       default_mismatch_handler(modname, elf, mismatch,
+> -                                                r, sym, fromsec);
+> -       }
+> +       if (!mismatch)
+> +               return;
+> +
+> +       default_mismatch_handler(modname, elf, mismatch, r, sym, fromsec)=
+;
+>  }
+>
+>  static unsigned int *reloc_location(struct elf_info *elf,
+> --
+> 2.39.2
+>
 
-> +	[MV88E6361] = {
-> +		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6361,
-> +		.family = MV88E6XXX_FAMILY_6393,
-> +		.name = "Marvell 88E6361",
-> +		.num_databases = 4096,
-> +		.num_macs = 16384,
-> +		.num_ports = 11,
-> +		/* Ports 1, 2 and 8 are not routed */
-> +		.invalid_port_mask = BIT(1) | BIT(2) | BIT(8),
-> +		.num_internal_phys = 5,
 
-Which ports have internal PHYs? 2, 3, 4, 5, 6, 7 ?  What does
-mv88e6xxx_phy_is_internal() return for these ports, and
-mv88e6xxx_get_capsmv88e6xxx_get_caps()? I'm wondering if you actually
-need to list 8 here?
-
-     Andrew
+--=20
+Thanks,
+~Nick Desaulniers
