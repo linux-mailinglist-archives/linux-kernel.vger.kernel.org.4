@@ -2,218 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C653705CCB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A5B705E8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjEQCE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S231769AbjEQEFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 00:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjEQCEw (ORCPT
+        with ESMTP id S229931AbjEQEFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:04:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB9C4231;
-        Tue, 16 May 2023 19:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684289083; x=1715825083;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GTa7OUv1VgGYQN8Q1QosotkMM+pqLAdlleu4ehfda+o=;
-  b=TJ58sRZCo+rYCiQO2bOX6smJd6cqeq6MYSG+z6m2z2MvZ+SlKjAAm/V6
-   gktG/MSOyKWAeOLpiZPsWxiY4R1ULrYSYdIWi2WRUL2yMVkcdZFIYYdxM
-   1w1Nn/rOjKzriwTQsKIwFHunbYvzC9NbrLw6MehGUqmmXvh1tNwniyRYB
-   5/kPdAPblcVyHPlwd/o8rUQoswj7b5qyIXaLMlWxHNtlduZJ/d0kg86+f
-   IQe62CjQbrVgjyMjOJ5Cr2rK1ohqRqCzZ1BP1HI9gqnzjliMvvRGcmjAP
-   nhxvmK9ZQRN+0wB+txCFYHgkgfLnrAhWsHIQyRm2fVhejlPG6DATq1Gkf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="331256269"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="331256269"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 19:04:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="948079086"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="948079086"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga006.fm.intel.com with ESMTP; 16 May 2023 19:04:41 -0700
-Date:   Wed, 17 May 2023 18:04:36 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [RFC PATCH v5 4/4] fpga: add initial KUnit test suites
-Message-ID: <ZGSmtCkPwi2TMW7K@yilunxu-OptiPlex-7050>
-References: <20230511141922.437328-1-marpagan@redhat.com>
- <20230511141922.437328-5-marpagan@redhat.com>
- <ZF/LpdlyBu2Z1uQE@yilunxu-OptiPlex-7050>
- <a50022a6-59e1-6b53-2c5b-c6eb44277876@redhat.com>
+        Wed, 17 May 2023 00:05:35 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D415C3A8B
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:05:33 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3f38956ffdbso2735731cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684296333; x=1686888333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A41ENrMX5x8zKKDNaUz4naidfiHWMXiWMyeFBHOAqaE=;
+        b=jY5wSwccT7jcQM0a81wqYwI9HPQisng8sSkj7Szr3Vp3Kq9yMD2arSqix5dpCucPiq
+         aqdDfui9fsp+AxPVFlD12MJCVBs1i++u/IhebU+aVpDal2klBG+8/JyXkaXarPkzNJ0m
+         6cYZSLnp2uJ74yiyZv4lx6/m4Z19TPdxmw4+g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684296333; x=1686888333;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A41ENrMX5x8zKKDNaUz4naidfiHWMXiWMyeFBHOAqaE=;
+        b=UvpKH0LXSmAJjtUAtKL11haA7+02ddAKesNElX007zOR12QkEBaOIL0tYf3qJ7DxGH
+         sHApjlgt6YUCCEpznATnR2UHFEZZ6bcG7xQf5hjAS2TkjV6RJH324XTuGScgQsp9ZbIS
+         cIB1SyyRND57V/mbNvcQ5ewItrOgNhChpQG3FBwh8G4Wd263XtHG9a6e9IAJqrIzZgoD
+         OKgi/v9C90fZXdCrkQI4X7nDtmvPqkkUtxPGn4OojtI/QhVeTvA0kDybuEkowl+wUDnp
+         asGEUkEJKb/YCFYX91wgnfFiTbUem6TIcKDr86wjR2CCBY40DlAevaoP38pNkRxj19XT
+         hsAg==
+X-Gm-Message-State: AC+VfDyULeONqPx7T0uJS2KoaZ8azfhdCACXZaQwG6rtP9tfMZs1tkcX
+        mE8lGcxANeFE0qcJ4QOd4sAq3rR3bIwWM3j5o3axFg==
+X-Google-Smtp-Source: ACHHUZ7vFnmzN2tTJnWw91DoasphQ1V0ZP66CiYEBQdr9aIgrmcHOxCdXywAuj6fh3zz6jSUSXEbYg==
+X-Received: by 2002:ac8:7e92:0:b0:3f5:2faf:7912 with SMTP id w18-20020ac87e92000000b003f52faf7912mr13290391qtj.61.1684296332766;
+        Tue, 16 May 2023 21:05:32 -0700 (PDT)
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com. [209.85.219.51])
+        by smtp.gmail.com with ESMTPSA id l30-20020ac8459e000000b003e97fe68511sm6816995qtn.3.2023.05.16.21.05.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 21:05:31 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-62384e391e3so1296246d6.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:05:30 -0700 (PDT)
+X-Received: by 2002:a05:6214:27cc:b0:623:1a2f:fe06 with SMTP id
+ ge12-20020a05621427cc00b006231a2ffe06mr25979660qvb.10.1684296330534; Tue, 16
+ May 2023 21:05:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a50022a6-59e1-6b53-2c5b-c6eb44277876@redhat.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230309-guenter-mini-v2-0-e6410d590d43@chromium.org>
+ <20230309-guenter-mini-v2-1-e6410d590d43@chromium.org> <20230309145757.GB1088@pendragon.ideasonboard.com>
+ <CANiDSCvCxk4m4MDPTL4DDot-PCkyuRQX7N6xAUvhOju16Hft4w@mail.gmail.com> <CANiDSCv_MkhE2iJjvm9-0+bu7-iJGEai5UnGUqwwEki58FE81A@mail.gmail.com>
+In-Reply-To: <CANiDSCv_MkhE2iJjvm9-0+bu7-iJGEai5UnGUqwwEki58FE81A@mail.gmail.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Wed, 17 May 2023 13:05:20 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5BWxV74P9YXEQpQQxFJ8aNn2CgxhjeABrOjdbVuESrm3w@mail.gmail.com>
+Message-ID: <CAAFQd5BWxV74P9YXEQpQQxFJ8aNn2CgxhjeABrOjdbVuESrm3w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] media: uvcvideo: Cancel async worker earlier
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Max Staudt <mstaudt@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sean Paul <seanpaul@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-15 at 19:24:07 +0200, Marco Pagani wrote:
-> 
-> 
-> On 2023-05-13 19:40, Xu Yilun wrote:
-> > On 2023-05-11 at 16:19:22 +0200, Marco Pagani wrote:
-> >> Introduce initial KUnit tests for the FPGA subsystem. Tests are organized
-> >> into three test suites. The first suite tests the FPGA Manager.
-> >> The second suite tests the FPGA Bridge. Finally, the last test suite
-> >> models a complete FPGA platform and tests static and partial reconfiguration.
-> >>
-> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> 
-> [...]
-> 
-> >> +static void fpga_bridge_test_get_put_list(struct kunit *test)
-> >> +{
-> >> +	struct list_head bridge_list;
-> >> +	struct fake_fpga_bridge *bridge_0_ctx, *bridge_1_ctx;
-> >> +	int ret;
-> >> +
-> >> +	bridge_0_ctx = test->priv;
-> >> +
-> >> +	/* Register another bridge for this test */
-> >> +	bridge_1_ctx = fake_fpga_bridge_register(test, NULL);
-> >> +	KUNIT_ASSERT_FALSE(test, IS_ERR(bridge_1_ctx));
-> > 
-> > I think bridge_1 could also be initialized in test_init together with
-> > bridge_0
-> 
-> I can do it, but it would remain unused in the previous test case.
->  
-> >> +
-> >> +	INIT_LIST_HEAD(&bridge_list);
-> >> +
-> >> +	/* Get bridge_0 and add it to the list */
-> >> +	ret = fpga_bridge_get_to_list(bridge_1_ctx->bridge->dev.parent, NULL,
-> >> +				      &bridge_list);
-> >> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> >> +
-> >> +	KUNIT_EXPECT_PTR_EQ(test, bridge_1_ctx->bridge,
-> >> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
-> > 
-> > Should operate on bridge_0_ctx?
-> 
-> Yes, sorry. Code and comments are reversed. I'll fix it in the next version.
-> 
-> >> +
-> >> +	/* Get bridge_1 and add it to the list */
-> >> +	ret = fpga_bridge_get_to_list(bridge_0_ctx->bridge->dev.parent, NULL,
-> >> +				      &bridge_list);
-> >> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> >> +
-> >> +	KUNIT_EXPECT_PTR_EQ(test, bridge_0_ctx->bridge,
-> >> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
-> > 
-> > Should operate on bridge_1_ctx?
-> 
-> Same.
-> 
-> >> +
-> >> +	/* Disable an then enable both bridges from the list */
-> >> +	KUNIT_EXPECT_TRUE(test, bridge_0_ctx->stats.enable);
-> > 
-> > Why expect enable without fpga_bridges_enable()?
-> 
-> To check that the bridge is initialized in the correct (enabled) state.
-> 
-> [...]
-> 
-> >> +static void fpga_test_partial_rcfg(struct kunit *test)
-> >> +{
-> >> +	struct fpga_base_ctx *base_ctx;
-> >> +	struct fake_fpga_region *sub_region_0_ctx, *sub_region_1_ctx;
-> >> +	struct fake_fpga_bridge *sub_bridge_0_ctx, *sub_bridge_1_ctx;
-> >> +	struct fpga_image_info *partial_img_info;
-> >> +	int ret;
-> >> +
-> >> +	base_ctx = test->priv;
-> >> +
-> >> +	/*
-> >> +	 * Add two reconfigurable sub-regions, each controlled by a bridge. The
-> >> +	 * reconfigurable sub-region are children of their bridges which are,
-> >> +	 * in turn, children of the base region. For simplicity, the same image
-> >> +	 * is used to configure reconfigurable regions
-> >> +	 */
-> >> +	sub_bridge_0_ctx = fake_fpga_bridge_register(test,
-> >> +						     &base_ctx->region_ctx->region->dev);
-> >> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_0_ctx));
-> >> +
-> >> +	sub_region_0_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
-> >> +						     &sub_bridge_0_ctx->bridge->dev);
-> >> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_0_ctx));
-> >> +
-> >> +	ret = fake_fpga_region_add_bridge(sub_region_0_ctx, sub_bridge_0_ctx->bridge);
-> >> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> >> +
-> >> +	sub_bridge_1_ctx = fake_fpga_bridge_register(test,
-> >> +						     &base_ctx->region_ctx->region->dev);
-> >> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_1_ctx));
-> >> +
-> >> +	sub_region_1_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
-> >> +						     &sub_bridge_1_ctx->bridge->dev);
-> >> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_1_ctx));
-> >> +
-> >> +	ret = fake_fpga_region_add_bridge(sub_region_1_ctx, sub_bridge_1_ctx->bridge);
-> >> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> > 
-> > I'm wondering if we need to construct the topology for partial
-> > reconfiguration test. The FPGA core doesn't actually check the topology.
-> > It is OK to do partial reconfiguration for a region without parents as
-> > long as its associated FPGA manager device has the capability.
-> > 
-> > Thanks,
-> > Yilun
-> 
-> I agree with you. Creating a hierarchical layout is rather unnecessary.
+On Mon, May 1, 2023 at 10:30=E2=80=AFPM Ricardo Ribalda <ribalda@chromium.o=
+rg> wrote:
 >
+> Hi Laurent
+>
+> Friendly ping!
 
-I assume the following sections have nothing to do with hierarchial
-layout, is it?
- 
-> Initially, the idea was to test that all components behave as expected
-> in a complete setup, e.g., only the bridge of the specific reconfigurable
-> region gets disabled during programming and then re-enabled.
-> 
-> However, after some iterations, I'm starting to think that it would be
-> better to restructure the whole test code into a set of self-contained
-> test modules, one for each core component. 
-> 
-> In that way, each module would contain the implementation of the fake/mock
-> low-level driver and the related tests. For instance, the manager module
-> would contain the implementation of the fake manager and the test_img_load_buf
-> and test_img_load_sgt test cases. Similarly, the bridge module would contain
-> the fake/mock bridge implementation and the test_toggle and test_get_put_list
-> cases.
-> 
-> I think that in this way, the code would be simpler and more adherent to the
-> unit testing methodology. The downside is that making tests that need multiple
-> components would be more cumbersome and possibly lead to code duplication.
-> For instance, testing the region's fpga_region_program_fpga() would require
-> implementing additional local mock/fakes for the manager and bridge.
++Kieran and +Mauro, could you take a look at this please, since
+Laurent has not responded to this for almost 2 months?
 
-This way is good to me.
-
-> 
-> What do you think?
-> 
-> Thanks,
-> Marco
-> 
-> [...]
-> 
+>
+> On Tue, 28 Mar 2023 at 09:52, Ricardo Ribalda <ribalda@chromium.org> wrot=
+e:
+> >
+> > Hi Laurent
+> >
+> > I have not tested it yet... but maybe something like this might be
+> > slightly better?
+> >
+> >
+> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/u=
+vc_ctrl.c
+> > index 5e9d3da862dd..3944404b2de2 100644
+> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > @@ -2762,10 +2762,6 @@ void uvc_ctrl_cleanup_device(struct uvc_device *=
+dev)
+> >         struct uvc_entity *entity;
+> >         unsigned int i;
+> >
+> > -       /* Can be uninitialized if we are aborting on probe error. */
+> > -       if (dev->async_ctrl.work.func)
+> > -               cancel_work_sync(&dev->async_ctrl.work);
+> > -
+> >         /* Free controls and control mappings for all entities. */
+> >         list_for_each_entry(entity, &dev->entities, list) {
+> >                 for (i =3D 0; i < entity->ncontrols; ++i) {
+> > diff --git a/drivers/media/usb/uvc/uvc_status.c
+> > b/drivers/media/usb/uvc/uvc_status.c
+> > index a78a88c710e2..0208612a9f12 100644
+> > --- a/drivers/media/usb/uvc/uvc_status.c
+> > +++ b/drivers/media/usb/uvc/uvc_status.c
+> > @@ -292,7 +292,7 @@ int uvc_status_init(struct uvc_device *dev)
+> >
+> >  void uvc_status_unregister(struct uvc_device *dev)
+> >  {
+> > -       usb_kill_urb(dev->int_urb);
+> > +       uvc_status_stop(dev);
+> >         uvc_input_unregister(dev);
+> >  }
+> >
+> >
+> > The benefit from Guenter patch is that it has been tested for years...
+> >
+> > What do you think? Shall we try this approach instead?
+> >
+> > Regards!
+> >
+> > On Thu, 9 Mar 2023 at 15:57, Laurent Pinchart
+> > <laurent.pinchart@ideasonboard.com> wrote:
+> > >
+> > > Hi Ricardo and Guenter,
+> > >
+> > > Thank you for the patch.
+> > >
+> > > On Thu, Mar 09, 2023 at 03:44:05PM +0100, Ricardo Ribalda wrote:
+> > > > From: Guenter Roeck <linux@roeck-us.net>
+> > > >
+> > > > So far the asynchronous control worker was canceled only in
+> > > > uvc_ctrl_cleanup_device. This is much later than the call to
+> > > > uvc_disconnect. However, after the call to uvc_disconnect returns,
+> > > > there must be no more USB activity. This can result in all kinds
+> > > > of problems in the USB code. One observed example:
+> > > >
+> > > > URB ffff993e83d0bc00 submitted while active
+> > > > WARNING: CPU: 0 PID: 4046 at drivers/usb/core/urb.c:364 usb_submit_=
+urb+0x4ba/0x55e
+> > > > Modules linked in: <...>
+> > > > CPU: 0 PID: 4046 Comm: kworker/0:35 Not tainted 4.19.139 #18
+> > > > Hardware name: Google Phaser/Phaser, BIOS Google_Phaser.10952.0.0 0=
+8/09/2018
+> > > > Workqueue: events uvc_ctrl_status_event_work [uvcvideo]
+> > > > RIP: 0010:usb_submit_urb+0x4ba/0x55e
+> > > > Code: <...>
+> > > > RSP: 0018:ffffb08d471ebde8 EFLAGS: 00010246
+> > > > RAX: a6da85d923ea5d00 RBX: ffff993e71985928 RCX: 0000000000000000
+> > > > RDX: ffff993f37a1de90 RSI: ffff993f37a153d0 RDI: ffff993f37a153d0
+> > > > RBP: ffffb08d471ebe28 R08: 000000000000003b R09: 001424bf85822e96
+> > > > R10: 0000001000000000 R11: ffffffff975a4398 R12: ffff993e83d0b000
+> > > > R13: ffff993e83d0bc00 R14: 0000000000000000 R15: 00000000fffffff0
+> > > > FS:  0000000000000000(0000) GS:ffff993f37a00000(0000) knlGS:0000000=
+000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: 00000000ec9c0000 CR3: 000000025b160000 CR4: 0000000000340ef0
+> > > > Call Trace:
+> > > >  uvc_ctrl_status_event_work+0xd6/0x107 [uvcvideo]
+> > > >  process_one_work+0x19b/0x4c5
+> > > >  worker_thread+0x10d/0x286
+> > > >  kthread+0x138/0x140
+> > > >  ? process_one_work+0x4c5/0x4c5
+> > > >  ? kthread_associate_blkcg+0xc1/0xc1
+> > > >  ret_from_fork+0x1f/0x40
+> > > >
+> > > > Introduce new function uvc_ctrl_stop_device() to cancel the worker
+> > > > and call it from uvc_unregister_video() to solve the problem.
+> > > >
+> > > > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > > > Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> > > > Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+> > > > Reviewed-by: Sean Paul <seanpaul@chromium.org>
+> > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > > ---
+> > > >  drivers/media/usb/uvc/uvc_ctrl.c   | 11 +++++++----
+> > > >  drivers/media/usb/uvc/uvc_driver.c |  1 +
+> > > >  drivers/media/usb/uvc/uvcvideo.h   |  1 +
+> > > >  3 files changed, 9 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/u=
+vc/uvc_ctrl.c
+> > > > index 5e9d3da862dd..769c1d2a2f45 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > > > @@ -2757,14 +2757,17 @@ static void uvc_ctrl_cleanup_mappings(struc=
+t uvc_device *dev,
+> > > >       }
+> > > >  }
+> > > >
+> > > > -void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+> > > > +void uvc_ctrl_stop_device(struct uvc_device *dev)
+> > > >  {
+> > > > -     struct uvc_entity *entity;
+> > > > -     unsigned int i;
+> > > > -
+> > > >       /* Can be uninitialized if we are aborting on probe error. */
+> > > >       if (dev->async_ctrl.work.func)
+> > > >               cancel_work_sync(&dev->async_ctrl.work);
+> > > > +}
+> > >
+> > > There may be an opportunity for refactoring, as we have
+> > > uvc_status_stop() that stops the work queue, but I think this is good
+> > > enough for now. I'm wondering, though, if there could be a race
+> > > condition here similar to the one that the recent changes to
+> > > uvc_status_stop() have fixed ? As uvc_ctrl_stop_device() is called at
+> > > release time I assume that URBs have been cancelled, so there should =
+be
+> > > no race, but a second pair of eyeballs to confirm this would be
+> > > appreciated.
+> > >
+> > > Other than that, the patch looks good to me, and fixes an issue
+> > > independent from the rest of the series, so
+> > >
+> > > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > >
+> > > I will wait for a reply regarding the race condition before queuing t=
+his
+> > > up though.
+> > >
+> > > > +
+> > > > +void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+> > > > +{
+> > > > +     struct uvc_entity *entity;
+> > > > +     unsigned int i;
+> > > >
+> > > >       /* Free controls and control mappings for all entities. */
+> > > >       list_for_each_entry(entity, &dev->entities, list) {
+> > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb=
+/uvc/uvc_driver.c
+> > > > index 7aefa76a42b3..4be6dfeaa295 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > > > @@ -1893,6 +1893,7 @@ static void uvc_unregister_video(struct uvc_d=
+evice *dev)
+> > > >       }
+> > > >
+> > > >       uvc_status_unregister(dev);
+> > > > +     uvc_ctrl_stop_device(dev);
+> > > >
+> > > >       if (dev->vdev.dev)
+> > > >               v4l2_device_unregister(&dev->vdev);
+> > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/u=
+vc/uvcvideo.h
+> > > > index 9a596c8d894a..50f171e7381b 100644
+> > > > --- a/drivers/media/usb/uvc/uvcvideo.h
+> > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
+> > > > @@ -760,6 +760,7 @@ int uvc_query_v4l2_menu(struct uvc_video_chain =
+*chain,
+> > > >  int uvc_ctrl_add_mapping(struct uvc_video_chain *chain,
+> > > >                        const struct uvc_control_mapping *mapping);
+> > > >  int uvc_ctrl_init_device(struct uvc_device *dev);
+> > > > +void uvc_ctrl_stop_device(struct uvc_device *dev);
+> > > >  void uvc_ctrl_cleanup_device(struct uvc_device *dev);
+> > > >  int uvc_ctrl_restore_values(struct uvc_device *dev);
+> > > >  bool uvc_ctrl_status_event_async(struct urb *urb, struct uvc_video=
+_chain *chain,
+> > >
+> > > --
+> > > Regards,
+> > >
+> > > Laurent Pinchart
+> >
+> >
+> >
+> > --
+> > Ricardo Ribalda
+>
+>
+>
+> --
+> Ricardo Ribalda
