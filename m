@@ -2,85 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8AB7061B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EAA7061BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjEQHuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S230270AbjEQHwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjEQHuP (ORCPT
+        with ESMTP id S230225AbjEQHwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:50:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA32F49CE;
-        Wed, 17 May 2023 00:50:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 412ED64309;
-        Wed, 17 May 2023 07:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACE2C433EF;
-        Wed, 17 May 2023 07:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684309807;
-        bh=gHbk0ucx0GMs+M8HKWhpclU1mbuhtBZOKMDwwu4F8tI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dG++y/69d3XpBt+dgNygyDUAzm2BStjA9csCTpYrdI8FzqSy5UoRnm3WatqTpHRZB
-         23gnM1EEYhcU/7BzyHWfnYOPcJPVr7ndzMskofpC/eMzUhnaeaCLhb14+0tK4gkIAR
-         /SEzDUvOO+ACaVk8tHw8pRKjmdk7Oy72PaZw41ctkV2BWYX4k1TEIQIrvE6SpUbXCS
-         82TBxbB3fAAwdo0WYFEg+vvsjsk1LczV/3aegA9cvGFqyrefL/R4uL/ennX7r/L74T
-         odsA8OyeZWJIFGHZkCEXHI4r4jWonuHXgQMObRcIgkb25KOgehYCkDi8d+oY9BNgdM
-         wqXrO8oH8RC0g==
-Date:   Wed, 17 May 2023 09:50:02 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Ondrej Valousek <ondrej.valousek.xm@renesas.com>,
-        "trondmy@hammerspace.com" <trondmy@hammerspace.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: A pass-through support for NFSv4 style ACL
-Message-ID: <20230517-outen-galopp-cf33633006b5@brauner>
-References: <20230516124655.82283-1-jlayton@kernel.org>
- <20230516-notorisch-geblickt-6b591fbd77c1@brauner>
- <TYXPR01MB18549D3A5B0BE777D7F6B284D9799@TYXPR01MB1854.jpnprd01.prod.outlook.com>
- <cc4317d9cb8f10aa0b3750bdb6db8b4e77ff26f8.camel@kernel.org>
- <20230517-herstellen-zitat-21eeccd36558@brauner>
- <ZGSGCTWOWkwIbvQE@infradead.org>
+        Wed, 17 May 2023 03:52:37 -0400
+Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [95.215.58.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22D63AB5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:52:36 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684309952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dyZ0cuqsL7jrvxzaZVQwwm8jIYz1ppUq/Jum/QlaPHY=;
+        b=OqE8aN8JSmdgKToLUX971c7a3DiU0pJ/sWtW/fk/TdEd7ve3MsuPqQUmLvJYFdYZAWuF/L
+        fY3RAA8bI8+JkKFtpGNXuWnggvdU95pfY1QJ/kI1njPSw/kCFj3CliY7MVbJz9tDqJudfU
+        OnoMOIJFePDXRG526clf0FUO/xpivRE=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZGSGCTWOWkwIbvQE@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] cgroup: fix missing cpus_read_{lock,unlock}() in
+ cgroup_transfer_tasks()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20230517074545.2045035-1-qi.zheng@linux.dev>
+Date:   Wed, 17 May 2023 15:51:56 +0800
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Zhao Gongyi <zhaogongyi@bytedance.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <75E872A8-652F-40B0-80D0-378569E77775@linux.dev>
+References: <20230517074545.2045035-1-qi.zheng@linux.dev>
+To:     Qi Zheng <qi.zheng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 12:45:13AM -0700, Christoph Hellwig wrote:
-> On Wed, May 17, 2023 at 09:42:59AM +0200, Christian Brauner wrote:
-> > I have no idea about the original flame war that ended RichACLs in
-> > additition to having no clear clue what RichACLs are supposed to
-> > achieve. My current knowledge extends to "Christoph didn't like them".
-> 
-> Christoph certainly doesn't like Rich ACLs, as do many other people.
-> 
-> But the deal block was that the patchset:
-> 
->  - totally duplicated the VFS level ACL handling instead of having
->    a common object for Posix and the new ACLs
 
-Which seems like a pretty obvious choice... That was the first thing I
-thought of doing (see earlier mail).
 
->  - did add even more mess to the already horrible xattr interface
->    instead of adding syscalls.
+> On May 17, 2023, at 15:45, Qi Zheng <qi.zheng@linux.dev> wrote:
+>=20
+> From: Qi Zheng <zhengqi.arch@bytedance.com>
+>=20
+> The commit 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> =
+cpus_read_lock()
+> deadlock") fixed the deadlock between cgroup_threadgroup_rwsem and
+> cpus_read_lock() by introducing cgroup_attach_{lock,unlock}() and =
+removing
+> cpus_read_{lock,unlock}() from cpuset_attach(). But =
+cgroup_transfer_tasks()
+> was missed and not handled, which will cause th following warning:
+>=20
+> WARNING: CPU: 0 PID: 589 at kernel/cpu.c:526 =
+lockdep_assert_cpus_held+0x32/0x40
+> CPU: 0 PID: 589 Comm: kworker/1:4 Not tainted 6.4.0-rc2-next-20230517 =
+#50
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 =
+04/01/2014
+> Workqueue: events cpuset_hotplug_workfn
+> RIP: 0010:lockdep_assert_cpus_held+0x32/0x40
+> <...>
+> Call Trace:
+>  <TASK>
+>  cpuset_attach+0x40/0x240
+>  cgroup_migrate_execute+0x452/0x5e0
+>  ? _raw_spin_unlock_irq+0x28/0x40
+>  cgroup_transfer_tasks+0x1f3/0x360
+>  ? find_held_lock+0x32/0x90
+>  ? cpuset_hotplug_workfn+0xc81/0xed0
+>  cpuset_hotplug_workfn+0xcb1/0xed0
+>  ? process_one_work+0x248/0x5b0
+>  process_one_work+0x2b9/0x5b0
+>  worker_thread+0x56/0x3b0
+>  ? process_one_work+0x5b0/0x5b0
+>  kthread+0xf1/0x120
+>  ? kthread_complete_and_exit+0x20/0x20
+>  ret_from_fork+0x1f/0x30
+>  </TASK>
+>=20
+> So just use the cgroup_attach_{lock,unlock}() helper to fix it.
+>=20
+> Fixes: 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> =
+cpus_read_lock() deadlock")
+> Reported-by: Zhao Gongyi <zhaogongyi@bytedance.com>
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-Plus that was before I moved POSIX ACLs out of the xattr handlers so
-they would've had to get that work done first for this to not end up a
-horrible horrible mess...
+Acked-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks.
+
