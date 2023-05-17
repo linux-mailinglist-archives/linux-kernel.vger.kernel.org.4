@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB1E706DA9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BF3706DAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjEQQKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S231846AbjEQQKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjEQQKB (ORCPT
+        with ESMTP id S231331AbjEQQKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:10:01 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A110DE47
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:10:00 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba87bd29e9dso620177276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:10:00 -0700 (PDT)
+        Wed, 17 May 2023 12:10:02 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D24268C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:10:01 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1ae515ff6a9so976625ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684339800; x=1686931800;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rgBNWBxudxifYf13fc5/OPTdkwgzhiJTdekK9406sZk=;
-        b=xZ7BRyrRuqfjm0Tqe9XVSbolDZPqt9jPwAQAa6wtxikuVD0C8co7/c5Y9GurownWnE
-         Vwb4VYj9ILg7MQSLYToewHVogtaYlXawfGom6s6TFghwK2Ye8vxhnGTSlxBKK024PdCw
-         pW53F9+8Kt5WjPNu6wSsWwfHYaB3WT4L8FO8HoI/+DAJRD4/h+kGo7aJ2B8cPrgAVTso
-         VY6HB3lvP0aYcDOt4Ipv5b1aIuQNkVwZrP/ekM4nH8cRI6aHFqD4VhzC4kQPdgBkwQia
-         nxZcw+Zr4vXrF1Sv1dvHUCuW6bvBBplwGKHfNZxImBEq5kNy1lfgsZLDDROAw0zUDdja
-         XQ5w==
+        d=google.com; s=20221208; t=1684339801; x=1686931801;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=woRAdaWYV8FD8vab19hJA4MPyBeuK73rImQoSJfr/I0=;
+        b=YE1b/zymZ9vc5qJrU2yZ6Y6Sk4upJCBRZPNMxGSUkSJ4NmR9re5sc7FtxyFCA6op5Z
+         NYFItdPqItmJDGSzZeWAH3tLZk1Wm8Afz5r3LdakqUg7OhhCWIIdGn7UMn0FZjneF7a+
+         bisIrHgG+Aut0UuT0TMLzqNQqD7aRu51rTrV0uDZzw1l+caeFdr0GilMHPWzBABPv15M
+         X4eJsAFnhsiuhrdvQNPjyZTVUft46X+7oX5ruBdVoJ1jwWqEudjOGdVLWk0A5g6E9K6h
+         emxl51IemdopSKTESt1Ud6k+QmEevHfSkIuOBN+uVG3cweipz2hw8QLMUNEJwvHVbkK9
+         kVdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684339800; x=1686931800;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rgBNWBxudxifYf13fc5/OPTdkwgzhiJTdekK9406sZk=;
-        b=CD2RdVhPscRypOwlPHd2Oyxd6hsfPPHoYDYTRPCLWNO0VULJ4riUNYOuJus4EkyU2K
-         5vslqDASkutUm+Vc4djqPMHaMf3xPqWDBeBSOTTpwmMtv4iPeq2u5iJAg5/Tp1K5uBqW
-         ysWmVWHKUmMVk3whSqnmIqyNYTPmQDgjGc5HYv+D1YVzDPmyhukgvkZbt76mMiBdXOwE
-         r5smAH/gw2BtTcHqwpweePdpCyOGj1ZhB6d48pi7lUzwiNpnXl06PaSid6bTqJ0aBrP/
-         ZEHfi/rhKcXai9OaCriULn88GQJKy48MBtTV/16Xy67GL7wIUuL1cVJQH0q88bVO4hUY
-         cxZg==
-X-Gm-Message-State: AC+VfDxPvxP2OMDtXnBcmeZuooC84NpoAficHUlhxfQecAQEZvG4GVfZ
-        xFbcgTLsJ0yJA0J3TQwCr5mEUByFF0npGg==
-X-Google-Smtp-Source: ACHHUZ6l+7V7zh/9o9ANvR18oYNtr6L0CFFmD7ZWpbPjx5EADmQYczbHcI+60Zrnel4Bh7QQTNeC5syqi7/Hcw==
+        d=1e100.net; s=20221208; t=1684339801; x=1686931801;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=woRAdaWYV8FD8vab19hJA4MPyBeuK73rImQoSJfr/I0=;
+        b=V7I39NxV/JDfIKRP7L5B8O6aKctKzU03tqiUZpReGw4Ttpwm2YMXKTDPvwReIitHAn
+         bnvsvjKZITUUyDRtw4fJ1lZeD5KyzqWpN1Y2IQMU6zEY3XeLDmswGwfuzj5dGWdnWU/8
+         FKyolGnQB9LprcjQifwYdFwr3/xBYGt2/G24K76ysGTYw2LCyqEr5g3ZQlu2NnqwooMY
+         C0lC7E4VUL5fHmXrvgbVo2LVdE4lscbihOgN0IgTkPe/tQTYEYWS+VyFVPQAIploebub
+         ZzKMX1egvfOoxNc6+hdkkmQGVmRFUpMUmkO5+fsJPsVnskziBaY9bENrWvIyqyhFVez+
+         iTbw==
+X-Gm-Message-State: AC+VfDw8L3KXjrqtayPVq7bob6eEa65tn6rXr+QCVPFtMIuj+xFvPuas
+        7wDz9d3DP+kfa5f7jOkFi/92digLXIcCvA==
+X-Google-Smtp-Source: ACHHUZ4THj5Qkl03JCHCjTlSWp/o7bV04vsyL93TtgiK33g3S4UGmuzEa+WOM6LmC0yaPTlWwNF+duECY3Pn7A==
 X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
- (user=jiaqiyan job=sendgmr) by 2002:a5b:e86:0:b0:ba8:4489:74c0 with SMTP id
- z6-20020a5b0e86000000b00ba8448974c0mr2602322ybr.6.1684339799873; Wed, 17 May
- 2023 09:09:59 -0700 (PDT)
-Date:   Wed, 17 May 2023 16:09:45 +0000
+ (user=jiaqiyan job=sendgmr) by 2002:a17:903:334f:b0:1ae:531f:366a with SMTP
+ id ka15-20020a170903334f00b001ae531f366amr637380plb.5.1684339801269; Wed, 17
+ May 2023 09:10:01 -0700 (PDT)
+Date:   Wed, 17 May 2023 16:09:46 +0000
+In-Reply-To: <20230517160948.811355-1-jiaqiyan@google.com>
 Mime-Version: 1.0
+References: <20230517160948.811355-1-jiaqiyan@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230517160948.811355-1-jiaqiyan@google.com>
-Subject: [PATCH v1 0/3] Improve hugetlbfs read on HWPOISON hugepages
+Message-ID: <20230517160948.811355-2-jiaqiyan@google.com>
+Subject: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
 From:   Jiaqi Yan <jiaqiyan@google.com>
 To:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
         naoya.horiguchi@nec.com, shy828301@gmail.com, linmiaohe@huawei.com
@@ -69,38 +71,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today when hardware memory is corrupted in a hugetlb hugepage,
-kernel leaves the hugepage in pagecache [1]; otherwise future mmap or
-read will suject to silent data corruption. This is implemented by
-returning -EIO from hugetlb_read_iter immediately if the hugepage has
-HWPOISON flag set.
+Adds the functionality to search a subpage's corresponding raw_hwp_page
+in hugetlb page's HWPOISON list. This functionality can also tell if a
+subpage is a raw HWPOISON page.
 
-Since memory_failure already tracks the raw HWPOISON subpages in a
-hugepage, a natural improvement is possible: if userspace only asks for
-healthy subpages in the pagecache, kernel can return these data.
+Exports this functionality to be immediately used in the read operation
+for hugetlbfs.
 
-This patchset implements this improvement. It consist of three parts.
-The 1st commit exports the functionality to tell if a subpage inside a
-hugetlb hugepage is a raw HWPOISON page. The 2nd commit teaches
-hugetlbfs_read_iter to return as many healthy bytes as possible.
-The 3rd commit properly tests this new feature.
+Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+---
+ include/linux/mm.h  | 23 +++++++++++++++++++++++
+ mm/memory-failure.c | 26 ++++++++++++++++----------
+ 2 files changed, 39 insertions(+), 10 deletions(-)
 
-[1] commit 8625147cafaa ("hugetlbfs: don't delete error page from pagecache")
-
-Jiaqi Yan (3):
-  mm/hwpoison: find subpage in hugetlb HWPOISON list
-  hugetlbfs: improve read HWPOISON hugepage
-  selftests/mm: add tests for HWPOISON hugetlbfs read
-
- fs/hugetlbfs/inode.c                          |  62 +++-
- include/linux/mm.h                            |  23 ++
- mm/memory-failure.c                           |  26 +-
- tools/testing/selftests/mm/.gitignore         |   1 +
- tools/testing/selftests/mm/Makefile           |   1 +
- .../selftests/mm/hugetlb-read-hwpoison.c      | 322 ++++++++++++++++++
- 6 files changed, 419 insertions(+), 16 deletions(-)
- create mode 100644 tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 27ce77080c79..f191a4119719 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3683,6 +3683,29 @@ enum mf_action_page_type {
+  */
+ extern const struct attribute_group memory_failure_attr_group;
+ 
++#ifdef CONFIG_HUGETLB_PAGE
++/*
++ * Struct raw_hwp_page represents information about "raw error page",
++ * constructing singly linked list from ->_hugetlb_hwpoison field of folio.
++ */
++struct raw_hwp_page {
++	struct llist_node node;
++	struct page *page;
++};
++
++static inline struct llist_head *raw_hwp_list_head(struct folio *folio)
++{
++	return (struct llist_head *)&folio->_hugetlb_hwpoison;
++}
++
++/*
++ * Given @subpage, a raw page in a hugepage, find its location in @folio's
++ * _hugetlb_hwpoison list. Return NULL if @subpage is not in the list.
++ */
++struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
++				       struct page *subpage);
++#endif
++
+ #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
+ extern void clear_huge_page(struct page *page,
+ 			    unsigned long addr_hint,
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 5b663eca1f29..c49e6c2d1f07 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1818,18 +1818,24 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
+ #endif /* CONFIG_FS_DAX */
+ 
+ #ifdef CONFIG_HUGETLB_PAGE
+-/*
+- * Struct raw_hwp_page represents information about "raw error page",
+- * constructing singly linked list from ->_hugetlb_hwpoison field of folio.
+- */
+-struct raw_hwp_page {
+-	struct llist_node node;
+-	struct page *page;
+-};
+ 
+-static inline struct llist_head *raw_hwp_list_head(struct folio *folio)
++struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
++				       struct page *subpage)
+ {
+-	return (struct llist_head *)&folio->_hugetlb_hwpoison;
++	struct llist_node *t, *tnode;
++	struct llist_head *raw_hwp_head = raw_hwp_list_head(folio);
++	struct raw_hwp_page *hwp_page = NULL;
++	struct raw_hwp_page *p;
++
++	llist_for_each_safe(tnode, t, raw_hwp_head->first) {
++		p = container_of(tnode, struct raw_hwp_page, node);
++		if (subpage == p->page) {
++			hwp_page = p;
++			break;
++		}
++	}
++
++	return hwp_page;
+ }
+ 
+ static unsigned long __folio_free_raw_hwp(struct folio *folio, bool move_flag)
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
