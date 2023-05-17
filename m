@@ -2,174 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBF07061A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DB57061AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjEQHtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S230238AbjEQHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjEQHtD (ORCPT
+        with ESMTP id S229615AbjEQHte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:49:03 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AB935B5;
-        Wed, 17 May 2023 00:49:00 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H6EdGq015592;
-        Wed, 17 May 2023 09:48:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=P+ZMEcqEKE/gj2cbWBXMhAEVFLObYOa5VFMI5f2bSBY=;
- b=CJo4R9YvF5G3P9NiCGISTw0r2Hdq1sqRldRjM5MMJNuuO1ZLBKmipXzmcvW9TkmvCcRl
- 3qIs5KJ1j0RHf4iZ5vg02gyc5nTYoAB6BJLbhgirObQRZfg6P0jL28oERN6hb9azYxcn
- +rMYHR8k5eb+sa2YW9Bn01HmAbKQ22bedIEuwz3ZwnA6V+CRqKSsxaGu5XebysUXh0C2
- zIFRceDh17+5QV2RssXgo8iVtZiJKg0Z8NOyheFmKG5cfO5MScuNJvcbgbjKlIscq9Ct
- X9fGLitXOcmutk+nENduMIxaA0NPjnfRegm87g1DycDeXaTkH0SVC19X050LE44ni/30 QQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qm7tfe5tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 09:48:46 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C2A3C10002A;
-        Wed, 17 May 2023 09:48:45 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BA1372194F3;
-        Wed, 17 May 2023 09:48:45 +0200 (CEST)
-Received: from localhost (10.252.30.50) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 17 May
- 2023 09:48:43 +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v4 2/2] ARM: dts: stm32: fix m4_rproc references to use SCMI
-Date:   Wed, 17 May 2023 09:48:30 +0200
-Message-ID: <20230517074830.569398-3-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230517074830.569398-1-arnaud.pouliquen@foss.st.com>
-References: <20230517074830.569398-1-arnaud.pouliquen@foss.st.com>
+        Wed, 17 May 2023 03:49:34 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5302D5591;
+        Wed, 17 May 2023 00:49:21 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QLlcD4YTxz4f3jpp;
+        Wed, 17 May 2023 15:49:16 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgD31QP7hmRkFY5qIw--.45129S3;
+        Wed, 17 May 2023 15:49:17 +0800 (CST)
+Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Yu Kuai <yukuai1@huaweicloud.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Ed Tsai <ed.tsai@mediatek.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        stanley.chu@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        powen.kao@mediatek.com, naomi.chu@mediatek.com,
+        wsd_upstream@mediatek.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230509065230.32552-1-ed.tsai@mediatek.com>
+ <20230509065230.32552-3-ed.tsai@mediatek.com>
+ <ZF0K7A6G2cYBjSgn@infradead.org>
+ <aa9af9ae-62a4-6469-244c-b5d9106bb044@acm.org>
+ <ZF5G5ztMng8Xbd1W@infradead.org>
+ <2740ee82-e35f-1cbf-f5d0-373f94eb14a5@acm.org>
+ <de3f41a0-b13d-d4f6-765a-19b857bce53e@huaweicloud.com>
+ <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <a26e28a6-91e0-e803-749e-2ce957711c64@huaweicloud.com>
+Date:   Wed, 17 May 2023 15:49:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.30.50]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: _Ch0CgD31QP7hmRkFY5qIw--.45129S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFyrWw17AF4rZw48Zr4ktFb_yoW5JFW7pF
+        Z3tF45Cw4kJ34jka1kZr4IgF1rt393JFWUJrnxAry0k398Ars7Zr17G3yY9FyrAw4kCF1j
+        yrWFqrykXFy8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes stm32mp15*-scmi DTS files introduced in [1]:
-This patch fixes the node which uses the MCU reset and adds the
-missing HOLD_BOOT which is also handled by the SCMI reset service.
+Hi,
 
-This change cannot be applied as a fix on commit [1], the management
-of the hold boot impacts also the stm32_rproc driver.
+在 2023/05/16 23:12, Bart Van Assche 写道:
+> On 5/12/23 20:09, Yu Kuai wrote:
+>> 在 2023/05/13 2:12, Bart Van Assche 写道:
+>>> The fair tag sharing algorithm has a negative impact on all SCSI 
+>>> devices with multiple logical units. This is because logical units 
+>>> are considered active until (request timeout) seconds have elapsed 
+>>> after the logical unit stopped being used (see also the 
+>>> blk_mq_tag_idle() call in blk_mq_timeout_work()). UFS users are hit 
+>>> by this because UFS 3.0 devices have a limited queue depth (32) and 
+>>> because power management commands are submitted to a logical unit 
+>>> (WLUN). Hence, it happens often that the block layer "active queue" 
+>>> counter is equal to 2 while only one logical unit is being used 
+>>> actively (a logical unit backed by NAND flash). The performance 
+>>> difference between queue depths 16 and 32 for UFS devices is 
+>>> significant.
+>>
+>> We meet similiar problem before, but I think remove tag fair sharing
+>> might cause some problems, because get tag is not fair currently, for
+>> example 2 devices share 32 tag, while device a issue large amount of
+>> io concurrently, and device b only issue one io, in this case, if fair
+>> tag sharing is removed, device b can get bad io latency.
+>>
+>> By the way, I tried to propose a way to workaround this by following:
+>>
+>> 1) disable fair tag sharing untill get tag found no tag is avaiable;
+>> 2) enable fair tag sharing again if the disk donesn't faild to get tag
+>> for a period of time;
+>>
+>> Can this approch be considered?
+> 
+> I'm afraid that this approach won't help for the UFS driver since it is 
+> likely that all tags are in use by a single logical unit during an IOPS 
+> test. Hence, fair sharing would be enabled even when we don't want it to 
+> be enabled.
 
-[1] 'commit 5b7e58313a77 ("ARM: dts: stm32: Add SCMI version of STM32 boards (DK1/DK2/ED1/EV1)")'
+It's right my original method is not flexible.
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
-Deltas vs previous revision:
-- add "/delete-property/ st,syscfg-holdboot;" to fix dtbs_check complain.
+> 
+> I propose that we switch to one of these two approaches:
 
----
- arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts | 7 +++++--
- arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts | 7 +++++--
- arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts | 7 +++++--
- arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts | 7 +++++--
- 4 files changed, 20 insertions(+), 8 deletions(-)
+How about a smoothing method that the device with more io will share
+more tag, and each device will get at least one tag?
 
-diff --git a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-index e539cc80bef8..afcd6285890c 100644
---- a/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157a-dk1-scmi.dts
-@@ -55,8 +55,11 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	/delete-property/ st,syscfg-holdboot;
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-index 97e4f94b0a24..39358d902000 100644
---- a/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-dk2-scmi.dts
-@@ -61,8 +61,11 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	/delete-property/ st,syscfg-holdboot;
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-index 9cf0a44d2f47..07ea765a4553 100644
---- a/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ed1-scmi.dts
-@@ -60,8 +60,11 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	/delete-property/ st,syscfg-holdboot;
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-index 3b9dd6f4ccc9..813086ec2489 100644
---- a/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1-scmi.dts
-@@ -66,8 +66,11 @@ &mdma1 {
- 	resets = <&scmi_reset RST_SCMI_MDMA>;
- };
- 
--&mlahb {
--	resets = <&scmi_reset RST_SCMI_MCU>;
-+&m4_rproc {
-+	/delete-property/ st,syscfg-holdboot;
-+	resets = <&scmi_reset RST_SCMI_MCU>,
-+		 <&scmi_reset RST_SCMI_MCU_HOLD_BOOT>;
-+	reset-names =  "mcu_rst", "hold_boot";
- };
- 
- &rcc {
--- 
-2.25.1
+Thanks,
+Kuai
+
+> * Either remove the fair tag sharing code entirely and rely on the 
+> fairness mechanism provided by the sbitmap code. I'm referring to how 
+> __sbitmap_queue_wake_up() uses the wake_index member variable.
+> * Or make the behavior of the fairness algorithm configurable from user 
+> space. One possible approach is to make the proportion of tags for a 
+> logical unit / NVMe namespace configurable via sysfs. This will allow to 
+> reduce the number of tags for the WLUN of UFS devices.
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> .
+> 
 
