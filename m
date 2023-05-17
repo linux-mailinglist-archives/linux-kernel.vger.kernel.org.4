@@ -2,161 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEA8706B31
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57B8706B33
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjEQOeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S232010AbjEQOeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbjEQOeD (ORCPT
+        with ESMTP id S231851AbjEQOeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:34:03 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBA17ED0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:33:54 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f42b4da6e5so4784551cf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:33:54 -0700 (PDT)
+        Wed, 17 May 2023 10:34:20 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674BE7DBB;
+        Wed, 17 May 2023 07:34:18 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-76c791e2d8dso63943639f.3;
+        Wed, 17 May 2023 07:34:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684334033; x=1686926033;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=e3oHRvM4+O+XVaUuEdehDkOXM012vn7RckSkGvna424=;
-        b=fu1tzDMU/Og/xO2VDVrDn7AMjoYSOOqIHHpkafFQsXAXa7bAquEW8FLCbTstV+4LMK
-         WozWorjMKA6Ye6vd/CWIiTxdEYThpduYehQ0CQ0WfYzDYjo3Vb2D2M2rgHnkpqG2DoOG
-         hFYTNMutL1PBlKS5Sm6U/taMV6kJ+5c+nFWzW2BnEmFKQvrQZqgN1lt1MaOoYlFovyr9
-         7rwdJcPszNNgJz0aUNWpj3BWju7B7DitjFIRX5EHLLPdarguqNTfEhlBsUlRfiyyggcm
-         rmyPk1XWlhvVmYgOtYCrVpLjW2EGN4HHxXkb5Vh4zDOUpaw4fdaI2HH4gyNooTHomACq
-         60Iw==
+        d=gmail.com; s=20221208; t=1684334057; x=1686926057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xg5+64VwYu4jgIPdssL1KkUeDoxI9Z+GcnNgZYWkm3Q=;
+        b=f7UYkofNs9JL4XDKdmmVxJ/FcOm5c66Vjo4sEzVNJyE+QNiDrsJAcOsggp0ry46ks5
+         pC0ZEl/aJVWXPMDYYIqTgRkVW0CTWqrQ+m47hPfjJD1sUHnOkYcjJwInI9r2Cas5bwyk
+         Aua+3xLxe0y93uSylEtAyy/SQCrXy3pu8EjWDQLqjDH9ZJfndfVuKp+AQ+2x+hmDX3CZ
+         UqukqOATp6ip9bYcd7D94O/5mcfgeoZikKSahbzqvqYo9ZVI9AXlQw01Vs9ecDPagjDm
+         ObObYN+/r8lDfrV7UZMd/9qWJEzIjlXTqJxInZK04mizR0Mt3KHXnwbWEZtG/Z7iSvnn
+         hyNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684334033; x=1686926033;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3oHRvM4+O+XVaUuEdehDkOXM012vn7RckSkGvna424=;
-        b=i2IAMRxEU9K7paGsYMcMogrVMo4IqQnxu+owziaB3FoTHYXI/N71TN8VXlbU96BxYx
-         oi1LUhoQzM+J39DHSPGUD/k33swOxoyOpQGY//b+Xj1ohz/Hu9dXqZoiiOgMEqVMN03K
-         e/6BFQwxmY+TQTvQQZKGaBE9FIlfF+a/AgunQvhbMZrO4NlidkHCattnNov7CiIowmzp
-         wUY+rAwDiEVxGmDEzTZVx/4G5iGL46jctt0ERfhCRE07hHD9nIdtpdx0gp43WzOpzrLw
-         GenvlO6AWItieenmCcsUF7Ip0WIsqEqK4VBKdp3oREZlxQ3hbO5o6ugaE+3PK3aBas+g
-         Gp7w==
-X-Gm-Message-State: AC+VfDycbEGjBE/YrXFVFBPBBz+4jWZnI1FzCnFfgOsrx5nFknhGb/85
-        cmsufb3XBncXwD37/uQ8Tsrk
-X-Google-Smtp-Source: ACHHUZ62YidM3zKdwt9WsXpqyD57MEzZUZPKzKjSHJhQM0a+oKDUHR+Gn6BJRSHZwAJwHcpYfUyurw==
-X-Received: by 2002:ac8:5c91:0:b0:3ef:5ba0:7038 with SMTP id r17-20020ac85c91000000b003ef5ba07038mr73060971qta.21.1684334033429;
-        Wed, 17 May 2023 07:33:53 -0700 (PDT)
-Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
-        by smtp.gmail.com with ESMTPSA id d19-20020a05620a159300b0075914b01c29sm645867qkk.70.2023.05.17.07.33.52
+        d=1e100.net; s=20221208; t=1684334057; x=1686926057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xg5+64VwYu4jgIPdssL1KkUeDoxI9Z+GcnNgZYWkm3Q=;
+        b=eND5pR/aaPVhNVJQBiGajEqF/4FqjyJdZpCTnt6o2mmu8W4KKNMMkweFxqxr7hJyZ7
+         BqsayxMrplauZRiBVoHDVsy1N0dI6zTDu19JfRH9r/DV+x7UVOuqg5Qd4sfgLNzkf1q8
+         ybrDg7OYkmg8oCoUa3kBf4NEfQP79g7HxXvsvdkLpjjfkyN1emD6WQkljx/fp6sMb/+1
+         0aKcSq8LIQQgNmH4hOt/mO0MvFAkFqCne+UGHZqn+uBhipx4SA7zHOmsyBfvWyycLjGq
+         0pV++1NwnpNA4Bs6oDQx/v+92cWqBNN5TfpLQqj0oVW4E6NxEvxYvQwG6qljM0FDwKLu
+         YZYg==
+X-Gm-Message-State: AC+VfDwWH3L2KI7Cna/1Lxspo2sfkuhcCBq5iZV+/u3lx05HZB+0TZvs
+        MwW6qTeJSOVFNIqc63YCIBM=
+X-Google-Smtp-Source: ACHHUZ6/nzU7Vyvyb5FH1f/FdNchYPWuX2uGRdwnvozU3JU2C4g5sXFhidMNl8Ac9liRJBzkXOCIgg==
+X-Received: by 2002:a6b:e910:0:b0:763:5cf8:65eb with SMTP id u16-20020a6be910000000b007635cf865ebmr4854888iof.9.1684334057611;
+        Wed, 17 May 2023 07:34:17 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id n16-20020a027150000000b0040fa0f43777sm8491190jaf.161.2023.05.17.07.34.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 07:33:52 -0700 (PDT)
-Date:   Wed, 17 May 2023 10:33:52 -0400
-Message-ID: <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
-From:   Paul Moore <paul@paul-moore.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
+        Wed, 17 May 2023 07:34:17 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Eric Paris <eparis@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        audit@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
-References: <20230517131102.934196-5-arnd@kernel.org>
-In-Reply-To: <20230517131102.934196-5-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] scsi: ibmvscsi: Replace all non-returning strlcpy with strscpy
+Date:   Wed, 17 May 2023 14:34:09 +0000
+Message-ID: <20230517143409.1520298-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
-> 
-> Building with 'make W=1' reveals two function definitions without
-> a previous prototype in the audit code:
-> 
-> lib/compat_audit.c:32:5: error: no previous prototype for 'audit_classify_compat_syscall' [-Werror=missing-prototypes]
-> kernel/audit.c:1813:14: error: no previous prototype for 'audit_serial' [-Werror=missing-prototypes]
-> 
-> The first one needs a declaration from linux/audit.h but cannot
-> include that header without causing conflicting (compat) syscall number
-> definitions, so move the it into linux/audit_arch.h.
-> 
-> The second one is declared conditionally based on CONFIG_AUDITSYSCALL
-> but needed as a local function even when that option is disabled, so
-> move the declaration out of the #ifdef block.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/linux/audit.h      | 2 --
->  include/linux/audit_arch.h | 2 ++
->  kernel/audit.h             | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/audit.h b/include/linux/audit.h
-> index 31086a72e32a..6a3a9e122bb5 100644
-> --- a/include/linux/audit.h
-> +++ b/include/linux/audit.h
-> @@ -130,8 +130,6 @@ extern unsigned compat_dir_class[];
->  extern unsigned compat_chattr_class[];
->  extern unsigned compat_signal_class[];
->  
-> -extern int audit_classify_compat_syscall(int abi, unsigned syscall);
-> -
->  /* audit_names->type values */
->  #define	AUDIT_TYPE_UNKNOWN	0	/* we don't know yet */
->  #define	AUDIT_TYPE_NORMAL	1	/* a "normal" audit record */
-> diff --git a/include/linux/audit_arch.h b/include/linux/audit_arch.h
-> index 8fdb1afe251a..0e34d673ef17 100644
-> --- a/include/linux/audit_arch.h
-> +++ b/include/linux/audit_arch.h
-> @@ -21,4 +21,6 @@ enum auditsc_class_t {
->  	AUDITSC_NVALS /* count */
->  };
->  
-> +extern int audit_classify_compat_syscall(int abi, unsigned syscall);
-> +
->  #endif
-> diff --git a/kernel/audit.h b/kernel/audit.h
-> index c57b008b9914..94738bce40b2 100644
-> --- a/kernel/audit.h
-> +++ b/kernel/audit.h
-> @@ -259,8 +259,8 @@ extern struct tty_struct *audit_get_tty(void);
->  extern void audit_put_tty(struct tty_struct *tty);
->  
->  /* audit watch/mark/tree functions */
-> -#ifdef CONFIG_AUDITSYSCALL
->  extern unsigned int audit_serial(void);
-> +#ifdef CONFIG_AUDITSYSCALL
->  extern int auditsc_get_stamp(struct audit_context *ctx,
->  			      struct timespec64 *t, unsigned int *serial);
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
 
-We probably should move the audit_serial() and auditsc_get_stamp()
-away from the watch/mark/tree functions, but that isn't your problem.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-Anyway, this looks okay to me; do you have a problem if I merge this
-via the audit/next branch or were you hoping to have this go in
-through a different tree?
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ drivers/scsi/ibmvscsi/ibmvscsi.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---
-paul-moore.com
+diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+index 63f32f843e75..59599299615d 100644
+--- a/drivers/scsi/ibmvscsi/ibmvscsi.c
++++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+@@ -250,7 +250,7 @@ static void gather_partition_info(void)
+ 
+ 	ppartition_name = of_get_property(of_root, "ibm,partition-name", NULL);
+ 	if (ppartition_name)
+-		strlcpy(partition_name, ppartition_name,
++		strscpy(partition_name, ppartition_name,
+ 				sizeof(partition_name));
+ 	p_number_ptr = of_get_property(of_root, "ibm,partition-no", NULL);
+ 	if (p_number_ptr)
+@@ -1282,12 +1282,12 @@ static void send_mad_capabilities(struct ibmvscsi_host_data *hostdata)
+ 	if (hostdata->client_migrated)
+ 		hostdata->caps.flags |= cpu_to_be32(CLIENT_MIGRATED);
+ 
+-	strlcpy(hostdata->caps.name, dev_name(&hostdata->host->shost_gendev),
++	strscpy(hostdata->caps.name, dev_name(&hostdata->host->shost_gendev),
+ 		sizeof(hostdata->caps.name));
+ 
+ 	location = of_get_property(of_node, "ibm,loc-code", NULL);
+ 	location = location ? location : dev_name(hostdata->dev);
+-	strlcpy(hostdata->caps.loc, location, sizeof(hostdata->caps.loc));
++	strscpy(hostdata->caps.loc, location, sizeof(hostdata->caps.loc));
+ 
+ 	req->common.type = cpu_to_be32(VIOSRP_CAPABILITIES_TYPE);
+ 	req->buffer = cpu_to_be64(hostdata->caps_addr);
+
