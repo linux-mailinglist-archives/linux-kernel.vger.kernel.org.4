@@ -2,128 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AE2707675
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085AC707679
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjEQXdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 19:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S229716AbjEQXeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 19:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjEQXdT (ORCPT
+        with ESMTP id S229529AbjEQXeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 19:33:19 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2627840EF
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:33:17 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1ae4f28454bso10997985ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684366396; x=1686958396;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZsdBaiO+SLRmvoF1oxELdQlQ303GgQ3he6ImyAqilwM=;
-        b=J/MaOic+T6lZSX9z6Crj6gInRjMD4E+E+bGF8IeK/gvj8+kVm52/pHWph1u3U31zYE
-         jIREYD7YA8vdvmTFseMWbpy5Nv0+FJ9aDZeIyNdd6yH1d6RIjSOmxQv7oWoVirv0X/E3
-         +iEcRGwC9ZGFbWfLGxA7xjhE6A9XCca1Op/D8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684366396; x=1686958396;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZsdBaiO+SLRmvoF1oxELdQlQ303GgQ3he6ImyAqilwM=;
-        b=M5Zsg7bMpUrFq2fNnXjKycKxrfq1n0pzqn+Rup56OfMUjBTmjNaF5Lwf6NmwzQtZF5
-         C+cTRAyOgkH5/zvBW3gmnzusey2dUIsBDRssPxzg/ebzjZAx+s4TcDKaUMK1fQkBEc2B
-         ZjoF3cDbMDMkFfcQv450XBxhN2UNxHnc3IQZ98lXWKLwl9VpCFDCkF/8qfYxXzcRAhL9
-         aVEqG+kaCdJmegTiE7ZO14BsANRXBBFsTzWGjYHaxV6i6YmEpK3lMHC+/Pa0oZM/qgCB
-         mAtFI4TqmWowHA29R/SzCkuLLQn+vNkpBENCXW5K52gcUQ9tBToYZIcb0wxOwmlOWmyS
-         3L9A==
-X-Gm-Message-State: AC+VfDzL6QhR+CjFOZrE/iT25tH9uRwfqEUP0t4cI1o9zgywkcofHsev
-        Vc7Pz7ekCD/EzLSqJnuaypNv+A==
-X-Google-Smtp-Source: ACHHUZ6E2Rw/PI0VAhjazUgu2RxKRx7eteRLCIGlE1gszdmLtBUw2S018ls9GRz9WQsxYdPoqGDQIQ==
-X-Received: by 2002:a17:903:441:b0:19d:1bc1:ce22 with SMTP id iw1-20020a170903044100b0019d1bc1ce22mr456930plb.5.1684366396668;
-        Wed, 17 May 2023 16:33:16 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902690c00b001a04d27ee92sm18103534plk.241.2023.05.17.16.33.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 16:33:16 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Song Liu <song@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] md/raid5: Convert stripe_head's "dev" to flexible array member
-Date:   Wed, 17 May 2023 16:33:14 -0700
-Message-Id: <20230517233313.never.130-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 May 2023 19:34:04 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4954F40EF;
+        Wed, 17 May 2023 16:34:00 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 1170D860F1;
+        Thu, 18 May 2023 01:33:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1684366439;
+        bh=7cQ8MHnnkw+u4jPFTbH2QZwg15cKSVff/yxwNCVRTfw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dMOrzvFm2psxlRz97auMZAlBgFKUPxr0qVAEAwL0I4CBChLUN3FZNjMd5xTXFGf9V
+         407aBtxtJOSZYzjQdTsWcPV+3YoNk/Tq0R1G1NNqTpehT1S/3/GtcBwX88w8ajV6Ey
+         bXGEm+RodWF1m32wYr1rOXSx7ExznKr+ZEWhGPp4JO2Fo3DBtPFGGHlH0m9C2knCea
+         xbYa4t/i5Z5XukvYQy9MFc3Gp9EmHJk210wOuzVGgg5clYiiMtWdx/rhmqL8FtRc8N
+         V2y5ll2MlozQCOJwg+o9qudMMXAWf2G8GU+rd1w0NIphJ3VZCvOtFKvpPShl+PPYTE
+         vUcw9SuDwEKiQ==
+Message-ID: <5f201903-17cb-5054-763c-f03b1066db1d@denx.de>
+Date:   Thu, 18 May 2023 01:33:57 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2199; h=from:subject:message-id; bh=dQaDdwwfJIKVOpP+xhSN1JdgX+awrlBT4qD4Mzl0Qq4=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkZWQ6fyNNtbsV/hrySf2Chk5e0QLsK0bNKO8z4CGK W/FZl+6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZGVkOgAKCRCJcvTf3G3AJkBVD/ 0VnC+3+XtytL1FbA2D8cGLXcifNdjNC2tFU+YvanxrXpbAXCMZMNbbLI9x/wA+DpnMgDCIorVvmzxp 5qOg6fKbI521D3qFRGLs8+zvjo97zAUnamMh5P10oVxDuR8+/mTpLJqOriXMDpbWQ59PPiue9d7y4i A2Ypz4LBiPgfwTy28j9oMEjIFrJdLJ8f6fDIk/+ylA13ye5HybcjkqMPnw0GFcaqSw9QKPY04SZwdI V3gofJWC4TrHAvO8UlrBXlHn/85ONM/WVetDN2CbBnAtnbhVM5Dvl4q6w/EIEmzpx0qLW2/K+XS/hc TBfQwNA3x/qN4Q05uJL8MOots/9ubwpvVAkP04R2GWnYra7dSuQ/qx9n7o31zZRAxNpLp4sZdCxg/j OPRzEvMElGft2bf2uZBvOhVkAmLIF3g4S9miE4hN112NTumjDidb3fDdAD6QOxN4WmV52AoNbYl9Wn vGAjU36QjmZHLEwcZT6tjXBIN2lZJhV5At1cWpn7wETRK2cf3/9hcvabLdoGem+0uSUPL/5dUtkE06 wgRJw/BNYXNanjMEU7MwSQH3+q/ZO8gs7KWh5tW9ugSylw28UAFJq9ZrkoX553GNAyC3q3cCGxLlEc jpl3o64ZLcZvNX0/+vF8mJpYtCDj+CmiWU6+qpL+68medw17eMHWEIKs1fGQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 3/3] ARM: dts: stm32: fix several DT warnings on
+ stm32mp15
+Content-Language: en-US
+To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@dh-electronics.com
+References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
+ <20230517143542.284029-4-raphael.gallais-pou@foss.st.com>
+ <f64de05b-8854-4345-80c2-f424968defdc@denx.de>
+ <e963370c-7018-243a-712d-62ca8463bfd8@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <e963370c-7018-243a-712d-62ca8463bfd8@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace old-style 1-element array of "dev" in struct stripe_head with
-modern C99 flexible array. In the future, we can additionally annotate
-it with the run-time size, found in the "disks" member.
+On 5/17/23 19:04, Raphael Gallais-Pou wrote:
+> Hi Marek
 
-Cc: Song Liu <song@kernel.org>
-Cc: linux-raid@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-It looks like this memory calculation:
+Hi,
 
-        memory = conf->min_nr_stripes * (sizeof(struct stripe_head) +
-                 max_disks * ((sizeof(struct bio) + PAGE_SIZE))) / 1024;
+> On 5/17/23 17:41, Marek Vasut wrote:
+>> On 5/17/23 16:35, Raphael Gallais-Pou wrote:
+>>
+>> Hi,
+>>
+>>> diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>> b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>> index 0f1110e42c93..a6e2e20f12fa 100644
+>>> --- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>> +++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>> @@ -457,8 +457,7 @@ &ltdc {
+>>>        status = "okay";
+>>>          port {
+>>> -        ltdc_ep0_out: endpoint@0 {
+>>> -            reg = <0>;
+>>> +        ltdc_ep0_out: endpoint {
+>>>                remote-endpoint = <&sii9022_in>;
+>>>            };
+>>>        };
+>>
+>> This LTDC port/endpoint stuff always scares me, because I always feel I get it
+>> wrong.
+>>
+>> I believe the LTDC does have one "port" , correct.
+>>
+>> But I think (?) that the LTDC has two endpoints, endpoint@0 for DPI (parallel
+>> output out of the SoC) and endpoint@1 for DSI (internal connection into the
+>> DSI serializer) ?
+> 
+> You are correct indeed, I rushed the patch and did not thought about this. I
+> agree that this can be confusing, as I also take some time to think through it.
+> 
+>>
+>> Only one of the endpoints can be connected at a time, but there are actually
+>> two endpoints in the LTDC port {} node, aren't there ?
+> Yes, they are mutually exclusive.
+>>
+>> So the original description should be OK I think , maybe #address/#size-cells
+>> are missing instead ?
+> 
+> Thing is: this file is only included in two device-trees : stm32mp157c-dk1.dts
+> and stm32mp157c-dk2.dts.
+> 
+> Among those two files there is only one which adds a second endpoint. Thus if
+> the fields are set higher in the hierarchy, a warning yields.
 
-... was already buggy (i.e. it included the single "dev" bytes in the
-result). However, I'm not entirely sure if that is the right analysis,
-since "dev" is not related to struct bio nor PAGE_SIZE?
----
- drivers/md/raid5.c | 4 ++--
- drivers/md/raid5.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I do not understand this one part, which warning are you trying to fix ?
+I just ran '$ make CHECK_DTBS=1 stm32mp157a-dk1.dtb stm32mp157c-dk2.dtb' 
+in latest linux-next and there was no warning related to LTDC .
 
-diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index 4739ed891e75..95aa74aea076 100644
---- a/drivers/md/raid5.c
-+++ b/drivers/md/raid5.c
-@@ -2433,7 +2433,7 @@ static int grow_stripes(struct r5conf *conf, int num)
- 
- 	conf->active_name = 0;
- 	sc = kmem_cache_create(conf->cache_name[conf->active_name],
--			       sizeof(struct stripe_head)+(devs-1)*sizeof(struct r5dev),
-+			       struct_size((struct stripe_head *)0, dev, devs),
- 			       0, 0, NULL);
- 	if (!sc)
- 		return 1;
-@@ -2559,7 +2559,7 @@ static int resize_stripes(struct r5conf *conf, int newsize)
- 
- 	/* Step 1 */
- 	sc = kmem_cache_create(conf->cache_name[1-conf->active_name],
--			       sizeof(struct stripe_head)+(newsize-1)*sizeof(struct r5dev),
-+			       struct_size((struct stripe_head *)0, dev, newsize),
- 			       0, 0, NULL);
- 	if (!sc)
- 		return -ENOMEM;
-diff --git a/drivers/md/raid5.h b/drivers/md/raid5.h
-index e873938a6125..6cfc74162b41 100644
---- a/drivers/md/raid5.h
-+++ b/drivers/md/raid5.h
-@@ -268,7 +268,7 @@ struct stripe_head {
- 		unsigned long	flags;
- 		u32		log_checksum;
- 		unsigned short	write_hint;
--	} dev[1]; /* allocated with extra space depending of RAID geometry */
-+	} dev[]; /* allocated with extra space depending of RAID geometry */
- };
- 
- /* stripe_head_state - collects and tracks the dynamic state of a stripe_head
+I think if you retain the stm32mp151.dtsi &ltdc { port { #address-cells 
+= <1>; #size-cells = <0>; }; }; part, then you wouldn't be getting any 
+warnings regarding LTDC , and you wouldn't have to remove the 
+unit-address from endpoint@0 .
+
+btw. I do use both endpoint@0/endpoint@1 in Avenger96 DTOs, but those 
+are not submitted yet, I have to clean them up a bit more first.
+
+> One way to do it would be to make the endpoint@0 go down in the device-tree with
+> its dependencies, so that both endpoints are the same level without generating
+> noise.
+
+I'm afraid I really don't quite understand which warning you're 
+referring to. Can you please share that warning and ideally how to 
+trigger it (the command-line incantation) ?
+
 -- 
-2.34.1
-
+Best regards,
+Marek Vasut
