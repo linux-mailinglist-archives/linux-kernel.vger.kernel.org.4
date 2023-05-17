@@ -2,134 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E43706970
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F69870697E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbjEQNP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S231882AbjEQNQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbjEQNPc (ORCPT
+        with ESMTP id S231622AbjEQNQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:15:32 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7B7E63;
-        Wed, 17 May 2023 06:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684329308; x=1715865308;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ecB/Ynuoe6ZBhEhZKZfKwKnN2RXD5h7a/Zsh9Jhj7y8=;
-  b=Et5m5zUehuGXCWfBLoVs2CmlwWdoXsOgtGofswpaHUHkyKwgVPSQPtlI
-   JbINvdJ2pPsEjSTqRUcYaJcwLjusZiEQ12jl53A/omZHftN3wmVpLopqO
-   g3GW46qjSaJTCSlHBGBaUvzP/e8rX9Lq6duNdeJEfc6apPQypGwPnsPNp
-   8GDLguZ+8+xZi0W61yBVCBPdKrcP43WhgW4clPdE+D2E0NdGwpH/6fuvE
-   ZwsswyfjS5oQNMHYeJX5mdvgSmpFbN1AVMj+PRUwNiCKTxeomE9h/QVb8
-   oSrezko4/rHDw5psEktEWbIneCvlKbbQqI0zy/5RT1yw3rKOIT+i5MeXG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="354049404"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="354049404"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 06:14:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="813855021"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="813855021"
-Received: from fabiobar-mobl.ger.corp.intel.com (HELO [10.251.219.163]) ([10.251.219.163])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 06:14:22 -0700
-Message-ID: <886904c2-26ea-8876-a6cf-b8de6ff94799@linux.intel.com>
-Date:   Wed, 17 May 2023 16:15:18 +0300
+        Wed, 17 May 2023 09:16:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EECB7AAD;
+        Wed, 17 May 2023 06:16:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36BB81FB;
+        Wed, 17 May 2023 06:17:04 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D9BF3F7BD;
+        Wed, 17 May 2023 06:16:17 -0700 (PDT)
+Date:   Wed, 17 May 2023 14:16:14 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "lihuisong (C)" <lihuisong@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
+        liuyonglong@huawei.com, huangdaode@huawei.com,
+        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+Message-ID: <20230517131614.cwi2fcj2cngaq7dm@bogus>
+References: <20230425131918.5tf5vot4h7jf54xk@bogus>
+ <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+ <20230515130807.pdvx7bxwjkfdsmsr@bogus>
+ <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
+ <20230516122931.il4ai7fyxdo5gsff@bogus>
+ <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
+ <20230516143530.venhj4gax6stinah@bogus>
+ <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
+ <20230517093033.4jvwjxuoeic46a24@bogus>
+ <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON
- UPX-i11
-To:     peterhuewe@gmx.de, jarkko@kernel.org
-Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        jsnitsel@redhat.com
-References: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-In-Reply-To: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 17, 2023 at 07:35:25PM +0800, lihuisong (C) wrote:
+> 
+> 在 2023/5/17 17:30, Sudeep Holla 写道:
+> > On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
+> > 
+> > [...]
+> > 
+> > > No. I want to use this flag to make compability between different platforms.
+> > > This driver only use PCC OpRegion to access to the channel if platform
+> > > support use PCC OpRegion.
+> > What do you mean by that ? It is not correct. If there is a PCC Opregion,
+> > then you need to make it work with drivers/acpi/acpi_pcc.c
+> > 
+> > You need to have all the other details in the firmware(ASL). By looking
+> > at the driver, it has no connection to PCC Opregion IMO unless I am missing
+> > something.
+> Driver just needs to call these APIs, such as acpi_evaluate_integer(), if
+> want to use PCC OpRegion.
 
+OK, please provide examples. I am definitely lost as it doesn't match with
+my understanding of how PCC Opregions are/can be used.
 
-On 17/05/2023 15:29, Peter Ujfalusi wrote:
-> The interrupts initially works on the device but they will stop arriving
-> after about 200 interrupts.
-> 
-> On system reboot/shutdown this will cause a long wait (120000 jiffies).
-> 
-> The interrupts on this device got enabled by commit
-> e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> 
-> Prior to this point the interrupts were not enabled on this machine.
-> 
-> Complements: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-> ---
-> Hi,
-> 
-> This patch applies on top of mainline since 6.4-rc1 takes about 2 minutes to
-> reboot on this machine, linux-next have
-> e7d3e5c4b1dd tpm/tpm_tis: Disable interrupts for more Lenovo devices
-> 
-> I'm not sure if I shouold send this on top of next or mainline is fine, please
-> let me know the preferred way to get this to 6.4.
+> I know that. I have tested PCC OpRegion before.
 
-In 6.3 the kernel prints this on boot:
-# dmesg -w | grep tpm
-tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1B, rev-id 22)
-tpm tpm0: [Firmware Bug]: TPM interrupt not working, polling instead
+Cool, examples please.
 
-It is interesting that with 6.4 most of the times the interrupts got
-enabled (without this patch) resulting stall during reboot/shutdown but
-there are few boots when the driver falls back to polling and thus the
-TPM driver works.
+> You've completely misunderstood what I said.😅
+>
 
-The command which 'locks' the system is TPM2_CC_SHUTDOWN, it is given
-TPM_UNDEFINED as duration index by tpm2_ordinal_duration_index().
+Hmm, may be but I need examples.
 
-> 
-> Regards,
-> Peter
-> 
->  drivers/char/tpm/tpm_tis.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 7af389806643..aad682c2ab21 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -122,6 +122,13 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
->  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
->  		},
->  	},
-> +	{
-> +		.callback = tpm_tis_disable_irq,
-> +		.ident = "UPX-TGL",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
-> +		},
-> +	},
->  	{}
->  };
->  
+> I mean that this driver plans to support both PCC and PCC OpRegion.
+> For example,
+> Platform A: this driver use PCC (as the current implementation)
+
+Good, then just keep what it needs in the implementation nothing more
+until you add support for something you have described below(not that
+I agree, just want you to make progress here based on what is actually
+required today)
+
+> Platform B: this driver use PCC OpRegion (Currently, this patch does not
+> implement it, but it may be available in the future.)
+
+Then let us discuss that in the future, don't add unnecessary complexity
+for some future use case today. You can always add it when you introduce
+that feature or support in the future.
+
+> Note:
+> This driver selects only one of them (PCC and PCC OpRegion) to communicate
+> with firmware on one platform.
+
+Let us keep it simple(KISS). The driver works just for PCC not PCC Opregion
+for now.
+
+> We use one bit in device-flags to know which one this driver will use.
+>
+
+NACK again just to re-iterate my point if you have not yet accepted that
+fact.
+
+> I'm not sure if you can understand what I mean by saing that.
+> If you're not confused about this now, can you reply to my last email
+> again?😁
+>
+
+The example you had IIRC is use of System Memory Opregion to demonstrate
+some _DSM. That has nothing to do with PCC Opregion.
+
+Commit 77e2a04745ff ("ACPI: PCC: Implement OperationRegion handler for
+the PCC Type 3 subtype") has the example in the commit message. IIRC,
+you have even fixed couple of bugs in that driver. That is the reason
+why I don't understand how you think this driver and that can or must
+work together. At least I fail to see how ATM(examples please, by that
+I mean ASL snippet for PCC vs PCC Opregion usage to work with this driver)
 
 -- 
-Péter
+Regards,
+Sudeep
