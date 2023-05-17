@@ -2,142 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEDD7068E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FF87068EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbjEQNHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S231503AbjEQNJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjEQNHd (ORCPT
+        with ESMTP id S229943AbjEQNJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:07:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ACD1BC
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684328806;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ricdlEvGEUBLNA0MniTa/NJPkEIbLbsrJ3rrWmsjOC8=;
-        b=P8gzYDSiEl7RudGTLBEuhcp25uhVNZZn4RyzvLlabxm4npHuQoE6+pXEHOgin+6jk/TWlF
-        D4qVd+bYVlZq6rDS6apFTBCvPcpfT6V7HW638aybFVl/EJ4lq3d589JPd/tn7V9f88J3ua
-        txr8ndDzkY+nla9CUHQ+8W2kiDggzoA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-206-I_4TdqUoMhGbrdvh5kWDUg-1; Wed, 17 May 2023 09:06:42 -0400
-X-MC-Unique: I_4TdqUoMhGbrdvh5kWDUg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 852211C0512D;
-        Wed, 17 May 2023 13:06:41 +0000 (UTC)
-Received: from localhost (unknown [10.22.32.104])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 26A882166B31;
-        Wed, 17 May 2023 13:06:39 +0000 (UTC)
-Date:   Wed, 17 May 2023 10:06:39 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     nobuhiro1.iwamatsu@toshiba.co.jp, jan.kiszka@siemens.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jeff Brady <jeffreyjbrady@gmail.com>
-Subject: Re: 5.10.179-rt87 (was Re: [ANNOUNCE] 5.10.175-rt84)
-Message-ID: <ZGTRX5hb0rK7MQSW@uudg.org>
-References: <ZBebYGllb3f9sOOS@uudg.org>
- <ZGS2sTPKvvNHyzGH@duo.ucw.cz>
+        Wed, 17 May 2023 09:09:42 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7091D10E;
+        Wed, 17 May 2023 06:09:41 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f22908a082so958212e87.1;
+        Wed, 17 May 2023 06:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684328980; x=1686920980;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HiOIFsakx0aMej54eXXoxdRm1SObTd8+GXwcqmC+gDI=;
+        b=nQqbckCj40fswXyyoyZANlw32GoODASyRy+I0BEcH8jVTq+9CS8dZsi7KJnYXhUTMu
+         T8gm0LELievGmm4DCn0L08Kr+seIoYQuhmH8JJFTb5+4j6v4xFyLpxB3yTdEjB0Uy3Z2
+         Pz+zfFv6OWCLZRHo9un5cb4wBQOORGnQ33+GIOY5AyrE1ifnChl7DYc9slDOBybRZmZg
+         gCbAeQs15epFThbzR9IlcsDHkEefxmLFxEiAiXvGYvT/RUtOtgRTr8WUlkLx3IalVvtz
+         z9gRDvbnTAyhsrgTWhFfApJBf27hSb1sAmfTC4SgGMe2CSQXRh48XoQzExndoLzjP4ca
+         NMjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684328980; x=1686920980;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HiOIFsakx0aMej54eXXoxdRm1SObTd8+GXwcqmC+gDI=;
+        b=QnY+/zJEti03r0OVFFIInlLbaGUJpcvz4cOhzE5iEKmP6Zi1vYDedadge2bSDVCbyt
+         QNroOSL4L1d26pbt9xbtFK+LAMyeU/CBrnv72FqylAt87xktVtAdw7Z7WtH5fjd5R8Py
+         H8ffTBtp1A/1Q9bvxZPZBYX3VO7xDqSb8omu7UktBNR8vPLibguLpcFCYFrBcUCUmhtr
+         QQNZFA7nmPeyrNhvB179+WBiwXVaH1KrlYs2wZyqMeN8ZvuAxEveKEcKjycgYEg9VHFf
+         L3OXekf/cxb+jcgijaRO9msC9ud7Ejn4PGFckAX2nkAthdzk4n+9HO3dViN3Nf62ZKAP
+         1v0A==
+X-Gm-Message-State: AC+VfDxy3zukX5dlyh1ENfK8hmXzYax7B4ziK+r/2ty3LWly6fp6M6jT
+        qlDXwSASp8QOifg3syB4jb4=
+X-Google-Smtp-Source: ACHHUZ7xq1vU49+oDj7CrWdxacjqGLeqMxxCfV6ZUVNhzOEYif121viDARlILRPrr/j6HhxvRR0olw==
+X-Received: by 2002:a05:6512:21d:b0:4f1:22a2:989b with SMTP id a29-20020a056512021d00b004f122a2989bmr200043lfo.50.1684328979302;
+        Wed, 17 May 2023 06:09:39 -0700 (PDT)
+Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id n1-20020a195501000000b004f25129628fsm3372942lfe.151.2023.05.17.06.09.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 06:09:38 -0700 (PDT)
+Message-ID: <f47550f9-73de-f212-fbd3-430ef6bd48a1@gmail.com>
+Date:   Wed, 17 May 2023 16:09:37 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0l8oaj5e51kAaOmh"
-Content-Disposition: inline
-In-Reply-To: <ZGS2sTPKvvNHyzGH@duo.ucw.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, en-GB
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
+References: <cover.1684220962.git.mazziesaccount@gmail.com>
+ <CACRpkdYPZWNTOW6c0q1+q64JRvxUXswQqm6j5N5KaAWO=sSUaQ@mail.gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v4 0/7] fix fwnode_irq_get[_byname()] returnvalue
+In-Reply-To: <CACRpkdYPZWNTOW6c0q1+q64JRvxUXswQqm6j5N5KaAWO=sSUaQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/17/23 15:43, Linus Walleij wrote:
+> On Tue, May 16, 2023 at 9:12 AM Matti Vaittinen
+> <mazziesaccount@gmail.com> wrote:
+> 
+>> The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
+>> zero if mapping the IRQ fails. This contradicts the
+>> fwnode_irq_get_byname() documentation. Furthermore, returning zero or
+>> errno on error is unepected and can easily lead to problems
+>> like:
+> 
+> Also, zero is not really a valid IRQ, it means NO_IRQ:
+> https://lwn.net/Articles/470820/
+> 
+> I'll apply the pinctrl patches.
 
---0l8oaj5e51kAaOmh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks Linus. I guess you noticed but please wait until the patch 1/7 
+gets in as the pinctrl patches won't do "the right thing" without it. 
+(Just ensuring we are on a same page ;) )
 
-On Wed, May 17, 2023 at 01:12:49PM +0200, Pavel Machek wrote:
-> Hi!
->=20
-> > I'm pleased to announce the 5.10.175-rt84 stable release.
-> >=20
-> > You can get this release via the git tree at:
->=20
-> Are there any plans for new -rt release?
->=20
-> Last I see is:
->=20
-> Author: Luis Claudio R. Goncalves <lgoncalv@redhat.com>
-> Date:   Fri Mar 24 11:52:56 2023 -0300
->     Linux 5.10.176-rt86
->=20
-> There's pending one in rt-next:
->=20
-> commit 5f84852113c1391abe8c38defdda562640bb3808 (origin/v5.10-rt-next)
-> Author: Luis Claudio R. Goncalves <lgoncalv@redhat.com>
-> Date:   Fri May 5 14:40:10 2023 -0300
->     Linux 5.10.179-rt87
->=20
-> ...but "real" release would be useful for us, as we could base our
-> -cip-rt on that.
->=20
-> Thanks and best regards,
-> 								Pavel
+Yours,
+	-- Matti
 
-Hi Pavel,
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-We are submitting our stable v5.10-rt kernels to kernel-ci now, to avoid
-problems our local tests were not able to uncover. The process is new for
-me and, while trying to streamline the process on our side, I seem to have
-hit a problem. Please allow me two more days and you shall have the release
-in hand.
-
-Best regards,
-Luis
-
-
---0l8oaj5e51kAaOmh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEk1QGSZlyjTHUZNFA85SkI/jmfCYFAmRk0V8ACgkQ85SkI/jm
-fCZmFw/+JRazR6H+Er/SohhaI8jiXtsrNABOCzMeDxiEF7DG3IQmJU5RM1kQ6iAw
-sRDmF1NFpEKKcumDbwn1J1OCmVPb8opUI+D/Yu3y2asuK6q34g8yYydTwYzSSsVb
-hjn1oL9D8XL78sAPIPcPxHdE2xKzSzLpMQ7T3CHHBODgGKwHnWTmm1ZvZ2xBIUlA
-coVEddcf6kw6WhN9hQnpDAXRc2C7G8zlu1zyvc62pXEsS3cw3aiPf6HabQxkvQwy
-tkIrkNB+fUxlz6mBlFqOIUxJp1kbAp/5rqFeQRs1HEUdoQli/njSHe/iQY3dM6w3
-tV2k28OpKWi9E+0pet51cV//WvoLGnlKUZjlXilwCWqNBBiKhJxmsVDdbzE3UVIO
-Lrv00CdoWHK98zvxBIbTnsXJF6CKSnD0prlLpZinOse2/VMGOKXjyWqttxVt7efF
-KvJ6MjGGp7uZN//M3tmc1i4ZWLWkkSUZRpWZuyKy480J8MG9PTH3HMrHvmp03KmD
-1JzEV6JUJGlD758WwJuvoVekl4t5QshqDY3VkxNN+7u4sipUqG7lqrA0TiFsqVYR
-Ez0sYGwlbq2BV0mJKyr6ai+dXK3/s4a2XADHr7O02lQ8RG1WEksTuK2ajzOkL34N
-xBamXkeVZE2CBlOtYf27ffa/e+AvikQcid9FUSUkfJXAmx1UMg4=
-=cGnq
------END PGP SIGNATURE-----
-
---0l8oaj5e51kAaOmh--
+~~ When things go utterly wrong vim users can always type :help! ~~
 
