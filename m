@@ -2,122 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F08C707651
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268D0707657
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjEQXPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 19:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S229476AbjEQXU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 19:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjEQXPF (ORCPT
+        with ESMTP id S229458AbjEQXU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 19:15:05 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF724213C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:15:03 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-510d1972d5aso1840512a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:15:03 -0700 (PDT)
+        Wed, 17 May 2023 19:20:28 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B186A2D76;
+        Wed, 17 May 2023 16:20:26 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae51b07338so9272245ad.0;
+        Wed, 17 May 2023 16:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684365302; x=1686957302;
+        d=gmail.com; s=20221208; t=1684365626; x=1686957626;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vk6cd8LcbzAJxt5N/GDDi+PvU6BaObHMv6cAraPkag0=;
-        b=L3qjB3VaqsqlOiGB5yeTiiPsIIfhodMmHKQY2F8CmzC2L7OHTbVab0xh8JeM0wAPRf
-         MVnA11JyPXHzfj84mH2U6ojLkg5Bs+WuZdXTkNXfkEFxQ3AqIyqzUyF4jEc8wFX0MnLP
-         qf/BBm0TbuUJvdeQBAKk9cgSNfVYQQ9hV9DHw=
+        bh=0FGTT8QnCRYYOWleyT4irBH5JIyvwsw53gKLlMTCAtQ=;
+        b=aULJWNAMgfDlK62yhEWh0LWjt81wS7PYKGheaRXWRwVdbgfQz+Q9NpHOCIIZI/hpQp
+         16qrIGkDmWNV7fe/zVMR3IL3vstgjv/98yi6dSu7BGgKhsttgzgn/fiP1EAhhhkjKUVA
+         lH3CZH6D4KoCY0B1F1+o/MMxx4Osk9FOnxjTqCUUumQ4k9RgUyuJu7+yJYEjUkPIp3a8
+         ENo2q/zZ0XiRh59nFvvdNmZ2C9jpAxPJW3LGYNH1ByW/nedMzTMslZORY4Zvj5ZeL8Sw
+         1IvCaiPOM4aeqSD52oI6Kd1xaBCdKJhqF5fXCfmiU4OYHZKNnYq3UyJfkvwolqYxyg/J
+         bjKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684365302; x=1686957302;
+        d=1e100.net; s=20221208; t=1684365626; x=1686957626;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vk6cd8LcbzAJxt5N/GDDi+PvU6BaObHMv6cAraPkag0=;
-        b=LV7ycN5ssjLGOdUzfbs46jJOurTbY2Psj6eZI4MW38G6pTP8pY4px6FzGZO3PT1YyM
-         Cfn6KG3oXsvBaOrgnYL9jp71WU+Q3uBRQ37LxXjpaNa1mXvsXPe9HYKfBQcAgLbPW0ar
-         BpYmnvd1zlwaKPv+JV1TJQNwiTjeN1bJjrRbTSZdODbxXiv2SHYzwy2qHK4N4lagBEY8
-         x+lXw1e/1SzO+zB5P9rS44vDXryUYESDud4yDQkKgclcwsPeU0RikxxvOz9+ay89gHG+
-         kx847AcCuzxkhnF/QAn3YztJmKnjSye1dQOdBBUNkhCP6Xo3K5x0GC5m/ZmpBHDIcjzl
-         hEcQ==
-X-Gm-Message-State: AC+VfDxkfmxraIigkTVe2H0onr15s4Ql7NcVKF1BMG+DGm+DLa0Dgpbu
-        4z9vgUT5fBSudZBk1TTazzJHZfZaqnb8H/mdwkjwbiG5
-X-Google-Smtp-Source: ACHHUZ7n4CJCSQ8x56SUgOPnh/MCVXJ7bbtdpGLSEMfLO+8xXKlU2sBevrxzQaUUmlJfcHuNsyaK7w==
-X-Received: by 2002:a17:906:db07:b0:94f:6058:4983 with SMTP id xj7-20020a170906db0700b0094f60584983mr33862855ejb.76.1684365301944;
-        Wed, 17 May 2023 16:15:01 -0700 (PDT)
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
-        by smtp.gmail.com with ESMTPSA id y21-20020a1709060a9500b00965cd15c9bbsm161858ejf.62.2023.05.17.16.15.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 16:15:01 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-50bc456cc39so2094310a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:15:00 -0700 (PDT)
-X-Received: by 2002:a17:907:c26:b0:966:238a:c93 with SMTP id
- ga38-20020a1709070c2600b00966238a0c93mr38602562ejc.68.1684365300509; Wed, 17
- May 2023 16:15:00 -0700 (PDT)
+        bh=0FGTT8QnCRYYOWleyT4irBH5JIyvwsw53gKLlMTCAtQ=;
+        b=JqrnEFUyIWyjK4a4Rr41LwLRmJQsaX+LxZ2bhSvtJDCiCnxbHvl7sY1sHhYcDkUDiO
+         0HJCV0sA+XQZ1xVpBGujoEIrQ2axbAJPhD5N5uHjPAJ4cobE2uGs1Qr0nKsnl/slFEct
+         xJ+O4f6yBjsZEytKI5zUquqoe+q7o/XWuGMgoowodyw+3dyhGtZSbuzeaNJseUqTu6hh
+         nhZVRFUk7iW+UHs+0PW+saM05gAPkliZBoct7oqk/Hp3VH4FwbEWMmEdZyci3ohCuszr
+         4GFm9oKco4Ldq0qjwv5RO7KCs3Fp0vJAeEZNLxR0r9kYB5J3YACo3G3gvIcbwrQDb68l
+         AWsQ==
+X-Gm-Message-State: AC+VfDwKUYQSq8TalNLCk6RWY9V5JTwaiXKvqRy3bvPE69YGVeuSwEQ7
+        EqLFe72In9PoGn+n2lwrItNyLsenLc66ORv5eaw=
+X-Google-Smtp-Source: ACHHUZ7DVMIpDP0wVFvhPmg32T37MXUYBQVHIbryPEsZqhKGHHq+QWaLxPQUnrkWMUmfEn1oOMPAem/FTp/OAbNB3gA=
+X-Received: by 2002:a17:903:2287:b0:1a6:77b8:23e0 with SMTP id
+ b7-20020a170903228700b001a677b823e0mr483539plh.60.1684365625988; Wed, 17 May
+ 2023 16:20:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAHk-=whBKoovtifU2eCeyuBBee-QMcbxdXDLv0mu0k2DgxiaOw@mail.gmail.com>
- <CAHk-=wj1hh=ZUriY9pVFvD1MjqbRuzHc4yz=S2PCW7u3W0-_BQ@mail.gmail.com>
- <20230516222919.79bba667@rorschach.local.home> <CAHk-=wh_GEr4ehJKwMM3UA0-7CfNpVH7v_T-=1u+gq9VZD70mw@mail.gmail.com>
- <20230517172243.GA152@W11-BEAU-MD.localdomain> <CAHk-=whzzuNEW8UcV2_8OyuKcXPrk7-j_8GzOoroxz9JiZiD3w@mail.gmail.com>
- <20230517190750.GA366@W11-BEAU-MD.localdomain> <CAHk-=whTBvXJuoi_kACo3qi5WZUmRrhyA-_=rRFsycTytmB6qw@mail.gmail.com>
- <CAHk-=wi4w9bPKFFGwLULjJf9hnkL941+c4HbeEVKNzqH04wqDA@mail.gmail.com>
- <CAHk-=wiiBfT4zNS29jA0XEsy8EmbqTH1hAPdRJCDAJMD8Gxt5A@mail.gmail.com> <20230517230054.GA195@W11-BEAU-MD.localdomain>
-In-Reply-To: <20230517230054.GA195@W11-BEAU-MD.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 17 May 2023 16:14:43 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgQ7qZZ1ud6nhY634eFS9g6NiOz5y2aEammoFkk+5KVcw@mail.gmail.com>
-Message-ID: <CAHk-=wgQ7qZZ1ud6nhY634eFS9g6NiOz5y2aEammoFkk+5KVcw@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>, dthaler@microsoft.com,
-        brauner@kernel.org, hch@infradead.org
+References: <20230517223007.178432-1-boerge.struempfel@gmail.com> <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
+In-Reply-To: <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
+From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
+Date:   Thu, 18 May 2023 01:20:14 +0200
+Message-ID: <CAEktqcuMrqiwDfGM=SAoHiKPY-hupS+jipt=6Tasr1q8VUvRQQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
+        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 4:01=E2=80=AFPM Beau Belgrave <beaub@linux.microsof=
-t.com> wrote:
+Thank you for your prompt feedback
+
+Am Do., 18. Mai 2023 um 00:43 Uhr schrieb Fabio Estevam <festevam@gmail.com=
+>:
 >
-> Do you mind giving me your Signed-off-by for these?
+> On Wed, May 17, 2023 at 7:30=E2=80=AFPM Boerge Struempfel
+> <boerge.struempfel@gmail.com> wrote:
+> >
+> > Some spi controller switch the mosi line to high, whenever they are
+> > idle. This may not be desired in all use cases. For example neopixel
+> > leds can get confused and flicker due to misinterpreting the idle state=
+.
+> > Therefore, we introduce a new spi-mode bit, with which the idle behavio=
+ur
+> > can be overwritten on a per device basis.
+> >
+> > Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
+> >
+> >
+> > Link for versions:
+> >   v1 and v2: https://lore.kernel.org/linux-spi/20230511135632.78344-1-b=
+struempfel@ultratronik.de/
+> >   v3: https://lore.kernel.org/linux-spi/20230517103007.26287-1-boerge.s=
+truempfel@gmail.com/T/#t
+> >
+> > Changes from V3:
+> >   - Added missing paranthesis which caused builderrors
+> >
+> > Changes from V2:
+> >   - Removed the device-tree binding since this should not be managed by
+> >     the DT but by the device itself.
+> >   - Replaced all occurences of spi->chip_select with the corresponding
+> >     macro spi_get_chipselect(spi,0)
+> >
+> > Changes from V1:
+> >   - Added patch, introducing the new devicetree binding flag
+> >   - Split the generic spi part of the patch from the imx-spi specific
+> >     part
+> >   - Replaced SPI_CPOL and SPI_CPHA by the combined SPI_MODE_X_MASK bit
+> >     in the imx-spi.c modebits.
+> >   - Added the SPI_MOSI_IDLE_LOW bit to spidev
+>
+> The change log should be placed below the --- line.
+>
 
-Assuming you have some test-cases that you've run them through, then yes:
+My bad. Thanks for letting me know. Just to clarify: I put the
+changelog directly below
+the first ---? And do I then put another --- between the changelog and
+the following
+include/uapi/linux/spi/spi.h | 3 ++- line?  or is there just a
+new-line seperating them.
 
- Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+And if you don't mind my trivial questions, am I supposed to write a
+cover letter for
+the patch-stack? I seem to find contradictory answers to this question onli=
+ne.
 
-for both. But since I can't really test them myself, I'd really like
-that. I did these patches just by looking at the source code, and
-while I think that's an excellent way to do development, I do think
-that testing is _also_ required.
+> > ---
+> >  include/uapi/linux/spi/spi.h | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.=
+h
+> > index 9d5f58059703..ca56e477d161 100644
+> > --- a/include/uapi/linux/spi/spi.h
+> > +++ b/include/uapi/linux/spi/spi.h
+> > @@ -28,6 +28,7 @@
+> >  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with=
+ 8 wires */
+> >  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedan=
+ce turnaround */
+> >  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on=
+ Rx only xfer */
+> > +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low =
+when idle */
+>
+> Should tools/spi/spidev_test.c be changed to include this new
+> mosi-idle-low option?
 
-And that second patch was obviously not even build-tested, so really
-just a "something like this".
+Until now I actually wasn't aware of this tool. However on first
+glance, it seems
+reasonable to add this mode bit. I can certainly add this mode bit to
+the spidev_test
+if desired.
 
-> I plan to do a series where I take these patches and then also fix up a
-> few comments and the link namings as you suggested.
-
-Sounds good.
-
-> First patch is clean, second patch I made the following changes and
-> after that passed all the self-tests without bug splats with
-> CONFIG_PROVE_LOCKING/RCU and ATOMIC_SLEEP:
-
-Your suggested version with just "list_add()" and a comment about why
-it doesn't need RCU safety looks good. And the build fix obviously
-requited ;)
-
-                  Linus
+While looking through the code, I noticed, that the latest two
+additions to the spi->mode
+(SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) are also missing from this tool. Is th=
+is
+by design, or should they then be included as well?
