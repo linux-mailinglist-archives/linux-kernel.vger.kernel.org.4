@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C36706C2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7610A706C2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbjEQPGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
+        id S232073AbjEQPGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbjEQPG1 (ORCPT
+        with ESMTP id S231769AbjEQPG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:06:27 -0400
+        Wed, 17 May 2023 11:06:26 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBF7A5D3
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B31A5C4
         for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:05:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684335856;
+        s=mimecast20190719; t=1684335885;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5R80nbUZwWFiHdR78rMDNlvBGteEPIxCifWqkv+jAN8=;
-        b=AVvl6WpRLnQ3H8wtsI401rmZ1NvYbvOboWkKsRRSx/wZy6WUDjiuGM6nNx1IqK0oDoCVql
-        EfkIYHivwHkkc3Qe5ZwJgmhLxzDGt/tQOEJat4IsHwwWB0+opCwFVJQI/QxEurdLc+lOWq
-        HOCMrCEA2WkoOBFR1mff3ZhX35C1TeE=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Ms+Yw6xLDbHeWgltH2GeZ/mYx1EXxuQy0fD+zKwpp0k=;
+        b=gUgCtHWV+6U//UcbdmPRdwiZR/+CfGY0UyX4Om2P0oIJo79KwiEcZ6h5uNfNjuA/An4BjL
+        5sOfBD6ZK6+KFJtTHZsjIKL3RAdjCoBoP5rL+djO7GPAkPKZHf+2dZPw3Fphd8xkYsDtDc
+        LdpgNvc2X219neQkSA1tgoWAbDEPSaU=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-192-xI2Sxs1qPwu4pWcRJCDoVg-1; Wed, 17 May 2023 11:04:14 -0400
-X-MC-Unique: xI2Sxs1qPwu4pWcRJCDoVg-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-74faf5008bbso3251585a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:13 -0700 (PDT)
+ us-mta-422-bG2_vudaOT2Z1n_fYIu0ig-1; Wed, 17 May 2023 11:04:18 -0400
+X-MC-Unique: bG2_vudaOT2Z1n_fYIu0ig-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f387d3b41eso1457741cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335853; x=1686927853;
+        d=1e100.net; s=20221208; t=1684335855; x=1686927855;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5R80nbUZwWFiHdR78rMDNlvBGteEPIxCifWqkv+jAN8=;
-        b=JkfFNt00JO34QH8j0nTKbzmg+o9W9nhve2QkghLXaV2MRyTk3x+992q5bYjXeiQibx
-         cpEMLoE8/o26DYs758qLFu2Rwyf2+hlV4Lx4SCIkpPwq24+7sER5n0ZW5iNWJhYINTAn
-         MxrhTu8Q04yE8m6gDVuco3nLQyJM6hGfPl7q7nT/5AoYbRQAuorTnMYIV2dIPwMbb9s4
-         GmTosN2WaW4B44buK1XUQWie5EXlbj0RMzilII5R6qXDX3BDp2IRnhwM/CmGTdeLpgg2
-         Z9ZQfmBbt8guRCihUshtqkQ+HSZLDGS4f3tITfUkmVfjovHFTGyLOpQQzFZmt8wghQso
-         sRXw==
-X-Gm-Message-State: AC+VfDzyBQDvlQR27xxC60OrDlNgfpEHAc/Iu6Bo11f6hde9hIy8dODl
-        bQ/uLCe54/OeJ3S2IoCczVyh5zWr6FsUnc5ioRd/1Mb5hH6nOGMECG361Qvzcj9+nImWSyb2ZVL
-        mw6gmDaZH8YDiKw4O6+X5AE0BbFgIQy+QIu1x/xhPuT+WEyB4KBNQif+cHT/H5Q2GhNilIyoruK
-        XZKjEbQw==
-X-Received: by 2002:a05:6214:cc8:b0:623:5678:1285 with SMTP id 8-20020a0562140cc800b0062356781285mr5664678qvx.2.1684335852882;
-        Wed, 17 May 2023 08:04:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4A7kugtT7Bx+EHF80tM99neHimNnRwy8AYQ2bdr/AsAi1MAhOSAI8qAPppaefRrYgb8kIRbA==
-X-Received: by 2002:a05:6214:cc8:b0:623:5678:1285 with SMTP id 8-20020a0562140cc800b0062356781285mr5664630qvx.2.1684335852517;
-        Wed, 17 May 2023 08:04:12 -0700 (PDT)
+        bh=Ms+Yw6xLDbHeWgltH2GeZ/mYx1EXxuQy0fD+zKwpp0k=;
+        b=Z8x4v8ItF51IY3uqkJx76/gn2tIKXYt1+mkxJefHqDAQa35xR4xiJrk6CkhgwOSn4B
+         s4kM6uR/GEDmukE3vsZwWy6BLBJyVUIZLeFV12tDbdduRJ9aErm3Q2TSwyZ2RlwHiEjR
+         uK0i4qBkBxfQrCimxZ5CYsdQjeheOZcp/bCAq0tufZVVbEy/qoKgVV4m6CMQ5J3hL7MR
+         bt+JAZVxcjNG4165X83DrEETVbEaN5bOEcigJIPkU7tqWuq6znbZiLuMRGEV+7BR5Vsm
+         /6GC6FHHN2qCjOfJrvB3fTDEYzg0x5CweId6Hu9V3NTn14ll9vwMgRlrWfopyGvqaRXN
+         tn0w==
+X-Gm-Message-State: AC+VfDwZGC5Y53vIL9lKEaU9ebpDZH10HmyGfF8SN1cbE4lfKiHtpGZt
+        10BPU9ouR9/woUC/imWrQkt7yedGIY5U+jWxsSZfKxzBRsgNOmMWZExqeDwgwCh0IU2tXF89fz8
+        pUKbaKh4FiSWw40G4RSutZJa0AXOLbkaoCiQOFzwPK9rMVpxOYlwIWt47Gqxayy4IXzB1pSgCVh
+        h0EAgQ3w==
+X-Received: by 2002:a05:622a:1a9e:b0:3f4:e9bc:22e with SMTP id s30-20020a05622a1a9e00b003f4e9bc022emr5674309qtc.6.1684335854967;
+        Wed, 17 May 2023 08:04:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6hB1PyGgcmxyQUgGB/Eq0H7OvCFFhm3wB8MI1WHZGGvhbCG9ZQuuvRPeeeoIz0SVcyOGZnxg==
+X-Received: by 2002:a05:622a:1a9e:b0:3f4:e9bc:22e with SMTP id s30-20020a05622a1a9e00b003f4e9bc022emr5674272qtc.6.1684335854592;
+        Wed, 17 May 2023 08:04:14 -0700 (PDT)
 Received: from x1n.. (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id u10-20020a05620a120a00b0074d4cf8f9fcsm661141qkj.107.2023.05.17.08.04.10
+        by smtp.gmail.com with ESMTPSA id u10-20020a05620a120a00b0074d4cf8f9fcsm661141qkj.107.2023.05.17.08.04.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 08:04:11 -0700 (PDT)
+        Wed, 17 May 2023 08:04:13 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
@@ -67,9 +67,9 @@ Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
         Mike Rapoport <rppt@kernel.org>, peterx@redhat.com,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         linux-stable <stable@vger.kernel.org>
-Subject: [PATCH 1/2] mm/uffd: Fix vma operation where start addr cuts part of vma
-Date:   Wed, 17 May 2023 11:04:07 -0400
-Message-Id: <20230517150408.3411044-2-peterx@redhat.com>
+Subject: [PATCH 2/2] mm/uffd: Allow vma to merge as much as possible
+Date:   Wed, 17 May 2023 11:04:08 -0400
+Message-Id: <20230517150408.3411044-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230517150408.3411044-1-peterx@redhat.com>
 References: <20230517150408.3411044-1-peterx@redhat.com>
@@ -78,70 +78,90 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems vma merging with uffd paths is broken with either
-register/unregister, where right now we can feed wrong parameters to
-vma_merge() and it's found by recent patch which moved asserts upwards in
-vma_merge() by Lorenzo Stoakes:
+We used to not pass in the pgoff correctly when register/unregister uffd
+regions, it caused incorrect behavior on vma merging and can cause
+mergeable vmas being separate after ioctls return.
 
-https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
+For example, when we have:
 
-The problem is in the current code base we didn't fixup "prev" for the case
-where "start" address can be within the "prev" vma section.  In that case
-we should have "prev" points to the current vma rather than the previous
-one when feeding to vma_merge().
+  vma1(range 0-9, with uffd), vma2(range 10-19, no uffd)
 
-This patch will eliminate the report and make sure vma_merge() calls will
-become legal again.
+Then someone unregisters uffd on range (5-9), it should logically become:
 
-One thing to mention is that the "Fixes: 29417d292bd0" below is there only
-to help explain where the warning can start to trigger, the real commit to
-fix should be 69dbe6daf104.  Commit 29417d292bd0 helps us to identify the
-issue, but unfortunately we may want to keep it in Fixes too just to ease
-kernel backporters for easier tracking.
+  vma1(range 0-4, with uffd), vma2(range 5-19, no uffd)
 
-Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+But with current code we'll have:
+
+  vma1(range 0-4, with uffd), vma3(range 5-9, no uffd), vma2(range 10-19, no uffd)
+
+This patch allows such merge to happen correctly before ioctl returns.
+
+This behavior seems to have existed since the 1st day of uffd.  Since pgoff
+for vma_merge() is only used to identify the possibility of vma merging,
+meanwhile here what we did was always passing in a pgoff smaller than what
+we should, so there should have no other side effect besides not merging
+it.  Let's still tentatively copy stable for this, even though I don't see
+anything will go wrong besides vma being split (which is mostly not user
+visible).
+
+Cc: Andrea Arcangeli <aarcange@redhat.com>
 Cc: Mike Rapoport (IBM) <rppt@kernel.org>
-Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
-Reported-by: Mark Rutland <mark.rutland@arm.com>
-Fixes: 29417d292bd0 ("mm/mmap/vma_merge: always check invariants")
-Fixes: 69dbe6daf104 ("userfaultfd: use maple tree iterator to iterate VMAs")
-Closes: https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
 Cc: linux-stable <stable@vger.kernel.org>
+Fixes: 86039bd3b4e6 ("userfaultfd: add new syscall to provide memory externalization")
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- fs/userfaultfd.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ fs/userfaultfd.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 0fd96d6e39ce..17c8c345dac4 100644
+index 17c8c345dac4..4e800bb7d2ab 100644
 --- a/fs/userfaultfd.c
 +++ b/fs/userfaultfd.c
-@@ -1459,6 +1459,8 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+@@ -1332,6 +1332,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+ 	bool basic_ioctls;
+ 	unsigned long start, end, vma_end;
+ 	struct vma_iterator vmi;
++	pgoff_t pgoff;
  
- 	vma_iter_set(&vmi, start);
- 	prev = vma_prev(&vmi);
-+	if (vma->vm_start < start)
-+		prev = vma;
+ 	user_uffdio_register = (struct uffdio_register __user *) arg;
  
- 	ret = 0;
- 	for_each_vma_range(vmi, vma, end) {
-@@ -1625,6 +1627,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+@@ -1484,8 +1485,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+ 		vma_end = min(end, vma->vm_end);
  
- 	vma_iter_set(&vmi, start);
- 	prev = vma_prev(&vmi);
-+	if (vma->vm_start < start)
-+		prev = vma;
-+
- 	ret = 0;
- 	for_each_vma_range(vmi, vma, end) {
- 		cond_resched();
+ 		new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
++		pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
+ 		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
+-				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
++				 vma->anon_vma, vma->vm_file, pgoff,
+ 				 vma_policy(vma),
+ 				 ((struct vm_userfaultfd_ctx){ ctx }),
+ 				 anon_vma_name(vma));
+@@ -1565,6 +1567,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+ 	unsigned long start, end, vma_end;
+ 	const void __user *buf = (void __user *)arg;
+ 	struct vma_iterator vmi;
++	pgoff_t pgoff;
+ 
+ 	ret = -EFAULT;
+ 	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
+@@ -1667,8 +1670,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+ 			uffd_wp_range(vma, start, vma_end - start, false);
+ 
+ 		new_flags = vma->vm_flags & ~__VM_UFFD_FLAGS;
++		pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
+ 		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
+-				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
++				 vma->anon_vma, vma->vm_file, pgoff,
+ 				 vma_policy(vma),
+ 				 NULL_VM_UFFD_CTX, anon_vma_name(vma));
+ 		if (prev) {
 -- 
 2.39.1
 
