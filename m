@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC09706C16
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CB2706C17
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjEQPFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S231322AbjEQPFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjEQPEf (ORCPT
+        with ESMTP id S231907AbjEQPEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:04:35 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722BA9EE9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:16 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f4449fa085so6125015e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:16 -0700 (PDT)
+        Wed, 17 May 2023 11:04:36 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124329ECC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:18 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3093eb8cd1fso598225f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684335825; x=1686927825;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ROoM+z1HUyIf7VmHaZw0Osm1LBJIPMGnhoCFAWKqLvQ=;
-        b=H4NRL7fIWw72mEHCSKlHC9bEXT51taavHTPlu4pLVksZeccv4zGLtYVNIV36lvzXiA
-         5DrTGLg1Rf7DedvAQXUKfRq7Ug6+IdfOEpKG9ZGu1VfUXI1NAB1a8pAc80nDzHmel1pE
-         oMoptbsoDTg0m8spTjg6Y56dpGUOJwkJtqGNU=
+        d=chromium.org; s=google; t=1684335827; x=1686927827;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J7ff2T9SWyCTsi5ruehr0chbFAgRla4S02ez1WlmA+w=;
+        b=kGPLMlrayHP1gkVYlmuR+aicFY/HlsmqbrMGUNf9veQEKPQqXMfCmsxUskzCN5t4z9
+         edI4hy/vkfueZyS+EvxWMN3BNzLs82IMkIZoa4eWel4ucQjUbPcYjaApd5sC90zM3Bad
+         WpnVorrZEg2iClzBo2gfsPxFa8/oL9nrPRdLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335825; x=1686927825;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ROoM+z1HUyIf7VmHaZw0Osm1LBJIPMGnhoCFAWKqLvQ=;
-        b=CjF3JzVb4MkfOlnlxr27dfG3rBC+IKkuC47DvhYHSy1WhnG/LUQPVRWrCsAWQq1TxQ
-         XsV8vqvFmo8kFB8jifq/CQrqfKeMu4RhmZfMksyEsjN/ctV0hwzbsNwo4jJgtzZvqnJe
-         hqRnNYLZYKjtfXXU5YqR/2wRK4dWbMe0ldpZlVxwwPQx1yiFf82ivyZua5fniy1eXIlT
-         lYNsvuTILTzjbOBEQAdfXdMx+jPfrinJhaFdcs213YS8NU/q0VgZ5JScKYOzBnmQwJex
-         jdQGzN1jwS6dgLPqH+/hRQhfitkX5/1GK+ibLWNpKABXxmjIX+3+fRvlsvcQepp/ZcxS
-         qW4A==
-X-Gm-Message-State: AC+VfDyTouGNDxv/YHChw3E9QP0ykJJoiiqs6A4PXzpYi1AaLNzHX3s+
-        xZur4b4EOrzJz2YizQYT/nEu6kilOByRSORab+E=
-X-Google-Smtp-Source: ACHHUZ6ycuHhmW1jZ1USr9pnh4eCN+Ti51EByPtxjWBdLNzffroPKrrzDg9jaCqBPM38i+CuolJ+MQ==
-X-Received: by 2002:a05:6000:1a4e:b0:306:37d9:201c with SMTP id t14-20020a0560001a4e00b0030637d9201cmr1145983wry.17.1684335824681;
-        Wed, 17 May 2023 08:03:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684335827; x=1686927827;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J7ff2T9SWyCTsi5ruehr0chbFAgRla4S02ez1WlmA+w=;
+        b=aURl/y3Q4+Jmxwb23dGld6N/ukX6kx5nbHUV737w8S8yfCI0/pxW3lMF3HjBW9fqHh
+         W/aiYuQEHO5pEUGD+EXOgD5Ttx3hYj1Pp3LLTqD+Je4wwZH7N3773I7j29FPxs/BPcrt
+         fxMZsYIwuZ2ZYzf+vbKyAza8OQwlL3eXPY3tXa/jI+0K6dFEVu3gRNfbsr07xzqxyce9
+         4wgFHyQRvJ5X5Ui6KGHeYX8SUWmPOOrGOuw7xVXRgABDnkYvKczO35SFaXWW8hovJuV0
+         E257uHL60iffTDW2Qak4zlSVBWF9YTUpGR3kxKl3HX82Yid7jhiQGUw+xlQ1uFXwoffF
+         CrFw==
+X-Gm-Message-State: AC+VfDxFBUVw0Swpd69OC0q/PdUREvOaAJsLo11/sprJHbqtjHvtqcC4
+        2lmvfD5iY0ffD3GAHrPIeMLhT/n7r6wkCcnZqr8=
+X-Google-Smtp-Source: ACHHUZ458WHZp8Liew7hGyfMAszvI+njNJrZTZ/BWAYiJZqoHN7xubyHs+mrEk/V9ZdgY6C7yyILRQ==
+X-Received: by 2002:adf:f109:0:b0:306:342a:6a01 with SMTP id r9-20020adff109000000b00306342a6a01mr880226wro.47.1684335826853;
+        Wed, 17 May 2023 08:03:46 -0700 (PDT)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:e223:a0c2:d2c:c371])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b003047ea78b42sm3038211wrr.43.2023.05.17.08.03.42
+        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b003047ea78b42sm3038211wrr.43.2023.05.17.08.03.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 08:03:43 -0700 (PDT)
+        Wed, 17 May 2023 08:03:45 -0700 (PDT)
 From:   Florent Revest <revest@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
@@ -54,10 +55,12 @@ Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
         izbyshev@ispras.ru, broonie@kernel.org, szabolcs.nagy@arm.com,
         kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com,
         Florent Revest <revest@chromium.org>
-Subject: [PATCH v2 0/5] MDWE without inheritance
-Date:   Wed, 17 May 2023 17:03:16 +0200
-Message-ID: <20230517150321.2890206-1-revest@chromium.org>
+Subject: [PATCH v2 1/5] kselftest: vm: Fix tabs/spaces inconsistency in the mdwe test
+Date:   Wed, 17 May 2023 17:03:17 +0200
+Message-ID: <20230517150321.2890206-2-revest@chromium.org>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+In-Reply-To: <20230517150321.2890206-1-revest@chromium.org>
+References: <20230517150321.2890206-1-revest@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -70,47 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Joey recently introduced a Memory-Deny-Write-Executable (MDWE) prctl which tags
-current with a flag that prevents pages that were previously not executable from
-becoming executable.
-This tag always gets inherited by children tasks. (it's in MMF_INIT_MASK)
+Signed-off-by: Florent Revest <revest@chromium.org>
+---
+ tools/testing/selftests/mm/mdwe_test.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-At Google, we've been using a somewhat similar downstream patch for a few years
-now. To make the adoption of this feature easier, we've had it support a mode in
-which the W^X flag does not propagate to children. For example, this is handy if
-a C process which wants W^X protection suspects it could start children
-processes that would use a JIT.
-
-I'd like to align our features with the upstream prctl. This series proposes a
-new NO_INHERIT flag to the MDWE prctl to make this kind of adoption easier. It
-sets a different flag in current that is not in MMF_INIT_MASK and which does not
-propagate.
-
-As part of looking into MDWE, I also fixed a couple of things in the MDWE test.
-
-This series applies on the mm-everything-2023-05-16-23-30 tag of the mm tree:
-  https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/
-
-Diff since v1:
-- MMF_HAS_MDWE_NO_INHERIT clears MMF_HAS_MDWE in the fork path as part of a
-  MMF_INIT_FLAGS macro (suggested by Catalin)
-- PR_MDWE_* are defined as unsigned long rather than int (suggested by Andrey)
-
-Florent Revest (5):
-  kselftest: vm: Fix tabs/spaces inconsistency in the mdwe test
-  kselftest: vm: Fix mdwe's mmap_FIXED test case
-  mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
-  mm: Add a NO_INHERIT flag to the PR_SET_MDWE prctl
-  kselftest: vm: Add tests for no-inherit memory-deny-write-execute
-
- include/linux/sched/coredump.h         |  10 +++
- include/uapi/linux/prctl.h             |   3 +-
- kernel/fork.c                          |   2 +-
- kernel/sys.c                           |  24 +++++-
- tools/include/uapi/linux/prctl.h       |   3 +-
- tools/testing/selftests/mm/mdwe_test.c | 110 +++++++++++++++++++++----
- 6 files changed, 131 insertions(+), 21 deletions(-)
-
+diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
+index bc91bef5d254..d0954c657feb 100644
+--- a/tools/testing/selftests/mm/mdwe_test.c
++++ b/tools/testing/selftests/mm/mdwe_test.c
+@@ -49,19 +49,19 @@ FIXTURE_VARIANT(mdwe)
+ 
+ FIXTURE_VARIANT_ADD(mdwe, stock)
+ {
+-        .enabled = false,
++	.enabled = false,
+ 	.forked = false,
+ };
+ 
+ FIXTURE_VARIANT_ADD(mdwe, enabled)
+ {
+-        .enabled = true,
++	.enabled = true,
+ 	.forked = false,
+ };
+ 
+ FIXTURE_VARIANT_ADD(mdwe, forked)
+ {
+-        .enabled = true,
++	.enabled = true,
+ 	.forked = true,
+ };
+ 
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
