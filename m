@@ -2,180 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49632705D39
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96AC705D44
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbjEQC0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
+        id S232067AbjEQC2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjEQCZv (ORCPT
+        with ESMTP id S232025AbjEQC1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:25:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 568691BD9;
-        Tue, 16 May 2023 19:25:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EADD91FB;
-        Tue, 16 May 2023 19:26:04 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.70.237])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3A2B93F793;
-        Tue, 16 May 2023 19:25:14 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH V10 10/10] arm64/perf: Implement branch records save on PMU IRQ
-Date:   Wed, 17 May 2023 07:54:10 +0530
-Message-Id: <20230517022410.722287-11-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230517022410.722287-1-anshuman.khandual@arm.com>
-References: <20230517022410.722287-1-anshuman.khandual@arm.com>
+        Tue, 16 May 2023 22:27:48 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C7F5246
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:27:22 -0700 (PDT)
+X-UUID: 3b633390f45a11ed9cb5633481061a41-20230517
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=XT0aWLrHFibG11Unqwd1/RdVtuvwg1ngn+cr6gZ0zko=;
+        b=LnTYq/QK+Mnx4P9JaLjilrHtv1j3T6N3ULhkDlQwREQskdmi7a+2viNAF6RUnUURF9P7DtroO1JkqffhrLTeqTAmvzyf6E82ffhykxYsXXhccPxdS9rc/U47WJg4te2y/CVeTryQGzg6x282bubNMHBnBM9H6QSQOjoVg3CQAX0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:bb6c198b-15dd-494d-b0d7-29d755afec7d,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-25
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:6cbc673b-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 3b633390f45a11ed9cb5633481061a41-20230517
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+        (envelope-from <walter.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2010033819; Wed, 17 May 2023 10:26:29 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 17 May 2023 10:26:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 10:26:28 +0800
+From:   <walter.chang@mediatek.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+CC:     <wsd_upstream@mediatek.com>, <stanley.chu@mediatek.com>,
+        <Chun-hung.Wu@mediatek.com>, <Freddy.Hsin@mediatek.com>,
+        <walter.chang@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v5 0/4] Support timer drivers as loadable modules
+Date:   Wed, 17 May 2023 10:25:44 +0800
+Message-ID: <20230517022557.24388-1-walter.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This modifies armv8pmu_branch_read() to concatenate live entries along with
-task context stored entries and then process the resultant buffer to create
-perf branch entry array for perf_sample_data. It follows the same principle
-like task sched out.
+From: Walter Chang <walter.chang@mediatek.com>
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- drivers/perf/arm_brbe.c | 75 +++++++++++++++--------------------------
- 1 file changed, 28 insertions(+), 47 deletions(-)
+This set of patches aims to make SoC related timer drivers, such as 
+timer-mediatek.c become loadable modules for the Generic Kernel Image
+(GKI).
 
-diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-index 0678ebf0a896..9e441141a2c3 100644
---- a/drivers/perf/arm_brbe.c
-+++ b/drivers/perf/arm_brbe.c
-@@ -693,41 +693,45 @@ void armv8pmu_branch_reset(void)
- 	isb();
- }
- 
--static bool capture_branch_entry(struct pmu_hw_events *cpuc,
--				 struct perf_event *event, int idx)
-+static void brbe_regset_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
-+				       struct brbe_regset *regset, int idx)
- {
- 	struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
--	u64 brbinf = get_brbinf_reg(idx);
--
--	/*
--	 * There are no valid entries anymore on the buffer.
--	 * Abort the branch record processing to save some
--	 * cycles and also reduce the capture/process load
--	 * for the user space as well.
--	 */
--	if (brbe_invalid(brbinf))
--		return false;
-+	u64 brbinf = regset[idx].brbinf;
- 
- 	perf_clear_branch_entry_bitfields(entry);
- 	if (brbe_record_is_complete(brbinf)) {
--		entry->from = get_brbsrc_reg(idx);
--		entry->to = get_brbtgt_reg(idx);
-+		entry->from = regset[idx].brbsrc;
-+		entry->to = regset[idx].brbtgt;
- 	} else if (brbe_record_is_source_only(brbinf)) {
--		entry->from = get_brbsrc_reg(idx);
-+		entry->from = regset[idx].brbsrc;
- 		entry->to = 0;
- 	} else if (brbe_record_is_target_only(brbinf)) {
- 		entry->from = 0;
--		entry->to = get_brbtgt_reg(idx);
-+		entry->to = regset[idx].brbtgt;
- 	}
- 	capture_brbe_flags(entry, event, brbinf);
--	return true;
-+}
-+
-+static void process_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
-+				   struct brbe_regset *regset, int nr_regset)
-+{
-+	int idx;
-+
-+	for (idx = 0; idx < nr_regset; idx++)
-+		brbe_regset_branch_entries(cpuc, event, regset, idx);
-+
-+	cpuc->branches->branch_stack.nr = nr_regset;
-+	cpuc->branches->branch_stack.hw_idx = -1ULL;
- }
- 
- void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
- {
- 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
-+	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
-+	struct brbe_regset live[BRBE_MAX_ENTRIES];
-+	int nr_live, nr_store;
- 	u64 brbfcr, brbcr;
--	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
- 
- 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
- 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-@@ -739,36 +743,13 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
- 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
- 	isb();
- 
--	/* Determine the indices for each loop */
--	loop1_idx1 = BRBE_BANK0_IDX_MIN;
--	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
--		loop1_idx2 = brbe_attr->brbe_nr - 1;
--		loop2_idx1 = BRBE_BANK1_IDX_MIN;
--		loop2_idx2 = BRBE_BANK0_IDX_MAX;
--	} else {
--		loop1_idx2 = BRBE_BANK0_IDX_MAX;
--		loop2_idx1 = BRBE_BANK1_IDX_MIN;
--		loop2_idx2 = brbe_attr->brbe_nr - 1;
--	}
--
--	/* Loop through bank 0 */
--	select_brbe_bank(BRBE_BANK_IDX_0);
--	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
--		if (!capture_branch_entry(cpuc, event, idx))
--			goto skip_bank_1;
--	}
--
--	/* Loop through bank 1 */
--	select_brbe_bank(BRBE_BANK_IDX_1);
--	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
--		if (!capture_branch_entry(cpuc, event, idx))
--			break;
--	}
--
--skip_bank_1:
--	cpuc->branches->branch_stack.nr = idx;
--	cpuc->branches->branch_stack.hw_idx = -1ULL;
-+	nr_live = capture_brbe_regset(brbe_attr, live);
-+	nr_store = task_ctx->nr_brbe_records;
-+	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
-+					      nr_live, brbe_attr->brbe_nr);
-+	process_branch_entries(cpuc, event, task_ctx->store, nr_store);
- 	process_branch_aborts(cpuc);
-+	task_ctx->nr_brbe_records = 0;
- 
- 	/* Unpause the buffer */
- 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+This driver registers an always-on timer as tick_broadcast_device on 
+MediaTek SoCs. If the system does not load this module at startup, 
+system will also boot normally by using built-in `bc_hrtimer` instead.
+Besides, the previous experiment [1] indicates that the SYST/GPT, in 
+combination with a loadable module, is fully operational.
+
+The first three patches export functions and remove __init markings to 
+support loadable timer modules.
+
+The fourth patch makes timer-mediatek.c become loadable module for GKI.
+
+[1]
+https://lore.kernel.org/all/32777456f8e0f98e4cd5b950f421d21f71b149cf.camel@mediatek.com/#t
+
+[v5]
+- Add Signed-off-by tags in all patches
+- Add Acked-by tags and Reviewed-by tags
+
+[v4]
+- Fix review comments pointed by Angelo
+
+[v3]
+- Rebase on linux-next
+
+[v2]
+- Convert timer-mediatek.c driver to loadable module
+
+Chun-Hung Wu (4):
+  time/sched_clock: Export sched_clock_register()
+  clocksource/drivers/mmio: Export clocksource_mmio_init()
+  clocksource/drivers/timer-of: Remove __init markings
+  clocksource/drivers/timer-mediatek: Make timer-mediatek become
+    loadable module
+
+ drivers/clocksource/Kconfig          |  2 +-
+ drivers/clocksource/mmio.c           |  8 ++++---
+ drivers/clocksource/timer-mediatek.c | 33 ++++++++++++++++++++++++++++
+ drivers/clocksource/timer-of.c       | 23 +++++++++----------
+ drivers/clocksource/timer-of.h       |  6 ++---
+ kernel/time/sched_clock.c            |  4 ++--
+ 6 files changed, 56 insertions(+), 20 deletions(-)
+
 -- 
-2.25.1
+2.18.0
 
