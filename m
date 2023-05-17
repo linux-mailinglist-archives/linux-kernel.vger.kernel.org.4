@@ -2,92 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2361705E41
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6402705E43
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbjEQDod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 23:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S232529AbjEQDpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 23:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbjEQDoA (ORCPT
+        with ESMTP id S232123AbjEQDpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 23:44:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BE040F2;
-        Tue, 16 May 2023 20:44:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B1D461631;
-        Wed, 17 May 2023 03:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701DBC433EF;
-        Wed, 17 May 2023 03:43:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684295039;
-        bh=Q2ZbDs6s6Qb4ow2/OkPPdJPXinCRf1wvSh2xDl0bANU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SmUEVUPMUu7tHPzGAeEv5ytuXrKtHB42dhqUTv15zKAMY2EM1sx/kW7CVlKRD/Xtw
-         FIeO/PFkb78wR/nRnxBllzYD/cJNyNbyJeFKXEtLFjE3ICunclMIbWgejDHzyPMYew
-         gOXanAeOUQGVMEiO2deXaRoPAuFo4Al7760SG7Nqpk1pWdd8zxsez5+BsfodX959A4
-         xmSRT7p4Xpax6KJfgmCkkwOHCMYyuNGhtsP4IDq4D5pKODBEU0l00nfR4+p9aMKa9w
-         Y3t+eW+0b+HBPPJLLERl1W9gvbtMIwHLj+c22a9FrStpId4cNkQQVU1zhhiS3/v1In
-         C5D/EGWQbfGBA==
-Date:   Tue, 16 May 2023 21:44:46 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] media: venus: Replace one-element arrays with
- flexible-array members
-Message-ID: <ZGRNrvl3xwgMqTWF@work>
-References: <ZGPk3PpvYzjD1+0/@work>
- <202305161318.4AF9203EB@keescook>
+        Tue, 16 May 2023 23:45:21 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7750730E8;
+        Tue, 16 May 2023 20:45:20 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-53202149ae2so134187a12.3;
+        Tue, 16 May 2023 20:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684295120; x=1686887120;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n0fdPmeINo3M3GEcsjn+DqgIArQ+TF8t88l9Aksr7VQ=;
+        b=Dy5EDllK8uVJFjPdvz1RUbi2yk4rgd1PjqZJX+ibJORvvteuhARUVlChiDWi2GdYyj
+         ornOQnlZWAccsQTsX9fLi2XGvQ4x2OgrV6l+T2ZMZvd75JIePFW+SoFmsNoYqlf4tmj6
+         mu8MFImYX/tmrIswvc9vSL7jdvTVtA3XMoOw2H5DMKVzaHKqWcXvCHVJhmLlIYe3M0zg
+         DYvxBvbgYH6iW3+axk10pT1phM6PW493USZleI0YoHLDNsChz3x3uojs4ai7zGPrwo1S
+         IyPBHmYqqM0fciz6V34Z9NRne8SpZebj4C4tOarrPY2uQ/ucSWcFEYkSxS9uD+fy6URe
+         cVdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684295120; x=1686887120;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n0fdPmeINo3M3GEcsjn+DqgIArQ+TF8t88l9Aksr7VQ=;
+        b=l0ksyFCRoVbMcBPmlWi6PK9EeCg7RZBTX08SVqJn2wRD7oqD0FqHMRv+13bREZ6NJO
+         8KI7e2gbgWLm02wYBaMd389o/UcMDzSci6yEdk0M9BFnWNMEydtVdWWoR3EgFo92bZNC
+         /gtZtydupaC0Vk/2oLLAd/yWgv0l19zC+4xWwR0DWQcDmknLPzNU/B3UMTAh1xgalzYa
+         ri9b7rjawpMozv/CEIa/mewKQ2fC4CtwyroQ1bSMu0p2fbe+wTpsPLY3PAi0pAuGWCea
+         BIHEQqdZ+LbabjQFDhsEm4dmkrCE6N5eA3MjEYp/dvPWNi4nPOPyVLTCcH/WV4XmAA70
+         EEFg==
+X-Gm-Message-State: AC+VfDxvMh/x76YgZmG+c7gIxnNWJP8uuR6L2adgGKyMMz7p99FkhQrw
+        vLExXrQc46eykkQMW9Rg6z8=
+X-Google-Smtp-Source: ACHHUZ4ZIj8959vfQi1i7G2NHQaO5ugC9tIBfRlSHL/tUdJglqovvvIgcNxw0ueQxt1v5RcuroWL7A==
+X-Received: by 2002:a17:903:110f:b0:1a2:8c7e:f310 with SMTP id n15-20020a170903110f00b001a28c7ef310mr48043595plh.35.1684295119892;
+        Tue, 16 May 2023 20:45:19 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.83])
+        by smtp.googlemail.com with ESMTPSA id t2-20020a170902e84200b001a19196af48sm16336746plg.64.2023.05.16.20.45.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 20:45:19 -0700 (PDT)
+From:   Ze Gao <zegao2021@gmail.com>
+X-Google-Original-From: Ze Gao <zegao@tencent.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Conor Dooley <conor@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Ze Gao <zegao@tencent.com>
+Subject: [PATCH v3 0/3] Make fprobe + rethook immune to recursion
+Date:   Wed, 17 May 2023 11:45:05 +0800
+Message-Id: <20230517034510.15639-1-zegao@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202305161318.4AF9203EB@keescook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 01:18:39PM -0700, Kees Cook wrote:
-> On Tue, May 16, 2023 at 02:17:32PM -0600, Gustavo A. R. Silva wrote:
-> > One-element arrays are deprecated, and we are replacing them with flexible
-> > array members instead. So, replace one-element arrays with flexible-array
-> > members in multiple structures, and refactor the rest of the code,
-> > accordingly.
-> > 
-> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> > routines on memcpy() and help us make progress towards globally
-> > enabling -fstrict-flex-arrays=3 [1].
-> > 
-> > This results in no differences in binary output.
-> > 
-> > Link: https://github.com/KSPP/linux/issues/79
-> > Link: https://github.com/KSPP/linux/issues/291
-> > Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> 
-> Oh fun, a subtraction variant! :)
+Hi all,
 
-This code has everything, subtractions and additions :p
+This is the 3rd version of patch series that fix the ftrace rethook recursion problem.
 
-https://lore.kernel.org/linux-hardening/ZGQn63U4IeRUiJWb@work/
+Changes since v2:
+- refine commit message of [PATCH v2 2/4] fprobe: make fprobe_kprobe_handler recursion free
 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
+v1: https://lore.kernel.org/linux-trace-kernel/cover.1684120990.git.zegao@tencent.com/T/
+v2: https://lore.kernel.org/linux-trace-kernel/ZGP4ypidaxQGdp7Y@krava/T/#mb9e74fe74d5800ee424234b26c6def9d5135237b
 
-Thanks!
---
-Gustavo
+The original discussions of this bug can be checked out here:
+
+https://lore.kernel.org/bpf/CAD8CoPCfPmqZH6BJCk3Y1-02BLVVsbQ6OeaNOhcfGWmdF0oX8A@mail.gmail.com/T/#t
+
+Ze Gao (4):
+  rethook: use preempt_{disable, enable}_notrace in
+    rethook_trampoline_handler
+  fprobe: make fprobe_kprobe_handler recursion free
+  fprobe: add recursion detection in fprobe_exit_handler
+  rethook, fprobe: do not trace rethook related functions
+
+ arch/riscv/kernel/probes/Makefile |  2 +
+ arch/s390/kernel/Makefile         |  1 +
+ arch/x86/kernel/Makefile          |  1 +
+ kernel/trace/fprobe.c             | 73 ++++++++++++++++++++++++-------
+ kernel/trace/rethook.c            |  4 +-
+ 5 files changed, 64 insertions(+), 17 deletions(-)
+
+-- 
+2.40.1
+
