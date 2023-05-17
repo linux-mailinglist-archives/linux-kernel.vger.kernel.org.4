@@ -2,166 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11AF7068E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4E87068E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbjEQNGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S231174AbjEQNHA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 May 2023 09:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjEQNGA (ORCPT
+        with ESMTP id S229746AbjEQNG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:06:00 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492C21A2;
-        Wed, 17 May 2023 06:05:59 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so514338b3a.2;
-        Wed, 17 May 2023 06:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684328759; x=1686920759;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mtyFrGfqKkakJXFw6p+ddnB6eN6diQD5RAmdRXKE4A4=;
-        b=DNj9p/rNZpttjQvvi7Jm4nTonkfssVDW8efMg1RxiXGPoGysbBJrF+4LDsaDvxEeqD
-         6FbvWZOToK3LZ1Q0i9SZ5SyANE0TtOaGzkn7h765fCrEykwM6q5JoMLReBb3uywyjjoP
-         yPAKc8r0lFrwU3HM7kP/mPbOHTwVd7Popqbgi7R3kdnJdkv3ioGzS2IW1i6nJYkkOtIa
-         Pt7JA2k5t4i2BQ3zbf0lIe83A4t25b6Pis/p2iRMQRozkHxSlglSqROG2OiCw0cRZn9Z
-         8Tw3x+vlMsHGV1y0Ockl9Ei7zUwN+MhRXxKynBLyVAcMRtRM7UgWhTCUQ/TAUAIeHYHn
-         rPJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684328759; x=1686920759;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mtyFrGfqKkakJXFw6p+ddnB6eN6diQD5RAmdRXKE4A4=;
-        b=h41XeAdhUKEWZnk+Uw6NTVhs8i/MbL7rRqJ2mbBjHPgtIgCFUp9Tv82MNmrHNiOSN/
-         qY3J6LCoVSoLpbYT8eu0/77CybyGTiIs6WvE6s/kckq/2F4BwvrV+qR52qsNPEtL4dx5
-         D/x4scRkLBYEATl3ZYjVKvCiVYmhmQ3CZDddfj9W9V4OV2cJshuwHLbTGbVtHHe97Fid
-         Hh5nzv0aCRERV3szUzE5rB40+6opmfYwxKPA/NNQgtpsmMl0tCWjUwJwb1N90iFVH20t
-         x30B8mUUYQ7RKOyFjH4FWFshYChY7uwmGfIHWHDRtU09DXvJw5X5py4BYblnwgf/H2oP
-         /kDQ==
-X-Gm-Message-State: AC+VfDxdP5W1oRtPXZ6WYgx6Nc4GfZVOCUSZ44xXbOLEVO/M6WjINRX/
-        rudKf9W2ukMY8jJJPNcWfs72gRp1afD2mA==
-X-Google-Smtp-Source: ACHHUZ7IOyaW4XbBAbuRkSoKVhCmX8H25L3dq2CXvCQ9FdgToR71UHsqrgXFzLPSTpd2DDDh9MmPgA==
-X-Received: by 2002:a05:6a00:1996:b0:63d:47ab:65ed with SMTP id d22-20020a056a00199600b0063d47ab65edmr984178pfl.7.1684328758586;
-        Wed, 17 May 2023 06:05:58 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-43.three.co.id. [116.206.12.43])
-        by smtp.gmail.com with ESMTPSA id x20-20020aa793b4000000b0063d2bb0d107sm15229351pff.64.2023.05.17.06.05.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:05:58 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 977BC104714; Wed, 17 May 2023 20:05:54 +0700 (WIB)
-Date:   Wed, 17 May 2023 20:05:54 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v11 11/11] Documentation: tracing/probes: Add fprobe
- event tracing document
-Message-ID: <ZGTRMsLQ3QqvCGew@debian.me>
-References: <168432112492.1351929.9265172785506392923.stgit@mhiramat.roam.corp.google.com>
- <168432122914.1351929.944185321099763072.stgit@mhiramat.roam.corp.google.com>
+        Wed, 17 May 2023 09:06:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF3C10C6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:06:53 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1pzGrN-0002yE-Fg; Wed, 17 May 2023 15:06:29 +0200
+Message-ID: <c747c38ecd4a52ad51021cc0cb5ce9854b7378d3.camel@pengutronix.de>
+Subject: Re: [PATCH V6 5/6] drm: bridge: samsung-dsim: Dynamically configure
+ DPHY timing
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     aford@beaconembedded.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Michael Walle <michael@walle.cc>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
+Date:   Wed, 17 May 2023 15:06:26 +0200
+In-Reply-To: <20230515235713.232939-6-aford173@gmail.com>
+References: <20230515235713.232939-1-aford173@gmail.com>
+         <20230515235713.232939-6-aford173@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ky6EilGNz1vHfqqH"
-Content-Disposition: inline
-In-Reply-To: <168432122914.1351929.944185321099763072.stgit@mhiramat.roam.corp.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Montag, dem 15.05.2023 um 18:57 -0500 schrieb Adam Ford:
+> The DPHY timings are currently hard coded. Since the input
+> clock can be variable, the phy timings need to be variable
+> too.  To facilitate this, we need to cache the hs_clock
+> based on what is generated from the PLL.
+> 
+> The phy_mipi_dphy_get_default_config_for_hsclk function
+> configures the DPHY timings in pico-seconds, and a small macro
+> converts those timings into clock cycles based on the hs_clk.
+> 
+I'm not going apply a review tag to a patch where I contributed myself,
+but FWIW this looks good to me.
 
---ky6EilGNz1vHfqqH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> Tested-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/gpu/drm/bridge/samsung-dsim.c | 57 +++++++++++++++++++++++----
+>  include/drm/bridge/samsung-dsim.h     |  1 +
+>  2 files changed, 51 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+> index 08266303c261..3944b7cfbbdf 100644
+> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
+> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+> @@ -218,6 +218,8 @@
+>  
+>  #define OLD_SCLK_MIPI_CLK_NAME		"pll_clk"
+>  
+> +#define PS_TO_CYCLE(ps, hz) DIV64_U64_ROUND_CLOSEST(((ps) * (hz)), 1000000000000ULL)
+> +
+>  static const char *const clk_names[5] = {
+>  	"bus_clk",
+>  	"sclk_mipi",
+> @@ -651,6 +653,8 @@ static unsigned long samsung_dsim_set_pll(struct samsung_dsim *dsi,
+>  		reg = samsung_dsim_read(dsi, DSIM_STATUS_REG);
+>  	} while ((reg & DSIM_PLL_STABLE) == 0);
+>  
+> +	dsi->hs_clock = fout;
+> +
+>  	return fout;
+>  }
+>  
+> @@ -698,13 +702,46 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  	const struct samsung_dsim_driver_data *driver_data = dsi->driver_data;
+>  	const unsigned int *reg_values = driver_data->reg_values;
+>  	u32 reg;
+> +	struct phy_configure_opts_mipi_dphy cfg;
+> +	int clk_prepare, lpx, clk_zero, clk_post, clk_trail;
+> +	int hs_exit, hs_prepare, hs_zero, hs_trail;
+> +	unsigned long long byte_clock = dsi->hs_clock / 8;
+>  
+>  	if (driver_data->has_freqband)
+>  		return;
+>  
+> +	phy_mipi_dphy_get_default_config_for_hsclk(dsi->hs_clock,
+> +						   dsi->lanes, &cfg);
+> +
+> +	/*
+> +	 * TODO:
+> +	 * The tech reference manual for i.MX8M Mini/Nano/Plus
+> +	 * doesn't state what the definition of the PHYTIMING
+> +	 * bits are beyond their address and bit position.
+> +	 * After reviewing NXP's downstream code, it appears
+> +	 * that the various PHYTIMING registers take the number
+> +	 * of cycles and use various dividers on them.  This
+> +	 * calculation does not result in an exact match to the
+> +	 * downstream code, but it is very close, and it appears
+> +	 * to sync at a variety of resolutions. If someone
+> +	 * can get a more accurate mathematical equation needed
+> +	 * for these registers, this should be updated.
+> +	 */
+> +
+> +	lpx = PS_TO_CYCLE(cfg.lpx, byte_clock);
+> +	hs_exit = PS_TO_CYCLE(cfg.hs_exit, byte_clock);
+> +	clk_prepare = PS_TO_CYCLE(cfg.clk_prepare, byte_clock);
+> +	clk_zero = PS_TO_CYCLE(cfg.clk_zero, byte_clock);
+> +	clk_post = PS_TO_CYCLE(cfg.clk_post, byte_clock);
+> +	clk_trail = PS_TO_CYCLE(cfg.clk_trail, byte_clock);
+> +	hs_prepare = PS_TO_CYCLE(cfg.hs_prepare, byte_clock);
+> +	hs_zero = PS_TO_CYCLE(cfg.hs_zero, byte_clock);
+> +	hs_trail = PS_TO_CYCLE(cfg.hs_trail, byte_clock);
+> +
+>  	/* B D-PHY: D-PHY Master & Slave Analog Block control */
+>  	reg = reg_values[PHYCTRL_ULPS_EXIT] | reg_values[PHYCTRL_VREG_LP] |
+>  		reg_values[PHYCTRL_SLEW_UP];
+> +
+>  	samsung_dsim_write(dsi, DSIM_PHYCTRL_REG, reg);
+>  
+>  	/*
+> @@ -712,7 +749,9 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  	 * T HS-EXIT: Time that the transmitter drives LP-11 following a HS
+>  	 *	burst
+>  	 */
+> -	reg = reg_values[PHYTIMING_LPX] | reg_values[PHYTIMING_HS_EXIT];
+> +
+> +	reg  = DSIM_PHYTIMING_LPX(lpx) | DSIM_PHYTIMING_HS_EXIT(hs_exit);
+> +
+>  	samsung_dsim_write(dsi, DSIM_PHYTIMING_REG, reg);
+>  
+>  	/*
+> @@ -728,10 +767,11 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  	 * T CLK-TRAIL: Time that the transmitter drives the HS-0 state after
+>  	 *	the last payload clock bit of a HS transmission burst
+>  	 */
+> -	reg = reg_values[PHYTIMING_CLK_PREPARE] |
+> -		reg_values[PHYTIMING_CLK_ZERO] |
+> -		reg_values[PHYTIMING_CLK_POST] |
+> -		reg_values[PHYTIMING_CLK_TRAIL];
+> +
+> +	reg = DSIM_PHYTIMING1_CLK_PREPARE(clk_prepare)	|
+> +	      DSIM_PHYTIMING1_CLK_ZERO(clk_zero)	|
+> +	      DSIM_PHYTIMING1_CLK_POST(clk_post)	|
+> +	      DSIM_PHYTIMING1_CLK_TRAIL(clk_trail);
+>  
+>  	samsung_dsim_write(dsi, DSIM_PHYTIMING1_REG, reg);
+>  
+> @@ -744,8 +784,11 @@ static void samsung_dsim_set_phy_ctrl(struct samsung_dsim *dsi)
+>  	 * T HS-TRAIL: Time that the transmitter drives the flipped differential
+>  	 *	state after last payload data bit of a HS transmission burst
+>  	 */
+> -	reg = reg_values[PHYTIMING_HS_PREPARE] | reg_values[PHYTIMING_HS_ZERO] |
+> -		reg_values[PHYTIMING_HS_TRAIL];
+> +
+> +	reg = DSIM_PHYTIMING2_HS_PREPARE(hs_prepare) |
+> +	      DSIM_PHYTIMING2_HS_ZERO(hs_zero) |
+> +	      DSIM_PHYTIMING2_HS_TRAIL(hs_trail);
+> +
+>  	samsung_dsim_write(dsi, DSIM_PHYTIMING2_REG, reg);
+>  }
+>  
+> diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
+> index a1a5b2b89a7a..d9d431e3b65a 100644
+> --- a/include/drm/bridge/samsung-dsim.h
+> +++ b/include/drm/bridge/samsung-dsim.h
+> @@ -93,6 +93,7 @@ struct samsung_dsim {
+>  
+>  	u32 pll_clk_rate;
+>  	u32 burst_clk_rate;
+> +	u32 hs_clock;
+>  	u32 esc_clk_rate;
+>  	u32 lanes;
+>  	u32 mode_flags;
 
-On Wed, May 17, 2023 at 08:00:29PM +0900, Masami Hiramatsu (Google) wrote:
-> +As same as other dynamic events, fprobe events and tracepoint probe
-> +events are defined via `dynamic_events` interface file on tracefs.
-
-Backquotes are rendered as italics instead. If you mean keyword/identifier,
-inline it with double backquotes (like ``foo``). Or you can skip formatting
-it instead (to be consistent with other keywords).
-
-> +For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
-
-Did you mean using :doc: directive instead?
-
----- >8 ----
-diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fpro=
-betrace.rst
-index eca64ad7216a1c..0cf8ed84bd6651 100644
---- a/Documentation/trace/fprobetrace.rst
-+++ b/Documentation/trace/fprobetrace.rst
-@@ -64,7 +64,7 @@ Synopsis of fprobe-events
-   (\*4) this is useful for fetching a field of data structures.
-   (\*5) "u" means user-space dereference.
-=20
--For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
-+For the details of TYPE, see :doc:`kprobetrace`.
-=20
- BTF arguments
- -------------
-
-On the other hand, you can also directly link to intended doc section:
-
----- >8 ----
-diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fpro=
-betrace.rst
-index eca64ad7216a1c..83892c7512726c 100644
---- a/Documentation/trace/fprobetrace.rst
-+++ b/Documentation/trace/fprobetrace.rst
-@@ -64,7 +64,7 @@ Synopsis of fprobe-events
-   (\*4) this is useful for fetching a field of data structures.
-   (\*5) "u" means user-space dereference.
-=20
--For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
-+For the details of TYPE, see :ref:`kprobetrace documentation <kprobetrace_=
-types>`.
-=20
- BTF arguments
- -------------
-diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kpro=
-betrace.rst
-index 651f9ab53f3ee9..8a2dfee3814544 100644
---- a/Documentation/trace/kprobetrace.rst
-+++ b/Documentation/trace/kprobetrace.rst
-@@ -66,6 +66,8 @@ Synopsis of kprobe_events
-   (\*3) this is useful for fetching a field of data structures.
-   (\*4) "u" means user-space dereference. See :ref:`user_mem_access`.
-=20
-+.. _kprobetrace_types:
-+
- Types
- -----
- Several types are supported for fetchargs. Kprobe tracer will access memory
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---ky6EilGNz1vHfqqH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGTRLwAKCRD2uYlJVVFO
-owQ8AQC1x1fvlyM1knwxxY3/PxegbkGTRhiar2QW5YX+U8h14QEA+N0PVJKuJDXx
-S/hl51lE9DLUn17lZ4MQhaMmp222kQA=
-=WlLN
------END PGP SIGNATURE-----
-
---ky6EilGNz1vHfqqH--
