@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B85705C36
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72070705C3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjEQBQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 21:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S231383AbjEQBRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 21:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjEQBQC (ORCPT
+        with ESMTP id S229552AbjEQBRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 21:16:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3301BCD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:16:02 -0700 (PDT)
+        Tue, 16 May 2023 21:17:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5844C469A;
+        Tue, 16 May 2023 18:17:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D387E63AB4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:16:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9902C433D2;
-        Wed, 17 May 2023 01:16:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E137460B7A;
+        Wed, 17 May 2023 01:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8CC1C433D2;
+        Wed, 17 May 2023 01:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684286161;
-        bh=YbwCfAzNBB7CY2C7jwdZq1e5lFcfLtjgsnIuxXKajjI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c0qmIIuyvZ8Ett7xuhW+YUarF3MNmFfwm+xQzqe8bZQ7P/eAWgGjEcJzsve9x0wYx
-         JzGpMyZgXRxfa6oD77qWEcH1Suen4iWJicVYJVzkW2+F4+AADLTTOAGa6SYLF0z4rd
-         3T2e8V2MueSfeCyqK/DZu09udtnbq8G8bg7dUiOIWIZUZuRZro00DSsvZkUbXUvBcS
-         6XafjqBuGxrGK+DpeD9V0nwQiZ1cfBKpVpfpO8kLR+hZoORMwbtghwNCuCkojFVFaH
-         S1sxnMW/dFn37kjfJzdOd/XrJvjzrxbuUS4Ay9a7wPBqZ+h6xF2Csl3/VmQEIkVMEs
-         3S7mxFbSEkImQ==
-Date:   Wed, 17 May 2023 10:15:58 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Jim Wylder <jwylder@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] regmap: Account for register length when chunking
-Message-ID: <ZGQqzlU7XPF+rS8c@finisterre.sirena.org.uk>
-References: <ZGJI2zU/bxDPxLAh@finisterre.sirena.org.uk>
- <20230516155223.2070731-1-jwylder@google.com>
+        s=k20201202; t=1684286233;
+        bh=biYz7ct5sU3QISD2vSXIgOyTlRasPXZBZtOwjhRjsrM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=saHRChJIGfsafUmuXO023PW74V+JkbgAGVwicIQaN2miLZvt+AmbCh7M8Kwg9wJv6
+         LkXO/9sUIb1nGw518+w0XwIqKt/5dbDBS2sXLQ+SUoBKaAeCibJ2zF+DUyOBzJtiqH
+         sEC80+Ne2COWpqad3YGPM82fVOlW/8O34MZ8t46YA1LnKzVpnuDhgWL5DpkR+4GiNf
+         257i2IutbuZiOSr3YLmvoPH16nRbdhQE/02kPabwwEGXagA9+0HA/AcC36r6d9LE6f
+         /Oz2RbaexwN7xK4rllq8MQ9qXdJ6aZtcX81igf6555qO0F1oL2cPpfnHMFQNCzjX78
+         CtwFE6/lnp04Q==
+Date:   Tue, 16 May 2023 19:18:01 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] media: venus: hfi_cmds: Replace fake flex-arrays with
+ flexible-array members
+Message-ID: <ZGQrSQ/zHu+pk7WU@work>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="azaE0N+hnG1ddcr0"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230516155223.2070731-1-jwylder@google.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+One-element arrays are deprecated, and we are replacing them with flexible
+array members instead. So, replace one-element arrays with flexible-array
+members in multiple structures.
 
---azaE0N+hnG1ddcr0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
 
-On Tue, May 16, 2023 at 10:52:23AM -0500, Jim Wylder wrote:
+This results in no differences in binary output.
 
-> +	size_t max_data = map->max_raw_write - map->format.reg_bytes;
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/294
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/media/platform/qcom/venus/hfi_cmds.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-This still doesn't take account of padding bytes.
+diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
+index dd9c5066442d..55dd73ff073b 100644
+--- a/drivers/media/platform/qcom/venus/hfi_cmds.h
++++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
+@@ -82,7 +82,7 @@ struct hfi_sys_set_buffers_pkt {
+ 	u32 buffer_type;
+ 	u32 buffer_size;
+ 	u32 num_buffers;
+-	u32 buffer_addr[1];
++	u32 buffer_addr[];
+ };
+ 
+ struct hfi_sys_ping_pkt {
+@@ -177,7 +177,7 @@ struct hfi_session_empty_buffer_uncompressed_plane1_pkt {
+ 	u32 filled_len;
+ 	u32 offset;
+ 	u32 packet_buffer2;
+-	u32 data[1];
++	u32 data[];
+ };
+ 
+ struct hfi_session_empty_buffer_uncompressed_plane2_pkt {
+@@ -186,7 +186,7 @@ struct hfi_session_empty_buffer_uncompressed_plane2_pkt {
+ 	u32 filled_len;
+ 	u32 offset;
+ 	u32 packet_buffer3;
+-	u32 data[1];
++	u32 data[];
+ };
+ 
+ struct hfi_session_fill_buffer_pkt {
+@@ -227,7 +227,7 @@ struct hfi_session_release_buffer_pkt {
+ 	u32 extradata_size;
+ 	u32 response_req;
+ 	u32 num_buffers;
+-	u32 buffer_info[1];
++	u32 buffer_info[];
+ };
+ 
+ struct hfi_session_release_resources_pkt {
+-- 
+2.34.1
 
-Please don't ignore review comments, people are generally making them
-for a reason and are likely to have the same concerns if issues remain
-unaddressed.  Having to repeat the same comments can get repetitive and
-make people question the value of time spent reviewing.  If you disagree
-with the review comments that's fine but you need to reply and discuss
-your concerns so that the reviewer can understand your decisions.
-
---azaE0N+hnG1ddcr0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRkKssACgkQJNaLcl1U
-h9BJ2wf+OkPubkQAjklIEkJjTFBmuP8csP9qe69XpAAyBKn9pyjOj4f2AbhluKKE
-BYAFLE7r3Ktphde14ggzFFbhd7k1/MvwKvuZHfKN7RwW+xaI5w12viB9/L+Gsmv3
-jYGuV/9wEAhPVC03kPEJQr5nd1WOvn1R971ePTei1Mqmg5ysgPkdlLCiuAotkNVu
-ZzGLPm8bc84CfbOoegu1Ic9eML5H2OUpmjrUwlbAdApW3RJvPSmsUrKjSPxwUV5p
-V9mE0OiyXx8BcpH8xa29sBD5Sp6Ynlnzk31wCFrdA2KlESX4akr3fGgsJCKkJcWx
-U7+0GTtBLYvrdUM0VlabZvVq7WBU9g==
-=a1Tk
------END PGP SIGNATURE-----
-
---azaE0N+hnG1ddcr0--
