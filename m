@@ -2,147 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240F9707072
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D8970706E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjEQSIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 14:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
+        id S229968AbjEQSIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 14:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjEQSIw (ORCPT
+        with ESMTP id S229942AbjEQSH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 14:08:52 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27064B0;
-        Wed, 17 May 2023 11:08:51 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 17 May 2023 14:07:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BACB0;
+        Wed, 17 May 2023 11:07:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QM1M16wqLz49Q4J;
-        Wed, 17 May 2023 21:08:45 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1684346928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tiLcdj+637utbguDBNkK5wark73uP2Co8cs3kwg/U9Q=;
-        b=jQUSyk2FZQA1vU6JewWipW+cdKwkZDlarhm1oGeeUNfSLDKi7I7q62g58ZGvOO9vBAPKY0
-        J/MvGuTDf2yOvFIclsp8tkj/EdPQVLFQ0+2Eri6T92PfgxSN3hAOzY6hhngEX6DSBOQVT8
-        Chqp+7MCbdGbjn1kLst9swohuuh3Fo8Ubl1BRz0h8cJD2m/VdrYwzIQeC/U10PbFUWvQhj
-        sugObrCuBmliu8g1nPfyOVEExa64L8KOQC2hwXgcBXEQ9DUKBNmih9SUpitpbgSF43Rekr
-        gAW+P/AU3sWC5I2HbYck7iSyZpa0locfKYx0vJFbsaOt14HXUdQR9WMBtfeovQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1684346928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tiLcdj+637utbguDBNkK5wark73uP2Co8cs3kwg/U9Q=;
-        b=ovVYV30Wze3B8zwIdQiQ7irLhEb2cTtgixz94tIKAnEZw68IViapHBsjkEl47BpSaAsd1s
-        jP3KQ0q39yl3O7Syslicamj0onYzWPtHuGAvyD9ojslDHrr1+8BDbLhJ9RkRKEVu5UKicP
-        Be67/au/bGigpWGiVZjmnc+PDIkzsmW1QF4Q6sHE5NzzVDAXprdtc5FXBT+9tVJVt3a9Ev
-        09moEyMXLR7F4dCoF+nDDJ1vsu0dU07taKsowvCR6tXV0txj/CpfZ8c+gbt4OEcXY1edpu
-        RcF1fnA04082M0Rf28NZkW/ThszPcJKzcwXMFyxwcly8CS2QiyPOcrljrqZjsg==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1684346928; a=rsa-sha256;
-        cv=none;
-        b=H1iG8yu+ooQ78ue0lMr+mkXE4wKY7y+poodJyXet7ili2TXm1glQWtgLb+ILV4WoOBsVI2
-        +oa5fpbhPPUoY8YSungTdIeiu7JFDBfHDd2/PQmHHom1SEnpW0AB/YRHifpkjg/dlZ5B/c
-        njsxCv8gigEebQJ8AczrHMj5QuCPC9i3HjZFWFyQDd4ZorkBVirN/zUrx0xvOoLzXEEk/M
-        ZTeUSejxiJGsdR4cXLuQZasn1JtYwOL/lijQFM3HfUmuszyvWh47MCpdOwqv/CHnZm21lQ
-        iJ5Q5zlAHvUa4P7PSl/+B4JwJ2ISLzimL29XA7Av2CIAKgFmSj4hKan3/2Yifg==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4173A634C94;
-        Wed, 17 May 2023 21:08:45 +0300 (EEST)
-Date:   Wed, 17 May 2023 21:08:45 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Intel Graphics Development List <intel-gfx@lists.freedesktop.org>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Luben Tuikov <luben.tuikov@amd.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BB23649E3;
+        Wed, 17 May 2023 18:07:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59121C433EF;
+        Wed, 17 May 2023 18:07:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684346876;
+        bh=fFAQZam9M9GaiJNW3WGAqDih6/zmyl0kx8ysWpMj0WQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k/QWdDVAs6ecpvp4JtgSMAgngJmiD4LVWf5EX+ggp09aHS5JhVJO5AZTR2rqwtvuD
+         PrZnBWsZTppJ8mC2sjtxPM0KR3WVmVR5DVqEahaByES2GmBUmfAT9tEVgE+xeICORj
+         VL+Z7nx1GkhOtWfwiiSwspOq92zj3kkvziWfsvcW1ltbfJLXd4fTXbJkCufDva4lW1
+         sbblEy8ZZ9oTGSRzNmGfoPZp98C3AV27Qraaaru72/6gwJvTS4b9yNc1UeCoI+DXKH
+         2BOBwCiDhQgxmjrpCDIbLp6SCC3CinzTinq64wh7Qktj1ggE55sEIeUEDX+pcQHNpE
+         G1DybcnsONI0w==
+Date:   Wed, 17 May 2023 12:08:46 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Gustavo Sousa <gustavo.sousa@intel.com>,
-        Balasubramani Vivekanandan <balasubramani.vivekanandan@intel.com>,
-        Matt Atwood <matthew.s.atwood@intel.com>,
-        =?iso-8859-1?Q?Jos=E9?= Roberto de Souza 
-        <jose.souza@intel.com>,
-        Srinivasan Shanmugam <srinivasan.s@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH 3/3] media: v4l2-core: Describe privacy_led field of
- v4l2_subdev
-Message-ID: <ZGUYLR4QT7Wb/Ly9@valkosipuli.retiisi.eu>
-References: <20230203100215.31852-1-bagasdotme@gmail.com>
- <20230203100215.31852-4-bagasdotme@gmail.com>
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] media: venus: hfi_cmds: Replace fake flex-array
+ with flexible-array member
+Message-ID: <ZGUYLoqwrcVsjiaH@work>
+References: <ZGQn63U4IeRUiJWb@work>
+ <202305171049.9AB52166@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230203100215.31852-4-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202305171049.9AB52166@keescook>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
-
-On Fri, Feb 03, 2023 at 05:02:15PM +0700, Bagas Sanjaya wrote:
-> Stephen Rothwell reported htmldocs warning:
+On Wed, May 17, 2023 at 10:50:53AM -0700, Kees Cook wrote:
+> On Tue, May 16, 2023 at 07:03:39PM -0600, Gustavo A. R. Silva wrote:
+> > One-element arrays are deprecated, and we are replacing them with flexible
+> > array members instead. So, replace one-element arrays with flexible-array
+> > members in struct hfi_sys_set_resource_pkt, and refactor the rest of
+> > the code, accordingly.
+> > 
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -fstrict-flex-arrays=3 [1].
+> > 
+> > The only binary differences seen before/after changes are the
+> > following:
+> > 
+> >      17ba:      mov    %rbx,%rdi
+> >      17bd:      call   17c2 <pkt_sys_set_resource+0x42>
+> >                         17be: R_X86_64_PLT32    __tsan_write4-0x4
+> > -    17c2:      movl   $0x14,(%rbx)
+> > +    17c2:      movl   $0x10,(%rbx)
+> >      17c8:      lea    0x4(%rbx),%rdi
+> >      17cc:      call   17d1 <pkt_sys_set_resource+0x51>
+> >                         17cd: R_X86_64_PLT32    __tsan_write4-0x4
+> > 
+> > which is expected once this accounts for the following line of code
+> > at  drivers/media/platform/qcom/venus/hfi_cmds.c:73
+> > 
+> > 73         pkt->hdr.size = sizeof(*pkt);
+> > 
+> > and as *pkt is of type struct hfi_sys_set_resource_pkt, sizeof(*pkt) is
+> > reduced by 4 bytes, due to the flex-array transformation.
 > 
-> include/media/v4l2-subdev.h:1088: warning: Function parameter or member 'privacy_led' not described in 'v4l2_subdev'
-> 
-> Describe privacy_led field to fix the warning.
-> 
-> Link: https://lore.kernel.org/linux-next/20230203135303.32da1fc6@canb.auug.org.au/
-> Fixes: 10d96e289fbd77 ("media: v4l2-core: Make the v4l2-core code enable/disable the privacy LED if present")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  include/media/v4l2-subdev.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
-> index 1ef5bbbf9d38c8..3e7a97c0657e1c 100644
-> --- a/include/media/v4l2-subdev.h
-> +++ b/include/media/v4l2-subdev.h
-> @@ -1033,6 +1033,7 @@ struct v4l2_subdev_platform_data {
->   * @active_state: Active state for the subdev (NULL for subdevs tracking the
->   *		  state internally). Initialized by calling
->   *		  v4l2_subdev_init_finalize().
-> + * @privacy_led: Privacy LED associated with the sub-device.
->   * @enabled_streams: Bitmask of enabled streams used by
->   *		     v4l2_subdev_enable_streams() and
->   *		     v4l2_subdev_disable_streams() helper functions for fallback
+> Based on the other place that was subtracting the 1 element, this looks
 
-I'm not sure how this ever was an issue --- privacy_led field was
-documented in the same patch that added it.
+Do you mean the one you commented on yesterday?
 
--- 
-Kind regards,
+https://lore.kernel.org/linux-hardening/ZGPk3PpvYzjD1+0%2F@work/ this?
 
-Sakari Ailus
+--
+Gustavo
+
+> like hfi_cmds.c:73 is an existing sizing bug that is now fixed with this
+> patch, yes?
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> -Kees
+> 
+> > 
+> > Link: https://github.com/KSPP/linux/issues/79
+> > Link: https://github.com/KSPP/linux/issues/293
+> > Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > ---
+> >  drivers/media/platform/qcom/venus/hfi_cmds.c | 2 +-
+> >  drivers/media/platform/qcom/venus/hfi_cmds.h | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> > index 3f74d518ad08..7c82e212434e 100644
+> > --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
+> > +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> > @@ -83,7 +83,7 @@ int pkt_sys_set_resource(struct hfi_sys_set_resource_pkt *pkt, u32 id, u32 size,
+> >  		res->size = size;
+> >  		res->mem = addr;
+> >  		pkt->resource_type = HFI_RESOURCE_OCMEM;
+> > -		pkt->hdr.size += sizeof(*res) - sizeof(u32);
+> > +		pkt->hdr.size += sizeof(*res);
+> >  		break;
+> >  	}
+> >  	case VIDC_RESOURCE_NONE:
+> > diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
+> > index ba74d03eb9cd..dd9c5066442d 100644
+> > --- a/drivers/media/platform/qcom/venus/hfi_cmds.h
+> > +++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
+> > @@ -56,7 +56,7 @@ struct hfi_sys_set_resource_pkt {
+> >  	struct hfi_pkt_hdr hdr;
+> >  	u32 resource_handle;
+> >  	u32 resource_type;
+> > -	u32 resource_data[1];
+> > +	u32 resource_data[];
+> >  };
+> >  
+> >  struct hfi_sys_release_resource_pkt {
+> > -- 
+> > 2.34.1
+> > 
+> 
+> -- 
+> Kees Cook
