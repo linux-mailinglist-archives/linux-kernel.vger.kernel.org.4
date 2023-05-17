@@ -2,112 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB2B706E52
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5329A706E59
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjEQQiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S229595AbjEQQkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjEQQiD (ORCPT
+        with ESMTP id S229473AbjEQQkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:38:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCFE93C3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:37:55 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-510db954476so585900a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:37:55 -0700 (PDT)
+        Wed, 17 May 2023 12:40:03 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0E735A5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:40:01 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9659443fb56so146170966b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684341474; x=1686933474;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linux-foundation.org; s=google; t=1684341600; x=1686933600;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oxFHTRCKX1b6ZPvp5Tbzp6uL023q77o/sho/DiHZlF0=;
-        b=ZlTl28XaVoUXtK1R34OnJkyaUON8lN7ZqEl9xlLeb2F1+VNKzXQlqUBUy3hYRe4+Xi
-         ybUetVhyCtCPth5UUo3OCKa6R+YiCxy1IwqvcrwWikT73tdqJ49b672dd7+Z8F4UM9g7
-         +794RuU2affLlGgyft4JZzow4imJSjLkSG2szqvX5pIw69/0w6ygLxEhAr+YTxUBwRe2
-         Ug9i/gcRmusm2cYeUth3Vp9EBacAnars4fWV+8HIUk2j2Vh8nuWVObwz34XOlD7n2pLa
-         +M+i4hpBfOIvxZ/z9Ty72PK3C0UgnGdUASeQYcjc7NBSmxP9IyfyF6qNMiD+noYB8xQc
-         ufYw==
+        bh=LUiZh9vX79/8GlRHS85iCL0x+Okzafu2CQZl4ySfqrA=;
+        b=hJSArDsACQfgIfZm5gUboXLfaag3Cc98UHAkpAcbwjSjIyOWcTjMzYULTRwkLUsTBc
+         Q6moqtReX3RXB65vJn4njVt1VF18bbqLOFraNA9bXXXFXhtZu7AqZ8icPXS/yqMHtGN0
+         4E+pzVP7uoj7+5A2t9EcRD7+lOjwJP7YYHZoM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684341474; x=1686933474;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684341600; x=1686933600;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oxFHTRCKX1b6ZPvp5Tbzp6uL023q77o/sho/DiHZlF0=;
-        b=NFq6WobxMRV3Qegf0cM/uNknh+sgfIAepYCMMZbtfdvtgdpL55O+vsbKRt09GaQRG8
-         NG5htwrIsFR3ezsz7z18BWmbCJpU8qPNr7RkPkfxkuNWphSCKyH6EhqnMU3csQs5ck8v
-         xO+x10ih9gngUz4nyiqkDL7+J4PoUo6DQ0nv7Wqtq1V1Zu9v1IWG4qwg37jwQmt7XNvG
-         XLMpKRWsWPI2uOPyEVeCoXyaYi6UQSWac8DwDYaaXUgJWsGo+V7FI3kaCwBSw0NtBEAs
-         woeIMz7zQ1uO+rhxtgG6NDsgPuzlrX5J0ggr7KvE2vcv7gzN+NuuCiRyFsw1AWyPD1ze
-         xFvQ==
-X-Gm-Message-State: AC+VfDwNcuXOooZlTyv5Fz9xd6JW4TN6yFPjNxgEz4igkDagZfxWhGeE
-        HNneeZS5TV92UjNDMlreFrEajA==
-X-Google-Smtp-Source: ACHHUZ4v5X5Nl45QaqZ4wy3xZQPUxWAVDqcRKxfdhsGdP1MRZG40xfitQgvgVmpnf2IMERFZMSdA6w==
-X-Received: by 2002:a05:6402:1209:b0:50b:d26d:c57e with SMTP id c9-20020a056402120900b0050bd26dc57emr2431904edw.12.1684341473752;
-        Wed, 17 May 2023 09:37:53 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id t21-20020aa7d715000000b0050bc041d2a8sm9284827edq.15.2023.05.17.09.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 09:37:53 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] soundwire: debugfs: fix unbalanced pm_runtime_put()
-Date:   Wed, 17 May 2023 18:37:50 +0200
-Message-Id: <20230517163750.997629-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517163750.997629-1-krzysztof.kozlowski@linaro.org>
-References: <20230517163750.997629-1-krzysztof.kozlowski@linaro.org>
+        bh=LUiZh9vX79/8GlRHS85iCL0x+Okzafu2CQZl4ySfqrA=;
+        b=du8x7E8yMANvF65e3Za1Yedo03RnCKU1MXT/8JsMA7b4dUR09s4tkNScrzeT5VeGR2
+         lR1AGvj15krGm04mFx9sL2Gu2HNluTG55Hj1+CnQQj6wIHqwsxfWRnkfb9OzTXE42lHE
+         /K2dABbj5RMdJqQ33v9f+1/W5poiBxJ3u2psW2k6ddNhOT/c46D33JuBaUWhqa0p312D
+         q94M5lpHwrZxqlqle7OEobOj/kIZNz+BB6IqvC+pVjE7EriI183OSyEJ/6fgsWU7zRJG
+         1o/me5mp5XwU+H6IlT1RobJeCr3va3Ar5qC04LHlqAZLRPa0sHQf73XzNT1F5Dki+2V3
+         5djw==
+X-Gm-Message-State: AC+VfDzRoOoAaw+0LM1G6/tv5Kqcerygh3DJi5GzzAg3hAkt/MMfmECS
+        pcmwtuqmf+A5MmzGdzg3roaC8ppP9s8cSb1bAo8xtBAB
+X-Google-Smtp-Source: ACHHUZ5rxne+lY6ohHdB6vH2wMqER+MwFFqMhVvH+85eU7d8XbUOqN+gLUMXmGgSnPuIrOLzDmSEsw==
+X-Received: by 2002:a17:907:868f:b0:969:f9e8:a77c with SMTP id qa15-20020a170907868f00b00969f9e8a77cmr31038204ejc.64.1684341599898;
+        Wed, 17 May 2023 09:39:59 -0700 (PDT)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id d1-20020a170907272100b0094bb4c75695sm12593048ejl.194.2023.05.17.09.39.59
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 09:39:59 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-9659443fb56so146166666b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:39:59 -0700 (PDT)
+X-Received: by 2002:a17:907:868f:b0:969:f9e8:a77c with SMTP id
+ qa15-20020a170907868f00b00969f9e8a77cmr31038132ejc.64.1684341598769; Wed, 17
+ May 2023 09:39:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517124721.929540-1-arnd@kernel.org>
+In-Reply-To: <20230517124721.929540-1-arnd@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 17 May 2023 09:39:41 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh+129KAcegJqvo2PKPUK3yw5qQwF0LcHofdT0bPbs8iQ@mail.gmail.com>
+Message-ID: <CAHk-=wh+129KAcegJqvo2PKPUK3yw5qQwF0LcHofdT0bPbs8iQ@mail.gmail.com>
+Subject: Re: [PATCH] tracing: make ftrace_likely_update() declaration visible
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If pm_runtime_resume_and_get() failed with -EACCES, the driver continued
-execution and finally called pm_runtime_put_autosuspend().  Since
-pm_runtime_resume_and_get() drops the usage counter on every error, this
-lead to double decrement of that counter.
+On Wed, May 17, 2023 at 5:47=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> This function is only used when CONFIG_TRACE_BRANCH_PROFILING is
+> set, and the declaration is hidden behind this Kconfig symbol,
+> which causes a warning if disabled:
 
-Fixes: b275bf45ba1d ("soundwire: debugfs: Switch to sdw_read_no_pm")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/soundwire/debugfs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+That explanation is not very clear.
 
-diff --git a/drivers/soundwire/debugfs.c b/drivers/soundwire/debugfs.c
-index dea782e0edc4..c3a1a359ee5c 100644
---- a/drivers/soundwire/debugfs.c
-+++ b/drivers/soundwire/debugfs.c
-@@ -56,8 +56,9 @@ static int sdw_slave_reg_show(struct seq_file *s_file, void *data)
- 	if (!buf)
- 		return -ENOMEM;
- 
--	ret = pm_runtime_resume_and_get(&slave->dev);
-+	ret = pm_runtime_get_sync(&slave->dev);
- 	if (ret < 0 && ret != -EACCES) {
-+		pm_runtime_put_noidle(&slave->dev);
- 		kfree(buf);
- 		return ret;
- 	}
--- 
-2.34.1
+The problem is that the tracing code itself is built with
+DISABLE_BRANCH_PROFILING, in order to not recurse. And that hides the
+declaration when the definition is compiled, leading to the problem.
 
+CONFIG_TRACE_BRANCH_PROFILING isn't the problem in itself - *that*
+part of the test is consistent (not used, not declared, and not
+compiled if it is off).
+
+The problem is that DISABLE_BRANCH_PROFILING case, where it is used
+elsewhere, but not declared when it is itself compiled.
+
+I applied the patch, but I tried to reword the explanation to be more
+clear. I may have failed.
+
+          Linus
