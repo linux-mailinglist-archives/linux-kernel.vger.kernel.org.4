@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5584706F52
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A65706F50
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbjEQRZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
+        id S229656AbjEQRZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjEQRZ4 (ORCPT
+        with ESMTP id S229505AbjEQRZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:25:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7DE76A9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684344288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1iAIrTnVwFzq6+c38GVnN7MsYmU1HrrFym557ov8ROI=;
-        b=ZEiqnoDnlRCLLl0pfuGfLaECEt9HbzuC9tqjp2BhPSbp4t0e0VDgjy3q/G7l4lsH3pETFn
-        UOcn3c5gjHYnKJdd9HiG3KS25RX6nxAWiGdBUl/b7zhPWxFgUpjjhpIsF8jA5Wgwd+Gpgs
-        M2MicOt8XNEE4BwtDusyyJ8ejMo++VE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-286-0sVRUiKlM5OHXYgdEe3mVA-1; Wed, 17 May 2023 13:24:47 -0400
-X-MC-Unique: 0sVRUiKlM5OHXYgdEe3mVA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f33f8ffa95so4618755e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:24:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684344286; x=1686936286;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1iAIrTnVwFzq6+c38GVnN7MsYmU1HrrFym557ov8ROI=;
-        b=dnrCn1kyMUvB+25fXAOpczFIOycLhtAdM++icNoEtx2IOPB86lG4jg4WwyzYMD8iF9
-         UsOZMbhwm7nuIOf7rx1jzIqmrdfDq4XdT/l4z9VbysUNH5y9RtC3oSP4wcwjbQGPqspF
-         XSI3g8V029rqRSWRdF+WFoAfe/5EW77NxXA/CZAhbrMkhfR9gikZk4LTwp6ozNyDaaLS
-         99wUSCIeI1Ht02J/gI/B5gx+3/G3g4A0sc6bBg9yvozn3trtFMvEQ7fgQkULYDG/cYAQ
-         P1ranXlh/NHqIybDx6yroO9f5Ag3A3BKmUjOD489t08NnFJajea+1igJrckYIie0Xh2J
-         XTtA==
-X-Gm-Message-State: AC+VfDwvwQZ9GqeKpCdBV2Aa0RKpo4tg0fbB1KQUDXqctjzwyGdm3p9w
-        uUkwhFfkq5OgAllL36hBFixu8ipuvqciDpF49WLw44EvlWo7sYP7q3KuqiJS9zoldGPyWvmyxyQ
-        VN4CLBqe6/LGFhs0kxuALoy/U
-X-Received: by 2002:a7b:c397:0:b0:3f5:772:f333 with SMTP id s23-20020a7bc397000000b003f50772f333mr8899204wmj.4.1684344286480;
-        Wed, 17 May 2023 10:24:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6jSHjGc2VCPNPYrXpge4cFfRVbJpvTfkWEcLMmIeIQDCnWRWkea0SDpPuJr/rrRfE4RbIP8g==
-X-Received: by 2002:a7b:c397:0:b0:3f5:772:f333 with SMTP id s23-20020a7bc397000000b003f50772f333mr8899194wmj.4.1684344286140;
-        Wed, 17 May 2023 10:24:46 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id i9-20020adffc09000000b0030497b3224bsm3347909wrr.64.2023.05.17.10.24.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 10:24:45 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dana Elfassy <delfassy@redhat.com>
-Cc:     eballetb@redhat.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dana Elfassy <dangel101@gmail.com>
-Subject: Re: [PATCH v2] Input: tests: add test to cover all
- input_grab_device() function
-In-Reply-To: <ZGUJoClUZpL71Jw4@google.com>
-References: <20230517153145.513095-1-dangel101@gmail.com>
- <ZGUJoClUZpL71Jw4@google.com>
-Date:   Wed, 17 May 2023 19:24:44 +0200
-Message-ID: <874joaan1f.fsf@minerva.mail-host-address-is-not-set>
+        Wed, 17 May 2023 13:25:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ACD93F7;
+        Wed, 17 May 2023 10:25:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FB1363E35;
+        Wed, 17 May 2023 17:25:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E9E6C433D2;
+        Wed, 17 May 2023 17:25:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684344311;
+        bh=mjFoAWFzRrM9eTl/Zbmccy0cVg5yWUVZAjtxpZaRWyI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JJSAp3/DeICH3C9UGkhuNBJHDqlTc+oJYD3lah9UEjSbbpdIHvYVt4JKbJrnKpfq8
+         jGOB90ZzNGUrHIdwLsKVgnZZeJha/DjxWrpMMNkKQenM/5a3pr4oDcH6tm0RoB1OSv
+         TyFFVgNn198G+8R8noWEfYc/XgQ4fkTWHH1R8mo5MCCpwQIl4ZI1EYBX4jX3sNLuWX
+         nB7N1AzvlkCZ9eFoTVWSVlQTQl8WV62hJOsoU/+VR77WAywEPx3jeZ2kioD+F2uEhE
+         bgZb3B4QWO7VWT8KQJ0+Jo1reEbgfSETto+mmz5A5VKu/zBOVO47qqyNwcnaAhuVRe
+         keX2nmUYvMgVg==
+Date:   Wed, 17 May 2023 18:25:07 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: sc16is7xx: Add property to change GPIO
+ function
+Message-ID: <20230517-argue-unbeaten-b07405fdd313@spud>
+References: <20230517150746.3823249-1-hugo@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mpbHctzDX7UX2Sd6"
+Content-Disposition: inline
+In-Reply-To: <20230517150746.3823249-1-hugo@hugovil.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry Torokhov <dmitry.torokhov@gmail.com> writes:
 
-Hello Dmitry,
+--mpbHctzDX7UX2Sd6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Hi Dana,
->
-> On Wed, May 17, 2023 at 06:31:45PM +0300, Dana Elfassy wrote:
->> Currently input_grab_device() isn't covered by any tests
->> Thus, adding a test to cover the cases:
->> 1. The device is grabbed successfully
->> 2. Trying to grab a device that is already grabbed by another input
->>    handle
->> 
->> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
->> Tested-by: Javier Martinez Canillas <javierm@redhat.com>
->> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
->> ---
->> 
->> Changes in v2:
->> - Use input_put_device() to decrement the refcount increased by get().
->> - Remove unnecessary struct input_handle test_handle variable.
->
-> So this tests something different than what patch description states.
-> You are testing that there is no "recursive" grabbing happening (an API
-> could be designed to allow the same handle grab device several times).
-> This is a good and useful test, but you do want to also use 2nd separate
-> handle to see that it gets -EBUSY as well. And ideally we should have
+On Wed, May 17, 2023 at 11:07:46AM -0400, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+>=20
+> Some variants in this series of uart controllers have GPIO pins that
+> are shared between GPIO and modem control lines.
+>=20
+> The pin mux mode (GPIO or modem control lines) can be set for each
+> ports (channels) supported by the variant.
+>=20
+> This adds a property to the device tree to set the GPIO pin mux to
+> modem control lines on selected ports if needed.
+>=20
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> ---
+>  .../bindings/serial/nxp,sc16is7xx.txt         | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b=
+/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> index 0fa8e3e43bf8..426b7285ad50 100644
+> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> @@ -23,6 +23,9 @@ Optional properties:
+>      1 =3D active low.
+>  - irda-mode-ports: An array that lists the indices of the port that
+>  		   should operate in IrDA mode.
+> +- modem-control-line-ports: An array that lists the indices of the port =
+that
+> +			    should have shared GPIO lines configured as modem
+> +			    control lines.
 
-That was my fault since v1 had two different handles but since it wasn't
-releasing it, didn't add any value really so I asked Dana to just drop it.
+If this is an NXP specific property, should it not have an nxp, vendor
+prefix?
 
-> another test verifying that the 2nd handle can successfully grab the
-> device once the first handle releases it.
->
 
-That's the correct approach indeed and would make the test more useful.
+--mpbHctzDX7UX2Sd6
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Best regards,
+-----BEGIN PGP SIGNATURE-----
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGUN8wAKCRB4tDGHoIJi
+0hp1AP9FdcuRN7IO7H2al/5we3uqXf0P4Jd54EhBY+MkzKRGxwD8DuYBxPPExott
+pQjz7PK7eIvyCdbZuUagAiV4Q8GrCAQ=
+=M+2F
+-----END PGP SIGNATURE-----
 
+--mpbHctzDX7UX2Sd6--
