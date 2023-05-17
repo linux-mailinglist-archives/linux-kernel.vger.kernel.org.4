@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63925705D12
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0EA705D13
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjEQCVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        id S231974AbjEQCVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbjEQCV3 (ORCPT
+        with ESMTP id S231913AbjEQCVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:21:29 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4E940EF
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:28 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8337a578dso151746276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:28 -0700 (PDT)
+        Tue, 16 May 2023 22:21:33 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17465468E
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:30 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5611211f767so2888547b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684290087; x=1686882087;
+        d=google.com; s=20221208; t=1684290090; x=1686882090;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DmZ7qJu2QJbmubDEgRMJhswdry7Qhukww11ZPOJRgvs=;
-        b=pXVJppsksfHh4I2n3d8xVcufhKZZlJjnCny+rmQ4mjQKI0AW/cCK2hASK83KfSiYpL
-         SwH5TVvYpvNqffEsNvDPgC+nhgLYFM3KaqHCuYbPaIFzls2lqfx0JYU50+6NVWzrME9W
-         1mfRz5hwNYEvKHUFnlT4dknNheNNzedfdZLSkBZlu7QlWmiIOdq/l+RcVRDobfHZBP0c
-         7otPYVh11OT4odfN5rNmMB6Xfe/sUmOnKNfozY8i+NNWwTSKo6jWbGtluyHsGeqrt/Um
-         gaSjHg7Sh7LXhrO/UUQMLAjulMUlLvxOhNHHmrBn6+ZKABwqhlZs4QhdwbdE4TaSFaoL
-         o8HQ==
+        bh=rrlZpn5lxQz0wYWidXhNS5k4qYdBDD7AOOGwfPiDsdQ=;
+        b=nS7ih6tlhFuvsMZlYwq74HbaDFXcOaTcEpDv9JgzLfbOcJeYHe55FxK9/JT/+cQbri
+         Mn6JAGOT1VNNKqihdxteunOmx5PruJg2/fGmmxtN3oJJTqr4S4WMMQ0nGGzH9yNCitD0
+         Kqebqjin+DuMmuu1ErU226+1fL8do4fC3XsOIDYwtzvXNYfy2fVo4kDBR9Dx2K31khL6
+         UbHaRwmvEWWPO7TJUQ+CmLPQ8R7iMGPQ8aPuRy4ci2qpyyMDXCg6i23WhA35RidSAMDh
+         2IbzmeSuiKtMSP2SW/XYy9SByGadBaD56U2heVCkkevaE6uaQskw46S6Abvm/vT+UB+O
+         0DLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684290087; x=1686882087;
+        d=1e100.net; s=20221208; t=1684290090; x=1686882090;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DmZ7qJu2QJbmubDEgRMJhswdry7Qhukww11ZPOJRgvs=;
-        b=e0ftyAVCqq0vRIdKMF0bGZLpGogtMPzjlg4t1U0bEifTF8sPW2g/m4qPHPP7hMcoo2
-         Pw3wqQPyLXdsPHy5t7tVwmHuimJMpbduAZBxm1XNiS/CSDtbfCU2cCcTMpFjQ6g5DGWq
-         NgZh7X7IR6cx1lt4u4MgvXVIz6vshHRyI1hCkigYH0rjgOPm5feIhvuDt64bZUqzjmxe
-         8OFsdRQSyoJAxlzcPH/Zq2wpqe/iIj3fgijCHnHP/gZutFL0tRWyp8U5WmLVlEpF9mf8
-         H8QqRJgcqsEAor9HDI5iDURQMQTv/x6BKAnbBiLGayDNd5GHzsp+CfspiTyLoXiiVBoI
-         L7zQ==
-X-Gm-Message-State: AC+VfDyZec4nQXNQQ17UaFIPhwAiiuj4uoQACgfBnb8W1MAacB3XvOuf
-        Q/7w9KbMD/FFTW4ppXUh63AHn+o=
-X-Google-Smtp-Source: ACHHUZ5CS7mk6mAM2fYvrtpJa+GCdOe26eXVwKAHAWQiAcvcFXtzYZLVtM0rm9Ojto/ISeUmGRcWqts=
+        bh=rrlZpn5lxQz0wYWidXhNS5k4qYdBDD7AOOGwfPiDsdQ=;
+        b=MYB5QbFGczcaptYxK/3BpkyT4YbBgDlt3dmpy6Cfxb5irAakUpuovuX51GgMn2+r+b
+         2ycx1F1x9fwUN3U1bUFp7wG3XOeilE88F4pSaAdC7Kfmjp1fkWWfQZDZ5zMHWAXbPOSR
+         mIgAMZ2//G+nUMw2IykR/2EBToDRYPGokILg4eWCOOx0oVJqIx4liEBaqGQKmNc6UzTw
+         0LgF3ZN796DZpowfc9O34UB8Wde9Jp+6VcsaR0LXU1BW9P1WgIOA8S/mcCCd2Y1EGKRm
+         zmRGakWw1DCIjfOD5F43GVL0l7aGs8MSnYD/3B4sHWgJ8a4lELwmdylhKiYc6H7x1OVs
+         spPw==
+X-Gm-Message-State: AC+VfDzqCx81MCvv5/h8deGnK/akP5vXKQpo6uCVLe+M3DtnxRiFgKBw
+        ncwQFGVwAfk/sw8QjxUX7ygcXeQ=
+X-Google-Smtp-Source: ACHHUZ7bLZybv9LVeL4X5M5xX1h96wUcd50pNUsrXoFbzJBGVtFUeHzy5iTZQluDbjMVvEYQTCD10jE=
 X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2d3:205:b3a7:7c59:b96b:adaa])
- (user=pcc job=sendgmr) by 2002:a25:8407:0:b0:ba8:4b22:4e8a with SMTP id
- u7-20020a258407000000b00ba84b224e8amr1065312ybk.0.1684290087741; Tue, 16 May
- 2023 19:21:27 -0700 (PDT)
-Date:   Tue, 16 May 2023 19:21:12 -0700
+ (user=pcc job=sendgmr) by 2002:a81:ae54:0:b0:559:f89f:bc81 with SMTP id
+ g20-20020a81ae54000000b00559f89fbc81mr23166501ywk.6.1684290089941; Tue, 16
+ May 2023 19:21:29 -0700 (PDT)
+Date:   Tue, 16 May 2023 19:21:13 -0700
 In-Reply-To: <20230517022115.3033604-1-pcc@google.com>
-Message-Id: <20230517022115.3033604-3-pcc@google.com>
+Message-Id: <20230517022115.3033604-4-pcc@google.com>
 Mime-Version: 1.0
 References: <20230517022115.3033604-1-pcc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Subject: [PATCH v3 2/3] mm: Call arch_swap_restore() from unuse_pte()
+Subject: [PATCH v3 3/3] arm64: mte: Simplify swap tag restoration logic
 From:   Peter Collingbourne <pcc@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Peter Collingbourne <pcc@google.com>,
@@ -83,37 +83,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We would like to move away from requiring architectures to restore
-metadata from swap in the set_pte_at() implementation, as this is not only
-error-prone but adds complexity to the arch-specific code. This requires
-us to call arch_swap_restore() before calling swap_free() whenever pages
-are restored from swap. We are currently doing so everywhere except in
-unuse_pte(); do so there as well.
+As a result of the previous two patches, there are no circumstances
+in which a swapped-in page is installed in a page table without first
+having arch_swap_restore() called on it. Therefore, we no longer need
+the logic in set_pte_at() that restores the tags, so remove it.
+
+Because we can now rely on the page being locked, we no longer need to
+handle the case where a page is having its tags restored by multiple tasks
+concurrently, so we can slightly simplify the logic in mte_restore_tags().
 
 Signed-off-by: Peter Collingbourne <pcc@google.com>
-Link: https://linux-review.googlesource.com/id/I68276653e612d64cde271ce1b5a99ae05d6bbc4f
+Link: https://linux-review.googlesource.com/id/I8ad54476f3b2d0144ccd8ce0c1d7a2963e5ff6f3
 ---
- mm/swapfile.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+v3:
+- Rebased onto arm64/for-next/fixes, which already has a fix
+  for the issue previously tagged, therefore removed Fixes:
+  tag
 
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 274bbf797480..e9843fadecd6 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -1794,6 +1794,13 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 		goto setpte;
- 	}
+ arch/arm64/include/asm/mte.h     |  4 ++--
+ arch/arm64/include/asm/pgtable.h | 14 ++----------
+ arch/arm64/kernel/mte.c          | 37 ++++++--------------------------
+ arch/arm64/mm/mteswap.c          |  7 +++---
+ 4 files changed, 14 insertions(+), 48 deletions(-)
+
+diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
+index c028afb1cd0b..4cedbaa16f41 100644
+--- a/arch/arm64/include/asm/mte.h
++++ b/arch/arm64/include/asm/mte.h
+@@ -90,7 +90,7 @@ static inline bool try_page_mte_tagging(struct page *page)
+ }
  
-+	/*
-+	 * Some architectures may have to restore extra metadata to the page
-+	 * when reading from swap. This metadata may be indexed by swap entry
-+	 * so this must be called before swap_free().
-+	 */
-+	arch_swap_restore(entry, page_folio(page));
-+
- 	/* See do_swap_page() */
- 	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
- 	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
+ void mte_zero_clear_page_tags(void *addr);
+-void mte_sync_tags(pte_t old_pte, pte_t pte);
++void mte_sync_tags(pte_t pte);
+ void mte_copy_page_tags(void *kto, const void *kfrom);
+ void mte_thread_init_user(void);
+ void mte_thread_switch(struct task_struct *next);
+@@ -122,7 +122,7 @@ static inline bool try_page_mte_tagging(struct page *page)
+ static inline void mte_zero_clear_page_tags(void *addr)
+ {
+ }
+-static inline void mte_sync_tags(pte_t old_pte, pte_t pte)
++static inline void mte_sync_tags(pte_t pte)
+ {
+ }
+ static inline void mte_copy_page_tags(void *kto, const void *kfrom)
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 0bd18de9fd97..e8a252e62b12 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -337,18 +337,8 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+ 	 * don't expose tags (instruction fetches don't check tags).
+ 	 */
+ 	if (system_supports_mte() && pte_access_permitted(pte, false) &&
+-	    !pte_special(pte)) {
+-		pte_t old_pte = READ_ONCE(*ptep);
+-		/*
+-		 * We only need to synchronise if the new PTE has tags enabled
+-		 * or if swapping in (in which case another mapping may have
+-		 * set tags in the past even if this PTE isn't tagged).
+-		 * (!pte_none() && !pte_present()) is an open coded version of
+-		 * is_swap_pte()
+-		 */
+-		if (pte_tagged(pte) || (!pte_none(old_pte) && !pte_present(old_pte)))
+-			mte_sync_tags(old_pte, pte);
+-	}
++	    !pte_special(pte) && pte_tagged(pte))
++		mte_sync_tags(pte);
+ 
+ 	__check_safe_pte_update(mm, ptep, pte);
+ 
+diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+index 7e89968bd282..c40728046fed 100644
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
+@@ -35,41 +35,18 @@ DEFINE_STATIC_KEY_FALSE(mte_async_or_asymm_mode);
+ EXPORT_SYMBOL_GPL(mte_async_or_asymm_mode);
+ #endif
+ 
+-static void mte_sync_page_tags(struct page *page, pte_t old_pte,
+-			       bool check_swap, bool pte_is_tagged)
+-{
+-	if (check_swap && is_swap_pte(old_pte)) {
+-		swp_entry_t entry = pte_to_swp_entry(old_pte);
+-
+-		if (!non_swap_entry(entry))
+-			mte_restore_tags(entry, page);
+-	}
+-
+-	if (!pte_is_tagged)
+-		return;
+-
+-	if (try_page_mte_tagging(page)) {
+-		mte_clear_page_tags(page_address(page));
+-		set_page_mte_tagged(page);
+-	}
+-}
+-
+-void mte_sync_tags(pte_t old_pte, pte_t pte)
++void mte_sync_tags(pte_t pte)
+ {
+ 	struct page *page = pte_page(pte);
+ 	long i, nr_pages = compound_nr(page);
+-	bool check_swap = nr_pages == 1;
+-	bool pte_is_tagged = pte_tagged(pte);
+-
+-	/* Early out if there's nothing to do */
+-	if (!check_swap && !pte_is_tagged)
+-		return;
+ 
+ 	/* if PG_mte_tagged is set, tags have already been initialised */
+-	for (i = 0; i < nr_pages; i++, page++)
+-		if (!page_mte_tagged(page))
+-			mte_sync_page_tags(page, old_pte, check_swap,
+-					   pte_is_tagged);
++	for (i = 0; i < nr_pages; i++, page++) {
++		if (try_page_mte_tagging(page)) {
++			mte_clear_page_tags(page_address(page));
++			set_page_mte_tagged(page);
++		}
++	}
+ 
+ 	/* ensure the tags are visible before the PTE is set */
+ 	smp_wmb();
+diff --git a/arch/arm64/mm/mteswap.c b/arch/arm64/mm/mteswap.c
+index cd508ba80ab1..3a78bf1b1364 100644
+--- a/arch/arm64/mm/mteswap.c
++++ b/arch/arm64/mm/mteswap.c
+@@ -53,10 +53,9 @@ void mte_restore_tags(swp_entry_t entry, struct page *page)
+ 	if (!tags)
+ 		return;
+ 
+-	if (try_page_mte_tagging(page)) {
+-		mte_restore_page_tags(page_address(page), tags);
+-		set_page_mte_tagged(page);
+-	}
++	WARN_ON_ONCE(!try_page_mte_tagging(page));
++	mte_restore_page_tags(page_address(page), tags);
++	set_page_mte_tagged(page);
+ }
+ 
+ void mte_invalidate_tags(int type, pgoff_t offset)
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
