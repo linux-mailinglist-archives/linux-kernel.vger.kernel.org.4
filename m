@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5488705FD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE929705FD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbjEQGUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 02:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
+        id S232577AbjEQGVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 02:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjEQGUQ (ORCPT
+        with ESMTP id S231761AbjEQGVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 02:20:16 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F532691
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:20:15 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f423521b10so2176775e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:20:14 -0700 (PDT)
+        Wed, 17 May 2023 02:21:05 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F432690
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:21:04 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30644c18072so169582f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684304413; x=1686896413;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E2SYMNkYj5fwh2CwNKXNMw46e/jfwO8wrtwmmlwcF+U=;
-        b=BwH0XaCVAk3BuMCFjpXVa3jmDLdLInbVss2XtWSfcGd2KzJkIKvxnaOdoONNclKG6b
-         4DNXjKrxNrWjHJEST/TyPvQjuBVg7xkSDfdR7i+zXEO8Pe6kuBhoRImqDSAJiWycHwsJ
-         X8iFScjWV3U7dgbDIMc8IoYcjj8aTGKTFrRrulJXeE5eVPKMHAxo2ZNa+ioDDf/JLEV8
-         WFdmDLhgnEtRi2tWot6BvLE3pVP783A6svlg64qH6QdW6ZfLNHJNtBO9KopoyDLnfkt2
-         r+WJBNS8CB9Tv7aKTFNh6Ve1eso+AfrXkw1/VXXdDwLi1+tCOth9cewsFuz3pkFn5y0d
-         cGtg==
+        d=gmail.com; s=20221208; t=1684304463; x=1686896463;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s3ZoBkyA20S5DTdyyP5tByv+QSgEyMwfqwV8c9kD140=;
+        b=P8RRYSTStyO/5/f4NJKVG/ZHYLkeB6wgqmu7btxrr1iDGqSIuosSv/k72eOWuTOeIl
+         F7xdz4xLlW1UC4r5Z/syHHyLjEnR9x1A0xJqqpsFqX1LurpTok0el2TCr/d32/l8WnH9
+         1OcIFDCPzgTpYA04t/WYA95u6kp51qoIzg/6RbxFxS4gwQOfbXLaLaUNVI5fYTmic8D4
+         DzqiGeK26Wt3/7WZkOnLO5yKB6QYmF5ELWQO2HObuZ2JCG1FqGJ0/MKSJjsOGKf1GcgJ
+         O160RMjH5y0ZybGk7Z7y8ydtdq1G5nwZSsvHljNA9Dkd+7bDP+u5/iXAu75FCLOWfDqb
+         r3Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684304413; x=1686896413;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E2SYMNkYj5fwh2CwNKXNMw46e/jfwO8wrtwmmlwcF+U=;
-        b=RlxemLeQZtRwdT9SOTmXFgrROncM6YZ551y84B8UuWFM5iRyRbVOyxmGyR/HSNMcyj
-         /Jq6wiEYepYVClfTXlsoBfjTNSAldD5A/CrRSet/cFrgygn+I6S2WgDdacoyZBM9d6Kh
-         7SiinCD6N1Y/JIjzYVy4xzoP4e2+EhSWiPVn+P52gA9cnvKGOaoZSwd52JP82+SiBBrT
-         fwGpHggQJe87hkQoP6x4xBJp5rvgmQmv9Qq9wkgNpXPWLve40wMys8BA9QQuRtZ+UO/l
-         3LtG9jXuoemET7CNSgBEu8nO//+Yr15GO9t/OMxUqdceFj2Ivx/YDKySqBP163xWmKcC
-         AnMQ==
-X-Gm-Message-State: AC+VfDwPDn/ZbuqyPc+groro+N/hpa2EiEzCfhPeptUEw5NE4KecyeWS
-        ucnAqLr8la2EISqvlIKqfpYWBG0F/Q==
-X-Google-Smtp-Source: ACHHUZ7npiNQcZZwu7ZgV/R5wR36KjVl8u2DOnb9h7uJV+178AtK44FXGzM0999L31ZdiNoMT9iFNQ==
-X-Received: by 2002:a7b:c7cb:0:b0:3f4:2cb2:a6cf with SMTP id z11-20020a7bc7cb000000b003f42cb2a6cfmr18565734wmk.10.1684304413293;
-        Tue, 16 May 2023 23:20:13 -0700 (PDT)
-Received: from p183 ([46.53.250.125])
-        by smtp.gmail.com with ESMTPSA id x7-20020a05600c21c700b003f4e3ed98ffsm1056121wmj.35.2023.05.16.23.20.12
+        d=1e100.net; s=20221208; t=1684304463; x=1686896463;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s3ZoBkyA20S5DTdyyP5tByv+QSgEyMwfqwV8c9kD140=;
+        b=L+hlElO42i81zv1ynGp0OOMXhIKPv9KFsJFnQi5mO/cQKRRJJCQPH2H8qxVAC3JhCE
+         z5bgjsq9DtsWRId4D5YjG4U1/dnQHyof9XIRJ41kDM1IotYCFmvCESUG6zE01TY0iF8X
+         NGz9Ba81F6ouHuB945DWAbbqRTUBH2j5F1nqfj6fcE86RKeu9Ex6vckGlGgzlb31sFz3
+         4lrnLb7hSAPOCytaBZcwnxhBR9oxpuzKYSbTXdDh6YrbIjhOzfGfdywUMA8EXg1Fjh8M
+         qNgMtcpp6NMLN6An83L30Q4fygi/tSKztSbdFIHgnH7QHkFL9Txb7Hhkp7Ox702ZVELr
+         1VwA==
+X-Gm-Message-State: AC+VfDzWzk0bd14KBLu1bS72tcgeD++5eoVcN+Mt2by0vM4qyqxhQYE0
+        b+xyjb9eCq7MtyJZKCrFuqo2pVH0VPXv9Q==
+X-Google-Smtp-Source: ACHHUZ618y+YEYNwPVMIefe4aIrlbudzEMK7Q3k92kQNoGobewTK+u0fSxZmD1lu5xRSbrgBq/vuIA==
+X-Received: by 2002:a5d:550c:0:b0:2f6:987f:a0f5 with SMTP id b12-20020a5d550c000000b002f6987fa0f5mr26388667wrv.5.1684304462838;
+        Tue, 16 May 2023 23:21:02 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id f12-20020adff8cc000000b002fe13ec49fasm1508567wrq.98.2023.05.16.23.21.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 23:20:12 -0700 (PDT)
-Date:   Wed, 17 May 2023 09:20:10 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] auto: add "auto" keyword as alias for __auto_type
-Message-ID: <7aa74931-f558-4eb9-9083-f4d4789d4fb0@p183>
-References: <20230516164947.86543-1-adobriyan@gmail.com>
- <20230516164947.86543-2-adobriyan@gmail.com>
- <20230516143910.ad39ddb949ca29d3a7cfdba1@linux-foundation.org>
- <CAHk-=wizmGie-9SznxRraSEAAQ7OHmyR0y0foWEDF35M7dfJEw@mail.gmail.com>
+        Tue, 16 May 2023 23:21:01 -0700 (PDT)
+Date:   Wed, 17 May 2023 07:21:00 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v2] mm: userfaultfd: avoid passing an invalid range to
+ vma_merge()
+Message-ID: <1f94f0be-a3fa-4539-9278-0e876f693c09@lucifer.local>
+References: <ZGKjvceDfpKMxtfb@x1n>
+ <bcfb0376-ccf4-4467-9da5-8ae6f1c86876@lucifer.local>
+ <20abea10-5307-498b-b9df-8f0b2fed1701@lucifer.local>
+ <ZGOcAOFOjx3XPGqO@x1n>
+ <9739133c-3ee7-4e94-a6a8-783045a50ac6@lucifer.local>
+ <ZGPn00ZqqQqdmk2e@x1n>
+ <e90c2b38-805b-4df1-abdd-8ee460b12b72@lucifer.local>
+ <ZGP4KSw/yD5ItTYu@x1n>
+ <9174fd63-5d32-4b83-bf6b-27f9cb00bd9e@lucifer.local>
+ <ZGQEhuXTBdzC2CGC@x1n>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wizmGie-9SznxRraSEAAQ7OHmyR0y0foWEDF35M7dfJEw@mail.gmail.com>
+In-Reply-To: <ZGQEhuXTBdzC2CGC@x1n>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -76,64 +86,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 04:18:59PM -0700, Linus Torvalds wrote:
-> On Tue, May 16, 2023 at 2:39 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+On Tue, May 16, 2023 at 06:32:38PM -0400, Peter Xu wrote:
+> On Tue, May 16, 2023 at 11:15:54PM +0100, Lorenzo Stoakes wrote:
+> > I'll try to address this in a later series, I don't think there's much use
+> > in going round in circles on this. If you dislike that series, you're
+> > welcome to provide negative feedback there, I don't think there's much use
+> > in discussing further here.
+>
+> I'm happy to read it, sorry if any of my wording was intruding, I didn't
+> mean so.
+
+No it's fine, I've perhaps not been clear, but this has all inspired an
+upcoming change so it's all good :)
+
+>
+> I think there's chance at least on generalizing vma flag change cases, even
+> though I'm not sure whether vma_merge() needs change.  Maybe it can be
+> another layer on top of it while keeping vma_merge() as is, but I can't tell.
+>
+
+Indeed, will dig in!
+
+> > We've seen a regression on invalid input to vma_merge() (explicitly I mean
+> > triggering a VM_WARN_ON()) and VMA fragmentation you were not aware of
+> > here, that does not strike me as a great + clear interface.
+>
+> Yes, the code needs time to read through, even the interface.  I don't
+> think I fully digested that myself.
+>
+> [...]
+>
+> > Ah the thanks you get for contributing a regression fix _and_ a repro - a
+> > nack :) will you at least give me some kind of a tag... or buy me a beer?
+> > ;)
+>
+> I can. :)
+>
+> We actually met on the conference, if I'll be able to meet you somewhere
+> that's what I can do.
+
+Yeah was nice to meet! And only being tongue in cheek, I actually at this
+point do think your suggestion should replace my patch.
+
+>
+> I was probably hashing in the words, sorry about that if so, and thanks for
+> looking at this issue!  I appreciate both your assertion patch and the png
+> documentation file.
+>
+> It's just that I feel irresponsible when we were talking about having vma
+> not merged correctly but then the discussion tried to end at there saying
+> it kept so so it's fine.  IMHO we should look into that problem or
+> something could be missing here.  Then when I was looking into that
+> not-merged issue I found that it's not uffd that's special.
+
+Sure, we should try to keep all invocations as close as possible if we
+can. It does seem as you say that uffd got left behind on this.
+
+>
+> > > Before that I'd like to know whether you agree that the new patch 1 (I'll
+> > > fixup the vma_prev() side effect) could be a better solution than the
+> > > current one, no matter whether we need a full revert or not.
 > >
-> > It is pretty cool and could get used a lot.  Cc Linus for his thoughts?
-> 
-> I'm not against it, although I'm also not convinced we need / want to
-> convert existing users of typeof().
-> 
-> The reason we use typeof is that that has always worked in gcc, and
-> __auto_type is relatively "new" in contrast.
-> 
-> But we require at least gcc-5.1 anyway, so it should be fine.
-> 
-> Note that mindless conversions can be dangerous: using "typeof(x)" in
-> macros may end up feeling a bit verbose, and "auto" can appear nicer,
-> but the auto use needs to be *very* careful about integer promotions.
-> 
-> For example, in
-> 
->   #define WRAPPER(c) do { \
->         typeof(c) __c = (c);
->         ...
-> 
-> it is very obvious what the type is.
-> 
-> But while using
-> 
->    #define WRAPPER(c) do { \
->         auto __c = (c);
-> 
-> gives you the same result with less redundancy (no need to state 'c'
-> twice), if you *ever* then happen to make that an integer expression
-> that is not *just* 'c' - even a trivial one - suddenly 'var' goes from
-> 'char' to 'int' because of the integer expression.
-> 
-> So __auto_type (and I agree that if we use it, we should probably just
-> wrap it in an 'auto' #define, since the legacy 'auto' keyword is
-> useless) can result in simpler and more obvious code, but it can also
-> lead to subtle type issues that are easy to then overlook.
-> 
-> The above is not an argument against 'auto', but it's one reason I'm
-> not convinced some mindless "convert existing uses of __typeof__" is a
-> good idea even if it might make some of them more legible.
-> 
-> But I have nothing against people starting to use it in new code.
-> 
-> And no, I don't think we should do that
-> 
->     KBUILD_CFLAGS += -Dauto=__auto_type
-> 
-> in the Makefile as Alexey suggests.
-> 
-> I think this is a 'compiler_types.h' kind of thing, and goes along
-> with all the other "simplied syntax" things we do (ie we redefine
-> 'inline', we add "__weak" etc etc etc).
+> > In principle it looks fine actually (pending Liam's assessment), case 4/5
+> > should handle it, but I feel like we need a comment (perhaps only in commit
+> > msg) to make clear that we are ensuring that the inputs to vma_merge() are
+> > either clamped to VMAs or case 4/5.
+> >
+> > Let's see what Liam thinks, then let me check it locally to give a final
+> > OK, if I may.
+>
+> Sounds perfect here.  Thanks a lot.
 
-Sure. I thought about where to put it in the filesystem under nice name
-but somehow completely forgot about compiler_types.h
+Great!
 
-I'll probably go through core headers at least and start conversion
-myself. Expect version 2 soon.
+>
+> --
+> Peter Xu
+>
