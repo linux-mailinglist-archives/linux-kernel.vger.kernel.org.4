@@ -2,321 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAE8705DAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D306705DAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbjEQDCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 23:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S232336AbjEQDEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 23:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbjEQDBy (ORCPT
+        with ESMTP id S232353AbjEQDDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 23:01:54 -0400
-Received: from out-6.mta0.migadu.com (out-6.mta0.migadu.com [IPv6:2001:41d0:1004:224b::6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3A9C3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:01:45 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684292503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=55M22bsLdEr4kZX97cqw/VukGXS1ErXW+2lln9tzz2I=;
-        b=ekVpBT7FD81laf96e1vkfy22EOyWHt07IfyLUC4cFSsADY4HoDAPFfm11pBqXB+DHuKbiX
-        VIh9Mud3R0SAEhgCinn3zgSewkYWuwu9GDeXmF+0NdcAAbALzMCPt8AD6PrbEo37LLOcNF
-        mLBGQSlbYaOuajieqOm/Xd+1RDBAF+Y=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     vkoul@kernel.org
-Cc:     Cai huoqing <cai.huoqing@linux.dev>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH v10 4/4] dmaengine: dw-edma: Add HDMA DebugFS support
-Date:   Wed, 17 May 2023 11:01:14 +0800
-Message-Id: <20230517030115.21093-5-cai.huoqing@linux.dev>
-In-Reply-To: <20230517030115.21093-1-cai.huoqing@linux.dev>
-References: <20230517030115.21093-1-cai.huoqing@linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 23:03:55 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68EE946B6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:03:10 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Ax3ertQ2Rkr14JAA--.16416S3;
+        Wed, 17 May 2023 11:03:09 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_8vrQ2RkyvNkAA--.41740S2;
+        Wed, 17 May 2023 11:03:08 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Christian Brauner <brauner@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH] LoongArch: Add support to clone a time namespace
+Date:   Wed, 17 May 2023 11:03:00 +0800
+Message-Id: <1684292580-2455-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Dx_8vrQ2RkyvNkAA--.41740S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxGr1DJFWfCryxXr1UCr13twb_yoWrCF1rpF
+        Z2krsrJw4UWryfKFWaq3sxurn8Grn7Ww42qF4I93yfAF1IgryDZr1vyrykZF45t3ykC34I
+        gFWfWw4Y9F4UX3DanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cai huoqing <cai.huoqing@linux.dev>
+When execute the following command to test clone3 on LoongArch:
 
-Add HDMA DebugFS support to show registers content
+  # cd tools/testing/selftests/clone3 && make && ./clone3
 
-Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
+we can see the following error info:
+
+  # [5719] Trying clone3() with flags 0x80 (size 0)
+  # Invalid argument - Failed to create new process
+  # [5719] clone3() with flags says: -22 expected 0
+  not ok 18 [5719] Result (-22) is different than expected (0)
+
+This is because if CONFIG_TIME_NS is not set, but the flag
+CLONE_NEWTIME (0x80) is used to clone a time namespace, it
+will return -EINVAL in copy_time_ns().
+
+Here is the related code in include/linux/time_namespace.h:
+
+  #ifdef CONFIG_TIME_NS
+  ...
+  struct time_namespace *copy_time_ns(unsigned long flags,
+				      struct user_namespace *user_ns,
+				      struct time_namespace *old_ns);
+  ...
+  #else
+  ...
+  static inline
+  struct time_namespace *copy_time_ns(unsigned long flags,
+				      struct user_namespace *user_ns,
+				      struct time_namespace *old_ns)
+  {
+	  if (flags & CLONE_NEWTIME)
+		  return ERR_PTR(-EINVAL);
+
+	  return old_ns;
+  }
+  ...
+  #endif
+
+Here is the complete call stack:
+
+  clone3()
+    kernel_clone()
+      copy_process()
+        copy_namespaces()
+          create_new_namespaces()
+            copy_time_ns()
+              clone_time_ns()
+
+Because CONFIG_TIME_NS depends on GENERIC_VDSO_TIME_NS, select
+GENERIC_VDSO_TIME_NS to enable CONFIG_TIME_NS to build the real
+implementation of copy_time_ns() in kernel/time/namespace.c.
+
+Additionally, it needs to define some arch dependent functions
+such as __arch_get_timens_vdso_data(), arch_get_vdso_data() and
+vdso_join_timens(), then the failed test can be fixed.
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-v9->v10: Update commit log
 
-v9 link:
-  https://lore.kernel.org/lkml/20230413033156.93751-5-cai.huoqing@linux.dev/
+This is based on 6.4-rc2
 
- drivers/dma/dw-edma/Makefile             |   3 +-
- drivers/dma/dw-edma/dw-hdma-v0-core.c    |   2 +
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.c | 170 +++++++++++++++++++++++
- drivers/dma/dw-edma/dw-hdma-v0-debugfs.h |  22 +++
- 4 files changed, 196 insertions(+), 1 deletion(-)
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
- create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+ arch/loongarch/Kconfig                         |  1 +
+ arch/loongarch/include/asm/vdso/gettimeofday.h |  7 ++++++
+ arch/loongarch/kernel/vdso.c                   | 32 ++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+)
 
-diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
-index b1c91ef2c63d..83ab58f87760 100644
---- a/drivers/dma/dw-edma/Makefile
-+++ b/drivers/dma/dw-edma/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
--dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
-+dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o	\
-+				   dw-hdma-v0-debugfs.o
- dw-edma-objs			:= dw-edma-core.o	\
- 				   dw-edma-v0-core.o	\
- 				   dw-hdma-v0-core.o $(dw-edma-y)
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-index 22b7b0410deb..00b735a0202a 100644
---- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
-@@ -11,6 +11,7 @@
- #include "dw-edma-core.h"
- #include "dw-hdma-v0-core.h"
- #include "dw-hdma-v0-regs.h"
-+#include "dw-hdma-v0-debugfs.h"
- 
- enum dw_hdma_control {
- 	DW_HDMA_V0_CB					= BIT(0),
-@@ -276,6 +277,7 @@ static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
- /* HDMA debugfs callbacks */
- static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
- {
-+	dw_hdma_v0_debugfs_on(dw);
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index d38b066..93b167f 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -80,6 +80,7 @@ config LOONGARCH
+ 	select GENERIC_SCHED_CLOCK
+ 	select GENERIC_SMP_IDLE_THREAD
+ 	select GENERIC_TIME_VSYSCALL
++	select GENERIC_VDSO_TIME_NS
+ 	select GPIOLIB
+ 	select HAS_IOPORT
+ 	select HAVE_ARCH_AUDITSYSCALL
+diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
+index 7b2cd37..1af88ac 100644
+--- a/arch/loongarch/include/asm/vdso/gettimeofday.h
++++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
+@@ -94,6 +94,13 @@ static __always_inline const struct vdso_data *__arch_get_vdso_data(void)
+ 	return get_vdso_data();
  }
  
- static const struct dw_edma_core_ops dw_hdma_v0_core = {
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-new file mode 100644
-index 000000000000..520c81978b08
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2023 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ *
-+ * Author: Cai Huoqing <cai.huoqing@linux.dev>
-+ */
-+
-+#include <linux/debugfs.h>
-+#include <linux/bitfield.h>
-+
-+#include "dw-hdma-v0-debugfs.h"
-+#include "dw-hdma-v0-regs.h"
-+#include "dw-edma-core.h"
-+
-+#define REGS_ADDR(dw, name)						       \
-+	({								       \
-+		struct dw_hdma_v0_regs __iomem *__regs = (dw)->chip->reg_base; \
-+									       \
-+		(void __iomem *)&__regs->name;				       \
-+	})
-+
-+#define REGS_CH_ADDR(dw, name, _dir, _ch)				       \
-+	({								       \
-+		struct dw_hdma_v0_ch_regs __iomem *__ch_regs;		       \
-+									       \
-+		if (_dir == EDMA_DIR_READ)				       \
-+			__ch_regs = REGS_ADDR(dw, ch[_ch].rd);		       \
-+		else							       \
-+			__ch_regs = REGS_ADDR(dw, ch[_ch].wr);		       \
-+									       \
-+		(void __iomem *)&__ch_regs->name;			       \
-+	})
-+
-+#define CTX_REGISTER(dw, name, dir, ch) \
-+	{#name, REGS_CH_ADDR(dw, name, dir, ch)}
-+
-+#define WRITE_STR				"write"
-+#define READ_STR				"read"
-+#define CHANNEL_STR				"channel"
-+#define REGISTERS_STR				"registers"
-+
-+struct dw_hdma_debugfs_entry {
-+	const char				*name;
-+	void __iomem				*reg;
-+};
-+
-+static int dw_hdma_debugfs_u32_get(void *data, u64 *val)
++#ifdef CONFIG_TIME_NS
++static __always_inline
++const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
 +{
-+	struct dw_hdma_debugfs_entry *entry = data;
-+	void __iomem *reg = entry->reg;
++	return get_vdso_data() + PAGE_SIZE;
++}
++#endif
+ #endif /* !__ASSEMBLY__ */
+ 
+ #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
+diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+index eaebd2e..cf62103 100644
+--- a/arch/loongarch/kernel/vdso.c
++++ b/arch/loongarch/kernel/vdso.c
+@@ -14,6 +14,7 @@
+ #include <linux/random.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
++#include <linux/time_namespace.h>
+ #include <linux/timekeeper_internal.h>
+ 
+ #include <asm/page.h>
+@@ -73,6 +74,37 @@ static int __init init_vdso(void)
+ }
+ subsys_initcall(init_vdso);
+ 
++#ifdef CONFIG_TIME_NS
++struct vdso_data *arch_get_vdso_data(void *vvar_page)
++{
++	return (struct vdso_data *)(vvar_page);
++}
 +
-+	*val = readl(reg);
++/*
++ * The vvar mapping contains data for a specific time namespace, so when a
++ * task changes namespace we must unmap its vvar data for the old namespace.
++ * Subsequent faults will map in data for the new namespace.
++ *
++ * For more details see timens_setup_vdso_data().
++ */
++int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
++{
++	struct mm_struct *mm = task->mm;
++	struct vm_area_struct *vma;
++
++	VMA_ITERATOR(vmi, mm, 0);
++
++	mmap_read_lock(mm);
++	for_each_vma(vmi, vma) {
++		if (vma_is_special_mapping(vma, &vdso_info.data_mapping))
++			zap_vma_pages(vma);
++	}
++	mmap_read_unlock(mm);
 +
 +	return 0;
 +}
-+DEFINE_DEBUGFS_ATTRIBUTE(fops_x32, dw_hdma_debugfs_u32_get, NULL, "0x%08llx\n");
++#endif
 +
-+static void dw_hdma_debugfs_create_x32(struct dw_edma *dw,
-+				       const struct dw_hdma_debugfs_entry ini[],
-+				       int nr_entries, struct dentry *dent)
-+{
-+	struct dw_hdma_debugfs_entry *entries;
-+	int i;
-+
-+	entries = devm_kcalloc(dw->chip->dev, nr_entries, sizeof(*entries),
-+			       GFP_KERNEL);
-+	if (!entries)
-+		return;
-+
-+	for (i = 0; i < nr_entries; i++) {
-+		entries[i] = ini[i];
-+
-+		debugfs_create_file_unsafe(entries[i].name, 0444, dent,
-+					   &entries[i], &fops_x32);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
-+				    u16 ch, struct dentry *dent)
-+{
-+	const struct dw_hdma_debugfs_entry debugfs_regs[] = {
-+		CTX_REGISTER(dw, ch_en, dir, ch),
-+		CTX_REGISTER(dw, doorbell, dir, ch),
-+		CTX_REGISTER(dw, prefetch, dir, ch),
-+		CTX_REGISTER(dw, handshake, dir, ch),
-+		CTX_REGISTER(dw, llp.lsb, dir, ch),
-+		CTX_REGISTER(dw, llp.msb, dir, ch),
-+		CTX_REGISTER(dw, cycle_sync, dir, ch),
-+		CTX_REGISTER(dw, transfer_size, dir, ch),
-+		CTX_REGISTER(dw, sar.lsb, dir, ch),
-+		CTX_REGISTER(dw, sar.msb, dir, ch),
-+		CTX_REGISTER(dw, dar.lsb, dir, ch),
-+		CTX_REGISTER(dw, dar.msb, dir, ch),
-+		CTX_REGISTER(dw, watermark_en, dir, ch),
-+		CTX_REGISTER(dw, control1, dir, ch),
-+		CTX_REGISTER(dw, func_num, dir, ch),
-+		CTX_REGISTER(dw, qos, dir, ch),
-+		CTX_REGISTER(dw, ch_stat, dir, ch),
-+		CTX_REGISTER(dw, int_stat, dir, ch),
-+		CTX_REGISTER(dw, int_setup, dir, ch),
-+		CTX_REGISTER(dw, int_clear, dir, ch),
-+		CTX_REGISTER(dw, msi_stop.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_stop.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_watermark.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_watermark.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_abort.lsb, dir, ch),
-+		CTX_REGISTER(dw, msi_abort.msb, dir, ch),
-+		CTX_REGISTER(dw, msi_msgdata, dir, ch),
-+	};
-+	int nr_entries = ARRAY_SIZE(debugfs_regs);
-+
-+	dw_hdma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
-+}
-+
-+static void dw_hdma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
-+{
-+	struct dentry *regs_dent, *ch_dent;
-+	char name[16];
-+	int i;
-+
-+	regs_dent = debugfs_create_dir(WRITE_STR, dent);
-+
-+	for (i = 0; i < dw->wr_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dent = debugfs_create_dir(name, regs_dent);
-+
-+		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_WRITE, i, ch_dent);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
-+{
-+	struct dentry *regs_dent, *ch_dent;
-+	char name[16];
-+	int i;
-+
-+	regs_dent = debugfs_create_dir(READ_STR, dent);
-+
-+	for (i = 0; i < dw->rd_ch_cnt; i++) {
-+		snprintf(name, sizeof(name), "%s:%d", CHANNEL_STR, i);
-+
-+		ch_dent = debugfs_create_dir(name, regs_dent);
-+
-+		dw_hdma_debugfs_regs_ch(dw, EDMA_DIR_READ, i, ch_dent);
-+	}
-+}
-+
-+static void dw_hdma_debugfs_regs(struct dw_edma *dw)
-+{
-+	struct dentry *regs_dent;
-+
-+	regs_dent = debugfs_create_dir(REGISTERS_STR, dw->dma.dbg_dev_root);
-+
-+	dw_hdma_debugfs_regs_wr(dw, regs_dent);
-+	dw_hdma_debugfs_regs_rd(dw, regs_dent);
-+}
-+
-+void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-+{
-+	if (!debugfs_initialized())
-+		return;
-+
-+	debugfs_create_u32("mf", 0444, dw->dma.dbg_dev_root, &dw->chip->mf);
-+	debugfs_create_u16("wr_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->wr_ch_cnt);
-+	debugfs_create_u16("rd_ch_cnt", 0444, dw->dma.dbg_dev_root, &dw->rd_ch_cnt);
-+
-+	dw_hdma_debugfs_regs(dw);
-+}
-diff --git a/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-new file mode 100644
-index 000000000000..e6842c83777d
---- /dev/null
-+++ b/drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2023 Cai Huoqing
-+ * Synopsys DesignWare HDMA v0 debugfs
-+ *
-+ * Author: Cai Huoqing <cai.huoqing@linux.dev>
-+ */
-+
-+#ifndef _DW_HDMA_V0_DEBUG_FS_H
-+#define _DW_HDMA_V0_DEBUG_FS_H
-+
-+#include <linux/dma/edma.h>
-+
-+#ifdef CONFIG_DEBUG_FS
-+void dw_hdma_v0_debugfs_on(struct dw_edma *dw);
-+#else
-+static inline void dw_hdma_v0_debugfs_on(struct dw_edma *dw)
-+{
-+}
-+#endif /* CONFIG_DEBUG_FS */
-+
-+#endif /* _DW_HDMA_V0_DEBUG_FS_H */
+ static unsigned long vdso_base(void)
+ {
+ 	unsigned long base = STACK_TOP;
 -- 
-2.34.1
+2.1.0
 
