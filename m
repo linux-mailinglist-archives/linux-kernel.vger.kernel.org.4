@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C41706658
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60640706659
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjEQLO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S230492AbjEQLO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjEQLOm (ORCPT
+        with ESMTP id S230334AbjEQLOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:14:42 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8434626AA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:14:40 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-965f7bdab6bso111872466b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:14:40 -0700 (PDT)
+        Wed, 17 May 2023 07:14:43 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7555A46BC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:14:41 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9659e9bbff5so105167766b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:14:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684322079; x=1686914079;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8f/Ov+L9lgAMMtQvsESvWR48vQlBSC6eGHRApShSvK4=;
-        b=sIfEiJbFesnboqrvDwg/JbxitCUki5aOESmQeTg6BQTaFmpQel55ARJNOzBd8Mm4FZ
-         fL+tqM9jp+I4U1fmvk7eAQehUtyk/TO+AAf9RFsKbKkkeNL6LvaF4LYZf9tyVKUlhdHG
-         i/DH2lMxWzJ7WPE4l4CfVfUWeP2GrHWEytoP6jrQX7Zkda97O0tWivR4CwTB9QHVEG1K
-         rBrCq0Y2omMSb5Z4kuCIJMQcJtoef5ryB9wcSy0/JXqX6taG1+ccb7qg58us2ne/Zb0p
-         7V10XrAmSJFkQZ4ZLTGvktUpzOfMUh1Q3cz8HYSdwZJS0JiMw8iiZs2Yq8MuIiFD1/N1
-         tN3A==
+        d=linaro.org; s=google; t=1684322080; x=1686914080;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MAqmALiwc11sAnAJSge5XtvJDOci8R9bv0tfhhHhu0U=;
+        b=Xtqjci4XXLDyaSfLmoL3GH9a66Wn20m9qX10IAhmV5YCbC9FqW/gSQhxvp8mMTJpNE
+         OeovLhwFZuK2cGjdqe0dZkA9Ub46RgWo31XNE4W8793NsgsxRjrvggmNki0sdcC711fF
+         f4VYa5bA9X8UtiOddbUZ+4s80EGBHLCOYPLlv7FjFz++siY4Rfl+xFnUnRq5tDfWMf88
+         AcFqRubiMXgUBXyoKYD71Q1lzNzWT1TNX/S9RO0oqx8xKSTXTVnILq8W6YCY/mTaNHVz
+         fV3YGEd2vKyHx/ryBmYY5Q105wjikO7EQ32VB9OLbL2lkz05+s6dOtVtyoXpk67lVD61
+         iSaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684322079; x=1686914079;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8f/Ov+L9lgAMMtQvsESvWR48vQlBSC6eGHRApShSvK4=;
-        b=USG+B8m8dFBtOuwW1VlAu7vVzzRGDDTWrpReOjqyg5GXQ2w/pbZyOb9txGN4elu/nJ
-         6yLxBu0n1qtPjNZnpQFxUQebk033Oaaudk2FvpsVFUtpneyYgbv5a0ra2KAr7UniQPJ2
-         GjhxuBkTe8NyHRsSke2yW8HoNTb24FX/IUCtZFRtDLAKYeqbeAGoFeq2CJjSaFNgpEzZ
-         MaJpdNwFZ3z4ZqrPAZEeC3Ph/GeLgfFvdT/jHo8LQFZYTb+4Yx7dXI5kEVUaVwTtfZ+s
-         RZzMAgDWY+Q0MaWqe8EReVBvRNO8nTms7PaJRoJ5ra7Co4/XBilu55i7Eokl7cYi3gKy
-         /4qg==
-X-Gm-Message-State: AC+VfDwhgfWiF3m4OwbuJLe+chvfdaIKtu5Kr1TS7umhTidl/9s4JfoL
-        YsKlchlb2P/Wm0jNwNKdOx6Db52ndYFZmVFhe4s=
-X-Google-Smtp-Source: ACHHUZ4W3Tqy+kmA5/CrSkwq+i+Z6QU84MiGKQFNv45sP/3v7DwL6mlpqoPP47j1FG0KjZyNBcEakA==
-X-Received: by 2002:a17:906:9c83:b0:95f:4889:412a with SMTP id fj3-20020a1709069c8300b0095f4889412amr39964429ejc.33.1684322078958;
-        Wed, 17 May 2023 04:14:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684322080; x=1686914080;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MAqmALiwc11sAnAJSge5XtvJDOci8R9bv0tfhhHhu0U=;
+        b=ZeUpT5VZO5wc1IAFq1OUPGyCe9IevMK+kHH0IyQkZ5TTdKVQywwIdLbUVRcOY/xI0i
+         FrcmGl6He55jmI5LEoltIUt+Q07iMgJzuhS8BB8oOHnYYLljfwiLuV4YIk+XIq6RVfwL
+         zTUiWwfEGUNTfvgvqcWBBEgjCU3WzGnYwwKo8RLFXBy5t4DBMFVk34WnjZHJIX+9maj3
+         PY4Ci2YaDEDDnmUnM5Zhlo5jAyzp5rCNOCl9ArcUKXARRdrZ3q5Y5hujitF6mvEFaMQ0
+         bk7V4VqJVhq7ufO0RHUJN4jLMr4XK3R8Qx4hexbTlSyi33vBKJ4iuTaRezVGuq9yAn6Q
+         J69g==
+X-Gm-Message-State: AC+VfDwjvPtodLJvAqb4MWe6R7tcpGEyl3EjMedaRcOe4kx+5wkHuRAo
+        hEFAyvVs8xkcg1mFwEwnysar5Q==
+X-Google-Smtp-Source: ACHHUZ6HWoBfX2XrD7IXrL+hJZA8QoR0fr8+uZLTZShrjMYmoYmQnhgXL7NPlQyHhFag68Tv7SlmAQ==
+X-Received: by 2002:a17:907:1614:b0:8a5:8620:575 with SMTP id hb20-20020a170907161400b008a586200575mr38600206ejc.3.1684322079941;
+        Wed, 17 May 2023 04:14:39 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id ml18-20020a170906cc1200b0094f124a37c4sm12326880ejb.18.2023.05.17.04.14.38
+        by smtp.gmail.com with ESMTPSA id ml18-20020a170906cc1200b0094f124a37c4sm12326880ejb.18.2023.05.17.04.14.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 04:14:38 -0700 (PDT)
+        Wed, 17 May 2023 04:14:39 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Oder Chiou <oder_chiou@realtek.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -57,10 +58,12 @@ To:     Oder Chiou <oder_chiou@realtek.com>,
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 01/12] ASoC: codecs: rt1308: do not store status in state container
-Date:   Wed, 17 May 2023 13:14:05 +0200
-Message-Id: <20230517111416.424420-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 02/12] ASoC: codecs: rt1316: do not store status in state container
+Date:   Wed, 17 May 2023 13:14:06 +0200
+Message-Id: <20230517111416.424420-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230517111416.424420-1-krzysztof.kozlowski@linaro.org>
+References: <20230517111416.424420-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,38 +81,38 @@ state container but it never uses it later.  Simplify the code a bit.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- sound/soc/codecs/rt1308-sdw.c | 5 +----
- sound/soc/codecs/rt1308-sdw.h | 1 -
+ sound/soc/codecs/rt1316-sdw.c | 5 +----
+ sound/soc/codecs/rt1316-sdw.h | 1 -
  2 files changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/sound/soc/codecs/rt1308-sdw.c b/sound/soc/codecs/rt1308-sdw.c
-index 1797af824f60..313e97c94532 100644
---- a/sound/soc/codecs/rt1308-sdw.c
-+++ b/sound/soc/codecs/rt1308-sdw.c
-@@ -304,9 +304,6 @@ static int rt1308_update_status(struct sdw_slave *slave,
+diff --git a/sound/soc/codecs/rt1316-sdw.c b/sound/soc/codecs/rt1316-sdw.c
+index 2ee5e763e345..601b76320124 100644
+--- a/sound/soc/codecs/rt1316-sdw.c
++++ b/sound/soc/codecs/rt1316-sdw.c
+@@ -323,9 +323,6 @@ static int rt1316_update_status(struct sdw_slave *slave,
  {
- 	struct  rt1308_sdw_priv *rt1308 = dev_get_drvdata(&slave->dev);
+ 	struct  rt1316_sdw_priv *rt1316 = dev_get_drvdata(&slave->dev);
  
 -	/* Update the status */
--	rt1308->status = status;
+-	rt1316->status = status;
 -
  	if (status == SDW_SLAVE_UNATTACHED)
- 		rt1308->hw_init = false;
+ 		rt1316->hw_init = false;
  
-@@ -314,7 +311,7 @@ static int rt1308_update_status(struct sdw_slave *slave,
+@@ -333,7 +330,7 @@ static int rt1316_update_status(struct sdw_slave *slave,
  	 * Perform initialization only if slave status is present and
  	 * hw_init flag is false
  	 */
--	if (rt1308->hw_init || rt1308->status != SDW_SLAVE_ATTACHED)
-+	if (rt1308->hw_init || status != SDW_SLAVE_ATTACHED)
+-	if (rt1316->hw_init || rt1316->status != SDW_SLAVE_ATTACHED)
++	if (rt1316->hw_init || status != SDW_SLAVE_ATTACHED)
  		return 0;
  
  	/* perform I/O transfers required for Slave initialization */
-diff --git a/sound/soc/codecs/rt1308-sdw.h b/sound/soc/codecs/rt1308-sdw.h
-index 04ff18fa18e2..f816c73e247e 100644
---- a/sound/soc/codecs/rt1308-sdw.h
-+++ b/sound/soc/codecs/rt1308-sdw.h
-@@ -159,7 +159,6 @@ struct rt1308_sdw_priv {
+diff --git a/sound/soc/codecs/rt1316-sdw.h b/sound/soc/codecs/rt1316-sdw.h
+index e37121655bc1..dc1bfe40edd3 100644
+--- a/sound/soc/codecs/rt1316-sdw.h
++++ b/sound/soc/codecs/rt1316-sdw.h
+@@ -42,7 +42,6 @@ struct rt1316_sdw_priv {
  	struct snd_soc_component *component;
  	struct regmap *regmap;
  	struct sdw_slave *sdw_slave;
