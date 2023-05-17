@@ -2,109 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733C3707285
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08D8707298
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjEQTp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S229661AbjEQTx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjEQTpZ (ORCPT
+        with ESMTP id S229921AbjEQTx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:45:25 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343E3E44
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:45:24 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965d2749e2eso184538866b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684352722; x=1686944722;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DE2bkq/ui14lTBLwtUifajE1EvCpc5Pz1BLS66HrLtI=;
-        b=pv0XlTzQm0AHDjnYWXA2DFOwY89iONL+pcihwOPnY2/55ELz63O65AuRo8sYRyVtfY
-         j4tyirV1rIXbj4sCHOWqTTlOuOSMW2jmK6+rtIOpV7Ka2tulKz/6eWhdbUWijx9Bu6Gb
-         ByIIf6pn51KS6teavMyaKat3eWK8I4nOHiWfDQvcdP/Uw0gfXBXnQIrIc/pz6cz6nVR5
-         Iy4x6JykOjawxDUZa1NyETS4srgGmwuaVLOaP/oJC0+uKgaPHr9cFO+fpRAAlIcMNtcy
-         nhs72woQacj+sq+ZLnu7DXHUJfQ74vtfFxKgtJUnmVCafSnNEWvepe5r3nD9pz3VWUP9
-         vy6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684352722; x=1686944722;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DE2bkq/ui14lTBLwtUifajE1EvCpc5Pz1BLS66HrLtI=;
-        b=XyWFOFh8/s1XNybkDF4v8jMWXtttDcWbvgrWtB4j83wn3PbuPD9/tO0/HeJ3aVKteA
-         w9wTyxlYa3yVqp2GWlPQD08EHHENzut8pU+W8TlAJhSroa2x5GGLXYi7pZz1yVezqkAu
-         g6ZtLKYB6WhTJsqoY2p4GWhdPcy0roQOU5zYhzzLzxuv+siE0du+ffljSWYpKHgmI9BC
-         ZlZ5eL+C1ZqO4rfTgjE53qvbYmyMGIliwEty+U6TdLe5AvHlSZo4Mo5fabz8Tz3s6lX4
-         HMcSxVDqiyYxPwUoNg0TEm9WOTuqI31obhYIwIa5fvPQlSewN8ZNXQogIzsD3SNueMd2
-         hZuQ==
-X-Gm-Message-State: AC+VfDyy4khKyrCJjPgc0oVnmGVbUT9rH2ggo9KS9O95cVFjmMsceMs7
-        vDngUq7RSPJt3RRiRMtJOjcIoA==
-X-Google-Smtp-Source: ACHHUZ6Tj8zelM2VZpR/AEzeGAQ8zj37niuO6NRBJvg0WI4NbhdxMvKTFTAAd3TJm0rHrq+VS/nWuA==
-X-Received: by 2002:a17:906:eec9:b0:94f:73db:b390 with SMTP id wu9-20020a170906eec900b0094f73dbb390mr34695874ejb.65.1684352722678;
-        Wed, 17 May 2023 12:45:22 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d7a:e7cc:21b3:c435? ([2a02:810d:15c0:828:d7a:e7cc:21b3:c435])
-        by smtp.gmail.com with ESMTPSA id tf8-20020a1709078d8800b0096a2b6de3a4sm10504747ejc.122.2023.05.17.12.45.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 12:45:22 -0700 (PDT)
-Message-ID: <032699a0-9a43-953a-60e9-59a515a26cef@linaro.org>
-Date:   Wed, 17 May 2023 21:45:20 +0200
+        Wed, 17 May 2023 15:53:27 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B45F4680
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684353145; i=efault@gmx.de;
+        bh=zAXFoLOajTXEmUsic4hbXuN64+R+26WPlaON6S5yV2o=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=InY58JYGwUOxMDeBhqF37iSsCjATATTRmo64tDgw55l9Gzg3sGm/pAk4gtG+Gq4sX
+         HVG3V1rqxoQiwesk33xMBAvR/oVW5jvPIsG4suVnGwZ9W5j4E3UGOlksxn08SkBwsj
+         IS5qzUgpafG1jaICrDdKzt6/LrUoFtWR7WnWIsKcDS0UfPtlJ1P5w41GdZY5SUTeVQ
+         cHZhOHRL8MBNMthZQnT99OiJTCkNy2IDcuJVcF/v827U7ScJIJzhJEyvLSedtaPaNq
+         fQWQ88PU3weUvGLSWIDPP3lIo3XPsrs7QGz8422dBZAm81Ic53YTuRFxN8lAqQZwcQ
+         lX6+Cgr5R+hww==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.191.218.183]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MK3W0-1pjVXK3DkE-00LW1n; Wed, 17
+ May 2023 21:52:24 +0200
+Message-ID: <a2a4cd5b398390dcf01b800c964b80c6eba89d18.camel@gmx.de>
+Subject: Re: [RFC PATCH] sched/fair: Introduce SIS_PAIR to wakeup task on
+ local idle core first
+From:   Mike Galbraith <efault@gmx.de>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, Barry Song <baohua@kernel.org>,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 17 May 2023 21:52:21 +0200
+In-Reply-To: <ZGUHa+Si4dJbdsZN@chenyu5-mobl1>
+References: <20230516011159.4552-1-yu.c.chen@intel.com>
+         <19664c68f77f5b23a86e5636a17ad2cbfa073f78.camel@gmx.de>
+         <ZGNBt7vWJ3fDs5Sc@chenyu5-mobl1>
+         <795a6d9475ecb444d219a9d36dc93b48a69e960e.camel@gmx.de>
+         <ZGUHa+Si4dJbdsZN@chenyu5-mobl1>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/7] drm/apu: allow platform driver to implement their own
- mmap function
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, airlied@gmail.com,
-        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jstephan@baylibre.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
-        nbelin@baylibre.com, bero@baylibre.com
-References: <20230517145237.295461-1-abailon@baylibre.com>
- <20230517145237.295461-6-abailon@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230517145237.295461-6-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:EJg82i2kMTUg9lieo5qfK4GQxONkuxsN8roMHmtqhL7sRu07Rku
+ H6lQfsRkE2uf5TD1eZ8Di63Svo8dEVFLhIH5Zen3rMGiv0rUpitkyTYLiEbSGTTXsVZ06Uw
+ 7jXSjP0hTiET4YsgHL8zGkviHu4vGbZde3Oaus7m3sjDB1IzNw6aiWJr/HgHElIuO42anyk
+ 9cGBsP4egHezfVTENxoSg==
+UI-OutboundReport: notjunk:1;M01:P0:ns0GJxB1Wbc=;/J5eMQ+N9Z05Xr/7p31NoSmyCS1
+ XU1fkr67v7H2Y0Cqb9uZTlNFDeqi6AJv9H1TxZOmFKqZzL3++kuiBHtPaIiDnNKAaOnaYe/ZF
+ KnUaepsTtaMUBFUCXXZ3pxwOcHctuJFfKVh0XR164mw/EL5Ek7B+fSshK1nMGvaEPG8OtP0LC
+ VRsZTcp2XKKIK8K1v4/VtAWtC4Dsbjn9Nl+d28Puz+zp8BTokAC14ydZFD+UPH/qt598LCM4g
+ xaZEu7ubr9yPK3fX8AtUFR9pkqtAVQKWHdtjdyFx6rE/bwuhuppjInmJRSTyfOecseZsxyeJi
+ RqPwzIKRcShNVOW6xUFQnhRXPy0HO3MF5PqjPgK6B2GCTSyt9ct9gpIR3d1daep8a+yKY+8e5
+ hZ7nN+b2jv2PMOdOt8/p2dLVT4Xcq8BV4NyPq1Q+V+HOd4DzicwRWsn/VtvqKHGvONIOJQNax
+ 44BN3YPAZPtZ3KKl3MMU1V7wJKkjKSXWLV/ZZjbnwUaaCDWOueKzLjtP1LjJKlmYHJEPvDgGo
+ xp80+6fTbKzHUOSOlAOW4ZC6KOHMrRBdilOCpFJ0mdoddDappaAVCcnT3JpMVE5rPUafe1V+Q
+ bynIcbdQhEuMFqrS01mQ1BadiJ/WOQp91UnIqKRHWJ0nBQLODsqJHHRMENuWJnd3r3/gJYW7y
+ fNfBK3fI/nx91VIu5Ib1xTVssFyWuVrrl/6WrowklJoOfuwfW+hKtg0yPETzbhofzDOT4rbyU
+ ndhuAFou90PCvD5eMHRC5f5cNvwuHQKCrfm6KpsqRvS9JzMTnoZ6mjJpvmBwq+Cnx9lizN6/e
+ 3WnWeXMPZ9seLirTcvWT2SLcaGrTYfZjWtMi9L6TfxmBzDFxNvUKUOY/nBvo/mI0kMKBIgvJv
+ 0m+99m4rV32DVJ4jOA0/S2Y1+q9wDsItVGy19iumxE/De8Ik4A5luidux33U7p0ue2sIDj672
+ IR9lbiHiFw7XL75lj8c0xPUpFS4=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 16:52, Alexandre Bailon wrote:
-> From: Julien Stephan <jstephan@baylibre.com>
-> 
-> By default we will call drm_gem_mmap() unless the apu driver has
-> declared it's own mmap handler.
-> 
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
+On Thu, 2023-05-18 at 00:57 +0800, Chen Yu wrote:
+> >
+> I'm thinking of two directions based on current patch:
+>
+> 1. Check the task duration, if it is a high speed ping-pong pair, let th=
+e
+> =C2=A0=C2=A0 wakee search for an idle SMT sibling on current core.
+>
+> =C2=A0=C2=A0 This strategy give the best overall performance improvement=
+, but
+> =C2=A0=C2=A0 the short task duration tweak based on online CPU number wo=
+uld be
+> =C2=A0=C2=A0 an obstacle.
 
-One does not have to review own code. We all assume that we send good
-code which we do not have to review by ourselves (by the author). We
-also assume we make mistakes, which we cannot find, thus other person's
-review is important.
+Duration is pretty useless, as it says nothing about concurrency.
+Taking the 500us metric as an example, one pipe ping-pong can meet
+that, and toss up to nearly 50% of throughput out the window if you
+stack based only on duration.
 
-Adding own review tag suggests you added them mechanically, so I doubt
-that they really happened.
+> Or
+>
+> 2. Honors the idle core.
+> =C2=A0=C2=A0 That is to say, if there is an idle core in the system, cho=
+ose that
+> =C2=A0=C2=A0 idle core first. Otherwise, fall back to searching for an i=
+dle smt
+> =C2=A0=C2=A0 sibling rather than choosing a idle CPU in a random half-bu=
+sy core.
+>
+> =C2=A0=C2=A0 This strategy could partially mitigate the C2C overhead, an=
+d not
+> =C2=A0=C2=A0 breaking the idle-core-first strategy. So I had a try on it=
+, with
+> =C2=A0=C2=A0 above change, I did see some improvement when the system is=
+ around
+> =C2=A0=C2=A0 half busy(afterall, the idle_has_core has to be false):
 
-Anyway, your SoB is missing.
+If mitigation is the goal, and until the next iteration of socket
+growth that's not a waste of effort, continuing to honor idle core is
+the only option that has a ghost of a chance.
 
-Best regards,
-Krzysztof
+That said, I don't like the waker/wakee have met heuristic much either,
+because tasks waking one another before can just as well mean they met
+at a sleeping lock, it does not necessarily imply latency bound IPC.
 
+I haven't met a heuristic I like, and that includes the ones I invent.
+The smarter you try to make them, the more precious fast path cycles
+they eat, and there's a never ending supply of holes in the damn things
+that want plugging.  A prime example was the SIS_CURRENT heuristic self
+destructing in my box, rendering that patch a not quite free noop :)
+
+	-Mike
