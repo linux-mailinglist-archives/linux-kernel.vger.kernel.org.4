@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5301270680A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72552706808
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjEQMZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S231642AbjEQMZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjEQMZX (ORCPT
+        with ESMTP id S231381AbjEQMZJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:25:23 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212685FCC;
-        Wed, 17 May 2023 05:25:21 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HCOjDH077036;
-        Wed, 17 May 2023 07:24:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684326285;
-        bh=ZdnZw29gNXuAQdLSzCiUFNQsPERQNjSnz3MX3E3cqOA=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=TZXIbrSYGkgeTg7sUwZoLimUISOmupo2ubHNtf2S/R1gAnO/oEJDDX+8BI4WwRSrB
-         EPTB6FN6PNL/rKPrxMw16h+u+uJdfiZLT3KjqunEIfFvsuQwmLk8Fz1tURtTUiTLCJ
-         DowI4GQ2nDH/mJpIf0hKp2sCSYMobVDbvhkQ9PcQ=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HCOjQu012585
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 17 May 2023 07:24:45 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
- May 2023 07:24:44 -0500
-Received: from DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c]) by
- DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c%18]) with mapi id
- 15.01.2507.023; Wed, 17 May 2023 07:24:44 -0500
-From:   "Ding, Shenghao" <shenghao-ding@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-CC:     Shenghao Ding <13916275206@139.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Lu, Kevin" <kevin-lu@ti.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
-        "Navada Kanyana, Mukund" <navada@ti.com>,
-        "gentuser@gmail.com" <gentuser@gmail.com>,
-        "Ryan_Chu@wistron.com" <Ryan_Chu@wistron.com>,
-        "Sam_Wu@wistron.com" <Sam_Wu@wistron.com>
-Subject: RE: [EXTERNAL] Re: [PATCH v2 2/5] ASoC: dt-bindings: Add tas2781
- amplifier
-Thread-Topic: [EXTERNAL] Re: [PATCH v2 2/5] ASoC: dt-bindings: Add tas2781
- amplifier
-Thread-Index: AQHZgw2r46dnAmj+dEya5A38wB/fZK9U5kcAgAA/wgD//+cmsIAAb9cAgAjm74A=
-Date:   Wed, 17 May 2023 12:24:44 +0000
-Message-ID: <26c335994d91492eb9439483ac98f61c@ti.com>
-References: <20230508054512.719-1-13916275206@139.com>
- <ca9d45cf-8a84-4fbc-e1dd-c96eef36fe25@linaro.org>
- <ZFyBzHWo3ORKAskX@finisterre.sirena.org.uk>
- <ca2ed8e9-850a-56c5-e395-72e5861b9c71@linaro.org>
- <3c48d5e47aff478b8ce8998d7efe001b@ti.com>
- <3e62d34b-a439-ac42-83a1-deb26ade63ff@linaro.org>
-In-Reply-To: <3e62d34b-a439-ac42-83a1-deb26ade63ff@linaro.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.250.160.143]
-x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 17 May 2023 08:25:09 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F84193;
+        Wed, 17 May 2023 05:25:08 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53202149ae2so471241a12.3;
+        Wed, 17 May 2023 05:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684326308; x=1686918308;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fEGoGpyrR60B8AjfNbHQnj78PfieDYrQkkUy4eueo0Q=;
+        b=kML+gvuAXtKqecLJrYpLLONtf5q3VxVj0mH3+jLLtkrkQE8d0WMDK3AeuWKiwiVBp6
+         CaxruwpHKGXvSNpTOiZ4WdaHHyG+gizh3lTsL7qFJ8fRgdCLVMZlxDGXLjjydp9T9iZf
+         v0wHNvQEkKfdpantj/99n9AktsRB8s+2WZlSolJJNo6MVJF8C1yg3HvCYMdZ4JCQn0sa
+         gwK+NvVHhiE20LuxQxyJqhYUXWpE1qCz5M/K4+4785N0wj2CkXV8SsjdN2TQFYq/toJG
+         /L9R5GU9GnqA82WbP/Zrx1wlDqJIti20Mc+hbYt9s5BdBP/0VKLOYUBfIF/2b4rEnllD
+         n4Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684326308; x=1686918308;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fEGoGpyrR60B8AjfNbHQnj78PfieDYrQkkUy4eueo0Q=;
+        b=S2GNJJcyzKFiYF0ukg3mSW9NWiSUCEDQasmcCahv8uf4JbCV+y10hJWJpAm4XjC8DA
+         AfwSAha9ewiT9HPj553DtYoPaemQ95fCW8tUfvugLerh2Bh8Tf4vXqMUrnbY745Oi+wE
+         fBpHxkxToxcEHKedLQWv+wn7ZmQRy5cBcA0AfYM6tFh6wPa5boLmruEvdM92T/SKUN8K
+         32b7iW0IMjoDWHME2FSUFb1PtbdpLGpPa7Rt1fmA8rShzFsZOoXoCARfD8LPJJyZONk3
+         e3WLkYyy0INiz5W+BCclcGhalfSiforUDp3KKQ8mTg5t8SIN+MBMh2pmjahTX5N/q4I2
+         81+w==
+X-Gm-Message-State: AC+VfDxHSBNMWvxd+MyfUZuVrZ+0/Uh9EDRrQlfm/EbyPQtYwnhy18v3
+        0zkqHDgLgXKdGf4IuvvEX6ccHOw5I2A=
+X-Google-Smtp-Source: ACHHUZ7tqN6XkclPOdB4GxCwvfImnp1nRD4DeA0mvf0+zmf9LZjB55uWWQyMz3U1XE9oy2JrH/3jiA==
+X-Received: by 2002:a05:6a20:8416:b0:ec:d7cf:bcf7 with SMTP id c22-20020a056a20841600b000ecd7cfbcf7mr51311098pzd.17.1684326307884;
+        Wed, 17 May 2023 05:25:07 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c25-20020a631c59000000b005143448896csm15283973pgm.58.2023.05.17.05.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 05:25:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 May 2023 05:25:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, markgross@kernel.org,
+        hdegoede@redhat.com, Shyam-sundar.S-k@amd.com,
+        linux-edac@vger.kernel.org, clemens@ladisch.de, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, mario.limonciello@amd.com,
+        babu.moger@amd.com
+Subject: Re: [PATCH 3/6] hwmon: (k10temp) Check return value of amd_smn_read()
+Message-ID: <f3cce515-845c-480e-a096-8e24e0079454@roeck-us.net>
+References: <20230516202430.4157216-1-yazen.ghannam@amd.com>
+ <20230516202430.4157216-4-yazen.ghannam@amd.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516202430.4157216-4-yazen.ghannam@amd.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCk9uIDExLzA1LzIwMjMgMTU6MTksIERpbmcsIFNoZW5naGFvIHdyb3RlOg0KPiANCj4gT24g
-MTEvMDUvMjAyMyAwNzo0OSwgTWFyayBCcm93biB3cm90ZToNCj4+PiBNaXNzaW5nIG1pbkl0ZW1z
-LCBidXQuLi4NCj4+DQo+Pj4+ICsgICAgaXRlbXM6DQo+Pj4+ICsgICAgICBtaW5pbXVtOiAweDM4
-DQo+Pj4+ICsgICAgICBtYXhpbXVtOiAweDNmDQo+Pg0KPj4+IC4uLiBTbyB0aGVzZSBhcmUgZml4
-ZWQ/IE5vIG5lZWQgdG8gZW5jb2RlIHRoZW0gaW4gc3VjaCBjYXNlLi4uDQo+Pg0KPj4gSSdtIG5v
-dCBzdXJlIEkgdW5kZXJzdGFuZCB5b3VyIGNvbmNlcm4gaGVyZSwgdGhlcmUncyB1cCB0byA0IHBv
-c3NpYmxlIA0KPj4gdmFsdWVzIGZyb20gMHgzOC0weDNmIHdoaWNoIGhhcyBtb3JlIHRoYW4gNCBw
-b3NzaWJsZSB2YWx1ZXMuDQo+IA0KPiBBcmVuJ3QgdGhlIGFkZHJlc3NlcyBnb2luZyB0byBiZSBp
-bmNyZW1lbnRlZCBieSBvbmUgKHVwIHRvIDggb2YgZGV2aWNlcyBpbiB0b3RhbCk/DQoNCldpdGgg
-eW91ciBzdHlsZSBvZiByZXBsaWVzLCBpdCBsb29rcyBsaWtlIHlvdSB3cm90ZSBpdC4uLg0KDQpB
-bGwgdGhlIGFkZHJlc3NlcyBvZiB0YXMyNzgxIGFyZSBpbiByYW5nZSBmcm9tIDB4MzggdG8gMHgg
-M2YsIHRoZSBvcmRlciBvZiB0aGVtIGluIHRoZSBhdWRpby1zbG90cyBpdGVtIGFyZSB1cCB0byB0
-aGUgaGFyZHdhcmUgY29ubmVjdGlvbnMuDQpJIGhhdmUgc3R1ZGllZCB0aGUgcmVnIGl0ZW0gdG8g
-c2F2ZSBtdWx0aXBsZSBpMmMgYWRkcmVzc2VzIGZvciBtdWx0aXBsZSBwaWVjZXMgb2YgdGFzMjc4
-MSBhbmQgZm91bmQgdGhhdCAiJyNhZGRyZXNzLWNlbGxzJzogICAgIG1heGltdW06IDMiDQp0aGF0
-IG1lYW5zICJyZWciIHN0b3JlIG5vdCBtb3JlIHRoYW4gdGhyZWUgYWRkcmVzc2VzLCB0aGlzIGNh
-bid0IHN1cHBvcnQgdGhlIG1vcmUgdGhhbiAzIHBpZWNlcyBvZiB0YXMyNzgxLCANCnN1Y2ggYXMg
-NC1zbG90IFRETSBjYXNlIG9yIG11bHRpcGxlIGR1YWwtbWVtYnJhbmUgc3BlYWtlcnMgY2FzZSwg
-aW4gc3VjaCBhIGNhc2UsIG9uZSBzcGVha2VyIHdpbGwgdXNlDQogdHdvIHBpZWNlcyBvZiB0YXMy
-NzgxIHRvIGJvb3N0LCB1c3VhbGx5IGF0IGxlYXN0IDYgcGllY2VzIG9mIHRhczI3ODEgd2lsbCBi
-ZSB1c2VkIGluIGEgbGFwdG9wIG9yIG90aGVyIGRldmljZS4NCg0KPiANCj4gTm8sIHRoZSBpMmMg
-YWRkcmVzcyBvcmRlciBpcyBub3QgYWx3YXlzIG1vbm90b25pYyBpbmNyZWFzZSBvciBkZWNyZWFz
-ZSwgc29tZXRpbWUgaXQgd291bGQgYmUgZGlzb3JkZXIsIGFjY29yZGluZyB0byB0aGUgYXBwbGlj
-YXRpb24uDQo+IEVhY2ggZGV2aWNlIHdvdWxkIGhhdmUgZWlnaHQgcG9zc2libGUgaTJjIGFkZHJl
-c3MsIHRoZSBmaW5hbCBhZGRyZXNzIGRlcGVuZHMgb24gdGhlIGhhcmR3YXJlIGNvbm5lY3Rpb25z
-Lg0KDQpPSywgdGhlIHF1ZXN0aW9uIGFib3V0IHRoZSBicm9hZGNhc3QgaXMgc3RpbGwgdGhlcmUg
-LSBjYW5ub3QgaXQgYmUgZGVkdWNlZD8NCg0KVGhlIHJlYXNvbiB0byBkZWZpbmUgdGhpcyBpdGVt
-IGFuZCBhZGQgaXQgaW4gZHRzIGlzIHRoYXQgdGVsbCB0YXMyNzgxIGRyaXZlciBjb2RlIHRvIGVu
-YWJsZSBicm9hZGNhc3QgYW5kIGl0cyBhZGRyZXNzLiANClJlbW92aW5nIHRoaXMgaXRlbSBtZWFu
-cyBkaXNhYmxpbmcgYnJvYWRjYXN0LiBEbyB5b3Ugd2FudCB0byBoYXJkY29kZSB0aGUgZ2xvYmFs
-IGFkZHJlc3MgaW4gdGhlIGNvZGU/DQpBbmQgdGhpcyBpdGVtIG9ubHkgdXNlZCBhcyBhIGZsYWcg
-dG8gZW5hYmxlIG9yIGRpc2FibGU/DQoNCkJlc3QgcmVnYXJkcywNCktyenlzenRvZg0KDQo=
+On Tue, May 16, 2023 at 03:24:27PM -0500, Yazen Ghannam wrote:
+> Check the return value of amd_smn_read() before saving a value. This
+> ensures invalid values aren't saved or used.
+> 
+> There are three cases here with slightly different behavior.
+> 
+> 1) read_tempreg_nb_zen():
+> 	This is a function pointer which does not include a return code.
+> 	In this case, set the register value to 0 on failure. This
+> 	enforces Read-as-Zero behavior.
+> 
+> 2) k10temp_read_temp():
+> 	This function does have return codes, so return -EINVAL on a
+> 	failed register read. Continued operation is not necessary,
+> 	since there is no valid data from the register. Furthermore, if
+> 	the register value was set to 0, then the following operation
+> 	would underflow.
+> 
+> 3) k10temp_get_ccd_support():
+> 	This function reads the same register from multiple CCD
+> 	instances in a loop. And a bitmask is formed if a specific bit
+> 	is set in each register instance. The loop should continue on a
+> 	failed register read, skipping the bit check.
+> 
+> Furthermore, the __must_check attribute will be added to amd_smn_read().
+> Therefore, this change is required to avoid compile-time warnings.
+> 
+> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/hwmon/k10temp.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index 7b177b9fbb09..6ea1fa62b7c1 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -145,8 +145,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
+>  
+>  static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
+>  {
+> -	amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> -		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
+> +	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> +			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
+> +		*regval = 0;
+>  }
+>  
+>  static long get_raw_temp(struct k10temp_data *data)
+> @@ -213,9 +214,11 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
+>  				*val = 0;
+>  			break;
+>  		case 2 ... 13:		/* Tccd{1-12} */
+> -			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+> -				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+> -						  &regval);
+> +			if (amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
+> +					 ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
+> +					 &regval))
+> +				return -EINVAL;
+> +
+
+-EINVAL: Invalid Argument, supposed to be used for bad user input.
+I don't see how that would apply here. amd_smn_read() returns
+a valid error code. This error core should be returned to the caller,
+or there needs to be an explanation why this is not appropriate.
+
+>  			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
+>  			break;
+>  		default:
+> @@ -373,8 +376,10 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
+>  	int i;
+>  
+>  	for (i = 0; i < limit; i++) {
+> -		amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> -			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
+> +		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
+> +				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
+> +			continue;
+> +
+The reason for ignoring the error should be explained here.
+
+>  		if (regval & ZEN_CCD_TEMP_VALID)
+>  			data->show_temp |= BIT(TCCD_BIT(i));
+>  	}
+> -- 
+> 2.34.1
+> 
