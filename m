@@ -2,111 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4E7705E5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63EF705E61
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjEQDvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 23:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S231963AbjEQDwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 23:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEQDvx (ORCPT
+        with ESMTP id S231881AbjEQDwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 23:51:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BD919BC;
-        Tue, 16 May 2023 20:51:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9055464149;
-        Wed, 17 May 2023 03:51:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA41C433EF;
-        Wed, 17 May 2023 03:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684295511;
-        bh=ujQm08tAstsBcSTC4djTVJKYZbnMD4JeakcC0SNda2Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TSkAnW3Tw7IFtikLGLu+GPWBvxuXEM5m65QAoEvCrtsO/iSmOETdJEiAUqaMrleII
-         zeTeMmaEQTm6FpcM/KIk9TO4oKxg96lYeHLh/rTFzJCKCtFjXf8P/ve8+aqQcFw0py
-         ZxJnT7Oyek0HGYBY8ZtQYTSc9qzOPYbYtNts8W2SDG9L0QEeOjsPJDT4KRtBegTYNN
-         IAKH0xnEKfpnt0cSPV5GYah+YvOlSxSSPIY0fYMj2Zs7P7v/pdLWr/zyIvf+reeAGH
-         uJ0yTaME660KgFSlPIjx8QlAJbysaP2KvTzEtkhMRuSYEQxxgZfoOsEuXjtxTJu4iT
-         nu6ZMWm+E+gDA==
-Date:   Wed, 17 May 2023 12:51:42 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ze Gao <zegao2021@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Ze Gao <zegao@tencent.com>
-Subject: Re: [PATCH v2 2/4] fprobe: make fprobe_kprobe_handler recursion
- free
-Message-Id: <20230517125142.b5fa0d958ccfa5c309c650af@kernel.org>
-In-Reply-To: <20230516232545.4f6c7805@rorschach.local.home>
-References: <20230516071830.8190-1-zegao@tencent.com>
-        <20230516071830.8190-3-zegao@tencent.com>
-        <20230516091820.GB2587705@hirez.programming.kicks-ass.net>
-        <CAD8CoPDFp2_+D6nykj6mu_Pr57iN+8jO-kgA_FRrcxD8C7YU+Q@mail.gmail.com>
-        <20230517010311.f46db3f78b11cf9d92193527@kernel.org>
-        <CAD8CoPAw_nKsm4vUJ_=aSwzLc5zo8D5pY6A7-grXENxpMYz9og@mail.gmail.com>
-        <20230517115432.94a65364e53cbd5b40c54e82@kernel.org>
-        <CAD8CoPC0BXB2ER_Oaixm5XgMk8TTqKVVF7Po0t4gBPOLhw_xwQ@mail.gmail.com>
-        <20230516232545.4f6c7805@rorschach.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 23:52:17 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C6A271B;
+        Tue, 16 May 2023 20:52:16 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25343f0c693so165524a91.3;
+        Tue, 16 May 2023 20:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684295536; x=1686887536;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AUXFRmo2MSjUiP3pz0lzOFDLD9CCDZHx5JZ6kXK49MA=;
+        b=YTS0qcj/hG4UhEBJb3/I8+r3muMeN3UAkFTzlWc4pOy86nF2hlfHA7HHcNw0QA7WdU
+         ysiWX5b8G7mWmzoet7jUv0bFKWPXaFJCHGreU3hWRcOHCJ91BupPc//853th0Mt1i532
+         qPVklvWPJCLhju91sHhOKM0X9nff7OeDHtkF66UZ29B5Evjc+jmIXfyoqPHMdDShJ3BQ
+         ZHYT50y+Y8kahR3mv8MVczj1df2eQup+P8Y/Dbss7EWF7wkJWVFSve4Qw47huUc9Zif2
+         We61ylGUJVMi4FZGqwYlGVTiwjh33TAlQiujlpl/9sUV7YLcaMxo4EeSI5ailX3IuKHP
+         Wdsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684295536; x=1686887536;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AUXFRmo2MSjUiP3pz0lzOFDLD9CCDZHx5JZ6kXK49MA=;
+        b=b4OabB9Ija9US2/g4w2cqTTV7Xr4FUK4c3+i9SZzF37U8UTiMUHR8WgE5NIxFTlCh6
+         TD2D/iS5HyOI396Juvd37jBYk7kCr7bf+lps2IB4h0i+i0Tr8NTIuExaNeoNbnpkPclW
+         g4KUQ/Yonb07SYu7jqp58Ph37cWNgohbqoucRiFvTkxpYyQQKqw0Eg8YcgbswB3MMykz
+         ETmroYOQBxeK4+4RqJEX815tAqYPmS+LVeBL+kXWgD8rTl9UvqtrVqgUAarPXgFVYUSC
+         XeCS8xEZQbUb0TjM49eKfqoRSASt/bAkD1/ubmLvQHRdTaSYWEUqMVyr+8wy5Iq7ZCsv
+         jgOA==
+X-Gm-Message-State: AC+VfDzF/FWHfynifFB7EQWssD9NJ9gqnQ36DSQQpfwCZ7p48491SIeJ
+        AUnuv1h2oLa+Mm5SgsY7cLkL0UUluFg=
+X-Google-Smtp-Source: ACHHUZ5FxCBS+0YcXJo3FhDTsN4EFNwO8RkcXyTXtu4z6LvH4lM5z60eFxhe/fPZQebwejl0so7hAg==
+X-Received: by 2002:a17:90b:350:b0:250:1905:ae78 with SMTP id fh16-20020a17090b035000b002501905ae78mr39147491pjb.15.1684295535825;
+        Tue, 16 May 2023 20:52:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t17-20020a639551000000b00519c3475f21sm14303276pgn.46.2023.05.16.20.52.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 20:52:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 16 May 2023 20:52:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 000/282] 5.4.243-rc1 review
+Message-ID: <739bd109-b32d-46f1-b382-e55f34efc11a@roeck-us.net>
+References: <20230515161722.146344674@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515161722.146344674@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 23:25:45 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Wed, 17 May 2023 11:10:21 +0800
-> Ze Gao <zegao2021@gmail.com> wrote:
+On Mon, May 15, 2023 at 06:26:18PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.243 release.
+> There are 282 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > Got it! :)
-> > 
-> > I will improve the commit message and send v3 ASAP.
-> > 
-> > BTW, which tree should I rebase those patches onto? Is that the
-> > for-next branch of
-> > git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git. I saw
-> > Jiri had troubles
-> > applying those since these works are based on v6.4.0.
-> > 
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
 > 
-> You can submit against 6.4-rc1. We haven't updated the for-next branch
-> yet. Which will be rebased off of one of the 6.4 rc's.
 
-Yeah, I would like to pick it to probes/fixes for 6.4 and stable branches.
+Build results:
+	total: 159 pass: 159 fail: 0
+Qemu test results:
+	total: 455 pass: 454 fail: 1
+Failed tests:
+	arm:sabrelite:multi_v7_defconfig:mtd2:mem256:net,default:imx6dl-sabrelite:rootfs
 
-Thank you,
+As far as I can see, the second SPI interface fails to instantiate.
 
+[   21.491528] spi_imx 2008000.spi: bitbang start failed with -22
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+There are also various new warnings in clock code.
+
+[   21.492631] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:986 clk_core_disable+0x124/0x2e4
+[   21.497524] WARNING: CPU: 0 PID: 1 at drivers/clk/clk.c:845 clk_core_unprepare+0x268/0x388
+
+The warnings in clock code are gone after reverting all changes introducing
+PM support for imx spi code. The boot failure is gone after reverting the
+gpio conversion. In total, I reverted the following patches to fix the
+boot and warning problems.
+
+d6fcaa127cc6 Revert "spi: imx/fsl-lpspi: Convert to GPIO descriptors"
+9783b21b591d Revert "spi: imx: enable runtime pm support"
+4a8bdbf7462b Revert "spi: spi-imx: using pm_runtime_resume_and_get instead of pm_runtime_get_sync"
+e6c5f497ff35 Revert "spi: imx: Don't skip cleanup in remove's error path"
+d6ea758df74f Revert "spi: imx: fix runtime pm support for !CONFIG_PM"
+b9dbd028c970 Revert "spi: imx: fix reference leak in two imx operations"
+
+Is this really 5.4 material ?
+
+Guenter
