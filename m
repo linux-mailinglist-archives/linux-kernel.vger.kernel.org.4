@@ -2,103 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BC3706275
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A92706283
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjEQINC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        id S229749AbjEQIOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjEQIM5 (ORCPT
+        with ESMTP id S229506AbjEQIOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:12:57 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7423AA2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:12:55 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc570b4a3so810846a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684311174; x=1686903174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a1tI4Mj0GuSStRExKQnt10Sk/TUm6zi642R3YYtuxTg=;
-        b=V8lPYAu5z6+U2gOqC3z7VJ6URsVOO59EBAapcvlyAJwMLkjWrr7Wo8CWmDGhwsYrsu
-         a2QuWAVSgLVcpflAjiee1DWUQ3QFYYWm4bs7QBkGaFGJ0e6X3kvIItt5WsDmPyMaDbv0
-         ECW7cs5cfAKHdX5/56inb70getKGq9ckpGPstIzT4dbHLvY83hCkguaYu4Er9bskuckq
-         yVBnUpbEdmrGwHP1R61bX7HXL+W5BvToV+0tCQAF8nw1o4bjRMbJGpVRVpGCiMon3YYq
-         CwGLNMl2Zk1brXQt53Iqh2/25aB7Vd6tAYJrjarZlSc3EZCU7eAaLoZl5TEb0z2PJAEB
-         kKQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684311174; x=1686903174;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a1tI4Mj0GuSStRExKQnt10Sk/TUm6zi642R3YYtuxTg=;
-        b=J/fUN7QVSC4WNd33ey3qa1PMoysZgej73QteNvBw/FTxnQqWTZWqUw9KWflZ1BF7Su
-         nB/7hB4GwqOYxs6o8FZypPotO3DluXmEih+GFddVpmWi8mX+a2LXbpgt/RxVLkJtVxX3
-         HqHq0ya229KUEqd5yBz/8fbHKBtE+8CdiQLxc0Xi74oiibhJOgJTN63b7LPVBczSdEw6
-         HocEYW7t0bldDCR+uEA2o/tjDTpvClg4SYFcwaIv4Y4OfFrwBVn11fTDUbqvSvTwHLdM
-         mvdFqRtSHpy5ZHUcwN2KOKF98iUa3RuZsxth7F7ZZYhTTt3np0BOBKX3a12B+RKzGgC7
-         s/Dw==
-X-Gm-Message-State: AC+VfDzrndCGvk5yCtdWN6PCAAAWos8JxGuIkrR/Y2YZzLQQP72/ioPG
-        6DYzFJ1cHliiMiB5jr9yzPjxDA==
-X-Google-Smtp-Source: ACHHUZ5K6XkIbwGR7BN6nwPpwg/ie+J/ruD+GqyEdrYyAZ5GpjgmN1Cyt5H5Q2dumD6Pk6xDfBnrBQ==
-X-Received: by 2002:aa7:d78f:0:b0:50d:8cde:a335 with SMTP id s15-20020aa7d78f000000b0050d8cdea335mr1615810edq.15.1684311173952;
-        Wed, 17 May 2023 01:12:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa7c149000000b00509d1c6dcefsm9033171edp.13.2023.05.17.01.12.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 01:12:53 -0700 (PDT)
-Message-ID: <8be8cc8e-5580-0f4f-a00e-46f392356026@linaro.org>
-Date:   Wed, 17 May 2023 10:12:52 +0200
+        Wed, 17 May 2023 04:14:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECA910C3;
+        Wed, 17 May 2023 01:14:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71AF663AE6;
+        Wed, 17 May 2023 08:14:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D4CC4339E;
+        Wed, 17 May 2023 08:14:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684311272;
+        bh=hQk2V61WT0ZjwjBD2C1jC1NdNjkBIK/8T3va0d3Yt14=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J1xp/Wh7+3wfQfMWt44YSKyN469bd+w+tMQvSbLbM7YduzmOMeTvzNWLJ1wOke2WO
+         UIyGUxhMzohW1yPdTrzHkYhM13UOZo8YA0VTfb0+VnOaTcyw8MV9pznKxtJI5Fco7c
+         dNQj9RSzsGXdZx6CroVHj12FKUFpVzaWAGGXnz4y2RChBOLkspNMCHkIAa1komDI39
+         XF9E5OR1To0i87muELit2gX31C9X3bJLB+vcRW8Gzr509IKOwHGNbzn1W/Wb52SBOG
+         ck3zxBFWzvtYYGpqP05ykHMi+RLQ7tBeLxKFlb/h8EVxcQxWzEisf7SCqD75hzXbCu
+         UUfqXiyF+Q/aw==
+Date:   Wed, 17 May 2023 13:44:28 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, konrad.dybcio@linaro.org, kishon@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v11 0/4] Enable USB SS qmp phy for Qualcomm SM6115 SoC
+Message-ID: <ZGSM5FHG8Ln2t0G7@matsya>
+References: <20230516150511.2346357-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: display: panel: Add Visionox R66451
- AMOLED DSI panel bindings
-Content-Language: en-US
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
- <20230516-b4-r66451-panel-driver-v1-1-4210bcbb1649@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516-b4-r66451-panel-driver-v1-1-4210bcbb1649@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516150511.2346357-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 22:20, Jessica Zhang wrote:
-> Document the 1080x2340 Visionox R66451 AMOLED DSI panel bindings
+On 16-05-23, 20:35, Bhupesh Sharma wrote:
 > 
-> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> ---
->  .../bindings/display/panel/visionox,r66451.yaml    | 59 ++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
+> This patchset adds the support for USB SS qmp phy for Qualcomm SM6115
+> SoC. For the previous versions of this patch there were conversations
+> on irc as to whether this was a 'qcom,usb-ssphy-qmp-usb3-or-dp' or a
+> 'qcom,usb-ssphy-qmp-dp-combo' as per downstream code and hardware
+> documentation.
 
-If there is going to be new version:
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
+Applied patch 1,2
 
+Thanks
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+~Vinod
