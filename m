@@ -2,237 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9387070686B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46F3706873
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjEQMm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S230340AbjEQMn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjEQMmS (ORCPT
+        with ESMTP id S231443AbjEQMnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:42:18 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CEE269F;
-        Wed, 17 May 2023 05:42:16 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id d2e1a72fcca58-64359d9c531so517302b3a.3;
-        Wed, 17 May 2023 05:42:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684327336; x=1686919336;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pX2hrFRMTsVQF1+5JbeKRRhV3fvCd61M3POL1LFhKAA=;
-        b=kDUlcJaW77qv2uceQP01whPf+y603pZWGnpjr3X5VKoYFKVAN6D0NRY4f6T6MCq2rh
-         ep/rW4c+eeXIXZULnUI0ht//PM48uzBnwnViUcXEz9K7VDB807FyPRXi1fNsoPggsXhd
-         Qw8zXKiP7ZUxHg0BWtYyH1OLe/YZM6iJEATdlO9UYbuQSlR1sTtScm/Efj5kkySgeJuf
-         ++nVpAlRG9lPVPbSUyMgroB+NqvhtDflxtk8H28X45+vJeK4a+5WX2MyIFmT0M2cVebq
-         USEmEd9DtH9c0sXzZwfDPQng5207kUEhHH/8MrLEDwE2kcbzX6wxedShDdA+5EHLTf26
-         2/Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684327336; x=1686919336;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pX2hrFRMTsVQF1+5JbeKRRhV3fvCd61M3POL1LFhKAA=;
-        b=LTqlPHajUDQuypc7t+90ZqnZ3eSAWlzSUwYo9PG7dJXuEJboAQAIsdJv8qQOYjpi5X
-         9Zr8Q9jHwfFbeARrq0MEvpps71wSsDDLhwNoX+iC3ar3hFNV3jbORx5NaezZsk8OSdMX
-         Wvhng7Ki3KEQu/bpvVC6PAaRxWRuSdXBuY1fP070twpsWcxbceHU4hMbTOPKgF0We0WP
-         lNex2DuMcuCGsCurrB/YlCqrUVjLK1tJcq0ncOHBHOYpZQfl6CJkL6rhjP1LnNT+BBAE
-         Udcq1r0oaZdjppoAid68ixw6i+Y61BxFn1cp26FxnU1zhC8iyQSo/Mblwre9GfDNYzsu
-         On1g==
-X-Gm-Message-State: AC+VfDzlVA+jNuracUQWRCDBGBzhKwEwQ21bJbGDp79VAjulY116tXNw
-        KoahN2E3PniXkKBfO1bLCNw=
-X-Google-Smtp-Source: ACHHUZ6oGWTq7fjcLMhSu3MHrZzpF6gpIFARGwmwve7ipGe3wMAWwd4V6JtnhedYmomBUE50HgvGxw==
-X-Received: by 2002:a05:6a20:54a8:b0:104:6432:270 with SMTP id i40-20020a056a2054a800b0010464320270mr24929219pzk.46.1684327336317;
-        Wed, 17 May 2023 05:42:16 -0700 (PDT)
-Received: from localhost.localdomain ([81.70.217.19])
-        by smtp.gmail.com with ESMTPSA id u23-20020aa78497000000b0064aea45b040sm9244224pfn.168.2023.05.17.05.42.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:42:16 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     kuba@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Subject: [PATCH net-next 3/3] net: tcp: handle window shrink properly
-Date:   Wed, 17 May 2023 20:42:01 +0800
-Message-Id: <20230517124201.441634-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230517124201.441634-1-imagedong@tencent.com>
-References: <20230517124201.441634-1-imagedong@tencent.com>
+        Wed, 17 May 2023 08:43:25 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3806B26A3;
+        Wed, 17 May 2023 05:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684327382; x=1715863382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0wb+aIX7/letJ9Gm0YD6AnxqCsFTli+EhhB+a+U+28w=;
+  b=SslVsAW6FXxd6f+ZaTufH/c+hLAJ9l11/xgsByN612z5cC8s5s6XMelE
+   0sy30NWoZAs9c+YJoGC33M9VbTinrNftGu8unetDRJLA2yLXyTDBbhS6O
+   D0O6iL36mNXP+YPW/VvinXJz+VKs5FGlPNIKI+q2zEE8O74jiBwYeqFnk
+   7bgSlHookIZdbvFS/nnx4OASyoHhttO0VQnEMGJeccBtb0R4v5ijX23Yx
+   OTunpIyBfX5kgbcw73X0NDVe21psEPu8Ve8d6fdEjgF0h8ZxqQsuCwdt9
+   dFSuJh+/0pnt+XTVbjoFl/a+SLPQh8LISZmin/b7B4763T+jmKjtyheeR
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,282,1677567600"; 
+   d="asc'?scan'208";a="152529056"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 05:42:51 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 17 May 2023 05:42:51 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 17 May 2023 05:42:49 -0700
+Date:   Wed, 17 May 2023 13:42:28 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc:
+ convert to yaml
+Message-ID: <20230517-degrading-stoppage-54f7769f1956@wendy>
+References: <20230517094119.2894220-1-claudiu.beznea@microchip.com>
+ <20230517094119.2894220-3-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ssdu9SzKEXVS/OPM"
+Content-Disposition: inline
+In-Reply-To: <20230517094119.2894220-3-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+--ssdu9SzKEXVS/OPM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Window shrink is not allowed and also not handled for now, but it's
-needed in some case.
+On Wed, May 17, 2023 at 12:41:16PM +0300, Claudiu Beznea wrote:
+> Convert Atmel PMC documentation to yaml. Along with it clock names
+> were adapted according to the current available device trees as
+> different controller versions accept different clock (some of them
+> have 3 clocks as input, some has 2 clocks as inputs and some with 2
+> input clocks uses different clock names).
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-In the origin logic, 0 probe is triggered only when there is no any
-data in the retrans queue and the receive window can't hold the data
-of the 1th packet in the send queue.
+Looks good to me now Claudiu, thanks!
 
-Now, let's change it and trigger the 0 probe in such cases:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-- if the retrans queue has data and the 1th packet in it is not within
-the receive window
-- no data in the retrans queue and the 1th packet in the send queue is
-out of the end of the receive window
+Cheers,
+Conor.
 
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/net/tcp.h     | 21 +++++++++++++++++++++
- net/ipv4/tcp_input.c  | 41 +++++++++++++++++++++++++++++++++++++++++
- net/ipv4/tcp_output.c |  3 +--
- net/ipv4/tcp_timer.c  |  4 +---
- 4 files changed, 64 insertions(+), 5 deletions(-)
+--ssdu9SzKEXVS/OPM
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index a6cf6d823e34..9625d0bf00e1 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1910,6 +1910,27 @@ static inline void tcp_add_write_queue_tail(struct sock *sk, struct sk_buff *skb
- 		tcp_chrono_start(sk, TCP_CHRONO_BUSY);
- }
- 
-+static inline bool tcp_rtx_overflow(const struct sock *sk)
-+{
-+	struct sk_buff *rtx_head = tcp_rtx_queue_head(sk);
-+
-+	return rtx_head && after(TCP_SKB_CB(rtx_head)->end_seq,
-+				 tcp_wnd_end(tcp_sk(sk)));
-+}
-+
-+static inline bool tcp_probe0_needed(const struct sock *sk)
-+{
-+	/* for the normal case */
-+	if (!tcp_sk(sk)->packets_out && !tcp_write_queue_empty(sk))
-+		return true;
-+
-+	if (!sysctl_tcp_wnd_shrink)
-+		return false;
-+
-+	/* for the window shrink case */
-+	return tcp_rtx_overflow(sk);
-+}
-+
- /* Insert new before skb on the write queue of sk.  */
- static inline void tcp_insert_write_queue_before(struct sk_buff *new,
- 						  struct sk_buff *skb,
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 56e395cb4554..a9ac295502ee 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -3188,6 +3188,14 @@ void tcp_rearm_rto(struct sock *sk)
- /* Try to schedule a loss probe; if that doesn't work, then schedule an RTO. */
- static void tcp_set_xmit_timer(struct sock *sk)
- {
-+	/* Check if we are already in probe0 state, which means it's
-+	 * not needed to schedule the RTO. The normal probe0 can't reach
-+	 * here, so it must be window-shrink probe0 case here.
-+	 */
-+	if (unlikely(inet_csk(sk)->icsk_pending == ICSK_TIME_PROBE0) &&
-+	    sysctl_tcp_wnd_shrink)
-+		return;
-+
- 	if (!tcp_schedule_loss_probe(sk, true))
- 		tcp_rearm_rto(sk);
- }
-@@ -3465,6 +3473,38 @@ static void tcp_ack_probe(struct sock *sk)
- 	}
- }
- 
-+/**
-+ * This function is called only when there are packets in the rtx queue,
-+ * which means that the packets out is not 0.
-+ *
-+ * NOTE: we only handle window shrink case in this part.
-+ */
-+static void tcp_ack_probe_shrink(struct sock *sk)
-+{
-+	struct inet_connection_sock *icsk = inet_csk(sk);
-+	unsigned long when;
-+
-+	if (!sysctl_tcp_wnd_shrink)
-+		return;
-+
-+	if (tcp_rtx_overflow(sk)) {
-+		when = tcp_probe0_when(sk, TCP_RTO_MAX);
-+
-+		when = tcp_clamp_probe0_to_user_timeout(sk, when);
-+		tcp_reset_xmit_timer(sk, ICSK_TIME_PROBE0, when, TCP_RTO_MAX);
-+	} else {
-+		/* check if recover from window shrink */
-+		if (icsk->icsk_pending != ICSK_TIME_PROBE0)
-+			return;
-+
-+		icsk->icsk_backoff = 0;
-+		icsk->icsk_probes_tstamp = 0;
-+		inet_csk_clear_xmit_timer(sk, ICSK_TIME_PROBE0);
-+		if (!tcp_rtx_queue_empty(sk))
-+			tcp_retransmit_timer(sk);
-+	}
-+}
-+
- static inline bool tcp_ack_is_dubious(const struct sock *sk, const int flag)
- {
- 	return !(flag & FLAG_NOT_DUP) || (flag & FLAG_CA_ALERT) ||
-@@ -3908,6 +3948,7 @@ static int tcp_ack(struct sock *sk, const struct sk_buff *skb, int flag)
- 	if ((flag & FLAG_FORWARD_PROGRESS) || !(flag & FLAG_NOT_DUP))
- 		sk_dst_confirm(sk);
- 
-+	tcp_ack_probe_shrink(sk);
- 	delivered = tcp_newly_delivered(sk, delivered, flag);
- 	lost = tp->lost - lost;			/* freshly marked lost */
- 	rs.is_ack_delayed = !!(flag & FLAG_ACK_MAYBE_DELAYED);
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 21dc4f7e0a12..eac0532edb61 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -4089,14 +4089,13 @@ int tcp_write_wakeup(struct sock *sk, int mib)
- void tcp_send_probe0(struct sock *sk)
- {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
--	struct tcp_sock *tp = tcp_sk(sk);
- 	struct net *net = sock_net(sk);
- 	unsigned long timeout;
- 	int err;
- 
- 	err = tcp_write_wakeup(sk, LINUX_MIB_TCPWINPROBE);
- 
--	if (tp->packets_out || tcp_write_queue_empty(sk)) {
-+	if (!tcp_probe0_needed(sk)) {
- 		/* Cancel probe timer, if it is not required. */
- 		icsk->icsk_probes_out = 0;
- 		icsk->icsk_backoff = 0;
-diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
-index b839c2f91292..a28606291b7e 100644
---- a/net/ipv4/tcp_timer.c
-+++ b/net/ipv4/tcp_timer.c
-@@ -350,11 +350,9 @@ static void tcp_delack_timer(struct timer_list *t)
- static void tcp_probe_timer(struct sock *sk)
- {
- 	struct inet_connection_sock *icsk = inet_csk(sk);
--	struct sk_buff *skb = tcp_send_head(sk);
--	struct tcp_sock *tp = tcp_sk(sk);
- 	int max_probes;
- 
--	if (tp->packets_out || !skb) {
-+	if (!tcp_probe0_needed(sk)) {
- 		icsk->icsk_probes_out = 0;
- 		icsk->icsk_probes_tstamp = 0;
- 		return;
--- 
-2.40.1
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGTLtAAKCRB4tDGHoIJi
+0liRAQDsZjU9B15a9rnhIN17ei53YY8w3HzELiqszr4hvKfR1wEAjsnlJtzq5Z1w
+U3kVEcygfCm3gQJxqEJTxAHcJtr6IgI=
+=bdpZ
+-----END PGP SIGNATURE-----
+
+--ssdu9SzKEXVS/OPM--
