@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56E9706F43
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C303706F4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjEQRXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        id S229717AbjEQRZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjEQRXe (ORCPT
+        with ESMTP id S229653AbjEQRZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:23:34 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52728728A;
-        Wed, 17 May 2023 10:23:22 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3063433fa66so704507f8f.3;
-        Wed, 17 May 2023 10:23:22 -0700 (PDT)
+        Wed, 17 May 2023 13:25:10 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3FB93F7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:24:54 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510b154559fso1811036a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684344201; x=1686936201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BKD2whEK1ythHrThH/kmgQln8MVyL2sg+QVZlHM2h4=;
-        b=SBC//ysUyt07A2/dgDEBiBiArbsFSHb0XkiDqC3g3wRyEVTTBadlJS+ClVJK8O7mEo
-         g6HovdKo6e7cAzRNepEyhrpzCgIrwvlDwb8np/iRSWaFdWlccDVCQd0c2HiBCaZhxlKg
-         hxfQ5Oui6egclQgMfzb9N6AZiJrctTqJov1LEgHwWYOg5FnleKCDmWxfDFZU9tm7aWSC
-         +eHZ6h9WGz1ISEIIL5MQu/4VvyHWPbxhgvQy0ArBoir18+i1O8WJ27hVZLkZExyRSU36
-         Vj74LBwRo/A+Jyw4F4bZ/BcQoGsKqh91TE7SejGERdy1uECmgz5SIbkccF0QkqtghDeV
-         8h/A==
+        d=gmail.com; s=20221208; t=1684344291; x=1686936291;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ydp0nzIqTf9GiPFxJfFUQZhMHTtnoSpeoV+NHzLr6E4=;
+        b=r4B62BFbS7AmMFV5HoMdEg0dcw8fXjpKt8dMdOraIXcuiW8WxxXKc+E3Amka7WhJeK
+         6R3WVymoGOszC7ipCN0+dtYSTLx5clCCAi/DZmq0+M7Bdz9/t5biJVH8u+ldKXHoKV0o
+         tZB3EYg79tj+51BuP+PRlWxE8ZXFsUG637Gmk4aAFzfIh/Y93N9DB8K2ey16bs3YliwH
+         pR1VOZ9oL2eDSLuecpttUZ5rFGj5YLHsPAxY03jxchARCvSiHFD33s38RuXNShCB6w8t
+         SL6luzV1wPMP7p6U8kN3Fk2ltKHiPjaODJ4/Dmf/A0UZFazk9qMZZ8JGyJT9oUsIFpKY
+         tMoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684344201; x=1686936201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7BKD2whEK1ythHrThH/kmgQln8MVyL2sg+QVZlHM2h4=;
-        b=B913GSLN43BxOOqzVEy6UXKC8/xjVJsLtBe2P9ZgSxy7BNWLhv+W218cH45CDGNSCF
-         F7odf6QlyIuEFnek82sxogKqN643k6eUx4SRQ2Omxt4W0Uwsi0lbUnaPcXB0lFznWQsK
-         BG1ARirjK/tJ0eh/lwUol5xXBcZuTN2TGnjuVv1/nsqxkigA97NplI5htA1KdnvxPInO
-         KuDngaqj/8dtk42C5DhHpaExCkKlrmyiyEOKxUxA+Oxt6KWqBvU5Al04++9a2/TgLdsf
-         pKAQ7kQvboOTk9/pWYK8lJ9oGtNNG13jfBiJdOM5fIVoZ0ELS2X2WRlqHka4RQRClTse
-         1Dtg==
-X-Gm-Message-State: AC+VfDy9F8AVnaFy/flwZYAE2azk9o5a5f5dhOYpFqf2Zp6hpGUvySnx
-        M98wifIr7pVWFZIPHQCwiefv1BvKx8e5QQ==
-X-Google-Smtp-Source: ACHHUZ4Bm7EWE3rQkQrjXhJTqdVO9G3J0QmcuTgJ1GRFii3dXQfi9F5ixtgIaHCSJOkT0h7drZ1UnA==
-X-Received: by 2002:a5d:4a8f:0:b0:306:2d3d:a108 with SMTP id o15-20020a5d4a8f000000b003062d3da108mr1133169wrq.11.1684344200527;
-        Wed, 17 May 2023 10:23:20 -0700 (PDT)
-Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
-        by smtp.gmail.com with ESMTPSA id z8-20020adfe548000000b00306281cfa59sm3321041wrm.47.2023.05.17.10.23.19
+        d=1e100.net; s=20221208; t=1684344291; x=1686936291;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ydp0nzIqTf9GiPFxJfFUQZhMHTtnoSpeoV+NHzLr6E4=;
+        b=ainB/iKMt0REFrrQOSyH1/2DaXeoR0K7wi79xGK7ozNZv92Ie/uJSFGUyhfgp37JCR
+         Gmcw6XnMBTrk8r3dPO9PEMWDyOypE4TM0BM9OrYD0d1u+2VDI2LsmuqgD5AMs7Np+lxP
+         DDRmiKw6bjLdHGyKmqhAJ3m7UqF2gEBG5h0ARK0uhanMigC7E5scZbqBW3lhKKVr7KeD
+         BFTnJJtQp833IwcCDZTUHvTxl8k3k8DXwE8yxhmpGN7iuJPE1+b57D7/MG4CpbEhsLU1
+         7L90u+U2T8jc+w0xDN0OvISRZkzVbhZIgMGkQgWIRIof6SbQ5Ld0GganxnM97zHiCZff
+         SCZw==
+X-Gm-Message-State: AC+VfDz1AsAeLXWcZJqb8UMPM+QzsngISyORklI6jJ7s3PIFTD2RY2Fr
+        aF2dyQlhBt15wgzbdejDKWo=
+X-Google-Smtp-Source: ACHHUZ78xtzzPlt84o9mNoDNQHi/wtMMcy6VkXVTXf+I5gP3pgGtigo30f7CZchPznk2+9nYiqRAkg==
+X-Received: by 2002:a17:907:74c:b0:965:6aff:4f02 with SMTP id xc12-20020a170907074c00b009656aff4f02mr36680500ejb.41.1684344291101;
+        Wed, 17 May 2023 10:24:51 -0700 (PDT)
+Received: from Osmten.. ([103.84.150.101])
+        by smtp.gmail.com with ESMTPSA id d1-20020a1709067a0100b0096b0e93193asm5440858ejo.90.2023.05.17.10.24.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 10:23:19 -0700 (PDT)
-Date:   Wed, 17 May 2023 18:23:18 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/2] mm/uffd: Allow vma to merge as much as possible
-Message-ID: <a23dc138-a7b3-40c7-adf9-68b2c8185e08@lucifer.local>
-References: <20230517150408.3411044-1-peterx@redhat.com>
- <20230517150408.3411044-3-peterx@redhat.com>
+        Wed, 17 May 2023 10:24:50 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     nm@ti.com, ssantosh@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Osama Muhammad <osmtendev@gmail.com>
+Subject: [PATCH] wkup_m3_ipc.c: Fix error checking for debugfs_create_dir
+Date:   Wed, 17 May 2023 22:24:31 +0500
+Message-Id: <20230517172431.13507-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517150408.3411044-3-peterx@redhat.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,90 +69,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:04:08AM -0400, Peter Xu wrote:
-> We used to not pass in the pgoff correctly when register/unregister uffd
-> regions, it caused incorrect behavior on vma merging and can cause
-> mergeable vmas being separate after ioctls return.
->
-> For example, when we have:
->
->   vma1(range 0-9, with uffd), vma2(range 10-19, no uffd)
->
-> Then someone unregisters uffd on range (5-9), it should logically become:
->
->   vma1(range 0-4, with uffd), vma2(range 5-19, no uffd)
->
-> But with current code we'll have:
->
->   vma1(range 0-4, with uffd), vma3(range 5-9, no uffd), vma2(range 10-19, no uffd)
->
-> This patch allows such merge to happen correctly before ioctl returns.
->
-> This behavior seems to have existed since the 1st day of uffd.  Since pgoff
-> for vma_merge() is only used to identify the possibility of vma merging,
-> meanwhile here what we did was always passing in a pgoff smaller than what
-> we should, so there should have no other side effect besides not merging
-> it.  Let's still tentatively copy stable for this, even though I don't see
-> anything will go wrong besides vma being split (which is mostly not user
-> visible).
->
+This patch fixes the error checking in wkup_m3_ipc.c in
+debugfs_create_dir. The correct way to check if an error occurred
+is 'IS_ERR' inline function.
 
-Maybe a Reported-by me since I discovered the fragmentation was already
-happening via the repro? :)
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+---
+ drivers/soc/ti/wkup_m3_ipc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Mike Rapoport (IBM) <rppt@kernel.org>
-> Cc: linux-stable <stable@vger.kernel.org>
-> Fixes: 86039bd3b4e6 ("userfaultfd: add new syscall to provide memory externalization")
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  fs/userfaultfd.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 17c8c345dac4..4e800bb7d2ab 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -1332,6 +1332,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
->  	bool basic_ioctls;
->  	unsigned long start, end, vma_end;
->  	struct vma_iterator vmi;
-> +	pgoff_t pgoff;
->
->  	user_uffdio_register = (struct uffdio_register __user *) arg;
->
-> @@ -1484,8 +1485,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
->  		vma_end = min(end, vma->vm_end);
->
->  		new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
-> +		pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
->  		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
-> -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
-> +				 vma->anon_vma, vma->vm_file, pgoff,
->  				 vma_policy(vma),
->  				 ((struct vm_userfaultfd_ctx){ ctx }),
->  				 anon_vma_name(vma));
-> @@ -1565,6 +1567,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
->  	unsigned long start, end, vma_end;
->  	const void __user *buf = (void __user *)arg;
->  	struct vma_iterator vmi;
-> +	pgoff_t pgoff;
->
->  	ret = -EFAULT;
->  	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
-> @@ -1667,8 +1670,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
->  			uffd_wp_range(vma, start, vma_end - start, false);
->
->  		new_flags = vma->vm_flags & ~__VM_UFFD_FLAGS;
-> +		pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
->  		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
-> -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
-> +				 vma->anon_vma, vma->vm_file, pgoff,
->  				 vma_policy(vma),
->  				 NULL_VM_UFFD_CTX, anon_vma_name(vma));
->  		if (prev) {
-> --
-> 2.39.1
->
+diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
+index c9197912ec24..3aff106fc11a 100644
+--- a/drivers/soc/ti/wkup_m3_ipc.c
++++ b/drivers/soc/ti/wkup_m3_ipc.c
+@@ -202,7 +202,7 @@ static int wkup_m3_ipc_dbg_init(struct wkup_m3_ipc *m3_ipc)
+ {
+ 	m3_ipc->dbg_path = debugfs_create_dir("wkup_m3_ipc", NULL);
+ 
+-	if (!m3_ipc->dbg_path)
++	if (IS_ERR(m3_ipc->dbg_path))
+ 		return -EINVAL;
+ 
+ 	(void)debugfs_create_file("enable_late_halt", 0644,
+-- 
+2.34.1
 
-Acked-by: Lorenzo Stoakes <lstoakes@gmail.com>
