@@ -2,112 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7C3706435
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1657F706438
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjEQJdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S229970AbjEQJem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjEQJdp (ORCPT
+        with ESMTP id S229678AbjEQJek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:33:45 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B00A4201
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:33:43 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-783ec566cb9so205621241.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:33:42 -0700 (PDT)
+        Wed, 17 May 2023 05:34:40 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBE8210C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:34:37 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f420618d5bso3621665e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684316022; x=1686908022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FZP05VBsRBTnZPUQDMha8VxgfVkr0tg5YgvQMaq3VYA=;
-        b=aBBRNgfRVqVIC9Dm9wfTTEuD3/7fHEtP2vqz1zKRHpv++rQJidsKaSv6VFaHtgUbRZ
-         CXvFwrhx4TSnPhFw55pNZ6xWesH8LjcxhDZO0NhjUZTdxcvT+RpWAzoM4/jGu2B0q5tk
-         /I/pHGwKwNVH2RwjTKwgErGoTTCaIjIwQrLjMJ9dFdAxHmyARJk5TfqE0oiSCE+xdRHY
-         1WUCaoAVdW+sIheYNBjlyzTjOjC0Dx3a04IOVFFFmsPO7YnLXS0GrYyv04jt8A2sTol5
-         kr6Wzma81tOJhTbplRq6UnjhD8F4ZAK7Y2VDE0Il3bseVJZY1BU9kmME6eOCZQ2qGZFR
-         sSow==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684316076; x=1686908076;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OUDDylEUMPQFAPrSz8VZ1I2suyRsN1Zbbv13ypc2rzA=;
+        b=XJSg314JjT5M+98dJS+VCddMEi8iYMXpPyn9zkjIGFyADWNkyxp7ryBtkVfS4Cd847
+         Lf48mYtXHWxAdR37oqQ0G6DJ2ismYf50up5N7NAFWfNKEyfAdokSiVpsnQLhPGW83h47
+         21D6C4OqYuNMollfIfXcv38/Z/u1EvEFleuDbYG2qLucJtxks4ngMKvuJtN8TPhlMxE4
+         mhskNVHTzvyf9d7zTcKLksGRRkEsGZC86Qn8Xv+7pDe78i5HKplZFQ62HbZTOry7HJ8i
+         nYDa3O6hEeyDtrwmAJO0FQzrGBnlICC2D7pwBW8C0Tb65VoXjz/1/H/502o/UslnVCAv
+         p6qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684316022; x=1686908022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FZP05VBsRBTnZPUQDMha8VxgfVkr0tg5YgvQMaq3VYA=;
-        b=Pc2UvecQj8Ud8mQHUv41d70Prt1xSx81rjc91YFyYMqroLTIx8nZbvSFckT/GWWhW6
-         j9xEaQiLhuep4i7XXMLGWagk20GxgkzNg8lu00ohcE3nt6VRkLceZofSYVNHhVpxoPHX
-         BeA3S0nz09taGsBJKhUTKHquxDCpQGePXyerMaazyMD+8BRggWsqxpukI/mzpHBVBn9e
-         NZIOVRNBIhBjR+DXyPlValYVUuz3A1UCS1dohEKC2rji+4btjdQ4w8pDa8mbRtVfiWhJ
-         qy2Zrs1QzrlsCTasntU7FidA+VW6i8XdCmBE7X+eqcH60vnvw8BtXbDtQupIpjKrxpD0
-         d6UA==
-X-Gm-Message-State: AC+VfDyLP6vUlzyFhBB1TIy+hsIidqviv0YZX1ioTldewpnqAFea3H0/
-        Sbmddd+J4xW02n+zwCScVRB97EyB+oL5uY7dWMQAkBf6UkbFz0gB
-X-Google-Smtp-Source: ACHHUZ5q/zWRBS78Q6k4yWV3Mh1qbcw1QL9guDD0uikNGXvaPjcLe0Aq0aLDDiyxGAu2nBIP9kLjT8g7+jMV4bVkJMw=
-X-Received: by 2002:a67:fd8c:0:b0:434:7037:c7dd with SMTP id
- k12-20020a67fd8c000000b004347037c7ddmr16176876vsq.34.1684316022180; Wed, 17
- May 2023 02:33:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684316076; x=1686908076;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OUDDylEUMPQFAPrSz8VZ1I2suyRsN1Zbbv13ypc2rzA=;
+        b=izR0/8TxgpeVpAOnc8/bb4P6Cax8QsUwcuKRrN/qBzsXhzU/EcNyu3JB4Y6FhHzaiy
+         Bcp144Pyn9QQ0v5NsP40yunXImqO1iRjRCxNp3zw5eaNLt8QI2M5Z3N4v+Aw0jSAvV9W
+         HUPbj7M5N/kMtHnkovBTzKm1kRcpi1CxtCTJHADMuuYU8n7iffkLnYzIE3kf8Yg9+Yb8
+         kKOtvFwrbal38dBIQ+YAuW7LEAfLQoThyij8NGAgAORnvOYZWLaNVVE/UL/7/Y4CXZq/
+         /k4L9K8uf5zTnNowkWGuevmurXIbPv+am+BVU4QrFQxH5cAwLthc4seP8DvLOXGRinIs
+         eq2A==
+X-Gm-Message-State: AC+VfDwe9I6DbytSpVW94fI6rdsd69M1EAMyBO0UnwiOTlSpaJjIIoZO
+        hQRmLJknboS1G8U957VJDPCpAuhmmAdsX333Tkk=
+X-Google-Smtp-Source: ACHHUZ4jNgQpFPdP+tvVxA3NtSIP3jJELzRJPLwuGEnKMoW8YHWa+nsihhXkJ5xOCHJj8CLdfns4gg==
+X-Received: by 2002:a05:600c:c6:b0:3f4:28db:f5ff with SMTP id u6-20020a05600c00c600b003f428dbf5ffmr21701922wmm.35.1684316076025;
+        Wed, 17 May 2023 02:34:36 -0700 (PDT)
+Received: from [10.1.3.59] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id n7-20020a05600c294700b003f4266965fbsm1655325wmd.5.2023.05.17.02.34.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 02:34:35 -0700 (PDT)
+Message-ID: <62c51f2c-a620-a879-5659-faf3c4b77268@baylibre.com>
+Date:   Wed, 17 May 2023 11:34:32 +0200
 MIME-Version: 1.0
-References: <20230516201642.557733-1-arnd@kernel.org>
-In-Reply-To: <20230516201642.557733-1-arnd@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 17 May 2023 11:33:31 +0200
-Message-ID: <CAMRc=Mdic_d3KaxFXrz7aVUcLyK8fBBHPgRGYP8nQvxN-ZwJXQ@mail.gmail.com>
-Subject: Re: [PATCH] gpio: sa1100: include <mach/generic.h>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] clk: mediatek: mt8365: fix the clock indexes
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230517-fix-clk-index-v1-0-142077a1732b@baylibre.com>
+ <20230517-fix-clk-index-v1-1-142077a1732b@baylibre.com>
+ <9c7ff0f1-3d2c-b83a-a47d-544c76f29663@linaro.org>
+Content-Language: en-US
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <9c7ff0f1-3d2c-b83a-a47d-544c76f29663@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 10:16=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> sa1100_init_gpio() is declared in a machine specific header so it
-> can be called from platform code, but the definition is in the device
-> driver, which causes a warning:
->
-> drivers/gpio/gpio-sa1100.c:310:13: error: no previous prototype for 'sa11=
-00_init_gpio' [-Werror=3Dmissing-prototypes]
->
-> It's already possible to include mach/generic.h from drivers, so add
-> this one here as well.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/gpio/gpio-sa1100.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpio/gpio-sa1100.c b/drivers/gpio/gpio-sa1100.c
-> index 342a59ea489a..3b1cc8462fcb 100644
-> --- a/drivers/gpio/gpio-sa1100.c
-> +++ b/drivers/gpio/gpio-sa1100.c
-> @@ -13,6 +13,7 @@
->  #include <mach/hardware.h>
->  #include <mach/regs-gpio.h>
+On 17/05/2023 10:40, Krzysztof Kozlowski wrote:
+> On 17/05/2023 10:28, Alexandre Mergnat wrote:
+>> Before the patch [1], the clock probe was done directly in the
+>> clk-mt8365 driver. In this probe function, the array which stores the
+>> data clocks is sized using the higher defined numbers (*_NR_CLOCK) in
+>> the clock lists [2]. Currently, with the patch [1], the specific
+>> clk-mt8365 probe function is replaced by the mtk generic one [3], which
+>> size the clock data array by adding all the clock descriptor array size
+>> provided by the clk-mt8365 driver.
+>>
+>> Actually, all clock indexes come from the header file [2], that mean, if
+>> there are more clock (then more index) in the header file [2] than the
+>> number of clock declared in the clock descriptor arrays (which is the
+>> case currently), the clock data array will be undersized and then the
+>> generic probe function will overflow when it will try to write in
+>> "clk_data[CLK_INDEX]". Actually, instead of crashing at boot, the probe
+>> function returns an error in the log which looks like:
+>> "of_clk_hw_onecell_get: invalid index 135", then this clock isn't
+>> enabled.
+> 
+> Please use subject prefixes matching the subsystem. You can get them for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching.
 
-This doesn't apply on top of my branch (neither on next) because of
-this line. I can't see where this was added. Any hint?
+I will.
 
-Bart
+> 
+> This is huge ABI break and I don't understand why it is needed. Entire
+> description above did not explain me that.
 
->  #include <mach/irqs.h>
-> +#include <mach/generic.h>
->
->  struct sa1100_gpio_chip {
->         struct gpio_chip chip;
-> --
-> 2.39.2
->
+Briefly, clocks with the higher index than the data clock array can't be 
+used. I've this issue:
+[    0.427054] of_clk_hw_onecell_get: invalid index 135
+[    0.429525] of_clk_hw_onecell_get: invalid index 69
+[    0.442998] of_clk_hw_onecell_get: invalid index 70
+
+That means CLK_TOP_SSUSB_PHY_CK_EN, CLK_IFR_SSUSB_REF and 
+CLK_IFR_SSUSB_XHCI aren't working when I need them. So my USB doesn't work.
+
+> 
+>>
+>> The simplest way to fix the regression is to remove from the header file
+>> [2] the unused clocks.
+> 
+> ??? The simples is to revert the patch, so you won't break the ABI.
+> 
+>>
+>> [1]: Commit ffe91cb28f6a ("clk: mediatek: mt8365: Convert to
+>>       mtk_clk_simple_{probe,remove}()")
+>> [2]: include/dt-bindings/clock/mediatek,mt8365-clk.h
+>> [3]: drivers/clk/mediatek/clk-mtk.c
+>>
+>> Fixes: ffe91cb28f6a ("clk: mediatek: mt8365: Convert to mtk_clk_simple_{probe,remove}()")
+>>
+>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>> ---
+>>   include/dt-bindings/clock/mediatek,mt8365-clk.h | 361 ++++++++++++------------
+>>   1 file changed, 177 insertions(+), 184 deletions(-)
+>>
+>> diff --git a/include/dt-bindings/clock/mediatek,mt8365-clk.h b/include/dt-bindings/clock/mediatek,mt8365-clk.h
+>> index f9aff1775810..fd59c8bdeb24 100644
+>> --- a/include/dt-bindings/clock/mediatek,mt8365-clk.h
+>> +++ b/include/dt-bindings/clock/mediatek,mt8365-clk.h
+>> @@ -7,147 +7,142 @@
+>>   #define _DT_BINDINGS_CLK_MT8365_H
+>>   
+>>   /* TOPCKGEN */
+>> -#define CLK_TOP_CLK_NULL		0> -#define CLK_TOP_I2S0_BCK		1
+> 
+> ...
+> 
+>> +#define CLK_TOP_I2S0_BCK		0
+> 
+> Why? This is really broken. You can remove the defines, but re-shuffling
+> everything?!?
+
+I've under-estimated the impact of modifying the defines, I will try to 
+find another way to fix the regression in the drivers directly.
+
+Thanks for your review.
+
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
+
+-- 
+Regards,
+Alexandre
+
