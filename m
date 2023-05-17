@@ -2,63 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9C2706009
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CECF570600D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjEQG2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 02:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S232256AbjEQG3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 02:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbjEQG2T (ORCPT
+        with ESMTP id S231974AbjEQG3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 02:28:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1153D35BB;
-        Tue, 16 May 2023 23:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=Vspge/HY+CqpXSg2weUlsF8Uhf
-        7vqByyappM3l++Nu1wyd2H8Iplmyk6CD5d3pnLpLrP1KCFdi/MDOP5Q/lIYLG4fdjk+fWXQGjc4dA
-        JgTY3rGmC98X04LV1+e01z1+HsOOLZ+hFlHaZwBVPZgszS/XywZuEj2gkKDYx1G1Kszuq1E3gnejN
-        loKUjfagQlP7QiRQ9B2mNIMjMmrAq+YZBu85ksrEERvgzN6rWHq/baU0wGj/DZLn6jkLtTUc8oP8g
-        Qa9L/P2a1xVi2bKMAN6Ud2mUrMFrA1HxpbAnalfuOaC+STBlU6LSxuzTJxkSABQ9uCMFwE6Gj+j6O
-        k6zpRMbg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzAdx-008SSt-0W;
-        Wed, 17 May 2023 06:28:13 +0000
-Date:   Tue, 16 May 2023 23:28:13 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: Re: [PATCH v5 RESEND 03/17] openrisc: mm: remove unneeded early
- ioremap code
-Message-ID: <ZGRz/a7aDla63C2y@infradead.org>
-References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-4-bhe@redhat.com>
+        Wed, 17 May 2023 02:29:16 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE4130F6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:29:14 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-510b56724caso6426229a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684304953; x=1686896953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6xI3hUbCW+FwBwOTtLOPQqL67ArdQOyuoW/lXxNMjQ4=;
+        b=QhBxL6hMCl1Ud6Amha9FLCu88o5zRWYcXHY07Og7YJJmKKLxqIf51jgzoy7GlXYQFV
+         f3mESbwL3yivp3PgaQAahI6wqjZJDBNf3SPjeyE9v/i/+ORg1dSIFhdy2lZC7hMrMwJO
+         sIXNvses9J2PlqQEtzGGDoijnrBZM+SQrLLjAfZ5eQ2A3unoXihRNuRbM5gf3L5cli2e
+         9i/t8F5usYel9g/57AGQghkuu1yhRQ08EfeCAyzIAk4bFsYkP6xea2Dzl1IbYib5obwt
+         V9J4Yt+R2ntKqXviGWxYPa6AFkxbtVlaFoFpMhVOZSilbhN4RsCnpUY79+h8/+MJjqAn
+         oD8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684304953; x=1686896953;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6xI3hUbCW+FwBwOTtLOPQqL67ArdQOyuoW/lXxNMjQ4=;
+        b=J3fULvqOy6nEJvELUaq/fX4TWYcoFLcVlbRZckJ+IZ4qTIV501rPN0lIihSiI9ceQ3
+         oSqd05lfsqo9QD8If6ofc5qIWRpo4QDNXHdtJkfXubgBggwgn1qf3hCeT0yCbVJXu6I/
+         nYOPob5iY97g0DYe6zEoh4rjSQcvAbbMsyJ1utnMcfPiLepqA6yOT+CthEbqK8XkgVVd
+         WPplsWM84l4fQdedgI6uVpgYa9uSRnRgaR6vBeYqxRqHPhBoWhMf8toePFQmrEbgJs7b
+         ScCSzycrArBzBguLyeOLyOHXlH5PPjMSRXur531vqqQP3IjigSDpLlBdOJWghHscYOmK
+         p9zQ==
+X-Gm-Message-State: AC+VfDxpl6uo8oGSkvteneueZhBEJoT5bioUvdKv/RRjFst984YEKwco
+        cCtaUY6gfjgY1GteDlUwlOhy
+X-Google-Smtp-Source: ACHHUZ42czu2IBgJGeY9QoEvbOwAYlFWVCvDL8R1Dq4JP2iduNUihBHafbmWDfP3n8G4Ls7VKC8RsA==
+X-Received: by 2002:a17:907:2d27:b0:969:ed36:12ab with SMTP id gs39-20020a1709072d2700b00969ed3612abmr1091538ejc.23.1684304952764;
+        Tue, 16 May 2023 23:29:12 -0700 (PDT)
+Received: from localhost.localdomain ([59.92.102.59])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906648900b0094f3d700868sm11859273ejm.80.2023.05.16.23.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 23:29:12 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, bp@alien8.de, mchehab@kernel.org
+Cc:     james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [RESEND PATCH v7 0/2] Fix crash when using Qcom LLCC/EDAC drivers
+Date:   Wed, 17 May 2023 11:58:57 +0530
+Message-Id: <20230517062859.57371-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515090848.833045-4-bhe@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+Hello,
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+This series fixes the crash seen on the Qualcomm SM8450 chipset with the
+LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
+fixed LLCC register offsets for detecting the LLCC errors.
+
+This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
+register offsets were changed. So accessing the fixed offsets causes the
+crash on this platform.
+
+So for fixing this issue, and also to make it work on future SoCs, let's
+pass the LLCC offsets from the Qcom LLCC driver based on the individual
+SoCs and let the EDAC driver make use of them.
+
+This series has been tested on SM8450 based dev board.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/linux-arm-msm/20230314053725.13623-1-manivannan.sadhasivam@linaro.org/
+
+Changes in v7:
+
+* Rebased on top of v6.4-rc1
+
+Changes in v6:
+
+* Rebased on top of v6.3-rc1
+* Dropped the Kconfig patch that got applied
+
+Changes in v5:
+
+* Added fixes tag and CCed stable mentioning the dependency
+* Added a patch to fix the build error with COMPILE_TEST
+
+Changes in v4:
+
+* Dropped the patches that were already applied
+* Rebased on top of v6.1-rc5
+
+Changes in v3:
+
+* Instead of using SoC specific register offset naming convention, used
+  LLCC version based as suggested by Sai
+* Fixed the existing reg_offset naming convention to clearly represent
+  the LLCC version from which the offsets were changed
+* Added Sai's Acked-by to MAINTAINERS patch
+* Added a new patch that removes an extra error no assignment
+
+Changes in v2:
+
+* Volunteered myself as a maintainer for the EDAC driver since the current
+  maintainers have left Qualcomm and I couldn't get hold of them.
+
+Manivannan Sadhasivam (2):
+  EDAC/qcom: Remove extra error no assignment in qcom_llcc_core_setup()
+  EDAC/qcom: Get rid of hardcoded register offsets
+
+ drivers/edac/qcom_edac.c           | 119 ++++++++++++++---------------
+ include/linux/soc/qcom/llcc-qcom.h |   6 --
+ 2 files changed, 59 insertions(+), 66 deletions(-)
+
+-- 
+2.25.1
+
