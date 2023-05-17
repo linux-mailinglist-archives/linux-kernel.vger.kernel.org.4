@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E11B706C2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD62706C35
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjEQPGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S232075AbjEQPH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbjEQPG0 (ORCPT
+        with ESMTP id S232250AbjEQPHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:06:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF4EA273;
-        Wed, 17 May 2023 08:05:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 17 May 2023 11:07:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50419028;
+        Wed, 17 May 2023 08:06:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C601E22326;
-        Wed, 17 May 2023 15:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684335951; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1CQ41ixeN2lCI6YEUo78oOOB3ssZOYerTAq/UhbIO6o=;
-        b=ID03M4eGcZSMtvsnpcTNqKFquOeohwroO+yoQ4/VsBdsKoblAEuMQQUe8PDlJEjk9vkKG2
-        RWHN0E5F11RF/UCirkDArPAoQfaPdiXymw6RYDtfBfOVLcXWpyUr9JlOmD8R/vo2p2YWma
-        AT/6frLX1BV7kB2F26y3ATaueFx2pDk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684335951;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1CQ41ixeN2lCI6YEUo78oOOB3ssZOYerTAq/UhbIO6o=;
-        b=QY3dQekxMp005Ui+hzGlEX2IaryAj0pI161/byoeTqvgOkXFoIBkz1KL3Lf7Bux6xrIIA2
-        E/DV0wRnmv76dhCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3A58913358;
-        Wed, 17 May 2023 15:05:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id KbAxDU/tZGSaeQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 17 May 2023 15:05:51 +0000
-Message-ID: <de2a6105-ab4d-3c1f-1564-f621d81e641d@suse.de>
-Date:   Wed, 17 May 2023 17:05:50 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 483FE64879;
+        Wed, 17 May 2023 15:06:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D895C433D2;
+        Wed, 17 May 2023 15:06:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684335985;
+        bh=uj3yY1AQxYZ5vT1NpUTbFozGPyly3ykjZNUb52/KP+M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TB0P7qc7sqyKrutmMUYIP9Aryjc6+VsVHC5s/C8RCzKNIma73U9n6kIJX6vn8Q/+D
+         13wWhU9FrBZBi/uq/FNfUJP5NKdDCp/a/YhyDCS39U8VVEFxOeird1HkAqAKfnnnv/
+         wKEmyocF4G19gelpmZAeSIrfdJAKKzXgmkJbtPiYjebeH1NH1guklKHoaj/XEhytet
+         v2xao5IngygO7BCpJqhDUDIe7TgCu0bf+9/wFbuPXPChWUf4RrQBftA96Z1mQSQDyV
+         yZU1ud73567zxvHRXP++zc9lU0BvkaQqw6sX6HxCHPF/4BJmedLoZnmPquDCMs5p54
+         uiop1DizSRCzQ==
+Date:   Wed, 17 May 2023 08:06:24 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v5] dt-bindings: net: nxp,sja1105: document
+ spi-cpol/cpha
+Message-ID: <20230517080624.672d52a2@kernel.org>
+In-Reply-To: <50cc1727-999f-9b7a-ef09-14461fa4ddfb@linaro.org>
+References: <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
+        <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
+        <20230515105035.kzmygf2ru2jhusek@skbuf>
+        <20230516201000.49216ca0@kernel.org>
+        <50cc1727-999f-9b7a-ef09-14461fa4ddfb@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 0/7] Add a DRM driver to support AI Processing Unit (APU)
-To:     Alexandre Bailon <abailon@baylibre.com>, airlied@gmail.com,
-        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jstephan@baylibre.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
-        nbelin@baylibre.com, bero@baylibre.com
-References: <20230517145237.295461-1-abailon@baylibre.com>
-Content-Language: en-US
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230517145237.295461-1-abailon@baylibre.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------3ncrOiZi2JhHUm00qxwLJpfV"
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,110 +67,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------3ncrOiZi2JhHUm00qxwLJpfV
-Content-Type: multipart/mixed; boundary="------------AbqRIMn4WI6qY8GL9obWCuXH";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Alexandre Bailon <abailon@baylibre.com>, airlied@gmail.com,
- daniel@ffwll.ch, maarten.lankhorst@linux.intel.com, mripard@kernel.org
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com, sumit.semwal@linaro.org,
- christian.koenig@amd.com, jstephan@baylibre.com,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, khilman@baylibre.com, nbelin@baylibre.com,
- bero@baylibre.com
-Message-ID: <de2a6105-ab4d-3c1f-1564-f621d81e641d@suse.de>
-Subject: Re: [PATCH 0/7] Add a DRM driver to support AI Processing Unit (APU)
-References: <20230517145237.295461-1-abailon@baylibre.com>
-In-Reply-To: <20230517145237.295461-1-abailon@baylibre.com>
+On Wed, 17 May 2023 10:26:38 +0200 Krzysztof Kozlowski wrote:
+> On 17/05/2023 05:10, Jakub Kicinski wrote:
+> > On Mon, 15 May 2023 13:50:35 +0300 Vladimir Oltean wrote:  
+> >> On Mon, May 15, 2023 at 09:45:25AM +0200, Krzysztof Kozlowski wrote:  
+>  [...]  
+> >>
+> >> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>  
+> > 
+> > Is my instinct that this should go to net-next correct?  
+> 
+> It would be great missing net-next was pointed out by checkpatch.pl.
 
---------------AbqRIMn4WI6qY8GL9obWCuXH
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+FWIW, I'd have taken the patch as is. There isn't much the current
+build tester can do for dt-bindings, anyway. But thanks for the resend
+:)
 
-SGksDQoNCml0IGxvb2tzIGxpa2UgdGhpcyBkcml2ZXIgYmVsb25ncyBpbnRvIGRyaXZlci9h
-Y2NlbC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KQW0gMTcuMDUuMjMgdW0gMTY6NTIg
-c2NocmllYiBBbGV4YW5kcmUgQmFpbG9uOg0KPiBUaGlzIGFkZHMgYSBEUk0gZHJpdmVyIHRo
-YXQgaW1wbGVtZW50cyBjb21tdW5pY2F0aW9uIGJldHdlZW4gdGhlIENQVSBhbmQgYW4NCj4g
-QVBVLiBUaGUgZHJpdmVyIHRhcmdldCBlbWJlZGRlZCBkZXZpY2UgdGhhdCB1c3VhbGx5IHJ1
-biBpbmZlcmVuY2UgdXNpbmcgc29tZQ0KPiBwcmVidWlsdCBtb2RlbHMuIFRoZSBnb2FsIGlz
-IHRvIHByb3ZpZGUgY29tbW9uIGluZnJhc3RydWN0dXJlIHRoYXQgY291bGQgYmUNCj4gcmUt
-dXNlZCB0byBzdXBwb3J0IG1hbnkgYWNjZWxlcmF0b3JzLiBCb3RoIGtlcm5lbCwgdXNlcnNw
-YWNlIGFuZCBmaXJtd2FyZSB0cmllcw0KPiB0byB1c2Ugc3RhbmRhcmQgYW5kIGV4aXN0aW5n
-IHRvIGxldmVyYWdlIHRoZSBkZXZlbG9wbWVudCBhbmQgbWFpbnRlbmFuY2UgZWZmb3J0Lg0K
-PiBUaGUgc2VyaWVzIGltcGxlbWVudHMgdHdvIHBsYXRmb3JtIGRyaXZlcnMsIG9uZSBmb3Ig
-c2ltdWxhdGlvbiBhbmQgYW5vdGhlciBvbmUgZm9yDQo+IHRoZSBtdDgxODMgKGNvbXBhdGli
-bGUgd2l0aCBtdDgzNjUpLg0KPiANCj4gRm9yIHRoZSBwZW9wbGUgaW50ZXJlc3RlZCBieSB0
-aGUgZmlybXdhcmUgb3IgdXNlcnNwYWNlIGxpYnJhcnksDQo+IHRoZSBzb3VyY2VzIGFyZSBh
-dmFpbGFibGUgaGVyZToNCj4gaHR0cHM6Ly9naXRsYWIuYmF5bGlicmUuY29tL2JheWxpYnJl
-L2xpYmFwdS9saWJhcHUNCj4gDQo+IFRoZSBzdXBwb3J0IG9mIEFQVSBoYXMgdG8gYmUgdXBz
-dHJlYW1lZCB0byBsaWJkcm0uDQo+IFVudGlsIHRoaXMgaXMgZG9uZSwgeW91IGNvdWxkIGZp
-bmQgdGhlIHNvdXJjZSBoZXJlOg0KPiBodHRwczovL2dpdGxhYi5iYXlsaWJyZS5jb20vYmF5
-bGlicmUvbGliYXB1L2xpYmRybS8tL3RyZWUvYWJhaWxvbi9tYWluDQo+IA0KPiBUaGUgZHJp
-dmVyIGZvciBtdDgxODMgZGVwZW5kcyBvbiB0aGlzIHNlcmllcyAod2hpY2ggaXMgY3VycmVu
-dGx5IGJsb2NrZWQpOg0KPiBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3Qv
-bGludXgtYXJtLWtlcm5lbC9saXN0Lz9zZXJpZXM9NjIwNDI5DQo+IA0KPiBBbGV4YW5kcmUg
-QmFpbG9uICg1KToNCj4gICAgZHJtOiBBZGQgc3VwcG9ydCBvZiBBSSBQcm9jZXNzb3IgVW5p
-dCAoQVBVKQ0KPiAgICBkcm0vYXB1OiBBZGQgbWVtb3J5IGFsbG9jYXRvcg0KPiAgICBkcm0v
-YXB1OiBBZGQgc3VwcG9ydCBvZiByZXF1ZXN0cw0KPiAgICBkcm0vYXB1OiBBZGQgc3VwcG9y
-dCBvZiBJT01NVQ0KPiAgICBkdC1iaW5kaW5nczogQWRkIGJpZGluZ3MgZm9yIG10ayxhcHUt
-ZHJtDQo+IA0KPiBKdWxpZW4gU3RlcGhhbiAoMik6DQo+ICAgIGRybS9hcHU6IGFsbG93IHBs
-YXRmb3JtIGRyaXZlciB0byBpbXBsZW1lbnQgdGhlaXIgb3duIG1tYXAgZnVuY3Rpb24NCj4g
-ICAgZHJtL2FwdTogQWRkIHN1cHBvcnQgZm9yIGEgc2ltdWxhdGVkIEFQVQ0KPiANCj4gICAu
-Li4vZGV2aWNldHJlZS9iaW5kaW5ncy9ncHUvbXRrLGFwdS1kcm0ueWFtbCAgfCAgMzggKysN
-Cj4gICBkcml2ZXJzL2dwdS9kcm0vS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgfCAg
-IDIgKw0KPiAgIGRyaXZlcnMvZ3B1L2RybS9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAg
-ICB8ICAgMSArDQo+ICAgZHJpdmVycy9ncHUvZHJtL2FwdS9LY29uZmlnICAgICAgICAgICAg
-ICAgICAgIHwgIDIyICsNCj4gICBkcml2ZXJzL2dwdS9kcm0vYXB1L01ha2VmaWxlICAgICAg
-ICAgICAgICAgICAgfCAgMTAgKw0KPiAgIGRyaXZlcnMvZ3B1L2RybS9hcHUvYXB1X2Rydi5j
-ICAgICAgICAgICAgICAgICB8IDI4MiArKysrKysrKysNCj4gICBkcml2ZXJzL2dwdS9kcm0v
-YXB1L2FwdV9nZW0uYyAgICAgICAgICAgICAgICAgfCAyMzAgKysrKysrKw0KPiAgIGRyaXZl
-cnMvZ3B1L2RybS9hcHUvYXB1X2ludGVybmFsLmggICAgICAgICAgICB8IDIwNSArKysrKysN
-Cj4gICBkcml2ZXJzL2dwdS9kcm0vYXB1L2FwdV9zY2hlZC5jICAgICAgICAgICAgICAgfCA1
-OTIgKysrKysrKysrKysrKysrKysrDQo+ICAgZHJpdmVycy9ncHUvZHJtL2FwdS9zaW11X2Fw
-dS5jICAgICAgICAgICAgICAgIHwgMzEzICsrKysrKysrKw0KPiAgIGluY2x1ZGUvdWFwaS9k
-cm0vYXB1X2RybS5oICAgICAgICAgICAgICAgICAgICB8ICA4MSArKysNCj4gICAxMSBmaWxl
-cyBjaGFuZ2VkLCAxNzc2IGluc2VydGlvbnMoKykNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQg
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2dwdS9tdGssYXB1LWRybS55YW1s
-DQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9hcHUvS2NvbmZpZw0K
-PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0vYXB1L01ha2VmaWxlDQo+
-ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9hcHUvYXB1X2Rydi5jDQo+
-ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9hcHUvYXB1X2dlbS5jDQo+
-ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9hcHUvYXB1X2ludGVybmFs
-LmgNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9ncHUvZHJtL2FwdS9hcHVfc2No
-ZWQuYw0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0vYXB1L3NpbXVf
-YXB1LmMNCj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgaW5jbHVkZS91YXBpL2RybS9hcHVfZHJt
-LmgNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZl
-bG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0
-cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFu
-ZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgw
-OSAoQUcgTnVlcm5iZXJnKQ0K
-
---------------AbqRIMn4WI6qY8GL9obWCuXH--
-
---------------3ncrOiZi2JhHUm00qxwLJpfV
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRk7U4FAwAAAAAACgkQlh/E3EQov+Cb
-tg/+Mw9nPevKsZrpAHKT2KpTKI72La7N9DWB82x51M59+Ye9js9hvSe02GYTaNNBMK8LnER4Pdxe
-PK3BI3M8A9kHvtKLkx1QPpmZ9glA7tPIavl12oVw/mT52U8lLnqs6QQZbJM8lJK5LZZRKiN5x0ko
-Z5D6D77HGWxune35pSwjh/Am73O0jITYWGiV+TYoBZ5XbVr9O53319rw/ZE54Qn+Bq5VNz917C6Z
-eOF5CbTWEAa0Fk10OlEiOlftFL7L+bS2u/QIPM8qxyc0h4ysXorAAveHfpY8hMMNLlbvl3U3TJO2
-zLPBLwzIOMqH3h2if0efzBnYX3HcXqyt54mrIlRLuKmSH+8CGlsZRNdl90WuGIiPk/CaoWwoME2h
-oB0QIxDlpsF7FpaJUBUJ8R7w0b1tnCz7ASKSueK/oRZUNwOgPTBz5B9LIC8jFcfN0yOkf0ZCVjEQ
-Revw5BYB2uNQxqZP8qcTQ18K4+xp8v7IQF66xLxshLEVvh9Z/R1B1pczNmeZAOPrXLPpLEkrYI9I
-QeCgRzyVap8n6DOzeH8IJZng3aCw/AjrjRiVH3ZgNVGujFoJ3vXGMDmK1nz4PG2MNJa8LYpiyqLQ
-7423fLxH/oL8gTSV7WL3P8gdPHQAaAUuE5erXzfDV/yujBpH47q/DsG1JN7W2sEqKTUk0DP57O77
-0Fc=
-=Xyw7
------END PGP SIGNATURE-----
-
---------------3ncrOiZi2JhHUm00qxwLJpfV--
+I was wondering about checkpatch, too, but haven't come up with any
+great solution. The problem is kind of at an intersection of checkpatch
+and get_maintainer.
