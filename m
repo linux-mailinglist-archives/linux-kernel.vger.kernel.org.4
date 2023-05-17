@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6AE706EF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EB3706F00
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjEQRDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
+        id S229582AbjEQRFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEQRDm (ORCPT
+        with ESMTP id S229456AbjEQRFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:03:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D989E;
-        Wed, 17 May 2023 10:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684343021; x=1715879021;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2y9dc4fvVXmSayb63VV0cFv6otKKoZXMYMxw98nbiUY=;
-  b=kRcCOgBggZt0gF/jc+KW4oVF1X8CHd4VGfx3lWlIry/tdwVU8QS/zubG
-   xe0NQamEfwys21whCOa/0Qc3+3/TlThDBOoEixu2sjuhLRfisygi2U0Qj
-   KATSMUNpuTMJtvFlraIFdbbEN+YtVp4kg9kBxskU0+Nknp9FUWg1tqeTD
-   /Dy7tCw4fzxFq9Oey4h2ippE57VfKzI8DvXoK+2HSSLOcAQBYv5Vcx8fs
-   YkcV0hdQdmaIzyu/2Jy5/4EWYJdgApN8RCZ2dc30mYa/XcJMpfI7fbOjv
-   zxuaFLH2WY0lTYl0/FCWjdBs3ub7IFe0vUri4fykpr9pksi8HI70Cftpr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="351840399"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="351840399"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 10:03:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="813944402"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="813944402"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 17 May 2023 10:03:31 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pzKYi-0008V6-2X;
-        Wed, 17 May 2023 20:03:28 +0300
-Date:   Wed, 17 May 2023 20:03:28 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 4/7] pinctrl: wpcm450: elax return value check for IRQ
- get
-Message-ID: <ZGUI4J27h69ed005@smile.fi.intel.com>
-References: <cover.1684220962.git.mazziesaccount@gmail.com>
- <2d89de999a1d142efbd5eb10ff31cca12309e66d.1684220962.git.mazziesaccount@gmail.com>
- <ZGOwCSPH68DJN/NC@probook>
+        Wed, 17 May 2023 13:05:15 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4D29E;
+        Wed, 17 May 2023 10:05:14 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HDSQc4015581;
+        Wed, 17 May 2023 19:04:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=9W/aSpUxJmkATSMYBkvf8JxR9pYleKOzKrYpx1aWW3s=;
+ b=sF/xOCzBWtzRIa9NfQykUhAYW9bdpi4BfqVd+u0QM+zVm8BwtMKvt5RKwyLBIisrS0oR
+ 5gGnY7Tk3ad0uxOVO9gOGzmHbktlfijDg8n+xakYesyoDHksavafdBUG4gbZJqBvJ82W
+ DFd7LXEkP+nJvqLj/AXc66wMlkIZ6uuXTfL4aNGT6+Nu7nQa6gzjVnNyBZzTPiAlc40t
+ ESmdzGMpWoagJ8rmGzqP9CtRdN4NTq6zU5h2ZwLs3UmatRMz82aMZT2nvXJbUIUAtNUJ
+ 2smMikZsEJeBeTn9xzDO8cd7MnSbfV49yjoZkle6SriTjs45hAmzw6RAlJ904FVa7xbz mA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qm7tfj1m6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 19:04:40 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 932B310002A;
+        Wed, 17 May 2023 19:04:39 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8202924F270;
+        Wed, 17 May 2023 19:04:39 +0200 (CEST)
+Received: from [10.129.178.187] (10.129.178.187) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 17 May
+ 2023 19:04:39 +0200
+Message-ID: <e963370c-7018-243a-712d-62ca8463bfd8@foss.st.com>
+Date:   Wed, 17 May 2023 19:04:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 3/3] ARM: dts: stm32: fix several DT warnings on
+ stm32mp15
+Content-Language: en-US
+To:     Marek Vasut <marex@denx.de>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
+References: <20230517143542.284029-1-raphael.gallais-pou@foss.st.com>
+ <20230517143542.284029-4-raphael.gallais-pou@foss.st.com>
+ <f64de05b-8854-4345-80c2-f424968defdc@denx.de>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <f64de05b-8854-4345-80c2-f424968defdc@denx.de>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZGOwCSPH68DJN/NC@probook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Originating-IP: [10.129.178.187]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,40 +85,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 06:32:09PM +0200, Jonathan Neusch�fer wrote:
-> On Tue, May 16, 2023 at 10:13:14AM +0300, Matti Vaittinen wrote:
+Hi Marek
 
-> > The special handling in this driver was added when fixing a problem
-> > where returning zero from fwnode_irq_get[_byname]() was treated as
-> > succes yielding zero being used as a valid IRQ by the driver.
-> > f4a31facfa80 ("pinctrl: wpcm450: Correct the fwnode_irq_get() return value check")
-> > The commit message does not mention if choosing not to abort the probe
-> > on device-tree mapping failure (as is done on other errors) was chosen
-> > because: a) Abort would have broken some existing setup. b) Because skipping
-> > an IRQ on failure is "the right thing to do", or c) because it sounded like
-> > a way to minimize risk of breaking something.
-> > 
-> > If the reason is a) - then I'd appreciate receiving some more
-> > information and a suggestion how to proceed (if possible). If the reason
-> > is b), then it might be best to just skip the IRQ instead of aborting
-> > the probe for all errors on IRQ getting. Finally, in case of c), well,
-> > by acking this change you will now accept the risk :)
+On 5/17/23 17:41, Marek Vasut wrote:
+> On 5/17/23 16:35, Raphael Gallais-Pou wrote:
+>
+> Hi,
+>
+>> diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>> b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>> index 0f1110e42c93..a6e2e20f12fa 100644
+>> --- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>> +++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>> @@ -457,8 +457,7 @@ &ltdc {
+>>       status = "okay";
+>>         port {
+>> -        ltdc_ep0_out: endpoint@0 {
+>> -            reg = <0>;
+>> +        ltdc_ep0_out: endpoint {
+>>               remote-endpoint = <&sii9022_in>;
+>>           };
+>>       };
+>
+> This LTDC port/endpoint stuff always scares me, because I always feel I get it
+> wrong.
+>
+> I believe the LTDC does have one "port" , correct.
+>
+> But I think (?) that the LTDC has two endpoints, endpoint@0 for DPI (parallel
+> output out of the SoC) and endpoint@1 for DSI (internal connection into the
+> DSI serializer) ?
 
-From my side it was c).
+You are correct indeed, I rushed the patch and did not thought about this. I
+agree that this can be confusing, as I also take some time to think through it.
 
-> > The first patch of the series changes the fwnode_irq_get() so this depends
-> > on the first patch of the series and should not be applied alone.
-> 
-> Thanks for investigating this!
-> 
-> It's not a), because there are no existing setups that rely on broken
-> IRQs connected to this pinctrl/GPIO controller.
-> 
-> I suspect b) or c), but I'll let Andy give a more definite answer.
+>
+> Only one of the endpoints can be connected at a time, but there are actually
+> two endpoints in the LTDC port {} node, aren't there ?
+Yes, they are mutually exclusive.
+>
+> So the original description should be OK I think , maybe #address/#size-cells
+> are missing instead ?
+
+Thing is: this file is only included in two device-trees : stm32mp157c-dk1.dts
+and stm32mp157c-dk2.dts.
+
+Among those two files there is only one which adds a second endpoint. Thus if
+the fields are set higher in the hierarchy, a warning yields.
+
+One way to do it would be to make the endpoint@0 go down in the device-tree with
+its dependencies, so that both endpoints are the same level without generating
+noise.
 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Raphaël
+
+
 
 
