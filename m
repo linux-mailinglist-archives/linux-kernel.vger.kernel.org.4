@@ -2,86 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB52D705D72
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A23705D71
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbjEQCtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        id S232161AbjEQCtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbjEQCtv (ORCPT
+        with ESMTP id S231605AbjEQCtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:49:51 -0400
-X-Greylist: delayed 67303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 19:49:50 PDT
-Received: from out-4.mta0.migadu.com (out-4.mta0.migadu.com [91.218.175.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B73110
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:49:50 -0700 (PDT)
+        Tue, 16 May 2023 22:49:50 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F547B3;
+        Tue, 16 May 2023 19:49:50 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so10051140b3a.0;
+        Tue, 16 May 2023 19:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684291789; x=1686883789;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X5Hu/pfh6heq83uqkqoHwx78gypqIXAEufcYmbKjLXk=;
+        b=DqUCKOkTV5NTLs9/3LrcKWL0q4sjkAZSk1eCnfxnr9yZG7ZUQp4D4q8wC9N5qG9gGk
+         xwhIYWlu93bS+7jvaocupczzqsNp62qS/1UCLcMxHtixd16yQvutnplJzdAV9P6n4jVt
+         3FmY80JW2FnGt6stjHlIj2+UqU7Oz+lVJ7obnlIfzDPISXB3UdePOZJkx0F00VAnTTLS
+         Rv2UYLFZ1xTBFjk2TG9mza0092KEiH1pn/NT7jyddLGAgXMF+ZztIULbzysRNvMJDKGL
+         BhPtbSR3zuXuxQDSzvvRbG3H5UVIL2Zs+27HIZs28rXU9rTpCGFqHH5kZduwUkcxBOSZ
+         P7FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684291789; x=1686883789;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X5Hu/pfh6heq83uqkqoHwx78gypqIXAEufcYmbKjLXk=;
+        b=Ylr/pG5norAKN+sS3TV9bmGHFSHFp+1ImscR7nwP3YcE2y/CokjrvttNTcxc0cXNs5
+         B0Oe8XAyJVgAdo2CxMZpXIjy+XqPYQkdG3Mh1A8sbG4y7WO0jFROMS+tILsVPRA3kd68
+         eo9w7ajlAO8Q1kcfUlfiEQu2HZFGY6EaCQsKqriGdcnIZd5AiGDbHnBBhdSo+jvJH6sV
+         a7t46I46PvtLfd6lvRUrZ8Ekk7F1fQiXAomhOOrGvt2x8SneCqczWGv0EpJjte9RjBGR
+         tHiZMPZydNGIFQPMWO9rGDFquHQkzRAF0nLkW1Sz8OUF2syvayrnEQrZCMSVVZtjMnir
+         5lFw==
+X-Gm-Message-State: AC+VfDy9k19wxzzOlGO2B3c9dq+k0KV7O7Y7hD5RaoQqeKKYCNqvSJn0
+        K5hpGdn4XQDkrmiGEZ1etlw=
+X-Google-Smtp-Source: ACHHUZ6wrbUWipYAF7ePukEX17pMnZjyX/PPIDzXkmrRP0Avx8utruS8ChESKc4/EcfW+bKDkMYdrA==
+X-Received: by 2002:a17:902:f612:b0:1a2:749:5f1a with SMTP id n18-20020a170902f61200b001a207495f1amr926119plg.26.1684291789466;
+        Tue, 16 May 2023 19:49:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g26-20020aa7819a000000b0063799398eaesm13991553pfi.51.2023.05.16.19.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 19:49:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 16 May 2023 19:49:48 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/381] 5.10.180-rc1 review
+Message-ID: <b2f06ad9-f298-4b97-9a5a-b40243910f7c@roeck-us.net>
+References: <20230515161736.775969473@linuxfoundation.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684291788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EsjCPqdF40VbunsnjYkM84s06frJ/PE3tIX8ln1mLtg=;
-        b=u/2LVRmhcj6ji42+Sypiqe+H+fGDwKhUxX5ugAbRDYH+axy3T+GMXgaXvH9omlrPL/AANS
-        Xqf7jvnjHAKwQXhIf3PW1UFg6gC621lO9NmxM40leVC0L2NFOomNJhjRV4HWhpnnPekxGM
-        daiQXXsVo6PLRxMqC7yZ5sVy8b2K0Yg=
-Date:   Wed, 17 May 2023 02:49:47 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   "Yajun Deng" <yajun.deng@linux.dev>
-Message-ID: <f0a8449f4a428300a5143b6ea3a51b82@linux.dev>
-Subject: Re: [PATCH] EDAC: Expose node link in sysfs if CONFIG_NUMA
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        "Borislav Petkov" <bp@alien8.de>
-Cc:     james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-doc@vger.kernel.org
-In-Reply-To: <SJ1PR11MB60831CF4AC4E4C23DE362E0DFC799@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <SJ1PR11MB60831CF4AC4E4C23DE362E0DFC799@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20230516111942.GCZGNmzu3Abd4KmZu3@fat_crate.local>
- <20230516103403.GBZGNcG7Q1sdtUpcHW@fat_crate.local>
- <20230516080748.3155788-1-yajun.deng@linux.dev>
- <e930d9a3efd6d99d2badc7bdff713afd@linux.dev>
- <3509bcc597e37616cf45247e8f92d369@linux.dev>
- <20230516121018.GDZGNyqjm9YWQp2Of4@fat_crate.local>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515161736.775969473@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-May 17, 2023 1:25 AM, "Luck, Tony" <tony.luck@intel.com> wrote:=0A=0A>>> =
-If we have '/sys/devices/system/node/node0/mc0', by comparing the number=
-=0A>>> of dimm and MemTotal in meminfo. It is easy to know that the dimm =
-didn't=0A>>> recognized whether it belonged to this NUMA node or not.=0A>=
-> =0A>> mc !=3D NUMA node.=0A> =0A> Modern systems have multiple memory c=
-ontrollers per socket.=0A> On an Icelake server I see:=0A> =0A> $ cd /sys=
-/devices/system/edac/mc=0A> $ ls -l=0A> total 0=0A> drwxr-xr-x. 5 root ro=
-ot 0 May 16 10:13 mc0=0A> drwxr-xr-x. 3 root root 0 May 16 10:13 mc1=0A> =
-drwxr-xr-x. 5 root root 0 May 16 10:13 mc2=0A> drwxr-xr-x. 3 root root 0 =
-May 16 10:13 mc3=0A> drwxr-xr-x. 5 root root 0 May 16 10:13 mc4=0A> drwxr=
--xr-x. 3 root root 0 May 16 10:13 mc5=0A> drwxr-xr-x. 5 root root 0 May 1=
-6 10:13 mc6=0A> drwxr-xr-x. 3 root root 0 May 16 10:13 mc7=0A> drwxr-xr-x=
-. 2 root root 0 May 16 10:13 power=0A> lrwxrwxrwx. 1 root root 0 May 16 0=
-3:11 subsystem -> ../../../../bus/edac=0A> -rw-r--r--. 1 root root 4096 M=
-ay 16 03:11 uevent=0A> =0A> But I can figure out the socket topology with=
-:=0A> =0A> $ grep . mc*/mc_name=0A> mc0/mc_name:Intel_10nm Socket#0 IMC#0=
-=0A> mc1/mc_name:Intel_10nm Socket#0 IMC#1=0A> mc2/mc_name:Intel_10nm Soc=
-ket#0 IMC#2=0A> mc3/mc_name:Intel_10nm Socket#0 IMC#3=0A> mc4/mc_name:Int=
-el_10nm Socket#1 IMC#0=0A> mc5/mc_name:Intel_10nm Socket#1 IMC#1=0A> mc6/=
-mc_name:Intel_10nm Socket#1 IMC#2=0A> mc7/mc_name:Intel_10nm Socket#1 IMC=
-#3=0A> =0A> I think this should help connect "mc*" to which node=0A> they=
- belong to.=0A> =0A=0AThanks! =0AYes, mc_name may show the NUMA id, it de=
-pends on the vendor edac modules.=0A=0AOn the other hand, this directory =
-'/sys/devices/system/node/node0/' should=0Ashow all resources that belong=
- to it. It already has cpu and memory symbolic=0Alink. Memory controller =
-also belongs to one NUMA. The memory controller=0Asymbolic link should ap=
-pear under node* directory.=0A=0A> -Tony
+On Mon, May 15, 2023 at 06:24:11PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.180 release.
+> There are 381 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
+> Anything received after that time might be too late.
+> 
+
+Build results:
+	total: 162 pass: 162 fail: 0
+Qemu test results:
+	total: 485 pass: 485 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
