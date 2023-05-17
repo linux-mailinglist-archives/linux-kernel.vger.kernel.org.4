@@ -2,204 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30AF707195
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE15970719A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjEQTLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58798 "EHLO
+        id S229519AbjEQTMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjEQTLr (ORCPT
+        with ESMTP id S229897AbjEQTLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:11:47 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46947E67
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:11:45 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f1411e8111so1385963e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684350703; x=1686942703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=54iwv/pGzux9yUooHmL70lgD44/ZcJlgzOCmfdHgBto=;
-        b=uXKqksZ2ucaYLlDpISTIWF6CU6gZIsSWQMMCvItyiZPfUXEnKMqv/zEdE1mKgC9o9A
-         uixAWtffzvQv+EwuxqvWr1aUCuYCC+lLVO51NVwdAIw/iC0GF7UeaevYSFG6lOhg1QUN
-         NI2ka+hKR8P88dK4M/uWuO093Hvn0+9IzfsXrdPu13JYVLhXWWQw7VvAHctUUKxxeGA7
-         YaxZlFD2VNm3ZhTCW1T8DnEXe1ggMBwa9OWTmn+A3iad+dnNbSrKq9uLoxmWbfRt8t7N
-         UhYpbq6QP+V1nlv5NQuatD9WMsTTasTm/qBzTqyvaESVvMYNNNzj21L0BPKHpGELKD9u
-         op2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350703; x=1686942703;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=54iwv/pGzux9yUooHmL70lgD44/ZcJlgzOCmfdHgBto=;
-        b=P67smAYGO1ux9fVywd1EfVNEdQ03d2rBj5kctV3zFdsotEAaEcjVjBptoWluo6TNzJ
-         YgowRRKhitxgDPulQSS73UlKT9acIphPIK/dmLMBDM+O+6W3IxALi0Mbh1kpQkn24M0z
-         RXuTq+nnDWZ9me4I51o44J1oqsqIDgwyuV+F5vTnL0ppvIAC/7cUaC12ARSto3X4KR9Y
-         uSzvd2N9xq7WlMeJbfhXJvcg5qe1gdROKgcu6/1PfHRThbKq80OZafKwbso4UDDJfDjg
-         Th9k5L1Qh5oVosEtuRydWA5DcpJeWt3e4ZSFa7QQNt49ibav8l2iDt1FbZBwoDcBZJwC
-         Xbxg==
-X-Gm-Message-State: AC+VfDySJW1qYLg52p8zsZPcpNhJzTTnZNH0MuePQpnAaTxtTVTxBUPY
-        V8xkfuX6YXPwGUtKAohDIvh2AA==
-X-Google-Smtp-Source: ACHHUZ7Ok6LehYkCwfiScUDyFS6l76YaTjpbf2vGVyHHiMNUo1oqXp2JOmH5PCmZZEe8/TewtLBSBQ==
-X-Received: by 2002:ac2:4143:0:b0:4f3:895f:f3f8 with SMTP id c3-20020ac24143000000b004f3895ff3f8mr410341lfi.16.1684350703501;
-        Wed, 17 May 2023 12:11:43 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id t24-20020ac243b8000000b004eff4f67f1csm3478306lfl.304.2023.05.17.12.11.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 12:11:43 -0700 (PDT)
-Message-ID: <2a04cde4-ae8e-82b0-d467-0fc32d0c67b7@linaro.org>
-Date:   Wed, 17 May 2023 21:11:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] clk: qcom: smd-rpm: conditionally enable scaling before
- doing handover
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Wed, 17 May 2023 15:11:52 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2067.outbound.protection.outlook.com [40.107.94.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F7F5FDB;
+        Wed, 17 May 2023 12:11:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=byhDdITCoqK7TWO1xuxfxfAG4kCrh9yA9noTTWIQCKfUB/8mU5i7CAv8+nkUCz9QzFlk8YUN42ciQ826zOOrKZF7fuKTSs52E2ukPd1yGeK0pzlFiVj9Wu8ex6SOOeooOyFlKEPfCy6QMrqYxRxuIAsafI4gUMA0SjovB4ZBqVarflBPawNu8WeZ3X7i3DV+gAkvFAWk6b5Z9NJuQ0BwN9VEy/OA/AuzQy1Q5QYK+GK+v58XOrTsT6xjR5IuuI+5S32OX82y6Aaz9IZcmiUMjZf+5NCJxhXS3oD6XVTeaDFFvpJhIT4l7IagIERnOyYj61RFqKlAkiBaZhQRZcWu0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tPZYhfDpg5scw9FSi89yd9uRu8JsjSbM3EdGCdgUTT0=;
+ b=elHBJ5D/U6yMMP2gwopiXnehnsz9SoYzxdKzl3WlD6ULiAsgxWfVovRK2bTzQ7fveP/059PN9DuVdRl1fLZanImTejwIGbZT0OLMTrVm8cITkKtTHUvTHNg74QX01QiTCH/S6U+nFQC8ATwWsbtrZiXNew5t3DzB5trr3a98vUhv3KaWQ000awaFfiN07xt+BMgRXuW04yuBXY8v3uDazUxS5PibXJu9G4IiBgcw9Cfv4PPAIO1+cC1Ea3vNcbOtF4l8TsmFxAZ7S4oK5XELa3nVqV4ffwAjr1Ap8LvpvMg5CzhLKnIQgxuwfmfGTqxLFr4+O4+q70x1yeItblBYCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tPZYhfDpg5scw9FSi89yd9uRu8JsjSbM3EdGCdgUTT0=;
+ b=o7d+MTp2hui2qsKoGJuyTTY/ceOh8TMBvSdfgPZ39MY9NsKQlkWv+8qUPwR/0dsiDa1QC4sb5LSTKq7OFi0HkcySuWMEk9esJ6IuQqjmcGEx0ddbFSOs8xRJwImxEWc5C/VtVa8HhvWYNzeA7a04Folphodx19JQLe24aibhAPsoda8DJoS4kPC7GUgug2dinXerq7Kicp6gGYYDTM5LG8YVGIRbaIclnhrMmp7lA8n/p7GcKTBxWa0AZECjvMP1u4i4VdTK7OQXYRRBM/se4RwuvV2RLzJi2oTiED+Ab4A9SSOUb3zsIbX6mREtQqIDucrL0doC8NQD3swcWjkITQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH8PR12MB8431.namprd12.prod.outlook.com (2603:10b6:510:25a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
+ 2023 19:11:47 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6411.017; Wed, 17 May 2023
+ 19:11:46 +0000
+Date:   Wed, 17 May 2023 16:11:45 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Junxian Huang <huangjunxian6@hisilicon.com>
+Cc:     leon@kernel.org, linux-rdma@vger.kernel.org, linuxarm@huawei.com,
         linux-kernel@vger.kernel.org
-References: <20230506-rpmcc-scaling-handover-v1-1-374338a8dfd9@z3ntu.xyz>
- <20bd79c1-6c38-f1ed-1661-6fa4c308c5c5@linaro.org>
- <2679120.mvXUDI8C0e@z3ntu.xyz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <2679120.mvXUDI8C0e@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH for-rc 0/3] Bugfixes for HNS RoCE
+Message-ID: <ZGUm8YPoyowIWGXY@nvidia.com>
+References: <20230512092245.344442-1-huangjunxian6@hisilicon.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512092245.344442-1-huangjunxian6@hisilicon.com>
+X-ClientProxiedBy: BLAPR03CA0123.namprd03.prod.outlook.com
+ (2603:10b6:208:32e::8) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH8PR12MB8431:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7708be5c-cf52-469a-3124-08db570a8ef3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M0OUI8HXhiMW62LY9fZc/F0JTkvBN5rFU6TE+umF6HRSRKzYvwPC3TVxf8pbNerCN3NB+rrnFTC1z9/STgAD/yqPJb2Rm8VPMNZmw6B3RLwhw+/D7ffGJUwy2IRCUvCNS3T0sBgl6EZUAPWkeZh51sIFthIeAjMpTEaSqEwaXeo7DUDCIrSgnvxRY8GDh3l/E+SD7nHictwbYmqGVJur8MWTgSahW1Np095YKIR6z2SMlvmoTzLl0KGNytSqXcmROd6zfdYKska6WBQGrh5MWJFyvCeTVIqPPmMVyE0fIfI4I01GiVz98c5/yOmhJPC5wNP3+pGDwdY3PW1Ze1hWUUt4etQF0rSTyVeWvxu/uSScU16qiNwNFwGDM8tqHJTNUOo8evzxZKgcDIya2cOcUuJ8pXUvOfAcekF/cwHGOIhNI794ejPnjE7+B676BtGkS6aikXko8WMxvVRHuesIcwFFCT5l4tBEmAY680w6bRBQuDVO1cfbxkfkmY4LdeoB4BC/6pZcMXUwhNnyZLxsTAz7Fhg7esKuhEcd81NuEs70vJ+I6LpYXuyR8MoYvcUc
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199021)(83380400001)(6486002)(478600001)(2616005)(26005)(186003)(6506007)(6512007)(8936002)(5660300002)(8676002)(36756003)(41300700001)(6916009)(66556008)(4326008)(38100700002)(66476007)(2906002)(66946007)(86362001)(316002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KG0sndcRNoTZwQl0gMa6B+qtRxh1aXgziBeDpvCDgrQT2SsUJ0NS/IwFpFDW?=
+ =?us-ascii?Q?f8ACyscPaeIJJo2RWSDOkAs2Grfop3H4iOTVcGT94OYODZiZVIHfZEl0gXTo?=
+ =?us-ascii?Q?z+uAHQrK0A+I/ek4th73jkpuWseyez5RrFE1UeWZrZkwxCL6Iliq9pOMLeWV?=
+ =?us-ascii?Q?0fxJ06FWTRbz4/K+Vhjf6jzRH+PDLgxKcoPRQPXsD5Scv0LPMxXV1vpVRrR3?=
+ =?us-ascii?Q?H1GsN2WXyAKUkDR6j+HLu5fQzF+Aghq4ydtdvt7fOn/A/XwB1rLDqcl5Croj?=
+ =?us-ascii?Q?OB78F0fFjMUkK9qREffaSFvwn4Q8RbkLupYRo7VMJ3WttUkfmcLsMvD6t87Z?=
+ =?us-ascii?Q?fdI4z3Ost3+olDMB5MwChWdon1LfBJWZMMu2MD5ir0aP1hkD1amYy7AvcrjT?=
+ =?us-ascii?Q?k4+KPVGjOkNRJJppvBCBV/kGqMtPMQD4Xf93XeXfzAaXXx6xT5mJa7k+7xRf?=
+ =?us-ascii?Q?p3z+WYddaCKxhgxvfBFRn+wf3f2EHEvRu5+RnA7SRf3SqfZJ1BRmLAYpXqef?=
+ =?us-ascii?Q?n8Mlbmcgdntjp5XZHFCy2WBM5aszXBayTEB7oBdnrxXx0VgSnLflepBnrUAh?=
+ =?us-ascii?Q?ODQhIymiqQnFpX+QTFtp3t9tNOwENtDGgXTAbCfPDpVdoLT099Tc+e6aNi0f?=
+ =?us-ascii?Q?T0eBxHcrGewKD9S118zrTCwBHyezqJvWuwQEymTy/nevbVztITTMArytoxaY?=
+ =?us-ascii?Q?4aRrsapngRAuLcm6Z22s/V71CvlNImwI5uEAOpdFWGHloFlFdjgMX34Hv/Sa?=
+ =?us-ascii?Q?W+Yn4ZZR5EQRdSDLKciXcRYLW1kcUYsfAoO/7rdaP6iRLziz2eHv4hUO90Oe?=
+ =?us-ascii?Q?5nTzbrCnkmJ4ORb7St5yeFo5ZnHd8T1V2yQajaLHuf0D6h/4M5n+ii+Ks9g9?=
+ =?us-ascii?Q?6Pq/4iriADbu6sWuoz6p70GTaiM03jUOFxJuesY3nTz1TmWsFG5pLC6WjbOa?=
+ =?us-ascii?Q?tkCerNbTWMq6SPp0xrVYmeBJ8snrh2aI18jFjrrKTJNGe5k0yJSXvYGx9moy?=
+ =?us-ascii?Q?h+CyrlM+yfRZa9WlPcLzKs7Psn++seADiJEnv+niHutd93/Sz43CedrjJ7Jk?=
+ =?us-ascii?Q?iP2kUyJkfB5BC0RVlckVkC4l6VH6Rb6JFVwSWhVez8XzWEomdl+rYbcQ6ffS?=
+ =?us-ascii?Q?/GGAPMaJtpZ1IXmqeJSJ/HMfaFjMiqWUwERGP59xBMfMwraIyvF1RscYJkxX?=
+ =?us-ascii?Q?qZkjtJCcEPWUPJxNvnFbxQiy/6HZbaFJHYLO6cr0TBut/XEWPLyrKa2tbYXM?=
+ =?us-ascii?Q?m0+rBs9LCjqAsEbph6p43dHDO5CIsGhs+jVI2x0UwSuUzRVNGhJYyyzmvGin?=
+ =?us-ascii?Q?XacAfM8nyp4GTyAspzR7SFungCjyPJ3kJ4+KrghwtZh9foxAEVamawr9x/hl?=
+ =?us-ascii?Q?+EqyVjCM5JQJILARv3aLIeS8f0GAWSZbZHqf+D+fqiYPcdgT2rzEi1t8Mwv9?=
+ =?us-ascii?Q?wJcYQQvhS/YVJpEkV0y1K43Xr0Eg1jkEq93YppKWf7OBRQ8/fXSc/Ej+mx1u?=
+ =?us-ascii?Q?zuurxYkIHqgExfnTTBGHJxTH7QKy8SsH/xzvN7fq6wntGgtspXMmczeSvBtj?=
+ =?us-ascii?Q?aCCQOQTR9eU0n3PyKHVQvwnSQeXSvomfxZUttmkf?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7708be5c-cf52-469a-3124-08db570a8ef3
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 19:11:46.3961
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d/N4+EnhbqTvw0EiUPouhV6S81nX8eE8buPzOPiCVV0ApCR4oYfWKtjxK1Hw1JZM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB8431
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 12, 2023 at 05:22:42PM +0800, Junxian Huang wrote:
+> 1.#1: The first patch fixes an error of queried timeout attr on HIP08.
+> 
+> 2.#2: The second patch checks and adjusts the BT page size to ensure
+>       successful resource allocation.
+> 
+> 3.#3: The third patch modifies the value of long message loopback slice
+>       to improve traffic balance.
+> 
+> Chengchang Tang (2):
+>   RDMA/hns: Fix timeout attr in query qp for HIP08
+>   RDMA/hns: Fix base address table allocation
+> 
+> Yangyang Li (1):
+>   RDMA/hns: Modify the value of long message loopback slice
 
+Applied to for-rc, thanks
 
-On 17.05.2023 16:59, Luca Weiss wrote:
-> On Dienstag, 16. Mai 2023 03:27:46 CEST Konrad Dybcio wrote:
->> On 6.05.2023 22:10, Luca Weiss wrote:
->>> On older platforms like msm8226, msm8974 and msm8916 the driver in the
->>> downstream kernel enables scaling first before doing the handover of the
->>> clocks.
->>>
->>> While this normally doesn't seem to cause noticeable problems, on
->>> apq8026-asus-sparrow this causes the device to immediately reboot,
->>> perhaps due to older rpm firmware that becomes unhappy.
->>>
->>> On newer platforms the order has swapped and enabling scaling is done
->>> after the handover, so let's introduce this behavior only conditionally
->>> for msm8226 and msm8974 for now.
->>>
->>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
->>> ---
->>
->> Did you give this a spin on some 8974? I think hammerhead had
->> issues around rpmcc in the past..
-> 
-> Yes, appears to be fine on msm8974 also.
-> 
-> I tried to reproduce the hammerhead ocmem hang we had in the past but even 
-> with v6.3 rpmcc it seems to be fine. But iirc it was happening more or less at 
-> random in the past so wouldn't be surprised if my tests just didn't show 
-> anything on accident.
-> 
-> Regards
-> Luca
-OK sg
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
-> 
->>
->> Konrad
->>
->>>  drivers/clk/qcom/clk-smd-rpm.c | 16 +++++++++++++---
->>>  1 file changed, 13 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c
->>> b/drivers/clk/qcom/clk-smd-rpm.c index 887b945a6fb7..6d5476afc4d1 100644
->>> --- a/drivers/clk/qcom/clk-smd-rpm.c
->>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->>> @@ -178,6 +178,7 @@ struct clk_smd_rpm_req {
->>>
->>>  struct rpm_smd_clk_desc {
->>>  
->>>  	struct clk_smd_rpm **clks;
->>>  	size_t num_clks;
->>>
->>> +	bool scaling_before_handover;
->>>
->>>  };
->>>  
->>>  static DEFINE_MUTEX(rpm_smd_clk_lock);
->>>
->>> @@ -693,6 +694,7 @@ static struct clk_smd_rpm *msm8974_clks[] = {
->>>
->>>  static const struct rpm_smd_clk_desc rpm_clk_msm8974 = {
->>>  
->>>  	.clks = msm8974_clks,
->>>  	.num_clks = ARRAY_SIZE(msm8974_clks),
->>>
->>> +	.scaling_before_handover = true,
->>>
->>>  };
->>>  
->>>  static struct clk_smd_rpm *msm8976_clks[] = {
->>>
->>> @@ -1318,6 +1320,12 @@ static int rpm_smd_clk_probe(struct platform_device
->>> *pdev)> 
->>>  	rpm_smd_clks = desc->clks;
->>>  	num_clks = desc->num_clks;
->>>
->>> +	if (desc->scaling_before_handover) {
->>> +		ret = clk_smd_rpm_enable_scaling(rpm);
->>> +		if (ret)
->>> +			goto err;
->>> +	}
->>> +
->>>
->>>  	for (i = 0; i < num_clks; i++) {
->>>  	
->>>  		if (!rpm_smd_clks[i])
->>>  		
->>>  			continue;
->>>
->>> @@ -1329,9 +1337,11 @@ static int rpm_smd_clk_probe(struct platform_device
->>> *pdev)> 
->>>  			goto err;
->>>  	
->>>  	}
->>>
->>> -	ret = clk_smd_rpm_enable_scaling(rpm);
->>> -	if (ret)
->>> -		goto err;
->>> +	if (!desc->scaling_before_handover) {
->>> +		ret = clk_smd_rpm_enable_scaling(rpm);
->>> +		if (ret)
->>> +			goto err;
->>> +	}
->>>
->>>  	for (i = 0; i < num_clks; i++) {
->>>  	
->>>  		if (!rpm_smd_clks[i])
->>>
->>> ---
->>> base-commit: dd9e11d6477a52ede9ebe575c83285e79e823889
->>> change-id: 20230506-rpmcc-scaling-handover-a63029ed9d13
->>>
->>> Best regards,
-> 
-> 
-> 
-> 
+Jason
