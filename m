@@ -2,211 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3682E70722F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB8B707232
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjEQT3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
+        id S229895AbjEQTbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjEQT3n (ORCPT
+        with ESMTP id S229738AbjEQTa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:29:43 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F987421D;
-        Wed, 17 May 2023 12:29:12 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9659f452148so216438566b.1;
-        Wed, 17 May 2023 12:29:12 -0700 (PDT)
+        Wed, 17 May 2023 15:30:59 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5622D68
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:30:45 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f42c865535so12415545e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1684351749; x=1686943749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BRvTHYRcDQyfQao8yhTDxI1vIuhT47cfD0S0poHYIPw=;
-        b=aaKUs+xVh6IPcai+II1QsDcFy7QmEuOBcL8lfvM2ZMJEzNacB2IHQkuwQFo0QCGlHK
-         QW00Px+ItZCbV8KBn8bsHD8EPliVquZk9QbRVdqqMJD9ce45kFzugkAEkMSQDFIAr8Hq
-         TTY5SIJakMLDXXvGHdu4Iu7JH4BkyRdy0NHOEA8x2GnnrMJQNcosNLJKMOnPNX2VR/M4
-         upQn+bTCJMOIWcv+NjWnjoTmJi+/oPmVaC3f6fHg5t7Byq0f9TQBLMc1nDDkWYidVMRr
-         Ogw9dW4cDiXa87LpOYvcYiXqHBmF2rWYCnUWB8K9viijTT0kf6KO4xuapFVmvWQdvYJL
-         SKEg==
+        d=linaro.org; s=google; t=1684351843; x=1686943843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kr6d+SVFbfwYxIPjljC34mJyItAu8XtQrptOaS6bxCg=;
+        b=pTywBKfDEzxgMMRn1O7n7Bu7DpCtUMiUnA9TozAVvTcvnqgBngngXxxNzXmoYVgmgN
+         UiIKIZ2nBAPofUsKGmMpILySj3BIeGh+Okto7boZE/LwpuLNFHFyZUwFyTWMUeeuBheU
+         RCU54V52MfMOL/VMQvCaIGPeIYnG/7T3Vt1K8Q+NQ7VkengF/OGehsVi0PySozvS7Y0s
+         rO6P24MntlSklmN00A2XNSMlPfG+9pr8dh8h9RNrlg+j8+rPiQ0oXTk5lf0M2HvNmGZ/
+         /y5xRQi4Yw4tsHyqtWAKtwF8JVLbFXWghf35nw4NgxGkmPbFKJ/gmiOdoBdVglSTdvYJ
+         wh2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684351749; x=1686943749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BRvTHYRcDQyfQao8yhTDxI1vIuhT47cfD0S0poHYIPw=;
-        b=dFbqDAmUcZTEszCSsniOgEceAdlmNcylUaakvK719Iv65EoXKRnHLKKVK/5w3rhw9D
-         pI2MnlrTPwUSCOqGFZ699jnDpn7WC1tinoUbjf/DeMQAnQrBSF9K0JwNy2Q/6r/ga6aI
-         vjNjOYQEBCL7noaw5agsouvTadKxiWdrPxUdAmXc2u3j15aYij0WbRiACYahX08hOy/S
-         k/KlA3yrXx/DWyewQUNk347Q7OlR2I8SyDnyVhYFEGWR5Lv9RFhJG/59pj/zxBBm7Dua
-         UyHf0UP95p7bX/lYq42XzdnA6II9MRUnnz5UCstEU3ycKBN9uarZvAxbJXk9ENXNY8cl
-         gJcw==
-X-Gm-Message-State: AC+VfDwGDYUez/QbmvvDdSfcX5GTMftILYSnRKH8p0ljpBeYP7Ds7v0y
-        tRDtHUSSj0ddjhBfmxw64flnaj0De3Gw5csllbI=
-X-Google-Smtp-Source: ACHHUZ42t7hg/BEUtpkEgle0rnmPxfNnZs3n8dHtxo3Ki6XyM3FRyzHQfUDlRC2lBpdTLCbiNHhpift3oLFUAhYhqy4=
-X-Received: by 2002:a17:907:5c5:b0:959:af74:4cf7 with SMTP id
- wg5-20020a17090705c500b00959af744cf7mr37444132ejb.70.1684351749366; Wed, 17
- May 2023 12:29:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684351843; x=1686943843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kr6d+SVFbfwYxIPjljC34mJyItAu8XtQrptOaS6bxCg=;
+        b=FyrXJcKLLdgwNePIOkNC8nDmMppunaZ3jKlR0X7J+R5iNGvFQktcgFcz7aknFWdI+u
+         QQcqyriAzhwNOLbl/7o+CurMKRXCZQ0nrHaxO9F1WVQiYUE9n3Kk/HVub5xjjQ4hVFn+
+         1d+sZ/1Ak4YFfSUc5edpf1Gzkii2Y7qNebolNRiaBGSrXKtXV5MtZ4CcurkVXI2eAqd4
+         bjlD6hXhJNRZ446lKVyvlw+a/LdU6LLZn1rE6L5mRh5NgcKTZBVWzIKpx6Q+lv80bXc6
+         IJDO8MmsX0wkXwfqMv+E906+Zex7tpz02s1Ucm/zAchYHTegPovxHa6swDXiy+iGZ1M+
+         yBzw==
+X-Gm-Message-State: AC+VfDxvuup60lq8R6VwpPQN/DH2Aa/3fPmvUR7Q7KqqBYKbTIUjm++J
+        H1HSVdULR/TboNzIeGiP/KRjdw==
+X-Google-Smtp-Source: ACHHUZ4FRheMWXHyKIux0JaXVWwYgCtMCMdH62mabjG8tjCmij2PXX4ulOpYJu1EOl9Ams43uo24FQ==
+X-Received: by 2002:a7b:cd89:0:b0:3f4:247a:ddce with SMTP id y9-20020a7bcd89000000b003f4247addcemr24569698wmj.36.1684351843658;
+        Wed, 17 May 2023 12:30:43 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id p5-20020a7bcc85000000b003f4248dcfcbsm3074911wma.30.2023.05.17.12.30.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 12:30:42 -0700 (PDT)
+Date:   Wed, 17 May 2023 22:30:29 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
+ fpsimd_release_task
+Message-ID: <2d9a04d8-c09e-49aa-95eb-32b4679f7eba@kili.mountain>
+References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230515210545.2100161-1-gnstark@sberdevices.ru>
- <CAFBinCCc+t7Ks6fqz38cVrufPRFdxFgC9Qp+JhcM1KfD6pupTg@mail.gmail.com> <a52335ea-6545-8ca6-d318-38b7ffc64368@lexina.in>
-In-Reply-To: <a52335ea-6545-8ca6-d318-38b7ffc64368@lexina.in>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 17 May 2023 21:28:58 +0200
-Message-ID: <CAFBinCDmkGnD5o_rV6K73De2XmHDxRYveDwNAy3iA+Kwr5sdqg@mail.gmail.com>
-Subject: Re: [PATCH v1] meson saradc: fix clock divider mask length
-To:     Vyacheslav <adeep@lexina.in>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     George Stark <gnstark@sberdevices.ru>, jic23@kernel.org,
-        lars@metafoo.de, neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, andy.shevchenko@gmail.com,
-        nuno.sa@analog.com, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Vyacheslav, George and Dmitry,
+I don't know this code at all so probably this is dumb...  I don't
+undestand how vec_set_vector_length() ensures that sme_state_size()
+stays in sync with the actual size allocated in sme_alloc()
 
-On Wed, May 17, 2023 at 1:37=E2=80=AFPM Vyacheslav <adeep@lexina.in> wrote:
->
-> Hi, Martin,
->
-> On 16.05.2023 22:08, Martin Blumenstingl wrote:
-> > Hi George,
-> >
-> > thank you for this patch!
-> >
-> > On Mon, May 15, 2023 at 11:06=E2=80=AFPM George Stark <gnstark@sberdevi=
-ces.ru> wrote:
-> >>
-> >> From: George Stark <GNStark@sberdevices.ru>
-> >>
-> >> According to datasheets of supported meson SOCs
-> >> length of ADC_CLK_DIV field is 6 bits long
-> > I have a question about this sentence which doesn't affect this patch
-> > - it's only about managing expectations:
-> > Which SoC are you referring to?
->
-> I checked the 905x, 905x3, a113x datasheets - there is the same register
-> with 6 bits for  ADC_CLK_DIV
-This highlights a common issue I have seen with Amlogic datasheets:
-parts of the datasheet are outdated (or incorrect in one way or
-another).
-For my following explanation I will refer to the public S905X3
-datasheet from [0].
+arch/arm64/kernel/fpsimd.c
+   847  int vec_set_vector_length(struct task_struct *task, enum vec_type type,
+   848                            unsigned long vl, unsigned long flags)
+                                               ^^^
+"vl" comes from the user and is 0-u16max.
 
-The documentation for SAR_ADC_REG3 on page 1065 states that this
-register contains:
-- bit 30: SAR ADC_CLK_EN: 1 =3D enable the SAR ADC clock
-- bits 10-15: ADC_CLK_DIV: The ADC clock is derived by dividing the
-27Mhz crystal by N+1. This value divides the 27Mhz clock to generate
-an ADC clock. A value of 20 for example divides the 27Mhz clock by 21
-to generate an equivalent 1.28Mhz clock
+   849  {
+   850          if (flags & ~(unsigned long)(PR_SVE_VL_INHERIT |
+   851                                       PR_SVE_SET_VL_ONEXEC))
+   852                  return -EINVAL;
+   853  
+   854          if (!sve_vl_valid(vl))
 
-The first problem with this part of the documentation is that there's
-no 27MHz crystal on the Amlogic SoCs listed (S905X, S905X3), only a
-24MHz one.
-I'm also human, I'm not perfect so typos and mistakes happen. If you
-look at the S805 datasheet (from year 2015) on page 116/117 you'll see
-that even back then it said 27MHz - and even that SoC generation
-(Meson8b) had a 24MHz crystal, not a 27MHz one. In over five years
-that typo has not been fixed.
+valid values are '16-8192'
 
-Let's focus on the S905X3 datasheet again, this time page 101 where it
-has "Figure 7-8 AO Clock Sources".
-Note that the register offsets listed in that section need to be
-multiplied by 4 to get the actual offset in IO memory.
-It describes the "sar_adc_clk" with:
-- first mux at register 0x90 (=3D 0x24 * 4) bits [10:9] (inputs are: 0 =3D
-XTAL, 1 =3D clk81, 2 and 3 are grounded)
-- gate at register 0x90 (=3D 0x24 * 4) bit 8
-- divider at register 0x90 (=3D 0x24 * 4) bits [7:0]
-- second mux at register 0x90 (=3D 0x24 * 4) bit 0 (inputs are: 0 =3D
-divider from above, 1 =3D XTAL)
+   855                  return -EINVAL;
+   856  
+   857          /*
+   858           * Clamp to the maximum vector length that VL-agnostic code
+   859           * can work with.  A flag may be assigned in the future to
+   860           * allow setting of larger vector lengths without confusing
+   861           * older software.
+   862           */
+   863          if (vl > VL_ARCH_MAX)
+   864                  vl = VL_ARCH_MAX;
 
-Looking at drivers/clk/meson/g12a-aoclk.c this is what we implement
-(apart form the second mux, which seems to be missing).
-But this now gets confusing: why are there now two dividers and two
-gates (one the SAR ADC registers and another on in the AO clock
-controller registers)?
+Now 16-256'
 
-Looking at my board (G12A X96 Max in this case, but it's uses the same
-clock controller drivers as SM1/S905X3) where &saradc is not enabled
-(meaning: it uses SoC defaults or values initialized by the vendor
-u-boot/TF-A):
-$ grep adc /sys/kernel/debug/clk/clk_summary
-   g12a_ao_saradc_mux                0        0        0    24000000
-      g12a_ao_saradc_div             0        0        0     1142858
-         g12a_ao_saradc_gate         0        0        0     1142858
-                        g12a_ao_saradc       0        0        0   16666666=
-4
-                        g12a_adc       0        0        0   166666664
-(output is shortened to make it easier to read)
+   865  
+   866          vl = find_supported_vector_length(type, vl);
 
-1142858Hz is 24MHz divided by 21 (as described in the SAR ADC register
-space - but these values are from the AO clock controller registers).
-So my thought is: if the clock has been programmed in the AO clock
-register space then the divider and gate from the SAR ADC register
-space are not used (anymore) on this SoC generation.
+type is ARM64_VEC_SVE.  I've looked at this function for a while and
+I don't see anything which ensures that "vl" is less than the current
+value.
 
-My understanding so far (matching experiments I made long time ago) is:
-- the gate and divider within the SAR ADC register space are only
-relevant for SoCs that predate the GXBB generation
-- SoCs starting from the GXBB SoC generation (that includes GXL, SM1,
-...) use a dedicated SAR ADC clock provided by some clock controller
-(see the output of $ git grep -E "sar[_]?adc" drivers/clk/meson/ |
-grep name | grep -v _div | grep -v _mux | grep -v _sel)
--- I think this even applies to the A1 SoC, looking at "clk: meson:
-a1: add Amlogic A1 Peripherals clock controller driver" [2] from
-Dmitry the peripheral clock controller has a "saradc" clock tree (with
-mux, divider, gate)
+   867  
+   868          if (flags & (PR_SVE_VL_INHERIT |
+   869                       PR_SVE_SET_VL_ONEXEC))
+   870                  task_set_vl_onexec(task, type, vl);
+   871          else
+   872                  /* Reset VL to system default on next exec: */
+   873                  task_set_vl_onexec(task, type, 0);
+   874  
+   875          /* Only actually set the VL if not deferred: */
+   876          if (flags & PR_SVE_SET_VL_ONEXEC)
 
-As result of my understanding meson_saradc.c will only register the
-divider and gate (using meson_sar_adc_clk_init()) if no ADC clock is
-provided via the .dtb.
-On GXBB and newer SoCs meson_sar_adc_clk_init() is not called and the
-divider and gate from the SAR ADC registers are not used.
+Assume the PR_SVE_SET_VL_ONEXEC flag is not set.
 
-Amlogic has debug tool IP block in these SoCs called "clock  measurer"
-which can measure various clocks.
-We provide a debugfs interface in
-/sys/kernel/debug/meson-clk-msr/measure_summary
-My suggestion is to play around with the SAR ADC clock (both, the one
-from the peripheral clock controller on your SoC and the one inside
-the SAR ADC registers) and see which clock has an impact on the
-measured clock rate.
+   877                  goto out;
+   878  
+   879          if (vl == task_get_vl(task, type))
 
-PS: I apologize for this long mail. I want to make clear that it's not
-a rant towards you.
-My thought is to share some of the experiences I made in the past.
-I'm always hoping that the quality of the datasheets improves over
-time. In some regards they do (a lot more IPs are documented compared
-to older generations).
-Missing details in the datasheet or incorrect descriptions have cost
-me a lot of time previously.
-My ultimate suggestion is to double check (for example with the clock
-measurer, a scope, ...) what's written in the datasheet so you're not
-wasting time like I did.
+This checks if the flag is == and if so we are done.
 
+   880                  goto out;
+   881  
+   882          /*
+   883           * To ensure the FPSIMD bits of the SVE vector registers are preserved,
+   884           * write any live register state back to task_struct, and convert to a
+   885           * regular FPSIMD thread.
+   886           */
+   887          if (task == current) {
+   888                  get_cpu_fpsimd_context();
+   889  
+   890                  fpsimd_save();
+   891          }
+   892  
+   893          fpsimd_flush_task_state(task);
+   894          if (test_and_clear_tsk_thread_flag(task, TIF_SVE) ||
+   895              thread_sm_enabled(&task->thread)) {
+   896                  sve_to_fpsimd(task);
+   897                  task->thread.fp_type = FP_STATE_FPSIMD;
+   898          }
+   899  
+   900          if (system_supports_sme() && type == ARM64_VEC_SME) {
+   901                  task->thread.svcr &= ~(SVCR_SM_MASK |
+   902                                         SVCR_ZA_MASK);
+   903                  clear_thread_flag(TIF_SME);
+   904          }
+   905  
+   906          if (task == current)
+   907                  put_cpu_fpsimd_context();
+   908  
+   909          /*
+   910           * Force reallocation of task SVE and SME state to the correct
+   911           * size on next use:
+   912           */
+   913          sve_free(task);
+   914          if (system_supports_sme() && type == ARM64_VEC_SME)
+   915                  sme_free(task);
+   916  
+   917          task_set_vl(task, type, vl);
 
-Best regards,
-Martin
+"vl" is set here.  This is fine if we are setting it to a smaller value,
+but if we are setting it to a larger value then I think we need to
+realloc the ->sme_state buffer.
 
+When we call sme_alloc() it will say the buffer is already allocated
+and just zero out what we need for "vl", but the existing buffer is too
+small.
 
-[0] https://dn.odroid.com/S905X3/ODROID-C4/Docs/S905X3_Public_Datasheet_Har=
-dkernel.pdf
-[1] https://dn.odroid.com/S805/Datasheet/S805_Datasheet%20V0.8%2020150126.p=
-df
-[2] https://lore.kernel.org/linux-amlogic/20230517133309.9874-7-ddrokosov@s=
-berdevices.ru/T/#u
+   918  
+   919  out:
+   920          update_tsk_thread_flag(task, vec_vl_inherit_flag(type),
+   922  
+   923          return 0;
+   924  }
+
+regards,
+dan carpenter
