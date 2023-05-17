@@ -2,120 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA5A706198
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A216670619C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbjEQHrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
+        id S230198AbjEQHrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjEQHrE (ORCPT
+        with ESMTP id S229878AbjEQHrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:47:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90E5E0;
-        Wed, 17 May 2023 00:47:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 17 May 2023 03:47:45 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079693A9E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:47:42 -0700 (PDT)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62898642FE;
-        Wed, 17 May 2023 07:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC3EC433D2;
-        Wed, 17 May 2023 07:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684309619;
-        bh=CrxLp3AHsiBT9omthbkFjUwyEAb+XuvYsglQMZaTHkY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uL3TvCb7G2N4leJalPW+7SzBmp1qVn99MQN5zxSIWe4LmXtJdanQVSCI/6Vitmffi
-         ezyE354obh8cYYNa1vEWEwJHOlp4asZGRgjCE6ppSk2UigLVS08SixnjVFlC0KqJSa
-         Rreu/9K2T+TGcxrKhjqvPs1ou8dVyLichSKDofJJ+lg2XNMb3+5cwtNfTzmpMBCOIO
-         O7zdkbPBNfMefF1SbkMUnzJS7edRwMQoGqSrwr0f/u3Dj+Bsf7FLyUkNZrKjll6z4Z
-         sSbG91TR1AM5NFNba8qAAxkKBLig+MTLWbrx9JYVQ58VkqHxTRSniHIWVh5Ua75q35
-         e0943MYgcIFww==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pzBsB-0002UC-7q; Wed, 17 May 2023 09:46:59 +0200
-Date:   Wed, 17 May 2023 09:46:59 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>
-Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <ZGSGc-X5Oir8wddK@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-4-quic_kriskura@quicinc.com>
- <ZGNy6FvVrBjYmorz@hovoldconsulting.com>
- <b2954b92-8b12-700a-af50-b914af7b0ace@quicinc.com>
- <cacc5813-404a-c2ef-e768-20f2acd696d9@quicinc.com>
- <20230517032124.rdh7ehnair3wjuvm@synopsys.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 470CB3F452
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684309658;
+        bh=Prp+gvCFzgWy8Wr4AdCPMHWn8zkQL1ei83GgGU4GXHc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=qaOWXoCC+8ZS/x3mPNaFVuGzssozdvh+pnN6vUaGFETdaKSCGvwephz2AASeWoVhE
+         e7mMQIyififEl8rc8KqLZ7vAuyIU6cRqRXRVob91AE5eP8Z82og5FL4haVY4lCR5w1
+         0V+X+NHlRRONfSBShni2u82T2ykGporBIOKHjcbh0gfjt8IN0/seqDxDQ/nLl0e/P+
+         sMlGOFFc+hGHxtJS362hgCKGkuzErTCyadLWcMFrBz3z3ATdPvFfed6MOvEXZx6oTw
+         97+A1/ZYC5OnOFxzKoDIlgkXbS4ZZqnDyw0QWyA8Xe8NOKrEnmEqr5H2VTzZT3Ylvp
+         O1P+L1qLMwH+g==
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-648f83d2169so537901b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:47:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684309656; x=1686901656;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Prp+gvCFzgWy8Wr4AdCPMHWn8zkQL1ei83GgGU4GXHc=;
+        b=PmWSmn1JrCeta8pCo+Tgwo3WTnGsfmETrvwp86w/3obVNCpLPlkkzUPGD4wQ+zQsbj
+         i96Cd+9w1D808deK2igzTAyGmb1ZBuUlG92eebvp37TsSponXdBOdRWZx+0xfi2XyhmX
+         S6k6olX7tLAG1OCeI3eRjtCrLc3YBeFPUTcjwPM/qRrGhu2d4466CZq5oNvY6kMn6Etc
+         TSAha6Nb6VgNBznDAzuMpFc51gTdCyA8qhvQmDEbP68vnTSpSjXNIvzgWtUQ4TFZPPA2
+         uOkYbWjv6ldUbO4aLpMO91hdd3jk8YdmYm0n7Sd0Phrpmbq2HbVD5CH8h8zyWvvVxHZ4
+         5E5Q==
+X-Gm-Message-State: AC+VfDxbGuJt+fjXrSF/JMsCZLHxU0QcF8Z1eq9cWJ82CxMLy15JVV1J
+        cUjR+nMfl0/kYcOUxFxId2BgJKxQH0NbagsvWLGo/OMJB8/c2R/HCN0zAMppYdYQQjwm4iXYVlj
+        LjwFDq8LY1LM/VhBJAh+plNkx/Atc6j5c0EwjdkLKqq18bzXQH/I6hk80LA==
+X-Received: by 2002:a05:6a00:1507:b0:647:3de:c0ff with SMTP id q7-20020a056a00150700b0064703dec0ffmr42340788pfu.30.1684309656001;
+        Wed, 17 May 2023 00:47:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6FbqLaYDTzFocG4a36CQQQ8fpuelvbMljb0kxtZcB09ddwN59whDaYuDB+DUJU+o/+04EHIOdHNRiwUhdTurg=
+X-Received: by 2002:a05:6a00:1507:b0:647:3de:c0ff with SMTP id
+ q7-20020a056a00150700b0064703dec0ffmr42340764pfu.30.1684309655711; Wed, 17
+ May 2023 00:47:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517032124.rdh7ehnair3wjuvm@synopsys.com>
+References: <20230516033133.340936-1-kai.heng.feng@canonical.com> <IA1PR11MB61718EFB6DB1BF95CB1CEA5089799@IA1PR11MB6171.namprd11.prod.outlook.com>
+In-Reply-To: <IA1PR11MB61718EFB6DB1BF95CB1CEA5089799@IA1PR11MB6171.namprd11.prod.outlook.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 17 May 2023 15:47:24 +0800
+Message-ID: <CAAd53p5YhCpFgHat6Qv+T6id53NhJ=5W85wVeJvO6BW_W06kFg@mail.gmail.com>
+Subject: Re: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM is absent
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     "Luck, Tony" <tony.luck@intel.com>,
+        "kao, acelan" <acelan.kao@canonical.com>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 03:21:24AM +0000, Thinh Nguyen wrote:
-> On Wed, May 17, 2023, Krishna Kurapati PSSNV wrote:
-> > On 5/16/2023 8:32 PM, Krishna Kurapati PSSNV wrote:
-> > > On 5/16/2023 5:41 PM, Johan Hovold wrote:
+On Tue, May 16, 2023 at 8:53=E2=80=AFPM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
+wrote:
+>
+> > From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ...
+> > Subject: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM
+> > is absent
+> >
+> > The following splat can be found on many systems equipped with EDAC:
+> > [   13.875276] UBSAN: shift-out-of-bounds in
+> > drivers/edac/skx_common.c:369:16
+> > [   13.875279] shift exponent -66 is negative
+> > [   13.875280] CPU: 11 PID: 519 Comm: systemd-udevd Not tainted 6.4.0-r=
+c1+
+> > #1
+> > [   13.875282] Hardware name: HP HP Z4 G5 Workstation Desktop PC/8962,
+> > BIOS U61 Ver. 01.01.15 04/19/2023
+> > [   13.875283] Call Trace:
+> > [   13.875285]  <TASK>
+> > [   13.875287]  dump_stack_lvl+0x48/0x70
+> > [   13.875295]  dump_stack+0x10/0x20
+> > [   13.875297]  __ubsan_handle_shift_out_of_bounds+0x156/0x310
+> > [   13.875302]  ? __kmem_cache_alloc_node+0x196/0x300
+> > [   13.875307]  skx_get_dimm_info.cold+0xac/0x15d [i10nm_edac]
+> > [   13.875312]  i10nm_get_dimm_config+0x240/0x360 [i10nm_edac]
+> > [   13.875316]  ? kasprintf+0x4e/0x80
+> > [   13.875321]  skx_register_mci+0x12b/0x1d0 [i10nm_edac]
+> > [   13.875324]  ? __pfx_i10nm_get_dimm_config+0x10/0x10 [i10nm_edac]
+> > [   13.875329]  i10nm_init+0x89f/0x1d10 [i10nm_edac]
+> > [   13.875333]  ? __pfx_i10nm_init+0x10/0x10 [i10nm_edac]
+> > [   13.875337]  do_one_initcall+0x46/0x240
+> > [   13.875342]  ? kmalloc_trace+0x2a/0xb0
+> > [   13.875346]  do_init_module+0x6a/0x280
+> > [   13.875350]  load_module+0x2419/0x2500
+> > [   13.875353]  ? security_kernel_post_read_file+0x5c/0x80
+> > [   13.875358]  __do_sys_finit_module+0xcc/0x150
+> > [   13.875360]  ? __do_sys_finit_module+0xcc/0x150
+> > [   13.875363]  __x64_sys_finit_module+0x18/0x30
+> > [   13.875365]  do_syscall_64+0x59/0x90
+> > [   13.875368]  ? syscall_exit_to_user_mode+0x2a/0x50
+> > [   13.875371]  ? do_syscall_64+0x69/0x90
+> > [   13.875372]  ? do_syscall_64+0x69/0x90
+> > [   13.875373]  ? do_syscall_64+0x69/0x90
+> > [   13.875374]  ? do_syscall_64+0x69/0x90
+> > [   13.875375]  ? syscall_exit_to_user_mode+0x2a/0x50
+> > [   13.875376]  ? do_syscall_64+0x69/0x90
+> > [   13.875377]  ? do_syscall_64+0x69/0x90
+> > [   13.875378]  ? do_syscall_64+0x69/0x90
+> > [   13.875379]  ? sysvec_call_function+0x4e/0xb0
+> > [   13.875381]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> >
+> > When a DIMM slot is empty, the read value of mtr can be 0xffffffff, the=
+refore
+>
+> Looked like a buggy BIOS/hw that didn't set the mtr register.
 
-> > > > You should not make another copy of xhci_find_next_ext_cap(), but rather
-> > > > use it directly.
-> > > > 
-> > > > We already have drivers outside of usb/host using this function so it
-> > > > should be fine to do the same for now:
-> > > > 
-> > > >     #include "../host/xhci-ext-caps.h"
+If that's the case, I suspect the bug comes from Intel BIOS RC,
+because the issue happens on different vendors' hardware.
 
-> > >    This was the approach which we followed when we first introduced the
-> > > patch [1]. But Thinh suggested to duplicate code so that we can avoid
-> > > any dependency on xhci (which seems to be right). So since its just one
-> > > function, I duplicated it here.
+>
+> 1. Did you print the mtr register whose value was 0xffffffff?
 
-> >   Would like to know your opinion here on how to proceed further.
+Yes, 0xffffffff is the value. mcddrtcfg is also 0xffffffff.
 
-> Please keep them separated. The xhci-ext-caps.h is for xhci driver only.
-> It's not meant to be exposed to other drivers. Same with other *.h files
-> under drivers/usb/host.
+> 2. Can you take a dmesg log with kernel "CONFIG_EDAC_DEBUG=3Dy" enabled?
+> 3. What was the CPU? Please take the output of "lscpu".
 
-As I mentioned earlier, it is already used by the xdbc earlyprintk
-driver which lives outside of drivers/usb/host, even if such a debug
-driver could be considered a special case.
+Both attached in Bugzlla [1].
 
-If it turns out that there's no way to avoid mapping those registers
-from the qcom glue driver, then I think at least the register defines
-need to be provided in a global header rather than being copied
-verbatim.
+> 4. Did you verify your patch that the issue was fixed on your systems?
 
-But hopefully that can be avoided too as the xhci driver already parses
-these registers and stores the port information, even if accessing that
-data may require a bit more work currently.
+I did, that's why I sent the patch to mailing list.
 
-Johan
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217453
+
+Kai-Heng
+
+>
+> Thanks!
+> -Qiuxu
+>
+> > the wrong "ranks" value creates shift-out-of-bounds error. The same iss=
+ue
+> > can be found on NVDIMM too.
+> >
+> > So only consider DIMM/NVDIMM is present when the value of
+> > mtr/mcddrtcfg is not ~0.
+> > ...
