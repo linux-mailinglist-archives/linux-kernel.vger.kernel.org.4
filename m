@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E54706EAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF6C706E8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjEQQvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S229550AbjEQQuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:50:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjEQQu4 (ORCPT
+        with ESMTP id S229496AbjEQQt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:50:56 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8CE4ED0;
-        Wed, 17 May 2023 09:50:56 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ab032d9266so11441855ad.0;
-        Wed, 17 May 2023 09:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684342256; x=1686934256;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BKjKRvCcUxdSw7sNrgS1vWdqJsRtZVoGJT9S+sDPoy8=;
-        b=ekY6uWaYg7UuXpcHLXNscUzl4+iv29+BOwOZbTmGhIA042oVp7uifx+5JGjSTFkKFj
-         x9VVBzvZvsS5oH0cxqNW15ukDjLvlwjiEDntKH7GcT660a7SepvwNnPfonMeDafcZpQc
-         mygFqrOAqJvbEzop8XwAIm+JUMpXphvt/uIYSl/TM+gb/s+klFaq0eL3f9xjsfrlYxUh
-         HAbT0TOMTVqWM3HgAULAZ11pLUikrWBRHrogxM6gA73etz4fHtl2DwBkjCSEXCid6ufJ
-         QQ+pxlv0i6Fwp0SFECw5RgSuWdfWIspUfjLfgfL4B4oiJUvWDH0Kd717ltO4xUDi0hvp
-         AXsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684342256; x=1686934256;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BKjKRvCcUxdSw7sNrgS1vWdqJsRtZVoGJT9S+sDPoy8=;
-        b=S7IhQv0m0oFoMeeKyjj8Bhg5u2iMmSKxNdEEdbCHHmUEg81x/VrgiYyoVuDsqYiDOw
-         jGkpKhgBlBi2aw0EslcbgKMlAEecLippDpfzjYXCbY52AcgAETfJ/x6+MrZYW17VrA4W
-         emnOxGWC4UJYzVrATNFK8DeLq2zInE+2Y7tGdPRQSvYkzHfhBRFnUNTKBdDTya0ewxmx
-         2SuP9PI7bQntlHE1pnyqM4CnCRYfwml7WlCWh6qObCRk7RU3/rCcwm23Sn8d3O9zUHJg
-         NH4KmM6oKbkgNW42Z/7rni7wIMykU6Tg7t+0dxqGgyCSJ7osT1PZOx+kbJhdzoHz8DxQ
-         iKaw==
-X-Gm-Message-State: AC+VfDx7HnmUibQ30Nzkw10DWtpdiwsj2lKWWdGDlzPahqb4aEQjCmGU
-        VZQk5jH9GbKmPPGAFllveKAyXbv2nknPtCUUay0=
-X-Google-Smtp-Source: ACHHUZ6NK7ZKdEgkgLo1ya5bbPE385Nw25giZ2czxVR9D64Ay6xg/gVUO8F9uH0DE6R4S/TKknivEw==
-X-Received: by 2002:a17:902:b695:b0:1ad:edbe:57a8 with SMTP id c21-20020a170902b69500b001adedbe57a8mr17599248pls.50.1684342255625;
-        Wed, 17 May 2023 09:50:55 -0700 (PDT)
-Received: from localhost.localdomain ([111.201.128.95])
-        by smtp.gmail.com with ESMTPSA id b2-20020a170902d50200b001ac7794a7eesm17822744plg.288.2023.05.17.09.50.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 09:50:55 -0700 (PDT)
-From:   Yeqi Fu <asuk4.q@gmail.com>
-To:     ulf.hansson@linaro.org, CLoehle@hyperstone.com
-Cc:     Yeqi Fu <asuk4.q@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ivan Orlov <ivan.orlov0322@gmail.com>
-Subject: [PATCH] mmc: Fix error checking
-Date:   Thu, 18 May 2023 00:46:28 +0800
-Message-Id: <20230517164628.365335-1-asuk4.q@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 17 May 2023 12:49:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A779A40F7;
+        Wed, 17 May 2023 09:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684342196; x=1715878196;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=1FDXaOvMiv/7nzig5qwdhuEpYL+zWHcV8CYwzpgWZu4=;
+  b=FauTNvl8g65N5QwNNQrP2udX1mntjz+zn75Jg7fRptXF+FE5yGM2VXNK
+   /I6C3HW7H89wsblJE4R2zpBM/YhKXMYWIE04oibOt5FLc8QPtvaI2fOfr
+   IHcz8PWVJ3zAfQowW6QyxDRqmDwGs6f6oQMLXWb8DWDEJrzaz0R3/RFEa
+   7Ab8SzuxEbxznBp3AajcfGJpB1+ettkFmlgAtzFf5Y1TLwIEUDsu067VC
+   Ge7h6XtG7qV/kUFJZHfFGdKcePx0wAXYem4eRivApOLusOg2Pz2Fcpf9D
+   v89Lygv4JHLCRb99QbA+pInjXzC0mgZFKp6SqfJtG/RBvMHqwRRXQLNO9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="350649356"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="350649356"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 09:48:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="734764317"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="734764317"
+Received: from pgopdahl-mobl1.amr.corp.intel.com (HELO [10.209.16.196]) ([10.209.16.196])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 09:48:48 -0700
+Message-ID: <7bcb1ee2-3950-5a43-14ee-5f16942b1eee@linux.intel.com>
+Date:   Wed, 17 May 2023 11:47:20 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] soundwire: qcom: fix unbalanced pm_runtime_put()
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230517163750.997629-1-krzysztof.kozlowski@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230517163750.997629-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +73,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functions debugfs_create_dir and debugfs_create_file_unsafe return
-ERR_PTR if an error occurs, and the appropriate way to verify for errors
-is to use the inline function IS_ERR. The patch will substitute the
-null-comparison with IS_ERR.
 
-Signed-off-by: Yeqi Fu <asuk4.q@gmail.com>
-Suggested-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- drivers/mmc/core/block.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 00c33edb9fb9..507bebc22636 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -2908,7 +2908,7 @@ static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
- 			debugfs_create_file_unsafe("status", 0400, root,
- 						   card,
- 						   &mmc_dbg_card_status_fops);
--		if (!md->status_dentry)
-+		if (IS_ERR(md->status_dentry))
- 			return -EIO;
- 	}
- 
-@@ -2916,7 +2916,7 @@ static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
- 		md->ext_csd_dentry =
- 			debugfs_create_file("ext_csd", S_IRUSR, root, card,
- 					    &mmc_dbg_ext_csd_fops);
--		if (!md->ext_csd_dentry)
-+		if (IS_ERR(md->ext_csd_dentry))
- 			return -EIO;
- 	}
- 
--- 
-2.37.2
+On 5/17/23 11:37, Krzysztof Kozlowski wrote:
+> This reverts commit 57ed510b0547 ("soundwire: qcom: use
+> pm_runtime_resume_and_get()") which introduced unbalanced
+> pm_runtime_put(), when device did not have runtime PM enabled.
+> 
+> If pm_runtime_resume_and_get() failed with -EACCES, the driver continued
+> execution and finally called pm_runtime_put_autosuspend().  Since
+> pm_runtime_resume_and_get() drops the usage counter on every error, this
+> lead to double decrement of that counter visible in certain debugfs
+> actions on unattached devices (still in reset state):
+> 
+>   $ cat /sys/kernel/debug/soundwire/master-0-0/sdw:0:0217:f001:00:0/registers
+>   qcom-soundwire 3210000.soundwire-controller: swrm_wait_for_wr_fifo_avail err write overflow
+>   soundwire sdw-master-0: trf on Slave 1 failed:-5 read addr e36 count 1
+>   soundwire sdw:0:0217:f001:00:0: Runtime PM usage count underflow!
+> 
+> Fixes: 57ed510b0547 ("soundwire: qcom: use pm_runtime_resume_and_get()")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Yes, this resume_and_get() added more problems indeed. One of those
+well-intended changes that went sideways.
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
+
+> ---
+>  drivers/soundwire/qcom.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index aad5942e5980..f442280af9d3 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -614,11 +614,12 @@ static irqreturn_t qcom_swrm_wake_irq_handler(int irq, void *dev_id)
+>  	struct qcom_swrm_ctrl *ctrl = dev_id;
+>  	int ret;
+>  
+> -	ret = pm_runtime_resume_and_get(ctrl->dev);
+> +	ret = pm_runtime_get_sync(ctrl->dev);
+>  	if (ret < 0 && ret != -EACCES) {
+>  		dev_err_ratelimited(ctrl->dev,
+> -				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
+> +				    "pm_runtime_get_sync failed in %s, ret %d\n",
+>  				    __func__, ret);
+> +		pm_runtime_put_noidle(ctrl->dev);
+>  		return ret;
+>  	}
+>  
+> @@ -1197,11 +1198,12 @@ static int qcom_swrm_startup(struct snd_pcm_substream *substream,
+>  	struct snd_soc_dai *codec_dai;
+>  	int ret, i;
+>  
+> -	ret = pm_runtime_resume_and_get(ctrl->dev);
+> +	ret = pm_runtime_get_sync(ctrl->dev);
+>  	if (ret < 0 && ret != -EACCES) {
+>  		dev_err_ratelimited(ctrl->dev,
+> -				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
+> +				    "pm_runtime_get_sync failed in %s, ret %d\n",
+>  				    __func__, ret);
+> +		pm_runtime_put_noidle(ctrl->dev);
+>  		return ret;
+>  	}
+>  
+> @@ -1402,11 +1404,12 @@ static int swrm_reg_show(struct seq_file *s_file, void *data)
+>  	struct qcom_swrm_ctrl *ctrl = s_file->private;
+>  	int reg, reg_val, ret;
+>  
+> -	ret = pm_runtime_resume_and_get(ctrl->dev);
+> +	ret = pm_runtime_get_sync(ctrl->dev);
+>  	if (ret < 0 && ret != -EACCES) {
+>  		dev_err_ratelimited(ctrl->dev,
+> -				    "pm_runtime_resume_and_get failed in %s, ret %d\n",
+> +				    "pm_runtime_get_sync failed in %s, ret %d\n",
+>  				    __func__, ret);
+> +		pm_runtime_put_noidle(ctrl->dev);
+>  		return ret;
+>  	}
+>  
