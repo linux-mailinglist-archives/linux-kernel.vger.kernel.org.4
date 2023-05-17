@@ -2,316 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F987069BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2737069C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjEQNX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S229983AbjEQNZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjEQNXP (ORCPT
+        with ESMTP id S229746AbjEQNZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:23:15 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0512D5A;
-        Wed, 17 May 2023 06:23:13 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HDJ8pg015592;
-        Wed, 17 May 2023 15:22:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=S6+XeqNo4IT8A1TIzUZjxqw/RT+AL0hlSV1L/bL/kw8=;
- b=gJR8xnyj3tsnBJbF6dlzBetj/tCI32Jn/ObGWATlvHqSV4hWyff3NhyCUzH84Q1V+ycC
- /3+O1L+kJefjCLDKtQbzcasWLhA1yuDudx6h4PXDAKYSvOvHZClFadSneEPWFbe7H4Zr
- tUnxE3w0bXWk2HntXUvgjg2g3X0NPv9mHQoAKGqDc3jSKby1ZSBE7OozfBM6koZAjXSR
- KxSbp8Tbd0UxGSWkKWJW0Cbv0oZVsfSXaFq360FNbob2E4MBpdjH9goDbWM+iQ43zETS
- dFgKai2ilR/kZV4Qf09QN7jPWyAomVuN6hJ/BLSHFc4NtsJ6Eg9cwUohd+Wt9Hq5h+Kp +w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qm7tfgpd0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 15:22:48 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 85ECC100039;
-        Wed, 17 May 2023 15:22:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7D1D72309C3;
-        Wed, 17 May 2023 15:22:47 +0200 (CEST)
-Received: from localhost (10.129.178.187) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 17 May
- 2023 15:22:47 +0200
-From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Wed, 17 May 2023 09:25:21 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B73F186
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:25:20 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-ba878d5e75fso409494276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684329919; x=1686921919;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=56WYJd+UeeU7i62VxA/IS8NmNCK4vEs9qF6l/gJW2W0=;
+        b=u5FUEWzjeugV7v6tHEPQYTfndWOxc39ugSX+Zm9nHrYWJDhqP2vynJLBeSXGI9uilT
+         +DzKFZ0YNSFqFMMv1bjuFRYCZK41rL0ikhKVYmX2lPC0X7ySmQ0DsynYPWMcd8u8pY/b
+         06rm91EwNWSBug4evR39ErPQR4psvDdu3oRTIxT3i2yOiWbLJzheSku1G5Bf5O6+e3pi
+         PYVs2luUIKS7U5tTEu4578GUfuir7HuuTqwO7ca05yQgXC1Qy6gsF1HRa8xZ9nbptulx
+         l1swE1J15TKosVSRjjY65zyMkcn+lJNhvq4YarKzIqO9nHkDwz0LQY1bRgv0yioBJhsP
+         RTpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684329919; x=1686921919;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=56WYJd+UeeU7i62VxA/IS8NmNCK4vEs9qF6l/gJW2W0=;
+        b=YNwtq7tT4YzBsZnPltOeOeHXiTAxqoLzwAps1xKSWzKgbK7+1agUwbr26Vrcs8aD2g
+         HGBkBJRXE+1Amyzlqd4JwO0FzeDwIGztRNnWuP36J5vOhZayZI+XS8GCKO7/chsUbsKQ
+         Cf9x824BiXb8t7s79jJN96EkL6ybpjYfKsPlafur39B5J/19Qm+J9+m20Izym8qU3gTy
+         UX02/dn6fUlOnO3GmJE0UJhwgj/YkIsgazaGVP9vDTpKQp9mc2OzHLPlRlYfAUE5dSMZ
+         SM+dZPSB8dNSaRZd3MXwXs0aW7j+TtzomMC8POzeGbDTI5PRUnH2oDJFrjC8niIQMvm4
+         tUpg==
+X-Gm-Message-State: AC+VfDz+7w6bLWcsHDBeLjutPMlIG4Bp4e+Jd9TiQ7mBIAhNKUBvBn4e
+        YLtOqMtsZ865nl9NDKTzup2Q/Vhl840HEhjIj0yoEQ==
+X-Google-Smtp-Source: ACHHUZ4K0ZuvOKahfJsmfrC1f7f2t3iU5bXvHcn/huKaqBjiMU4xctXDaiZH+dqpjY0LIKaiLNYwdOCIct7qnRZDq9o=
+X-Received: by 2002:a25:e743:0:b0:ba8:15a3:f2e4 with SMTP id
+ e64-20020a25e743000000b00ba815a3f2e4mr5001987ybh.0.1684329919315; Wed, 17 May
+ 2023 06:25:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230517-topic-kailua-rpmhpd-v1-0-cd3013d051a6@linaro.org> <20230517-topic-kailua-rpmhpd-v1-3-cd3013d051a6@linaro.org>
+In-Reply-To: <20230517-topic-kailua-rpmhpd-v1-3-cd3013d051a6@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 17 May 2023 16:25:07 +0300
+Message-ID: <CAA8EJppaZSXeRP661g65WtadZAuJo1T8=Yk8AfX6n4Jg04BvZA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8550: Add missing RPMhPD OPP levels
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marek Vasut <marex@denx.de>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>
-CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
-Subject: [PATCH 3/3] ARM: dts: stm32: fix several DT warnings on stm32mp15
-Date:   Wed, 17 May 2023 15:22:14 +0200
-Message-ID: <20230517132214.254757-4-raphael.gallais-pou@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230517132214.254757-1-raphael.gallais-pou@foss.st.com>
-References: <20230517132214.254757-1-raphael.gallais-pou@foss.st.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.129.178.187]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several warnings regarding LTDC and DSI on stm32mp15* device-trees remains.
+On Wed, 17 May 2023 at 16:20, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> We need more granularity for things like the GPU. Add the missing levels.
+>
+> This unfortunately requires some re-indexing, resulting in an ugly diff.
+>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 36 ++++++++++++++++++++++++++++--------
+>  1 file changed, 28 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 6e9bad8f6f33..0c987dd4e4e5 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -3616,35 +3616,55 @@ rpmhpd_opp_min_svs: opp2 {
+>                                                 opp-level = <RPMH_REGULATOR_LEVEL_MIN_SVS>;
+>                                         };
+>
+> -                                       rpmhpd_opp_low_svs: opp3 {
+> +                                       rpmhpd_opp_lov_svs_d2: opp3 {
+> +                                               opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS_D2>;
+> +                                       };
+>
 
-Those concern:
-  * "#size-cells" and "#address-cells" wrongly used
-  * residual "reg" property appearing on endpoints where it could be
-    avoided
-  * Changed 'panel-dsi@0' to 'panel@0' according to st,stm32-dsi.yaml
+Maybe we should stop using the indices for OPP entries and switch to
+encoding levels instead?
 
-Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
----
- arch/arm/boot/dts/stm32mp151.dtsi                      |  5 -----
- arch/arm/boot/dts/stm32mp157.dtsi                      |  7 -------
- .../dts/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts    |  6 ++++--
- .../boot/dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts   |  6 ++++--
- .../stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts  |  3 +--
- arch/arm/boot/dts/stm32mp157c-dk2.dts                  |  8 ++++++++
- arch/arm/boot/dts/stm32mp157c-ev1.dts                  | 10 +++++++---
- arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts              |  3 +--
- arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi     |  6 +-----
- arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                 |  3 +--
- 10 files changed, 27 insertions(+), 30 deletions(-)
-
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index a98ae58e2c1c..bf3830dca742 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1529,11 +1529,6 @@ ltdc: display-controller@5a001000 {
- 			clock-names = "lcd";
- 			resets = <&rcc LTDC_R>;
- 			status = "disabled";
--
--			port {
--				#address-cells = <1>;
--				#size-cells = <0>;
--			};
- 		};
- 
- 		iwdg2: watchdog@5a002000 {
-diff --git a/arch/arm/boot/dts/stm32mp157.dtsi b/arch/arm/boot/dts/stm32mp157.dtsi
-index 54e73ccea446..5e733cd16ff9 100644
---- a/arch/arm/boot/dts/stm32mp157.dtsi
-+++ b/arch/arm/boot/dts/stm32mp157.dtsi
-@@ -24,14 +24,7 @@ dsi: dsi@5a000000 {
- 			clock-names = "pclk", "ref", "px_clk";
- 			resets = <&rcc DSI_R>;
- 			reset-names = "apb";
--			#address-cells = <1>;
--			#size-cells = <0>;
- 			status = "disabled";
--
--			ports {
--				#address-cells = <1>;
--				#size-cells = <0>;
--			};
- 		};
- 	};
- };
-diff --git a/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts b/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts
-index 9a2a4bc7d079..4279b26547df 100644
---- a/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts
-+++ b/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts
-@@ -49,6 +49,9 @@ &dsi {
- 	phy-dsi-supply = <&reg18>;
- 
- 	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
- 		port@0 {
- 			reg = <0>;
- 			dsi_in: endpoint {
-@@ -104,8 +107,7 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
--		ltdc_ep0_out: endpoint@0 {
--			reg = <0>;
-+		ltdc_ep0_out: endpoint {
- 			remote-endpoint = <&dsi_in>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts b/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts
-index 390ee8c05754..efba54289820 100644
---- a/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts
-+++ b/arch/arm/boot/dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts
-@@ -49,6 +49,9 @@ &dsi {
- 	phy-dsi-supply = <&reg18>;
- 
- 	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
- 		port@0 {
- 			reg = <0>;
- 			dsi_in_ltdc: endpoint {
-@@ -104,8 +107,7 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
--		ltdc_out_dsi: endpoint@0 {
--			reg = <0>;
-+		ltdc_out_dsi: endpoint {
- 			remote-endpoint = <&dsi_in_ltdc>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts b/arch/arm/boot/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
-index 0d7560ba2950..5116a7785201 100644
---- a/arch/arm/boot/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
-+++ b/arch/arm/boot/dts/stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts
-@@ -81,8 +81,7 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
--		ltdc_ep0_out: endpoint@0 {
--			reg = <0>;
-+		ltdc_ep0_out: endpoint {
- 			remote-endpoint = <&panel_in>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/stm32mp157c-dk2.dts b/arch/arm/boot/dts/stm32mp157c-dk2.dts
-index ab13e340f4ef..4bef2300ed7c 100644
---- a/arch/arm/boot/dts/stm32mp157c-dk2.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-dk2.dts
-@@ -31,10 +31,15 @@ &cryp1 {
- };
- 
- &dsi {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
- 	status = "okay";
- 	phy-dsi-supply = <&reg18>;
- 
- 	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
- 		port@0 {
- 			reg = <0>;
- 			dsi_in: endpoint {
-@@ -82,6 +87,9 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
- 		ltdc_ep1_out: endpoint@1 {
- 			reg = <1>;
- 			remote-endpoint = <&dsi_in>;
-diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-index ba8e9d9a42fa..49ca94c19b02 100644
---- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
-@@ -101,9 +101,14 @@ dcmi_0: endpoint {
- 
- &dsi {
- 	phy-dsi-supply = <&reg18>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
- 	status = "okay";
- 
- 	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
- 		port@0 {
- 			reg = <0>;
- 			dsi_in: endpoint {
-@@ -119,7 +124,7 @@ dsi_out: endpoint {
- 		};
- 	};
- 
--	panel-dsi@0 {
-+	panel@0 {
- 		compatible = "raydium,rm68200";
- 		reg = <0>;
- 		reset-gpios = <&gpiof 15 GPIO_ACTIVE_LOW>;
-@@ -239,8 +244,7 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
--		ltdc_ep0_out: endpoint@0 {
--			reg = <0>;
-+		ltdc_ep0_out: endpoint {
- 			remote-endpoint = <&dsi_in>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts b/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
-index 407ed3952f75..eada9cf257be 100644
---- a/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
-+++ b/arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts
-@@ -161,8 +161,7 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
--		ltdc_ep0_out: endpoint@0 {
--			reg = <0>;
-+		ltdc_ep0_out: endpoint {
- 			remote-endpoint = <&panel_input>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
-index 302efac5d26f..e1306f92fd82 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
-@@ -336,11 +336,7 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
--		#address-cells = <1>;
--		#size-cells = <0>;
--
--		ltdc_ep0_out: endpoint@0 {
--			reg = <0>;
-+		ltdc_ep0_out: endpoint {
- 			remote-endpoint = <&adv7513_in>;
- 		};
- 	};
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-index 0f1110e42c93..a6e2e20f12fa 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-@@ -457,8 +457,7 @@ &ltdc {
- 	status = "okay";
- 
- 	port {
--		ltdc_ep0_out: endpoint@0 {
--			reg = <0>;
-+		ltdc_ep0_out: endpoint {
- 			remote-endpoint = <&sii9022_in>;
- 		};
- 	};
 -- 
-2.25.1
-
+With best wishes
+Dmitry
