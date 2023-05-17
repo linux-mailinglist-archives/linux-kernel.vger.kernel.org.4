@@ -2,193 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDEA7062E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EC57062E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjEQIao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S229746AbjEQIa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjEQIaK (ORCPT
+        with ESMTP id S231179AbjEQIaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:30:10 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5021961AD;
-        Wed, 17 May 2023 01:29:41 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H83Taj019707;
-        Wed, 17 May 2023 08:29:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=K8dSz1VSi5KMNCqzv/v+CmqKEFda7USjYbIoW8+RWPA=;
- b=G5Vcbl6pu9JnasKr/Jrp74k8RVew2jKLXpRFaNj8+rJ56I74hMXe4txWQUL8hmRHGnru
- yeLw7LA3HUZopq9MrknBXL3fjJTmC59B+ArS7DxJ119+SDO+6xzrV83QlJFUZ5lgTX09
- PdD8GmeC0yIA+Ihgew3oPSpXm7I3kkxG+lsF0VP2zmZ+Fgbqxjj2DhpAPLM0iUqtdS92
- A7ezSR1VEybji1cZFDxt1Mt8TBfCiBPJjLiopTlg8WSFSggsjEUBRmq7sogePqATp70H
- ELrHDlcWUOxUBNxDmlWUQkDBD9UVROZOJBKxjbCDYKeCq339JNaHiTdP7YyJJ2Ng+HL3 VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmu33gymm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 08:29:27 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34H8QrEG003309;
-        Wed, 17 May 2023 08:29:27 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmu33gym2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 08:29:27 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H1LASE022307;
-        Wed, 17 May 2023 08:29:25 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qj1tdsq7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 08:29:25 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34H8TMmV13763118
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 08:29:22 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A464520040;
-        Wed, 17 May 2023 08:29:22 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9039C20043;
-        Wed, 17 May 2023 08:29:21 +0000 (GMT)
-Received: from [9.179.22.107] (unknown [9.179.22.107])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 08:29:21 +0000 (GMT)
-Message-ID: <33f6bd2277d2bdc5c5455c2987f479c3b2cd554d.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Date:   Wed, 17 May 2023 10:29:21 +0200
-In-Reply-To: <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-         <20230516110038.2413224-36-schnelle@linux.ibm.com>
-         <2023051643-overtime-unbridle-7cdd@gregkh>
-         <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
-         <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Wed, 17 May 2023 04:30:03 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0D5618E;
+        Wed, 17 May 2023 01:29:33 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2ac80ed7f26so3812971fa.1;
+        Wed, 17 May 2023 01:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684312171; x=1686904171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=78En7bFX4DNtv99F1zZg+12j6HtDjxQe1ib/JrAoDvA=;
+        b=XRWVX2p7cTvMHloNSe+15Ataagn9cyJxaJbHcp1PHe5lusUhd++9+4KqN18L63WreI
+         LsKUM7V3TLcdcw1FFvPLFBso/oCe/gPHN7csTTO00yZwUSnF7OX7jFFtpG4oHZjgJeRC
+         PDenRervF0VNz/jig6R5/JNNjOZftfHDMdWqTMvl9KIXXwpE9BPhvStHYSGftav/Ig+B
+         eXMiE+IVmo6DAqWWdPsslhzMOK61hvsU3CU48ckIwE6DtkF0eGXewN23j7HoTa4HYJwN
+         G4ysNzjk0nclpG5rFafu8gnwwGGIRcNDhcbWuFnXV/s+10G7kAcE6zcMAtwE6I8bJFbA
+         Vumw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684312171; x=1686904171;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=78En7bFX4DNtv99F1zZg+12j6HtDjxQe1ib/JrAoDvA=;
+        b=XdgYYaWlIIIktEAbIqOQW47Tx5Tzm1l0ihzijpDukf3MI1Xo7i3Jb7xYk8IJBOB7ZA
+         ZCj84zcL3rjdJmK2XzE73TV+zMTuGmkKTpFNObRgo27XwHURdYxkZSwfbDdW6zEdsVJ4
+         RR8Mbe/EF2ZwjLl2D1VzaTye3xWAXZKoOPxp0/01vCQjM1gSFA/ig12SfEEpOVYF6svM
+         Wsm9C+I4DNj3kSej8XyBS1bYauGj6KR5bEVcOz5NqjCdjZDCWLhFu65nNjHsUMuH+hGS
+         nT1NVgtLvmETbkj7HnjMwVN8s2K40ZPpZUzOkuzfPd4YC/RNQIrWQVETPQyv5j74YaOs
+         lWdw==
+X-Gm-Message-State: AC+VfDw67Flu1BVv2aHXaImsz+H4i3fKlDWuiw1BTusXdZ2odzrP4ueU
+        DbPdG16qR0eavfzuecN2wCw=
+X-Google-Smtp-Source: ACHHUZ5oddWxcGwgp3BKJp1Lcs/+h6rsNvb+TshwjSOR4jrSPWEUTaWM1im/mPATuGuxQIyzaCF7Lg==
+X-Received: by 2002:a2e:8244:0:b0:2ad:814c:6ad5 with SMTP id j4-20020a2e8244000000b002ad814c6ad5mr8045673ljh.46.1684312170872;
+        Wed, 17 May 2023 01:29:30 -0700 (PDT)
+Received: from [10.8.28.198] ([89.201.166.50])
+        by smtp.gmail.com with ESMTPSA id h4-20020a2e9ec4000000b002a8c32fd2f3sm4515688ljk.89.2023.05.17.01.29.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 01:29:30 -0700 (PDT)
+Message-ID: <356bfe96-75e6-1c6d-0049-d664e719a266@gmail.com>
+Date:   Wed, 17 May 2023 10:29:28 +0200
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cNeghrB-Fl803ZHecJIADJe8FW4yGHtE
-X-Proofpoint-GUID: DDn3Pa_fTkGb6tUVcF-u7Wwj4JwyIvzM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0 mlxlogscore=441
- clxscore=1015 malwarescore=0 priorityscore=1501 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2] dt-bindings: display: panel: add
+ panel-mipi-dsi-bringup
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        robh+dt@kernel.org, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com>
+ <023f6cf9-0f08-f27e-d203-5ff78faf110f@linaro.org>
+ <CAO9szn1EsbuPSRrOW8CLqhp+QUcL=9NE93FAwsg2n3htd_aJTw@mail.gmail.com>
+ <97124cb1-4f45-22d5-418f-568f8a68deec@linaro.org>
+From:   Paulo Pavacic <pavacic.p@gmail.com>
+In-Reply-To: <97124cb1-4f45-22d5-418f-568f8a68deec@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-16 at 15:51 -0400, Alan Stern wrote:
-> On Tue, May 16, 2023 at 06:44:34PM +0200, Arnd Bergmann wrote:
-> > On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
-> > > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
-> >=20
-> > > >  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
-> > > >  /* Support PCI only */
-> > > >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
-> > > >  {
-> > > > -	return inl(uhci->io_addr + reg);
-> > > > +	return UHCI_IN(inl(uhci->io_addr + reg));
-> > > >  }
-> > > > =20
-> > > >  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 va=
-l, int reg)
-> > > >  {
-> > > > -	outl(val, uhci->io_addr + reg);
-> > > > +	UHCI_OUT(outl(val, uhci->io_addr + reg));
-> > >=20
-> > > I'm confused now.
-> > >=20
-> > > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
-> > >=20
-> > > But if it isn't, then these are just no-ops that do nothing?  So then
-> > > the driver will fail to work?  Why have these stubs at all?
-> > >=20
-> > > Why not just not build the driver at all if this option is not enable=
-d?
+Hello,
 
-The driver supports multiple access methods in several functions
-similar to the following:
+If I understood you correctly you'd prefer it to be named 
+fannal,c3004.yaml? My logic is that if more panels were to be added that 
+means that each one would have yaml files that would look exactly the 
+same with the same user.
 
-static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int re=
-g)
-{
-	if (uhci_has_pci_registers(uhci))
-		UHCI_OUT(outl(val, uhci->io_addr + reg));
-	else if (uhci_is_aspeed(uhci))
-		writel(val, uhci->regs + uhci_aspeed_reg(reg));
-#ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
-	else if (uhci_big_endian_mmio(uhci))
-		writel_be(val, uhci->regs + reg);
-#endif
-	else
-		writel(val, uhci->regs + reg);
-}
+Best regards,
 
-Instead of adding more #ifdefs Alan Stern suggested to just stub out
-both uhci_has_pci_registers() and the access itself. So with a half way
-optimizing compiler this shouldn't even leave no-ops in the binary.
+Paulo
 
-
->=20
-> > That said, there is a minor problem with the empty definition
-> >=20
-> > +#define UHCI_OUT(x)
-> >=20
-> > I think this should be "do { } while (0)" to avoid warnings
-> > about empty if/else blocks.
->=20
-> I'm sure Niklas wouldn't mind making such a change.  But do we really=20
-> get such warnings?  Does the compiler really think that this kind of=20
-> (macro-expanded) code:
->=20
-> 	if (uhci_has_pci_registers(uhci))
-> 		;
-> 	else if (uhci_is_aspeed(uhci))
-> 		writel(val, uhci->regs + uhci_aspeed_reg(reg));
->=20
-> deserves a warning?  I write stuff like that fairly often; it's a good=
-=20
-> way to showcase a high-probability do-nothing pathway at the start of a=
-=20
-> series of conditional cases.  And I haven't noticed any complaints from=
-=20
-> the compiler.
->=20
-> Alan Stern
-
-I changed it to "do {} while (0)" for v5 but agree I haven't seen
-warnings for this either. Still doesn't hurt.
-
-Thanks,
-Niklas
+On 5/17/23 09:03, Krzysztof Kozlowski wrote:
+> On 17/05/2023 00:13, Paulo Pavacic wrote:
+>> Hello, thank you for your time to review this patch and sorry for not
+>> addressing all of the concerns, it was done unintentionally. This is
+>> my first contribution to the Linux kernel and it is quite a process.
+>> I have run those two scripts and haven't received any errors I have
+>> latest master cloned so I will check what I did wrong.
+>>
+>> The thing I would like to get approval on before I try anything else
+>> is the name 'panel-mipi-dsi-bringup':
+>>
+>>> Still wrong filename. You did not respond to my previous comments, so I
+>> don't really understand what's this.
+>>> Judging by compatible, this should be fannal,c3004.yaml
+>>>
+>>> If not, explain please.
+>>>
+>>> Missing user of the bindings - driver or DTS. Please sent patches together as patchset.
+>>
+>> I wasn't sure how to name it and this name seemed fit. I'm not sure
+>> how to be concise about this, but here is the full story as to why I
+>> have done that:
+>>
+>> I got a task to enable panel for which working driver wasn't
+>> available. I have started testing raydium driver and modifying parts
+>> of it until I got it working.
+>> Driver was modified quite a lot, new functions, macros and structures
+>> were added which resulted in a new driver.
+>> Therefore I have made a simple driver which I have submitted for a
+>> review which will probably be rejected now due tomany reasons I have
+>> noticed after sending it:
+>> https://lore.kernel.org/lkml/CAO9szn03msW6pu37Zws5EaFGL10rjp9ugPdCuDvOPuQRU72gVQ@mail.gmail.com/T/
+>>
+>> While talking with manufacturers of the panel I have figured out that
+>> they aren't that familiar with the Linux kernel.
+>> They had previously only enabled  it on bare metal (PLA?) and provided
+>> me with the initialization sequences. Initialization sequences are hex
+>> values sent over MIPI DSI to initialize panel controller.
+>> Initialization sequences sometimes also require delays after certain
+>> commands and for different panels it can be very different.
+>> I believe I have simplified it so that someone can follow comments
+>> inside of the driver and try to enable mipi dsi panel by copy pasting
+>> initialization code from bare metal system and doing minor
+>> modifications.
+>> Since I have targeted this at people who need to enable their panels
+>> for the first time name seemed okay. I thought that since there is
+>> panel-simple.yml that panel-mipi-dsi-bringup.yml would be acceptable
+>> name.
+> Bindings are for hardware, not driver, so they describe the hardware panel.
+>
+> Best regards,
+> Krzysztof
+>
