@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D284870718B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C4270718C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjEQTKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S229795AbjEQTKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjEQTKT (ORCPT
+        with ESMTP id S229574AbjEQTKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:10:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8494F93C8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:23 -0700 (PDT)
+        Wed, 17 May 2023 15:10:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FE083C5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684350562;
+        s=mimecast20190719; t=1684350564;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=TNueZVKvKbqYKsThUlmAqqW8H5EGDZrswTYYHFq1+MY=;
-        b=PBwtHQ+RUbVbotMmoA/uxZiCoyY7/GVl4/G1cacEHa1JM5/VFtKnCNm4R8bB/JftqIf7hk
-        /x65J0DELByOPaI1nDmwRWxvN0TaD1WJeYhMDJdy2+bBBOvk5647XdRpmYa/8/oDbUkg1S
-        4NdOJJ/VCwaoT9dG2RWQyNdo5VC4B4k=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X0vLIGQ76sSG5EGgMh6kBM7wgWyPxuvXNfJPYChH6HQ=;
+        b=Gtrr0Hq0NXrkjSbKP/wTRsx6tfagXDJJbOT3+j/N+0SnV+jXf3ZfSCW4HIVILMDvU7fj5i
+        aMZEq8nYLbygoH4LZAy22bm0vehxisHAN1sNPlAdgQxx4pJa83A25cnvrLr4Emlkr2O9UJ
+        i5FdH7Ft/PYGD5N1ogqgQc/A/aCfK5M=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-599-Mni7MywSPdabraTPDwuf2A-1; Wed, 17 May 2023 15:09:21 -0400
-X-MC-Unique: Mni7MywSPdabraTPDwuf2A-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f38280ec63so2227041cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:20 -0700 (PDT)
+ us-mta-138-hrZzoHSVOR-v2Cbqz3SdWA-1; Wed, 17 May 2023 15:09:23 -0400
+X-MC-Unique: hrZzoHSVOR-v2Cbqz3SdWA-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f39195e7e5so2360161cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350559; x=1686942559;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TNueZVKvKbqYKsThUlmAqqW8H5EGDZrswTYYHFq1+MY=;
-        b=DWCrBFR42E5PfOMcw+7tgEjYSj9sEbtldbd2tCd649rKEkaCZKBRutyBGdzWceNTUs
-         QLg9jZGli2V0UGLWOwotrvLoBoS+WUhHNCBheIFkZ5NahzuU8CL8V78MDOPjy5y2yyfS
-         cRgJNDMJklOdxWkBXPjj++G7roeo+ho3f2czRgpTY44ybsCXtJjY+muBuwkGP9W5IX9r
-         fJynyt1TLvwmKEajMaRGYxDMKg9evpvf8HSXH9SvLzUVET9GTRkJaufk2LxZYiPVJz7d
-         MCIozSXGJVFwLdKcnJdBxVkUIngZejEoGmmM4IVA5X45qCxPZHc6wAc+17jlzLjuD+vL
-         5NYQ==
-X-Gm-Message-State: AC+VfDwlmmnk5PcQO7EJ0/n0S+JqhJr1B2WpYFWOguRi+yrt0D0ddiDW
-        HFtHu9/MNh5xoW57wHuzF8LGLdA8cLueeFeFklTY7zRSr+kcPmKrdWxVBsmtQAaPNPDJalH06uo
-        hIe5eJZkOpGMjGln2GhhPf1XIMOIknZFswc7Ta52D+nh35AawcjbKMgCLUb3POed9/+fEVczHbC
-        8qVqdNMA==
-X-Received: by 2002:a05:622a:1a9f:b0:3f5:1def:67fd with SMTP id s31-20020a05622a1a9f00b003f51def67fdmr6869904qtc.2.1684350559360;
-        Wed, 17 May 2023 12:09:19 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5m7p0QqMHfQEXYY68UUBJuy0d24Wlx3YBE8G36XlPM1mx1FsLjvPznRvMD7EUjylbl1XAp/g==
-X-Received: by 2002:a05:622a:1a9f:b0:3f5:1def:67fd with SMTP id s31-20020a05622a1a9f00b003f51def67fdmr6869843qtc.2.1684350558865;
-        Wed, 17 May 2023 12:09:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684350562; x=1686942562;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X0vLIGQ76sSG5EGgMh6kBM7wgWyPxuvXNfJPYChH6HQ=;
+        b=LV9waJnguUZoLSNzcwjaC+VVd3bjuIJkm7S4qW6OWgqbjbB+uIQ3AKbdSaPbky913y
+         6pqBYPBxzNIfboUlbyFc8VS7aKOBi2bSMulFAcj1w6zG7IRyUhRIasLgDwWbazOiwj2m
+         RTw+EP3Ry/FGxmkxjjXtKk4PupCHQTBh0cVmeDSzJ+WMAhQorbIbAtQtyk2fNVXzMQOV
+         vkf9+xK431nucZP8sH7QpBhRBVIOMX4XOinqWU0ra9pvej/r6DCD1uFSy6QvKlpf2wJ2
+         C1TrOvXFjBiTemiU1qtKaPCWRmiDqlCRYnsElZH+TH6acHSPuUhOl0aGPWrG1DFqZi3L
+         WMSQ==
+X-Gm-Message-State: AC+VfDzf/WPlQRBwrWdF4D97fjuEdENEPbCdwxUunKI7MBc0r+b4x1ue
+        P8r4NfxLaBFPycoq9Mf1y4HzzCtGyVycGhyaHbMwvhMyiCSazjgbq95Pkt95bop9W7Flt4uyA3G
+        adfUCxy42Va4+4efXdrDVnmI6ICJ6U7wNvUFKNTd654QdhZk4ibkVN0xXDR1LPb5cLbFix7L4FQ
+        hDgpFqGg==
+X-Received: by 2002:a05:622a:2cd:b0:3ef:4614:d0de with SMTP id a13-20020a05622a02cd00b003ef4614d0demr6995421qtx.4.1684350561922;
+        Wed, 17 May 2023 12:09:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7J2wzPLNuWb2xStmEdoJDaUJKipyb+2I0xjiFg3N5ksFe4XH0shtqnXZrCduoJFkiMn/Bkjw==
+X-Received: by 2002:a05:622a:2cd:b0:3ef:4614:d0de with SMTP id a13-20020a05622a02cd00b003ef4614d0demr6995376qtx.4.1684350561541;
+        Wed, 17 May 2023 12:09:21 -0700 (PDT)
 Received: from x1n.. (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05620a143500b0075954005b46sm833464qkj.48.2023.05.17.12.09.17
+        by smtp.gmail.com with ESMTPSA id k21-20020a05620a143500b0075954005b46sm833464qkj.48.2023.05.17.12.09.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 12:09:18 -0700 (PDT)
+        Wed, 17 May 2023 12:09:20 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Rapoport <rppt@kernel.org>, peterx@redhat.com,
@@ -64,57 +65,85 @@ Cc:     Mike Rapoport <rppt@kernel.org>, peterx@redhat.com,
         "Liam R . Howlett" <Liam.Howlett@oracle.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v2 0/2] mm/uffd: Fix vma merge/split
-Date:   Wed, 17 May 2023 15:09:14 -0400
-Message-Id: <20230517190916.3429499-1-peterx@redhat.com>
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: [PATCH v2 1/2] mm/uffd: Fix vma operation where start addr cuts part of vma
+Date:   Wed, 17 May 2023 15:09:15 -0400
+Message-Id: <20230517190916.3429499-2-peterx@redhat.com>
 X-Mailer: git-send-email 2.39.1
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20230517190916.3429499-1-peterx@redhat.com>
+References: <20230517190916.3429499-1-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2:
-- Added r-bs for Lorenzo and Liam
-- Reworded patch 1's commit message [Lorenzo]
+It seems vma merging with uffd paths is broken with either
+register/unregister, where right now we can feed wrong parameters to
+vma_merge() and it's found by recent patch which moved asserts upwards in
+vma_merge() by Lorenzo Stoakes:
 
-This series contains two patches that fix vma merge/split for userfaultfd
-on two separate issues.  The patchset is based on akpm/mm-hotfixes-unstable
-with 2f628010799e reverted (where patch 1 should be used to replace it
-which seems to be the plan we reached).
+https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
 
-Patch 1 fixes a regression since 6.1+ due to something we overlooked when
-converting to maple tree apis.  The plan is we use patch 1 to replace the
-commit "2f628010799e (mm: userfaultfd: avoid passing an invalid range to
-vma_merge())" in mm-hostfixes-unstable tree if possible, so as to bring
-uffd vma operations back aligned with the rest code again.
+It's possible that "start" is contained within vma but not clamped to its
+start.  We need to convert this into either "cannot merge" case or "can
+merge" case 4 which permits subdivision of prev by assigning vma to
+prev. As we loop, each subsequent VMA will be clamped to the start.
 
-Patch 2 fixes a long standing issue that vma can be left unmerged even if
-we can for either uffd register or unregister.
+This patch will eliminate the report and make sure vma_merge() calls will
+become legal again.
 
-Many thanks to Lorenzo on either noticing this issue from the assert
-movement patch, looking at this problem, and also provided a reproducer on
-the unmerged vma issue [1].
+One thing to mention is that the "Fixes: 29417d292bd0" below is there only
+to help explain where the warning can start to trigger, the real commit to
+fix should be 69dbe6daf104.  Commit 29417d292bd0 helps us to identify the
+issue, but unfortunately we may want to keep it in Fixes too just to ease
+kernel backporters for easier tracking.
 
-Please have a look, thanks.
+Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+Cc: Mike Rapoport (IBM) <rppt@kernel.org>
+Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
+Reported-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Fixes: 29417d292bd0 ("mm/mmap/vma_merge: always check invariants")
+Fixes: 69dbe6daf104 ("userfaultfd: use maple tree iterator to iterate VMAs")
+Closes: https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
+Cc: linux-stable <stable@vger.kernel.org>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ fs/userfaultfd.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-[1] https://gist.github.com/lorenzo-stoakes/a11a10f5f479e7a977fc456331266e0e
-
-Peter Xu (2):
-  mm/uffd: Fix vma operation where start addr cuts part of vma
-  mm/uffd: Allow vma to merge as much as possible
-
- fs/userfaultfd.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 0fd96d6e39ce..17c8c345dac4 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1459,6 +1459,8 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+ 
+ 	vma_iter_set(&vmi, start);
+ 	prev = vma_prev(&vmi);
++	if (vma->vm_start < start)
++		prev = vma;
+ 
+ 	ret = 0;
+ 	for_each_vma_range(vmi, vma, end) {
+@@ -1625,6 +1627,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+ 
+ 	vma_iter_set(&vmi, start);
+ 	prev = vma_prev(&vmi);
++	if (vma->vm_start < start)
++		prev = vma;
++
+ 	ret = 0;
+ 	for_each_vma_range(vmi, vma, end) {
+ 		cond_resched();
 -- 
 2.39.1
 
