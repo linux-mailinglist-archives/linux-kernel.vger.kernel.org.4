@@ -2,102 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38EE7071BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7EB7071B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbjEQTOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjEQTOU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229980AbjEQTOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 17 May 2023 15:14:20 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B32B3A8D;
-        Wed, 17 May 2023 12:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684350847; x=1715886847;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bcV1wWBOCBZQgPTgstGT/dGjpn/djf7q8srqFQkL1qk=;
-  b=cLJr2hnuiMf7hrN0DohrPjkMu0Rn5Sxp94KHZt1yHe+rcYRapikG5fVm
-   yK9PCmw5LBfVpaiDwR8MbN8/wt/2ZYNrg6bVCS4USmkIsMH3UawO/UYhA
-   P7DozsIZ5+zHrxp617wPN5fqgfzyVffXpan6wo9vtiUu8X1aFvcw4irL4
-   +yc1GB+XtNF1j4TGfviklBGlBqoGU1ET15sIo1D7VxCrHphvMTwB0QvVv
-   WyJjDxngioX8SO1AOlnXiBsk63Kdp4bcDZUz+iByrvtPdWBMnOz8qrHWN
-   U+QjCN20R+7rmz+DrUwkE2ifJoO/HT0mISpCku0vsDkPKPXEK8B0sWy3x
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="349358981"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="349358981"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 12:14:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="696004563"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="696004563"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 17 May 2023 12:14:03 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pzMb3-0008aX-2j;
-        Wed, 17 May 2023 22:14:01 +0300
-Date:   Wed, 17 May 2023 22:14:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg KH <greg@kroah.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        heikki.krogerus@linux.intel.com, rafael@kernel.org,
-        ajayg@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
-        Sanket.Goswami@amd.com
-Subject: Re: [PATCH 2/2] usb: typec: ucsi: Don't create power supplies for
- dGPUs
-Message-ID: <ZGUneSmV6dJBk7AO@smile.fi.intel.com>
-References: <20230516182541.5836-1-mario.limonciello@amd.com>
- <20230516182541.5836-3-mario.limonciello@amd.com>
- <ZGULZU01tdqm1Xoc@smile.fi.intel.com>
- <2023051742-guiding-footing-3527@gregkh>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229989AbjEQTOR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 17 May 2023 15:14:17 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FF2D056
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:14:05 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so836716b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684350845; x=1686942845;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FOcRPuLGObm+Vg1R2GCaP1lmxZ7GfKsTU0IS+UkR3zs=;
+        b=SUqO4jCCzRBEgKPabZ2BR1iWXlDt2bJ4YSx2nTK+jnAsmW8ztUDPnxFpi2XNxv89H0
+         xkQ2xhTIBVlUIXd65WUWWEmzgGVJRq5XXv4dHzNMp9TnfYmVeRGoc5/iYDZuxhtKLl+X
+         R/owG4gwXqt6fPHMYaTSzJ+vYIB2PSQuBqtjw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684350845; x=1686942845;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FOcRPuLGObm+Vg1R2GCaP1lmxZ7GfKsTU0IS+UkR3zs=;
+        b=XrnNYyf2B7kxYD4ldoutekli+aTQlEYvd3dyNJekXq/szh5P3X6fWmYUqQ3yiYeNeN
+         gWh8rAuDN3Lmw3+Kyhb7pwFiZ1eA5btmB7sYfemfHHxN9UeOp3bGxVt5/j88Y4zwcp7s
+         GcRUVGEjwlxd2+XZCQryZd24HxuRY3fL2js6MBp/PYYMA8MxpqgMSK6e6gewvF++yJR+
+         qUKAJ3M1hCthMT8DD1xS9J/ePG2uFQOWX5mvpI0NlZmpv/ob5+7ihXE1EsAVosVKCPBl
+         Y6r3EcfIRrxcrEk9UfuHj1LS2P1dry98yg2WslvdgNn5iJiusIk+RiyVBOpgn7peZGPW
+         8NcQ==
+X-Gm-Message-State: AC+VfDxDI/DzOGz05hCuBq/3L6YjAofDTWYEvruSIscgZgmIe1PuTIh4
+        VE4ICEUQJoGRi2ttkHKZAWXYCA==
+X-Google-Smtp-Source: ACHHUZ4LRkx/6YsdhklEs/2vurTILxouu44+3QT3dOA1O72v+gTZjxf++gH4zzIh+dIYs6Tt7TknXQ==
+X-Received: by 2002:a05:6a00:15c1:b0:64c:ae1c:3385 with SMTP id o1-20020a056a0015c100b0064cae1c3385mr866272pfu.32.1684350845462;
+        Wed, 17 May 2023 12:14:05 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f13-20020aa782cd000000b0062e63cdfcb6sm16005552pfn.94.2023.05.17.12.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 12:14:05 -0700 (PDT)
+Date:   Wed, 17 May 2023 12:14:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+        linux-hardening@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] scsi: ibmvscsi: Replace all non-returning strlcpy with
+ strscpy
+Message-ID: <202305171214.77A5A62DD@keescook>
+References: <20230517143409.1520298-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023051742-guiding-footing-3527@gregkh>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230517143409.1520298-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 08:58:49PM +0200, Greg KH wrote:
-> On Wed, May 17, 2023 at 08:14:13PM +0300, Andy Shevchenko wrote:
-> > On Tue, May 16, 2023 at 01:25:41PM -0500, Mario Limonciello wrote:
-
-...
-
-> > > +static const struct property_entry dgpu_properties[] = {
-> > > +	/* USB-C doesn't power the system */
-> > > +	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
-> > > +	{},
-> > 
-> > Comma is not needed in terminator entry.
+On Wed, May 17, 2023 at 02:34:09PM +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
 > 
-> But it's encouraged!
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 
-Why?! This might lead to the subtle mistakes going unnoticed during rebases.
-Yes, it's quite unlikely, but it might be still possible to have the empty
-entry in the middle of the array. Why should we shoot ourselves in the foot
-if we can avoid it without any effort?
-
-Hence I can say it's discouraged.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Kees Cook
