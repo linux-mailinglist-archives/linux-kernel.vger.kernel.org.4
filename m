@@ -2,130 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFAC705BE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 02:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86700705BEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 02:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjEQATq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 20:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S231313AbjEQAY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 20:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjEQATo (ORCPT
+        with ESMTP id S229671AbjEQAYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 20:19:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1352118
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 17:18:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684282734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fAWA1BLnS6OZoKpUWNVEQYD1QFUo+cJ+dgpIwEFG8vQ=;
-        b=MyKNlXGC4lLrsgqQZYBSCeq2R2EJhlFeyansotgpO/+ZclrpYBkaDI37GGK9doMDSe/1y/
-        f1pFHuluczWb8GWyBAQuVluCnMXMH0JC8k48ONbygBT39+5XFPjbfnSxAyjBAf4NpEvlWx
-        zFPPjG3G/kE2lNOhp0hVuCZMe/dcU00=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-630-xSYMGA7rM6C5pLqfMBrTEw-1; Tue, 16 May 2023 20:18:51 -0400
-X-MC-Unique: xSYMGA7rM6C5pLqfMBrTEw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3A533810B05;
-        Wed, 17 May 2023 00:18:50 +0000 (UTC)
-Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 02B2A1410DD5;
-        Wed, 17 May 2023 00:18:49 +0000 (UTC)
-Date:   Wed, 17 May 2023 08:18:46 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        schnelle@linux.ibm.com, linux-s390@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/2] dmaengine: make QCOM_HIDMA depend on HAS_IOMEM
-Message-ID: <ZGQdZhutT+lUdily@MiWiFi-R3L-srv>
-References: <20230506111628.712316-1-bhe@redhat.com>
- <20230506111628.712316-3-bhe@redhat.com>
- <ZGPD1wELeXafPJ/T@matsya>
+        Tue, 16 May 2023 20:24:55 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E978740DF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 17:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684283093; x=1715819093;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=VHJgDotmM1YR6FyBhX/3Ob5tky0kjCc7LZ41KEmsRc0=;
+  b=SLRXDMH07iivWmB+iIoOcPFSyYGT2F6r8zsNqfwKu1nJVYrAAPPBTh4T
+   W0Fjv7tKYWrMQSmOaob7Ne8Kap9vU++XgtnJRjgPevHb6MT5AmSGyyUYB
+   bxzQ+ZIy3Gq0pEm0/3wAcTEAglFdtxI0P9u01whnohAZ43bT9eiPSo0fe
+   BX6i9x0UzwP285m6GbM4x6xSksBFrdBAEVz3uKsD0KuZHsK7YwpOhcjGM
+   OYJV32dMunRnDA32AuQHx0t79wfWg9tM1IMNrFuueSEiNOr8kf7vtV8pK
+   /KAMnyCWdg0Bk90UC6EfFosptwg+I3/3hyANahAk3UF8NeIujra2CwclS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="349125529"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="349125529"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 17:24:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="732181480"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="732181480"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 17:24:50 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH] swap: cleanup get/put_swap_device usage
+References: <20230516052957.175432-1-ying.huang@intel.com>
+        <d1b054d0-d083-d35c-e547-7e8756fd802a@redhat.com>
+Date:   Wed, 17 May 2023 08:23:18 +0800
+In-Reply-To: <d1b054d0-d083-d35c-e547-7e8756fd802a@redhat.com> (David
+        Hildenbrand's message of "Tue, 16 May 2023 13:06:03 +0200")
+Message-ID: <87fs7v7qmh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGPD1wELeXafPJ/T@matsya>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/16/23 at 11:26pm, Vinod Koul wrote:
-> On 06-05-23, 19:16, Baoquan He wrote:
-> > On s390 systems (aka mainframes), it has classic channel devices for
-> > networking and permanent storage that are currently even more common
-> > than PCI devices. Hence it could have a fully functional s390 kernel
-> > with CONFIG_PCI=n, then the relevant iomem mapping functions
-> > [including ioremap(), devm_ioremap(), etc.] are not available.
-> > 
-> > Here let QCOM_HIDMA depend on HAS_IOMEM so that it won't be built to
-> > cause below compiling error if PCI is unset.
-> 
-> I have 2/2 patch here, where is patch 1 of 2..?
+David Hildenbrand <david@redhat.com> writes:
 
-It's here, thanks for check.
-https://lore.kernel.org/all/20230506111628.712316-2-bhe@redhat.com/T/#u
+> On 16.05.23 07:29, Huang Ying wrote:
+>> The general rule to use a swap entry is as follows.
+>> When we get a swap entry, if there isn't some other way to prevent
+>> swapoff, such as page lock for swap cache, page table lock, etc., the
+>> swap entry may become invalid because of swapoff.  Then, we need to
+>> enclose all swap related functions with get_swap_device() and
+>> put_swap_device(), unless the swap functions call
+>> get/put_swap_device() by themselves.
+>> Add the rule as comments of get_swap_device(), and cleanup some
+>> functions which call get/put_swap_device().
+>> 1. Enlarge the get/put_swap_device() protection range in
+>> __read_swap_cache_async().  This makes the function a little easier to
+>> be understood because we don't need to consider swapoff.  And this
+>> makes it possible to remove get/put_swap_device() calling in some
+>> function called by __read_swap_cache_async().
+>> 2. Remove get/put_swap_device() in __swap_count().  Which is call in
+>> do_swap_page() only, which encloses the call with get/put_swap_device()
+>> already.
+>> 3. Remove get/put_swap_device() in __swp_swapcount().  Which is call
+>> in __read_swap_cache_async() only, which encloses the call with
+>> get/put_swap_device() already.
+>> 4. Remove get/put_swap_device() in __swap_duplicate(). Which is
+>> called
+>> by
+>> - swap_shmem_alloc(): the swap cache is locked.
+>> - copy_nonpresent_pte() -> swap_duplicate() and try_to_unmap_one()
+>> ->
+>> swap_duplicate(): the page table lock is held.
+>> - __read_swap_cache_async() -> swapcache_prepare(): enclosed with
+>> get/put_swap_device() already.
+>> Other get/put_swap_device() usages are checked too.
+>
+> I suggest splitting this patch up into logical pieces as outlined here
+> by you already.
 
-I used get_maintainer to get reivewers list, seems your contact is only
-put in 2/2 patch. I also sent to lkml, linux-mm and s390 mailing list,
-so the whole series can be seen in any of the ML.
+OK.  Will do that in the next version.
 
-Thanks
-Baoquan
-
-> 
-> > 
-> > --------------------------------------------------------
-> > ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
-> > hidma.c:(.text+0x4b46): undefined reference to `devm_ioremap_resource'
-> > ld: hidma.c:(.text+0x4b9e): undefined reference to `devm_ioremap_resource'
-> > make[1]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
-> > make: *** [Makefile:1264: vmlinux] Error 2
-> > 
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > Cc: Andy Gross <agross@kernel.org>
-> > Cc: Bjorn Andersson <andersson@kernel.org>
-> > Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Cc: linux-arm-msm@vger.kernel.org
-> > Cc: dmaengine@vger.kernel.org
-> > ---
-> >  drivers/dma/qcom/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/dma/qcom/Kconfig b/drivers/dma/qcom/Kconfig
-> > index 3f926a653bd8..ace75d7b835a 100644
-> > --- a/drivers/dma/qcom/Kconfig
-> > +++ b/drivers/dma/qcom/Kconfig
-> > @@ -45,6 +45,7 @@ config QCOM_HIDMA_MGMT
-> >  
-> >  config QCOM_HIDMA
-> >  	tristate "Qualcomm Technologies HIDMA Channel support"
-> > +	depends on HAS_IOMEM
-> >  	select DMA_ENGINE
-> >  	help
-> >  	  Enable support for the Qualcomm Technologies HIDMA controller.
-> > -- 
-> > 2.34.1
-> 
-> -- 
-> ~Vinod
-> 
-
+Best Regards,
+Huang, Ying
