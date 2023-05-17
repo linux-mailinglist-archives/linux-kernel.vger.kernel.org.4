@@ -2,110 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED1D706817
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE18C706821
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbjEQM2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S231713AbjEQMaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjEQM2k (ORCPT
+        with ESMTP id S230391AbjEQMaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:28:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF6B10DA;
-        Wed, 17 May 2023 05:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684326519; x=1715862519;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=X2f39L4vZwZUOK/jkj4uPaCR2SriTj538cYcK+gs4jo=;
-  b=hx7hLmchS1rMD/O8DpfUT2UC+A91YI09d3x15i618uekizG3On7Sn2L1
-   ydJhINEr0oZi/QfLm4qn7M3jsIIvT/G2jdcyXNToIC04qEXTEGFTgpO/y
-   HsD59ijFc8f+iBFRyP3vagbVxphUxb5ebOtCaLI7mxDoyxRYzTIlBA+IM
-   UhYxeiBqAB9Yx20gw+kw551WsMTe8qYkNBhfXtKr2L69rXVV2Elv8ctGx
-   BrEwQOUFxQBHJIWDOth7PuyV0QDDdrkGcAG8D0Tmu6BhaGcm27DnzhUqO
-   vvorbJI327KHVImdHIlFk6QggqPVtzc9wvGU4AqMlr4IRGDzoa3trSw1s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="415156753"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="415156753"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 05:28:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="652213946"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="652213946"
-Received: from fabiobar-mobl.ger.corp.intel.com (HELO pujfalus-desk.ger.corp.intel.com) ([10.251.219.163])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 05:28:35 -0700
-From:   Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-To:     peterhuewe@gmx.de, jarkko@kernel.org
-Cc:     jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        peter.ujfalusi@linux.intel.com, jsnitsel@redhat.com
-Subject: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON UPX-i11
-Date:   Wed, 17 May 2023 15:29:31 +0300
-Message-Id: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 17 May 2023 08:30:09 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348B41720;
+        Wed, 17 May 2023 05:30:07 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50db91640d3so1066374a12.0;
+        Wed, 17 May 2023 05:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684326605; x=1686918605;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zG7OAtWW1ntr+yw/2O/iG28G8+bEDuvHfZ1bydZEJAA=;
+        b=WxpIe5pMxx0VA25leALbaHV7URbrgAZQgUBOO+Dm/oEU4zI7xovBGNR0Fqdj3S0U5D
+         +wX/5bbik+VhVwaVqkhO/m/bAJfyUm6S98KhIjZNjJmORqxyH79So3CJNh8nGmLwlmzz
+         0gEEtIchHsxOUZ+D/QMa8VshbsujBhVWd+NHfczwXI7dwfKp3Ud2ghErffmsQNPHs3QT
+         3SC5awUHHfdaGU5KKUxQh4cPlmsVI8rB9OtER/noYauADAGyKyMVc8GF2mViI2dv+f9X
+         nQofY16nsB6wxSSeolmYXUVITJPW4DgOomnU4IAy50pVTuxZt0MURD8TkOrG9H68lWX2
+         mDig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684326605; x=1686918605;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zG7OAtWW1ntr+yw/2O/iG28G8+bEDuvHfZ1bydZEJAA=;
+        b=G5elhPSq27nzaGlBsTXeBHPHQrxMTdcLAmhRFEvpUfnuB8qS2viFF4wlNT7vJMvN/7
+         ToHzXONZ+gxs9JO/JF0X246L5oYvw4QGOWZynrV48Q4nfwqr75Hi32jhqAEi9oXo/NPj
+         3RfuzSIzkKY/ERmICwTn+N0BQN4IaqRuriDXv/i+khZfdAzifJa9/Ux7WkMetT1KNfry
+         bvWnwLs5hebnK+wXFsBHUgEBUKCC7SyRmPx+7NcOy+cnUEuFC4TYJZM3wouESrYsgoIA
+         7J56jaFnDD9LUMquu/JTUkrEWi4zaQRy6Rxm7zmwZPprtUP3mT77C4F5PMsSf9wyStZq
+         2mOQ==
+X-Gm-Message-State: AC+VfDwScL5eZL9S1th8wE5t9bQvOCIExXlEUWq2+tQ+clKl9jOA/OVr
+        uEqgaYyt9z99aUTlyjrbFoo=
+X-Google-Smtp-Source: ACHHUZ5fZJXdzpqMUilN3IDYmrxIKIW+aD2uyjM+ZYcZgxAxMpplHCS3A36ogwRDUcF+oXUh5RDHSA==
+X-Received: by 2002:aa7:d1c5:0:b0:510:d075:9e13 with SMTP id g5-20020aa7d1c5000000b00510d0759e13mr1374346edp.22.1684326605340;
+        Wed, 17 May 2023 05:30:05 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id u15-20020aa7db8f000000b0050bc863d32asm9472513edt.27.2023.05.17.05.30.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 05:30:05 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 17 May 2023 14:30:02 +0200
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Ze Gao <zegao2021@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Conor Dooley <conor@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Ze Gao <zegao@tencent.com>
+Subject: Re: [PATCH v3 2/4] fprobe: make fprobe_kprobe_handler recursion free
+Message-ID: <ZGTIyrPXkCiwFPBo@krava>
+References: <20230517034510.15639-1-zegao@tencent.com>
+ <20230517034510.15639-3-zegao@tencent.com>
+ <ZGSwzuM8oHgKaaga@krava>
+ <20230517204236.e0f579399e5a69505a4ec7ef@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517204236.e0f579399e5a69505a4ec7ef@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interrupts initially works on the device but they will stop arriving
-after about 200 interrupts.
+On Wed, May 17, 2023 at 08:42:36PM +0900, Masami Hiramatsu wrote:
+> On Wed, 17 May 2023 12:47:42 +0200
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > On Wed, May 17, 2023 at 11:45:07AM +0800, Ze Gao wrote:
+> > > Current implementation calls kprobe related functions before doing
+> > > ftrace recursion check in fprobe_kprobe_handler, which opens door
+> > > to kernel crash due to stack recursion if preempt_count_{add, sub}
+> > > is traceable in kprobe_busy_{begin, end}.
+> > > 
+> > > Things goes like this without this patch quoted from Steven:
+> > > "
+> > > fprobe_kprobe_handler() {
+> > >    kprobe_busy_begin() {
+> > >       preempt_disable() {
+> > >          preempt_count_add() {  <-- trace
+> > >             fprobe_kprobe_handler() {
+> > > 		[ wash, rinse, repeat, CRASH!!! ]
+> > > "
+> > > 
+> > > By refactoring the common part out of fprobe_kprobe_handler and
+> > > fprobe_handler and call ftrace recursion detection at the very beginning,
+> > > the whole fprobe_kprobe_handler is free from recursion.
+> > > 
+> > > Signed-off-by: Ze Gao <zegao@tencent.com>
+> > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > Link: https://lore.kernel.org/linux-trace-kernel/20230516071830.8190-3-zegao@tencent.com
+> > > ---
+> > >  kernel/trace/fprobe.c | 59 ++++++++++++++++++++++++++++++++-----------
+> > >  1 file changed, 44 insertions(+), 15 deletions(-)
+> > > 
+> > > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> > > index 9abb3905bc8e..097c740799ba 100644
+> > > --- a/kernel/trace/fprobe.c
+> > > +++ b/kernel/trace/fprobe.c
+> > > @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
+> > >  	char data[];
+> > >  };
+> > >  
+> > > -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> > > -			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> > > +static inline void __fprobe_handler(unsigned long ip, unsigned long
+> > > +		parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> > >  {
+> > >  	struct fprobe_rethook_node *fpr;
+> > >  	struct rethook_node *rh = NULL;
+> > >  	struct fprobe *fp;
+> > >  	void *entry_data = NULL;
+> > > -	int bit, ret;
+> > > +	int ret;
+> > >  
+> > 
+> > this change uncovered bug for me introduced by [1]
+> > 
+> > the bpf's kprobe multi uses either fprobe's entry_handler or exit_handler,
+> > so the 'ret' value is undefined for return probe path and occasionally we
+> > won't setup rethook and miss the return probe
+> 
+> Oops, I missed to push my fix.
+> 
+> https://lore.kernel.org/all/168100731160.79534.374827110083836722.stgit@devnote2/
+> 
+> > 
+> > we can either squash this change into your patch or I can make separate
+> > patch for that.. but given that [1] is quite recent we could just silently
+> > fix that ;-)
+> 
+> Jiri, I think the above will fix the issue, right?
 
-On system reboot/shutdown this will cause a long wait (120000 jiffies).
+yes, it's the same fix, great, thanks
 
-The interrupts on this device got enabled by commit
-e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+jirka
 
-Prior to this point the interrupts were not enabled on this machine.
-
-Complements: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
----
-Hi,
-
-This patch applies on top of mainline since 6.4-rc1 takes about 2 minutes to
-reboot on this machine, linux-next have
-e7d3e5c4b1dd tpm/tpm_tis: Disable interrupts for more Lenovo devices
-
-I'm not sure if I shouold send this on top of next or mainline is fine, please
-let me know the preferred way to get this to 6.4.
-
-Regards,
-Peter
-
- drivers/char/tpm/tpm_tis.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-index 7af389806643..aad682c2ab21 100644
---- a/drivers/char/tpm/tpm_tis.c
-+++ b/drivers/char/tpm/tpm_tis.c
-@@ -122,6 +122,13 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
- 			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
- 		},
- 	},
-+	{
-+		.callback = tpm_tis_disable_irq,
-+		.ident = "UPX-TGL",
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
-+		},
-+	},
- 	{}
- };
- 
--- 
-2.40.1
-
+> 
+> > 
+> > jirka
+> > 
+> > 
+> > [1] 39d954200bf6 fprobe: Skip exit_handler if entry_handler returns !0
+> > 
+> > ---
+> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> > index 9abb3905bc8e..293184227394 100644
+> > --- a/kernel/trace/fprobe.c
+> > +++ b/kernel/trace/fprobe.c
+> > @@ -27,7 +27,7 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> >  	struct rethook_node *rh = NULL;
+> >  	struct fprobe *fp;
+> >  	void *entry_data = NULL;
+> > -	int bit, ret;
+> > +	int bit, ret = 0;
+> >  
+> >  	fp = container_of(ops, struct fprobe, ops);
+> >  	if (fprobe_disabled(fp))
+> > 
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
