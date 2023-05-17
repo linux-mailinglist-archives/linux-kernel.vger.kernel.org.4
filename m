@@ -2,118 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37DF706CE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7545F706CE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjEQPby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S231786AbjEQPcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjEQPbw (ORCPT
+        with ESMTP id S231464AbjEQPcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:31:52 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE75A5CB;
-        Wed, 17 May 2023 08:31:08 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6ab028260f8so678991a34.3;
-        Wed, 17 May 2023 08:31:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684337300; x=1686929300;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RASfi4C6iFM4Ndi70/5KgD6n2tXBLGdQMzw0G7ZIRkw=;
-        b=dunsjc9L5CsoEMW/CWcQzfUR3o8LeC4bWBU3NtQgDT/fVS2/Qm/tyJyzJhO2mglGtF
-         /WMG1BT2h0mqOyMnYXUzj+gdCtCyrydqdr06nzYx+inpYsdWAvMwDoXf30msuzA1Danw
-         Ss3UI34DEZsUOTfDuqTXNpvAbkxYLa4yEBRluulXXPtM63T7SPIyagBpZDjX0pm7aWtG
-         Pp++dz2ThXO0D8Kw290sIvRu0iXsqrhyrqMa5eG0JlebzAUt7feC3eIr2yVy8JsFL0A2
-         rLYQBB+3lQhuwsaVeAJBkdvtLpUKG/hjfJX6oJyxghQryMN1l85I3LSyCGHHvh8KJk18
-         Cb1g==
-X-Gm-Message-State: AC+VfDx1pZGoalrdUeaQc6PihEVAsxCBPdY2o0qQSDkMua2IG9/tpGc1
-        1fDF49JliTdfcVFQlRazyA==
-X-Google-Smtp-Source: ACHHUZ6ijD9N5SseCCQ1cWe5HZUVSbftXF5bMVUuAmhW+DgCGKOm3XkKpKsWZ5OlaP5anPyYkVoUGA==
-X-Received: by 2002:a05:6830:14c9:b0:6ab:840:c498 with SMTP id t9-20020a05683014c900b006ab0840c498mr15482515otq.33.1684337300240;
-        Wed, 17 May 2023 08:28:20 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id di10-20020a0568303a0a00b006a5db4474c8sm13400347otb.33.2023.05.17.08.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 08:28:19 -0700 (PDT)
-Received: (nullmailer pid 894363 invoked by uid 1000);
-        Wed, 17 May 2023 15:28:17 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 17 May 2023 11:32:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73A5A5C6;
+        Wed, 17 May 2023 08:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684337488; x=1715873488;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=s7w7liuVQK6OILCFceYzFS73/MrLg8U8eXJ3628P3TM=;
+  b=oDe4Q3O/gq9qyielJx7TYnzEIPkGcm6qtYwenQBd6n7YLgzA8M+Dfaqv
+   Ov/MEl30m1XUjcoHwI7CYYg9AW6yljgSMyL8tx1otenpLYhFILHkA+1R1
+   5b8Z+hgYAkO1yKPOtPLUxIvGsCIrto82xC3PFAQ+8O04qn5cxtm66CaNX
+   AohGwjXOwYhMFp3nU4sPuAiYfH9smv46gzCMxQzTKtoYkzR8aUtW3PN75
+   y1T52Ih4Tgc9vQ+EQ6X2sR1QE7nVsoaC/l1JvUYv86Ff3TgK3u0blu/Nl
+   ELAsfTvH6pZDbg+xS5bOMt3F07ql7jViJDTvyZcX9axG5gOCN2JjfHIaJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="349294763"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="349294763"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:29:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="695907865"
+X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
+   d="scan'208";a="695907865"
+Received: from cbrown-mobl1.amr.corp.intel.com (HELO [10.212.129.207]) ([10.212.129.207])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:29:47 -0700
+Message-ID: <b69f6809-b483-158f-8be9-4976fad918d8@intel.com>
+Date:   Wed, 17 May 2023 08:29:47 -0700
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Bailon <abailon@baylibre.com>
-Cc:     khilman@baylibre.com, linux-mediatek@lists.infradead.org,
-        tzimmermann@suse.de, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, matthias.bgg@gmail.com,
-        nbelin@baylibre.com, linux-arm-kernel@lists.infradead.org,
-        airlied@gmail.com, maarten.lankhorst@linux.intel.com,
-        linaro-mm-sig@lists.linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        daniel@ffwll.ch, conor+dt@kernel.org, christian.koenig@amd.com,
-        mripard@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, bero@baylibre.com,
-        dri-devel@lists.freedesktop.org, jstephan@baylibre.com,
-        sumit.semwal@linaro.org, angelogioacchino.delregno@collabora.com
-In-Reply-To: <20230517145237.295461-8-abailon@baylibre.com>
-References: <20230517145237.295461-1-abailon@baylibre.com>
- <20230517145237.295461-8-abailon@baylibre.com>
-Message-Id: <168433729744.894347.3314650002007733913.robh@kernel.org>
-Subject: Re: [PATCH 7/7] dt-bindings: Add bidings for mtk,apu-drm
-Date:   Wed, 17 May 2023 10:28:17 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+Content-Language: en-US
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>,
+        jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+ <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+ <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+ <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
+ <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
+ <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com>
+ <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/17/23 08:21, Jeff Xu wrote:
+>>> I’m not sure I follow the details, can you give an example of an asynchronous
+>>> mechanism to do this? E.g. would this be the kernel writing to the memory in a
+>>> syscall for example?
+>> I was thinking of all of the IORING_OP_*'s that can write to memory or
+>> aio(7).
+> IORING is challenging from security perspectives, for now, it is 
+> disabled in ChromeOS. Though I'm not sure how aio is related ?
 
-On Wed, 17 May 2023 16:52:37 +0200, Alexandre Bailon wrote:
-> This adds the device tree bindings for the APU DRM driver.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
-> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
-> ---
->  .../devicetree/bindings/gpu/mtk,apu-drm.yaml  | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
-> 
+Let's say you're the attacking thread and you're the *only* attacking
+thread.  You have three things at your disposal:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+ 1. A benign thread doing aio_read()
+ 2. An arbitrary write primitive
+ 3. You can send signals to yourself
+ 4. You can calculate where your signal stack will be
 
-yamllint warnings/errors:
+You calculate the address of PKRU on the future signal stack.  You then
+leverage the otherwise benign aio_write() to write a 0 to that PKRU
+location.  Then, send a signal to yourself.  The attacker's PKRU value
+will be written to the stack.  If you can time it right, the AIO will
+complete while the signal handler is in progress and PKRU is on the
+stack.  On sigreturn, the kernel restores the aio_read()-placed,
+attacker-provided PKRU value.  Now the attacker has PKRU==0.  It
+effectively build a WRPKRU primitive out of those other pieces.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-./Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/gpu/mtk,apu-drm.yaml#
-Documentation/devicetree/bindings/gpu/mtk,apu-drm.example.dts:18.15-22.11: Warning (unit_address_vs_reg): /example-0/apu@0: node has a unit name, but no reg or ranges property
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/mtk,apu-drm.example.dtb: apu@0: remoteproc: [[4294967295, 4294967295]] is too short
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230517145237.295461-8-abailon@baylibre.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
