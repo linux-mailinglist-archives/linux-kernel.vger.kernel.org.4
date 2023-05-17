@@ -2,104 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0681D706F07
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AB3706F0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjEQRGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S229733AbjEQRHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEQRGt (ORCPT
+        with ESMTP id S229483AbjEQRHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:06:49 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62CA7AAF;
-        Wed, 17 May 2023 10:06:44 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1ae507af2e5so1931495ad.1;
-        Wed, 17 May 2023 10:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684343204; x=1686935204;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=boazAWl36v99eEXuRpQ42/WdUM91p8HdkXonUurVJnE=;
-        b=OTVTUiXLiRLSJ0wsvnQZu/w7pzW46Ur56awRS8Z5tcwFDGqRJI6jIt2aBRcat1OLd9
-         ycc3xXDZmsOgud2KBY/k+znszxraf2Lz2rfvIW7P2GzgYfl7VRqtNRCyiKL7nt2ylF1i
-         EwMIq72bS0fdI1Lvn+OXLYf/ryX8eIp3aZz6ZjDtbA8hBeFioY/QQeHbMcK6dVROzN5v
-         IUu+GvIo3HVJfQINFthFi+A6m8FnHX6+zyd1wjqz+NmFQo9YRIr14K2CMm5fbRSXQpg6
-         5ZM7eKcvEo2fTGCu7S79dzXeX/jW2DigpgXbejCjAqDE6IF2mGpfWshcLaX5xB3gUU2Y
-         matA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684343204; x=1686935204;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=boazAWl36v99eEXuRpQ42/WdUM91p8HdkXonUurVJnE=;
-        b=Idximj60gzbeRujRQ1vHP0OvWjLssA1Ig0m/Xa4c3CNuDlnzBaUBghXBzD9EmtkLcJ
-         AQ/PHomVxFwIvpklzW09yeLUplimxslxxZZUbmRbh3qyZQtu+DNj/2SIYhIM4D3toqhI
-         ZC1ejgUk+FkxN6oqeIeAyHnHqvf2ce5kdy7SQbrECinT87/PbTvBQUABJVgegWJ+zrYS
-         /Ga3YcJCE+Y0tYyY7bkkfsloKj0xkzjZxNz8SDIKve8S3GjMSZ6Jo57vItqEI14C2pcz
-         XmCklNAim6xJ1J86gFM/wQnyFpsRqTa75ssGNyh1aPnOPNYNg0DtFFjFPuT4mMuRx1Gy
-         YULA==
-X-Gm-Message-State: AC+VfDwzXGVIvoMtrHVsPfeOO1t0ZwWd9AqRXHkNssSbDg0wkQC827EI
-        BVQTdH/VsvBRZW6m7uOpQuSBYgEO+oc=
-X-Google-Smtp-Source: ACHHUZ7q7MqFCnq8IaUlTrUceSrGbeKLqTSMIWuEE+5Yu3af1tProZktDsF9qBnro1VBmfteHNhMpQ==
-X-Received: by 2002:a17:902:d2ce:b0:1ac:61ad:d6f2 with SMTP id n14-20020a170902d2ce00b001ac61add6f2mr3791404plc.5.1684343203941;
-        Wed, 17 May 2023 10:06:43 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:6ecb:b01b:2e2e:6c1])
-        by smtp.gmail.com with ESMTPSA id m12-20020a170902db0c00b001adbb8991b3sm14095177plx.89.2023.05.17.10.06.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 10:06:43 -0700 (PDT)
-Date:   Wed, 17 May 2023 10:06:40 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Dana Elfassy <delfassy@redhat.com>
-Cc:     eballetb@redhat.com, javierm@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dana Elfassy <dangel101@gmail.com>
-Subject: Re: [PATCH v2] Input: tests: add test to cover all
- input_grab_device() function
-Message-ID: <ZGUJoClUZpL71Jw4@google.com>
-References: <20230517153145.513095-1-dangel101@gmail.com>
+        Wed, 17 May 2023 13:07:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE2A198E;
+        Wed, 17 May 2023 10:07:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AFF564977;
+        Wed, 17 May 2023 17:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 859B4C433EF;
+        Wed, 17 May 2023 17:07:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684343269;
+        bh=jlpULr56z9pfFP7Yb088Wjr+4EMYWoKXtPTLZijI+ag=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=H2be7qw2VyAmj3KaqG3LUIXAxQH5bnBIptZnYpEmoOevxhypMhcG6+oS2ihu7RZxP
+         j3vn5e5jQaJPoWGYosX8znZ1LoSAQ8M9TBDHWFFzSTF6VrpY61BZ1kEd/fx6swaT8j
+         AlWhdmsMDnwi7HYeK7k2CokBDNRYMTO0ICpfzdqevtaLJ8r9I9D//hPRAlXs6hLeJU
+         HlrAoDjK4tRYJPS6m/GNGutXExn8MTfyqIl9RdhOmaLqB8yHcDlIBaEMtqCzQ9MTI7
+         e1WfmpKOP5EdTTHvK0KsvKq7+oihJGlp3Vz8ukI8XD03lmhasoTcAKs2/IrUKIbu6d
+         6yjLaxV265KVg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 14A20CE107D; Wed, 17 May 2023 10:07:49 -0700 (PDT)
+Date:   Wed, 17 May 2023 10:07:49 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the rcu tree
+Message-ID: <1c450a26-c85a-4c6e-8b1f-cda8b04bd174@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230511090010.2916e9d7@canb.auug.org.au>
+ <59c2fd36-6920-47d8-a79c-9ff3fcf7c7ae@paulmck-laptop>
+ <96c6fdf7-e589-ca56-9314-1d437b8082ac@linuxfoundation.org>
+ <62cabd2d-124f-4bc3-8eb8-36773c10b4f2@paulmck-laptop>
+ <427a54c6-f097-f64d-29fb-b90eee504c4b@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230517153145.513095-1-dangel101@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <427a54c6-f097-f64d-29fb-b90eee504c4b@linuxfoundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dana,
-
-On Wed, May 17, 2023 at 06:31:45PM +0300, Dana Elfassy wrote:
-> Currently input_grab_device() isn't covered by any tests
-> Thus, adding a test to cover the cases:
-> 1. The device is grabbed successfully
-> 2. Trying to grab a device that is already grabbed by another input
->    handle
+On Wed, May 17, 2023 at 10:12:49AM -0600, Shuah Khan wrote:
+> On 5/16/23 06:19, Paul E. McKenney wrote:
+> > On Mon, May 15, 2023 at 01:28:23PM -0600, Shuah Khan wrote:
+> > > On 5/11/23 10:52, Paul E. McKenney wrote:
+> > > > On Thu, May 11, 2023 at 09:00:10AM +1000, Stephen Rothwell wrote:
+> > > > > Hi all,
+> > > > > 
+> > > > > The following commit is also in the kselftest-fixes tree as a different
+> > > > > commit (but the same patch):
+> > > > > 
+> > > > >     6d9ed63d8bc3 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+> > > > > 
+> > > > > This is commit
+> > > > > 
+> > > > >     d7eafa64a158 ("tools/nolibc: Fix build of stdio.h due to header ordering")
+> > > > > 
+> > > > > in the kselftest-fixes tree.
+> > > > 
+> > > > I can currently cleanly remove this commit from the rest of the nolibc
+> > > > commits in -rcu.
+> > > > 
+> > > > However, I might need to re-introduce it in some way or another, for
+> > > > example, if there are dependencies on it by future nolibc patches.
+> > > > (I expect another batch in a few days.)
+> > > > 
+> > > > So how would you like to proceed?
+> > > 
+> > > Paul,
+> > > 
+> > > I can drop this from linux-kselftest fixes if that is the easier path.
+> > > Just let me know.
+> > 
+> > That would work better for me, less need to keep track of different
+> > commits in different trees.  So could you please drop this one?
 > 
-> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
-> Tested-by: Javier Martinez Canillas <javierm@redhat.com>
-> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
-> 
-> Changes in v2:
-> - Use input_put_device() to decrement the refcount increased by get().
-> - Remove unnecessary struct input_handle test_handle variable.
+> Done. Dropped d7eafa64a158 from linux-kselftest fixes.
 
-So this tests something different than what patch description states.
-You are testing that there is no "recursive" grabbing happening (an API
-could be designed to allow the same handle grab device several times).
-This is a good and useful test, but you do want to also use 2nd separate
-handle to see that it gets -EBUSY as well. And ideally we should have
-another test verifying that the 2nd handle can successfully grab the
-device once the first handle releases it.
+Thank you, Shuah!
 
-Thanks.
-
--- 
-Dmitry
+							Thanx, Paul
