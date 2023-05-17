@@ -2,184 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F57707437
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EF0707438
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjEQV1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 17:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+        id S229670AbjEQV20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 17:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjEQV1e (ORCPT
+        with ESMTP id S229456AbjEQV2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 17:27:34 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C686421E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:27:13 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-62385a3106dso5974806d6.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684358833; x=1686950833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lirS5BgNCncTUTh8FAM6PKxjij7fXFg47f/fXiGEh7o=;
-        b=c6DgAVlUuJ+r/1qZcduFGWMWEFL5kGetd7CyObirpFZziXiLYtWCZGy6rHlB5+rbjI
-         gxjyXKMB96uVbZgVrn0K97i8FCv8uD13XqzbYC+t/ynDqfokJdHD56UxovXFGXjHGMNH
-         hUHjDIGlJQJlWobLCeMXiDpSj/rkMu+3OdqxuC/Ee2ovJhqujEro7m9JUkigMT1vS8tu
-         KpbMW9+n0XFQTYsJFsm30uAbWduYJiOPtVJW3uC1Vw3FgL6YEXnPXHQyaffRkKt3n0lm
-         3CF1Pi0JySZ/OqZ6G1s7UGL3T3nyUS2idL5/SFwoy0UJcareCyraZa2Na83TCY24zTEh
-         Pqzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684358833; x=1686950833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lirS5BgNCncTUTh8FAM6PKxjij7fXFg47f/fXiGEh7o=;
-        b=RPkJeI1/hQj2c7EoIHXnaYaK56SCRuocxekyacQ4QeVIbOpIxVEGzMo3e6plF/LOUz
-         4YHaO6cTVr/m++qwSGQXxggaCcNFP0GA2Nd/qZhoMhRq8gIPm/pymRFiBtsgZVOnYgHp
-         zFKT9Ov6Zi2NGB0aTElkWdDJrCTgk5Qn9OOjJUYTK2u6Pk2YojFYq4maRkUbMKMnSykU
-         Gow0/jzAeGPvs+kIMp6cJ2agnILz4AY6aXkaX/7+dGCWQN6ZLmu9CB1T6RHOwSGqxc+2
-         o7pnlenaB3/DgTGozLKj2hOWGS9ArF0hnluc/HLOCT0morrWf6e9oVL2ppTfcDPCZzat
-         SNSQ==
-X-Gm-Message-State: AC+VfDymd0YyZw3KIWhGS35qUs+t2PCvXVV4r7kT5hiv4S/A/ZAoUwZR
-        7R2E/f637okY2gLaYyULUGPfBkUY/K7BiS7q+4Rm3g==
-X-Google-Smtp-Source: ACHHUZ6FCeZr6o1q4w+D9utGOYJrDTWuP81JZbwW5K2G4D2a3zeB5Ri/oH8y6QwIf0SkW4NqCfsi05tBZyUufjI0ug4=
-X-Received: by 2002:a05:6214:1bcb:b0:5ef:60a8:e795 with SMTP id
- m11-20020a0562141bcb00b005ef60a8e795mr2123896qvc.4.1684358833008; Wed, 17 May
- 2023 14:27:13 -0700 (PDT)
+        Wed, 17 May 2023 17:28:23 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A45B4;
+        Wed, 17 May 2023 14:28:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684358902; x=1715894902;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=XFuPVNP8lz9ZwYdOOWjkCdcTZ0eGcHJibAcwLj5frpU=;
+  b=UgRRqm3Wn8eGk/0aurm0Dy9oRMeFiCFT3BgTNwJ4Ny6kiG65Qgd1mZVs
+   SLLblluO6H0B54Ov+XF5aZiCZ4oPDK3opXw27DNFsEhgeuHjB8On5df5X
+   moSFOQd60Ton4nr+F6bYX26jbG9nc09Y0g0PvphCT+eYcM1oWQrR3jNs4
+   3vc508gUlZXhdCFB+EqPQBSWkroytw60xmzpTNRB4lks6bV2Vq7X3XxTn
+   rbsDnAlQemAxeu6pEtBnFNc/mtfMBVplEuiEMZnxbZ5KS3I1wdynu9uSU
+   72ftNegie7m87c/Ri4SWtzosOn4Rk9yA36ItowCpXS//20XBG88ugK6/w
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="341274704"
+X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
+   d="scan'208";a="341274704"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:28:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="826098039"
+X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
+   d="scan'208";a="826098039"
+Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.209.143.168])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:28:20 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH 0/3] cxl: Random clean ups
+Date:   Wed, 17 May 2023 14:28:09 -0700
+Message-Id: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
 MIME-Version: 1.0
-References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-5-masahiroy@kernel.org>
-In-Reply-To: <20230514152739.962109-5-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 17 May 2023 14:27:02 -0700
-Message-ID: <CAKwvOd=ntBEuLMyw55U3=mZmJ8=JY_NhiBL0nO9RtU8t6m+=VQ@mail.gmail.com>
-Subject: Re: [PATCH v5 04/21] modpost: squash report_extable_warnings() into extable_mismatch_handler()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOlGZWQC/x2L0QqDMBAEf0XuuQcx1SD9ldKHJG7rgaSSKxIQ/
+ 72Jj7M7c5AiC5Qe3UEZu6h8U4X+1lFcfPqAZa5M1ti7GazjWFZ+S4HyNAbnwuzMCEPVD17BIfs
+ Ul1Y0MaH82rVlXE3dn6/z/AMCZiO0dgAAAA==
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>
+X-Mailer: b4 0.13-dev-9a8cd
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684358895; l=642;
+ i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
+ bh=XFuPVNP8lz9ZwYdOOWjkCdcTZ0eGcHJibAcwLj5frpU=;
+ b=vf4WutSMvXBCUbYgHrsdichGgi03m07anRtez8CTjBpedTthixrQbo/wZDDUzEgWeBi9jGq8x
+ W5ce+Xe8M8zAdTNnFxkbT18YaWaXjXYnjJ3wYBYRsX551budVg5Zr/x
+X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
+ pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 8:27=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> Collect relevant code into one place to clarify all the cases are
-> covered by 'if () ... else if ... else ...'.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+These 3 clean ups were found while working on other code.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+Ira Weiny (3):
+      MAINTAINERS: Add additional reviewers for CXL
+      cxl/pci: Update comment
+      tools/testing/cxl: Document test configurations
 
-> ---
->
->  scripts/mod/modpost.c | 40 ++++++++++++++--------------------------
->  1 file changed, 14 insertions(+), 26 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 371891d67175..7a9a3ef8ca0d 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1275,40 +1275,19 @@ static int is_executable_section(struct elf_info*=
- elf, unsigned int section_inde
->         return ((elf->sechdrs[section_index].sh_flags & SHF_EXECINSTR) =
-=3D=3D SHF_EXECINSTR);
->  }
->
-> -static void report_extable_warnings(const char* modname, struct elf_info=
-* elf,
-> -                                   const struct sectioncheck* const mism=
-atch,
-> -                                   Elf_Rela* r, Elf_Sym* sym,
-> -                                   const char* fromsec, const char* tose=
-c)
-> -{
-> -       Elf_Sym* tosym =3D find_elf_symbol(elf, r->r_addend, sym);
-> -       const char* tosym_name =3D sym_name(elf, tosym);
-> -
-> -       warn("%s(%s+0x%lx): Section mismatch in reference to the %s:%s\n"=
-,
-> -            modname, fromsec, (long)r->r_offset, tosec, tosym_name);
-> -
-> -       if (!match(tosec, mismatch->bad_tosec) &&
-> -           is_executable_section(elf, get_secindex(elf, sym)))
-> -               fprintf(stderr,
-> -                       "The relocation at %s+0x%lx references\n"
-> -                       "section \"%s\" which is not in the list of\n"
-> -                       "authorized sections.  If you're adding a new sec=
-tion\n"
-> -                       "and/or if this reference is valid, add \"%s\" to=
- the\n"
-> -                       "list of authorized sections to jump to on fault.=
-\n"
-> -                       "This can be achieved by adding \"%s\" to \n"
-> -                       "OTHER_TEXT_SECTIONS in scripts/mod/modpost.c.\n"=
-,
-> -                       fromsec, (long)r->r_offset, tosec, tosec, tosec);
-> -}
-> -
->  static void extable_mismatch_handler(const char* modname, struct elf_inf=
-o *elf,
->                                      const struct sectioncheck* const mis=
-match,
->                                      Elf_Rela* r, Elf_Sym* sym,
->                                      const char *fromsec)
->  {
->         const char* tosec =3D sec_name(elf, get_secindex(elf, sym));
-> +       Elf_Sym *tosym =3D find_elf_symbol(elf, r->r_addend, sym);
-> +       const char *tosym_name =3D sym_name(elf, tosym);
->
->         sec_mismatch_count++;
->
-> -       report_extable_warnings(modname, elf, mismatch, r, sym, fromsec, =
-tosec);
-> +       warn("%s(%s+0x%lx): Section mismatch in reference to the %s:%s\n"=
-,
-> +            modname, fromsec, (long)r->r_offset, tosec, tosym_name);
->
->         if (match(tosec, mismatch->bad_tosec))
->                 fatal("The relocation at %s+0x%lx references\n"
-> @@ -1317,7 +1296,16 @@ static void extable_mismatch_handler(const char* m=
-odname, struct elf_info *elf,
->                       "You might get more information about where this is=
-\n"
->                       "coming from by using scripts/check_extable.sh %s\n=
-",
->                       fromsec, (long)r->r_offset, tosec, modname);
-> -       else if (!is_executable_section(elf, get_secindex(elf, sym)))
-> +       else if (is_executable_section(elf, get_secindex(elf, sym)))
-> +               warn("The relocation at %s+0x%lx references\n"
-> +                    "section \"%s\" which is not in the list of\n"
-> +                    "authorized sections.  If you're adding a new sectio=
-n\n"
-> +                    "and/or if this reference is valid, add \"%s\" to th=
-e\n"
-> +                    "list of authorized sections to jump to on fault.\n"
-> +                    "This can be achieved by adding \"%s\" to\n"
-> +                    "OTHER_TEXT_SECTIONS in scripts/mod/modpost.c.\n",
-> +                    fromsec, (long)r->r_offset, tosec, tosec, tosec);
-> +       else
->                 error("%s+0x%lx references non-executable section '%s'\n"=
-,
->                       fromsec, (long)r->r_offset, tosec);
->  }
-> --
-> 2.39.2
->
+ MAINTAINERS                  |  2 ++
+ drivers/cxl/pci.c            |  5 ++-
+ tools/testing/cxl/test/cxl.c | 75 ++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 79 insertions(+), 3 deletions(-)
+---
+base-commit: bfe58458fd2557c9a81b89bc0ff10eb03d6c0745
+change-id: 20230426-cxl-fixes-85b66bd605e0
 
+Best regards,
+-- 
+Ira Weiny <ira.weiny@intel.com>
 
---=20
-Thanks,
-~Nick Desaulniers
