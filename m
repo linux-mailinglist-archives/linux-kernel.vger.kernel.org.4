@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7BC70658C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BC8706697
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjEQKos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
+        id S230398AbjEQL1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjEQKoq (ORCPT
+        with ESMTP id S229810AbjEQL1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:44:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B7097;
-        Wed, 17 May 2023 03:44:44 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H96Cq4010037;
-        Wed, 17 May 2023 10:44:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=bFnCwGczl3OS9F2aTvxsraVLaxiRaaqktdcvI5Dvz6k=;
- b=IaiQAFS5WVtG8L5SpXbnC8Wo/6e5vo7FHIYRlyY3Q7X8W20+thJwUAzdUrso5+GRUR3J
- g3sHywdbIctw1wU+zDcxCvm+6hdxpBTlek/yZazsQfvIANa0E+gbFNZg99e1ALLXIpyQ
- p9cTe/GuDka7Nl2JkHhypNlWUdq6DJrJWsGgDY495gJjgpJTbtZg4ypZhFDd5mgZUJP5
- SiAa5Xqxvj3pw81yDaSvh4d3Y9npc9B0dKJv0uT4dNpVyA9wkbQ+DR3cKo2UZz1Te+Lz
- MltSbsBCx/CvxrRuljeapwbS3zUg//mUwwxKtAuRizXXtHS73XiO3km7/9uQcFeJ6kLJ bg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qme0m9smd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 10:44:40 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34HAidNJ017404
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 10:44:39 GMT
-Received: from tjiang-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 17 May 2023 03:44:37 -0700
-From:   Tim Jiang <quic_tjiang@quicinc.com>
-To:     <marcel@holtmann.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <quic_tjiang@quicinc.com>,
-        <quic_bgodavar@quicinc.com>, <quic_hemantg@quicinc.com>,
-        <mka@chromium.org>
-Subject: [PATCH v4] Bluetooth: hci_qca: Add support for Qualcomm Bluetooth SoC QCA2066
-Date:   Wed, 17 May 2023 18:44:26 +0800
-Message-ID: <20230517104426.14055-1-quic_tjiang@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 17 May 2023 07:27:23 -0400
+X-Greylist: delayed 2479 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 04:27:17 PDT
+Received: from spam.asrmicro.com (asrmicro.com [210.13.118.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0CE30C8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:27:16 -0700 (PDT)
+Received: from spam.asrmicro.com (localhost [127.0.0.2] (may be forged))
+        by spam.asrmicro.com with ESMTP id 34HAjrrH010386
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:45:53 +0800 (GMT-8)
+        (envelope-from zhengyan@asrmicro.com)
+Received: from exch02.asrmicro.com (exch02.asrmicro.com [10.1.24.122])
+        by spam.asrmicro.com with ESMTPS id 34HAjJZO010357
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Wed, 17 May 2023 18:45:19 +0800 (GMT-8)
+        (envelope-from zhengyan@asrmicro.com)
+Received: from exch03.asrmicro.com (10.1.24.118) by exch02.asrmicro.com
+ (10.1.24.122) with Microsoft SMTP Server (TLS) id 15.0.847.32; Wed, 17 May
+ 2023 18:45:22 +0800
+Received: from exch03.asrmicro.com ([::1]) by exch03.asrmicro.com ([::1]) with
+ mapi id 15.00.0847.030; Wed, 17 May 2023 18:45:22 +0800
+From:   =?gb2312?B?WWFuIFpoZW5no6jRz9X+o6k=?= <zhengyan@asrmicro.com>
+To:     Marc Zyngier <maz@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?gb2312?B?R2FvIE1laXRhb6OouN/DtczOo6k=?= <meitaogao@asrmicro.com>,
+        =?gb2312?B?WmhvdSBRaWFvKNbcx8gp?= <qiaozhou@asrmicro.com>,
+        =?gb2312?B?WmhhbmcgWmhpemhvdSjVxdbO1t4p?= 
+        <zhizhouzhang@asrmicro.com>
+Subject: RE: [PATCH] irqchip/gic-v3: workaround for ASR8601 when reading
+ mpidr
+Thread-Topic: [PATCH] irqchip/gic-v3: workaround for ASR8601 when reading
+ mpidr
+Thread-Index: AQHZiJTvP0JzizWi8EWX3jYwRrRS6a9dnPCAgACenBA=
+Date:   Wed, 17 May 2023 10:45:22 +0000
+Message-ID: <9dcef1c9343041c49a92ec8cd40d6331@exch03.asrmicro.com>
+References: <20230517075500.43516-1-zhengyan@asrmicro.com>
+ <86ttwbl5nq.wl-maz@kernel.org>
+In-Reply-To: <86ttwbl5nq.wl-maz@kernel.org>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.1.170.215]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BAI6Bd6tcv-bgQq4KRgoXT3dOAmqXYVZ
-X-Proofpoint-ORIG-GUID: BAI6Bd6tcv-bgQq4KRgoXT3dOAmqXYVZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0
- spamscore=0 adultscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170087
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL: spam.asrmicro.com 34HAjrrH010386
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,199 +68,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for QCA2066 firmware patch and nvm downloading.
-
-Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
----
- drivers/bluetooth/btqca.c   | 76 ++++++++++++++++++++++++++++++++++++-
- drivers/bluetooth/btqca.h   |  4 ++
- drivers/bluetooth/hci_qca.c |  8 +++-
- 3 files changed, 86 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index fd0941fe8608..9bb0ba6fe00d 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -205,6 +205,48 @@ static int qca_send_reset(struct hci_dev *hdev)
- 	return 0;
- }
- 
-+static int qca_read_fw_board_id(struct hci_dev *hdev, u16 *bid)
-+{
-+	u8 cmd;
-+	struct sk_buff *skb;
-+	struct edl_event_hdr *edl;
-+	int err = 0;
-+	int bid_len;
-+
-+	bt_dev_dbg(hdev, "QCA read board ID");
-+
-+	cmd = EDL_GET_BID_REQ_CMD;
-+	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CMD_LEN,
-+				&cmd, 0, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		err = PTR_ERR(skb);
-+		bt_dev_err(hdev, "Reading QCA board ID failed (%d)", err);
-+		return err;
-+	}
-+
-+	edl = skb_pull_data(skb, sizeof(*edl));
-+	if (!edl) {
-+		bt_dev_err(hdev, "QCA read board ID with no header");
-+		err = -EILSEQ;
-+		goto out;
-+	}
-+
-+	if (edl->cresp != EDL_CMD_REQ_RES_EVT ||
-+	    edl->rtype != EDL_GET_BID_REQ_CMD) {
-+		bt_dev_err(hdev, "QCA Wrong packet: %d %d", edl->cresp, edl->rtype);
-+		err = -EIO;
-+		goto out;
-+	}
-+
-+	bid_len = edl->data[0];
-+	*bid = (edl->data[1] << 8) + edl->data[2];
-+	bt_dev_info(hdev, "%s: bid len = %x, bid = %x", __func__, bid_len, *bid);
-+
-+out:
-+	kfree_skb(skb);
-+	return err;
-+}
-+
- int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
- {
- 	struct sk_buff *skb;
-@@ -574,6 +616,29 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
- }
- EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
- 
-+static void qca_generate_nvm_name(struct hci_dev *hdev, char *fwname,
-+		   size_t max_size, struct qca_btsoc_version ver, u16 bid)
-+{
-+	u8 rom_ver = 0;
-+	u32 soc_ver;
-+	const char *variant;
-+
-+	soc_ver = get_soc_ver(ver.soc_id, ver.rom_ver);
-+	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
-+
-+	if ((ver.soc_id & 0x0000ff00) == QCA_HSP_GF_SOC_ID)  /* hsp gf chip */
-+		variant = "g";
-+	else
-+		variant = "";
-+
-+	if (bid == 0x0)
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.bin", rom_ver, variant);
-+	else
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.%x", rom_ver, variant, bid);
-+
-+	bt_dev_info(hdev, "%s: nvm name is %s", __func__, fwname);
-+}
-+
- int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 		   enum qca_btsoc_type soc_type, struct qca_btsoc_version ver,
- 		   const char *firmware_name)
-@@ -582,6 +647,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	int err;
- 	u8 rom_ver = 0;
- 	u32 soc_ver;
-+	u16 boardid = 0;
- 
- 	bt_dev_dbg(hdev, "QCA setup on UART");
- 
-@@ -604,6 +670,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	if (qca_is_wcn399x(soc_type)) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/crbtfw%02x.tlv", rom_ver);
-+	} else if (soc_type == QCA_QCA2066) {
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/hpbtfw%02x.tlv", rom_ver);
- 	} else if (soc_type == QCA_QCA6390) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htbtfw%02x.tlv", rom_ver);
-@@ -631,6 +700,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	/* Give the controller some time to get ready to receive the NVM */
- 	msleep(10);
- 
-+	if (soc_type == QCA_QCA2066)
-+		qca_read_fw_board_id(hdev, &boardid);
-+
- 	/* Download NVM configuration */
- 	config.type = TLV_TYPE_NVM;
- 	if (firmware_name)
-@@ -644,7 +716,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 			snprintf(config.fwname, sizeof(config.fwname),
- 				 "qca/crnv%02x.bin", rom_ver);
- 		}
--	}
-+	} else if (soc_type == QCA_QCA2066)
-+		qca_generate_nvm_name(hdev, config.fwname, sizeof(config.fwname),
-+				ver, boardid);
- 	else if (soc_type == QCA_QCA6390)
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htnv%02x.bin", rom_ver);
-diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index b884095bcd9d..7c9b3464ae4a 100644
---- a/drivers/bluetooth/btqca.h
-+++ b/drivers/bluetooth/btqca.h
-@@ -13,6 +13,7 @@
- #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
- #define EDL_GET_BUILD_INFO_CMD		(0x20)
- #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
-+#define EDL_GET_BID_REQ_CMD		(0x23)
- #define EDL_PATCH_CONFIG_CMD		(0x28)
- #define MAX_SIZE_PER_TLV_SEGMENT	(243)
- #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
-@@ -48,6 +49,8 @@
- 
- #define QCA_FW_BUILD_VER_LEN		255
- 
-+#define QCA_HSP_GF_SOC_ID		0x1200
-+
- 
- enum qca_baudrate {
- 	QCA_BAUDRATE_115200 	= 0,
-@@ -145,6 +148,7 @@ enum qca_btsoc_type {
- 	QCA_WCN3990,
- 	QCA_WCN3998,
- 	QCA_WCN3991,
-+	QCA_QCA2066,
- 	QCA_QCA6390,
- 	QCA_WCN6750,
- 	QCA_WCN6855,
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 1b064504b388..c7b8e1c630b4 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1729,7 +1729,7 @@ static int qca_setup(struct hci_uart *hu)
- 	bt_dev_info(hdev, "setting up %s",
- 		qca_is_wcn399x(soc_type) ? "wcn399x" :
- 		(soc_type == QCA_WCN6750) ? "wcn6750" :
--		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
-+		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390/QCA2066");
- 
- 	qca->memdump_state = QCA_MEMDUMP_IDLE;
- 
-@@ -1874,6 +1874,11 @@ static const struct qca_device_data qca_soc_data_qca6390 __maybe_unused = {
- 	.num_vregs = 0,
- };
- 
-+static const struct qca_device_data qca_soc_data_qca2066 __maybe_unused = {
-+	.soc_type = QCA_QCA2066,
-+	.num_vregs = 0,
-+};
-+
- static const struct qca_device_data qca_soc_data_wcn6750 __maybe_unused = {
- 	.soc_type = QCA_WCN6750,
- 	.vregs = (struct qca_vreg []) {
-@@ -2364,6 +2369,7 @@ static const struct of_device_id qca_bluetooth_of_match[] = {
- 	{ .compatible = "qcom,wcn3998-bt", .data = &qca_soc_data_wcn3998},
- 	{ .compatible = "qcom,wcn6750-bt", .data = &qca_soc_data_wcn6750},
- 	{ .compatible = "qcom,wcn6855-bt", .data = &qca_soc_data_wcn6855},
-+	{ .compatible = "qcom,qca2066-bt", .data = &qca_soc_data_qca2066},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, qca_bluetooth_of_match);
--- 
-2.17.1
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFyYyBaeW5naWVyIFtt
+YWlsdG86bWF6QGtlcm5lbC5vcmddDQo+IFNlbnQ6IFdlZG5lc2RheSwgTWF5IDE3LCAyMDIzIDQ6
+MzIgUE0NCj4gVG86IFlhbiBaaGVuZ6Oo0c/V/qOpIDx6aGVuZ3lhbkBhc3JtaWNyby5jb20+DQo+
+IENjOiB0Z2x4QGxpbnV0cm9uaXguZGU7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IEdh
+byBNZWl0YW+jqLjfw7XMzqOpDQo+IDxtZWl0YW9nYW9AYXNybWljcm8uY29tPjsgWmhvdSBRaWFv
+KNbcx8gpIDxxaWFvemhvdUBhc3JtaWNyby5jb20+Ow0KPiBaaGFuZyBaaGl6aG91KNXF1s7W3ikg
+PHpoaXpob3V6aGFuZ0Bhc3JtaWNyby5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIGlycWNo
+aXAvZ2ljLXYzOiB3b3JrYXJvdW5kIGZvciBBU1I4NjAxIHdoZW4gcmVhZGluZw0KPiBtcGlkcg0K
+PiANCj4gT24gV2VkLCAxNyBNYXkgMjAyMyAwODo1NTowMCArMDEwMCwNCj4gemhlbmd5YW4gPHpo
+ZW5neWFuQGFzcm1pY3JvLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBUaGlzIHBhdGNoIGFkZCB3b3Jr
+YXJvdW5kIGZvciBBU1I4NjAxLCB3aGljaCB1c2VzIGFuIGFybXY4LjIgcHJvY2Vzc29yDQo+ID4g
+d2l0aCBhIGdpYy01MDAuIEFSTXY4LjIgdXNlcyBNdWx0aXByb2Nlc3NvciBBZmZpbml0eSBSZWdp
+c3RlciB0bw0KPiA+IGlkZW50aWZ5IHRoZSBsb2dpY2FsIGFkZHJlc3Mgb2YgdGhlIGNvcmUgYnkN
+Cj4gPiB8IGNsdXN0ZXIgfCBjb3JlIHwgdGhyZWFkIHwuDQo+IA0KPiBOb3QgcXVpdGUuIFRoZSBB
+Uk12OC4yIGFyY2hpdGVjdHVyZSBkb2Vzbid0IHNheSAqYW55KiBvZiB0aGF0LiBJdCBpcyBBUk0n
+cw0KPiAqaW1wbGVtZW50YXRpb25zKiB0aGF0IGZvbGxvdyB0aGlzIHNjaGVtZS4NCj4gDQoNClJl
+YWxseSB0aGFuayB5b3UgZm9yIHJhcGlkIHJlc3BvbnNlLCANClllcywgYXMgYXJtIGRvY3VtZW50
+cyBodHRwczovL2RldmVsb3Blci5hcm0uY29tL2RvY3VlbnRhdGlvbi9rYTAwMjEwNy9sYXRlc3Qg
+c2FpZA0KSXQgY29tZXMgZnJvbSBhcm12OC4yIGdldCAzIHR5cGVzIGZvciBhZmZpbml0eSAoYXJt
+IHY4LjAgY3B1cyBvbmx5IGdldCAyIHR5cGVzKQ0KQW5kIGl0J3MgYW4gaW1wbGVtZW50YXRpb25z
+IGlzc3VlLg0KDQo+ID4gSG93ZXZlciwgZ2ljLTUwMCBvbmx5IHN1cHBvcnRzIHRvcG9sb2dpZXMg
+d2l0aCBhZmZpbml0eSBsZXZlbHMgbGVzcw0KPiA+IHRoYW4gMiBhcw0KPiA+IHwgY2x1c3RlciB8
+IGNvcmV8Lg0KPiA+DQo+ID4gU28gaXQgbmVlZHMgdGhpcyBwYXRjaCB0byBzaGlmdCB0aGUgTVBJ
+RFIgdmFsdWVzIHRvIGVuc3VyZSBwcm9wZXINCj4gPiBmdW5jdGlvbmFsaXR5DQo+ID4NCj4gPiBT
+aWduZWQtb2ZmLWJ5OiB6aGVuZ3lhbiA8emhlbmd5YW5AYXNybWljcm8uY29tPg0KPiA+IC0tLQ0K
+PiA+ICBkcml2ZXJzL2lycWNoaXAvaXJxLWdpYy12My5jIHwgMjggKysrKysrKysrKysrKysrKysr
+KysrKysrKysrLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMjcgaW5zZXJ0aW9ucygrKSwgMSBkZWxl
+dGlvbigtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaXJxY2hpcC9pcnEtZ2ljLXYz
+LmMNCj4gPiBiL2RyaXZlcnMvaXJxY2hpcC9pcnEtZ2ljLXYzLmMgaW5kZXggNmZjZWUyMjFmMjAx
+Li40MzViOThhODY0MWUgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9pcnFjaGlwL2lycS1naWMt
+djMuYw0KPiA+ICsrKyBiL2RyaXZlcnMvaXJxY2hpcC9pcnEtZ2ljLXYzLmMNCj4gPiBAQCAtMzks
+NiArMzksNyBAQA0KPiA+DQo+ID4gICNkZWZpbmUgRkxBR1NfV09SS0FST1VORF9HSUNSX1dBS0VS
+X01TTTg5OTYJKDFVTEwgPDwgMCkNCj4gPiAgI2RlZmluZSBGTEFHU19XT1JLQVJPVU5EX0NBVklV
+TV9FUlJBVFVNXzM4NTM5CSgxVUxMIDw8IDEpDQo+ID4gKyNkZWZpbmUgRkxBR1NfV09SS0FST1VO
+RF9NUElEUl9BU1I4NjAxCQkoMVVMTCA8PCAyKQ0KPiANCj4gV2hhdCBpcyBBU1I4NjAxPyBJcyBp
+dCBhIHN5c3RlbT8gT3IgYW4gZXJyYXR1bSBudW1iZXI/IEZvciBpc3N1ZXMgdGhhdCBhcmUgdGhl
+DQo+IHJlc3VsdCBvZiBhIEhXIGludGVncmF0aW9uIGlzc3VlLCBwbGVhc2UgcHJvdmlkZSBhbiBv
+ZmZpY2lhbCBlcnJhdHVtIG51bWJlciwgYW5kDQo+IHVwZGF0ZSBEb2N1bWVudGF0aW9uL2FybTY0
+L3NpbGljb24tZXJyYXRhLnJzdC4NCj4gDQoNCkFTUjg2MDEgaXMgb3VyIHNvYydzIG5hbWUsIGFu
+ZCB5ZXMgaXShr3MgYSBraW5kIG9mIEhXIGludGVncmF0aW9uIGlzc3VlDQpCdXQgbWF5YmUgaXSh
+r3Mgbm90IGFuIGVycmF0dW0gc2luY2Ugb3VyIEhXIGRlc2lnbiBpcyBsaWtlIHRoYXQsIGFsdGhv
+dWdoDQpBcm0gZG9lc24ndCByZWNvbW1lbmQgdGhpcyB3YXkuDQpBbmQgSSB3b3VsZCBsaWtlIHRv
+IGFkZCBtb3JlIGNvbW1lbnRzDQpVbmRlciB0aGUgbmV4dCBwYXJ0IGJlZm9yZSAqZGVzYwk9ICJH
+SUN2MzogQVNSIDg2MDEgTVBJRFIgc2hpZnQiKg0KTWF5YmUgdGhpcyBpcyBhIGJldHRlciB3YXk/
+IE9yIGFkZCBzb21ldGhpbmcgdW5kZXIgRG9jdW1lbnRhdGlvbqO/DQoNCj4gPg0KPiA+ICAjZGVm
+aW5lIEdJQ19JUlFfVFlQRV9QQVJUSVRJT04JKEdJQ19JUlFfVFlQRV9MUEkgKyAxKQ0KPiA+DQo+
+ID4gQEAgLTY1OSw2ICs2NjAsOSBAQCBzdGF0aWMgdTY0IGdpY19tcGlkcl90b19hZmZpbml0eSh1
+bnNpZ25lZCBsb25nDQo+ID4gbXBpZHIpICB7DQo+ID4gIAl1NjQgYWZmOw0KPiA+DQo+ID4gKwlp
+ZiAoZ2ljX2RhdGEuZmxhZ3MgJiBGTEFHU19XT1JLQVJPVU5EX01QSURSX0FTUjg2MDEpDQo+ID4g
+KwkJbXBpZHIgPj49IDg7DQo+ID4gKw0KPiA+ICAJYWZmID0gKCh1NjQpTVBJRFJfQUZGSU5JVFlf
+TEVWRUwobXBpZHIsIDMpIDw8IDMyIHwNCj4gPiAgCSAgICAgICBNUElEUl9BRkZJTklUWV9MRVZF
+TChtcGlkciwgMikgPDwgMTYgfA0KPiA+ICAJICAgICAgIE1QSURSX0FGRklOSVRZX0xFVkVMKG1w
+aWRyLCAxKSA8PCA4ICB8IEBAIC05NzAsNiArOTc0LDkNCj4gQEANCj4gPiBzdGF0aWMgaW50IF9f
+Z2ljX3BvcHVsYXRlX3JkaXN0KHN0cnVjdCByZWRpc3RfcmVnaW9uICpyZWdpb24sIHZvaWQgX19p
+b21lbQ0KPiAqcHRyKQ0KPiA+ICAJICogQ29udmVydCBhZmZpbml0eSB0byBhIDMyYml0IHZhbHVl
+IHRoYXQgY2FuIGJlIG1hdGNoZWQgdG8NCj4gPiAgCSAqIEdJQ1JfVFlQRVIgYml0cyBbNjM6MzJd
+Lg0KPiA+ICAJICovDQo+ID4gKwlpZiAoZ2ljX2RhdGEuZmxhZ3MgJiBGTEFHU19XT1JLQVJPVU5E
+X01QSURSX0FTUjg2MDEpDQo+ID4gKwkJbXBpZHIgPj49IDg7DQo+ID4gKw0KPiA+ICAJYWZmID0g
+KE1QSURSX0FGRklOSVRZX0xFVkVMKG1waWRyLCAzKSA8PCAyNCB8DQo+ID4gIAkgICAgICAgTVBJ
+RFJfQUZGSU5JVFlfTEVWRUwobXBpZHIsIDIpIDw8IDE2IHwNCj4gPiAgCSAgICAgICBNUElEUl9B
+RkZJTklUWV9MRVZFTChtcGlkciwgMSkgPDwgOCB8IEBAIC0xMjY1LDYgKzEyNzIsOA0KPiBAQA0K
+PiA+IHN0YXRpYyB1MTYgZ2ljX2NvbXB1dGVfdGFyZ2V0X2xpc3QoaW50ICpiYXNlX2NwdSwgY29u
+c3Qgc3RydWN0IGNwdW1hc2sNCj4gKm1hc2ssDQo+ID4gIAl1bnNpZ25lZCBsb25nIG1waWRyID0g
+Y3B1X2xvZ2ljYWxfbWFwKGNwdSk7DQo+ID4gIAl1MTYgdGxpc3QgPSAwOw0KPiA+DQo+ID4gKwlp
+ZiAoZ2ljX2RhdGEuZmxhZ3MgJiBGTEFHU19XT1JLQVJPVU5EX01QSURSX0FTUjg2MDEpDQo+ID4g
+KwkJbXBpZHIgPj49IDg7DQo+ID4gIAl3aGlsZSAoY3B1IDwgbnJfY3B1X2lkcykgew0KPiA+ICAJ
+CXRsaXN0IHw9IDEgPDwgKG1waWRyICYgMHhmKTsNCj4gPg0KPiA+IEBAIC0xMjc0LDcgKzEyODMs
+OCBAQCBzdGF0aWMgdTE2IGdpY19jb21wdXRlX3RhcmdldF9saXN0KGludCAqYmFzZV9jcHUsDQo+
+IGNvbnN0IHN0cnVjdCBjcHVtYXNrICptYXNrLA0KPiA+ICAJCWNwdSA9IG5leHRfY3B1Ow0KPiA+
+DQo+ID4gIAkJbXBpZHIgPSBjcHVfbG9naWNhbF9tYXAoY3B1KTsNCj4gPiAtDQo+ID4gKwkJaWYg
+KGdpY19kYXRhLmZsYWdzICYgRkxBR1NfV09SS0FST1VORF9NUElEUl9BU1I4NjAxKQ0KPiA+ICsJ
+CQltcGlkciA+Pj0gODsNCj4gPiAgCQlpZiAoY2x1c3Rlcl9pZCAhPSBNUElEUl9UT19TR0lfQ0xV
+U1RFUl9JRChtcGlkcikpIHsNCj4gPiAgCQkJY3B1LS07DQo+ID4gIAkJCWdvdG8gb3V0Ow0KPiA+
+IEBAIC0xMzIxLDYgKzEzMzEsOCBAQCBzdGF0aWMgdm9pZCBnaWNfaXBpX3NlbmRfbWFzayhzdHJ1
+Y3QgaXJxX2RhdGEgKmQsDQo+IGNvbnN0IHN0cnVjdCBjcHVtYXNrICptYXNrKQ0KPiA+ICAJCXU2
+NCBjbHVzdGVyX2lkID0gTVBJRFJfVE9fU0dJX0NMVVNURVJfSUQoY3B1X2xvZ2ljYWxfbWFwKGNw
+dSkpOw0KPiA+ICAJCXUxNiB0bGlzdDsNCj4gPg0KPiA+ICsJCWlmIChnaWNfZGF0YS5mbGFncyAm
+IEZMQUdTX1dPUktBUk9VTkRfTVBJRFJfQVNSODYwMSkNCj4gPiArCQkJY2x1c3Rlcl9pZCA9DQo+
+IE1QSURSX1RPX1NHSV9DTFVTVEVSX0lEKGNwdV9sb2dpY2FsX21hcChjcHUpID4+IDgpOw0KPiAN
+Cj4gWW91J3ZlIHdyaXR0ZW4gdGhlIHNhbWUgY2hlY2sgNSB0aW1lcy4gTWF5YmUgeW91IGNvdWxk
+IHN0YXJ0IGJ5IHJlZmFjdG9yaW5nDQo+IHRoYXQgY29kZSBzbyB0aGF0IHRoZSBoYWNrIGNhbiBi
+ZSBpbiBhIHNpbmdsZSBwbGFjZT8NCj4gDQoNCk9rYXksIEknbGwgdHJ5IHRvIHJlZmFjdG9yIGl0
+DQoNCj4gPiAgCQl0bGlzdCA9IGdpY19jb21wdXRlX3RhcmdldF9saXN0KCZjcHUsIG1hc2ssIGNs
+dXN0ZXJfaWQpOw0KPiA+ICAJCWdpY19zZW5kX3NnaShjbHVzdGVyX2lkLCB0bGlzdCwgZC0+aHdp
+cnEpOw0KPiA+ICAJfQ0KPiA+IEBAIC0xNzI5LDYgKzE3NDEsMTUgQEAgc3RhdGljIGJvb2wgZ2lj
+X2VuYWJsZV9xdWlya19jYXZpdW1fMzg1Mzkodm9pZA0KPiAqZGF0YSkNCj4gPiAgCXJldHVybiB0
+cnVlOw0KPiA+ICB9DQo+ID4NCj4gPiArc3RhdGljIGJvb2wgZ2ljX2VuYWJsZV9xdWlya19hc3I4
+NjAxKHZvaWQgKmRhdGEpIHsNCj4gPiArCXN0cnVjdCBnaWNfY2hpcF9kYXRhICpkID0gZGF0YTsN
+Cj4gPiArDQo+ID4gKwlkLT5mbGFncyB8PSBGTEFHU19XT1JLQVJPVU5EX01QSURSX0FTUjg2MDE7
+DQo+ID4gKw0KPiA+ICsJcmV0dXJuIHRydWU7DQo+ID4gK30NCj4gPiArDQo+ID4gIHN0YXRpYyBi
+b29sIGdpY19lbmFibGVfcXVpcmtfaGlwMDZfMDcodm9pZCAqZGF0YSkgIHsNCj4gPiAgCXN0cnVj
+dCBnaWNfY2hpcF9kYXRhICpkID0gZGF0YTsNCj4gPiBAQCAtMTgyMyw2ICsxODQ0LDExIEBAIHN0
+YXRpYyBjb25zdCBzdHJ1Y3QgZ2ljX3F1aXJrIGdpY19xdWlya3NbXSA9IHsNCj4gPiAgCQkubWFz
+awk9IDB4ZmZmZmZmZmYsDQo+ID4gIAkJLmluaXQJPSBnaWNfZW5hYmxlX3F1aXJrX252aWRpYV90
+MjQxLA0KPiA+ICAJfSwNCj4gPiArCXsNCj4gPiArCQkuZGVzYwk9ICJHSUN2MzogQVNSIDg2MDEg
+TVBJRFIgU0hJRlQiLA0KPiANCj4gcy9TSElGVC9zaGlmdC8NCj4gDQoNCk9rYXkNCj4gPiArCQku
+Y29tcGF0aWJsZSA9ICJhc3IsYXNyODYwMS1naWMtdjMiLA0KPiANCj4gU28gQVNSODYwMSAqaXMq
+IGEgc3lzdGVtLi4uIElzIGl0IERUIG9ubHk/DQo+IA0KPiBUaGFua3MsDQo+IA0KPiAJTS4NCj4g
+DQo+IC0tDQo+IFdpdGhvdXQgZGV2aWF0aW9uIGZyb20gdGhlIG5vcm0sIHByb2dyZXNzIGlzIG5v
+dCBwb3NzaWJsZS4NCg0KWWVzLCBhc3I4NjAxIGlzIG91ciBzb2MsIGFuZCB3ZSB3YW50IHRvIHVz
+ZSBjb21wYXRpYmxlIG5vZGUgaW4gZGV2aWNlcy10cmVlIHRvIGNvbnRyb2wgaXQsDQpBcyBJIG1l
+bnRpb25lZCBhdCBwcmV2aW91cyBwYXJ0LCBpdCBtaWdodCB3b3JrcyB3ZWxsIHVuZGVyDQphcm12
+OC4yKDMgdHlwZXMgb2YgYWZmaW5pdHkpIHdpdGggZ2ljNTAwLCBidXQgdGhlc2UgY29kZSBnZXQg
+c3Ryb25nbHkgb3JkZXIgd2l0aCBIVyBpbnRlZ3JhdGlvbg0KDQpUaGFua3MgYWdhaW4sDQoNCg0K
