@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB11E707023
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898D770702E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjEQR4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        id S229630AbjEQR5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjEQR4O (ORCPT
+        with ESMTP id S229622AbjEQR5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:56:14 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904C5BE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:56:13 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HHu8mD007207;
-        Wed, 17 May 2023 12:56:08 -0500
+        Wed, 17 May 2023 13:57:05 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666BF19A;
+        Wed, 17 May 2023 10:57:04 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HHunoe025410;
+        Wed, 17 May 2023 12:56:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684346168;
-        bh=cu2wP79rOfwXO1QBjusyb/mAgkmBvFTMHjOe+GfxRB4=;
+        s=ti-com-17Q1; t=1684346209;
+        bh=Y5a7G0lQ4tGrkMUd9GogBnap1YhDDaj9ce2WHoIytzE=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=dLAbSZRItPSskq5CRPKWBrroytVZSo/ZtiXQMpPy+kIHRgvbgYpPdhQPZjX5FPRSO
-         0sDavgCMcV055wi+dzyZAiu3kGFHgndidihIcYXs4ccY/NEj8bhQ9a1b+wMzdrrZYI
-         ptEJc2MrnNz1Pm1/5WR1FGTO50LuOkiV2Fscp+Ro=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HHu8jc024724
+        b=OHFEjeIr/5Xotn/BzJYhNRpLynn9wN2SIlCiS+SLdCME3gtsNY47L5imijBiCoXln
+         4JoYY11qcbyFbZEOl5Ep9wYPKU/T5XmP0HpfthiTow2r4MmN2YKWRv++/C9WL+31I7
+         PMy2ZamfQkTOIlgX8MJWE/KrmbiZDuJ/JI7rO8d4=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HHunFw020022
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 17 May 2023 12:56:08 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 17 May 2023 12:56:49 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
- May 2023 12:56:08 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ May 2023 12:56:49 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 17 May 2023 12:56:08 -0500
+ Frontend Transport; Wed, 17 May 2023 12:56:49 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34HHu8xs106043;
-        Wed, 17 May 2023 12:56:08 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34HHunJg106538;
+        Wed, 17 May 2023 12:56:49 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Santosh Shilimkar <ssantosh@kernel.org>,
-        Simon Horman <horms@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] soc: ti: pruss: Allow compile-testing
-Date:   Wed, 17 May 2023 12:56:08 -0500
-Message-ID: <168434612546.1538453.14483208071718769411.b4-ty@ti.com>
+To:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: Re: [PATCH v9 0/4] Introduce PRU platform consumer API
+Date:   Wed, 17 May 2023 12:56:48 -0500
+Message-ID: <168434617580.1538524.11482827517408254591.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230511-ti-pruss-compile-testing-v1-1-56291309a60c@kernel.org>
-References: <20230511-ti-pruss-compile-testing-v1-1-56291309a60c@kernel.org>
+In-Reply-To: <20230414045542.3249939-1-danishanwar@ti.com>
+References: <20230414045542.3249939-1-danishanwar@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,23 +74,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon Horman,
+Hi MD Danish Anwar,
 
-On Thu, 11 May 2023 16:54:36 +0200, Simon Horman wrote:
-> Allow compile testing of TI PRU-ICSS Subsystem Platform drivers.
-> This allows for improved build-test coverage.
+On Fri, 14 Apr 2023 10:25:38 +0530, MD Danish Anwar wrote:
+> The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+> or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+> (Programmable Real-Time Units, or PRUs) for program execution.
 > 
-> No functional change intended.
+> There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+> driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+> already been merged and can be found under:
+> 1) drivers/soc/ti/pruss.c
+>    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> 2) drivers/irqchip/irq-pruss-intc.c
+>    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+> 3) drivers/remoteproc/pru_rproc.c
+>    Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
 > 
-> 
+> [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
-NOTE: I did'nt see any immediate issue with this patch, but hopefully we dont
-break COMPILE_TEST going ahead. Lets see.
-Thank you!
+Thank you for your patience in following up and incorporating all the fixes
+and the multiple hand-overs!
 
-[1/1] soc: ti: pruss: Allow compile-testing
-      commit: e752f9b924a1fd1afcf36e51b03dfa9c3096a3bd
+[1/4] soc: ti: pruss: Add pruss_get()/put() API
+      commit: 67d1b0a1030fb20d54b720df6e976c06b893fb00
+[2/4] soc: ti: pruss: Add pruss_{request,release}_mem_region() API
+      commit: b789ca1e3380ab63b60c3356c026a7e8eb26ba01
+[3/4] soc: ti: pruss: Add pruss_cfg_read()/update(), pruss_cfg_get_gpmux()/set_gpmux() APIs
+      commit: 51b5760e56ef19106a3c4487a66d186d46ccc6f4
+[4/4] soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and XFR
+      commit: 0211cc1e4fbbc81853227147bf0982c47362c567
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
