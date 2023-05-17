@@ -2,190 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C027062CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5874F7062CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjEQI2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S230267AbjEQI12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbjEQI1u (ORCPT
+        with ESMTP id S230433AbjEQI1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:27:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA3F4209
+        Wed, 17 May 2023 04:27:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7215C49EF
         for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684312022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BhjK5yazou5RvTWn30tpmSdINFxSKMIDQ661jcxLjOE=;
-        b=Hdfs3ZyuzW17C5O28jpqFd56YDik0Ryg9x3VOJymCYphVmj3AduM7G5Os37yWIF7bkea9q
-        0nwj2utkmc0Q3PyObVwlECLImOOW63eShhFmoNj3mGxB2bqqkafNS/ZvzOOAw+j9fPgoG5
-        KMVzOQJSfUse2PNxPWvD2Cxow3OWDsA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-630-kh-Xj1KQOIqDA0dsSCFPvg-1; Wed, 17 May 2023 04:27:00 -0400
-X-MC-Unique: kh-Xj1KQOIqDA0dsSCFPvg-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f4dd7f13d0so2053465e9.3
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EBD8643A4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36E6C433A4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:27:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684312020;
+        bh=/VFfL2QbJ6k3VJGcWXoGQEaNMxXHPIHmIVTKIHJFJBo=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=oSCxm6sh/98I8Ox04VmmDDnilXcPcRMYh6yJ9qIuyLsWjQETjKV/2tX8zdPFulsF5
+         z6EKAZ07VqvTVeqRfpnqqL2CwOCvijrT5vbtqIpcIHv68QOlZnBHabPf9gEJACQESL
+         WqCeMK2g+VBxzzXfgLmlVUqV+PA40aNTJ56sggpJJH4bXPRaMhRaIz3hOKVzMqwKTb
+         AD4VJGmlepH1dlPqnjHV1hZP7SQb/GdHaGJDvvgy8jhHbGhKD/YVV2OrY6RXW30jLo
+         wWEca4DOvypVXBpjpxM6LQhK716xuN19c0TLJpG1GTon2lIgeDxmwL+Wl0XNv86O3u
+         Rg1yzYw8y0gWg==
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-19a19778b09so93559fac.3
         for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:27:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684312019; x=1686904019;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BhjK5yazou5RvTWn30tpmSdINFxSKMIDQ661jcxLjOE=;
-        b=QUvzvbxbohbF4XfQmV6gx70KeasoKoypRd9awxqQr9fkpAv7y+ussqI1/zplTjKbKA
-         44s64yzU96TdahSQAMs7D1GLYzaFht760ITwbcpSRptw+YvjX7/zYQqDO3geMoDE+FJO
-         rISeh0lKR5H7o7tMEIkqSTf7YVZDbPbC5BjUsnkoUiByk98/9pmSQDe/gYA/wFT7VcdK
-         fiLzzAoLyc833ssrghXIhYOa5IDj++9hr8zKNq1ILFfAcIkfbf/LbSWjbfHWzBCorhX6
-         lxBuUalVr0Li4mO8ca1rvi+xsbH/V/n9d271QmrDU87Gt2NfriEoXrNn4NyekcyrJGvQ
-         zSrA==
-X-Gm-Message-State: AC+VfDyFequWb1bbwY9+HQZVamPOtVn8H0pfN2TFmp+EkYu0d2CJMhP2
-        Fo3r2N08HUJqN5l+2yScVuv35jBtvruGbOyRDKrpLFlbvvScbh7WOVRUfdMh+KvRoyFiRqI6Vco
-        zxfDCsxQcV/XGr3A38duy+/nU
-X-Received: by 2002:a05:600c:2141:b0:3f4:fd67:6d7c with SMTP id v1-20020a05600c214100b003f4fd676d7cmr9063708wml.40.1684312019279;
-        Wed, 17 May 2023 01:26:59 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5xa065nZ/uQiaIJKC7O793u58obHvly4Gk+TYkCEFKD9upiESKtIAlN64oMtp1eokU88QqYA==
-X-Received: by 2002:a05:600c:2141:b0:3f4:fd67:6d7c with SMTP id v1-20020a05600c214100b003f4fd676d7cmr9063676wml.40.1684312018895;
-        Wed, 17 May 2023 01:26:58 -0700 (PDT)
-Received: from [192.168.3.108] (p4ff23b51.dip0.t-ipconnect.de. [79.242.59.81])
-        by smtp.gmail.com with ESMTPSA id a3-20020a05600c224300b003f17848673fsm1416580wmm.27.2023.05.17.01.26.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 01:26:58 -0700 (PDT)
-Message-ID: <3c11455b-3af4-eeaa-9f43-49d4d70348fd@redhat.com>
-Date:   Wed, 17 May 2023 10:26:56 +0200
+X-Gm-Message-State: AC+VfDxwvg/wuvr0j3450fKPpVM+aZ3nxtLS15WTJUXiV2T4fS1rTb+8
+        U69PuAUl4ETuyy/v+3s5oDJLRCku7V5uaehLMsU=
+X-Google-Smtp-Source: ACHHUZ7N9/reC7wmuhF51pRnT9mEKyzQMTd0GpRUzXVd1EUiUPAn5uqg7uY9TVh9SqyXXxv+pftvSsYwMAWxuN8bJHg=
+X-Received: by 2002:a05:6871:395:b0:195:e56f:ced2 with SMTP id
+ z21-20020a056871039500b00195e56fced2mr15848513oaf.38.1684312019977; Wed, 17
+ May 2023 01:26:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-References: <cover.1683235180.git.lstoakes@gmail.com>
- <0eb31f6f-a122-4a5b-a959-03ed4dee1f3c@lucifer.local>
- <ZGG/xkIUYK2QMPSv@infradead.org>
- <59c47ed5-a565-4220-823c-a278130092d5@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-In-Reply-To: <59c47ed5-a565-4220-823c-a278130092d5@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a8a:290:0:b0:4da:311c:525d with HTTP; Wed, 17 May 2023
+ 01:26:59 -0700 (PDT)
+In-Reply-To: <4125c148-a4f4-edd2-3009-0283246f8a95@gmail.com>
+References: <20230517070739.6505-1-linkinjeon@kernel.org> <4125c148-a4f4-edd2-3009-0283246f8a95@gmail.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Wed, 17 May 2023 17:26:59 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_=kXjKnmfiSEuTLG0fd6Ezj+7_R_ZSWntbvUgQ9Hyx0w@mail.gmail.com>
+Message-ID: <CAKYAXd_=kXjKnmfiSEuTLG0fd6Ezj+7_R_ZSWntbvUgQ9Hyx0w@mail.gmail.com>
+Subject: Re: [PATCH v2] ntfs: Add myself as a reviewer
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     brauner@kernel.org, anton@tuxera.com,
+        linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.05.23 13:31, Lorenzo Stoakes wrote:
-> On Sun, May 14, 2023 at 10:14:46PM -0700, Christoph Hellwig wrote:
->> On Sun, May 14, 2023 at 08:20:04PM +0100, Lorenzo Stoakes wrote:
->>> As discussed at LSF/MM, on the flight over I wrote a little repro [0] which
->>> reliably triggers the ext4 warning by recreating the scenario described
->>> above, using a small userland program and kernel module.
->>>
->>> This code is not perfect (plane code :) but does seem to do the job
->>> adequately, also obviously this should only be run in a VM environment
->>> where data loss is acceptable (in my case a small qemu instance).
+2023-05-17 16:37 GMT+09:00, Bagas Sanjaya <bagasdotme@gmail.com>:
+> On 5/17/23 14:07, Namjae Jeon wrote:
+>> I'm volunteering to help review patches for current unmaintained
+>> ntfs filesytem.
 >>
->> It would be really awesome if you could wire it up with and submit it
->> to xfstests.
-> 
-> Sure am happy to take a look at that! Also happy if David finds it useful in any
-> way for this unit tests.
-
-I played with a simple selftest that would reuse the existing gup_test 
-infrastructure (adding PIN_LONGTERM_TEST_WRITE), and try reproducing an 
-actual data corruption.
-
-So far, I was not able to reproduce any corruption easily without your 
-patches, because d824ec2a1546 ("mm: do not reclaim private data from 
-pinned page") seems to mitigate most of it.
-
-So ... before my patches (adding PIN_LONGTERM_TEST_WRITE) I cannot test 
-it from a selftest, with d824ec2a1546 ("mm: do not reclaim private data 
-from pinned page") I cannot reproduce and with your patches long-term 
-pinning just fails.
-
-Long story short: I'll most probably not add such a test but instead 
-keep testing that long-term pinning works/fails now as expected, based 
-on the FS type.
-
-> 
-> The kernel module interface is a bit sketchy (it takes a user address which it
-> blindly pins for you) so it's not something that should be run in any unsafe
-> environment but as long as we are ok with that :)
-
-I can submit the PIN_LONGTERM_TEST_WRITE extension, that would allow to 
-test with a stock kernel that has the module compiled in. It won't allow 
-!longterm, though (it would be kind-of hacky to have !longterm 
-controlled by user space, even if it's a GUP test module).
-
-Finding an actual reproducer using existing pinning functionality would 
-be preferred. For example, using O_DIRECT (should be possible even 
-before it starts using FOLL_PIN instead of FOLL_GET). That would be 
-highly racy then, but most probably not impossible.
-
-Such (racy) tests are not a good fit for selftests.
-
-Maybe I'll have a try later to reproduce with O_DIRECT.
-
--- 
-Thanks,
-
-David / dhildenb
-
+>> Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+>> ---
+>>  MAINTAINERS | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index e2fd64c2ebdc..c2cecb2059d7 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -14928,6 +14928,7 @@ F:	drivers/ntb/hw/intel/
+>>
+>>  NTFS FILESYSTEM
+>>  M:	Anton Altaparmakov <anton@tuxera.com>
+>> +R:	Namjae Jeon <linkinjeon@kernel.org>
+>>  L:	linux-ntfs-dev@lists.sourceforge.net
+>>  S:	Supported
+>>  W:	http://www.tuxera.com/
+>
+> Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Thanks for your ack!
+>
+> Anyway, what about also adding linux-mm list so that akpm can
+> pick patches?
+Hm.. I think that MM folks probably don't like to see fs patches on mm list...
+And as far as I know, Christian is going to picks up the ntfs patches.
+Christian, right?
+>
+> --
+> An old man doll... just what I always wanted! - Clara
+>
+>
