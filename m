@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C303706F4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5584706F52
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjEQRZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
+        id S229464AbjEQRZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjEQRZK (ORCPT
+        with ESMTP id S229646AbjEQRZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:25:10 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3FB93F7
+        Wed, 17 May 2023 13:25:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7DE76A9
         for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:24:54 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510b154559fso1811036a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684344291; x=1686936291;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ydp0nzIqTf9GiPFxJfFUQZhMHTtnoSpeoV+NHzLr6E4=;
-        b=r4B62BFbS7AmMFV5HoMdEg0dcw8fXjpKt8dMdOraIXcuiW8WxxXKc+E3Amka7WhJeK
-         6R3WVymoGOszC7ipCN0+dtYSTLx5clCCAi/DZmq0+M7Bdz9/t5biJVH8u+ldKXHoKV0o
-         tZB3EYg79tj+51BuP+PRlWxE8ZXFsUG637Gmk4aAFzfIh/Y93N9DB8K2ey16bs3YliwH
-         pR1VOZ9oL2eDSLuecpttUZ5rFGj5YLHsPAxY03jxchARCvSiHFD33s38RuXNShCB6w8t
-         SL6luzV1wPMP7p6U8kN3Fk2ltKHiPjaODJ4/Dmf/A0UZFazk9qMZZ8JGyJT9oUsIFpKY
-         tMoQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684344288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1iAIrTnVwFzq6+c38GVnN7MsYmU1HrrFym557ov8ROI=;
+        b=ZEiqnoDnlRCLLl0pfuGfLaECEt9HbzuC9tqjp2BhPSbp4t0e0VDgjy3q/G7l4lsH3pETFn
+        UOcn3c5gjHYnKJdd9HiG3KS25RX6nxAWiGdBUl/b7zhPWxFgUpjjhpIsF8jA5Wgwd+Gpgs
+        M2MicOt8XNEE4BwtDusyyJ8ejMo++VE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-0sVRUiKlM5OHXYgdEe3mVA-1; Wed, 17 May 2023 13:24:47 -0400
+X-MC-Unique: 0sVRUiKlM5OHXYgdEe3mVA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f33f8ffa95so4618755e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:24:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684344291; x=1686936291;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ydp0nzIqTf9GiPFxJfFUQZhMHTtnoSpeoV+NHzLr6E4=;
-        b=ainB/iKMt0REFrrQOSyH1/2DaXeoR0K7wi79xGK7ozNZv92Ie/uJSFGUyhfgp37JCR
-         Gmcw6XnMBTrk8r3dPO9PEMWDyOypE4TM0BM9OrYD0d1u+2VDI2LsmuqgD5AMs7Np+lxP
-         DDRmiKw6bjLdHGyKmqhAJ3m7UqF2gEBG5h0ARK0uhanMigC7E5scZbqBW3lhKKVr7KeD
-         BFTnJJtQp833IwcCDZTUHvTxl8k3k8DXwE8yxhmpGN7iuJPE1+b57D7/MG4CpbEhsLU1
-         7L90u+U2T8jc+w0xDN0OvISRZkzVbhZIgMGkQgWIRIof6SbQ5Ld0GganxnM97zHiCZff
-         SCZw==
-X-Gm-Message-State: AC+VfDz1AsAeLXWcZJqb8UMPM+QzsngISyORklI6jJ7s3PIFTD2RY2Fr
-        aF2dyQlhBt15wgzbdejDKWo=
-X-Google-Smtp-Source: ACHHUZ78xtzzPlt84o9mNoDNQHi/wtMMcy6VkXVTXf+I5gP3pgGtigo30f7CZchPznk2+9nYiqRAkg==
-X-Received: by 2002:a17:907:74c:b0:965:6aff:4f02 with SMTP id xc12-20020a170907074c00b009656aff4f02mr36680500ejb.41.1684344291101;
-        Wed, 17 May 2023 10:24:51 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.101])
-        by smtp.gmail.com with ESMTPSA id d1-20020a1709067a0100b0096b0e93193asm5440858ejo.90.2023.05.17.10.24.48
+        d=1e100.net; s=20221208; t=1684344286; x=1686936286;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1iAIrTnVwFzq6+c38GVnN7MsYmU1HrrFym557ov8ROI=;
+        b=dnrCn1kyMUvB+25fXAOpczFIOycLhtAdM++icNoEtx2IOPB86lG4jg4WwyzYMD8iF9
+         UsOZMbhwm7nuIOf7rx1jzIqmrdfDq4XdT/l4z9VbysUNH5y9RtC3oSP4wcwjbQGPqspF
+         XSI3g8V029rqRSWRdF+WFoAfe/5EW77NxXA/CZAhbrMkhfR9gikZk4LTwp6ozNyDaaLS
+         99wUSCIeI1Ht02J/gI/B5gx+3/G3g4A0sc6bBg9yvozn3trtFMvEQ7fgQkULYDG/cYAQ
+         P1ranXlh/NHqIybDx6yroO9f5Ag3A3BKmUjOD489t08NnFJajea+1igJrckYIie0Xh2J
+         XTtA==
+X-Gm-Message-State: AC+VfDwvwQZ9GqeKpCdBV2Aa0RKpo4tg0fbB1KQUDXqctjzwyGdm3p9w
+        uUkwhFfkq5OgAllL36hBFixu8ipuvqciDpF49WLw44EvlWo7sYP7q3KuqiJS9zoldGPyWvmyxyQ
+        VN4CLBqe6/LGFhs0kxuALoy/U
+X-Received: by 2002:a7b:c397:0:b0:3f5:772:f333 with SMTP id s23-20020a7bc397000000b003f50772f333mr8899204wmj.4.1684344286480;
+        Wed, 17 May 2023 10:24:46 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6jSHjGc2VCPNPYrXpge4cFfRVbJpvTfkWEcLMmIeIQDCnWRWkea0SDpPuJr/rrRfE4RbIP8g==
+X-Received: by 2002:a7b:c397:0:b0:3f5:772:f333 with SMTP id s23-20020a7bc397000000b003f50772f333mr8899194wmj.4.1684344286140;
+        Wed, 17 May 2023 10:24:46 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id i9-20020adffc09000000b0030497b3224bsm3347909wrr.64.2023.05.17.10.24.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 10:24:50 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     nm@ti.com, ssantosh@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] wkup_m3_ipc.c: Fix error checking for debugfs_create_dir
-Date:   Wed, 17 May 2023 22:24:31 +0500
-Message-Id: <20230517172431.13507-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 May 2023 10:24:45 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Dana Elfassy <delfassy@redhat.com>
+Cc:     eballetb@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dana Elfassy <dangel101@gmail.com>
+Subject: Re: [PATCH v2] Input: tests: add test to cover all
+ input_grab_device() function
+In-Reply-To: <ZGUJoClUZpL71Jw4@google.com>
+References: <20230517153145.513095-1-dangel101@gmail.com>
+ <ZGUJoClUZpL71Jw4@google.com>
+Date:   Wed, 17 May 2023 19:24:44 +0200
+Message-ID: <874joaan1f.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,28 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the error checking in wkup_m3_ipc.c in
-debugfs_create_dir. The correct way to check if an error occurred
-is 'IS_ERR' inline function.
+Dmitry Torokhov <dmitry.torokhov@gmail.com> writes:
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
----
- drivers/soc/ti/wkup_m3_ipc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello Dmitry,
 
-diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-index c9197912ec24..3aff106fc11a 100644
---- a/drivers/soc/ti/wkup_m3_ipc.c
-+++ b/drivers/soc/ti/wkup_m3_ipc.c
-@@ -202,7 +202,7 @@ static int wkup_m3_ipc_dbg_init(struct wkup_m3_ipc *m3_ipc)
- {
- 	m3_ipc->dbg_path = debugfs_create_dir("wkup_m3_ipc", NULL);
- 
--	if (!m3_ipc->dbg_path)
-+	if (IS_ERR(m3_ipc->dbg_path))
- 		return -EINVAL;
- 
- 	(void)debugfs_create_file("enable_late_halt", 0644,
+> Hi Dana,
+>
+> On Wed, May 17, 2023 at 06:31:45PM +0300, Dana Elfassy wrote:
+>> Currently input_grab_device() isn't covered by any tests
+>> Thus, adding a test to cover the cases:
+>> 1. The device is grabbed successfully
+>> 2. Trying to grab a device that is already grabbed by another input
+>>    handle
+>> 
+>> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+>> Tested-by: Javier Martinez Canillas <javierm@redhat.com>
+>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+>> ---
+>> 
+>> Changes in v2:
+>> - Use input_put_device() to decrement the refcount increased by get().
+>> - Remove unnecessary struct input_handle test_handle variable.
+>
+> So this tests something different than what patch description states.
+> You are testing that there is no "recursive" grabbing happening (an API
+> could be designed to allow the same handle grab device several times).
+> This is a good and useful test, but you do want to also use 2nd separate
+> handle to see that it gets -EBUSY as well. And ideally we should have
+
+That was my fault since v1 had two different handles but since it wasn't
+releasing it, didn't add any value really so I asked Dana to just drop it.
+
+> another test verifying that the 2nd handle can successfully grab the
+> device once the first handle releases it.
+>
+
+That's the correct approach indeed and would make the test more useful.
+
 -- 
-2.34.1
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
