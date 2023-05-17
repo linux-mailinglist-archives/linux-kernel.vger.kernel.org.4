@@ -2,97 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A23705D71
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2DE705D75
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjEQCtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S232195AbjEQCu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjEQCtu (ORCPT
+        with ESMTP id S231472AbjEQCu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:49:50 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F547B3;
-        Tue, 16 May 2023 19:49:50 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so10051140b3a.0;
-        Tue, 16 May 2023 19:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684291789; x=1686883789;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X5Hu/pfh6heq83uqkqoHwx78gypqIXAEufcYmbKjLXk=;
-        b=DqUCKOkTV5NTLs9/3LrcKWL0q4sjkAZSk1eCnfxnr9yZG7ZUQp4D4q8wC9N5qG9gGk
-         xwhIYWlu93bS+7jvaocupczzqsNp62qS/1UCLcMxHtixd16yQvutnplJzdAV9P6n4jVt
-         3FmY80JW2FnGt6stjHlIj2+UqU7Oz+lVJ7obnlIfzDPISXB3UdePOZJkx0F00VAnTTLS
-         Rv2UYLFZ1xTBFjk2TG9mza0092KEiH1pn/NT7jyddLGAgXMF+ZztIULbzysRNvMJDKGL
-         BhPtbSR3zuXuxQDSzvvRbG3H5UVIL2Zs+27HIZs28rXU9rTpCGFqHH5kZduwUkcxBOSZ
-         P7FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684291789; x=1686883789;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X5Hu/pfh6heq83uqkqoHwx78gypqIXAEufcYmbKjLXk=;
-        b=Ylr/pG5norAKN+sS3TV9bmGHFSHFp+1ImscR7nwP3YcE2y/CokjrvttNTcxc0cXNs5
-         B0Oe8XAyJVgAdo2CxMZpXIjy+XqPYQkdG3Mh1A8sbG4y7WO0jFROMS+tILsVPRA3kd68
-         eo9w7ajlAO8Q1kcfUlfiEQu2HZFGY6EaCQsKqriGdcnIZd5AiGDbHnBBhdSo+jvJH6sV
-         a7t46I46PvtLfd6lvRUrZ8Ekk7F1fQiXAomhOOrGvt2x8SneCqczWGv0EpJjte9RjBGR
-         tHiZMPZydNGIFQPMWO9rGDFquHQkzRAF0nLkW1Sz8OUF2syvayrnEQrZCMSVVZtjMnir
-         5lFw==
-X-Gm-Message-State: AC+VfDy9k19wxzzOlGO2B3c9dq+k0KV7O7Y7hD5RaoQqeKKYCNqvSJn0
-        K5hpGdn4XQDkrmiGEZ1etlw=
-X-Google-Smtp-Source: ACHHUZ6wrbUWipYAF7ePukEX17pMnZjyX/PPIDzXkmrRP0Avx8utruS8ChESKc4/EcfW+bKDkMYdrA==
-X-Received: by 2002:a17:902:f612:b0:1a2:749:5f1a with SMTP id n18-20020a170902f61200b001a207495f1amr926119plg.26.1684291789466;
-        Tue, 16 May 2023 19:49:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g26-20020aa7819a000000b0063799398eaesm13991553pfi.51.2023.05.16.19.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 19:49:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 16 May 2023 19:49:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/381] 5.10.180-rc1 review
-Message-ID: <b2f06ad9-f298-4b97-9a5a-b40243910f7c@roeck-us.net>
-References: <20230515161736.775969473@linuxfoundation.org>
+        Tue, 16 May 2023 22:50:57 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3492F103;
+        Tue, 16 May 2023 19:50:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0ViqnrSZ_1684291846;
+Received: from 30.97.48.190(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0ViqnrSZ_1684291846)
+          by smtp.aliyun-inc.com;
+          Wed, 17 May 2023 10:50:50 +0800
+Message-ID: <93e0e991-147f-0021-d635-95e615057273@linux.alibaba.com>
+Date:   Wed, 17 May 2023 10:50:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515161736.775969473@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
+ Extension for FUSE
+To:     Daniel Rosenberg <drosen@google.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
+References: <20230418014037.2412394-1-drosen@google.com>
+ <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
+ <CA+PiJmTMs2u=J6ANYqHdGww5SoE_focZGjMRZk5WgoH8fVuCsA@mail.gmail.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <CA+PiJmTMs2u=J6ANYqHdGww5SoE_focZGjMRZk5WgoH8fVuCsA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 06:24:11PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.180 release.
-> There are 381 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+
+
+On 2023/5/2 17:07, Daniel Rosenberg wrote:
+> On Mon, Apr 24, 2023 at 8:32 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
+>>
+>>
+>> The security model needs to be thought about and documented.  Think
+>> about this: the fuse server now delegates operations it would itself
+>> perform to the passthrough code in fuse.  The permissions that would
+>> have been checked in the context of the fuse server are now checked in
+>> the context of the task performing the operation.  The server may be
+>> able to bypass seccomp restrictions.  Files that are open on the
+>> backing filesystem are now hidden (e.g. lsof won't find these), which
+>> allows the server to obfuscate accesses to backing files.  Etc.
+>>
+>> These are not particularly worrying if the server is privileged, but
+>> fuse comes with the history of supporting unprivileged servers, so we
+>> should look at supporting passthrough with unprivileged servers as
+>> well.
+>>
 > 
-> Responses should be made by Wed, 17 May 2023 16:16:37 +0000.
-> Anything received after that time might be too late.
+> This is on my todo list. My current plan is to grab the creds that the
+> daemon uses to respond to FUSE_INIT. That should keep behavior fairly
+> similar. I'm not sure if there are cases where the fuse server is
+> operating under multiple contexts.
+> I don't currently have a plan for exposing open files via lsof. Every
+> such file should relate to one that will show up though. I haven't dug
+> into how that's set up, but I'm open to suggestions.
 > 
+>> My other generic comment is that you should add justification for
+>> doing this in the first place.  I guess it's mainly performance.  So
+>> how performance can be won in real life cases?   It would also be good
+>> to measure the contribution of individual ops to that win.   Is there
+>> another reason for this besides performance?
+>>
+>> Thanks,
+>> Miklos
+> 
+> Our main concern with it is performance. We have some preliminary
+> numbers looking at the pure passthrough case. We've been testing using
+> a ramdrive on a somewhat slow machine, as that should highlight
+> differences more. We ran fio for sequential reads, and random
+> read/write. For sequential reads, we were seeing libfuse's
+> passthrough_hp take about a 50% hit, with fuse-bpf not being
+> detectably slower. For random read/write, we were seeing a roughly 90%
+> drop in performance from passthrough_hp, while fuse-bpf has about a 7%
+> drop in read and write speed. When we use a bpf that traces every
+> opcode, that performance hit increases to a roughly 1% drop in
+> sequential read performance, and a 20% drop in both read and write
+> performance for random read/write. We plan to make more complex bpf
+> examples, with fuse daemon equivalents to compare against.
+> 
+> We have not looked closely at the impact of individual opcodes yet.
+> 
+> There's also a potential ease of use for fuse-bpf. If you're
+> implementing a fuse daemon that is largely mirroring a backing
+> filesystem, you only need to write code for the differences in
+> behavior. For instance, say you want to remove image metadata like
+> location. You could give bpf information on what range of data is
+> metadata, and zero out that section without having to handle any other
+> operations.
 
-Build results:
-	total: 162 pass: 162 fail: 0
-Qemu test results:
-	total: 485 pass: 485 fail: 0
+A bit out of topic (although I'm not quite look into FUSE BPF internals)
+After roughly listening to this topic in FS track last week, I'm not
+quite sure (at least in the long term) if it might be better if
+ebpf-related filter/redirect stuffs could be landed in vfs or in a
+somewhat stackable fs so that we could redirect/filter any sub-fstree
+in principle?    It's just an open question and I have no real tendency
+of this but do we really need a BPF-filter functionality for each
+individual fs?
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+It sounds much like
+https://learn.microsoft.com/en-us/windows-hardware/drivers/ifs/about-file-system-filter-drivers
 
-Guenter
+Thanks,
+Gao Xiang
+
+> 
+>   -Daniel
