@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61554706B16
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA561706B18
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjEQOaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S231790AbjEQOat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjEQOaV (ORCPT
+        with ESMTP id S229740AbjEQOaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:30:21 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6C69C;
-        Wed, 17 May 2023 07:30:20 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-3361b08a564so5657245ab.3;
-        Wed, 17 May 2023 07:30:20 -0700 (PDT)
+        Wed, 17 May 2023 10:30:46 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BB276BC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:30:40 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso761502a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:30:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684333820; x=1686925820;
+        d=linaro.org; s=google; t=1684333839; x=1686925839;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yNUMQ1PEW/q33xRaa3QEUyTPfbVsUmYNJm0BWOVeXO4=;
-        b=WvGb/E9JOdG7FSmn8zE2q48KwNsDlB+LL/p9y2AqxtlKYYfLzI+ptQKMjtVgA2AyTR
-         7Qbj1enSn4b/no9DOQziR3ihlN30R6f22k6Aqb20hMPEduBgJWB5W8tb2RbjkdG6Z0n1
-         OtFAuYTgwNrAUy9DHLaA3aX1VygCPtb8MkoxmLwytPLZXwiPhsxAhJVdUk82dTLD8wjS
-         ppOgSs1dQQ9W2kRnW7f68XW8YMNGgtXorFTpfJNzwBIKMJJbqoxWa4pv33uF4MAvgp87
-         ufK0C9nM68+F4ZsK3sgDb6BrjV/PkAONiUnEcnDyJrstlJDrALt35E10GjsZ6wpWlMZz
-         C5pg==
+        bh=sw4AmAQYZ1efOtuboC8tuzE6GxP3pTc6qv80qoB6U2M=;
+        b=bKyhm0sFnndsJTAa3h1AVM8sIYeseNib/U3ZQYTtU2X+lPjPz4INyyqmDxdGODuRPr
+         kbMaQMp/+/5E177ATV6ERiAR0uGhCRsGdwCS65MP3DvOuWQK/7gtGzqJfzkJRpjcinTB
+         FOK/6ZVIP4deE6RwjAnzn8joSgBEpRqsaAuGCQ/9zOHNoqh2lAMIAa0jxnlodvadDk2T
+         g9SYbtUY8ZFZyubq+qQhkEyOvL5ss2vNhCGV6PW5dMKd/VTY950o8Edw7lpsTAs9Nft1
+         5iWYDaeybqGix5BPJgblKr3bEA7Pw9gEU1IC3JQLujELj6Kwr6EXbBxmSZgYmb0WAnlm
+         yiyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684333820; x=1686925820;
+        d=1e100.net; s=20221208; t=1684333839; x=1686925839;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yNUMQ1PEW/q33xRaa3QEUyTPfbVsUmYNJm0BWOVeXO4=;
-        b=N/lyGgaqf3VERBUrQYoHpX98+SOUhyXwWhjgA72nYLuvkt4dE5QjNI84sibI13D0uA
-         0//gzjPkk8EYugXiMEpN4pEZ61xBBLdlaHEQK+CZ66OwJIMpLtYaQ0RpiHy73xT9aroT
-         evYuh8rI838A/sgykqamA/mLwcEgaCpnX2iSflRToN9VN3Qvqelirl94qF8l8dEo7Iqy
-         c8gDbuuFMo715rRalbpsKaBTXrzjfwDjHcL5S67irXzw01EHNs4uoF+3GR3SacOZoyzO
-         Qb3X1ghnEOVANRv3MWwCvr82+SEPfDBGWBG7NDAoFcjRs5UhP+xcDYq+3+hFKSkSdlXR
-         kQNQ==
-X-Gm-Message-State: AC+VfDyR6ktK4x7gaYfFAVn3wKBMvi5SuZ7bGW+zwhQhI/YWjBgivur0
-        lZGtA6rnn/Yp47vcVQUO1EQzeZnwpTXyag==
-X-Google-Smtp-Source: ACHHUZ6/3uRbfAeIuIA2STlk3/JDq8+dYaVfVPym/azA03JYjDzYn7elAXf/5OV0s0wqu3dVjbTyTw==
-X-Received: by 2002:a92:de50:0:b0:338:1e73:ca0 with SMTP id e16-20020a92de50000000b003381e730ca0mr2354891ilr.11.1684333819595;
-        Wed, 17 May 2023 07:30:19 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id a2-20020a927f02000000b003312915e615sm8153185ild.28.2023.05.17.07.30.18
+        bh=sw4AmAQYZ1efOtuboC8tuzE6GxP3pTc6qv80qoB6U2M=;
+        b=JavkDgRfWa1AaoZAf1RUFG2zmWUikvDWFbmA8tH0wRt0mLIGkaoNnBUjP9bNm1EXpj
+         Md1LxXHP3WhLUQNHUtAHxv51Efo5LS8hNch/Wx9syEiPdeloix0jnCJZMqUByhh0WkyZ
+         H1XkptPjcd5rrTqeVPRVevaV+Lrr3widL3pTiCD7OHchyyOwSv5Ep+gjPvgxaKFyzjlg
+         jViYmRWUpDOdiei5K5TbT7GP6vH+0GNaA3NiB4g7quxwb2Zq7IBr3lZi2Twc6856ndGO
+         M+8vuoucQOiBdPH/fLACACDoQq0QVfna88GePPBiVCu3gXNHE0MZtLqY1hP7gXAuOqRJ
+         2SnQ==
+X-Gm-Message-State: AC+VfDy3mhSr+QpOGDwwq0kXOl3KBF1EwyYo2QRBiGz3WJrB9AQzSzac
+        9ygopcmUuusJt+d8dxusHTyttw==
+X-Google-Smtp-Source: ACHHUZ6yw89KlxZBTvgE/5dOclub660CXUfA34kiArdQvxFvau9bhNBAgQuOCCeb8ird8GLV1AVaHw==
+X-Received: by 2002:a17:907:961d:b0:966:6056:a7c1 with SMTP id gb29-20020a170907961d00b009666056a7c1mr35946908ejc.74.1684333839303;
+        Wed, 17 May 2023 07:30:39 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170906499000b0096b55be592asm3649592eju.92.2023.05.17.07.30.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 07:30:19 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Adam Radford <aradford@gmail.com>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH] scsi: 3w-9xxx: Replace all non-returning strlcpy with strscpy
-Date:   Wed, 17 May 2023 14:29:55 +0000
-Message-ID: <20230517142955.1519572-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+        Wed, 17 May 2023 07:30:38 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, afaerber@suse.de,
+        linux-arm-kernel@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org,
+        Conor Dooley <conor@kernel.org>, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+        UNGLinuxDriver@microchip.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: defconfig: Enable ARCH_SPARX5 and ARCH_REALTEK
+Date:   Wed, 17 May 2023 16:30:11 +0200
+Message-Id: <20230517143011.549319-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
+Enable Microchip SparX-5 (ARCH_SPARX5) with its MMC controller and
+Realtek (ARCH_REALTEK) so their DTS will get built with defconfig and
+maybe platforms could be booted from it.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
-
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/scsi/3w-9xxx.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/configs/defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
-index 38d20a69ee12..f925f8664c2c 100644
---- a/drivers/scsi/3w-9xxx.c
-+++ b/drivers/scsi/3w-9xxx.c
-@@ -617,7 +617,7 @@ static int twa_check_srl(TW_Device_Extension *tw_dev, int *flashed)
- 	}
- 
- 	/* Load rest of compatibility struct */
--	strlcpy(tw_dev->tw_compat_info.driver_version, TW_DRIVER_VERSION,
-+	strscpy(tw_dev->tw_compat_info.driver_version, TW_DRIVER_VERSION,
- 		sizeof(tw_dev->tw_compat_info.driver_version));
- 	tw_dev->tw_compat_info.driver_srl_high = TW_CURRENT_DRIVER_SRL;
- 	tw_dev->tw_compat_info.driver_branch_high = TW_CURRENT_DRIVER_BRANCH;
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index a24609e14d50..de1ef135c578 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -41,6 +41,7 @@ CONFIG_ARCH_BCMBCA=y
+ CONFIG_ARCH_BRCMSTB=y
+ CONFIG_ARCH_BERLIN=y
+ CONFIG_ARCH_EXYNOS=y
++CONFIG_ARCH_SPARX5=y
+ CONFIG_ARCH_K3=y
+ CONFIG_ARCH_LG1K=y
+ CONFIG_ARCH_HISI=y
+@@ -54,6 +55,7 @@ CONFIG_ARCH_MXC=y
+ CONFIG_ARCH_S32=y
+ CONFIG_ARCH_NPCM=y
+ CONFIG_ARCH_QCOM=y
++CONFIG_ARCH_REALTEK=y
+ CONFIG_ARCH_RENESAS=y
+ CONFIG_ARCH_ROCKCHIP=y
+ CONFIG_ARCH_SEATTLE=y
+@@ -1003,6 +1005,7 @@ CONFIG_MMC_SDHCI_PLTFM=y
+ CONFIG_MMC_SDHCI_OF_ARASAN=y
+ CONFIG_MMC_SDHCI_OF_ESDHC=y
+ CONFIG_MMC_SDHCI_OF_DWCMSHC=y
++CONFIG_MMC_SDHCI_OF_SPARX5=y
+ CONFIG_MMC_SDHCI_CADENCE=y
+ CONFIG_MMC_SDHCI_ESDHC_IMX=y
+ CONFIG_MMC_SDHCI_TEGRA=y
+-- 
+2.34.1
 
