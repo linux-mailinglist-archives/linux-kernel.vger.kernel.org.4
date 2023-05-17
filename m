@@ -2,126 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62786706162
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D49706167
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230052AbjEQHkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S230070AbjEQHkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjEQHkF (ORCPT
+        with ESMTP id S229563AbjEQHkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:40:05 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48579196
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:40:04 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-33156204adcso7461865ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:40:04 -0700 (PDT)
+        Wed, 17 May 2023 03:40:31 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282DEE40;
+        Wed, 17 May 2023 00:40:30 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f475366514so2821145e9.2;
+        Wed, 17 May 2023 00:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684309228; x=1686901228;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E+Ld0Ovjdd0x8sc5pvboMnhYHV4AgRb0J8CE6t0hZIM=;
+        b=WA4SxHpvGm1ODLM4q/8vfu4vKglP08hu0HlJ/yJJbiD9LBzuIHlUgDdcL3VIMkHk/P
+         p2cz2vdAYv4BbiJ0LQb/Dzae+iABrn+JRnv+S8RGWEPseRZq0h7QRvRtmRbcesxue8a/
+         BciE7NdBJ4QRsjKDJQE77K2/2QUXnqDpqCLLflQ9zc8BaBcSESiHiDelcdo0LrzKMHaC
+         GUMDcQgWV//4Zs7KXkfDnbCoP76vQ+YQT8YhKjLXhfDZACBifHxeO2/8ymyh0cmWzSVD
+         rtYLl1O47U9VzqLqtCwhyHFUA2ZAtik0+iGN7RqiL3HAYiJJoJPkrJkPKRposqrQ0oAq
+         ri2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684309203; x=1686901203;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=69VsXeyPuZfUkl/0X2g0yMrT/XXVKTEkT0F6vVJIoGg=;
-        b=Hnv36IzO/PtaKAC3TNAqEFLnhnB7c+PrrGPBA/BQeWZ03UwJbRuEtWPQ1fXPlVKlF2
-         PkG6P8/OKerkaJuyzQzU95shIL9LfqAM0z23pYprTvb4dy5tj5RSeAPAy8xcbgJ9j1IX
-         NeXZBn7nftywuUjhWhn5Fyd+6F8QJz1wqPt9j/11WJp6CBhdm/G4T8adu/vY+X1xv2aT
-         JAsIrdMw7XwVvnjUSJDWZtX0ItjiMxDOgIiGhYjIHU9+v5wu409rVg321YTl2K3rYgdK
-         YckaojeG2B4xURkQykhyifRCi1tfKYjVsxLzmXgPL2kgxsdT5NMKtobPhqrL/LqEm9T/
-         Kb/Q==
-X-Gm-Message-State: AC+VfDzMwJdohMlYB3XltcIN20NH5b3mWDV/ZO1cNJDGchpcU8TCuq88
-        /jtSjy7nViybUBT+E3QUCjG/u0iiJIYESygof+nGqYMndQl6
-X-Google-Smtp-Source: ACHHUZ7uskBz3KEz7qbkJs6uORi9CJzYHEMEhlHZvYV40zrittXllcU++Vbq85REdlNAiZ3qfDXLBq0MwFp2Cbd2vn6N40ahhpHN
+        d=1e100.net; s=20221208; t=1684309228; x=1686901228;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E+Ld0Ovjdd0x8sc5pvboMnhYHV4AgRb0J8CE6t0hZIM=;
+        b=QBzK6v89W+4YM359n67GZzi+5YcIKdg7P+DhjZdk6BTwR0TrW1FmmOP0evHZQ+GOF+
+         d1GIQP/6NC+glSm7PukqP/G5LTX0bYHVO8f4Mofk5hwC1zTEuc73RJTilFtkf4cyQ7sj
+         XMWBqDzCQPeZHW8L0kDqExExznLNDS9LoWfsh5rAwtRgIZ5FF7mgNQmbIMf4kHhjJWNo
+         +kmRAOmXUJos7QS/BLTrYCyQmhijGqL+GFBUX8ZNp1w4n6jIRAoIZArrsrdxOssv/cER
+         KcGlDUNdAikMEUcszJV6xB0b1x0Z+hEcl4K8JZWotXzl72dlZ+VZo06n6EiKfmsWoxun
+         u6IQ==
+X-Gm-Message-State: AC+VfDwlygc1sGiQEVkQkU9xynPdCP2yY767H+8AOqjbvnjetIrFM2+T
+        N6GNfcPk8CKGwHWMP0oPItc=
+X-Google-Smtp-Source: ACHHUZ4QFru10EJHOkrAg2WS7xokWnRh6SsO8/nZ9408Z1x44sx4+q5GoeByQVkYGCmWKPQ44It+Qw==
+X-Received: by 2002:a7b:ca51:0:b0:3f4:2148:e8e5 with SMTP id m17-20020a7bca51000000b003f42148e8e5mr24473724wml.1.1684309228284;
+        Wed, 17 May 2023 00:40:28 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id f21-20020a7bcc15000000b003f31d44f0cbsm1289563wmh.29.2023.05.17.00.40.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 00:40:26 -0700 (PDT)
+Date:   Wed, 17 May 2023 08:40:26 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
+ mappings by default
+Message-ID: <d17c0fce-679b-4f5d-9a7c-6ff7e28ad4b2@lucifer.local>
+References: <cover.1683235180.git.lstoakes@gmail.com>
+ <20230515110315.uqifqgqkzcrrrubv@box.shutemov.name>
+ <7f6dbe36-88f2-468e-83c1-c97e666d8317@lucifer.local>
+ <ZGIhwZl2FbLodLrc@nvidia.com>
+ <ad0053a4-fa34-4b95-a262-d27942b168fd@lucifer.local>
+ <20230517072920.bfs7gfo4whdmi6ay@quack3>
 MIME-Version: 1.0
-X-Received: by 2002:a92:dd07:0:b0:331:57f3:6af3 with SMTP id
- n7-20020a92dd07000000b0033157f36af3mr1019476ilm.1.1684309203665; Wed, 17 May
- 2023 00:40:03 -0700 (PDT)
-Date:   Wed, 17 May 2023 00:40:03 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c6de2a05fbdecbbb@google.com>
-Subject: [syzbot] [kernel?] linux-next test error: UBSAN: array-index-out-of-bounds
- in alloc_pid
-From:   syzbot <syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517072920.bfs7gfo4whdmi6ay@quack3>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, May 17, 2023 at 09:29:20AM +0200, Jan Kara wrote:
+> On Mon 15-05-23 14:07:57, Lorenzo Stoakes wrote:
+> > On Mon, May 15, 2023 at 09:12:49AM -0300, Jason Gunthorpe wrote:
+> > > On Mon, May 15, 2023 at 12:16:21PM +0100, Lorenzo Stoakes wrote:
+> > > > Jason will have some thoughts on this I'm sure. I guess the key question
+> > > > here is - is it actually feasible for this to work at all? Once we
+> > > > establish that, the rest are details :)
+> > >
+> > > Surely it is, but like Ted said, the FS folks are not interested and
+> > > they are at least half the solution..
+> >
+> > :'(
+>
+> Well, I'd phrase this a bit differently - it is a difficult sell to fs
+> maintainers that they should significantly complicate writeback code / VFS
+> with bounce page handling etc. for a thing that is not much used corner
+> case. So if we can get away with forbiding long-term pins, then that's the
+> easiest solution. Dealing with short-term pins is easier as we can just
+> wait for unpinning which is implementable in a localized manner.
+>
 
-syzbot found the following issue on:
+Totally understandable. It's unfortunately I feel a case of something we
+should simply not have allowed.
 
-HEAD commit:    065efa589871 Add linux-next specific files for 20230517
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f27bb2280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=821eeb02ef201bcc
-dashboard link: https://syzkaller.appspot.com/bug?extid=ac3b41786a2d0565b6d5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > The FS also has to actively not write out the page while it cannot be
+> > > write protected unless it copies the data to a stable page. The block
+> > > stack needs the source data to be stable to do checksum/parity/etc
+> > > stuff. It is a complicated subject.
+> >
+> > Yes my sense was that being able to write arbitrarily to these pages _at
+> > all_ was a big issue, not only the dirty tracking aspect.
+>
+> Yes.
+>
+> > I guess at some level letting filesystems have such total flexibility as to
+> > how they implement things leaves us in a difficult position.
+>
+> I'm not sure what you mean by "total flexibility" here. In my opinion it is
+> also about how HW performs checksumming etc.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/dbbd691e9e5a/disk-065efa58.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e5b9541c3979/vmlinux-065efa58.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/44cf3f3aaabb/bzImage-065efa58.xz
+I mean to say *_ops allow a lot of flexibility in how things are
+handled. Certainly checksumming is a great example but in theory an
+arbitrary filesystem could be doing, well, anything and always assuming
+that only userland mappings should be modifying the underlying data.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: array-index-out-of-bounds in kernel/pid.c:244:15
-index 1 is out of range for type 'upid [1]'
-CPU: 1 PID: 5002 Comm: syz-executor.0 Not tainted 6.4.0-rc2-next-20230517-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
- alloc_pid+0xbe5/0xdd0 kernel/pid.c:244
- copy_process+0x45da/0x7660 kernel/fork.c:2522
- kernel_clone+0xeb/0x890 kernel/fork.c:2914
- __do_sys_clone+0xba/0x100 kernel/fork.c:3057
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f23be089e9b
-Code: ed 0f 85 60 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 89 00 00 00 41 89 c5 85 c0 0f 85 90 00 00
-RSP: 002b:00007ffe5c64b680 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-RAX: ffffffffffffffda RBX: 00007ffe5c64bcd8 RCX: 00007f23be089e9b
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000555557393400
-R10: 00005555573936d0 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe5c64b770 R14: 00007f23be1ac9d8 R15: 000000000000000c
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>
+> 								Honza
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
