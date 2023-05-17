@@ -2,110 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBD3706492
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1958706495
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjEQJv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S229888AbjEQJvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjEQJv2 (ORCPT
+        with ESMTP id S229542AbjEQJvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:51:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399E440E6;
-        Wed, 17 May 2023 02:51:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C873D63DB1;
-        Wed, 17 May 2023 09:51:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87A8C433D2;
-        Wed, 17 May 2023 09:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684317084;
-        bh=PiIX9F7CgLx+hd6tbKAUBlwKVOg63Kqvs7tVepmIrnI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E2/zGuNuFCzdxhmxUOhm7YSe3r4jzd5mPfUYEJXuphNIXjHVx7hj1kJHju/xS7NWg
-         UuZAp6B0MT0X50OrPm2dcEZqnEZt+wM06l7pKpBJZ8GBVm4vc5B9Zg76+x+UGj4VBn
-         PyFOSl4rkI0OkFeGlSTnZzPuD9Blr+m8wrk7o54o=
-Date:   Wed, 17 May 2023 11:51:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/381] 5.10.180-rc1 review
-Message-ID: <2023051704-catnip-vitality-d6cb@gregkh>
-References: <20230515161736.775969473@linuxfoundation.org>
- <ZGNJfAPd8eeVoCJ3@debian>
- <2023051711-thespian-sponsor-8878@gregkh>
- <CA+G9fYvw6HJopruUn4QKPCcqbdgw++AFf1wnwMP9hP1rJsmq3g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvw6HJopruUn4QKPCcqbdgw++AFf1wnwMP9hP1rJsmq3g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 05:51:49 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8124F1BF8;
+        Wed, 17 May 2023 02:51:48 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 635E05C00E3;
+        Wed, 17 May 2023 05:51:44 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 17 May 2023 05:51:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1684317104; x=1684403504; bh=V3xsILHICgJLZkK2B+bruOp3fFAhB06OWCO
+        PN9kuRmo=; b=mWqI5wtYr3Fr0/W0KfPiRryajdbIiJMvuhB6FawPWn8fZbh3y9d
+        zbPHSga41RW2CnQQTRvPYzEAKjjD/o3GCJ7U/1dtad41EdkqwYsiDhDWD4YB/mma
+        rxMEU6CXgYI/AxUiiKcEIfPbbkpWlNTujasf7EuccEU0Wfn3sQfby8kOEuZKC80d
+        dCQX1/OgD5citKbfrQhMywCYUjezGbrnlaE1FiqYkv+C2iyMLDRk84jFF94sb7Rk
+        b5VW3h5548nfx9aY3tTM0/XSyX2GKdFdNk6z5lPUTIeTpB61slRbj5JR+qttfO89
+        LZGKo6X9DSMqdDlh93GD0hcIlNdGIR09p8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684317104; x=1684403504; bh=V3xsILHICgJLZkK2B+bruOp3fFAhB06OWCO
+        PN9kuRmo=; b=rtKjnAURDnI/lG2lOecTJGeLUc1xlML8p9RcznY5ArlQNO+semU
+        N0B+UIq/T+uPwvT6QdkyAQNA5hrjaPNI4rdRDJOofeSalu5wlk5D78/4LBSQAiLW
+        M9AxTuW1X3Wzmkv54QaeeIHkxoIUnz75OMRLWo/rv0x2xGuh53ZVNuyqYj2wiTl1
+        hVio1J50OoRtIyt5Ka8qEWwuNyZshJYjJAZSRdO82qrnS3hHtXPzC9ixYL1yRKnw
+        MtOvVU4zzvy2q5cAMK+70y+SI90wnQdLSEMBZS2UlbBGVel2Z2kAZsjVmn8E7F8P
+        788EvRYAd9bxxQNTfb6UiiT6o/XkNV9q9hw==
+X-ME-Sender: <xms:sKNkZO9YeNUkY-1agj9p1cWGfD5-JM3EPv01SX4qS5_ECTZwnxsdug>
+    <xme:sKNkZOuzbopH_DC7NeKSkQrflz0BsiRZKPAJAMH7b9HJ6lbg4E_U2bDeuvd-AwWbi
+    BC0F_j-6WQSmvJprK0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:sKNkZEAVzATeNX4ng_FUgG2ly-efk7TUjJjSGY5wEc8AI2ynvRdK3w>
+    <xmx:sKNkZGf438EPn-Ue1OCJIGY_MpdMkZJq7bPSrZt_WrnKm--qzoBphg>
+    <xmx:sKNkZDMSwVJlBIP8qAIxegFp6KCzOItmkUjp79hr0ooV12an_glI3Q>
+    <xmx:sKNkZMYSW6CPcicKyKyDh5337P8qblJgsNu693rwMKtDgP9yl0PDPg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 0EE08B60086; Wed, 17 May 2023 05:51:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <9d350346-c45e-470c-bfe5-0a98d549f29a@app.fastmail.com>
+In-Reply-To: <CAMRc=Mdic_d3KaxFXrz7aVUcLyK8fBBHPgRGYP8nQvxN-ZwJXQ@mail.gmail.com>
+References: <20230516201642.557733-1-arnd@kernel.org>
+ <CAMRc=Mdic_d3KaxFXrz7aVUcLyK8fBBHPgRGYP8nQvxN-ZwJXQ@mail.gmail.com>
+Date:   Wed, 17 May 2023 11:51:23 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gpio: sa1100: include <mach/generic.h>
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 03:11:48PM +0530, Naresh Kamboju wrote:
-> On Wed, 17 May 2023 at 14:21, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, May 16, 2023 at 10:14:36AM +0100, Sudip Mukherjee (Codethink) wrote:
-> > > Hi Greg,
-> > >
-> > > On Mon, May 15, 2023 at 06:24:11PM +0200, Greg Kroah-Hartman wrote:
-> > > > This is the start of the stable review cycle for the 5.10.180 release.
-> > > > There are 381 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> > >
-> > > Build test (gcc version 11.3.1 20230511):
-> > > mips: 63 configs -> no failure
-> > > arm: 104 configs -> no failure
-> > > arm64: 3 configs -> 1 failure
-> > > x86_64: 4 configs -> no failure
-> > > alpha allmodconfig -> no failure
-> > > powerpc allmodconfig -> no failure
-> > > riscv allmodconfig -> no failure
-> > > s390 allmodconfig -> no failure
-> > > xtensa allmodconfig -> no failure
-> > >
-> > > arm64 allmodconfig build fails with the error:
-> > >
-> > > /gcc/bin/aarch64-linux-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function `__kvm_nvhe___kvm_tlb_flush_vmid_ipa':
-> > > (.hyp.text+0x1a4c): undefined reference to `__kvm_nvhe_memset'
-> > > /gcc/bin/aarch64-linux-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function `__kvm_nvhe___kvm_tlb_flush_vmid':
-> > > (.hyp.text+0x1b20): undefined reference to `__kvm_nvhe_memset'
-> > > /gcc/bin/aarch64-linux-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function `__kvm_nvhe___kvm_flush_cpu_context':
-> > > (.hyp.text+0x1b80): undefined reference to `__kvm_nvhe_memset'
-> >
-> > That's odd, I don't see that symbol anywhere in the tree at all.
-> >
-> > And the only arm-related kvm changes don't have those symbols either
-> > (the other kvm changes are x86-only)
-> >
-> > Also, no one else has seen this issue.  Can you bisect?
-> 
-> This is an old issue,
-> Many other reported long back [1]
-> 
-> [1] https://lore.kernel.org/stable/CADYN=9KSKQx816id-zWepV-E3ozph3k2_i9Rhs6QseFv0hkPfg@mail.gmail.com/
+On Wed, May 17, 2023, at 11:33, Bartosz Golaszewski wrote:
+> On Tue, May 16, 2023 at 10:16=E2=80=AFPM Arnd Bergmann <arnd@kernel.or=
+g> wrote:
+>>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> sa1100_init_gpio() is declared in a machine specific header so it
+>> can be called from platform code, but the definition is in the device
+>> driver, which causes a warning:
+>>
+>> drivers/gpio/gpio-sa1100.c:310:13: error: no previous prototype for '=
+sa1100_init_gpio' [-Werror=3Dmissing-prototypes]
+>>
+>> It's already possible to include mach/generic.h from drivers, so add
+>> this one here as well.
+>>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>  drivers/gpio/gpio-sa1100.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/gpio/gpio-sa1100.c b/drivers/gpio/gpio-sa1100.c
+>> index 342a59ea489a..3b1cc8462fcb 100644
+>> --- a/drivers/gpio/gpio-sa1100.c
+>> +++ b/drivers/gpio/gpio-sa1100.c
+>> @@ -13,6 +13,7 @@
+>>  #include <mach/hardware.h>
+>>  #include <mach/regs-gpio.h>
+>
+> This doesn't apply on top of my branch (neither on next) because of
+> this line. I can't see where this was added. Any hint?
 
-Then maybe someone should submit it properly for inclusion?
+My mistake, my working tree had some experimental patches in it.
 
-thanks,
+I'll send a v2.
 
-greg k-h
+    Arnd
