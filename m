@@ -2,117 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00D0706ECE
+	by mail.lfdr.de (Postfix) with ESMTP id 111B6706ECC
 	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjEQQxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S229564AbjEQQxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEQQxI (ORCPT
+        with ESMTP id S229921AbjEQQxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:53:08 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE901A255;
-        Wed, 17 May 2023 09:52:43 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-61b19406102so1327656d6.1;
-        Wed, 17 May 2023 09:52:43 -0700 (PDT)
+        Wed, 17 May 2023 12:53:07 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD29A7A95
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:52:41 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-510d1972d5aso1305538a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684342362; x=1686934362;
+        d=linux-foundation.org; s=google; t=1684342357; x=1686934357;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Pvyuk45qAwIZHtrdAvIYk8lq6oEJbOWM7TWmUfxEmXc=;
-        b=diNUrRiIcfwrHfCYK8S3a5dVoAnso/EVGvDEvCsURN9COJxCKfROWRtDZ1J3o2A5Tc
-         3n+TPqwKRH541c3ZdXz0vCsjAr7c52VCsHAMsmeMO3iI5On37wN2JqiLu2lJZtlI3bw2
-         pPjYyv91nCohYATMb0dbJEdbwAEZmGD42aDWAUIKRhwQiiEyFLXlcA1tH+42UWt8Srlr
-         3KSmJepx8fAyyibOdJEgQ3Qf92ql8Yg/+fZxVSa2QDemYChfoJDgWv7n2IvypaCuE7Np
-         trrkHqPtOG77pgt9pSarG81U80WzB5xjG+6+s8tuLTNSNQ7vwcRSc3Y8lP+HcemDg6Yq
-         Ta7Q==
+        bh=WbLIWNwbWi1oPfkJYehay++7vldUE9mgEn/i2k6StuA=;
+        b=LOT6zd+dCqQmaTvAuzv+iEr0Jw4BhTBe521buKQszAUMoN1iBVTP9sWxjD8uf8VN2d
+         jl6HA6GVlY3gmKGnODyfN7mElerddiKMdf+q0GNJ659dsKmskJOC1wlUfdZY1nYkub4a
+         zl8RwPvQ+lareVeMcG84Xi48Aa8OFZ9lN1HsQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684342362; x=1686934362;
+        d=1e100.net; s=20221208; t=1684342357; x=1686934357;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Pvyuk45qAwIZHtrdAvIYk8lq6oEJbOWM7TWmUfxEmXc=;
-        b=JpRey+pq9QKA743v++Sqn7ybc5n9dsG8kdkeSsColrTSzDr2WYJF18Pyg1Gy94bQDK
-         pHNl9lZF8qR/uVDoRhPP55AevUmMihUmCm3xg5nSb1eKSM25XOodMWNKdWwisx2Vp32c
-         mAH3rT4Sqq/WDHvqrAreksC1s9lJZSC/gA9puucXVAaprqFOgcx4LmUxw/gisLywIKqN
-         34g5S8K6Yjioi1UmB+WyJoTIR9FFejGRpNdlY6DthRLTj2QCa98QN7eXb4v4BVSLL5Xq
-         1UMhkvo/wrIY5TinHlE/YcWnGq2n/TFGl2+INH5gibiwMLdh77slvrjikOLeOG6x8uqb
-         vAGA==
-X-Gm-Message-State: AC+VfDyr5/dxiEYqPBUJrwNNSdnzD2mwAp0CSn5EiQxQ1bE5guauCWAe
-        P9e9W8riz8BtQ1bqAxWWrOGL1gnhGllbJ62e27TNfL3TY+nXhA==
-X-Google-Smtp-Source: ACHHUZ6GfNaGFm2xtZWG1blndv3Mz+ujglmZyG7jXWpyaCYi94a28PlelYGaw4Sf1EYfzFhCXHUMrVih5wefdxhfzI8=
-X-Received: by 2002:a05:6214:1944:b0:5ef:4f83:f454 with SMTP id
- q4-20020a056214194400b005ef4f83f454mr112213qvk.24.1684342362617; Wed, 17 May
- 2023 09:52:42 -0700 (PDT)
+        bh=WbLIWNwbWi1oPfkJYehay++7vldUE9mgEn/i2k6StuA=;
+        b=US1SGUxCX8/FsPGVNNqs1X2YOzkSMIO+A3okMsI0f+QW7+0md5TsVLREukzPWFqMhP
+         XMxmh8IPvIVTedp2IB0MVFjP+xtkPUrZs2oPGlsxpQEa2G66JM8tepO32E7BgD+v4np3
+         wArCeN3thkTTpFWcrvCnWNPLtCHIyzFkxQi2hocf97IaO7qSuPvD4Ycrp7Ub3QQEjreT
+         mT8uwK3FU1hS6BCctI9GYAB/INfUGKYi7gWjOjHhwaz9tclzPJ8pMO9tn69W9kfdz7C1
+         sEqi/O1S7S1+5lg6dSulbwIDG0aMuntikc09dFxntCoCzPLo9+dz/FMgoyH95Li4NUJK
+         P48Q==
+X-Gm-Message-State: AC+VfDzWR5iqNbPI0VBfvZwW5ixywpRYsFv1uYTjp7/2yzk4nrU2fFeg
+        iezDz6pXSAjSuYvl7EiorUR4zZ4qdVR7HLpM0+lm/Iom
+X-Google-Smtp-Source: ACHHUZ57Aj9UjiMlJIZaieg37tMLNKaSngX+0mG1UadWKM+PHXt+2cYfJx71iNohZ0ssK5pNmxzwTw==
+X-Received: by 2002:a17:907:2d11:b0:96a:411a:1cc4 with SMTP id gs17-20020a1709072d1100b0096a411a1cc4mr25647241ejc.66.1684342357367;
+        Wed, 17 May 2023 09:52:37 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id p1-20020a170906838100b009662b4230cesm12758901ejx.148.2023.05.17.09.52.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 09:52:37 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96a2b6de3cbso156768066b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:52:36 -0700 (PDT)
+X-Received: by 2002:a17:907:7d9e:b0:969:f54c:dee2 with SMTP id
+ oz30-20020a1709077d9e00b00969f54cdee2mr28364544ejc.26.1684342355901; Wed, 17
+ May 2023 09:52:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230512141755.1712358-1-eblanc@baylibre.com> <20230512141755.1712358-2-eblanc@baylibre.com>
- <ZF514wvUt_xrU1gG@surfacebook> <CSOPFJOVLSS1.1XKI60F9TLBMN@burritosblues>
-In-Reply-To: <CSOPFJOVLSS1.1XKI60F9TLBMN@burritosblues>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 17 May 2023 19:52:06 +0300
-Message-ID: <CAHp75Vfg+yAhJ58qt76GHqxWHD48hF-6ZnT=xEUh+1rzr7UvVg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] rtc: tps6594: Add driver for TPS6594 RTC
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, sterzik@ti.com,
-        u-kumar1@ti.com
+References: <20230516000208.4008443-1-jarkko@kernel.org>
+In-Reply-To: <20230516000208.4008443-1-jarkko@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 17 May 2023 09:52:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiEYewsSM0SbdBbdX2DhUNcaZptvS8NPKZES41vr_H=bA@mail.gmail.com>
+Message-ID: <CAHk-=wiEYewsSM0SbdBbdX2DhUNcaZptvS8NPKZES41vr_H=bA@mail.gmail.com>
+Subject: Re: [GIT PULL] tpmdd: three bug fixes for v6.4-rc2
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 7:47=E2=80=AFPM Esteban Blanc <eblanc@baylibre.com>=
+On Mon, May 15, 2023 at 5:02=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
  wrote:
-> On Fri May 12, 2023 at 7:22 PM CEST,  wrote:
-> > Fri, May 12, 2023 at 04:17:53PM +0200, Esteban Blanc kirjoitti:
-
-...
-
-> > > +/* Multiplier for ppb conversions */
-> > > +#define PPB_MULT (1000000000LL)
-> >
-> > We have something in units.h. Can you use generic macro?
 >
-> I found GIGA, NANO and NANOHZ_PER_HZ that have the same value in
-> units.h. However I'm not sure any of them have the correct meaning in
-> this situation.
-
-MULT[IPLIER] has no units AFAIU, so SI macro can be used, no? NANO or
-GIGA depends on what the actual sign of the exponent of the multiplier
-is. Write it on paper and check the exponent in the equation(s) and
-hence decide which one to use.
-
-...
-
-> > > +   if (tmp < 0)
-> > > +           tmp -=3D TICKS_PER_HOUR / 2LL;
-> > > +   else
-> > > +           tmp +=3D TICKS_PER_HOUR / 2LL;
-> >
-> > Is it guaranteed to have no overflow here?
+> are available in the Git repository at:
 >
-> We know from `tps6594_rtc_set_offset` that the loaded value can't be
-> more than 277774 (register default value is 0), So `tmp` can't exceed
-> 277774000000000 which is lower than 2^63-1. No overflow here.
->
-> TICK_PER_HOUR / 2LL =3D 117964800, so at the end of this computation,
-> `tmp` can have a maximum value of 277774117964800 which is still
-> inferior to 2^63-1.
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jarkkojs/linux-tpmdd.git/=
+ tpmdd-v6.4-rc2
 
-Please add a respective comment.
---=20
-With Best Regards,
-Andy Shevchenko
+That didn't work at all.
+
+That "jarkkojs" part of the path seems to be just wrong, and it should
+be - like always before - just "jarkko".
+
+I pulled it from the correct location, but I don't know how you messed
+that up - maybe just a fat-fingered mistaken edit, or maybe something
+else.
+
+So you might try to see what went wrong...
+
+              Linus
