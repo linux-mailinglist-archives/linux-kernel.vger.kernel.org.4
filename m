@@ -2,199 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDAC7066C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDA67066CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjEQLeI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 May 2023 07:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52526 "EHLO
+        id S230323AbjEQLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjEQLeE (ORCPT
+        with ESMTP id S229670AbjEQLe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:34:04 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183294C11;
-        Wed, 17 May 2023 04:34:01 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-504d149839bso152268a12.1;
-        Wed, 17 May 2023 04:34:01 -0700 (PDT)
+        Wed, 17 May 2023 07:34:26 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3710C40EB
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:34:20 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 085B63F436
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:34:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684323255;
+        bh=HKuR0leq9JWpjhp3ZyDhJpalTo2jRYOfikwPIv5EKao=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=H1SOY8kTKiuNFjD5E1wIRNX+s0FQ+v8Sgd/PaDshEoJBCYJlfyoZjowMqKrOf89bv
+         rJYyKdRknieeiXj7I98pg6KcWzlgrrl0YcUrOXjRclRe2KynMzCqzBXRug57Q9Lna2
+         qfCMODyuNv6JldFaoEx1s84+epGqE0/a/1EKFgCpslOnIHzqRQhMW0EmQ01DAq1dNO
+         ZsPK5dT7xseXBRWx5BV1lQ5yfS4VhAdfz840hbvGdE14B0cBmiVaHyXyiZp0sY99wR
+         OSzsvsi1aHwuZpc9Q5dfDQz3ZAd64ayrk26sjC4k3H6+ekHgcmoXKLgBqwuF+hzEIV
+         DMYHo97OJsmlg==
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-50bf9e97bdbso801045a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:34:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684323239; x=1686915239;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NlEG0hm+m0LqnpRE/YfUbTnxdtj54gtmMkfXrapS7vc=;
-        b=NvjXDp6onPwaLKHghhWNrCnp89SplC3P/iIjRpGec122XaLba+oZ8gsUoF4egqEdAR
-         XQfNHl8Y7dW3zc4/aeB0MHkdPkQS3sJ6HJqyF8dskx+kLuCwEssoXPAxBAk6gJr9T5rl
-         5i7MGSKM2khP/B/69S0ClAh1Oh3b+L8YEKx43CmGn5KxudY4s5oUkF/28wHln0jaLJqx
-         DdlgTiC9s9Wcy7VXSuKtoDNjEkSAQ7AuxxX35w+5khqGx1SsBAR2w6ptZcY9jVor9H47
-         891+OBBm1pFrve06QpoOPwPa2UrAUfynRWhK54KHx79yHP0u3LEojK+U1OxaXIfoh5yt
-         hhTg==
-X-Gm-Message-State: AC+VfDwW0JSy+lkuwTPmjhzsJp7MAUAndQUDJCbxbHJsVHMIQFiijDjj
-        Pm0R3PnAduy8sutb3ZjFESUtJo/g+ZKWSaFI3DI=
-X-Google-Smtp-Source: ACHHUZ7+ObBH8x061XkkaHhi1MDSE/QM63jGlqWY1s8zB1JPk1RyjG+llhRb6SXwezSr+70tDTpE8u9hjyJ5lCARd2Y=
-X-Received: by 2002:a05:6402:40c3:b0:502:1f7b:f069 with SMTP id
- z3-20020a05640240c300b005021f7bf069mr2690450edb.2.1684323239338; Wed, 17 May
- 2023 04:33:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517105235.29176-1-ilpo.jarvinen@linux.intel.com> <20230517105235.29176-4-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20230517105235.29176-4-ilpo.jarvinen@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
+        d=1e100.net; s=20221208; t=1684323254; x=1686915254;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HKuR0leq9JWpjhp3ZyDhJpalTo2jRYOfikwPIv5EKao=;
+        b=C5dzLnV54j5qkh7ta6cUrmMRtpBjGoDYtR0oH9SYqkxg9+4GFCKM8G8F4xj7iiI75y
+         fgznerruvJgPaOi5Sy8kwGuEioA6Qq/EW6+IeK+qkrNBUpRLHmlxOm/Rb3tBRO1ApKnm
+         2xbkINYpgIvIkztQYRgb3khuZxGhRtfriKUNR+R+mmMZGDPKU/5PnnLNT5gGsgFVNE+G
+         4HbbrjT40n7uURc+yuduRiC9X6jmQfRae2bo565rCM6+dVSmDYpRfHSFU8B2OHiPktP8
+         Dk/4313JO7nzM1GHtrly5PkcprNnuMi4E/aLyf2W5zSDDccxFVNpj+UHTOTmt7bm/xKI
+         mrww==
+X-Gm-Message-State: AC+VfDxi/ePHBaotd38KLQIPCpTf7TXuyevYw1MreNDKAXD4xQejJqdF
+        wk32dJGqQV2/Oc9dA1lNC7LTWpAZuTnwzRmlGDSiRDYgWlzC1ediRrlZX+ZljOYI3tn61Qey6FX
+        3dfFsY7Xz/87n55iU7yp1W0r8LbJ5ExIzsLhjLUrScA==
+X-Received: by 2002:a17:907:6e10:b0:968:1e8:a754 with SMTP id sd16-20020a1709076e1000b0096801e8a754mr27137045ejc.72.1684323254548;
+        Wed, 17 May 2023 04:34:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5hPlyLnjaPKKQqlm5H00NNoerrsreBCcVJ8rGUa9razY3/8sGLsh64ku66WUbR5wlgxgjTvA==
+X-Received: by 2002:a17:907:6e10:b0:968:1e8:a754 with SMTP id sd16-20020a1709076e1000b0096801e8a754mr27137015ejc.72.1684323254166;
+        Wed, 17 May 2023 04:34:14 -0700 (PDT)
+Received: from amikhalitsyn.local (dslb-088-074-206-207.088.074.pools.vodafone-ip.de. [88.74.206.207])
+        by smtp.gmail.com with ESMTPSA id p1-20020a170906838100b009662b4230cesm12404387ejx.148.2023.05.17.04.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 04:34:13 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     davem@davemloft.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Luca Boccassi <bluca@debian.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: [PATCH net-next v5 0/3] Add SCM_PIDFD and SO_PEERPIDFD
 Date:   Wed, 17 May 2023 13:33:48 +0200
-Message-ID: <CAJZ5v0hQAsZWECyqHxiB=qX=dNAxuEJaxkiayajYH0ykjXLDtA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/9] PCI/ASPM: Use RMW accessors for changing LNKCTL
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jesse Barnes <jbarnes@virtuousgeek.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Shaohua Li <shaohua.li@intel.com>,
-        Thomas Renninger <trenn@suse.de>,
-        Greg Kroah-Hartman <gregkh@suse.de>,
-        linux-kernel@vger.kernel.org,
-        Dean Luick <dean.luick@cornelisnetworks.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Message-Id: <20230517113351.308771-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 12:53 PM Ilpo Järvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> Don't assume that the device is fully under the control of ASPM and use
-> RMW capability accessors which do proper locking to avoid losing
-> concurrent updates to the register values.
->
-> If configuration fails in pcie_aspm_configure_common_clock(), the
-> function attempts to restore the old PCI_EXP_LNKCTL_CCC settings. Store
-> only the old PCI_EXP_LNKCTL_CCC bit for the relevant devices rather
-> than the content of the whole LNKCTL registers. It aligns better with
-> how pcie_lnkctl_clear_and_set() expects its parameter and makes the
-> code more obvious to understand.
->
-> Fixes: 4ec73791a64b ("PCI: Work around Pericom PCIe-to-PCI bridge Retrain Link erratum")
-> Fixes: 86fa6a344209 ("PCI: Factor out pcie_retrain_link() function")
-> Fixes: 2a42d9dba784 ("PCIe: ASPM: Break out of endless loop waiting for PCI config bits to switch")
-> Fixes: 7d715a6c1ae5 ("PCI: add PCI Express ASPM support")
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Cc: stable@vger.kernel.org
+1. Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+but it contains pidfd instead of plain pid, which allows programmers not
+to care about PID reuse problem.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+2. Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
+This thing is direct analog of SO_PEERCRED which allows to get plain PID.
 
-> ---
->  drivers/pci/pcie/aspm.c | 39 ++++++++++++++++-----------------------
->  1 file changed, 16 insertions(+), 23 deletions(-)
->
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index dde1ef13d0d1..426fb0bd8e3a 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -213,7 +213,6 @@ static bool pcie_wait_for_retrain(struct pci_dev *pdev)
->  static bool pcie_retrain_link(struct pcie_link_state *link)
->  {
->         struct pci_dev *parent = link->pdev;
-> -       u16 reg16;
->
->         /*
->          * Ensure the updated LNKCTL parameters are used during link
-> @@ -224,17 +223,14 @@ static bool pcie_retrain_link(struct pcie_link_state *link)
->         if (!pcie_wait_for_retrain(parent))
->                 return false;
->
-> -       pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
-> -       reg16 |= PCI_EXP_LNKCTL_RL;
-> -       pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
-> +       pcie_capability_set_word(parent, PCI_EXP_LNKCTL, PCI_EXP_LNKCTL_RL);
->         if (parent->clear_retrain_link) {
->                 /*
->                  * Due to an erratum in some devices the Retrain Link bit
->                  * needs to be cleared again manually to allow the link
->                  * training to succeed.
->                  */
-> -               reg16 &= ~PCI_EXP_LNKCTL_RL;
-> -               pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
-> +               pcie_capability_clear_word(parent, PCI_EXP_LNKCTL, PCI_EXP_LNKCTL_RL);
->         }
->
->         return pcie_wait_for_retrain(parent);
-> @@ -248,7 +244,7 @@ static bool pcie_retrain_link(struct pcie_link_state *link)
->  static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->  {
->         int same_clock = 1;
-> -       u16 reg16, parent_reg, child_reg[8];
-> +       u16 reg16, parent_old_ccc, child_old_ccc[8];
->         struct pci_dev *child, *parent = link->pdev;
->         struct pci_bus *linkbus = parent->subordinate;
->         /*
-> @@ -270,6 +266,7 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->
->         /* Port might be already in common clock mode */
->         pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
-> +       parent_old_ccc = reg16 & PCI_EXP_LNKCTL_CCC;
->         if (same_clock && (reg16 & PCI_EXP_LNKCTL_CCC)) {
->                 bool consistent = true;
->
-> @@ -289,22 +286,16 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->         /* Configure downstream component, all functions */
->         list_for_each_entry(child, &linkbus->devices, bus_list) {
->                 pcie_capability_read_word(child, PCI_EXP_LNKCTL, &reg16);
-> -               child_reg[PCI_FUNC(child->devfn)] = reg16;
-> -               if (same_clock)
-> -                       reg16 |= PCI_EXP_LNKCTL_CCC;
-> -               else
-> -                       reg16 &= ~PCI_EXP_LNKCTL_CCC;
-> -               pcie_capability_write_word(child, PCI_EXP_LNKCTL, reg16);
-> +               child_old_ccc[PCI_FUNC(child->devfn)] = reg16 & PCI_EXP_LNKCTL_CCC;
-> +               pcie_capability_clear_and_set_word(child, PCI_EXP_LNKCTL,
-> +                                                  PCI_EXP_LNKCTL_CCC,
-> +                                                  same_clock ? PCI_EXP_LNKCTL_CCC : 0);
->         }
->
->         /* Configure upstream component */
-> -       pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
-> -       parent_reg = reg16;
-> -       if (same_clock)
-> -               reg16 |= PCI_EXP_LNKCTL_CCC;
-> -       else
-> -               reg16 &= ~PCI_EXP_LNKCTL_CCC;
-> -       pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
-> +       pcie_capability_clear_and_set_word(parent, PCI_EXP_LNKCTL,
-> +                                          PCI_EXP_LNKCTL_CCC,
-> +                                          same_clock ? PCI_EXP_LNKCTL_CCC : 0);
->
->         if (pcie_retrain_link(link))
->                 return;
-> @@ -312,9 +303,11 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->         /* Training failed. Restore common clock configurations */
->         pci_err(parent, "ASPM: Could not configure common clock\n");
->         list_for_each_entry(child, &linkbus->devices, bus_list)
-> -               pcie_capability_write_word(child, PCI_EXP_LNKCTL,
-> -                                          child_reg[PCI_FUNC(child->devfn)]);
-> -       pcie_capability_write_word(parent, PCI_EXP_LNKCTL, parent_reg);
-> +               pcie_capability_clear_and_set_word(child, PCI_EXP_LNKCTL,
-> +                                                  PCI_EXP_LNKCTL_CCC,
-> +                                                  child_old_ccc[PCI_FUNC(child->devfn)]);
-> +       pcie_capability_clear_and_set_word(parent, PCI_EXP_LNKCTL,
-> +                                          PCI_EXP_LNKCTL_CCC, parent_old_ccc);
->  }
->
->  /* Convert L0s latency encoding to ns */
-> --
-> 2.30.2
->
+3. Add SCM_PIDFD / SO_PEERPIDFD kselftest
+
+Idea comes from UAPI kernel group:
+https://uapi-group.org/kernel-features/
+
+Big thanks to Christian Brauner and Lennart Poettering for productive
+discussions about this and Luca Boccassi for testing and reviewing this.
+
+=== Motivation behind this patchset
+
+Eric Dumazet raised a question:
+> It seems that we already can use pidfd_open() (since linux-5.3), and
+> pass the resulting fd in af_unix SCM_RIGHTS message ?
+
+Yes, it's possible, but it means that from the receiver side we need
+to trust the sent pidfd (in SCM_RIGHTS),
+or always use combination of SCM_RIGHTS+SCM_CREDENTIALS, then we can
+extract pidfd from SCM_RIGHTS,
+then acquire plain pid from pidfd and after compare it with the pid
+from SCM_CREDENTIALS.
+
+A few comments from other folks regarding this.
+
+Christian Brauner wrote:
+
+>Let me try and provide some of the missing background.
+
+>There are a range of use-cases where we would like to authenticate a
+>client through sockets without being susceptible to PID recycling
+>attacks. Currently, we can't do this as the race isn't fully fixable.
+>We can only apply mitigations.
+
+>What this patchset will allows us to do is to get a pidfd without the
+>client having to send us an fd explicitly via SCM_RIGHTS. As that's
+>already possibly as you correctly point out.
+
+>But for protocols like polkit this is quite important. Every message is
+>standalone and we would need to force a complete protocol change where
+>we would need to require that every client allocate and send a pidfd via
+>SCM_RIGHTS. That would also mean patching through all polkit users.
+
+>For something like systemd-journald where we provide logging facilities
+>and want to add metadata to the log we would also immensely benefit from
+>being able to get a receiver-side controlled pidfd.
+
+>With the message type we envisioned we don't need to change the sender
+>at all and can be safe against pid recycling.
+
+>Link: https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/154
+>Link: https://uapi-group.org/kernel-features
+
+Lennart Poettering wrote:
+
+>So yes, this is of course possible, but it would mean the pidfd would
+>have to be transported as part of the user protocol, explicitly sent
+>by the sender. (Moreover, the receiver after receiving the pidfd would
+>then still have to somehow be able to prove that the pidfd it just
+>received actually refers to the peer's process and not some random
+>process. – this part is actually solvable in userspace, but ugly)
+
+>The big thing is simply that we want that the pidfd is associated
+>*implicity* with each AF_UNIX connection, not explicitly. A lot of
+>userspace already relies on this, both in the authentication area
+>(polkit) as well as in the logging area (systemd-journald). Right now
+>using the PID field from SO_PEERCREDS/SCM_CREDENTIALS is racy though
+>and very hard to get right. Making this available as pidfd too, would
+>solve this raciness, without otherwise changing semantics of it all:
+>receivers can still enable the creds stuff as they wish, and the data
+>is then implicitly appended to the connections/datagrams the sender
+>initiates.
+
+>Or to turn this around: things like polkit are typically used to
+>authenticate arbitrary dbus methods calls: some service implements a
+>dbus method call, and when an unprivileged client then issues that
+>call, it will take the client's info, go to polkit and ask it if this
+>is ok. If we wanted to send the pidfd as part of the protocol we
+>basically would have to extend every single method call to contain the
+>client's pidfd along with it as an additional argument, which would be
+>a massive undertaking: it would change the prototypes of basically
+>*all* methods a service defines… And that's just ugly.
+
+>Note that Alex' patch set doesn't expose anything that wasn't exposed
+>before, or attach, propagate what wasn't before. All it does, is make
+>the field already available anyway (the struct ucred .pid field)
+>available also in a better way (as a pidfd), to solve a variety of
+>races, with no effect on the protocol actually spoken within the
+>AF_UNIX transport. It's a seamless improvement of the status quo.
+
+===
+
+Git tree:
+https://github.com/mihalicyn/linux/tree/scm_pidfd
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Lennart Poettering <mzxreary@0pointer.de>
+Cc: Luca Boccassi <bluca@debian.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Stanislav Fomichev <sdf@google.com>
+
+Tested-by: Luca Boccassi <bluca@debian.org>
+
+Alexander Mikhalitsyn (3):
+  scm: add SO_PASSPIDFD and SCM_PIDFD
+  net: core: add getsockopt SO_PEERPIDFD
+  selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
+
+ arch/alpha/include/uapi/asm/socket.h          |   3 +
+ arch/mips/include/uapi/asm/socket.h           |   3 +
+ arch/parisc/include/uapi/asm/socket.h         |   3 +
+ arch/sparc/include/uapi/asm/socket.h          |   3 +
+ include/linux/net.h                           |   1 +
+ include/linux/socket.h                        |   1 +
+ include/net/scm.h                             |  39 +-
+ include/uapi/asm-generic/socket.h             |   3 +
+ net/core/sock.c                               |  44 ++
+ net/mptcp/sockopt.c                           |   1 +
+ net/unix/af_unix.c                            |  34 +-
+ tools/include/uapi/asm-generic/socket.h       |   3 +
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/af_unix/Makefile  |   3 +-
+ .../testing/selftests/net/af_unix/scm_pidfd.c | 430 ++++++++++++++++++
+ 15 files changed, 564 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
+
+-- 
+2.34.1
+
