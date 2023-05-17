@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE447062BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C707062C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjEQI0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44422 "EHLO
+        id S230422AbjEQI1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjEQI0Z (ORCPT
+        with ESMTP id S230345AbjEQI0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:26:25 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6412D3AB0;
-        Wed, 17 May 2023 01:26:19 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-24e0c29733fso554840a91.2;
-        Wed, 17 May 2023 01:26:19 -0700 (PDT)
+        Wed, 17 May 2023 04:26:43 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF0044A5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:26:42 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1b2so416507a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:26:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684311979; x=1686903979;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KTc75nBooVuD86e3sizZpv99O1kaziV5RzesGn9lJ30=;
-        b=fN7P3xozEcsdZ4tKVtucSdhKOuWQ/7nxXF++xcFuu9tZMOCdXRPPK29xCPtANLYhw3
-         L1xJlALCPenPxQeO6DFFYCvvaak4kjFAMGJiniyPGzO2WIN5i+jEERe0QQmMr0EquT9x
-         IFlLbuGe3SEu4WtHB1MbPEBglsjbPoP4EQF5VcP40O37Mct922mgznPv9TmSdkPwQXZJ
-         vmkjadqcPkQ3/K7ubFULfg0Fsxv4Gykav5nopIE5b0J+KYbFMEImZRI4C2zJCHePcC4n
-         n4kXPIz1s6OEIRrQYAt+Xp5Z2gomExmQZ+MrV1QfwCORNM/DglZ3Q7KOgYzJ7vuz65Fb
-         Wk+w==
+        d=linaro.org; s=google; t=1684312000; x=1686904000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SIOrvUUAtZyi4FUcHTM2x45qSYsRRVl2b97WHgQpvzE=;
+        b=eQ3g/7Rm2/GZIotGQTg6KTEm2qew6cAgGks8iRaNvcPsWwXAFYZsrAKPtZC9leV57r
+         OkmcZ+onUsyadK95vLiahEr/ht/fI0Km4qnow2gVjD3f3ENWjmmVMB9MxWk1SGhvKDye
+         0N03RnFIiWFqMa+0Ph3YnDkIgj0qUmM0SYmv4rMMgY0XJP0l1LLZywu3oWugm0spIpGB
+         +cgBR81BvIQBEGwE30xAM/NQIg2+rf9dXi9aKRVxIFhxTUCcgYLiYqgXRU9SnDPU6KMi
+         NUbw6jjFT7jfkaA1+YE+xKERJR8AeGWms3MEpI5n4z32X0yU35nuUcDaN4eRmlsVDLKB
+         M64Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684311979; x=1686903979;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KTc75nBooVuD86e3sizZpv99O1kaziV5RzesGn9lJ30=;
-        b=FUjy4CsQMyOAXqbALrfeFWSUOw6fKZhceps8aHb1QtrXlHPbXCq25ZMhOKpB/T4dAx
-         htQj5NlpvXwmfKwME9XWA/WQJCmk0QZO7DCte2hD0FJOZZpxruvQ1MscjDi0n0ouLrGL
-         d2dBB/vwF5q9Lsq/EgSwf2MXOTndVU+1HavB8EbZe8uZVvHfx+k5ddFXeIY/JaEePz4D
-         Z0w9bf4frMbKjQDjN4kjGEnkhLQyErdXuTQGl17LeLLfYULaqF68bNkwx+OMuUDlXc4X
-         9mWzENYtXoJTeXdkC5Zz8PIx/zU3y+uNTLsu5a0CxqVnyz1qb9GUfif4q4FDrxJvJtad
-         YAoA==
-X-Gm-Message-State: AC+VfDxyyQ/wIfTh1nJi3F89u6LFQXUwAmcHcmb53Wded1jIRFm/cDrH
-        tWijPdXIU7yMSHUF0CK32JzOxhsL7Hlf3zqjAyg=
-X-Google-Smtp-Source: ACHHUZ6bgofSXXBFEOG6jSKDxllcNZzxOXpx6wxTEuak6lNpoNIQxC2rjFfGBur9TQ5JF9psG0xbQnXhKF31UrkSD4g=
-X-Received: by 2002:a17:90b:3a8e:b0:247:6ead:d0ed with SMTP id
- om14-20020a17090b3a8e00b002476eadd0edmr40836957pjb.28.1684311978781; Wed, 17
- May 2023 01:26:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684312000; x=1686904000;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SIOrvUUAtZyi4FUcHTM2x45qSYsRRVl2b97WHgQpvzE=;
+        b=ajAenf0sjNuvcEl7oWJWnRnd7kKVDjcjh7Jnx5+UXN5VCpY4ovgxiuN4VXBLuf3xLP
+         Xgdc/Bn9Ko2VD7CXMzTOpLGVlb1MBvnghP11lvBEQySJfPAwsYpoDJIOsot8C4CKTTb8
+         Hb2VGJ83lNdUogmTb6DLBG8Own4ryOgTRMDOmdVptxV+39NY/R+Zp8e++/TiFfyXWYT7
+         tsvd94YK5g6JxKbG1yI9FVWA71S6xxRn6V9tVeoOKVdswnrJHshOMHPxQuWfWi+cyPEL
+         f6Nwzq7k5no91WF1QE/KP+vnEj9aZ7fwuSYk5KSW78fyhoOOVk2pHieM96Q6zDTqK6yz
+         PQxw==
+X-Gm-Message-State: AC+VfDxvXHNwxozAR71JJpPMegRL6Ctxxc5IFs75v7oHySe2X8fYAiAZ
+        jkMv7iH21hHIHqF3wXI4RScagA==
+X-Google-Smtp-Source: ACHHUZ7eptdbo1d96sX474rlETqgth2MCTCvWmKHpGMhDBMtcdSR5IZGuNGlLOAJwIKRGbpoWAwKcw==
+X-Received: by 2002:aa7:d551:0:b0:508:3f06:8fd1 with SMTP id u17-20020aa7d551000000b005083f068fd1mr1386249edr.29.1684312000564;
+        Wed, 17 May 2023 01:26:40 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id u24-20020a056402111800b0050bc4eb9846sm9010673edv.1.2023.05.17.01.26.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 01:26:40 -0700 (PDT)
+Message-ID: <50cc1727-999f-9b7a-ef09-14461fa4ddfb@linaro.org>
+Date:   Wed, 17 May 2023 10:26:38 +0200
 MIME-Version: 1.0
-References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
- <20230511231317.158214-1-bstruempfel@ultratronik.de> <20230511231317.158214-2-bstruempfel@ultratronik.de>
- <ZF2y1YNkSbXzRm4V@finisterre.sirena.org.uk> <CAEktqcthEG=AWTk9VcVkwexH6xV_xHw1hqxkkPkD=d1NqPKqSg@mail.gmail.com>
- <ZGF+Ei5sn4ci41LU@finisterre.sirena.org.uk>
-In-Reply-To: <ZGF+Ei5sn4ci41LU@finisterre.sirena.org.uk>
-From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Date:   Wed, 17 May 2023 10:26:07 +0200
-Message-ID: <CAEktqcsYDn8Gncf8Mk-7dCX+qA=ZTAu_JFTNi-KL0UjPnmG=pw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] spi: dt-bindings: Introduce spi-mosi-idle-low flag
-To:     Mark Brown <broonie@kernel.org>
-Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+References: <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
+ <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
+ <20230515105035.kzmygf2ru2jhusek@skbuf> <20230516201000.49216ca0@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230516201000.49216ca0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,38 +86,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for your feedback
+On 17/05/2023 05:10, Jakub Kicinski wrote:
+> On Mon, 15 May 2023 13:50:35 +0300 Vladimir Oltean wrote:
+>> On Mon, May 15, 2023 at 09:45:25AM +0200, Krzysztof Kozlowski wrote:
+>>> Some boards use SJA1105 Ethernet Switch with SPI CPHA, while ones with
+>>> SJA1110 use SPI CPOL, so document this to fix dtbs_check warnings:
+>>>
+>>>   arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>>
+>> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> 
+> Is my instinct that this should go to net-next correct?
 
-Am Mo., 15. Mai 2023 um 02:34 Uhr schrieb Mark Brown <broonie@kernel.org>:
->
-> On Fri, May 12, 2023 at 08:54:19AM +0200, B=C3=B6rge Str=C3=BCmpfel wrote=
-:
-> > Am Fr., 12. Mai 2023 um 05:30 Uhr schrieb Mark Brown <broonie@kernel.or=
-g>:
->
-> > > If this is always required for a given device (which I'd expect to be
-> > > the case) why configure it through DT?  I know we've got some legacy
-> > > stuff like that but not all legacy DT choices were good and no need t=
-o
-> > > continue the pattern.
->
-> > Yes this will always be the case for specific spi-device, spi-controlle=
-r
-> > combinations. Just to make sure, that I understand your suggestion
-> > correctly: You propose to check from the specific spi-device-driver, if
-> > the spi-controller supports this particular mode-bit, and then set it i=
-f
-> > it does and thereby loose the need for the DT entry completely?
->
-> Yes, we shouldn't need DT here.  Though the device should just be
-> setting this unconditionally if it's always required.
+It would be great missing net-next was pointed out by checkpatch.pl.
 
-I agree with you, that we should not need DT here. I will remove the
-dt-binding in the next patch version.
+Best regards,
+Krzysztof
 
-However I am not so sure about setting it unconditionally, since this
-is dependent on the spi-controller. Not all spi-controller show this
-behavior, that they use a high mosi line in idle mode and have the
-ability to change this. As far as I know, another common behavior
-is that the mosi just keeps the last state which it transmitted. In this
-case, devices like Neopixel would still work without this mode bit.
