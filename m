@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0569F706C45
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67968706C49
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjEQPKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S231617AbjEQPK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjEQPKb (ORCPT
+        with ESMTP id S231687AbjEQPKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:10:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C81987;
-        Wed, 17 May 2023 08:10:13 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 17 May 2023 11:10:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB6AA5D4;
+        Wed, 17 May 2023 08:10:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 81954660588A;
-        Wed, 17 May 2023 16:10:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684336212;
-        bh=BrW8utkPJOxoIND7izOm/XEslPXwZWFXJRck8b/4gfM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FuRybqK3UvoHRJVoF0gtJq7kqiuCcsKekfjjhb5FSLWjBNJklmmij6wRSym/gTVSd
-         PeUmkXloGmT8DMC7ypKNSwpPCi7HwtIsTfb5dDltnzn7XyId5bDAHyBsuq99dbKbaO
-         qV2acIPdh7HYFcfPWTHkypsPGJEgiqHDkL/41RfQYK3JvWfyc3bM/eqAEChYLWPkUK
-         e3xuHQXJ9jR9m+sngBhcfi4FCD0PuoDq5/oqFLOmikXaNrbDjoHuuBLeYPTDFrkxOJ
-         0mRHrdJiPmYhd52jCx+gvylcbI/CezvomXKablFTISBJWRzIu6KZ9eO8GooGD38j+K
-         u5x+MqDbpHy1w==
-Message-ID: <aee5f540-4f8b-f087-57d4-bfdafa4a0568@collabora.com>
-Date:   Wed, 17 May 2023 17:10:08 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2A1A60FBD;
+        Wed, 17 May 2023 15:10:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CEE0C433EF;
+        Wed, 17 May 2023 15:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684336238;
+        bh=Ny0LoiDv3bdptEg6qSZYN06fzaz93keaVkr7dslnSLA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bjrUez/4cBi2daN/lwRZUVJr2uMICn2TiWwRJKY5GVljwxRJOtPmsMt6z2oSfhDDc
+         Y7RwIrQi3vSr6HeQjOf4WI+hDofp6G4GK7v7A3NtM9jpr9qKtqUjUbl7UPV/I76NJ5
+         Sa0bdeTErhYfHu7YdrPjpP7dzFT9ozbHgkDBuMpbjmT5Sr5VbUUP04Qu0lXHs9R4zh
+         IhgpGJd+v+zIHLhCMnrzGT4MDkq3rNDnZkTqGmnXqiI82k0+LCYUDakvZKOz2OdisR
+         4XEPouomRWHk9Irbh7o/AGGGwNbXx/JHMW977iXccU/BTP7tV6BAIDzEvDM06yKhI1
+         Cyc3s/ZLhGWSQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pzInW-0005qx-Fz; Wed, 17 May 2023 17:10:39 +0200
+Date:   Wed, 17 May 2023 17:10:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <ZGTubmBViN9rTiZC@hovoldconsulting.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-4-quic_kriskura@quicinc.com>
+ <ZGNy6FvVrBjYmorz@hovoldconsulting.com>
+ <b2954b92-8b12-700a-af50-b914af7b0ace@quicinc.com>
+ <ZGSDr08h3Go1Dk8C@hovoldconsulting.com>
+ <82a8c414-bfa8-5066-fb68-1ac117b76c4e@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/5] ASoC: mediatek: mt8188-mt6359: register hdmi/dp jack
- pins
-Content-Language: en-US
-To:     =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20230517111534.32630-1-trevor.wu@mediatek.com>
- <20230517111534.32630-3-trevor.wu@mediatek.com>
- <154497b3-f5c7-45d6-edd5-729642b80be5@collabora.com>
- <9685a64561fc90d592481ae5e95d1e849fe3c55b.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <9685a64561fc90d592481ae5e95d1e849fe3c55b.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82a8c414-bfa8-5066-fb68-1ac117b76c4e@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,52 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/05/23 14:10, Trevor Wu (吳文良) ha scritto:
-> On Wed, 2023-05-17 at 13:31 +0200, AngeloGioacchino Del Regno wrote:
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>
->>
->> Il 17/05/23 13:15, Trevor Wu ha scritto:
->>> Some userspace applications need jack control events, so register
->>> hdmi
->>> and dp jack pins to activate jack control events.
->>>
->>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
->>> ---
->>>    sound/soc/mediatek/mt8188/mt8188-mt6359.c | 27
->>> +++++++++++++++++++----
->>>    1 file changed, 23 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
->>> b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
->>> index 833bc362dad2..6c3f36e2fffd 100644
->>> --- a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
->>> +++ b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
->>> @@ -151,6 +151,20 @@ struct mt8188_mt6359_priv {
->>>        struct snd_soc_jack hdmi_jack;
->>>    };
->>>
->>> +static struct snd_soc_jack_pin mt8188_hdmi_jack_pins[] = {
->>> +     {
->>> +             .pin = "HDMI",
->>
->> "HDMI Jack" is more consistent with the snd_soc_jack_new_pins() call
->> performed
->> later.
+On Wed, May 17, 2023 at 05:51:45PM +0530, Krishna Kurapati PSSNV wrote:
+> On 5/17/2023 1:05 PM, Johan Hovold wrote:
+
+> >>>> +	temp = readl(regs + DWC3_XHCI_HCSPARAMS1);
+> >>>> +	if (HCS_MAX_PORTS(temp) != (dwc->num_usb3_ports + dwc->num_usb2_ports)) {
+> >>>> +		dev_err(dwc->dev,
+> >>>> +			"Mismatched reported MAXPORTS (%d)\n", HCS_MAX_PORTS(temp));
+> >>>> +		ret = -EINVAL;
+> >>>> +		goto unmap_reg;
+> >>>> +	}
+> >>>
+> >>> Not sure this is needed either.
+> >>>
+> >>> Could this risk regressing platforms which does not have currently have
+> >>> all PHYs described in DT?
+> >>>
+> >> No, it doesn't. AFAIK, this only tells how many ports are present as per
+> >> the core consultant configuration of the device. I tried to explain what
+> >> would happen incase phy's are not present in DT in [2] & [3].
+> > 
+> > Right, whether the PHYs are described in DT is not directly related to
+> > this.
+> > 
+> > As long as HCS_MAX_PORTS by definition (assumption) is always
+> > (dwc->num_usb3_ports + dwc->num_usb2_ports) any such machines would
+> > continue to work.
+> > 
+> > But if you want to catch machines where this assumption does not hold,
+> > you could also end up regressing machines which have so far been working
+> > despite these numbers not adding up.
+> > 
+> > That may be acceptable, but I'm still not sure what the value of this
+> > check is (e.g. as xhci core will handle basic sanity checks like usb2 +
+> > usb3 <= max_ports).
+
+>    Thanks for the review comments. Ideally the HCC_PARAMS1 must indicate 
+> total number of ports supported. If not then I believe the core 
+> consultant configuration is wrong.
 > 
-> Hi Angelo,
+> According to the spec:
 > 
-> I see jack_kctl_name_gen() will append "Jack" to the name if I don't
-> name the pin "HDMI Jack". Do you mean that I could directly use "HDMI
-> Jack" because ALSA uses the name finally?
+> "The MaxPorts value in the HCSPARAMS1 register defines the number of
+> Port Register Sets (e.g. PORTSC, PORTPMSC, and PORTLI register sets)."
 > 
+> So shouldn't the (usb2+usb3 ports be equal to MaxPorts to ensure each 
+> port properly accesses the respective PortSC etc., ?
 
-You're right and I just checked; the comment even says
-'remove redundant " Jack" from src_name'
+Sure, that's what is expected, but why do you need to add a check for
+this in the glue driver all of a sudden? Your series does not seem to
+rely on this. This is the xHCI driver's business (as is parsing these
+registers in the first place, really).
 
-So yes, the current names are fine. Sorry about that.
-
-Regards,
-Angelo
-
+Johan
