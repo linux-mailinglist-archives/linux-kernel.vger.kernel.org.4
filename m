@@ -2,254 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9C1706DD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51627706DDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjEQQRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44420 "EHLO
+        id S229564AbjEQQRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjEQQRK (ORCPT
+        with ESMTP id S229453AbjEQQRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:17:10 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F77133
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:17:08 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HE4DtC032144;
-        Wed, 17 May 2023 16:16:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2023-03-30;
- bh=gLFYdWov4P9Tmx/yE5Yd5P2g0kOW3P+UFXo1n95NLLE=;
- b=mOLywOmTyy/CRwtcR3vHRJ6eVPFgpcTkxQRZG45GB2LBlO3+Xl1jRIRyidXVv8mL24gP
- bHoYYfcoNRMlhVU35eCacwxIv0SPxq+ARBOWma0l9lNn6nTIwJJUCOy0WvJwCNfIb7yd
- +kqg0FPyOcrC/QWsaVK3ihkCqdtchUQWYl2ynY1RbkKcN/YFE3mgd7luNTPa0UrcCfxm
- HH004iumUd/9mi4T3yDqCCsbqtX5f8YD1FDfMYG3u6cQGhFcgJf3ZzvjDHNIVOzMMO29
- 8WzU5bzG90RpKo4BDDvFm8K5zt1t13dY/H+pOysJ7gBLHqiz2NXz2nUbEEK96t9oFAAV mw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj2kdpb7k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 16:16:46 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34HFuB25036269;
-        Wed, 17 May 2023 16:16:45 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2105.outbound.protection.outlook.com [104.47.70.105])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qmm02mvs0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 16:16:45 +0000
+        Wed, 17 May 2023 12:17:11 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2050.outbound.protection.outlook.com [40.107.6.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ECA1725;
+        Wed, 17 May 2023 09:17:09 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AeaZFj5GGPqjbKxqfJ2dkhxPXNTF+XjIQ6Zbdm1SxSdsigxNKIVAsn6h7oT6VaCfOK8QPlTRJHEIRTHWv/Du6Xnbj9wg46UAXIzQ6R5i+pXCyW+6vhaaS7loIyzZ4kbcHZAwfGMF+zOYdBpujvVl7t8BxjtIiiKJiHrqmP4rjRXYcwvnY/D/wrUS6wxBP1VCx+E3++7cix33XqiS74QJLEIwIkiW/BVDJdsOUsN/a/xqEjr78P+5nPI0v37QIHyLDNVtIwU0sXMMjJ6XGkB3yd3/yWb5fFNUQgAD60AKy0+EN3iTlJ8KOGtOLHL8hzo7AZH58TP++DPh7Uu2s5+O7w==
+ b=TEom7AzYLMavqaDmfj3CJZjQE5qKkgpOqLvazepiOUXRJSYsBgEKvHRDAvcJv8jWX3muBAnH4UMEOf/4S7sY+BvzkDDR+/Qndik3Xhnc7DsK2QuXKtQioJtuXU5/mQYQ6bPPSQLA3HZkAxi6CJM+86mwUpN7C00CQ8Rb7D77OPECQ2CKNhSbFMu+UcvQDaWZTUuJX4uwZ54xZ7y7wi27rV3fX6lnX846m1Zd55yONJeTv2gKX/IWIh5ouME/WScJseBx0x32k85nY7QAJ8HLFjWv92c9ui03aHOVpDQdwaujn/RcMDQx9Ty2V5/G1RCb2LYW827GC3xMGtFCQcR1vg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gLFYdWov4P9Tmx/yE5Yd5P2g0kOW3P+UFXo1n95NLLE=;
- b=koc64ffzwNX5xQrO5HyHWf940ARs3m1G8UNY922WsB3IJ6u8t3deT5vPDLLkfAfq0jAPpQig4+8zvF96JDuuQhM0M3HGiXurToZdqN2EIKR+gD/An3W2sqTciaHpxdLRFgGzM7kCOrgiiO28rIiFgoBFZhDEoLgDkRn2xikIm3bGF0aoCf9Kfa2guPsubvtiEvn0+ZFeAJzX/Dfs9/Vv6Chu4jshl9pwRJkGMpIQE91JosXNtxK6UzvRs86IurCYqeDl7xEDrIKRXJzT6wJGRDWSXuJIdvHqyiHqj8yKTMIDA2Q9jG61wtJ7ukmaJL/tzqpzI01c71OsAxDJISQhPA==
+ bh=fWXMhnO2IZwYzit5IYcLyjkmqox75MHq1vno0sgcIqk=;
+ b=KbHbp3R1QXGj+1Y6z+ZhmeNZ4AcSNjpsuZCUslIVph6/VJmh+8QBLJeZPEaPyRRahvlsm7+8+1kQJO27BjPnYldCi6tqaKyAErDZynU8fKSaa5Jq9mo4vjLCswZlBZORoLig40FfUKIsd2zGSyhSgbUPTCC9aJKN9SWs60eqZjTI7RyxPXtbisbr9RWF8wZN4ufq5bCkpAmE5qkxfO2Uol3AsG8LMcwyaQsrAZ6+4xGgeuKoLJ89SgY7bBN6Wkj7ly0cfgpx57jDRYupWurixrmHOPc/q90JzDHB3BJ4I4qPn71H685IV78p3GnDaL2bowxK8Ainwv8rRIdVJBPCiA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gLFYdWov4P9Tmx/yE5Yd5P2g0kOW3P+UFXo1n95NLLE=;
- b=sO/Rh1wptsV6K7HOuYQK8Iuhr/2d4xBIbVEKbYv1YNqwys7XsDsbINL1t3GR1qC38/rF92O8SKOn1FFAn8G22AwuJ2U+fWofCFEryEMe1xLM50rbtp8XjMLNf0tfqdDnt5fkXuBaqoEEvBm4ItUPXaDiAGFCLSqn8JsLeSwMQJE=
-Received: from CH3PR10MB6810.namprd10.prod.outlook.com (2603:10b6:610:140::15)
- by DS0PR10MB6078.namprd10.prod.outlook.com (2603:10b6:8:ca::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6387.33; Wed, 17 May 2023 16:16:43 +0000
-Received: from CH3PR10MB6810.namprd10.prod.outlook.com
- ([fe80::ba49:e5dd:6a80:37ae]) by CH3PR10MB6810.namprd10.prod.outlook.com
- ([fe80::ba49:e5dd:6a80:37ae%6]) with mapi id 15.20.6387.033; Wed, 17 May 2023
- 16:16:43 +0000
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-To:     akpm@linux-foundation.org
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, willy@infradead.org,
-        steven.sistare@oracle.com, ying.huang@intel.com,
-        mgorman@techsingularity.net, khalid@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] mm, compaction: Skip all non-migratable pages during scan
-Date:   Wed, 17 May 2023 10:15:54 -0600
-Message-Id: <20230517161555.84776-1-khalid.aziz@oracle.com>
-X-Mailer: git-send-email 2.37.2
+ bh=fWXMhnO2IZwYzit5IYcLyjkmqox75MHq1vno0sgcIqk=;
+ b=bX6lJ+lYLqa+rkaonL1QDj87c9AZ0Z6iLm+b90/S6mscsQ7TenSK3hklIBjJA3s8MNAkuMFrMTOpYKEfY745U/sF8iBFU7V7pqL7HF2dDqqp4O6o1+5U8DhMCFNXUjrqV0zwwDLvMyVCzaPhSCiik7RWCuRPQcTQZ2Tw8G0VRHI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by DB9PR04MB9962.eurprd04.prod.outlook.com (2603:10a6:10:4c4::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.34; Wed, 17 May
+ 2023 16:17:07 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.033; Wed, 17 May 2023
+ 16:17:07 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     vkoul@kernel.org
+Cc:     Frank.Li@nxp.com, devicetree@vger.kernel.org, fushi.peng@nxp.com,
+        imx@lists.linux.dev, kernel@pengutronix.de, kishon@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, shawnguo@kernel.org
+Subject: [PATCH v5 0/6] phy: cadence: salvo: some fixes and workarounds
+Date:   Wed, 17 May 2023 12:16:40 -0400
+Message-Id: <20230517161646.3418250-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: DS7PR03CA0264.namprd03.prod.outlook.com
- (2603:10b6:5:3b3::29) To CH3PR10MB6810.namprd10.prod.outlook.com
- (2603:10b6:610:140::15)
+X-ClientProxiedBy: SJ0PR03CA0041.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::16) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR10MB6810:EE_|DS0PR10MB6078:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95c525c8-dc09-414b-02d8-08db56f21a4a
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|DB9PR04MB9962:EE_
+X-MS-Office365-Filtering-Correlation-Id: fe549842-0a9b-46ce-1511-08db56f228a4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 09gs4wGan2yfGD6r6hfjNS9Aau9RmN6gszZSLAERVeO1u0wcdAEX286Oxg55bCYG++gCjyC7tPUMuBNHEkqfymFRDs/A95d9/dm2zXzwbRE9luZdO06xoam04iQITO58FSOn2OH+q7vcpJfXrBYjGJWqupAg6SIruxi2Qbw8kJzSwmNOXSbq1jm+W91R20bvr5V8U5dG79QEV81wcPCQX6VoH/agTl+qJAZKWYOi9IKnkLLApm8oj8IZw+sj3Pmfd6WFg4z5yNrU1cmPhphcPShxGFtm+yi8tMSmaFQ2/0apDYZi0tM5GTQgQH0gOqh8pzvjGbOZn7fDer/kQ8BX25QCtohI8QfCoFrvymdZSQ1BPaeXhBQjHROeiv1VsqG7+nzjSTnabwC/kz5pR/rdXBcVc+CdGCCBf+J9++TPqEZMqcyFroj0qLVmTP+/xVOJWIV6C7gU/sCSSvRIdtg/zzghbLCJEciSirMEClMuvMMvAKJxEQfDAFTn7rukBjQgu/6Ji1XcY6fbl9O7Jza/lyvP5XgmxkiJzHnPpgkVwG4V2lu/qYY5IUmff81d36vZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB6810.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(376002)(346002)(39860400002)(396003)(451199021)(5660300002)(8936002)(44832011)(83380400001)(26005)(6512007)(1076003)(6506007)(2616005)(38100700002)(186003)(8676002)(6666004)(41300700001)(6486002)(478600001)(86362001)(66476007)(316002)(66556008)(66946007)(36756003)(4326008)(6916009)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: es56MJuRrNqJeqsayqiifEaNyCAChQ3KuMga79VvCuCipENq8sAOel+IuigSwjTUxJsWHfFvoEAt9ADae0Fk5wMYGob6qidYpM+AA4lti+nEMi1hORLb4Md0YCZ0lXkhW1mNOkeq/dLJXn9aryKc471pr6laZ5o1qkiP66QnMJ37Z1wGKHzODwVuVXmKBeUzmxUx4zK5vfwHCgQxyb5nH2sknEegPubG1R7CjltoRX/01e9BN/wvN3szs/h9qRKLPIV+qgsb5fD7MWcQNt/xr+57DlPyEWr+R4dl0+0gqhllVYlBAWjY7RebOIiW7rJIziUQbCkiA4WpPE2Mzzo1E1yNyN/SnJchrg/ZcsDajRiYxIiW7XPKuISV2D41znUo//hS9dCKkpR0/iOo6TAFF5uzB6v3bZXXc3LuO5xsM60TYHmrL2TlEl+O9mDyjfHePX5wVU9aAE9PNGkamDV1ExffGodw00sbAB4QNCZ7k77ScG5HaOE0XuIqwTh3ClScVBJywt0czr+sEZQFE5F44ZquY6uFYmVqET3vDYGwnIXpLTADfRStJK1E5sEdBQGeyB4e0QQzFLjBbD5VkgkLwEbCCHbiT/s8qozGq9kCB9I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(366004)(346002)(376002)(451199021)(6916009)(316002)(66946007)(66476007)(8936002)(66556008)(4326008)(8676002)(2906002)(478600001)(6486002)(41300700001)(5660300002)(6666004)(7416002)(52116002)(966005)(26005)(1076003)(6512007)(6506007)(186003)(2616005)(83380400001)(36756003)(38350700002)(38100700002)(86362001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d2HZEtPhD1q16nKxjbNxCopL/LGdP6oIRlFs5INkAU0/Mq5HISWmyEFJQ8VZ?=
- =?us-ascii?Q?bCTl8KmhhhehThYWyogfKyXMAppHEEoepJIDVscvauWgNruUmydqVH0TBWWp?=
- =?us-ascii?Q?hStBVe74UU/OjIHSiArhQE+lDqfuRlEm1mA1bqXZMQiVqCS4pPumolK4qDfx?=
- =?us-ascii?Q?GYZyHBj73nOoat9n6Szh3Mgx4J4ibOOVmahwPriRRxwWNYW3g9r/mr8k4/lz?=
- =?us-ascii?Q?edoKR8nhgUf0x6zxiByLmZzWtXiIhuiS2fwP4VnkgR/OkKGvZI3WVw82KP7V?=
- =?us-ascii?Q?nV9zpvIsoOkKYiaDtHx6/dZyTFov8YTwk23nuxoBtE9G/txCY4MkhmLpPeeA?=
- =?us-ascii?Q?fT2+AgAWI2kZgWF8dQ6+kH+d5NMm0ANGVi2+wkGdduAu3I+csi9i8krfJJ0c?=
- =?us-ascii?Q?nfiNEUtfFAhrf/+WqIlpKf5eTuRKm71vtNnEaz3d1Hp1kQQ25KA+q8BpWlRW?=
- =?us-ascii?Q?EBgAcMGWm9LPZNek7895tBkzqCP/qDODVKx2TTem89hNBgCfEEopsnOutmSv?=
- =?us-ascii?Q?yPsO+iyptAY1rI2ybb7impHVShrGOpmccKxndXPQnCJpkZFCV78Jp5dzkxSB?=
- =?us-ascii?Q?wolrLhjzcObskD3AWhTT75tpTkeaPWPSlxnzhSFckE5mpdb9HrYLM4Xuwm11?=
- =?us-ascii?Q?sGmz4MR3xtPHlCZuGp3Wy8s5+7O0Lk8f0hhaUiT5gqlvp6I+7TbC3H1m7/yz?=
- =?us-ascii?Q?jwCMjb9fBcc+tJpOCvlinx8I27wPd/BBexRzLUo2ETX1dXTWrBmNk0jGBVps?=
- =?us-ascii?Q?VGlNnhglvpu8m+n8OUW9lBfh3I020HmfxPZ4nrUcJaz5HrFR+sUDac94BdEf?=
- =?us-ascii?Q?1jfVb9aHKHeQapz/z5VF0xnI8gqDGTuREJLb7+1h+3fJXo4XCxAcBmj9rwEY?=
- =?us-ascii?Q?U6i5gPhPFYIM6x+j6VKV+mI3d5HN2XlXd2+yP9YAwHH4p5lblkcKJmSnXKYe?=
- =?us-ascii?Q?/3qsAIvDO0bPCj3SzZ5quhxAtGzMFl/Vvp47cBTXbY0i5QORJfCAxg+lIsfP?=
- =?us-ascii?Q?ETxdP47yXS8e/Evnwrxa88RfxOavIP7SlmI43y4qhoWtm7G32IFD0Xj9nieV?=
- =?us-ascii?Q?aEc+8Vn782+dBFj4R12/GWZmXN89f1RdtED4nD2kFQUAS4bCw5NK2q+WVowC?=
- =?us-ascii?Q?2YBl67TeDrJXPJvmmzd8cvmhuRyUmnLMNShCKx2ni0J5j9s8y5z/af6Kt79Q?=
- =?us-ascii?Q?PUWiy2CZKHfTOX2MEk6AJdyot/87LJaqp5DNQLyK+j2YImYC8mFwCN3hk3nf?=
- =?us-ascii?Q?Klh+26/0dA8oDvwKD6ynlhNG2vbwnibJY2UIy9dt6mY1tPbLxcr0eJpla9Ai?=
- =?us-ascii?Q?Xh0ZuHWf/yFT/veUg2ahPsUDMsrDu/l7kdXcb0FuRh9sPu6acZTuHA/d6iMb?=
- =?us-ascii?Q?sHWf+CRGXtORqCAYBlULxDvY/1/CYyATc1CWqW9DIZ+tAhmYGb+dkjUkN+cq?=
- =?us-ascii?Q?kJ7rCUooC1FJD61PWU9cLg2PfgeDhrwEXQhCMsZFnzPFSHuN+vwGveA8cRXd?=
- =?us-ascii?Q?l0/fWaRkVeszSNRZ7jdWKbcdmTJvNetWpDa4dJ9FiEyHXG948IVBlVbe/PD1?=
- =?us-ascii?Q?dI9EH0gg04SQazuK46c8Fc1QCObNjUusOZ68dzJu?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?e/vzlw4b5x9pi2xqPEJWZ/tNFdSAKDnPnakS44nLR3YvaJPoBDPSi1SydX++?=
- =?us-ascii?Q?g1YNtqq2vQD6kOO9KGMQKIoTqng+3RuJXbi6+aeRZJrEXY0TKUrbo729dDT/?=
- =?us-ascii?Q?c1SRWOTxAyaLZBdXXGnNWrCrtCOEZr8j4XC9mSsMxm8IBkBTvHnYu1Vf8lCE?=
- =?us-ascii?Q?mDGwhjf6uj6JG8SOFljijePqXl62OOpdJTuaOM8CGowtUcqPVVOzo/H+BeMd?=
- =?us-ascii?Q?9kMLiGlTevaAobLa2E/p3uCmCBib6K6uAj2Vb5un+2yZlBw2wbC3M7deCtiK?=
- =?us-ascii?Q?zktRCv9xoh2JPR9LlhQ7pcTmaslpOJvkAnZnTaksrkroy64z2xEanwHvP0ym?=
- =?us-ascii?Q?UCMvD/Y2D5Z0GgItJpfJqymKyzlxwfFCYhfypqU2r2c0wqD8w35x333pYp3x?=
- =?us-ascii?Q?SNEURdazOykwbowm59sCE1AuC+MceXdyG48KmvFhnkjkr2Q218y4vOFJ9diR?=
- =?us-ascii?Q?VqFWpCOCziOiNxKxoVKaOx8XAqM6iFAHSB8kRA+4mOUhxHI9je0JYbp+HK/d?=
- =?us-ascii?Q?NCHa6JwVvfsPsctdMsoOMaec5vUEfpFkPS3YXfTU2YiRFKkqwQTaZCO15JOO?=
- =?us-ascii?Q?xKMk48Pvr1AtBShT6SkDyFT/zDJvnIozXnGkXDvX914POqpP9TSq6TUF+8JV?=
- =?us-ascii?Q?fsiR8tmdiYOwabNDz8i+9ujX2GXV1hOvkOLWxltedhMCXIJzGr9810P96bTL?=
- =?us-ascii?Q?YQZV4LiGlxnnJ39klQqPTfl2ZcYIXlLSi71ACHzQZ5gs3AyOjNuZFQ1qNZrP?=
- =?us-ascii?Q?sEjhunZvcUaDYbBmdQz8+IWRUnKTu0GyzRtCCzhrSyhsTI0uWNDyYXhlqbNq?=
- =?us-ascii?Q?MeWDz4GtkAUQsMhIPz1q2dt/4h99vpTUcONnS+TYb5ySqSM3ZrKEfpKUl1Vs?=
- =?us-ascii?Q?oRpMfnlSRuM+FSy9oJ5QcwqLTnLNvF/bPgUv72ilDDDviwGSFmoOA+nxK8Zh?=
- =?us-ascii?Q?W44zh94H9isJXlo8R05Saxx+ElgKcctRq/JW3/pB5rk=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95c525c8-dc09-414b-02d8-08db56f21a4a
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR10MB6810.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UDdSs5TsmyJcQsSlf8LSPVDhh0db1dhcWO1E/A+mOLm8DkeJmWM0YtlhuW93?=
+ =?us-ascii?Q?VtGN4xZwNB+MN/USLafREpeD6jLChYXqCuvv7iupZcQUI24qFDu/GX6B3Qyi?=
+ =?us-ascii?Q?0EOWcve3deJzOGPHjVWkDKtYiPraEVlzaUopULwNFVSdxvZCybyp6/JNk08Q?=
+ =?us-ascii?Q?L7VWLvRaOjoDCJmgKU6qhXHNdaDNRlQ5FBDlE2TwkBwOvHd3WB5Vh5v2lkoz?=
+ =?us-ascii?Q?OMGDdwU+tY9wD8CdwEUVirm7R8/6szIxSEHoF/ybClpkTgLZmml+67KvHQum?=
+ =?us-ascii?Q?VQbZ9o5TELGobysDPF8SgKjyVutrLkEtagIvD0/KAYY+8gWjSIki0uBV9fcW?=
+ =?us-ascii?Q?+WpFCA65NMtaQ9KOqCqKUbong3/6e4eIV9H7wDMfT+NnnoWvz2aFEEVx3hD9?=
+ =?us-ascii?Q?Olg4fRCy/QyncAianEVYYhNtm2OWxWs91U8Ej77aFx+/xwj7MFbYLxJcjiZd?=
+ =?us-ascii?Q?cYZLkEPGDTQJW0vrkc7V9KgcDNlcag5SwDwncjdnPo5/3n+8+/Btotok/jcj?=
+ =?us-ascii?Q?O1ct7SN5uX7QSJyM84EMO5DkFSA+Vxkj8ikgawrx8Mmuho2VoFLtbA3jgu1/?=
+ =?us-ascii?Q?IiAHFbYRmJUqJXJ6u9/d4uZQYvsKy4YGGHbCIVwX1XZUh2QWaPajWrgI2Rqj?=
+ =?us-ascii?Q?IIIeMwbxPDhcLEFjEdod8otObtUKk7BJcHr2Tph/sQsnE5KGReJ4NAHW/UK9?=
+ =?us-ascii?Q?OQeMQkVO6dtqm7IPzDSsEolDf9NiR4r0bUDW3Jn5odBxByLCCymPKc6y50vd?=
+ =?us-ascii?Q?XuDzkxIJiAvz3KeSqarvbiMlogeduKUh2znuUEHVyimRyLGjG+3CV0MIbqMm?=
+ =?us-ascii?Q?DtudSNXLiEHcTSzbP5NDa+V5ApCg9sODYpa1iLAmXwSDRaV9llSI++5nkrL7?=
+ =?us-ascii?Q?gpy4dyQA5XBYGCpqvSIWVgLOJ83wKNxRY2W6zQ2vnqjou0B/rTjClkA/++s8?=
+ =?us-ascii?Q?+YbAYUdcKfCKu8EsEPeHTVDfp26Nbb1Jehy6UTUTpOQvBJ9gsaQRvhEKkl7G?=
+ =?us-ascii?Q?FkCbJ8yLvLsgWZg6AxRMCLGhaQxNWYXSgfQ8d5AX9Ev7B+KdxwyT1QH17V9e?=
+ =?us-ascii?Q?4q4VbvzriHRnuwWrUDgAMKTH48W6fLXBws0MV30xIDEv443/Nk5lJN1VVJSA?=
+ =?us-ascii?Q?Ukfih0nZM8bfwCNLQ4UO0CtnMlvBQiVI1ks7B4hSf4mveTQqX3vSl6nKQeyV?=
+ =?us-ascii?Q?Re8I7yODTWZpjGOzcWl/BhvIzHd2vG2yR2BocMq6Ls2dZmdZIt3oP2/OvxM/?=
+ =?us-ascii?Q?WkErIDR4alOty1EeY3hkbk8BfJR5ND0X3tXidlzkTDbIy1iPQGiihzdfKV0o?=
+ =?us-ascii?Q?/pbLd4HJl9hlKDzkmhbfGnozw3pWjgvGDDMzT6+gn/2CWZABGUDZXEI+nPdN?=
+ =?us-ascii?Q?NIaIg0c1zCQOEgEckCHFQPfG5K/A4beqGs5VwVRswLXTemI+F6m1kqQhuHQn?=
+ =?us-ascii?Q?M2FaEMcEa+W9VUePji3wuaVyaVWlAC/EiNFz6aXd8Y2eCybn8P1VvUwFzT90?=
+ =?us-ascii?Q?9bbFhCggn9Au+7E9/RBSeKRr+j5ZZAIxolgWoq87FPC0REZ2KOSSSpPl031W?=
+ =?us-ascii?Q?dc3BrS8p+J/AGa/PmLQ=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe549842-0a9b-46ce-1511-08db56f228a4
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 16:16:42.9735
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 16:17:07.0723
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 39PGTT8pTsZUhs2u0A53voVf9hipnrnRTqL0UNPgP8laoRrCLO4hFkhRDvbvyNAJZ+kq1GjsK51UK85hs2bmAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6078
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 mlxlogscore=957
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170132
-X-Proofpoint-GUID: sVVNSOqX_q6gjOUHavRZBMEX0Zu8JHVA
-X-Proofpoint-ORIG-GUID: sVVNSOqX_q6gjOUHavRZBMEX0Zu8JHVA
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: EH48lCoMngJVm7ErTXAOl+Q4sKsgjfqEL6MWqMl3FYbAKT7DEwtmoaGVBD+1FifsJqPfY1ulWjlU88CT2akxhQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9962
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pages pinned in memory through extra refcounts can not be migrated.
-Currently as isolate_migratepages_block() scans pages for
-compaction, it skips any pinned anonymous pages. All non-migratable
-pages should be skipped and not just the anonymous pinned pages.
-This patch adds a check for extra refcounts on a page to determine
-if the page can be migrated.  This was seen as a real issue on a
-customer workload where a large number of pages were pinned by vfio
-on the host and any attempts to allocate hugepages resulted in
-significant amount of cpu time spent in either direct compaction or
-in kcompactd scanning vfio pinned pages over and over again that can
-not be migrated. 
 
-Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-Suggested-by: Steve Sistare <steven.sistare@oracle.com>
----
-v3:
-	- Account for extra ref added by get_page_unless_zero() earlier
-	  in isolate_migratepages_block() (Suggested by Huang, Ying)
-	- Clean up computation of extra refs to be consistent 
-	  (Suggested by Huang, Ying)
+Sorry I have not realized some patches were missed at upstream kernel.
+Version number continue with previous
+https://lore.kernel.org/imx/ZGOCT0Mdg3Jtar6c@matsya/T/#t
 
-v2:
-	- Update comments in the code (Suggested by Andrew)
-	- Use PagePrivate() instead of page_has_private() (Suggested
-	  by Matthew)
-	- Pass mapping to page_has_extrarefs() (Suggested by Matthew)
-	- Use page_ref_count() (Suggested by Matthew)
-	- Rename is_pinned_page() to reflect its function more
-	  accurately (Suggested by Matthew)
+Peter's Fixes:
+- Bist issue
+- fix corrupt package from devices when start transferring less than 20us
+- fix the FSM in controller seeing the disconnection at L1 use case.
 
- mm/compaction.c | 36 ++++++++++++++++++++++++++++++++----
- 1 file changed, 32 insertions(+), 4 deletions(-)
+Change from v4 to v5
+- Add sign off at Patch 3
+- Single line to set reg5
+- correct .set_mode logic
 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 5a9501e0ae01..f04c00981172 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -764,6 +764,34 @@ static bool too_many_isolated(pg_data_t *pgdat)
- 	return too_many;
- }
- 
-+/*
-+ * Check if this base page should be skipped from isolation because
-+ * it has extra refcounts that will prevent it from being migrated.
-+ * This function is called for regular pages only, and not
-+ * for THP or hugetlbfs pages. This code is inspired by similar code
-+ * in migrate_vma_check_page(), can_split_folio() and
-+ * folio_migrate_mapping()
-+ */
-+static inline bool page_has_extra_refs(struct page *page)
-+{
-+	/* caller holds a ref already from get_page_unless_zero() */
-+	unsigned long extra_refs = 1;
-+
-+	/* anonymous page can have extra ref from swap cache */
-+	if (PageAnon(page))
-+		extra_refs += PageSwapCache(page) ? 1 : 0;
-+	else
-+		extra_refs += 1 + PagePrivate(page);
-+
-+	/*
-+	 * This is an admittedly racy check but good enough to determine
-+	 * if a page is pinned and can not be migrated
-+	 */
-+	if ((page_ref_count(page) - extra_refs) > page_mapcount(page))
-+		return true;
-+	return false;
-+}
-+
- /**
-  * isolate_migratepages_block() - isolate all migrate-able pages within
-  *				  a single pageblock
-@@ -992,12 +1020,12 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
- 			goto isolate_fail;
- 
- 		/*
--		 * Migration will fail if an anonymous page is pinned in memory,
--		 * so avoid taking lru_lock and isolating it unnecessarily in an
--		 * admittedly racy check.
-+		 * Migration will fail if a page has extra refcounts
-+		 * preventing it from migrating, so avoid taking
-+		 * lru_lock and isolating it unnecessarily
- 		 */
- 		mapping = page_mapping(page);
--		if (!mapping && (page_count(page) - 1) > total_mapcount(page))
-+		if (page_has_extra_refs(page))
- 			goto isolate_fail_put;
- 
- 		/*
+Change from v3 to v4:
+- Added missed dependent patches.
+
+Change from v2 to v3:
+- add cdns prefix
+Change from v1 to v2
+- remove empty change before #include 
+- Remove dts change from patch
+- fixed dt-binding-check warning
+
+
+Frank Li (2):
+  phy: cadence: salvo: Add cdns,usb2-disconnect-threshold-microvolt
+    property
+  dt-bindings: phy: cdns,salvo: add property
+    cdns,usb2-disconnect-threshold-microvolt
+
+Peter Chen (4):
+  phy: cadence: salvo: add access for USB2PHY
+  phy: cadence: salvo: decrease delay value to zero for txvalid
+  phy: cadence: salvo: add bist fix
+  phy: cadence: salvo: add .set_mode API
+
+ .../bindings/phy/cdns,salvo-phy.yaml          |  6 ++
+ drivers/phy/cadence/phy-cadence-salvo.c       | 95 +++++++++++++++++--
+ 2 files changed, 93 insertions(+), 8 deletions(-)
+
 -- 
-2.37.2
+2.34.1
 
