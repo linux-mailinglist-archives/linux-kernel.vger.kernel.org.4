@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626A370637D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22106706381
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjEQJCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S229452AbjEQJCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjEQJBm (ORCPT
+        with ESMTP id S229496AbjEQJCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:01:42 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB966A54
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:01:22 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510b56724caso7429431a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:01:22 -0700 (PDT)
+        Wed, 17 May 2023 05:02:24 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC1F30E0;
+        Wed, 17 May 2023 02:02:03 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64ab2a37812so11523573b3a.1;
+        Wed, 17 May 2023 02:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1684314081; x=1686906081;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684314123; x=1686906123;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8BFnzpFnEWHgBCYzwUlEu4io3XMBxiABg4u5t/U4XNM=;
-        b=aQ35lN37DYUOGChsdqb0kqQN4HJT38nERHgvEjALuQ7BO+TAECKaybq6G/dAuMj6yq
-         4hpn6i6zz4t1w2OsZKeN0ula9iZBr4x1Ai+ZD6WDHES5gfFjtfcFLmG40IkB903jVn7t
-         IH8FOPBAudvgqXWRUc76iovKokS1OWF2iFFXtg+BOjLEFFBS9aWUj19ovGyM/Qc+QyFG
-         mwAhDMpHLxDfuOE7s57Ph1ANVdGyBIU4yUABXC6NXn7mKmClX/e9egc0J3R8/uVZo5X3
-         J/CJMZiyuVFxOEItgq4jUIvxnxFxHuNstZmOLGwz6bb1f73MqJCo4tNCGQGD7Gb7BRJl
-         iU1Q==
+        bh=Ph7FWotnDHyNH43Suo9o026I5GBhoRCi6trqJm+ae1c=;
+        b=cOn7sW93YxROwtygiZ4kd6HC6BbzEHtija5wSUXNqYIudX5SCymwnx4qX3kwMKrjWV
+         90e27La7ebSJzffNnJsKKHey7cKsPV/kors2tLfdFYziBd0nPtoHMafZBFsQiQyKpLhh
+         FlktAOsEqWN7I3T4kvxc51w9EjkSrpw5EWcZI/pk5PUJWkKwYj65dnxR+39jZ0kg0m38
+         AkBEe7+TelBuXq8v+ZNCnqZSpJAax9mH3MTWDpBe78F3DFEW3efPAKuR8GwnOQZNQvL4
+         Q8tS5ZooefJN3S5lCYtSZmvqD6TAzWE6OOftQuMwRuuWnZxEIo30Y/0WKIs3Xc/oEgf8
+         gr+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684314081; x=1686906081;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8BFnzpFnEWHgBCYzwUlEu4io3XMBxiABg4u5t/U4XNM=;
-        b=FDi6ch9UwfrqGmx7hN7llhRzCEiwoAyTCiyta8Zday7KLW3VpWQuq6YEXOsXZJyYaq
-         F+6nMxFz7Jgv/7hQXzSBjfYwzhtJvh241Gy8Uw97wqCYPjUrr56TxGVDRRcrrBgXSqRl
-         gC0bZON8y+eRaUCKliVyVEWc6BPGLJ1GfxYoGw26wbAokdP6tvnbr+3IyRIUtCHhZWVR
-         /FManMtj9hLxuKGdXPYoi20BS7f5/FYdMxee7xLOLoPBiTLZhpqflRgrwmrFvdrG76E2
-         BDUl1O0JcnnvOYYSiK2wgakL/W+n8vSz6Nusv8ttPksdMjJa/ypMqjZEXEcNzCIUq6Z9
-         ZdNQ==
-X-Gm-Message-State: AC+VfDwadWsW0YiJx3WkrPbnowh4sMbHKysGRLEE3WscLu0fsGb88jxd
-        PyVDzPFhvE4lj6IEpAbQQ0wqTggFQ90T5LaO4GGscw==
-X-Google-Smtp-Source: ACHHUZ5P75xcx+CWtz+lJaC31PQ4IxYJSQC9FYvo3svbCkpxO/YbHVL4pxqH9BUbLvt4AL2mmI+w2gTcjJsFJ28Ci9I=
-X-Received: by 2002:a17:907:a407:b0:965:6a32:451f with SMTP id
- sg7-20020a170907a40700b009656a32451fmr1326875ejc.6.1684314080855; Wed, 17 May
- 2023 02:01:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684314123; x=1686906123;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ph7FWotnDHyNH43Suo9o026I5GBhoRCi6trqJm+ae1c=;
+        b=bp2ZC+lYCeShFRvM4cwkWcqT/ZkWXNC4Pj/Ucy7lYMBjg1j2HX6WsM1vt07b+kKq6R
+         MLycK9TrQVLEtEJbevjUvfOfJVn3R21iJP4+Hj+xJJZbzP3mMQKv0JiIVhmlL6bENa+h
+         gvDl9d3JU1lVnRQ202GPspGaRnIssDPonEpWcAlTYZCQjH41dimKOcbGHWE51nN22SSd
+         SjRMICLk0+K3WbSjfyqj7TmeDoZTEbc+4aaNRLmD9zgfhFXIBKa0oKoFCSl8UQfdqCom
+         ky23r00iESoDL/7mhX6K+gD+Yt1N/18kKoWU1wW+KEcIrcYz/5WUT4Gzkm9y5nF+pVHi
+         sUFA==
+X-Gm-Message-State: AC+VfDxv8bfDRqB/lq5Rz/jqBupuQj/AL+XR6HKaeM38me2JTtqGFuyq
+        +/zPyIn98xwpnxCu3sDvgbA=
+X-Google-Smtp-Source: ACHHUZ63hS1/S/jzGaGnpkvjna7RhS7G2JWLtso6RdQPEeBMDByM66294yz5+hFQTOQZz07Cn9oEkg==
+X-Received: by 2002:a17:90b:4b0e:b0:250:648b:781d with SMTP id lx14-20020a17090b4b0e00b00250648b781dmr1763729pjb.23.1684314122885;
+        Wed, 17 May 2023 02:02:02 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id l14-20020a17090a384e00b00250d670306esm1076450pjf.35.2023.05.17.02.01.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 02:02:02 -0700 (PDT)
+Message-ID: <e255cc80-a232-d66c-5f9b-9db179d33951@gmail.com>
+Date:   Wed, 17 May 2023 17:01:51 +0800
 MIME-Version: 1.0
-References: <20230515121521.30569-1-lmb@isovalent.com> <a29c604e-5a68-eed2-b581-0ad4687fda10@linux.dev>
-In-Reply-To: <a29c604e-5a68-eed2-b581-0ad4687fda10@linux.dev>
-From:   Lorenz Bauer <lmb@isovalent.com>
-Date:   Wed, 17 May 2023 10:01:09 +0100
-Message-ID: <CAN+4W8hixyHYOwYRh-3WedS-a0KTQk8VQ4JxqM8y-DQY-yjsNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: btf: restore resolve_mode when popping the
- resolve stack
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [RFC PATCH V6 01/14] x86/sev: Add a #HV exception handler
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, pangupta@amd.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-2-ltykernel@gmail.com>
+ <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,21 +89,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 7:26=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 5/15/23 5:15 AM, Lorenz Bauer wrote:
-> > In commit 9b459804ff99 ("btf: fix resolving BTF_KIND_VAR after ARRAY, S=
-TRUCT, UNION, PTR")
-> > I fixed a bug that occurred during resolving of a DATASEC by strategica=
-lly resetting
-> > resolve_mode. This fixes the immediate bug but leaves us open to future=
- bugs where
-> > nested types have to be resolved.
->
-> hmm... future bugs like when adding new BTF_KIND in the future?
+On 5/16/2023 5:30 PM, Peter Zijlstra wrote:
+> On Mon, May 15, 2023 at 12:59:03PM -0400, Tianyu Lan wrote:
+>> From: Tianyu Lan<tiala@microsoft.com>
+>>
+>> Add a #HV exception handler that uses IST stack.
+>>
+> Urgh.. that is entirely insufficient. Like it doesn't even begin to
+> start to cover things.
+> 
+> The whole existing VC IST stack abuse is already a nightmare and you're
+> duplicating that.. without any explanation for why this would be needed
+> and how it is correct.
+> 
+> Please try again.
 
-It could just be refactoring of the codebase? What is the downside of
-restoring the mode when popping the item? It also makes push and pop
-symmetrical. Feel free to NACK if you don't want this change, not
-going to push for it.
+Hi Peter:
+	Thanks for your review. Will add more explanation in the next version.
