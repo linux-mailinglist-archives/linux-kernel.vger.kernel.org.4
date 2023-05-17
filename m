@@ -2,109 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC91770725B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98095707261
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjEQTip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S229509AbjEQTlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjEQTik (ORCPT
+        with ESMTP id S229458AbjEQTlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:38:40 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F921B8;
-        Wed, 17 May 2023 12:38:33 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f26f437b30so1474660e87.1;
-        Wed, 17 May 2023 12:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684352311; x=1686944311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LQJ695KcI3BHYBzG7w7+hK8f+dLo9EP3mtkJ6GlEeMM=;
-        b=FEoTIs3jqYZHn5b/tw5ANvwitlS6ZLEWAuqT48WYTezNNzY/7bDC9EzczQfvQZ15yz
-         Dvqol4sTo946W9+gA4PwWMsitnMhRzVUlkza36pz7CxODDjvir4ZRD9lvUC2b7+i/Os3
-         L4JQ/jOolvue/+rSqTWoQzq5pLqQd7g4PB0GosH1vAK8D/lj7G1R5xkWrfKF+gAu+l3f
-         qJxwDQYpcQBBiPKzGa9DUgqGMqeGO7uftUzujXQapwIdoFzFiQCmXH5gGuCmC9TvHEl/
-         n/mC015H2WmoVvHIsqGjK+o/Zj4YWVW2osFClHEpto4tLDqNKLEw7LwMRWp4umQlUg6h
-         TqeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684352311; x=1686944311;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQJ695KcI3BHYBzG7w7+hK8f+dLo9EP3mtkJ6GlEeMM=;
-        b=iAA3yiZFdkMDDgo1C6bjVkuPYapehCs+Y4Pz02GCf60HXZBkcFfKgreFLvSLYgUzYb
-         8x6i6OUb7vEp2xXM1e1N6KAltwVL2CEYD+/SLKKzyYAkYx3C7f9xL+R+ItykwQ3lH7Yq
-         UxU4DSmN9zCHJ1rmfuUn3veyWlxPcbRqir+oIVSWeIkA0Qsvwr2MmpWchkp6geEXrGED
-         IBCrhfmKnV/+YhG3BKUS/rhyuVh70zQYOCKYQB74eKrAVLxsL5qUqJydCpMQbJLwQcFl
-         31mGo4abMISGcDLeZfzAY8ztueB6NQdYlRAoSJs0mkaHW6FuTJTqdAxSDEAP9nVKZ9+J
-         QdXw==
-X-Gm-Message-State: AC+VfDxx7mmQZIhJdJ3qKSJ+XY151K0Jgm2+tSH5IPVEecnWCRMNNyDt
-        U77LNd8ZTPNG6uf75CvoUF0=
-X-Google-Smtp-Source: ACHHUZ6iWLS8cmSrAAC07mVEE2/2vgmFh0Or+bdUPcvpXYk0j0f3yRpeBwKkgTTCrJmspTLTqq4cgQ==
-X-Received: by 2002:ac2:55b4:0:b0:4f2:502d:f6c9 with SMTP id y20-20020ac255b4000000b004f2502df6c9mr548933lfg.13.1684352311155;
-        Wed, 17 May 2023 12:38:31 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id e10-20020a056512090a00b004f00c854d34sm3470629lft.204.2023.05.17.12.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 12:38:30 -0700 (PDT)
-Date:   Wed, 17 May 2023 22:38:27 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v5 13/14] MAINTAINERS: Add Manivannan to DW eDMA
- driver maintainers list
-Message-ID: <20230517193827.rpjihsuw5c7ac7ji@mobilestation>
-References: <20230511190902.28896-1-Sergey.Semin@baikalelectronics.ru>
- <20230511190902.28896-14-Sergey.Semin@baikalelectronics.ru>
- <20230517052824.GA4868@thinkpad>
- <ZGSMd+mOQSq560dZ@matsya>
+        Wed, 17 May 2023 15:41:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1056211F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:41:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74D9E62C1F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3093C433EF;
+        Wed, 17 May 2023 19:41:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684352469;
+        bh=NG9a8/HxZiREAt48f4XHXBbPjBYheg34T+R3HqxYF04=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=KrIqwaxHjOrDIPcl5GFZ4nH02dTUeLfqkP1kFzv/oso+V9602cACvTve631+G0rWd
+         qtmhyeex4Ww16mQqeXJe4I0VdROcdDIphtG8zWUwkGE3VVRJZZ7LU6zfFzPwYK8lB/
+         fPBBGX+YK0Zdziz8IjNrQ7PzM9+6teg4K2OYcAg+f4cPl0CHM0mKhaY5eaKYbHXlD1
+         9k4SV00HQBe9mmYDJwkCc8m+jajh5QE9FlFrVGp0Uh9NpFSbFGrQnduYLqVJb+5HOo
+         6zT00Pg9RJ4tOu/96uMrG1I/nGlSr1tYtyyNU/nvtjXO6MupmAlnFlhPFd+Ip+Gvxv
+         LhBFq2V8MuPgA==
+Date:   Wed, 17 May 2023 12:41:06 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Arnd Bergmann <arnd@kernel.org>
+cc:     Juergen Gross <jgross@suse.com>, Arnd Bergmann <arnd@arndb.de>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xen: xen_debug_interrupt prototype to global header
+In-Reply-To: <20230517124525.929201-1-arnd@kernel.org>
+Message-ID: <alpine.DEB.2.22.394.2305171240550.128889@ubuntu-linux-20-04-desktop>
+References: <20230517124525.929201-1-arnd@kernel.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGSMd+mOQSq560dZ@matsya>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod
-
-On Wed, May 17, 2023 at 01:42:39PM +0530, Vinod Koul wrote:
-> On 17-05-23, 10:58, Manivannan Sadhasivam wrote:
-> > On Thu, May 11, 2023 at 10:09:01PM +0300, Serge Semin wrote:
-> > > Manivannan has been very active in reviewing the bits coming to the DW
-> > > eDMA driver. Let's add him to the driver maintainers list.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On Wed, 17 May 2023, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Applied to dmaengine/next, thanks
-
-Patch 14 of the series also concerns the DW eDMA driver. Could you
-please have a look at it too?
-
--Serge(y)
-
+> The xen_debug_interrupt() function is only called on x86, which has a
+> prototype in an architecture specific header, but the definition also
+> exists on others, where the lack of a prototype causes a W=1 warning:
 > 
+> drivers/xen/events/events_2l.c:264:13: error: no previous prototype for 'xen_debug_interrupt' [-Werror=missing-prototypes]
+> 
+> Move the prototype into a global header instead to avoid this warning.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+
+
+> ---
+>  arch/x86/xen/xen-ops.h | 2 --
+>  include/xen/events.h   | 3 +++
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
+> index 84a35ff1e0c9..0f71ee3fe86b 100644
+> --- a/arch/x86/xen/xen-ops.h
+> +++ b/arch/x86/xen/xen-ops.h
+> @@ -72,8 +72,6 @@ void xen_restore_time_memory_area(void);
+>  void xen_init_time_ops(void);
+>  void xen_hvm_init_time_ops(void);
+>  
+> -irqreturn_t xen_debug_interrupt(int irq, void *dev_id);
+> -
+>  bool xen_vcpu_stolen(int vcpu);
+>  
+>  void xen_vcpu_setup(int cpu);
+> diff --git a/include/xen/events.h b/include/xen/events.h
+> index 44c2855c76d1..ac1281c5ead6 100644
+> --- a/include/xen/events.h
+> +++ b/include/xen/events.h
+> @@ -138,4 +138,7 @@ int xen_test_irq_shared(int irq);
+>  
+>  /* initialize Xen IRQ subsystem */
+>  void xen_init_IRQ(void);
+> +
+> +irqreturn_t xen_debug_interrupt(int irq, void *dev_id);
+> +
+>  #endif	/* _XEN_EVENTS_H */
 > -- 
-> ~Vinod
+> 2.39.2
+> 
