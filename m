@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292E1707015
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB11E707023
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjEQRzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S229592AbjEQR4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbjEQRzd (ORCPT
+        with ESMTP id S229955AbjEQR4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:55:33 -0400
+        Wed, 17 May 2023 13:56:14 -0400
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4522AE48
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:55:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904C5BE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:56:13 -0700 (PDT)
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HHtGuQ007084;
-        Wed, 17 May 2023 12:55:16 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HHu8mD007207;
+        Wed, 17 May 2023 12:56:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684346116;
-        bh=ZdFx4WJk7gaa50DEFIuKLu7bef6RAjGgSB7wWhI1fE0=;
+        s=ti-com-17Q1; t=1684346168;
+        bh=cu2wP79rOfwXO1QBjusyb/mAgkmBvFTMHjOe+GfxRB4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Zj5/EobOmHNK6dbld/PufMWVa6QAmdKJ0g2Yp/sY6EQjnji4GK9a13D8riZA79kWP
-         QPThPn4sKRzio4cBccuMvG3XxebaAI/Re0BDCnuMdK4cerRJqbvxQMTRfSxzIRskO+
-         OwcE8U0xQKb5u0KF70j3o3hnewe0jKWG/eKyr+PY=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HHtGQm023786
+        b=dLAbSZRItPSskq5CRPKWBrroytVZSo/ZtiXQMpPy+kIHRgvbgYpPdhQPZjX5FPRSO
+         0sDavgCMcV055wi+dzyZAiu3kGFHgndidihIcYXs4ccY/NEj8bhQ9a1b+wMzdrrZYI
+         ptEJc2MrnNz1Pm1/5WR1FGTO50LuOkiV2Fscp+Ro=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HHu8jc024724
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 17 May 2023 12:55:16 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 17 May 2023 12:56:08 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
- May 2023 12:55:15 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ May 2023 12:56:08 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 17 May 2023 12:55:15 -0500
+ Frontend Transport; Wed, 17 May 2023 12:56:08 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34HHtFjM104816;
-        Wed, 17 May 2023 12:55:15 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34HHu8xs106043;
+        Wed, 17 May 2023 12:56:08 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Santosh Shilimkar <ssantosh@kernel.org>,
         Simon Horman <horms@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>
-Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
-Date:   Wed, 17 May 2023 12:55:15 -0500
-Message-ID: <168434598652.1537118.16232593863715460020.b4-ty@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] soc: ti: pruss: Allow compile-testing
+Date:   Wed, 17 May 2023 12:56:08 -0500
+Message-ID: <168434612546.1538453.14483208071718769411.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
-References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+In-Reply-To: <20230511-ti-pruss-compile-testing-v1-1-56291309a60c@kernel.org>
+References: <20230511-ti-pruss-compile-testing-v1-1-56291309a60c@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -69,25 +67,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Simon Horman,
 
-On Tue, 18 Apr 2023 13:41:48 +0200, Simon Horman wrote:
-> Rather than casting clk_unregister_mux to an incompatible function
-> type provide a trivial wrapper with the correct signature for the
-> use-case.
+On Thu, 11 May 2023 16:54:36 +0200, Simon Horman wrote:
+> Allow compile testing of TI PRU-ICSS Subsystem Platform drivers.
+> This allows for improved build-test coverage.
 > 
-> Reported by clang-16 with W=1:
+> No functional change intended.
 > 
->  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
->          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
 > 
-> [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
-NOTE: I think this is trivial fixup, which I think is better off for
-the next window.
+NOTE: I did'nt see any immediate issue with this patch, but hopefully we dont
+break COMPILE_TEST going ahead. Lets see.
 Thank you!
 
-[1/1] soc: ti: pruss: Avoid cast to incompatible function type
-      commit: 413552b360e72604b8c0cf3f60f9e6f01c8ff963
+[1/1] soc: ti: pruss: Allow compile-testing
+      commit: e752f9b924a1fd1afcf36e51b03dfa9c3096a3bd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
