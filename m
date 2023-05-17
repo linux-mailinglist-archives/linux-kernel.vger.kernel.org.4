@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B67706339
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321E670633F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjEQIpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S230483AbjEQIqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjEQIpk (ORCPT
+        with ESMTP id S230378AbjEQIqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:45:40 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9921738
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:45:38 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-966400ee79aso85021766b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684313137; x=1686905137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bkpEoV4fvWHofZFJGs95rC2ymcCgXT2vPbv2LelJ68Y=;
-        b=fm0dTYeX7uD6iREM9mwljE+pR5Rz59+fdb7opWly/irSuhYwLr0ehAsz8+HlxQ843H
-         uRQ66mXeouWe9DVEHD1VjZ0LbRRS6tJpK8nO6pXaH1ohMguXqLYJ0JVIm38TlatoR3ai
-         CjBPw43NbhfDVUURDxyRas9VPVOTxPilDzZdFIqiHYgKRQvkg1WEQb1Sk09L+YgFItNz
-         +5h9EgBHZ4P2hN07YBM6Jm5pHDb+B846KOawiU22l2SryJNnFbcirSTZkLCn/oSQQ0fi
-         OvpipVR+yZeYNN55F8hhP6mUlv9/PBgMQNuE/NrAtPWUeqATxtx+RNUMPvduwuVksclt
-         A9/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684313137; x=1686905137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bkpEoV4fvWHofZFJGs95rC2ymcCgXT2vPbv2LelJ68Y=;
-        b=e/3PWlhbF65a3qZKQyT19rG9PjKuORBWfJjIAGYPEep0NaNxn0b3mS/OeGGQ9UHa1l
-         z2ZorcfVmGmnp08AdUY0Iie4+8qeAbyQaK/hSGXStNk6Lf/6HojDFVgEI38F4tndy5w0
-         NByY8lGKzW0wP7TEQTQASmRXaQAh7b4CtPmQK0Is6/K+1Bi0s9AjXbEb7rfkXTeLHdEw
-         xaBV9zKUKA6cRIO40RvIxwAMFPZ4c0JjQnNPihg68h7cFmDDNf9gEJXx/y94+HAFjOJ1
-         Gzau6sQXkXHIwp/QFfW4O4DciYA+GUGNNToKBDaoaI9aJEc/WxpsY+ooyMfNML4K1Zjy
-         D8AA==
-X-Gm-Message-State: AC+VfDw8MGMCkP1aE3+QACflY/maAZMk0ot641BmMqTcKG8A1VrTAKrd
-        SBRlaNhKcHH/GsjfvS1XC6YcWA==
-X-Google-Smtp-Source: ACHHUZ5ptAWs3fEV6gNFAegVFJwj5kBSck0Xwq9/93ooM6PFOumf0BMKlFXgtZOhD7YpZRRWaDaHrw==
-X-Received: by 2002:a17:907:2daa:b0:94e:dbf7:2dfe with SMTP id gt42-20020a1709072daa00b0094edbf72dfemr40456838ejc.11.1684313137392;
-        Wed, 17 May 2023 01:45:37 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id gx9-20020a1709068a4900b00965d294e633sm11982610ejc.58.2023.05.17.01.45.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 01:45:36 -0700 (PDT)
-Message-ID: <5a7b168e-6f66-f38c-3f5d-d05028fe45e1@linaro.org>
-Date:   Wed, 17 May 2023 10:45:35 +0200
+        Wed, 17 May 2023 04:46:08 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D248B1FFC;
+        Wed, 17 May 2023 01:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684313166; x=1715849166;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=Esgsm3RTHSGvonHSP9mXXt4krUC+gmpYyDOTAsvlPgc=;
+  b=ffOi8zGm0F33Ba/cJayIRkwnhIXNYCNNN/mtw0a3AWWk8FCuyqPPfRVX
+   2hEhxmSrPHkY8Nhs9Zi/+WvwFPaybAZ38XIi/OO1VfEhMhR2HGWb6+1S/
+   RZYrr94gmQaFhQupgCbkyWjsh2bM6SsXGfbOltJTIQbiAX5NlolBM6hQ3
+   4j2Cam9fTschKfjQWoyq47Ssn7dQ5m5eZv+koo11tLQiaJH+8VV9mTGck
+   98kLd89fiY0ysk8xlcPSI9Lkbvu+EzdAmYK88jbo3Zn0IOCJ5cWGeaMSW
+   ft0BkUZcXMlb0s06XjQP0gQDU1S3VmRWIaLXUVweNi9HPiuYCTkvCKP1j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="379893883"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="379893883"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 01:46:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="948187140"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="948187140"
+Received: from pakurapo-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.50.207])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 01:46:03 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Antonino Daplas <adaplas@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fbdev: i810: include i810_main.h in i810_dvt.c
+In-Reply-To: <20230516202814.561262-1-arnd@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230516202814.561262-1-arnd@kernel.org>
+Date:   Wed, 17 May 2023 11:46:00 +0300
+Message-ID: <87lehngxbr.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: imx8mq-usb: add phy tuning
- properties
-Content-Language: en-US
-To:     Johannes Zink <j.zink@pengutronix.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, Li Jun <jun.li@nxp.com>
-Cc:     patchwork-jzi@pengutronix.de, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230516-lustige-usb-phy-dinge-v2-0-3383a0de34ac@pengutronix.de>
- <20230516-lustige-usb-phy-dinge-v2-1-3383a0de34ac@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516-lustige-usb-phy-dinge-v2-1-3383a0de34ac@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 18:20, Johannes Zink wrote:
-> Add optional properties for tuning of usb phy.
-> 
-> Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
+On Tue, 16 May 2023, Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Building with W=1 shows that a header needs to be included to
+> make the prototypes visible:
+>
+> drivers/video/fbdev/i810/i810_dvt.c:194:6: error: no previous prototype for 'round_off_xres' [-Werror=missing-prototypes]
+> drivers/video/fbdev/i810/i810_dvt.c:233:6: error: no previous prototype for 'i810fb_encode_registers' [-Werror=missing-prototypes]
+> drivers/video/fbdev/i810/i810_dvt.c:245:6: error: no previous prototype for 'i810fb_fill_var_timings' [-Werror=missing-prototypes]
+> drivers/video/fbdev/i810/i810_dvt.c:279:5: error: no previous prototype for 'i810_get_watermark' [-Werror=missing-prototypes]
+>
+> Adding the header leads to another warning from a mismatched
+> prototype, so fix this as well:
+>
+> drivers/video/fbdev/i810/i810_dvt.c:280:5: error: conflicting types for 'i810_get_watermark'; have 'u32(struct fb_var_screeninfo *,
+
+Changes here look fine,
+
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+
+but I think you should try CONFIG_FB_I810_GTF=y to get the same
+mismatched prototype error for i810_get_watermark() in i810_gtf.c, and
+add the const there while at it. R-b stands for that addition as well.
+
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  .../bindings/phy/fsl,imx8mq-usb-phy.yaml           | 47 ++++++++++++++++++++++
->  1 file changed, 47 insertions(+)
-> 
+>  drivers/video/fbdev/i810/i810_dvt.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/video/fbdev/i810/i810_dvt.c b/drivers/video/fbdev/i810/i810_dvt.c
+> index b4b3670667ab..2082b5c92e8f 100644
+> --- a/drivers/video/fbdev/i810/i810_dvt.c
+> +++ b/drivers/video/fbdev/i810/i810_dvt.c
+> @@ -14,6 +14,7 @@
+>  
+>  #include "i810_regs.h"
+>  #include "i810.h"
+> +#include "i810_main.h"
+>  
+>  struct mode_registers std_modes[] = {
+>  	/* 640x480 @ 60Hz */
+> @@ -276,7 +277,7 @@ void i810fb_fill_var_timings(struct fb_var_screeninfo *var)
+>  	var->upper_margin = total - (yres + var->lower_margin + var->vsync_len);
+>  }
+>  
+> -u32 i810_get_watermark(struct fb_var_screeninfo *var,
+> +u32 i810_get_watermark(const struct fb_var_screeninfo *var,
+>  		       struct i810fb_par *par)
+>  {
+>  	struct mode_registers *params = &par->regs;
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Jani Nikula, Intel Open Source Graphics Center
