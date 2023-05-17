@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDC5706374
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCB9706375
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjEQJAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S231237AbjEQJAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjEQI7c (ORCPT
+        with ESMTP id S231246AbjEQI7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:59:32 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DCF5275
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:59:06 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-52c6f81193cso306501a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:59:06 -0700 (PDT)
+        Wed, 17 May 2023 04:59:38 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0054225
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:59:09 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5343c3daff0so312921a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684313946; x=1686905946;
+        d=bytedance.com; s=google; t=1684313949; x=1686905949;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QOzzsH+HINl0nPqqyHkNJXvYfvo/GTpdTPT7077/sGQ=;
-        b=LEpcP6Z2iO5V244pOZDVZ9PD/DssYhxM/g2Dgywp7L5+4So8fiBCWCs+ByEv4uwRGf
-         Lsrr8ZnveVCkcBoJOY7slGzezuGunBr1hkrG0WbES9lRgR4WkaPW3WkN7INx7m+7bNLa
-         b+SJ6BYMLFPicf7kxRDWbsSTeTmNlQfqx0iU2i51i1P6ZXGuBr0QlzliS3x6NlTf2MJy
-         84wk5jYwGFVMpmaKVNv8+tkrtO5wnPxXEPT/COvyZcL1lvzf3LamcYd/jVgY6tFdIuJK
-         KUFlZld0CYflLmPq/feOirZ1Up6XjBoz2hnunMuxMbHmjp6cuc8TyruCJLUKCE4dPmGy
-         y0rQ==
+        bh=c2NEt2xRNbAeMZlKbxLJ6YsB/xGL2Lb8EXzhG/zDA3k=;
+        b=e3RVLiwnNDJjglhqaPR32b6FAYRWgjhUEJc1A7SpY9YkqYyI5oHyho43Tedkc5zwus
+         aHgi1ZYqf7Cq4ND0XTOXDujMqiX5bzPJy2RZGibIBcrC/k5/aMp84AxWTf/aP2NCWhIR
+         DyblUWcmvnVlSZKV9373659tbRllyKFikIOF1Wfpt8NGfxpcQs03vxNQpA/54vh1ICpj
+         3Zad9u1jj7xtrGQSXDJwfJJMXsx5fPPJuqUZwLmDSF7zeZdf4rOhSEhSkNvecFV/UIdg
+         t7/KJsstAhtGxvKIJXclrTbcZed6B0ndQUqrgy0QJJ0XpDY0DFK9iHTZbSnQnWRdjhrP
+         E4Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684313946; x=1686905946;
+        d=1e100.net; s=20221208; t=1684313949; x=1686905949;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QOzzsH+HINl0nPqqyHkNJXvYfvo/GTpdTPT7077/sGQ=;
-        b=lWyWZ5jrJDnBHtteuK+zIyh87/12K02L8f85iZ9ycqWMz+w5imY7uDBU9dY+qsk+jd
-         TMQd/+QtvjUxIQsrcndQV3wgVuymgV1ZyV/sHRg0AgbBmuoZxI2srCc3AY2KjhUa6MK0
-         k5inECxD6Zm7btMTAoLXHfZTZOfkBjykdYk5SBB7B4Ama/MEMBq1h16z4Mrvv4KVjHm6
-         5YQ8Kopbpg/gZRYQgq/7E7YyqmSI1MnFuIx/5d+vROrlN1VK13+txFKlowrz4lfkZqZS
-         oBiXSN6JAIlJv5JXzLuhgjzNAHZKv9di+sZ4oGfpt8dDJCl/NsSUJR1s15aNrVaxOKsr
-         a6pQ==
-X-Gm-Message-State: AC+VfDyAg64XIwdRiXtqr9x3AOaUZDdiglhPQb0qnNkKXgiyRUfrf+oD
-        6my7gzAmZsUfuvIPZVZ+aam01w==
-X-Google-Smtp-Source: ACHHUZ5sLjaykUSvrFlKay55p8VrWsxrTs0AGlQ0fIeJ8X1NfblBBaQJci8YRv4xfW3zFc3U6grQNQ==
-X-Received: by 2002:a05:6a20:12cd:b0:106:70af:a5b9 with SMTP id v13-20020a056a2012cd00b0010670afa5b9mr10364681pzg.31.1684313945924;
-        Wed, 17 May 2023 01:59:05 -0700 (PDT)
+        bh=c2NEt2xRNbAeMZlKbxLJ6YsB/xGL2Lb8EXzhG/zDA3k=;
+        b=ktNTFQRppMFmBEIONQhWociQ6jpPjzRiHMJ1IO67RQvsDUG9UPUd0ernsjBrokJnRc
+         B0aoe+KixCHfbmwdNAZ1tnwwbN+D1SSfV09VNS33z/llb7eDPIKZ1WXSv80cX2+w0gPi
+         a02K5zCVMGuZJn4/d3qlqVyDDfZcQPURrwsnhskbDKaSDjENffey3zhZyvGAWVyruXMB
+         lC1QL/yWNMgOo4UwlzqPxo2VCRBhg8WD7Kc8XygEOXk5dJbOPoRMFxtUSgCh1vPm9o99
+         bGUpcGUEyyyL8vdzrcPt7ebIqcW/b0foRwGhSr0iSOPfR44WIPtjlm6k8cchLRXzq7cq
+         KsrA==
+X-Gm-Message-State: AC+VfDz3GrwzK1WUzGAYu2tq6clN1e6rIV9D0DaQiiNnYiWu0JXuNODL
+        0eRYAE3CB5ao2cqGIbBd9E5MWA==
+X-Google-Smtp-Source: ACHHUZ5b7PIeql3DsYG38mUQCLvjrV3k1K4DbQmsm4PKRgFsDr9YaB+sYp0r5E81HI1DCdL6LBOLFg==
+X-Received: by 2002:a05:6a21:150f:b0:ef:7aa2:3cfd with SMTP id nq15-20020a056a21150f00b000ef7aa23cfdmr35267926pzb.50.1684313948739;
+        Wed, 17 May 2023 01:59:08 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id m18-20020a63ed52000000b0052c9d1533b6sm15056765pgk.56.2023.05.17.01.59.03
+        by smtp.gmail.com with ESMTPSA id m18-20020a63ed52000000b0052c9d1533b6sm15056765pgk.56.2023.05.17.01.59.06
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 17 May 2023 01:59:05 -0700 (PDT)
+        Wed, 17 May 2023 01:59:08 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH v2 07/10] maple_tree: Add comments and some minor cleanups to mas_wr_append()
-Date:   Wed, 17 May 2023 16:58:06 +0800
-Message-Id: <20230517085809.86522-8-zhangpeng.00@bytedance.com>
+Subject: [PATCH v2 08/10] maple_tree: Rework mas_wr_slot_store() to be cleaner and more efficient.
+Date:   Wed, 17 May 2023 16:58:07 +0800
+Message-Id: <20230517085809.86522-9-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230517085809.86522-1-zhangpeng.00@bytedance.com>
 References: <20230517085809.86522-1-zhangpeng.00@bytedance.com>
@@ -73,90 +73,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add comment for mas_wr_append(), move mas_update_gap() into
-mas_wr_append(), and other cleanups to make mas_wr_modify() cleaner.
+The code of mas_wr_slot_store() is messy, make it clearer and concise,
+and add comments. In addition, get whether the two gaps are empty to
+avoid calling mas_update_gap() all the time.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 ---
- lib/maple_tree.c | 33 ++++++++++++++++++++-------------
- 1 file changed, 20 insertions(+), 13 deletions(-)
+ lib/maple_tree.c | 59 ++++++++++++++++++++----------------------------
+ 1 file changed, 24 insertions(+), 35 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 3b9d227f3d7d..bbe4c6f2858c 100644
+index bbe4c6f2858c..25a8b7d5d598 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -4308,6 +4308,12 @@ static inline unsigned char mas_wr_new_end(struct ma_wr_state *wr_mas)
- 	return new_end;
- }
- 
-+/*
-+ * mas_wr_append: Attempt to append
-+ * @wr_mas: the maple write state
-+ *
-+ * Return: True if appended, false otherwise
-+ */
- static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
+@@ -4200,49 +4200,38 @@ static inline bool mas_wr_node_store(struct ma_wr_state *wr_mas)
+ static inline bool mas_wr_slot_store(struct ma_wr_state *wr_mas)
  {
- 	unsigned char end = wr_mas->node_end;
-@@ -4315,7 +4321,11 @@ static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
  	struct ma_state *mas = wr_mas->mas;
- 	unsigned char node_pivots = mt_pivots[wr_mas->type];
+-	unsigned long lmax; /* Logical max. */
+ 	unsigned char offset = mas->offset;
++	unsigned char offset_end = wr_mas->offset_end;
++	unsigned long lmax = wr_mas->end_piv; /* Logical max. */
++	bool gap = false;
  
-+	if (!(mas->offset == wr_mas->node_end))
-+		return false;
-+
- 	if ((mas->index != wr_mas->r_min) && (mas->last == wr_mas->r_max)) {
-+		/* Append to end of range */
- 		if (new_end < node_pivots)
- 			wr_mas->pivots[new_end] = wr_mas->pivots[end];
+-	if ((wr_mas->r_max > mas->last) && ((wr_mas->r_min != mas->index) ||
+-				  (offset != wr_mas->node_end)))
++	if (offset_end - offset != 1)
+ 		return false;
  
-@@ -4323,13 +4333,10 @@ static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
- 			ma_set_meta(wr_mas->node, maple_leaf_64, 0, new_end);
- 
- 		rcu_assign_pointer(wr_mas->slots[new_end], wr_mas->entry);
--		mas->offset = new_end;
- 		wr_mas->pivots[end] = mas->index - 1;
+-	if (offset == wr_mas->node_end - 1)
+-		lmax = mas->max;
+-	else
+-		lmax = wr_mas->pivots[offset + 1];
 -
--		return true;
+-	/* going to overwrite too many slots. */
+-	if (lmax < mas->last)
+-		return false;
+-
+-	if (wr_mas->r_min == mas->index) {
+-		/* overwriting two or more ranges with one. */
+-		if (lmax == mas->last)
+-			return false;
+-
+-		/* Overwriting all of offset and a portion of offset + 1. */
++	if (mas->index == wr_mas->r_min && mas->last < lmax) {
++		/* Overwriting the range and over a part of the next range. */
++		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset);
++		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
+ 		rcu_assign_pointer(wr_mas->slots[offset], wr_mas->entry);
+ 		wr_mas->pivots[offset] = mas->last;
+-		goto done;
 -	}
 -
--	if ((mas->index == wr_mas->r_min) && (mas->last < wr_mas->r_max)) {
-+		mas->offset = new_end;
-+	} else if ((mas->index == wr_mas->r_min) && (mas->last < wr_mas->r_max)) {
-+		/* Append to start of range */
- 		if (new_end < node_pivots)
- 			wr_mas->pivots[new_end] = wr_mas->pivots[end];
- 
-@@ -4339,10 +4346,13 @@ static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
- 
- 		wr_mas->pivots[end] = mas->last;
- 		rcu_assign_pointer(wr_mas->slots[end], wr_mas->entry);
--		return true;
+-	/* Doesn't end on the next range end. */
+-	if (lmax != mas->last)
++	} else if (mas->index > wr_mas->r_min && mas->last == lmax) {
++		/* Overwriting a part of the range and over the next range */
++		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset);
++		gap |= !mt_slot_locked(mas->tree, wr_mas->slots, offset + 1);
++		rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
++		wr_mas->pivots[offset] = mas->index - 1;
++		mas->offset++; /* Keep mas accurate. */
 +	} else {
-+		return false;
- 	}
+ 		return false;
++	}
  
--	return false;
-+	if (!wr_mas->content || !wr_mas->entry)
+-	/* Overwriting a portion of offset and all of offset + 1 */
+-	if ((offset + 1 < mt_pivots[wr_mas->type]) &&
+-	    (wr_mas->entry || wr_mas->pivots[offset + 1]))
+-		wr_mas->pivots[offset + 1] = mas->last;
+-
+-	rcu_assign_pointer(wr_mas->slots[offset + 1], wr_mas->entry);
+-	wr_mas->pivots[offset] = mas->index - 1;
+-	mas->offset++; /* Keep mas accurate. */
+-
+-done:
+ 	trace_ma_write(__func__, mas, 0, wr_mas->entry);
+-	mas_update_gap(mas);
++	/*
++	 * Only update gap when the new entry is empty or there is an empty
++	 * entry in the original two ranges.
++	 */
++	if (!wr_mas->entry || gap)
 +		mas_update_gap(mas);
-+	return  true;
+ 	return true;
  }
  
- /*
-@@ -4382,12 +4392,9 @@ static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
- 	if (new_end >= mt_slots[wr_mas->type])
- 		goto slow_path;
- 
--	if (wr_mas->entry && (wr_mas->node_end < mt_slots[wr_mas->type] - 1) &&
--	    (mas->offset == wr_mas->node_end) && mas_wr_append(wr_mas)) {
--		if (!wr_mas->content || !wr_mas->entry)
--			mas_update_gap(mas);
-+	/* Attempt to append */
-+	if (new_end == wr_mas->node_end + 1 && mas_wr_append(wr_mas))
+@@ -4396,7 +4385,7 @@ static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
+ 	if (new_end == wr_mas->node_end + 1 && mas_wr_append(wr_mas))
  		return;
--	}
  
- 	if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
+-	if ((wr_mas->offset_end - mas->offset <= 1) && mas_wr_slot_store(wr_mas))
++	if (new_end == wr_mas->node_end && mas_wr_slot_store(wr_mas))
+ 		return;
+ 	else if (mas_wr_node_store(wr_mas))
  		return;
 -- 
 2.20.1
