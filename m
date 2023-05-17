@@ -2,120 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BC1706614
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778847065E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjEQLFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S230027AbjEQK73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbjEQLFN (ORCPT
+        with ESMTP id S231136AbjEQK7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:05:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F412691;
-        Wed, 17 May 2023 04:04:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684321494; x=1715857494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=r2C53q37nasETW8R0y62vJQzUer3lCIfLyK7Hf9/7k8=;
-  b=axX8PbLpY9PsCKFDzZNUFo/vEuC91gM+29zbxdq5GSxrvk/en9g2ap/T
-   QYr/az5gn598UL2VgilXah8J2eRmEAIid3mtNAXSBs4OWeGPLOqp9KT3i
-   imwaz3MGavyD9glOS4eMG9R6LLkP83y7mLhxyFszw0KXTj3UsVziFX+nb
-   Cgft0b9Zt5lBgZ89f7SumfxLIoZiLv6sx0xr03r1OMt2vH6JLERatA1s1
-   coaqkhTPOJJK+sYXaxQEQCMYDUWtx3PeMWHrHqxyuxSujxWvVod3aBowp
-   eSNBVdAMprB4mZPCiwogQ6Sa/Qv1aHkkbXArmL68bs1qLVAxLffw9EB3P
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,281,1677567600"; 
-   d="asc'?scan'208";a="215862137"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 03:57:37 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 17 May 2023 03:57:36 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 17 May 2023 03:57:35 -0700
-Date:   Wed, 17 May 2023 11:57:14 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v17 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <20230517-sinner-remember-a5f6b86194ab@wendy>
-References: <20230421-neurology-trapezoid-b4fa29923a23@wendy>
- <20230421-sleek-bottom-88b867f56609@wendy>
- <20230517102030.b4nyo2dmpfl7v7fk@pengutronix.de>
+        Wed, 17 May 2023 06:59:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5B76EA9;
+        Wed, 17 May 2023 03:58:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50F7B64556;
+        Wed, 17 May 2023 10:58:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC54C433EF;
+        Wed, 17 May 2023 10:58:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684321129;
+        bh=LyqQuqxk2nIF+cCI4D2OVfVZwmdd2faUMGSMypBGGAc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DhoHaQa2loe4pjG/qm2TFREQ1/wQxMoT//PzUU839g/p2cDP9sQCoufP7KhOId/ax
+         IXfNMT4jn1tDIGDxy6a0WFugzPMAX9vdRTm6CFLvAUgdn+Irj/ShJSEAopJuuojqtE
+         WRYk+IeYmPxWyWbjUoVIF+PSdbtao+I5d6N8DybrBKnvL5HKQrLstvDv+09VaBDjIi
+         nGWn7RERe1DG5JjrnfWE1thYrh4+SXuwG4fudkEgUJZ7a1wGZ3nNk7w42/KJdVj8vQ
+         tZXJY9Z3d+lvIyTHCO7FT28NXJk5sVaUobaHm2iqzBaYr7cTSBJdW18XnQtbBBjhft
+         g92TfEPXfQlAw==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: [PATCH v11 00/11] tracing: Add fprobe/tracepoint events
+Date:   Wed, 17 May 2023 19:58:45 +0900
+Message-ID:  <168432112492.1351929.9265172785506392923.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wz8/6k7ZC8Bn65VB"
-Content-Disposition: inline
-In-Reply-To: <20230517102030.b4nyo2dmpfl7v7fk@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---wz8/6k7ZC8Bn65VB
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Wed, May 17, 2023 at 12:20:30PM +0200, Uwe Kleine-K=F6nig wrote:
-> Hello Conor,
->=20
-> I found one remaining issue:
->=20
-> On Fri, Apr 21, 2023 at 10:27:09AM +0100, Conor Dooley wrote:
-> > +static u64 mchp_core_pwm_calc_duty(const struct pwm_state *state, u64 =
-clk_rate,
-> > +				   u8 prescale, u8 period_steps)
-> > +{
-> > +	u64 duty_steps, tmp;
-> > +
-> > +	/*
-> > +	 * Calculate the duty cycle in multiples of the prescaled period:
-> > +	 * duty_steps =3D duty_in_ns / step_in_ns
-> > +	 * step_in_ns =3D (prescale * NSEC_PER_SEC) / clk_rate
-> > +	 * The code below is rearranged slightly to only divide once.
-> > +	 */
-> > +	tmp =3D (prescale + 1) * NSEC_PER_SEC;
->=20
-> If prescale > 4 this overflows on 32bit archs, doesn't it?
+Here is the 11th version of add a basic fprobe event support for
+ftrace (tracefs) and perf. Here is the previous version.
 
-Ooh, I think you are right.
+https://lore.kernel.org/all/168407346448.941486.15681419068846125595.stgit@mhiramat.roam.corp.google.com/
 
-> (I think prescale + 1 is promoted to unsigned int, then the
-> multiplication is done and only then the range is extended to u64.
+The major change is using '$argr*' instead of '$$args' and automatically
+use the argument name when user specifies '$argN' when the kernel supports
+BTF [7/11].
+This version also update test cases[10/11] and document [11/11].
 
-I'll respin with an explicit cast.
+You can also get this series from:
 
-Thanks,
-Conor.
+git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
 
---wz8/6k7ZC8Bn65VB
-Content-Type: application/pgp-signature; name="signature.asc"
+With this fprobe events, we can continue to trace function entry/exit
+even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+it is not available if the architecture only supports
+CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+events can not probe function entry/exit effectively on such architecture.
+But this problem can be solved if the dynamic events supports fprobe events
+because fprobe events doesn't use kprobe but ftrace via fprobe.
 
------BEGIN PGP SIGNATURE-----
+FPROBE EVENTS
+=============
 
-iHQEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGSzCgAKCRB4tDGHoIJi
-0hR/AQCX5o1i7KOyi7nlg0yPqhSWIWjpqh9ysAtfM1Ro3HafgwD4+ygsDH16bb3k
-qDc8pgBDgXVyZ+OhNF7rK7RJvQMNDA==
-=7JAi
------END PGP SIGNATURE-----
+Fprobe events allows user to add new events on the entry and exit of kernel
+functions (which can be ftraced). Unlike kprobe events, the fprobe events
+can only probe the function entry and exit, and it can only trace the
+function args, return value, and stacks. (no registers)
+For probing function body, users can continue to use the kprobe events.
 
---wz8/6k7ZC8Bn65VB--
+The tracepoint probe events (tprobe events) also allows user to add new
+events dynamically on the tracepoint. Most of the tracepoint already has
+trace-events, so this feature is useful if you only want to know a
+specific parameter, or trace the tracepoints which has no trace-events
+(e.g. sched_*_tp tracepoints only exposes the tracepoints.)
+
+The fprobe events syntax is;
+
+ f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+ f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+
+And tracepoint probe events syntax is;
+
+ t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+
+This series includes BTF argument support for fprobe/tracepoint events,
+and kprobe events. This allows us to fetch a specific function parameter
+by name, and all parameters by '$arg*'.
+Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
+confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
+
+E.g.
+
+ # echo 't kfree ptr' >> dynamic_events
+ # echo 'f kfree object' >> dynamic_events
+ # cat dynamic_events 
+t:tracepoints/kfree kfree ptr=ptr
+f:fprobes/kfree__entry kfree object=object
+ # echo 1 > events/fprobes/enable
+ # echo 1 > events/tracepoints/enable
+ # echo > trace
+ # head -n 20 trace | tail
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+            tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
+            tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
+            tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
+            tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
+            tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
+            tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
+            tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
+            tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
+
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (11):
+      fprobe: Pass return address to the handlers
+      tracing/probes: Add fprobe events for tracing function entry and exit.
+      selftests/ftrace: Add fprobe related testcases
+      tracing/probes: Add tracepoint support on fprobe_events
+      tracing/probes: Move event parameter fetching code to common parser
+      tracing/probes: Support function parameters if BTF is available
+      tracing/probes: Add $arg* meta argument for all function args
+      tracing/probes: Add BTF retval type support
+      selftests/ftrace: Add tracepoint probe test case
+      selftests/ftrace: Add BTF arguments test cases
+      Documentation: tracing/probes: Add fprobe event tracing document
+
+
+ Documentation/trace/fprobetrace.rst                |  187 +++
+ Documentation/trace/index.rst                      |    1 
+ include/linux/fprobe.h                             |   11 
+ include/linux/rethook.h                            |    2 
+ include/linux/trace_events.h                       |    3 
+ include/linux/tracepoint-defs.h                    |    1 
+ include/linux/tracepoint.h                         |    5 
+ kernel/kprobes.c                                   |    1 
+ kernel/trace/Kconfig                               |   26 
+ kernel/trace/Makefile                              |    1 
+ kernel/trace/bpf_trace.c                           |    6 
+ kernel/trace/fprobe.c                              |   17 
+ kernel/trace/rethook.c                             |    3 
+ kernel/trace/trace.c                               |   13 
+ kernel/trace/trace.h                               |   11 
+ kernel/trace/trace_eprobe.c                        |   44 -
+ kernel/trace/trace_fprobe.c                        | 1197 ++++++++++++++++++++
+ kernel/trace/trace_kprobe.c                        |   33 -
+ kernel/trace/trace_probe.c                         |  629 +++++++++--
+ kernel/trace/trace_probe.h                         |   45 +
+ kernel/trace/trace_uprobe.c                        |    8 
+ lib/test_fprobe.c                                  |   10 
+ samples/fprobe/fprobe_example.c                    |    6 
+ .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   54 +
+ .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 
+ .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  102 ++
+ .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 +
+ .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 
+ 29 files changed, 2404 insertions(+), 163 deletions(-)
+ create mode 100644 Documentation/trace/fprobetrace.rst
+ create mode 100644 kernel/trace/trace_fprobe.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
