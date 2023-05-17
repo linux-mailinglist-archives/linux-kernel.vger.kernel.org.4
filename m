@@ -2,212 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D306705DAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFEA3705DAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbjEQDEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 23:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S232401AbjEQDEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 23:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232353AbjEQDDz (ORCPT
+        with ESMTP id S232443AbjEQDD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 23:03:55 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68EE946B6
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:03:10 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Ax3ertQ2Rkr14JAA--.16416S3;
-        Wed, 17 May 2023 11:03:09 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_8vrQ2RkyvNkAA--.41740S2;
-        Wed, 17 May 2023 11:03:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH] LoongArch: Add support to clone a time namespace
-Date:   Wed, 17 May 2023 11:03:00 +0800
-Message-Id: <1684292580-2455-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8Dx_8vrQ2RkyvNkAA--.41740S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGr1DJFWfCryxXr1UCr13twb_yoWrCF1rpF
-        Z2krsrJw4UWryfKFWaq3sxurn8Grn7Ww42qF4I93yfAF1IgryDZr1vyrykZF45t3ykC34I
-        gFWfWw4Y9F4UX3DanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 16 May 2023 23:03:58 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F18949FC
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:03:29 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso450654a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684292608; x=1686884608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mQC84bjg5veEkaq5Nnh/MZ6+IOv+WPa/0t9irvzCFqA=;
+        b=gj4J4tXNFizhNQB/HoengzmVIQXJSFw4abMjN/yA0HJfTXudNTk3BX/b7D2efAx9ZJ
+         Gdaz4BmOqUYa/csf1ugtVdGcRRFUI/kSpTe7Caq0rwhwBhzRG0vIjMA09uEaDIvx7j2h
+         pBR5EEvj8SHJoQGU9cKoodwuUaxVvRy7vby6I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684292608; x=1686884608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mQC84bjg5veEkaq5Nnh/MZ6+IOv+WPa/0t9irvzCFqA=;
+        b=hcLOAeQ3iV7bG8wkRXXTfwYVVrSCJAvtfBUjD/ptiHXk91FS2m7yzLIj3WiKtqeaE2
+         LiZSGw7SUr5KqXU6Ujf3zGEOXEBROQSLeLHD/+k9Vg4dut/ojSRlwh6b9hgRDFS1UwaW
+         rnK3TATCy3xmyPlVvtPhKkEZ+h3vgeblUyMdofxqGS2pLY/fdPPryoVgZo/D9TbjkHa7
+         A/eMNhqLzGJGvAYh7DvF5uI7tdisaYX9UjTbOvxwaJrL+DhEGvPgvhTsgrM2lC/TdivN
+         QaD2j3q+FSmauQFgA2kzSDtVH9y0ZqD6yzJDYb83Obl5url6zOk4SYQsRH3xDTFYGN+A
+         C0sA==
+X-Gm-Message-State: AC+VfDxBmhRWe4x+rP3aWoKJ7IsXc+GnQ6p2ngYdKxOuflIRU/sbBs4C
+        OLZigfvKMys1IalPSSU4u7CcU5ZyZ0TwN0VFC86VK/Nb
+X-Google-Smtp-Source: ACHHUZ4pwkHO7SKRHngBtG2fBI0+1saLRB6GA+tmDFi2o8/AKjO6oZaiD2v86g1Ad8jJKKagvnperQ==
+X-Received: by 2002:a17:906:9b8f:b0:96a:6c3:5e72 with SMTP id dd15-20020a1709069b8f00b0096a06c35e72mr25824245ejc.10.1684292607865;
+        Tue, 16 May 2023 20:03:27 -0700 (PDT)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
+        by smtp.gmail.com with ESMTPSA id y10-20020a170906914a00b009663cf5dc3bsm11510502ejw.53.2023.05.16.20.03.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 20:03:27 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-965a68abfd4so31577066b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 20:03:26 -0700 (PDT)
+X-Received: by 2002:a17:907:6d15:b0:96a:bfc:7335 with SMTP id
+ sa21-20020a1709076d1500b0096a0bfc7335mr23923089ejc.53.1684292606486; Tue, 16
+ May 2023 20:03:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230508163751.841-1-beaub@linux.microsoft.com>
+ <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
+ <20230509130111.62d587f1@rorschach.local.home> <20230509163050.127d5123@rorschach.local.home>
+ <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local> <20230515192407.GA85@W11-BEAU-MD.localdomain>
+ <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local> <CAHk-=whBKoovtifU2eCeyuBBee-QMcbxdXDLv0mu0k2DgxiaOw@mail.gmail.com>
+ <CAHk-=wj1hh=ZUriY9pVFvD1MjqbRuzHc4yz=S2PCW7u3W0-_BQ@mail.gmail.com> <20230516222919.79bba667@rorschach.local.home>
+In-Reply-To: <20230516222919.79bba667@rorschach.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 16 May 2023 20:03:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh_GEr4ehJKwMM3UA0-7CfNpVH7v_T-=1u+gq9VZD70mw@mail.gmail.com>
+Message-ID: <CAHk-=wh_GEr4ehJKwMM3UA0-7CfNpVH7v_T-=1u+gq9VZD70mw@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>, dthaler@microsoft.com,
+        brauner@kernel.org, hch@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When execute the following command to test clone3 on LoongArch:
+On Tue, May 16, 2023 at 7:29=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> So this code path is very much in user context (called directly by a
+> write system call). The issue that Alexei had was that it's also in an
+> rcu_read_lock() section.
+>
+> I wonder if this all goes away if we switch to SRCU?
 
-  # cd tools/testing/selftests/clone3 && make && ./clone3
+Yes, SRCU context would work.
 
-we can see the following error info:
+That said, how critical is this code? Because honestly, the *sanest*
+thing to do is to just hold the lock that actually protects the list,
+not try to walk the list in any RCU mode.
 
-  # [5719] Trying clone3() with flags 0x80 (size 0)
-  # Invalid argument - Failed to create new process
-  # [5719] clone3() with flags says: -22 expected 0
-  not ok 18 [5719] Result (-22) is different than expected (0)
+And as far as I can tell, that's the 'event_mutex', which is already held.
 
-This is because if CONFIG_TIME_NS is not set, but the flag
-CLONE_NEWTIME (0x80) is used to clone a time namespace, it
-will return -EINVAL in copy_time_ns().
+RCU walking of a list is only meaningful when the walk doesn't need
+the lock that guarantees the list integrity.
 
-Here is the related code in include/linux/time_namespace.h:
+But *modification* of a RCU-protected list still requires locking, and
+from a very cursory look, it really looks like 'event_mutex' is
+already the lock that protects the list.
 
-  #ifdef CONFIG_TIME_NS
-  ...
-  struct time_namespace *copy_time_ns(unsigned long flags,
-				      struct user_namespace *user_ns,
-				      struct time_namespace *old_ns);
-  ...
-  #else
-  ...
-  static inline
-  struct time_namespace *copy_time_ns(unsigned long flags,
-				      struct user_namespace *user_ns,
-				      struct time_namespace *old_ns)
-  {
-	  if (flags & CLONE_NEWTIME)
-		  return ERR_PTR(-EINVAL);
+So the whole use of RCU during the list walking there in
+user_event_enabler_update() _seems_ pointless. You hold event_mutex -
+user_event_enabler_write() that is called in the loop already has a
+lockdep assert to that effect.
 
-	  return old_ns;
-  }
-  ...
-  #endif
+So what is it that could even race and change the list that is the
+cause of that rcu-ness?
 
-Here is the complete call stack:
+Other code in that file happily just does
 
-  clone3()
-    kernel_clone()
-      copy_process()
-        copy_namespaces()
-          create_new_namespaces()
-            copy_time_ns()
-              clone_time_ns()
+        mutex_lock(&event_mutex);
 
-Because CONFIG_TIME_NS depends on GENERIC_VDSO_TIME_NS, select
-GENERIC_VDSO_TIME_NS to enable CONFIG_TIME_NS to build the real
-implementation of copy_time_ns() in kernel/time/namespace.c.
+        list_for_each_entry_safe(enabler, next, &mm->enablers, link)
 
-Additionally, it needs to define some arch dependent functions
-such as __arch_get_timens_vdso_data(), arch_get_vdso_data() and
-vdso_join_timens(), then the failed test can be fixed.
+with no RCU anywhere. Why does user_event_enabler_update() not do that?
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
+Oh, and even those other loops are a bit strange. Why do they use the
+"_safe" variant, even when they just traverse the list without
+changing it? Look at user_event_enabler_exists(), for example.
 
-This is based on 6.4-rc2
+I must really be missing something. That code is confusing. Or I am
+very confused.
 
- arch/loongarch/Kconfig                         |  1 +
- arch/loongarch/include/asm/vdso/gettimeofday.h |  7 ++++++
- arch/loongarch/kernel/vdso.c                   | 32 ++++++++++++++++++++++++++
- 3 files changed, 40 insertions(+)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index d38b066..93b167f 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -80,6 +80,7 @@ config LOONGARCH
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
- 	select GENERIC_TIME_VSYSCALL
-+	select GENERIC_VDSO_TIME_NS
- 	select GPIOLIB
- 	select HAS_IOPORT
- 	select HAVE_ARCH_AUDITSYSCALL
-diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
-index 7b2cd37..1af88ac 100644
---- a/arch/loongarch/include/asm/vdso/gettimeofday.h
-+++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
-@@ -94,6 +94,13 @@ static __always_inline const struct vdso_data *__arch_get_vdso_data(void)
- 	return get_vdso_data();
- }
- 
-+#ifdef CONFIG_TIME_NS
-+static __always_inline
-+const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
-+{
-+	return get_vdso_data() + PAGE_SIZE;
-+}
-+#endif
- #endif /* !__ASSEMBLY__ */
- 
- #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
-diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
-index eaebd2e..cf62103 100644
---- a/arch/loongarch/kernel/vdso.c
-+++ b/arch/loongarch/kernel/vdso.c
-@@ -14,6 +14,7 @@
- #include <linux/random.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
-+#include <linux/time_namespace.h>
- #include <linux/timekeeper_internal.h>
- 
- #include <asm/page.h>
-@@ -73,6 +74,37 @@ static int __init init_vdso(void)
- }
- subsys_initcall(init_vdso);
- 
-+#ifdef CONFIG_TIME_NS
-+struct vdso_data *arch_get_vdso_data(void *vvar_page)
-+{
-+	return (struct vdso_data *)(vvar_page);
-+}
-+
-+/*
-+ * The vvar mapping contains data for a specific time namespace, so when a
-+ * task changes namespace we must unmap its vvar data for the old namespace.
-+ * Subsequent faults will map in data for the new namespace.
-+ *
-+ * For more details see timens_setup_vdso_data().
-+ */
-+int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
-+{
-+	struct mm_struct *mm = task->mm;
-+	struct vm_area_struct *vma;
-+
-+	VMA_ITERATOR(vmi, mm, 0);
-+
-+	mmap_read_lock(mm);
-+	for_each_vma(vmi, vma) {
-+		if (vma_is_special_mapping(vma, &vdso_info.data_mapping))
-+			zap_vma_pages(vma);
-+	}
-+	mmap_read_unlock(mm);
-+
-+	return 0;
-+}
-+#endif
-+
- static unsigned long vdso_base(void)
- {
- 	unsigned long base = STACK_TOP;
--- 
-2.1.0
-
+            Linus
