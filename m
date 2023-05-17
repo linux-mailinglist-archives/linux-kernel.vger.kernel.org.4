@@ -2,120 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937CF7066A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F34C7066B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjEQL3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S231139AbjEQLa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbjEQL3i (ORCPT
+        with ESMTP id S231208AbjEQLaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:29:38 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F122D30C8;
-        Wed, 17 May 2023 04:29:36 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HB7BJC023902;
-        Wed, 17 May 2023 11:28:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=NDNDo483NWCxuBgC62EmEkRd88RyM/bkMdaCrqWiEjU=;
- b=VRtGkAflt6Ne1p93gyowlWX7j5boLIQ7h0nC9VIo7uX3bwTrUs3t4FOkk1lJTYXqc25V
- 9FamFmiSWFwwyWa1DKrOu9DcxLjGAv2i0jSAymPQgGQf5P0M1OluYrFgT26OhkCmT/su
- BOKQtACZlOM4qdl7albr+SCOM7HzolGHsX5OPk132gsH5r9G7psINiKU8nGXVgkrlm0G
- JFTSinpEe96JQbyAanKB2Lfpy9cfYcMtNW6I0KolKOl1iMwgb7HevQZDAfJyxXafubsX
- 7gBNmSwaGFu7ct5RonhF3KWLIHQEwZVWECGZeI9L5VSTs6GPXqMDDHdOU4895qB3OFQc 4w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmw5v1gq1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 11:28:14 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HB7Pi6025529;
-        Wed, 17 May 2023 11:28:13 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmw5v1gn6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 11:28:12 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H2RRIs022653;
-        Wed, 17 May 2023 11:28:09 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qj264t4u2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 11:28:09 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HBS6QC63177030
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 11:28:06 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 203902004B;
-        Wed, 17 May 2023 11:28:06 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CE9620040;
-        Wed, 17 May 2023 11:28:05 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Wed, 17 May 2023 11:28:04 +0000 (GMT)
-Date:   Wed, 17 May 2023 13:28:03 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 16/23] s390: gmap use pte_unmap_unlock() not spin_unlock()
-Message-ID: <ZGS6Q9jb/Rjwi4Rm@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
- <5579873-d7b-65e-5de0-a2ba8a144e7@google.com>
+        Wed, 17 May 2023 07:30:24 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7B44205;
+        Wed, 17 May 2023 04:30:12 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1684323010;
+        bh=tX5B9YR0enKjdo8Rk63Z+5SJMwlE6xq8HQ4kgSM4ylU=;
+        h=From:Date:Subject:To:Cc:From;
+        b=hJwrVwFQukiU4UMcCJrA5lzxgA8pOX1JdgG5wrs409bquq+cCFhPJaPpOvhUTKiQ6
+         gAmlRrXeNYLhk4wqqunpw/JNawwyVx+jcl/Yr4AVbIxITF+R7cH4NEwCBko8caCqns
+         db6bMl9bj0XldY4OxYVYl+8dWzQMV/35+rpLtAZE=
+Date:   Wed, 17 May 2023 13:30:05 +0200
+Subject: [PATCH v2] nbd: automatically load module on genl access
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5579873-d7b-65e-5de0-a2ba8a144e7@google.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tSWvl9C0MlO4O_EzCFOjF_JcbOB8NztS
-X-Proofpoint-ORIG-GUID: NWm_n_tm0YYcdEmwRmZvkdtWX-DujuzO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
- spamscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=780
- priorityscore=1501 mlxscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305170090
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230223-b4-nbd-genl-v2-1-64585d9ce4b9@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIALy6ZGQC/zWNQQrCMBBFr1KydkoyqTW48h7iIkmnTSBOJWm1U
+ Hp3g+DyfXjv76JQjlTEtdlFpncsceYKeGqED5YngjhUFihRS0QNrgN2A0zECbS9dN722vSmF9V
+ wthC4bNmH6vCaUh1fmca4/S7uj8pjnp+whEz2H0allJRn7LRpURkDClLkdbt9KJZSfFhDy7SI4
+ /gC2AiDba8AAAA=
+To:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org, Wouter Verhelst <w@uter.be>,
+        "Richard W.M. Jones" <rjones@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684323007; l=1278;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=tX5B9YR0enKjdo8Rk63Z+5SJMwlE6xq8HQ4kgSM4ylU=;
+ b=RTZfwn/ytq5xcFdHDR6ZfgqLHr4gAH0UxLUokOjS5rbCOF9JIRK0Cd8dGjOiYbvJOZYg2yayr
+ kkMaoHJCcGmBEw2CS2M5jS/gbBTUajZjw3sB464zeEyofqm7L9U3Cjv
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,15 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:02:32PM -0700, Hugh Dickins wrote:
-> pte_alloc_map_lock() expects to be followed by pte_unmap_unlock(): to
-> keep balance in future, pass ptep as well as ptl to gmap_pte_op_end(),
-> and use pte_unmap_unlock() instead of direct spin_unlock() (even though
-> ptep ends up unused inside the macro).
-> 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  arch/s390/mm/gmap.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
+Instead of forcing the user to manually load the module do it
+automatically.
 
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+For example this avoids the following error when using nbd-client:
+
+$ nbd-client localhost 10809 /dev/nbd0
+...
+Error: Couldn't resolve the nbd netlink family, make sure the nbd module is loaded and your nbd driver supports the netlink interface.
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Expand Cc list to get some reviews
+- Add concrete commit example to commit message
+- Link to v1: https://lore.kernel.org/lkml/20221110052438.2188-1-linux@weissschuh.net/
+---
+ drivers/block/nbd.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 65ecde3e2a5b..8632dbacd2ef 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -2335,6 +2335,7 @@ static struct genl_family nbd_genl_family __ro_after_init = {
+ 	.mcgrps		= nbd_mcast_grps,
+ 	.n_mcgrps	= ARRAY_SIZE(nbd_mcast_grps),
+ };
++MODULE_ALIAS_GENL_FAMILY(NBD_GENL_FAMILY_NAME);
+ 
+ static int populate_nbd_status(struct nbd_device *nbd, struct sk_buff *reply)
+ {
+
+---
+base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+change-id: 20230223-b4-nbd-genl-3a74ca638686
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
