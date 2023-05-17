@@ -2,142 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2DE705D75
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6711705D7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbjEQCu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S232228AbjEQCwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjEQCu5 (ORCPT
+        with ESMTP id S232214AbjEQCwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:50:57 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3492F103;
-        Tue, 16 May 2023 19:50:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=23;SR=0;TI=SMTPD_---0ViqnrSZ_1684291846;
-Received: from 30.97.48.190(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0ViqnrSZ_1684291846)
-          by smtp.aliyun-inc.com;
-          Wed, 17 May 2023 10:50:50 +0800
-Message-ID: <93e0e991-147f-0021-d635-95e615057273@linux.alibaba.com>
-Date:   Wed, 17 May 2023 10:50:45 +0800
+        Tue, 16 May 2023 22:52:41 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A006D469D;
+        Tue, 16 May 2023 19:52:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id D6787180120CAB;
+        Wed, 17 May 2023 10:52:32 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+To:     Alex Deucher <alexander.deucher@amd.com>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Su Hui <suhui@nfschina.com>
+Subject: [PATCH] drm/radeon: Remove unnecessary (void*) conversions
+Date:   Wed, 17 May 2023 10:52:19 +0800
+Message-Id: <20230517025219.50281-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [RFC PATCH bpf-next v3 00/37] FUSE BPF: A Stacked Filesystem
- Extension for FUSE
-To:     Daniel Rosenberg <drosen@google.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Amir Goldstein <amir73il@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
-References: <20230418014037.2412394-1-drosen@google.com>
- <CAJfpegtuNgbZfLiKnpzdEP0sNtCt=83NjGtBnmtvMaon2avv2w@mail.gmail.com>
- <CA+PiJmTMs2u=J6ANYqHdGww5SoE_focZGjMRZk5WgoH8fVuCsA@mail.gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <CA+PiJmTMs2u=J6ANYqHdGww5SoE_focZGjMRZk5WgoH8fVuCsA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+No need cast (void*) to (struct radeon_device *)
+or (struct radeon_ring *).
 
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/gpu/drm/radeon/r100.c         | 8 ++++----
+ drivers/gpu/drm/radeon/r300.c         | 2 +-
+ drivers/gpu/drm/radeon/r420.c         | 2 +-
+ drivers/gpu/drm/radeon/r600.c         | 2 +-
+ drivers/gpu/drm/radeon/radeon_fence.c | 2 +-
+ drivers/gpu/drm/radeon/radeon_gem.c   | 2 +-
+ drivers/gpu/drm/radeon/radeon_ib.c    | 2 +-
+ drivers/gpu/drm/radeon/radeon_pm.c    | 2 +-
+ drivers/gpu/drm/radeon/radeon_ring.c  | 2 +-
+ drivers/gpu/drm/radeon/radeon_ttm.c   | 2 +-
+ drivers/gpu/drm/radeon/rs400.c        | 2 +-
+ drivers/gpu/drm/radeon/rv515.c        | 4 ++--
+ 12 files changed, 16 insertions(+), 16 deletions(-)
 
-On 2023/5/2 17:07, Daniel Rosenberg wrote:
-> On Mon, Apr 24, 2023 at 8:32 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
->>
->>
->> The security model needs to be thought about and documented.  Think
->> about this: the fuse server now delegates operations it would itself
->> perform to the passthrough code in fuse.  The permissions that would
->> have been checked in the context of the fuse server are now checked in
->> the context of the task performing the operation.  The server may be
->> able to bypass seccomp restrictions.  Files that are open on the
->> backing filesystem are now hidden (e.g. lsof won't find these), which
->> allows the server to obfuscate accesses to backing files.  Etc.
->>
->> These are not particularly worrying if the server is privileged, but
->> fuse comes with the history of supporting unprivileged servers, so we
->> should look at supporting passthrough with unprivileged servers as
->> well.
->>
-> 
-> This is on my todo list. My current plan is to grab the creds that the
-> daemon uses to respond to FUSE_INIT. That should keep behavior fairly
-> similar. I'm not sure if there are cases where the fuse server is
-> operating under multiple contexts.
-> I don't currently have a plan for exposing open files via lsof. Every
-> such file should relate to one that will show up though. I haven't dug
-> into how that's set up, but I'm open to suggestions.
-> 
->> My other generic comment is that you should add justification for
->> doing this in the first place.  I guess it's mainly performance.  So
->> how performance can be won in real life cases?   It would also be good
->> to measure the contribution of individual ops to that win.   Is there
->> another reason for this besides performance?
->>
->> Thanks,
->> Miklos
-> 
-> Our main concern with it is performance. We have some preliminary
-> numbers looking at the pure passthrough case. We've been testing using
-> a ramdrive on a somewhat slow machine, as that should highlight
-> differences more. We ran fio for sequential reads, and random
-> read/write. For sequential reads, we were seeing libfuse's
-> passthrough_hp take about a 50% hit, with fuse-bpf not being
-> detectably slower. For random read/write, we were seeing a roughly 90%
-> drop in performance from passthrough_hp, while fuse-bpf has about a 7%
-> drop in read and write speed. When we use a bpf that traces every
-> opcode, that performance hit increases to a roughly 1% drop in
-> sequential read performance, and a 20% drop in both read and write
-> performance for random read/write. We plan to make more complex bpf
-> examples, with fuse daemon equivalents to compare against.
-> 
-> We have not looked closely at the impact of individual opcodes yet.
-> 
-> There's also a potential ease of use for fuse-bpf. If you're
-> implementing a fuse daemon that is largely mirroring a backing
-> filesystem, you only need to write code for the differences in
-> behavior. For instance, say you want to remove image metadata like
-> location. You could give bpf information on what range of data is
-> metadata, and zero out that section without having to handle any other
-> operations.
+diff --git a/drivers/gpu/drm/radeon/r100.c b/drivers/gpu/drm/radeon/r100.c
+index d4f09ecc3d22..affa9e0309b2 100644
+--- a/drivers/gpu/drm/radeon/r100.c
++++ b/drivers/gpu/drm/radeon/r100.c
+@@ -2929,7 +2929,7 @@ static void r100_set_safe_registers(struct radeon_device *rdev)
+ #if defined(CONFIG_DEBUG_FS)
+ static int r100_debugfs_rbbm_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t reg, value;
+ 	unsigned i;
+ 
+@@ -2948,7 +2948,7 @@ static int r100_debugfs_rbbm_info_show(struct seq_file *m, void *unused)
+ 
+ static int r100_debugfs_cp_ring_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	struct radeon_ring *ring = &rdev->ring[RADEON_RING_TYPE_GFX_INDEX];
+ 	uint32_t rdp, wdp;
+ 	unsigned count, i, j;
+@@ -2974,7 +2974,7 @@ static int r100_debugfs_cp_ring_info_show(struct seq_file *m, void *unused)
+ 
+ static int r100_debugfs_cp_csq_fifo_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t csq_stat, csq2_stat, tmp;
+ 	unsigned r_rptr, r_wptr, ib1_rptr, ib1_wptr, ib2_rptr, ib2_wptr;
+ 	unsigned i;
+@@ -3022,7 +3022,7 @@ static int r100_debugfs_cp_csq_fifo_show(struct seq_file *m, void *unused)
+ 
+ static int r100_debugfs_mc_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t tmp;
+ 
+ 	tmp = RREG32(RADEON_CONFIG_MEMSIZE);
+diff --git a/drivers/gpu/drm/radeon/r300.c b/drivers/gpu/drm/radeon/r300.c
+index 7b0cfeaddcec..9c1a92fa2af6 100644
+--- a/drivers/gpu/drm/radeon/r300.c
++++ b/drivers/gpu/drm/radeon/r300.c
+@@ -589,7 +589,7 @@ int rv370_get_pcie_lanes(struct radeon_device *rdev)
+ #if defined(CONFIG_DEBUG_FS)
+ static int rv370_debugfs_pcie_gart_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t tmp;
+ 
+ 	tmp = RREG32_PCIE(RADEON_PCIE_TX_GART_CNTL);
+diff --git a/drivers/gpu/drm/radeon/r420.c b/drivers/gpu/drm/radeon/r420.c
+index 7e6320e8c6a0..eae8a6389f5e 100644
+--- a/drivers/gpu/drm/radeon/r420.c
++++ b/drivers/gpu/drm/radeon/r420.c
+@@ -474,7 +474,7 @@ int r420_init(struct radeon_device *rdev)
+ #if defined(CONFIG_DEBUG_FS)
+ static int r420_debugfs_pipes_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t tmp;
+ 
+ 	tmp = RREG32(R400_GB_PIPE_SELECT);
+diff --git a/drivers/gpu/drm/radeon/r600.c b/drivers/gpu/drm/radeon/r600.c
+index dd78fc499402..382795a8b3c0 100644
+--- a/drivers/gpu/drm/radeon/r600.c
++++ b/drivers/gpu/drm/radeon/r600.c
+@@ -4345,7 +4345,7 @@ int r600_irq_process(struct radeon_device *rdev)
+ 
+ static int r600_debugfs_mc_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 
+ 	DREG32_SYS(m, rdev, R_000E50_SRBM_STATUS);
+ 	DREG32_SYS(m, rdev, VM_L2_STATUS);
+diff --git a/drivers/gpu/drm/radeon/radeon_fence.c b/drivers/gpu/drm/radeon/radeon_fence.c
+index 73e3117420bf..2749dde5838f 100644
+--- a/drivers/gpu/drm/radeon/radeon_fence.c
++++ b/drivers/gpu/drm/radeon/radeon_fence.c
+@@ -955,7 +955,7 @@ void radeon_fence_driver_force_completion(struct radeon_device *rdev, int ring)
+ #if defined(CONFIG_DEBUG_FS)
+ static int radeon_debugfs_fence_info_show(struct seq_file *m, void *data)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	int i, j;
+ 
+ 	for (i = 0; i < RADEON_NUM_RINGS; ++i) {
+diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+index bdc5af23f005..5de99ffa072f 100644
+--- a/drivers/gpu/drm/radeon/radeon_gem.c
++++ b/drivers/gpu/drm/radeon/radeon_gem.c
+@@ -879,7 +879,7 @@ int radeon_mode_dumb_create(struct drm_file *file_priv,
+ #if defined(CONFIG_DEBUG_FS)
+ static int radeon_debugfs_gem_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	struct radeon_bo *rbo;
+ 	unsigned i = 0;
+ 
+diff --git a/drivers/gpu/drm/radeon/radeon_ib.c b/drivers/gpu/drm/radeon/radeon_ib.c
+index 6a45a72488f9..fb9ecf5dbe2b 100644
+--- a/drivers/gpu/drm/radeon/radeon_ib.c
++++ b/drivers/gpu/drm/radeon/radeon_ib.c
+@@ -292,7 +292,7 @@ int radeon_ib_ring_tests(struct radeon_device *rdev)
+ 
+ static int radeon_debugfs_sa_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 
+ 	radeon_sa_bo_dump_debug_info(&rdev->ring_tmp_bo, m);
+ 
+diff --git a/drivers/gpu/drm/radeon/radeon_pm.c b/drivers/gpu/drm/radeon/radeon_pm.c
+index cbc554928bcc..b73fd9ab0252 100644
+--- a/drivers/gpu/drm/radeon/radeon_pm.c
++++ b/drivers/gpu/drm/radeon/radeon_pm.c
+@@ -1916,7 +1916,7 @@ static void radeon_dynpm_idle_work_handler(struct work_struct *work)
+ 
+ static int radeon_debugfs_pm_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	struct drm_device *ddev = rdev->ddev;
+ 
+ 	if  ((rdev->flags & RADEON_IS_PX) &&
+diff --git a/drivers/gpu/drm/radeon/radeon_ring.c b/drivers/gpu/drm/radeon/radeon_ring.c
+index 7e207276df37..e6534fa9f1fb 100644
+--- a/drivers/gpu/drm/radeon/radeon_ring.c
++++ b/drivers/gpu/drm/radeon/radeon_ring.c
+@@ -464,7 +464,7 @@ void radeon_ring_fini(struct radeon_device *rdev, struct radeon_ring *ring)
+ 
+ static int radeon_debugfs_ring_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_ring *ring = (struct radeon_ring *) m->private;
++	struct radeon_ring *ring = m->private;
+ 	struct radeon_device *rdev = ring->rdev;
+ 
+ 	uint32_t rptr, wptr, rptr_next;
+diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+index 2220cdf6a3f6..06a53ecc04a2 100644
+--- a/drivers/gpu/drm/radeon/radeon_ttm.c
++++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+@@ -780,7 +780,7 @@ void radeon_ttm_set_active_vram_size(struct radeon_device *rdev, u64 size)
+ 
+ static int radeon_ttm_page_pool_show(struct seq_file *m, void *data)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 
+ 	return ttm_pool_debugfs(&rdev->mman.bdev.pool, m);
+ }
+diff --git a/drivers/gpu/drm/radeon/rs400.c b/drivers/gpu/drm/radeon/rs400.c
+index 6383f7a34bd8..922a29e58880 100644
+--- a/drivers/gpu/drm/radeon/rs400.c
++++ b/drivers/gpu/drm/radeon/rs400.c
+@@ -307,7 +307,7 @@ void rs400_mc_wreg(struct radeon_device *rdev, uint32_t reg, uint32_t v)
+ #if defined(CONFIG_DEBUG_FS)
+ static int rs400_debugfs_gart_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t tmp;
+ 
+ 	tmp = RREG32(RADEON_HOST_PATH_CNTL);
+diff --git a/drivers/gpu/drm/radeon/rv515.c b/drivers/gpu/drm/radeon/rv515.c
+index 63fb06e8e2d7..76260fdfbaa7 100644
+--- a/drivers/gpu/drm/radeon/rv515.c
++++ b/drivers/gpu/drm/radeon/rv515.c
+@@ -221,7 +221,7 @@ void rv515_mc_wreg(struct radeon_device *rdev, uint32_t reg, uint32_t v)
+ #if defined(CONFIG_DEBUG_FS)
+ static int rv515_debugfs_pipes_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t tmp;
+ 
+ 	tmp = RREG32(GB_PIPE_SELECT);
+@@ -237,7 +237,7 @@ static int rv515_debugfs_pipes_info_show(struct seq_file *m, void *unused)
+ 
+ static int rv515_debugfs_ga_info_show(struct seq_file *m, void *unused)
+ {
+-	struct radeon_device *rdev = (struct radeon_device *)m->private;
++	struct radeon_device *rdev = m->private;
+ 	uint32_t tmp;
+ 
+ 	tmp = RREG32(0x2140);
+-- 
+2.30.2
 
-A bit out of topic (although I'm not quite look into FUSE BPF internals)
-After roughly listening to this topic in FS track last week, I'm not
-quite sure (at least in the long term) if it might be better if
-ebpf-related filter/redirect stuffs could be landed in vfs or in a
-somewhat stackable fs so that we could redirect/filter any sub-fstree
-in principle?    It's just an open question and I have no real tendency
-of this but do we really need a BPF-filter functionality for each
-individual fs?
-
-It sounds much like
-https://learn.microsoft.com/en-us/windows-hardware/drivers/ifs/about-file-system-filter-drivers
-
-Thanks,
-Gao Xiang
-
-> 
->   -Daniel
