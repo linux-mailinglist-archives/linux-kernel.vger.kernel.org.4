@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883327068D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0807068DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbjEQNCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S231855AbjEQNET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjEQNCS (ORCPT
+        with ESMTP id S231215AbjEQNEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:02:18 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB13F10EB
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:02:17 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso580227a91.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684328537; x=1686920537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z5AxAeCdhuBvApaM2VNWNpR5KDUG0yf5YyED4YO+eQA=;
-        b=oOzu2jaD9jkQxFp/C6pdw/65JxoJTdqqUn1IncbHbJJnSqOvS3XDF8ki9Bxc0VELhl
-         2vu8ShEJFZcH3m7N5hIz9qxjX/JaCY5/b7wDutu+gWVtl+nO8sxU5PuHiCu564O+ZUw3
-         1V5G2t5yUXe+MJNjdh/0vjOmhHHiMWVbrGaFs3IRQ8149RJWXVZQbLohaTIlNpgbylHK
-         T+AMpbEIiejf0rj0KSkV7Zidngkxt08yJotwRxkO6m8HN7NB+pcb2BZIolkgCZNNnEls
-         TN+VjPiaptl+3yYvtHH7gTESFvrLrOowhWtCtLWw/mO0H0munPE62+EUHplhSy8Dr3w+
-         ComQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684328537; x=1686920537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z5AxAeCdhuBvApaM2VNWNpR5KDUG0yf5YyED4YO+eQA=;
-        b=GcBAHMIYGHLJ9KJpZM5Q6gdf1oY6TuZPTM3DUQUy+h/HmcuEeyoDzSnuw+nXsjdIIs
-         n3R8Qc5GAQLSZ55c+kmrRpUJFj0Dvv6SmmpkaBttEDzxzwlQkvEFGTWuAhuBcLwClG5Y
-         r6TGMqOgFBhzdsLITrRU7w5U7IxBhq8tgLfhYyqlT8PvcAlGXWDAzf+reNCaEr3ggwKL
-         qwXTm4vm6WkLwW5bazfxyjh6OZihvRRHzKBhci5c0sMisibOoPJ4Koqi1J/TqEsApBtH
-         Dih2TbCEonEv+GQL9LP9NWR9rwGu6UF46Hkom7uKCA5XE/n4sSM4BgOgZIS+IvbzkzVU
-         ro9g==
-X-Gm-Message-State: AC+VfDy9Dkur91AO/8m/6MHhVKenMgqOvBUCtRYp/+zgqRVgMGcSkJLx
-        Oj4HatwSugFbiwFjjAm9lAKzR0y8FFmHtL21fzg=
-X-Google-Smtp-Source: ACHHUZ7QNLHezJKKgugcDY76WqtFsyRDPUdrP3VNrAmxpGJnnItHVANA8FASckIlsufnD4WgvoVUwVdScRLgfreQMIw=
-X-Received: by 2002:a17:90a:f30d:b0:253:2c9b:2523 with SMTP id
- ca13-20020a17090af30d00b002532c9b2523mr4971288pjb.46.1684328536918; Wed, 17
- May 2023 06:02:16 -0700 (PDT)
+        Wed, 17 May 2023 09:04:16 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFD110D4;
+        Wed, 17 May 2023 06:04:14 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4QLtbV1QG8zyVk;
+        Wed, 17 May 2023 16:04:05 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1684328652;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qroAO/01zVC5BeUS1oPJjvMgFXQbPQ5wLZQknG7YiBc=;
+        b=KI5xLqxAreFfTVONtxIvWUWwB6MTDQj7RtmKmQdExNpcu0TTzvVSri6CgDzfn/Cvel5yIF
+        peJPQn6GiZwvSCe1d9YgeARR10JKXstw9T0rA85J5gW4iNziKdRCMcnWXYP0+H6llDqTu+
+        dlJg7YsYYMHPUazplrk3fr+MLlrvNQ8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1684328652;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qroAO/01zVC5BeUS1oPJjvMgFXQbPQ5wLZQknG7YiBc=;
+        b=tq4IDVw8v8U/8GsVfhSpzk5/qRBC75wFpFFUJgfBv9u3M7Nh/LDCouHEa/Yf2TAbdyN9RL
+        s9DHY+YDHwdk5UhlkrhBxeP2H2uUN2GWxD/ThDKmfJpRrOdCf8iI3cZweO5gCffPclWh3T
+        72d3B2jMq4cIupzPEIlKtqOR6tjzSWQ=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684328652; a=rsa-sha256; cv=none;
+        b=NhylTHQjTF5WnCPKZ7JS9gpIQVkp7jw/Go3W19TSMVVJzM3XuHh1EGsfnax0pohXqM0PST
+        9D9wqdiwjRp9aDijZ5JN+bmSBC6eMjAtZznB5usfmHDH3gVQKs7r3mGmGqix5OK1JPosO8
+        b8VJFUZikNPWWHwmwu7R15M7dw0pr0I=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4BC90634C94;
+        Wed, 17 May 2023 16:04:05 +0300 (EEST)
+Date:   Wed, 17 May 2023 16:04:05 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org,
+        bpf@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v5 5/6] mm/gup: remove vmas parameter from
+ pin_user_pages()
+Message-ID: <ZGTQxbiFnTADjLgv@valkosipuli.retiisi.eu>
+References: <cover.1684097001.git.lstoakes@gmail.com>
+ <acd4a8c735c9bc1c736e1a52a9a036db5cc7d462.1684097002.git.lstoakes@gmail.com>
 MIME-Version: 1.0
-References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-5-aford173@gmail.com>
- <a0debcb9251aa99326aec44235d39f84c6086096.camel@pengutronix.de>
-In-Reply-To: <a0debcb9251aa99326aec44235d39f84c6086096.camel@pengutronix.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 17 May 2023 08:02:05 -0500
-Message-ID: <CAHCN7xJZMu2u2gydmL9gF16Sd6wVX62kJRpzvZnhQLCtRm-zrQ@mail.gmail.com>
-Subject: Re: [PATCH V6 4/6] drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acd4a8c735c9bc1c736e1a52a9a036db5cc7d462.1684097002.git.lstoakes@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 7:58=E2=80=AFAM Lucas Stach <l.stach@pengutronix.de=
-> wrote:
->
-> Am Montag, dem 15.05.2023 um 18:57 -0500 schrieb Adam Ford:
-> > In order to support variable DPHY timings, it's necessary
-> > to enable GENERIC_PHY_MIPI_DPHY so phy_mipi_dphy_get_default_config
-> > can be used to determine the nominal values for a given resolution
-> > and refresh rate.
-> >
-> I would just squash this one into the patch introducing the dependency.
+On Sun, May 14, 2023 at 10:26:58PM +0100, Lorenzo Stoakes wrote:
+> We are now in a position where no caller of pin_user_pages() requires the
+> vmas parameter at all, so eliminate this parameter from the function and
+> all callers.
+> 
+> This clears the way to removing the vmas parameter from GUP altogether.
+> 
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Acked-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com> (for qib)
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-I thought Kconfig updates were supposed to be on their own.  Is that
-not correct?
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com> # drivers/media
 
-adam
->
-> Regards,
-> Lucas
->
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> > Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> > ---
-> >  drivers/gpu/drm/bridge/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kc=
-onfig
-> > index f076a09afac0..82c68b042444 100644
-> > --- a/drivers/gpu/drm/bridge/Kconfig
-> > +++ b/drivers/gpu/drm/bridge/Kconfig
-> > @@ -227,6 +227,7 @@ config DRM_SAMSUNG_DSIM
-> >       select DRM_KMS_HELPER
-> >       select DRM_MIPI_DSI
-> >       select DRM_PANEL_BRIDGE
-> > +     select GENERIC_PHY_MIPI_DPHY
-> >       help
-> >         The Samsung MIPI DSIM bridge controller driver.
-> >         This MIPI DSIM bridge can be found it on Exynos SoCs and
->
+-- 
+Sakari Ailus
