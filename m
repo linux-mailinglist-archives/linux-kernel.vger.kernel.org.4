@@ -2,109 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16944706AC5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BF6706AC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjEQOPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S230459AbjEQOPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjEQOPO (ORCPT
+        with ESMTP id S231373AbjEQOPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:15:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151DE1701
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:15:12 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso139287166b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:15:12 -0700 (PDT)
+        Wed, 17 May 2023 10:15:47 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137B8E8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:15:45 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-783feefeedeso74911241.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684332910; x=1686924910;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/+DuntF1kGSXfgTxfrwPEsnEtPGyOGiybO9J9yV6hV0=;
-        b=YxUXwUSa0MMpWwhVQIBaoMd8+vylj9fXfs7ShwJcW6Kl2dtdhvV/pN0TrPd5bkkks/
-         onhgkjcHPY46PLE81aFVxJiX70EdS//f0qLGRpSUos28sXuIUkqPC9kYPtFEqNUcxTUH
-         yo3amUqDEONRtPpOPym2tzBqKTnlNdAGSjRGdWINna3F8R2cLvPFl50ll/+wJHuNbiyh
-         sxVWEJJiQasi12jgS6qmoi/j1rBYrQ7Id5U19h4b/U+2IYvQ+fV5ECE/Slb8WniYV0RT
-         7+X90cStc2kX+BZ4kZhX8ycl9HaC4hOTJYhA9Pfqvfi0PGk+rz+tlFFTv5esV4ar1E/2
-         L8xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684332910; x=1686924910;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684332944; x=1686924944;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/+DuntF1kGSXfgTxfrwPEsnEtPGyOGiybO9J9yV6hV0=;
-        b=MUA9NWK0ROX/zB5+HcsyLhuKp3wocLtJQFcucn2E8AFLF4dsaLWd14IOGclRGHzkkH
-         LbCKMt340ZY9u1EtFW83+G7PyS51pQUWXwI9+pAx1umy2ZpnJV+fHzBKKgY7S3PeBgmO
-         sN6iDtG+HNBIYwj5lJWu5T5Y34YUfNt3h+i7aTg6zglBZV4QZv3WombRzmGC1uG/NI77
-         fLLDwD2f+K0OttfW7cpu4VNGmVa1pA9YVGrkIO5iQf4w53w5gd5aIbML4vybzRNw4Ehp
-         qzca5jtEcS/ipTItuc8t37yFeng5Xe1MwWSjd8SyTAIBYJX9rs4X1tEV9++Wdn+dqFUN
-         /7rw==
-X-Gm-Message-State: AC+VfDxELPgsGVZM53U6ZVYVGtD+B4xQp5FI64ATxOTfP0xeD2Fk5+o2
-        LlYbubxTla5gtnBdcND6WQTzybuoXlKKukkJ09jx1w==
-X-Google-Smtp-Source: ACHHUZ7v/hjsisoRpms2YFKoT5XjALbav8o1TqyOjf5UQjXZuLtCWsQxiH1ClSgL5DX4UEhoJuJBaQ==
-X-Received: by 2002:a17:906:5d06:b0:96a:bf50:3ad9 with SMTP id g6-20020a1709065d0600b0096abf503ad9mr17295497ejt.43.1684332910462;
-        Wed, 17 May 2023 07:15:10 -0700 (PDT)
-Received: from krzk-bin ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id 30-20020a17090601de00b009662d0e637esm12340013ejj.155.2023.05.17.07.15.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 07:15:10 -0700 (PDT)
-Date:   Wed, 17 May 2023 16:15:08 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        nicolas.ferre@microchip.com, krzysztof.kozlowski+dt@linaro.org,
-        conor.dooley@microchip.com, mturquette@baylibre.com,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 5/5] dt-bindings: clocks: at91sam9x5-sckc: convert to
- yaml
-Message-ID: <20230517141508.evb6jg5bcpjzhqve@krzk-bin>
-References: <20230517094119.2894220-1-claudiu.beznea@microchip.com>
- <20230517094119.2894220-6-claudiu.beznea@microchip.com>
+        bh=rhkiIjPom+AxXYktEbUGoiA5T8CFiFkldMIkLPxRd/I=;
+        b=btMjxiay7nTs9qGr2zF9OAO0jpL42voTb/3qx7U+H6IjvybBo2YPtO8ipdMK5+vh2A
+         0oVFC9RDLnqBM7wIkRssr9lRFjlzCpvN0QnAy//EbHeJ1qJYB6qH62/p510KIYQqzd0/
+         vaiJ1In/L259P2iCso5nuf+Pmcp+e96jB3D2//famDOz2Ht8iSuuJW9GVT1+DEPnGs2/
+         UvLCJuFNXTA7zQ6KIoZ2P8ksaUuxhAMNObn3WTbmXYL+GhbGs850pVFCtZCvBiUi0TRU
+         ISPxSRNz/U3C41t/l2Xz7RZv02kXsJJkw/gT+ZEF5gADx9H+/BAG9k7aqA64/KsCz+mF
+         zl4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684332944; x=1686924944;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rhkiIjPom+AxXYktEbUGoiA5T8CFiFkldMIkLPxRd/I=;
+        b=AJGvn5FCbFBfXGCETn/y4hh+ebYWvFAYXvyJXX5kaXKZlvWl6UCnHXLT1taNrT5Vkg
+         xxElICHNIY0ZyiD3ItytwxfwxmdA845cElO9trthyGCpdpvmeJSXDdEX8klwGHOMfGV8
+         6yaFJUVRajQvKaKafgIZ3VErNRY//GBK359TII+k/WAUWtC7TLoaJMpoY4raML+1bHHx
+         thz+/VB0WcZzpdz2xAZG7YuAqypWF/RIkJhYWXqTRSUImj+5fMn8/zT/0WRt1WJiMD6E
+         i1OYA3Lqgl1+Z3NDY5q/BkjSah7f7mEpWDV0yfN9ZEZJFoF8g6u9FEQ8OPA2gqYQMCyx
+         RGOQ==
+X-Gm-Message-State: AC+VfDzoiZzx+6Rx+aY0qsiy1IJatLMmkW2LeiHCx7hQTgbGL+j5K4f4
+        0l9dHx9JzNTj+NVlOAA83BGkTUEegmxaTlIL+RhftOwYFZOz5XIo
+X-Google-Smtp-Source: ACHHUZ69WfWL4WTiwk755kvqeutjvUUlmYSAmwRFi+TJ9UfsaagdkkjZ1uXo7yV+e1+514xM6y+BFWbESVx/LjXArlM=
+X-Received: by 2002:a67:fd98:0:b0:434:7765:3330 with SMTP id
+ k24-20020a67fd98000000b0043477653330mr16597840vsq.15.1684332944178; Wed, 17
+ May 2023 07:15:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230517094119.2894220-6-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com> <20230516110038.2413224-10-schnelle@linux.ibm.com>
+In-Reply-To: <20230516110038.2413224-10-schnelle@linux.ibm.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 17 May 2023 16:15:33 +0200
+Message-ID: <CAMRc=Mc+5BSra2oLnNrCqU+ZRfWdUGXAu0P8pay0+UFmBjC6eg@mail.gmail.com>
+Subject: Re: [PATCH v4 09/41] gpio: add HAS_IOPORT dependencies
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 12:41:19 +0300, Claudiu Beznea wrote:
-> Convert Atmel slow clock controller documentation to yaml.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Tue, May 16, 2023 at 1:00=E2=80=AFPM Niklas Schnelle <schnelle@linux.ibm=
+.com> wrote:
+>
+> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
->  .../devicetree/bindings/clock/at91-clock.txt  | 30 --------
->  .../bindings/clock/atmel,at91sam9x5-sckc.yaml | 70 +++++++++++++++++++
->  2 files changed, 70 insertions(+), 30 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/clock/at91-clock.txt
->  create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
-> 
+> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+>       per-subsystem patches may be applied independently
+>
+>  drivers/gpio/Kconfig | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> index 5521f060d58e..a470ec8d617b 100644
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -704,18 +704,6 @@ config GPIO_VISCONTI
+>         help
+>           Say yes here to support GPIO on Tohisba Visconti.
+>
+> -config GPIO_VX855
+> -       tristate "VIA VX855/VX875 GPIO"
+> -       depends on (X86 || COMPILE_TEST) && PCI
+> -       select MFD_CORE
+> -       select MFD_VX855
+> -       help
+> -         Support access to the VX855/VX875 GPIO lines through the GPIO l=
+ibrary.
+> -
+> -         This driver provides common support for accessing the device.
+> -         Additional drivers must be enabled in order to use the
+> -         functionality of the device.
+> -
+>  config GPIO_WCD934X
+>         tristate "Qualcomm Technologies Inc WCD9340/WCD9341 GPIO controll=
+er driver"
+>         depends on MFD_WCD934X && OF_GPIO
+> @@ -835,7 +823,19 @@ config GPIO_IDT3243X
+>  endmenu
+>
+>  menu "Port-mapped I/O GPIO drivers"
+> -       depends on X86 # Unconditional I/O space access
+> +       depends on X86 && HAS_IOPORT # I/O space access
+> +
+> +config GPIO_VX855
+> +       tristate "VIA VX855/VX875 GPIO"
+> +       depends on PCI
+> +       select MFD_CORE
+> +       select MFD_VX855
+> +       help
+> +         Support access to the VX855/VX875 GPIO lines through the GPIO l=
+ibrary.
+> +
+> +         This driver provides common support for accessing the device.
+> +         Additional drivers must be enabled in order to use the
+> +         functionality of the device.
+>
+>  config GPIO_I8255
+>         tristate
+> --
+> 2.39.2
+>
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Applied, thanks!
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/1782586
-
-
-sckc@fffffe50: '#clock-cells' is a required property
-	arch/arm/boot/dts/at91sam9n12ek.dtb
-
-sckc@fffffe50: 'clocks' is a required property
-	arch/arm/boot/dts/at91sam9n12ek.dtb
-
-sckc@fffffe50: 'slck', 'slow_osc', 'slow_rc_osc' do not match any of the regexes: 'pinctrl-[0-9]+'
-	arch/arm/boot/dts/at91sam9n12ek.dtb
+Bart
