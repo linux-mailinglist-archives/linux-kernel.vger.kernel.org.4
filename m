@@ -2,142 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DB57061AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AA17061B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjEQHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S229791AbjEQHuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjEQHte (ORCPT
+        with ESMTP id S230350AbjEQHtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:49:34 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5302D5591;
-        Wed, 17 May 2023 00:49:21 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QLlcD4YTxz4f3jpp;
-        Wed, 17 May 2023 15:49:16 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgD31QP7hmRkFY5qIw--.45129S3;
-        Wed, 17 May 2023 15:49:17 +0800 (CST)
-Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Yu Kuai <yukuai1@huaweicloud.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Ed Tsai <ed.tsai@mediatek.com>, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        stanley.chu@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        powen.kao@mediatek.com, naomi.chu@mediatek.com,
-        wsd_upstream@mediatek.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230509065230.32552-1-ed.tsai@mediatek.com>
- <20230509065230.32552-3-ed.tsai@mediatek.com>
- <ZF0K7A6G2cYBjSgn@infradead.org>
- <aa9af9ae-62a4-6469-244c-b5d9106bb044@acm.org>
- <ZF5G5ztMng8Xbd1W@infradead.org>
- <2740ee82-e35f-1cbf-f5d0-373f94eb14a5@acm.org>
- <de3f41a0-b13d-d4f6-765a-19b857bce53e@huaweicloud.com>
- <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <a26e28a6-91e0-e803-749e-2ce957711c64@huaweicloud.com>
-Date:   Wed, 17 May 2023 15:49:15 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 17 May 2023 03:49:53 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1898A4EF5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:49:40 -0700 (PDT)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id AB4C83F4D8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:49:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684309778;
+        bh=am/lQy0gekRHp1bKvU7D62NT+HZ4SISHKlUFomkzByY=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=d6ArQtNGPFaws6l+mHV9b953tU5tusPzlwTdPa8r2THDUKe84glEDS+844drWKpnb
+         5mChVH7Ur8RL/IzaOE9NZTXmTxjpWrQefEfZNsaC1M+9dH78MME0gLaF5JyFOyboU2
+         AurBazLuydvbC03G3D5Wd0IM/TSvmM/wuNh8e1VEjgs6c7kwqgf67xgdBC1g2sWymD
+         aNTJwSuIr+9vujSzGgWCuHDa9rpgAMYPoe/LEG+gP63Kx+buPFLV7wO5OhQ0pAw5oR
+         OrSZ5GTRqBGQZnAkjXSW9sK6aHIzbE0yo1b14mTh6VsLIht7521TeR0QUBKPIA5ZJr
+         6cKmSD0rJy9Uw==
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-644c382a49aso301571b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:49:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684309777; x=1686901777;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=am/lQy0gekRHp1bKvU7D62NT+HZ4SISHKlUFomkzByY=;
+        b=AaRaZKCZV5GiyjYVeOj5M2a/u4GND3sUv55IEp7nKBS/nQsCzoTCd0phmTFrlt3kxJ
+         LvNMqAyxUl2Mgu3ACnuZlX8Up4qqVBf6yyFHa/vUXqxYpiE3dvqOKjLtX0N7qsXOWiCU
+         p1C2RHqDUqfUvBViS6ekopSAGb3vqMuejvkVF8tzLyBD0Jtu9NdHjbzJjGeZfCOtypsm
+         w1EUW/pwJx8MhfsOR13dkIMJMrR1UnTLk5t1SNJ7NOnOfZywDW1Ly1Bqwk4K2cHf4v0z
+         LIxdUw8T2C7sj7/xynGqMzmOXfJqGYOYFAHdlWEYZVN78i03H7nIzXpYt1lJluM7SOEe
+         DXpw==
+X-Gm-Message-State: AC+VfDwoFmJue+whhwL2J9nBjTY1nb5KPMQs/AttANv7XC/lWqbjfngv
+        AYplyA8v/a9pXaZpTIKc/PRrge8slpNYSLrWlVxgGJblx8xCmXLf72lw8u5ADw5ZKVIQku/T1ME
+        8+UqKDxATM6ju7ZAK9n35jTCRslcmorhh3K3ImwSiGMDHlyRsp9U2bqm4hI/anq2tK5tK
+X-Received: by 2002:a05:6a00:2408:b0:643:aa2:4dd9 with SMTP id z8-20020a056a00240800b006430aa24dd9mr49908576pfh.7.1684309777267;
+        Wed, 17 May 2023 00:49:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6VvAJDWc7mpXAm9F4cxKWCYX288vkxp71onlGSpaChEKBiCed2TETAdWOjbBwVhXLzWgYKJ/0NljXX+RUgGnM=
+X-Received: by 2002:a05:6a00:2408:b0:643:aa2:4dd9 with SMTP id
+ z8-20020a056a00240800b006430aa24dd9mr49908562pfh.7.1684309776997; Wed, 17 May
+ 2023 00:49:36 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgD31QP7hmRkFY5qIw--.45129S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFyrWw17AF4rZw48Zr4ktFb_yoW5JFW7pF
-        Z3tF45Cw4kJ34jka1kZr4IgF1rt393JFWUJrnxAry0k398Ars7Zr17G3yY9FyrAw4kCF1j
-        yrWFqrykXFy8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbQVy7UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230516033133.340936-1-kai.heng.feng@canonical.com>
+ <IA1PR11MB61718EFB6DB1BF95CB1CEA5089799@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <SJ1PR11MB608384487F94EC485C91F47CFC799@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB608384487F94EC485C91F47CFC799@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 17 May 2023 15:49:25 +0800
+Message-ID: <CAAd53p56=CpWpPEOD2YdCneJX-XxO93MHMQHbLRB7VCYweW7SQ@mail.gmail.com>
+Subject: Re: [PATCH] EDAC/Intel: Fix shift-out-of-bounds when DIMM/NVDIMM is absent
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        "kao, acelan" <acelan.kao@canonical.com>,
+        Borislav Petkov <bp@alien8.de>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 17, 2023 at 1:13=E2=80=AFAM Luck, Tony <tony.luck@intel.com> wr=
+ote:
+>
+> >> [   13.875282] Hardware name: HP HP Z4 G5 Workstation Desktop PC/8962,
+> > > BIOS U61 Ver. 01.01.15 04/19/2023
+>
+>
+> >> When a DIMM slot is empty, the read value of mtr can be 0xffffffff, th=
+erefore
+>
+> > Looked like a buggy BIOS/hw that didn't set the mtr register.
+> >
+> > 1. Did you print the mtr register whose value was 0xffffffff?
+> > 2. Can you take a dmesg log with kernel "CONFIG_EDAC_DEBUG=3Dy" enabled=
+?
+> > 3. What was the CPU? Please take the output of "lscpu".
+> > 4. Did you verify your patch that the issue was fixed on your systems?
+>
+> I wonder if BIOS is "hiding" some devices from the OS? The 0xffffffff ret=
+urn is
+> the standard PCI response for reading a non-existent register. But that d=
+oesn't
+> quite make sense with having a "dimm present" bit in the MTR register. If
+> the register only exists if the DIMM is present, then there is no need fo=
+r
+> a "dimm present" bit.
 
-在 2023/05/16 23:12, Bart Van Assche 写道:
-> On 5/12/23 20:09, Yu Kuai wrote:
->> 在 2023/05/13 2:12, Bart Van Assche 写道:
->>> The fair tag sharing algorithm has a negative impact on all SCSI 
->>> devices with multiple logical units. This is because logical units 
->>> are considered active until (request timeout) seconds have elapsed 
->>> after the logical unit stopped being used (see also the 
->>> blk_mq_tag_idle() call in blk_mq_timeout_work()). UFS users are hit 
->>> by this because UFS 3.0 devices have a limited queue depth (32) and 
->>> because power management commands are submitted to a logical unit 
->>> (WLUN). Hence, it happens often that the block layer "active queue" 
->>> counter is equal to 2 while only one logical unit is being used 
->>> actively (a logical unit backed by NAND flash). The performance 
->>> difference between queue depths 16 and 32 for UFS devices is 
->>> significant.
->>
->> We meet similiar problem before, but I think remove tag fair sharing
->> might cause some problems, because get tag is not fair currently, for
->> example 2 devices share 32 tag, while device a issue large amount of
->> io concurrently, and device b only issue one io, in this case, if fair
->> tag sharing is removed, device b can get bad io latency.
->>
->> By the way, I tried to propose a way to workaround this by following:
->>
->> 1) disable fair tag sharing untill get tag found no tag is avaiable;
->> 2) enable fair tag sharing again if the disk donesn't faild to get tag
->> for a period of time;
->>
->> Can this approch be considered?
-> 
-> I'm afraid that this approach won't help for the UFS driver since it is 
-> likely that all tags are in use by a single logical unit during an IOPS 
-> test. Hence, fair sharing would be enabled even when we don't want it to 
-> be enabled.
+I wonder if the "non-existent register" read is intended?
 
-It's right my original method is not flexible.
+>
+> Some "lspci" output may also be useful.
 
-> 
-> I propose that we switch to one of these two approaches:
+lspci can be found in [1]:
 
-How about a smoothing method that the device with more io will share
-more tag, and each device will get at least one tag?
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=3D217453
 
-Thanks,
-Kuai
+Kai-Heng
 
-> * Either remove the fair tag sharing code entirely and rely on the 
-> fairness mechanism provided by the sbitmap code. I'm referring to how 
-> __sbitmap_queue_wake_up() uses the wake_index member variable.
-> * Or make the behavior of the fairness algorithm configurable from user 
-> space. One possible approach is to make the proportion of tags for a 
-> logical unit / NVMe namespace configurable via sysfs. This will allow to 
-> reduce the number of tags for the WLUN of UFS devices.
-> 
-> Thanks,
-> 
-> Bart.
-> 
-> 
-> .
-> 
-
+>
+> -Tony
