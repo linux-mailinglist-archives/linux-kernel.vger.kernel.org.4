@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7708D705D11
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63925705D12
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbjEQCVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S231921AbjEQCVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjEQCV1 (ORCPT
+        with ESMTP id S231899AbjEQCV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:21:27 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6BA171E
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:26 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba81b37d9d2so220670276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:26 -0700 (PDT)
+        Tue, 16 May 2023 22:21:29 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4E940EF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:28 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8337a578dso151746276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684290085; x=1686882085;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=icy+EhZ3UBgzX+LkBKZmwy9I7D5yLVOL3MyBuUnW0II=;
-        b=kU3u/jVPNbJOPkDSOv1M9xE9gA7eqoTFhSdZQD4qt7SNgcYJYLu77i/2peyYkaoM+E
-         1CklaeTAYSmTwv8Km5dGKi7C0WCfutgqDI2sGNHRkPp+sdYNdJ963Ikhl8N6lfTWY03r
-         Jc0A1tNgoUDHR5FiwBDbsHV8XCGmQ1kAqZSfPSuC5DautA1wUknPrMKD4FBEPRXJM1cI
-         zDV47+hqam9u7nttpZOONvGIAgOZpyS9w/3N1M0W8GoFsxZc0Tu51VmRu5U30nbsUdLv
-         KRfdPlHe57ebRvFOgibo1B8s53lcdE03PGn3ebRw8zfKd/8XLAR3q4VID38yQeldPd39
-         cHzw==
+        d=google.com; s=20221208; t=1684290087; x=1686882087;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DmZ7qJu2QJbmubDEgRMJhswdry7Qhukww11ZPOJRgvs=;
+        b=pXVJppsksfHh4I2n3d8xVcufhKZZlJjnCny+rmQ4mjQKI0AW/cCK2hASK83KfSiYpL
+         SwH5TVvYpvNqffEsNvDPgC+nhgLYFM3KaqHCuYbPaIFzls2lqfx0JYU50+6NVWzrME9W
+         1mfRz5hwNYEvKHUFnlT4dknNheNNzedfdZLSkBZlu7QlWmiIOdq/l+RcVRDobfHZBP0c
+         7otPYVh11OT4odfN5rNmMB6Xfe/sUmOnKNfozY8i+NNWwTSKo6jWbGtluyHsGeqrt/Um
+         gaSjHg7Sh7LXhrO/UUQMLAjulMUlLvxOhNHHmrBn6+ZKABwqhlZs4QhdwbdE4TaSFaoL
+         o8HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684290085; x=1686882085;
-        h=content-transfer-encoding:cc:to:from:subject:references
-         :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=icy+EhZ3UBgzX+LkBKZmwy9I7D5yLVOL3MyBuUnW0II=;
-        b=Q8iFC7Wn+liBu/RpKPShQUgrIsbC2BiPVqKQJ4ow151j0pZ2Pyn2rOccHXiFGrvBCJ
-         pEDhrlL4R+n/qi885dix8svSDM0nDb5I3bTrd+usVawrwYIRgDPdN9UeHaRVJjhBBGHs
-         1VZqthVsY00X8Mp4w28l8/SyQ2Ysl/NGIoHuL0QwHQgSB/HzxUqI1KKVDm7BVFntyqyI
-         hp4F+ai4umGdi+9dIBma+oKRsxhcM2Djt1t/ELhKDazz5JbfGBA9lsVQ7XLkkfUjkupv
-         ATatYWCKatBo3KEscrJuwBUXafcMamFHiPf4O4NnzXz1EBtFfgi/VYFOVaYQ6DYcQyhH
-         Xc1A==
-X-Gm-Message-State: AC+VfDwVEBvmyRt1+NqG5V9q1BQXHbmZ3LIKGCXWf2q9Zc01X61Av/GQ
-        E77G+DuJEoCNBcrrfLCy2DUCUcc=
-X-Google-Smtp-Source: ACHHUZ6HltqTMi815u6+g2acsl5ZG5UZd+Y+2Rbyffv/trwosDfbc8rLxY0NJ38GbW8keQ8pFoFL1ds=
+        d=1e100.net; s=20221208; t=1684290087; x=1686882087;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DmZ7qJu2QJbmubDEgRMJhswdry7Qhukww11ZPOJRgvs=;
+        b=e0ftyAVCqq0vRIdKMF0bGZLpGogtMPzjlg4t1U0bEifTF8sPW2g/m4qPHPP7hMcoo2
+         Pw3wqQPyLXdsPHy5t7tVwmHuimJMpbduAZBxm1XNiS/CSDtbfCU2cCcTMpFjQ6g5DGWq
+         NgZh7X7IR6cx1lt4u4MgvXVIz6vshHRyI1hCkigYH0rjgOPm5feIhvuDt64bZUqzjmxe
+         8OFsdRQSyoJAxlzcPH/Zq2wpqe/iIj3fgijCHnHP/gZutFL0tRWyp8U5WmLVlEpF9mf8
+         H8QqRJgcqsEAor9HDI5iDURQMQTv/x6BKAnbBiLGayDNd5GHzsp+CfspiTyLoXiiVBoI
+         L7zQ==
+X-Gm-Message-State: AC+VfDyZec4nQXNQQ17UaFIPhwAiiuj4uoQACgfBnb8W1MAacB3XvOuf
+        Q/7w9KbMD/FFTW4ppXUh63AHn+o=
+X-Google-Smtp-Source: ACHHUZ5CS7mk6mAM2fYvrtpJa+GCdOe26eXVwKAHAWQiAcvcFXtzYZLVtM0rm9Ojto/ISeUmGRcWqts=
 X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2d3:205:b3a7:7c59:b96b:adaa])
- (user=pcc job=sendgmr) by 2002:a5b:309:0:b0:ba6:a54d:1cae with SMTP id
- j9-20020a5b0309000000b00ba6a54d1caemr8869621ybp.0.1684290085477; Tue, 16 May
- 2023 19:21:25 -0700 (PDT)
-Date:   Tue, 16 May 2023 19:21:11 -0700
+ (user=pcc job=sendgmr) by 2002:a25:8407:0:b0:ba8:4b22:4e8a with SMTP id
+ u7-20020a258407000000b00ba84b224e8amr1065312ybk.0.1684290087741; Tue, 16 May
+ 2023 19:21:27 -0700 (PDT)
+Date:   Tue, 16 May 2023 19:21:12 -0700
 In-Reply-To: <20230517022115.3033604-1-pcc@google.com>
-Message-Id: <20230517022115.3033604-2-pcc@google.com>
+Message-Id: <20230517022115.3033604-3-pcc@google.com>
 Mime-Version: 1.0
 References: <20230517022115.3033604-1-pcc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Subject: [PATCH v3 1/3] mm: Call arch_swap_restore() from do_swap_page()
+Subject: [PATCH v3 2/3] mm: Call arch_swap_restore() from unuse_pte()
 From:   Peter Collingbourne <pcc@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Peter Collingbourne <pcc@google.com>,
@@ -73,61 +71,49 @@ Cc:     Peter Collingbourne <pcc@google.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         vincenzo.frascino@arm.com,
         Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
-        eugenis@google.com, Steven Price <steven.price@arm.com>,
-        stable@vger.kernel.org
+        eugenis@google.com, Steven Price <steven.price@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c145e0b47c77 ("mm: streamline COW logic in do_swap_page()") moved
-the call to swap_free() before the call to set_pte_at(), which meant that
-the MTE tags could end up being freed before set_pte_at() had a chance
-to restore them. Fix it by adding a call to the arch_swap_restore() hook
-before the call to swap_free().
+We would like to move away from requiring architectures to restore
+metadata from swap in the set_pte_at() implementation, as this is not only
+error-prone but adds complexity to the arch-specific code. This requires
+us to call arch_swap_restore() before calling swap_free() whenever pages
+are restored from swap. We are currently doing so everywhere except in
+unuse_pte(); do so there as well.
 
 Signed-off-by: Peter Collingbourne <pcc@google.com>
-Link: https://linux-review.googlesource.com/id/I6470efa669e8bd2f841049b8c61=
-020c510678965
-Cc: <stable@vger.kernel.org> # 6.1
-Fixes: c145e0b47c77 ("mm: streamline COW logic in do_swap_page()")
-Reported-by: Qun-wei Lin (=E6=9E=97=E7=BE=A4=E5=B4=B4) <Qun-wei.Lin@mediate=
-k.com>
-Closes: https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d43=
-4.camel@mediatek.com/
+Link: https://linux-review.googlesource.com/id/I68276653e612d64cde271ce1b5a99ae05d6bbc4f
 ---
-v2:
-- Call arch_swap_restore() directly instead of via arch_do_swap_page()
-
- mm/memory.c | 7 +++++++
+ mm/swapfile.c | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index f69fbc251198..fc25764016b3 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3932,6 +3932,13 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 		}
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 274bbf797480..e9843fadecd6 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1794,6 +1794,13 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 		goto setpte;
  	}
-=20
+ 
 +	/*
 +	 * Some architectures may have to restore extra metadata to the page
 +	 * when reading from swap. This metadata may be indexed by swap entry
 +	 * so this must be called before swap_free().
 +	 */
-+	arch_swap_restore(entry, folio);
++	arch_swap_restore(entry, page_folio(page));
 +
- 	/*
- 	 * Remove the swap entry and conditionally try to free up the swapcache.
- 	 * We're already holding a reference on the page but haven't mapped it
---=20
+ 	/* See do_swap_page() */
+ 	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
+ 	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
+-- 
 2.40.1.606.ga4b1b128d6-goog
 
