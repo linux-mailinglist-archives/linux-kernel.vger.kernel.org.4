@@ -2,74 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BD570612D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA28706134
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjEQHcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S230042AbjEQHcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjEQHb3 (ORCPT
+        with ESMTP id S229964AbjEQHcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:31:29 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE5E10DA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oltwkFLlo0AQrYAodskSSe/CDS+m4jJFdNAkie40kHs=; b=mxW+jzZAT+OfI3RZ3aJBzvYA36
-        2r7KbM2Y8CgWd0A+yep/cgiosCLSHyDBQB1vkwFs49tlZPuD9ld+0IwSZAoat0w4OGGcDO7A/NjUH
-        Iy3bx5qWpysvQgyM6weyFOnUpGaSkIQLof96wyzEm1Y2QIxa94opIKsraMJu/7378F9zFUqXUR/3x
-        8Gn/0FceU5yfAeQ2rbV/DGD6v0CEiz91ynIV2xg9vEoLb1bm7zxqYQqfUl+CM6shcQiED2A3zK2Af
-        YcSj22Q7ksqY3ctXwnmbID3hHwoGhnuv7ZwQaEPn3X0F88eXP7dSFeQSiAeDxah3+SkoY/n97lMmC
-        RpfZtI6g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzBd3-00D9uS-0O;
-        Wed, 17 May 2023 07:31:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0774B3001E4;
-        Wed, 17 May 2023 09:31:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E15992419CD6B; Wed, 17 May 2023 09:31:19 +0200 (CEST)
-Date:   Wed, 17 May 2023 09:31:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <song@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] watchdog: Prefer use "ref-cycles" for NMI watchdog
-Message-ID: <20230517073119.GA2665450@hirez.programming.kicks-ass.net>
-References: <20230516235817.2323062-1-song@kernel.org>
+        Wed, 17 May 2023 03:32:01 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34134170E;
+        Wed, 17 May 2023 00:31:57 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Bx7errgmRkL2oJAA--.16575S3;
+        Wed, 17 May 2023 15:31:55 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axmr3lgmRk_1plAA--.41619S2;
+        Wed, 17 May 2023 15:31:55 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v1 0/3] soc: loongson2_pm: add power management support
+Date:   Wed, 17 May 2023 15:31:46 +0800
+Message-Id: <20230517073149.31980-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516235817.2323062-1-song@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axmr3lgmRk_1plAA--.41619S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7GFWrJr18Xr4kXw1xtry8AFb_yoW3XwbE9a
+        s7Xay8ur47GFZrJa4DXw15Xry5WFWxJ3Z093Wqqr1I93WYyr15Jr4UZ343CF12qFWUuFs8
+        XrW8KryFyryFyjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        X7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+        1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07jUManUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 04:58:17PM -0700, Song Liu wrote:
-> NMI watchdog permanently consumes one hardware counters per CPU on the
-> system. For systems that use many hardware counters, this causes more
-> aggressive time multiplexing of perf events.
-> 
-> OTOH, some CPUs (mostly Intel) support "ref-cycles" event, which is rarely
-> used. Try use "ref-cycles" for the watchdog, so that one more hardware
-> counter is available to the user. If the CPU doesn't support "ref-cycles",
-> fall back to "cycles".
-> 
-> The downside of this change is that users of "ref-cycles" need to disable
-> nmi_watchdog.
+Loongson-2 platform support Power Management Controller (ACPI) and this
+series patch was to add PM driver that base on dts and PM binding support.
 
-I still utterly hate how you hardcode ref-cycles
+Yinbo Zhu (3):
+  loongarch: export loongarch pm interface
+  dt-bindings: soc: add loongson-2 pm
+  soc: loongson2_pm: add power management support
+
+ .../soc/loongson/loongson,ls2k-pmc.yaml       |  47 ++++
+ MAINTAINERS                                   |   7 +
+ arch/loongarch/include/asm/acpi.h             |   5 +-
+ arch/loongarch/include/asm/suspend.h          |  10 +
+ arch/loongarch/power/suspend.c                |  10 +-
+ arch/loongarch/power/suspend_asm.S            |   8 +-
+ drivers/soc/loongson/Kconfig                  |  10 +
+ drivers/soc/loongson/Makefile                 |   1 +
+ drivers/soc/loongson/loongson2_pm.c           | 237 ++++++++++++++++++
+ 9 files changed, 323 insertions(+), 12 deletions(-)
+
+-- 
+2.20.1
+
