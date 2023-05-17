@@ -2,80 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE65C7068AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2772B7068AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbjEQMxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S231799AbjEQMyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbjEQMxI (ORCPT
+        with ESMTP id S231732AbjEQMya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:53:08 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62272D68
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:53:07 -0700 (PDT)
-Received: from vefanov-Precision-3650-Tower.intra.ispras.ru (unknown [10.10.2.69])
-        by mail.ispras.ru (Postfix) with ESMTPSA id E979144C1013;
-        Wed, 17 May 2023 12:53:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru E979144C1013
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1684327986;
-        bh=KFaX/2tqEHJVLG8kfiqijrjpzQ1dulXoIoRl1Nm6ws4=;
+        Wed, 17 May 2023 08:54:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799FC3A96
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:54:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B926149F
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:54:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506A2C433D2;
+        Wed, 17 May 2023 12:54:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684328068;
+        bh=nc29UDrIzO0K1XrrlSRT98qfuvFbPBoKCvdXYVf6s80=;
         h=From:To:Cc:Subject:Date:From;
-        b=ZG1fdJH2oBF1CHR2wwa1NllsEyhlC/jOhH8h9ubTvPRpSNyDlOduUsGvINvz6FN1w
-         /l4EkLGy8uUj43MBmgeHPNizD5r053D/05CVV1ry6yX36RdHHsGTrkcWp5TsTzZW3F
-         pAQfrN2BdL/5S2rfItpWx9Lpt5lHQW8aGQZ5s7Oc=
-From:   Vladislav Efanov <VEfanov@ispras.ru>
-To:     Luben Tuikov <luben.tuikov@amd.com>
-Cc:     Vladislav Efanov <VEfanov@ispras.ru>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH] drm/sched: Remove redundant check
-Date:   Wed, 17 May 2023 15:52:47 +0300
-Message-Id: <20230517125247.434103-1-VEfanov@ispras.ru>
-X-Mailer: git-send-email 2.34.1
+        b=nkomx8kuTnEAGcwqhXaP550kiR6KMRbHeWoYuNBp8tXXIzslqThf+dLOXAVc467X8
+         GpB1Chozz6vx8UMHKoWPeDVbWIFgrJFAHhfMsjmcr9izjE04oGKMffP9dDlEcuEO9y
+         QusgbvrUgOLy7I7tIvVcegzvp1gBO6VZ8SXJUS291HlKQSAJobess2Np9fLFrKLoC+
+         7VMERVDpqW8I55FPQDuQSaA09a0RL/EEjuT0DCKCUeFO/419R09dGaZ4jr8qBBT2mh
+         YPucdwE7RHotyr28PlvMZ7jnwvFL7TrzkcTgN9dRPX6xSySIUzFjeLvIosRotnQdy1
+         cI6/myrhgvMCA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     kgdb-bugreport@lists.sourceforge.net,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kdb: include header in signal handling code
+Date:   Wed, 17 May 2023 14:54:09 +0200
+Message-Id: <20230517125423.930967-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rq pointer points inside the drm_gpu_scheduler structure. Thus
-it can't be NULL.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+kdb_send_sig() is defined in the signal code and called from kdb,
+but the declaration is part of the kdb internal code.
+Include this from signal.c as well to avoid the warning:
 
-Fixes: c61cdbdbffc1 ("drm/scheduler: Fix hang when sched_entity released")
-Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+kernel/signal.c:4789:6: error: no previous prototype for 'kdb_send_sig' [-Werror=missing-prototypes]
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/gpu/drm/scheduler/sched_main.c | 3 ---
- 1 file changed, 3 deletions(-)
+ kernel/signal.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 8c183639603e..aea5a90ff98b 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -1141,9 +1141,6 @@ void drm_sched_fini(struct drm_gpu_scheduler *sched)
- 	for (i = DRM_SCHED_PRIORITY_COUNT - 1; i >= DRM_SCHED_PRIORITY_MIN; i--) {
- 		struct drm_sched_rq *rq = &sched->sched_rq[i];
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 8f6330f0e9ca..d38df14f71ac 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -4780,6 +4780,8 @@ void __init signals_init(void)
  
--		if (!rq)
--			continue;
--
- 		spin_lock(&rq->lock);
- 		list_for_each_entry(s_entity, &rq->entities, list)
- 			/*
+ #ifdef CONFIG_KGDB_KDB
+ #include <linux/kdb.h>
++#include "debug/kdb/kdb_private.h"
++
+ /*
+  * kdb_send_sig - Allows kdb to send signals without exposing
+  * signal internals.  This function checks if the required locks are
 -- 
-2.34.1
+2.39.2
 
