@@ -2,172 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036D670753E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DE770753F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjEQWV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S229779AbjEQWW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjEQWV4 (ORCPT
+        with ESMTP id S229737AbjEQWWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:21:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0222449DC
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684362038;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VcaEZoDJHfgt+J9YnbNiKZBp9/Lub2+teMXBeGVG5MA=;
-        b=USomMHhVhO69hrPJE7QFl+fBzn1oiUdUIm9YAtH0hh+L+mkImFfXq4nGwXUl9pP++w9TqE
-        C6Xvf2N5Ps6h2THRBazMT/T7V2HUkingfX/eIyQlsn3uVGzaF37qZBLdEQu+wlBtcCfZuR
-        XmfNe0QhNlAAVuDP5lOUBStXahVRc1E=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-375-7DcGfwBHOr2JaooFSIh2Vg-1; Wed, 17 May 2023 18:20:37 -0400
-X-MC-Unique: 7DcGfwBHOr2JaooFSIh2Vg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f387d3b41eso1998141cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:20:37 -0700 (PDT)
+        Wed, 17 May 2023 18:22:24 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073554EF8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:22:23 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-50bd7555c6eso1324126a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:22:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684362141; x=1686954141;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qCQ3NjxZoebSIAtGeHR5p1IA6stp8bUJIlG4AwU4skw=;
+        b=4vgsoY+5jg02OmnaPeEWdmac9MQv5QgavqYYTecATI2iI4NboNWkxSh2nzbpk0VLCQ
+         1P2DkeGOfUT2Qp1xK7LPXfGpmW0RrVlmiRL59/wUEXcyiBT/N/6NWTeQk+lyuGlbeKoc
+         P0Kt5+RNnAgHuUe8PxnnlnmAoSdBMcdFPEywkmBUKz61dRhfUK1efGsDLggM0K2E3sPw
+         5egtqGedMvFnjHxzdyzRXcKon5hhGc7ajk4WplTzQvh6KqLqmnPgShi/AU9TqabaWiUE
+         5TSBzXNr6sg8rs0q4jDdHXHYfA+lQ6I/aq25oRpOlqjYLO5UQJrgUEIrFSNBxA8nmTkN
+         tfzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684362037; x=1686954037;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VcaEZoDJHfgt+J9YnbNiKZBp9/Lub2+teMXBeGVG5MA=;
-        b=O3F9D/tzEHUvlGhfooA1+cJDg0qpAolOgyASqPKLlY/sQMRNc0VfZY1YSVwpXNRLIx
-         fUzQ2qrTxVKaqPHlSCoVxRxqIfssFl+IHrTx08J3reGdIAuB2yn7bBSAgnuy2jApFJb6
-         SGhk7Zr4oiJ3l3PhVPe/53hlNZhbMSFDqrUyTlm4R7BWKk/aefZsnM3PGSFjsm9YuoaX
-         lBQWNOK+WgmBpFPYErW7U4ym6Z3iATxnwDLKxFChBnvUWgxhd2su4CbxtjAZGA+cfE4P
-         e63vgprcchgMemtVNl0v90tylTurl+4jXxCzmAFkYBMxPhMb3Fy9DJMMAPkL21lH5eIx
-         EJMA==
-X-Gm-Message-State: AC+VfDyGBAwlpSKEs00yBhoCcxuOHmbD1lXxYYXl/ZRtgDvxa0iAmTHM
-        WPwlHe3fLlSjvOR1yAxxEq+9wlu/dFZkJsEsfTxBZUv8yHh5C4ua/KpC01vO6BvQiNIbJvCLHFd
-        A9IOrzt8W3nN+8etng71ocm7F
-X-Received: by 2002:a05:622a:1a27:b0:3f3:9680:c51d with SMTP id f39-20020a05622a1a2700b003f39680c51dmr8042884qtb.0.1684362037293;
-        Wed, 17 May 2023 15:20:37 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ51qVMVRnjdvCvS7y5TEkZzxFBB4mc/MDlORK64EYFltlS9Fb1BPgf2+NDqPVLOw0qxDZ9JXw==
-X-Received: by 2002:a05:622a:1a27:b0:3f3:9680:c51d with SMTP id f39-20020a05622a1a2700b003f39680c51dmr8042857qtb.0.1684362037020;
-        Wed, 17 May 2023 15:20:37 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05620a15cf00b0075784a8f13csm937274qkm.96.2023.05.17.15.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 15:20:36 -0700 (PDT)
-Date:   Wed, 17 May 2023 18:20:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZGVTMnVKNcQDM0x4@x1n>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZGVRUeCWr8209m8d@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1684362141; x=1686954141;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qCQ3NjxZoebSIAtGeHR5p1IA6stp8bUJIlG4AwU4skw=;
+        b=Ee1akn+jc63Z+New8+yHa7bkuUyxCHhP147NrYXCDt57s1Vi9Wr5b8Ts7ay/k2qoZg
+         7BFSbNPR0Y/yigb+s36jhm0GVNpvhHyp7iEeJ4jAGtTEJEQayWINxC+d70C5n6JPiQpT
+         Xpq5RuDTjchXuT93BpB1CF/+ADjzSkiSNBEe/EDe16lG62xsVGj4hUddQnsxojVe8pu/
+         3+SuNAZf7ctePc68fzw3TnAMQPGKx8qrU40GaZQTIic7uq9SQ4i3ckU7b/vEnQLfhH91
+         +88dBhaoxhQhrqZ1ybibbSKg8kdQz0Cx4yZ8nLP99H4GKdxiA0yZIzWrjB3tCikhUr1+
+         cKTA==
+X-Gm-Message-State: AC+VfDx7YWTI3UOi5HVgIAHdOWNOTbteODsK8kDLRQ6k41nzx8E7xa1T
+        HecwTB0B8y7c3wRRiX19rXMbOy02VnLCmQA=
+X-Google-Smtp-Source: ACHHUZ4ZH2KINwV3iFH0MzY+AxxyQSTIb3TM0RL+58yOgF2J8k82d22mDFv8B5Y8f2a6F3opNfUG8p8xYlA9gss=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a50:d09d:0:b0:504:8731:4ef2 with SMTP id
+ v29-20020a50d09d000000b0050487314ef2mr1612484edd.7.1684362141496; Wed, 17 May
+ 2023 15:22:21 -0700 (PDT)
+Date:   Wed, 17 May 2023 22:22:19 +0000
+In-Reply-To: <ZGVLo1V4kjx_lep5@slm.duckdns.org>
+Mime-Version: 1.0
+References: <ZGVLo1V4kjx_lep5@slm.duckdns.org>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230517222219.3191560-1-aliceryhl@google.com>
+Subject: Re: [PATCH v1 0/7] Bindings for the workqueue
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     tj@kernel.org
+Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
+        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
-> On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
-> > On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
-> > <axelrasmussen@google.com> wrote:
-> > >
-> > > So the basic way to use this new feature is:
-> > >
-> > > - On the new host, the guest's memory is registered with userfaultfd, in
-> > >   either MISSING or MINOR mode (doesn't really matter for this purpose).
-> > > - On any first access, we get a userfaultfd event. At this point we can
-> > >   communicate with the old host to find out if the page was poisoned.
-> > > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
-> > >   so any future accesses will SIGBUS. Because the pte is now "present",
-> > >   future accesses won't generate more userfaultfd events, they'll just
-> > >   SIGBUS directly.
-> > 
-> > I want to clarify the SIGBUS mechanism here when KVM is involved,
-> > keeping in mind that we need to be able to inject an MCE into the
-> > guest for this to be useful.
-> > 
-> > 1. vCPU gets an EPT violation --> KVM attempts GUP.
-> > 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
-> > 3. KVM finds that GUP failed and returns -EFAULT.
-> > 
-> > This is different than if GUP found poison, in which case KVM will
-> > actually queue up a SIGBUS *containing the address of the fault*, and
-> > userspace can use it to inject an appropriate MCE into the guest. With
-> > UFFDIO_SIGBUS, we are missing the address!
-> > 
-> > I see three options:
-> > 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
-> > this is pointless.
-> > 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
-> > UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
-> > instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
-> > accesses, just like how we get repeated signals for real poison.
-> > 3. Use this in conjunction with the additional KVM EFAULT info that
-> > Anish proposed (the first part of [1]).
-> > 
-> > I think option 3 is fine. :)
-> 
-> Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
+On Wed, 17 May 2023 11:48:19 -1000, Tejun Heo wrote:
+> I tried to read the patches but am too dumb to understand much.
 
-I just remember Axel mentioned this in the commit message, and just in case
-this is why option 4) was ruled out:
+The patch is more complicated than I would have liked, unfortunately.
+However, as I mentioned in the cover letter, simplifications should be
+on their way.
 
-        They expect that once poisoned, pages can never become
-        "un-poisoned". So, when we live migrate the VM, we need to preserve
-        the poisoned status of these pages.
+Luckily, using the workqueue bindings is simpler than the bindings
+themselves.
 
-Just to supplement on this point: we do have unpoison (echoing to
-"debug/hwpoison/hwpoison_unpoison"), or am I wrong?
+> Any chance you can provide some examples so that I can at least
+> imagine how workqueue would be used from rust side?
 
-> 
-> Besides what James mentioned on "missing addr", I didn't quickly see what's
-> the major difference comparing to the old hwpoison injection methods even
-> without the addr requirement. If we want the addr for MCE then it's more of
-> a question to ask.
-> 
-> I also didn't quickly see why for whatever new way to inject a pte error we
-> need to have it registered with uffd.  Could it be something like
-> MADV_PGERR (even if MADV_HWPOISON won't suffice) so you can inject even
-> without an userfault context (but still usable when uffd registered)?
-> 
-> And it'll be alawys nice to have a cover letter too (if there'll be a new
-> version) explaining the bits.
-> 
-> Thanks,
-> 
-> -- 
-> Peter Xu
+Yes, of course!
 
--- 
-Peter Xu
+The simplest way to use the workqueue is to use the `try_spawn` method
+introduced by the last patch in the series. With this function, you just
+pass a function pointer to the `try_spawn` method, and it schedules the
+function for execution. Unfortunately this allocates memory, making it
+a fallible operation.
 
+To avoid allocation memory, we do something else. As an example, we can
+look at the Rust binder driver that I am currently working on. Here is
+how it will be used in the binder driver: First, the `Process` struct
+will be given a `work_struct` field:
+
+#[pin_data]
+pub(crate) struct Process {
+    // Work node for deferred work item.
+    #[pin]
+    defer_work: Work<Arc<Process>>,
+
+    // Other fields follow...
+}
+
+Here, we use the type `Work<Arc<Process>>` for our field. This type is
+the Rust wrapper for `work_struct`. The generic parameter to `Work`
+should be the pointer type used to access `Process`, and in this case it
+is `Arc<Process>`. The pointer type `Arc` is used for reference
+counting, and its a pointer type that owns a ref-count to the inner
+value. (So e.g., it decrements the ref-cout when the arc goes out of
+scope.) Arc is an abbreviation of "atomic reference count". This means
+that while it is enqueued in the workqueue, the workqueue owns a
+ref-count to the process.
+
+Next, binder will use the `impl_has_work!` macro to declare that it
+wants to use `defer_work` as its `work_struct` field. That looks like
+this:
+
+kernel::impl_has_work! {
+    impl HasWork<Arc<Process>> for Process { self.defer_work }
+}
+
+To define the code that should run when the work item is executed on the
+workqueue, binder does the following:
+
+impl workqueue::ArcWorkItem for Process {
+    fn run(self: Arc<Process>) {
+        // this runs when the work item is executed
+    }
+}
+
+Finally to schedule it to the system workqueue, it does the following:
+
+let _ = workqueue::system().enqueue(process);
+
+Here, the `enqueue` call is fallible, since it might fail if the process
+has already been enqueued to a work queue. However, binder just uses
+`let _ =` to ignore the failure, since it doesn't need to do anything
+special in that case.
+
+I hope that helps, and let me know if you have any further questions.
+
+Alice
