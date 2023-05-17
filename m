@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20917072E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74F17072EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbjEQUUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
+        id S229680AbjEQUX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjEQUUV (ORCPT
+        with ESMTP id S229475AbjEQUXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:20:21 -0400
+        Wed, 17 May 2023 16:23:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5851FEB;
-        Wed, 17 May 2023 13:20:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DA87ABB;
+        Wed, 17 May 2023 13:23:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78D1464AFF;
-        Wed, 17 May 2023 20:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A9F7C433D2;
-        Wed, 17 May 2023 20:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684354817;
-        bh=tmrEqMSlltVVWCR826sj25ts9zl6YULEBavsqHAY8to=;
-        h=From:To:Cc:Subject:Date:From;
-        b=heAqux+yqXgxXkijDEAiFmUchjVlz/v6KJhWZCe6P5zq4SpPdRo95hufWL9UwLfDP
-         q8bmR8CLw+ubMxjTT4b2nAAqQg254sbAryZReih0XIyrXXsjOcOY0sARWFEPHQe4Ti
-         7aE7pS3721poCYt4gnaEnUFAo4frdbIXerV9OCscoIG/UWwtOPl0G/7V3DKIFy1D5J
-         qFtrPPY3KrscAD9nAoF8XdyvFiapgeKjwo3JXT/anN1qbPrCCHCc41eKFr4dqObPR9
-         f27UJY6anzLAiejtanf0SvyuRONjQwe9XmczmWR5NkNcgoua6lafEpyFgebvU9kRI2
-         i1obqdAcXlLqg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: 8250: omap: convert to modern PM ops
-Date:   Wed, 17 May 2023 22:20:07 +0200
-Message-Id: <20230517202012.634386-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82C6A64B03;
+        Wed, 17 May 2023 20:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88929C433D2;
+        Wed, 17 May 2023 20:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1684355002;
+        bh=AjsQOG0MykYnMxLHdltKAUap2Wv/krluksbvS6JbP6g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z1HgqTYWcr5kftNDrCqxuvLuR40gWmjvgEUFp3xU+PeDg6O6vg2bCYxeQW292QEzd
+         8wwRCC3aQu12x8lde6UJszuGLHkqI+tb19NUU43qFoD6iQ/Pl7IBRcX69VS2cPYdm5
+         ohLq8y5Mv3OhHUi2uRx7QJe5gcEPHE1WVI5Y2BO8=
+Date:   Wed, 17 May 2023 13:23:21 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] mm/uffd: Fix vma operation where start addr cuts
+ part of vma
+Message-Id: <20230517132321.2466ef1ccde9e8d05436e3f2@linux-foundation.org>
+In-Reply-To: <20230517190916.3429499-2-peterx@redhat.com>
+References: <20230517190916.3429499-1-peterx@redhat.com>
+        <20230517190916.3429499-2-peterx@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, 17 May 2023 15:09:15 -0400 Peter Xu <peterx@redhat.com> wrote:
 
-The new uart_write() function is only called from suspend/resume code, causing
-a build warning when those are left out:
+> It seems vma merging with uffd paths is broken with either
+> register/unregister, where right now we can feed wrong parameters to
+> vma_merge() and it's found by recent patch which moved asserts upwards in
+> vma_merge() by Lorenzo Stoakes:
+> 
+> https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
+> 
+> It's possible that "start" is contained within vma but not clamped to its
+> start.  We need to convert this into either "cannot merge" case or "can
+> merge" case 4 which permits subdivision of prev by assigning vma to
+> prev. As we loop, each subsequent VMA will be clamped to the start.
+> 
+> This patch will eliminate the report and make sure vma_merge() calls will
+> become legal again.
+> 
+> One thing to mention is that the "Fixes: 29417d292bd0" below is there only
+> to help explain where the warning can start to trigger, the real commit to
+> fix should be 69dbe6daf104.  Commit 29417d292bd0 helps us to identify the
+> issue, but unfortunately we may want to keep it in Fixes too just to ease
+> kernel backporters for easier tracking.
+> 
+> Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+> Cc: Mike Rapoport (IBM) <rppt@kernel.org>
+> Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
+> Reported-by: Mark Rutland <mark.rutland@arm.com>
+> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> Fixes: 29417d292bd0 ("mm/mmap/vma_merge: always check invariants")
+> Fixes: 69dbe6daf104 ("userfaultfd: use maple tree iterator to iterate VMAs")
 
-drivers/tty/serial/8250/8250_omap.c:169:13: error: 'uart_write' defined but not used [-Werror=unused-function]
+I don't know how -stable maintainers are to handle more than a single
+Fixes: target, given that Fixes: means "kernels which have that patch
+need this one".  Can we narrow this down to a single commit for this
+purpose?
 
-Remove the #ifdefs and use the modern pm_ops/pm_sleep_ops and their wrappers
-to let the compiler see where it's used but still drop the dead code.
-
-Fixes: 398cecc24846 ("serial: 8250: omap: Fix imprecise external abort for omap_8250_pm()")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/tty/serial/8250/8250_omap.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 5c093dfcee1d..00b2c35042ee 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -1571,7 +1571,6 @@ static int omap8250_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int omap8250_prepare(struct device *dev)
- {
- 	struct omap8250_priv *priv = dev_get_drvdata(dev);
-@@ -1616,12 +1615,7 @@ static int omap8250_resume(struct device *dev)
- 	serial8250_resume_port(priv->line);
- 	return 0;
- }
--#else
--#define omap8250_prepare NULL
--#define omap8250_complete NULL
--#endif
- 
--#ifdef CONFIG_PM
- static int omap8250_lost_context(struct uart_8250_port *up)
- {
- 	u32 val;
-@@ -1738,7 +1732,6 @@ static int omap8250_runtime_resume(struct device *dev)
- 	schedule_work(&priv->qos_work);
- 	return 0;
- }
--#endif
- 
- #ifdef CONFIG_SERIAL_8250_OMAP_TTYO_FIXUP
- static int __init omap8250_console_fixup(void)
-@@ -1781,17 +1774,17 @@ console_initcall(omap8250_console_fixup);
- #endif
- 
- static const struct dev_pm_ops omap8250_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(omap8250_suspend, omap8250_resume)
--	SET_RUNTIME_PM_OPS(omap8250_runtime_suspend,
-+	SYSTEM_SLEEP_PM_OPS(omap8250_suspend, omap8250_resume)
-+	RUNTIME_PM_OPS(omap8250_runtime_suspend,
- 			   omap8250_runtime_resume, NULL)
--	.prepare        = omap8250_prepare,
--	.complete       = omap8250_complete,
-+	.prepare        = pm_sleep_ptr(omap8250_prepare),
-+	.complete       = pm_sleep_ptr(omap8250_complete),
- };
- 
- static struct platform_driver omap8250_platform_driver = {
- 	.driver = {
- 		.name		= "omap8250",
--		.pm		= &omap8250_dev_pm_ops,
-+		.pm		= pm_ptr(&omap8250_dev_pm_ops),
- 		.of_match_table = omap8250_dt_ids,
- 	},
- 	.probe			= omap8250_probe,
--- 
-2.39.2
 
