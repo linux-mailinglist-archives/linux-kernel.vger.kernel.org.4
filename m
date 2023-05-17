@@ -2,212 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1A4706C00
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8BF706C07
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjEQPCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S230120AbjEQPCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbjEQPBp (ORCPT
+        with ESMTP id S232464AbjEQPBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:01:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6645D847
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:00:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E33C113E;
-        Wed, 17 May 2023 08:00:38 -0700 (PDT)
-Received: from [10.57.58.217] (unknown [10.57.58.217])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A69203F73F;
-        Wed, 17 May 2023 07:59:50 -0700 (PDT)
-Message-ID: <993ee407-cd7a-ab14-9d66-2e1009e05d3a@arm.com>
-Date:   Wed, 17 May 2023 15:59:48 +0100
+        Wed, 17 May 2023 11:01:51 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01B8A5F4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:00:37 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-95fde138693so23131766b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684335627; x=1686927627;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u1G2m3/V/8HwP4S0PilYqw+ntJ6wrr0IYdjxDwg97nI=;
+        b=KGGwf+TgQE3MnRRbh8F9ZWrd7mAnUM8CGnhjLSRzEP7eBdZtDzGG8r9cH15QPidrTY
+         yNGdaoRLij2m2vk4yF9wQ3wdwVDhXg4ZKccA5K6j9U3lRc/r/vfo+iflvGfjQCIfce0s
+         SpLcDsgxsiGJL1KfSZWdYCfPprlt0QjnmOVxFI6UAmoWosvoa6scXeFec1MUvbqFhhA2
+         QtoY0wUfTxjbVwxaZQ5TtE79S8Rbp+jvbwanrUIFKLrlpkjUwk3WshLMR+18gmvifTFs
+         kNhjU1v1QwAba8Umv1KoaJRvXo2IZUYVBC11kMyEb/TjWc+uzI6MYel0w8b3ANUkt4pR
+         foYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684335627; x=1686927627;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u1G2m3/V/8HwP4S0PilYqw+ntJ6wrr0IYdjxDwg97nI=;
+        b=TA2MLpk8xJkXFBf75byKcqe61+F6GQH2kkpc7VRFXq/ukUj1vLfcviwZ/nmYwlEd3Y
+         IY6a9bRKBxvmLCmrqtZe7PvYA3JXHYtGnIblvdC6d8bdlKKTvBjBtPGJ5EfzxiEcKss/
+         jleckXHpD+zOGH+2bY4Gt7J7OxOMWHXwMUZ8WwUXSXP64dylkbra8uXlKIamVry5WHIH
+         67EZ27S7IA7uwmnE0yFs7ddbijIQtkptzt2KNZNd/0uU9FzyzH89qCQmK22kC+rfIxQr
+         iXI3Jm6KPvxHbFjErJh8YE6y6zFhWObrtSZVGb/A1QPCTlZSSkOqhBc87vchplzo1BYh
+         YwGQ==
+X-Gm-Message-State: AC+VfDw2iUXdQAhkOd00RpFw4nyBqPwPU0+MdnfO5CDXbNjftM8zPcp0
+        R7sAjDXe+NLldPk0Z5EymqN6KQ==
+X-Google-Smtp-Source: ACHHUZ6wgsqOiRJf4xmcSwbV6QggqmsGx/cjJKJNST88Bdd9lOPCs5cSMTYn0pICtw84HRJnXKbqFA==
+X-Received: by 2002:a17:907:d21:b0:94a:57d1:5539 with SMTP id gn33-20020a1709070d2100b0094a57d15539mr2566510ejc.5.1684335626891;
+        Wed, 17 May 2023 08:00:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id bm11-20020a170906c04b00b00965ec1faf27sm12391114ejb.74.2023.05.17.08.00.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 08:00:26 -0700 (PDT)
+Message-ID: <d3791702-4d41-0208-1346-34738a2883b6@linaro.org>
+Date:   Wed, 17 May 2023 17:00:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/3] arm64: mte: Simplify swap tag restoration logic
-Content-Language: en-GB
-To:     Peter Collingbourne <pcc@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
-        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "surenb@google.com" <surenb@google.com>,
-        "david@redhat.com" <david@redhat.com>,
-        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
-        <chinwen.chang@mediatek.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
-        <Kuan-Ying.Lee@mediatek.com>,
-        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        vincenzo.frascino@arm.com,
-        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
-        eugenis@google.com
-References: <20230517022115.3033604-1-pcc@google.com>
- <20230517022115.3033604-4-pcc@google.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20230517022115.3033604-4-pcc@google.com>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 2/3] dt-bindings: soc: add loongson-2 pm
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230517073149.31980-1-zhuyinbo@loongson.cn>
+ <20230517073149.31980-3-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230517073149.31980-3-zhuyinbo@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 03:21, Peter Collingbourne wrote:
-> As a result of the previous two patches, there are no circumstances
-> in which a swapped-in page is installed in a page table without first
-> having arch_swap_restore() called on it. Therefore, we no longer need
-> the logic in set_pte_at() that restores the tags, so remove it.
+On 17/05/2023 09:31, Yinbo Zhu wrote:
+> Add the Loongson-2 SoC Power Management Controller binding with DT
+> schema format using json-schema.
 > 
-> Because we can now rely on the page being locked, we no longer need to
-> handle the case where a page is having its tags restored by multiple tasks
-> concurrently, so we can slightly simplify the logic in mte_restore_tags().
-> 
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> Link: https://linux-review.googlesource.com/id/I8ad54476f3b2d0144ccd8ce0c1d7a2963e5ff6f3
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 
-This is much neater, thanks for figuring out a better way of
-implementing it. The set_pte_at() thing always felt like a hack, but it
-was always there for the non-swap case and I obviously never figured out
-a better solution.
+...
 
-Reviewed-by: Steven Price <steven.price@arm.com>
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - loongson,ls2k-pmc
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  suspend-address:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This option indicate this PM suspend address.
 
-> ---
-> v3:
-> - Rebased onto arm64/for-next/fixes, which already has a fix
->   for the issue previously tagged, therefore removed Fixes:
->   tag
-> 
->  arch/arm64/include/asm/mte.h     |  4 ++--
->  arch/arm64/include/asm/pgtable.h | 14 ++----------
->  arch/arm64/kernel/mte.c          | 37 ++++++--------------------------
->  arch/arm64/mm/mteswap.c          |  7 +++---
->  4 files changed, 14 insertions(+), 48 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
-> index c028afb1cd0b..4cedbaa16f41 100644
-> --- a/arch/arm64/include/asm/mte.h
-> +++ b/arch/arm64/include/asm/mte.h
-> @@ -90,7 +90,7 @@ static inline bool try_page_mte_tagging(struct page *page)
->  }
->  
->  void mte_zero_clear_page_tags(void *addr);
-> -void mte_sync_tags(pte_t old_pte, pte_t pte);
-> +void mte_sync_tags(pte_t pte);
->  void mte_copy_page_tags(void *kto, const void *kfrom);
->  void mte_thread_init_user(void);
->  void mte_thread_switch(struct task_struct *next);
-> @@ -122,7 +122,7 @@ static inline bool try_page_mte_tagging(struct page *page)
->  static inline void mte_zero_clear_page_tags(void *addr)
->  {
->  }
-> -static inline void mte_sync_tags(pte_t old_pte, pte_t pte)
-> +static inline void mte_sync_tags(pte_t pte)
->  {
->  }
->  static inline void mte_copy_page_tags(void *kto, const void *kfrom)
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 0bd18de9fd97..e8a252e62b12 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -337,18 +337,8 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
->  	 * don't expose tags (instruction fetches don't check tags).
->  	 */
->  	if (system_supports_mte() && pte_access_permitted(pte, false) &&
-> -	    !pte_special(pte)) {
-> -		pte_t old_pte = READ_ONCE(*ptep);
-> -		/*
-> -		 * We only need to synchronise if the new PTE has tags enabled
-> -		 * or if swapping in (in which case another mapping may have
-> -		 * set tags in the past even if this PTE isn't tagged).
-> -		 * (!pte_none() && !pte_present()) is an open coded version of
-> -		 * is_swap_pte()
-> -		 */
-> -		if (pte_tagged(pte) || (!pte_none(old_pte) && !pte_present(old_pte)))
-> -			mte_sync_tags(old_pte, pte);
-> -	}
-> +	    !pte_special(pte) && pte_tagged(pte))
-> +		mte_sync_tags(pte);
->  
->  	__check_safe_pte_update(mm, ptep, pte);
->  
-> diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
-> index 7e89968bd282..c40728046fed 100644
-> --- a/arch/arm64/kernel/mte.c
-> +++ b/arch/arm64/kernel/mte.c
-> @@ -35,41 +35,18 @@ DEFINE_STATIC_KEY_FALSE(mte_async_or_asymm_mode);
->  EXPORT_SYMBOL_GPL(mte_async_or_asymm_mode);
->  #endif
->  
-> -static void mte_sync_page_tags(struct page *page, pte_t old_pte,
-> -			       bool check_swap, bool pte_is_tagged)
-> -{
-> -	if (check_swap && is_swap_pte(old_pte)) {
-> -		swp_entry_t entry = pte_to_swp_entry(old_pte);
-> -
-> -		if (!non_swap_entry(entry))
-> -			mte_restore_tags(entry, page);
-> -	}
-> -
-> -	if (!pte_is_tagged)
-> -		return;
-> -
-> -	if (try_page_mte_tagging(page)) {
-> -		mte_clear_page_tags(page_address(page));
-> -		set_page_mte_tagged(page);
-> -	}
-> -}
-> -
-> -void mte_sync_tags(pte_t old_pte, pte_t pte)
-> +void mte_sync_tags(pte_t pte)
->  {
->  	struct page *page = pte_page(pte);
->  	long i, nr_pages = compound_nr(page);
-> -	bool check_swap = nr_pages == 1;
-> -	bool pte_is_tagged = pte_tagged(pte);
-> -
-> -	/* Early out if there's nothing to do */
-> -	if (!check_swap && !pte_is_tagged)
-> -		return;
->  
->  	/* if PG_mte_tagged is set, tags have already been initialised */
-> -	for (i = 0; i < nr_pages; i++, page++)
-> -		if (!page_mte_tagged(page))
-> -			mte_sync_page_tags(page, old_pte, check_swap,
-> -					   pte_is_tagged);
-> +	for (i = 0; i < nr_pages; i++, page++) {
-> +		if (try_page_mte_tagging(page)) {
-> +			mte_clear_page_tags(page_address(page));
-> +			set_page_mte_tagged(page);
-> +		}
-> +	}
->  
->  	/* ensure the tags are visible before the PTE is set */
->  	smp_wmb();
-> diff --git a/arch/arm64/mm/mteswap.c b/arch/arm64/mm/mteswap.c
-> index cd508ba80ab1..3a78bf1b1364 100644
-> --- a/arch/arm64/mm/mteswap.c
-> +++ b/arch/arm64/mm/mteswap.c
-> @@ -53,10 +53,9 @@ void mte_restore_tags(swp_entry_t entry, struct page *page)
->  	if (!tags)
->  		return;
->  
-> -	if (try_page_mte_tagging(page)) {
-> -		mte_restore_page_tags(page_address(page), tags);
-> -		set_page_mte_tagged(page);
-> -	}
-> +	WARN_ON_ONCE(!try_page_mte_tagging(page));
-> +	mte_restore_page_tags(page_address(page), tags);
-> +	set_page_mte_tagged(page);
->  }
->  
->  void mte_invalidate_tags(int type, pgoff_t offset)
+This tells me nothing. Drop "This option indicate this" and rephrase
+everything to actually describe this property. Why would the address
+differ on given, specific SoC? It looks like you just miss compatibles.
+Anyway this needs much more explanation so we can judge whether it fits DT.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    pmc: pm@1fe27000 {
+> +        compatible = "loongson,ls2k-pmc", "syscon";
+> +        reg = <0x1fe27000 0x58>;
+> +        interrupt-parent = <&liointc1>;
+> +        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+> +        suspend-address = <0x1c000500>;
+
+
+Best regards,
+Krzysztof
 
