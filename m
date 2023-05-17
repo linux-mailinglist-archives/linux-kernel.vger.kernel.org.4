@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4C07066B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAFE7066B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjEQLbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
+        id S231343AbjEQLa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbjEQLa5 (ORCPT
+        with ESMTP id S231181AbjEQLaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:30:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2182D5D;
-        Wed, 17 May 2023 04:30:55 -0700 (PDT)
-X-UUID: 2647466ef4a411ed9cb5633481061a41-20230517
+        Wed, 17 May 2023 07:30:55 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D463330F6;
+        Wed, 17 May 2023 04:30:53 -0700 (PDT)
+X-UUID: 2663cb7cf4a411edb20a276fd37b9834-20230517
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=r/ynvpD56p320B6BbN2gG/8wM3GbWN7STgUsQ5UpneI=;
-        b=KqEQWkKtmfot8OezVMYGgucItJO8e+4KfTMamiTh2WRW7TFhhxEAw44vNmxTcKgpnMlE4Qj0Ai8LCVH3OEnmBjQ45rMvwPeqshoVb2IZ2GjIxt2tHQ+ROvaZxjrZ3XW95260edU5FuhIsXD5ueENhGQmbVQtjCnmOFbU2b5SBB0=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=wwKjF0dgzn4sw9jpbPBz5pPHmhzAFBmOncmAdxxMpSI=;
+        b=In0Hu4YuoBIhqfB9NYjBci5iTL+8KBpVSuk7LCvYwtvcGEuTMyQl/xsFdZSxD71D6/4Sp7+94Doznoeig3AGeui01eqXa5csERSktEPm6oIzcd7tl+nLXXDCHgFol0NsYVYzrRDQQJ6ZnMfSPy3JJLVtjPnXL51/QNBsr8LmHtM=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:de3a0acb-93cc-4bd6-a18b-ecb2235d5053,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:8d7825c1-e32c-4c97-918d-fbb3fc224d4e,B
+X-CID-O-INFO: VERSION:1.1.25,REQID:144c14fc-ad09-4290-9dcc-2c7883357a71,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:071a793b-de1e-4348-bc35-c96f92f1dcbb,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-UUID: 2647466ef4a411ed9cb5633481061a41-20230517
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-UUID: 2663cb7cf4a411edb20a276fd37b9834-20230517
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
         (envelope-from <trevor.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 640718673; Wed, 17 May 2023 19:15:37 +0800
+        with ESMTP id 1830841433; Wed, 17 May 2023 19:15:37 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1118.26; Wed, 17 May 2023 19:15:36 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 19:15:35 +0800
+ 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 19:15:36 +0800
 From:   Trevor Wu <trevor.wu@mediatek.com>
 To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
         <perex@perex.cz>, <robh+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH 2/5] ASoC: mediatek: mt8188-mt6359: register hdmi/dp jack pins
-Date:   Wed, 17 May 2023 19:15:31 +0800
-Message-ID: <20230517111534.32630-3-trevor.wu@mediatek.com>
+Subject: [PATCH 3/5] ASoC: mediatek: common: soundcard driver add dai_fmt support
+Date:   Wed, 17 May 2023 19:15:32 +0800
+Message-ID: <20230517111534.32630-4-trevor.wu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230517111534.32630-1-trevor.wu@mediatek.com>
 References: <20230517111534.32630-1-trevor.wu@mediatek.com>
@@ -68,73 +68,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some userspace applications need jack control events, so register hdmi
-and dp jack pins to activate jack control events.
+There are two changes included in the patch.
+
+First, add set_dailink_daifmt() function, so dai_fmt can be updated by
+the configuration in dai-link sub node.
+
+Second, remove codec phandle from required property in dai-link sub node.
+For example, user possibly needs to update dai-format for all etdm
+co-clock dai-links, but codec doesn't need to be specified in capture
+dai-link for a speaker amp.
 
 Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
 ---
- sound/soc/mediatek/mt8188/mt8188-mt6359.c | 27 +++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ .../mediatek/common/mtk-soundcard-driver.c    | 49 ++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/mediatek/mt8188/mt8188-mt6359.c b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
-index 833bc362dad2..6c3f36e2fffd 100644
---- a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
-+++ b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
-@@ -151,6 +151,20 @@ struct mt8188_mt6359_priv {
- 	struct snd_soc_jack hdmi_jack;
- };
+diff --git a/sound/soc/mediatek/common/mtk-soundcard-driver.c b/sound/soc/mediatek/common/mtk-soundcard-driver.c
+index 738093451ccb..5e291092046b 100644
+--- a/sound/soc/mediatek/common/mtk-soundcard-driver.c
++++ b/sound/soc/mediatek/common/mtk-soundcard-driver.c
+@@ -22,7 +22,7 @@ static int set_card_codec_info(struct snd_soc_card *card,
  
-+static struct snd_soc_jack_pin mt8188_hdmi_jack_pins[] = {
-+	{
-+		.pin = "HDMI",
-+		.mask = SND_JACK_LINEOUT,
-+	},
-+};
+ 	codec_node = of_get_child_by_name(sub_node, "codec");
+ 	if (!codec_node)
+-		return -EINVAL;
++		return 0;
+ 
+ 	/* set card codec info */
+ 	ret = snd_soc_of_get_dai_link_codecs(dev, codec_node, dai_link);
+@@ -36,6 +36,47 @@ static int set_card_codec_info(struct snd_soc_card *card,
+ 	return 0;
+ }
+ 
++static int set_dailink_daifmt(struct snd_soc_card *card,
++			      struct device_node *sub_node,
++			      struct snd_soc_dai_link *dai_link)
++{
++	unsigned int daifmt;
++	const char *str;
++	int ret;
++	struct {
++		char *name;
++		unsigned int val;
++	} of_clk_table[] = {
++		{ "cpu",	SND_SOC_DAIFMT_CBC_CFC },
++		{ "codec",	SND_SOC_DAIFMT_CBP_CFP },
++	};
 +
-+static struct snd_soc_jack_pin mt8188_dp_jack_pins[] = {
-+	{
-+		.pin = "DP",
-+		.mask = SND_JACK_LINEOUT,
-+	},
-+};
++	daifmt = snd_soc_daifmt_parse_format(sub_node, NULL);
++	if (daifmt) {
++		dai_link->dai_fmt &= SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK;
++		dai_link->dai_fmt |= daifmt;
++	}
 +
- struct mt8188_card_data {
- 	const char *name;
- 	unsigned long quirk;
-@@ -159,6 +173,8 @@ struct mt8188_card_data {
- static const struct snd_soc_dapm_widget mt8188_mt6359_widgets[] = {
- 	SND_SOC_DAPM_HP("Headphone", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
-+	SND_SOC_DAPM_SINK("HDMI"),
-+	SND_SOC_DAPM_SINK("DP"),
- };
++	/*
++	 * check "mediatek,clk-provider = xxx"
++	 * SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK area
++	 */
++	ret = of_property_read_string(sub_node, "mediatek,clk-provider", &str);
++	if (ret == 0) {
++		int i;
++
++		for (i = 0; i < ARRAY_SIZE(of_clk_table); i++) {
++			if (strcmp(str, of_clk_table[i].name) == 0) {
++				dai_link->dai_fmt &= ~SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK;
++				dai_link->dai_fmt |= of_clk_table[i].val;
++				break;
++			}
++		}
++	}
++
++	return 0;
++}
++
+ int parse_dai_link_info(struct snd_soc_card *card)
+ {
+ 	struct device *dev = card->dev;
+@@ -67,6 +108,12 @@ int parse_dai_link_info(struct snd_soc_card *card)
+ 			of_node_put(sub_node);
+ 			return ret;
+ 		}
++
++		ret = set_dailink_daifmt(card, sub_node, dai_link);
++		if (ret < 0) {
++			of_node_put(sub_node);
++			return ret;
++		}
+ 	}
  
- static const struct snd_kcontrol_new mt8188_mt6359_controls[] = {
-@@ -396,8 +412,10 @@ static int mt8188_hdmi_codec_init(struct snd_soc_pcm_runtime *rtd)
- 	struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
- 	int ret = 0;
- 
--	ret = snd_soc_card_jack_new(rtd->card, "HDMI Jack", SND_JACK_LINEOUT,
--				    &priv->hdmi_jack);
-+	ret = snd_soc_card_jack_new_pins(rtd->card, "HDMI Jack",
-+					 SND_JACK_LINEOUT, &priv->hdmi_jack,
-+					 mt8188_hdmi_jack_pins,
-+					 ARRAY_SIZE(mt8188_hdmi_jack_pins));
- 	if (ret) {
- 		dev_info(rtd->dev, "%s, new jack failed: %d\n", __func__, ret);
- 		return ret;
-@@ -417,8 +435,9 @@ static int mt8188_dptx_codec_init(struct snd_soc_pcm_runtime *rtd)
- 	struct snd_soc_component *component = asoc_rtd_to_codec(rtd, 0)->component;
- 	int ret = 0;
- 
--	ret = snd_soc_card_jack_new(rtd->card, "DP Jack", SND_JACK_LINEOUT,
--				    &priv->dp_jack);
-+	ret = snd_soc_card_jack_new_pins(rtd->card, "DP Jack", SND_JACK_LINEOUT,
-+					 &priv->dp_jack, mt8188_dp_jack_pins,
-+					 ARRAY_SIZE(mt8188_dp_jack_pins));
- 	if (ret) {
- 		dev_info(rtd->dev, "%s, new jack failed: %d\n", __func__, ret);
- 		return ret;
+ 	return 0;
 -- 
 2.18.0
 
