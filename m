@@ -2,82 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F204170726D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731CB707272
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjEQTlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S229691AbjEQTmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjEQTlu (ORCPT
+        with ESMTP id S229555AbjEQTmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:41:50 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B44197
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:41:49 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965a68abfd4so210160266b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684352507; x=1686944507;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AE8+B3pWQ4l7QxfBqXUnPyiVc+aZlt+BtRcwXsFR3Kg=;
-        b=JeDzLUDQ2pq/eW+97XnNWJdM/lObXBgEGxcH7lBWg6seb0FFwdy+Skry85v27s6EvM
-         QkKH/tarHJPDjjQLK1puuvgut2LSyAGVlXvtgQk85PVSFy2ZrpUXtZCoQdoEG4NYgMJq
-         ecYIECc3PBpmL8RasuQeCZ8hXX7hhxfC2bTTNXwk7kQw9Yp3FrTvUxxIvUe9j2IPmmj8
-         XYAnodyLH69Fi5r5Z0kVGXZz57/Xitgrslunok7K0u2BrSApjH7yzTPKUGDHH4SwwMj1
-         bnIg4tChp1M9aS3koD+8rutqnoTrCa3Cc+09L8PFzVd5FnecZA/i+KSehJoymjAUhr21
-         QwXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684352507; x=1686944507;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AE8+B3pWQ4l7QxfBqXUnPyiVc+aZlt+BtRcwXsFR3Kg=;
-        b=E5HdUSUC40w8t/kMPvs6oW0qfL7e+3pmN7+4OPtjV8T+2gFLK4vVF42u4g75PI17PG
-         S+l44VZyoV4KXrs1pE4IWCR8D3oxf/UZqW25jR1eO7Dlgl/U5PNw0+y2mbdgcGlIeFig
-         gvTb8L/bQEU7UoP7GdMaVsmGtVDAkHYi89QjJIzHGGrBTOjju+fsHRvMk4QR6Uqe8xut
-         iXZCFGWOduMkDmn1Gu+TFojC/2swqPb+FMH05t0lTxjLu5K4h+LcEditp/L6uEmiyKP3
-         LWE+PPUvItmqcl2x8DFUZ27RXzPyvfhMZkBivZQuMreFNu9XKKtmlOO2EQt4B8Tkz+B1
-         ixvQ==
-X-Gm-Message-State: AC+VfDwGgyRBR3wLtMstWcBbXFpJ1/9F8cbo7mD1FbSe77cpKAwqnMQb
-        0/jMqc9e8oIia/ZLGSYk7sepcA==
-X-Google-Smtp-Source: ACHHUZ4Qg3tRhWiRB2mnHGaX2Qu65CxTKUwvjCQnfKZkAA1h5PCV5S9tuiMPT1sXlI8/YMjQYOhZ5A==
-X-Received: by 2002:a17:907:8a04:b0:95f:de3c:6c98 with SMTP id sc4-20020a1709078a0400b0095fde3c6c98mr39648716ejc.58.1684352507571;
-        Wed, 17 May 2023 12:41:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d7a:e7cc:21b3:c435? ([2a02:810d:15c0:828:d7a:e7cc:21b3:c435])
-        by smtp.gmail.com with ESMTPSA id og16-20020a1709071dd000b0096637a19dcasm12671085ejc.4.2023.05.17.12.41.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 12:41:47 -0700 (PDT)
-Message-ID: <ffd620e7-66ae-2921-85c0-c81070c09e01@linaro.org>
-Date:   Wed, 17 May 2023 21:41:45 +0200
+        Wed, 17 May 2023 15:42:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC87271B;
+        Wed, 17 May 2023 12:42:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04DA164AB5;
+        Wed, 17 May 2023 19:42:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32FC7C433EF;
+        Wed, 17 May 2023 19:42:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684352559;
+        bh=afhI056VdXNOr9ugoqlRkd2TTFxvYYZ/gycL5eBOWXo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YUk0CCY0gbbYh1ILW9Y80BGNdCD8aVom443ZRnGmZp6gHYNPGY6nOHSGOpla7z3F9
+         FX9QzNm1UO338vsjPE3LzzQXej6dglBW2R84lzV4DTBxdQkz0Et7RCXC0qKiPYdPlf
+         HfvPeqswFlXmM1yds8VtHBJ3N3Vn/a9k9D1Wli6O1Krl8QukSEk/G3ytVknfQePcE7
+         rtskS3VCbqX9mAtS68eeWWlCUldNzRclks28YB/JkBc2qdUqsVvfLhHjywQDTQPkOF
+         YjjV5YA5oVefQJmQCS8/HqkJaA4lnWkRWJWCDlyQ28TbENhnLICK+oU13yd1ToTWfp
+         Zv/FDKcHY6OOw==
+Date:   Wed, 17 May 2023 13:43:28 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Bill Wendling <morbo@google.com>,
+        Qing Zhao <qing.zhao@oracle.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] Compiler Attributes: Add __counted_by macro
+Message-ID: <ZGUuYHlEoCF9AyKz@work>
+References: <20230517190841.gonna.796-kees@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 7/7] dt-bindings: Add bidings for mtk,apu-drm
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alexandre Bailon <abailon@baylibre.com>, airlied@gmail.com,
-        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, jstephan@baylibre.com,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
-        nbelin@baylibre.com, bero@baylibre.com
-References: <20230517145237.295461-1-abailon@baylibre.com>
- <20230517145237.295461-8-abailon@baylibre.com>
- <f0469fcb-a1ef-77a2-a8ab-40ab8d91bff7@linaro.org>
-In-Reply-To: <f0469fcb-a1ef-77a2-a8ab-40ab8d91bff7@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517190841.gonna.796-kees@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,83 +58,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 21:38, Krzysztof Kozlowski wrote:
-> On 17/05/2023 16:52, Alexandre Bailon wrote:
->> This adds the device tree bindings for the APU DRM driver.
->>
->> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
->> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
+On Wed, May 17, 2023 at 12:08:44PM -0700, Kees Cook wrote:
+> In an effort to annotate all flexible array members with their run-time
+> size information, the "element_count" attribute is being introduced by
+> Clang[1] and GCC[2] in future releases. This annotation will provide
+> the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
+> to perform run-time bounds checking on otherwise unknown-size flexible
+> arrays.
 > 
-> There are so many errors in this patch... that for sure it was not
-> tested. Reduced review, except what was already said:
+> Even though the attribute is under development, we can start the
+> annotation process in the kernel. This requires defining a macro for
+> it, even if we have to change the name of the actual attribute later.
+> Since it is likely that this attribute may change its name to "counted_by"
+> in the future (to better align with a future total bytes "sized_by"
+> attribute), name the wrapper macro "__counted_by", which also reads more
+> clearly (and concisely) in structure definitions.
 > 
->> ---
->>  .../devicetree/bindings/gpu/mtk,apu-drm.yaml  | 38 +++++++++++++++++++
->>  1 file changed, 38 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml b/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
->> new file mode 100644
->> index 000000000000..6f432d3ea478
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
->> @@ -0,0 +1,38 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/gpu/mediatek,apu-drm.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: AI Processor Unit DRM
->> +
->> +properties:
->> +  compatible:
->> +    const: mediatek,apu-drm
+> [1] https://reviews.llvm.org/D148381
+> [2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
 > 
-> drm is not hardware. Drop everywhere or explain the acronym. If you
-> explain it like Linux explains, then: drm is not hardware.
-> 
->> +
->> +  remoteproc:
->> +    maxItems: 2
->> +    description:
->> +      Handle to remoteproc devices controlling the APU
-> 
-> Missing type/ref. Does not look like generic property, so missing vendor
-> prefix.
-> 
->> +
->> +  iova:
->> +    maxItems: 1
->> +    description:
->> +      Address and size of virtual memory that could used by the APU
-> 
-> So it is a reg?
-> 
->> +
->> +required:
->> +  - compatible
->> +  - remoteproc
->> +  - iova
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    apu@0 {
-> 
-> Where is reg? @0 says you have it...
-> 
->> +      compatible = "mediatek,apu-drm";
->> +      remoteproc = <&vpu0>, <&vpu1>;
->> +      iova = <0 0x60000000 0 0x10000000>;
-> 
-> Why would you store virtual address, not real, in DT? Let's say you have
-> some randomization like KASLR. How is it going to work? Drop, it is not
-> hardware property.
+> Cc: Miguel Ojeda <ojeda@kernel.org>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Qing Zhao <qing.zhao@oracle.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Tom Rix <trix@redhat.com>
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Actually RANDOMIZE_BASE. KASLR randomizes the physical.
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Best regards,
-Krzysztof
+Thanks
+--
+Gustavo
 
+> ---
+> v2: - update "Optional" comments
+> v1: https://lore.kernel.org/all/20230504181636.never.222-kees@kernel.org/
+> ---
+>  include/linux/compiler_attributes.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index e659cb6fded3..a92d8887e8f0 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -123,6 +123,19 @@
+>  # define __designated_init
+>  #endif
+>  
+> +/*
+> + * Optional: only supported since gcc >= 14
+> + * Optional: only supported since clang >= 17
+> + *
+> + *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> + * clang: https://reviews.llvm.org/D148381
+> + */
+> +#if __has_attribute(__element_count__)
+> +# define __counted_by(member)		__attribute__((__element_count__(member)))
+> +#else
+> +# define __counted_by(member)
+> +#endif
+> +
+>  /*
+>   * Optional: only supported since clang >= 14.0
+>   *
+> -- 
+> 2.34.1
+> 
