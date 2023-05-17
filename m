@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A65706F50
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ED0706F60
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjEQRZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S229844AbjEQR0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjEQRZ1 (ORCPT
+        with ESMTP id S229805AbjEQR01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:25:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ACD93F7;
-        Wed, 17 May 2023 10:25:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FB1363E35;
-        Wed, 17 May 2023 17:25:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E9E6C433D2;
-        Wed, 17 May 2023 17:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684344311;
-        bh=mjFoAWFzRrM9eTl/Zbmccy0cVg5yWUVZAjtxpZaRWyI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JJSAp3/DeICH3C9UGkhuNBJHDqlTc+oJYD3lah9UEjSbbpdIHvYVt4JKbJrnKpfq8
-         jGOB90ZzNGUrHIdwLsKVgnZZeJha/DjxWrpMMNkKQenM/5a3pr4oDcH6tm0RoB1OSv
-         TyFFVgNn198G+8R8noWEfYc/XgQ4fkTWHH1R8mo5MCCpwQIl4ZI1EYBX4jX3sNLuWX
-         nB7N1AzvlkCZ9eFoTVWSVlQTQl8WV62hJOsoU/+VR77WAywEPx3jeZ2kioD+F2uEhE
-         bgZb3B4QWO7VWT8KQJ0+Jo1reEbgfSETto+mmz5A5VKu/zBOVO47qqyNwcnaAhuVRe
-         keX2nmUYvMgVg==
-Date:   Wed, 17 May 2023 18:25:07 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: sc16is7xx: Add property to change GPIO
- function
-Message-ID: <20230517-argue-unbeaten-b07405fdd313@spud>
-References: <20230517150746.3823249-1-hugo@hugovil.com>
+        Wed, 17 May 2023 13:26:27 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B57A5C7;
+        Wed, 17 May 2023 10:26:02 -0700 (PDT)
+Received: from vefanov-Precision-3650-Tower.intra.ispras.ru (unknown [10.10.2.69])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 6BEC340755CE;
+        Wed, 17 May 2023 17:25:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 6BEC340755CE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1684344348;
+        bh=aom6zdq+nb9ytMsl0njXJSZ8hBFPWeXehVcz6nJqeBk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=b6ILUDy5tVtHTiedTk1ynvQrY53mc9N/+34FAKpQgbEZww0c6FcikJ+m0yEIdaCAW
+         CZhTx7KZzFBxzx1/O8c9gY5QAVR4r1EpwHL9RAzFidYLln9RXaLsIA7n+p52qIpro1
+         FPNSvFn10XGwsFP4n+k2Rx4308mm5lJyg/GwGOeE=
+From:   Vladislav Efanov <VEfanov@ispras.ru>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Vladislav Efanov <VEfanov@ispras.ru>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] usb: dwc3: qcom: Fix potential memory leak
+Date:   Wed, 17 May 2023 20:25:18 +0300
+Message-Id: <20230517172518.442591-1-VEfanov@ispras.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mpbHctzDX7UX2Sd6"
-Content-Disposition: inline
-In-Reply-To: <20230517150746.3823249-1-hugo@hugovil.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Function dwc3_qcom_probe() allocates memory for resource structure
+which is pointed by parent_res pointer. This memory is not
+freed. This leads to memory leak. Use stack memory to prevent
+memory leak.
 
---mpbHctzDX7UX2Sd6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-On Wed, May 17, 2023 at 11:07:46AM -0400, Hugo Villeneuve wrote:
-> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
->=20
-> Some variants in this series of uart controllers have GPIO pins that
-> are shared between GPIO and modem control lines.
->=20
-> The pin mux mode (GPIO or modem control lines) can be set for each
-> ports (channels) supported by the variant.
->=20
-> This adds a property to the device tree to set the GPIO pin mux to
-> modem control lines on selected ports if needed.
->=20
-> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> ---
->  .../bindings/serial/nxp,sc16is7xx.txt         | 28 +++++++++++++++++++
->  1 file changed, 28 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b=
-/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> index 0fa8e3e43bf8..426b7285ad50 100644
-> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> @@ -23,6 +23,9 @@ Optional properties:
->      1 =3D active low.
->  - irda-mode-ports: An array that lists the indices of the port that
->  		   should operate in IrDA mode.
-> +- modem-control-line-ports: An array that lists the indices of the port =
-that
-> +			    should have shared GPIO lines configured as modem
-> +			    control lines.
+Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-If this is an NXP specific property, should it not have an nxp, vendor
-prefix?
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 959fc925ca7c..f52241883694 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -791,6 +791,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	struct device		*dev = &pdev->dev;
+ 	struct dwc3_qcom	*qcom;
+ 	struct resource		*res, *parent_res = NULL;
++	struct resource		local_res;
+ 	int			ret, i;
+ 	bool			ignore_pipe_clk;
+ 	bool			wakeup_source;
+@@ -842,9 +843,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 	if (np) {
+ 		parent_res = res;
+ 	} else {
+-		parent_res = kmemdup(res, sizeof(struct resource), GFP_KERNEL);
+-		if (!parent_res)
+-			return -ENOMEM;
++		memcpy(&local_res, res, sizeof(struct resource));
++		parent_res = &local_res;
+ 
+ 		parent_res->start = res->start +
+ 			qcom->acpi_pdata->qscratch_base_offset;
+-- 
+2.34.1
 
-
---mpbHctzDX7UX2Sd6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGUN8wAKCRB4tDGHoIJi
-0hp1AP9FdcuRN7IO7H2al/5we3uqXf0P4Jd54EhBY+MkzKRGxwD8DuYBxPPExott
-pQjz7PK7eIvyCdbZuUagAiV4Q8GrCAQ=
-=M+2F
------END PGP SIGNATURE-----
-
---mpbHctzDX7UX2Sd6--
