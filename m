@@ -2,150 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826937075BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BCB7075C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjEQXBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 19:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S229683AbjEQXBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 19:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjEQXBH (ORCPT
+        with ESMTP id S229645AbjEQXBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 19:01:07 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 440F6526E;
-        Wed, 17 May 2023 16:01:02 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4AA5620F32B2;
-        Wed, 17 May 2023 16:01:01 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4AA5620F32B2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1684364461;
-        bh=Sx7I12MgI21IfjMTdz/sb80FwxyU0F3BNXVRLf4aVFk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FxrRMQa7TTr1X0TjqUCm//+svY6KZbH9tYmAPw+8nNFvginetlK4nlCkW1zTf43dy
-         5R8xZ/rgUZeKe0i93HeJXlZgswahiJepbG7A7OidHSokQ2jztFc1Dq6xrHtVoeOtBE
-         79o2I3HH9PbWv0MnCEk5aRssl/axM4kSkCii+DU8=
-Date:   Wed, 17 May 2023 16:00:54 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>, dthaler@microsoft.com,
-        brauner@kernel.org, hch@infradead.org
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-ID: <20230517230054.GA195@W11-BEAU-MD.localdomain>
-References: <CAHk-=whBKoovtifU2eCeyuBBee-QMcbxdXDLv0mu0k2DgxiaOw@mail.gmail.com>
- <CAHk-=wj1hh=ZUriY9pVFvD1MjqbRuzHc4yz=S2PCW7u3W0-_BQ@mail.gmail.com>
- <20230516222919.79bba667@rorschach.local.home>
- <CAHk-=wh_GEr4ehJKwMM3UA0-7CfNpVH7v_T-=1u+gq9VZD70mw@mail.gmail.com>
- <20230517172243.GA152@W11-BEAU-MD.localdomain>
- <CAHk-=whzzuNEW8UcV2_8OyuKcXPrk7-j_8GzOoroxz9JiZiD3w@mail.gmail.com>
- <20230517190750.GA366@W11-BEAU-MD.localdomain>
- <CAHk-=whTBvXJuoi_kACo3qi5WZUmRrhyA-_=rRFsycTytmB6qw@mail.gmail.com>
- <CAHk-=wi4w9bPKFFGwLULjJf9hnkL941+c4HbeEVKNzqH04wqDA@mail.gmail.com>
- <CAHk-=wiiBfT4zNS29jA0XEsy8EmbqTH1hAPdRJCDAJMD8Gxt5A@mail.gmail.com>
+        Wed, 17 May 2023 19:01:50 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB91170E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:01:48 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1ae4baa77b2so10719215ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684364508; x=1686956508;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7BzCe/htlM5mTAaSOzvP8pEpnyOYq7XwMu4hjpniWzo=;
+        b=B/J7qvOTlzVBF6bH+lZ1fSjUgxLBV+R4eZ+jYhz/z7+S5IILF0ehttCPGNSyoMI3ub
+         pZZlsX3zL98h9GWstYJknqvKryfgKw//T778pjlMZh+uODdCWwpS9hx/J36oaYLURxlS
+         cyqOXevDrp4eByr5L4zRgmx+xnpgp96/7O1Pw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684364508; x=1686956508;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7BzCe/htlM5mTAaSOzvP8pEpnyOYq7XwMu4hjpniWzo=;
+        b=EcIN9dCbf5OK/z3XboGUgvEFbjlJizs2deAhzMQeaCQ/TeeAYR/3pKkteyJoFZ1J9x
+         pcxQr59EFKtL6aEtd2DFRVbh3bn0CoGFoE8mvSDe9PJEGxL7ryvt/oYeNm0lUNZq/Cp9
+         LDglQGqawug7TZUQ/bWKdMlLfUkpafudEdlrXwJrjmgXo/rN3/uC6vDiibKFqvDbUI5X
+         X7EARsxleLlwB08sPynLgHDSntQHZ3ONsdHYlv6x2cktWSk8/bWKk93ITbG1fMKfmyvH
+         nFdo8plbPZh4lbyns5JXNVUvbjKCQ33hhsabOZV2x/yV9xQcSXkxIjeB6aN65kGgSX5t
+         5Kow==
+X-Gm-Message-State: AC+VfDxXIlKPi+8evA/WE6wKx6oEv5u+TRrClBJl5/sKQasSZQ78+Ygo
+        UhTOzYmM/VehVwlZw+7l6lufWQ==
+X-Google-Smtp-Source: ACHHUZ54qKIN5A4ugmU6aiQY1NXaOIPnQ8RUOJisfyPF5LS+vhwZWZ17iQt+hucvIjzEZ21J39EIWQ==
+X-Received: by 2002:a17:902:e5c8:b0:1ad:fa2e:17fc with SMTP id u8-20020a170902e5c800b001adfa2e17fcmr530850plf.2.1684364508211;
+        Wed, 17 May 2023 16:01:48 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p20-20020a170902a41400b0019719f752c5sm9901606plq.59.2023.05.17.16.01.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 16:01:47 -0700 (PDT)
+Date:   Wed, 17 May 2023 16:01:47 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <james.smart@broadcom.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2][next] scsi: lpfc: Use struct_size() helper
+Message-ID: <202305171601.B3FF9D0BB@keescook>
+References: <cover.1684358315.git.gustavoars@kernel.org>
+ <99e06733f5f35c6cd62e05f530b93107bfd03362.1684358315.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wiiBfT4zNS29jA0XEsy8EmbqTH1hAPdRJCDAJMD8Gxt5A@mail.gmail.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <99e06733f5f35c6cd62e05f530b93107bfd03362.1684358315.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 12:37:11PM -0700, Linus Torvalds wrote:
-> On Wed, May 17, 2023 at 12:36 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > .. this is the patch that I think should go on top of it to fix the
-> > misleading "safe" and the incorrect RCU walk.
+On Wed, May 17, 2023 at 03:23:01PM -0600, Gustavo A. R. Silva wrote:
+> Prefer struct_size() over open-coded versions of idiom:
 > 
-> Let's actually attach the patch too. Duh.
+> sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
 > 
->                Linus
-
->  kernel/trace/trace_events_user.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> where count is the max number of items the flexible array is supposed to
+> contain.
 > 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index b2aecbfbbd24..054e28cc5ad4 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -439,7 +439,7 @@ static bool user_event_enabler_exists(struct user_event_mm *mm,
->  	struct user_event_enabler *enabler;
->  	struct user_event_enabler *next;
->  
-> -	list_for_each_entry_safe(enabler, next, &mm->enablers, link) {
-> +	list_for_each_entry(enabler, next, &mm->enablers, link) {
->  		if (enabler->addr == uaddr &&
->  		    (enabler->values & ENABLE_VAL_BIT_MASK) == bit)
->  			return true;
-> @@ -455,19 +455,19 @@ static void user_event_enabler_update(struct user_event *user)
->  	struct user_event_mm *next;
->  	int attempt;
->  
-> +	lockdep_assert_held(&event_mutex);
-> +
->  	while (mm) {
->  		next = mm->next;
->  		mmap_read_lock(mm->mm);
-> -		rcu_read_lock();
->  
-> -		list_for_each_entry_rcu(enabler, &mm->enablers, link) {
-> +		list_for_each_entry(enabler, &mm->enablers, link) {
->  			if (enabler->event == user) {
->  				attempt = 0;
->  				user_event_enabler_write(mm, enabler, true, &attempt);
->  			}
->  		}
->  
-> -		rcu_read_unlock();
->  		mmap_read_unlock(mm->mm);
->  		user_event_mm_put(mm);
->  		mm = next;
+> Link: https://github.com/KSPP/linux/issues/160
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/scsi/lpfc/lpfc_ct.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
+> index e880d127d7f5..3b95c56023bf 100644
+> --- a/drivers/scsi/lpfc/lpfc_ct.c
+> +++ b/drivers/scsi/lpfc/lpfc_ct.c
+> @@ -3748,8 +3748,7 @@ lpfc_vmid_cmd(struct lpfc_vport *vport,
+>  		rap->obj[0].entity_id_len = vmid->vmid_len;
+>  		memcpy(rap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
+>  		size = RAPP_IDENT_OFFSET +
+> -			sizeof(struct lpfc_vmid_rapp_ident_list) +
+> -			sizeof(struct entity_id_object);
+> +			struct_size(rap, obj, rap->no_of_objects);
 
-Do you mind giving me your Signed-off-by for these?
+Has rap->no_of_objects always been "1"? (i.e. there was a prior
+multiplication here before...
 
-I plan to do a series where I take these patches and then also fix up a
-few comments and the link namings as you suggested.
-
-First patch is clean, second patch I made the following changes and
-after that passed all the self-tests without bug splats with
-CONFIG_PROVE_LOCKING/RCU and ATOMIC_SLEEP:
-
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index b2aecbfbbd24..2f70dabb0f71 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -437,9 +437,8 @@ static bool user_event_enabler_exists(struct user_event_mm *mm,
-                                      unsigned long uaddr, unsigned char bit)
- {
-        struct user_event_enabler *enabler;
--       struct user_event_enabler *next;
-
--       list_for_each_entry_safe(enabler, next, &mm->enablers, link) {
-+       list_for_each_entry(enabler, &mm->enablers, link) {
-                if (enabler->addr == uaddr &&
-                    (enabler->values & ENABLE_VAL_BIT_MASK) == bit)
-                        return true;
-@@ -495,7 +494,9 @@ static bool user_event_enabler_dup(struct user_event_enabler *orig,
-        enabler->values = orig->values & ENABLE_VAL_DUP_MASK;
-
-        refcount_inc(&enabler->event->refcnt);
--       list_add_rcu(&enabler->link, &mm->enablers);
-+
-+       /* Enablers not exposed yet, RCU not required */
-+       list_add(&enabler->link, &mm->enablers);
+-- 
+Kees Cook
