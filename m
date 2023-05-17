@@ -2,239 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EAF7067C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8797067CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjEQMN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S230446AbjEQMPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjEQMNZ (ORCPT
+        with ESMTP id S229670AbjEQMPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:13:25 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D037B1;
-        Wed, 17 May 2023 05:13:23 -0700 (PDT)
-X-UUID: 349df08ef4ac11ed9cb5633481061a41-20230517
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=CWuHZ6AHLCNVvKru471VbgA2r58WhC/618EWL5GsanE=;
-        b=jLmpTSbdWNGjxxGmHjes6nZNFKPyhk+8v+QOsAbFxRhMsjd0z58OLBX2nrJGjM3zxQ6nZndFJTgF2NZQT3QyzuM9A4vs2Aail/AZdqmqfTrdthRqOUNKEeYk78gxlygSI9464xZKliNgC8xwOIkG8TnIGDJ2i0Kxs+rOhOPDsr0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:86f3aea3-b891-4fdc-a8af-d21c1e436ef1,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:aa2e1f6c-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 349df08ef4ac11ed9cb5633481061a41-20230517
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 137115995; Wed, 17 May 2023 20:13:17 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 17 May 2023 20:13:16 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 20:13:15 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lrUEgltKxSF+vlcIikAUEdbCOnRt1xl7vRVl6dLKZdzO/z9SaDJ/rKWzHpJds1dGTd8iiB8uSRdj3LpDetahRv26xrY9E45O4kBaNl4ORw/kf7i+wlABiGMFWKMj/PnOhYgCukVQqDlcvw8YWLr7waFaeyVZKVXKhFsEqpZ5PGdWR4UDeduo3T80jKeNHiQMZjM5Rw/ndNc0LWhFzLmY33x3lABBqlLoQW6dmx7FY8DoP3aUDztgMqPOdLvIywuxbNxYGmj67MvAN9q51niMovkVqbQaAfrbrlJ1++lDroso8BWmrr0aQnCogcC/dkWjp9sN3RoHmdjClkrjHIyD8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CWuHZ6AHLCNVvKru471VbgA2r58WhC/618EWL5GsanE=;
- b=azKgg3PZDCaGh+mlYJ/Ns5GgzItPqFuOdFmxCbJpDjSb+zOu/ZRQ5XDsJOYK9gJUQweCyy4PghomqJAxhV4GePj7je4RKX71SQnxqGk22x+hmzLDoIs14D/EFRdDNW2O/8tYWVc4HtofZST6yra8bJOuZpRy/G25pdKIbAlyzF4KN++Z1uFlKxuCLN3auDModYoEw3jAcoR8EEoDQAsRMBR+h1FkPWCtPL4l9Ezl9n5qUxAUeODq5/6qtkzYoLFo4meawVxbc+TPiJRy3C8dpgxadw9QZcgzg35EW2u7bBgBUjoLZg0wbsDpw/PIF+0ME6oZtZXW96g0oarD+PZc8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+        Wed, 17 May 2023 08:15:36 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C703189;
+        Wed, 17 May 2023 05:15:35 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ae51b07338so4143075ad.0;
+        Wed, 17 May 2023 05:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CWuHZ6AHLCNVvKru471VbgA2r58WhC/618EWL5GsanE=;
- b=mytE5KDh+dhOkK3YQlMTdvipKqP+3rtaA+LS2fYCKM/uCvqFyebJ0DINxp7vD7CdxizAzjFZ5E1ooMZyUr0nVkulL0vUnlmghi5tm6ZhsZ+Hv8WrUWlsjPpO2srAbVLrQ3klHYzmfas8knQtT7kk2bBsSeCsUj1Gjr4/aQv4dXk=
-Received: from SI2PR03MB6686.apcprd03.prod.outlook.com (2603:1096:4:1e9::14)
- by PSAPR03MB5192.apcprd03.prod.outlook.com (2603:1096:301:41::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
- 2023 12:13:14 +0000
-Received: from SI2PR03MB6686.apcprd03.prod.outlook.com
- ([fe80::bfa:5a41:b6e1:63de]) by SI2PR03MB6686.apcprd03.prod.outlook.com
- ([fe80::bfa:5a41:b6e1:63de%3]) with mapi id 15.20.6411.017; Wed, 17 May 2023
- 12:13:13 +0000
-From:   =?utf-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/5] ASoC: mediatek: mt8188: separate ADDA playback dai
- from capture dai
-Thread-Topic: [PATCH 1/5] ASoC: mediatek: mt8188: separate ADDA playback dai
- from capture dai
-Thread-Index: AQHZiLDrK222lHVkCUWF2nRgQpKtH69eV2WAgAAJHoA=
-Date:   Wed, 17 May 2023 12:13:13 +0000
-Message-ID: <520bb4d2d65958dddba314d7fb931282959ba44e.camel@mediatek.com>
-References: <20230517111534.32630-1-trevor.wu@mediatek.com>
-         <20230517111534.32630-2-trevor.wu@mediatek.com>
-         <678f3582-ff1e-033a-f8d9-f73910156d15@collabora.com>
-In-Reply-To: <678f3582-ff1e-033a-f8d9-f73910156d15@collabora.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SI2PR03MB6686:EE_|PSAPR03MB5192:EE_
-x-ms-office365-filtering-correlation-id: 00bbcbef-d290-403e-a1e2-08db56d016ac
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: slRWwefJxDw6kK38wjSBIIB4/5A19gzixFSPuEug+zTlPqyTwb2Ao8p0Pw/LQLOyRzPNyWj8Zu8JSdPFtEBY0gXWJdVBiiTFOYVRSUKH8t1OTNWBVKCoxnkBSF7aF+ezTp8stnP19lgNSSQELRNgQYtJX35Gme7d8qqLJWVIJflPiuX6FJX5GPegsuch97EvvXznnKgmIXKv8xxNvm2jLX8X8IruVg0Zcol2bV04pQNTH54eJzPONlrAdz5tqU0UnqlG8ge6fDfIFLZ6PiJdzHCiVAAJ/IoaCKlzdnVUZehuFUUs5R0u9VQUGec5x6WSBFrILEM6e4rlvXWMVO4gI68uDhEQ3Rx4k/a4KVGQMPV+BuPo1m+QMLt4Yb1osil/VWh4GOZYhbubbYTZ3ZVl5iyn7kptTGiQAJDHG8oexgQ3ESY6VU9yuSMLlq7rDUvVf1GRq0yryzQ5Vye1IFRg4eCXZ/4hD9sBWtpv9OPTNBQwRYrS0m12gFEXC9ohfzqjmKQDZV6kjc8ps7EuETGYx+ltZj0tcsvJcL5DSsV67brFP56b7nXujAzgMfP+8ouJo8vOkdtKi5GWapUk43h6atqsTFMjDOdRAuqpTuF1r9GD7FH8KqDsYx4I29yT7/3TlzYxkZgPLlxzoNLUW3R6NY88Nn9Vh69lxddyur98XF8JjnXGg0HCMAf3UnddIkRs
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB6686.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199021)(2906002)(110136005)(54906003)(5660300002)(83380400001)(7416002)(8676002)(8936002)(41300700001)(91956017)(76116006)(85182001)(316002)(64756008)(66446008)(66476007)(66556008)(66946007)(478600001)(36756003)(4326008)(71200400001)(6486002)(6512007)(26005)(122000001)(2616005)(86362001)(6506007)(186003)(38070700005)(38100700002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d0Nmb3Jkb2xhalhDcC9kQWJtVFBFb1BHbmpobTB1dWtEbEJLajVkMXhKQXR3?=
- =?utf-8?B?UEtmVngyNENlanhlcU9BVitJUUxKcml0eitPT2pwVXBSSndGbDJpcXNHZS8x?=
- =?utf-8?B?WlJFTmlUM29xSUg2T2dNZ1g3bGtreTFuTmIzVWYyZFRKZWRuQytNUEhKZHFU?=
- =?utf-8?B?S3NXQ0FsU0J3K0dkVXpIUnk4aHYxeUJGNjkyN3NQL1RwV1JONWE4MjZvN0pD?=
- =?utf-8?B?c0tIYVBZUU5YUVg1Z3MveEFBSmVTcyswa1VvZlFhRDJJOWl5dWFXUDIwaDZC?=
- =?utf-8?B?a0NiL1RiNHduZnFXd0FXY1RDdEpBR0U2RmVyWGRwTk8vdXlzcVFOS2RtNGVw?=
- =?utf-8?B?ekVwbVoxdUE0R2E4NnFBYkNWRE9kYnRPd0RTaUtDVjRTWTR0d2NkdW94VzRH?=
- =?utf-8?B?WkZxV0owWTdMVWJIcnFvV0R6SjJpKzJjanhXYkkvN2NDa3R5ZW5CK01pUlpW?=
- =?utf-8?B?UkRpUE1IV0txeTIyM0pvV3FJd2FadDlBVW1tNmhRRWRWYktLOEZEWWFEeG9r?=
- =?utf-8?B?Vks3MlFFRkFMWTlleGtWMjFmWWFvSlY5K3VJZEV5UnplclFIQnBTY2JXdCtp?=
- =?utf-8?B?N01BcElTdlVJc0dGZ2FJbFJObitCMjRzeDlFeG9lNFlIMXNHYyt2ajQvZm1S?=
- =?utf-8?B?eG5pYzNoOE1NcWhyZTNQOTJtOG5xbkZWWWlNelNueHpKSDVCM3JRSkhBMlJx?=
- =?utf-8?B?NklTYjU5T1JFU3VubkZlVjUxZFNzdzFMS1dzT1dQN043US8xYU5hakFrZ3R6?=
- =?utf-8?B?TStLcTMxb1ZzNTE0aGQ1MTRqUUNLZnA2STMxUi9FdDFsVzVyeWpOVVdRaWJs?=
- =?utf-8?B?NEZHNWZaVkI1QnRrd285eVN1dXBvWXI5MjBtR2NScCt6QWhPcE55bE9KQTdZ?=
- =?utf-8?B?eC9EdHk0TVlqeC9lNEl4NDlndFFzT0ZjUmRGZEJzclkzZU1XcDdUTjM4L2hm?=
- =?utf-8?B?aC9RMU5tczlaeGptYnJDVGZkNkpzMGt3cjVJTktJR1ZvVVBhb2JxVWM2ckVy?=
- =?utf-8?B?cUo0a2hzMndLL2VoNk5ORzNKa3pIS2hMaTh0SkROcXVmR3RzU25Pc1k0aXZO?=
- =?utf-8?B?em9OcjZLTjRiZWVXNlcyWE5iem1MZEgrdlRCNjN4QlIxN1V0Y1V4T0o5Wlpm?=
- =?utf-8?B?TTFJZWk2ejk5L2h0L0dJOXZVMmRhTDZsOFNKZU5laTFmZWpsNUZhNThXWkFQ?=
- =?utf-8?B?SWFMaXZGQ3lGV2ptSzhkK01RNzQ5UVRtcFFLL08rWncybU1CMHh3bkFvc1Q3?=
- =?utf-8?B?Y3VZKzVjV3ZvYmZoczNSQjZhd3gwRWxFQUhPU2l5dW1ISGVSUXFlYTF2d05v?=
- =?utf-8?B?NG0zeExrMTJaVmtoOGpRSmRyZG1tMldFcElYT2d6QWR6amIvbDJReGdnOXNG?=
- =?utf-8?B?anppSkJUWGRVd1JmQWVuUlNBS2xCaTZYR2p3WDQ3OThsZEc0N1AxUm9QeUtY?=
- =?utf-8?B?V0FFNnVTb21NdUt0cExmUUIvcWtMVEt0M25jK0dhdmNBdW5ONE0wa29VeUZj?=
- =?utf-8?B?cndCUUJQWFRsdjlZUUJzd3VyODdibkx2MkppVDF4cm1DZ1gvbFFCMnNmSXlP?=
- =?utf-8?B?WThtWUFpWmFIUU5pclkvWEMrTDNXaTZRalNnbUxPNmRkL2Q0cVFONGwrNmRL?=
- =?utf-8?B?bzVBVVNieTlMcVZBdWFHU1RzK0NMWXI3emZ6bnVUb2NQQndWY08ycis1U3hq?=
- =?utf-8?B?T3J2cGJOdmsrNVdXcGxjQ2JZMm5tdjhJbkJ0b2lqZ0pqMGltZjR1eWNqNGlm?=
- =?utf-8?B?ZXMrVjB3Slo1TnNTU2s1c2xlTFVRYXpZTVE1MmVNNWJiYmdEV1BkOGZpa3NY?=
- =?utf-8?B?eExVK2hManQzaFkwUkp0amVjbkFtWmVaZFFPb0hCZVlwcEZmRDZNM2crSlk0?=
- =?utf-8?B?OVJoK2dDcDVVTzJJSk5Oa0Z5Vmk2RjdzS082QXMvTGp1OHhTVXVWVXh3L3J6?=
- =?utf-8?B?WXFXZUFaUGlaNVlCd3ZOeWRma2VXV05Cblh3Zksxbzg5SVFGMkFDOTVSV1lX?=
- =?utf-8?B?MUR2MElVZGhoRTc2UjZjcmZaQ0o3RnBLR0JEazhNUitxNS94NysyQkdGSVhv?=
- =?utf-8?B?NjZ5SUFQSTlZT2VlTEU5TkNZYUdpaG5kWUN0MlMvV203RGx6eEw5SXFVNlI3?=
- =?utf-8?B?T0pJU2I4SExJSTlVWGUxS2pPd3dsQ0NDSnM0blNvemsxelNwaVZ4TkVJTUIv?=
- =?utf-8?B?REE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <084314D78BE55F4989B3DB203DF368D2@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20221208; t=1684325734; x=1686917734;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MroEbOObr/DKh8KoFkk8p+WQrCDqfI7CSroMazxdyRE=;
+        b=DYXpA9j9dx/HRz/hyvlJZKsu78jHP0a3HFg2bkZze+2BDn1NCkoCcpyGK2CNpbeQtZ
+         XetHJhTcBVgLXEnNVT9a9LwDPTbSQ4ZJxhS6n2S5/0E3MYHuYCeS8Qyq54rxhGz6p3ca
+         tCuwusB64vTeNLJ+n02fvfzpeWXzw0xfLTMMt9eVzVLxuR6NNoqw5FRcZu6aFb+9Qc5y
+         24yTOCB44zlWuq++gS2khJ0FpmSA2wkAvQibnMknrrcfQlDdxEPHyK3YJ3bygs78zJL5
+         jRjPj/e4qLaAGA8+Lxp8PKvEcr2aLU1ntNsyoeD+ThtasjElXu+cQm6YArmgZvLKbgx/
+         F9kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684325734; x=1686917734;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MroEbOObr/DKh8KoFkk8p+WQrCDqfI7CSroMazxdyRE=;
+        b=P8E6olPB9ea9XAV6/oZzRdim7goaUZDcYhPiHQw0erShXsfGdHAsyAIWvI0BAbrTns
+         wqulD6tIUNE+kSfKm74S/HPxPGF7ic9Hsr3B1whkhFlHf6JC/4bCDI90xtvzd5kBypZm
+         cnGcfG42doAVbu5xNb+WC5jedwRcBSx4g3Ad0ntvKmOJxUf0ZTaHTASWYXXGEXvrnXaR
+         ZjnKLYJhARTNLkdZZznMH2TSFcqxOsLc7DHe3ah7ZCon70Vhvis1pZB75SbGuoMmbfnV
+         kzdHu2fT1/Lm6dB+0/pawJ+ufD9rVXsDKDbwi1ZmmWIT3QAV9Vogg+6bXoCDYms9d4yN
+         zf0g==
+X-Gm-Message-State: AC+VfDxDRZQ1X+LOtGo6YxnjsS0GasD5HqGDPegiVMT3m9iJjOpvuoTi
+        hOO8fBgp73W/Ns3pBmIgz1E=
+X-Google-Smtp-Source: ACHHUZ5KjMaxqRo07yEVAmfkYSoHDZlCusPOar9hC7hLyj5JWGFr76acMQuvhwWwPyPd0eT9oqNgBQ==
+X-Received: by 2002:a17:902:db07:b0:1ae:3650:7512 with SMTP id m7-20020a170902db0700b001ae36507512mr5808047plx.20.1684325734442;
+        Wed, 17 May 2023 05:15:34 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g4-20020a1709026b4400b001aaf536b1e3sm15851798plt.123.2023.05.17.05.15.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 05:15:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 17 May 2023 05:15:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Watchdog Drivers <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Ray Lehtiniemi <rayl@mail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Deepak Saxena <dsaxena@plexity.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonas Jensen <jonas.jensen@gmail.com>,
+        Sylver Bruneau <sylver.bruneau@googlemail.com>,
+        Denis Turischev <denis@compulab.co.il>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
+Subject: Re: [PATCH 1/2] watchdog: Convert GPL 2.0 notice to SPDX identifier
+Message-ID: <d7947267-b880-4f1f-b440-656e271cf79e@roeck-us.net>
+References: <20230517072140.1086660-1-bagasdotme@gmail.com>
+ <20230517072140.1086660-2-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB6686.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00bbcbef-d290-403e-a1e2-08db56d016ac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 12:13:13.6259
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OI5PUr1+2PP2NAUlPSOEs/6XcBNpdR/FF0Kf2hNo17FUZHolLY+QU4zfTAvQBYTSFCwaKebeutoW2KBf3gGXVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR03MB5192
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230517072140.1086660-2-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA1LTE3IGF0IDEzOjQwICswMjAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
-ZWdubyB3cm90ZToNCj4gRXh0ZXJuYWwgZW1haWwgOiBQbGVhc2UgZG8gbm90IGNsaWNrIGxpbmtz
-IG9yIG9wZW4gYXR0YWNobWVudHMgdW50aWwNCj4geW91IGhhdmUgdmVyaWZpZWQgdGhlIHNlbmRl
-ciBvciB0aGUgY29udGVudC4NCj4gDQo+IA0KPiBJbCAxNy8wNS8yMyAxMzoxNSwgVHJldm9yIFd1
-IGhhIHNjcml0dG86DQo+ID4gTVQ4MTg4IHdpbGwgc3VwcG9ydCBTT0YuIEluIFNPRiwgYmVfaHdf
-cGFyYW1zX2ZpeHVwIGNhbGxiYWNrIGFyZQ0KPiA+IHVzZWQgdG8NCj4gPiBjb25maWd1cmUgQkUg
-aGFyZHdhcmUgcGFyYW1ldGVycy4gSG93ZXZlciwgcGxheWJhY2sgYW5kIGNhcHR1cmUNCj4gPiBz
-dHJlYW0NCj4gPiBzaGFyZSB0aGUgc2FtZSBjYWxsYmFjayBmdW5jdGlvbiBpbiB3aGljaCBpdCBj
-YW4ndCBrbm93IHRoZSBzdHJlYW0NCj4gPiB0eXBlLg0KPiA+IA0KPiA+IEl0J3MgcG9zc2libGUg
-dG8gcmVxdWlyZSBkaWZmZXJlbnQgcGFyZW10ZXJzIGZvciBwbGF5YmFjayBhbmQNCj4gPiBjYXB0
-dXJlDQo+ID4gc3RyZWFtLCBzbyBzZXBhcmF0ZSB0aGVtIGludG8gdHdvIGRhaXMgZm9yIFNPRiB1
-c2FnZS4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBUcmV2b3IgV3UgPHRyZXZvci53dUBtZWRp
-YXRlay5jb20+DQo+ID4gLS0tDQo+ID4gICBzb3VuZC9zb2MvbWVkaWF0ZWsvbXQ4MTg4L210ODE4
-OC1hZmUtY29tbW9uLmggfCAgMyArLQ0KPiA+ICAgc291bmQvc29jL21lZGlhdGVrL210ODE4OC9t
-dDgxODgtZGFpLWFkZGEuYyAgIHwgNzYgKysrKysrKysrKy0tDQo+ID4gLS0tLS0tLQ0KPiA+ICAg
-c291bmQvc29jL21lZGlhdGVrL210ODE4OC9tdDgxODgtbXQ2MzU5LmMgICAgIHwgMzQgKysrKysr
-Ky0tDQo+ID4gICAzIGZpbGVzIGNoYW5nZWQsIDY4IGluc2VydGlvbnMoKyksIDQ1IGRlbGV0aW9u
-cygtKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9zb3VuZC9zb2MvbWVkaWF0ZWsvbXQ4MTg4L210
-ODE4OC1hZmUtY29tbW9uLmgNCj4gPiBiL3NvdW5kL3NvYy9tZWRpYXRlay9tdDgxODgvbXQ4MTg4
-LWFmZS1jb21tb24uaA0KPiA+IGluZGV4IGViN2U1N2MyMzliZC4uMTMwNGQ2ODVhMzA2IDEwMDY0
-NA0KPiA+IC0tLSBhL3NvdW5kL3NvYy9tZWRpYXRlay9tdDgxODgvbXQ4MTg4LWFmZS1jb21tb24u
-aA0KPiA+ICsrKyBiL3NvdW5kL3NvYy9tZWRpYXRlay9tdDgxODgvbXQ4MTg4LWFmZS1jb21tb24u
-aA0KPiA+IEBAIC0zOSw3ICszOSw3IEBAIGVudW0gew0KPiA+ICAgICAgIE1UODE4OF9BRkVfTUVN
-SUZfRU5ELA0KPiA+ICAgICAgIE1UODE4OF9BRkVfTUVNSUZfTlVNID0gKE1UODE4OF9BRkVfTUVN
-SUZfRU5EIC0NCj4gPiBNVDgxODhfQUZFX01FTUlGX1NUQVJUKSwNCj4gPiAgICAgICBNVDgxODhf
-QUZFX0lPX1NUQVJUID0gTVQ4MTg4X0FGRV9NRU1JRl9FTkQsDQo+ID4gLSAgICAgTVQ4MTg4X0FG
-RV9JT19BRERBID0gTVQ4MTg4X0FGRV9JT19TVEFSVCwNCj4gPiArICAgICBNVDgxODhfQUZFX0lP
-X0RMX1NSQyA9IE1UODE4OF9BRkVfSU9fU1RBUlQsDQo+ID4gICAgICAgTVQ4MTg4X0FGRV9JT19E
-TUlDX0lOLA0KPiA+ICAgICAgIE1UODE4OF9BRkVfSU9fRFBUWCwNCj4gPiAgICAgICBNVDgxODhf
-QUZFX0lPX0VURE1fU1RBUlQsDQo+ID4gQEAgLTUyLDYgKzUyLDcgQEAgZW51bSB7DQo+ID4gICAg
-ICAgTVQ4MTg4X0FGRV9JT19FVERNX05VTSA9DQo+ID4gICAgICAgICAgICAgICAoTVQ4MTg4X0FG
-RV9JT19FVERNX0VORCAtIE1UODE4OF9BRkVfSU9fRVRETV9TVEFSVCksDQo+ID4gICAgICAgTVQ4
-MTg4X0FGRV9JT19QQ00gPSBNVDgxODhfQUZFX0lPX0VURE1fRU5ELA0KPiA+ICsgICAgIE1UODE4
-OF9BRkVfSU9fVUxfU1JDLA0KPiA+ICAgICAgIE1UODE4OF9BRkVfSU9fRU5ELA0KPiA+ICAgICAg
-IE1UODE4OF9BRkVfSU9fTlVNID0gKE1UODE4OF9BRkVfSU9fRU5EIC0NCj4gPiBNVDgxODhfQUZF
-X0lPX1NUQVJUKSwNCj4gPiAgICAgICBNVDgxODhfREFJX0VORCA9IE1UODE4OF9BRkVfSU9fRU5E
-LA0KPiA+IGRpZmYgLS1naXQgYS9zb3VuZC9zb2MvbWVkaWF0ZWsvbXQ4MTg4L210ODE4OC1kYWkt
-YWRkYS5jDQo+ID4gYi9zb3VuZC9zb2MvbWVkaWF0ZWsvbXQ4MTg4L210ODE4OC1kYWktYWRkYS5j
-DQo+ID4gaW5kZXggZmVkOWY5MjdlNjIzLi45YTY2NzNhNmYyOGEgMTAwNjQ0DQo+ID4gLS0tIGEv
-c291bmQvc29jL21lZGlhdGVrL210ODE4OC9tdDgxODgtZGFpLWFkZGEuYw0KPiA+ICsrKyBiL3Nv
-dW5kL3NvYy9tZWRpYXRlay9tdDgxODgvbXQ4MTg4LWRhaS1hZGRhLmMNCj4gPiBAQCAtNTMsOCAr
-NTMsNyBAQCBlbnVtIHsNCj4gPiAgIH07DQo+ID4gDQo+ID4gICBzdHJ1Y3QgbXRrX2RhaV9hZGRh
-X3ByaXYgew0KPiA+IC0gICAgIHVuc2lnbmVkIGludCBkbF9yYXRlOw0KPiA+IC0gICAgIHVuc2ln
-bmVkIGludCB1bF9yYXRlOw0KPiA+ICsgICAgIGJvb2wgaGlyZXNfcmVxdWlyZWQ7DQo+ID4gICB9
-Ow0KPiA+IA0KPiA+ICAgc3RhdGljIHVuc2lnbmVkIGludCBhZmVfYWRkYV9kbF9yYXRlX3RyYW5z
-Zm9ybShzdHJ1Y3QNCj4gPiBtdGtfYmFzZV9hZmUgKmFmZSwNCj4gDQo+IC4uc25pcC4uDQo+IA0K
-PiA+IEBAIC01MDMsMTMgKzQ5NSwxNSBAQCBzdGF0aWMgaW50IG10a19kYWlfYWRkYV9od19wYXJh
-bXMoc3RydWN0DQo+ID4gc25kX3BjbV9zdWJzdHJlYW0gKnN1YnN0cmVhbSwNCj4gPiAgICAgICBk
-ZXZfZGJnKGFmZS0+ZGV2LCAiJXMoKSwgaWQgJWQsIHN0cmVhbSAlZCwgcmF0ZSAldVxuIiwNCj4g
-PiAgICAgICAgICAgICAgIF9fZnVuY19fLCBpZCwgc3Vic3RyZWFtLT5zdHJlYW0sIHJhdGUpOw0K
-PiA+IA0KPiA+IC0gICAgIGlmIChzdWJzdHJlYW0tPnN0cmVhbSA9PSBTTkRSVl9QQ01fU1RSRUFN
-X1BMQVlCQUNLKSB7DQo+ID4gLSAgICAgICAgICAgICBhZGRhX3ByaXYtPmRsX3JhdGUgPSByYXRl
-Ow0KPiA+ICsgICAgIGlmIChyYXRlID4gQUREQV9ISVJFU19USFJFUykNCj4gPiArICAgICAgICAg
-ICAgIGFkZGFfcHJpdi0+aGlyZXNfcmVxdWlyZWQgPSAxOw0KPiA+ICsgICAgIGVsc2UNCj4gPiAr
-ICAgICAgICAgICAgIGFkZGFfcHJpdi0+aGlyZXNfcmVxdWlyZWQgPSAwOw0KPiA+ICsNCj4gDQo+
-IGhpcmVzX3JlcXVpcmVkIGlzIGEgYm9vbGVhbiwgc28gYXNzaWduaW5nIDEgb3IgMCBzaG91bGQg
-YmUgcmVwbGFjZWQNCj4gd2l0aA0KPiBhc3NpZ25pbmcgdHJ1ZSBvciBmYWxzZTsgcmVnYXJkbGVz
-cyBvZiB0aGF0LCB3aGF0IGFib3V0Li4uDQo+IA0KPiAgICAgICAgIGFkZGFfcHJpdi0+aGlyZXNf
-cmVxdWlyZWQgPSAocmF0ZSA+IEFEREFfSElSRVNfVEhSRVMpOw0KPiANCg0KSXQncyBncmVhdCEh
-IEkgd2lsbCBhZG9wdCBpdCBpbiBWMi4NCg0KVGhhbmtzLA0KVHJldm9yDQoNCj4gPiArICAgICBp
-ZiAoc3Vic3RyZWFtLT5zdHJlYW0gPT0gU05EUlZfUENNX1NUUkVBTV9QTEFZQkFDSykNCj4gPiAg
-ICAgICAgICAgICAgIHJldCA9IG10a19kYWlfZGFfY29uZmlndXJlKGFmZSwgcmF0ZSwgaWQpOw0K
-PiA+IC0gICAgIH0gZWxzZSB7DQo+ID4gLSAgICAgICAgICAgICBhZGRhX3ByaXYtPnVsX3JhdGUg
-PSByYXRlOw0KPiA+ICsgICAgIGVsc2UNCj4gPiAgICAgICAgICAgICAgIHJldCA9IG10a19kYWlf
-YWRfY29uZmlndXJlKGFmZSwgcmF0ZSwgaWQpOw0KPiA+IC0gICAgIH0NCj4gPiANCj4gPiAgICAg
-ICByZXR1cm4gcmV0Ow0KPiA+ICAgfQ0KPiANCj4gUmVnYXJkcywNCj4gQW5nZWxvDQo=
+On Wed, May 17, 2023 at 02:21:39PM +0700, Bagas Sanjaya wrote:
+> Convert the boilerplate to SPDX license identifier. While at it, also
+> move SPDX identifier for drivers/watchdog/rtd119x_wdt.c to the top of
+> file (as in other files).
+> 
+> Cc: Ray Lehtiniemi <rayl@mail.com>,
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: H Hartley Sweeten <hsweeten@visionengravers.com>
+> Cc: Deepak Saxena <dsaxena@plexity.net>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Jonas Jensen <jonas.jensen@gmail.com>
+> Cc: Sylver Bruneau <sylver.bruneau@googlemail.com>
+> Cc: Denis Turischev <denis@compulab.co.il>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Acked-by: Andreas Färber <afaerber@suse.de>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/ep93xx_wdt.c     | 5 +----
+>  drivers/watchdog/m54xx_wdt.c      | 4 +---
+>  drivers/watchdog/max63xx_wdt.c    | 5 +----
+>  drivers/watchdog/moxart_wdt.c     | 4 +---
+>  drivers/watchdog/octeon-wdt-nmi.S | 5 +----
+>  drivers/watchdog/orion_wdt.c      | 4 +---
+>  drivers/watchdog/rtd119x_wdt.c    | 2 +-
+>  drivers/watchdog/sbc_fitpc2_wdt.c | 4 +---
+>  drivers/watchdog/ts4800_wdt.c     | 4 +---
+>  drivers/watchdog/ts72xx_wdt.c     | 4 +---
+>  10 files changed, 10 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/watchdog/ep93xx_wdt.c b/drivers/watchdog/ep93xx_wdt.c
+> index 38e26f160b9a57..59dfd7f6bf0ba1 100644
+> --- a/drivers/watchdog/ep93xx_wdt.c
+> +++ b/drivers/watchdog/ep93xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for Cirrus Logic EP93xx family of devices.
+>   *
+> @@ -11,10 +12,6 @@
+>   * Copyright (c) 2012 H Hartley Sweeten <hsweeten@visionengravers.com>
+>   *	Convert to a platform device and use the watchdog framework API
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+> - *
+>   * This watchdog fires after 250msec, which is a too short interval
+>   * for us to rely on the user space daemon alone. So we ping the
+>   * wdt each ~200msec and eventually stop doing it if the user space
+> diff --git a/drivers/watchdog/m54xx_wdt.c b/drivers/watchdog/m54xx_wdt.c
+> index f388a769dbd33d..062ea3e6497e52 100644
+> --- a/drivers/watchdog/m54xx_wdt.c
+> +++ b/drivers/watchdog/m54xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * drivers/watchdog/m54xx_wdt.c
+>   *
+> @@ -11,9 +12,6 @@
+>   *  Copyright 2004 (c) MontaVista, Software, Inc.
+>   *  Based on sa1100 driver, Copyright (C) 2000 Oleg Drokin <green@crimea.edu>
+>   *
+> - * This file is licensed under  the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
+> index 9e1541cfae0d89..21935f9620e463 100644
+> --- a/drivers/watchdog/max63xx_wdt.c
+> +++ b/drivers/watchdog/max63xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * drivers/char/watchdog/max63xx_wdt.c
+>   *
+> @@ -5,10 +6,6 @@
+>   *
+>   * Copyright (C) 2009 Marc Zyngier <maz@misterjones.org>
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+> - *
+>   * This driver assumes the watchdog pins are memory mapped (as it is
+>   * the case for the Arcom Zeus). Should it be connected over GPIOs or
+>   * another interface, some abstraction will have to be introduced.
+> diff --git a/drivers/watchdog/moxart_wdt.c b/drivers/watchdog/moxart_wdt.c
+> index 6340a1f5f471b2..b7b1da3c932ded 100644
+> --- a/drivers/watchdog/moxart_wdt.c
+> +++ b/drivers/watchdog/moxart_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * MOXA ART SoCs watchdog driver.
+>   *
+> @@ -5,9 +6,6 @@
+>   *
+>   * Jonas Jensen <jonas.jensen@gmail.com>
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2.  This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #include <linux/clk.h>
+> diff --git a/drivers/watchdog/octeon-wdt-nmi.S b/drivers/watchdog/octeon-wdt-nmi.S
+> index 97f6eb7b5a8e04..e308cc74392018 100644
+> --- a/drivers/watchdog/octeon-wdt-nmi.S
+> +++ b/drivers/watchdog/octeon-wdt-nmi.S
+> @@ -1,8 +1,5 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+>  /*
+> - * This file is subject to the terms and conditions of the GNU General Public
+> - * License.  See the file "COPYING" in the main directory of this archive
+> - * for more details.
+> - *
+>   * Copyright (C) 2007-2017 Cavium, Inc.
+>   */
+>  #include <asm/asm.h>
+> diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+> index 5ec2dd8fd5fa3d..1fe583e8a95b2e 100644
+> --- a/drivers/watchdog/orion_wdt.c
+> +++ b/drivers/watchdog/orion_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * drivers/watchdog/orion_wdt.c
+>   *
+> @@ -5,9 +6,6 @@
+>   *
+>   * Author: Sylver Bruneau <sylver.bruneau@googlemail.com>
+>   *
+> - * This file is licensed under  the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> diff --git a/drivers/watchdog/rtd119x_wdt.c b/drivers/watchdog/rtd119x_wdt.c
+> index 95c8d7abce42e6..984905695dde51 100644
+> --- a/drivers/watchdog/rtd119x_wdt.c
+> +++ b/drivers/watchdog/rtd119x_wdt.c
+> @@ -1,9 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+>  /*
+>   * Realtek RTD129x watchdog
+>   *
+>   * Copyright (c) 2017 Andreas Färber
+>   *
+> - * SPDX-License-Identifier: GPL-2.0+
+>   */
+>  
+>  #include <linux/bitops.h>
+> diff --git a/drivers/watchdog/sbc_fitpc2_wdt.c b/drivers/watchdog/sbc_fitpc2_wdt.c
+> index 13db71e165836e..b8eb8d5ca1af0c 100644
+> --- a/drivers/watchdog/sbc_fitpc2_wdt.c
+> +++ b/drivers/watchdog/sbc_fitpc2_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for SBC-FITPC2 board
+>   *
+> @@ -5,9 +6,6 @@
+>   *
+>   * Adapted from the IXP2000 watchdog driver by Deepak Saxena.
+>   *
+> - * This file is licensed under  the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME " WATCHDOG: " fmt
+> diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
+> index 0ea554c7cda579..0099403f49922f 100644
+> --- a/drivers/watchdog/ts4800_wdt.c
+> +++ b/drivers/watchdog/ts4800_wdt.c
+> @@ -1,11 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for TS-4800 based boards
+>   *
+>   * Copyright (c) 2015 - Savoir-faire Linux
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #include <linux/kernel.h>
+> diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
+> index bf918f5fa13175..3d57670befe1ce 100644
+> --- a/drivers/watchdog/ts72xx_wdt.c
+> +++ b/drivers/watchdog/ts72xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for Technologic Systems TS-72xx based SBCs
+>   * (TS-7200, TS-7250 and TS-7260). These boards have external
+> @@ -8,9 +9,6 @@
+>   *
+>   * This driver is based on ep93xx_wdt and wm831x_wdt drivers.
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #include <linux/platform_device.h>
+> -- 
+> An old man doll... just what I always wanted! - Clara
+> 
