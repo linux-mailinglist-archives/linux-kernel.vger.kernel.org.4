@@ -2,130 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14C6707222
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CA4707225
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjEQT1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S230160AbjEQT1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjEQT1C (ORCPT
+        with ESMTP id S230127AbjEQT1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:27:02 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D74DC4E;
-        Wed, 17 May 2023 12:26:22 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QM34W2J3tz49Q4J;
-        Wed, 17 May 2023 22:26:19 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1684351579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/YiOntKiq1t2aKqRxB/vNZKyQYA7kVVSMg4c0ahwgfE=;
-        b=lP3edUuKvfOT3j9P9WCTsbYy1hDSxAjcOOSl3Zr7R/lFUnMA6BLPAIxu6el1oKDOPstOc1
-        qYjxrMy9I6VBxm1TMubJxf75qXJRqAnwTje1Ut+EbnReFqg/ISbNDzCScGxC67dxZLck+K
-        UWkaSMD4rXkwghAT24c8+Imnxg1waGSOaX/uJm7664u/GgDTgLGyox98LmrKOLUbZRme7O
-        ETBYVcuYvgBkdvXfqd92Og2Cbb1YrCvYdEdbce+xfko9nzAnj5FbhPdBS9rZMaP+i9eXbF
-        AjXz3TwyPKyIG5ejJub+c70LgYOe0/vlGgnK0yOqpBtRVPtVq5bfs6BlOKntrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1684351579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/YiOntKiq1t2aKqRxB/vNZKyQYA7kVVSMg4c0ahwgfE=;
-        b=uUn3WgrAZKxXYSfoJCCdHrj8DjGF6VzQmeuUS/+P7tzcAqmLfhrXKpBnen5GXF+M+pfPBf
-        x3bCM0vBvbITCwoImVGrROwTN13Q0pn8/F1Tk3pO+Vkr1YKojIvXMshc/Sb+jXIpoGPePb
-        arWBHCug7SSL3ycavtNVNXJat9Ql0/804VpsUB1BG5ZjhwjjPk7tZFxR96yGktyNayPHwN
-        +JXVlNET+JGwxKDH3gbszf6Ai3zZc5rGSfpLJt1eJ18XrVEYfgG5Qnbx0z04I6RoU3VOMR
-        8btiyMJR8qCljQPQcAERZkKx4Fg5r5Mp6i928IDfmNenVXat04AX36yC6yIBvg==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1684351579; a=rsa-sha256;
-        cv=none;
-        b=hhovqfl84Yjvt+r8jS2uB88oxqxrMkh2YoN+3gMkCiBbir35b8VLX/0B+GRrsIf/3B40az
-        BLHiqxvZJvCijLqVVdqu9TDC2o90jm2wmAVjYrZ8vqgTdN4N7WL/RO3qHul6nC2OI08MxQ
-        OLteKGQ6wWH3rB9UrSN9SZvqtM3ahOQ1UTXN69IP5bdKw1wQ5lwQZzYTa1VqMq9px/LTA/
-        oTXyRSTElOcv1FgXcEBGKhW3WnWbY90Xz8lfP0gU52HPtPS90fjbKcFQ25we02HqVDalzJ
-        hmgjPi37jXvgedwPuV3SW80nPOjxC0ScJqXst7cy92tefAEDhQUWQt5qtnKC5A==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id E3F55634C94;
-        Wed, 17 May 2023 22:26:17 +0300 (EEST)
-Date:   Wed, 17 May 2023 22:26:17 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: c8sectpfe: convert to gpio descriptors
-Message-ID: <ZGUqWZoxXRGGJ9Kv@valkosipuli.retiisi.eu>
-References: <20230130131003.668888-1-arnd@kernel.org>
- <ZGUbDFssUwXKTiDt@valkosipuli.retiisi.eu>
- <ZGUnBfqBLWkD7ZgD@google.com>
+        Wed, 17 May 2023 15:27:15 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD84170E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:26:40 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-953343581a4so172288966b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684351597; x=1686943597;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mm1FTlLFksMfdpbiAMAJzUodVZBvDKUEnd/MrdiN4SE=;
+        b=ah3JKaxqw48Owmtqcin9G2kpFmSJG8xXLqbqJf/sbesavcjD11tzf/n+zkfbp7ZNPn
+         p5OcoclJk5sUAb3FirHxTvN25HKiL2dpTdlnZAVZeYsyhxOCjEhaaIN/VOGbF/ONXO6Z
+         8jBF0vNA9utft1oi4E/qCcQfVwz1n1x78kvuhzfsaoSJ6HtxXJbbqhHtTep5w9qn2mox
+         soooocVeS6hzk9nJRDiRSLt+WUA4tix/LOph4Ek6w6oTNSl2E4DShg68SmBb6jNXKM0N
+         hvLO1eTvrtcs4eGxtJFm5HpXsFV0NykSjc2PGiKGDDSSNaGNldRlFZvF2hhL4z5nvZlu
+         ncRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684351597; x=1686943597;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mm1FTlLFksMfdpbiAMAJzUodVZBvDKUEnd/MrdiN4SE=;
+        b=NkhwaY7GRc2GZ5dir+doRRjpO4cAqt6Jif+9ocQPgSccUy/7snKQA+GBI9CVLcSeST
+         5jj68XYxdnAyADNVhKbSGUEiHBfVRTl1K8wze5Sa2mne1wl3wHNLEzB54WE2m3UXjECu
+         SeaeQJx+S8mlNm3F/QRqDwKQ54fQ+ibvm+dEHbTdypQW7CYd/C7ip7gKjPvKJuzVQz69
+         vGklB5Ik8/HHRViti1ZLj3BbNCMojbeYWj0EfzbM+t7D3i1w+wuVwO2GA6T7OqMXqGx+
+         hq296k11zpFjMgppjiUQR0sMqvkegw+qM2NhCs5z7FCT/K0bT1HZNJ0xDh1t9L6eM7jN
+         4HJQ==
+X-Gm-Message-State: AC+VfDxLM66zKDtBwmdrutLhtwQeWNqqWKxbpNztRkPX5Xi5Bfbq6D2t
+        FdDqOwoyrfqHRXqB3c3Eilsrtw==
+X-Google-Smtp-Source: ACHHUZ6++WL2KoWrWr1kQFg7pgPeyB9wQttL5UxWx7+NYYB6bmuyDQFSgFA845peRuMllKux/N69yg==
+X-Received: by 2002:a17:907:3daa:b0:96a:1cbf:3dcc with SMTP id he42-20020a1709073daa00b0096a1cbf3dccmr32103920ejc.54.1684351597249;
+        Wed, 17 May 2023 12:26:37 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d7a:e7cc:21b3:c435? ([2a02:810d:15c0:828:d7a:e7cc:21b3:c435])
+        by smtp.gmail.com with ESMTPSA id w12-20020aa7da4c000000b0050bc5727507sm9712685eds.73.2023.05.17.12.26.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 12:26:36 -0700 (PDT)
+Message-ID: <408ee74c-e6ed-d654-af04-58bd7d1e087b@linaro.org>
+Date:   Wed, 17 May 2023 21:26:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGUnBfqBLWkD7ZgD@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment option
+Content-Language: en-US
+To:     Ivan Mikhaylov <fr0st61te@gmail.com>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Paul Fertser <fercerpav@gmail.com>
+References: <20230509143504.30382-1-fr0st61te@gmail.com>
+ <20230509143504.30382-4-fr0st61te@gmail.com>
+ <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
+ <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
+ <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
+ <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
+ <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
+ <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
+ <38ae4ceb-da21-d73e-9625-1918b4ab4e16@linaro.org>
+ <5d7421b6a419a9645f97e6240b1dfbf47ffcab4e.camel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5d7421b6a419a9645f97e6240b1dfbf47ffcab4e.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On 17/05/2023 23:38, Ivan Mikhaylov wrote:
+> On Wed, 2023-05-17 at 10:36 +0200, Krzysztof Kozlowski wrote:
+>> On 16/05/2023 13:47, Ivan Mikhaylov wrote:
+>> hy this is property of the hardware. I
+>>>>>> understand
+>>>>>> that this is something you want Linux to do, but DT is not
+>>>>>> for
+>>>>>> that
+>>>>>> purpose. Do not encode system policies into DT and what above
+>>>>>> commit
+>>>>>> says is a policy.
+>>>>>>
+>>>>>
+>>>>> Krzysztof, okay then to which DT subsystem it should belong? To
+>>>>> ftgmac100 after conversion?
+>>>>
+>>>> To my understanding, decision to add some numbers to MAC address
+>>>> does
+>>>> not look like DT property at all. Otherwise please help me to
+>>>> understand
+>>>> - why different boards with same device should have different
+>>>> offset/value?
 
-On Wed, May 17, 2023 at 12:12:05PM -0700, Dmitry Torokhov wrote:
-> On Wed, May 17, 2023 at 09:21:00PM +0300, Sakari Ailus wrote:
-> > Hi Arnd,
-> > 
-> > On Mon, Jan 30, 2023 at 02:09:47PM +0100, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > > 
-> > > The gpio usage in the function is fairly straightforward,
-> > > but the normal gpiod_get() interface cannot be used here
-> > > since the gpio is referenced by a child node of the device.
-> > > 
-> > > Using devm_fwnode_gpiod_get_index() is the best alternative
-> > > here.
-> > > 
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > I've picked
-> > <URL:https://patchwork.linuxtv.org/project/linux-media/patch/20230130131003.668888-1-arnd@kernel.org/>
-> > instead. I hope that's fine. Also cc Dmitry.
+I would like to remind this question.
+"why different boards with same device should have different offset/value?"
+
+It was literally ignored and you started explaining network cards and
+BMC. I don't understand why, but it does not help your case.
+
+Let me extend this question with one more:
+"Why for all your boards of one type, so using the same DTS, would you
+use one value of incrementing MAC address?"
+
+>>>>
+>>>> Anyway, commit msg also lacks any justification for this.
+>>>>
+>>>> Best regards,
+>>>> Krzysztof
+>>>>
+>>>
+>>> Krzysztof, essentially some PCIe network cards have like an
+>>> additional
+>>> *MII interface which connects directly to a BMC (separate SoC for
+>>> managing a motherboard) and by sending special ethernet type frames
+>>> over that connection (called NC-SI) the BMC can obtain MAC, get
+>>> link
+>>> parameters etc. So it's natural for a vendor to allocate two MACs
+>>> per
+>>> such a board with PCIe card intergrated, with one MAC "flashed
+>>> into"
+>>> the network card, under the assumption that the BMC should
+>>
+>> Who makes the assumption that next MAC should differ by 1 or 2?
 > 
-> What do you mean "instead"? This is the exact patch that started this
-> thread, and it is broken (uses wrong name of the GPIO and wrong polarity).
+> Krzysztof, in this above case BMC does, BMC should care about changing
+> it and doing it with current codebase without any options just by some
+> hardcoded numbers which is wrong.
+
+But you hard-code the number, just in BMC DTS. How does it differ from
+BMC hard-coding it differently?
+
+You encode policy - or software decisions - into Devicetree.
+
 > 
-> I'd much rather you picked up
-> https://lore.kernel.org/all/Y92VLGLQJZ%2FUDRx1@google.com/
+>>
+>>> automatically use the next MAC. So it's the property of the
+>>> hardware as
+>>> the vendor designs it, not a matter of usage policy.
+>>>
+>>> Also at the nvmem binding tree is "nvmem-cell-cells" which is
+>>> literally
+>>> the same as what was proposed but on different level.
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/Documentation/devicetree/bindings/nvmem?id=7e2805c203a6c8dc85c1cfda205161ed39ae82d5
+>>
+>> How is this similar? This points the location of mac address on some
+>> NV
+>> storage. You add fixed value which should be added to the Ethernet.
 > 
-> Thanks.
+> It's not the points the location, this particular option provides this
+> increment for mac addresses to make use of them with multiple
+> interfaces. Just part of above commit:
+> "It's used as a base for calculating addresses for multiple interfaces.
+> It's done by adding proper values. Actual offsets are picked by
+> manufacturers and vary across devices."
+> 
+> It is same as we talked before about mac-address-increment in openwrt
+> project, if you want examples, you can look into their github. And same
+> as we trying to achieve here.
+> 
+> https://github.com/openwrt/openwrt/blob/master/target/linux/generic/pending-5.15/682-of_net-add-mac-address-increment-support.patch
 
-Ah, the URL in my e-mail was wrong. I have
-<URL:https://patchwork.linuxtv.org/project/linux-media/patch/Y92VLGLQJZ/UDRx1@google.com/>,
-i.e. the same patch.
+Awesome... so if project added wrong property to bindings, e.g. SW
+property, you find it as an argument for anyone else.
 
--- 
-Regards,
+No, that's not how it works.
 
-Sakari Ailus
+> 
+> "Lots of embedded devices use the mac-address of other interface
+> extracted from nvmem cells and increments it by one or two. Add two
+> bindings to integrate this and directly use the right mac-address for
+> the interface. Some example are some routers that use the gmac
+> mac-address stored in the art partition and increments it by one for
+> the
+> wifi. mac-address-increment-byte bindings is used to tell what byte of
+> the mac-address has to be increased (if not defined the last byte is
+> increased) and mac-address-increment tells how much the byte decided
+> early has to be increased."
+> 
+> Don't you see similarity with nvmem commit?
+
+Explanation is similar, but you are using wrong argument to justify the
+property. The MAC address is stored in some NVMEM cell. There is such
+NVMEM cell. That's the hardware property, thus it is justified in DT.
+
+Now how MAC address will be modified - by 1, 2, 3, 252 - is not related
+to that commit, because it is a software decision.
+
+Again, we are back to the previous question to which you answered "BMC
+will do it". I understand this is property for the BMC DTS, thus:
+Why for all your boards of one type, so using one DTS, would you use one
+value of incrementing MAC address?
+Why devices with same board cannot use different values? One board "1"
+and second "2" for MAC increments? I am sure that one customer could
+have it different.
+
+The choice how much you increment some MAC address is not a hardware
+property. It does not even look like a firmware property. If playing
+with this property was done by firmware, like we do for all MAC address
+fields, then I would expect here some references to it. Which you did
+not provide, I believe.
+
+
+
+> 
+>>
+>> I might be missing the context but there is no DTS example nor user
+>> of
+>> this property, so how can I get such?
+>>
+> 
+> I don't see it either in linux kernel DTS tree but it in DTS doc.
+> 
+> Also, just a little bit history about older propositions
+> https://lore.kernel.org/all/?q=mac-address-increment
+> https://lore.kernel.org/all/20200919214941.8038-5-ansuelsmth@gmail.com/
+
+I don't see any user there, except the same rejected proposal:
+
+https://lore.kernel.org/all/CAL_JsqKhyeh2=pJcpBKkh+s3FM__DY+VoYSYJLRUErrujTLn9A@mail.gmail.com/
+
+If you want to convince us, please illustrate it in a real world
+upstreamed DTS (or explain why it cannot). Otherwise I don't see
+justification as it is not a hardware property.
+
+This is a NAK from me.
+
+Feel free to ping Rob in some later time, as he might have different
+opinion.
+
+Best regards,
+Krzysztof
+
