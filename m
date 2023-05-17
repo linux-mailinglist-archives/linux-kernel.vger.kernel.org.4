@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB65706E64
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799C7706E6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjEQQk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:40:57 -0400
+        id S229838AbjEQQlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:41:06 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjEQQkx (ORCPT
+        with ESMTP id S229596AbjEQQlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:40:53 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946B540CE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:40:51 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2ad89c7a84fso10237711fa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:40:51 -0700 (PDT)
+        Wed, 17 May 2023 12:41:02 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84915A5EA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:40:54 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2ac7ac8a4ffso9930181fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684341650; x=1686933650;
+        d=linaro.org; s=google; t=1684341653; x=1686933653;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AGFT+wjphG28hwnPjTkUYcKbXPZiE3HV0SuQwI1BQuo=;
-        b=tiYtdPRSS5OEaeC6FPpC77eMRKHKuH8xMPa+TlI8AI77Znq/T31xAIXm/aPQ572PEs
-         XsUqU73sE/cK2rnT0+OCc1xbbYB/z6+aaQhX6LOCsDozNXO+t2WdZGHS2lSZ3aIZBjTo
-         taCNQNv9X/lHqf3KyO47Ffi4psBt9z7KK0cL1ZWqtyyzdY95H8wkttyJCu4s47SVWQvn
-         QwA0kt1kGqG8aHEI9silkPmIeCG7CE/j6A/DrLhs1mDfifXc84LJQI08UtShloGx3S4j
-         6mNTYu9Ti4qul6624iAPtrp/f4Yg0DrtbSd8u96UG8VFzl1A2618SgTzGH8hFjjsP6al
-         5mkw==
+        bh=21Y/lONTQ0Y2HJDUDOGXrhNqNSuoVcf6wbWYKvgA/OQ=;
+        b=J1B+L6gNHaU6nGktyrY/YToDXewhaQgSXVvC7YvCBYQ6Fp7264VtEPg8bw53rJauzu
+         n0xg6nm6Z4R5vECW9739UEeKLssy2ZJRBY36Ro3mk5tSZIPh4h9/Vn7c03KGHDI67s4m
+         jsRcsr4lO2WfxLG0/QOsfc4qVIW5piELU+9+bLC6cc7rQLB6xe3Swfbh2njS99buwy76
+         fwdj5w3GE/VdlvHVmGZK7K+fRzqn/5q0b0F8G6LlCELohN2v6jdYu6uXKKsgi//p/Fft
+         ywvpJsGYJVz14iE+qJeV3Dx96gYmStx8Y2UnSgcMqUhTe+jTP0QPq+LaKdnz3fPYn7Rj
+         IIIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684341650; x=1686933650;
+        d=1e100.net; s=20221208; t=1684341653; x=1686933653;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AGFT+wjphG28hwnPjTkUYcKbXPZiE3HV0SuQwI1BQuo=;
-        b=ZqKEMWIgOfpU4MtGyKqioA5kpOqNiedCspasGCKPgRYryyrg0fOcocevZkX2z2I57e
-         D14PmjwQ82KevAh7MrQ5Md5l2IERCEzjXTuthcrQ/NRVoJKegjwsDVLArzshUYGAWAMW
-         X/eZIsPt/4hGFUwbUI/ODItXBt+BSLWidWbMeaEfKpbzZz4SU+aWq2LtAr/16i/vy5sg
-         PW/fyjwbB6v+OiHL4kdbehyRvl9WFT1wh34wWsJ984tO+K1zO8WHbOXKx0+FV99ectjs
-         CB5zdP6j+kvColtojHmjv3Ss45cyCA2ghoXXY/RSM4tYLaWUMVTkk/Bd6M7CfhNWmFdh
-         IrXA==
-X-Gm-Message-State: AC+VfDzCC32axPCZ8ru8N0APKplEPVueJDElBRdc1f+ohb4NQsa/+h4T
-        6L1stUX/S2KpM2q0KDoYtOao8A==
-X-Google-Smtp-Source: ACHHUZ7AnvhYliNKkvo1wXuA6iTJAjlwQDBn+N59qe0ubrnV2L6uSxGKtLeIama5Frq1U5dGduIzeg==
-X-Received: by 2002:a2e:8e86:0:b0:2ad:9751:8d79 with SMTP id z6-20020a2e8e86000000b002ad97518d79mr9234043ljk.31.1684341649893;
-        Wed, 17 May 2023 09:40:49 -0700 (PDT)
+        bh=21Y/lONTQ0Y2HJDUDOGXrhNqNSuoVcf6wbWYKvgA/OQ=;
+        b=bV7Mth1GwmWan23TDjTiqte/YHQo5wSNW5iGFKqvfwNtA/H2bd+LVrta15TO+t8XZH
+         Y8woRoEzhWOyJrdh/NqDg2n3NiIRJCCHPDMx/uEspqgX8shJC20K30rtL6dZHEMfxOCz
+         kSnUh67dJdyrx1szPVpfq35cneqQUi9P8ar5Rxxp1tCyQcL1sPqiYCVoJzGvud1UaAfN
+         FiSvsUGIrEIrklDkVKVENwVqfCLiwS0h7TubcOI0fHccoB3MwJ5KlXpvGlUnz3+retqa
+         0q3PF4j+pCpRtx/or/i4va6+laPh5AZA1zIJiDUMIca3+Ce6I07APUi5+8ELMdzxowsV
+         1FNA==
+X-Gm-Message-State: AC+VfDyAOLKxLkOHeFhmrf3v1xjbu3U0B2va+gGhkWcu7tW1ZYl0awPO
+        bDDGrz7Ck7zOCR6W4oaHQYanZ09SgPwLQ/3/2YA=
+X-Google-Smtp-Source: ACHHUZ6jl0ZO6U+g6qi3Wh5TRY2RPbsC/TK3JUt5l+rKlWFr+mha78+Lz02TKSs+WbG0JdGVOdt5zQ==
+X-Received: by 2002:a2e:b61c:0:b0:2a8:bce4:c70f with SMTP id r28-20020a2eb61c000000b002a8bce4c70fmr8930854ljn.26.1684341652892;
+        Wed, 17 May 2023 09:40:52 -0700 (PDT)
 Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id 9-20020a05651c040900b002a8c271de33sm1919259lja.67.2023.05.17.09.40.48
+        by smtp.gmail.com with ESMTPSA id 9-20020a05651c040900b002a8c271de33sm1919259lja.67.2023.05.17.09.40.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 09:40:49 -0700 (PDT)
+        Wed, 17 May 2023 09:40:52 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 17 May 2023 18:40:39 +0200
-Subject: [PATCH 2/4] clk: qcom: rcg2: Make hw_clk_ctrl toggleable
+Date:   Wed, 17 May 2023 18:40:40 +0200
+Subject: [PATCH 3/4] clk: qcom: gcc-sm8450: Enable hw_clk_ctrl
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230517-topic-waipio-gpucc-v1-2-4f40e282af1d@linaro.org>
+Message-Id: <20230517-topic-waipio-gpucc-v1-3-4f40e282af1d@linaro.org>
 References: <20230517-topic-waipio-gpucc-v1-0-4f40e282af1d@linaro.org>
 In-Reply-To: <20230517-topic-waipio-gpucc-v1-0-4f40e282af1d@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -73,11 +73,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684341644; l=1689;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684341644; l=11592;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=fnX8Gs7THnPKyxc7XYOaJzSXtKdHLn/shBY+gLa1OAc=;
- b=dc7FDYnfPDVDqiSyXx2sBVWzWIEGK2mW+pKm3QRUvO8ubVk5bfUJ7nDe0HxUNk6RCH6W5Kwgo
- 5HC3owtkZg7Dw/0EFcRcNNhwp7/Ei6prAIfkiumFuISDWhw/Cw+Mazg
+ bh=K573iqNmTIG1+Cr4UymMlBHDghHI13Rxxj/QpZgKwns=;
+ b=zV1RCfGohyZMqJiPSNMBrn3K1JRo3JMBZE5ozowv1KXHkA/jag4BfLUjvAcj71TNcV9wkr/sL
+ vDmOa6I8vBACnUCVl7B1VSMU+KrxYYAtNrlJaiobvE/saE6FCx8G6LV
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,51 +90,329 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certain SoCs use the HW_CLK_CTRL feature on some of the clocks they
-host. This allows the clocks to be turned on automatically when a
-downstream branch tries to change rate or config.
-
-Make it togglable so that we can utilize this.
+Enable hardware clock control on all RCGs.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/clk/qcom/clk-rcg.h  | 2 ++
- drivers/clk/qcom/clk-rcg2.c | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/clk/qcom/gcc-sm8450.c | 39 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-index 01581f4d2c39..e6d84c8c7989 100644
---- a/drivers/clk/qcom/clk-rcg.h
-+++ b/drivers/clk/qcom/clk-rcg.h
-@@ -141,6 +141,7 @@ extern const struct clk_ops clk_dyn_rcg_ops;
-  * @clkr: regmap clock handle
-  * @cfg_off: defines the cfg register offset from the CMD_RCGR + CFG_REG
-  * @parked_cfg: cached value of the CFG register for parked RCGs
-+ * @hw_clk_ctrl: whether to enable hardware clock control
-  */
- struct clk_rcg2 {
- 	u32			cmd_rcgr;
-@@ -152,6 +153,7 @@ struct clk_rcg2 {
- 	struct clk_regmap	clkr;
- 	u8			cfg_off;
- 	u32			parked_cfg;
-+	bool			hw_clk_ctrl;
+diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
+index 84764cc3db4f..75635d40a12d 100644
+--- a/drivers/clk/qcom/gcc-sm8450.c
++++ b/drivers/clk/qcom/gcc-sm8450.c
+@@ -334,6 +334,7 @@ static struct clk_rcg2 gcc_gp1_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_1,
+ 	.freq_tbl = ftbl_gcc_gp1_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_gp1_clk_src",
+ 		.parent_data = gcc_parent_data_1,
+@@ -349,6 +350,7 @@ static struct clk_rcg2 gcc_gp2_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_1,
+ 	.freq_tbl = ftbl_gcc_gp1_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_gp2_clk_src",
+ 		.parent_data = gcc_parent_data_1,
+@@ -364,6 +366,7 @@ static struct clk_rcg2 gcc_gp3_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_1,
+ 	.freq_tbl = ftbl_gcc_gp1_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_gp3_clk_src",
+ 		.parent_data = gcc_parent_data_1,
+@@ -384,6 +387,7 @@ static struct clk_rcg2 gcc_pcie_0_aux_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_2,
+ 	.freq_tbl = ftbl_gcc_pcie_0_aux_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_pcie_0_aux_clk_src",
+ 		.parent_data = gcc_parent_data_2,
+@@ -405,6 +409,7 @@ static struct clk_rcg2 gcc_pcie_0_phy_rchng_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_pcie_0_phy_rchng_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_pcie_0_phy_rchng_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -420,6 +425,7 @@ static struct clk_rcg2 gcc_pcie_1_aux_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_2,
+ 	.freq_tbl = ftbl_gcc_pcie_0_aux_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_pcie_1_aux_clk_src",
+ 		.parent_data = gcc_parent_data_2,
+@@ -435,6 +441,7 @@ static struct clk_rcg2 gcc_pcie_1_phy_rchng_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_pcie_0_phy_rchng_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_pcie_1_phy_rchng_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -455,6 +462,7 @@ static struct clk_rcg2 gcc_pdm2_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_pdm2_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_pdm2_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -493,6 +501,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s0_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s0_clk_src_init,
  };
  
- #define to_clk_rcg2(_hw) container_of(to_clk_regmap(_hw), struct clk_rcg2, clkr)
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index 76551534f10d..e22baf3a7112 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -325,6 +325,8 @@ static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f,
- 	cfg |= rcg->parent_map[index].cfg << CFG_SRC_SEL_SHIFT;
- 	if (rcg->mnd_width && f->n && (f->m != f->n))
- 		cfg |= CFG_MODE_DUAL_EDGE;
-+	if (rcg->hw_clk_ctrl)
-+		cfg |= CFG_HW_CLK_CTRL_MASK;
+@@ -510,6 +519,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s1_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s1_clk_src_init,
+ };
  
- 	*_cfg &= ~mask;
- 	*_cfg |= cfg;
+@@ -527,6 +537,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s2_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s2_clk_src_init,
+ };
+ 
+@@ -544,6 +555,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s3_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s3_clk_src_init,
+ };
+ 
+@@ -561,6 +573,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s4_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s4_clk_src_init,
+ };
+ 
+@@ -590,6 +603,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s5_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s5_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s5_clk_src_init,
+ };
+ 
+@@ -607,6 +621,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s6_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s6_clk_src_init,
+ };
+ 
+@@ -624,6 +639,7 @@ static struct clk_rcg2 gcc_qupv3_wrap0_s7_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap0_s7_clk_src_init,
+ };
+ 
+@@ -660,6 +676,7 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s0_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap1_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s0_clk_src_init,
+ };
+ 
+@@ -677,6 +694,7 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s1_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap1_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s1_clk_src_init,
+ };
+ 
+@@ -694,6 +712,7 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s2_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s2_clk_src_init,
+ };
+ 
+@@ -711,6 +730,7 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s3_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s3_clk_src_init,
+ };
+ 
+@@ -728,6 +748,7 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s4_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s4_clk_src_init,
+ };
+ 
+@@ -745,6 +766,7 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s5_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s5_clk_src_init,
+ };
+ 
+@@ -762,6 +784,7 @@ static struct clk_rcg2 gcc_qupv3_wrap1_s6_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap1_s6_clk_src_init,
+ };
+ 
+@@ -779,6 +802,7 @@ static struct clk_rcg2 gcc_qupv3_wrap2_s0_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap1_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap2_s0_clk_src_init,
+ };
+ 
+@@ -796,6 +820,7 @@ static struct clk_rcg2 gcc_qupv3_wrap2_s1_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap1_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap2_s1_clk_src_init,
+ };
+ 
+@@ -813,6 +838,7 @@ static struct clk_rcg2 gcc_qupv3_wrap2_s2_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap2_s2_clk_src_init,
+ };
+ 
+@@ -830,6 +856,7 @@ static struct clk_rcg2 gcc_qupv3_wrap2_s3_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap2_s3_clk_src_init,
+ };
+ 
+@@ -847,6 +874,7 @@ static struct clk_rcg2 gcc_qupv3_wrap2_s4_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap2_s4_clk_src_init,
+ };
+ 
+@@ -864,6 +892,7 @@ static struct clk_rcg2 gcc_qupv3_wrap2_s5_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap2_s5_clk_src_init,
+ };
+ 
+@@ -881,6 +910,7 @@ static struct clk_rcg2 gcc_qupv3_wrap2_s6_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_qupv3_wrap0_s0_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &gcc_qupv3_wrap2_s6_clk_src_init,
+ };
+ 
+@@ -899,6 +929,7 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_7,
+ 	.freq_tbl = ftbl_gcc_sdcc2_apps_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_sdcc2_apps_clk_src",
+ 		.parent_data = gcc_parent_data_7,
+@@ -921,6 +952,7 @@ static struct clk_rcg2 gcc_sdcc4_apps_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_sdcc4_apps_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_sdcc4_apps_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -944,6 +976,7 @@ static struct clk_rcg2 gcc_ufs_phy_axi_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_ufs_phy_axi_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_ufs_phy_axi_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -966,6 +999,7 @@ static struct clk_rcg2 gcc_ufs_phy_ice_core_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_ufs_phy_ice_core_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_ufs_phy_ice_core_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -987,6 +1021,7 @@ static struct clk_rcg2 gcc_ufs_phy_phy_aux_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_3,
+ 	.freq_tbl = ftbl_gcc_ufs_phy_phy_aux_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_ufs_phy_phy_aux_clk_src",
+ 		.parent_data = gcc_parent_data_3,
+@@ -1002,6 +1037,7 @@ static struct clk_rcg2 gcc_ufs_phy_unipro_core_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_ufs_phy_ice_core_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_ufs_phy_unipro_core_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -1025,6 +1061,7 @@ static struct clk_rcg2 gcc_usb30_prim_master_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_usb30_prim_master_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_usb30_prim_master_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -1040,6 +1077,7 @@ static struct clk_rcg2 gcc_usb30_prim_mock_utmi_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_0,
+ 	.freq_tbl = ftbl_gcc_pcie_0_aux_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_usb30_prim_mock_utmi_clk_src",
+ 		.parent_data = gcc_parent_data_0,
+@@ -1055,6 +1093,7 @@ static struct clk_rcg2 gcc_usb3_prim_phy_aux_clk_src = {
+ 	.hid_width = 5,
+ 	.parent_map = gcc_parent_map_2,
+ 	.freq_tbl = ftbl_gcc_pcie_0_aux_clk_src,
++	.hw_clk_ctrl = true,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "gcc_usb3_prim_phy_aux_clk_src",
+ 		.parent_data = gcc_parent_data_2,
 
 -- 
 2.40.1
