@@ -2,98 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F34C7066B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9E47066BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjEQLa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S230303AbjEQLcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbjEQLaY (ORCPT
+        with ESMTP id S230175AbjEQLcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:30:24 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7B44205;
-        Wed, 17 May 2023 04:30:12 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1684323010;
-        bh=tX5B9YR0enKjdo8Rk63Z+5SJMwlE6xq8HQ4kgSM4ylU=;
-        h=From:Date:Subject:To:Cc:From;
-        b=hJwrVwFQukiU4UMcCJrA5lzxgA8pOX1JdgG5wrs409bquq+cCFhPJaPpOvhUTKiQ6
-         gAmlRrXeNYLhk4wqqunpw/JNawwyVx+jcl/Yr4AVbIxITF+R7cH4NEwCBko8caCqns
-         db6bMl9bj0XldY4OxYVYl+8dWzQMV/35+rpLtAZE=
-Date:   Wed, 17 May 2023 13:30:05 +0200
-Subject: [PATCH v2] nbd: automatically load module on genl access
+        Wed, 17 May 2023 07:32:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305A3527D;
+        Wed, 17 May 2023 04:31:36 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E3754660563D;
+        Wed, 17 May 2023 12:31:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684323094;
+        bh=L2mTlsU8VTc247vwq0FkEbhJOgBaKoelge6UNY1Jq28=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dhFlWVbrsUUAUCO8oux7TvXYQVVNG8o7CgMnfFb9gVXKBxIuqSvsNyjv5gSAUIl8d
+         wg8O1k+IuiplGKJOsUHlIBMUot1ztw1WVetcQPD9PSAzRZWZTqflbOGbvwPdTeGTyK
+         4520iQ01nOUn9j3LLQnt18vv5nioXx26f2eC1DZDBmATH2/6NZ8My2yRS3QMVwNlCm
+         CBDdNSHIXOxAZBM6Vnx3C+p+7pvrQwhCHZXl1INby6jQntYFO2mrLPfWstzmvsz9mv
+         jk0tYFxkkyzUwqewsjTM6ZiQl10RWVcd63+ssb84QDgT55fHFp+C5m6F4iyljaTLmo
+         S8WNE20MwI0nA==
+Message-ID: <154497b3-f5c7-45d6-edd5-729642b80be5@collabora.com>
+Date:   Wed, 17 May 2023 13:31:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-b4-nbd-genl-v2-1-64585d9ce4b9@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIALy6ZGQC/zWNQQrCMBBFr1KydkoyqTW48h7iIkmnTSBOJWm1U
- Hp3g+DyfXjv76JQjlTEtdlFpncsceYKeGqED5YngjhUFihRS0QNrgN2A0zECbS9dN722vSmF9V
- wthC4bNmH6vCaUh1fmca4/S7uj8pjnp+whEz2H0allJRn7LRpURkDClLkdbt9KJZSfFhDy7SI4
- /gC2AiDba8AAAA=
-To:     Josef Bacik <josef@toxicpanda.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
-        linux-kernel@vger.kernel.org, Wouter Verhelst <w@uter.be>,
-        "Richard W.M. Jones" <rjones@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684323007; l=1278;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=tX5B9YR0enKjdo8Rk63Z+5SJMwlE6xq8HQ4kgSM4ylU=;
- b=RTZfwn/ytq5xcFdHDR6ZfgqLHr4gAH0UxLUokOjS5rbCOF9JIRK0Cd8dGjOiYbvJOZYg2yayr
- kkMaoHJCcGmBEw2CS2M5jS/gbBTUajZjw3sB464zeEyofqm7L9U3Cjv
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 2/5] ASoC: mediatek: mt8188-mt6359: register hdmi/dp jack
+ pins
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, matthias.bgg@gmail.com
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230517111534.32630-1-trevor.wu@mediatek.com>
+ <20230517111534.32630-3-trevor.wu@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230517111534.32630-3-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of forcing the user to manually load the module do it
-automatically.
+Il 17/05/23 13:15, Trevor Wu ha scritto:
+> Some userspace applications need jack control events, so register hdmi
+> and dp jack pins to activate jack control events.
+> 
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> ---
+>   sound/soc/mediatek/mt8188/mt8188-mt6359.c | 27 +++++++++++++++++++----
+>   1 file changed, 23 insertions(+), 4 deletions(-)
+> 
+> diff --git a/sound/soc/mediatek/mt8188/mt8188-mt6359.c b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+> index 833bc362dad2..6c3f36e2fffd 100644
+> --- a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+> +++ b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+> @@ -151,6 +151,20 @@ struct mt8188_mt6359_priv {
+>   	struct snd_soc_jack hdmi_jack;
+>   };
+>   
+> +static struct snd_soc_jack_pin mt8188_hdmi_jack_pins[] = {
+> +	{
+> +		.pin = "HDMI",
 
-For example this avoids the following error when using nbd-client:
+"HDMI Jack" is more consistent with the snd_soc_jack_new_pins() call performed
+later.
 
-$ nbd-client localhost 10809 /dev/nbd0
-...
-Error: Couldn't resolve the nbd netlink family, make sure the nbd module is loaded and your nbd driver supports the netlink interface.
+> +		.mask = SND_JACK_LINEOUT,
+> +	},
+> +};
+> +
+> +static struct snd_soc_jack_pin mt8188_dp_jack_pins[] = {
+> +	{
+> +		.pin = "DP",
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Changes in v2:
-- Expand Cc list to get some reviews
-- Add concrete commit example to commit message
-- Link to v1: https://lore.kernel.org/lkml/20221110052438.2188-1-linux@weissschuh.net/
----
- drivers/block/nbd.c | 1 +
- 1 file changed, 1 insertion(+)
+Same here: "DP Jack"
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 65ecde3e2a5b..8632dbacd2ef 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -2335,6 +2335,7 @@ static struct genl_family nbd_genl_family __ro_after_init = {
- 	.mcgrps		= nbd_mcast_grps,
- 	.n_mcgrps	= ARRAY_SIZE(nbd_mcast_grps),
- };
-+MODULE_ALIAS_GENL_FAMILY(NBD_GENL_FAMILY_NAME);
- 
- static int populate_nbd_status(struct nbd_device *nbd, struct sk_buff *reply)
- {
+> +		.mask = SND_JACK_LINEOUT,
+> +	},
+> +};
+> +
 
----
-base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
-change-id: 20230223-b4-nbd-genl-3a74ca638686
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+Regards,
+Angelo
 
