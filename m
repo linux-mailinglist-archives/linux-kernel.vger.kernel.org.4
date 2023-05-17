@@ -2,104 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA12D707578
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C8770757C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjEQWbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S229566AbjEQWcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjEQWav (ORCPT
+        with ESMTP id S229700AbjEQWbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:30:51 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E101259EE;
-        Wed, 17 May 2023 15:30:46 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-965f7bdab6bso254687166b.3;
-        Wed, 17 May 2023 15:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684362645; x=1686954645;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wwJ2jZY3dnjuT0EUFOXSV7VbKcctKtPzov6U1NhPAW4=;
-        b=RbGlBFWRA3xf6AobWogZ/o62Go80hrmxmKteFSu4DIYEpr5gmlsdQwulT80Y4ly1c7
-         bJrbVGnkXLqeWIfdiqkKsQbuVEKFx5z6t3orih7R8AvI/NU1NvZwm0/cnGSgOXdT1Ka1
-         CzyvWwrJTzs0nInvcjfrI3yWfr1DP9VvOnxn2WW+KAz/JTV+D5C6o6wmrNXayqkSyC74
-         MHPgKgGLtL6mBh4NDdpxjhJ86IJpOMM4zyw7J/O81pL9dvooWwQJh+oD/oHf1EMqPu25
-         ldw5jQoxMJpErAynLkV1xoWyUUgNAbtWdh7+JNueStrPbqB2ZV/WIYkf1+w9IiZeTkdw
-         YOGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684362645; x=1686954645;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wwJ2jZY3dnjuT0EUFOXSV7VbKcctKtPzov6U1NhPAW4=;
-        b=dsOTRib2PirQP/+Y5VIOwwV6VpykGHjaii9CZFIWMhsLFaWCza8gBuTkO0uycFeJtw
-         twrdTN9TbBgv4CGhJTI0gyKb8mpUENIbDktQwgZozFa5aJ9KgU0RuFO0XPRmqoeRLYQD
-         STX6mV2IB/ENLZJrcI71OO8nVT59/nI+iFBAhDCH+ziQtJDE4RcnS4NwAws1uwu2sGsA
-         0kxwYy1fDGkQT5CoeCN4MqM3CkqKouGziZxEI60W3Phi/IS9toTQ3bOty086t9r7Pw+x
-         kCVSKwFQLT37ZmMGjnDJKr3aXr1PZ25AMFJYCqWmv16+IUDiUw0lsGWW8W1qanaq/WVy
-         FNFA==
-X-Gm-Message-State: AC+VfDwccRfuW86O+H119W4/Q1TCDN879ZVq1MFWdiC+yNuuYC2ZsDDZ
-        vicacVlWw/zstNnqLt47aBg=
-X-Google-Smtp-Source: ACHHUZ5gQ9+esOzZAXGxhnfjprvTP/lv23I4k0RHwccRhvuqGQGV0LNYQUFXARjh7qch2FWKIbCixw==
-X-Received: by 2002:a17:906:ee84:b0:959:a9a1:589e with SMTP id wt4-20020a170906ee8400b00959a9a1589emr35427005ejb.76.1684362645340;
-        Wed, 17 May 2023 15:30:45 -0700 (PDT)
-Received: from wslxew193.fritz.box (p200300c78700c900633510ddc4028dcd.dip0.t-ipconnect.de. [2003:c7:8700:c900:6335:10dd:c402:8dcd])
-        by smtp.gmail.com with ESMTPSA id y14-20020a1709064b0e00b0095807ab4b57sm109327eju.178.2023.05.17.15.30.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 15:30:44 -0700 (PDT)
-From:   Boerge Struempfel <boerge.struempfel@gmail.com>
-Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
-        andy.shevchenko@gmail.com, festevam@gmail.com,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wed, 17 May 2023 18:31:52 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED70769C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:31:40 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 8935F2045E;
+        Thu, 18 May 2023 00:31:38 +0200 (CEST)
+Date:   Thu, 18 May 2023 00:31:37 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/3] spi: spidev: add SPI_MOSI_IDLE_LOW mode bit
-Date:   Thu, 18 May 2023 00:30:07 +0200
-Message-Id: <20230517223007.178432-3-boerge.struempfel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230517223007.178432-1-boerge.struempfel@gmail.com>
-References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
+Subject: Re: [PATCH v10 6/8] drm/msm/dpu: separate DSC flush update out of
+ interface
+Message-ID: <evkla3rkf4tge6gln4lgtulj7q5gt6vef3i2yqupc5lj2oszfx@7ttyxzlmvet5>
+References: <1684360919-28458-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684360919-28458-7-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1684360919-28458-7-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow userspace to set SPI_MOSI_IDLE_LOW mode bit using the
-SPI_IOC_WR_MODE32 ioctl.
+On 2023-05-17 15:01:57, Kuogee Hsieh wrote:
+> Currently DSC flushing happens during interface configuration at
+> dpu_hw_ctl_intf_cfg_v1(). Separate DSC flush away from
+> dpu_hw_ctl_intf_cfg_v1() by adding dpu_hw_ctl_update_pending_flush_dsc_v1()
+> to handle both per-DSC engine and DSC flush bits at same time to make it
+> consistent with the location of flush programming of other DPU sub-blocks.
+> 
+> Changes in v10:
+> -- rewording commit text
+> -- pass ctl directly instead of dpu_enc to dsc_pipe_cfg()
 
-Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
----
- drivers/spi/spidev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+There are a few things missing from v8 review, see below.
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 39d94c850839..e50da54468ec 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -64,7 +64,7 @@ static_assert(N_SPI_MINORS > 0 && N_SPI_MINORS <= 256);
- 				| SPI_NO_CS | SPI_READY | SPI_TX_DUAL \
- 				| SPI_TX_QUAD | SPI_TX_OCTAL | SPI_RX_DUAL \
- 				| SPI_RX_QUAD | SPI_RX_OCTAL \
--				| SPI_RX_CPHA_FLIP)
-+				| SPI_RX_CPHA_FLIP | SPI_MOSI_IDLE_LOW)
- 
- struct spidev_data {
- 	dev_t			devt;
--- 
-2.25.1
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 10 ++++++++--
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  | 22 ++++++++++++++++------
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h  | 13 +++++++++++++
+>  3 files changed, 37 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index ffa6f04..1957545 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1834,7 +1834,8 @@ dpu_encoder_dsc_initial_line_calc(struct drm_dsc_config *dsc,
+>  	return DIV_ROUND_UP(total_pixels, dsc->slice_width);
+>  }
+>  
+> -static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
+> +static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_ctl *ctl,
+> +				     struct dpu_hw_dsc *hw_dsc,
+>  				     struct dpu_hw_pingpong *hw_pp,
+>  				     struct drm_dsc_config *dsc,
+>  				     u32 common_mode,
+> @@ -1854,6 +1855,9 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
+>  
+>  	if (hw_pp->ops.enable_dsc)
+>  		hw_pp->ops.enable_dsc(hw_pp);
+> +
+> +	if (ctl->ops.update_pending_flush_dsc)
+> +		ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
+>  }
+>  
+>  static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
+> @@ -1861,6 +1865,7 @@ static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
+>  {
+>  	/* coding only for 2LM, 2enc, 1 dsc config */
+>  	struct dpu_encoder_phys *enc_master = dpu_enc->cur_master;
+> +	struct dpu_hw_ctl *ctl = enc_master->hw_ctl;
+>  	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
+>  	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
+>  	int this_frame_slices;
+> @@ -1898,7 +1903,8 @@ static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
+>  	initial_lines = dpu_encoder_dsc_initial_line_calc(dsc, enc_ip_w);
+>  
+>  	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
+> -		dpu_encoder_dsc_pipe_cfg(hw_dsc[i], hw_pp[i], dsc, dsc_common_mode, initial_lines);
+> +		dpu_encoder_dsc_pipe_cfg(ctl, hw_dsc[i], hw_pp[i], dsc,
+> +					 dsc_common_mode, initial_lines);
+>  }
+>  
+>  void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> index 4f7cfa9..4e132d9 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> @@ -139,6 +139,11 @@ static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
+>  				CTL_DSPP_n_FLUSH(dspp - DSPP_0),
+>  				ctx->pending_dspp_flush_mask[dspp - DSPP_0]);
+>  		}
+> +
+> +	if (ctx->pending_flush_mask & BIT(DSC_IDX))
+> +		DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH,
+> +			      ctx->pending_dsc_flush_mask);
 
+Again, when do we reset this mask to 0?  (v8 review)
+
+> +
+>  	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);
+>  }
+>  
+> @@ -285,6 +290,13 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
+>  	ctx->pending_flush_mask |= BIT(MERGE_3D_IDX);
+>  }
+>  
+> +static void dpu_hw_ctl_update_pending_flush_dsc_v1(struct dpu_hw_ctl *ctx,
+> +						   enum dpu_dsc dsc_num)
+> +{
+> +	ctx->pending_dsc_flush_mask |= BIT(dsc_num - DSC_0);
+> +	ctx->pending_flush_mask |= BIT(DSC_IDX);
+> +}
+> +
+>  static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+>  	enum dpu_dspp dspp, u32 dspp_sub_blk)
+>  {
+> @@ -502,9 +514,6 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>  	if ((test_bit(DPU_CTL_VM_CFG, &ctx->caps->features)))
+>  		mode_sel = CTL_DEFAULT_GROUP_ID  << 28;
+>  
+> -	if (cfg->dsc)
+> -		DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH, cfg->dsc);
+> -
+>  	if (cfg->intf_mode_sel == DPU_CTL_MODE_SEL_CMD)
+>  		mode_sel |= BIT(17);
+>  
+> @@ -524,10 +533,9 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>  	if (cfg->merge_3d)
+>  		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
+>  			      BIT(cfg->merge_3d - MERGE_3D_0));
+> -	if (cfg->dsc) {
+> -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+
+Again, this bugfix of now wrapping DSC_IDX in BIT() should go in a
+separate Fixes: patch to have this semantic change documented.  (v8
+review)
+
+> +
+> +	if (cfg->dsc)
+>  		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
+> -	}
+>  }
+>  
+>  static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
+> @@ -630,6 +638,8 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
+>  		ops->update_pending_flush_merge_3d =
+>  			dpu_hw_ctl_update_pending_flush_merge_3d_v1;
+>  		ops->update_pending_flush_wb = dpu_hw_ctl_update_pending_flush_wb_v1;
+> +		ops->update_pending_flush_dsc =
+> +			dpu_hw_ctl_update_pending_flush_dsc_v1;
+>  	} else {
+>  		ops->trigger_flush = dpu_hw_ctl_trigger_flush;
+>  		ops->setup_intf_cfg = dpu_hw_ctl_intf_cfg;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> index 6292002..d5f3ef8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+> @@ -158,6 +158,15 @@ struct dpu_hw_ctl_ops {
+>  		enum dpu_dspp blk, u32 dspp_sub_blk);
+>  
+>  	/**
+> +	 * OR in the given flushbits to the cached pending_(dsc_)flush_mask
+> +	 * No effect on hardware
+> +	 * @ctx: ctl path ctx pointer
+> +	 * @blk: interface block index
+> +	 */
+> +	void (*update_pending_flush_dsc)(struct dpu_hw_ctl *ctx,
+> +		enum dpu_dsc blk);
+> +
+> +	/**
+>  	 * Write the value of the pending_flush_mask to hardware
+>  	 * @ctx       : ctl path ctx pointer
+>  	 */
+> @@ -229,6 +238,9 @@ struct dpu_hw_ctl_ops {
+>   * @pending_flush_mask: storage for pending ctl_flush managed via ops
+>   * @pending_intf_flush_mask: pending INTF flush
+>   * @pending_wb_flush_mask: pending WB flush
+
+The above is all capitalized, so...:
+
+> + * @pending_merge_3d_flush_mask: pending merge_3d flush
+
+MERGE_3D?
+
+> + * @pending_dspp_flush_mask: pending dspp flush
+
+DSPP
+
+> + * @pending_dsc_flush_mask: pending dsc flush
+
+DSC
+
+- Marijn
+
+>   * @ops: operation list
+>   */
+>  struct dpu_hw_ctl {
+> @@ -245,6 +257,7 @@ struct dpu_hw_ctl {
+>  	u32 pending_wb_flush_mask;
+>  	u32 pending_merge_3d_flush_mask;
+>  	u32 pending_dspp_flush_mask[DSPP_MAX - DSPP_0];
+> +	u32 pending_dsc_flush_mask;
+>  
+>  	/* ops */
+>  	struct dpu_hw_ctl_ops ops;
+> -- 
+> 2.7.4
+> 
