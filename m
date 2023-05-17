@@ -2,192 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB497072A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7659E7072A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjEQT5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
+        id S229576AbjEQT7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjEQT5G (ORCPT
+        with ESMTP id S229475AbjEQT7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:57:06 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF44459E1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:57:05 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-338458a9304so4975ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684353425; x=1686945425;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7PuhUAmuAWN2zg9B5H7JpxfVt8/E1PBqFeU+rQFkSJg=;
-        b=v5ZjVpaBb6iZa0hSwYV500ZA3Ke59Sg524tk3MudH+mTJ2OReFBmhRQeLlK3+NoO52
-         b9iIZnnf9pW6II0Jxv/lLOWCPoXob+8QM9YqfWtizoS3DcF/qiWtaJo5PpF+nN4HmmY3
-         4ZSfFzLCM0jWoDb2Yhn5BNFSYHAbKfxQl2aB2qvLNBui/rx6jgXOLH2+IvbOI3ZQH6H7
-         4qmCuGugwe0E9ctJomBfQLlIx1GvEGBwlpVt6ImTkB7mz26vqWLYmjUdqs5LEQgQp7Sy
-         jxLndMr9vXh66NGAGkSqTVJYyifkZjfPrHeg2FYQIC+zc2F405Z4nULPFkV9/et/BQ7q
-         j9Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684353425; x=1686945425;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7PuhUAmuAWN2zg9B5H7JpxfVt8/E1PBqFeU+rQFkSJg=;
-        b=S9R+LBJjlfKBOuxf3ddEG9sSw5NfcmdEfFSwAR1x4fEzrvHnFN7mr/iqUYMLs0sZhA
-         8e+IHINYPlL+acsMI43K972EoiAZalSgRjJu1qilFjc+9Rkp5ql0LcKv9+PyVZ75ybaJ
-         RBynqTAtfpsf9f0jUNiQHsV0YZVKFa1mxBhLdzb3ohbhgHvfYDKVXwvAslALh7Golzj2
-         tnwu/jD2VEPIZqmfD3tfsrbTiP/VQOkoWhD147eGfCIdNIea/jFlCFkxAgaNkmuViUvW
-         BzA+r7ZzoLjuuFtsHX0E+zWMxUwomJ/k8MRi+KDkNB67Ff9+KJTbBZ8jfXsy8Em92sv7
-         8Cvg==
-X-Gm-Message-State: AC+VfDzrMtM9k9gp9UOngx9YhWCQcKxuYeEyoFzAdCMoFCWM+Zu1UHvd
-        1zWSqgPTkzmtjhxX/8k0Ya0f3jzn4jUWQRz6DGILvg==
-X-Google-Smtp-Source: ACHHUZ5fNoYcY4gMzQWohPszL01/Ayk00Rs0kYmAmvMCIkuVDJUtmqG0jhf1cbaqfkK5bOymJYPt9ZrnB79F2+NTVUc=
-X-Received: by 2002:a05:6e02:198b:b0:32f:7831:dea5 with SMTP id
- g11-20020a056e02198b00b0032f7831dea5mr3825ilf.8.1684353424981; Wed, 17 May
- 2023 12:57:04 -0700 (PDT)
+        Wed, 17 May 2023 15:59:21 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E47E67;
+        Wed, 17 May 2023 12:59:20 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-146-199-nat.elisa-mobile.fi [85.76.146.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4QM3pT6zgSzyWs;
+        Wed, 17 May 2023 22:59:13 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1684353557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uT4QeccEOPKkK7gGYPYPm3Y9FH1yk/CYJCXvyI1gFcg=;
+        b=WZFEpJpuxHgdL66a5PaD1yNk7SpgMp9G9guhbNAaUh3HEUxnbuFWcPk8rHcB/dQQJaayMK
+        upe+8t3l5YMswlkboqSxW1TMcS8P/5RX1nVRVXD5ExA19T8y7uQqsCZL1U0nsnp5cTTAW4
+        WqLdFf44BWpW+Gcb+Kix2JvPsvJMOEE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1684353557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uT4QeccEOPKkK7gGYPYPm3Y9FH1yk/CYJCXvyI1gFcg=;
+        b=uqZALiO1J2n/ZSQ1Zg25g0VKOhsOJ/6Qt1tM/2HyGw+suNSH0P3c0GzRaRzizaWMSFNnCo
+        kXUNe5mMx5fBj+8WBcmDkoSMxVBjAarDMIXN1vF1ZIB9LxTfhPvbYuxL0RtKrJA9x3X5j+
+        m2hOXBKV8p6FLsSV8qUVN62sMFztjCM=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684353557; a=rsa-sha256; cv=none;
+        b=RKAECBWDBO58k84XgosU1UrhQq2r0jPWNipNo3Gi0fMRoUGJZblm+3P1vXugNvU+LqaNyh
+        c2O6jMu7dk5j7DzRa8mJccrAhHhiOFueDQPGfrq0HfU5IqmE4NrXeiRgdWhUIROwa4xfNf
+        00KimNUa/R4AbP591nbysQnVZMJjE/A=
+Date:   Wed, 17 May 2023 22:59:11 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] Input: ads7846 - Convert to use software nodes
+Message-ID: <20230517195911.GG271152@darkstar.musicnaut.iki.fi>
+References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
+ <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
 MIME-Version: 1.0
-References: <ZGUYVjJk2DhX9UrC@yoga>
-In-Reply-To: <ZGUYVjJk2DhX9UrC@yoga>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 17 May 2023 12:56:52 -0700
-Message-ID: <CAP-5=fX3oLRgUzt6QhN+6bybp_WsS9gCuJ1484hq16FTWc3Dyg@mail.gmail.com>
-Subject: Re: [PATCH] perf: test: Add support for testing JSON generated by
- perf data command
-To:     Anup Sharma <anupnewsmail@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230430-nokia770-regression-v4-1-9b6dc5536b17@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:09=E2=80=AFAM Anup Sharma <anupnewsmail@gmail.co=
-m> wrote:
->
-> This commit adds support for testing the JSON output generated
-> by the perf data command's conversion to JSON functionality.
-> The test script now includes a validation step to ensure that
-> the resulting JSON file is contain valid data.
->
-> As a newcomer to this community, any feedback on the implementation
-> is highly appreciated.
->
-> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+Hi,
 
-Congratulations on sending your first patch! Anup is this summer's
-Google Summer-of-Code contributor for the Linux perf tool. I'm sure
-everyone on the lists is looking forward to your contributions!
+This does not compile as nokia770_ads7846_props is declared twice,
+and nokia770_cbus_props and nokia770_mpuio_gpiochip_swnode are missing.
 
-> ---
->  .../shell/test_perf_data_converter_json.sh    | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100755 tools/perf/tests/shell/test_perf_data_converter_json.=
-sh
->
-> diff --git a/tools/perf/tests/shell/test_perf_data_converter_json.sh b/to=
-ols/perf/tests/shell/test_perf_data_converter_json.sh
-> new file mode 100755
-> index 000000000000..88db96e38925
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/test_perf_data_converter_json.sh
-> @@ -0,0 +1,64 @@
-> +#!/bin/sh
-> +# perf data json converter test
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -e
-> +
-> +err=3D0
-> +perfdata=3D$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +result=3D$(mktemp /tmp/__perf_test.output.json.XXXXX)
-> +
-> +cleanup()
-> +{
-> +       rm -f ${perfdata}
-> +       rm -f ${result}
-> +       trap - exit term int
-> +}
-> +
-> +trap_cleanup()
-> +{
-> +       cleanup
-> +       exit ${err}
-> +}
-> +trap trap_cleanup exit term int
-> +
-> +check()
-> +{
-> +       if [ `id -u` !=3D 0 ]; then
-> +               echo "[Skip] No root permission"
-> +               err=3D2
-> +               exit
-> +       fi
-> +}
-> +
-> +test_json()
-> +{
-> +       echo "Testing perf data convertion to JSON"
-> +       perf record -o $perfdata -F 99 -a -g -- sleep 1 > /dev/null 2>&1
-> +       perf data convert --to-json $result --force -i $perfdata >/dev/nu=
-ll 2>&1
-> +       echo "Perf Data Converter to JSON [SUCCESS]"
-> +}
-> +
-> +validate_json_format()
-> +{
-> +       echo "Testing perf data converted to JSON format"
-> +       if [ -f "${result}" ]; then
+On Mon, May 08, 2023 at 11:20:06PM +0200, Linus Walleij wrote:
+> +static const struct software_node_ref_args nokia770_cbus_gpio_refs[] = {
+> +	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 9, 0),
+> +	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 10, 0),
+> +	SOFTWARE_NODE_REFERENCE(&nokia770_mpuio_gpiochip_swnode, 11, 0),
+> +};
 
-It can be a good idea to test for failure and early exit. It would
-avoid being as indented in the following if.
+These should be nokia770_mpuio_gpiochip_node.
 
-> +               if jq '.' "${result}" > /dev/null 2>&1; then
+> +static const struct property_entry nokia770_ads7846_props[] = {
+> +	PROPERTY_ENTRY_REF_ARRAY("gpios", nokia770_cbus_gpio_refs),
+> +	{ }
+>  };
 
-This assumes the jq program is available and it isn't by default on my
-distribution. We could test:
-if ! which jq; then
-but it may be better to depend on Python and json.loads - Python is
-already a dependency for a number of the tests.
+This should be nokia770_cbus_props.
 
-Thanks,
-Ian
-
-> +                   echo "The file contains valid JSON format [SUCCESS]"
-> +               else
-> +                   echo "The file does not contain valid JSON format [FA=
-ILED]"
-> +                   err=3D1
-> +               fi
-> +           else
-> +               echo "File not found [FAILED]"
-> +               err=3D2
-> +               exit
-> +           fi
-> +}
-> +
-> +check
-> +
-> +test_json
-> +validate_json_format
-> +
-> +exit ${err}
-> --
-> 2.34.1
->
+A.
