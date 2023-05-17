@@ -2,168 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72552706808
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3808170680D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbjEQMZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
+        id S231669AbjEQM0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjEQMZJ (ORCPT
+        with ESMTP id S229708AbjEQM0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:25:09 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F84193;
-        Wed, 17 May 2023 05:25:08 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53202149ae2so471241a12.3;
-        Wed, 17 May 2023 05:25:08 -0700 (PDT)
+        Wed, 17 May 2023 08:26:02 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49823193
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:26:01 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96649b412easo106195766b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:26:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684326308; x=1686918308;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fEGoGpyrR60B8AjfNbHQnj78PfieDYrQkkUy4eueo0Q=;
-        b=kML+gvuAXtKqecLJrYpLLONtf5q3VxVj0mH3+jLLtkrkQE8d0WMDK3AeuWKiwiVBp6
-         CaxruwpHKGXvSNpTOiZ4WdaHHyG+gizh3lTsL7qFJ8fRgdCLVMZlxDGXLjjydp9T9iZf
-         v0wHNvQEkKfdpantj/99n9AktsRB8s+2WZlSolJJNo6MVJF8C1yg3HvCYMdZ4JCQn0sa
-         gwK+NvVHhiE20LuxQxyJqhYUXWpE1qCz5M/K4+4785N0wj2CkXV8SsjdN2TQFYq/toJG
-         /L9R5GU9GnqA82WbP/Zrx1wlDqJIti20Mc+hbYt9s5BdBP/0VKLOYUBfIF/2b4rEnllD
-         n4Vg==
+        d=linaro.org; s=google; t=1684326360; x=1686918360;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8BF8szOaDaK/L0QmbrAoJ/Wjb3d8ACeN/7ZR5Tb+EZs=;
+        b=cPngGdM4i7qJ2bdf+dAXdwtUBhd3zZzzgIFasm4uvJsJOKfkWjgEhb7SsZzn+YnC1P
+         VkJvj/ZHXxrS+Cm5odyh5RpVbmZtYVi+oXHwk7Cuad0tjQBDcsoLof3f6zhIVvtulC9R
+         qyK9q2SixMYh+z3NlM9yvVvdPSb2R6CZj77N6aYqRa3G4j5nVQNa0S9/1jaWvfyXEhVx
+         lKpQOuhy2NnfODX1MJkdf+iIs2zzIM2b6U9qAvh7nWv8njp76ahjubAVnvMBH8toVtyP
+         GwFlKmWh03AUKFd6ujW0fpFUUqXqb7zaCXF7LKcJMGAttMy/G3gbF/3P5ImQAqK0rm8S
+         iAeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684326308; x=1686918308;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fEGoGpyrR60B8AjfNbHQnj78PfieDYrQkkUy4eueo0Q=;
-        b=S2GNJJcyzKFiYF0ukg3mSW9NWiSUCEDQasmcCahv8uf4JbCV+y10hJWJpAm4XjC8DA
-         AfwSAha9ewiT9HPj553DtYoPaemQ95fCW8tUfvugLerh2Bh8Tf4vXqMUrnbY745Oi+wE
-         fBpHxkxToxcEHKedLQWv+wn7ZmQRy5cBcA0AfYM6tFh6wPa5boLmruEvdM92T/SKUN8K
-         32b7iW0IMjoDWHME2FSUFb1PtbdpLGpPa7Rt1fmA8rShzFsZOoXoCARfD8LPJJyZONk3
-         e3WLkYyy0INiz5W+BCclcGhalfSiforUDp3KKQ8mTg5t8SIN+MBMh2pmjahTX5N/q4I2
-         81+w==
-X-Gm-Message-State: AC+VfDxHSBNMWvxd+MyfUZuVrZ+0/Uh9EDRrQlfm/EbyPQtYwnhy18v3
-        0zkqHDgLgXKdGf4IuvvEX6ccHOw5I2A=
-X-Google-Smtp-Source: ACHHUZ7tqN6XkclPOdB4GxCwvfImnp1nRD4DeA0mvf0+zmf9LZjB55uWWQyMz3U1XE9oy2JrH/3jiA==
-X-Received: by 2002:a05:6a20:8416:b0:ec:d7cf:bcf7 with SMTP id c22-20020a056a20841600b000ecd7cfbcf7mr51311098pzd.17.1684326307884;
-        Wed, 17 May 2023 05:25:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c25-20020a631c59000000b005143448896csm15283973pgm.58.2023.05.17.05.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:25:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 May 2023 05:25:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, markgross@kernel.org,
-        hdegoede@redhat.com, Shyam-sundar.S-k@amd.com,
-        linux-edac@vger.kernel.org, clemens@ladisch.de, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, mario.limonciello@amd.com,
-        babu.moger@amd.com
-Subject: Re: [PATCH 3/6] hwmon: (k10temp) Check return value of amd_smn_read()
-Message-ID: <f3cce515-845c-480e-a096-8e24e0079454@roeck-us.net>
-References: <20230516202430.4157216-1-yazen.ghannam@amd.com>
- <20230516202430.4157216-4-yazen.ghannam@amd.com>
+        d=1e100.net; s=20221208; t=1684326360; x=1686918360;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8BF8szOaDaK/L0QmbrAoJ/Wjb3d8ACeN/7ZR5Tb+EZs=;
+        b=L3F1bQj8pPz7wS1657iNhHivHvya2NGmDvzazvRTbJnn6KdZGDhC3wI0kz3hjDYkzz
+         mMrBvVpDXGO6yX/RDszKuBizelSpO7BV37iJHvqGTK6SRSZtxVvjXFuX0eCVlYPqjRJv
+         Cnret14RhoEsWyF2Dw+beGVyG9z7f+Tb+1SHtp2NtLpvT8h4bwRuDQyhnsEoLyhzK3aJ
+         phNy+toEYrhrIiJmoD0t1dca4ds1brZ/OtJVRJic3XCKa++Ey7qxYh2Wl+Le5o7QYsy3
+         LS+nW2U5wCsuH/u2Zm78lorP5oHMBtt/VfMZO5by+nW03HyHq208TXaIVu0JBVbn5a6x
+         G5Yg==
+X-Gm-Message-State: AC+VfDy7DPR2g/4iuF4Kktb7/h7iWjyu4QAquPqHl1IG0sAj3uC1Xvvk
+        lUEtSl3MqVqbzi+5Q/idRkbbDg==
+X-Google-Smtp-Source: ACHHUZ6HNTd3s0nBmdIcMwsu5zxtK0RN3cvNFdy3wRSgesmGDinq2Q7uaXE3hdZZYoeQhPPcwXszBA==
+X-Received: by 2002:a17:907:6d8e:b0:966:5c04:2c61 with SMTP id sb14-20020a1709076d8e00b009665c042c61mr32193919ejc.8.1684326358847;
+        Wed, 17 May 2023 05:25:58 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id w23-20020aa7cb57000000b0050b57848b01sm9146132edt.82.2023.05.17.05.25.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 05:25:58 -0700 (PDT)
+Message-ID: <3e74c04c-827d-6824-548f-a1d37913ac96@linaro.org>
+Date:   Wed, 17 May 2023 14:25:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516202430.4157216-4-yazen.ghannam@amd.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/3] arm64: dts: microchip: sparx5: do not use PSCI on
+ reference boards
+Content-Language: en-US
+To:     Robert Marko <robert.marko@sartura.hr>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+        UNGLinuxDriver@microchip.com, arnd@arndb.de,
+        alexandre.belloni@bootlin.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor@kernel.org>
+Cc:     luka.perkov@sartura.hr
+References: <20230221105039.316819-1-robert.marko@sartura.hr>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230221105039.316819-1-robert.marko@sartura.hr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:24:27PM -0500, Yazen Ghannam wrote:
-> Check the return value of amd_smn_read() before saving a value. This
-> ensures invalid values aren't saved or used.
+On 21/02/2023 11:50, Robert Marko wrote:
+> PSCI is not implemented on SparX-5 at all, there is no ATF and U-boot that
+> is shipped does not implement it as well.
 > 
-> There are three cases here with slightly different behavior.
+> I have tried flashing the latest BSP 2022.12 U-boot which did not work.
+> After contacting Microchip, they confirmed that there is no ATF for the
+> SoC nor PSCI implementation which is unfortunate in 2023.
 > 
-> 1) read_tempreg_nb_zen():
-> 	This is a function pointer which does not include a return code.
-> 	In this case, set the register value to 0 on failure. This
-> 	enforces Read-as-Zero behavior.
+> So, disable PSCI as otherwise kernel crashes as soon as it tries probing
+> PSCI with, and the crash is only visible if earlycon is used.
 > 
-> 2) k10temp_read_temp():
-> 	This function does have return codes, so return -EINVAL on a
-> 	failed register read. Continued operation is not necessary,
-> 	since there is no valid data from the register. Furthermore, if
-> 	the register value was set to 0, then the following operation
-> 	would underflow.
+> Since PSCI is not implemented, switch core bringup to use spin-tables
+> which are implemented in the vendor U-boot and actually work.
 > 
-> 3) k10temp_get_ccd_support():
-> 	This function reads the same register from multiple CCD
-> 	instances in a loop. And a bitmask is formed if a specific bit
-> 	is set in each register instance. The loop should continue on a
-> 	failed register read, skipping the bit check.
+> Tested on PCB134 with eMMC (VSC5640EV).
 > 
-> Furthermore, the __must_check attribute will be added to amd_smn_read().
-> Therefore, this change is required to avoid compile-time warnings.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Cc: stable@vger.kernel.org
+> Fixes: 6694aee00a4b ("arm64: dts: sparx5: Add basic cpu support")
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 > ---
->  drivers/hwmon/k10temp.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 7b177b9fbb09..6ea1fa62b7c1 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -145,8 +145,9 @@ static void read_tempreg_nb_f15(struct pci_dev *pdev, u32 *regval)
->  
->  static void read_tempreg_nb_zen(struct pci_dev *pdev, u32 *regval)
->  {
-> -	amd_smn_read(amd_pci_dev_to_node_id(pdev),
-> -		     ZEN_REPORTED_TEMP_CTRL_BASE, regval);
-> +	if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-> +			 ZEN_REPORTED_TEMP_CTRL_BASE, regval))
-> +		*regval = 0;
->  }
->  
->  static long get_raw_temp(struct k10temp_data *data)
-> @@ -213,9 +214,11 @@ static int k10temp_read_temp(struct device *dev, u32 attr, int channel,
->  				*val = 0;
->  			break;
->  		case 2 ... 13:		/* Tccd{1-12} */
-> -			amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-> -				     ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
-> -						  &regval);
-> +			if (amd_smn_read(amd_pci_dev_to_node_id(data->pdev),
-> +					 ZEN_CCD_TEMP(data->ccd_offset, channel - 2),
-> +					 &regval))
-> +				return -EINVAL;
-> +
+> Changes in v2:
+> * As suggested by Arnd, disable PSCI only on reference boards
 
--EINVAL: Invalid Argument, supposed to be used for bad user input.
-I don't see how that would apply here. amd_smn_read() returns
-a valid error code. This error core should be returned to the caller,
-or there needs to be an explanation why this is not appropriate.
+Patch seemed forgotten, so I applied it.
+https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git/log/?h=next/dt64
 
->  			*val = (regval & ZEN_CCD_TEMP_MASK) * 125 - 49000;
->  			break;
->  		default:
-> @@ -373,8 +376,10 @@ static void k10temp_get_ccd_support(struct pci_dev *pdev,
->  	int i;
->  
->  	for (i = 0; i < limit; i++) {
-> -		amd_smn_read(amd_pci_dev_to_node_id(pdev),
-> -			     ZEN_CCD_TEMP(data->ccd_offset, i), &regval);
-> +		if (amd_smn_read(amd_pci_dev_to_node_id(pdev),
-> +				 ZEN_CCD_TEMP(data->ccd_offset, i), &regval))
-> +			continue;
-> +
-The reason for ignoring the error should be explained here.
 
->  		if (regval & ZEN_CCD_TEMP_VALID)
->  			data->show_temp |= BIT(TCCD_BIT(i));
->  	}
-> -- 
-> 2.34.1
-> 
+Best regards,
+Krzysztof
+
