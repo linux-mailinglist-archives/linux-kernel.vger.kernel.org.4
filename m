@@ -2,95 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042B570634B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58ACC706358
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbjEQItM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S231145AbjEQIwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjEQItH (ORCPT
+        with ESMTP id S231124AbjEQIwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:49:07 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB594688
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:49:04 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96adcb66f37so83755066b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684313343; x=1686905343;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MaJ5XUiPawbgSLxazOeekgQ6zrqG2tuKF4ul0ZKbcTE=;
-        b=TTmWUVl7QixW+1Jq78EWwxVYh9jVn4dIZDbxF5q8ezdEa7WIA6rDHJunSR5UysIapV
-         wKR/0t9Fi64d99Wl9rGtjuu+nZv2YOhpiaawHXy7/jxiiBsQ0/hnDrX6LXRvZ3TzFKey
-         zPt1QgFVLLngXs421tZw+GWUld5jmEQJQrxR6pw0Z9iy2V8GDXR2ASsJtRbZSKA4/xKr
-         qn/asQ9n6kt8QtgHzyP4hJASRRFKO1D2eEBVyNvO4uyXT62kt25r9udELYIpZsjJMizk
-         ziIlWNNX+o5KdQN+tGJNvmufVlCj+3psX1GPTDGZsZ8C3zvt03GKzMBLC8BsceTLSbPe
-         7JVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684313343; x=1686905343;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MaJ5XUiPawbgSLxazOeekgQ6zrqG2tuKF4ul0ZKbcTE=;
-        b=WF0/R3PjxQU7V0RGUAtjvHP78hIDB/acBaFe7HHAvEDbUiYBTdn1WQTEnasenTsHb5
-         EnH56k/GTDXNeU5lj9993qkGxjCB3ss6kNayKdRTTtZGaauINUwh4/gwQDktzir/FvAl
-         AOkiskr0Z7My1zyZBKErwmkvkJYDaNh+M8VGPGrqmHRQvHA8vmYs6dfI+/MX8ZlF3i1R
-         VpA1lTvONWbxo0PFCMNoENcIq0L2LWzTPbqfO+GahEd0CKQBDhf9tKhaqCnNheQDQzD2
-         TG/EJ5hn9GUjiJGYhT8iUZGx92Bpl+nCctae7dpr2WqR2Fr5ElDEUvepE+iVdi9SkVgV
-         23Yw==
-X-Gm-Message-State: AC+VfDz//m9mUKb6+eBuANAfoxYHs0r1LNeoo2NmvWhYSh1gJxOiKj1e
-        yyab3PQt1ZwiFtqOc71gGQLrpg==
-X-Google-Smtp-Source: ACHHUZ65OotyaUVps2r09ofoIL7n2B8BaydzF2ggyJTZdoXzbiRnH2Sm4bKfP/VZe+dPTgGvVTjuIg==
-X-Received: by 2002:a17:907:31c7:b0:94e:e859:7b07 with SMTP id xf7-20020a17090731c700b0094ee8597b07mr34882125ejb.32.1684313343361;
-        Wed, 17 May 2023 01:49:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id kz23-20020a17090777d700b009659fed3612sm11846349ejc.24.2023.05.17.01.49.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 01:49:02 -0700 (PDT)
-Message-ID: <41001e48-35bb-0aa3-347b-8a25e3dcd8a3@linaro.org>
-Date:   Wed, 17 May 2023 10:49:01 +0200
+        Wed, 17 May 2023 04:52:18 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2087.outbound.protection.outlook.com [40.107.96.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979251FEC;
+        Wed, 17 May 2023 01:52:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H4SFenk+1V+m+W/H5Uap/LcX2WU3ciN/6eH2jYzEWZa23wS/DAgU9R1BNSwyRXZVE/VrNo/EbwYMHz7A9+dNiXsO7GP6a14e+jqLNJbYsw33qEdpkExrfHua9N+z9smjuJngZvpfiBMPWJCaNdPocHDohj8cb4H38IT40jApVmgrcwrcP5lSBJTRPHCB6JfFLCshDjK4QDBRIlPFkbwEchIzCDkPwjDKSpvMWex7zppXDW9iQ6EWOQmAql9XDOwkwxCy+EbK9PTh3ZHhBHNWq3T+SuJvvLnIKw5OG+XEa42pbBoa2z5jyx4zEwUBm6E+Fu0htEeIS1AkTOtm3/K49g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZwcRntYmYbW3mAzt8iDXDUEcE4tF72xVmuNhGy5xH8E=;
+ b=N+A5aaT7Wjr3ytcFiWRvBw+st+AXflMo5qKeNYhvasrnTXsItabvRz87/tjwcLsJ2EHODvEzpEkMn+uBzH9ypIGk87XR3tJLUSG1HF7hRKZSM/b48c9DQQszwXuQ5DtQOuCH3trr1MVBsWuPHpKTyvmqgAUUCfMlbimf5mxdY47HDmungHRPLl3lWQBuiFIV6uMJQunIdSwvYsxksbJ9esfkHzpyqfwqKF8TTROcyQ52vSpfPOn5U6/H5Es8m38fSUtT/sw1aIPa5WBfxLi8eSk2vWWYrmVP3m9Mr5NhTTYuJbREnrt/xRb7WERB68UpPgg8fFmqgi+QMe45x02G7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=bytedance.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZwcRntYmYbW3mAzt8iDXDUEcE4tF72xVmuNhGy5xH8E=;
+ b=rlMqBB+20ST1iyxPYTb2kpcY9Tao5pINbEEBWeOSA36R7kWWyJBIwY4OccNx7kPL2K74jkNqbT0F+pr9AYv0692b1SsY+4MvQImvifdSQjbrp1xSzgGtV2djcj4t2dEO2RutOM/zwj4WBcIhDyajTEjWw0Pia9WUTCjSAbV4FOrNwXm1c//r7GvDqheLnaqs59pT1F4d3Mq2YrE3uQGQYCK7LpnUz8yhbexP7iTWW36Q0O9MyswGj3v8669KDUFREqUBX9gkScPDl7jSa4Kh7U/jf++HaP5jUAwOK4VNwCQzbwREXnkNAwhY3SgZi2GM+YTukloSVodwafIMsE1nQA==
+Received: from DS7PR06CA0017.namprd06.prod.outlook.com (2603:10b6:8:2a::24) by
+ PH7PR12MB5879.namprd12.prod.outlook.com (2603:10b6:510:1d7::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.33; Wed, 17 May 2023 08:52:13 +0000
+Received: from DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2a:cafe::f4) by DS7PR06CA0017.outlook.office365.com
+ (2603:10b6:8:2a::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
+ Transport; Wed, 17 May 2023 08:52:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT042.mail.protection.outlook.com (10.13.173.165) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.17 via Frontend Transport; Wed, 17 May 2023 08:52:12 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 17 May 2023
+ 01:51:56 -0700
+Received: from fedora.nvidia.com (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 17 May
+ 2023 01:51:52 -0700
+References: <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
+ <20230510161559.2767b27a@kernel.org>
+ <ZF1SqomxfPNfccrt@C02FL77VMD6R.googleapis.com>
+ <20230511162023.3651970b@kernel.org>
+ <ZF1+WTqIXfcPAD9Q@C02FL77VMD6R.googleapis.com>
+ <ZF2EK3I2GDB5rZsM@C02FL77VMD6R.googleapis.com>
+ <ZGK1+3CJOQucl+Jw@C02FL77VMD6R.googleapis.com>
+ <20230516122205.6f198c3e@kernel.org> <87y1lojbus.fsf@nvidia.com>
+ <20230516145010.67a7fa67@kernel.org>
+ <ZGQKpuRujwFTyzgJ@C02FL77VMD6R.googleapis.com>
+ <20230516173902.17745bd2@kernel.org>
+User-agent: mu4e 1.8.11; emacs 28.2
+From:   Vlad Buslov <vladbu@nvidia.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Peilin Ye <yepeilin.cs@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Jamal Hadi Salim" <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        "Peilin Ye" <peilin.ye@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+Date:   Wed, 17 May 2023 11:49:10 +0300
+In-Reply-To: <20230516173902.17745bd2@kernel.org>
+Message-ID: <87ttwbjq6y.fsf@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 7/7] dt-bindings: iio: adc: Add rockchip,rk3588-saradc
- string
-Content-Language: en-US
-To:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
-        lars@metafoo.de, heiko@sntech.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, gustavo.padovan@collabora.com,
-        serge.broslavsky@collabora.com
-References: <20230516230051.14846-1-shreeya.patel@collabora.com>
- <20230516230051.14846-8-shreeya.patel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516230051.14846-8-shreeya.patel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT042:EE_|PH7PR12MB5879:EE_
+X-MS-Office365-Filtering-Correlation-Id: 822c5512-2fd1-4afd-b6fd-08db56b401ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BWu59jL3eC+40AXEdu01MHidPF+JD7xeo7fLQPOfRxvShfAjsSYPpcGFjWrTJBBxx1u3mYv2eB+yoAIo8sCKj8K+bBrJpKbXjv56bdNiZZl1HHeUE7kRTCcjsmR2e7vEERtEYPywzpZYt7vWsn/Yz3YhNVaF5qykBceSK/GKEJ3px0Og8zwDvEFMPS0AlPENp1GWsjth35P9CL8mWGc4Y0qy9twptXjutdSgrybhEvZ5s4gVd2byVLob8MdGAh5bTIQc41hcMjuS+ev0urJ8JtsxEZDjGZvH7yPX6xWAvm2c68lzz3HhLHJlhQ1SVPSx7FmgJTq8/RJjgPAx1LGo+GyqEyYrci2i21gwdhJvI4RV0F0EpK/hBiRaFy4HKucGE4tZPZgcDKkTfNCWy6F0iZTS7rD9yRKLZMjl+iDEU8wNCRAywYFt4sGhBLsecRjvSnJBcZURL2xxXrjDCKIPMFlu0bOthtUznqq22IUo6Xe+YLsYAmB99ts7vQ2uAQK/Cxd1g1o0nKKZlQqgU4nzd43aYDf2uGKpDTNf05VrH3ZBZgmO62OUVOOkxy+wmwcXnZ8Dc4984RPhjIo++bW/0C6hxXQAofVS792Z0uvNU1pzh49NMDngJh4oVtjNpemmkq/cj95uI3ULQdZPJPJA0VSwbOfj2HFV9qUY5fLHyzjA9J7In5G84DCWuBXfMBCHoLDajLdDz+hWWvU3NN/cOvGx+EoLwh1/J0tpwrgxOpw1ZYw9EJJ39ZEaR1YzrRgr
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(70586007)(4326008)(478600001)(6916009)(70206006)(316002)(54906003)(86362001)(36756003)(7696005)(47076005)(83380400001)(36860700001)(426003)(336012)(2616005)(16526019)(26005)(186003)(5660300002)(41300700001)(8936002)(7416002)(4744005)(2906002)(8676002)(40480700001)(6666004)(82310400005)(7636003)(82740400003)(356005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 08:52:12.9132
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 822c5512-2fd1-4afd-b6fd-08db56b401ff
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5879
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 01:00, Shreeya Patel wrote:
-> Add rockchip,rk3588-saradc compatible string.
-> 
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> ---
->  Documentation/devicetree/bindings/iio/adc/rockchip-saradc.yaml | 1 +
+On Tue 16 May 2023 at 17:39, Jakub Kicinski <kuba@kernel.org> wrote:
+> On Tue, 16 May 2023 15:58:46 -0700 Peilin Ye wrote:
+>> > Given Peilin's investigation I think fix without changing core may
+>> > indeed be hard. I'm not sure if returning -EBUSY when qdisc refcnt
+>> > is elevated will be appreciated by the users, do we already have
+>> > similar behavior in other parts of TC?  
+>> 
+>> Seems like trying to delete an "in-use" cls_u32 filter returns -EBUSY
+>
+> I meant -EBUSY due to a race (another operation being in flight).
+> I think that's different.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+I wonder if somehow leveraging existing tc_modify_qdisc() 'replay'
+functionality instead of returning error to the user would be a better
+approach? Currently the function is replayed when qdisc_create() returns
+EAGAIN. It should be trivial to do the same for qdisc_graft() result.
 
