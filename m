@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17792706C19
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B794E706C18
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjEQPFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S231704AbjEQPFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjEQPEj (ORCPT
+        with ESMTP id S231152AbjEQPEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 May 2023 11:04:39 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F482A5E6
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9887EE7
         for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:20 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30935d343f7so842653f8f.1
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30644c18072so607480f8f.2
         for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:04:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684335829; x=1686927829;
+        d=chromium.org; s=google; t=1684335831; x=1686927831;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cfh3GE7IWMNsnxpLZpSEij25ZLJGjbedQ1hG+0yiDYk=;
-        b=TBK4OSB65hONFNWvZypUGnx7S8WLlWfYWTq7/K+E9K+S8Su0GdBk6u6iGCqrsSrKG7
-         GqW6tBLQWziSzCi6z0EemnxyB+m/nKMEsmMfHGQ51NphG3FFy8IWI/ZDoiWu+0+j9qHS
-         J3G4o2dX78bFaRnun6CZnrH+uMpsoOvIf6WsM=
+        bh=oipxQEZj91stE4t+lxud7GTslgXbD/udBSL61+uH1L8=;
+        b=nYRCTEvOWhb0FzekCMnJ6+34uErlW9tdW8D7eUgNnDXRCvoUVAdioTe4bDYStyLbtZ
+         +wOkz4pBqp/FKbfovlnRGHcbww4zHsdW1pobdsCTi7FymG/8pUeZAv4ix9bN6fTKR5K0
+         yeoouszxWZdws1CxpHmjxNcnk9WQ5iIHC5Qms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335829; x=1686927829;
+        d=1e100.net; s=20221208; t=1684335831; x=1686927831;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Cfh3GE7IWMNsnxpLZpSEij25ZLJGjbedQ1hG+0yiDYk=;
-        b=ib6wl0f2FvtGY1nj9JvbDSDiTYJU0nvwqwptWY7YmsEE/fpuvNVDGdP9GFKYkR1Cap
-         oyzlZ/OTkG55tGC55NRxwJEAH9pCDLgqVm41KaWLUfwE3eKMOAgVhAxcoMY410nkxZ+T
-         oQWjnkJKxoWUEblzHz6e9gI4+9L3gSRDAlWL8Y+4cykrAaPpQo1TUajoqNkG5nI/HDYd
-         S2mVjN6acHOiqQqQydLIDPX2PirVix7RGy4KL3l1vMSufFF50tHyO9AQv7rBPU4n+c5b
-         pSJ6JfiFA7/8LB0VXZS+K2HnZb6N/ng/D7P14jMMa//GR0r//Aah62gnLQSrNiZhd0wa
-         00XQ==
-X-Gm-Message-State: AC+VfDxqKAKF4InlAL3CbQatS7K3BLzfJaevbUj/7WSECpoYvohuoefu
-        jBgmEj+GKToUSGDEjwtJnoYLP3zmHhOtyRqyd4w=
-X-Google-Smtp-Source: ACHHUZ4BRxwoghBUU+IFL+ZJtsWoSYF2p3g8nvOhl3yyyU/th6R/Oov+Ul9D08ODS1HBQAF1HRdzMA==
-X-Received: by 2002:adf:fa03:0:b0:2f9:4fe9:74bb with SMTP id m3-20020adffa03000000b002f94fe974bbmr791746wrr.40.1684335828943;
-        Wed, 17 May 2023 08:03:48 -0700 (PDT)
+        bh=oipxQEZj91stE4t+lxud7GTslgXbD/udBSL61+uH1L8=;
+        b=Gx9noDoJncCDjnI2jPkT310rwAwaX0iUYQdKvP+lHzIZnptNn+lmq3G5TGdML5znoK
+         kLkUFsGFnkCRGBB4ps6yIHXbW7573AjqVEvvv+pZqD3KVouWQ2Wp9AH8Rz1stTwurEjO
+         SmPXagSA1YxDFXf7xBVxvbrBfBEKoPE2mkWuW+Okp8VxaEgF45x94d3q4RkACBMyYpHY
+         L8ml1DzKEC45N85mjQJCQeaPP9dv0Qgj1njqh77Llv2PwDMwLCD17CzvQ/qVUvEnXBpn
+         wk7/WHTXG96SIqlAu97x2Xp4Sjpyn6xRHZSn9EXAi2ft0nv6rPVgTJyJDNT0KGznHyb4
+         3pIg==
+X-Gm-Message-State: AC+VfDwyqt5I4Ni9s6X4GBSbBfMrAtywlz20xmfBKfhChLj7XT0izKZR
+        DZzYxsPdKyzUI5eZ54mIy9VMePHe8nVHcD3tIH0=
+X-Google-Smtp-Source: ACHHUZ4TlxSSHFz+e4rSAsGydvOiw2BlLkeaeXVAkr1EEg9gHoiubCodrjA6vz2o/fUYubTcNwOvcQ==
+X-Received: by 2002:a5d:4cc9:0:b0:2fb:7099:6070 with SMTP id c9-20020a5d4cc9000000b002fb70996070mr866319wrt.47.1684335831152;
+        Wed, 17 May 2023 08:03:51 -0700 (PDT)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:e223:a0c2:d2c:c371])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b003047ea78b42sm3038211wrr.43.2023.05.17.08.03.46
+        by smtp.gmail.com with ESMTPSA id e17-20020adffd11000000b003047ea78b42sm3038211wrr.43.2023.05.17.08.03.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 08:03:48 -0700 (PDT)
+        Wed, 17 May 2023 08:03:50 -0700 (PDT)
 From:   Florent Revest <revest@chromium.org>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
@@ -55,9 +55,9 @@ Cc:     akpm@linux-foundation.org, catalin.marinas@arm.com,
         izbyshev@ispras.ru, broonie@kernel.org, szabolcs.nagy@arm.com,
         kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com,
         Florent Revest <revest@chromium.org>
-Subject: [PATCH v2 2/5] kselftest: vm: Fix mdwe's mmap_FIXED test case
-Date:   Wed, 17 May 2023 17:03:18 +0200
-Message-ID: <20230517150321.2890206-3-revest@chromium.org>
+Subject: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
+Date:   Wed, 17 May 2023 17:03:19 +0200
+Message-ID: <20230517150321.2890206-4-revest@chromium.org>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 In-Reply-To: <20230517150321.2890206-1-revest@chromium.org>
 References: <20230517150321.2890206-1-revest@chromium.org>
@@ -73,47 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I checked with the original author, the mmap_FIXED test case wasn't
-properly tested and fails. Currently, it maps two consecutive (non
-overlapping) pages and expects the second mapping to be denied by MDWE
-but these two pages have nothing to do with each other so MDWE is
-actually out of the picture here.
+Alexey pointed out that defining a prctl flag as an int is a footgun
+because, under some circumstances, when used as a flag to prctl, it can
+be casted to long with garbage upper bits which would result in
+unexpected behaviors.
 
-What the test actually intended to do was to remap a virtual address
-using MAP_FIXED. However, this operation unmaps the existing mapping and
-creates a new one so the va is backed by a new page and MDWE is again
-out of the picture, all remappings should succeed.
-
-This patch keeps the test case to make it clear that this situation is
-expected to work.
+This patch changes the constant to a UL to eliminate these
+possibilities.
 
 Signed-off-by: Florent Revest <revest@chromium.org>
-Fixes: 4cf1fe34fd18 ("kselftest: vm: add tests for memory-deny-write-execute")
+Suggested-by: Alexey Izbyshev <izbyshev@ispras.ru>
 ---
- tools/testing/selftests/mm/mdwe_test.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ include/uapi/linux/prctl.h       | 2 +-
+ tools/include/uapi/linux/prctl.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
-index d0954c657feb..91aa9c3099e7 100644
---- a/tools/testing/selftests/mm/mdwe_test.c
-+++ b/tools/testing/selftests/mm/mdwe_test.c
-@@ -168,13 +168,10 @@ TEST_F(mdwe, mmap_FIXED)
- 	self->p = mmap(NULL, self->size, PROT_READ, self->flags, 0, 0);
- 	ASSERT_NE(self->p, MAP_FAILED);
+diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+index f23d9a16507f..6e9af6cbc950 100644
+--- a/include/uapi/linux/prctl.h
++++ b/include/uapi/linux/prctl.h
+@@ -283,7 +283,7 @@ struct prctl_mm_map {
  
--	p = mmap(self->p + self->size, self->size, PROT_READ | PROT_EXEC,
-+	/* MAP_FIXED unmaps the existing page before mapping which is allowed */
-+	p = mmap(self->p, self->size, PROT_READ | PROT_EXEC,
- 		 self->flags | MAP_FIXED, 0, 0);
--	if (variant->enabled) {
--		EXPECT_EQ(p, MAP_FAILED);
--	} else {
--		EXPECT_EQ(p, self->p);
--	}
-+	EXPECT_EQ(p, self->p);
- }
+ /* Memory deny write / execute */
+ #define PR_SET_MDWE			65
+-# define PR_MDWE_REFUSE_EXEC_GAIN	1
++# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
  
- TEST_F(mdwe, arm64_BTI)
+ #define PR_GET_MDWE			66
+ 
+diff --git a/tools/include/uapi/linux/prctl.h b/tools/include/uapi/linux/prctl.h
+index 759b3f53e53f..6e6563e97fef 100644
+--- a/tools/include/uapi/linux/prctl.h
++++ b/tools/include/uapi/linux/prctl.h
+@@ -283,7 +283,7 @@ struct prctl_mm_map {
+ 
+ /* Memory deny write / execute */
+ #define PR_SET_MDWE			65
+-# define PR_MDWE_REFUSE_EXEC_GAIN	1
++# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
+ 
+ #define PR_GET_MDWE			66
+ 
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
