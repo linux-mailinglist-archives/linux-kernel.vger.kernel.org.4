@@ -2,159 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5182706135
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A04E70613B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbjEQHc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
+        id S230119AbjEQHdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjEQHcC (ORCPT
+        with ESMTP id S230015AbjEQHcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:32:02 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8D3519B0;
-        Wed, 17 May 2023 00:31:59 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cx_erugmRkQGoJAA--.16200S3;
-        Wed, 17 May 2023 15:31:58 +0800 (CST)
-Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axmr3lgmRk_1plAA--.41619S4;
-        Wed, 17 May 2023 15:31:56 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Baoqi Zhang <zhangbaoqi@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v1 2/3] dt-bindings: soc: add loongson-2 pm
-Date:   Wed, 17 May 2023 15:31:48 +0800
-Message-Id: <20230517073149.31980-3-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230517073149.31980-1-zhuyinbo@loongson.cn>
-References: <20230517073149.31980-1-zhuyinbo@loongson.cn>
+        Wed, 17 May 2023 03:32:42 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D4259DC;
+        Wed, 17 May 2023 00:32:31 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id EFCF0164AA5;
+        Wed, 17 May 2023 09:32:27 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1684308748; bh=SMZB1a3FJVckA4uh20yz2Mfq+e2cLIxWHNP75ATsZTs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mCcRh259Vaj22uiaMFcYNHaDzhfPsk/D0QMaoI55cIkowp5s+9dkExQMSa8mLBTUT
+         5HaVl2QV8QtWeIRuctMEN24UM7lmHIfQLwO8UrdS/9TVYOUE95+fnNnOKn5ipXk4AP
+         evJWOCMsexuRG8FTtoAxJH7Sw//hc3hTXntur2OBH2Nelzkn8T4G8XWcAjsiAytoqy
+         r5NZYBw8QLufWsBkKN5hlx34hE9EcHXlH8z+9sa9hrXKI/4ahp+nATH2KFDs3jtOBc
+         mPZ69RpNCTo7KFBnr8LmhqIyqdXTIxSnHkaiJ3XNqz4PLNhJfG4Rz36dVOMuZs/mjk
+         5g6PC4LcI462w==
+Date:   Wed, 17 May 2023 09:32:26 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2 RESEND 4/7] swiotlb: Dynamically allocated bounce
+ buffers
+Message-ID: <20230517093226.77ab1d2a@meshulam.tesarici.cz>
+In-Reply-To: <20230517065653.GA25016@lst.de>
+References: <cover.1683623618.git.petr.tesarik.ext@huawei.com>
+        <346abecdb13b565820c414ecf3267275577dbbf3.1683623618.git.petr.tesarik.ext@huawei.com>
+        <BYAPR21MB168874BC467BFCEC133A9DCDD7789@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <20230516061309.GA7219@lst.de>
+        <20230516083942.0303b5fb@meshulam.tesarici.cz>
+        <ZGPEgsplBSsI9li3@arm.com>
+        <20230517083510.0cd7fa1a@meshulam.tesarici.cz>
+        <20230517065653.GA25016@lst.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axmr3lgmRk_1plAA--.41619S4
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7ArW7tFy3KryxJrykJFyrZwb_yoW8KFy3p3
-        ZxCas3KF40qF17Zws5KFy8C3W5ZF95C3ZrXFsrJw17Kr9rJ3WYvw43K3WDZF43Cry8JFW7
-        uF92krWjgFyUJw7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU2iFxUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 SoC Power Management Controller binding with DT
-schema format using json-schema.
+Hi Christoph,
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- .../soc/loongson/loongson,ls2k-pmc.yaml       | 47 +++++++++++++++++++
- MAINTAINERS                                   |  6 +++
- 2 files changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+On Wed, 17 May 2023 08:56:53 +0200
+Christoph Hellwig <hch@lst.de> wrote:
 
-diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-new file mode 100644
-index 000000000000..a52bfa5e3eb6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 Power Manager controller
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - loongson,ls2k-pmc
-+      - const: syscon
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  suspend-address:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      This option indicate this PM suspend address.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    pmc: pm@1fe27000 {
-+        compatible = "loongson,ls2k-pmc", "syscon";
-+        reg = <0x1fe27000 0x58>;
-+        interrupt-parent = <&liointc1>;
-+        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-+        suspend-address = <0x1c000500>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a91f14cad2e..bcd05f1fa5c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12190,6 +12190,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
- F:	drivers/soc/loongson/loongson2_guts.c
- 
-+LOONGSON-2 SOC SERIES PM DRIVER
-+M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-+L:	linux-pm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
-+
- LOONGSON-2 SOC SERIES PINCTRL DRIVER
- M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
--- 
-2.20.1
+> Just thinking out loud:
+> 
+>  - what if we always way overallocate the swiotlb buffer
+>  - and then mark the second half / two thirds / <pull some number out
+>    of the thin air> slots as used, and make that region available
+>    through a special CMA mechanism as ZONE_MOVABLE (but not allowing
+>    other CMA allocations to dip into it).
 
+This approach has also been considered internally at Huawei, and it
+looked like a viable option, just more complex. We decided to send the
+simple approach first to get some feedback and find out who else might
+be interested in the dynamic sizing of swiotlb (if anyone).
+
+> This allows us to have a single slot management for the entire
+> area, but allow reclaiming from it.  We'd probably also need to make
+> this CMA variant irq safe.
+
+Let me recap my internal analysis.
+
+On the pro side:
+
+- no performance penalty for devices that do not use swiotlb
+- all alignment and boundary constraints can be met
+- efficient use of memory for buffers smaller than 1 page
+
+On the con side:
+
+- ZONE_MOVABLE cannot be used for most kernel allocations
+- competition with CMA over precious physical address space
+  (How much should be reserved for CMA and how much for SWIOTLB?)
+
+To quote from Memory hotplug documentation:
+
+Usually, MOVABLE:KERNEL ratios of up to 3:1 or even 4:1 are fine. [...]
+Actual safe zone ratios depend on the workload. Extreme cases, like
+excessive long-term pinning of pages, might not be able to deal with
+ZONE_MOVABLE at all.
+
+This should be no big issue on bare metal (where the motivation is
+addressing limitations), but the size of SWIOTLB in CoCo VMs probably
+needs some consideration.
+
+> This could still be combined with more aggressive use of per-device
+> swiotlb area, which is probably a good idea based on some hints.
+> E.g. device could hint an amount of inflight DMA to the DMA layer,
+> and if there are addressing limitations and the amout is large enough
+> that could cause the allocation of a per-device swiotlb area.
+
+I would not rely on device hints, because it probably depends on
+workload rather than type of device. I'd rather implement some logic
+based on the actual runtime usage pattern. I have some ideas already.
+
+Petr T
