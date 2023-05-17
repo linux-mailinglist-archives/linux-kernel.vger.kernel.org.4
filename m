@@ -2,182 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA813706F8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49CB706F8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjEQRfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S229693AbjEQRgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjEQRfm (ORCPT
+        with ESMTP id S229566AbjEQRgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:35:42 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA5126A3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:35:40 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3383a678225so10260775ab.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:35:40 -0700 (PDT)
+        Wed, 17 May 2023 13:36:20 -0400
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDF930D4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:36:18 -0700 (PDT)
+Received: by mail-wr1-x449.google.com with SMTP id ffacd0b85a97d-30641258c9eso435868f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684344976; x=1686936976;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5uJJv3crY452Cbw+h/uO2M9ipntFn8IiofxC6JQaalg=;
+        b=oTfhi1BZqEqlbSyRZKsaZbxyoT1XGLw0ndFlgxV1Ih5MfIvb9saj+Q8te1b2ZHQWug
+         5AuE7O1jzuWUbCBIcNQX5f4N+yYwOI/x6Ylr69+w7Zq9mDiDpeXrPthRBLmUI2pAcC9f
+         PqsrGGBT1WCMauB0c8AGEG5xE/woeUlAdhNBrjkH3E6YGS5JhbiTIc7HTS5rpzimnnEC
+         Lqv0tw6nPERm6RqH9V+PpS7OgADjWBbMiyoP2lk+K551bdcDZD1nobGj686zIDv1jjpJ
+         co/Kpd6jk9In8B5tXNLaUmMIovihIySZ4ecE0lvpjPDJ3o2EY4ygh2CZDFDIYiw5s2z/
+         GriQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684344939; x=1686936939;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        d=1e100.net; s=20221208; t=1684344976; x=1686936976;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aGQwNnU6wbVIzp4iz14/V7eAlLSmWR46eSYidn8u46M=;
-        b=MqDNnM/MmNQoM1hSfVNWXX12sV5QCWAQ+ukWQdXC/7375tH+pV+AUh3pPQP4a6o3ca
-         Z2ElNWh/kQYWA2+n/VkZX7OqW9FTLe6/yIKxQNjqDGgCDmFVdIsR8fR1hUsmxMLis+6J
-         0PE1LVXMb1OacMauI/lUaeFx3POnHK9Su2zeebmOtV7chTtSk1DecsaHp9VacMgLVJ8w
-         6vrTJnRFipLRHI8FAxUCqVyqX88DjPYgd923NL6lRVfnXyHmZ7YJPATtWC4GGBS+LCfh
-         kkY2o8CaE0pkSLcfm0QnmWyucd9nE9lrALTbwmjN/GLG8YLfAtYtLDbPeUZSzYu6dDQy
-         imjw==
-X-Gm-Message-State: AC+VfDzPbTqCpy9e06tgF413uuSTqcPtnNjtCmZrEgIdxlWVAo0oXoCi
-        hFhxa7TNwd+8jRWDnJDGCNNjXrghW3RlyN/wl4N/5vC62TYu
-X-Google-Smtp-Source: ACHHUZ58ceKj+7ueId84yjPKsorg5yhzD02C/g+j09rM3UikJgHxnAJ+xNcfdIlsYtvlxz5rguc9H+GNuyPSaAVcRqmIEybzk9Pl
-MIME-Version: 1.0
-X-Received: by 2002:a92:d950:0:b0:331:8e32:a36b with SMTP id
- l16-20020a92d950000000b003318e32a36bmr1763043ilq.4.1684344939754; Wed, 17 May
- 2023 10:35:39 -0700 (PDT)
-Date:   Wed, 17 May 2023 10:35:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d03b0805fbe71d55@google.com>
-Subject: [syzbot] [erofs?] general protection fault in erofs_bread (2)
-From:   syzbot <syzbot+bbb353775d51424087f2@syzkaller.appspotmail.com>
-To:     chao@kernel.org, huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        linux-erofs@lists.ozlabs.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        xiang@kernel.org
+        bh=5uJJv3crY452Cbw+h/uO2M9ipntFn8IiofxC6JQaalg=;
+        b=RC3+avGEqwGt35Eb4MRDMh4sRN00TeAlZnRs0RvE6orqVtW9G2HcLgK4xmZfRNcHxJ
+         ojJEX8bVTUj7RWYu8jOcBOd8qERhJbjYeDF8mzN94mHlvBDSWq+GW3K+sTOW6oGGnJaU
+         TWreXELRHwc9eo3I97OT05llrepNsq6bRhsUN39cBW2quI9yVFjCfedmTQNVVezOksiZ
+         KSpIP1whJO7Th0tkgMrOJwY37mg/d0jvkyLSBffZM7YOoQs2LVtUcvwUZkC92F99mFdP
+         TV9VDx1JPbYJQ/97ZBKTXJIx5YAMmPmlsy3VDcj/PaXyE2iBo6lmhDsQpgXS7k/zZAiN
+         pzoQ==
+X-Gm-Message-State: AC+VfDxpgPeh6trKr7nxcvNBJIBh0/wUPZnz59UlytrW3Sgu87vp/rnz
+        Ox7VSiOTZ4jjhxD/aT3gcyWmKDezbfnI4g==
+X-Google-Smtp-Source: ACHHUZ6C/5xTtdIqstRhu/xWULwybxRbU5ExPUfg4iVpV0C5ry5eK1AJFKWXZsdClO5EAEDhW6Hu4Njz/NJ5hQ==
+X-Received: from mostafa.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:333c])
+ (user=smostafa job=sendgmr) by 2002:a5d:5272:0:b0:2fe:9a9f:195b with SMTP id
+ l18-20020a5d5272000000b002fe9a9f195bmr247714wrc.5.1684344976634; Wed, 17 May
+ 2023 10:36:16 -0700 (PDT)
+Date:   Wed, 17 May 2023 17:35:52 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230517173552.163711-1-smostafa@google.com>
+Subject: [PATCH v2] KVM: arm64: Use BTI for nvhe
+From:   Mostafa Saleh <smostafa@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com, Mostafa Saleh <smostafa@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+However, the nvhe code doesn't make use of it as it doesn't map any
+pages with Guarded Page(GP) bit.
 
-syzbot found the following issue on:
+This patch maps nvhe(and pKVM recreated mapping of) .text section
+with GP bit which matches the kernel handling for BTI.
 
-HEAD commit:    f1fcbaa18b28 Linux 6.4-rc2
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=114aa029280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6beb6ffe4f59ef2a
-dashboard link: https://syzkaller.appspot.com/bug?extid=bbb353775d51424087f2
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13dd834e280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=167ef106280000
+A new flag is added to enum kvm_pgtable_prot: KVM_PGTABLE_PROT_GP_S1,
+which represents BTI guarded page in hypervisor stage-1 page table.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4adf207e9d5e/disk-f1fcbaa1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9e7cce92f611/vmlinux-f1fcbaa1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/cfd911b80f89/bzImage-f1fcbaa1.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/a2583fbaaf14/mount_2.gz
+At hyp init, SCTLR_EL2.BT is set to 1 to match EL1 configuration
+(SCTLR_EL1.BT1) set in bti_enable().
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bbb353775d51424087f2@syzkaller.appspotmail.com
+hyp_init_valid_leaf_pte is added to avoid unnecessary considering GP
+bit for stage-2.
 
-erofs: (device loop0): EXPERIMENTAL global deduplication feature in use. Use at your own risk!
-general protection fault, probably for non-canonical address 0xdffffc0000000019: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000c8-0x00000000000000cf]
-CPU: 0 PID: 4995 Comm: syz-executor235 Not tainted 6.4.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-RIP: 0010:erofs_bread+0x56/0x6d0 fs/erofs/data.c:38
-Code: 48 c1 ea 03 80 3c 02 00 0f 85 15 06 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 23 49 8d bc 24 ca 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 82 05 00 00
-RSP: 0018:ffffc900034b7980 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffffc900034b7af8 RCX: 0000000000000000
-RDX: 0000000000000019 RSI: ffffffff83c1ea5f RDI: 00000000000000ca
-RBP: 0000000000000000 R08: 0000000000000001 R09: 000000000000003f
-R10: 000000000000000c R11: ffffffff81d50f12 R12: 0000000000000000
-R13: 0000000000000001 R14: ffff888019bd4000 R15: ffff888019bd4000
-FS:  0000555555bf6300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc664ae0ca0 CR3: 0000000020cc6000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- erofs_read_metadata+0xbb/0x490 fs/erofs/super.c:137
- erofs_xattr_prefixes_init+0x3b1/0x590 fs/erofs/xattr.c:684
- erofs_fc_fill_super+0x1734/0x2a80 fs/erofs/super.c:825
- get_tree_bdev+0x44a/0x770 fs/super.c:1303
- vfs_get_tree+0x8d/0x350 fs/super.c:1510
- do_new_mount fs/namespace.c:3039 [inline]
- path_mount+0x134b/0x1e40 fs/namespace.c:3369
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x283/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc664b09e5a
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd1310be98 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fc664b09e5a
-RDX: 0000000020000180 RSI: 0000000020000140 RDI: 00007ffd1310bea0
-RBP: 00007ffd1310bea0 R08: 00007ffd1310bee0 R09: 00000000000001d4
-R10: 0000000001000801 R11: 0000000000000286 R12: 0000000000000005
-R13: 0000555555bf62c0 R14: 00007ffd1310bee0 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:erofs_bread+0x56/0x6d0 fs/erofs/data.c:38
-Code: 48 c1 ea 03 80 3c 02 00 0f 85 15 06 00 00 48 b8 00 00 00 00 00 fc ff df 4c 8b 23 49 8d bc 24 ca 00 00 00 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 82 05 00 00
-RSP: 0018:ffffc900034b7980 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffffc900034b7af8 RCX: 0000000000000000
-RDX: 0000000000000019 RSI: ffffffff83c1ea5f RDI: 00000000000000ca
-RBP: 0000000000000000 R08: 0000000000000001 R09: 000000000000003f
-R10: 000000000000000c R11: ffffffff81d50f12 R12: 0000000000000000
-R13: 0000000000000001 R14: ffff888019bd4000 R15: ffff888019bd4000
-FS:  0000555555bf6300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb0e8fdab10 CR3: 0000000020cc6000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	48 c1 ea 03          	shr    $0x3,%rdx
-   4:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
-   8:	0f 85 15 06 00 00    	jne    0x623
-   e:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  15:	fc ff df
-  18:	4c 8b 23             	mov    (%rbx),%r12
-  1b:	49 8d bc 24 ca 00 00 	lea    0xca(%r12),%rdi
-  22:	00
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	48 89 fa             	mov    %rdi,%rdx
-  31:	83 e2 07             	and    $0x7,%edx
-  34:	38 d0                	cmp    %dl,%al
-  36:	7f 08                	jg     0x40
-  38:	84 c0                	test   %al,%al
-  3a:	0f 85 82 05 00 00    	jne    0x5c2
-
-
+Signed-off-by: Mostafa Saleh <smostafa@google.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v1 -> v2:
+- Enable BTI for nvhe also.
+- Only set GP bit for executable pages from pgtable code.
+- Set SCTLR_EL2.BT when BTI is used.
+- use system_supports_bti() for consistency.
+- Add hyp_init_valid_leaf_pte.
+v1: https://lore.kernel.org/all/20230516141846.792193-1-smostafa@google.com/
+---
+ arch/arm64/include/asm/kvm_pgtable.h |  3 +++
+ arch/arm64/include/asm/sysreg.h      |  1 +
+ arch/arm64/kvm/arm.c                 |  7 ++++++-
+ arch/arm64/kvm/hyp/nvhe/hyp-init.S   |  7 +++++++
+ arch/arm64/kvm/hyp/nvhe/setup.c      |  8 ++++++--
+ arch/arm64/kvm/hyp/pgtable.c         | 11 ++++++++++-
+ 6 files changed, 33 insertions(+), 4 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index 4cd6762bda80..5bcd06d664d3 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -151,6 +151,7 @@ enum kvm_pgtable_stage2_flags {
+  * @KVM_PGTABLE_PROT_W:		Write permission.
+  * @KVM_PGTABLE_PROT_R:		Read permission.
+  * @KVM_PGTABLE_PROT_DEVICE:	Device attributes.
++ * @KVM_PGTABLE_PROT_GP_S1:	GP(guarded page) used for BTI in stage-1 only
+  * @KVM_PGTABLE_PROT_SW0:	Software bit 0.
+  * @KVM_PGTABLE_PROT_SW1:	Software bit 1.
+  * @KVM_PGTABLE_PROT_SW2:	Software bit 2.
+@@ -163,6 +164,8 @@ enum kvm_pgtable_prot {
+ 
+ 	KVM_PGTABLE_PROT_DEVICE			= BIT(3),
+ 
++	KVM_PGTABLE_PROT_GP_S1			= BIT(50),
++
+ 	KVM_PGTABLE_PROT_SW0			= BIT(55),
+ 	KVM_PGTABLE_PROT_SW1			= BIT(56),
+ 	KVM_PGTABLE_PROT_SW2			= BIT(57),
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index e72d9aaab6b1..204124ce86c4 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -558,6 +558,7 @@
+ 			 (BIT(18)) | (BIT(22)) | (BIT(23)) | (BIT(28)) | \
+ 			 (BIT(29)))
+ 
++#define SCTLR_EL2_BT	(BIT(36))
+ #ifdef CONFIG_CPU_BIG_ENDIAN
+ #define ENDIAN_SET_EL2		SCTLR_ELx_EE
+ #else
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 14391826241c..60c770030b33 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -2073,6 +2073,7 @@ static int __init init_hyp_mode(void)
+ 	u32 hyp_va_bits;
+ 	int cpu;
+ 	int err = -ENOMEM;
++	enum kvm_pgtable_prot text_prot = PAGE_HYP_EXEC;
+ 
+ 	/*
+ 	 * The protected Hyp-mode cannot be initialized if the memory pool
+@@ -2124,8 +2125,12 @@ static int __init init_hyp_mode(void)
+ 	/*
+ 	 * Map the Hyp-code called directly from the host
+ 	 */
++	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && system_supports_bti())
++		text_prot |= KVM_PGTABLE_PROT_GP_S1;
++
+ 	err = create_hyp_mappings(kvm_ksym_ref(__hyp_text_start),
+-				  kvm_ksym_ref(__hyp_text_end), PAGE_HYP_EXEC);
++				  kvm_ksym_ref(__hyp_text_end), text_prot);
++
+ 	if (err) {
+ 		kvm_err("Cannot map world-switch code\n");
+ 		goto out_err;
+diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-init.S b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
+index a6d67c2bb5ae..e89b694bd8eb 100644
+--- a/arch/arm64/kvm/hyp/nvhe/hyp-init.S
++++ b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
+@@ -128,6 +128,13 @@ alternative_if ARM64_HAS_ADDRESS_AUTH
+ 		     SCTLR_ELx_ENDA | SCTLR_ELx_ENDB)
+ 	orr	x0, x0, x1
+ alternative_else_nop_endif
++
++#ifdef CONFIG_ARM64_BTI_KERNEL
++alternative_if ARM64_BTI
++	orr	x0, x0, #SCTLR_EL2_BT
++alternative_else_nop_endif
++#endif /* CONFIG_ARM64_BTI_KERNEL */
++
+ 	msr	sctlr_el2, x0
+ 	isb
+ 
+diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+index 110f04627785..c41065a5a4bd 100644
+--- a/arch/arm64/kvm/hyp/nvhe/setup.c
++++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+@@ -66,7 +66,7 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+ {
+ 	void *start, *end, *virt = hyp_phys_to_virt(phys);
+ 	unsigned long pgt_size = hyp_s1_pgtable_pages() << PAGE_SHIFT;
+-	enum kvm_pgtable_prot prot;
++	enum kvm_pgtable_prot prot = PAGE_HYP_EXEC;
+ 	int ret, i;
+ 
+ 	/* Recreate the hyp page-table using the early page allocator */
+@@ -88,7 +88,11 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, PAGE_HYP_EXEC);
++	/* Hypervisor text is mapped as guarded pages(GP). */
++	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && system_supports_bti())
++		prot |= KVM_PGTABLE_PROT_GP_S1;
++
++	ret = pkvm_create_mappings(__hyp_text_start, __hyp_text_end, prot);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 3d61bd3e591d..9f68e4ce6d14 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -152,6 +152,13 @@ static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
+ 	return pte;
+ }
+ 
++static kvm_pte_t hyp_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
++{
++	kvm_pte_t pte = kvm_init_valid_leaf_pte(pa, attr, level);
++
++	return pte | (attr & KVM_PGTABLE_PROT_GP_S1);
++}
++
+ static kvm_pte_t kvm_init_invalid_leaf_owner(u8 owner_id)
+ {
+ 	return FIELD_PREP(KVM_INVALID_PTE_OWNER_MASK, owner_id);
+@@ -371,6 +378,8 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot, kvm_pte_t *ptep)
+ 
+ 		if (device)
+ 			return -EINVAL;
++
++		attr |= prot & KVM_PGTABLE_PROT_GP_S1;
+ 	} else {
+ 		attr |= KVM_PTE_LEAF_ATTR_HI_S1_XN;
+ 	}
+@@ -414,7 +423,7 @@ static bool hyp_map_walker_try_leaf(const struct kvm_pgtable_visit_ctx *ctx,
+ 		return false;
+ 
+ 	data->phys += granule;
+-	new = kvm_init_valid_leaf_pte(phys, data->attr, ctx->level);
++	new = hyp_init_valid_leaf_pte(phys, data->attr, ctx->level);
+ 	if (ctx->old == new)
+ 		return true;
+ 	if (!kvm_pte_valid(ctx->old))
+-- 
+2.40.1.698.g37aff9b760-goog
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
