@@ -2,157 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064A1706C54
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5551706C5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjEQPMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S231801AbjEQPOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjEQPMn (ORCPT
+        with ESMTP id S229822AbjEQPOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:12:43 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3453B1996;
-        Wed, 17 May 2023 08:12:41 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HEnFSu004022;
-        Wed, 17 May 2023 15:12:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Eh6DM2BXuzdEiz/5380GZOi/7cYP/Y43A1Uy0AUkQRU=;
- b=BaPb7vlsCcXw2eRy2akSBCY6au8GLkYB0VwPboCBvwNineXYnXL9vQZ4aurnEjJ6X3Wf
- Ag60Teum3xMOjRxMGnSwRrKNu1ifwUfbd3/qzVtreIhdUZU3nUrSleZPbqXNQa66nBVh
- eJmL+N7vTpJBybTVCwdK/kftHtD6O34qrmp6Rc6g5DtuHV61fpMFQjOvYY4s11mb7PhJ
- D/Se+zPk7OXfGz5LdNhENqjuk91yMGjR7+hdGs4YwZeP7GzushmQUmTOuC73jkQzkHWi
- dl/XHmw2XIr9jOrli1GH/5+vOy1ZhIADhszjFKNJ+TzlvQPZRnTMJ/8ZwIVsWHmL+3D1 Ig== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmwnr8m00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 15:12:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34HFCBsO010993
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 15:12:12 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 17 May
- 2023 08:12:10 -0700
-Message-ID: <d0807fe4-dba2-8244-f655-d04e80973572@quicinc.com>
-Date:   Wed, 17 May 2023 09:12:09 -0600
+        Wed, 17 May 2023 11:14:17 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A739E75;
+        Wed, 17 May 2023 08:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1684336456;
+  x=1715872456;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N/eMCsIiyll+x4kcz0Wo3RiOWp9di7LTaMCImN+QjZU=;
+  b=OeFLvCEvMBM93q9O8RFRrX9t04wVgUytkSnp+usFwu9+b0TAoq8w3gwh
+   RrVDj0FjvqbczQMwGMdBRwczwxWviL2Qpq07t+GGLp8cAB206chWWKNC8
+   wkNCd5kuXxt2SxUJK0thefKBksVsaYlmri8cxnv3dRhEmBPcRShVGRvJ5
+   IJ2NjKIiE1MZ5i/a4hJtHxyNxBnvb2iM8JGzp16qfoXR5Ifsw8mGoXd7n
+   a43bW7HlwdL6HXqJClXMclTxfFby+MwxfOVJZmhk0hTPPuIJvcfCaoeJF
+   2Ux5PGRGQHOdqneHuEfC/ojklxRp7uXC8M/Y3bGIb5GnGwDBWbfHHokKe
+   w==;
+From:   Astrid Rost <astrid.rost@axis.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+CC:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@axis.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mathieu Othacehe <m.othacehe@gmail.com>,
+        Astrid Rost <astrid.rost@axis.com>
+Subject: [PATCH v3 0/7] iio: light: vcnl4000: Add features for vncl4040/4200
+Date:   Wed, 17 May 2023 17:13:59 +0200
+Message-ID: <20230517151406.368219-1-astrid.rost@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 0/7] Add a DRM driver to support AI Processing Unit (APU)
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, <airlied@gmail.com>,
-        <daniel@ffwll.ch>, <maarten.lankhorst@linux.intel.com>,
-        <mripard@kernel.org>, <tzimmermann@suse.de>
-CC:     <devicetree@vger.kernel.org>, <conor+dt@kernel.org>,
-        <bero@baylibre.com>, <khilman@baylibre.com>,
-        <jstephan@baylibre.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <christian.koenig@amd.com>,
-        <linaro-mm-sig@lists.linaro.org>, <robh+dt@kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <nbelin@baylibre.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <linux-media@vger.kernel.org>, <sumit.semwal@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <angelogioacchino.delregno@collabora.com>
-References: <20230517145237.295461-1-abailon@baylibre.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230517145237.295461-1-abailon@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xdufAva3TRcFfqBsoaM5Jab-1ErNBgGj
-X-Proofpoint-ORIG-GUID: xdufAva3TRcFfqBsoaM5Jab-1ErNBgGj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- clxscore=1011 malwarescore=0 priorityscore=1501 spamscore=0 phishscore=0
- adultscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305170122
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/2023 8:52 AM, Alexandre Bailon wrote:
-> This adds a DRM driver that implements communication between the CPU and an
-> APU. The driver target embedded device that usually run inference using some
-> prebuilt models. The goal is to provide common infrastructure that could be
-> re-used to support many accelerators. Both kernel, userspace and firmware tries
-> to use standard and existing to leverage the development and maintenance effort.
-> The series implements two platform drivers, one for simulation and another one for
-> the mt8183 (compatible with mt8365).
+Add a more complete support for vncl4040 and vcnl4200, which allows to
+change the distance of proximity detection and interrupt support for the
+illuminance sensor.
 
-This looks like the 3 existing Accel drivers.  Why is this in DRM?
+Proximity functionality:
+  - Interrupt support (new on vcnl4200).
 
-> For the people interested by the firmware or userspace library,
-> the sources are available here:
-> https://gitlab.baylibre.com/baylibre/libapu/libapu
+Proximity reduce the amount of interrupts:
+  - Adaptable integration time (new on vcnl4200) - the sampling rate
+    changes according to this value.
+  - Period - interrupt is asserted if the value is above or
+    below a certain threshold.
 
-I don't see a compiler.  What am I missing?
+Proximity change the activity distance:
+  - Oversampling ratio - Amount of LED pulses per measured raw value.
+  - Calibration bias - LED current calibration of the sensor.
 
-> The support of APU has to be upstreamed to libdrm.
-> Until this is done, you could find the source here:
-> https://gitlab.baylibre.com/baylibre/libapu/libdrm/-/tree/abailon/main
-> 
-> The driver for mt8183 depends on this series (which is currently blocked):
-> https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=620429
-> 
-> Alexandre Bailon (5):
->    drm: Add support of AI Processor Unit (APU)
->    drm/apu: Add memory allocator
->    drm/apu: Add support of requests
->    drm/apu: Add support of IOMMU
->    dt-bindings: Add bidings for mtk,apu-drm
-> 
-> Julien Stephan (2):
->    drm/apu: allow platform driver to implement their own mmap function
->    drm/apu: Add support for a simulated APU
-> 
->   .../devicetree/bindings/gpu/mtk,apu-drm.yaml  |  38 ++
->   drivers/gpu/drm/Kconfig                       |   2 +
->   drivers/gpu/drm/Makefile                      |   1 +
->   drivers/gpu/drm/apu/Kconfig                   |  22 +
->   drivers/gpu/drm/apu/Makefile                  |  10 +
->   drivers/gpu/drm/apu/apu_drv.c                 | 282 +++++++++
->   drivers/gpu/drm/apu/apu_gem.c                 | 230 +++++++
->   drivers/gpu/drm/apu/apu_internal.h            | 205 ++++++
->   drivers/gpu/drm/apu/apu_sched.c               | 592 ++++++++++++++++++
->   drivers/gpu/drm/apu/simu_apu.c                | 313 +++++++++
->   include/uapi/drm/apu_drm.h                    |  81 +++
+Illuminance functionality:
+  - Interrupt support.
 
-"apu" seems too generic.  We already have 3 "AI processing units" over 
-in drivers/accel already...
+Illuminance reduce the amount of interrupts:
+  - Adaptable integration time - the sampling rate and scale changes
+    according to this value.
+  - Period – interrupt is asserted if the value is above or
+    below a certain threshold.
 
->   11 files changed, 1776 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
->   create mode 100644 drivers/gpu/drm/apu/Kconfig
->   create mode 100644 drivers/gpu/drm/apu/Makefile
->   create mode 100644 drivers/gpu/drm/apu/apu_drv.c
->   create mode 100644 drivers/gpu/drm/apu/apu_gem.c
->   create mode 100644 drivers/gpu/drm/apu/apu_internal.h
->   create mode 100644 drivers/gpu/drm/apu/apu_sched.c
->   create mode 100644 drivers/gpu/drm/apu/simu_apu.c
->   create mode 100644 include/uapi/drm/apu_drm.h
-> 
+changes v2:
+- [PATCH v2 3/7] Fixed calculation of al_scale.
+  Fix the value of vcnl4040 according to the data-sheet.
+  Use div_u64 for the division.
+scription for the branch
 
-I feel like device/driver based documentation in Documentation/ would 
-really help in reviews.
+changes v3:
+- [PATCH v3 1-3/7] Add differences between the chips as variables in
+    chip-spec.
+- [PATCH v3 4/7] Changed commit message.
+- [PATCH v3 5/7] Use period instead of debounce time. This causes some
+  calculations as the period is a time and the chip allows to set a certain
+  amount of measurements above/below the threshold, before throwing an
+  interrupt.
+- [PATCH v3 6/7] Changed commit message.
 
--Jeff
+
+Astrid Rost (7):
+  [PATCH v3 1/7] iio: light: vcnl4000: Add proximity irq for vcnl4200
+  [PATCH v3 2/7] iio: light: vcnl4000: Add proximity ps_it for vcnl4200
+  [PATCH v3 3/7] iio: light: vcnl4000: Add als_it for vcnl4040/4200
+  [PATCH v3 4/7] iio: light: vcnl4000: add illuminance irq vcnl4040/4200
+  [PATCH v3 5/7] iio: light: vcnl4000: Add period for vcnl4040/4200
+  [PATCH v3 6/7] iio: light: vcnl4000: Add oversampling_ratio for 4040/4200
+  [PATCH v3 7/7] iio: light: vcnl4000: Add calibration bias for 4040/4200
+
+ drivers/iio/light/vcnl4000.c | 721 +++++++++++++++++++++++++++++++----
+ 1 file changed, 653 insertions(+), 68 deletions(-)
+
+--
+2.30.2
 
