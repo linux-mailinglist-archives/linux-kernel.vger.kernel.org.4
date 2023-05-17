@@ -2,194 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888AC706E32
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1C8706E37
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjEQQcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
+        id S229751AbjEQQdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjEQQcN (ORCPT
+        with ESMTP id S229721AbjEQQdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:32:13 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5DB7AB2;
-        Wed, 17 May 2023 09:32:10 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H5D8YH023779;
-        Wed, 17 May 2023 11:31:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=FHKtiJcMAexLeq/mGQuPV2ftG2sf3W8GTjsMKBwGQu0=;
- b=YnkldFt4jx2NYZyWMioWm30Q1TcbM2Ofpw2XI4VOb0ysqi3ArXhET9t3Oskg6apHdLxA
- 9KZbTkk2BzJ/OdP/6K1kR3Kh7yRzSqlYQT8OcREFKNzHX1gZZaNfXPiDMoonhwSzy7xr
- SpnU+On7F+0m87Tdkaz/F2/5Tf/L/XvdlR7q8VIawxeol2NWM3pcj8W0EmmKZzrPgWaH
- /uOWMpNwx+gdTGNZ+Qh8x0vDqV373nBqHPEEZna/KCg5cnyV/icQFsAD76DEwcrAQ0Lv
- UYaH22953AULVa3nNg1JjcjTCI6nHtzecj8vhhjo1oB0CzAisMYDGf/u8LP+IGuMTl13 vA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qj6ymx7cv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 11:31:59 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 17 May
- 2023 11:31:57 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Wed, 17 May 2023 11:31:57 -0500
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D6F4F11CA;
-        Wed, 17 May 2023 16:31:57 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <srinivas.goud@amd.com>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-Subject: [PATCH] spi: spi-cadence: Interleave write of TX and read of RX FIFO
-Date:   Wed, 17 May 2023 17:31:57 +0100
-Message-ID: <20230517163157.639974-1-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 17 May 2023 12:33:02 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048372108
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:33:00 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561d5b34e10so5356747b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:32:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1684341179; x=1686933179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=seiQZ9YiOuM9ev2SDnncT8dHc6tNpiemL2yol+RQQmc=;
+        b=rARhUCmEST2pQfbq/THE9kQrsVUKD5cL8fz4mXj7808tMytYuZe7snXExsaIC0DinJ
+         r9gp+0RQBbC+st99eMXxz+oXJPzKNXaMQZohevPlt6IJR1f1ziqr22locJ6EsLGMVw/1
+         s+EMTIB0qyD6ZMGffR4ZeD2WQ0swHln2rxkCM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684341179; x=1686933179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=seiQZ9YiOuM9ev2SDnncT8dHc6tNpiemL2yol+RQQmc=;
+        b=KiIH/FNhJ0YmkLV7hLXU0xqjo53poGej0PFb1AMmKIzhGTm2HEfdyHclrLoM1Nwjx5
+         cFnV5KrC7k2zIFvFDbozcCpNVNWIMvA5y5+ho2W2v6tIDgBAH9aFDsB3QaDzPuMDhnAk
+         kfdDdT5B6CFxiJLMHP3JI5Pib7lbQGwVbzyzAIppqJNhChyc0i0VFIe6oTcIPvxOS5wX
+         T1W/V3EkdMdQgy7j2y6IAAgg7BwXgqq9bwz1NJbXFZV4DuRreG1fcJ9hzQxQX9b/nged
+         GewRTT3J4cKfcHA5Nl8baB9AaXA7X8+K81uwPbMrB32coz4zmC8NP6aNGuw/DyHcb6HO
+         8oCg==
+X-Gm-Message-State: AC+VfDyveqdyoUZ+27EkM0AgzcOqPivlXMy/aLB79+SkW6sbfl1cKxJ0
+        Tm7dF3NL7uUd096fE4eaK5szyYYeR64MlA9kqA2eKw==
+X-Google-Smtp-Source: ACHHUZ5G6ubA44duLT/TEAQihOcSC/J+UBoHnxsofv8biC5kLtL6cO4NiUzdIWWkBRLS62id8kmDPVQbLVllmNv99s8=
+X-Received: by 2002:a81:1b4c:0:b0:55a:776e:95f3 with SMTP id
+ b73-20020a811b4c000000b0055a776e95f3mr1957775ywb.25.1684341179202; Wed, 17
+ May 2023 09:32:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: GJjC7YcdrcR4XyHntFEtx79i0Zb1ekuY
-X-Proofpoint-ORIG-GUID: GJjC7YcdrcR4XyHntFEtx79i0Zb1ekuY
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com>
+ <023f6cf9-0f08-f27e-d203-5ff78faf110f@linaro.org> <CAO9szn1EsbuPSRrOW8CLqhp+QUcL=9NE93FAwsg2n3htd_aJTw@mail.gmail.com>
+ <CAMty3ZCAP6CRsJWMUZZ6+hd5igX3NgyNfhdEv2FwuDtqj4iaaA@mail.gmail.com> <HB0TUR.1IPEEV2C5LMB1@gmail.com>
+In-Reply-To: <HB0TUR.1IPEEV2C5LMB1@gmail.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 17 May 2023 22:02:47 +0530
+Message-ID: <CAMty3ZCSUx-81m4SQcJZvUq3NyhzZbe8ow+LiV7iyUmVLCmNYQ@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: display: panel: add panel-mipi-dsi-bringup
+To:     Paulo <pavacic.p@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        neil.armstrong@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, sam@ravnborg.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When working in slave mode it seems the timing is exceedingly tight.
-The TX FIFO can never empty, because the master is driving the clock so
-zeros would be sent for those bytes where the FIFO is empty.
+Hi,
 
-Return to interleaving the writing of the TX FIFO and the reading
-of the RX FIFO to try to ensure the data is available when required.
+Please don't post, use inline replies.
 
-Fixes: a84c11e16dc2 ("spi: spi-cadence: Avoid read of RX FIFO before its ready")
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
+On Wed, May 17, 2023 at 6:34=E2=80=AFPM Paulo <pavacic.p@gmail.com> wrote:
+>
+> On Wed, May 17 2023 at 05:50:22 PM +0530, Jagan Teki
+> <jagan@amarulasolutions.com> wrote:
+>  > Just to add a few pieces of information for you to understand better
+>  > on the context of dsi panels. DSI panels can be part of
+> panel-simple.c
+>  > or panel-<vendor-part>.c DSI panels whose init and exit sequence is
+>  > generic are suitable to add it in panel-simple and have bindings on
+>  > panel-simple.yml.
+>
+> This panel doesn't fit that well into panel-simple.c since it has
+> initialization sequence. For that reason it would fit more into
+> panel-sortofsimple.c which didn't exist so I have created new driver
+> and called it panel-mipi-dsi-bringup.c.
+>
+>  > Some DSI panels have specific init and exit
+>  > sequences in terms of power, reset and DCS then those have separate
+>  > drivers to handle and whose driver name must be panel-<vendor-part>.c
+>  > or similar and bindings also follow a similar naming convention.
+>
+> I have made a driver exactly for that purpose. Driver that allows
+> adding new panels which have specific init sequences (and of course
+> timings and other stuff). fannal,c3004 can be seen as a working example.
+>
+> Here is code snippet from the driver:
+> ```
+> static const struct brup_panel_info brup_fannal_c3004_panel_info =3D {
+>  .display_mode =3D &brup_fannal_c3004_display_mode,
+>  .num_of_dsi_lanes =3D 2, //how many wires are connected to the panel
+>  .video_mode =3D BRUP_VIDEO_MODES[BRUP_SYNC_PULSE],
+>  .mipi_dsi_format =3D MIPI_DSI_FMT_RGB888,
+>  .mipi_dsi_mode_flags =3D
+>   MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_VSYNC_FLUSH |
+>   MIPI_DSI_MODE_VIDEO_HSE | MIPI_DSI_MODE_NO_EOT_PACKET,
+>  .bus_flags =3D DRM_BUS_FLAG_DE_LOW | DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE=
+,
+>  .panel_enable_function =3D &brup_panel_fannal_c3004_enable_function
+> };
+> ```
+> where enable function is function with init sequence and other values
+> are values that might be different for different displays.
+>
+> All the inputs are appreciated as this is my first time submitting
+> patch. If you see anything that is odd to you please reach out to me.
+> All in all I believe I now understand how should device tree look and
+> the reasons/ideology behind it.
 
-This patch puts the interleaving back it tests out fine even on
-longer transfers on my master setup. We should probably wait for a
-tested-by from Srinivas before we merge it. I can't test slave mode,
-and it sounds like the timing is exceedingly tight on his system.
+So, the driver has to be panel-fannal-c3004.c and binding to be
+fannal,c3004.yaml.
 
 Thanks,
-Charles
-
- drivers/spi/spi-cadence.c | 60 ++++++++++++++++++---------------------
- 1 file changed, 27 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index ff02d81041319..08136bbb34030 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -12,6 +12,7 @@
- #include <linux/gpio/consumer.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of_irq.h>
- #include <linux/of_address.h>
-@@ -304,44 +305,38 @@ static int cdns_spi_setup_transfer(struct spi_device *spi,
-  * cdns_spi_fill_tx_fifo - Fills the TX FIFO with as many bytes as possible
-  * @xspi:	Pointer to the cdns_spi structure
-  */
--static void cdns_spi_fill_tx_fifo(struct cdns_spi *xspi, unsigned int avail)
-+static void cdns_spi_process_fifo(struct cdns_spi *xspi, int ntx, int nrx)
- {
--	unsigned long trans_cnt = 0;
-+	ntx = clamp(ntx, 0, xspi->tx_bytes);
-+	nrx = clamp(nrx, 0, xspi->rx_bytes);
- 
--	while ((trans_cnt < avail) && (xspi->tx_bytes > 0)) {
-+	xspi->tx_bytes -= ntx;
-+	xspi->rx_bytes -= nrx;
-+
-+	while (ntx || nrx) {
- 		/* When xspi in busy condition, bytes may send failed,
- 		 * then spi control did't work thoroughly, add one byte delay
- 		 */
--		if (cdns_spi_read(xspi, CDNS_SPI_ISR) &
--		    CDNS_SPI_IXR_TXFULL)
-+		if (cdns_spi_read(xspi, CDNS_SPI_ISR) & CDNS_SPI_IXR_TXFULL)
- 			udelay(10);
- 
--		if (xspi->txbuf)
--			cdns_spi_write(xspi, CDNS_SPI_TXD, *xspi->txbuf++);
--		else
--			cdns_spi_write(xspi, CDNS_SPI_TXD, 0);
-+		if (ntx) {
-+			if (xspi->txbuf)
-+				cdns_spi_write(xspi, CDNS_SPI_TXD, *xspi->txbuf++);
-+			else
-+				cdns_spi_write(xspi, CDNS_SPI_TXD, 0);
- 
--		xspi->tx_bytes--;
--		trans_cnt++;
--	}
--}
-+			ntx--;
-+		}
- 
--/**
-- * cdns_spi_read_rx_fifo - Reads the RX FIFO with as many bytes as possible
-- * @xspi:       Pointer to the cdns_spi structure
-- * @count:	Read byte count
-- */
--static void cdns_spi_read_rx_fifo(struct cdns_spi *xspi, unsigned long count)
--{
--	u8 data;
--
--	/* Read out the data from the RX FIFO */
--	while (count > 0) {
--		data = cdns_spi_read(xspi, CDNS_SPI_RXD);
--		if (xspi->rxbuf)
--			*xspi->rxbuf++ = data;
--		xspi->rx_bytes--;
--		count--;
-+		if (nrx) {
-+			u8 data = cdns_spi_read(xspi, CDNS_SPI_RXD);
-+
-+			if (xspi->rxbuf)
-+				*xspi->rxbuf++ = data;
-+
-+			nrx--;
-+		}
- 	}
- }
- 
-@@ -391,11 +386,10 @@ static irqreturn_t cdns_spi_irq(int irq, void *dev_id)
- 		if (xspi->tx_bytes < xspi->tx_fifo_depth >> 1)
- 			cdns_spi_write(xspi, CDNS_SPI_THLD, 1);
- 
--		cdns_spi_read_rx_fifo(xspi, trans_cnt);
--
- 		if (xspi->tx_bytes) {
--			cdns_spi_fill_tx_fifo(xspi, trans_cnt);
-+			cdns_spi_process_fifo(xspi, trans_cnt, trans_cnt);
- 		} else {
-+			cdns_spi_process_fifo(xspi, 0, trans_cnt);
- 			cdns_spi_write(xspi, CDNS_SPI_IDR,
- 				       CDNS_SPI_IXR_DEFAULT);
- 			spi_finalize_current_transfer(ctlr);
-@@ -448,7 +442,7 @@ static int cdns_transfer_one(struct spi_controller *ctlr,
- 			cdns_spi_write(xspi, CDNS_SPI_THLD, xspi->tx_fifo_depth >> 1);
- 	}
- 
--	cdns_spi_fill_tx_fifo(xspi, xspi->tx_fifo_depth);
-+	cdns_spi_process_fifo(xspi, xspi->tx_fifo_depth, 0);
- 	spi_transfer_delay_exec(transfer);
- 
- 	cdns_spi_write(xspi, CDNS_SPI_IER, CDNS_SPI_IXR_DEFAULT);
--- 
-2.30.2
-
+Jagan.
