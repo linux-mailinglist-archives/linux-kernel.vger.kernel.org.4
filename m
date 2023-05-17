@@ -2,142 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F69870697E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B43706984
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjEQNQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S229943AbjEQNRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbjEQNQa (ORCPT
+        with ESMTP id S232000AbjEQNRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:16:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EECB7AAD;
-        Wed, 17 May 2023 06:16:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36BB81FB;
-        Wed, 17 May 2023 06:17:04 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1D9BF3F7BD;
-        Wed, 17 May 2023 06:16:17 -0700 (PDT)
-Date:   Wed, 17 May 2023 14:16:14 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "lihuisong (C)" <lihuisong@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
-        soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
-        liuyonglong@huawei.com, huangdaode@huawei.com,
-        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Message-ID: <20230517131614.cwi2fcj2cngaq7dm@bogus>
-References: <20230425131918.5tf5vot4h7jf54xk@bogus>
- <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
- <20230515130807.pdvx7bxwjkfdsmsr@bogus>
- <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
- <20230516122931.il4ai7fyxdo5gsff@bogus>
- <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
- <20230516143530.venhj4gax6stinah@bogus>
- <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
- <20230517093033.4jvwjxuoeic46a24@bogus>
- <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
+        Wed, 17 May 2023 09:17:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7B083F6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:16:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B0C96470A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3879C433D2;
+        Wed, 17 May 2023 13:16:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684329415;
+        bh=TVBrWrqlO7ETqfUDw0KqLCNyJy/N3Ip6iNpnUXfnZjA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VJaT1AtcxMe8kUfwrd8tBVflgaJ790sJJ9wxvG99pxmzrHRDcIM96YVxYM0cVRWfF
+         Lppi1+GAP1OrrEm0nbJJQHuLyeqcOJC3kMMZIYIT7GomSgDe0joXPeMm3hQ+dnXAQq
+         7Opl/pqGjcj+DwP+NmOGUFYdW5tBCmWRwMYS2JLfPW9WyoPXqlY/wnVqr5H3+kgCBf
+         MieFGCQ6/8eZZ8Q8c/LkdInPtAuCrBGJYujoWE1fbhjQSz9yyerYP+4tmVwQVFgoOt
+         ukfPplfQbcy/KYPUUO2z//F8DXXk+JVDkoOSyTCcXCzydnpreN1Zuy4LA6+htjTA9L
+         oQyTxWL2uJLbA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AC545403B5; Wed, 17 May 2023 10:16:51 -0300 (-03)
+Date:   Wed, 17 May 2023 10:16:51 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jim Mattson <jmattson@google.com>,
+        Babu Moger <babu.moger@amd.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: [PATCH 1/1 fyi] tools headers x86 cpufeatures: Sync with the kernel
+ sources
+Message-ID: <ZGTTw642q8mWgv2Y@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 07:35:25PM +0800, lihuisong (C) wrote:
-> 
-> 在 2023/5/17 17:30, Sudeep Holla 写道:
-> > On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
-> > 
-> > [...]
-> > 
-> > > No. I want to use this flag to make compability between different platforms.
-> > > This driver only use PCC OpRegion to access to the channel if platform
-> > > support use PCC OpRegion.
-> > What do you mean by that ? It is not correct. If there is a PCC Opregion,
-> > then you need to make it work with drivers/acpi/acpi_pcc.c
-> > 
-> > You need to have all the other details in the firmware(ASL). By looking
-> > at the driver, it has no connection to PCC Opregion IMO unless I am missing
-> > something.
-> Driver just needs to call these APIs, such as acpi_evaluate_integer(), if
-> want to use PCC OpRegion.
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-OK, please provide examples. I am definitely lost as it doesn't match with
-my understanding of how PCC Opregions are/can be used.
+- Arnaldo
 
-> I know that. I have tested PCC OpRegion before.
+Full explanation:
 
-Cool, examples please.
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
 
-> You've completely misunderstood what I said.😅
->
+The way these headers are used in perf are not restricted to just
+including them to compile something.
 
-Hmm, may be but I need examples.
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
 
-> I mean that this driver plans to support both PCC and PCC OpRegion.
-> For example,
-> Platform A: this driver use PCC (as the current implementation)
+E.g.:
 
-Good, then just keep what it needs in the implementation nothing more
-until you add support for something you have described below(not that
-I agree, just want you to make progress here based on what is actually
-required today)
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
 
-> Platform B: this driver use PCC OpRegion (Currently, this patch does not
-> implement it, but it may be available in the future.)
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
 
-Then let us discuss that in the future, don't add unnecessary complexity
-for some future use case today. You can always add it when you introduce
-that feature or support in the future.
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
 
-> Note:
-> This driver selects only one of them (PCC and PCC OpRegion) to communicate
-> with firmware on one platform.
+---
 
-Let us keep it simple(KISS). The driver works just for PCC not PCC Opregion
-for now.
+To pick the changes from:
 
-> We use one bit in device-flags to know which one this driver will use.
->
+  3d8f61bf8bcd69bc ("x86: KVM: Add common feature flag for AMD's PSFD")
+  3763bf58029f3459 ("x86/cpufeatures: Redefine synthetic virtual NMI bit as AMD's "real" vNMI")
+  6449dcb0cac73821 ("x86: CPUID and CR3/CR4 flags for Linear Address Masking")
+  be8de49bea505e77 ("x86/speculation: Identify processors vulnerable to SMT RSB predictions")
+  e7862eda309ecfcc ("x86/cpu: Support AMD Automatic IBRS")
+  faabfcb194a8d068 ("x86/cpu, kvm: Add the SMM_CTL MSR not present feature")
+  5b909d4ae59aedc7 ("x86/cpu, kvm: Add the Null Selector Clears Base feature")
+  84168ae786f8a15a ("x86/cpu, kvm: Move X86_FEATURE_LFENCE_RDTSC to its native leaf")
+  a9dc9ec5a1fafc3d ("x86/cpu, kvm: Add the NO_NESTED_DATA_BP feature")
+  f8df91e73a6827a4 ("x86/cpufeatures: Add macros for Intel's new fast rep string features")
+  78335aac6156eada ("x86/cpufeatures: Add Bandwidth Monitoring Event Configuration feature flag")
+  f334f723a63cfc25 ("x86/cpufeatures: Add Slow Memory Bandwidth Allocation feature flag")
+  a018d2e3d4b1abc4 ("x86/cpufeatures: Add Architectural PerfMon Extension bit")
 
-NACK again just to re-iterate my point if you have not yet accepted that
-fact.
+This causes these perf files to be rebuilt and brings some X86_FEATURE
+that will be used when updating the copies of
+tools/arch/x86/lib/mem{cpy,set}_64.S with the kernel sources:
 
-> I'm not sure if you can understand what I mean by saing that.
-> If you're not confused about this now, can you reply to my last email
-> again?😁
->
+  CC       /tmp/build/perf/bench/mem-memcpy-x86-64-asm.o
+  CC       /tmp/build/perf/bench/mem-memset-x86-64-asm.o
 
-The example you had IIRC is use of System Memory Opregion to demonstrate
-some _DSM. That has nothing to do with PCC Opregion.
+And addresses this perf build warning:
 
-Commit 77e2a04745ff ("ACPI: PCC: Implement OperationRegion handler for
-the PCC Type 3 subtype") has the example in the commit message. IIRC,
-you have even fixed couple of bugs in that driver. That is the reason
-why I don't understand how you think this driver and that can or must
-work together. At least I fail to see how ATM(examples please, by that
-I mean ASL snippet for PCC vs PCC Opregion usage to work with this driver)
+  Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
+  diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
 
+Cc: Borislav Petkov (AMD) <bp@alien8.de>
+Cc: Kim Phillips <kim.phillips@amd.com>
+Cc: Jim Mattson <jmattson@google.com>
+Cc: Babu Moger <babu.moger@amd.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/x86/include/asm/cpufeatures.h | 26 +++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/tools/arch/x86/include/asm/cpufeatures.h b/tools/arch/x86/include/asm/cpufeatures.h
+index b89005819cd551a9..cb8ca46213bed0a8 100644
+--- a/tools/arch/x86/include/asm/cpufeatures.h
++++ b/tools/arch/x86/include/asm/cpufeatures.h
+@@ -97,7 +97,7 @@
+ #define X86_FEATURE_SYSENTER32		( 3*32+15) /* "" sysenter in IA32 userspace */
+ #define X86_FEATURE_REP_GOOD		( 3*32+16) /* REP microcode works well */
+ #define X86_FEATURE_AMD_LBR_V2		( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
+-#define X86_FEATURE_LFENCE_RDTSC	( 3*32+18) /* "" LFENCE synchronizes RDTSC */
++/* FREE, was #define X86_FEATURE_LFENCE_RDTSC		( 3*32+18) "" LFENCE synchronizes RDTSC */
+ #define X86_FEATURE_ACC_POWER		( 3*32+19) /* AMD Accumulated Power Mechanism */
+ #define X86_FEATURE_NOPL		( 3*32+20) /* The NOPL (0F 1F) instructions */
+ #define X86_FEATURE_ALWAYS		( 3*32+21) /* "" Always-present feature */
+@@ -226,10 +226,9 @@
+ 
+ /* Virtualization flags: Linux defined, word 8 */
+ #define X86_FEATURE_TPR_SHADOW		( 8*32+ 0) /* Intel TPR Shadow */
+-#define X86_FEATURE_VNMI		( 8*32+ 1) /* Intel Virtual NMI */
+-#define X86_FEATURE_FLEXPRIORITY	( 8*32+ 2) /* Intel FlexPriority */
+-#define X86_FEATURE_EPT			( 8*32+ 3) /* Intel Extended Page Table */
+-#define X86_FEATURE_VPID		( 8*32+ 4) /* Intel Virtual Processor ID */
++#define X86_FEATURE_FLEXPRIORITY	( 8*32+ 1) /* Intel FlexPriority */
++#define X86_FEATURE_EPT			( 8*32+ 2) /* Intel Extended Page Table */
++#define X86_FEATURE_VPID		( 8*32+ 3) /* Intel Virtual Processor ID */
+ 
+ #define X86_FEATURE_VMMCALL		( 8*32+15) /* Prefer VMMCALL to VMCALL */
+ #define X86_FEATURE_XENPV		( 8*32+16) /* "" Xen paravirtual guest */
+@@ -307,14 +306,21 @@
+ #define X86_FEATURE_SGX_EDECCSSA	(11*32+18) /* "" SGX EDECCSSA user leaf function */
+ #define X86_FEATURE_CALL_DEPTH		(11*32+19) /* "" Call depth tracking for RSB stuffing */
+ #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
++#define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
++#define X86_FEATURE_BMEC		(11*32+22) /* "" Bandwidth Monitoring Event Configuration */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+ #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
+ #define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* "" CMPccXADD instructions */
++#define X86_FEATURE_ARCH_PERFMON_EXT	(12*32+ 8) /* "" Intel Architectural PerfMon Extension */
++#define X86_FEATURE_FZRM		(12*32+10) /* "" Fast zero-length REP MOVSB */
++#define X86_FEATURE_FSRS		(12*32+11) /* "" Fast short REP STOSB */
++#define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
+ #define X86_FEATURE_LKGS		(12*32+18) /* "" Load "kernel" (userspace) GS */
+ #define X86_FEATURE_AMX_FP16		(12*32+21) /* "" AMX fp16 Support */
+ #define X86_FEATURE_AVX_IFMA            (12*32+23) /* "" Support for VPMADD52[H,L]UQ */
++#define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
+ 
+ /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
+ #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
+@@ -331,6 +337,7 @@
+ #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
+ #define X86_FEATURE_AMD_SSB_NO		(13*32+26) /* "" Speculative Store Bypass is fixed in hardware. */
+ #define X86_FEATURE_CPPC		(13*32+27) /* Collaborative Processor Performance Control */
++#define X86_FEATURE_AMD_PSFD            (13*32+28) /* "" Predictive Store Forwarding Disable */
+ #define X86_FEATURE_BTC_NO		(13*32+29) /* "" Not vulnerable to Branch Type Confusion */
+ #define X86_FEATURE_BRS			(13*32+31) /* Branch Sampling available */
+ 
+@@ -363,6 +370,7 @@
+ #define X86_FEATURE_VGIF		(15*32+16) /* Virtual GIF */
+ #define X86_FEATURE_X2AVIC		(15*32+18) /* Virtual x2apic */
+ #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* Virtual SPEC_CTRL */
++#define X86_FEATURE_VNMI		(15*32+25) /* Virtual NMI */
+ #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* "" SVME addr check */
+ 
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (ECX), word 16 */
+@@ -427,6 +435,13 @@
+ #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
+ #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+ 
++/* AMD-defined Extended Feature 2 EAX, CPUID level 0x80000021 (EAX), word 20 */
++#define X86_FEATURE_NO_NESTED_DATA_BP	(20*32+ 0) /* "" No Nested Data Breakpoints */
++#define X86_FEATURE_LFENCE_RDTSC	(20*32+ 2) /* "" LFENCE always serializing / synchronizes RDTSC */
++#define X86_FEATURE_NULL_SEL_CLR_BASE	(20*32+ 6) /* "" Null Selector Clears Base */
++#define X86_FEATURE_AUTOIBRS		(20*32+ 8) /* "" Automatic IBRS */
++#define X86_FEATURE_NO_SMM_CTL_MSR	(20*32+ 9) /* "" SMM_CTL MSR is not present */
++
+ /*
+  * BUG word(s)
+  */
+@@ -467,5 +482,6 @@
+ #define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
+ #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
+ #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
++#define X86_BUG_SMT_RSB			X86_BUG(29) /* CPU is vulnerable to Cross-Thread Return Address Predictions */
+ 
+ #endif /* _ASM_X86_CPUFEATURES_H */
 -- 
-Regards,
-Sudeep
+2.39.2
+
