@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3B47062AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64B37062B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjEQIYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S229746AbjEQIZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjEQIXy (ORCPT
+        with ESMTP id S229530AbjEQIZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:23:54 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915703AB0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:23:52 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510a59ead3fso707213a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684311831; x=1686903831;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LKUIs50mnG/Knu4CLF/A96KY4SWKyjHZGjCyjw2baO4=;
-        b=xDvL5sQ+DjWEIr5GoQyOeWMPcVUdgea2iobHJW1TnN8/cjb3uYuoxBRO5ONKv0BZAT
-         8981ycPq0MWXiUIx/ecTG4EynrbkzKAzVyGJ4AfOdNF3Qm0veuDInBrds2quBika/Xmv
-         s4/4KgK0NTl+h2wEbi7ACJc1JIEISD0N3hjtuCKVgzyINzPK5TQv9aSKLyiM5delIPH3
-         vDb5vngLmWMvttRB8+2vsHUrjl/9yqscY1ROOfTpcuWk+RxvDXpsrJ7BKmzw3eD0ElCA
-         CASgBv2+/2qRJfVTw6CMUr3knbtLadmBmjcLPgKMJSoCOGL1jPCkcbwX76zooIaE6DpB
-         Beog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684311831; x=1686903831;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LKUIs50mnG/Knu4CLF/A96KY4SWKyjHZGjCyjw2baO4=;
-        b=HgVtQNotNK6pmEaYPMZxgYr28fxH22PguwgBlfrk48fRm1ovIjjss1AYn3cg39cd62
-         PX+PHK0OPKqkLWK5s0XKiR4l8nifUuCnGhgy1UY6xEXpIq901b8b0YKmZ2kBvDIZwTxI
-         6VMOK0WRHD8AIjcdYdLq7k/SoLcGetQOV3cK9BJQ+kf4dBoxJbFqNoqnsFdmLEyjUGMQ
-         fTndnrAQocz5T3+H0oQwLmkO2EU1e+CSA0d7+Y2BmgbymB4RXIQRUyHXFcv4Qrw6UsT5
-         mJhExx6SbvuMRMGH0M+S5FEM+sOEXEsvtjC7+NUye6O8+v2c1Y2njRKRwS9E1/LRCNa3
-         0Dxw==
-X-Gm-Message-State: AC+VfDy7Q7hHVyHPF/fldOTEKDak31lX/jQfQJEKMe2yGQ4RtjMb1YX9
-        n0uGGq4Ktr5L+yofZcCw+za9MQ==
-X-Google-Smtp-Source: ACHHUZ6JAU9IyvwDF7lt/LO8E3EuXYi5lw61lPs7XcWdpC28r6MFpbSeQVAKg2TYT4dhri6K8nNUhA==
-X-Received: by 2002:a17:907:a46:b0:94f:2b80:f3b4 with SMTP id be6-20020a1709070a4600b0094f2b80f3b4mr32901870ejc.69.1684311830969;
-        Wed, 17 May 2023 01:23:50 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id mm30-20020a170906cc5e00b0096595cc87cesm11997266ejb.132.2023.05.17.01.23.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 01:23:50 -0700 (PDT)
-Message-ID: <c585ef60-1482-ad53-3b7b-44163754c0fa@linaro.org>
-Date:   Wed, 17 May 2023 10:23:49 +0200
+        Wed, 17 May 2023 04:25:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99369358B;
+        Wed, 17 May 2023 01:25:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36D7861B57;
+        Wed, 17 May 2023 08:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BBCC433D2;
+        Wed, 17 May 2023 08:25:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684311912;
+        bh=Q2eq2HRQkG8z30GmpDc7eSZoIAm9vdn5MKezqNcrPxE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BEIPpLrVK0QUCJ22xeGkEZa6tG+vSNkfHcm2hRsRaYnUwraeYRiDVOsDhVhWLA3CE
+         b2TOJUcfSaKQ11HxcVwMUGzPgiwMM+J+qCZmjVPtl03GQAFzM51+9qJtENB4UeywhC
+         fCNous0bjVY8XGp4E14GznqwvnR6kfMY0fHL9WtZcHk+cj/gy+O8nX5G7KeAC9ZQwV
+         mtM+T2R4XOKRaEetrt2s1OaNfnKxSW/+565Vxkg9Fsj0wzYAxQ4w4fYmU2/8MIe41q
+         oZJpOHx0WgmWcIlsh4xP6i3JiH+L3q/17tQSQz9ZI9Zxd4+xeShpb2XiLTlRLJfHWx
+         64Io7tQibioYA==
+Date:   Wed, 17 May 2023 10:25:08 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     syzbot <syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [kernel?] linux-next test error: UBSAN:
+ array-index-out-of-bounds in alloc_pid
+Message-ID: <20230517-bushaltestelle-super-e223978c1ba6@brauner>
+References: <000000000000c6de2a05fbdecbbb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-References: <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
- <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
- <20230515105035.kzmygf2ru2jhusek@skbuf> <20230516201000.49216ca0@kernel.org>
- <124a5697-9bcf-38ec-ca0e-5fbcae069646@linaro.org>
- <20230517070437.ixgvnru4a2wjgele@skbuf>
- <20230517070826.ywncgnuyoi67zttg@skbuf>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230517070826.ywncgnuyoi67zttg@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <000000000000c6de2a05fbdecbbb@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 09:08, Vladimir Oltean wrote:
-> On Wed, May 17, 2023 at 10:04:37AM +0300, Vladimir Oltean wrote:
->> On Wed, May 17, 2023 at 09:01:38AM +0200, Krzysztof Kozlowski wrote:
->>> Yes, apologies, I usually forget the net-next tag.
->>>
->>> Shall I resend?
->>
->> Probably not.
+On Wed, May 17, 2023 at 12:40:03AM -0700, syzbot wrote:
+> Hello,
 > 
-> Although patchwork marked it as "not a local patch", so no tests ran on
-> it. Let's see what Jakub says.
-> https://patchwork.kernel.org/project/netdevbpf/patch/20230515074525.53592-1-krzysztof.kozlowski@linaro.org/
+> syzbot found the following issue on:
+> 
+> HEAD commit:    065efa589871 Add linux-next specific files for 20230517
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17f27bb2280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=821eeb02ef201bcc
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ac3b41786a2d0565b6d5
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/dbbd691e9e5a/disk-065efa58.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/e5b9541c3979/vmlinux-065efa58.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/44cf3f3aaabb/bzImage-065efa58.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
+> 
+> ================================================================================
+> UBSAN: array-index-out-of-bounds in kernel/pid.c:244:15
 
-I will just resend in such case.
+Only way I see this happening is if the logic in
+kernel/pid_namespace.c:create_pid_cachep() which sets the object size
+for the struct pid allocation of this pid namespace based on
+parent_pid_namespace->level + 1 is broken. The way this works is:
 
-Best regards,
-Krzysztof
+    struct pid
+    {
+            [snip]
+            struct upid numbers[1];
+    };
 
+    create_pid_namespace()
+    {
+            unsigned int level = parent_pid_ns->level + 1;
+            ns->pid_cachep = create_pid_cachep(level);
+    }
+
+and then during fork:
+
+    alloc_pid()
+    {
+            pid = kmem_cache_alloc(ns->pid_cachep, GFP_KERNEL);
+    }
+
+So effectively, the wrong level must've been set in
+create_pid_namespace() so that the flexible array allocation is too
+small.
+
+I don't have time to debug this tbh. Ccing Kees maybe there's some
+flexible array stuff going on I'm unaware of.
