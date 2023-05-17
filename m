@@ -2,142 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6357067F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B557067D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbjEQMVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        id S231491AbjEQMS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjEQMVM (ORCPT
+        with ESMTP id S230446AbjEQMSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:21:12 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409955FCC;
-        Wed, 17 May 2023 05:20:56 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A81C0320010B;
-        Wed, 17 May 2023 08:20:54 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 17 May 2023 08:20:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684326054; x=1684412454; bh=io
-        DFLJqXuMHAy8ZisCrVAdUFi7mpfdRTggwR7KwpJ/I=; b=n1+OhcBGIbGgmnDFTH
-        9Mp8FunJF/Hj/m5OKnDmlfaCkq4bZXBhTlz6GGzoPR2SbbWho71/Err4OXmIevWI
-        ESr4wZq2mgan4gHRFlfwv33DmOCGcK2RlqYT/VjkesDxHVj1YW/GlIkbA5gHSsT/
-        nl8uJ8XKVxL4G/2NYy4TBe+UGpQzd0CYxjxGG7RV/+3E8mE+sOuKqFME1a/WH8Hf
-        jgxuV9328QHf1xMBHntkZMHtWUhoifd7cOxaCv6y5m8Sq8/IrWMM68s6GJvf94K+
-        ycPL00bX1KQQ/Zs46Sf0RfaqZzW4vVTBXS7d+isPBUvo2cPq85tka8RGYkNn/y2G
-        RkbA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684326054; x=1684412454; bh=ioDFLJqXuMHAy
-        8ZisCrVAdUFi7mpfdRTggwR7KwpJ/I=; b=i1f9JIu1fAnawdVfNkN7qv45bSE8x
-        +ENHwvsHdfUDHBpwpjkL9JDAxcQ9uuoGYWq8g9Zjmn6BkpzR/o5kovp+HGQKoqwy
-        yrmHrjxik89+HDUeCMwgfzdayqaRE7HpCMUFZrJaA+Vv2WqbuiLvtkn6/ZKXuzSC
-        CFKRCUZzMLNvIda9U0kcdc9EKIZLnbqUxPKJx5uCsAYJAPk/Gy0gDTLUfjIrOKKm
-        fN/kVAjB/Qy7ZR4parXhSwHQZTvUzDATofyE7soLA8NOd63Ey0Ad6s1dBdvllxJS
-        z4Bjj13auITa7dF2YELLrIbZ1ZfUqs/BWCu8qmlqDs99JC9JZ1hcZM2LQ==
-X-ME-Sender: <xms:pcZkZFcu1YK1pDGxm-zCjddI4eueG27Txfy48615KJ9ZCcMmBqaDQg>
-    <xme:pcZkZDMBka7qpxkgt1Gj7XBZDWH6AO36Do687ffDYMPFmejsBGUzvAkFVn64tyezu
-    Gf-lkaCQuvXGEz4wCM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgheduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:pcZkZOisNec3xayVss6IpafKIKHWIjh-pHIYfpYe80MbdsgSE0XFsw>
-    <xmx:pcZkZO969oU0bgwiGrTDEgRjbGONCKHOrWvEQYL_WydOcqpgDk3pZw>
-    <xmx:pcZkZBvW_E64HmOTtezyw8u5bw8FkEn5QLhMmG4wJeXPxwDaqT99CA>
-    <xmx:psZkZCOQ8jQceD-rTypMpzpJ48UNMzRbGAJQ9qyno1x07JpeSqLE4w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 31633B60086; Wed, 17 May 2023 08:20:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <440855f4-897c-4597-bbe6-7c5f295f616a@app.fastmail.com>
-In-Reply-To: <2c03973e-0635-4dbb-a1df-bfda8cbee161@rowland.harvard.edu>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-36-schnelle@linux.ibm.com>
- <2023051643-overtime-unbridle-7cdd@gregkh>
- <2c03973e-0635-4dbb-a1df-bfda8cbee161@rowland.harvard.edu>
-Date:   Wed, 17 May 2023 14:17:58 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Alan Stern" <stern@rowland.harvard.edu>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 17 May 2023 08:18:25 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FB010E9;
+        Wed, 17 May 2023 05:18:24 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HC1BNn015354;
+        Wed, 17 May 2023 12:18:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=2u3BfMePA2tfNmr/HMzpxolG9jJcyPkro5D6meuJ8sI=;
+ b=TRN7O/x4T2tDVy1NGe5QAcpzvgekH6IoYlZtY2izXr79q2agSLDb+dGakEBiK/EvtqWl
+ 4piRqiUfYVeqMKQYzLM7y3iokW00pDF02srvrL0lHOm/flcIH0r+O28pj9xiGRC84Pet
+ pTkj+J/JuGdr+w6G29r4Eyh9QqD1yZUyTg0M8sxlYLkgOOHtlXUlyT6QDuPlwlKDyara
+ HYW8wHc+XDMCpqUiKB93D3BHEfSss/vmGChw3ygbdT6FwrQMKBMPWyObAvxWobrMKBrA
+ eBoh7KPgKhwDishq+s7Ut5/2WWQcAnTVCGZ1rBxZoHAE4Yb5flgkyIiIHNMuunZy4kDT jQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmwnr863x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 12:18:21 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34HCIHoQ022258;
+        Wed, 17 May 2023 12:18:17 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qj3mk69qk-1;
+        Wed, 17 May 2023 12:18:17 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HCIHBV022252;
+        Wed, 17 May 2023 12:18:17 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-vnivarth-hyd.qualcomm.com [10.213.111.166])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34HCIHdd022250;
+        Wed, 17 May 2023 12:18:17 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3994820)
+        id 71B704B3C; Wed, 17 May 2023 17:48:16 +0530 (+0530)
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, quic_vnivarth@quicinc.com,
+        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
+Subject: [PATCH v2 0/2] spi-geni-qcom: Add new interfaces and utilise them to do map/unmap in framework for SE DMA
+Date:   Wed, 17 May 2023 17:48:12 +0530
+Message-Id: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: dLNKqUw9VhoSS_gi9j1fjApY0GzrCn-k
+X-Proofpoint-ORIG-GUID: dLNKqUw9VhoSS_gi9j1fjApY0GzrCn-k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=601
+ clxscore=1015 malwarescore=0 priorityscore=1501 spamscore=0 phishscore=0
+ adultscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305170100
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023, at 22:17, Alan Stern wrote:
-> On Tue, May 16, 2023 at 06:29:56PM +0200, Greg Kroah-Hartman wrote:
->> On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
->
->> I'm confused now.
->> 
->> So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
->> 
->> But if it isn't, then these are just no-ops that do nothing?  So then
->> the driver will fail to work?  Why have these stubs at all?
->> 
->> Why not just not build the driver at all if this option is not enabled?
->
-> I should add something to my previous email.  This particular section of 
-> code is protected by:
->
-> #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
-> /* Support PCI only */
->
-> So it gets used only in cases where the driver supports just a PCI bus 
-> -- no other sorts of non-PCI on-chip devices.  But the preceding patch 
-> in this series changes the Kconfig file to say:
->
->  config USB_UHCI_HCD
-> 	tristate "UHCI HCD (most Intel and VIA) support"
-> 	depends on (USB_PCI && HAS_IOPORT) || USB_UHCI_SUPPORT_NON_PCI_HC
->
-> As a result, when the configuration includes support only for PCI 
-> controllers the driver won't get built unless HAS_IOPORT is set.  Thus 
-> the no-op case (in this part of the code) can't arise.
+A "known issue" during implementation of SE DMA for spi geni driver was
+that it does DMA map/unmap internally instead of in spi framework.
+Current patches remove this hiccup and also clean up code a bit.
 
-Indeed, that makes sense.
+Testing revealed no regressions and results with 1000 iterations of
+reading from EC showed no loss of performance.
+Results
+=======
+Before - Iteration 999, min=5.10, max=5.17, avg=5.14, ints=25129
+After  - Iteration 999, min=5.10, max=5.20, avg=5.15, ints=25153
 
-> Which is a long-winded way of saying that you're right; the UHCI_IN() 
-> and UHCI_OUT() wrappers aren't needed in this part of the driver.  I 
-> guess Niklas put them in either for consistency with the rest of the 
-> code or because it didn't occur to him that they could be omitted.  (And 
-> I didn't spot it either.)
+Vijaya Krishna Nivarthi (2):
+  soc: qcom: geni-se: Add interfaces geni_se_tx_init_dma() and
+    geni_se_rx_init_dma()
+  spi: spi-geni-qcom: Do not do DMA map/unmap inside driver, use
+    framework instead
+---
+v1 -> v2:
+- Modified interfaces arguments and accordingly calls to them
+- Added dma_max_len to driver
 
-It's probably less confusing to leave out the PCI-only part of
-the patch then and only modify the generic portion.
+ drivers/soc/qcom/qcom-geni-se.c  |  67 ++++++++++++++++++-------
+ drivers/spi/spi-geni-qcom.c      | 103 +++++++++++++++++++--------------------
+ include/linux/soc/qcom/geni-se.h |   4 ++
+ 3 files changed, 103 insertions(+), 71 deletions(-)
 
-      Arnd
+-- 
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, hosted by the Linux Foundation.
+
