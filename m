@@ -2,134 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BF8706986
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB55706989
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjEQNRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S230160AbjEQNSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbjEQNRN (ORCPT
+        with ESMTP id S231855AbjEQNSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:17:13 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B78C5256;
-        Wed, 17 May 2023 06:17:07 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64ab2a37812so12993488b3a.1;
-        Wed, 17 May 2023 06:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684329427; x=1686921427;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yHXuyHwVCeuY27Dn1Z0at52ryyIy4L1nPjIskZAszmI=;
-        b=dUOMQp99ITY+BLsYtUfBUox35t4cHq8L99aLU4kEb/muIhogRXPxriKIy3bGhM2cIk
-         Qm5vHpgfi8JzuSS7TXFXzvIqNHoiDNg8ykl4RxdhyNw2/95P5OOZ3XaaaYRmaXr+9qhP
-         eyQaDeiUK+M30Y/rP999YAu1c8iQZ5pjqwpQ9JE7ugH7Nbg1YITtikepM3Qp1WTRdCnU
-         1253YWL3lLBG1gZt2okIuiR8zJZWO/lEQu4rvuuCv+tzNM2FDnmT12ftVQ4uGF9aNNuf
-         Zg2/0sxkU0fIXqL80dbr/59DUAxpaUJKK8K5iNjoNMj7t2IuJkYzHLjjjQr7KYO84X96
-         XeKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684329427; x=1686921427;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yHXuyHwVCeuY27Dn1Z0at52ryyIy4L1nPjIskZAszmI=;
-        b=iTcA3l0vx2D4yHHysW31Mhq2lGTLN8MgfwGipxmreal3oaQqSn1hG42khULzx7vfdx
-         UDZa4kIqLAF1OOYtFy7MAgdl8GvQU7iC7Ep9bQ/jvRx3NV92xxbE04CBxSKbE8yxEaB/
-         uzsxSx+BcNGGH1b3HpQ32K2YpVoHVsDGXXBGR3RgpUDdKRKxChNuADTRQDPttgh+fz3Y
-         5/sXIrQ6BO2lcOBzdekCcsqkN8E4dLRtGkiAVGf4TH6CemetZ3y1pEawkxnYsmHJEPmU
-         pLXGj9EN75SOWjAYyYnM9QkCNjUFjvjd3Bs6xDPmK5+OVNMOA0Oy65XQIrbN5WfdIzVS
-         qcjw==
-X-Gm-Message-State: AC+VfDw1dbLa84UxDe1tqF0ah8j5aR7fexohUk9An2sb06ourS0SxCaj
-        HTXrjqSooT1xeYCp7jlv9ejoVmo6PRUL+A==
-X-Google-Smtp-Source: ACHHUZ53Bt8k3To/ZCJUCFRY1gJ/yj1dblrLK/SwggOMj6JCejIVpvqNUPmQiL1F96xkVOy3qaQmXw==
-X-Received: by 2002:a17:903:11c6:b0:1aa:d235:6dd4 with SMTP id q6-20020a17090311c600b001aad2356dd4mr2718253plh.19.1684329426721;
-        Wed, 17 May 2023 06:17:06 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-43.three.co.id. [116.206.12.43])
-        by smtp.gmail.com with ESMTPSA id o18-20020a17090aeb9200b0024decfb1ec2sm1527675pjy.30.2023.05.17.06.17.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:17:06 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 37E13104714; Wed, 17 May 2023 20:17:03 +0700 (WIB)
-Date:   Wed, 17 May 2023 20:17:02 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Filipe =?utf-8?B?TGHDrW5z?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Linux Input Devices <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch,
-        poncho@spahan.ch, Bastien Nocera <hadess@hadess.net>
-Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
- working properly
-Message-ID: <ZGTTznb+zal7XRkv@debian.me>
-References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info>
- <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info>
+        Wed, 17 May 2023 09:18:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC7D5580;
+        Wed, 17 May 2023 06:18:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6918D646FD;
+        Wed, 17 May 2023 13:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B14C433EF;
+        Wed, 17 May 2023 13:18:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684329505;
+        bh=fFaBhSlTcMJjI8CnUH0C+qCZq/vTg7EvCm12mEBrjAY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n8MkuYef3+BHDNckeyaUgqc5b2L54WprOPLVQQ4Sy4FSWFX6SVa5c0IHQ4TQsUlML
+         skyxSOiOqHcGbBXeq8XDDfC1ndeivE0CMdm39/hkih5011ohB7MwoFrlrE9K3lWJkN
+         XVXX+kbld2p7EDaALZ4k9CNEqSVAtlHqpN79T1qINQaqtL3dQEDrUsBp4b3aLlzY1W
+         6MQ0W2X26bJugHIdCkulIrHOKky5rd5p2Wx9tk8vx+MwHrkhPyILNSReZ7Ae/4m7uG
+         a6rCdMuQXCYEWMRE3aOKtzcRtWIFTiR467gshJtgOEn/NOcIrbA8zr6pT1rs2gK5Ay
+         SkX0gSRUcPgBQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-modules@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] kallsyms: remove unused arch_get_kallsym() helper
+Date:   Wed, 17 May 2023 15:18:07 +0200
+Message-Id: <20230517131820.936553-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MBlPoFm2IDF6Uk9n"
-Content-Disposition: inline
-In-Reply-To: <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Arnd Bergmann <arnd@arndb.de>
 
---MBlPoFm2IDF6Uk9n
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The arch_get_kallsym() function was introduced so that x86 could override
+it, but that override was removed in bf904d2762ee ("x86/pti/64: Remove
+the SYSCALL64 entry trampoline"), so now this does nothing except causing
+a warning about a missing prototype:
 
-On Thu, May 11, 2023 at 01:58:43PM +0200, Thorsten Leemhuis wrote:
-> Hi, Thorsten here, the Linux kernel's regression tracker.
->=20
-> On 08.05.23 11:55, Linux regression tracking (Thorsten Leemhuis) wrote:
-> > Hi, Thorsten here, the Linux kernel's regression tracker.
-> >=20
-> > I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> > kernel developers don't keep an eye on it, I decided to forward it by m=
-ail.
-> >=20
-> > Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=3D217412 :
->=20
-> TWIMC: a few other users (three or four iirc) showed up in that ticket
-> and reported problems with the receiver, albeit the symptoms are not
-> exactly the same for all of them, so there might be more than one problem.
->=20
-> I'll try to motivate the affected users to perform a bisection. But
-> would be great if those with more knowledge about this code could
-> briefly look into the ticket, maybe the details the users shared allows
-> one of you to guess what causes this.
+kernel/kallsyms.c:662:12: error: no previous prototype for 'arch_get_kallsym' [-Werror=missing-prototypes]
+  662 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
 
-Hi Thorsten,
+Restore the old behavior before d83212d5dd67 ("kallsyms, x86: Export
+addresses of PTI entry trampolines") to simplify the code and avoid
+the warning.
 
-Another reporter in the same bug ticket has already pinned down the
-culprit to 586e8fede7953b ("HID: logitech-hidpp: Retry commands when device
-is busy"). I'm now updating regzbot entry (and Cc'ing the culprit author):
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ kernel/kallsyms.c | 28 +---------------------------
+ 1 file changed, 1 insertion(+), 27 deletions(-)
 
-#regzbot introduced: 586e8fede7953b
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index e01c435595f9..dac13659601f 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -646,7 +646,6 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
+ /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
+ struct kallsym_iter {
+ 	loff_t pos;
+-	loff_t pos_arch_end;
+ 	loff_t pos_mod_end;
+ 	loff_t pos_ftrace_mod_end;
+ 	loff_t pos_bpf_end;
+@@ -659,29 +658,9 @@ struct kallsym_iter {
+ 	int show_value;
+ };
+ 
+-int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+-			    char *type, char *name)
+-{
+-	return -EINVAL;
+-}
+-
+-static int get_ksymbol_arch(struct kallsym_iter *iter)
+-{
+-	int ret = arch_get_kallsym(iter->pos - kallsyms_num_syms,
+-				   &iter->value, &iter->type,
+-				   iter->name);
+-
+-	if (ret < 0) {
+-		iter->pos_arch_end = iter->pos;
+-		return 0;
+-	}
+-
+-	return 1;
+-}
+-
+ static int get_ksymbol_mod(struct kallsym_iter *iter)
+ {
+-	int ret = module_get_kallsym(iter->pos - iter->pos_arch_end,
++	int ret = module_get_kallsym(iter->pos - kallsyms_num_syms,
+ 				     &iter->value, &iter->type,
+ 				     iter->name, iter->module_name,
+ 				     &iter->exported);
+@@ -764,7 +743,6 @@ static void reset_iter(struct kallsym_iter *iter, loff_t new_pos)
+ 	iter->nameoff = get_symbol_offset(new_pos);
+ 	iter->pos = new_pos;
+ 	if (new_pos == 0) {
+-		iter->pos_arch_end = 0;
+ 		iter->pos_mod_end = 0;
+ 		iter->pos_ftrace_mod_end = 0;
+ 		iter->pos_bpf_end = 0;
+@@ -780,10 +758,6 @@ static int update_iter_mod(struct kallsym_iter *iter, loff_t pos)
+ {
+ 	iter->pos = pos;
+ 
+-	if ((!iter->pos_arch_end || iter->pos_arch_end > pos) &&
+-	    get_ksymbol_arch(iter))
+-		return 1;
+-
+ 	if ((!iter->pos_mod_end || iter->pos_mod_end > pos) &&
+ 	    get_ksymbol_mod(iter))
+ 		return 1;
+-- 
+2.39.2
 
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---MBlPoFm2IDF6Uk9n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGTTzgAKCRD2uYlJVVFO
-o8v/AQDMzxXPL0aJTjJvzDxxNi7DhL90709+agUP7k6Ys1BHdwEA8KY+RvcY9h4G
-b9R7HSqlbCmnbX1nhs9j/8Zq4ghLzA0=
-=uvie
------END PGP SIGNATURE-----
-
---MBlPoFm2IDF6Uk9n--
