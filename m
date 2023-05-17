@@ -2,153 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08327064EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9D87064F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbjEQKN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
+        id S230240AbjEQKOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjEQKNW (ORCPT
+        with ESMTP id S229545AbjEQKOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:13:22 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699E7E4D;
+        Wed, 17 May 2023 06:14:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA1EE64
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:13:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684318405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=I2wx/HsJhUUdqsz7R5qMuiWwVG1FuENAd62XK76/qS8=;
+        b=jBHB2kr7ujd9dBQWoXyd2YhhgsbPfmqs9Pb7NX+x/l+NNCmCxKTtX7OIGeWhfWdmJik4Ar
+        +PaPptjSyNPmpTLdmxj5p3OFsTms80oKpJhE9mcB6+uf/0IsapvvzTiA7SnIt4y4W8dTA5
+        obywxjkXHvAmYYFXIfjsUdDyGKdBfnk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-645-x9WnlNGyPuGVaJaQ7e4ZXA-1; Wed, 17 May 2023 06:13:24 -0400
+X-MC-Unique: x9WnlNGyPuGVaJaQ7e4ZXA-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f426d4944fso2223215e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:13:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684318403; x=1686910403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I2wx/HsJhUUdqsz7R5qMuiWwVG1FuENAd62XK76/qS8=;
+        b=DqUOiSxV03YyEo87VH8c9xvdIziBcRrOuVmRAIsEH9l/FkVm2N+Fdb9qC9l24lgsNO
+         QQ9XhVw2sfm2HqrUkt4my/LzBMyAAl5gvRTuHc3jgpR/HHcF5g7afDEofDqM5kyr7Lby
+         wWJGMbiPSKTymZqFab7KUI4I++1Jzz7MCsdQpKUy1gfQssiEYFRAhwq0owDl/RhwGQ3q
+         C7TqFyp003uWVRk96v/qSH1Rps3qLsLY3oiNEmSCASh8m5O2QIjO2+pWf1JerUcrB0MC
+         uetHbCpLQBFPeB/X3tL4MmqFoc0ilZ/QT4t+zbtLRy79T9HcdWa9fv7H4mg4iOHKkzJJ
+         neaw==
+X-Gm-Message-State: AC+VfDz9lEi9QzRESjfNNWdsme+rWghUtiaUGTIq5aXgC0Hfv97ESdi9
+        galIgr2ogKogIjdTuDwseQR0jOkguoGoXfu0irjlZZO5aYh+mjYA7kSC68Eyntb7zCASRV+MK32
+        9s3DMUl5qcl7FAvnqd8xcUxqIOtu9P5dI
+X-Received: by 2002:a7b:c846:0:b0:3f5:1980:ad43 with SMTP id c6-20020a7bc846000000b003f51980ad43mr2663450wml.31.1684318403016;
+        Wed, 17 May 2023 03:13:23 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ73+Ow9A8iGZ2I7XMdEwZHisBEr3+oOaglzf/0hAGadudfZm+Nhadvv93jmpnbpOJYRyatYsA==
+X-Received: by 2002:a7b:c846:0:b0:3f5:1980:ad43 with SMTP id c6-20020a7bc846000000b003f51980ad43mr2663436wml.31.1684318402615;
+        Wed, 17 May 2023 03:13:22 -0700 (PDT)
+Received: from redhat.com ([2.52.6.43])
+        by smtp.gmail.com with ESMTPSA id f21-20020a7bcc15000000b003f31d44f0cbsm1765534wmh.29.2023.05.17.03.13.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 17 May 2023 03:13:21 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H6sFqA004446;
-        Wed, 17 May 2023 05:13:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=PODMain02222019;
- bh=Xpb1EWBMfi+Jisb8QnCvI2wmKB3bYLxwbNbSZLNIp3M=;
- b=P9lZtHUZVwbkmZDE5vVygaoxtsyGAnba+uL/acfYiQBVvTk4+IkqJ2tg01ycyBQHocRU
- 6dZNsVaypvtbrKVudMv67oGzLxMwzWzP/2hdsNmMwAPwHdbcpZt6W4L8ZB92tMG65hza
- NCp/K2MblSmvnAMKfKZFuUCb0PS3vzQLufVxQiK0XSJQ6EZbDow3UrhIFL5nMlV3DetT
- q2D+xV+2SxcVEIjPTkpriFZ12whLcPQ41yiUzGL+KDest4tL6DOAZFpRnX8wkyfICsWR
- 4LXUZ+17daG1kJZhWiYt6PgJPMWmW9ZlUoGIpqrQ0wKYbKey+jBKw8DL42xXhFpweczb OA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qj6ymwq4r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 05:13:02 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 17 May
- 2023 05:13:01 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 05:13:01 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3234311CA;
-        Wed, 17 May 2023 10:13:01 +0000 (UTC)
-Date:   Wed, 17 May 2023 10:13:01 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <linus.walleij@linaro.org>,
-        <vkoul@kernel.org>, <lgirdwood@gmail.com>,
-        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
-Message-ID: <20230517101301.GV68926@ediswmail.ad.cirrus.com>
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
- <ZF6RMqElYZVMpWRt@surfacebook>
- <20230515101350.GS68926@ediswmail.ad.cirrus.com>
- <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
+Date:   Wed, 17 May 2023 06:13:17 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>
+Cc:     stefanha@redhat.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: Re: Re: [PATCH v2 0/2] virtio: abstract virtqueue related
+ methods
+Message-ID: <20230517061152-mutt-send-email-mst@kernel.org>
+References: <20230517025424.601141-1-pizhenwei@bytedance.com>
+ <20230516234444-mutt-send-email-mst@kernel.org>
+ <8f3ca136-0276-49ca-d703-715c83cff557@bytedance.com>
+ <20230516235541-mutt-send-email-mst@kernel.org>
+ <949dd4db-89ea-4331-5fa7-700f96874ab3@bytedance.com>
+ <20230517020947-mutt-send-email-mst@kernel.org>
+ <b0b69e9d-da8a-791b-545f-c521dc752b88@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: E83zWdV2Sk2QsBLUBUii7rBv6xNydwdo
-X-Proofpoint-ORIG-GUID: E83zWdV2Sk2QsBLUBUii7rBv6xNydwdo
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <b0b69e9d-da8a-791b-545f-c521dc752b88@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 10:03:45PM +0300, Andy Shevchenko wrote:
-> On Mon, May 15, 2023 at 1:13 PM Charles Keepax
-> <ckeepax@opensource.cirrus.com> wrote:
-> > On Fri, May 12, 2023 at 10:19:14PM +0300, andy.shevchenko@gmail.com wrote:
-> > > Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
-> > > > +   if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
-> > > > +           ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
-> > > > +                                        0, 0, CS42L43_NUM_GPIOS);
-> > > > +           if (ret) {
-> > > > +                   dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
-> > > > +                   goto err_pm;
-> > > > +           }
-> > > > +   }
-> > >
-> > > Besides the fact that we have a callback for this, why GPIO library can't
-> > > handle this for you already?
-> >
-> > Apologies but I am not quite sure I follow you, in the device
-> > tree case this will be handled by the GPIO library. But for ACPI
-> > this information does not exist so has to be called manually, the
-> > library does not necessarily know which values to call with,
-> > although admittedly our case is trivial but not all are.
+On Wed, May 17, 2023 at 02:21:09PM +0800, zhenwei pi wrote:
+> On 5/17/23 14:10, Michael S. Tsirkin wrote:
+> > On Wed, May 17, 2023 at 12:58:10PM +0800, zhenwei pi wrote:
+> > > On 5/17/23 11:57, Michael S. Tsirkin wrote:
+> > > > On Wed, May 17, 2023 at 11:51:03AM +0800, zhenwei pi wrote:
+> > > > > 
+> > > > > 
+> > > > > On 5/17/23 11:46, Michael S. Tsirkin wrote:
+> > > > > > On Wed, May 17, 2023 at 10:54:22AM +0800, zhenwei pi wrote:
+> > > > > > > v1 -> v2:
+> > > > > > > - Suggested by MST, use fast path for vring based performance
+> > > > > > > sensitive API.
+> > > > > > > - Reduce changes in tools/virtio.
+> > > > > > > 
+> > > > > > > Add test result(no obvious change):
+> > > > > > > Before:
+> > > > > > > time ./vringh_test --parallel
+> > > > > > > Using CPUS 0 and 191
+> > > > > > > Guest: notified 10036893, pinged 68278
+> > > > > > > Host: notified 68278, pinged 3093532
+> > > > > > > 
+> > > > > > > real	0m14.463s
+> > > > > > > user	0m6.437s
+> > > > > > > sys	0m8.010s
+> > > > > > > 
+> > > > > > > After:
+> > > > > > > time ./vringh_test --parallel
+> > > > > > > Using CPUS 0 and 191
+> > > > > > > Guest: notified 10036709, pinged 68347
+> > > > > > > Host: notified 68347, pinged 3085292
+> > > > > > > 
+> > > > > > > real	0m14.196s
+> > > > > > > user	0m6.289s
+> > > > > > > sys	0m7.885s
+> > > > > > > 
+> > > > > > > v1:
+> > > > > > > Hi,
+> > > > > > > 
+> > > > > > > 3 weeks ago, I posted a proposal 'Virtio Over Fabrics':
+> > > > > > > https://lists.oasis-open.org/archives/virtio-comment/202304/msg00442.html
+> > > > > > > 
+> > > > > > > Jason and Stefan pointed out that a non-vring based virtqueue has a
+> > > > > > > chance to overwrite virtqueue instead of using vring virtqueue.
+> > > > > > > 
+> > > > > > > Then I try to abstract virtqueue related methods in this series, the
+> > > > > > > details changes see the comment of patch 'virtio: abstract virtqueue related methods'.
+> > > > > > > 
+> > > > > > > Something is still remained:
+> > > > > > > - __virtqueue_break/__virtqueue_unbreak is supposed to use by internal
+> > > > > > >      virtio core, I'd like to rename them to vring_virtqueue_break
+> > > > > > >      /vring_virtqueue_unbreak. Is this reasonable?
+> > > > > > 
+> > > > > > Why? These just set a flag?
+> > > > > > 
+> > > > > 
+> > > > > Rename '__virtqueue_break' to 'vring_virtqueue_break', to make symbols
+> > > > > exported from virtio_ring.ko have unified prefix 'vring_virtqueue_xxx'.
+> > > > 
+> > > > I just do not see why you need these callbacks at all.
+> > > > 
+> > > 
+> > > I use these callbacks for break/unbreak device like:
+> > > static inline void virtio_break_device(struct virtio_device *dev)
+> > > {
+> > > 	struct virtqueue *vq;
+> > > 
+> > > 	spin_lock(&dev->vqs_list_lock);
+> > > 	list_for_each_entry(vq, &dev->vqs, list) {
+> > > 		vq->__break(vq);
+> > > 	}
+> > > 	spin_unlock(&dev->vqs_list_lock);
+> > > }
+> > 
+> > why do this? backend knows they are broken.
+> > 
 > 
-> Why can't the firmware provide this information? _DSD() is a part of
-> ACPI v5.1 IIRC.
+> I grep 'virtio_break_device' in the latest code:
+> arch/um/drivers/virtio_uml.c:1147:	virtio_break_device(&vu_dev->vdev);
+> arch/um/drivers/virtio_uml.c:1285:	virtio_break_device(&vu_dev->vdev);
+> drivers/crypto/virtio/virtio_crypto_core.c:269:	
+> virtio_break_device(vcrypto->vdev);
+> drivers/s390/virtio/virtio_ccw.c:1251:			virtio_break_device(&vcdev->vdev);
+> drivers/s390/virtio/virtio_ccw.c:1268:		virtio_break_device(&vcdev->vdev);
+> drivers/firmware/arm_scmi/virtio.c:489:
+> virtio_break_device(vioch->vqueue->vdev);
+> drivers/char/virtio_console.c:1956:	virtio_break_device(vdev);
 > 
+> Some virtio drivers use 'virtio_break_device'...
 
-I am very very far from confident we can guarantee that will be
-present in the ACPI. The ACPI is typically made for and by the
-Windows side.
+You should read the code and understand what it does,
+not just grep things and make assumptions.
+What virtio_break_device does is stop linux from sending
+new requests.
 
-> Although it might require moving some code from gpiolib-of.c to
-> gpiolib.c with replacing OF APIs with agnostic ones.
+
+> > > > > > > - virtqueue_get_desc_addr/virtqueue_get_avail_addr/virtqueue_get_used_addr
+> > > > > > >      /virtqueue_get_vring is vring specific, I'd like to rename them like
+> > > > > > >      vring_virtqueue_get_desc_addr. Is this reasonable?
+> > > > > > > - there are still some functions in virtio_ring.c with prefix *virtqueue*,
+> > > > > > >      for example 'virtqueue_add_split', just keep it or rename it to
+> > > > > > >      'vring_virtqueue_add_split'?
+> > > > > > > zhenwei pi (2):
+> > > > > > >      virtio: abstract virtqueue related methods
+> > > > > > >      tools/virtio: implement virtqueue in test
+> > > > > > > 
+> > > > > > >     drivers/virtio/virtio_ring.c | 285 +++++-----------------
+> > > > > > >     include/linux/virtio.h       | 441 +++++++++++++++++++++++++++++++----
+> > > > > > >     include/linux/virtio_ring.h  |  26 +++
+> > > > > > >     tools/virtio/linux/virtio.h  | 355 +++++++++++++++++++++++++---
+> > > > > > >     4 files changed, 807 insertions(+), 300 deletions(-)
+> > > > > > > 
+> > > > > > > -- 
+> > > > > > > 2.20.1
+> > > > > > 
+> > > > > 
+> > > > > -- 
+> > > > > zhenwei pi
+> > > > 
+> > > 
+> > > -- 
+> > > zhenwei pi
+> > 
 > 
+> -- 
+> zhenwei pi
 
-I really think if we want to start doing things that way on ACPI
-platforms someone with a little more clout than us needs to start
-doing it first. If Intel or someone was doing it that way it
-might give us a little more levelage to push it as being the
-"correct" way to do it.
-
-I will switch to the callback, but really don't think we can rely
-on this being in DSD yet.
-
-> 
-> > > > +static int cs42l43_pin_remove(struct platform_device *pdev)
-> > > > +{
-> > > > +   pm_runtime_disable(&pdev->dev);
-> > >
-> > > This is simply wrong order because it's a mix of non-devm_*() followed by
-> > > devm_*() calls in the probe.
-> > >
-> >
-> > I had missed there are now devm_pm_runtime calls, I will switch
-> > to that. But I would like to understand the wrong order, remove
-> > will be called before the devm bits are destroyed and it seems
-> > reasonable to disable the pm_runtime before destroying the
-> > pinctrl device. What exactly would run in the wrong order here?
-> 
-> At the ->remove() stage after this call an IRQ can be fired (or on SMP
-> systems any other APIs can be called), for example. So, would it be a
-> problem to service it with PM disabled?
-> 
-> But in any case the shuffling ordering like this is prone to subtle
-> bugs. I prefer to have strict ordering if there is nothing preventing
-> from doing that way.
-
-Yeah happy enough to use devm_ here, just didn't know it existed
-and wanted to better understand your concerns as I was having
-difficulty seeing the issue.
-
-Thanks,
-Charles
