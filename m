@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A648F706E14
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0337706E1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjEQQ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S229693AbjEQQ1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjEQQ0s (ORCPT
+        with ESMTP id S229641AbjEQQ1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:26:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3137130;
-        Wed, 17 May 2023 09:26:47 -0700 (PDT)
+        Wed, 17 May 2023 12:27:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1ACE45;
+        Wed, 17 May 2023 09:27:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FF0D63D9C;
-        Wed, 17 May 2023 16:26:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83718C433D2;
-        Wed, 17 May 2023 16:26:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 648946495A;
+        Wed, 17 May 2023 16:27:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D30C433EF;
+        Wed, 17 May 2023 16:27:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684340807;
-        bh=sU1C7XJg/7VvloWpwX9yx2Ma9fhNOkvoRR16fGxVrx4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sZJlHjmztkvkLKxHbNj52fhsNhecUqM37bGatmGQxktUqEdItN6NL5LT81V2t091h
-         gPcnMFAc4lv9o6eMpujnLyfiItRFzKYUVq04zMGhsHGW8TlWs6aPW8/qBYsGTQd3bH
-         Yqul0tjCKB1OEQlFvxnj6oyty7r0DvSw62ycW3nV5MfdlkgPfgzublOcRIf2hxfnup
-         wO6fGalPgH4Yha0Fy6jCA5HXWHpPEpcQFbaO9ayWcfJ1QMlfeEWH4TpdoLo2N6cIn9
-         XdrYaNigaP+qblqjiHbOFziGE0A/8WhqPj7v0QnQB09sTVfVptanFsFJrBRx2ONgce
-         J9jFpKhWTDKag==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Chuck Lever <chuck.lever@oracle.com>
-Cc:     Zhi Li <yieli@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] nfsd: make a copy of struct iattr before calling notify_change
-Date:   Wed, 17 May 2023 12:26:44 -0400
-Message-Id: <20230517162645.254512-1-jlayton@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        s=k20201202; t=1684340828;
+        bh=86RzE6D5pO3A8yYeWzeN2fRiureyHgGp8eTGKaO2dq4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=MDrcxoVXnq/S9N0/g9hHTGp4FCME2zRJVfQZLAS+gTYrC8nR4Kb4zWvvV+348dyus
+         mCneVveEYvMrI2vAlXLTLMLY5EGhRWsKaQXflRKYbkC9552rgqqssBWhAJ9O78/uBn
+         +MUGjuW38Mg2taa/USgIVp9t9qvckfgl9jfff/kg7/pyLoxgCpK7HnUj9YTDaILzOu
+         +U10SDC+S3DC7WqGm3tso5Aft3LBT0y3hzyDdTH8KPt6b11eUl4W7v8Zm3LDX5v/Rw
+         z2qS6WNnIP4aPkznPR4pr0QrOski9n7prAH/qiwza06jKvrnuG5nbkxqXzZ2PFn9Qq
+         0AUC9NntdMmmA==
+Date:   Wed, 17 May 2023 11:27:07 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Shuai Xue <xueshuai@linux.alibaba.com>,
+        Robin Murphy <robin.murphy@arm.com>, yangyicong@huawei.com,
+        will@kernel.org, baolin.wang@linux.alibaba.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, rdunlap@infradead.org,
+        mark.rutland@arm.com, zhuo.song@linux.alibaba.com,
+        linux-cxl@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] drivers/perf: add DesignWare PCIe PMU driver
+Message-ID: <ZGUAWxoEngmqFcLJ@bhelgaas>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230517105421.00003251@Huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,35 +59,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-notify_change can modify the iattr structure. In particular it can can
-end up setting ATTR_MODE when ATTR_KILL_SUID is already set, causing a
-BUG() if the same iattr is passed to notify_change more than once.
+On Wed, May 17, 2023 at 10:54:21AM +0100, Jonathan Cameron wrote:
+> On Tue, 16 May 2023 14:17:52 -0500
+> Bjorn Helgaas <helgaas@kernel.org> wrote:
+> 
+> > On Tue, May 16, 2023 at 04:03:04PM +0100, Jonathan Cameron wrote:
+> ...
 
-Make a copy of the struct iattr before calling notify_change.
+> > > The approach used here is to separately walk the PCI topology and
+> > > register the devices.  It can 'maybe' get away with that because no
+> > > interrupts and I assume resets have no nasty impacts on it because
+> > > the device is fairly simple.  In general that's not going to work.
+> > > CXL does a similar trick (which I don't much like, but too late
+> > > now), but we've also run into the problem of how to get interrupts
+> > > if not the main driver.  
+> > 
+> > Yes, this is a real problem.  I think the "walk all PCI devices
+> > looking for one we like" approach is terrible because it breaks a lot
+> > of driver model assumptions (no device ID to autoload module via udev,
+> > hotplug doesn't work, etc), but we don't have a good alternative right
+> > now.
+> > 
+> > I think portdrv is slightly better because at least it claims the
+> > device in the usual way and gives a way for service drivers to
+> > register with it.  But I don't really like that either because it
+> > created a new weird /sys/bus/pci_express hierarchy full of these
+> > sub-devices that aren't really devices, and it doesn't solve the
+> > module load and hotplug issues.
+> > 
+> > I would like to have portdrv be completely built into the PCI core and
+> > not claim Root Ports or Switch Ports.  Then those devices would be
+> > available via the usual driver model for driver loading and binding
+> > and for hotplug.
+> 
+> Let me see if I understand this correctly as I can think of a few options
+> that perhaps are inline with what you are thinking.
+> 
+> 1) All the portdrv stuff converted to normal PCI core helper functions
+>    that a driver bound to the struct pci_dev can use.
+> 2) Driver core itself provides a bunch of extra devices alongside the
+>    struct pci_dev one to which additional drivers can bind? - so kind
+>    of portdrv handling, but squashed into the PCI device topology?
+> 3) Have portdrv operated under the hood, so all the services etc that
+>    it provides don't require a driver to be bound at all.  Then
+>    allow usual VID/DID based driver binding.
+> 
+> If 1 - we are going to run into class device restrictions and that will
+> just move where we have to handle the potential vendor specific parts.
+> We probably don't want that to be a hydra with all the functionality
+> and lookups etc driven from there, so do we end up with sub devices
+> of that new PCI port driver with a discover method based on either
+> vsec + VID or DVSEC with devices created under the main pci_dev.
+> That would have to include nastiness around interrupt discovery for
+> those sub devices. So ends up roughly like port_drv.
+> 
+> I don't think 2 solves anything.
+> 
+> For 3 - interrupts and ownership of facilities is going to be tricky
+> as initially those need to be owned by the PCI core (no device driver bound)
+> and then I guess handed off to the driver once it shows up?  Maybe that
+> driver should call a pci_claim_port() that gives it control of everything
+> and pci_release_port() that hands it all back to the core.  That seems
+> racey.
 
-Fixes: 34b91dda7124 NFSD: Make nfsd4_setattr() wait before returning NFS4ERR_DELAY
-Link: https://bugzilla.redhat.com/show_bug.cgi?id=2207969
-Reported-by: Zhi Li <yieli@redhat.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/nfsd/vfs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Yes, 3 is the option I want to explore.  That's what we already do for
+things like ASPM.  Agreed, interrupts is a potential issue.  I think
+the architected parts of config space should be implicitly owned by
+the PCI core, with interfaces à la pci_disable_link_state() if drivers
+need them.
 
-diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
-index c4ef24c5ffd0..ad0c5cd900b1 100644
---- a/fs/nfsd/vfs.c
-+++ b/fs/nfsd/vfs.c
-@@ -538,7 +538,9 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *fhp,
- 
- 	inode_lock(inode);
- 	for (retries = 1;;) {
--		host_err = __nfsd_setattr(dentry, iap);
-+		struct iattr attrs = *iap;
-+
-+		host_err = __nfsd_setattr(dentry, &attrs);
- 		if (host_err != -EAGAIN || !retries--)
- 			break;
- 		if (!nfsd_wait_for_delegreturn(rqstp, inode))
--- 
-2.40.1
-
+Bjorn
