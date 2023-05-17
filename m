@@ -2,29 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570457068CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883327068D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjEQNBx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 May 2023 09:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S231618AbjEQNCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjEQNBs (ORCPT
+        with ESMTP id S231400AbjEQNCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:01:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36539AA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:01:45 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1pzGmd-00020O-ER; Wed, 17 May 2023 15:01:35 +0200
-Message-ID: <f67301f5870e78f65104618316d851feb25d9aa3.camel@pengutronix.de>
-Subject: Re: [PATCH V6 6/6] drm: bridge: samsung-dsim: Support non-burst mode
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Marek Vasut <marex@denx.de>,
+        Wed, 17 May 2023 09:02:18 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB13F10EB
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:02:17 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso580227a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684328537; x=1686920537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z5AxAeCdhuBvApaM2VNWNpR5KDUG0yf5YyED4YO+eQA=;
+        b=oOzu2jaD9jkQxFp/C6pdw/65JxoJTdqqUn1IncbHbJJnSqOvS3XDF8ki9Bxc0VELhl
+         2vu8ShEJFZcH3m7N5hIz9qxjX/JaCY5/b7wDutu+gWVtl+nO8sxU5PuHiCu564O+ZUw3
+         1V5G2t5yUXe+MJNjdh/0vjOmhHHiMWVbrGaFs3IRQ8149RJWXVZQbLohaTIlNpgbylHK
+         T+AMpbEIiejf0rj0KSkV7Zidngkxt08yJotwRxkO6m8HN7NB+pcb2BZIolkgCZNNnEls
+         TN+VjPiaptl+3yYvtHH7gTESFvrLrOowhWtCtLWw/mO0H0munPE62+EUHplhSy8Dr3w+
+         ComQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684328537; x=1686920537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z5AxAeCdhuBvApaM2VNWNpR5KDUG0yf5YyED4YO+eQA=;
+        b=GcBAHMIYGHLJ9KJpZM5Q6gdf1oY6TuZPTM3DUQUy+h/HmcuEeyoDzSnuw+nXsjdIIs
+         n3R8Qc5GAQLSZ55c+kmrRpUJFj0Dvv6SmmpkaBttEDzxzwlQkvEFGTWuAhuBcLwClG5Y
+         r6TGMqOgFBhzdsLITrRU7w5U7IxBhq8tgLfhYyqlT8PvcAlGXWDAzf+reNCaEr3ggwKL
+         qwXTm4vm6WkLwW5bazfxyjh6OZihvRRHzKBhci5c0sMisibOoPJ4Koqi1J/TqEsApBtH
+         Dih2TbCEonEv+GQL9LP9NWR9rwGu6UF46Hkom7uKCA5XE/n4sSM4BgOgZIS+IvbzkzVU
+         ro9g==
+X-Gm-Message-State: AC+VfDy9Dkur91AO/8m/6MHhVKenMgqOvBUCtRYp/+zgqRVgMGcSkJLx
+        Oj4HatwSugFbiwFjjAm9lAKzR0y8FFmHtL21fzg=
+X-Google-Smtp-Source: ACHHUZ7QNLHezJKKgugcDY76WqtFsyRDPUdrP3VNrAmxpGJnnItHVANA8FASckIlsufnD4WgvoVUwVdScRLgfreQMIw=
+X-Received: by 2002:a17:90a:f30d:b0:253:2c9b:2523 with SMTP id
+ ca13-20020a17090af30d00b002532c9b2523mr4971288pjb.46.1684328536918; Wed, 17
+ May 2023 06:02:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-5-aford173@gmail.com>
+ <a0debcb9251aa99326aec44235d39f84c6086096.camel@pengutronix.de>
+In-Reply-To: <a0debcb9251aa99326aec44235d39f84c6086096.camel@pengutronix.de>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 17 May 2023 08:02:05 -0500
+Message-ID: <CAHCN7xJZMu2u2gydmL9gF16Sd6wVX62kJRpzvZnhQLCtRm-zrQ@mail.gmail.com>
+Subject: Re: [PATCH V6 4/6] drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
         Neil Armstrong <neil.armstrong@linaro.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         Robert Foss <rfoss@kernel.org>,
@@ -36,121 +68,56 @@ Cc:     Marek Vasut <marex@denx.de>,
         Chen-Yu Tsai <wenst@chromium.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Jagan Teki <jagan@amarulasolutions.com>
-Date:   Wed, 17 May 2023 15:01:33 +0200
-In-Reply-To: <20230515235713.232939-7-aford173@gmail.com>
-References: <20230515235713.232939-1-aford173@gmail.com>
-         <20230515235713.232939-7-aford173@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, dem 15.05.2023 um 18:57 -0500 schrieb Adam Ford:
-> The high-speed clock is hard-coded to the burst-clock
-> frequency specified in the device tree.  However, when
-> using devices like certain bridge chips without burst mode
-> and varying resolutions and refresh rates, it may be
-> necessary to set the high-speed clock dynamically based
-> on the desired pixel clock for the connected device.
-> 
-> This also removes the need to set a clock speed from
-> the device tree for non-burst mode operation, since the
-> pixel clock rate is the rate requested from the attached
-> device like a bridge chip. 
-> 
+On Wed, May 17, 2023 at 7:58=E2=80=AFAM Lucas Stach <l.stach@pengutronix.de=
+> wrote:
+>
+> Am Montag, dem 15.05.2023 um 18:57 -0500 schrieb Adam Ford:
+> > In order to support variable DPHY timings, it's necessary
+> > to enable GENERIC_PHY_MIPI_DPHY so phy_mipi_dphy_get_default_config
+> > can be used to determine the nominal values for a given resolution
+> > and refresh rate.
+> >
+> I would just squash this one into the patch introducing the dependency.
 
-Same as with the earlier patch, this needs to be documented in the DT
-binding by moving "samsung,burst-clock-frequency" to be a optional
-property.
+I thought Kconfig updates were supposed to be on their own.  Is that
+not correct?
 
-Regards,
-Lucas
-
->  This should have no impact
-> for people using burst-mode and setting the burst clock
-> rate is still required for those users.  If the burst
-> clock is not present, change the error message to
-> dev_info indicating the clock use the pixel clock.
-> 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> ---
->  drivers/gpu/drm/bridge/samsung-dsim.c | 27 +++++++++++++++++++++------
->  1 file changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
-> index 3944b7cfbbdf..03b21d13f067 100644
-> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> @@ -655,16 +655,28 @@ static unsigned long samsung_dsim_set_pll(struct samsung_dsim *dsi,
->  
->  	dsi->hs_clock = fout;
->  
-> +	dsi->hs_clock = fout;
-> +
->  	return fout;
->  }
->  
->  static int samsung_dsim_enable_clock(struct samsung_dsim *dsi)
->  {
-> -	unsigned long hs_clk, byte_clk, esc_clk;
-> +	unsigned long hs_clk, byte_clk, esc_clk, pix_clk;
->  	unsigned long esc_div;
->  	u32 reg;
-> +	struct drm_display_mode *m = &dsi->mode;
-> +	int bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
-> +
-> +	/* m->clock is in KHz */
-> +	pix_clk = m->clock * 1000;
-> +
-> +	/* Use burst_clk_rate if available, otherwise use the pix_clk */
-> +	if (dsi->burst_clk_rate)
-> +		hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
-> +	else
-> +		hs_clk = samsung_dsim_set_pll(dsi, DIV_ROUND_UP(pix_clk * bpp, dsi->lanes));
->  
-> -	hs_clk = samsung_dsim_set_pll(dsi, dsi->burst_clk_rate);
->  	if (!hs_clk) {
->  		dev_err(dsi->dev, "failed to configure DSI PLL\n");
->  		return -EFAULT;
-> @@ -935,7 +947,7 @@ static void samsung_dsim_set_display_mode(struct samsung_dsim *dsi)
->  	u32 reg;
->  
->  	if (dsi->mode_flags & MIPI_DSI_MODE_VIDEO) {
-> -		int byte_clk_khz = dsi->burst_clk_rate / 1000 / 8;
-> +		int byte_clk_khz = dsi->hs_clock / 1000 / 8;
->  		int hfp = (m->hsync_start - m->hdisplay) * byte_clk_khz / m->clock;
->  		int hbp = (m->htotal - m->hsync_end) * byte_clk_khz / m->clock;
->  		int hsa = (m->hsync_end - m->hsync_start) * byte_clk_khz / m->clock;
-> @@ -1785,10 +1797,13 @@ static int samsung_dsim_parse_dt(struct samsung_dsim *dsi)
->  			return PTR_ERR(pll_clk);
->  	}
->  
-> +	/* If it doesn't exist, use pixel clock instead of failing */
->  	ret = samsung_dsim_of_read_u32(node, "samsung,burst-clock-frequency",
-> -				       &dsi->burst_clk_rate, 0);
-> -	if (ret < 0)
-> -		return ret;
-> +				       &dsi->burst_clk_rate, 1);
-> +	if (ret < 0) {
-> +		dev_info(dev, "Using pixel clock for HS clock frequency\n");
-> +		dsi->burst_clk_rate = 0;
-> +	}
->  
->  	ret = samsung_dsim_of_read_u32(node, "samsung,esc-clock-frequency",
->  				       &dsi->esc_clk_rate, 0);
-
+adam
+>
+> Regards,
+> Lucas
+>
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> > ---
+> >  drivers/gpu/drm/bridge/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kc=
+onfig
+> > index f076a09afac0..82c68b042444 100644
+> > --- a/drivers/gpu/drm/bridge/Kconfig
+> > +++ b/drivers/gpu/drm/bridge/Kconfig
+> > @@ -227,6 +227,7 @@ config DRM_SAMSUNG_DSIM
+> >       select DRM_KMS_HELPER
+> >       select DRM_MIPI_DSI
+> >       select DRM_PANEL_BRIDGE
+> > +     select GENERIC_PHY_MIPI_DPHY
+> >       help
+> >         The Samsung MIPI DSIM bridge controller driver.
+> >         This MIPI DSIM bridge can be found it on Exynos SoCs and
+>
