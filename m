@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DD37075C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8B770761D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjEQXCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 19:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S229825AbjEQXDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 19:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjEQXCO (ORCPT
+        with ESMTP id S229924AbjEQXDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 19:02:14 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DB361AE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:02:06 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-528cdc9576cso923761a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684364526; x=1686956526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NCOs9XFCFeYjn/qRnbFLhpqd0QIqRRTHRKO1/+0RAUk=;
-        b=hblzA3PbsTRQj6+lS+RlZl1Bd8A+m4ZU2gRkGKogDTW2wJqSkEx6ZBxuNyeQhCXmO/
-         7U6aPZGf5+vHz+ckkVvoPkEV42PklylLIZkRyTnzUlpACKLZIomqzSnqlpjZ0O8yve08
-         FxK3KLI7abAFw3PZBgAl5IPQmQOw7B7VwPl3Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684364526; x=1686956526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NCOs9XFCFeYjn/qRnbFLhpqd0QIqRRTHRKO1/+0RAUk=;
-        b=jsbV4nVjrZbkGj79hFwLn+ETIFFKcK738wF+Yh4voVb6idMyvKsf6zO55RMsbYPJ6J
-         ASHjw5VByzmGJ4TtWesw6EwQIHVfEXViJ8nFEo/uapKJGFFyemkcocsaVSobJvirGxNA
-         GKoSldqM9S1uwNcqKcELT2j2Vq01qIsFhGGX9OulPLny0xX58e48IGNSDuyCyCFZZyrs
-         8+u+lB8sFmEObd3JoTPOWt+zIDSziiIQIjhVQkr2aOAq8Hrq42f3MSSuW72jSd240O4F
-         dYsuMM3aJ5wvFQ2VdRR2uQz3bKRbrr/teGQVXOWALUXHYxfFma+FBXaivPU2hT89eWk8
-         mZRg==
-X-Gm-Message-State: AC+VfDyF0u5bVe3Ph9PdH4mRW38VP73bRDT3NUs8uqWAQ4o559xsO/j1
-        tiIkjKPaJ1KZQdKKlEqYP9K9e5+/0xkhhenu7DY=
-X-Google-Smtp-Source: ACHHUZ7Qe0iBjeZmvcgnaHOBEs733JZVei10a9MeOfdNB6l5X05u502QW9KQ28OgeMcXVjjkg2bwog==
-X-Received: by 2002:a17:902:ec8a:b0:19f:87b5:1873 with SMTP id x10-20020a170902ec8a00b0019f87b51873mr342789plg.62.1684364526317;
-        Wed, 17 May 2023 16:02:06 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170902728f00b001a69c1c78e7sm18008090pll.71.2023.05.17.16.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 16:02:05 -0700 (PDT)
-Date:   Wed, 17 May 2023 16:02:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Smart <james.smart@broadcom.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2][next] scsi: lpfc: Replace one-element array with
- flexible-array member
-Message-ID: <202305171602.2C715B078F@keescook>
-References: <cover.1684358315.git.gustavoars@kernel.org>
- <6c6dcab88524c14c47fd06b9332bd96162656db5.1684358315.git.gustavoars@kernel.org>
+        Wed, 17 May 2023 19:03:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068246E88;
+        Wed, 17 May 2023 16:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684364600; x=1715900600;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2+0dwq6i5SrTU+4itFIZkMLXuGYnuIgVovKsqf7sCNE=;
+  b=bz3wfmJ8p2miQm5XNO0u2C5npXIqIHJYXvdiENkRR9G21n3fHt16Bxj9
+   1K4u2ZpupFYtYD3gkvTOUKdzaO2qwFkSXFf9aSv6IIiHUd84iZ9/fqMhY
+   pVe8BhZFsuKjUSGiTM+HIdhqxrvjmOJVActQCnCxeV9BXgsixxZ8gnYvD
+   5tpW6Xyn0cSZKTqZO6EOuiuuaX0VZLqhiS+BijATBgSISdIKqdn9S6ACc
+   i7tF25CvzgHNgL6Pa0HdU5jhrRejpOvkCLXz1eaVGOCvvwA+OaF1UOVLX
+   pB7v/2Ud9IKcLJK2J0/EQvb6Fd+chyIKPgQu+TB0GUMaqU7bKwd7kA8Oe
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="417561586"
+X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
+   d="scan'208";a="417561586"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 16:03:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="771617280"
+X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
+   d="scan'208";a="771617280"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 17 May 2023 16:03:09 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pzQAl-000AU7-2p;
+        Thu, 18 May 2023 02:03:07 +0300
+Date:   Thu, 18 May 2023 02:03:07 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, manugautam@google.com,
+        Serge Semin <fancer.lancer@gmail.com>
+Subject: Re: [PATCH v11 3/3] spi: dw: Round of n_bytes to power of 2
+Message-ID: <ZGVdK9jQ+zxRvOze@smile.fi.intel.com>
+References: <20230512104746.1797865-1-joychakr@google.com>
+ <20230512104746.1797865-4-joychakr@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6c6dcab88524c14c47fd06b9332bd96162656db5.1684358315.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230512104746.1797865-4-joychakr@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 03:22:45PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in a couple of structures, and refactor the rest of the code,
-> accordingly.
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> This results in no differences in binary output.
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/295
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+On Fri, May 12, 2023 at 10:47:45AM +0000, Joy Chakraborty wrote:
+> n_bytes variable in the driver represents the number of bytes per word
+> that needs to be sent/copied to fifo. Bits/word can be between 8 and 32
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+FIFO
+
+> bits from the client but in memory they are a power of 2, same is mentioned
+> in spi.h header:
+
+> "
+
+Just a blank line is enough here.
+
+>  * @bits_per_word: Data transfers involve one or more words; word sizes
+>  *      like eight or 12 bits are common.  In-memory wordsizes are
+>  *      powers of two bytes (e.g. 20 bit samples use 32 bits).
+>  *      This may be changed by the device's driver, or left at the
+>  *      default (0) indicating protocol words are eight bit bytes.
+>  *      The spi_transfer.bits_per_word can override this for each transfer.
+> "
+
+And here.
+
+> Hence, round of n_bytes to a power of 2 to avoid values like 3 which
+> would generate unalligned/odd accesses to memory/fifo.
+
+FIFO
+
+> Fixes: a51acc2400d4 ("spi: dw: Add support for 32-bits max xfer size")
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+> Tested-by: Serge Semin <fancer.lancer@gmail.com>
+
+> * tested on Baikal-T1 based system with DW SPI-looped back interface
+> transferring a chunk of data with DFS:8,12,16.
+
+This shouldn't be here. It's not a tag.
 
 -- 
-Kees Cook
+With Best Regards,
+Andy Shevchenko
+
+
