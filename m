@@ -2,207 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EE9706FE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22149706FE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjEQRrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S229926AbjEQRsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjEQRrm (ORCPT
+        with ESMTP id S229923AbjEQRsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:47:42 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E66D2C7;
-        Wed, 17 May 2023 10:47:23 -0700 (PDT)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HE5CFD031014;
-        Wed, 17 May 2023 17:47:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=dkpDg7GuhJDDs4td12pUvAJ4vlKH2Olbn9+FRDroq/E=;
- b=mj4qZb2FK4K9zKGITYiv07CAqvUdm5ib28aGcvlXC1iCy/A0uQFA4fRLBUn7LGOEDnwG
- YXpiZccgWEJY5ED31Is+K/kcHl/BS69z1/mtyjAHqqw8T1fmmZH7ym6PgBWiRa5RMoyF
- ss+f91D7NQSOcBZCDtSfK6KXznBy4eDEz9ZD09ed/arRwTXOBDhoYUkIrY9zkuCpp0zZ
- /a2aVRcOymx0JIq5JubgOrt7j9XtL22s4eyyJt1jvEKJfDl7vWTS2ceL/ao+VsHy/vUB
- 5ckqq3cM6PZ46oItzy1DjXo5QWyumrFsvx+LBITTwIlIvrdJCqWqRHDnj2Utw/fsF+c6 5w== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj1fc6fpv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 17:47:17 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34HHhPjx036175;
-        Wed, 17 May 2023 17:47:15 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qmm02rb9f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 17:47:15 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AxLcxzvLSA0ztlSTmkiqCYe9LcAc3ATDn6etBv6khEbQIbkBgjxkNcN+v0/V+cBCxYUMxLD3pBXmEDrjWbyTynuwnK5IARB0jd2q3vpF8wgq2zLBveU39RcjKi9hHKOtljOyxQ/C+Ef6ZyO48Zyw4wNoGjR9DHNUAZvZF+bdZx9W8MfIfNnvp3Ec5VsWLVxuLD6x4sCbyxNCwxLsvIGRPalvZTAxEjFFQ2LUaDprzS2RCDVwq14cBtleaULlPdPGp3+ZheeYyRP6nPrtiSHLgmpkGDNkNIh/jdxxSzQnRLuoDPHBbiHdl02MZKGkp+na6d54GHpTodZ9I6XrZtRxFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dkpDg7GuhJDDs4td12pUvAJ4vlKH2Olbn9+FRDroq/E=;
- b=N1rpvlQ1hwoseXF+7FOLTNPEl13Va6MVj9H0nH0pIFEIj6JGzLuQo+FMrFzW9BnTkZiZ/dPtvpHsxWyr3tjnTHL7oS70qERcpSv9abubOjj/o8fk9og0aNKzkLxzU9SvxPCA8ugAzXJi8lFkcp+qv0AbCoXhFCVb/yLhQs7sAf9ZVQ4v+vEmGqz82e1HpfLFGrR2sFq1W/BonZ/xCMVfU7mWtjO2SvfGqC1NPBwkpx8A3/y5f6Xr1GSmrZTgxNZbPJ7UIDfnvEpnfRFVEwDNCUiIiiVHiD+xNZmMBoUYnaTGrmaXd82P4GOl5luWAqZLcQ9xd7LShkdc/no37OxaBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dkpDg7GuhJDDs4td12pUvAJ4vlKH2Olbn9+FRDroq/E=;
- b=rmT2hv6UnVKwSGIJ+RkerG3K9XBIzIPC/u40eLjkmE4fWbSxmBvqYKCAkj7SV5DalLYRG3EK27sj91fWuji+cDFB6NurDJsQjnsOERdzZnKI09287MBnfTwVJZSg+hWG8fy7o24M8kWrMD3v5IclPQGrAr9LFVxT3uHt6POmhgQ=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by IA0PR10MB7276.namprd10.prod.outlook.com (2603:10b6:208:3dc::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Wed, 17 May
- 2023 17:47:13 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::ecbd:fc46:2528:36db]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::ecbd:fc46:2528:36db%5]) with mapi id 15.20.6411.017; Wed, 17 May 2023
- 17:47:13 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     Jeff Layton <jlayton@kernel.org>
-CC:     Zhi Li <yieli@redhat.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] nfsd: make a copy of struct iattr before calling
- notify_change
-Thread-Topic: [PATCH] nfsd: make a copy of struct iattr before calling
- notify_change
-Thread-Index: AQHZiNxjTBHmZLbinU6qeN9/OzGsKK9evXMA
-Date:   Wed, 17 May 2023 17:47:13 +0000
-Message-ID: <74D303B1-08F8-4CDF-8732-9352FFDEC463@oracle.com>
-References: <20230517162645.254512-1-jlayton@kernel.org>
-In-Reply-To: <20230517162645.254512-1-jlayton@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.500.231)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN0PR10MB5128:EE_|IA0PR10MB7276:EE_
-x-ms-office365-filtering-correlation-id: 5420cb0a-7cbd-42bf-f921-08db56febf2d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2RZM3x5ofYmNbyByC4Kyn/qYS5Nx6Oantpks/ouIVxeCiEQeROmivCa8RBWantuZaP52yBp/sy4gfy9/wiG1zWj/NaYr2QlOMGQf4FO/i7co7X5Q/oYXYe7ENg/UnmV/y5kAsFdmodNleOFDW896yZxyHlnODhIYk5OiTY3PWOs57JEXjD6LAHt9/5tk5yNGfLg/bRYZtjKwjJhXs7gpvILpgBpiDtkMLxt98WqPyQAZ3OIQaVwKtxCLclZ2ZtpBWvUQnANq6Vq+k+BF9pl7vRBg8+5aYVFGVu3UvBmRQMqZ1saJiyb7vo/U+6soKcmheg1bPh2kGdhg3Jm3TbIXRQZkmxudcaAaF+u9NkaXDVdbp3N7g2r9XxmjrGLFiCwxt6Hnltsh3GATtoIuUBvB74uLmxV2Y9MQwASRSyuKqm6HJfPlrlPAcqSlfulbXceDU+m705llo0Mzce2qxcra8zEWxn3h1zq+WKsfYMkQFtzRoq1NfibfjlPbFOxd1VCjM++B2kPgVvThpJ8gbcmC/A9YpigF2H0Q4mbQHzKbZYKPonZB3VD+AzEkXtenglTBIRzJZeEQuMXydoMpOkjOPcNcyRxdfuJQnnUTDDeJVqu9Xzn3R2Sc3XcJQcs045kM
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199021)(36756003)(33656002)(38070700005)(86362001)(66446008)(54906003)(316002)(91956017)(76116006)(966005)(66476007)(66946007)(66556008)(6916009)(4326008)(478600001)(64756008)(71200400001)(5660300002)(8936002)(8676002)(2906002)(38100700002)(122000001)(2616005)(26005)(53546011)(6506007)(83380400001)(6512007)(186003)(41300700001)(6486002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Nrh13yiCEPtMEmVE8hsKawGgMgENjECSFco6K05jj2qSRGoa8WccFGFeROoa?=
- =?us-ascii?Q?XIfdUWPk4f8BV5vT82WFkhm/4tqhwIVHCA8d2BrhWVIf26pJEGb9oGH10G2n?=
- =?us-ascii?Q?I8Mq1ABksTX49fEcsQ0MLga/X8MHXK5llEPpfxnQjespKsX/RuhiiSVwYYdC?=
- =?us-ascii?Q?nTu5ZHtiHxbUKLBKhc6GAhQMBjWiLnRqK+T635wUS3ILrajunGADwSa093Pl?=
- =?us-ascii?Q?mxjLC1u2zr96MuBpjyFS2rFOFRzBI1nhQuRAh1IHAPVtU+lHGtaijP2Z3939?=
- =?us-ascii?Q?IPiQZ9Z6ow3bYrnKeY+zM/BoWjxsTy6Z3+vqV73IzX9UJ7zIZ4mbmxwG62PK?=
- =?us-ascii?Q?vhpBT3yhqvvMxxmCE9Q+oYbotQYiJigoOUrnYexzTH7abFfgjQ7BkK9FKJD/?=
- =?us-ascii?Q?QxtQRY3+fEgqvuUpxofMQljm2AUhc9U/Zy2T0wyMB8W+1akW7x183e31kKnG?=
- =?us-ascii?Q?9aQPc4LoOmFEGxr2s4w6tfzkYjjQ7uBVGCAa/5+4T622AoNS2E89AJLAVZII?=
- =?us-ascii?Q?Vd+gS3HHdZv4tVMKsj4b+XXasxEqj3EYBkpZaD4US7BCbGfWzZ5KRcKQH884?=
- =?us-ascii?Q?cuN/Bc84Jao9zagzRZ3WRchg7GDsXmgm35/f1iu/FQVcekhRCVIFaa0KAL7V?=
- =?us-ascii?Q?4lLR+Tra4uSVhLg+9hnaaoo8vHlKuGvbrao22aPjj75+b6ZvGe+10Fepi7Bk?=
- =?us-ascii?Q?MqYGHtPPrYCZ5N2owghgX4RTwTZI80y0AKQ6Yn0vZH6gdl1Ui2tk+W5yt7O+?=
- =?us-ascii?Q?VyRBXvDEEOhaOFIKvj3uLQ399W51SeUvFGriTprnAwdEzIlODHFAmC3hp7yA?=
- =?us-ascii?Q?4BXHewHAz0Bp5j2xz2PQoiJtO74ewUxpamx3tQldegnN5v4lUGBUtK1/LPkA?=
- =?us-ascii?Q?nQ+YnMeIQ+vQ+zFVYmnFY/C35KUhXRDNMMVy0Fb6Ptjo16C73++oFFWpnx4/?=
- =?us-ascii?Q?pFGeHavp2EGRXxZxM7JzYZudJsRvJD1qkbMRzgqC3ceO5QwsZ5h6wNpm8PLS?=
- =?us-ascii?Q?c4FdMIb2o68ekTXRnav8vIiWPZV2QLp+g5v1jLz56D4LtzkZfDNTeNPq+i1U?=
- =?us-ascii?Q?B32G7ogwn40ushTp9FPE9q4LlNTNd230P+/ml2C0f+OsAIiP/ZHTUnvskfOe?=
- =?us-ascii?Q?OYNiq4tmzKPdXoyc/eMdh/TVKVoeNurhP+6So18bu7moedXqYVuIqzE618bC?=
- =?us-ascii?Q?WEGgZ0CQq3pYAOOWueknUsdHPrD0BjKPBThcumn32jFFAYsSzFa/jF4vRtHG?=
- =?us-ascii?Q?v6/bV1Db05TFnxvjcomjPE4Euo5VZpYFzzLiGX7BHG3tc7JlXE/zuTXiREp8?=
- =?us-ascii?Q?yO2nmXy2nh6IMm7TzP+k7J0CLnOdl3p7W8Q0RNrQWe73U5q4zzPR801CaX9N?=
- =?us-ascii?Q?i2QgY9kPEkNNEuB0dRegAy/TX66fxpQXFO6/bsvpeV6++R+E5YjyRRWLJTAL?=
- =?us-ascii?Q?c6DOJLSuXPw6AXI3kCmZVnbl2DsWoHiqNgIrfTueR6noyhs8Hnh3VE3OxzBE?=
- =?us-ascii?Q?dbenXccrEiveo09KHmPjWKxfNoy+HD775TbkIeQsPxkkzlmCGeFavCTHxX6K?=
- =?us-ascii?Q?+P7JkcCmoQYtZ0QDAuUcmKD+w07UdGTKeiTYG0OZieccVS4NNW87ilzFdEoH?=
- =?us-ascii?Q?Kg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8CC45C45018B8F44924A55827C79BFE4@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 17 May 2023 13:48:21 -0400
+Received: from p3plwbeout16-04.prod.phx3.secureserver.net (p3plsmtp16-04-2.prod.phx3.secureserver.net [173.201.193.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D671D84C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:47:44 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.142])
+        by :WBEOUT: with ESMTP
+        id zLFWp4Nh3b397zLFXpx1yr; Wed, 17 May 2023 10:47:43 -0700
+X-CMAE-Analysis: v=2.4 cv=XfBMcK15 c=1 sm=1 tr=0 ts=6465133f
+ a=s1hRAmXuQnGNrIj+3lWWVA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=FXvPX3liAAAA:8
+ a=IoMjfNCK1isbzoXsNuIA:9 a=QEXdDO2ut3YA:10 a=SM4aVyO6fsoA:10
+ a=UxLD5KG5Eu0A:10 a=UObqyxdv-6Yh2QiB9mM_:22
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  zLFWp4Nh3b397
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.87])
+        by smtp05.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1pzLFa-0006vm-O3; Wed, 17 May 2023 18:47:47 +0100
+Message-ID: <6c9e3b5d-093f-b7b7-2370-04d3953dc9cd@squashfs.org.uk>
+Date:   Wed, 17 May 2023 18:47:41 +0100
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: fMfHLsRmpFUo79wm04z3Gx6ozD/CeczAfargFbmOjGZsdALaYGU0bnBdW7/9ajCPzly40Cdt4IBwRAQ0l5ZBMo7SG6gBwwgeG1pCwVd3QQ1aoYYzx0TSJJ8wZ9O9xi1FalRGCu3qBZb+DS/RzdZdStOoY9J29P7WrFxp7+FL/AICVzRhYh+rrUYABN1cfJmdXzQw+XcRGz/Jqk9+HRqoYYWiL+zFuRg5/N6HGYGy45cnkGknZND+L8qgKK0yXEaiql74wFVmFtHbx8urJouJ1afbkBGp4eD4Xe2yOHshT4sgKWZMBlzxa/mnCoraGR04OzDG7PzqmBmBTNHhJ01b3Zkvaj0ZHMBBgThMRl6xqcFLfLytaiff/Z9Y8gz2XL7CtiOIKCOWmBaoAlFr7aXfXA8KCwJ9TR22CPtY1JOXyYIjrJ68hMWCiO7BXVvI0VWbgPP1/gJyksBxYiLhWVN+SbWYtuwJX3ywHtDbXalzMxliLnr/h0PACmuo108wb6NdgwtL4HAj62fx4mg5zy7sPn4z2UyWfk0s5pag27zamIaI8EnSrN2afgzOj3oMGM5Otcv4vs6aZc0Mm35JTm6IXtb4aLWmw7GcHR6nVwy5+tGihzy229HfWR59SYaBKXaZx+ZWq+2Jkfwhx5J3YhiMC2B1+OIiC4hHmPLBZI9kmfQdlqRBVwJrwzEBcMx2XvBThnK/lvaGWySpXepmBCCnlP7esLAo0+Uwhscp9z1Bh0StzlCvBVTqZtQ2ssNOuDpR8N/2hsNvPBD3tHAg2BK32JxhsYOX6sF0m0y0Pt40i8YAJPi3UeQ689IPfaC5z2Eg
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5420cb0a-7cbd-42bf-f921-08db56febf2d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 17:47:13.1738
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LF+JhXdAtkUHQAkV4V+6M8VPj/5uCAy7cwOPuUH27J6Q8EoJikSMBHYv2CryLqANst3JnywHDRtV3NutmzdWiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB7276
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
- malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170146
-X-Proofpoint-ORIG-GUID: uqie-gC3q9dJz6N3UPDxoUhCpuhpprSy
-X-Proofpoint-GUID: uqie-gC3q9dJz6N3UPDxoUhCpuhpprSy
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] squashfs: don't include buffer_head.h
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     akpm@linux-foundation.org, squashfs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230517071622.245151-1-hch@lst.de>
+Content-Language: en-GB
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <20230517071622.245151-1-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfDQmMV5H0TZAUZ8qKdYriUUlbqZqPqTrxCvr9ALcT7ae9mYtwXcsexgTNFa1IS7Yq7rX0OzKkGTUScTV9OB35HTcZ3eZLX606lxzWY9jLGo6T5TpZfsX
+ fge0FfNrZgBJq/C7kFPaAcHmlomSHg976uUZDCI2QtadD4rjNE2bzJT1tG8LDiUHBbzge0ym9lxQ/HsD+nAsWKifOPG9AFZB4NpIVl3gyfvedIacy6CKoAqw
+ GxCRN6aps+p8f3VQuiL1ug==
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17/05/2023 08:16, Christoph Hellwig wrote:
+> Squashfs has stopped using buffers heads in 93e72b3c612adcaca1
+> ("squashfs: migrate from ll_rw_block usage to BIO").
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-
-> On May 17, 2023, at 12:26 PM, Jeff Layton <jlayton@kernel.org> wrote:
->=20
-> notify_change can modify the iattr structure. In particular it can can
-> end up setting ATTR_MODE when ATTR_KILL_SUID is already set, causing a
-> BUG() if the same iattr is passed to notify_change more than once.
->=20
-> Make a copy of the struct iattr before calling notify_change.
->=20
-> Fixes: 34b91dda7124 NFSD: Make nfsd4_setattr() wait before returning NFS4=
-ERR_DELAY
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2207969
-> Reported-by: Zhi Li <yieli@redhat.com>
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
-> fs/nfsd/vfs.c | 4 +++-
-> 1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
-> index c4ef24c5ffd0..ad0c5cd900b1 100644
-> --- a/fs/nfsd/vfs.c
-> +++ b/fs/nfsd/vfs.c
-> @@ -538,7 +538,9 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *f=
-hp,
->=20
-> inode_lock(inode);
-> for (retries =3D 1;;) {
-> - host_err =3D __nfsd_setattr(dentry, iap);
-> + struct iattr attrs =3D *iap;
-
-This construct always makes me queazy. I'm never sure if an
-initializer inside a loop is "only once" or "every time". I
-fixed a bug like this once.
-
-But if you've tested it and it addresses the BUG, then let's
-go with this. I can apply it to nfsd-fixes.
-
-
-> +
-> + host_err =3D __nfsd_setattr(dentry, &attrs);
-> if (host_err !=3D -EAGAIN || !retries--)
-> break;
-> if (!nfsd_wait_for_delegreturn(rqstp, inode))
-> --=20
-> 2.40.1
->=20
-
---
-Chuck Lever
+Reviewed-by: Phillip Lougher <phillip@squashfs.org.uk>
 
 
