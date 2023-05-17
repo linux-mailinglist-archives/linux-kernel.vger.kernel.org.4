@@ -2,164 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80E670616C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111F3706170
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjEQHlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S230014AbjEQHld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjEQHlB (ORCPT
+        with ESMTP id S229510AbjEQHlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:41:01 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D5710CE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:40:59 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so763241a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684309258; x=1686901258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JtCtewUzVRW8uKYzP1Tao4nr54dZXagWaGdfoHN7tnw=;
-        b=uuLpv0TPdGVb78xn7vF4u2Gz6XP+nbkReTYJC1oFYxpS9C67JYwewj58bcRDPj6f6w
-         yY186AVWeCvpyGINXsyl1m7LR8qRSiu/2nyifyOXxOLOpAB2ANnEDzgOf6ks0j8BvTBA
-         9R8lRY//6mD3X1ZCYBUV4X+mQUHy6O6zs2SsjGKF/4XCa53+GI6aaqnIGJDwKNl5Fiv0
-         SMG4dVXlBw3mFbWqWSze4O9Y/MljNz955fCP6Nwl66okuWOZzjnCyAuvA/pF2zlyCBj3
-         dwWCHQH+aVSWG6Y03Dkd0qlsk02Epn1Cwkaj6OScVpjkmVMRNm+XZQbUWEduc8S5bN3r
-         JQ5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684309258; x=1686901258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JtCtewUzVRW8uKYzP1Tao4nr54dZXagWaGdfoHN7tnw=;
-        b=l50bnZ2fAOlVHy6TCUVDBuFj2CJWeFRBkg7CdKssAIKpNYwDd8Vi39vo/Dh+Y6gndR
-         VTyD0zcmAI4tuXsEcxwQclS2UHJiQsSuPiCdRWm1zeYtMGXTwGlrgmj/2BnWSymvdzR1
-         aHwHJJ6Ctc5rdH2RhTIXER7VvnX0imEJaSeRbVR0cWPprK0CsRVIcOhrKCbu3vMPQKhr
-         92howrlYumcryyGLhQX+k/R5k6GZGq6cs6WW7AnilBNXRPx3ftXiqgcl1VuRJMH1Nxry
-         JSObf1PEaViarDmaZftfTQF/DH9TkALej6CvQWsQckscZC+4iyImhb1l6GeSGdx+QYO2
-         8yxg==
-X-Gm-Message-State: AC+VfDxGe3ySmjzHwoPdwzguVEAYnu6StoQm5gqRpc0n6DdXuO2u5Sv8
-        h6NQTf97vZh+tD91d6poF0wvdg==
-X-Google-Smtp-Source: ACHHUZ5MX40hBHEYvpaGYmdcpfpkfWBCMgkl6rhA0Lvr/VDGhzhQbEuS3/WdyLTzslok+rOrR9UchA==
-X-Received: by 2002:a17:907:724d:b0:96a:53e6:eab5 with SMTP id ds13-20020a170907724d00b0096a53e6eab5mr19711718ejc.41.1684309258349;
-        Wed, 17 May 2023 00:40:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id my14-20020a1709065a4e00b0096643397aeesm11823975ejc.184.2023.05.17.00.40.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 00:40:57 -0700 (PDT)
-Message-ID: <c63ebd7e-8658-9cdd-4fc4-ade9c94dfa64@linaro.org>
-Date:   Wed, 17 May 2023 09:40:56 +0200
+        Wed, 17 May 2023 03:41:31 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7601E64
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:41:29 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8DxzOomhWRk5moJAA--.16259S3;
+        Wed, 17 May 2023 15:41:26 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuQlhWRkhl5lAA--.42736S2;
+        Wed, 17 May 2023 15:41:25 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        suijingfeng <suijingfeng@loongson.cn>, liyi <liyi@loongson.cn>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/drm_atomic.h: update the comment of legacy cursor update
+Date:   Wed, 17 May 2023 15:41:25 +0800
+Message-Id: <20230517074125.3228854-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: add mediatek mipi csi driver v
- 0.5
-Content-Language: en-US
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Julien Stephan <jstephan@baylibre.com>
-Cc:     robh@kernel.org, chunkuang.hu@kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230515090551.1251389-1-jstephan@baylibre.com>
- <20230515090551.1251389-2-jstephan@baylibre.com>
- <ab9aa30f-82d7-1d14-5561-e19ff10af0b0@linaro.org>
- <4yppinkucchwnwtnnpbqdn4bejmntjq3q6mx6es55f2pwyce3c@qdhdks47lpyt>
- <1853f049-4f00-b7f0-973a-2c4e7b0b2634@linaro.org>
- <7h353w2oug.fsf@baylibre.com>
- <fbf1b0a6-f45d-69a0-5de6-8269567e15b3@linaro.org>
- <7hwn18yndq.fsf@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <7hwn18yndq.fsf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxHuQlhWRkhl5lAA--.42736S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZFWrJF1kGry3uw4kWF1fXrb_yoWDCrgE9r
+        y7Z3ykGr9xC34Fg347tF93KFZ3K392vF4Duw4rJw15JFykGa13Aw4DGFyfC3WUGrWDG34U
+        W3Z3X34xZw1fWjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        Z7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 23:31, Kevin Hilman wrote:
+Because there have no atomic_async_commit hook in drm_plane_helper_funcs,
+Should replace it with atomic_async_update. Legacy cursor updates should
+be down with drm_plane_helper_funcs.atomic_async_update.
 
->> Third is to use versioned IP blocks.
->>
->> The second case also would work, if it is applicable to you (you really
->> have fallback matching all devices). Third solution depends on your
->> versioning and Rob expressed dislike about it many times.
->>
->> We had many discussions on mailing lists, thus simplifying the review -
->> I recommend the first choice. For a better recommendation you should say
->> a bit more about the block in different SoCs.
-> 
-> I'll try to say a bit more about the PHY block, but in fact, it's not
-> just about differences between SoCs. On the same SoC, 2 different PHYs
-> may have different features/capabilities.
-> 
-> For example, on MT8365, There are 2 PHYs: CSI0 and CSI1.  CSI0 can
-> function as a C-PHY or a D-PHY, but CSI1 can only function as D-PHY
-> (used as the example in the binding patch[1].)  On another related SoC,
-> there are 3 PHYs, where CSI0 is C-D but CSI1 & CSI2 are only D.
-> 
-> So that's why it seems (at least to me) that while we need SoC
-> compatible, it's not enough.  We also need properties to describe
-> PHY-specific features (e.g. C-D PHY)
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ include/drm/drm_atomic.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I recall the same or very similar case... It bugs me now, but
-unfortunately I cannot find it.
-
-> 
-> Of course, we could rely only on SoC-specific compatibles describe this.
-> But then driver will need an SoC-specific table with the number of PHYs
-> and per-PHY features for each SoC encoded in the driver.  Since the
-> driver otherwise doesn't (and shouldn't, IMHO) need to know how many
-> PHYs are on each SoC, I suggested to Julien that perhaps the additional
-> propery was the better solution.
-
-Phys were modeled as separate device instances, so you would need
-difference in compatible to figure out which phy is it.
-
-Other way could be to create device for all phys and use phy-cells=1.
-Whether it makes sense, depends on the actual datasheet - maybe the
-split phy per device is artificial? There is one PHY block with two
-address ranges for each PHY - CSI0 and CSI1 - but it is actually one
-block? You should carefully check this because once design is chosen,
-you won't be able to go back to other and it might be a problem (e.g.
-there is some top-level block for powering on all CSI instances).
-
-
-> 
-> To me it seems redundant to have the driver encode PHYs-per-SoC info,
-> when the per-SoC DT is going to have the same info, so my suggestion was
-> to simplify the driver and have this kind of hardware description in the
-> DT, and keep the driver simple, but we are definitely open to learning
-> the "right way" of doing this.
-
-The property then is reasonable. It should not be bool, though, because
-it does not scale. There can be next block which supports only D-PHY on
-CSI0 and C-PHY on CSI1? Maybe some enum or list, depending on possible
-configurations.
-
-Best regards,
-Krzysztof
+diff --git a/include/drm/drm_atomic.h b/include/drm/drm_atomic.h
+index 9a022caacf93..c023c682301b 100644
+--- a/include/drm/drm_atomic.h
++++ b/include/drm/drm_atomic.h
+@@ -384,7 +384,7 @@ struct drm_atomic_state {
+ 	 * WARNING: This is thoroughly broken and pretty much impossible to
+ 	 * implement correctly. Drivers must ignore this and should instead
+ 	 * implement &drm_plane_helper_funcs.atomic_async_check and
+-	 * &drm_plane_helper_funcs.atomic_async_commit hooks. New users of this
++	 * &drm_plane_helper_funcs.atomic_async_update hooks. New users of this
+ 	 * flag are not allowed.
+ 	 */
+ 	bool legacy_cursor_update : 1;
+-- 
+2.25.1
 
