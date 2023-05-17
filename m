@@ -2,110 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D2C706105
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8DF70610A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjEQHWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S229901AbjEQHYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjEQHVz (ORCPT
+        with ESMTP id S229591AbjEQHYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:21:55 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C74F1727;
-        Wed, 17 May 2023 00:21:47 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-52c6f8ba7e3so355041a12.3;
-        Wed, 17 May 2023 00:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684308107; x=1686900107;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BS1Na/akbxcwCBviSJ46uyRelYEV2u7/1Oj5iI8pDZU=;
-        b=DHkEdXATNviXY3mYKfPgC2QKdgu3cRWMZnopSMkj0ila7020sxn+b2cnNRskmpAbZo
-         3OBqnhqMWEccG4TcmCA0wwS/h/T5C8k+Tzcl1N55uGuSAjZsScJUIeJZUktT9PdiUuI6
-         U7v/XeLVWzyU2pmH150DqEQw/kSLW2jiMSHB6ZchU3r1tVd8tFyPap7funYDjIcLS18K
-         MUZ2MQcOLOrYFPN0sHTvmCQk5CUuzxfQkxWEDROo7cEOmDhsKjJ9BE5nOJf33OVIUmfC
-         JDCEBaEFOOpBrh+aiZ0THMaqPWH8kTOhVbHTGuK+sCxbzKUPJjDzZTI+eZuoDIvjIWgQ
-         Yimg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684308107; x=1686900107;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BS1Na/akbxcwCBviSJ46uyRelYEV2u7/1Oj5iI8pDZU=;
-        b=PdQ3qd5/MuI7uSjvZE9ldbAoSwDsxRUCWV9M42app+SflENfwWVAw6beMPSNtHNEra
-         qO2Thdo6gSGnJDMdTXBb1NiVDoKuDIqkRGCmJW2D4lUSXcQiYWh0umUcb1z/E3tN8H4P
-         JDCWQrGr9UoanPqRwCx9FASZJbg3NWj67Hi9Unr2lbbwzTPpnMZZ3VOz8aDR0IkvX5YX
-         w40LOiDTXe3w05hwqg8OqUiqA0D8z5vs86z/VVGFlgICf35V+KMUCZt6t4H6uQ7B0zKo
-         hSknUiOmsXg+jG9puKPwcSNG3hRc45GgCHcqMR1o4zeksonroQEDUZOGYvQixlokehL4
-         xqZQ==
-X-Gm-Message-State: AC+VfDyHfEtjZqlYTcIs71piSMQHzv4t9kYwf7j9CrLcN2hnWAzT6Ycr
-        PU8FN3kEhvIxD/wSqIEup2I=
-X-Google-Smtp-Source: ACHHUZ5i+90PE5P+soAQjoR6R62SXEFnC71GiDKChwBtnvPTH12pwILXHueF3vQtLbKwuoEBFexfVw==
-X-Received: by 2002:a17:903:1c2:b0:1ac:94b3:3aaa with SMTP id e2-20020a17090301c200b001ac94b33aaamr36314210plh.6.1684308106760;
-        Wed, 17 May 2023 00:21:46 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-12.three.co.id. [180.214.232.12])
-        by smtp.gmail.com with ESMTPSA id t17-20020a170902e85100b0019309be03e7sm16712947plg.66.2023.05.17.00.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 00:21:46 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 26ABA1061C6; Wed, 17 May 2023 14:21:43 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux Watchdog Drivers <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Andrey Panin <pazke@donpac.ru>
-Subject: [PATCH 2/2] watchdog: ibmasr: Replace GPL license notice with SPDX identifier
-Date:   Wed, 17 May 2023 14:21:40 +0700
-Message-Id: <20230517072140.1086660-3-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230517072140.1086660-1-bagasdotme@gmail.com>
-References: <20230517072140.1086660-1-bagasdotme@gmail.com>
+        Wed, 17 May 2023 03:24:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72008110
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:24:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DBB41222E3;
+        Wed, 17 May 2023 07:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684308244; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6PiEFThpZMX1fwAg1ibrqioFtbtD24TZ4UiQ6URGOwI=;
+        b=hPN+0nYUQXPLpyPWU8sgx0/1wMgnm97EmASRgEhdU7IgmasLaKrw5lfxRUSZeWfSxJy2tb
+        WWVZ18kzEV3u1V+cV+fMB6uJj7RqEfgaJ+Yi77yjJ6Rt80Av2fvdkETaQfsDtbiV1dyRdX
+        C11aS2xvDMKQe9Rc/B1heqrnmQ89l8Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684308244;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6PiEFThpZMX1fwAg1ibrqioFtbtD24TZ4UiQ6URGOwI=;
+        b=rYzcd5U8TOTVW8GahveUkbQmFBYRRYtaUdvw0wMMhDhEWwtTY6zb8YaBe4CHN2vG5fxS8D
+        zJUK0XrwaozyNECg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EEB113478;
+        Wed, 17 May 2023 07:24:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T8ODJRSBZGTqCgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 17 May 2023 07:24:04 +0000
+Message-ID: <40689882-6771-97c7-f771-d57ceefd052a@suse.de>
+Date:   Wed, 17 May 2023 09:24:04 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=939; i=bagasdotme@gmail.com; h=from:subject; bh=Y1QNbQK3xjZdpu9JwvlhnKA2/0o+9myq3T+4p7KyICk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkpDS2yOZKsmrY1a36VFv7V38oamtUi88HoheWe9da2N 5ilXxzuKGVhEONikBVTZJmUyNd0epeRyIX2tY4wc1iZQIYwcHEKwESC3Bl+sySnPMppygxd/fOc 0DGHEAu+F9d9c+zq0ifqfP9+Qk4qkJFh/i2JhiT1VQoL9E2f74xRXbvn2FnN/enRc5zXcxyVych mAwA=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] drm/drm_atomic_helper.c: fix a typo
+Content-Language: en-US
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Sui Jingfeng <15330273260@189.cn>
+References: <20230517041602.3225325-1-suijingfeng@loongson.cn>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230517041602.3225325-1-suijingfeng@loongson.cn>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------0iThGoVUUDEsQ0zbkacndXD4"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace unversioned GPL license notice with appropriate SPDX license
-identifier, which is GPL 1.0+.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------0iThGoVUUDEsQ0zbkacndXD4
+Content-Type: multipart/mixed; boundary="------------Hbaqg3Tqaxl7stRw81ysETmF";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sui Jingfeng <suijingfeng@loongson.cn>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>
+Cc: loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Sui Jingfeng <15330273260@189.cn>
+Message-ID: <40689882-6771-97c7-f771-d57ceefd052a@suse.de>
+Subject: Re: [PATCH] drm/drm_atomic_helper.c: fix a typo
+References: <20230517041602.3225325-1-suijingfeng@loongson.cn>
+In-Reply-To: <20230517041602.3225325-1-suijingfeng@loongson.cn>
 
-Cc: Andrey Panin <pazke@donpac.ru>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- drivers/watchdog/ibmasr.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+--------------Hbaqg3Tqaxl7stRw81ysETmF
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/drivers/watchdog/ibmasr.c b/drivers/watchdog/ibmasr.c
-index 4a22fe15208630..6955c693b5fd00 100644
---- a/drivers/watchdog/ibmasr.c
-+++ b/drivers/watchdog/ibmasr.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-1.0+
- /*
-  * IBM Automatic Server Restart driver.
-  *
-@@ -6,8 +7,6 @@
-  * Based on driver written by Pete Reynolds.
-  * Copyright (c) IBM Corporation, 1998-2004.
-  *
-- * This software may be used and distributed according to the terms
-- * of the GNU Public License, incorporated herein by reference.
-  */
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--- 
-An old man doll... just what I always wanted! - Clara
+TWVyZ2VkLiBUaGFua3MgYSBsb3QuDQoNCkFtIDE3LjA1LjIzIHVtIDA2OjE2IHNjaHJpZWIg
+U3VpIEppbmdmZW5nOg0KPiBGcm9tOiBTdWkgSmluZ2ZlbmcgPDE1MzMwMjczMjYwQDE4OS5j
+bj4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFN1aSBKaW5nZmVuZyA8c3VpamluZ2ZlbmdAbG9v
+bmdzb24uY24+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fYXRvbWljX2hlbHBl
+ci5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxl
+dGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9kcm1fYXRvbWlj
+X2hlbHBlci5jIGIvZHJpdmVycy9ncHUvZHJtL2RybV9hdG9taWNfaGVscGVyLmMNCj4gaW5k
+ZXggZTBhYjU1NWFhZDJjLi40MWI4MDY2ZjYxZmYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMv
+Z3B1L2RybS9kcm1fYXRvbWljX2hlbHBlci5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9k
+cm1fYXRvbWljX2hlbHBlci5jDQo+IEBAIC0zMTU0LDcgKzMxNTQsNyBAQCBpbnQgZHJtX2F0
+b21pY19oZWxwZXJfdXBkYXRlX3BsYW5lKHN0cnVjdCBkcm1fcGxhbmUgKnBsYW5lLA0KPiAg
+IEVYUE9SVF9TWU1CT0woZHJtX2F0b21pY19oZWxwZXJfdXBkYXRlX3BsYW5lKTsNCj4gICAN
+Cj4gICAvKioNCj4gLSAqIGRybV9hdG9taWNfaGVscGVyX2Rpc2FibGVfcGxhbmUgLSBIZWxw
+ZXIgZm9yIHByaW1hcnkgcGxhbmUgZGlzYWJsZSB1c2luZyAqIGF0b21pYw0KPiArICogZHJt
+X2F0b21pY19oZWxwZXJfZGlzYWJsZV9wbGFuZSAtIEhlbHBlciBmb3IgcHJpbWFyeSBwbGFu
+ZSBkaXNhYmxlIHVzaW5nIGF0b21pYw0KPiAgICAqIEBwbGFuZTogcGxhbmUgdG8gZGlzYWJs
+ZQ0KPiAgICAqIEBjdHg6IGxvY2sgYWNxdWlyZSBjb250ZXh0DQo+ICAgICoNCg0KLS0gDQpU
+aG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0
+d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYx
+IE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRy
+ZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcp
+DQo=
 
+--------------Hbaqg3Tqaxl7stRw81ysETmF--
+
+--------------0iThGoVUUDEsQ0zbkacndXD4
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRkgRQFAwAAAAAACgkQlh/E3EQov+BH
+1xAAmDLLFNXBszMdvotO+u2QzOe1+3aeuRWyw3r6SyXtaVtuO2o7TCJv8huapWv6RwJVnM6Opk+Q
+T+PltmOfR9nTVyfkCLr7QiQFfjzI+ZjmjiQIxh9LBJgRcIrIGWnQMU/tWuDt9grI63mhWwAzPF/j
+qDS0HEIBCqyeUHdn7a1JyBbNRs5fh5NwAc/m3vOf2T/vIqY73AjmUoBXLOVP09eVXZu8Lom0in2I
+AJFtYreQ6HGsTCe0hMqwmtf60SFpUlWOc8Bii6IcgnTQkb+3paCRaFtaDFfp/pxSRAOFcwuYOBlk
+0hi6q+Bi5SKIbQUsZ2zmsPUZyLo1JBXqZnLDKV9yIb8kit0pjxKfIcKLhmPPT9ej8JvK4XXAOmqD
+fFg0jQ5DrcHpbojaoVbl346yWVY0xgqlAY79eAoiTKALbVwWzIAfc2ciDDJt0z+qwG0Aon8XB2ES
+8ocYmJjFXZgdQXl7QGvtVxN93UMDC5bonbeL9++u4FGzv6osOfJjffcrql3VBORl2nYpXn6mpB9g
+17Aa47balptJsrCBGaNTY1/BPgGrFYj6qLVthySL2s/2BDMU4ajU/lVz1bi/wXYO2NayB9ahyjee
+UFgdGldEhLi18xarvQUQ5lb4YE6f/IOkz/gv9zaq2mWkcghEgd4jiSVzi/zK3x7R2pedachEX3Xl
+VAo=
+=b5go
+-----END PGP SIGNATURE-----
+
+--------------0iThGoVUUDEsQ0zbkacndXD4--
