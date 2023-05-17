@@ -2,66 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02772707445
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3B9707447
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjEQV3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 17:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S229596AbjEQVaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 17:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjEQV3m (ORCPT
+        with ESMTP id S229543AbjEQVaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 17:29:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3677EB4;
-        Wed, 17 May 2023 14:29:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684358981; x=1715894981;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eZ74ldENADY+CWTR6k8PxDuJHdv/JJ22uNtqWxNPuV0=;
-  b=BK2MC1eCFMJrdpgB8A7Qgetbq7ppI//kttTiHltacCluYW+luay4W5WV
-   fM71YY6pnNpc5V1GROtXrew8B1NB+0Z+B5mDJzNe0fIwxlbvcURgiQVSb
-   pP9an74bDkIe7WL7oCxXdU3aqQ0YTpTuJstKsAiTbS5VSrkvohMTWtwxt
-   tQ1CBFSniiIglb6ulGMZS3+5LJwaOA1tI1noB8CFQ1j4JLMoqAyR6U3s3
-   jINJFPk9rSKSrWt6Y3wmv+UoUPeoP4Ik7ms20JgA3TF53Z/uaaqIqV4hY
-   N1vVd4to/egDVEvdPvhOMxUdpVgNKgss7+Clve1xbmib1gaMPydxAbKZc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="417543691"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="417543691"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:29:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="704962201"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="704962201"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.83.61]) ([10.212.83.61])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:29:35 -0700
-Message-ID: <f09f9c9d-09d2-72bd-6892-4a7e80a37b49@intel.com>
-Date:   Wed, 17 May 2023 14:29:35 -0700
+        Wed, 17 May 2023 17:30:02 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E8F1996;
+        Wed, 17 May 2023 14:30:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=YQ/waTn/4esVCDDekDi58999aSnIc14UPn0SAKuaX7w=; b=q1
+        efnrPypgQgZifUGOYhCQwD+zdhVxpxea/r1xchsI4x2tNoz0GnprxVXQsB/B/KXqxESB2pcCPB6+S
+        8HDxN6YqSjnQwko5sJ1mSzqucM8uzO3UkkzRD9eP2utfSDO+tLydGpg0azlis/V0waHV1dHUi7Jwy
+        LPF0WsA3wQa1LYM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pzOiV-00DAtx-Ak; Wed, 17 May 2023 23:29:51 +0200
+Date:   Wed, 17 May 2023 23:29:51 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     netdev@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 2/3] net: phy: broadcom: Add support for
+ WAKE_FILTER
+Message-ID: <7e3b5d21-946b-49e9-b0a9-805af8cca9ae@lunn.ch>
+References: <20230516231713.2882879-1-florian.fainelli@broadcom.com>
+ <20230516231713.2882879-3-florian.fainelli@broadcom.com>
+ <a47d27e0-a8ef-4df0-aa45-623dda9e6412@lunn.ch>
+ <011706c2-f0fb-42d2-81a9-7e5e4fbd784d@broadcom.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] MAINTAINERS: Add additional reviewers for CXL
-Content-Language: en-US
-To:     Ira Weiny <ira.weiny@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
- <20230426-cxl-fixes-v1-1-870c4c8b463a@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230426-cxl-fixes-v1-1-870c4c8b463a@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <011706c2-f0fb-42d2-81a9-7e5e4fbd784d@broadcom.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,32 +63,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/17/23 2:28 PM, Ira Weiny wrote:
-> To get better coverage add Dave Jiang and Jonathan Cameron as reviewers.
+> > > ethtool -N eth0 flow-type ether dst 01:00:5e:00:00:fb loc 0 action -2
+> > > ethtool -n eth0
+> > > Total 1 rules
+> > > 
+> > > Filter: 0
+> > >          Flow Type: Raw Ethernet
+> > >          Src MAC addr: 00:00:00:00:00:00 mask: FF:FF:FF:FF:FF:FF
+> > >          Dest MAC addr: 01:00:5E:00:00:FB mask: 00:00:00:00:00:00
+> > >          Ethertype: 0x0 mask: 0xFFFF
+> > >          Action: Wake-on-LAN
+> > > ethtool -s eth0 wol f
+> > 
+> > What i don't particularly like about this is its not vary
+> > discoverable, since it is not part of:
+> > 
+> >            wol p|u|m|b|a|g|s|f|d...
+> >                    Sets Wake-on-LAN options.  Not all devices support
+> >                    this.  The argument to this option is a string of
+> >                    characters specifying which options to enable.
+> > 
+> >                    p   Wake on PHY activity
+> >                    u   Wake on unicast messages
+> >                    m   Wake on multicast messages
+> >                    b   Wake on broadcast messages
+> >                    a   Wake on ARP
+> >                    g   Wake on MagicPacket™
+> >                    s   Enable SecureOn™ password for MagicPacket™
+> >                    f   Wake on filter(s)
+> >                    d   Disable (wake on  nothing).   This  option
+> >                        clears all previous options.
+> > 
+> > If the PHY hardware is not generic, it only has one action, WoL, it
+> > might be better to have this use the standard wol commands. Can it be
+> > made to work under the 'f' option?
 > 
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> You actually need both, if you only configure the filter with
+> RX_CLS_FLOW_WAKE but forget to set the 'f' bit in wolopts, then the wake-up
+> will not occur because the PHY will not have been configured with the
+> correct matching mode.
 
-Acked-by: Dave Jiang <dave.jiang@intel.com>
+Ah. Please could you extend the man page for ethtool. Maybe make flow
+type action -2 reference wol, and wol f reference flow-type?
 
-> ---
->   MAINTAINERS | 2 ++
->   1 file changed, 2 insertions(+)
+> I was initially considering that the 'sopass' field could become an union
+> since it is exactly the size of a MAC address (6 bytes) and you could do
+> something like:
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 90abe83c02f3..6f8568ec2731 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5169,6 +5169,8 @@ M:	Vishal Verma <vishal.l.verma@intel.com>
->   M:	Ira Weiny <ira.weiny@intel.com>
->   M:	Ben Widawsky <bwidawsk@kernel.org>
->   M:	Dan Williams <dan.j.williams@intel.com>
-> +R:	Dave Jiang <dave.jiang@intel.com>
-> +R:	Jonathan Cameron <Jonathan.Cameron@Huawei.com>
->   L:	linux-cxl@vger.kernel.org
->   S:	Maintained
->   F:	drivers/cxl/
-> 
+> ethtool -s eth0 wol f mac 01:00:5E:00:00:FB
+
+Yes, i was thinking something like that.
+
+> but then we have some intersection with the 'u', 'm' and 'b' options too,
+> which are just short hand for specific MAC DAs.
+
+The man page for ethtool say:
+
+           sopass xx:yy:zz:aa:bb:cc
+                  Sets the SecureOn™ password.  The argument  to  this  option
+                  must    be    6   bytes   in   Ethernet   MAC   hex   format
+                  (xx:yy:zz:aa:bb:cc).
+
+So i don't think it is too much of an API bendage to pass a MAC
+address in a union.
+
+I had a quick look at some Marvell switches. They allow an arbitrary
+Unicast MAC address to be used to wake a port. So such an extension
+could be used for it as well.
+
+And it looks like the Marcell Alaska PHY could implement it as
+well. So it would not be limited to just the Broadcom PHYs.
+
+      Andrew
