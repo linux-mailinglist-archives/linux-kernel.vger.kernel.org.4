@@ -2,113 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404F17070CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA6D7070CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjEQSdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 14:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
+        id S229641AbjEQSei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 14:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjEQSdl (ORCPT
+        with ESMTP id S229483AbjEQSeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 14:33:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C3659F6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684348375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tWirlWWlCUUsr8UZmipN+8l7jgoXYLY/EkGHRTVlLyg=;
-        b=AUqKf/wETCEoQbjE0lxx0heW/SsCaH5rx1URufID57Ir/u6uPP5x5QZG2jd/iLcdKDLVZw
-        OJotl4HwYeN2x5cWglT+ETsSHCHFSON7NLStiscaacuytDsyXHu++FDw9XXIoNpnsXT/Rl
-        XQAIg4h1ArnNBZ9o8IwFlCkrjsuXqH8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-321-3V2wh-1BNrG6c420O4UTYw-1; Wed, 17 May 2023 14:32:54 -0400
-X-MC-Unique: 3V2wh-1BNrG6c420O4UTYw-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3062dedf7d9so786191f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:32:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684348373; x=1686940373;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tWirlWWlCUUsr8UZmipN+8l7jgoXYLY/EkGHRTVlLyg=;
-        b=bLnN0d8IFiyq8yKsXXQIXHGw4p09LCAEAsTC8aunPmoUdn02Q+bC0W7ua+kO6Q0+9L
-         Loe1dVE9/QEGk42V/YIqpco2mnimyDjGCgkHAKO8jK9pG8Whiw4pee4fBOfhe6L6cRHv
-         tntXQJ/VwcF8JeFozyP/Of1NHKSvJAZG41NpaSNVH5tLe6FOaQP4/+xL4MS/Xcq+qpVz
-         o8oRqtpac1k2qDsiR6jQWhfJui8PkyDatPuLpZlxsKK++/PYwDL0NiRtKgI5o9ubC47F
-         FvK8KAt8P4RLvA+YYzz2Os5T5xjmGAakyfsSQjK+Kw2WLwijIGIYFqMnFpQEZf3SK2zE
-         bHrg==
-X-Gm-Message-State: AC+VfDwq2eFpuu37Mhgmy3x+gO3nfTHZz42MtvjRlvKg7YMl1nRz1BNW
-        JX8iepFp7tIE0u2vhm8q7nS07GlDWoM8oRuyQ94isfPeEpMf8CkCKCDYcIBgMZnIFPKtI9zfInN
-        qBTOMDpn9qN/Zw/51GPeGkeYmry4s5qDe
-X-Received: by 2002:a05:6000:1b02:b0:306:32fa:6750 with SMTP id f2-20020a0560001b0200b0030632fa6750mr1586268wrz.33.1684348373176;
-        Wed, 17 May 2023 11:32:53 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5pxxZHXbgxjBtssu1Seqb0hRfntY6UXqemn9lgw482zixUcCJCgZXrri/08JLB/NFvO0TxuQ==
-X-Received: by 2002:a05:6000:1b02:b0:306:32fa:6750 with SMTP id f2-20020a0560001b0200b0030632fa6750mr1586259wrz.33.1684348372847;
-        Wed, 17 May 2023 11:32:52 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:3900:757e:83f8:a99d:41ae? (p200300cbc7073900757e83f8a99d41ae.dip0.t-ipconnect.de. [2003:cb:c707:3900:757e:83f8:a99d:41ae])
-        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003f19b3d89e9sm2903695wmc.33.2023.05.17.11.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 11:32:52 -0700 (PDT)
-Message-ID: <c34e3768-8a01-d155-1970-8eada8c80ba7@redhat.com>
-Date:   Wed, 17 May 2023 20:32:51 +0200
+        Wed, 17 May 2023 14:34:36 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192DE59F6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:34:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JYPbCejWiP/4rDAhzW6qmDSb3X+z50LITwusbPfDe2GVemNq76oU/respW4ykkPatAvUJlSQ/7ZHAV6SpugztGRYKHBVUjK8FtIQSGVrMYgLja+yJ6r0J91t8EyreY6ZdrKdfz1W9aIRnD1bdHbO9QPs8bYkw7cjkIe5awi18ySZDs2TkPjydmD/S0dcQsOWxr58Bln+eqSBydlaSuFDyI58GOS8dmpaSc56hygh13RN3zi93j7eeD6xkpaOgjkIBiOd67Ag9vb5EtElOWndpAr0tpVhdihiQ4/xrbrnBDXKr/tCz6YTK47mSIYCwfkFYoPoMpwb705tXw/TXLRYew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jhbo/StYlLnJNWpVlS+CXRHr66jym3+B2/ZPhrPK+0o=;
+ b=eyiyfci0DD7hpGhXDG4QmUrFsmdP9QQV4H2l79dKpC3+/8EjXOxHoQDiQnUvH0PXvzTG6AvjsZICeX2ydJPANx9V0Dy2nrj8hvioP71f01UDK1J+X2c8qGOtw8hYA1KHpGJn6WqHeoSiwyzSA5nTmlZGcmDBQkQZOX2STfrXavvT7F8YYzGmlluvbCw0UYRTxFr5Gv6/XwcYz/JnIRfRrPejX+G2vXdhJR7ZvZZ0vBR7bel2apDxdq5TYnIxhR1N3lkBSR/1sDLdkmLL2DH0aazCDopWxQzdxfAkdUW2vmh6sF50PoGTm45VeqK6PZSPij0stgQT9aTLqihUfD9BGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jhbo/StYlLnJNWpVlS+CXRHr66jym3+B2/ZPhrPK+0o=;
+ b=Qugm8fAmGdKlQW00rU/XDSnmep9weyLSUKk+lxQtP0cFxbyRf6A5SwevZXYwuz0ACuHMDqZYik8Zm5bk/Umss2A2Ofn6my2E+xQhmR+8xvkSy6RMAWZs5VAVHRPx0sIhZcyT/7+q2QohrM5rq1t22kcxeyUlM3mbhmQ1gmaN1zA=
+Received: from DM6PR02CA0063.namprd02.prod.outlook.com (2603:10b6:5:177::40)
+ by BN9PR12MB5164.namprd12.prod.outlook.com (2603:10b6:408:11d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Wed, 17 May
+ 2023 18:34:31 +0000
+Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:177:cafe::fc) by DM6PR02CA0063.outlook.office365.com
+ (2603:10b6:5:177::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
+ Transport; Wed, 17 May 2023 18:34:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.18 via Frontend Transport; Wed, 17 May 2023 18:34:30 +0000
+Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 17 May
+ 2023 13:34:28 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <amd-gfx@lists.freedesktop.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Harry Wentland <harry.wentland@amd.com>,
+        "Leo Li" <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        Hersen Wu <hersenxs.wu@amd.com>,
+        Stylon Wang <stylon.wang@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Leon Huang <Leon.Huang1@amd.com>,
+        Mike Hsieh <Mike.Hsieh@amd.com>,
+        Cruise Hung <Cruise.Hung@amd.com>,
+        Nasir Osman <nasir.osman@amd.com>,
+        pengfuyuan <pengfuyuan@kylinos.cn>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/3] drm/amd/display: drop redundant memset() in get_available_dsc_slices()
+Date:   Wed, 17 May 2023 14:33:45 -0400
+Message-ID: <20230517183350.314082-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org
-Cc:     willy@infradead.org, steven.sistare@oracle.com,
-        ying.huang@intel.com, mgorman@techsingularity.net,
-        khalid@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230517161555.84776-1-khalid.aziz@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3] mm, compaction: Skip all non-migratable pages during
- scan
-In-Reply-To: <20230517161555.84776-1-khalid.aziz@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT032:EE_|BN9PR12MB5164:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7834d83d-9ac2-4fca-9dcb-08db57055aa8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: esHtKSzpycsP+oYRNdKv4qphocZsEzn5lMwSJi0mTyxQNNqEuG4UUll/WgqN0cgx5IROjSxbDFUQMbP1xqZgynfzo6st7YfsoVMo+DNinfL6oeFA7vOMo+U2eGc7qReRY8Co0/ANXI2tSD52hR/fthGIz5aaftnfGNUKgk0p3ZZysrHIw0DwNf5f24HgdUGJEjYeuFXWcUEL1AHqwJ1/r1xPxpcrZjIHipidXINrGqF3ymVcLF3AiWZm609vMsDRIEVyuWIZWcL9xeo+v31ah+LnTfhx7PiER7O5xznf+E/z7iDNIIV8fx9684YRgQJ8HfzTDQYncgSuXIdt/jjWu9hlE+uaWaIqnMuTBuvn9pG6wROlkrnpTdwJqmt4NF18+9/GVv9Q2Qz2lElkWHEUMSewacziJin954YINZaxA9ZM4ua/n+xhkyON/D7ihjN75FoGpmfyaHx+zAT0d+cYSeU1NmQMeoR5yYuwDjK69eDYMHNLs5zJdp9GYuzG61J45vAjaEVq42kUKUmg+fg4T/gqVEEp3w1GipLhtqfnSFe66ZEKVyjP7+iS+VKNhYKJON3VLSnbIE737lRPUUBOJyjPs9puSDH4xPG7z57XzMnuNXIZ1CMdHFnNwEVIay0TwFIrTg1U72Vm24osgSHjOPFrjHURUOs6eoc9xb77Xh2rAkJxEslu4uo2XnPld5frKp93EXAQlPSgmJ9lqEddHWjv/QCYxolwk+2tCtf4ZYNgZf8Cr9GvEgpJyC1gPLJ6OB6UA3R69VW9b/Kg58o1VBqBumEjJk1coJru3FpLgOtmJW35hRo+LZe+a9nsKMH6
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(70586007)(70206006)(4326008)(6916009)(478600001)(316002)(54906003)(36756003)(86362001)(83380400001)(47076005)(2616005)(16526019)(186003)(1076003)(26005)(40480700001)(36860700001)(426003)(336012)(44832011)(5660300002)(8936002)(8676002)(2906002)(6666004)(82310400005)(82740400003)(81166007)(356005)(41300700001)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 18:34:30.9885
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7834d83d-9ac2-4fca-9dcb-08db57055aa8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5164
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.05.23 18:15, Khalid Aziz wrote:
-> Pages pinned in memory through extra refcounts can not be migrated.
-> Currently as isolate_migratepages_block() scans pages for
-> compaction, it skips any pinned anonymous pages. All non-migratable
-> pages should be skipped and not just the anonymous pinned pages.
-> This patch adds a check for extra refcounts on a page to determine
-> if the page can be migrated.  This was seen as a real issue on a
-> customer workload where a large number of pages were pinned by vfio
-> on the host and any attempts to allocate hugepages resulted in
-> significant amount of cpu time spent in either direct compaction or
-> in kcompactd scanning vfio pinned pages over and over again that can
-> not be migrated.
+get_available_dsc_slices() returns the number of indices set, and all of
+the users of get_available_dsc_slices() don't cross the returned bound
+when iterating over available_slices[]. So, the memset() in
+get_available_dsc_slices() is redundant and can be dropped.
 
-How will this change affect alloc_contig_range(), such as used for CMA 
-allocations or virtio-mem? alloc_contig_range() ends up calling 
-isolate_migratepages_range() -> isolate_migratepages_block().
+Fixes: 97bda0322b8a ("drm/amd/display: Add DSC support for Navi (v2)")
+Reported-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-We don't want to fail early in case there is a short-term pin that might 
-go away any moment after we isolated ... that will make the situation 
-worse for these use cases, especially if MIGRATE_CMA or ZONE_MOVABLE is 
-involved.
-
+diff --git a/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c b/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
+index b9a05bb025db..58dd62cce4bb 100644
+--- a/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
++++ b/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
+@@ -645,8 +645,6 @@ static int get_available_dsc_slices(union dsc_enc_slice_caps slice_caps, int *av
+ {
+ 	int idx = 0;
+ 
+-	memset(available_slices, -1, MIN_AVAILABLE_SLICES_SIZE);
+-
+ 	if (slice_caps.bits.NUM_SLICES_1)
+ 		available_slices[idx++] = 1;
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.40.1
 
