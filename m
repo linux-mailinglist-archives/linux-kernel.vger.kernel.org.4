@@ -2,323 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD16707585
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EDF70758B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjEQWfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36292 "EHLO
+        id S229510AbjEQWki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjEQWfD (ORCPT
+        with ESMTP id S229484AbjEQWkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:35:03 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614BCAC
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684362902; x=1715898902;
-  h=date:from:to:cc:subject:message-id;
-  bh=gHKYqp62fyowHC3X7ExpJbaYCcpySJCuPjDZ6Dr2G8E=;
-  b=oB3lgmNvkPpm8NrmZJ/GTy+zk3BgDL7lGfdPzpK4XPTmJkX37c/+i4KQ
-   nPWStV4lOubhJjmMxqOLkRqlvFVz06DYoV6rbqYNJOtD6Bwo68DC6MEQg
-   5gupOY/VMO7S3qH3l9SiYnyz0EuWzY3KzrIn9fY58TctgCwUg+QXHpqIy
-   qiZETjVv9ntsi6e14lETI084SdN3KHB3nXTwZOSA9TbYGVr8S3QZilRJW
-   7cyofqkhUdcKC4EwyuP4gRWlDXHrT9bHIBIQV3YCa2AQlWj25J4C2Ox37
-   n8Zgc0HgfX2LuI89JSeLGZkHNmzDAlPaM17lKaG7KDQwYfr1rwHBHhGS2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="349399922"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="349399922"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 15:34:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="1031920951"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="1031920951"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 17 May 2023 15:34:47 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pzPjK-0009Hk-2B;
-        Wed, 17 May 2023 22:34:46 +0000
-Date:   Thu, 18 May 2023 06:34:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- f81d8f759e7f80c643027e631c586369836aac90
-Message-ID: <20230517223425.cuwbQ%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 18:40:37 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A331A2112;
+        Wed, 17 May 2023 15:40:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KmyUCisiZQRadSMtc3trGyj6vmE/XuJWoUZAONXRBqB37L3MBpXESQbspZFzj18MF1gxwZCgOAV1BxUQD4EICVtDPx5ja2te3QVbQWqH6DR/TDLhcBIMkgBDQOMCJsNgpJ+vexK2sTuOWCS4VgANfoVB7y0+VVzsmcoQ1C/iTlm12W9ARKH+drtQA6C/QrZTqm1J7vOslVb74s41hYfnYRRpKeCyn8lxctCeuw45LbGQfAINybfTxL3FX4x/WPjCOe+9s2Q3I2421qfw+aU47fRRjDP7LPMWkQFaCVICAxJ2Q41PeZQF3F6Tvfm9RM2QRk+o6nYCm3pIq4dPaQTNWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uSXmemznnc8NPR/ApGhvbYClYorbjAPj/3eFalY1iWQ=;
+ b=n8Q+k3qBk5/Ye/x7thLJnV+QI0DYXM6xXQhmTqeA9RqP8A+fzg+uusEbme3d/qgWa2hVqYeyPX3HeJyR9VcEWgo2ZfzG0lC9MojAowdTF+xpTJjDd2aU3YPVlEsT9R+7g7SQm7S/RZipMPQFPbg1ZIq5buqRetoaPO//rubJm7vjwEG+09/x8q8pfLc3VU5+F7LKArlx8F+8fuU9B1eMOjjRLgFE8KzomXBNgtCpnFiqswTChK+4aLb8c7g0fGskLGbO5d3MOPC8dNoeZx1xaofLJAKE/K//0fbmy6t1u9jPqBXNSkj3LB/qYR9SPH052VigyBdG3ZGsaynf93oH3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uSXmemznnc8NPR/ApGhvbYClYorbjAPj/3eFalY1iWQ=;
+ b=idx67fPxyHa0Piz+JxTuJU4ja+yn9skJbmzikEs9IBjBy+3ZWdxDAeUhl+Rm/0HwYCu3XQ0h/OmEzMnVsrsgoEeYJxQxQwFANNLLG931h+sfgH+/pRbxpHMox5uWe9IzoiL9bLa+YObE2etml6mwpN92KlEeTtfEJA8agqt3eYQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by PH8PR12MB7184.namprd12.prod.outlook.com (2603:10b6:510:227::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
+ 2023 22:40:32 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6411.017; Wed, 17 May 2023
+ 22:40:32 +0000
+Message-ID: <6f858998-bb56-689b-76a7-0952d73f5ab8@amd.com>
+Date:   Wed, 17 May 2023 17:40:30 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 05/20] x86: decompressor: Avoid the need for a stack in
+ the 32-bit trampoline
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20230508070330.582131-1-ardb@kernel.org>
+ <20230508070330.582131-6-ardb@kernel.org>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230508070330.582131-6-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DS7PR05CA0064.namprd05.prod.outlook.com
+ (2603:10b6:8:57::26) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|PH8PR12MB7184:EE_
+X-MS-Office365-Filtering-Correlation-Id: d9b0b733-6420-4a43-68ef-08db5727b8d4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TfEubXib1kITk6Ug4WMA+bj5G79SPBYG2mlsdlIa9841zo2ZPFXU9h+akuFmRtzJrBl4/MOd7jn9FQFANTx15ugiwtpDKy9nL7joyXCgvCzllqgDm1s6lOojF3oP2Mll7wg3ELcLBdqsG7un78qr6NsJs1VMUrBLEuF03/lSZoA2NG7bti07B2eswzpW2xQW01GGlw3s3qefjpJt+4+Q9a5CUNgDqKCdTa1pjh5gIdd2oPSW6FDiObjwNn3jHa6Y7Q/iTuQLpEUNDn5NLaickdm/hUhW3pPg7AUWSI1oRvsnfEGOGm/qQ5ISz7XnCswVc9pCirY6Oj+YDZPgvQ27ZgQLqEnAux9hdvyTWndjxV7NSoLyGinB9+761ktacONnuIn+ROwc2tbACptxIwhZVScNL1AosRRvjqe4pbZCImAahl94//2e02d+qC+Dl8jKlE+XnuKBZgn8vnidqFmmc2vP/R+DTZSrfDKSyNVViH/QsIugAlvmFA7tRu9GxMVU4cMC5cS3HzQA8eqGGgEHBec2KBZOjCumqRa0LtnxtR3+aYX7MnRcfIED9btT4cvZRUGGpNkpwnkpQQw8uNUlqcFuLDG+nFpCTB0cp/RGu1G8ZmGevGwQoDZ3pDldKBrifnZw1VEQOGm82zxkG79+OA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(39860400002)(376002)(346002)(451199021)(83380400001)(6506007)(186003)(26005)(53546011)(6512007)(36756003)(6486002)(2616005)(316002)(4326008)(66946007)(66556008)(2906002)(66476007)(38100700002)(8936002)(8676002)(7416002)(31686004)(31696002)(86362001)(41300700001)(5660300002)(54906003)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TEVPVml3R3U0NkNHdTQzK0JmbHdwVUc3dGIydkxtSTAxOTIrdVFTUFg4MzI2?=
+ =?utf-8?B?ZG15Tm5SMWFLQzVMa29NeVo4eUowM1V0eTdlWkZDeFRiOE5zbUJmVEFVWlVr?=
+ =?utf-8?B?c0tkajkwRllMcGZmVjA3ZWQ2NXFaUnh0SmNJc1BmQW1aNGdNWVZzZXRTRTh6?=
+ =?utf-8?B?U3puMDArUmxXcTFWU2JrMzkrUnN3L0FhOVVUZnJjUGlENmpRbGVJTU1QK09D?=
+ =?utf-8?B?OWx2L0VQUklNdTlaM01UZTdodjN3eTFMT25XbVoyUHMySmRsS2hBekw3MWxC?=
+ =?utf-8?B?RlFlanZKMHAwUzMxeXFRT1IrcWFJd201bHBQQ2s5a1NXMEptRlAxbU1pM3da?=
+ =?utf-8?B?eVE1dFdiZnN3SlVjTDVqVzhYTEZzczlhQ1VCYWI3ZjZLdnArUnhlYUlFd2Ru?=
+ =?utf-8?B?UkcvWUhtcm5vZE5aSkhqejlldWRoNTBmZXJwS2ZORnduNU9CcFJRTTRqWW01?=
+ =?utf-8?B?bWdLeTljWEgwQ1pTYk03Z0xMZ3B3UnhSZjExc21lMmxYRHdtZGZ0ZCtJWFAw?=
+ =?utf-8?B?eDBQVjNaekhIaDZYelJOdWJQMkNPdXpDRkdiTFpVSFcrTVRHazUwRVF1aWJE?=
+ =?utf-8?B?cjVuUmZxcnQ1R3FLbFVzWDJIZ3hrMzErMTFXSVppRWcyVUEvTWFmL0tBSXRD?=
+ =?utf-8?B?YjNtbnMwVTZPY2RueGlwZ25NWmZONXg2ajdPRGd4dE1CQmFaSHlJOTZ4WG04?=
+ =?utf-8?B?bzhNRjhGNGg4c0tOMXFiQi82U2Q0Vm10d01HWEsxbFh1bkZYVWZkdk5MbkUw?=
+ =?utf-8?B?UmJRRXJiaWI1TGl5V1ZYVnkyM2ptcHpJWVNyckx4MEdKdCtjREd5NDYzNmlL?=
+ =?utf-8?B?TlVQRkltT29aZEYzOXJnemRpYkdoM0ZmTjJPVGZSSklqTjM1cVJJTzJxS2NR?=
+ =?utf-8?B?QXlGUjdrOTgyMC9mb3pzWnZHL1NGMGptUHpxbGNjU1pVdGRiVDhSUkdpaERr?=
+ =?utf-8?B?RnhpNWNFTHBHOENkZGZnMzNGdUZWWDNNVHMzWm1yVng3MnNtRU1ZaHF1a1Ny?=
+ =?utf-8?B?SmNoZm10a3UyZ1lVS1hhMm5MWlNpYkxVclRYSVZWWlhJdUNRTE1waHZVdEgr?=
+ =?utf-8?B?V2NTS2gxdXFQSmpmTmRId29NRmY1T0NwK1ozZXBDN3lmbDdGMkMxWURYSzNi?=
+ =?utf-8?B?eVZFWEZ5bVlQVjlwemkxZE1laXI3OVlOaVlGVU9vNGFzMXhHN28zK1hwTmRM?=
+ =?utf-8?B?eEpLd2RYUnFjQXI0UjFLL2lCTzdKcWhsNUdoUWU1aGdVYk5tSzhBTGVscS9p?=
+ =?utf-8?B?VFRhcjcyMkk3dGR1WWkraDdHSWRkeU9vUXAzOUI4Vm5JMnFXamhEc1c3TGlP?=
+ =?utf-8?B?NFRyYjNnUkVHS1c4bE91Vmt1U1BhT3A1QkpVNFYxYzVPb0ttNzZXSGFsSnFX?=
+ =?utf-8?B?Q2JqK2pPT1BDRFMreDNlUUcvTytSKzBNSS9hWEdHZGtFSm5JSGNEdHczam5x?=
+ =?utf-8?B?Q2VvWXpMTWtERGlSck5ILzVyczdnYitwU3VqVVZFTlB6MEJtYjZ2MXUyV3Az?=
+ =?utf-8?B?Y0hVSTZYWjRieWs1Rm9SNjZCZjR2NVRpcWdsY1ZnZVIzNWJpWUt6TVRYbnhB?=
+ =?utf-8?B?Rm1SeEhyTTF5dXdZcStDV3M4N1ZJMDBMTFFOTkJNL3FGc2xWc002Wm40dVJY?=
+ =?utf-8?B?ZklYQks2Z0liMGJRd0NUbjlDMW14K2dUNTRrS2Q2NlYyUUpRbFNqY1h0T045?=
+ =?utf-8?B?YVZGeEZjamt2ckpMZlY5SVdPem1obTQ2MURXZGJxUG44L01oeC9RZ2JPVzlQ?=
+ =?utf-8?B?RVkwQTQxMnVxeVljOUpGc1N5VW9qWllNUS9pM1VsK0IyQ2gxQTQ1QThacmpZ?=
+ =?utf-8?B?MkxYcS9sNEl2WjRLTlpzeUUrMWZtRWpObTc2WVpDTmVHUmtnNmJQTUFNRk42?=
+ =?utf-8?B?T3Vta25HK2Q0MHBSV1hjRUo0QkdhMEFyYjdjdDdhVS9ySXdvZll5OGV3QVFu?=
+ =?utf-8?B?bGRSeExaUTNFeUtVTmFZZ1l0MGFNRXpzaWF6TGxOVjF1WFNweWYvQWF5aEov?=
+ =?utf-8?B?a1YxWDZkSHlUNlhOYzMrWTlxVEV5SEV2S2owVnJHWldKcDQwQmNvajJRVUMy?=
+ =?utf-8?B?T0I2eVV2eDEyTmtMSGpCZlpLekJEOUgrc1k1R01rWlE3b0NzYmlROFJQMFpD?=
+ =?utf-8?Q?XpJyMVg9shGSm2VLPFhSn6plj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9b0b733-6420-4a43-68ef-08db5727b8d4
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 22:40:32.1513
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GRRZ8T+tHLXAMEGd9ZgZvPGJdABcAawyPvmuR4SeqwhD0MECSBbta08R0Wab1ADhgNgVHEzxrRFdf6jqPYDRag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7184
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230517200055/lkp-src/repo/*/tip
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: f81d8f759e7f80c643027e631c586369836aac90  Merge x86/cpu into tip/master
+On 5/8/23 02:03, Ard Biesheuvel wrote:
+> The 32-bit trampoline no longer uses the stack for anything except
+> performing a long return back to long mode. Currently, this stack is
+> allocated in the same page that carries the trampoline code, which means
+> this page must be mapped writable and executable, and the stack is
+> therefore executable as well.
+> 
+> So let's do a long jump instead: that way, we can pre-calculate the
+> return address and poke it into the code before we call it. In a later
+> patch, we will take advantage of this by removing writable permissions
+> (and adding executable ones) explicitly when booting via the EFI stub.
+> 
+> Not playing with the stack pointer also makes it more straight-forward
+> to call the trampoline code as an ordinary 64-bit function from C code.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>   arch/x86/boot/compressed/head_64.S    | 34 ++++----------------
+>   arch/x86/boot/compressed/pgtable.h    |  6 ++--
+>   arch/x86/boot/compressed/pgtable_64.c | 12 ++++++-
+>   3 files changed, 21 insertions(+), 31 deletions(-)
+> 
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index b1f8a867777120bb..3b5fc851737ffc39 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -460,9 +460,6 @@ SYM_CODE_START(startup_64)
+>   	leaq	TRAMPOLINE_32BIT_CODE_OFFSET(%rax), %rax
+>   	call	*%rax
+>   
+> -	/* Restore the stack, the 32-bit trampoline uses its own stack */
+> -	leaq	rva(boot_stack_end)(%rbx), %rsp
+> -
+>   	/*
+>   	 * cleanup_trampoline() would restore trampoline memory.
+>   	 *
+> @@ -563,24 +560,17 @@ SYM_FUNC_END(.Lrelocated)
+>    * EDI contains the base address of the trampoline memory.
+>    * Non-zero ESI means trampoline needs to enable 5-level paging.
+>    */
+> +	.section ".rodata", "a", @progbits
+>   SYM_CODE_START(trampoline_32bit_src)
+> -	popq	%r8
+>   	/* Switch to compatibility mode (CS.L = 0 CS.D = 1) via far return */
+>   	pushq	$__KERNEL32_CS
+>   	leaq	0f(%rip), %rax
+>   	pushq	%rax
+>   	lretq
+> +.Lret:	retq
 
-elapsed time: 722m
+Maybe just add a comment above this to explain that this is a target of 
+the long jump below to get back into long mode and be able to return 
+without setting up a new stack for the 32-bit code.
 
-configs tested: 245
-configs skipped: 106
+And then a corresponding comment on the long jump itself. I think it would 
+make it easier to understand what is going on in this part of the code.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Tom
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230517   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r014-20230517   gcc  
-alpha                randconfig-r015-20230517   gcc  
-alpha                randconfig-r024-20230517   gcc  
-alpha                randconfig-r034-20230517   gcc  
-alpha                randconfig-r035-20230517   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r005-20230517   gcc  
-arc          buildonly-randconfig-r006-20230517   gcc  
-arc                                 defconfig   gcc  
-arc                        nsim_700_defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arc                  randconfig-r001-20230517   gcc  
-arc                  randconfig-r022-20230517   gcc  
-arc                  randconfig-r025-20230517   gcc  
-arc                    vdk_hs38_smp_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r001-20230517   clang
-arm                        clps711x_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          exynos_defconfig   gcc  
-arm                            hisi_defconfig   gcc  
-arm                        keystone_defconfig   gcc  
-arm                            mmp2_defconfig   clang
-arm                  randconfig-r031-20230517   gcc  
-arm                  randconfig-r034-20230517   gcc  
-arm                  randconfig-r035-20230517   gcc  
-arm                  randconfig-r036-20230517   gcc  
-arm                  randconfig-r046-20230517   clang
-arm                           u8500_defconfig   gcc  
-arm                       versatile_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r003-20230517   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r006-20230517   clang
-arm64                randconfig-r014-20230517   gcc  
-arm64                randconfig-r023-20230517   gcc  
-arm64                randconfig-r024-20230517   gcc  
-arm64                randconfig-r034-20230517   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230517   gcc  
-hexagon              randconfig-r012-20230517   clang
-hexagon              randconfig-r016-20230517   clang
-hexagon              randconfig-r035-20230517   clang
-hexagon              randconfig-r041-20230517   clang
-hexagon              randconfig-r045-20230517   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r003-20230517   gcc  
-ia64                                defconfig   gcc  
-ia64                      gensparse_defconfig   gcc  
-ia64                 randconfig-r005-20230517   gcc  
-ia64                 randconfig-r012-20230517   gcc  
-ia64                 randconfig-r013-20230517   gcc  
-ia64                 randconfig-r014-20230517   gcc  
-ia64                 randconfig-r023-20230517   gcc  
-ia64                 randconfig-r036-20230517   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r005-20230517   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r003-20230517   gcc  
-loongarch            randconfig-r011-20230517   gcc  
-loongarch            randconfig-r022-20230517   gcc  
-loongarch            randconfig-r032-20230517   gcc  
-loongarch            randconfig-r033-20230517   gcc  
-loongarch            randconfig-r035-20230517   gcc  
-m68k                             alldefconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                         amcore_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                 randconfig-r005-20230517   gcc  
-m68k                 randconfig-r015-20230517   gcc  
-m68k                 randconfig-r023-20230517   gcc  
-m68k                 randconfig-r034-20230517   gcc  
-microblaze   buildonly-randconfig-r003-20230517   gcc  
-microblaze   buildonly-randconfig-r005-20230517   gcc  
-microblaze           randconfig-r012-20230517   gcc  
-microblaze           randconfig-r021-20230517   gcc  
-microblaze           randconfig-r025-20230517   gcc  
-microblaze           randconfig-r031-20230517   gcc  
-microblaze           randconfig-r033-20230517   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                     loongson1c_defconfig   clang
-mips                      maltasmvp_defconfig   gcc  
-mips                        maltaup_defconfig   clang
-mips                 randconfig-r006-20230517   gcc  
-mips                        vocore2_defconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2        buildonly-randconfig-r002-20230517   gcc  
-nios2        buildonly-randconfig-r006-20230517   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r003-20230517   gcc  
-nios2                randconfig-r004-20230517   gcc  
-nios2                randconfig-r011-20230517   gcc  
-nios2                randconfig-r013-20230517   gcc  
-nios2                randconfig-r023-20230517   gcc  
-nios2                randconfig-r025-20230517   gcc  
-nios2                randconfig-r032-20230517   gcc  
-openrisc     buildonly-randconfig-r004-20230517   gcc  
-openrisc             randconfig-r001-20230517   gcc  
-openrisc             randconfig-r002-20230517   gcc  
-openrisc             randconfig-r003-20230517   gcc  
-openrisc             randconfig-r011-20230517   gcc  
-openrisc             randconfig-r012-20230517   gcc  
-openrisc             randconfig-r013-20230517   gcc  
-openrisc             randconfig-r031-20230517   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r002-20230517   gcc  
-parisc               randconfig-r016-20230517   gcc  
-parisc               randconfig-r026-20230517   gcc  
-parisc               randconfig-r032-20230517   gcc  
-parisc64                            defconfig   gcc  
-powerpc                    adder875_defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                        fsp2_defconfig   clang
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                 linkstation_defconfig   gcc  
-powerpc                       maple_defconfig   gcc  
-powerpc              randconfig-r016-20230517   gcc  
-powerpc                    socrates_defconfig   clang
-powerpc                  storcenter_defconfig   gcc  
-powerpc                     tqm5200_defconfig   clang
-powerpc                      walnut_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r001-20230517   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r001-20230517   clang
-riscv                randconfig-r002-20230517   clang
-riscv                randconfig-r005-20230517   clang
-riscv                randconfig-r011-20230517   gcc  
-riscv                randconfig-r014-20230517   gcc  
-riscv                randconfig-r015-20230517   gcc  
-riscv                randconfig-r024-20230517   gcc  
-riscv                randconfig-r026-20230517   gcc  
-riscv                randconfig-r032-20230517   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r004-20230517   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r016-20230517   gcc  
-s390                 randconfig-r021-20230517   gcc  
-s390                 randconfig-r022-20230517   gcc  
-s390                 randconfig-r031-20230517   clang
-sh                               alldefconfig   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r004-20230517   gcc  
-sh           buildonly-randconfig-r005-20230517   gcc  
-sh           buildonly-randconfig-r006-20230517   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                   randconfig-r005-20230517   gcc  
-sh                   randconfig-r013-20230517   gcc  
-sh                   randconfig-r015-20230517   gcc  
-sh                   randconfig-r021-20230517   gcc  
-sh                   randconfig-r024-20230517   gcc  
-sh                   randconfig-r025-20230517   gcc  
-sh                   randconfig-r036-20230517   gcc  
-sh                           se7619_defconfig   gcc  
-sh                           se7722_defconfig   gcc  
-sh                           se7751_defconfig   gcc  
-sh                           se7780_defconfig   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sh                        sh7785lcr_defconfig   gcc  
-sh                             shx3_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc        buildonly-randconfig-r002-20230517   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r001-20230517   gcc  
-sparc                randconfig-r003-20230517   gcc  
-sparc                randconfig-r021-20230517   gcc  
-sparc                randconfig-r022-20230517   gcc  
-sparc                randconfig-r023-20230517   gcc  
-sparc                randconfig-r024-20230517   gcc  
-sparc                randconfig-r033-20230517   gcc  
-sparc                randconfig-r036-20230517   gcc  
-sparc64      buildonly-randconfig-r001-20230517   gcc  
-sparc64              randconfig-r005-20230517   gcc  
-sparc64              randconfig-r016-20230517   gcc  
-sparc64              randconfig-r026-20230517   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                        randconfig-x052   clang
-x86_64                        randconfig-x054   clang
-x86_64                        randconfig-x056   clang
-x86_64                        randconfig-x061   gcc  
-x86_64                        randconfig-x062   clang
-x86_64                        randconfig-x063   gcc  
-x86_64                        randconfig-x064   clang
-x86_64                        randconfig-x065   gcc  
-x86_64                        randconfig-x066   clang
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-kvm   gcc  
-x86_64                           rhel-8.3-syz   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r001-20230517   gcc  
-xtensa       buildonly-randconfig-r003-20230517   gcc  
-xtensa               randconfig-r004-20230517   gcc  
-xtensa               randconfig-r012-20230517   gcc  
-xtensa               randconfig-r025-20230517   gcc  
-xtensa               randconfig-r026-20230517   gcc  
-xtensa               randconfig-r031-20230517   gcc  
-xtensa               randconfig-r032-20230517   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>   
+>   	.code32
+> -0:	/* Set up data and stack segments */
+> -	movl	$__KERNEL_DS, %eax
+> -	movl	%eax, %ds
+> -	movl	%eax, %ss
+> -
+> -	/* Set up new stack */
+> -	leal	TRAMPOLINE_32BIT_STACK_END(%edi), %esp
+> -
+> -	/* Disable paging */
+> +0:	/* Disable paging */
+>   	movl	%cr0, %eax
+>   	btrl	$X86_CR0_PG_BIT, %eax
+>   	movl	%eax, %cr0
+> @@ -634,26 +624,16 @@ SYM_CODE_START(trampoline_32bit_src)
+>   1:
+>   	movl	%eax, %cr4
+>   
+> -	/* Calculate address of paging_enabled() once we are executing in the trampoline */
+> -	leal	.Lpaging_enabled - trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_OFFSET(%edi), %eax
+> -
+> -	/* Prepare the stack for far return to Long Mode */
+> -	pushl	$__KERNEL_CS
+> -	pushl	%eax
+> -
+>   	/* Enable paging again. */
+>   	movl	%cr0, %eax
+>   	btsl	$X86_CR0_PG_BIT, %eax
+>   	movl	%eax, %cr0
+>   
+> -	lret
+> +.Ljmp:	ljmpl	$__KERNEL_CS, $(.Lret - trampoline_32bit_src)
+>   SYM_CODE_END(trampoline_32bit_src)
+>   
+> -	.code64
+> -SYM_FUNC_START_LOCAL_NOALIGN(.Lpaging_enabled)
+> -	/* Return from the trampoline */
+> -	jmp	*%r8
+> -SYM_FUNC_END(.Lpaging_enabled)
+> +/* keep this right after trampoline_32bit_src() so we can infer its size */
+> +SYM_DATA(trampoline_ljmp_imm_offset, .word  .Ljmp + 1 - trampoline_32bit_src)
+>   
+>   	/*
+>            * The trampoline code has a size limit.
+> @@ -662,7 +642,7 @@ SYM_FUNC_END(.Lpaging_enabled)
+>   	 */
+>   	.org	trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_SIZE
+>   
+> -	.code32
+> +	.text
+>   SYM_FUNC_START_LOCAL_NOALIGN(.Lno_longmode)
+>   	/* This isn't an x86-64 CPU, so hang intentionally, we cannot continue */
+>   1:
+> diff --git a/arch/x86/boot/compressed/pgtable.h b/arch/x86/boot/compressed/pgtable.h
+> index 4e8cef135226bcbb..131488f50af55d0a 100644
+> --- a/arch/x86/boot/compressed/pgtable.h
+> +++ b/arch/x86/boot/compressed/pgtable.h
+> @@ -6,9 +6,7 @@
+>   #define TRAMPOLINE_32BIT_PGTABLE_OFFSET	0
+>   
+>   #define TRAMPOLINE_32BIT_CODE_OFFSET	PAGE_SIZE
+> -#define TRAMPOLINE_32BIT_CODE_SIZE	0xA0
+> -
+> -#define TRAMPOLINE_32BIT_STACK_END	TRAMPOLINE_32BIT_SIZE
+> +#define TRAMPOLINE_32BIT_CODE_SIZE	0x80
+>   
+>   #ifndef __ASSEMBLER__
+>   
+> @@ -16,5 +14,7 @@ extern unsigned long *trampoline_32bit;
+>   
+>   extern void trampoline_32bit_src(void *trampoline, bool enable_5lvl);
+>   
+> +extern const u16 trampoline_ljmp_imm_offset;
+> +
+>   #endif /* __ASSEMBLER__ */
+>   #endif /* BOOT_COMPRESSED_PAGETABLE_H */
+> diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
+> index 2ac12ff4111bf8c0..09fc18180929fab3 100644
+> --- a/arch/x86/boot/compressed/pgtable_64.c
+> +++ b/arch/x86/boot/compressed/pgtable_64.c
+> @@ -109,6 +109,7 @@ static unsigned long find_trampoline_placement(void)
+>   struct paging_config paging_prepare(void *rmode)
+>   {
+>   	struct paging_config paging_config = {};
+> +	void *tramp_code;
+>   
+>   	/* Initialize boot_params. Required for cmdline_find_option_bool(). */
+>   	boot_params = rmode;
+> @@ -143,9 +144,18 @@ struct paging_config paging_prepare(void *rmode)
+>   	memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
+>   
+>   	/* Copy trampoline code in place */
+> -	memcpy(trampoline_32bit + TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
+> +	tramp_code = memcpy(trampoline_32bit +
+> +			TRAMPOLINE_32BIT_CODE_OFFSET / sizeof(unsigned long),
+>   			&trampoline_32bit_src, TRAMPOLINE_32BIT_CODE_SIZE);
+>   
+> +	/*
+> +	 * Avoid the need for a stack in the 32-bit trampoline code, by using
+> +	 * LJMP rather than LRET to return back to long mode. LJMP takes an
+> +	 * immediate absolute address, so we have to adjust that based on the
+> +	 * placement of the trampoline.
+> +	 */
+> +	*(u32 *)(tramp_code + trampoline_ljmp_imm_offset) += (unsigned long)tramp_code;
+> +
+>   	/*
+>   	 * The code below prepares page table in trampoline memory.
+>   	 *
