@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7F1707189
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04704707181
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjEQTJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S229701AbjEQTI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjEQTJj (ORCPT
+        with ESMTP id S229454AbjEQTI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:09:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066F9D07A;
-        Wed, 17 May 2023 12:09:24 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-643a6f993a7so839983b3a.1;
-        Wed, 17 May 2023 12:09:24 -0700 (PDT)
+        Wed, 17 May 2023 15:08:56 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64871FFE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:08:55 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ae4e49727eso12886485ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:08:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684350563; x=1686942563;
+        d=chromium.org; s=google; t=1684350535; x=1686942535;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6WVov+bnLXMOL8DiXreTcMhdqSvbTR7Fd9X+LdYwyE=;
-        b=YpRgYw9tZWbaGZGYQP8w0uwt9hrh31TWFjUosBsvefsC9kZK2gHgyp5HraBcnEUxSi
-         4HMB0hKB8tURZqUIRjGoQ9CdUhAENhAfeuBzY36WvUv1edukhQ4V0m0u9kBUVN1Tljf/
-         07gJz8/AmHK1mfX4mGmM4uimc2yy88HjLUkNIB6D7mjwzSdy5PYIbZK3HRGxX3XOSiR/
-         bPOpdcVRmc+6jTrKQh6s2H0vCttxJ+9MvQmcVa4W3bh+2wSqQCglZXVxgypps2itsopf
-         R46txHwiya0Ud8gHGhNqi8FGRFX0Xx37Sp4uKWrUwgtdBGqLb4wjNCkamINzmplxES7e
-         OQRw==
+        bh=0VPi5GJ7kmLjbS0ChDvxnSbO/WFZryCQHS1zNojC1Jg=;
+        b=QAoKvlkXZAxsNAT7iJlbWuQC5CZ9lAmg+vD8qn89JEKx3i+Chbwjy34BBTAw3HenUM
+         95QJL8FLlicZ+roKErcDYlYs7dqg9pbjkYn1D++vPhog1nPSZ7JNL26LZYK2Jsy39vRj
+         K1OI4iaGO9d4YxchHs9cUQJDIpoyX0EpIlE3Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350563; x=1686942563;
+        d=1e100.net; s=20221208; t=1684350535; x=1686942535;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=f6WVov+bnLXMOL8DiXreTcMhdqSvbTR7Fd9X+LdYwyE=;
-        b=MlypYVVM9xJLUZuBg7VoKUol1ogRllDIbhi9y1K5nUSq1TvvsfHcCCE8rKkMnK1bEh
-         ocUkkw+Jhhnh2i8lGcas4v/2vB2ysn26LkwGMwlFNMxWtrUHXA4j+5OuNiXH50lwnWna
-         HE9re8lC5K4YAbE7nw13dKXiqhwfIBvps4O9Ttc5MlpxhnVj8TKq2edEZfJjVIZqyqc9
-         gdPDN7Pufad18vlerM3dpeKKvpJz/jvTYS/pjg8htECfEHK0Ee6XY74k6Yk0kb5/2U96
-         bP416kR+AYKEa1RuSgR09AB3Z+1cDI7wAcqtKmfZapiVR3B9YQvRt50HLmlrgEJjZR7p
-         pOrg==
-X-Gm-Message-State: AC+VfDxKzLXm5n69SzsvRef6VMfSuEMWpuEt2jJj4DGy8Fe+fJi4gncY
-        8m3rSnVxC/pnS09V1Ggsn9I=
-X-Google-Smtp-Source: ACHHUZ5uN9up1EecQ7C/PmmncKVL/vnGeQt/VLMkiDtcE7xE8yeWl1itRLU5lJ1pWt2L5v+36LAVbA==
-X-Received: by 2002:a05:6a20:8e07:b0:101:8f00:595f with SMTP id y7-20020a056a208e0700b001018f00595fmr34785076pzj.44.1684350563288;
-        Wed, 17 May 2023 12:09:23 -0700 (PDT)
-Received: from localhost.localdomain ([111.201.128.95])
-        by smtp.gmail.com with ESMTPSA id p24-20020a62ab18000000b0063b5776b073sm15550842pff.117.2023.05.17.12.09.20
+        bh=0VPi5GJ7kmLjbS0ChDvxnSbO/WFZryCQHS1zNojC1Jg=;
+        b=bkPyLR5kCb//g0c3OX5kaL23JibQEjQOTIGC/YqFLppXAlVAA5a5znqh+g6ARCXHd8
+         x/dzR55Sqv5uTw+g+2W9KUkWRfmdfeawIUN5usyo5mLENgJEw5sgjDbpvDIJuKEcWXI5
+         VptK+67BHHFynQ+OSopiesXSPG6WPmz/vpxtaqCupbaTU+e0Lu3IF538G9SBuiZGkA+A
+         7AESQq+IM/vf9/BY/2YVX1hqgCIf2/fVWkDlMnGwwtKVoGBG7vf8Mbv4H4JSCOTf3o5U
+         jNncMfQJIt1z4bkAvGdCKpAYuk0GGjqlWEIqCwnEnrgeikgjF6AZf0EGpC0Y1QAZKrqr
+         2nCQ==
+X-Gm-Message-State: AC+VfDzRmhHEwLXiG8SBvPITHyimwxcNzzvP7SWWZORiByeHKQpZLqUq
+        Rw3LJGuSjqOoneMILF6orLRSvg==
+X-Google-Smtp-Source: ACHHUZ4X5CjhFGFsKy9pS738nZl7R3AuPDeJNfdDh/ABCbUMCY6EEuqWdvHd5p+s0M+DHCZFWQDnHw==
+X-Received: by 2002:a17:903:d2:b0:1aa:fe40:6f96 with SMTP id x18-20020a17090300d200b001aafe406f96mr39969648plc.23.1684350535344;
+        Wed, 17 May 2023 12:08:55 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id bh3-20020a170902a98300b00192aa53a7d5sm18013091plb.8.2023.05.17.12.08.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 12:09:22 -0700 (PDT)
-From:   Yeqi Fu <asuk4.q@gmail.com>
-To:     mw@semihalf.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     Yeqi Fu <asuk4.q@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ivan Orlov <ivan.orlov0322@gmail.com>
-Subject: [PATCH] net: mvpp2: Fix error checking
-Date:   Thu, 18 May 2023 03:08:11 +0800
-Message-Id: <20230517190811.367461-1-asuk4.q@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 17 May 2023 12:08:54 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Bill Wendling <morbo@google.com>,
+        Qing Zhao <qing.zhao@oracle.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] Compiler Attributes: Add __counted_by macro
+Date:   Wed, 17 May 2023 12:08:44 -0700
+Message-Id: <20230517190841.gonna.796-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2258; h=from:subject:message-id; bh=yahvJN5DCdafW0sbh3khm99IcP//ArMckUf9/Rm/k1Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkZSY8EEJAxM5wyI9gvstGb7zmJRvApBqEZyE9Udmr DyS5k9aJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZGUmPAAKCRCJcvTf3G3AJrhjEA CHmN+3SQXNK++1nQr083pwerk7hnyxY/0CHVs/nd+VRVNIU4kbvdO/H/Hm3bs4+9THF5BAibH4f22f AF+mFhiS3xb8ADoFbZkKr9/fKhBnysCjg1A9p0ROOYVmQfGWe598FWh50dGb8yYBII2RRdKBtQ6C/I kcWGtEQhSY5BsRtfvEJJInQvoXaevjSM47tB9Re+tcHIG6S33Uba/07ek+0lVm3oydR/eumHn1HST/ /4VSivqreIggJen6dDe23s4U01qDbepY2T99mfcZs61U/DdONRUEzPdGo9jJLowtrVWpMOp3Qrrkay 4RiE9k0M+czZH3LIRANnchCZjRomfHUe6W8MwnZssrx8AY02Hf4z3g2ocsNVVWYlq0JaQiA2tjCJsk 0Cl53x+UTS1QGilWJQ+V6z2FzJVlYx0bfEp4nU375D3evPtqos0j7Z153C7igMkSJWwJdFQ/vfD4dO x51qKGl9f1x54XLlKVjOfKkh3h6Qx2mIXVYg5lzH/xxNunuphL24QBTI47jeMxmwg8ABMu6FamxKkf RhpsdZL2sGJtmiunsxqalimFqKyYWAtLl2V5ly+YNRtfhS8MgUud4SHAXFkO03Umx6rme9CqhA4tVS VUuPd+ULbQylFUrp/1QFDtTZvhtxg8byb3pEwkg22LzzulBTtz9JvDQ6CLLw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,62 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function debugfs_create_dir returns ERR_PTR if an error occurs,
-and the appropriate way to verify for errors is to use the inline
-function IS_ERR. The patch will substitute the null-comparison with
-IS_ERR.
+In an effort to annotate all flexible array members with their run-time
+size information, the "element_count" attribute is being introduced by
+Clang[1] and GCC[2] in future releases. This annotation will provide
+the CONFIG_UBSAN_BOUNDS and CONFIG_FORTIFY_SOURCE features the ability
+to perform run-time bounds checking on otherwise unknown-size flexible
+arrays.
 
-Suggested-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-Signed-off-by: Yeqi Fu <asuk4.q@gmail.com>
+Even though the attribute is under development, we can start the
+annotation process in the kernel. This requires defining a macro for
+it, even if we have to change the name of the actual attribute later.
+Since it is likely that this attribute may change its name to "counted_by"
+in the future (to better align with a future total bytes "sized_by"
+attribute), name the wrapper macro "__counted_by", which also reads more
+clearly (and concisely) in structure definitions.
+
+[1] https://reviews.llvm.org/D148381
+[2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Qing Zhao <qing.zhao@oracle.com>
+Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Tom Rix <trix@redhat.com>
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+v2: - update "Optional" comments
+v1: https://lore.kernel.org/all/20230504181636.never.222-kees@kernel.org/
+---
+ include/linux/compiler_attributes.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-index 75e83ea2a926..9c53f378edda 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-@@ -593,7 +593,7 @@ static int mvpp2_dbgfs_c2_entry_init(struct dentry *parent,
- 	sprintf(c2_entry_name, "%03d", id);
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index e659cb6fded3..a92d8887e8f0 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -123,6 +123,19 @@
+ # define __designated_init
+ #endif
  
- 	c2_entry_dir = debugfs_create_dir(c2_entry_name, parent);
--	if (!c2_entry_dir)
-+	if (IS_ERR(c2_entry_dir))
- 		return -ENOMEM;
- 
- 	entry = &priv->dbgfs_entries->c2_entries[id];
-@@ -626,7 +626,7 @@ static int mvpp2_dbgfs_flow_tbl_entry_init(struct dentry *parent,
- 	sprintf(flow_tbl_entry_name, "%03d", id);
- 
- 	flow_tbl_entry_dir = debugfs_create_dir(flow_tbl_entry_name, parent);
--	if (!flow_tbl_entry_dir)
-+	if (IS_ERR(flow_tbl_entry_dir))
- 		return -ENOMEM;
- 
- 	entry = &priv->dbgfs_entries->flt_entries[id];
-@@ -646,11 +646,11 @@ static int mvpp2_dbgfs_cls_init(struct dentry *parent, struct mvpp2 *priv)
- 	int i, ret;
- 
- 	cls_dir = debugfs_create_dir("classifier", parent);
--	if (!cls_dir)
-+	if (IS_ERR(cls_dir))
- 		return -ENOMEM;
- 
- 	c2_dir = debugfs_create_dir("c2", cls_dir);
--	if (!c2_dir)
-+	if (IS_ERR(c2_dir))
- 		return -ENOMEM;
- 
- 	for (i = 0; i < MVPP22_CLS_C2_N_ENTRIES; i++) {
-@@ -660,7 +660,7 @@ static int mvpp2_dbgfs_cls_init(struct dentry *parent, struct mvpp2 *priv)
- 	}
- 
- 	flow_tbl_dir = debugfs_create_dir("flow_table", cls_dir);
--	if (!flow_tbl_dir)
-+	if (IS_ERR(flow_tbl_dir))
- 		return -ENOMEM;
- 
- 	for (i = 0; i < MVPP2_CLS_FLOWS_TBL_SIZE; i++) {
++/*
++ * Optional: only supported since gcc >= 14
++ * Optional: only supported since clang >= 17
++ *
++ *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
++ * clang: https://reviews.llvm.org/D148381
++ */
++#if __has_attribute(__element_count__)
++# define __counted_by(member)		__attribute__((__element_count__(member)))
++#else
++# define __counted_by(member)
++#endif
++
+ /*
+  * Optional: only supported since clang >= 14.0
+  *
 -- 
-2.37.2
+2.34.1
 
