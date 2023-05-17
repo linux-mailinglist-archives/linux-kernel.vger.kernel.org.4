@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255447064B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B457064BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjEQJ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S230009AbjEQJ50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjEQJ4x (ORCPT
+        with ESMTP id S229695AbjEQJ5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:56:53 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240CA421E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:56:51 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-783dd1c02c9so208282241.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:56:51 -0700 (PDT)
+        Wed, 17 May 2023 05:57:24 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910053C3A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:57:22 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-783fb1d02dcso64146241.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684317410; x=1686909410;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684317441; x=1686909441;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5XPSuVta2HOg8vUR/UtRay+7le/6KZcKOQV/SsBICAQ=;
-        b=xg2SrZFsIcXofYfCA/oEKWGumYVHRqt2E7GiaCt4zYD0Oo1spN4WAfYjdLySKN5cPH
-         jNx9oLYtmKwyXXDchLi6waDj9wX+mshKdt+XbyjAU7y9+2wqNf8pSV9EFJ1h7C6mbjyo
-         74Uz8uSQwULzZekhN914f4AEZgLj97M+LN9+YR1QrmKvDkdZNv86a2Q7KvozqCbQ214x
-         2NDIyrBVCpMOuV7+0xgcYAccg+CWD9lHU2sAB5aZy+ceCNBNlNI25jaypvwQyHPNcZoh
-         aLggCDng1mIU8SjvpYt9wxmZddfKA0kVhAvoBe9pHisF8KujGXCt3/LH/tHFPufYklg7
-         z/LA==
+        bh=VynSA3MQFwVAlFJdNBzl7ESPzIRRYdlEm8KKXbrpLiw=;
+        b=dxMWiPc/RBQNG0nw7gRRx8RJ1ieg+Q1e0goSUeFafR5dy3j9uXHba1ehIfcXfgpwtt
+         lQsoXLyM/5ZCBuoBu62jfg4LL9jfOsl1J/8Dz3Y95JfSnOIU/4GpXHmN7t45PmgNKzD+
+         +iiFiBxdYGsN1ftn63I4laptCzzfJUacG+A8de8o/OkfJU87LgJywI3rkBjERaO2PZ+Q
+         BTIMQTOafenASM7DTp3gyBumA1Sm/TwSYekq4oXM6/cc7eIuY47MNO0wL2o385gI4Ew+
+         OB5VqBtyIrCwZgfpK081tlmrG8pKNCe/UsSrkf/MJVZguF6ryVPHKGFleeXOHBFBVDMy
+         moyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684317410; x=1686909410;
+        d=1e100.net; s=20221208; t=1684317441; x=1686909441;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5XPSuVta2HOg8vUR/UtRay+7le/6KZcKOQV/SsBICAQ=;
-        b=R8bs5W2ideR79TCSapWUm8G7Zmrg2xQGgI4nyDktT8vbdxx4PxMSijqOcsiZDS7P8Q
-         01sI/8NYHQaFauJ9A3O/pP386lbBtPk/BVkiDIZT0GCA1NT1BPlhS0enyEo8fqB+tJut
-         7YrASDzN+fE8H4LgNTYV34nBdnny+S+ItA/Ltj1TR09qRnB3DT9RK5F1WvceJjpnAZ4J
-         nK5mXviPACVFh/nD2Jf/Z4Wnd4x93EfwzbAeagJqOGfEA5wax1I0FtUd2/KLo2gafyL9
-         ffXeaRgd7SLQ4GmSoFlzMm2w78SWn9raCYv5vubgHfTlQvkXDFineUYxWpYazY//A5WJ
-         n9Cg==
-X-Gm-Message-State: AC+VfDw/N66jfKRu9vDs05gpC6fhT1qZOFeVWZ5UovCejA6E9MM/3IX+
-        VKYiRnSci1TdWPD1o+uYlpWw9mKQf0EM8cqm3PN8SA==
-X-Google-Smtp-Source: ACHHUZ7dirwHzYqNcWJVEqkux+QzlRUgjKDMGdkdIXhV7Xz7wEKIF4dhBqxRzz2JM//g+mgozFgPI8R4rAGnRt/XgIQ=
-X-Received: by 2002:a1f:4bc4:0:b0:440:125:7e59 with SMTP id
- y187-20020a1f4bc4000000b0044001257e59mr14096028vka.1.1684317410290; Wed, 17
- May 2023 02:56:50 -0700 (PDT)
+        bh=VynSA3MQFwVAlFJdNBzl7ESPzIRRYdlEm8KKXbrpLiw=;
+        b=XvA+kz5d+hWig45Z/IOaibuddM06zIYgdCjEuyk2wRDHGuHcbTScamlkbqP+1T7uXJ
+         rw5/yFeiQucgk+Nn8j4MrNldSdjGXnmeJ917O83ZX02gLsLTLIczZSr7ctPIjsv3XXKO
+         VEvixANMyqKRV67P9M4nCLLM3H69QcD+loIwmkFuue47qu9hi1lDZ9Sm85SKkJQSl29C
+         45B/YinwyWQRdEpLN8qE1lU7IkpGHE35vY9sjFEZrgphD84fjS61WHYbi1/cNRAwODpC
+         TW6pLIYMwMlXXAkyXwhUHWGUyFepGuSh0Aolsg6xWjk9Soa9aTS6kNU0Blswmk2Y0FiP
+         P/aw==
+X-Gm-Message-State: AC+VfDzmIvceSNGXogHbxdAZYv4tzZS13zjmXJLYlNKWTJggVGxlmgx7
+        NUNqwsFbhYmnNushiqw2CuWK+kjoV4m/mswj4sJDHw==
+X-Google-Smtp-Source: ACHHUZ5h7TQ820u7krPwOeein/T5RuKnCImpgUUK7k9MkkO14WXVMJJhr8wd8FomNgs2ecq9zPQccveEy/DRhwF9UfQ=
+X-Received: by 2002:a67:e988:0:b0:436:1e1:685e with SMTP id
+ b8-20020a67e988000000b0043601e1685emr13184350vso.28.1684317441643; Wed, 17
+ May 2023 02:57:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517095301.903567-1-arnd@kernel.org>
-In-Reply-To: <20230517095301.903567-1-arnd@kernel.org>
+References: <20230430-omap2-pdata-quirks-v1-0-e015f3a3ea46@linaro.org>
+ <20230430-omap2-pdata-quirks-v1-1-e015f3a3ea46@linaro.org>
+ <CAMRc=MczGKVFo+iWe_Pnvi3-hCK0fhmmkjp-h92RHONEHFAP_g@mail.gmail.com> <CACRpkdbYR+kobi3-xx7FgQG5aZb37JJageP+JWMss=D+KZUkFw@mail.gmail.com>
+In-Reply-To: <CACRpkdbYR+kobi3-xx7FgQG5aZb37JJageP+JWMss=D+KZUkFw@mail.gmail.com>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 17 May 2023 11:56:39 +0200
-Message-ID: <CAMRc=McaZQ=e18=fo1GzOmMh2nRdF3A5Z8a1ftUJhvrM3VtZOw@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: sa1100: include <mach/generic.h>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Wed, 17 May 2023 11:57:10 +0200
+Message-ID: <CAMRc=Me3KdxwjHYE4SQWo=CvDx9ccHp1qmzEBc7PszhOSYgS3w@mail.gmail.com>
+Subject: Re: [PATCH 1/3] ARM/gpio: Push OMAP2 quirk down into TWL4030 driver
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lee Jones <lee@kernel.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:53=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
+On Thu, May 4, 2023 at 2:19=E2=80=AFPM Linus Walleij <linus.walleij@linaro.=
+org> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> On Wed, May 3, 2023 at 3:02=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
+> > On Mon, May 1, 2023 at 11:05=E2=80=AFAM Linus Walleij <linus.walleij@li=
+naro.org> wrote:
+> > >
+> > > The TWL4030 GPIO driver has a custom platform data .set_up()
+> > > callback to call back into the platform and do misc stuff such
+> > > as hog and export a GPIO for WLAN PWR on a specific OMAP3 board.
+> > >
+> > > Avoid all the kludgery in the platform data and the boardfile
+> > > and just put the quirks right into the driver. Make it
+> > > conditional on OMAP3.
+> > >
+> > > I think the exported GPIO is used by some kind of userspace
+> > > so ordinary DTS hogs will probably not work.
+> > >
+> >
+> > While I haven't tested it (nor can I) so don't take my word for it, it
+> > looks to me as if regular DTS hogs *should* work. If anything, the way
+> > this quirk is implemented in your patch moves the export past the chip
+> > registration, while ordinary hogs would be applied when the chip is
+> > first added.
+> >
+> > Am I missing something?
 >
-> sa1100_init_gpio() is declared in a machine specific header so it
-> can be called from platform code, but the definition is in the device
-> driver, which causes a warning:
+> DTS hogs cannot do gpiod_export(), that's the problem. I think the OMAP2
+> (Nokia phones?) need those exported GPIOs.
 >
-> drivers/gpio/gpio-sa1100.c:310:13: error: no previous prototype for 'sa11=
-00_init_gpio' [-Werror=3Dmissing-prototypes]
->
-> It's already possible to include mach/generic.h from drivers, so add
-> this one here as well.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> v2: rebase back on mainline tree
-> ---
->  drivers/gpio/gpio-sa1100.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpio/gpio-sa1100.c b/drivers/gpio/gpio-sa1100.c
-> index edff5e81489f..242dad763ac4 100644
-> --- a/drivers/gpio/gpio-sa1100.c
-> +++ b/drivers/gpio/gpio-sa1100.c
-> @@ -12,6 +12,7 @@
->  #include <soc/sa1100/pwer.h>
->  #include <mach/hardware.h>
->  #include <mach/irqs.h>
-> +#include <mach/generic.h>
->
->  struct sa1100_gpio_chip {
->         struct gpio_chip chip;
-> --
-> 2.39.2
->
+> Yours,
+> Linus Walleij
 
-Now applied, thanks!
+Ah, it needs to manipulate the GPIOs then. Get it. I don't have a
+better idea either.
 
 Bart
