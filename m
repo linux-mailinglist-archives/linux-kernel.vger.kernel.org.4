@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52519707281
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733C3707285
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjEQTpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
+        id S229959AbjEQTp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjEQTox (ORCPT
+        with ESMTP id S229937AbjEQTpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:44:53 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C9240D4;
-        Wed, 17 May 2023 12:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=uRn5jY22yg/grNtbC+Tg4kXWRa2p3rPCDtHdGv1KI5M=; b=s
-        qRxIcJ6vuRm9doZ4eNPugrtGBiFVBL+9R0zAVWVFmlUvZn1wjnpcKr2QIzNufuvkAz4y4YyeBWXSf
-        i0/cBmyy8bMp1HuTIRzOl1S8rgHuByC/W9mhE9SacLobZj1t0YZaVHc2x9jlZ3DB+l6/rvntTAfms
-        tcQJ4zpd4lJ+/MtU=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:36992 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pzN4l-0001n2-71; Wed, 17 May 2023 15:44:43 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 17 May 2023 15:44:07 -0400
-Message-Id: <20230517194406.4125912-1-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 17 May 2023 15:45:25 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343E3E44
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:45:24 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965d2749e2eso184538866b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684352722; x=1686944722;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DE2bkq/ui14lTBLwtUifajE1EvCpc5Pz1BLS66HrLtI=;
+        b=pv0XlTzQm0AHDjnYWXA2DFOwY89iONL+pcihwOPnY2/55ELz63O65AuRo8sYRyVtfY
+         j4tyirV1rIXbj4sCHOWqTTlOuOSMW2jmK6+rtIOpV7Ka2tulKz/6eWhdbUWijx9Bu6Gb
+         ByIIf6pn51KS6teavMyaKat3eWK8I4nOHiWfDQvcdP/Uw0gfXBXnQIrIc/pz6cz6nVR5
+         Iy4x6JykOjawxDUZa1NyETS4srgGmwuaVLOaP/oJC0+uKgaPHr9cFO+fpRAAlIcMNtcy
+         nhs72woQacj+sq+ZLnu7DXHUJfQ74vtfFxKgtJUnmVCafSnNEWvepe5r3nD9pz3VWUP9
+         vy6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684352722; x=1686944722;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DE2bkq/ui14lTBLwtUifajE1EvCpc5Pz1BLS66HrLtI=;
+        b=XyWFOFh8/s1XNybkDF4v8jMWXtttDcWbvgrWtB4j83wn3PbuPD9/tO0/HeJ3aVKteA
+         w9wTyxlYa3yVqp2GWlPQD08EHHENzut8pU+W8TlAJhSroa2x5GGLXYi7pZz1yVezqkAu
+         g6ZtLKYB6WhTJsqoY2p4GWhdPcy0roQOU5zYhzzLzxuv+siE0du+ffljSWYpKHgmI9BC
+         ZlZ5eL+C1ZqO4rfTgjE53qvbYmyMGIliwEty+U6TdLe5AvHlSZo4Mo5fabz8Tz3s6lX4
+         HMcSxVDqiyYxPwUoNg0TEm9WOTuqI31obhYIwIa5fvPQlSewN8ZNXQogIzsD3SNueMd2
+         hZuQ==
+X-Gm-Message-State: AC+VfDyy4khKyrCJjPgc0oVnmGVbUT9rH2ggo9KS9O95cVFjmMsceMs7
+        vDngUq7RSPJt3RRiRMtJOjcIoA==
+X-Google-Smtp-Source: ACHHUZ6Tj8zelM2VZpR/AEzeGAQ8zj37niuO6NRBJvg0WI4NbhdxMvKTFTAAd3TJm0rHrq+VS/nWuA==
+X-Received: by 2002:a17:906:eec9:b0:94f:73db:b390 with SMTP id wu9-20020a170906eec900b0094f73dbb390mr34695874ejb.65.1684352722678;
+        Wed, 17 May 2023 12:45:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d7a:e7cc:21b3:c435? ([2a02:810d:15c0:828:d7a:e7cc:21b3:c435])
+        by smtp.gmail.com with ESMTPSA id tf8-20020a1709078d8800b0096a2b6de3a4sm10504747ejc.122.2023.05.17.12.45.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 12:45:22 -0700 (PDT)
+Message-ID: <032699a0-9a43-953a-60e9-59a515a26cef@linaro.org>
+Date:   Wed, 17 May 2023 21:45:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5/7] drm/apu: allow platform driver to implement their own
+ mmap function
+Content-Language: en-US
+To:     Alexandre Bailon <abailon@baylibre.com>, airlied@gmail.com,
+        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, jstephan@baylibre.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
+        nbelin@baylibre.com, bero@baylibre.com
+References: <20230517145237.295461-1-abailon@baylibre.com>
+ <20230517145237.295461-6-abailon@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230517145237.295461-6-abailon@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: [RFC PATCH] serial: sc16is7xx: fix broken port 0 uart init
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On 17/05/2023 16:52, Alexandre Bailon wrote:
+> From: Julien Stephan <jstephan@baylibre.com>
+> 
+> By default we will call drm_gem_mmap() unless the apu driver has
+> declared it's own mmap handler.
+> 
+> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
 
-While experimenting with rs485 configuration on a SC16IS752 dual UART,
-I found that the sc16is7xx_config_rs485() function was called only for
-the second port (index 1, channel B), causing initialization problems
-for the first port.
+One does not have to review own code. We all assume that we send good
+code which we do not have to review by ourselves (by the author). We
+also assume we make mistakes, which we cannot find, thus other person's
+review is important.
 
-For the sc16is7xx driver, port->membase and port->mapbase are not set,
-and their default values are 0. And we set port->iobase to the device
-index. This means that when the first device is registered using the
-uart_add_one_port() function, the following values will be in the port
-structure:
-    port->membase = 0
-    port->mapbase = 0
-    port->iobase  = 0
+Adding own review tag suggests you added them mechanically, so I doubt
+that they really happened.
 
-Therefore, the function uart_configure_port() in serial_core.c will
-exit early because of the following check:
-	/*
-	 * If there isn't a port here, don't do anything further.
-	 */
-	if (!port->iobase && !port->mapbase && !port->membase)
-		return;
+Anyway, your SoB is missing.
 
-Typically, I2C and SPI drivers do not set port->membase and
-port->mapbase. But I found that the max310x driver sets
-port->membase to ~0 (all ones). By implementing the same change in our
-driver, uart_configure_port() is now correctly executed.
-
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
-
-I am not sure if this change is the best long-term solution to this
-problem, and maybe uart_configure_port() itself could be modified to
-take into account the fact that some devices have all three *base
-values set to zero?
-
-Also, many drivers use port->iobase as an index, is it the correct way
-to use it?
-
-For example, for our driver, there was
-commit 5da6b1c079e6 ("sc16is7xx: Set iobase to device index") with the
-following explanation:
-    "Set the .iobase value to the relative index within the device to allow
-    infering the order through sysfs."
-
- drivers/tty/serial/sc16is7xx.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 1a3143331c1f..3e0e63498052 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -1432,6 +1432,7 @@ static int sc16is7xx_probe(struct device *dev,
- 		s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
- 		s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
- 		s->p[i].port.iobase	= i;
-+		s->p[i].port.membase	= (void __iomem *)~0;
- 		s->p[i].port.iotype	= UPIO_PORT;
- 		s->p[i].port.uartclk	= freq;
- 		s->p[i].port.rs485_config = sc16is7xx_config_rs485;
--- 
-2.30.2
+Best regards,
+Krzysztof
 
