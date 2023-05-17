@@ -2,303 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2825706B28
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402B0706B2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbjEQOci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S231977AbjEQOdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjEQOcg (ORCPT
+        with ESMTP id S231776AbjEQOdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:32:36 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9157293;
-        Wed, 17 May 2023 07:32:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RvZP6LgLisrMPRqA3j1Rvf+DGfmUUXjo4xilAcUohRQjlGf9XrOSj/eUgela9abf9jjW8DIcrthsLqQCWuaYnRf5X0hx5+auvVqJ8wlzVImD6sFfyS4kLR2ldVwQI8SyzEzk79r8K7aZS4mGiQnEKKflAuFOdOSL1GeZincSYC+QcadVDHwDPAEx/7He6rIxyvlmsJR3yQfxAyW7qz3RcwPm90/plV8IgjJ4BxG+pVBtY7W1vwQNi50I1U2XHvfq8fyFHzVOWlgzVA52Qz7yvdU809HTTUaTuEmjiCGmMyTBxNDrN/0vKcFOgXEJ/WE2X4QA4E2NPz07wvqsw+Llvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oGH9/afE197hpRD9BqpOJMbtxYlyPKJe89JDipVHiOM=;
- b=CdxdG5Trg2esH2op3+OpJD5xoDyVErU+FJ9YcjRAq638lTIvzT3t+hsKJNjCF5I3dV+xaRpaEVOjoZ3nHyT3A0tw6oiJcYRoSV98XW/QTNPCvexEHBartFs4dxqQJaY7BaYLApFkbRdFDGBHqSOsO7Wwc1QFETxb+3wJwzQFZ9PLHnSW0BMcvRI0qH8/gRelbjFYHgy5FleVcgs2u6jCv/PJAedKZATVfXsX1RKZXlC50Ig8UNYbKuEnCsw0t+2opgfkaRyKSVowJjZlGKIbswYHzNVv54rSJfevr4DzfFu1sAjaCpwwYU6DkfrW6r4d/XB56wjucZIQDL6NK55Nzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oGH9/afE197hpRD9BqpOJMbtxYlyPKJe89JDipVHiOM=;
- b=JU7ZvpFyJzLUvvsPyZWfeCYqD+zxOCvma87uDojUePQYVHAVNR14k+y71YoqtZ6YLEPx678mSPQFwuPGNlvpwOYxCk9K/D3PN8gVUnwnSyd3YfMGMtppV/C9p1pr2vn6azTdJWdAroUIUMrcCW306sX5+++d6if/I8EcgvQXL1c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by SJ0PR12MB7473.namprd12.prod.outlook.com (2603:10b6:a03:48d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
- 2023 14:32:31 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6411.017; Wed, 17 May 2023
- 14:32:31 +0000
-Message-ID: <fe62b3a6-2c28-a069-d880-772fe6c13125@amd.com>
-Date:   Wed, 17 May 2023 09:32:27 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCHv11 0/9] mm, x86/cc, efi: Implement support for unaccepted
- memory
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <aa35a445-f410-b11f-bf21-3e482647faae@amd.com>
- <20230516232204.3k53vh6pdnimdrhi@box.shutemov.name>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230516232204.3k53vh6pdnimdrhi@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR13CA0002.namprd13.prod.outlook.com
- (2603:10b6:806:130::7) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Wed, 17 May 2023 10:33:35 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144487EC2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:33:34 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64354231003so51933b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684334013; x=1686926013;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6grocRhJIU5ye1kh6G9Zidl87EJr94gMOm6Ihix7z1k=;
+        b=oBrZlI/RZKZ7/yr5vxMylyBh5YH6hy+11Vwn6IMR6DXZiKQTQGd4tBS8VehOhbpMeB
+         o436q3xItFVqJ/DhrZn1tyxCMRhAlAZkYYf3FI8p24bONgkDQp63AzMU2XdCxAZSTrqc
+         BWQeoDtyjwfsnYfEsy8Jh2ybzA0fhmTWtJtIOcH0llYBAMbBX46FjqXXJdGLmlLRclbu
+         UHfhRtge8jN4nugOePVkRUYvS8oWWlZB2Bha4+Yg4gpI3oKxrO9n/EqJOnl7b6euTHHP
+         KI09Wndg75MhIOhsUH3EubMo2gMFsDexJuK4pwKbQ9U/tHCljJlBlSbFx3PcRFeXI1e0
+         O+fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684334013; x=1686926013;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6grocRhJIU5ye1kh6G9Zidl87EJr94gMOm6Ihix7z1k=;
+        b=Ho/wKbpcGG0uUhJW/59SahB4Ro8jOxgRmasXg9OMyvl80OJ/Tr8yFRC3rDycMVF/hv
+         szFmHCmuMoG37Z47B3iRAEWjRdggSkkbugiXtwCutxAERFktsXVsavCy6QIYfp3LQWdv
+         6FSr8yaOB1xLFI2XIQ4LC3vKc9onZ4RdYdMzMvoaGupstiJHDwoRHx0bZqjBAXAx5+m1
+         yXuLYpW12+tdmNQm3QePf9JbB8NqJnjzJEBV0EO1r2SuWPZ+un0KYKqE8uacmXwB75SY
+         5nZ7zdF+cZFJlVemnGA/1PmRqlOYoWfUh8d22x9ph3s79ph07hxKo/gJg/X2GNAwP79K
+         L7hw==
+X-Gm-Message-State: AC+VfDxhWQEmCme9y8BqYYZ1kkxEC8Z7fhdj/T5Admi5h38q48bYM0sf
+        WeEMG/JKm6qvmXU/HRQhrl+Kog==
+X-Google-Smtp-Source: ACHHUZ7+P9l1tHL+9CP4QDsG/qvPc0c1TagoBWlcZh/bo7Vc3P/kUXjVev6CnyTxm0n+O+PaHNbDFA==
+X-Received: by 2002:a05:6a20:258e:b0:ff:ca91:68ee with SMTP id k14-20020a056a20258e00b000ffca9168eemr3193310pzd.9.1684334013445;
+        Wed, 17 May 2023 07:33:33 -0700 (PDT)
+Received: from sumit-X1.. ([223.178.212.223])
+        by smtp.gmail.com with ESMTPSA id p24-20020a62ab18000000b0063b5776b073sm15303474pff.117.2023.05.17.07.33.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 07:33:33 -0700 (PDT)
+From:   Sumit Garg <sumit.garg@linaro.org>
+To:     etienne.carriere@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org, jens.wiklander@linaro.org,
+        sudeep.holla@arm.com, cristian.marussi@arm.com,
+        vincent.guittot@linaro.org, Sumit Garg <sumit.garg@linaro.org>
+Subject: [PATCH v9 3/4] tee: optee: support tracking system threads
+Date:   Wed, 17 May 2023 20:03:11 +0530
+Message-Id: <20230517143311.585080-1-sumit.garg@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|SJ0PR12MB7473:EE_
-X-MS-Office365-Filtering-Correlation-Id: 567dd25e-6994-4bbf-f912-08db56e38c3b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: asQ3vAS5j+jc0aY+C84cFgE/lEWN246cEBY3sKDyFYZ2ndr5QMWHAulXnliwMGJ8HLEuQ3C9Ze9Z7o57v2RS4sKvb7TG4geRopQI/FvC+h4UuLVodcC8INaBhAeVLMRfL2HimzNdl2u3Eieo4lsO49riPA2n4Mkrx5bWxb2r3pc94Y/6daG/GEJui0md6v/6lloBUw8jsJTpPCq0Q/8qf3KZ/IXDyUZvXmaju87wCieJxkXhgD87ncNiGjCnfpW9FUULDkyHxbmq1hnS9NsfsVwpona6hrk2sJX1CHRsNPnX7UjxJ/3ypSZIn30LpgSEM8K6P7Q9/2JPq3YdWiR6pKPlzNEiSHzFQrYdupHX7Q9OFd0h3Awer5ktjgLH6w6fTzEgvwexUoZbyeDez1834XqEDk28wOU22OnYAD8gvBKnwoDD773CF7l9e1P1vjPEZYxn7g8+GrUdr4sbp/fT55EJ5u+2G3zkVxy4IAK3tsNAEvij9YspEIvT1HSWQ/XAobdrvLGXTTGmV+0BQYGXVtX5W3yVBr6noXr6KCyRJXkD1tEOiFCOvmCOqXJNIgw7TABBN6q1B8t/2gyvO1I8M7xlBrPyTXLnYGXveYtCKwZWo4K4e6sk0qxupvQ5feL+vV9gxO4LpRK2Rw/wWY9SkmJNK0kbg64br1IT4BntwApFpthPpFjMgFTlGYZ7qUr3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(376002)(396003)(366004)(451199021)(31686004)(83380400001)(6916009)(41300700001)(8676002)(7416002)(7406005)(2906002)(8936002)(5660300002)(36756003)(31696002)(86362001)(316002)(38100700002)(4326008)(66476007)(66556008)(66946007)(966005)(53546011)(6512007)(6506007)(26005)(186003)(478600001)(6486002)(2616005)(6666004)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d0p0emxvb1ZCRDg0cWh0V1NhRDRFQWt0QlptbmVSaldzNnBHNEZEbDRjNnkw?=
- =?utf-8?B?ejVabmZPQndWWEJGSDUwYlZmamo0aGJRRjdKZEpJekg3VXZJbWVzbmJhazB2?=
- =?utf-8?B?dUZJdVppdjJEN1ZwSFlhWFhGOWlRY2VKSmxhM1VhYURnNTg3dklBekJEdWJH?=
- =?utf-8?B?UEZhbFZKYWkwZ0pBdnFnQWNISjJ3RiszNUNzTTQvdEs3R2hlcjhMQXhzTGZh?=
- =?utf-8?B?Rm1hWnkvNDI0LzVhdWFkRitRUHlINzBmMFVvS2U3YStvYzI3OUZBb3Urekxw?=
- =?utf-8?B?bSt3cGdpNUVvdTYyRDVUdUtaNDhkMHJ1RXhxYVFBK0NjZ0RIS21aUGFCaHJn?=
- =?utf-8?B?YlF2TXEwZi9DeEZhUUppeVpwYnJ1OHN1Q2VXak1ZNjhMOWFGV2t4TXdJNkZU?=
- =?utf-8?B?YVFncjQyelZIZFFGSEJjc0liTDNWOVg0UGtOQ3FUd0p6bER2Z2llR2t1WmhC?=
- =?utf-8?B?eHo0VEJvamEralZrbVFnRmEvMkhDa2l3S3NxbkZDdTd1aFZFMjBHNHpiOE8y?=
- =?utf-8?B?MXAwczIrRDBqWGFMWnB2NUp5MVZ2RTNoU3ZBM2piM1dBVFh5dEZJNzNQSnh3?=
- =?utf-8?B?M1k3ZTI1OGJnK1V1NUdVUEVDbkVHMjl6amJ4aFJhTWFkNDFTMDdKbGpXSEdC?=
- =?utf-8?B?emttNzFoTXlpd0diakIxL2FXK2xlOFRFTjF1M0o2aFZlbWUwUzMxN2ZYbGxu?=
- =?utf-8?B?OEFMcmNwZHZJWmd6eGRtRXpyZStucEpjNS8zYWxJb3pFY2Uzd0VwV1lPbnFn?=
- =?utf-8?B?UGRyZW1MaUhRd0w3dkhzMkRWcWE3NXVOOEVscmU1NGdidW5FUkVVa0FNYlJS?=
- =?utf-8?B?c2FCaUllbjhrLzREbGtNcHp0bzN3QUhTNGFmeUZNcWovREhhSG8yRWJqQWNj?=
- =?utf-8?B?U0UwUCtFVEpTbjU0djRuR2ZTaGZlU1hnT0VtbldPVFhUanBtWmh6V0hZU0sz?=
- =?utf-8?B?dnJOUTJDR0JkRzZKU3NLQkdvT2V2U0phOFZEWDF2ckJPU2J4K2dvbzhZT0gx?=
- =?utf-8?B?b2IzM3duNmVva2FoNTZ5SVpkN3RpWmI5N3NvNC8wVWdqUHR3ek8yb2x2OVN1?=
- =?utf-8?B?TzZwR3dvQkg4UUdKTzh6SktNRTlHczVQUFI4dzA4NDArRU5qUlZZaERxTUF2?=
- =?utf-8?B?bTU1QS9leVRpR2dmY1QrVGU1SnJsbGp1dGt4NkJRa0VWY2d3SERobDhwcHlx?=
- =?utf-8?B?NUxTNmFqdWJlcDY0ZWN2b0NMbVZIVGJVajlxOUhwaEFJcG42MU5SbDFtbnNW?=
- =?utf-8?B?S0VVSENGVVFxRDdaTW81UXRwcHV4SzJ1SFdYTUs1ZGI5Ny9YRTBEUXU1bG93?=
- =?utf-8?B?QmNSeWRWbm1xaVhVa2hTVFFsWjZkNzgrbjIyNHJJa2JTZHhraWZwSU51SXVC?=
- =?utf-8?B?VlVzRFFhYW9IcDBXTW1HTEFrTUd6L0UzbXN4akFuUUIybGhjVllkYTBYaTh6?=
- =?utf-8?B?cVVJYWdIRmV2LzdtNHRWdlJSeEc5MW43aVY2ODBsU2wvdHFVL3ZUNnpJUU1w?=
- =?utf-8?B?VGRYbUZTQkFFZjVjbnhCZHVOQ2FMV0lRenFXNEFhM0xpVTNoRElNRFhna2JF?=
- =?utf-8?B?empvSGFrR0pzd25DcENlTWtXK2w1VnVadGk5SS9GNFZSMFhaWElEQkVRbHFa?=
- =?utf-8?B?a09IK1M4c3hpbFAvMkkycWkvNFdtbmNUTlZtUnlNSXZpVlROZW5IZ3l5S1d2?=
- =?utf-8?B?UW5Jd1NrRzN0OTd4RzJNL0xjQWp1V3lRWHVwS1dlem5MbEU1ZmgzRkcyVWR5?=
- =?utf-8?B?d0FnaDVkSVNidVk5RnUzVTZ0M3hnSmdUSnFleGdGaGhySlkxRUhHRWFDaHNn?=
- =?utf-8?B?cThhZWIraWx2TktpZzlvOWFhYitNTk50SDFaNGY4SFVOVklpUFY5bmU3UGtM?=
- =?utf-8?B?ZSs0b1FYaG04NUpYdmtZZkUvNStWL3JzSG9MREpRTUMyWUR4TlhnVWZ4aGkv?=
- =?utf-8?B?UUVBWnA0aHIrSWU2dUo5QmFPVU0wcXQ1ZlRSWkFpTnZjQWpQTzNld3h4eDIw?=
- =?utf-8?B?cjRkK3hLa014dkhodkhiNE45Y0gyRHZjVHVSN0xOY2gyb2tIQklzZ29aQlJr?=
- =?utf-8?B?Z1pKOHpjb0g1aHVmS0xtMjNLNUdlVEkyZkxkaEw5eTlxc3dKc0dkdlg5Y0xr?=
- =?utf-8?Q?krMM3S8p09f82rzmULnWCVaVq?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 567dd25e-6994-4bbf-f912-08db56e38c3b
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 14:32:31.5360
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ECSwRAcLCwmGUng8Dl0sc5L4Esww1BbZCfO2d4gieQlLiPrBuXI6ipu8GwZZbay4F6e4tExPh1iJm7e5Zr4HHw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7473
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 18:22, Kirill A. Shutemov wrote:
-> On Tue, May 16, 2023 at 05:41:55PM -0500, Tom Lendacky wrote:
->> On 5/13/23 17:04, Kirill A. Shutemov wrote:
->>> UEFI Specification version 2.9 introduces the concept of memory
->>> acceptance: some Virtual Machine platforms, such as Intel TDX or AMD
->>> SEV-SNP, requiring memory to be accepted before it can be used by the
->>> guest. Accepting happens via a protocol specific for the Virtual
->>> Machine platform.
->>>
->>> Accepting memory is costly and it makes VMM allocate memory for the
->>> accepted guest physical address range. It's better to postpone memory
->>> acceptance until memory is needed. It lowers boot time and reduces
->>> memory overhead.
->>>
->>> The kernel needs to know what memory has been accepted. Firmware
->>> communicates this information via memory map: a new memory type --
->>> EFI_UNACCEPTED_MEMORY -- indicates such memory.
->>>
->>> Range-based tracking works fine for firmware, but it gets bulky for
->>> the kernel: e820 has to be modified on every page acceptance. It leads
->>> to table fragmentation, but there's a limited number of entries in the
->>> e820 table
->>>
->>> Another option is to mark such memory as usable in e820 and track if the
->>> range has been accepted in a bitmap. One bit in the bitmap represents
->>> 2MiB in the address space: one 4k page is enough to track 64GiB or
->>> physical address space.
->>>
->>> In the worst-case scenario -- a huge hole in the middle of the
->>> address space -- It needs 256MiB to handle 4PiB of the address
->>> space.
->>>
->>> Any unaccepted memory that is not aligned to 2M gets accepted upfront.
->>>
->>> The approach lowers boot time substantially. Boot to shell is ~2.5x
->>> faster for 4G TDX VM and ~4x faster for 64G.
->>>
->>> TDX-specific code isolated from the core of unaccepted memory support. It
->>> supposed to help to plug-in different implementation of unaccepted memory
->>> such as SEV-SNP.
->>>
->>> -- Fragmentation study --
->>>
->>> Vlastimil and Mel were concern about effect of unaccepted memory on
->>> fragmentation prevention measures in page allocator. I tried to evaluate
->>> it, but it is tricky. As suggested I tried to run multiple parallel kernel
->>> builds and follow how often kmem:mm_page_alloc_extfrag gets hit.
->>>
->>> See results in the v9 of the patchset[1][2]
->>>
->>> [1] https://lore.kernel.org/all/20230330114956.20342-1-kirill.shutemov@linux.intel.com
->>> [2] https://lore.kernel.org/all/20230416191940.ex7ao43pmrjhru2p@box.shutemov.name
->>>
->>> --
->>>
->>> The tree can be found here:
->>>
->>> https://github.com/intel/tdx.git guest-unaccepted-memory
->>
->> I get some failures when building without TDX support selected in my
->> kernel config after adding unaccepted memory support for SNP:
->>
->>    In file included from arch/x86/boot/compressed/../../coco/tdx/tdx-shared.c:1,
->>                     from arch/x86/boot/compressed/tdx-shared.c:2:
->>    ./arch/x86/include/asm/tdx.h: In function ?tdx_kvm_hypercall?:
->>    ./arch/x86/include/asm/tdx.h:72:17: error: ?ENODEV? undeclared (first use in this function)
->>       72 |         return -ENODEV;
->>          |                 ^~~~~~
->>    ./arch/x86/include/asm/tdx.h:72:17: note: each undeclared identifier is reported only once for each function it appears in
->>
->> Adding an include for linux/errno.h gets past that error, but then
->> I get the following:
->>
->>    ld: arch/x86/boot/compressed/tdx-shared.o: in function `tdx_enc_status_changed_phys':
->>    tdx-shared.c:(.text+0x42): undefined reference to `__tdx_hypercall'
->>    ld: tdx-shared.c:(.text+0x7f): undefined reference to `__tdx_module_call'
->>    ld: tdx-shared.c:(.text+0xce): undefined reference to `__tdx_module_call'
->>    ld: tdx-shared.c:(.text+0x13b): undefined reference to `__tdx_module_call'
->>    ld: tdx-shared.c:(.text+0x153): undefined reference to `cc_mkdec'
->>    ld: tdx-shared.c:(.text+0x15d): undefined reference to `cc_mkdec'
->>    ld: tdx-shared.c:(.text+0x18e): undefined reference to `__tdx_hypercall'
->>    ld: arch/x86/boot/compressed/vmlinux: hidden symbol `__tdx_hypercall' isn't defined
->>    ld: final link failed: bad value
->>
->> So it looks like arch/x86/boot/compressed/tdx-shared.c is being
->> built, while arch/x86/boot/compressed/tdx.c isn't.
-> 
-> Right. I think this should help:
-> 
-> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-> index 78f67e0a2666..b13a58021086 100644
-> --- a/arch/x86/boot/compressed/Makefile
-> +++ b/arch/x86/boot/compressed/Makefile
-> @@ -106,8 +106,8 @@ ifdef CONFIG_X86_64
->   endif
-> 
->   vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
-> -vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
-> -vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/mem.o $(obj)/tdx-shared.o
-> +vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o $(obj)/tdx-shared.o
-> +vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/mem.o
-> 
->   vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
->   vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_mixed.o
-> 
->> After setting TDX in the kernel config, I can build successfully, but
->> I'm running into an error when trying to accept memory during
->> decompression.
->>
->> In drivers/firmware/efi/libstub/unaccepted_memory.c, I can see that the
->> unaccepted_table is allocated, but when accept_memory() is invoked the
->> table address is now zero. I thought maybe it had to do with bss, but even
->> putting it in the .data section didn't help. I'll keep digging, but if you
->> have any ideas, that would be great.
-> 
-> Not right away. But maybe seeing your side of enabling would help.
+From: Etienne Carriere <etienne.carriere@linaro.org>
 
-Let me get something pushed up where you can access it and I'll also send
-you my kernel config.
+Adds support in the OP-TEE driver to keep track of reserved system
+threads. The optee_cq_*() functions are updated to handle this if
+enabled. The SMC ABI part of the driver enables this tracking, but the
+FF-A ABI part does not.
 
-In the mean time I added the following and everything worked. But I'm not
-sure how acceptable it is to always be checking for the table when the
-value is zero is.
+The logic allows atleast 1 OP-TEE thread can be reserved to TEE system
+sessions. For sake of simplicity, initialization of call queue
+management is factorized into new helper function optee_cq_init().
 
+Co-developed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Co-developed-by: Sumit Garg <sumit.garg@linaro.org>
+Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+---
 
-diff --git a/drivers/firmware/efi/libstub/unaccepted_memory.c b/drivers/firmware/efi/libstub/unaccepted_memory.c
-index f4642c4f25dd..8c5632ab1208 100644
---- a/drivers/firmware/efi/libstub/unaccepted_memory.c
-+++ b/drivers/firmware/efi/libstub/unaccepted_memory.c
-@@ -183,8 +183,13 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
-  	unsigned long bitmap_size;
-  	u64 unit_size;
-  
--	if (!unaccepted_table)
--		return;
-+	if (!unaccepted_table) {
-+		efi_guid_t unaccepted_table_guid = LINUX_EFI_UNACCEPTED_MEM_TABLE_GUID;
+Disclaimer: Compile tested only
+
+Hi Etienne,
+
+Overall the idea we agreed upon was okay but the implementation looked
+complex to me. So I thought it would be harder to explain that via
+review and I decided myself to give a try at simplification. I would
+like you to test it if this still addresses the SCMI deadlock problem or
+not. Also, feel free to include this in your patchset if all goes fine
+wrt testing.
+
+-Sumit
+
+Changes since v8:
+- Simplified system threads tracking implementation.
+
+ drivers/tee/optee/call.c          | 72 +++++++++++++++++++++++++++++--
+ drivers/tee/optee/ffa_abi.c       |  3 +-
+ drivers/tee/optee/optee_private.h | 16 +++++++
+ drivers/tee/optee/smc_abi.c       | 16 ++++++-
+ 4 files changed, 99 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+index 42e478ac6ce1..09e824e4dcaf 100644
+--- a/drivers/tee/optee/call.c
++++ b/drivers/tee/optee/call.c
+@@ -39,9 +39,27 @@ struct optee_shm_arg_entry {
+ 	DECLARE_BITMAP(map, MAX_ARG_COUNT_PER_ENTRY);
+ };
+ 
++void optee_cq_init(struct optee_call_queue *cq, int thread_count)
++{
++	mutex_init(&cq->mutex);
++	INIT_LIST_HEAD(&cq->waiters);
++	/*
++	 * If cq->total_thread_count is 0 then we're not trying to keep
++	 * track of how many free threads we have, instead we're relying on
++	 * the secure world to tell us when we're out of thread and have to
++	 * wait for another thread to become available.
++	 */
++	cq->total_thread_count = thread_count;
++	cq->free_thread_count = thread_count;
++}
 +
-+		unaccepted_table = get_efi_config_table(unaccepted_table_guid);
-+		if (!unaccepted_table)
-+			return;
+ void optee_cq_wait_init(struct optee_call_queue *cq,
+ 			struct optee_call_waiter *w, bool sys_thread)
+ {
++	bool need_wait = false;
++
++	memset(w, 0, sizeof(*w));
++
+ 	/*
+ 	 * We're preparing to make a call to secure world. In case we can't
+ 	 * allocate a thread in secure world we'll end up waiting in
+@@ -53,15 +71,43 @@ void optee_cq_wait_init(struct optee_call_queue *cq,
+ 	mutex_lock(&cq->mutex);
+ 
+ 	/*
+-	 * We add ourselves to the queue, but we don't wait. This
+-	 * guarantees that we don't lose a completion if secure world
+-	 * returns busy and another thread just exited and try to complete
+-	 * someone.
++	 * We add ourselves to a queue, but we don't wait. This guarantees
++	 * that we don't lose a completion if secure world returns busy and
++	 * another thread just exited and try to complete someone.
+ 	 */
+ 	init_completion(&w->c);
+ 	list_add_tail(&w->list_node, &cq->waiters);
+ 
++	if (cq->total_thread_count && sys_thread) {
++		if (cq->free_thread_count > 0)
++			cq->free_thread_count--;
++		else
++			need_wait = true;
++	} else if (cq->total_thread_count) {
++		if (cq->free_thread_count > 1)
++			cq->free_thread_count--;
++		else
++			need_wait = true;
 +	}
-  
-  	unit_size = unaccepted_table->unit_size;
-  
++
+ 	mutex_unlock(&cq->mutex);
++
++	while (need_wait) {
++		optee_cq_wait_for_completion(cq, w);
++		mutex_lock(&cq->mutex);
++		if (sys_thread) {
++			if (cq->free_thread_count > 0) {
++				cq->free_thread_count--;
++				need_wait = false;
++			}
++		} else {
++			if (cq->free_thread_count > 1) {
++				cq->free_thread_count--;
++				need_wait = false;
++			}
++		}
++		mutex_unlock(&cq->mutex);
++	}
+ }
+ 
+ void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+@@ -104,6 +150,8 @@ void optee_cq_wait_final(struct optee_call_queue *cq,
+ 	/* Get out of the list */
+ 	list_del(&w->list_node);
+ 
++	cq->free_thread_count++;
++
+ 	/* Wake up one eventual waiting task */
+ 	optee_cq_complete_one(cq);
+ 
+@@ -361,6 +409,22 @@ int optee_open_session(struct tee_context *ctx,
+ 	return rc;
+ }
+ 
++int optee_system_session(struct tee_context *ctx, u32 session)
++{
++	struct optee_context_data *ctxdata = ctx->data;
++	struct optee_session *sess;
++
++	mutex_lock(&ctxdata->mutex);
++
++	sess = find_session(ctxdata, session);
++	if (sess && !sess->use_sys_thread)
++		sess->use_sys_thread = true;
++
++	mutex_unlock(&ctxdata->mutex);
++
++	return 0;
++}
++
+ int optee_close_session_helper(struct tee_context *ctx, u32 session,
+ 			       bool system_thread)
+ {
+diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+index 5fde9d4100e3..0c9055691343 100644
+--- a/drivers/tee/optee/ffa_abi.c
++++ b/drivers/tee/optee/ffa_abi.c
+@@ -852,8 +852,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+ 	if (rc)
+ 		goto err_unreg_supp_teedev;
+ 	mutex_init(&optee->ffa.mutex);
+-	mutex_init(&optee->call_queue.mutex);
+-	INIT_LIST_HEAD(&optee->call_queue.waiters);
++	optee_cq_init(&optee->call_queue, 0);
+ 	optee_supp_init(&optee->supp);
+ 	optee_shm_arg_cache_init(optee, arg_cache_flags);
+ 	ffa_dev_set_drvdata(ffa_dev, optee);
+diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+index b68273051454..6dcecb83c893 100644
+--- a/drivers/tee/optee/optee_private.h
++++ b/drivers/tee/optee/optee_private.h
+@@ -40,15 +40,29 @@ typedef void (optee_invoke_fn)(unsigned long, unsigned long, unsigned long,
+ 				unsigned long, unsigned long,
+ 				struct arm_smccc_res *);
+ 
++/*
++ * struct optee_call_waiter - TEE entry may need to wait for a free TEE thread
++ * @list_node		Reference in waiters list
++ * @c			Waiting completion reference
++ */
+ struct optee_call_waiter {
+ 	struct list_head list_node;
+ 	struct completion c;
+ };
+ 
++/*
++ * struct optee_call_queue - OP-TEE call queue management
++ * @mutex			Serializes access to this struct
++ * @waiters			List of threads waiting to enter OP-TEE
++ * @total_thread_count		Overall number of thread context in OP-TEE or 0
++ * @free_thread_count		Number of threads context free in OP-TEE
++ */
+ struct optee_call_queue {
+ 	/* Serializes access to this struct */
+ 	struct mutex mutex;
+ 	struct list_head waiters;
++	int total_thread_count;
++	int free_thread_count;
+ };
+ 
+ struct optee_notif {
+@@ -254,6 +268,7 @@ int optee_supp_send(struct tee_context *ctx, u32 ret, u32 num_params,
+ int optee_open_session(struct tee_context *ctx,
+ 		       struct tee_ioctl_open_session_arg *arg,
+ 		       struct tee_param *param);
++int optee_system_session(struct tee_context *ctx, u32 session);
+ int optee_close_session_helper(struct tee_context *ctx, u32 session,
+ 			       bool system_thread);
+ int optee_close_session(struct tee_context *ctx, u32 session);
+@@ -303,6 +318,7 @@ static inline void optee_to_msg_param_value(struct optee_msg_param *mp,
+ 	mp->u.value.c = p->u.value.c;
+ }
+ 
++void optee_cq_init(struct optee_call_queue *cq, int thread_count);
+ void optee_cq_wait_init(struct optee_call_queue *cq,
+ 			struct optee_call_waiter *w, bool sys_thread);
+ void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index e2763cdcf111..3314ffeb91c8 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -1209,6 +1209,7 @@ static const struct tee_driver_ops optee_clnt_ops = {
+ 	.release = optee_release,
+ 	.open_session = optee_open_session,
+ 	.close_session = optee_close_session,
++	.system_session = optee_system_session,
+ 	.invoke_func = optee_invoke_func,
+ 	.cancel_req = optee_cancel_req,
+ 	.shm_register = optee_shm_register,
+@@ -1356,6 +1357,16 @@ static bool optee_msg_exchange_capabilities(optee_invoke_fn *invoke_fn,
+ 	return true;
+ }
+ 
++static unsigned int optee_msg_get_thread_count(optee_invoke_fn *invoke_fn)
++{
++	struct arm_smccc_res res;
++
++	invoke_fn(OPTEE_SMC_GET_THREAD_COUNT, 0, 0, 0, 0, 0, 0, 0, &res);
++	if (res.a0)
++		return 0;
++	return res.a1;
++}
++
+ static struct tee_shm_pool *
+ optee_config_shm_memremap(optee_invoke_fn *invoke_fn, void **memremaped_shm)
+ {
+@@ -1609,6 +1620,7 @@ static int optee_probe(struct platform_device *pdev)
+ 	struct optee *optee = NULL;
+ 	void *memremaped_shm = NULL;
+ 	unsigned int rpc_param_count;
++	unsigned int thread_count;
+ 	struct tee_device *teedev;
+ 	struct tee_context *ctx;
+ 	u32 max_notif_value;
+@@ -1636,6 +1648,7 @@ static int optee_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
++	thread_count = optee_msg_get_thread_count(invoke_fn);
+ 	if (!optee_msg_exchange_capabilities(invoke_fn, &sec_caps,
+ 					     &max_notif_value,
+ 					     &rpc_param_count)) {
+@@ -1725,8 +1738,7 @@ static int optee_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		goto err_unreg_supp_teedev;
+ 
+-	mutex_init(&optee->call_queue.mutex);
+-	INIT_LIST_HEAD(&optee->call_queue.waiters);
++	optee_cq_init(&optee->call_queue, thread_count);
+ 	optee_supp_init(&optee->supp);
+ 	optee->smc.memremaped_shm = memremaped_shm;
+ 	optee->pool = pool;
+-- 
+2.34.1
 
-Thanks,
-Tom
-
-> 
