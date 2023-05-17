@@ -2,45 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C822B705D5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D027D705D61
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjEQCfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
+        id S232111AbjEQCkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEQCft (ORCPT
+        with ESMTP id S231432AbjEQCkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:35:49 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639744ED3;
-        Tue, 16 May 2023 19:35:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Viqoj7k_1684290929;
-Received: from 30.240.113.228(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Viqoj7k_1684290929)
-          by smtp.aliyun-inc.com;
-          Wed, 17 May 2023 10:35:30 +0800
-Message-ID: <18b27158-a8fb-e1d9-f85e-f12620b69bfb@linux.alibaba.com>
-Date:   Wed, 17 May 2023 10:35:27 +0800
+        Tue, 16 May 2023 22:40:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6557B35A8
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E8C60FD9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2495C433EF;
+        Wed, 17 May 2023 02:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684291216;
+        bh=NdrwmnejHdoL348J6WmccW3ZdlHY3rSkgi/6/8J/jcc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=i8PH5HNXNqDJ4w+iqIxFtytlXJGS9XfvLYfHVXQG8mf6Xd4zUba616U2iUVpYnQK6
+         h+VN2FU0ztxn/omhVl8Scc1WImm6E4BLmszILp8I52pfG3nYGM+7JvUAQxxs5UtdsM
+         jEfvZDvF3qxSB6Bph8nWIsXrVMHoDaUTKFMVIdB+3Gv0yS2jC38pDD2k1eGpdE+0zI
+         8WtNur9FAsMZAOKVtX3ItRsiIhvrJizJWhOows6raG2sli7QdfF7pEvyOj6qm7QmnB
+         I39THNrhW6mUtcL9aVZUtzj3TostteHDfylp9WRgufK591ooBmADKBNgIb4A+5o4gK
+         x0cj0tShqAMjg==
+Message-ID: <a089749c-061a-f5b7-1d09-2fc0fce2f76a@kernel.org>
+Date:   Wed, 17 May 2023 10:40:13 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v4 3/4] drivers/perf: add DesignWare PCIe PMU driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1] f2fs: Fix over-estimating free section during FG GC
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     yangyicong@huawei.com, will@kernel.org,
-        Jonathan.Cameron@huawei.com, baolin.wang@linux.alibaba.com,
-        robin.murphy@arm.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        rdunlap@infradead.org, mark.rutland@arm.com,
-        zhuo.song@linux.alibaba.com
-References: <ZGPXWzwrZPZTIMJd@bhelgaas>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <ZGPXWzwrZPZTIMJd@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
+To:     yonggil.song@samsung.com,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Seokhwan Kim <sukka.kim@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        beomsu kim <beomsu7.kim@samsung.com>
+References: <CGME20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63@epcms2p5>
+ <20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63@epcms2p5>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63@epcms2p5>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,71 +63,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/5/17 03:19, Bjorn Helgaas wrote:
-> On Tue, May 16, 2023 at 09:01:09PM +0800, Shuai Xue wrote:
->> ...
+On 2023/5/12 12:16, Yonggil Song wrote:
+> There was a bug that finishing FG GC unconditionally because free sections
+> are over-estimated after checkpoint in FG GC.
+> This patch initializes sec_freed by every checkpoint in FG GC.
 > 
->> +#include <linux/pci.h>
->> +#include <linux/bitfield.h>
->> +#include <linux/bitops.h>
->> +#include <linux/cpuhotplug.h>
->> +#include <linux/cpumask.h>
->> +#include <linux/device.h>
->> +#include <linux/errno.h>
->> +#include <linux/kernel.h>
->> +#include <linux/list.h>
->> +#include <linux/perf_event.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/smp.h>
->> +#include <linux/sysfs.h>
->> +#include <linux/types.h>
-> 
-> Typically in alpha order.
+> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
 
-Got it, I will reorder them.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-> 
->> +#define DWC_PCIE_VSEC_RAS_DES_ID		0x02
->> +
->> +#define DWC_PCIE_EVENT_CNT_CTL			0x8
-> 
-> Add a blank line here.
-
-Sure, will add it.
-
-> 
->> +/*
->> + * Event Counter Data Select includes two parts:
-> 
->> +#define DWC_PCIE_EVENT_CNT_DATA			0xC
->> +#define DWC_PCIE_DURATION_4US			0xff
-> ...
-> Pick upper-case hex or lower-case hex and use consistently.
-
-Will pick upper-case hex for all macros.
-
-> 
->> +#define DWC_PCIE_LANE_EVENT_MAX_PERIOD		(GENMASK_ULL(31, 0))
->> +#define DWC_PCIE_TIME_BASED_EVENT_MAX_PERIOD	(GENMASK_ULL(63, 0))
-> 
-> Unnecessary outer "()".
-
-Ok, will remove it.
-
-> 
->> +struct dwc_pcie_pmu {
->> +	struct pci_dev		*pdev;		/* Root Port device */
->> +	u32			ras_des;	/* RAS DES capability offset */
-> 
-> u16 is enough to address all of config space.
-
-Go it. will fix in next version.
-
-Thank you :)
-
-Best Regards,
-Shuai
-
-
+Thanks,
