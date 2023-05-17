@@ -2,156 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A657706B8A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F2C706B8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjEQOsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S232160AbjEQOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbjEQOsi (ORCPT
+        with ESMTP id S232086AbjEQOtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:48:38 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CF240C0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:48:36 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510d9218506so162688a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:48:36 -0700 (PDT)
+        Wed, 17 May 2023 10:49:24 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F135140C0;
+        Wed, 17 May 2023 07:49:23 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-338335fe6d0so4258415ab.1;
+        Wed, 17 May 2023 07:49:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684334915; x=1686926915;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=elvq0HJ66cNTWAPxUlVMN+GA2+ufgNIYZmKlf1bKE8k=;
-        b=jmxWX2Hqep6vnItCfquyL4U0/eXi1cZdZsjpxkc1mZ8b0gd9rHAG0PWwAF9MTFi032
-         dFnf3vhPW4W7KF3nmL36359po+98NHdO7P72IyggzX2g+z5qBZ2WUFt7DyVEs6OfyJtG
-         uXvZL0ZoWSM0wxX5nkvM+spVf6bTID6yhMXs3lLsE7r0HcVoUEIHvMAwIreOvSFPFp7q
-         e45BhCbAqJszQd6nFsfu7D0xQrRvgXsuKC+O9Rog7D38WESf/XyxcMhozRi+PTMV2S/c
-         tAxMVehKJ19ocmLDMZxZ6kZp/vjvp10QwatUHMen9Yx5XDp09mJom+0OjuDWArXVwptw
-         nR+w==
+        d=gmail.com; s=20221208; t=1684334963; x=1686926963;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f05y9R3Fl6VbAlQDanAd2cha5Cf54wSBkc374UYz9UI=;
+        b=bcV6hwSN/0UMrTECo6qVNLbcumprmfyioJE1mNkB4ZvaLkYCkIocelHX5SOEgYsMXy
+         4qohG/wVVQqGw+ecK8qY4Fy8IUXu264edouOtmhBZPY/71Fu3QLqaWfhSP3TcKcQF+In
+         ZO0mFghri6ezRm/oh0xOPXiR7FwL2bxHsWI25CcSeWyMwi/LdiWcisGKAXw+Xnq09mvP
+         8lzLtMvMEUOQm2xLIdJZdzNQJZR6D2b2F64LumxbPfun64507uFbXaDIIJPE9PDxSFNZ
+         +wfoK44iT56GTZxcV4/eUadsFzr09t6Wt4aFaPfQfz655XkMQiTC6ixOHuxsCI6Vzagc
+         vLQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684334915; x=1686926915;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=elvq0HJ66cNTWAPxUlVMN+GA2+ufgNIYZmKlf1bKE8k=;
-        b=fpQ8EHjoq5kySIGN5rfwVQBqXOqrw4VOZxaorKu1Eu5JZtvc77d/zg5XMw9GuXssj2
-         ok/LP0stQLXwFa+xti5PioutALwOhOSAfbQ/u+GrfNoU99Y1kcNO7lixgp1jzg9z0oeo
-         ZmEBJmfA6RG/izpbfXyH7bXhL8BiosmpbJ5NR26cLuJwcHQYOrRN4soRxuI27eINAbPC
-         8q+/fF/KJfvE90WHoWNCTaMk1basN+QEtiCQkPeMSMppYx3WTo2lG8p8SACwseMIXTOh
-         ofp4/gOVEpF3Nr/FqsmagDslb4/wu582SEvWHiI7DvHJ9feZiwLPVr+8Oq1h8b0R1q5x
-         8wkg==
-X-Gm-Message-State: AC+VfDx0TyVgI7JtwGy1WFhYCjKkuNt88ZoL6FCSDhDVYNtZNzSfctgs
-        i6WhUvCDgY1cE2pbxlrdpevlag==
-X-Google-Smtp-Source: ACHHUZ7u2N7bCmDcp4Y15qBMsgz6bSdlw0qZZSEJUJZGSKF0JWiEAQtQGmDA7ZrNlC5N0a2zBmn3kw==
-X-Received: by 2002:a05:6402:35c2:b0:4fc:97d9:18ec with SMTP id z2-20020a05640235c200b004fc97d918ecmr2062220edc.21.1684334915088;
-        Wed, 17 May 2023 07:48:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id s13-20020aa7c54d000000b00506b2af49fbsm9257750edr.81.2023.05.17.07.48.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 07:48:34 -0700 (PDT)
-Message-ID: <d8af7985-49d7-021c-a51e-271d7b731971@linaro.org>
-Date:   Wed, 17 May 2023 16:48:33 +0200
+        d=1e100.net; s=20221208; t=1684334963; x=1686926963;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f05y9R3Fl6VbAlQDanAd2cha5Cf54wSBkc374UYz9UI=;
+        b=YZqVMYAkaFFJE57OQV8dfs1NPpc24aVX658PDGGUmRPKSTaGfmXIg+xZSx4ij8oyXH
+         eknC/UXihP2vgjeYaTczxbXDmyTycgGSQ2Cri/fk7HjJp7bKjST9kxu7mrW0zH8mfZGz
+         6AdBijPvXj1y6v89hDvvwAzzGsy2kl+MctLcZjXZjaFVqNLu0kSnJm/RyjsdFYS9Geau
+         ZYrWwzJjqIZuZ0gNRiJshx6mToVoZ6cDIv4a07U4VOV3ab/W+vupSb8o337CjDnHzFHY
+         oPkBCZ6QbSXuNIWrlg3gniVqyCA8YYmR08g3F50vuXzSsR6ASfGZXN1Gk/rWeQSpuoB6
+         FcAQ==
+X-Gm-Message-State: AC+VfDwTeIBpkovE2yixqvNbc7K6569flLCG1ytS2qUVwfwuWmV0oUh+
+        rYJrcmfkK/Igfhh7dXXAyYLNN7vC3ScWLQ==
+X-Google-Smtp-Source: ACHHUZ5PNwtFgZ4TY7EG85CA8qH2DfYwiCJMnE4oFcAfjtFgIfd/LUSDC6uiZ1KAuZ3Wd6kntCwSLA==
+X-Received: by 2002:a92:c6cf:0:b0:32a:b78f:e7d5 with SMTP id v15-20020a92c6cf000000b0032ab78fe7d5mr2242319ilm.27.1684334963225;
+        Wed, 17 May 2023 07:49:23 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id 18-20020a92c652000000b00335717785ecsm5925900ill.63.2023.05.17.07.49.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 07:49:22 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cgroup: Replace all non-returning strlcpy with strscpy
+Date:   Wed, 17 May 2023 14:49:10 +0000
+Message-ID: <20230517144910.1521547-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next V3 1/3] dt-bindings: net: xilinx_axienet:
- Introduce dmaengine binding support
-Content-Language: en-US
-To:     "Gaddam, Sarath Babu Naidu" <sarath.babu.naidu.gaddam@amd.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sarangi, Anirudha" <anirudha.sarangi@amd.com>,
-        "Katakam, Harini" <harini.katakam@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20230510085031.1116327-1-sarath.babu.naidu.gaddam@amd.com>
- <20230510085031.1116327-2-sarath.babu.naidu.gaddam@amd.com>
- <95f61847-2ec3-a4e0-d277-5d68836f66cf@linaro.org>
- <MW5PR12MB55986A4865DB56F7F024EA7687749@MW5PR12MB5598.namprd12.prod.outlook.com>
- <fe2989c2-2d90-286f-0492-2b07720afcf9@linaro.org>
- <MW5PR12MB55983A529A1F57A39C7A61B7877E9@MW5PR12MB5598.namprd12.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MW5PR12MB55983A529A1F57A39C7A61B7877E9@MW5PR12MB5598.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 14:06, Gaddam, Sarath Babu Naidu wrote:
->>>>> +  dma-names:
->>>>> +    items:
->>>>> +      - const: tx_chan0
->>>>
->>>> tx
->>>>
->>>>> +      - const: rx_chan0
->>>>
->>>> rx
->>>
->>> We want to support more channels in the future, currently we support
->>> AXI DMA which has only one tx and rx channel. In future we want to
->>> extend support for multichannel DMA (MCDMA) which has 16 TX and
->>> 16 RX channels. To uniquely identify each channel, we are using chan
->>> suffix. Depending on the usecase AXI ethernet driver can request any
->>> combination of multichannel DMA  channels.
->>>
->>> dma-names = tx_chan0, tx_chan1, rx_chan0, rx_chan1;
->>>
->>> will update the commit message with same.
->>
->> I expect the binding to be complete, otherwise you get comments like this.
->> Add missing parts to the binding and resend.
-> 
-> Binding is complete for current supported DMA (single channel).  We will
-> extend when we add MCDMA.
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
 
-What doe sit mean "current supported DMA"? By driver? or by hardware? If
-the former, then how does it matter for the bindings?
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-If the latter, then your hardware is going to change? Then you will have
-different set of compatibles and then can use different names.
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ kernel/cgroup/cgroup-v1.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> We will describe the reason for using channel suffix in the description as 
-> below. 
-> 
->    dma-names:
->       items:
->         - const: tx_chan0
->         - const: rx_chan0
->      description: |
->            Chan suffix is used for identifying each channel uniquely.
->            Current DMA has only one Tx and Rx channel but it will be 
->            extended to support for multichannel DMA (MCDMA) which
->            has 16 TX and 16 RX channels. Depending on the usecase AXI
->            ethernet driver can request any combination of multichannel
->            DMA  channels.
-
-No, because I don't understand what is "will be extended". Bindings
-should be complete. If they are going to be extended, it means they are
-not complete. If they cannot be complete, which happens, please provide
-a reason. There was no reason so far, except your claim it is complete.
-
-Best regards,
-Krzysztof
+diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
+index aeef06c465ef..d55216c4cc2d 100644
+--- a/kernel/cgroup/cgroup-v1.c
++++ b/kernel/cgroup/cgroup-v1.c
+@@ -563,7 +563,7 @@ static ssize_t cgroup_release_agent_write(struct kernfs_open_file *of,
+ 	if (!cgrp)
+ 		return -ENODEV;
+ 	spin_lock(&release_agent_path_lock);
+-	strlcpy(cgrp->root->release_agent_path, strstrip(buf),
++	strscpy(cgrp->root->release_agent_path, strstrip(buf),
+ 		sizeof(cgrp->root->release_agent_path));
+ 	spin_unlock(&release_agent_path_lock);
+ 	cgroup_kn_unlock(of->kn);
+@@ -797,7 +797,7 @@ void cgroup1_release_agent(struct work_struct *work)
+ 		goto out_free;
+ 
+ 	spin_lock(&release_agent_path_lock);
+-	strlcpy(agentbuf, cgrp->root->release_agent_path, PATH_MAX);
++	strscpy(agentbuf, cgrp->root->release_agent_path, PATH_MAX);
+ 	spin_unlock(&release_agent_path_lock);
+ 	if (!agentbuf[0])
+ 		goto out_free;
 
