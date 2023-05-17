@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E91470666A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C41706658
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbjEQLPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S230175AbjEQLO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjEQLPD (ORCPT
+        with ESMTP id S230125AbjEQLOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:15:03 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543BB271B;
-        Wed, 17 May 2023 04:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oA7UPGpTSZL9i4ew+XAireX7x3872RNVvWWFAISPjRE=; b=bIzarW9nY78beCdFYkOzB2QpCI
-        LwSpvqZ14pH65RAvNk4PL/ZhRxHLB2P/DnJVNRs0KHX+L6xIymUdyRrL9OqOIvei1ChQ8PwFKtqiA
-        hUKgqtynFlY1CY0oEj/N9baV/gKFVT+wD5RCkjcFPBjKMe3geCwvi/Q9TDN1a0mTUTL6fjzTSyLT8
-        skL8CmSo8gXsa4K9fko4iAguxtuT5obqtkoRqf5paYJtzr4Y9Vwi2hoPXE0AsM98aR9r8Xanq9Nee
-        bdWgp1kjCJ5BPBZGqArNBReMrA0wLO7eUgzgTa1XIiOqkaXd2vuov0EQ9TfV7vShVQNgmIU7+vRW4
-        U7x+E2Xg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzF6Y-00DCdL-0C;
-        Wed, 17 May 2023 11:14:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 484E23003CF;
-        Wed, 17 May 2023 13:13:58 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1DEDB241D47E6; Wed, 17 May 2023 13:13:58 +0200 (CEST)
-Date:   Wed, 17 May 2023 13:13:58 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        Mark Rutland <Mark.Rutland@arm.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "kernel@xen0n.name" <kernel@xen0n.name>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "longman@redhat.com" <longman@redhat.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        "jstultz@google.com" <jstultz@google.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [RFC][PATCH 7/9] x86/tsc: Provide sched_clock_noinstr()
-Message-ID: <20230517111358.GC2665450@hirez.programming.kicks-ass.net>
-References: <20230508211951.901961964@infradead.org>
- <20230508213147.853677542@infradead.org>
- <20230508214419.GA2053935@hirez.programming.kicks-ass.net>
- <BYAPR21MB1688853D01CABA74B51DA841D77E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Wed, 17 May 2023 07:14:42 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8434626AA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:14:40 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-965f7bdab6bso111872466b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684322079; x=1686914079;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8f/Ov+L9lgAMMtQvsESvWR48vQlBSC6eGHRApShSvK4=;
+        b=sIfEiJbFesnboqrvDwg/JbxitCUki5aOESmQeTg6BQTaFmpQel55ARJNOzBd8Mm4FZ
+         fL+tqM9jp+I4U1fmvk7eAQehUtyk/TO+AAf9RFsKbKkkeNL6LvaF4LYZf9tyVKUlhdHG
+         i/DH2lMxWzJ7WPE4l4CfVfUWeP2GrHWEytoP6jrQX7Zkda97O0tWivR4CwTB9QHVEG1K
+         rBrCq0Y2omMSb5Z4kuCIJMQcJtoef5ryB9wcSy0/JXqX6taG1+ccb7qg58us2ne/Zb0p
+         7V10XrAmSJFkQZ4ZLTGvktUpzOfMUh1Q3cz8HYSdwZJS0JiMw8iiZs2Yq8MuIiFD1/N1
+         tN3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684322079; x=1686914079;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8f/Ov+L9lgAMMtQvsESvWR48vQlBSC6eGHRApShSvK4=;
+        b=USG+B8m8dFBtOuwW1VlAu7vVzzRGDDTWrpReOjqyg5GXQ2w/pbZyOb9txGN4elu/nJ
+         6yLxBu0n1qtPjNZnpQFxUQebk033Oaaudk2FvpsVFUtpneyYgbv5a0ra2KAr7UniQPJ2
+         GjhxuBkTe8NyHRsSke2yW8HoNTb24FX/IUCtZFRtDLAKYeqbeAGoFeq2CJjSaFNgpEzZ
+         MaJpdNwFZ3z4ZqrPAZEeC3Ph/GeLgfFvdT/jHo8LQFZYTb+4Yx7dXI5kEVUaVwTtfZ+s
+         RZzMAgDWY+Q0MaWqe8EReVBvRNO8nTms7PaJRoJ5ra7Co4/XBilu55i7Eokl7cYi3gKy
+         /4qg==
+X-Gm-Message-State: AC+VfDwhgfWiF3m4OwbuJLe+chvfdaIKtu5Kr1TS7umhTidl/9s4JfoL
+        YsKlchlb2P/Wm0jNwNKdOx6Db52ndYFZmVFhe4s=
+X-Google-Smtp-Source: ACHHUZ4W3Tqy+kmA5/CrSkwq+i+Z6QU84MiGKQFNv45sP/3v7DwL6mlpqoPP47j1FG0KjZyNBcEakA==
+X-Received: by 2002:a17:906:9c83:b0:95f:4889:412a with SMTP id fj3-20020a1709069c8300b0095f4889412amr39964429ejc.33.1684322078958;
+        Wed, 17 May 2023 04:14:38 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id ml18-20020a170906cc1200b0094f124a37c4sm12326880ejb.18.2023.05.17.04.14.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 04:14:38 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 01/12] ASoC: codecs: rt1308: do not store status in state container
+Date:   Wed, 17 May 2023 13:14:05 +0200
+Message-Id: <20230517111416.424420-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688853D01CABA74B51DA841D77E9@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 02:26:35AM +0000, Michael Kelley (LINUX) wrote:
+Driver in its update status callback stores Soundwire device status in
+state container but it never uses it later.  Simplify the code a bit.
 
-> Peter -- I've sent you an RFC patch to incorporate into your broader
-> patch set.  I think it probably makes sense for all the Hyper-V
-> stuff to be a separate patch.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ sound/soc/codecs/rt1308-sdw.c | 5 +----
+ sound/soc/codecs/rt1308-sdw.h | 1 -
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
-Perhaps, it's not that much.
+diff --git a/sound/soc/codecs/rt1308-sdw.c b/sound/soc/codecs/rt1308-sdw.c
+index 1797af824f60..313e97c94532 100644
+--- a/sound/soc/codecs/rt1308-sdw.c
++++ b/sound/soc/codecs/rt1308-sdw.c
+@@ -304,9 +304,6 @@ static int rt1308_update_status(struct sdw_slave *slave,
+ {
+ 	struct  rt1308_sdw_priv *rt1308 = dev_get_drvdata(&slave->dev);
+ 
+-	/* Update the status */
+-	rt1308->status = status;
+-
+ 	if (status == SDW_SLAVE_UNATTACHED)
+ 		rt1308->hw_init = false;
+ 
+@@ -314,7 +311,7 @@ static int rt1308_update_status(struct sdw_slave *slave,
+ 	 * Perform initialization only if slave status is present and
+ 	 * hw_init flag is false
+ 	 */
+-	if (rt1308->hw_init || rt1308->status != SDW_SLAVE_ATTACHED)
++	if (rt1308->hw_init || status != SDW_SLAVE_ATTACHED)
+ 		return 0;
+ 
+ 	/* perform I/O transfers required for Slave initialization */
+diff --git a/sound/soc/codecs/rt1308-sdw.h b/sound/soc/codecs/rt1308-sdw.h
+index 04ff18fa18e2..f816c73e247e 100644
+--- a/sound/soc/codecs/rt1308-sdw.h
++++ b/sound/soc/codecs/rt1308-sdw.h
+@@ -159,7 +159,6 @@ struct rt1308_sdw_priv {
+ 	struct snd_soc_component *component;
+ 	struct regmap *regmap;
+ 	struct sdw_slave *sdw_slave;
+-	enum sdw_slave_status status;
+ 	struct sdw_bus_params params;
+ 	bool hw_init;
+ 	bool first_hw_init;
+-- 
+2.34.1
 
-> I haven't previously worked with the details of notrace vs. noinstr,
-> but I followed the patterns elsewhere in patch set. Please review
-> to see if it seems correct.
-
-notrace inhibits the "call __fentry__" at the start of the symbol.
-
-The __fentry__ call is mostly for ftrace, there's a few sites where
-inhibiting tracing is critical -- stuff that happens before the ftrace
-recursion handling, but mostly it's about performance these days,
-constantly hitting the recusion code isn't very good.
-
-noinstr inhibits any and all compiler generated 'extra' -- it is for the
-C as a portable assembler usage. This very much includes notrace, but it
-also covers all the *SAN nonsense. Basically, if it does not directly
-reflect the code as written, it shouldn't be emitted.
-
-Additionally, and for validation purposes, it also ensures all these
-symbols end up in a special text section.
-
-But yeah, you seem to have gotten it right.
-
-> One thing:  In the cases where I added __always_inline, I dropped
-> any notrace or noinstr annotations.  I presume such code always
-> takes on the attributes of the caller.  If that's not correct, let me know.
-
-Correct; noinstr actually has an explicit noinline because compilers
-suck :/
