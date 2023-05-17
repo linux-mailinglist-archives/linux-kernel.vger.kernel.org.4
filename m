@@ -2,90 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1185D7071C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A7B7071CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjEQTPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S229980AbjEQTRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjEQTPH (ORCPT
+        with ESMTP id S229829AbjEQTRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:15:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA10046BD
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:14:46 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-53033a0b473so777030a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:14:46 -0700 (PDT)
+        Wed, 17 May 2023 15:17:07 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D05635BC;
+        Wed, 17 May 2023 12:17:07 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae4be0b1f3so9604895ad.0;
+        Wed, 17 May 2023 12:17:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684350886; x=1686942886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I86GqiU0YgzZjcmQYbWuXd34tQJA/R6gUQrAR3Ef4Vo=;
-        b=a9BUGVeBYF7ixWNiY98NX+YR8nMPaRDXPVrEzp1DMOAcTrHdtsQyseNqO7cCzSPHTq
-         hkxCLO4A3OLziF1E5Do+xEwfS6rY3QOBEJhYNvKI/HR4Dcbr96g7F1da1HYOhN2+UEgp
-         ebtEQun6/IpF4T2lpL5yftuLBzWRT4BZG8O2U=
+        d=gmail.com; s=20221208; t=1684351026; x=1686943026;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LanXL4cSjsGDYSSD0FSs2zO2brIePGo9H9nGrxSamac=;
+        b=cOADYCKrXZvPD11VXf7AXxA/Noml5RKbZfZ32QgzGekH7ufXcDbscir85yncraiskI
+         3/1uiBWFrnnIh6pViv6i4sfQl6jQ1omaCo7iJznH6jzLbBf90XbIo2fFdGORGOIksYu5
+         nGnOTasoErUP5KEifdn7QEo0LmtGdBkgkhBB7LlcX428pWe+tpYrQyXzdO28WjcJQMKC
+         vNRWlQaELarsWFNXkLnEaxgQd1rmWPuPm0mmeTwXroOvIdQ/a3yqW5oYnk8QsfkgVCZr
+         MNidIgg0bLEetkobR4wFI0e4tMiB5AbxlCi3W+Z9BoIWbmtOPadOX2HJXwSgCr6T1eF4
+         cBjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350886; x=1686942886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I86GqiU0YgzZjcmQYbWuXd34tQJA/R6gUQrAR3Ef4Vo=;
-        b=W3j+FuWbW0vMFTaInk5cc9kJncQ8UY/AgovsB1Su80N4hOF+Mf31GqNdS8p/KeMgOv
-         wJzeFNqBoEm4JYH3xiu2pcBUx0i0ZoDK8LdRXeUU6zd2+y5y2tzGYErA3VAG0pVZrEn0
-         B+AKHNd90qZS5q4kmyThTWqBj1ECAsrcmrN8gzgzv3KOVJreX0WkcEB1AogeOrFSLP4E
-         9HztOxmIgXCgsxPhuFsUuHVEFDyCIxIoS7ZHBBcSvzizBdkpC71cpV7h3VhtCirwk4Mc
-         K1RaFGycErlignfqQMsOXY0k5FJGIvwaLAJw3Fw/BBU1RVBzlifVyPohMA9XLJMoZJi9
-         FxxA==
-X-Gm-Message-State: AC+VfDzhZKhzR2ZmeSAkeU+5oAPaSIjpu8eLBJQ4OZGE2ppM50ODvoLY
-        kSnmwhG+hPSn1Q92vKBoowpfsA==
-X-Google-Smtp-Source: ACHHUZ5k47l/bNRLiG9PgNcNSBM86j3ELSgSLeMZf8fFyVeviUlMsarseItJaDwcgLfSkjvALPfISA==
-X-Received: by 2002:a17:902:b594:b0:1ae:3dcd:30fc with SMTP id a20-20020a170902b59400b001ae3dcd30fcmr5365858pls.11.1684350885863;
-        Wed, 17 May 2023 12:14:45 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170902c08600b001ab13f1fa82sm376964pld.85.2023.05.17.12.14.45
+        d=1e100.net; s=20221208; t=1684351026; x=1686943026;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LanXL4cSjsGDYSSD0FSs2zO2brIePGo9H9nGrxSamac=;
+        b=ac5HoVvXwot4psAnq+IVHp82ajGI7om2u6V1Bi3m5GJ/adRrUZH7aWERADRJKzVL1g
+         EiF2+VWG1+MK9KojMRSboHAk1rsDCVHsp2jDdebc5dy0gJmP+PXRFd2CPGoM/eSDG4XS
+         mPOViwZS1lyRF8EIPoUPXGOYsBpCELWXZyxg/oHhNvZKE9M/X2Gxx53yWTa5Z9h//ut5
+         Dte0moYCcXV+gLlQLzQ5FtIhHj+d/US458bEMuE5DlJ8LJtyKUblFjGT1KJkEfu+VP7H
+         vwvDfsOwqxAEoBIzzaJsY13V4NFMvDRBStKhxu6X/JINhVstuEUIGlnz3UOhimkxZ3Q5
+         nw0w==
+X-Gm-Message-State: AC+VfDyE3DLOOyJiLhgkjKZd+lIt7EUzIyaRgfEH71/WMVYxJhI1MYfT
+        usEmGCOsh6ZNr1FiCvvBbRU=
+X-Google-Smtp-Source: ACHHUZ7b9gqpxVRtD0xI0+8yT36VHR3Gh7qFSeCjIat07BTqPuDEZzpCbUEhf0KHEjrbK02f2JeMhQ==
+X-Received: by 2002:a17:903:182:b0:1ac:8be5:8787 with SMTP id z2-20020a170903018200b001ac8be58787mr38973015plg.21.1684351026519;
+        Wed, 17 May 2023 12:17:06 -0700 (PDT)
+Received: from localhost.localdomain ([111.201.128.95])
+        by smtp.gmail.com with ESMTPSA id z2-20020a170903018200b001acad86ebc5sm16215089plg.33.2023.05.17.12.17.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 12:14:45 -0700 (PDT)
-Date:   Wed, 17 May 2023 12:14:45 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] ftrace: Replace all non-returning strlcpy with strscpy
-Message-ID: <202305171214.3D13652AC@keescook>
-References: <20230517145323.1522010-1-azeemshaikh38@gmail.com>
+        Wed, 17 May 2023 12:17:06 -0700 (PDT)
+From:   Yeqi Fu <asuk4.q@gmail.com>
+To:     dinguyen@kernel.org, bp@alien8.de, tony.luck@intel.com
+Cc:     Yeqi Fu <asuk4.q@gmail.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/altera: Fix error checking
+Date:   Thu, 18 May 2023 03:15:56 +0800
+Message-Id: <20230517191556.367689-1-asuk4.q@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517145323.1522010-1-azeemshaikh38@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 02:53:23PM +0000, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+The function edac_debugfs_create_dir returns ERR_PTR if an error
+occurs, and the appropriate way to verify for errors is to use the
+inline function IS_ERR. The patch will substitute the null-comparison
+with IS_ERR.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Yeqi Fu <asuk4.q@gmail.com>
+---
+ drivers/edac/altera_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index 8b31cd54bdb6..19693333408f 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -683,7 +683,7 @@ static void altr_create_edacdev_dbgfs(struct edac_device_ctl_info *edac_dci,
+ 		return;
+ 
+ 	drvdata->debugfs_dir = edac_debugfs_create_dir(drvdata->edac_dev_name);
+-	if (!drvdata->debugfs_dir)
++	if (IS_ERR(drvdata->debugfs_dir))
+ 		return;
+ 
+ 	if (!edac_debugfs_create_file("altr_trigger", S_IWUSR,
 -- 
-Kees Cook
+2.37.2
+
