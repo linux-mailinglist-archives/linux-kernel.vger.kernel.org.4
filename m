@@ -2,287 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9A17062FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC257062FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjEQIeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S229622AbjEQIfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjEQIds (ORCPT
+        with ESMTP id S230044AbjEQIeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:33:48 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B726126A3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:33:35 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so54048425e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:33:35 -0700 (PDT)
+        Wed, 17 May 2023 04:34:13 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942AE6194
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:33:51 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so11491494b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:33:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1684312414; x=1686904414;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BAyV66Y/Vm4PdBxW7vmpRw9zo8Rm8rLzK1v/t96n/70=;
-        b=0LyM6eRNeXVHw96sTahfkYDddwZBUiG/2gbmWN4LmZSolnoQL+CXA7+L3KBruUIFkr
-         zgMoxwiTNKYh5aMgCojMMxYIyPZh4I7xTfUdEnrMgCAvD5D2Fa+zEp08NuFZyCHl1lb+
-         EpSP0fbyC48bbX5vPZpQtcSEg0CKWFthuTu5EKuhsGxxm0KNnOHDqmMpqazVd0TOs5fC
-         P1awl2EbggGDUSzNE6S7bSpc5LjVdJ6T6KGyXMgteVa4THC26TFyo156ljcEOcK8y9df
-         vMvE8BK1jNfLf+t+HYzMY3TgLlan3gB3/FiIbX0U5NXSggLLJr/BmOmexRyhlLaCOl4h
-         qD0A==
+        d=gmail.com; s=20221208; t=1684312431; x=1686904431;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xtx/5B8H/rVaVXYUM8sgj4CYA6Dh2uyNukruYFTcNhs=;
+        b=hpfTYsOKZUTKDuGBdBu0RCZDVieutrWJrMd7A0AmhSoBA172Pga1u0OCq4TQYeWpz4
+         XLTC6gieO1yPkOEemhHmq6LIprdk3zeu4ZeUWjiHQbvxfyI+n76QZPxU5d1dxY6+mPtP
+         jQfn07RfqnRBnSxLz2RuC30t4mNuFH85sZ6P00sR783z0U/phrOswZRX9xNozWRzUz4D
+         Udshf5pgLEU2gZmikESGH6ZEtnoHH0K0R1r1FXiaA9XuYEnQ8u0uR6T4pJLGMdfKv757
+         F4NwzQqKGoSfL36HeRRW7j6KwDXu1daaBA0E8M7bcSBTeGfa3iEeNCkYR/k+D2daNw1b
+         9cFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684312414; x=1686904414;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BAyV66Y/Vm4PdBxW7vmpRw9zo8Rm8rLzK1v/t96n/70=;
-        b=XU9Xk45mSXFAGsGtj7tqtKJc0rcagZ5XSMs8c+eu7XPdThnJRdKt4VKyVC3z/Oi3fO
-         zg8jzRY5l1zh6D/R86Ovvjx5h/wGTqHdl0meUm65rIH//zdD9UG4xc30TLTm2YO3DBmA
-         6Jw6OWI5/+GIQbbWoIAgl5qwOQCs0BdLz3Hb+4G+zcvSgZHn3AKurvEVFOrx1S7A/dM3
-         29B6NoX51o05R1m6/7CEI3yXtZ+7h4HYCWPodj6iHicABF/mJWQi4e7t4QfVEkK5EKRj
-         prDm/GO8bp7wRZCLvwxMY4lIAyLjbDNrH9aMMQ425YNoNh1wVR4zsKbfGlP3L8+5NfqT
-         +OeQ==
-X-Gm-Message-State: AC+VfDzYAZTRwlde6v881mDhvsKzYQljZHWHfStS2EaCLS6Mt2exjA/2
-        Bj0MzgzdgMx//aaVEX6x1qqNvpURBqhzWjW//HgseA==
-X-Google-Smtp-Source: ACHHUZ5I/uZ1/+ekNO4XJmKarVhu6IImpQGEI0CR+p8LwqebofT1NelNaJWTJoXXU5GxHdgLVmF8+1GCkIpQqLj7ikg=
-X-Received: by 2002:a05:6000:1b87:b0:2fe:e455:666c with SMTP id
- r7-20020a0560001b8700b002fee455666cmr955985wru.33.1684312414102; Wed, 17 May
- 2023 01:33:34 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684312431; x=1686904431;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xtx/5B8H/rVaVXYUM8sgj4CYA6Dh2uyNukruYFTcNhs=;
+        b=VOs3Gnf27L5ce/LyuM0lik9ZBpbLH01781ldYxhdtKZBhO9KTi1K1b3WpZDpcbv36O
+         B+UDCO18aBkqgqZeen9nM6RuGAD7bvitgM71WkY0ss5NaSyyerd55qMFUr3JrtRy0GOa
+         AeYHJiTVKaohk+Rm01EZvoQDFpA6LF49oKM47BauIM37UoodMiuo4jSMyiYMRADOO9yy
+         XZ2CNI2k0SKGM15ZimO2ouZV8gvww+sKyCObp14z8kJXY1UbtmVFwf9oTg/NxdcjHXgg
+         MEng8+/UztThwQi/KekeGRcyh2exEFxfRQDxMrKM9zgF+gWvtwt9e/7wVjsFbO+Trl5a
+         cbtw==
+X-Gm-Message-State: AC+VfDwtFU+GDDav0QhxqWCHIQQVNG/g568VZBlMx0zQg31QLGSOdNGt
+        OfVPu4X0LU1M2BjRSrqJ0Cs=
+X-Google-Smtp-Source: ACHHUZ6fwHK1sTgE6sZNB+k12Q/9TotcyFkRuxUf3TTWLmhlbf5g1os5cp5yYnULZLDbXEJDPvqPoA==
+X-Received: by 2002:a05:6a00:a82:b0:648:e2c8:c40 with SMTP id b2-20020a056a000a8200b00648e2c80c40mr1882964pfl.11.1684312430925;
+        Wed, 17 May 2023 01:33:50 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-12.three.co.id. [180.214.232.12])
+        by smtp.gmail.com with ESMTPSA id u8-20020a62ed08000000b0063d2dae6247sm9029431pfh.77.2023.05.17.01.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 01:33:50 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C1AF710627D; Wed, 17 May 2023 15:33:46 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Cc:     Jan Kara <jack@suse.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH 0/2] SPDX conversion for UDF
+Date:   Wed, 17 May 2023 15:33:42 +0700
+Message-Id: <20230517083344.1090863-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
- <5902235c8f5046be9cbd7411955ec43e@EXMBX066.cuchost.com> <CAHVXubg-v=Xe4LQ-bTbf3=FN4cpdBU+xrX7qm8GnUNrmvKDkSQ@mail.gmail.com>
- <7578a14b360542159ee360482e7cc579@EXMBX066.cuchost.com>
-In-Reply-To: <7578a14b360542159ee360482e7cc579@EXMBX066.cuchost.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Wed, 17 May 2023 10:33:23 +0200
-Message-ID: <CAHVXubi8CfCYZOx_mwqpkrLOXs-enQPamxOMrktUDgivxOR3Zw@mail.gmail.com>
-Subject: Re: Bug report: kernel paniced when system hibernates
-To:     JeeHeng Sia <jeeheng.sia@starfivetech.com>
-Cc:     Song Shuai <suagrfillet@gmail.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "palmer@rivosinc.com" <palmer@rivosinc.com>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1539; i=bagasdotme@gmail.com; h=from:subject; bh=CJo83dBt6rIK+5/RONxg1BgO7ghf8CvlB4Gt3zory/4=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkpE5OYXplmz8tcUJucOyk3Slju7Hk+L9djCjsUf3oq3 ZgcPrWro5SFQYyLQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABOZmcbwh3sNSwCTDlN8/t/7 AmuL/x7SfXo3PGn5C7bTco+jZubu28HI8GHZl5DTNztUVGMiXltsPcihyCShp9xgv2Wb764Nbhv y+QE=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 1:27=E2=80=AFPM JeeHeng Sia
-<jeeheng.sia@starfivetech.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > Sent: Tuesday, May 16, 2023 7:15 PM
-> > To: JeeHeng Sia <jeeheng.sia@starfivetech.com>
-> > Cc: Song Shuai <suagrfillet@gmail.com>; robh@kernel.org; Andrew Jones <=
-ajones@ventanamicro.com>; anup@brainfault.org;
-> > palmer@rivosinc.com; Leyfoon Tan <leyfoon.tan@starfivetech.com>; Mason =
-Huo <mason.huo@starfivetech.com>; Paul Walmsley
-> > <paul.walmsley@sifive.com>; Conor Dooley <conor.dooley@microchip.com>; =
-Guo Ren <guoren@kernel.org>; linux-
-> > riscv@lists.infradead.org; linux-kernel@vger.kernel.org
-> > Subject: Re: Bug report: kernel paniced when system hibernates
-> >
-> > Hi JeeHeng,
-> >
-> > On Tue, May 16, 2023 at 11:55=E2=80=AFAM JeeHeng Sia
-> > <jeeheng.sia@starfivetech.com> wrote:
-> > >
-> > > Hi Song,
-> > >
-> > > Thanks for the investigation. Indeed, the exposure of the PMP reserve=
-d region to the kernel page table is causing the problem.
-> > > Here is the similar report: https://groups.google.com/u/0/a/groups.ri=
-scv.org/g/sw-dev/c/ITXwaKfA6z8
-> >
-> > IMO, we should discuss the kernel related stuff on the linux riscv ML,
-> > I'm not subscribed to the group above and you did not answer my last
-> > direct emails regarding this problem either.
-> Hi Alex, it's strange that I haven't received a reply from you.
+This small SPDX conversion series targets UDF file system, which is
+splitted from v2 of my SPDX conversion series that is triggered by
+Didi's GPL full name fixes [1]. It is done to ease review.
 
-I should stop using my personal email as it gets more and more
-blocked, I don't know why.
+All boilerplates in fs/udf/ is converted, except fs/udf/ecma_167.h.
+The latter file apparently looks like 2-clause BSD Source-Code
+license, yet the second clause is from third clause of 3-Clause BSD.
+This custom license can't be expressed satisfiably in SPDX license
+identifier, hence ecma_167.h is doesn't get converted.
 
-> Seems like I have forgot to update to the mailing list.
-> By the way, the reason hibernation failed with the recent page table is b=
-ecause during the initiation of the hibernation process, the hibernation co=
-re accesses the page table to check if the page can be saved. Since the pag=
-e is reserved and is available to the page table, the kernel tries to acces=
-s the PMP region, which causes a kernel panic. The code can be found under:
-> /kernel/power/snapshot.c/ line #1340
-> if (PageReserved(page) && (!kernel_page_present(page) || pfn_is_nosave(pf=
-n)))
+This series is based on mm-nonmm-unstable branch.
 
-Thanks for this pointer, it really helps!
+Happy reviewing!
 
-> If the virtual memory is mapped to the kernel page table, then hibernatio=
-n core will try to access the page.
->
-> > Thanks,
-> >
-> > Alex
-> >
-> > >
-> > > Thanks
-> > > Regards
-> > > Jee Heng
+[1]: https://lore.kernel.org/linux-spdx/20230512100620.36807-1-bagasdotme@gmail.com/
 
-Is your issue also related to hibernation?
+Bagas Sanjaya (2):
+  fs: udf: Replace GPL 2.0 boilerplate license notice with SPDX
+    identifier
+  fs: udf: udftime: Replace LGPL boilerplate with SPDX identifier
 
-> > >
-> > > > -----Original Message-----
-> > > > From: Song Shuai <suagrfillet@gmail.com>
-> > > > Sent: Tuesday, May 16, 2023 5:24 PM
-> > > > To: alexghiti@rivosinc.com; robh@kernel.org; Andrew Jones <ajones@v=
-entanamicro.com>; anup@brainfault.org;
-> > > > palmer@rivosinc.com; JeeHeng Sia <jeeheng.sia@starfivetech.com>; Le=
-yfoon Tan <leyfoon.tan@starfivetech.com>; Mason Huo
-> > > > <mason.huo@starfivetech.com>; Paul Walmsley <paul.walmsley@sifive.c=
-om>; Conor Dooley <conor.dooley@microchip.com>;
-> > Guo
-> > > > Ren <guoren@kernel.org>
-> > > > Cc: linux-riscv@lists.infradead.org; linux-kernel@vger.kernel.org
-> > > > Subject: Bug report: kernel paniced when system hibernates
-> > > >
-> > > > Description of problem:
-> > > >
-> > > > The latest hibernation support[1] of RISC-V Linux produced a kernel=
- panic.
-> > > > The entire log has been posted at this link: https://termbin.com/sp=
-hl .
-> > > >
-> > > > How reproducible:
-> > > >
-> > > > You can reproduce it with the following step :
-> > > >
-> > > > 1. prepare the environment with
-> > > > - Qemu-virt v8.0.0 (with OpenSbi v1.2)
-> > > > - Linux v6.4-rc1
-> > > >
-> > > > 2. start the Qemu virt
-> > > > ```sh
-> > > > $ cat ~/8_riscv/start_latest.sh
-> > > > #!/bin/bash
-> > > > /home/song/8_riscv/3_acpi/qemu/ooo/usr/local/bin/qemu-system-riscv6=
-4 \
-> > > > -smp 2 -m 4G -nographic -machine virt \
-> > > > -kernel /home/song/9_linux/linux/00_rv_test/arch/riscv/boot/Image \
-> > > > -append "root=3D/dev/vda ro eaylycon=3Duart8250,mmio,0x10000000
-> > > > early_ioremap_debug console=3DttyS0 loglevel=3D8 memblock=3Ddebug
-> > > > no_console_suspend audit=3D0 3" \
-> > > > -drive file=3D/home/song/8_riscv/fedora/stage4-disk.img,format=3Dra=
-w,id=3Dhd0 \
-> > > > -device virtio-blk-device,drive=3Dhd0 \
-> > > > -drive file=3D/home/song/8_riscv/fedora/adisk.qcow2,format=3Dqcow2,=
-id=3Dhd1 \
-> > > > -device virtio-blk-device,drive=3Dhd1 \
-> > > > -gdb tcp::1236 #-S
-> > > > ```
-> > > > 3. execute hibernation
-> > > >
-> > > > ```sh
-> > > > swapon /dev/vdb2 # this is my swap disk
-> > > >
-> > > > echo disk > /sys/power/state
-> > > > ```
-> > > >
-> > > > 4. Then you will encounter the kernel panic logged in the above lin=
-k
-> > > >
-> > > >
-> > > > Other Information:
-> > > >
-> > > > After my initial and incomplete dig-up, the commit (3335068f8721
-> > > > "riscv: Use PUD/P4D/PGD pages for the linear mapping")[2]
-> > > > is closely related to this panic. This commit uses re-defined
-> > > > `MIN_MEMBLOCK_ADDR` to discover the entire system memory
-> > > > and extends the `va_pa_offset` from `kernel_map.phys_addr` to
-> > > > `phys_ram_base` for linear memory mapping.
-> > > >
-> > > > If the firmware delivered the firmware memory region (like: a PMP
-> > > > protected region in OpenSbi) without "no-map" propriety,
-> > > > this commit will result in firmware memory being directly mapped by
-> > > > `create_linear_mapping_page_table()`.
-> > > >
-> > > > We can see the mapping via ptdump :
-> > > > ```c
-> > > > ---[ Linear mapping ]---
-> > > > 0xff60000000000000-0xff60000000200000 0x0000000080000000 2M PMD D A=
- G
-> > > > . . W R V ------------- the firmware memory
-> > > > 0xff60000000200000-0xff60000000c00000 0x0000000080200000 10M PMD D =
-A G . . . R V
-> > > > 0xff60000000c00000-0xff60000001000000 0x0000000080c00000 4M PMD D A=
- G . . W R V
-> > > > 0xff60000001000000-0xff60000001600000 0x0000000081000000 6M PMD D A=
- G . . . R V
-> > > > 0xff60000001600000-0xff60000040000000 0x0000000081600000 1002M PMD =
-D A
-> > > > G . . W R V
-> > > > 0xff60000040000000-0xff60000100000000 0x00000000c0000000 3G PUD D A=
- G . . W R V
-> > > > ---[ Modules/BPF mapping ]---
-> > > > ---[ Kernel mapping ]---
-> > > > 0xffffffff80000000-0xffffffff80a00000 0x0000000080200000 10M PMD D =
-A G . X . R V
-> > > > 0xffffffff80a00000-0xffffffff80c00000 0x0000000080c00000 2M PMD D A=
- G . . . R V
-> > > > 0xffffffff80c00000-0xffffffff80e00000 0x0000000080e00000 2M PMD D A=
- G . . W R V
-> > > > 0xffffffff80e00000-0xffffffff81400000 0x0000000081000000 6M PMD D A=
- G . . . R V
-> > > > 0xffffffff81400000-0xffffffff81800000 0x0000000081600000 4M PMD
-> > > > ```
-> > > >
-> > > > In the hibernation process, `swsusp_save()` calls
-> > > > `copy_data_pages(&copy_bm, &orig_bm)` to copy these two memory
-> > > > bitmaps,
-> > > > the Oops(load access fault) occurred while copying the page of
-> > > > PAGE_OFFSET (which maps the firmware memory).
-> > > >
-> > > > I also did two other tests:
-> > > > Test1:
-> > > >
-> > > > The hibernation works well in the kernel with the commit 3335068f87=
-21
-> > > > reverted at least in the current environment.
-> > > >
-> > > > Test2:
-> > > >
-> > > > I built a simple kernel module to simulate the access of the value =
-of
-> > > > `PAGE_OFFSET` address, and the same panic occurred with the load
-> > > > access fault.
-> > > > So hibernation seems not the only case to trigger this panic.
-> > > >
-> > > > Finally, should we always leave the firmware memory with
-> > > > `MEMBLOCK_NOMAP` flag by some efforts from Linux or OpenSbi (at lea=
-st
-> > > > in the current environment) or any other suggestions?
-> > > >
-> > > > Please correct me if I'm wrong.
-> > > >
-> > > > [1]: https://lore.kernel.org/r/20230330064321.1008373-5-jeeheng.sia=
-@starfivetech.com
-> > > > [2]: https://lore.kernel.org/r/20230324155421.271544-4-alexghiti@ri=
-vosinc.com
-> > > >
-> > > > --
-> > > > Thanks,
-> > > > Song
+ fs/udf/balloc.c    |  6 +-----
+ fs/udf/dir.c       |  6 +-----
+ fs/udf/directory.c |  6 +-----
+ fs/udf/file.c      |  6 +-----
+ fs/udf/ialloc.c    |  6 +-----
+ fs/udf/inode.c     |  6 +-----
+ fs/udf/lowlevel.c  |  6 +-----
+ fs/udf/misc.c      |  6 +-----
+ fs/udf/namei.c     |  6 +-----
+ fs/udf/partition.c |  6 +-----
+ fs/udf/super.c     |  6 +-----
+ fs/udf/symlink.c   |  6 +-----
+ fs/udf/truncate.c  |  6 +-----
+ fs/udf/udftime.c   | 18 ++----------------
+ fs/udf/unicode.c   |  6 +-----
+ 15 files changed, 16 insertions(+), 86 deletions(-)
+
+
+base-commit: 689cdaf84d7c00a1a77b25f545b4f3a48e3476d4
+-- 
+An old man doll... just what I always wanted! - Clara
+
