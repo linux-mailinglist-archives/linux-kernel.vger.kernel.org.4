@@ -2,103 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA3870658F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7171706592
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjEQKqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S230302AbjEQKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjEQKqh (ORCPT
+        with ESMTP id S229782AbjEQKrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:46:37 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08CE97;
-        Wed, 17 May 2023 03:46:36 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H6Ye5k010531;
-        Wed, 17 May 2023 05:46:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=sRGJh5o2DA79DjdFheuNkuTMul+lTmOesNItZcaV51g=;
- b=UA1PgTpweGDIuz7gZTZM689wRyow0OwRHwYG79ojqcV3NyTleB07o+Psoy/CyQFqXStu
- 1lsKRrxgp20KJ3mcRpV3FG0hZfcvIcqy7hDEiflmQfaR4aYVgDMRf/0o1tFDm5HGRZUR
- 6JoOSnTAMABzdxSEyFsSNqv9b2vigI+YLF21iwLbbFnnf4iEhnsuu4Lt/NJlBIdz3Iev
- UHehSDcGhQzZ4ent2J7AXCs/YfkWfGeWiU3sslKECe2359Pe+WWvPWte8OWq35riGKVM
- sS8l9BKPTspdL3NQbrBkReiZkjsDWQ70vMKjphcu3K2XO/tnv6QSzxPULuG226fAiSre gA== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qj7y15g6h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 05:46:31 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 17 May
- 2023 05:46:29 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 05:46:29 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B01C511CA;
-        Wed, 17 May 2023 10:46:29 +0000 (UTC)
-Date:   Wed, 17 May 2023 10:46:29 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     "Goud, Srinivas" <srinivas.goud@amd.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
-Subject: Re: [PATCH 1/2] spi: spi-cadence: Avoid read of RX FIFO before its
- ready
-Message-ID: <20230517104629.GW68926@ediswmail.ad.cirrus.com>
-References: <20230509164153.3907694-1-ckeepax@opensource.cirrus.com>
- <PH8PR12MB6675F6CC30254C5EED898FD5E1789@PH8PR12MB6675.namprd12.prod.outlook.com>
- <20230515125458.GT68926@ediswmail.ad.cirrus.com>
- <PH8PR12MB6675A433C8B129AA96B5C853E17E9@PH8PR12MB6675.namprd12.prod.outlook.com>
+        Wed, 17 May 2023 06:47:48 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384D72D49;
+        Wed, 17 May 2023 03:47:47 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30786c87cdaso560048f8f.2;
+        Wed, 17 May 2023 03:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684320465; x=1686912465;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hqvkmynEV6/dEj1F324kSuUIEax/RriRwvtPl5SBD9Q=;
+        b=DOV6yM9dgDqxu/o3argXq7spycp9mQOqF4YFCCozRgcJGMQsomFhVXykW6RfhwpEiv
+         /a0f2cTkEepZnT5QgNXf6RvLzzvSTWoL3P8Z7Gpx1I/muxcTBMVR7MDYXWnMXnxzmRMe
+         VVg3i4z3QFNpTD2MMb0J7LWn3oHMsgaN+mQIG3cRjsDS48ZqfNyVAv9/qBYvzkYzyZr9
+         dP8SJvZrVYNW0sNEHZpQRnv+MwzSP83lXswk9OCHG95Tw24QwwkZSeYT8hX8qu/CYbaG
+         tgOzYr1po54vgH0Ki+BM7IZ3IeaMHl/yIlAjowj8b7gZ4s1UsQWjCCTW10o3+M2iAfOp
+         oijg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684320465; x=1686912465;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hqvkmynEV6/dEj1F324kSuUIEax/RriRwvtPl5SBD9Q=;
+        b=crzLWt+caaxsWNoEDVl/jOmHinEqH7PdxuGrfzn9N8y9/rT1RHC7nfWs1/KHdkVUN/
+         g7PTTM7NHgRp3oKigOvxW5Twd+VkoKGHsO+I3884J/zP+xufwprS5XmgTcIoYpKIvA1f
+         B22qSpnglwBMIkYLZcHz9c1QoXQejKkdmDjiOyVouDxe4c5nbXDFpkp1/OIhdCab/4bf
+         MXWJ2ERm/hExW+7/Bi8prL9ESiaZ7IJqy/UXprJog6RlTVXJ9UaU3IrWMMIoaWNbXCA4
+         Mqjc2YuYdF/HPASbZYIu3R8uLsW5B4UtT+AVb61nfSi8vmhZGjANOXhDfESZ3vOz/EEV
+         w9xA==
+X-Gm-Message-State: AC+VfDxLCAm0z8njI2YYPG+YZ4tfl1b29IgcTQ+iCncIFuGFYmJ8ZCU0
+        d68cZL4dPmLI7M3Fs3kaHHo=
+X-Google-Smtp-Source: ACHHUZ471C3w5wFUGqIt4z27L/T2S6UBevOn16Z1o3xjez4iuEJaWtfcI8ywEBpGacqYJ2cij8Y9bA==
+X-Received: by 2002:adf:f8d1:0:b0:307:8b3e:285a with SMTP id f17-20020adff8d1000000b003078b3e285amr261055wrq.67.1684320465184;
+        Wed, 17 May 2023 03:47:45 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id g3-20020a5d6983000000b002ff2c39d072sm2334322wru.104.2023.05.17.03.47.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 03:47:44 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 17 May 2023 12:47:42 +0200
+To:     Ze Gao <zegao2021@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Conor Dooley <conor@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Ze Gao <zegao@tencent.com>
+Subject: Re: [PATCH v3 2/4] fprobe: make fprobe_kprobe_handler recursion free
+Message-ID: <ZGSwzuM8oHgKaaga@krava>
+References: <20230517034510.15639-1-zegao@tencent.com>
+ <20230517034510.15639-3-zegao@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH8PR12MB6675A433C8B129AA96B5C853E17E9@PH8PR12MB6675.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: NWnnnyWmGdAx5jCQfCQ4fmew7dkE3WIC
-X-Proofpoint-ORIG-GUID: NWnnnyWmGdAx5jCQfCQ4fmew7dkE3WIC
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230517034510.15639-3-zegao@tencent.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 05:24:10AM +0000, Goud, Srinivas wrote:
-> >On Mon, May 15, 2023 at 12:04:38PM +0000, Goud, Srinivas wrote:
-> >> Cadence SPI configured in Slave mode,  when threshold is half of FIFO
-> >> depth cdns_spi_read_rx_fifo() function continuously in read mode, due to
-> >this we see incorrect data received on the Master side as Slave is failed to
-> >update the TX FIFO on time.
-> >
-> >Apologies I am having a little trouble following this are you saying this part of
-> >the patch cases issues for you running in slave mode?
-> Yes, we see issue with this patch when we run in Slave mode.
+On Wed, May 17, 2023 at 11:45:07AM +0800, Ze Gao wrote:
+> Current implementation calls kprobe related functions before doing
+> ftrace recursion check in fprobe_kprobe_handler, which opens door
+> to kernel crash due to stack recursion if preempt_count_{add, sub}
+> is traceable in kprobe_busy_{begin, end}.
 > 
-> When any master is in continuous read mode (anything > FIFO depth), 
-> with updated logic cdns_spi_read_rx_fifo() function in cdns_spi_irq
-> continuously in read loop to read complete half FIFO data.
-> due to this Slave failed to write the TX FIFO on time and result in
-> incorrect data in Master receive. 
-> Whereas in my previous patch, data read and write happening byte wise,
-> by which we are making sure data availability in TXFIFO on time.
+> Things goes like this without this patch quoted from Steven:
+> "
+> fprobe_kprobe_handler() {
+>    kprobe_busy_begin() {
+>       preempt_disable() {
+>          preempt_count_add() {  <-- trace
+>             fprobe_kprobe_handler() {
+> 		[ wash, rinse, repeat, CRASH!!! ]
+> "
+> 
+> By refactoring the common part out of fprobe_kprobe_handler and
+> fprobe_handler and call ftrace recursion detection at the very beginning,
+> the whole fprobe_kprobe_handler is free from recursion.
+> 
+> Signed-off-by: Ze Gao <zegao@tencent.com>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Link: https://lore.kernel.org/linux-trace-kernel/20230516071830.8190-3-zegao@tencent.com
+> ---
+>  kernel/trace/fprobe.c | 59 ++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 44 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 9abb3905bc8e..097c740799ba 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
+>  	char data[];
+>  };
+>  
+> -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> -			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> +static inline void __fprobe_handler(unsigned long ip, unsigned long
+> +		parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
+>  	struct fprobe_rethook_node *fpr;
+>  	struct rethook_node *rh = NULL;
+>  	struct fprobe *fp;
+>  	void *entry_data = NULL;
+> -	int bit, ret;
+> +	int ret;
+>  
 
-That is a very tight system if reading 64 sequential memory locations
-is the timing difference between success and failure, Linux is
-not a real-time OS.
+this change uncovered bug for me introduced by [1]
 
-But I don't really mind moving back to a byte-wise operation. Although
-we need to avoid the issues introduced by the first attempt at that. I
-will have a look at doing a patch to put the byte-wise back in.
+the bpf's kprobe multi uses either fprobe's entry_handler or exit_handler,
+so the 'ret' value is undefined for return probe path and occasionally we
+won't setup rethook and miss the return probe
 
-Thanks,
-Charles
+we can either squash this change into your patch or I can make separate
+patch for that.. but given that [1] is quite recent we could just silently
+fix that ;-)
+
+jirka
+
+
+[1] 39d954200bf6 fprobe: Skip exit_handler if entry_handler returns !0
+
+---
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 9abb3905bc8e..293184227394 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -27,7 +27,7 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+ 	struct rethook_node *rh = NULL;
+ 	struct fprobe *fp;
+ 	void *entry_data = NULL;
+-	int bit, ret;
++	int bit, ret = 0;
+ 
+ 	fp = container_of(ops, struct fprobe, ops);
+ 	if (fprobe_disabled(fp))
+
+
