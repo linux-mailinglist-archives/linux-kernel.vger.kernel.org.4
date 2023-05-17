@@ -2,259 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAD4706E04
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA150706E08
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjEQQVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
+        id S229521AbjEQQXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjEQQV3 (ORCPT
+        with ESMTP id S229592AbjEQQX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:21:29 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2086AD2C9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:21:19 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f14468ef54so1251205e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:21:19 -0700 (PDT)
+        Wed, 17 May 2023 12:23:27 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910E22D5D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:23:26 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561c11762b7so13727277b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:23:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684340477; x=1686932477;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ChIVfbdP674iihHLcCeQgumGx8yk3INFc1OPHf7Gp3M=;
-        b=o5+4zGG4vLM3JtsbCVaRv8icO5k4KRyaqLIgm4nNXIEa3NKvVHVNNQ/LQBBsttlcoi
-         yHI9soeCj9MPwYzd2qtoP6IyGy1vWUMCpgxOyPXuCVHN8bXONHBEt/213Xy/8Xgezaam
-         pQy1ExSn4egGCGveDIgH/YbJ6HdA+PybZnIMZ+c81NseZLUJYelYJGsbSrpIlcnGcM8U
-         HJ1kp3Reo9erF5wOFwg+7njtC7+42Ady7kWCYjh3TkcwimZKnnelxqz6kjTFAq7TVyy8
-         HxK6fRRFPbwkOEnTqHJlUDHbgYoCVeaf1xx2csw3GRi8NJ5li8cNDXDr3LwoZ6VWI2KO
-         tkcA==
+        d=google.com; s=20221208; t=1684340606; x=1686932606;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vaL/27odEK7tkDU5POuT7lbmrJSszQaButEBuwvYdNs=;
+        b=YM35Pq5w3m4rYqdaMXFs+/GWwuhGPQWA0RSX3P0xUHWar2Y1X5aegbFNXZl8TnbZBJ
+         O3r7m4e6nmTsVmFnXtMlgtmBZmSnDe+SrFw0gH42IliVQGc1bzvNuSJjsewHu8pmqZk0
+         2rCAY+wniFVG81jcwnkAdiPrEkyYTexQIagI8GmwqlMJjr1TrKNjXB3urpH+a5SQm79d
+         X/yrrNBhifYtNzj7G+e8VkC7h6+Y8EBXg7YX6yizfQi8eTLJ77nph+a2x0PvLgfN1Omx
+         ht+eb9QdBjRIEmQIcPRRhBlkS8Qc77k/TkwPMUn30EZrwaf9E56mpl7XIkDLUfuHLfuU
+         57BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684340477; x=1686932477;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ChIVfbdP674iihHLcCeQgumGx8yk3INFc1OPHf7Gp3M=;
-        b=HTLOo5BUJh/VXUVNZzOwAVg1cmjlq521IPrZppREpyk4B1BIi+itODyktIapvoB6p6
-         r16aw5anGE80A0TQDz7rh1P4w8hO/pIMjBeRiYLjj/Al/mGyN72UOvA/f9XaNPktxcOw
-         omtekMINJUqKB/qJxk+4zwUNjcyCMxnL8op8MPP0pwWLpQQInMPpGnH99OSGI1QGT0XH
-         Fx0z+WloQT5a/x+u9vNJTbwGDaF0O1xD2q50aY/IXDX1viABbhNuN1czoRgUX0G5JLkM
-         xzontvX5JF0jN1hv1pUXOAo8/limQOCAWE0romsRvlk03/ll1wQ1BNWslh71laI+K1xp
-         mJJQ==
-X-Gm-Message-State: AC+VfDwaxNCmpatF7lEzuOqcONVCl6PVV9WHTY6SMiX6SZhDMJ1Ekzy8
-        NL0gYKntWriMvum5MV+DGRvcEA==
-X-Google-Smtp-Source: ACHHUZ7Kx9X9WbzBlqUy7R10/6IiExFzx1PtsoTdz59PYW4PPh2JL61/9upryDyHc2SoeR4gUWLw/w==
-X-Received: by 2002:ac2:596e:0:b0:4ef:eeaa:e9b9 with SMTP id h14-20020ac2596e000000b004efeeaae9b9mr387519lfp.35.1684340477151;
-        Wed, 17 May 2023 09:21:17 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id k27-20020ac257db000000b004e95f53adc7sm3433962lfo.27.2023.05.17.09.21.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 09:21:16 -0700 (PDT)
-Message-ID: <95f36218-c0eb-eb69-696d-044fd72cf8c4@linaro.org>
-Date:   Wed, 17 May 2023 18:21:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v8 0/8] The great interconnecification fixation
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1684340606; x=1686932606;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vaL/27odEK7tkDU5POuT7lbmrJSszQaButEBuwvYdNs=;
+        b=gQ2pyX0AE3WEWFGXIUHd9od3GJUdAQ+3H1kBIvbJyk9mGObR4UNqMw5wYHBkd30e9Q
+         Hh77IScjXk5Y/ZgtxBPGMtnnQIUler5BzF4huW1gn2wg4vtSNsNvmX//KVL7suuzyBCm
+         CSA+Ff00KdKiRWntxyGrFJOAA3H5JIxkD2etszaHmCitblsOcs646ExRqM0VDu52zewO
+         QoDdR1NDWHrFqy3m7XkeqexwuZWevdBCJnoEW2p0V+no/1keyf6nrfWFL3b3aNYGi9Yn
+         Zc7N+rfZfI+nrRoRgpyC+Oppz+NTAwUVo2nWO7LhzSZ5ewp1Z7Fi5otnd2JSa2CL3Nc0
+         xKAw==
+X-Gm-Message-State: AC+VfDxuSOvhBmzR9UAQPlwqFKot+guX0rsPVoKpKgzQE2ReAh9s8FLA
+        LDfvHLAcrsmBYrHRwe9x7JJJF543BIGIoj04ygY=
+X-Google-Smtp-Source: ACHHUZ6NdaI40kXvf1BU50rHPPWhX+ejuYobBk9x0TQGd0uQUROoFot1PPQi07jDl5Fp80ZnPz9vZb46mziw//SlL5k=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:a482:1a11:bbfc:3af4])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:b209:0:b0:55d:955b:360 with SMTP
+ id q9-20020a81b209000000b0055d955b0360mr23798404ywh.5.1684340605834; Wed, 17
+ May 2023 09:23:25 -0700 (PDT)
+Date:   Wed, 17 May 2023 09:23:16 -0700
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHP/ZGQC/x2NQQqDQBAEvyJzdkFXFyVfCR5G7egQ3IQZkQTx7
+ 65eGoouqJ0MKjB6ZDspNjH5xARlntEwc5zgZExMvvBVEcrGTYhv/J2vua1CaHxaSnLPBtcrx2G +9IVthV7HV/GS3114dsdxAk+dXSFxAAAA
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684340604; l=1972;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=GW4jP2PSBzeFIDkH2ffkq3N72XBOV9s7pvdD5DDFav0=; b=4ERTA9BOjWmg7kfBlrlzuCmDZ2oGmuve0kGlIsiPU0frgrM3CjT9M6wcIAbzRnlnOsb1pwWeGgyl
+ jkdRWtRpCWcPNFZf/RiChBLgEmMNk4LO2yHj7LaVPOO08TFdAch/
+X-Mailer: b4 0.12.2
+Message-ID: <20230517-genkey-v1-1-b887424da4a8@google.com>
+Subject: [PATCH] certs: buffer stderr from openssl unless error
+From:   ndesaulniers@google.com
+To:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, keyrings@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230228-topic-qos-v8-0-ee696a2c15a9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Running `openssl req` prints a progress meter consisting of `.`, `*`,
+and `+` characters to stderr which we redirect to stdout. During a build
+with `make -j`, the output from this command becomes interspersed
+throughout the rest of the quiet_cmd_* output, messing up the
+indentation.
 
+Suppress the output from this command unless the return code is
+non-zero. If `openssl req` prints additional information to stderr
+without setting a non-zero return code, it will be missed.
 
-On 7.04.2023 22:14, Konrad Dybcio wrote:
-> Hi!
-Bump!
+Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ certs/Makefile   | 4 +---
+ certs/gen_key.sh | 7 +++++++
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-Konrad
-> 
-> v7 -> v8:
-> - Rebase (dropping has_bus_pd, picked patches from v7)
-> 
-> - Clean up the QoS-setting functions [3/8]
-> 
-> - Only set the QoS registers once [4/8] - Georgi talked to some
->   Qualcomm folks and we concluded that it's "good enough" as they
->   should:tm: persist until a full reboot on "almost all" platforms
-> 
-> - Move the intf clock enabling/disabling to correspond with /\ [5/8]
-> 
-> - DO NOT switch to associating an interface clock with a given node
->   (instead of a provider), as it makes little sense with the changes
->   with [4/8] and the new iteration of [5/8]
-> 
-> v7: https://lore.kernel.org/r/20230228-topic-qos-v7-0-815606092fff@linaro.org
-> 
-> v6 -> v7 changelog:
-> - Rebase on Johan's recent patches
-> 
-> Link to v6: https://lore.kernel.org/r/20230228-topic-qos-v6-0-3c37a349656f@linaro.org
-> 
-> v5 -> v6 changelog:
-> - Completely rewrite the commit message of [1/9], I realized that there
->   was actually no issue with the present upstream setups and the only
->   drivers suffering from ghost votes were.. my own OOT drivers..
->   As a consequence of that, all fixes tags were dropped and the patch
->   has been kept, since it was deemed useful for newer SoCs that don't
->   distinguish ap_owned nodes.
-> 
-> - Change the number of allowed bus_clocks from (0-2 in the previous
->   revision, 0-inf in the current upstream state) to {0, 2}. Scaling is
->   only possible with a pair of wake-sleep clocks, but some providers
->   don't do scaling at all (see 8996 A0NoC, 660 GNoC). Drop the cheeky
->   -1 / 0 / >0 checks from the previous revision. [7/9]
-> 
-> - bus_clocks are now forced to be named "bus", "bus_a", as there is no
->   need for variance here - we don't do scaling on non-SMD RPM bus clocks.
->   [7/9]
-> 
-> - The interface clocks are now only turned on when the associated bus
->   is running at a non-zero frequency [6/9] instead of being always on
->   and leaking power
-> 
-> Tested on MSM8996 Kagura, SM6375 PDX225 (OOT), MSM8998 Maple (OOT)
-> 
-> Link to v5: https://lore.kernel.org/linux-arm-msm/20230217-topic-icc-fixes-v5-v5-0-c9a550f9fdb9@linaro.org/
-> 
-> v4 -> v5 changelog:
-> - Previously the "Always set QoS params on QNoC" contained part of what
->   should have been included in "make QoS INVALID default".. (very bad)
->   Fix it!
-> 
-> - Drop negative offset and keep_alive, they will be resubmitted with new
->   icc driver submissions
-> 
-> - use b4 this time.. hopefully the series gets to everybody now
-> 
-> Link to v4: https://lore.kernel.org/linux-arm-msm/20230214143720.2416762-1-konrad.dybcio@linaro.org/
-> 
-> v3 -> v4 changelog:
-> - Drop "Always set QoS params on QNoC", it only causes issues.. this
->   can be investigated another day, as it's not necessary for operation
-> 
-> - Drop "Add a way to always set QoS registers", same as /\
-> 
-> - Add a way (and use it) to have no bus_clocks (the ones we set rate on),
->   as at least msm8996 has a bus (A0NoC) that doesn't have any and does
->   all the scaling through RPM requests
-> 
-> - Promote 8996 icc to core_initcall
-> 
-> - Introduce keep_alive (see patch [11/12]) (important!, will be used by at least 6375)
-> 
-> - Allow negative QoS offsets in preparation for introducing 8998 icc [12/12]
-> 
-> Link to v3: https://lore.kernel.org/linux-arm-msm/20230116132152.405535-1-konrad.dybcio@linaro.org/
-> 
-> v2 -> v3 changelog:
-> - Drop "Don't set QoS params before non-zero bw is requested"
-> 
-> - Rebase on next
-> 
-> - [1/9] ("..make QoS INVALID default.."): remove unused define for
->   MODE_INVALID_VAL
-> 
-> - Pick up tags
-> 
-> v1 -> v2 changelog:
-> - reorder "make QoS INVALID default", makes more sense to have it
->   before "Always set QoS params on QNoC"
-> 
-> - Limit ap_owned-independent QoS setting to QNoC only
-> 
-> - Add new patches for handling the 8996-and-friends clocks situation
->   and optional BIMC regardless-of-ap_owned QoS programming
-> 
-> [1] https://lore.kernel.org/linux-arm-msm/14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org/T/#m056692bea71d4c272968d5e07afbd9eb07a88123
-> [2] https://lore.kernel.org/linux-arm-msm/20230110132202.956619-1-konrad.dybcio@linaro.org/
-> 
-> This series grew quite a bit bigger than the previous [1] attempt, so
-> I decided to also add a cover letter.
-> 
-> Link to v2: [2]
-> 
-> It addresses a few things that were not quite right:
-> 
-> - Setting QoS params before a "real" (non-zero) bandwidth request
->   makes little sense (since there's no data supposed to flow through
->   the bus, why would the QoS matter) and (at least newer) downstream
->   prevents that from happening. Do the same in Patch 1.
-> 
-> - QNoC type buses expect to always have their QoS registers set as long
->   as there's a non-INVALID QoS mode set; ap_owned is not really a thing
->   on these anymore, Patch 3 handles that.
-> 
-> - The recent MSM8996 boot fix was done quickly and not quite properly,
->   leading to possibly setting the aggregate bus rate on "normal"
->   hardware interface clocks; this series handles that by limiting the
->   number of bus_clocks to 2 (which is the maximum that makes sense,
->   anyway) and handling the rest as "intf_clocks", which are required
->   to access the   hardware at the other end. Patches 5-8 take care of
->   that and Patch 10 reverts the _optional moniker in clk_get_ to make
->   sure we always have the bus scaling clocks, as they're well, kind
->   of important ;)
-> 
-> - Similarly to QNoC, BIMC on "newer" (which can be loosely approximated
->   by "new enough" == "has only BIMC and QNoC hosts") SoCs expects to
->   always receive QoS programming, whereas BIMC on "older" SoCs cries
->   like a wild boar and crashes the platform when trying to do so
->   unconditionally. Patch 9 adds a way to take care of that for newer
->   SoCs (like SM6375)
-> 
-> - QoS mode INVALID was assumed by developers before to be the default
->   ("I didn't specify any QoS settings, so the driver can't assume I
->   did.. right? right!?" - wrong, partial struct initialization led to
->   0 being set and 0 corresponded to QoS mode FIXED). Make it so, as
->   that's the logical choice. This allows the "Always set QoS params
->   on QNoC" patch to work without setting tons of what-should-
->   -obviously-be-the-default values everywhere, as well as fixes older
->   drivers that set ap_owned = true but left the QoS mode field unset.
->   Patch 2 cleans that up.
-> 
-> - Some nodes are physically connected over more than one channel
->   (usually DDR or other high-throughput paths). Patch 4 allows that
->   to be reflected in calculations. This will be required for at least
->   MSM8998 and SM6375 (which will be submitted soon after this lands)
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Konrad Dybcio (8):
->       interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
->       interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
->       interconnect: qcom: rpm: Drop unused parameters
->       interconnect: qcom: rpm: Set QoS registers only once
->       interconnect: qcom: rpm: Handle interface clocks
->       interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
->       interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
->       interconnect: qcom: msm8996: Promote to core_initcall
-> 
->  drivers/interconnect/qcom/icc-rpm.c | 110 +++++++++++++++++++-----------------
->  drivers/interconnect/qcom/icc-rpm.h |  22 ++++++--
->  drivers/interconnect/qcom/msm8996.c |  35 +++++++-----
->  drivers/interconnect/qcom/sdm660.c  |  17 +++---
->  4 files changed, 102 insertions(+), 82 deletions(-)
-> ---
-> base-commit: e134c93f788fb93fd6a3ec3af9af850a2048c7e6
-> change-id: 20230228-topic-qos-5435cac88d89
-> 
-> Best regards,
+diff --git a/certs/Makefile b/certs/Makefile
+index 799ad7b9e68a..9b4fee56780d 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -45,9 +45,7 @@ ifeq ($(CONFIG_MODULE_SIG_KEY),certs/signing_key.pem)
+ keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) := -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
+ 
+ quiet_cmd_gen_key = GENKEY  $@
+-      cmd_gen_key = openssl req -new -nodes -utf8 -$(CONFIG_MODULE_SIG_HASH) -days 36500 \
+-		-batch -x509 -config $< \
+-		-outform PEM -out $@ -keyout $@ $(keytype-y) 2>&1
++      cmd_gen_key = $(srctree)/$(src)/gen_key.sh $(CONFIG_MODULE_SIG_HASH) $< $@ $(keytype-y)
+ 
+ $(obj)/signing_key.pem: $(obj)/x509.genkey FORCE
+ 	$(call if_changed,gen_key)
+diff --git a/certs/gen_key.sh b/certs/gen_key.sh
+new file mode 100755
+index 000000000000..1de1f22be484
+--- /dev/null
++++ b/certs/gen_key.sh
+@@ -0,0 +1,7 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: GPL-2.0
++OUT=$(openssl req -new -nodes -utf8 -"$1" -days 36500 -batch -x509 \
++	-config "$2" -outform PEM -out "$3" -keyout "$3" $4 2>&1)
++if [[ $? -ne 0 ]]; then
++	echo "$OUT"
++fi
+
+---
+base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+change-id: 20230517-genkey-24a835572835
+
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
+
