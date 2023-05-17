@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225467069AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB937069BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjEQNWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S231620AbjEQNXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjEQNWg (ORCPT
+        with ESMTP id S232038AbjEQNXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:22:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700CC19BD;
-        Wed, 17 May 2023 06:22:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAA3D6435E;
-        Wed, 17 May 2023 13:22:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C252C433EF;
-        Wed, 17 May 2023 13:22:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684329747;
-        bh=kOiatuzHsXf6QCfoX/dn21WUzpfgb5KaOfzC26f90Zo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XHdoBVopIBFp9u3NUtzX8zsVUCrgJPg/GcgSg2H2tRYfaboEy+qNa2efQnFLRnTiZ
-         RV8zuBCCNbIg+8I1i4wPMiMblmAbyfDt4sySoL9MseG4Vw1H1qcr5O6E078MDAZChN
-         UB+1hJ3JE8W4twf5vYYzn1wSFvmZbdslrLVE65xMkBvsuCQtoxbRJHqomHmt5TDSlm
-         ppx3jUpbCLVufS93I5hT5Qp/HkBoSyT6Ma+TQn1qd/v39HXL5TVYPns28GrQZP1quP
-         olyGfnx7ZX3UgAMMtnxJpV5xW1aewJhKW8oGd2ZBKvtMqoMwWD2bx9g4d9jMKVi1q4
-         n3BnP7qfBecSw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Song Liu <song@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-raid@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH] raid6: neon: add missing prototypes
-Date:   Wed, 17 May 2023 15:22:12 +0200
-Message-Id: <20230517132220.937200-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 17 May 2023 09:23:13 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A801FC2;
+        Wed, 17 May 2023 06:23:11 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HDJ8ph015592;
+        Wed, 17 May 2023 15:22:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=selector1;
+ bh=VuzeyXx3vDBXZhDujSRxX5i79czlhrzhUuiXRpr3N40=;
+ b=zo7gnmsBuhYAS5M/An3+jCBwFnwzaRtovo2+OqCGi1ZqAWaHAcaGFK4ONtzIlVHim9cP
+ CoeALv44+pZmTBNXyp6NXYZjCvob1WXW76y78z2dGdDZz4Vf4K2MO9GiQbGY6al1crwW
+ vwTywCdpBbjw+fjcGu9z0w4nFUHKjR55Q6Xgw5R3vpS51yXhLGqC3Hc5ZJhueypCNPUG
+ tiCWFxbZnU5AWiKeV6q7vmwHxrlwdPTBdv0ufuROBDi32cjf8S21Yn/8f2jIZBozogB4
+ TbdZAeDXdfuuUlz53Csp8SqnnC2Yeiz9QIK0txBmDibDDTZ08LmZrFzQpDa1tZxxHY4b hA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qm7tfgpd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 15:22:48 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BD29510003A;
+        Wed, 17 May 2023 15:22:47 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B4FCB2309C4;
+        Wed, 17 May 2023 15:22:47 +0200 (CEST)
+Received: from localhost (10.129.178.187) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 17 May
+ 2023 15:22:46 +0200
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Marek Vasut <marex@denx.de>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
+Subject: [PATCH 2/3] dt-bindings: display: st,stm32-dsi: Remove unnecessary fields
+Date:   Wed, 17 May 2023 15:22:13 +0200
+Message-ID: <20230517132214.254757-3-raphael.gallais-pou@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230517132214.254757-1-raphael.gallais-pou@foss.st.com>
+References: <20230517132214.254757-1-raphael.gallais-pou@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.129.178.187]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+"#address-cells" and "#size-cells" are two properties that are not
+mandatory. For instance, the DSI could refer to a bridge outside the scope
+of the node rather than include a 'panel@0' subnode. By doing so, address
+and size fields become then unnecessary, creating a warning at build time.
 
-The raid6 syndrome functions are generated for different sizes and have
-no generic prototype, while in the inner functions have a prototype
-in a header that cannot be included from the correct file. In both
-cases, the compiler warns about missing prototypes:
-
-lib/raid6/recov_neon_inner.c:27:6: warning: no previous prototype for '__raid6_2data_recov_neon' [-Wmissing-prototypes]
-lib/raid6/recov_neon_inner.c:77:6: warning: no previous prototype for '__raid6_datap_recov_neon' [-Wmissing-prototypes]
-lib/raid6/neon1.c:56:6: warning: no previous prototype for 'raid6_neon1_gen_syndrome_real' [-Wmissing-prototypes]
-lib/raid6/neon1.c:86:6: warning: no previous prototype for 'raid6_neon1_xor_syndrome_real' [-Wmissing-prototypes]
-lib/raid6/neon2.c:56:6: warning: no previous prototype for 'raid6_neon2_gen_syndrome_real' [-Wmissing-prototypes]
-lib/raid6/neon2.c:97:6: warning: no previous prototype for 'raid6_neon2_xor_syndrome_real' [-Wmissing-prototypes]
-lib/raid6/neon4.c:56:6: warning: no previous prototype for 'raid6_neon4_gen_syndrome_real' [-Wmissing-prototypes]
-lib/raid6/neon4.c:119:6: warning: no previous prototype for 'raid6_neon4_xor_syndrome_real' [-Wmissing-prototypes]
-lib/raid6/neon8.c:56:6: warning: no previous prototype for 'raid6_neon8_gen_syndrome_real' [-Wmissing-prototypes]
-lib/raid6/neon8.c:163:6: warning: no previous prototype for 'raid6_neon8_xor_syndrome_real' [-Wmissing-prototypes]
-
-Add a new header file that contains the prototypes for both to avoid
-the warnings.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
 ---
- lib/raid6/neon.h             | 22 ++++++++++++++++++++++
- lib/raid6/neon.uc            |  1 +
- lib/raid6/recov_neon.c       |  8 +-------
- lib/raid6/recov_neon_inner.c |  1 +
- 4 files changed, 25 insertions(+), 7 deletions(-)
- create mode 100644 lib/raid6/neon.h
+ Documentation/devicetree/bindings/display/st,stm32-dsi.yaml | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/lib/raid6/neon.h b/lib/raid6/neon.h
-new file mode 100644
-index 000000000000..2ca41ee9b499
---- /dev/null
-+++ b/lib/raid6/neon.h
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+void raid6_neon1_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs);
-+void raid6_neon1_xor_syndrome_real(int disks, int start, int stop,
-+				    unsigned long bytes, void **ptrs);
-+void raid6_neon2_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs);
-+void raid6_neon2_xor_syndrome_real(int disks, int start, int stop,
-+				    unsigned long bytes, void **ptrs);
-+void raid6_neon4_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs);
-+void raid6_neon4_xor_syndrome_real(int disks, int start, int stop,
-+				    unsigned long bytes, void **ptrs);
-+void raid6_neon8_gen_syndrome_real(int disks, unsigned long bytes, void **ptrs);
-+void raid6_neon8_xor_syndrome_real(int disks, int start, int stop,
-+				    unsigned long bytes, void **ptrs);
-+void __raid6_2data_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t *dp,
-+			      uint8_t *dq, const uint8_t *pbmul,
-+			      const uint8_t *qmul);
-+
-+void __raid6_datap_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t *dq,
-+			      const uint8_t *qmul);
-+
-+
-diff --git a/lib/raid6/neon.uc b/lib/raid6/neon.uc
-index b7c68030da4f..355270af0cd6 100644
---- a/lib/raid6/neon.uc
-+++ b/lib/raid6/neon.uc
-@@ -25,6 +25,7 @@
-  */
+diff --git a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+index c488308d7be1..53560052aaf0 100644
+--- a/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
++++ b/Documentation/devicetree/bindings/display/st,stm32-dsi.yaml
+@@ -74,8 +74,6 @@ properties:
+                   - const: 2
  
- #include <arm_neon.h>
-+#include "neon.h"
- 
- typedef uint8x16_t unative_t;
- 
-diff --git a/lib/raid6/recov_neon.c b/lib/raid6/recov_neon.c
-index d6fba8bf8c0a..1bfc14174d4d 100644
---- a/lib/raid6/recov_neon.c
-+++ b/lib/raid6/recov_neon.c
-@@ -8,6 +8,7 @@
- 
- #ifdef __KERNEL__
- #include <asm/neon.h>
-+#include "neon.h"
- #else
- #define kernel_neon_begin()
- #define kernel_neon_end()
-@@ -19,13 +20,6 @@ static int raid6_has_neon(void)
- 	return cpu_has_neon();
- }
- 
--void __raid6_2data_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t *dp,
--			      uint8_t *dq, const uint8_t *pbmul,
--			      const uint8_t *qmul);
--
--void __raid6_datap_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t *dq,
--			      const uint8_t *qmul);
--
- static void raid6_2data_recov_neon(int disks, size_t bytes, int faila,
- 		int failb, void **ptrs)
- {
-diff --git a/lib/raid6/recov_neon_inner.c b/lib/raid6/recov_neon_inner.c
-index 90eb80d43790..f9e7e8f5a151 100644
---- a/lib/raid6/recov_neon_inner.c
-+++ b/lib/raid6/recov_neon_inner.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <arm_neon.h>
-+#include "neon.h"
- 
- #ifdef CONFIG_ARM
- /*
+ required:
+-  - "#address-cells"
+-  - "#size-cells"
+   - compatible
+   - reg
+   - clocks
 -- 
-2.39.2
+2.25.1
 
