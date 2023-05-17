@@ -2,335 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5C9707504
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 651647074F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjEQWCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S229632AbjEQWCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjEQWC1 (ORCPT
+        with ESMTP id S229453AbjEQWCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:02:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214CD469B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:02:25 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzPDS-0000hg-Vd; Thu, 18 May 2023 00:01:51 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzPDM-000wDY-9S; Thu, 18 May 2023 00:01:44 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzPDL-005TXx-Dv; Thu, 18 May 2023 00:01:43 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Justin Stitt <justinstitt@google.com>,
-        Yuan Can <yuancan@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Machata <petrm@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH] misc: Switch i2c drivers back to use .probe()
-Date:   Thu, 18 May 2023 00:01:35 +0200
-Message-Id: <20230517220135.170379-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Wed, 17 May 2023 18:02:20 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A4440CE;
+        Wed, 17 May 2023 15:02:19 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HJrlfo008378;
+        Wed, 17 May 2023 22:02:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=V+fu4Jl8nxExO64zchEbC+xXtgYj1oQi3VWPVEjVrwY=;
+ b=BhESeyQSPNEdgl04p2Hg0ODhCNU4f3klLpDMBHpLox9IFwT5HRBj7cMPsGwsv57LOI4A
+ 3OAary26hfHpKoVFd/hDLBhyKU9a6KFUCl79HsigEMLrEhktIhLChToTOEcS4kcsSotv
+ FruNG2kPMqwXpzzOiwMR0eEkqpERhcV1An+XkQJXA46751XmOpX9uAEm+Lze4nATvGCX
+ mLPuVq3Q8TjIBLr4Townbhxx7fK2wYbQZK+zFyrZ+Hw0HB2AruBvhHX/nsLl4LcwPoC5
+ pLHv0kvUDEiH6rfaqO4t0R20hGbnE7o4IXFst/aQ2zzmwY8OHLTPgfzRX2zBmPrbmBOw HA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmxyp18q5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 22:02:09 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34HM287P031232
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 22:02:08 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 17 May 2023 15:02:07 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v10 0/8] add DSC 1.2 dpu supports
+Date:   Wed, 17 May 2023 15:01:51 -0700
+Message-ID: <1684360919-28458-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8842; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=weNhufFH3Y4bWFSxn3YPkrBd6c89tUFafI/ObkzG2sU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkZU69ZGChmdWXv1JU/zJOI6/KhO2/TGpURd45O PcfXpKyTFaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZGVOvQAKCRCPgPtYfRL+ Tv2SB/9VNQV5pyAHSi8MFncRlMsjGBspr3DiNBdPD3bh0ebj6Idx0SQ+CDPXfWzOQKmUF1e2STc OyrQpQnWQMqyPLRxmaiyTQKJHbh9o2OkK6tUWm4SLThySnIPpxGtDf2nhRmvobc1HfLI+82254O QpK7okcyTnBhE2q00Xu0k+X1L/cbYxlivhwOUM3Kn4+RdQOyUL78un54TgCOx1x2jI/XpNHeB4X GxucP3RmQcAsztjB9WpuPUx5nAx2hEkX/0k/JPp1dq8LBM3BwqIrC7ShwfwkzK6E6r7XrjPUtVE DF61zGpwVEg59HVJTUlKQCBp3OzagKF9HZDGS8G6uwwb46CX
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: O5jZi0gNylFxMjWydkg-wLPWZU6qP8kM
+X-Proofpoint-GUID: O5jZi0gNylFxMjWydkg-wLPWZU6qP8kM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_04,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=949
+ priorityscore=1501 impostorscore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305170181
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-call-back type"), all drivers being converted to .probe_new() and then
-03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
-back to (the new) .probe() to be able to eventually drop .probe_new() from
-struct i2c_driver.
+This series adds the DPU side changes to support DSC 1.2 encoder. This
+was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
+The DSI and DP parts will be pushed later on top of this change.
+This seriel is rebase on [1], [2] and catalog fixes from rev-4 of [3].
 
-While touching these drivers, fix alignment in apds990x.c and bh1770glc.c.
+[1]: https://patchwork.freedesktop.org/series/116851/
+[2]: https://patchwork.freedesktop.org/series/116615/
+[3]: https://patchwork.freedesktop.org/series/112332/
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+Abhinav Kumar (2):
+  drm/msm/dpu: add dsc blocks to the catalog of MSM8998 and SC8180X
+  drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
 
-I used v6.4-rc1 as base for this patch, but it also fits on top of
-today's next master. If there are some conflicts when you apply it, feel
-free to just drop all conflicting hunks, I'll care about the fallout
-later.
+Kuogee Hsieh (6):
+  drm/msm/dpu: add DPU_PINGPONG_DSC feature bit for DPU < 7.0.0
+  drm/msm/dpu: Guard PINGPONG DSC ops behind DPU_PINGPONG_DSC bit
+  drm/msm/dpu: Introduce PINGPONG_NONE to disconnect DSC from PINGPONG
+  drm/msm/dpu: add support for DSC encoder v1.2 engine
+  drm/msm/dpu: separate DSC flush update out of interface
+  drm/msm/dpu: tear down DSC data path when DSC disabled
 
-I chose to do this in a single patch for all drivers below drivers/misc
-If you want me to split it, just tell me.
+ drivers/gpu/drm/msm/Makefile                       |   1 +
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  11 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  16 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  14 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  51 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  29 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  35 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  29 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  13 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c         |  14 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  15 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 386 +++++++++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h        |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |   9 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |   7 +-
+ 19 files changed, 646 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
 
-Best regards
-Uwe
-
- drivers/misc/ad525x_dpot-i2c.c         | 2 +-
- drivers/misc/apds9802als.c             | 2 +-
- drivers/misc/apds990x.c                | 4 ++--
- drivers/misc/bh1770glc.c               | 4 ++--
- drivers/misc/ds1682.c                  | 2 +-
- drivers/misc/eeprom/at24.c             | 2 +-
- drivers/misc/eeprom/ee1004.c           | 2 +-
- drivers/misc/eeprom/eeprom.c           | 2 +-
- drivers/misc/eeprom/idt_89hpesx.c      | 2 +-
- drivers/misc/eeprom/max6875.c          | 2 +-
- drivers/misc/hmc6352.c                 | 2 +-
- drivers/misc/ics932s401.c              | 2 +-
- drivers/misc/isl29003.c                | 2 +-
- drivers/misc/isl29020.c                | 2 +-
- drivers/misc/lis3lv02d/lis3lv02d_i2c.c | 2 +-
- drivers/misc/tsl2550.c                 | 2 +-
- 16 files changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/misc/ad525x_dpot-i2c.c b/drivers/misc/ad525x_dpot-i2c.c
-index 3856d5c04c5f..469478f7a1d3 100644
---- a/drivers/misc/ad525x_dpot-i2c.c
-+++ b/drivers/misc/ad525x_dpot-i2c.c
-@@ -106,7 +106,7 @@ static struct i2c_driver ad_dpot_i2c_driver = {
- 	.driver = {
- 		.name	= "ad_dpot",
- 	},
--	.probe_new	= ad_dpot_i2c_probe,
-+	.probe		= ad_dpot_i2c_probe,
- 	.remove		= ad_dpot_i2c_remove,
- 	.id_table	= ad_dpot_id,
- };
-diff --git a/drivers/misc/apds9802als.c b/drivers/misc/apds9802als.c
-index 0526c55d5cd5..693f0e539f37 100644
---- a/drivers/misc/apds9802als.c
-+++ b/drivers/misc/apds9802als.c
-@@ -296,7 +296,7 @@ static struct i2c_driver apds9802als_driver = {
- 		.name = DRIVER_NAME,
- 		.pm = APDS9802ALS_PM_OPS,
- 	},
--	.probe_new = apds9802als_probe,
-+	.probe = apds9802als_probe,
- 	.remove = apds9802als_remove,
- 	.id_table = apds9802als_id,
- };
-diff --git a/drivers/misc/apds990x.c b/drivers/misc/apds990x.c
-index 0024503ea6db..92b92be91d60 100644
---- a/drivers/misc/apds990x.c
-+++ b/drivers/misc/apds990x.c
-@@ -1267,11 +1267,11 @@ static const struct dev_pm_ops apds990x_pm_ops = {
- };
- 
- static struct i2c_driver apds990x_driver = {
--	.driver	 = {
-+	.driver	  = {
- 		.name	= "apds990x",
- 		.pm	= &apds990x_pm_ops,
- 	},
--	.probe_new = apds990x_probe,
-+	.probe    = apds990x_probe,
- 	.remove	  = apds990x_remove,
- 	.id_table = apds990x_id,
- };
-diff --git a/drivers/misc/bh1770glc.c b/drivers/misc/bh1770glc.c
-index bedbe0efb330..1629b62fd052 100644
---- a/drivers/misc/bh1770glc.c
-+++ b/drivers/misc/bh1770glc.c
-@@ -1374,11 +1374,11 @@ static const struct dev_pm_ops bh1770_pm_ops = {
- };
- 
- static struct i2c_driver bh1770_driver = {
--	.driver	 = {
-+	.driver	  = {
- 		.name	= "bh1770glc",
- 		.pm	= &bh1770_pm_ops,
- 	},
--	.probe_new = bh1770_probe,
-+	.probe    = bh1770_probe,
- 	.remove	  = bh1770_remove,
- 	.id_table = bh1770_id,
- };
-diff --git a/drivers/misc/ds1682.c b/drivers/misc/ds1682.c
-index d517eed32971..21fc5bc85c5c 100644
---- a/drivers/misc/ds1682.c
-+++ b/drivers/misc/ds1682.c
-@@ -250,7 +250,7 @@ static struct i2c_driver ds1682_driver = {
- 		.name = "ds1682",
- 		.of_match_table = ds1682_of_match,
- 	},
--	.probe_new = ds1682_probe,
-+	.probe = ds1682_probe,
- 	.remove = ds1682_remove,
- 	.id_table = ds1682_id,
- };
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 938c4f41b98c..d93fbb1cb43e 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -832,7 +832,7 @@ static struct i2c_driver at24_driver = {
- 		.of_match_table = at24_of_match,
- 		.acpi_match_table = ACPI_PTR(at24_acpi_ids),
- 	},
--	.probe_new = at24_probe,
-+	.probe = at24_probe,
- 	.remove = at24_remove,
- 	.id_table = at24_ids,
- 	.flags = I2C_DRV_ACPI_WAIVE_D0_PROBE,
-diff --git a/drivers/misc/eeprom/ee1004.c b/drivers/misc/eeprom/ee1004.c
-index c8c6deb7ed89..a1acd77130f2 100644
---- a/drivers/misc/eeprom/ee1004.c
-+++ b/drivers/misc/eeprom/ee1004.c
-@@ -234,7 +234,7 @@ static struct i2c_driver ee1004_driver = {
- 		.name = "ee1004",
- 		.dev_groups = ee1004_groups,
- 	},
--	.probe_new = ee1004_probe,
-+	.probe = ee1004_probe,
- 	.remove = ee1004_remove,
- 	.id_table = ee1004_ids,
- };
-diff --git a/drivers/misc/eeprom/eeprom.c b/drivers/misc/eeprom/eeprom.c
-index 32611100d5cd..ccb7c2f7ee2f 100644
---- a/drivers/misc/eeprom/eeprom.c
-+++ b/drivers/misc/eeprom/eeprom.c
-@@ -196,7 +196,7 @@ static struct i2c_driver eeprom_driver = {
- 	.driver = {
- 		.name	= "eeprom",
- 	},
--	.probe_new	= eeprom_probe,
-+	.probe		= eeprom_probe,
- 	.remove		= eeprom_remove,
- 	.id_table	= eeprom_id,
- 
-diff --git a/drivers/misc/eeprom/idt_89hpesx.c b/drivers/misc/eeprom/idt_89hpesx.c
-index 7075d0b37881..740c06382b83 100644
---- a/drivers/misc/eeprom/idt_89hpesx.c
-+++ b/drivers/misc/eeprom/idt_89hpesx.c
-@@ -1556,7 +1556,7 @@ static struct i2c_driver idt_driver = {
- 		.name = IDT_NAME,
- 		.of_match_table = idt_of_match,
- 	},
--	.probe_new = idt_probe,
-+	.probe = idt_probe,
- 	.remove = idt_remove,
- 	.id_table = idt_ids,
- };
-diff --git a/drivers/misc/eeprom/max6875.c b/drivers/misc/eeprom/max6875.c
-index 79cf8afcef2e..cb6b1efeafe0 100644
---- a/drivers/misc/eeprom/max6875.c
-+++ b/drivers/misc/eeprom/max6875.c
-@@ -192,7 +192,7 @@ static struct i2c_driver max6875_driver = {
- 	.driver = {
- 		.name	= "max6875",
- 	},
--	.probe_new	= max6875_probe,
-+	.probe		= max6875_probe,
- 	.remove		= max6875_remove,
- 	.id_table	= max6875_id,
- };
-diff --git a/drivers/misc/hmc6352.c b/drivers/misc/hmc6352.c
-index 8967940ecd1e..759eaeb64307 100644
---- a/drivers/misc/hmc6352.c
-+++ b/drivers/misc/hmc6352.c
-@@ -131,7 +131,7 @@ static struct i2c_driver hmc6352_driver = {
- 	.driver = {
- 		.name = "hmc6352",
- 	},
--	.probe_new = hmc6352_probe,
-+	.probe = hmc6352_probe,
- 	.remove = hmc6352_remove,
- 	.id_table = hmc6352_id,
- };
-diff --git a/drivers/misc/ics932s401.c b/drivers/misc/ics932s401.c
-index 12108a7b9b40..ee6296b98078 100644
---- a/drivers/misc/ics932s401.c
-+++ b/drivers/misc/ics932s401.c
-@@ -105,7 +105,7 @@ static struct i2c_driver ics932s401_driver = {
- 	.driver = {
- 		.name	= "ics932s401",
- 	},
--	.probe_new	= ics932s401_probe,
-+	.probe		= ics932s401_probe,
- 	.remove		= ics932s401_remove,
- 	.id_table	= ics932s401_id,
- 	.detect		= ics932s401_detect,
-diff --git a/drivers/misc/isl29003.c b/drivers/misc/isl29003.c
-index 147b58f7968d..ebf0635aee64 100644
---- a/drivers/misc/isl29003.c
-+++ b/drivers/misc/isl29003.c
-@@ -459,7 +459,7 @@ static struct i2c_driver isl29003_driver = {
- 		.name	= ISL29003_DRV_NAME,
- 		.pm	= ISL29003_PM_OPS,
- 	},
--	.probe_new = isl29003_probe,
-+	.probe = isl29003_probe,
- 	.remove	= isl29003_remove,
- 	.id_table = isl29003_id,
- };
-diff --git a/drivers/misc/isl29020.c b/drivers/misc/isl29020.c
-index 3be02093368c..c5976fa8c825 100644
---- a/drivers/misc/isl29020.c
-+++ b/drivers/misc/isl29020.c
-@@ -214,7 +214,7 @@ static struct i2c_driver isl29020_driver = {
- 		.name = "isl29020",
- 		.pm = ISL29020_PM_OPS,
- 	},
--	.probe_new = isl29020_probe,
-+	.probe = isl29020_probe,
- 	.remove = isl29020_remove,
- 	.id_table = isl29020_id,
- };
-diff --git a/drivers/misc/lis3lv02d/lis3lv02d_i2c.c b/drivers/misc/lis3lv02d/lis3lv02d_i2c.c
-index 7071412d6bf6..3882e97e96a7 100644
---- a/drivers/misc/lis3lv02d/lis3lv02d_i2c.c
-+++ b/drivers/misc/lis3lv02d/lis3lv02d_i2c.c
-@@ -262,7 +262,7 @@ static struct i2c_driver lis3lv02d_i2c_driver = {
- 		.pm     = &lis3_pm_ops,
- 		.of_match_table = of_match_ptr(lis3lv02d_i2c_dt_ids),
- 	},
--	.probe_new = lis3lv02d_i2c_probe,
-+	.probe = lis3lv02d_i2c_probe,
- 	.remove	= lis3lv02d_i2c_remove,
- 	.id_table = lis3lv02d_id,
- };
-diff --git a/drivers/misc/tsl2550.c b/drivers/misc/tsl2550.c
-index 6c62b94e0acd..a3bc2823143e 100644
---- a/drivers/misc/tsl2550.c
-+++ b/drivers/misc/tsl2550.c
-@@ -437,7 +437,7 @@ static struct i2c_driver tsl2550_driver = {
- 		.of_match_table = tsl2550_of_match,
- 		.pm	= TSL2550_PM_OPS,
- 	},
--	.probe_new = tsl2550_probe,
-+	.probe = tsl2550_probe,
- 	.remove	= tsl2550_remove,
- 	.id_table = tsl2550_id,
- };
-
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
 -- 
-2.39.2
+2.7.4
 
