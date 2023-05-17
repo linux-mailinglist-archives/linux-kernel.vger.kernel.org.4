@@ -2,121 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E929D707185
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D284870718B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjEQTJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S229678AbjEQTKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjEQTJE (ORCPT
+        with ESMTP id S229489AbjEQTKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:09:04 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF378A7A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:03 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f14f266b72so1398737e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684350541; x=1686942541;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=huaxMu2yPsa+W+Dphwqdvi3R3kbSqOL8XYUyHgZBXNI=;
-        b=y5J48RtfUhG782JdfsiJt796SQugTBGoIKbCVDTn5+5b8+/dwDv9IlCvmD/U6bOHqS
-         kUkGlMzvAcY7RGoXlDyNubn5N6sDHwyXHMRyR/ejxo5W7I7e3GNmqidYBOBCXIHSD/zJ
-         B5fBQ6HKv3i4WpEGf5VQGu/S7y/avfCUfVm78KufMTmIAdlwPXTQv1Z0LrJYKdww3BT4
-         dUwKSDXHOSgKzPMoF3Rr/GCvTn8FfaYkfnprBV+MqnQ9Vi4QBnKVMJWCvRzPhssIpD0P
-         MMRQfyCsXedFfR64N91jsMRL185KSGywugmamc+H0gfJRD5MfzrBno+C0siTPw0Wze3v
-         xi+A==
+        Wed, 17 May 2023 15:10:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8494F93C8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684350562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TNueZVKvKbqYKsThUlmAqqW8H5EGDZrswTYYHFq1+MY=;
+        b=PBwtHQ+RUbVbotMmoA/uxZiCoyY7/GVl4/G1cacEHa1JM5/VFtKnCNm4R8bB/JftqIf7hk
+        /x65J0DELByOPaI1nDmwRWxvN0TaD1WJeYhMDJdy2+bBBOvk5647XdRpmYa/8/oDbUkg1S
+        4NdOJJ/VCwaoT9dG2RWQyNdo5VC4B4k=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-599-Mni7MywSPdabraTPDwuf2A-1; Wed, 17 May 2023 15:09:21 -0400
+X-MC-Unique: Mni7MywSPdabraTPDwuf2A-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f38280ec63so2227041cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:09:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350541; x=1686942541;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=huaxMu2yPsa+W+Dphwqdvi3R3kbSqOL8XYUyHgZBXNI=;
-        b=MA0mt73L5YHBStDZ0spAYFbuREfxX5rso53wm7YsCLH6/+AFsQOQIqhzQE2XB+xKQj
-         qYT6n2qzfWg+uNI/RCyz6d2LsQgs58ZCr9ZvQTXXbMUUncDAQyt3CDBkTvkGxBZwEJqe
-         u10fJBme0N/j9ExFzxI0tBcMCD8/32M8bD1gYyHBsxDS6ipdq+JnHcUITCmppTitTPVc
-         Ck0F8R08QLrltO5BvWfxozMkCVWSYLX7TFrAfoRB7GT6T2jPfiYUFNtmnGRpxRmlSZbj
-         7rIplTCLFjfGI3k07fK9mw3dc27JQ0hRwmPudB5RE/PmjN4BIgRoQAdDLx75OvGDfop2
-         hKTw==
-X-Gm-Message-State: AC+VfDyGhDg+gDyD2mMi8hsDZbnsv4SJWUNzEyr30Vp7zR/BJ3aUO7PR
-        Z3wQfEtbQ2AS8lTr5Z8AJ+Vh7A==
-X-Google-Smtp-Source: ACHHUZ56irov5Zpc/KBB1vmtqjYbdjCGlC3dGGkIVzITUpKg/G6jZZdmyhGq/5TEvQWENZUQ8oh02g==
-X-Received: by 2002:a05:6512:507:b0:4f2:60da:7c97 with SMTP id o7-20020a056512050700b004f260da7c97mr537779lfb.36.1684350541323;
-        Wed, 17 May 2023 12:09:01 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id b12-20020ac2410c000000b004b5979f9ba8sm3422089lfi.210.2023.05.17.12.08.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 12:09:00 -0700 (PDT)
-Message-ID: <88f04ec5-f41b-d918-56e7-642bf13fa795@linaro.org>
-Date:   Wed, 17 May 2023 21:08:59 +0200
+        d=1e100.net; s=20221208; t=1684350559; x=1686942559;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TNueZVKvKbqYKsThUlmAqqW8H5EGDZrswTYYHFq1+MY=;
+        b=DWCrBFR42E5PfOMcw+7tgEjYSj9sEbtldbd2tCd649rKEkaCZKBRutyBGdzWceNTUs
+         QLg9jZGli2V0UGLWOwotrvLoBoS+WUhHNCBheIFkZ5NahzuU8CL8V78MDOPjy5y2yyfS
+         cRgJNDMJklOdxWkBXPjj++G7roeo+ho3f2czRgpTY44ybsCXtJjY+muBuwkGP9W5IX9r
+         fJynyt1TLvwmKEajMaRGYxDMKg9evpvf8HSXH9SvLzUVET9GTRkJaufk2LxZYiPVJz7d
+         MCIozSXGJVFwLdKcnJdBxVkUIngZejEoGmmM4IVA5X45qCxPZHc6wAc+17jlzLjuD+vL
+         5NYQ==
+X-Gm-Message-State: AC+VfDwlmmnk5PcQO7EJ0/n0S+JqhJr1B2WpYFWOguRi+yrt0D0ddiDW
+        HFtHu9/MNh5xoW57wHuzF8LGLdA8cLueeFeFklTY7zRSr+kcPmKrdWxVBsmtQAaPNPDJalH06uo
+        hIe5eJZkOpGMjGln2GhhPf1XIMOIknZFswc7Ta52D+nh35AawcjbKMgCLUb3POed9/+fEVczHbC
+        8qVqdNMA==
+X-Received: by 2002:a05:622a:1a9f:b0:3f5:1def:67fd with SMTP id s31-20020a05622a1a9f00b003f51def67fdmr6869904qtc.2.1684350559360;
+        Wed, 17 May 2023 12:09:19 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5m7p0QqMHfQEXYY68UUBJuy0d24Wlx3YBE8G36XlPM1mx1FsLjvPznRvMD7EUjylbl1XAp/g==
+X-Received: by 2002:a05:622a:1a9f:b0:3f5:1def:67fd with SMTP id s31-20020a05622a1a9f00b003f51def67fdmr6869843qtc.2.1684350558865;
+        Wed, 17 May 2023 12:09:18 -0700 (PDT)
+Received: from x1n.. (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05620a143500b0075954005b46sm833464qkj.48.2023.05.17.12.09.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 12:09:18 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Mike Rapoport <rppt@kernel.org>, peterx@redhat.com,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v2 0/2] mm/uffd: Fix vma merge/split
+Date:   Wed, 17 May 2023 15:09:14 -0400
+Message-Id: <20230517190916.3429499-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.39.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH 5/6] drm/msm/a6xx: Use GMU_ALWAYS_ON_COUNTER
- for GMU-equipped GPUs in timestamp
-Content-Language: en-US
-To:     Jonathan Marek <jonathan@marek.ca>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        freedreno@lists.freedesktop.org
-References: <20230517-topic-a7xx_prep-v1-0-7a964f2e99c2@linaro.org>
- <20230517-topic-a7xx_prep-v1-5-7a964f2e99c2@linaro.org>
- <aaab25be-3403-518d-e639-c80b0930906a@marek.ca>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <aaab25be-3403-518d-e639-c80b0930906a@marek.ca>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+v2:
+- Added r-bs for Lorenzo and Liam
+- Reworded patch 1's commit message [Lorenzo]
 
+This series contains two patches that fix vma merge/split for userfaultfd
+on two separate issues.  The patchset is based on akpm/mm-hotfixes-unstable
+with 2f628010799e reverted (where patch 1 should be used to replace it
+which seems to be the plan we reached).
 
-On 17.05.2023 20:09, Jonathan Marek wrote:
-> AFAIK GMU_ALWAYS_ON_COUNTER does not have the same value as CP_ALWAYS_ON_COUNTER (only the same frequency), so changing this would break userspace expecting to be able to compare the value returned by MSM_PARAM_TIMESTAMP with CP timestamp values.
-FWIW A630 and A730 seem to work fine with this patch. Anything
-in particular I should look out for?
+Patch 1 fixes a regression since 6.1+ due to something we overlooked when
+converting to maple tree apis.  The plan is we use patch 1 to replace the
+commit "2f628010799e (mm: userfaultfd: avoid passing an invalid range to
+vma_merge())" in mm-hostfixes-unstable tree if possible, so as to bring
+uffd vma operations back aligned with the rest code again.
 
-Konrad
-> 
-> On 5/17/23 12:50 PM, Konrad Dybcio wrote:
->> Use the always-on counter provided by the GMU to skip having to
->> keep the GPU online.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 9 +++------
->>   1 file changed, 3 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> index 8707e8b6ac7e..d2a999b90589 100644
->> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> @@ -1664,12 +1664,9 @@ static int a6xx_get_timestamp(struct msm_gpu *gpu, uint64_t *value)
->>         mutex_lock(&a6xx_gpu->gmu.lock);
->>   -    /* Force the GPU power on so we can read this register */
->> -    a6xx_gmu_set_oob(&a6xx_gpu->gmu, GMU_OOB_PERFCOUNTER_SET);
->> -
->> -    *value = gpu_read64(gpu, REG_A6XX_CP_ALWAYS_ON_COUNTER);
->> -
->> -    a6xx_gmu_clear_oob(&a6xx_gpu->gmu, GMU_OOB_PERFCOUNTER_SET);
->> +    *value = gmu_read64(&a6xx_gpu->gmu,
->> +                REG_A6XX_GMU_ALWAYS_ON_COUNTER_L,
->> +                REG_A6XX_GMU_ALWAYS_ON_COUNTER_H);
->>         mutex_unlock(&a6xx_gpu->gmu.lock);
->>  
+Patch 2 fixes a long standing issue that vma can be left unmerged even if
+we can for either uffd register or unregister.
+
+Many thanks to Lorenzo on either noticing this issue from the assert
+movement patch, looking at this problem, and also provided a reproducer on
+the unmerged vma issue [1].
+
+Please have a look, thanks.
+
+[1] https://gist.github.com/lorenzo-stoakes/a11a10f5f479e7a977fc456331266e0e
+
+Peter Xu (2):
+  mm/uffd: Fix vma operation where start addr cuts part of vma
+  mm/uffd: Allow vma to merge as much as possible
+
+ fs/userfaultfd.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+-- 
+2.39.1
+
