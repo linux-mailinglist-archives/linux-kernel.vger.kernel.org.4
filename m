@@ -2,100 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06A27060EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774647060F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjEQHQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S229793AbjEQHRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjEQHQb (ORCPT
+        with ESMTP id S229560AbjEQHRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:16:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15815449A;
-        Wed, 17 May 2023 00:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=L9Rma4Q1qDKB9y05bibUf7H4u/Qt/w4qqQA7vkQBHhw=; b=hnjQeZYxV88CDNJnYVZxS9Ogzb
-        /rGRANh+Rb2oHRd/CSQtpL38iDlXzfV/nCAWMRf91jzgaqNKYfBbwmGUb8+QPD91hTl51Bc680hAZ
-        ytdAV872DJBp65Lq3M/dFlPE+K/X2cJGZ2Tc/+GHiXKHGKA5MN2lMgKjxglsO65x7F7f6cqFJfLfP
-        SbgMZkqKL9Dap9wFQNXwfrdi7vpeYwndyFn8MsygBg3QNH/6cw8HPEJiFslgbOBIVV0MXL8e+yEII
-        KZrHGXdkwuVc9pcQxDo0o+Ub6Sa+rw5uixfiA/ncblOwpyLFM03zj2RbQaMFKoRfhtjaNUqjsP1W4
-        LUa2qddw==;
-Received: from [2001:4bb8:188:3dd5:bc0:409a:ad8d:a02b] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzBOa-008dWg-33;
-        Wed, 17 May 2023 07:16:25 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     phillip@squashfs.org.uk
-Cc:     akpm@linux-foundation.org, squashfs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] squashfs: don't include buffer_head.h
-Date:   Wed, 17 May 2023 09:16:22 +0200
-Message-Id: <20230517071622.245151-1-hch@lst.de>
-X-Mailer: git-send-email 2.39.2
+        Wed, 17 May 2023 03:17:51 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C19E1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:17:50 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f509ec3196so51300935e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684307869; x=1686899869;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3b7hHEbI+h5xExrBy/3T83CDD//SAXlI6SxFmf+dg6o=;
+        b=k/U/uR+Kh2i8gM7Pk6RUGeZwy7PDiUYiTnAV/R3uiK0IqpFL70tKxc9hp7IdwFlPa7
+         xUUIcNxQhDYAY9LsvdDpjgWgZEreMKVqY93hiz8/RlgBMI7BsE7GSEAfrdVM4Ig0bbQ9
+         wR8PKfUscO1vVY2odj8vQH+U/hDGDbhVUg9tlVdFCoHVHRW09CsgiQ2/XIQfWJkGsRGK
+         8JNjUNt9KtUO8fyuWb4LIXe298IL2XLTSEqP0ywZ2dnZuMG+yHqUq2Vcwq5YxkZgH3Pb
+         QRSp4tt6bXwHCiJyXY3xuw/GoDx5ZqiJbVWaIbJecOaWmSRDltxEVHuM4b/uVGY8XIjK
+         +Xpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684307869; x=1686899869;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3b7hHEbI+h5xExrBy/3T83CDD//SAXlI6SxFmf+dg6o=;
+        b=PDErS/ttFOKTGXhdxkeeJDLTgIc9EVMHEOHeSrp7hpylu1HC+GIqdsM9Hvr8E+YS2R
+         90rtbQq6tXXuzo3wvVTcw85umNFPhF35B/iECt68eB+TmLmeNBM0H2/FezLv5HSkFT4m
+         RgCmBMagrqQugCOTQAZkgsjSEVnwoS4HPylxe/sqi978+Os5PZEZpmtFCq26G2X+qk35
+         skQzEFcuKBwl18FLzBW+FMtrieyL72WOtkbUQOUF9xAnZ1AJWEwnOMof9d4saFeC3VqF
+         zYaH0+u8w2T5guNyzCGxhqiZXuno+Ugtc74XSuA7bUC+iQGKEg3x37Bmmra8b4QJwEYo
+         GV1w==
+X-Gm-Message-State: AC+VfDxZMUGumGi9bi9ih5fKL4TOnY32oLOx5S8FMpAf86Ja+aZmUdmV
+        UPeUMLgi1xPpaPX+WxqI5WRLIQ==
+X-Google-Smtp-Source: ACHHUZ7L8yq0YUXp4EkM5Pe8eXsIVBrvz531exY2hfJ5I3XU3mTKbCCNdU+W3txyHrHKucWdLC23/Q==
+X-Received: by 2002:adf:ce8d:0:b0:307:cf71:ed8c with SMTP id r13-20020adfce8d000000b00307cf71ed8cmr780409wrn.35.1684307868772;
+        Wed, 17 May 2023 00:17:48 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.230])
+        by smtp.gmail.com with ESMTPSA id d15-20020adff2cf000000b0030647449730sm1762852wrp.74.2023.05.17.00.17.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 00:17:48 -0700 (PDT)
+Message-ID: <41d0bb3f-559d-ac70-9525-dd98b820a85c@linaro.org>
+Date:   Wed, 17 May 2023 08:17:46 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] mtd: spi-nor: spansion: make sure local struct does
+ not contain garbage
+Content-Language: en-US
+To:     miquel.raynal@bootlin.com
+Cc:     pratyush@kernel.org, michael@walle.cc, richard@nod.at,
+        vigneshr@ti.com, Takahiro.Kuwano@infineon.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        geert@linux-m68k.org
+References: <749c2fc2-93dc-585-3826-dea581602d6e@linux-m68k.org>
+ <20230509193900.948753-1-tudor.ambarus@linaro.org>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20230509193900.948753-1-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Squashfs has stopped using buffers heads in 93e72b3c612adcaca1
-("squashfs: migrate from ll_rw_block usage to BIO").
+Miquel, please consider this fix for -rc3.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- fs/squashfs/block.c                     | 1 -
- fs/squashfs/decompressor.c              | 1 -
- fs/squashfs/decompressor_multi_percpu.c | 1 -
- 3 files changed, 3 deletions(-)
+cheers,
+ta
 
-diff --git a/fs/squashfs/block.c b/fs/squashfs/block.c
-index bed3bb8b27fa3d..cb4e48baa4ba5b 100644
---- a/fs/squashfs/block.c
-+++ b/fs/squashfs/block.c
-@@ -18,7 +18,6 @@
- #include <linux/vfs.h>
- #include <linux/slab.h>
- #include <linux/string.h>
--#include <linux/buffer_head.h>
- #include <linux/bio.h>
- 
- #include "squashfs_fs.h"
-diff --git a/fs/squashfs/decompressor.c b/fs/squashfs/decompressor.c
-index 8893cb9b419833..a676084be27e43 100644
---- a/fs/squashfs/decompressor.c
-+++ b/fs/squashfs/decompressor.c
-@@ -11,7 +11,6 @@
- #include <linux/types.h>
- #include <linux/mutex.h>
- #include <linux/slab.h>
--#include <linux/buffer_head.h>
- 
- #include "squashfs_fs.h"
- #include "squashfs_fs_sb.h"
-diff --git a/fs/squashfs/decompressor_multi_percpu.c b/fs/squashfs/decompressor_multi_percpu.c
-index 1dfadf76ed9ae8..8a218e7c2390f2 100644
---- a/fs/squashfs/decompressor_multi_percpu.c
-+++ b/fs/squashfs/decompressor_multi_percpu.c
-@@ -7,7 +7,6 @@
- #include <linux/types.h>
- #include <linux/slab.h>
- #include <linux/percpu.h>
--#include <linux/buffer_head.h>
- #include <linux/local_lock.h>
- 
- #include "squashfs_fs.h"
--- 
-2.39.2
-
+On 5/9/23 20:39, Tudor Ambarus wrote:
+> Following errors were seen with um-x86_64-gcc12/um-allyesconfig:
+> + /kisskb/src/drivers/mtd/spi-nor/spansion.c: error: 'op' is used uninitialized [-Werror=uninitialized]:  => 495:27, 364:27
+> 
+> Initialise local struct spi_mem_op with all zeros at declaration in
+> order to avoid using garbage data for fields that are not explicitly
+> set afterwards.
+> 
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Fixes: c87c9b11c53ce ("mtd: spi-nor: spansion: Determine current address mode")
+> Fixes: 6afcc84080c41 ("mtd: spi-nor: spansion: Add support for Infineon S25FS256T")
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+> v2:
+> - init both local vars with all zeros at declaration
+> - squash patches as the blamed commits were just introduced in this
+>   merge window.
+> 
+>  drivers/mtd/spi-nor/spansion.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
+> index 15f9a80c10b9..36876aa849ed 100644
+> --- a/drivers/mtd/spi-nor/spansion.c
+> +++ b/drivers/mtd/spi-nor/spansion.c
+> @@ -361,7 +361,7 @@ static int cypress_nor_determine_addr_mode_by_sr1(struct spi_nor *nor,
+>   */
+>  static int cypress_nor_set_addr_mode_nbytes(struct spi_nor *nor)
+>  {
+> -	struct spi_mem_op op;
+> +	struct spi_mem_op op = {};
+>  	u8 addr_mode;
+>  	int ret;
+>  
+> @@ -492,7 +492,7 @@ s25fs256t_post_bfpt_fixup(struct spi_nor *nor,
+>  			  const struct sfdp_parameter_header *bfpt_header,
+>  			  const struct sfdp_bfpt *bfpt)
+>  {
+> -	struct spi_mem_op op;
+> +	struct spi_mem_op op = {};
+>  	int ret;
+>  
+>  	ret = cypress_nor_set_addr_mode_nbytes(nor);
