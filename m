@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7B1705FCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EA9705FCE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjEQGO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 02:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S232241AbjEQGTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 02:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjEQGOy (ORCPT
+        with ESMTP id S232553AbjEQGSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 02:14:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E28468A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:14:17 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzAQJ-0005tA-Eb; Wed, 17 May 2023 08:14:07 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzAQI-000mGL-L7; Wed, 17 May 2023 08:14:06 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzAQH-005Ewr-FP; Wed, 17 May 2023 08:14:05 +0200
-Date:   Wed, 17 May 2023 08:13:55 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 36/43] pwm: ep93xx: drop legacy pinctrl
-Message-ID: <20230517061355.5o2ksfkpupsbpuha@pengutronix.de>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-37-nikita.shubin@maquefel.me>
- <20230515143222.dlhxcze5254773r4@pengutronix.de>
- <f43addc54fd6bafca831d2f2802cc09c4e5baef9.camel@maquefel.me>
+        Wed, 17 May 2023 02:18:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EF2272D
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:18:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8032960F28
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:18:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818CDC4339B;
+        Wed, 17 May 2023 06:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684304324;
+        bh=wKqkHvW8YRCZBQqkh+oMj1zOtFej3/tgcZrgi/WwsEI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V1CK3sIFM1MG762LdB3D9BwwhEVH/SBGS9OousQu3vjpqfn3x3r8+Uak8O49YJ9sE
+         Smg5cmUFH99yNaSmDZfcYMPb6Z3E2S9q2KQbe6Cx08bARjLDfm+RDwIVfvkwFAEGfO
+         N9oavdg5QFB6uracWxV+9iQ2pDaAzciVMGDyLdoM=
+Date:   Wed, 17 May 2023 08:18:37 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 3/5] debugfs: Update debugfs_create_str() kerneldoc to
+ warn about pointer race
+Message-ID: <2023051700-puzzling-visiting-e647@gregkh>
+References: <20230516160753.32317-1-rf@opensource.cirrus.com>
+ <20230516160753.32317-4-rf@opensource.cirrus.com>
+ <2023051607-trial-worrisome-87df@gregkh>
+ <1d174049-0eaf-01d5-2f85-c3cd3f4a40a0@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gw7u2sguz6vwjysm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f43addc54fd6bafca831d2f2802cc09c4e5baef9.camel@maquefel.me>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <1d174049-0eaf-01d5-2f85-c3cd3f4a40a0@opensource.cirrus.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,112 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 16, 2023 at 06:50:16PM +0100, Richard Fitzgerald wrote:
+> On 16/5/23 17:35, Greg KH wrote:
+> > On Tue, May 16, 2023 at 05:07:51PM +0100, Richard Fitzgerald wrote:
+> > > Add a warning to the debugfs_create_str() kerneldoc that the char * pointer
+> > > value must not change after the function returns, because of a race with
+> > > debugfs_read_file_str() accessing the pointer.
+> > > 
+> > > The only safe case is a change from NULL to non-NULL because in that case
+> > > debugfs_read_file_str() will see either the NULL or the valid pointer.
+> > > 
+> > > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> > > ---
+> > >   fs/debugfs/file.c | 9 ++++++++-
+> > >   1 file changed, 8 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+> > > index 0c039a3d9a42..77794871f26d 100644
+> > > --- a/fs/debugfs/file.c
+> > > +++ b/fs/debugfs/file.c
+> > > @@ -938,11 +938,18 @@ static const struct file_operations fops_str_wo = {
+> > >    *          directory dentry if set.  If this parameter is %NULL, then the
+> > >    *          file will be created in the root of the debugfs filesystem.
+> > >    * @value: a pointer to the variable that the file should read to and write
+> > > - *         from.
+> > > + *         from. The char* pointer must not change, except from NULL to
+> > > + *         non-NULL.
+> > 
+> > This feels odd.  Why wouldn't you want to change the string value?  Or
+> > why would you?
+> 
+> Well, if you _would_ want to change the string value, then the
+> implementation of debugfs_create_str() is certainly broken and could
+> only be fixed by involving a shared mutex to protect use of the pointer.
 
---gw7u2sguz6vwjysm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Agreed.  So let's just say "never change the pointer" and leave it at
+that?
 
-Hello Nikita,
+> > And why is this one-way transition ok?
+> > 
+> 
+> This one case happens to be safe because it either sees NULL (which it
+> handles) or a valid pointer (which is ok). It will not result in using a
+> stale pointer. This wasn't a deliberate design intent but happens to be
+> safe, and easily maintainable behavior.
+> 
+> A transition from valid->NULL or old->new isn't safe because the
+> read function could get the old pointer but racing with that is the
+> change to the pointer, and so the debugfs code could try to use a
+> stale pointer.
+> 
+> > Given that this is only used internally, why is it exported?
+> > 
+> 
+> It isn't only used internally. I found 3 drivers that use it.
+> But there are no uses internal to debugfs.
 
-On Tue, May 16, 2023 at 01:43:27PM +0300, Nikita Shubin wrote:
-> On Mon, 2023-05-15 at 16:32 +0200, Uwe Kleine-K=F6nig wrote:
-> > On Mon, Apr 24, 2023 at 03:34:52PM +0300, Nikita Shubin wrote:
-> > > diff --git a/drivers/pwm/pwm-ep93xx.c b/drivers/pwm/pwm-ep93xx.c
-> > > index 8bfe6cfbb3db..657adb011aeb 100644
-> > > --- a/drivers/pwm/pwm-ep93xx.c
-> > > +++ b/drivers/pwm/pwm-ep93xx.c
-> > > @@ -45,20 +45,6 @@ static inline struct ep93xx_pwm
-> > > *to_ep93xx_pwm(struct pwm_chip *chip)
-> > > =A0=A0=A0=A0=A0=A0=A0=A0return container_of(chip, struct ep93xx_pwm, =
-chip);
-> > > =A0}
-> > > =A0
-> > > -static int ep93xx_pwm_request(struct pwm_chip *chip, struct
-> > > pwm_device *pwm)
-> > > -{
-> > > -=A0=A0=A0=A0=A0=A0=A0struct platform_device *pdev =3D to_platform_de=
-vice(chip-
-> > > >dev);
-> > > -
-> > > -=A0=A0=A0=A0=A0=A0=A0return ep93xx_pwm_acquire_gpio(pdev);
-> >=20
-> > I didn't get the whole series and didn't spot a relevant followup
-> > change
->=20
-> https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel=
-=2Eme/
+Oops, I missed the other users (arm_scmi and opp), so let's leave it.
 
-Yeah, I looked there, but didn't find it. Applied the whole series now
-and found "ARM: ep93xx: soc: drop defines". A few things I noticed while
-doing so:
+> I didn't write debugfs_create_str(), I only tried to use it and made
+> an attempt to fix some problems.
+> 
+> Given the limitations of the basic implementation of
+> debugfs_create_str() and its file reading function (the lack of
+> protection against the pointer changing) perhaps drop this chain? Don't
+> bother fixing it, instead deprecate it for being unsafe?
 
- - git am warns about new blank lines at EOF in several patches.
+We don't "deprecate" things, that never works.  We either fix them, or
+rip them out :)
 
- - b4 am 20230424123522.18302-1-nikita.shubin@maquefel.me
-   warns about broken DKIM signatures. The copy I got directly via Cc is
-   OK though. The relevant problem is that your To: header is empty but
-   part of the signed payload + the copy I got via vger.kernel.org had
-   the To header mangled to
+thanks,
 
-	To:     unlisted-recipients:; (no To-header on input)=20
-
-   This results in:
-
-	$ curl -s https://lore.kernel.org/lkml/20230424123522.18302-37-nikita.shub=
-in@maquefel.me/raw | dkimverify
-	signature verification failed
-	$ curl -s https://lore.kernel.org/lkml/20230424123522.18302-37-nikita.shub=
-in@maquefel.me/raw | sed 's/^To:.*/To:/' | dkimverify=20
-	signature ok
-
-   I don't know who is to blame here (i.e. is an empty To allowed?) but
-   I'd recommend to put the people you want to merge the patches into
-   the To header anyhow.
-
-> > on lore.k.o, so: I assume ep93xx_pwm_acquire_gpio() and
-> > ep93xx_pwm_release_gpio() will be unused in the end? Do you drop
-> > them?
-> >=20
-> > I assume this series target to be taken via arm-soc (once the review
-> > feedback is positive)?
-
-You didn't reply to that one. Still assuming this to be true, I'll mark
-this patch as handled-elsewhere in the PWM patchwork.
-
-> > I wonder if this change breaks non-dt machine support?
->=20
-> The aim for the whole series is fully converting to dt, this means
-> platform files will be dropped.
->=20
-> The v1 series tries not to break anything until platform removal
-> commit, before this commit non-dt version should be compilable and
-> fully functional.
-
-OK, the pwm patch looks fine to me,
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards and thanks for your efforts,
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gw7u2sguz6vwjysm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRkcKIACgkQj4D7WH0S
-/k66AQgApBlpGxKurVIar8vOJEAJIDsakYGLp5W4nQvnDQ6MhtYWPPlhOAMIJutb
-yGK/w6VdeWkCQ39Bf0nJLk1U6Mr2ZxPJx+c7A8Lm2J5dR6qelbBVONW+8RLt6Po1
-hoJ3G38tVl6DHbwsMdGoBAwEmIpSlLveu6+ojMAmL/OsuVqYLqBRdEwsmbJTzpVn
-D9kUQ8bUy/v7w1UXX2tHzU2v12hwOzEyxsxhYfVJmp+/M7vw0aEsN78lOQ5ySFgD
-VoPG65pnywTb5ksLOZr845MXyE1SqtCXt0a4NDsbOk0IgkoF1Wiwik5xN2uEvyoE
-JJLZ6DVCvwGrqPX/HfRyeQ6AmrAz/A==
-=tUOA
------END PGP SIGNATURE-----
-
---gw7u2sguz6vwjysm--
+greg k-h
