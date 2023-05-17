@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE8370733B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D24570734F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjEQUkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S229794AbjEQUq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjEQUkr (ORCPT
+        with ESMTP id S229532AbjEQUq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:40:47 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA4483;
-        Wed, 17 May 2023 13:40:44 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8BF705C01B9;
-        Wed, 17 May 2023 16:40:42 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 17 May 2023 16:40:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ryhl.io; h=cc:cc
-        :content-transfer-encoding:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1684356042; x=1684442442; bh=ghk7mGsvuQGuVrjeRiTDYinTiiFkqaw9VUe
-        QsZ2qew8=; b=rkqF1pWbMBTeBx4H44JeGXZ4V4sev7qMDienTltUrQ/wbVIpMx5
-        lpyR8VEPGxcs6yizyn1BE5lXEjUIFjImSzP41ATpqCwz38owd5hZ/87LCXz9FgLG
-        /qEUnd5eMa9FUmtoDONmqgYJgEuUxyrp8xMYLeNNivKA2lptKAAKEtxaHFqnLNXS
-        qoSjN8CYLZ5crbZDulVL/ZHqCeeSc9Q0bIXeXzuBiYWt/R1wnGWvXAry669vdeRB
-        UPrf6VSTKKKDKegDWx0uDzipS3E7/h3hZNQ+EznVljoGyXTuvuXZLRkZ9ZkJQX6S
-        YxNdUzZskIKM29C7JfYUx1Gd9e/MIfax/VA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684356042; x=1684442442; bh=ghk7mGsvuQGuVrjeRiTDYinTiiFkqaw9VUe
-        QsZ2qew8=; b=tv1dhMRYaY4wvGP3WdQW34d9yLhX6PzGXpvJaD3qjha0RL3Ew6R
-        fBmuYbesXTH1LCRh3JJim/saMJzYGWStsZeQTzIzMIsw5J+zCmtUlzfITOHYnFav
-        ucOb6mxNbGQuPcWXxPhzXNiLN4kPM1KOafRFWGjrpN034/ZgWegGG4HEGFnsvAFd
-        swP3qrviYiNgVUHegCMV/4xZ5WKNHDYC00RTxKpAIdanIpsKRvly1VhNtH5bT4eI
-        s6MYaczfXmw5Z8hJbAcV/p8+Ggg6SwFyBMO2aVNo5sDNH+xUCfxqz6pQjhKlDgef
-        CdoP/vLgsTG+f927I9sXXixWUoewOR8AhIw==
-X-ME-Sender: <xms:yTtlZBgoJackQwN4zJeCH7oYaek36RvPdKOTrXcW-iSaswORYqbwow>
-    <xme:yTtlZGC-7Zr4wg0WC7-vXHvxDs3nkR_2wpx1UX2leC_3uiIHa5yC2XSNmctwIA-dk
-    ZJQUBMQCPnKHrfWrQ>
-X-ME-Received: <xmr:yTtlZBGnJEhz4cv9V2bY1NHW9kuRDWc8ZEnJN2tHdIsXQu96imyRcYQ5Vmgvz2-Up9u76Kzf5C5LwhJ5isImvaF8Onw36cF7qMYnIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgudehvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomheptehl
-    ihgtvgcutfihhhhluceorghlihgtvgesrhihhhhlrdhioheqnecuggftrfgrthhtvghrnh
-    epheduuddvteekvdektdduledugfffhfdugeejgeeuvdevtdetveejheehiefffeegnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihgtvg
-    esrhihhhhlrdhioh
-X-ME-Proxy: <xmx:yTtlZGTUQ6zxCsEaeFPoHk5uoejU72xydi14pkEbau10L6HilMpDyg>
-    <xmx:yTtlZOwKJwq_UA8OXQk1ROIp3fGDpjkhU6v8r9gfieYzO_eCRkOwEQ>
-    <xmx:yTtlZM5K5qDhv4qMQh24ufgG4Js_oiHL6P6cdsqFrkn0bR7w5HJKXg>
-    <xmx:yjtlZNl1_-V269yvRtAcu738AyLDPo87TKEIYL1Y6iHhln5kSc-kyA>
-Feedback-ID: i56684263:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 May 2023 16:40:40 -0400 (EDT)
-Message-ID: <83744422-a332-5b3e-8269-73b2f2ce281e@ryhl.io>
-Date:   Wed, 17 May 2023 22:41:10 +0200
+        Wed, 17 May 2023 16:46:58 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3655255B3;
+        Wed, 17 May 2023 13:46:57 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-19674cab442so915542fac.3;
+        Wed, 17 May 2023 13:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684356416; x=1686948416;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tOWjDaNo3/cJ5irwgAWSl2hXx4QRdUNNrZTKP14O2Xo=;
+        b=DKhNLAOxM7f1QqxL7ESIoOIpDxHgo31eq97FmRl6lrjFs42gZeymo5Y0DuuXWMPsVt
+         qFW7Gm3we0p+BJ/HK2pzFKC8LM34kFMYICsOSq6KWoDmS1tvNric1jAPpMdNZS9OtWCt
+         iDg9+/XmCTklCtzCDH9T3BGqgJ3lmtFKIqxmhVuNSdzpBN6hrpXR3CKylIw2efJPBVKB
+         Imj1pATGnSmMHr83gCVz0TR4Uz3/e9hjym2wy/LIVbPnKc4IYLknJ0vrzo7NKDZoeGl4
+         XnqphKA/6CJtr5/o2GZ0yn8YXwgmYnnD8vTmCfMBotd6RCNZ3eSzXmzRLUq9mQ+2eFOK
+         i0bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684356416; x=1686948416;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tOWjDaNo3/cJ5irwgAWSl2hXx4QRdUNNrZTKP14O2Xo=;
+        b=cbjAX/oWSczdx2ysPseTXl6Et5vo7D8Fbl4fjERDmqafgaAuGbDFrNrWtOarlxnWq1
+         9w3RVpKqH7tsQLMsaaYqK42/0Ye+FIIDx7+9NwrgsEPT8SNstINcQ4PbeYUzImw6TFK/
+         n3F0cVY6ydwHu6legrfCZWrkSRgtL1Zw7zau5u9Oux+pUl7gXK8+aPXLzQLd9k7JI4m1
+         j2FotPiFskZZeJqwImmfPlW6VWYDMQUkP4wCurOs72yYvbsWHat3h96Ess7ufA4dZoRj
+         o/7wuHAtHtS7N0KobJs/K/95il7aViGcuQqe2czYv0hs318rBBYkB7V9srZ1sLTwGUSO
+         pI4g==
+X-Gm-Message-State: AC+VfDwZJTE17STQQTog4SFG/SQfO499FgZ9XoDVTFcexoiQOCSCEMdJ
+        Pu86W4KbDtsPer2PKbnHFzM=
+X-Google-Smtp-Source: ACHHUZ4Fy1lnnqBoT3R7pNo7eHnEXuk2Q1IeKoNRk5GFRNws5g5Z4uFR+rwa2Fery3DNzuDAMENGuw==
+X-Received: by 2002:a05:6871:8504:b0:192:b536:259 with SMTP id sx4-20020a056871850400b00192b5360259mr96231oab.19.1684356416433;
+        Wed, 17 May 2023 13:46:56 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id g15-20020a9d6a0f000000b006ab1dd9eedesm9048otn.49.2023.05.17.13.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 13:46:56 -0700 (PDT)
+Message-ID: <ed7b485c-a700-ed59-5480-01417977fa41@gmail.com>
+Date:   Wed, 17 May 2023 17:41:11 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/4] rust: macros: fix usage of `#[allow]` in `quote!`
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 1/2] rust: sync: add `Arc::ptr_eq`
 Content-Language: en-US
-To:     Benno Lossin <benno.lossin@proton.me>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
+To:     Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230424081112.99890-1-benno.lossin@proton.me>
-From:   Alice Ryhl <alice@ryhl.io>
-In-Reply-To: <20230424081112.99890-1-benno.lossin@proton.me>
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+References: <20230517200814.3157916-1-aliceryhl@google.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230517200814.3157916-1-aliceryhl@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,12 +84,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 10:11, Benno Lossin wrote:
-> When using `quote!` as part of an expression that was not the last one
-> in a function, the `#[allow(clippy::vec_init_then_push)]` attribute
-> would be present on an expression, which is not allowed.
-> This patch refactors that part of the macro to use a statement instead.
+On 5/17/23 17:08, Alice Ryhl wrote:
+> [...]
+> +
+> +    /// Compare whether two [`Arc`] pointers reference the same underlying object.
+> +    pub fn ptr_eq(this: &Self, other: &Self) -> bool {
+> +        core::ptr::eq(this.ptr.as_ptr(), other.ptr.as_ptr())
+> +    }
+>   }
+>   
+>   impl<T: 'static> ForeignOwnable for Arc<T> {
 > 
-> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+> base-commit: ac9a78681b921877518763ba0e89202254349d1b
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
