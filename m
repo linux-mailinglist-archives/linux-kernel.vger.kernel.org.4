@@ -2,99 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E36706335
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3973706337
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjEQIoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
+        id S230248AbjEQIpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjEQIo2 (ORCPT
+        with ESMTP id S230521AbjEQIo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:44:28 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20602.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::602])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C29DDC
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:44:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T2UpQmms6WnjzUw4slh+GpbbMjFzE7K+qhgRZaJAsVq7cg70dnY/WwDBK82kmtnFKEJIS/Nblb2+1/p+ejlJyaxn+5pRFNqi/P8yfC6/PjBpkXdBLetSr2FJ0fWeBh3CPdQKXbv5vpnWbihTUpm4dYSXaHG8QsJGMRoBXQJgByDYPePFZ3nl9zAZ7Ncmxs1bc7Sig4o+tCMS7zlrf0pfL2c2TNo4r/2EMhlVJdgBcnI/90R6gXrPdMfckRE8xYsu8U00YmNpMw45ZXbImO+P7/YRxz2J6Xyewan+iZFLTurnrYp9j3ZfGA3elMB2dHNtyCtDntW2jZEaAS5CjCd75Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HzTkDU2qJZecO6YlShyUOc5fqvbnPxyJbmA3NjrFGfg=;
- b=JxyDP8/FTM6oRrLxquyFlyFvVfhVa8dIH8Hl9DpICDAUSzECL46MudKZZhoX8mvsMDQjh1kbAgWnilI7pZEKiz5qXPkmVK2FU02LQbjotBYeV4JQQ9RHXrSB/p4xLJjClppGwuJoAbUcfk4h5YdMB5inZEU/XHq/cd1KkFT+W6sVw2oN3ypTl4GERXVz0k+zs3VatjfeoXCDcRIrFElSJsR1fNskALnXHtth/dHvg7Hl1Q6FF4qXXjb18A4FAGg60uOWi3HwDd4hVX1O9cE6HHnmeS+IcsMYmqY3J+Q52yMzmU9MXJ8M2gEl8giIpR9Zr25q7x+6TtLejIW/vNH+Pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HzTkDU2qJZecO6YlShyUOc5fqvbnPxyJbmA3NjrFGfg=;
- b=EIGMl/rl0uUVuVQNPOsC8NmZ8TrLWxNVjE/9swbTE+3tB1bzEi7H0j+VAUPcZQ2kwseX6qPsvjDDgSENIp7rGpk29AwVklTHz+mOH5wJazxP76AQRQcGNrJAO5vW7e+/jW2f1iGHzheKHmfHlcCyul/I3ByiJQFVpxJtStH/AKE=
-Received: from DM6PR11CA0021.namprd11.prod.outlook.com (2603:10b6:5:190::34)
- by PH7PR12MB7284.namprd12.prod.outlook.com (2603:10b6:510:20b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Wed, 17 May
- 2023 08:44:23 +0000
-Received: from DM6NAM11FT006.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:190:cafe::e6) by DM6PR11CA0021.outlook.office365.com
- (2603:10b6:5:190::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33 via Frontend
- Transport; Wed, 17 May 2023 08:44:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT006.mail.protection.outlook.com (10.13.173.104) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.15 via Frontend Transport; Wed, 17 May 2023 08:44:23 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 17 May
- 2023 03:44:22 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 17 May
- 2023 03:44:22 -0500
-Received: from xhdipdslab59.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 17 May 2023 03:44:20 -0500
-From:   Abhijit Gangurde <abhijit.gangurde@amd.com>
-To:     <nikhil.agarwal@amd.com>, <Nipun.Gupta@amd.com>,
-        <gregkh@linuxfoundation.org>, <geert@linux-m68k.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <git@amd.com>, <michal.simek@amd.com>,
-        Abhijit Gangurde <abhijit.gangurde@amd.com>
-Subject: [PATCH 1/1] cdx: Rename MCDI_LOGGING to CDX_MCDI_LOGGING
-Date:   Wed, 17 May 2023 14:14:03 +0530
-Message-ID: <20230517084404.187463-1-abhijit.gangurde@amd.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT006:EE_|PH7PR12MB7284:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8cbacd77-45fc-415f-40e8-08db56b2ea14
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q6vRDfA0XokN/SgUWefM5JOUbwjF+2r+H9WChQ3fTHKyVYdeKnOoIsAaO7e2mTsNjlx9j9YyqDGG2qymu8Hz0j31s3OsaKDmTao9QeWIC41gLLSLzRMFSph0u9y3h7lIhVFjcLSXR/MkhT5cllOzeZD4a3BJmEvALBCOxhncTh/Z7mbKElVp+8DiuZx0ivJIEHYcdftobVPmiei1kRZBgx0d/h+3dag0WUvj+YaloblBoWrkhtDSqnb/GsIjXvyqRZ932z6GPiTfr6UdxbVe2NV79gIK76q8WG21SZY/BZa7HCWXhsXnALj3fcCw8ShdXBrN8ZadBOL50glYSfKClTKk/LnfDbeuylNh68LpVEy61QripIfwrr+7ZGnxeqqP6/GE2HOoq9QJWykPJytd5VeG1JnBrXoDdkXMz+FG8h5RvOsF/H7Cs0ZV9vAlJlEHZLJ9Nz110zDhkpwv95c5XsJEhi3wjg0KY9F4L4TTWf6DvYySNX5SkzpFMtTDFEd89V1hGv2vEK3S1/5yhvwt0XFaf9XB0ukBHD3aVqPqbp9VZFHR7v2PDjjyYSMr/F/PNK0xr1D/DT0+Y4z09WdypiQpXu5JXwVSxgp4ZBZ4CZBK0jsHbS9zb9cQOLZo2TjHIlb3ZYQ69oe6MaHbuAE/CV6ujXp5jh0kIZdX5NLlytFdruDj0MqO9FnB7R1MstJGjH1INQ1pRLMiOwWzzqgGzwC0z95O0Jz0Jga254dyfQfxI+hZipVMGG3LUJwfTL5YL7kzWFf1WsNwYlsNlD9kipuwPaklctaC1ly/CQDuTp0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(86362001)(54906003)(316002)(110136005)(70206006)(70586007)(4326008)(478600001)(6666004)(40480700001)(2906002)(82310400005)(44832011)(8676002)(5660300002)(41300700001)(8936002)(82740400003)(81166007)(356005)(26005)(36860700001)(336012)(2616005)(186003)(426003)(83380400001)(47076005)(1076003)(40460700003)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 08:44:23.3639
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8cbacd77-45fc-415f-40e8-08db56b2ea14
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT006.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7284
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        Wed, 17 May 2023 04:44:56 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED555269F;
+        Wed, 17 May 2023 01:44:54 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H7xjvZ025469;
+        Wed, 17 May 2023 08:44:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=0dTK9SqxayUN+1e9gRtbnM5n3yjd3BGdZ2EbdV92l70=;
+ b=BWwdRE/NqF3lKPIkU+FaGMtkxpWV8VjGKdcTrvMMKMneZ785tLSCa3ub3yZ0ht6113XX
+ Wn6cyWU/bN/iQvSSS1Um7PHJLqNYHXDNYrez4feU7OSzQ93SLraSvY+YqFs0b3mmIGtw
+ l8e/1UN2eH/9MyIiK6CR1sh58joz8tu7iWisKRnMvCeziiWChamsXhQQNDO+V47YdaYj
+ ilZMvSUJfVN5OrPWL1mR2JfgwuCGhMiuPm69YXj0btDBfpTytIlODPMSAHGW5GecnIOb
+ b+vgLIETNfw3QgCfr0Lo5vzgAvR45xMGnDMWDu/kEsTzc/aAlcFxHanuSNHKrTybd8jV Tw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmbk79yfg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 08:44:53 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34H8guA1023017;
+        Wed, 17 May 2023 08:44:49 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qj3mk5t6v-1;
+        Wed, 17 May 2023 08:44:49 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34H8insv024372;
+        Wed, 17 May 2023 08:44:49 GMT
+Received: from hyd-e160-a01-1-05.qualcomm.com (hyd-e160-a01-1-05.qualcomm.com [10.147.154.233])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34H8imt0024371;
+        Wed, 17 May 2023 08:44:49 +0000
+Received: by hyd-e160-a01-1-05.qualcomm.com (Postfix, from userid 2304101)
+        id 015908CE2; Wed, 17 May 2023 14:14:47 +0530 (IST)
+From:   Pradeep P V K <quic_pragalla@quicinc.com>
+To:     axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pradeep P V K <quic_pragalla@quicinc.com>
+Subject: [PATCH V1] block: Fix null pointer dereference issue on struct io_cq
+Date:   Wed, 17 May 2023 14:14:34 +0530
+Message-Id: <20230517084434.18932-1-quic_pragalla@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cT6VP9PHtFRSQg5lakFs0OXVhKbLuZGg
+X-Proofpoint-ORIG-GUID: cT6VP9PHtFRSQg5lakFs0OXVhKbLuZGg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ adultscore=0 priorityscore=1501 mlxlogscore=694 bulkscore=0 suspectscore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305170071
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -103,118 +76,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MCDI_LOGGING is too generic considering other MCDI users
-SFC_MCDI_LOGGING and SFC_SIENA_MCDI_LOGGING. Rename it to
-CDX_MCDI_LOGGING makes it more domain specific.
+There is a potential race between ioc_clear_fn() and
+exit_io_context() as shown below, due to which below
+crash is observed. It can also result into use-after-free
+issue.
 
-Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+context#1:                           context#2:
+ioc_release_fn()                     do_exit();
+->spin_lock(&ioc->lock);             ->exit_io_context();
+->ioc_destroy_icq(icq);              ->ioc_exit_icqs();
+ ->list_del_init(&icq->q_node);       ->spin_lock_irq(&ioc->lock);
+ ->call_rcu(&icq->__rcu_head,
+     icq_free_icq_rcu);
+->spin_unlock(&ioc->lock);
+                                      ->ioc_exit_icq(); gets the same icq
+				       ->bfq_exit_icq();
+                                  This results into below crash as bic
+				  is NULL as it is derived from icq.
+				  There is a chance that icq could be
+				  free'd as well.
+
+[33.245722][ T8666] Unable to handle kernel NULL pointer dereference
+at virtual address 0000000000000018.
+...
+Call trace:
+[33.325782][ T8666]  bfq_exit_icq+0x28/0xa8
+[33.325785][ T8666]  exit_io_context+0xcc/0x100
+[33.325786][ T8666]  do_exit+0x764/0xa58
+[33.325791][ T8666]  do_group_exit+0x0/0xa0
+[33.325793][ T8666]  invoke_syscall+0x48/0x114
+[33.325802][ T8666]  el0_svc_common+0xcc/0x118
+[33.325805][ T8666]  do_el0_svc+0x34/0xd0
+[33.325807][ T8666]  el0_svc+0x38/0xd0
+[33.325812][ T8666]  el0t_64_sync_handler+0x8c/0xfc
+[33.325813][ T8666]  el0t_64_sync+0x1a0/0x1a4
+
+Fix this by checking with ICQ_DESTROYED flags in ioc_exit_icqs().
+Also, ensure ioc_exit_icq() is accessing icq within rcu_read_lock/unlock
+so that icq doesn't get free'd up while it is still using it.
+
+Signed-off-by: Pradeep P V K <quic_pragalla@quicinc.com>
 ---
- drivers/cdx/controller/Kconfig |  2 +-
- drivers/cdx/controller/mcdi.c  | 16 ++++++++--------
- drivers/cdx/controller/mcdi.h  |  2 +-
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ block/blk-ioc.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cdx/controller/Kconfig b/drivers/cdx/controller/Kconfig
-index c3e3b9ff8dfe..e7014e9819ea 100644
---- a/drivers/cdx/controller/Kconfig
-+++ b/drivers/cdx/controller/Kconfig
-@@ -18,7 +18,7 @@ config CDX_CONTROLLER
+diff --git a/block/blk-ioc.c b/block/blk-ioc.c
+index 63fc02042408..1aa34fd46ac8 100644
+--- a/block/blk-ioc.c
++++ b/block/blk-ioc.c
+@@ -60,10 +60,14 @@ static void ioc_exit_icqs(struct io_context *ioc)
+ {
+ 	struct io_cq *icq;
  
- 	  If unsure, say N.
++	rcu_read_lock();
+ 	spin_lock_irq(&ioc->lock);
+-	hlist_for_each_entry(icq, &ioc->icq_list, ioc_node)
+-		ioc_exit_icq(icq);
++	hlist_for_each_entry(icq, &ioc->icq_list, ioc_node) {
++		if (!(icq->flags & ICQ_DESTROYED))
++			ioc_exit_icq(icq);
++	}
+ 	spin_unlock_irq(&ioc->lock);
++	rcu_read_unlock();
+ }
  
--config MCDI_LOGGING
-+config CDX_MCDI_LOGGING
- 	bool "MCDI Logging for the CDX controller"
- 	depends on CDX_CONTROLLER
- 	help
-diff --git a/drivers/cdx/controller/mcdi.c b/drivers/cdx/controller/mcdi.c
-index a211a2ca762e..3a1fbc3d409e 100644
---- a/drivers/cdx/controller/mcdi.c
-+++ b/drivers/cdx/controller/mcdi.c
-@@ -31,7 +31,7 @@ struct cdx_mcdi_copy_buffer {
- 	struct cdx_dword buffer[DIV_ROUND_UP(MCDI_CTL_SDU_LEN_MAX, 4)];
- };
- 
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- #define LOG_LINE_MAX		(1024 - 32)
- #endif
- 
-@@ -119,7 +119,7 @@ int cdx_mcdi_init(struct cdx_mcdi *cdx)
- 	mcdi = cdx_mcdi_if(cdx);
- 	mcdi->cdx = cdx;
- 
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	mcdi->logging_buffer = kmalloc(LOG_LINE_MAX, GFP_KERNEL);
- 	if (!mcdi->logging_buffer)
- 		goto fail2;
-@@ -136,7 +136,7 @@ int cdx_mcdi_init(struct cdx_mcdi *cdx)
- 
- 	return 0;
- fail3:
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	kfree(mcdi->logging_buffer);
- fail2:
- #endif
-@@ -156,7 +156,7 @@ void cdx_mcdi_finish(struct cdx_mcdi *cdx)
- 
- 	cdx_mcdi_wait_for_cleanup(cdx);
- 
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	kfree(mcdi->logging_buffer);
- #endif
- 
-@@ -246,13 +246,13 @@ static void cdx_mcdi_send_request(struct cdx_mcdi *cdx,
- 	size_t hdr_len;
- 	bool not_epoch;
- 	u32 xflags;
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	char *buf;
- #endif
- 
- 	if (!mcdi)
- 		return;
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	buf = mcdi->logging_buffer; /* page-sized */
- #endif
- 
-@@ -281,7 +281,7 @@ static void cdx_mcdi_send_request(struct cdx_mcdi *cdx,
- 			     MC_CMD_V2_EXTN_IN_MCDI_MESSAGE_TYPE_PLATFORM);
- 	hdr_len = 8;
- 
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	if (!WARN_ON_ONCE(!buf)) {
- 		const struct cdx_dword *frags[] = { hdr, inbuf };
- 		const size_t frag_len[] = { hdr_len, round_up(inlen, 4) };
-@@ -700,7 +700,7 @@ static bool cdx_mcdi_complete_cmd(struct cdx_mcdi_iface *mcdi,
- 		resp_data_len = 0;
- 	}
- 
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	if (!WARN_ON_ONCE(!mcdi->logging_buffer)) {
- 		char *log = mcdi->logging_buffer;
- 		int i, bytes = 0;
-diff --git a/drivers/cdx/controller/mcdi.h b/drivers/cdx/controller/mcdi.h
-index 0bfbeab04e43..c881f3ecd8a9 100644
---- a/drivers/cdx/controller/mcdi.h
-+++ b/drivers/cdx/controller/mcdi.h
-@@ -170,7 +170,7 @@ struct cdx_mcdi_iface {
- 	enum cdx_mcdi_mode mode;
- 	u8 prev_seq;
- 	bool new_epoch;
--#ifdef CONFIG_MCDI_LOGGING
-+#ifdef CONFIG_CDX_MCDI_LOGGING
- 	bool logging_enabled;
- 	char *logging_buffer;
- #endif
+ /*
 -- 
-2.25.1
+2.17.1
 
