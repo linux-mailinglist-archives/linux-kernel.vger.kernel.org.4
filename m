@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F6D706175
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F013706179
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjEQHmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S230113AbjEQHmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjEQHl6 (ORCPT
+        with ESMTP id S230025AbjEQHmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:41:58 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6305010E6;
-        Wed, 17 May 2023 00:41:53 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f38c23b06eso3364831cf.3;
-        Wed, 17 May 2023 00:41:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684309312; x=1686901312;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gt8vcqfcBcSzFv5CqI8kXtZUiisqmIiLAVfG/Z4B1wo=;
-        b=gNAni+aefYGCbzXJZ1KCoFg8ZVjbrHwK7u+sKWIsmjjGqQJ2bWNPSg+WakHJQVS3ab
-         Bp5bqMntw1uQkVw+IN1lOsU4BFRNTNuMiq9ef5c1RW9TLIi66HUQpNRoz99rtQztmRGD
-         KYnmVtSd+sNgymFummMsYYEpskLLZBxJnmkacqEQxSIDH8jjQDIifWpfH9ktAgm+tMoA
-         l5xZHrVJnxwv1lhnl/gXppJABX//LI0ugS4VIj2bunZX7U1ejXCSJwy/Tf02yZh0TYX/
-         2qa/8Rhqzrv1gtxn/rhiuEfjmYRrH3Jk4TsxNllrNjP6UscF1wHGQheDYKzJXyF9J7W6
-         2Wiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684309312; x=1686901312;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gt8vcqfcBcSzFv5CqI8kXtZUiisqmIiLAVfG/Z4B1wo=;
-        b=O4BYHxzEvATblTSSSlpOJLuQ4kAEho7zd5KcXofjc+THCL0MoOYhNMnHEsINaiMzMY
-         8/gfZU6ToH1Vk3B+BTnXDm+K4OFWxDpQXiS0yYpXLs/ZRVDxbNUdoQnbfWfmiAOI2GwU
-         DYvR7VyrseNN0cDnPGGZgNAEqQGWRyMeBVw9YEeN7phjgQAX/b4AN1k7N9nkLecpS3xA
-         sZU9kI6PyxmI7L0L/EOSicDT782+s6Hsb+9Gpc5edF6ai1Ca5ORhXtZU9Iv0z1+n3crr
-         vd7r0wcW115VM7ejZJhrEsWdCWbXTqu/rxUxO1XSfY2bbY/GkGa1a6WYiZ+mYq7J0Fz6
-         deTw==
-X-Gm-Message-State: AC+VfDwNnDyAUbXk6EDuKdwHea5oMUnnwALi3IIn2PjnSiD7eroUU819
-        q+nJ47q78vMmJPsfR8bzalDjTaY5v8J7GXf1kls=
-X-Google-Smtp-Source: ACHHUZ74fvUaQLS0H9Z1NeDqPl+csekVSshwiPDecXWRaUqETx8dIFlUfbpRHpQ/LDhjlhXM7ONSaWWLwZCTLV0Bubs=
-X-Received: by 2002:ac8:580e:0:b0:3ef:52ac:10d2 with SMTP id
- g14-20020ac8580e000000b003ef52ac10d2mr66678755qtg.43.1684309312426; Wed, 17
- May 2023 00:41:52 -0700 (PDT)
+        Wed, 17 May 2023 03:42:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3478B1BF;
+        Wed, 17 May 2023 00:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HPDWw34wuVd8ioS24/GeMKLCeS2AVAgFryvQOngyNIQ=; b=MsacaJGq7G6gp1g2tKwWD9aPxj
+        lIWiYSjSeZTbTQc8SB3TDcwvIoK1SbqwWRIlPhC4YSIUXLoxKBxmBJ58tJRS9JpJmnWpamWhDDysS
+        V+k9SiF1Gr/FG74fEbS0WLGg5+wM8WHBsWbZPUbLL61ZV6/WLTgCmsVZQ0eHVUJ6f5q8AhU/DBoow
+        9bum13Vokx8ry+6dEIpVmJ8nUJYyawYXr4VnZAj+bk7J7JugOSOwIcYMLgnY3TWJ9XtR7iQY9Doiw
+        wbuan1SLeZK8/F+6tjRql9ysljB4YE9pY/nSPiZeshU2J/+GFfaBZVfQ90285TEWrjn1EYa4PYQ/M
+        3YyGF0Jg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pzBnk-008iGg-1Y;
+        Wed, 17 May 2023 07:42:24 +0000
+Date:   Wed, 17 May 2023 00:42:24 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
+ mappings by default
+Message-ID: <ZGSFYNAauVDsb22o@infradead.org>
+References: <cover.1683235180.git.lstoakes@gmail.com>
+ <20230515110315.uqifqgqkzcrrrubv@box.shutemov.name>
+ <7f6dbe36-88f2-468e-83c1-c97e666d8317@lucifer.local>
+ <ZGIhwZl2FbLodLrc@nvidia.com>
+ <ad0053a4-fa34-4b95-a262-d27942b168fd@lucifer.local>
+ <20230517072920.bfs7gfo4whdmi6ay@quack3>
 MIME-Version: 1.0
-References: <20230405141710.3551-1-ubizjak@gmail.com> <20230405141710.3551-4-ubizjak@gmail.com>
-In-Reply-To: <20230405141710.3551-4-ubizjak@gmail.com>
-From:   Charlemagne Lasse <charlemagnelasse@gmail.com>
-Date:   Wed, 17 May 2023 09:41:41 +0200
-Message-ID: <CAFGhKbyxtuk=LoW-E3yLXgcmR93m+Dfo5-u9oQA_YC5Fcy_t9g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] locking/arch: Wire up local_try_cmpxchg
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517072920.bfs7gfo4whdmi6ay@quack3>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
-> +{
-> +       typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
-> +       return try_cmpxchg_local(&l->a.counter, __old, new);
-> +}
-> +
+On Wed, May 17, 2023 at 09:29:20AM +0200, Jan Kara wrote:
+> > > Surely it is, but like Ted said, the FS folks are not interested and
+> > > they are at least half the solution..
+> > 
+> > :'(
+> 
+> Well, I'd phrase this a bit differently - it is a difficult sell to fs
+> maintainers that they should significantly complicate writeback code / VFS
+> with bounce page handling etc. for a thing that is not much used corner
+> case. So if we can get away with forbiding long-term pins, then that's the
+> easiest solution. Dealing with short-term pins is easier as we can just
+> wait for unpinning which is implementable in a localized manner.
 
-This patch then causes following sparse errors:
+Full agreement here.  The whole concept of supporting writeback for
+long term mappings does not make much sense.
 
-    ./arch/x86/include/asm/local.h:131:16: warning: symbol '__old'
-shadows an earlier one
-    ./arch/x86/include/asm/local.h:130:30: originally declared here
+> > > The FS also has to actively not write out the page while it cannot be
+> > > write protected unless it copies the data to a stable page. The block
+> > > stack needs the source data to be stable to do checksum/parity/etc
+> > > stuff. It is a complicated subject.
+> > 
+> > Yes my sense was that being able to write arbitrarily to these pages _at
+> > all_ was a big issue, not only the dirty tracking aspect.
+> 
+> Yes.
+> 
+> > I guess at some level letting filesystems have such total flexibility as to
+> > how they implement things leaves us in a difficult position.
+> 
+> I'm not sure what you mean by "total flexibility" here. In my opinion it is
+> also about how HW performs checksumming etc.
 
-This is then visible in all kinds of builds - which makes it hard to
-find out actual problems with sparse.
+I have no idea what total flexbility is even supposed to be.
