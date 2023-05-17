@@ -2,177 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EC9705F0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41428705F0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjEQFAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 01:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S232012AbjEQFCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 01:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjEQFAl (ORCPT
+        with ESMTP id S229453AbjEQFCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 01:00:41 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E81835A0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:00:15 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-5304913530fso254719a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:00:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684299614; x=1686891614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P0ayuQD1yG3R2Gd1MnzlrpUhS5iphVyxpsIrxm7q4sE=;
-        b=Y52AyCLsbM4D/d67PD1bGzQZQoDlM3aHciAN1wrkyvnxm+Dn/vJhGSM1m1NJ8EZDdK
-         sow8BXGsaLRPY50OiP8OBKQA3e0pB236P+5WExJr9yAJGZezvwKGm0lvVyt6G3Gjk4At
-         FJRp5WjvDIjpeBi2ZSVC8gjxR9I2KrvqN6shK4SjY4tCvUtCKAL84GsNvVAkZ0r5rtcg
-         605IaqoC07Wp4/mMDGp/U5LsjWQlwuCuJalwAw4GjgaXptnzyN2S+I5Z2Pk2OPtRdemu
-         vk0YWUSAOmbJAgf9uE8LkzdKkEh1dWFgXABpbJqxcAV/2wLV9fmRQBvDF0A33Awl/uQ2
-         b3Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684299614; x=1686891614;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P0ayuQD1yG3R2Gd1MnzlrpUhS5iphVyxpsIrxm7q4sE=;
-        b=kR4ciM+IMugY1tDJozsF5ElEy1VINGG4mIUE8ZphJzD49O95mcuF90h8nIwbtepWxW
-         vQk7smzIOr4mVyzFjuPKf8uVDOD05BFzblFufkFvRb6Bk6ZxdKeFGhlb1/TVEuQNZa9f
-         nhCxJh7y6NcMthABIoRgguVKshpUPqUuXRh312xBl9FfbbRcR3VThya8hsM61hbf5DX1
-         9QXUAZSWDYfgu1+LUWRcOJEwKvA1k4AjRLFBxfTEnLB9llsSKEF7wm7OM36l8rpBHG2W
-         rApyOerue169d6Y05ecmUd+n1uNmml0MWIuKpRTx+ndiya0Ep2ZW/FJBUEE/BfmWO6ok
-         yujw==
-X-Gm-Message-State: AC+VfDxG+mBrUCq2lT+Vxmm5kuY7hOmTWeMO94gReY0Ul2rSOpLbQ5sR
-        tKdvG66hcxueILc7lJRiI903ig==
-X-Google-Smtp-Source: ACHHUZ6UYgglmLRIeq+ymAQ0bT5ay0/DQJupZCh6QNbX/GBM1JVcTKNYewM68/CWfoTimBrPnuwinA==
-X-Received: by 2002:a17:903:124f:b0:1ac:451d:34a with SMTP id u15-20020a170903124f00b001ac451d034amr52262835plh.33.1684299614560;
-        Tue, 16 May 2023 22:00:14 -0700 (PDT)
-Received: from [10.3.43.196] ([61.213.176.8])
-        by smtp.gmail.com with ESMTPSA id b20-20020a17090a8c9400b0024e1172c1d3sm524407pjo.32.2023.05.16.22.00.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 22:00:14 -0700 (PDT)
-Message-ID: <949dd4db-89ea-4331-5fa7-700f96874ab3@bytedance.com>
-Date:   Wed, 17 May 2023 12:58:10 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Re: Re: [PATCH v2 0/2] virtio: abstract virtqueue related methods
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     stefanha@redhat.com, jasowang@redhat.com,
-        xuanzhuo@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
+        Wed, 17 May 2023 01:02:51 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF2E2136
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:02:49 -0700 (PDT)
+X-UUID: 97ba50cf53c147aaa6f2d5b5e43098f3-20230517
+X-CID-O-RULE: Release_Ham
+X-CID-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:d2b87ce7-df4a-4b37-adae-eb666f7a01d2,IP:15,
+        URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-INFO: VERSION:1.1.22,REQID:d2b87ce7-df4a-4b37-adae-eb666f7a01d2,IP:15,UR
+        L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-5
+X-CID-META: VersionHash:120426c,CLOUDID:73f4116c-2f20-4998-991c-3b78627e4938,B
+        ulkID:230517130233VKXSJLJ6,BulkQuantity:0,Recheck:0,SF:17|19|44|38|24|102,
+        TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 97ba50cf53c147aaa6f2d5b5e43098f3-20230517
+X-User: liucong2@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <liucong2@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 247450098; Wed, 17 May 2023 13:02:31 +0800
+From:   Cong Liu <liucong2@kylinos.cn>
+To:     liucong2@kylinos.cn, Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-References: <20230517025424.601141-1-pizhenwei@bytedance.com>
- <20230516234444-mutt-send-email-mst@kernel.org>
- <8f3ca136-0276-49ca-d703-715c83cff557@bytedance.com>
- <20230516235541-mutt-send-email-mst@kernel.org>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20230516235541-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v2] drm/i915: Fix memory leaks in function live_nop_switch
+Date:   Wed, 17 May 2023 13:02:03 +0800
+Message-Id: <20230517050204.4111874-1-liucong2@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230508085016.437836-1-liucong2@kylinos.cn>
+References: <20230508085016.437836-1-liucong2@kylinos.cn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 11:57, Michael S. Tsirkin wrote:
-> On Wed, May 17, 2023 at 11:51:03AM +0800, zhenwei pi wrote:
->>
->>
->> On 5/17/23 11:46, Michael S. Tsirkin wrote:
->>> On Wed, May 17, 2023 at 10:54:22AM +0800, zhenwei pi wrote:
->>>> v1 -> v2:
->>>> - Suggested by MST, use fast path for vring based performance
->>>> sensitive API.
->>>> - Reduce changes in tools/virtio.
->>>>
->>>> Add test result(no obvious change):
->>>> Before:
->>>> time ./vringh_test --parallel
->>>> Using CPUS 0 and 191
->>>> Guest: notified 10036893, pinged 68278
->>>> Host: notified 68278, pinged 3093532
->>>>
->>>> real	0m14.463s
->>>> user	0m6.437s
->>>> sys	0m8.010s
->>>>
->>>> After:
->>>> time ./vringh_test --parallel
->>>> Using CPUS 0 and 191
->>>> Guest: notified 10036709, pinged 68347
->>>> Host: notified 68347, pinged 3085292
->>>>
->>>> real	0m14.196s
->>>> user	0m6.289s
->>>> sys	0m7.885s
->>>>
->>>> v1:
->>>> Hi,
->>>>
->>>> 3 weeks ago, I posted a proposal 'Virtio Over Fabrics':
->>>> https://lists.oasis-open.org/archives/virtio-comment/202304/msg00442.html
->>>>
->>>> Jason and Stefan pointed out that a non-vring based virtqueue has a
->>>> chance to overwrite virtqueue instead of using vring virtqueue.
->>>>
->>>> Then I try to abstract virtqueue related methods in this series, the
->>>> details changes see the comment of patch 'virtio: abstract virtqueue related methods'.
->>>>
->>>> Something is still remained:
->>>> - __virtqueue_break/__virtqueue_unbreak is supposed to use by internal
->>>>     virtio core, I'd like to rename them to vring_virtqueue_break
->>>>     /vring_virtqueue_unbreak. Is this reasonable?
->>>
->>> Why? These just set a flag?
->>>
->>
->> Rename '__virtqueue_break' to 'vring_virtqueue_break', to make symbols
->> exported from virtio_ring.ko have unified prefix 'vring_virtqueue_xxx'.
-> 
-> I just do not see why you need these callbacks at all.
-> 
+Be sure to properly free the allocated memory before exiting
+the live_nop_switch function.
 
-I use these callbacks for break/unbreak device like:
-static inline void virtio_break_device(struct virtio_device *dev)
-{
-	struct virtqueue *vq;
+Signed-off-by: Cong Liu <liucong2@kylinos.cn>
+Suggested-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+---
+ .../gpu/drm/i915/gem/selftests/i915_gem_context.c  | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-	spin_lock(&dev->vqs_list_lock);
-	list_for_each_entry(vq, &dev->vqs, list) {
-		vq->__break(vq);
-	}
-	spin_unlock(&dev->vqs_list_lock);
-}
-
->>>> - virtqueue_get_desc_addr/virtqueue_get_avail_addr/virtqueue_get_used_addr
->>>>     /virtqueue_get_vring is vring specific, I'd like to rename them like
->>>>     vring_virtqueue_get_desc_addr. Is this reasonable?
->>>> - there are still some functions in virtio_ring.c with prefix *virtqueue*,
->>>>     for example 'virtqueue_add_split', just keep it or rename it to
->>>>     'vring_virtqueue_add_split'?
->>>> zhenwei pi (2):
->>>>     virtio: abstract virtqueue related methods
->>>>     tools/virtio: implement virtqueue in test
->>>>
->>>>    drivers/virtio/virtio_ring.c | 285 +++++-----------------
->>>>    include/linux/virtio.h       | 441 +++++++++++++++++++++++++++++++----
->>>>    include/linux/virtio_ring.h  |  26 +++
->>>>    tools/virtio/linux/virtio.h  | 355 +++++++++++++++++++++++++---
->>>>    4 files changed, 807 insertions(+), 300 deletions(-)
->>>>
->>>> -- 
->>>> 2.20.1
->>>
->>
->> -- 
->> zhenwei pi
-> 
-
+diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+index a81fa6a20f5a..2fb125d0cb5e 100644
+--- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
++++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
+@@ -66,7 +66,7 @@ static int live_nop_switch(void *arg)
+ 		ctx[n] = live_context(i915, file);
+ 		if (IS_ERR(ctx[n])) {
+ 			err = PTR_ERR(ctx[n]);
+-			goto out_file;
++			goto out_ctx;
+ 		}
+ 	}
+ 
+@@ -82,7 +82,7 @@ static int live_nop_switch(void *arg)
+ 			this = igt_request_alloc(ctx[n], engine);
+ 			if (IS_ERR(this)) {
+ 				err = PTR_ERR(this);
+-				goto out_file;
++				goto out_ctx;
+ 			}
+ 			if (rq) {
+ 				i915_request_await_dma_fence(this, &rq->fence);
+@@ -96,7 +96,7 @@ static int live_nop_switch(void *arg)
+ 			intel_gt_set_wedged(to_gt(i915));
+ 			i915_request_put(rq);
+ 			err = -EIO;
+-			goto out_file;
++			goto out_ctx;
+ 		}
+ 		i915_request_put(rq);
+ 
+@@ -107,7 +107,7 @@ static int live_nop_switch(void *arg)
+ 
+ 		err = igt_live_test_begin(&t, i915, __func__, engine->name);
+ 		if (err)
+-			goto out_file;
++			goto out_ctx;
+ 
+ 		end_time = jiffies + i915_selftest.timeout_jiffies;
+ 		for_each_prime_number_from(prime, 2, 8192) {
+@@ -120,7 +120,7 @@ static int live_nop_switch(void *arg)
+ 				this = igt_request_alloc(ctx[n % nctx], engine);
+ 				if (IS_ERR(this)) {
+ 					err = PTR_ERR(this);
+-					goto out_file;
++					goto out_ctx;
+ 				}
+ 
+ 				if (rq) { /* Force submission order */
+@@ -165,7 +165,7 @@ static int live_nop_switch(void *arg)
+ 
+ 		err = igt_live_test_end(&t);
+ 		if (err)
+-			goto out_file;
++			goto out_ctx;
+ 
+ 		pr_info("Switch latencies on %s: 1 = %lluns, %lu = %lluns\n",
+ 			engine->name,
+@@ -173,6 +173,8 @@ static int live_nop_switch(void *arg)
+ 			prime - 1, div64_u64(ktime_to_ns(times[1]), prime - 1));
+ 	}
+ 
++out_ctx:
++	kfree(ctx);
+ out_file:
+ 	fput(file);
+ 	return err;
 -- 
-zhenwei pi
+2.34.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
