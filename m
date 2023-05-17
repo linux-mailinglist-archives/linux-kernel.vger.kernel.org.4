@@ -2,103 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C1B706B1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D876706B1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjEQObC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
+        id S231853AbjEQObA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjEQOa5 (ORCPT
+        with ESMTP id S231785AbjEQOa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 May 2023 10:30:57 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FC67AB8;
-        Wed, 17 May 2023 07:30:57 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-76c64ddee11so20345339f.2;
-        Wed, 17 May 2023 07:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684333856; x=1686925856;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m4G0ffA6zmiA7GH7zmCNMUfYrrJvuole56H+sbXXV7w=;
-        b=eT5kHWUFo55SmDc35iD7xK/1mEeYE8kGtY53rC3Sb1A2IjklfvANgMkamm3iTyhZUC
-         qehFKlUlF+n5vqwJZ12TElAHVl3WbxNVEXt5hBeWZ+OUxB/IhcvH61MmuY4RQ1KGv7bC
-         FEp3XPX65zhltac05BRDePQPq59og8srm6AZ8zakNFF2SsoCEMtID1h2K1f6pKiadHuf
-         wJEpCZn7UtyFYkHff9Gq34IqD9EZQfuRCKzrDTUhA5uNZQXJ8F75+g9/v6+nmPEsboTi
-         xMIbnCsAeCnGM92eFciAa9sfyK4RaWrZGJPhAFJR/lQsr1wMXB1tW0aKF/1rsYNbrYku
-         ltYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684333856; x=1686925856;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m4G0ffA6zmiA7GH7zmCNMUfYrrJvuole56H+sbXXV7w=;
-        b=g2GMBT9tT0yjMu5JyY4KNoFBrO13fUlq3Ki7Fj7z+zxwQnZDKynCivhduvTaYHv/xy
-         nG+UFd4acKhQ++EIcSHCwWdu6UgZl4DMO4w36Y1SY7iPZhvjD8Auxsdk629Wcgpl2erp
-         WUVDvt7r4wvlo2gksH8/kC+ILCUH/Zilg5VafICSJsfDox4strFq9EYBpRkeRSoKFxlG
-         gGEj3h267iOaXBaETc/HxTePOtZbSt/skWoYUIneNMTNoi60hHFSxJeizQUl5cqiorUH
-         rBqjVwYwoVEs8pEpOl+DcesZip3DPcRxWlHwbL5AODI7u/QKgae14rHU87D9TSEI1Z9/
-         R6wA==
-X-Gm-Message-State: AC+VfDyOrYpduXU26XJJ+NY2QFQI3v73mXydMzuQPVusdh1hLKbSqAJW
-        pJqJz+vUB4fg090NJmyWRoU=
-X-Google-Smtp-Source: ACHHUZ6p682nSxZpGqVNGTnWlwaKJsm8R0x2lauLJBIZsfd9OAZwuzm+jcFKbEM9dL4QdZb6TzaBAg==
-X-Received: by 2002:a6b:680d:0:b0:76c:8674:81e7 with SMTP id d13-20020a6b680d000000b0076c867481e7mr4727944ioc.21.1684333856216;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2757DA7;
         Wed, 17 May 2023 07:30:56 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id g11-20020a6be60b000000b0076f931316b0sm2775923ioh.55.2023.05.17.07.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 07:30:55 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH] scsi: aacraid: Replace all non-returning strlcpy with strscpy
-Date:   Wed, 17 May 2023 14:30:49 +0000
-Message-ID: <20230517143049.1519806-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE0DD645BE;
+        Wed, 17 May 2023 14:30:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DB4C433EF;
+        Wed, 17 May 2023 14:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684333855;
+        bh=m6Os9B2ed6cigaZgyvST3zp5sKK8MZYV/M/roj0u/iI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RP/qhpzfg0S6E2//ryq4SNYkedqo/IWGritLtCDNhEgQHZtNfcDiCVK4yp7Jqokur
+         eZpH0XvtuStZo6aqN+hogrkZ3ILJCcOls7Tl7kcazXTdN/ubmWTgkH9rUIxhuJjz0a
+         UBgRVYr3p3w4zT8k+AcySzysNtLfh0Ceap+08PWvRWxYluu8VbpOvpNhKHhNDfUioF
+         rrqhnzZsSp2amH1YpoV2Nc23APNXZN5+MCglArTtOdsxNja8I8s1oVOpVnIceiFQHi
+         IQUQqLLdXnY2QrLuYg7Pr0y8sIk+L8FCFGHO8OffGQbzXK7BD5WOF8JDk69EcP2T9I
+         dLsa58uJTvBGA==
+Date:   Wed, 17 May 2023 23:30:52 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, tglx@linutronix.de, maz@kernel.org,
+        linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
+Message-ID: <ZGTlHMRl/ifaQmiN@finisterre.sirena.org.uk>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
+ <ZF6RMqElYZVMpWRt@surfacebook>
+ <20230515101350.GS68926@ediswmail.ad.cirrus.com>
+ <CAHp75Vcizrucc-2KFdFNeHNrxCzz4GwX1OzZYyjPH7P9RgnKYQ@mail.gmail.com>
+ <20230517101301.GV68926@ediswmail.ad.cirrus.com>
+ <CAHp75VchpbiYcd2yaP1WTjX17P0hg3qON5JGAXu08aDVw6Ydkw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ov0voJhDONNyMty6"
+Content-Disposition: inline
+In-Reply-To: <CAHp75VchpbiYcd2yaP1WTjX17P0hg3qON5JGAXu08aDVw6Ydkw@mail.gmail.com>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-In an effort to remove strlcpy() completely [2], replace
-strlcpy() here with strscpy().
-No return values were used, so direct replacement is safe.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
+--Ov0voJhDONNyMty6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
- drivers/scsi/aacraid/aachba.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, May 17, 2023 at 04:59:50PM +0300, Andy Shevchenko wrote:
+> On Wed, May 17, 2023 at 1:13=E2=80=AFPM Charles Keepax
 
-diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 24c049eff157..70e1cac1975e 100644
---- a/drivers/scsi/aacraid/aachba.c
-+++ b/drivers/scsi/aacraid/aachba.c
-@@ -3289,7 +3289,7 @@ static int query_disk(struct aac_dev *dev, void __user *arg)
- 	else
- 		qd.unmapped = 0;
- 
--	strlcpy(qd.name, fsa_dev_ptr[qd.cnum].devname,
-+	strscpy(qd.name, fsa_dev_ptr[qd.cnum].devname,
- 	  min(sizeof(qd.name), sizeof(fsa_dev_ptr[qd.cnum].devname) + 1));
- 
- 	if (copy_to_user(arg, &qd, sizeof (struct aac_query_disk)))
+> > I am very very far from confident we can guarantee that will be
+> > present in the ACPI. The ACPI is typically made for and by the
+> > Windows side.
 
+> Why? You may insist firmware vendors / OEMs to use that as a
+> requirement to the platforms that would like to use your chip. The
+> _DSD() is part of the specification, I don't see how the above can be
+> an argument.
+
+> The times when ACPI =3D=3D Windows are quite behind.
+
+Nobody is going to loose a sale over something like that, especially
+when it's just not idiomatic.  It's very unlikely to even be worth the
+effort of educating customers who don't care what DSD is when there's no
+ecosystem push for it, it'd just make you look difficult and weird.
+
+--Ov0voJhDONNyMty6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRk5RsACgkQJNaLcl1U
+h9DaIggAgmCuOSFXfbUoH1Su2DcLeh0wIfTqcONVi5GSZAbHyuk9dy5MrNYj7nfa
+BcKuolLtwCe4MMP4zB5zLMSydCTOL6J4vPUUcGrQgOl0jUHkF+k/G292o5wyf3B5
+346PTZPODQloCnkBdi+vjpx+7XLYki/f4sjbTFZ0i4AeKblgvmROpqBpk7e0oWRa
+phVv/QMLjXuxIi+wmCuR8MfiBA3G+V4nhHFpiOQ7tJynbOXwEqwf+Pap/bT1l/pp
+q/SLuiz+4SqQLPP/OWZNMDzVLpDfFfHHumuKTS6jztcZ2+EkDjI/NSESl85fkee0
+b4R9RbjgMmuLqwnWKrgLotCs+oO0pg==
+=aZyT
+-----END PGP SIGNATURE-----
+
+--Ov0voJhDONNyMty6--
