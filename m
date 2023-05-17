@@ -2,113 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C7C706839
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC53706837
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjEQMeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S231731AbjEQMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbjEQMeI (ORCPT
+        with ESMTP id S231389AbjEQMdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:34:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8673A3C3B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684326797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8z2vZD/Mt9cHAxNPllMtq5Gn202/y1MZsQVh5pJbJGM=;
-        b=ib+M0AL8v9877lvme7UrMuz2yL57uu8VI6R7XiC8iAZxjn6GOAxWJY/R2BYZc69Pvs7jhA
-        jOTrRuCpiOl/rvf21NMBL2xy/vUFWHHGWX9EZFa7WVma6B7gYCn7hME0YjrqOEzIWG5rUs
-        Scx3GDsOhHg9Q1MbzS7Zw3CAsD6leq4=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-590-YKb3YLolP4yhr5_cYSseyw-1; Wed, 17 May 2023 08:33:16 -0400
-X-MC-Unique: YKb3YLolP4yhr5_cYSseyw-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6213569ba95so10570746d6.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:33:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684326795; x=1686918795;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8z2vZD/Mt9cHAxNPllMtq5Gn202/y1MZsQVh5pJbJGM=;
-        b=clv7Pgjy/Rir9RviXLz74FPJ9VV/fg5uiK9+fc4mOAON6ygo2XkEi1NtM1WrSv92AR
-         hLNKXlsRIRJ3pQayiBk6mATmc0vaqxJqy1htXTmHE4xEEwAlYkpJJaGfVPOhvnIilVBk
-         BwQFDsDln/vlbntD8O7RYd2HU/ibjvTVfCUJkds2X8z35EJDezj4O4uaTpApU2inf84O
-         n7Z7PT+z5B89H3CbdztaJHJHMMLtGnMd81H0/CJMpaL+wdOHQZz/0S3suKSXOb2sdga5
-         2co/ImDsOj6KheGiC5sppeFG1z8ddrdi7V1K3UUEaZOHF6NJzCEAREOYJSJ3gi8RM+vh
-         8tWw==
-X-Gm-Message-State: AC+VfDw7runbiYMXTiR6M7YDmbutliUjvPdRQjmg4VYAhz/8xBAkdm9q
-        pD/CEbxevO7l1f2XSFU8dOIb2J7wvUYfoTWwfT6UxYzGOi6rq9HvL3C2OWU0Oq8yl/IE4uCyFhG
-        4kMoOXP5oxet0IRktqIdCFGBRIq2XmqQT
-X-Received: by 2002:a05:6214:501b:b0:5ef:45a7:a3c0 with SMTP id jo27-20020a056214501b00b005ef45a7a3c0mr64278010qvb.27.1684326795650;
-        Wed, 17 May 2023 05:33:15 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6lcwZCrP5ym6tgc0dTs+Pyybh7A+czybYSDpfRXvVjBpMBMbt7jNR80EZ4gMhVuD96wNBLdQ==
-X-Received: by 2002:a05:6214:501b:b0:5ef:45a7:a3c0 with SMTP id jo27-20020a056214501b00b005ef45a7a3c0mr64277993qvb.27.1684326795438;
-        Wed, 17 May 2023 05:33:15 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j5-20020a37c245000000b007595df328dcsm564251qkm.115.2023.05.17.05.33.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:33:15 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     johannes@sipsolutions.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        nathan@kernel.org, ndesaulniers@google.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] lib80211: remove unused variables iv32 and iv16
-Date:   Wed, 17 May 2023 08:33:10 -0400
-Message-Id: <20230517123310.873023-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
+        Wed, 17 May 2023 08:33:25 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362E32101;
+        Wed, 17 May 2023 05:33:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CKMbQssgBeS+ePhxDQe57cLJg0o2ct7CtgmGhjPDIB4b0+O7oTnpLrtCnv2zqwzHz31Uy74F3vXmhdW2CSHaRTkhTW1wPyS/EWeHT6VOrsOdsk8FsSKRrbmsQhdLW673ftwVvwBTutvTROheqHW7oTlWZK/prupBxFnWhbQ8vpKILZZK+Js96EY8cRE41r64tOwxeYbZ4v9FzGNXimR0S4nuJMMWrsc8hU/BupkHaldPG/25oFIkhtyYAjt6U0ypaINIgALkvLVQ5pE0dGp5VmTStkvR8qgyluTm+lDesotlDz2FxN6nFa/jaTbfCNMeVJlzoJvBbpsoiIlzWpEtLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fcn257jqt50UQnfinT3HB0mItESfQuYPNInIDt1bKLo=;
+ b=iN7+Xnm8mLksQ0SJYUxvZyoXsx2uafJ2KuQS1SK9yie9Kk/kMiHXzCtXkI+C7EbJa4YhJxxJXjSJaPSP/jEetf0TWAHGtJmAJ+Gx4Q+w7Ka6ZzEZCnfuyfFOY2Rc661VuqW9m9zaiS45ZxidJmZpRvXDgJQ1SnS1Quv74YCtE0LeurdDs/VvA3wyuKT02OplrmhKvFGlJaLyOt/oqlbztAHTos5uwg+X+K1phmLK1jPtJPH+/oHBAfeubzAW6hlk7BIR0Nf672Wz4PUcsHuEjS/vGxKkNaklGj7hYS2mIJqX6+Oo2Gm29rq1E8M82WfUgoOrZ1lg7b04AeOv4O/sQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fcn257jqt50UQnfinT3HB0mItESfQuYPNInIDt1bKLo=;
+ b=M6n4fPrfbrKoWh6MHjk25iHujJoZZjlx9i4mzcDvLP6Yuv63um2RKvqutr90SBbEbNvlZlsQS6d5Cxw5KAUacegMEZ7Ca7eu/gh7Ca73YQ4G5W4tF2T66/rtLkwnOQ8Sww1o+X/ciem1nYk9wvTOVofdzPj9nVVWMs5B5/WWdvk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CH0PR12MB5170.namprd12.prod.outlook.com (2603:10b6:610:b9::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
+ 2023 12:33:19 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::3f45:358e:abba:24f5]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::3f45:358e:abba:24f5%3]) with mapi id 15.20.6387.030; Wed, 17 May 2023
+ 12:33:19 +0000
+Message-ID: <8e7e23dc-f01b-6f78-f383-7706795e386e@amd.com>
+Date:   Wed, 17 May 2023 07:33:17 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] PCI: Only put >= 2015 root ports into D3 on Intel
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Limonciello, Mario" <mlimonci@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Iain Lane <iain@orangesquash.org.uk>
+References: <20230515231515.1440-1-mario.limonciello@amd.com>
+ <20230516055918.GS66750@black.fi.intel.com>
+ <f0417d28-0c1a-f46e-9cbd-f20f2ac1e9f9@amd.com>
+ <20230517071527.GU66750@black.fi.intel.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20230517071527.GU66750@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SA0PR11CA0113.namprd11.prod.outlook.com
+ (2603:10b6:806:d1::28) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH0PR12MB5170:EE_
+X-MS-Office365-Filtering-Correlation-Id: 56b17f05-2d81-4f47-9b6e-08db56d2e51c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lcbJ3sIPlIVC4DZgQm7rnarlARWebl8a5pMGafA0qy3NrtxvwCyToGAC+ISVdN4XKT4JBNqjc85UFW2yEXxkfzA+FG2dpVrNJC9xDLGBFE7syO7v6Wvu8iGR7hAOOCXMT+g5EMtsx52V0JlgPbeW4EVut3auoFQKL/iywFUVtfvr9BbNWiOfeHO3y97tlfMtP7Wmep9K4J5vagsJPYSqOaBngX7G6CoCMREqx+rdhKLvJsXWy5JwuWjUvTC1Pqsyxj6qQlf2Dk2jRREGwo54J5K5Oi/QISNqyA0rRPlyqqcVTF/wqEdcXJ8agu9ITkOiZBqjsrPMHexuGjDH4InuH2Tj/O3F/GN7w7ccOab0j08j3L5BlfsFgIvTSjUQUZ+j0lSw4YzAlqXk7HmD3it5acCOHICPtf7M5fhdSAX5ky4bn18n1LXCgMKXqi+2OgHFONYR/hgnEY5XGZxQwRnggEUD0KjeVWFaxKH33T8A9vzCInOg8XUqh5WtMrNooYyRhr9KWw99VN9YNFVrqfmr3sjNgvC7A4dcDZF2jU6+J+rCj+MFW5vHOdMF1TWOauY9wW4sJffN74HsUrSi0eSPLGlt6OcDu/O5HL4u1mNqaXOxVPd/fACyb0+widn3biYqy9JwY64kgOUEjVpNH0ecIg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(366004)(376002)(346002)(451199021)(5660300002)(41300700001)(2906002)(36756003)(83380400001)(2616005)(86362001)(31696002)(38100700002)(26005)(186003)(6512007)(6506007)(8676002)(8936002)(66556008)(66476007)(31686004)(66946007)(478600001)(6486002)(54906003)(316002)(6636002)(4326008)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cnJiVHgxYnd6RXpDWHdtK3UxZDhpTkVsd1dLOGdxcDVZMnRJNkYyZVpzczI0?=
+ =?utf-8?B?RkhYaEJSQW1pWUVHTkh1RER0TjZobnBNb0poL0xBQms0R2wzT3VTS2JLWk91?=
+ =?utf-8?B?UGJkM3RURjhFU3NXUE9MRWhwQlJCYms3MXF5cmczV05VMXBNOFdzZWFvTlh5?=
+ =?utf-8?B?VnBid011VUZ5ZWFVMjM0ZmRCbTJNSDBpUGt6amt1U2NIeHRJUUZsNkVzSzZw?=
+ =?utf-8?B?RVh2Y25OK0FvZmlQektzZGh3MU1SQ3VZem00V0JsbWZzMWxuektyRGEwdVNi?=
+ =?utf-8?B?TmFPbW1KcE5BTHJzeVM0SzBndEwxYTFqZkJMdVAvVDZQeU4ydVRWdk1Fb2h4?=
+ =?utf-8?B?LzdvWVJaRXRwd0F6anE3N3crWWdFV2ptMiswQkVWR1RXekhVY3laQThSOEkz?=
+ =?utf-8?B?eE5UWnBLUmszSW1JelV3a3hwbExVTDJOZGlhMHVCWjFOaDU0enpYVHJoMXBt?=
+ =?utf-8?B?cVZhbW4rblo1OFpuR24zMjU3eHhnckVCQjBuYTBwRjhZNFdSNWVPZTRUdm5U?=
+ =?utf-8?B?bHFuamxOVXExLzd2RHE5ZVNpbmZpdUdRRFRvQXZBRkx6RVZEOU81OE1CK3hD?=
+ =?utf-8?B?YndzalBwN1lqQjd2QUU5NCtNanVicmZXSW9pbDJZcXJNK0Jid3hGdVRzazNk?=
+ =?utf-8?B?c1l4ZjhoM2sxcEM0Y1lhaU5tYXloWGlwanVFaXhGRy9wYnc3RlJyRFFacDlX?=
+ =?utf-8?B?OFNCbVNYMS9hZzQxWGJvUE5Xa1V0U1NFOUhLMTU3VkFzNUl5NzRPSzhPTEgv?=
+ =?utf-8?B?dXJEaitRNkg4TzRPVkVVTC9hUU9YM0V5d1IvZVZTZno0NzNLZzNLdXNSUFJ1?=
+ =?utf-8?B?cWhqaXBLMSswaUlGQld2aU1Cb2x4Z212dnljakpTM3ZKVXNlc1Y2MWUxZkJP?=
+ =?utf-8?B?akxlL1dud2lNT1VuUExoUFBpSlRQY3kvMlllR1lTYlU3TVpkNjdBeHBJdEE0?=
+ =?utf-8?B?QXI4S2VDVExPMWpZK3BXOElEelBqZGVEZHlLeWhLd0xhWjl4QkZRMmI2Y2Z4?=
+ =?utf-8?B?S2thT21lbkpMdHJVaS82TzdSN2lvcldBYysveGN0VjE1OUtieVEvOGkvWnR1?=
+ =?utf-8?B?Y1A5REFnckIxRm5UODRacGZyOWtDaEFidmlqRVZUSWl3aEpNZm50V3krN3ZG?=
+ =?utf-8?B?STd6eUllVk1iTjYyaWljUjlMRG1Jb2picXYwa0hmTmRCSUl2UHE3NHRrQ2Vh?=
+ =?utf-8?B?WkxVa29qTitQYlJBNEtKRWJLTHRYTy9SUXR6TVlCWTcxa3RDcGwydC9XVWps?=
+ =?utf-8?B?YnJPVzEyUFU4d3hkNi9Ya2x2NmZZWTgwSlh1TnJVSjJZUGJuVHpSbTdHZUNj?=
+ =?utf-8?B?Q2JQamcxQ0ptNGY2RVFxWGx1OFFwN1g3T2FRdFJnc2UydXd3SVRFckxPMjJK?=
+ =?utf-8?B?d2p4M2k2WE1qUk01Qys1VkIvaEgyTGNiSkVxOUFyZThmNVgxWXh4RVpCM0ho?=
+ =?utf-8?B?czRrWEV1V0hlV0tVT2NmK2F6VWtMZVhPYi95K2NLN0Y1eTJXdllHcHIzaXl5?=
+ =?utf-8?B?TlJ2eTBLc2NaWkVwMkNlSDFyZHBxclhCd0pvTmVLODZ1SC9IVTZyQURkeVNs?=
+ =?utf-8?B?a2dqWG4vRVUyalNleFpXREJmRUlkOHhCQm1oQjIra0dEOE9aZmt1N3p3RTZI?=
+ =?utf-8?B?UEhuWHVocEx3SkROMUU3enBGWTZMZkU4dVBROCsyeStIc1Q1eVN4c0VlWjZL?=
+ =?utf-8?B?NWRyNHZ6aE9KaVYrU1YvSi9nMGZsT2ptbTY5OG1Ubnpob0NtZ3g1SFVLY0l5?=
+ =?utf-8?B?NGcvcmxlUVM1Vit0aVBhYVFhenM1bkdoa3pvcFdRbWVUNFVMMVJML21EK2Nh?=
+ =?utf-8?B?c1V0RUNRRmtlaTBEcVFpQzM3RWNQQ1M3UUYwMkFoWGp5UU12N2hQV1JvcGVw?=
+ =?utf-8?B?Vkx5Nm9ZQTkxaVMxWmYzc2JzdVVrd2dYKzRlclJvTFA3cFlZWnVsT2NrQnBv?=
+ =?utf-8?B?WE4zV1hWSUJqZ3dUdTE1QnhmalgvL01PbW5SOTJLbkJzdzNNVWE5bTNWakh5?=
+ =?utf-8?B?Qzc0V2p1bkdtL2tETlNKdmZ5RzgyblFtbVBQdEkydHgvWm4zc3Y4N1ZPUmta?=
+ =?utf-8?B?RjNHODFBNmladUhTL2tSbXJ6Z21yajBKbFRmbFZSMkgvT0Y3RnNaVEFYdGFt?=
+ =?utf-8?Q?yZSmczX6hTS5egQYUPUuPanLv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56b17f05-2d81-4f47-9b6e-08db56d2e51c
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 12:33:19.1614
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: H4Ps8hsvDJ/hvQF0s7n+8b3QhDtVSGVHQ2uFBPPuenqrUmo42G5CHYqKyKGbUNJZp0EEbQe0t9kjpOxfgei6sg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5170
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-clang with W=1 reports
-net/wireless/lib80211_crypt_tkip.c:667:7: error: variable 'iv32'
-  set but not used [-Werror,-Wunused-but-set-variable]
-                u32 iv32 = tkey->tx_iv32;
-                    ^
-This variable not used so remove it.
-Then remove a similar iv16 variable.
-Remove the comment because the length is returned.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- net/wireless/lib80211_crypt_tkip.c | 6 ------
- 1 file changed, 6 deletions(-)
+>> AFAICT the actual issue is entirely a wakeup platform firmware sequencing
+>> issue
+>> while in a hardware sleep state and not PMEs.
+>>
+>> It's only exposed by putting the root ports into D3 over s2idle.
+> But there are two ways to enter s2idle (well or the S0ix whatever is the
+> AMD term for that). Either through system sleep or simply waiting that
+> all the needed devices runtime suspend. There should be no difference
+> from device perspective AFAICT.
+On AMD all devices in runtime suspend and SoC entering system
+suspend aren't the same state.
+>> As an experiment on an unpatched kernel if I avoid letting amd-pmc bind then
+>> the
+>> hardware will never enter a hardware sleep state over Linux s2idle and this
+>> issue
+>> doesn't occur.
+>>
+>> That shows that PMEs *do* work from D3cold.
+>>
+>> With all of this I have to wonder if the Windows behavior of what to do with
+>> the root
+>> ports is tied to the uPEP requirements specified in the firmware.
+>>
+>> Linux doesn't do any enforcement or adjustments from what uPEP indicates.
+>>
+>> The uPEP constraints for the root port in question in an affected AMD system
+>> has:
+>>
+>>                      Package (0x04)
+>>                      {
+>>                          Zero,
+>>                          "\\_SB.PCI0.GP19",
+>>                          Zero,
+>>                          Zero
+>>                      },
+>>
+>> AMD's parsing is through 'lpi_device_get_constraints_amd' so that structure
+>> shows
+>> as not enabled and doesn't specify any D-state requirements.
+> AFAIK this object does not exist in ChromeOS so Linux cannot use it
+> there.
+OK that means that if we came up with a solution that utilized
+uPEP that it would have to remain optional.
+>
+>> What do they specify for Intel on a matching root port?
+> I think the corresponding entry in ADL-P system for TBT PCIe root port 0
+> looks like this:
+>
+> 	Package (0x03)
+> 	{
+> 	    "\\_SB.PC00.TRP0",
+> 	    Zero,
+> 	    Package (0x02)
+> 	    {
+> 		Zero,
+> 		Package (0x02)
+> 		{
+> 		    0xFF,
+> 		    0x03
+> 		}
+> 	    }
+> 	},
+>
+> I'm not entirely sure what does it tell? ;-)
 
-diff --git a/net/wireless/lib80211_crypt_tkip.c b/net/wireless/lib80211_crypt_tkip.c
-index 1b4d6c87a5c5..9b411b6a7b5d 100644
---- a/net/wireless/lib80211_crypt_tkip.c
-+++ b/net/wireless/lib80211_crypt_tkip.c
-@@ -662,12 +662,6 @@ static int lib80211_tkip_get_key(void *key, int len, u8 * seq, void *priv)
- 	memcpy(key, tkey->key, TKIP_KEY_LEN);
- 
- 	if (seq) {
--		/* Return the sequence number of the last transmitted frame. */
--		u16 iv16 = tkey->tx_iv16;
--		u32 iv32 = tkey->tx_iv32;
--		if (iv16 == 0)
--			iv32--;
--		iv16--;
- 		seq[0] = tkey->tx_iv16;
- 		seq[1] = tkey->tx_iv16 >> 8;
- 		seq[2] = tkey->tx_iv32;
--- 
-2.27.0
+It's parsed using `lpi_device_get_constraints`.
+
+So should I follow it right this means for ACPI device
+\\_SB.PC00.TRP0 the constraint is disabled.
+
+It's described as
+Version 0, UID 0xFF has a minimum D-state of 3.
+
+That means my idea to try to only change D-states at
+suspend for enabled constraints won't help.
+
 
