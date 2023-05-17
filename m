@@ -2,122 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72070705C3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4D5705C42
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjEQBRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 21:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S231453AbjEQBSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 21:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjEQBRP (ORCPT
+        with ESMTP id S229552AbjEQBSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 21:17:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5844C469A;
-        Tue, 16 May 2023 18:17:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E137460B7A;
-        Wed, 17 May 2023 01:17:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8CC1C433D2;
-        Wed, 17 May 2023 01:17:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684286233;
-        bh=biYz7ct5sU3QISD2vSXIgOyTlRasPXZBZtOwjhRjsrM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=saHRChJIGfsafUmuXO023PW74V+JkbgAGVwicIQaN2miLZvt+AmbCh7M8Kwg9wJv6
-         LkXO/9sUIb1nGw518+w0XwIqKt/5dbDBS2sXLQ+SUoBKaAeCibJ2zF+DUyOBzJtiqH
-         sEC80+Ne2COWpqad3YGPM82fVOlW/8O34MZ8t46YA1LnKzVpnuDhgWL5DpkR+4GiNf
-         257i2IutbuZiOSr3YLmvoPH16nRbdhQE/02kPabwwEGXagA9+0HA/AcC36r6d9LE6f
-         /Oz2RbaexwN7xK4rllq8MQ9qXdJ6aZtcX81igf6555qO0F1oL2cPpfnHMFQNCzjX78
-         CtwFE6/lnp04Q==
-Date:   Tue, 16 May 2023 19:18:01 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] media: venus: hfi_cmds: Replace fake flex-arrays with
- flexible-array members
-Message-ID: <ZGQrSQ/zHu+pk7WU@work>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 21:18:43 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCA9269D;
+        Tue, 16 May 2023 18:18:41 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H17jt8025818;
+        Wed, 17 May 2023 01:18:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=KmU7UPnAnSf6c1RNg/uFbRLIxBBlxHBio2SWVAbWWFM=;
+ b=kbWjXyzASgiEX9FLUfizn4xO+bz7/O3QPlo7Vb5LXbvLHruiNJHKdImjWUzHk7pAQJEf
+ KzIqx+aWe6+MeW7nVfhkNDkWeS/GII0/izK7m90GkWdbPs02dAjLXaKqWutzZ/NIqO4Z
+ rkVQvWPp+L3fssSVHg+BTIUyIj3KIJvRdOMqGtUIMcnwRTuxaPgpRPv40HyWjvM5Ijxn
+ K8ii4yRFb8EytsGXLltuKR3mPKxxzlt6+G4A8oTJytdpn6DhuOYJG5ogY8r/3lLULQHH
+ Waf7ZL+XZ98o0KcPzRg4x5SWNOAHBhIM9o0/9ZWQC5stuqQ52LeFpLSKfIL9whhffPQE sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmmbu16kb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 01:18:14 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34H1GJC0029300;
+        Wed, 17 May 2023 01:18:13 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmmbu16jw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 01:18:13 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34GLiqVg009219;
+        Wed, 17 May 2023 01:18:13 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3qj265k57v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 01:18:12 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34H1IBGG52494720
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 May 2023 01:18:12 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D1C0C5805E;
+        Wed, 17 May 2023 01:18:11 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6B89C58059;
+        Wed, 17 May 2023 01:18:09 +0000 (GMT)
+Received: from sig-9-77-133-203.ibm.com (unknown [9.77.133.203])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 17 May 2023 01:18:09 +0000 (GMT)
+Message-ID: <d96f5b8ef6f4afdcae1a3be776d10749bf0b4984.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/3] KEYS: DigitalSignature link restriction
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, jlee@suse.com, kanth.ghatraju@oracle.com,
+        konrad.wilk@oracle.com, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Tue, 16 May 2023 21:18:07 -0400
+In-Reply-To: <20230508220708.2888510-2-eric.snowberg@oracle.com>
+References: <20230508220708.2888510-1-eric.snowberg@oracle.com>
+         <20230508220708.2888510-2-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: XMO5lPHlzZjAtUWe1T3poojACAQ46MFQ
+X-Proofpoint-GUID: PW6OjyfkjRZcuKRr-tKInEv9N3JM2dEP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 spamscore=0 impostorscore=0 mlxlogscore=975 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305170006
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element arrays with flexible-array
-members in multiple structures.
+On Mon, 2023-05-08 at 18:07 -0400, Eric Snowberg wrote:
+> Add a new link restriction.  Restrict the addition of keys in a keyring
+> based on the key having digitalSignature usage set. Additionally, verify
+> the new certificate against the ones in the system keyrings.  Add two
+> additional functions to use the new restriction within either the builtin
+> or secondary keyrings.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+Thanks, Eric.
 
-This results in no differences in binary output.
-
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/294
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/media/platform/qcom/venus/hfi_cmds.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
-index dd9c5066442d..55dd73ff073b 100644
---- a/drivers/media/platform/qcom/venus/hfi_cmds.h
-+++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
-@@ -82,7 +82,7 @@ struct hfi_sys_set_buffers_pkt {
- 	u32 buffer_type;
- 	u32 buffer_size;
- 	u32 num_buffers;
--	u32 buffer_addr[1];
-+	u32 buffer_addr[];
- };
- 
- struct hfi_sys_ping_pkt {
-@@ -177,7 +177,7 @@ struct hfi_session_empty_buffer_uncompressed_plane1_pkt {
- 	u32 filled_len;
- 	u32 offset;
- 	u32 packet_buffer2;
--	u32 data[1];
-+	u32 data[];
- };
- 
- struct hfi_session_empty_buffer_uncompressed_plane2_pkt {
-@@ -186,7 +186,7 @@ struct hfi_session_empty_buffer_uncompressed_plane2_pkt {
- 	u32 filled_len;
- 	u32 offset;
- 	u32 packet_buffer3;
--	u32 data[1];
-+	u32 data[];
- };
- 
- struct hfi_session_fill_buffer_pkt {
-@@ -227,7 +227,7 @@ struct hfi_session_release_buffer_pkt {
- 	u32 extradata_size;
- 	u32 response_req;
- 	u32 num_buffers;
--	u32 buffer_info[1];
-+	u32 buffer_info[];
- };
- 
- struct hfi_session_release_resources_pkt {
--- 
-2.34.1
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
