@@ -2,191 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A410A705F35
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349B7705F3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbjEQFYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 01:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S232262AbjEQFZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 01:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjEQFYO (ORCPT
+        with ESMTP id S231744AbjEQFZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 01:24:14 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBE140C0;
-        Tue, 16 May 2023 22:24:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R2QixDTuxCtNTDqePIHMC/sk0RaCapjmF9JY8CpDDCPVR8JR3oksfCZpcqi7fKdPjm/JNYy4iSLCD8eORQWLIhsIHcutEEKC9NhKUisWrOiyF6LbQoATpd+WapMKNxCpM/KN9tJSz+E5E1H1SiAOvT34Kwecxh+REkBUnWKiVk/Tmr6jq76j6+ZPcK+DJ3L7E/zJp48hy+MlRTHXOVOB03qPS937MDWbGBHgabL+rtJtm0bS208YO4xByS5W9E14WQdQ1zfjIdWjios/vainiutjTWeoOkPSAvCJWzZbqfgqy0zWYxBXZG10+qYZ4aMzvyzs6E95D07zLPAkzJiR/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oJhPpy7vamQoF6pU/tkzjFEFt3wlQIGt622jKY+FB1k=;
- b=oXG7Y6VbODzf8xLmeZSE2HZm2QK/Bs+GnhQR+ZqU60XCVGHNoVwz4CKobENjSrTSkLixVtesNoW83EPZ94mHNWcId8dOa91OgLEZ9R7tyRGd+2ZNqM/GEIbYZJxyErN+Rt+Lm7CVaqPPmfMXX84W103TL5baAJIdDJko3dS4BOeLAPfwh6cSK1Vb6W2/tWmANE+6DpIWFb7+8ZWCYY255yoHsOMAi5+I8iN5f4+8ZdFkVm24TXFJt55UDdMMhzZPeTkruw9n/pkdwCtDm8ZZzt1mgnfhApvaW4O7pK9PWEb6Ur4MRw1s+1XPNtDQOSq30JL2C2QbHOssFfK/0xsr3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oJhPpy7vamQoF6pU/tkzjFEFt3wlQIGt622jKY+FB1k=;
- b=mMkMuHui+nenb0xgAbs0baZFG9VCbRVk4o6alDKBCg0xIfEZlY8f+r8Yo6ekZuGdUlYYJFJxMQctW6p0QAMkAnYEVshGHLcqRLlBwtgxQuAW8htIK3tkzCigmVQ8d5o1GJ3Zrwdp5IBHQZsbupsnz9Wl8lK1rSHsHK1ZxNL+MxM=
-Received: from PH8PR12MB6675.namprd12.prod.outlook.com (2603:10b6:510:1c2::15)
- by DS0PR12MB9040.namprd12.prod.outlook.com (2603:10b6:8:f5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Wed, 17 May
- 2023 05:24:10 +0000
-Received: from PH8PR12MB6675.namprd12.prod.outlook.com
- ([fe80::a9cc:895f:cc74:30b7]) by PH8PR12MB6675.namprd12.prod.outlook.com
- ([fe80::a9cc:895f:cc74:30b7%4]) with mapi id 15.20.6387.033; Wed, 17 May 2023
- 05:24:10 +0000
-From:   "Goud, Srinivas" <srinivas.goud@amd.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>
-Subject: RE: [PATCH 1/2] spi: spi-cadence: Avoid read of RX FIFO before its
- ready
-Thread-Topic: [PATCH 1/2] spi: spi-cadence: Avoid read of RX FIFO before its
- ready
-Thread-Index: AQHZgpUsoHY1RY/m3UymshDymAXTqq9bRGXAgAAPWACAAQ67wA==
-Date:   Wed, 17 May 2023 05:24:10 +0000
-Message-ID: <PH8PR12MB6675A433C8B129AA96B5C853E17E9@PH8PR12MB6675.namprd12.prod.outlook.com>
-References: <20230509164153.3907694-1-ckeepax@opensource.cirrus.com>
- <PH8PR12MB6675F6CC30254C5EED898FD5E1789@PH8PR12MB6675.namprd12.prod.outlook.com>
- <20230515125458.GT68926@ediswmail.ad.cirrus.com>
-In-Reply-To: <20230515125458.GT68926@ediswmail.ad.cirrus.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH8PR12MB6675:EE_|DS0PR12MB9040:EE_
-x-ms-office365-filtering-correlation-id: 309d51fa-bda4-4739-ffc4-08db5696f1cf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YobA5d/tXKLFc9Dlx3hFsWOi5kA+Kga9mHQGlMLRNzVZlQk9Z8Ap3Ux3ANyMDF3ZDiAz/qExiO8O5hYGQwSekcUKdELCtQlfwp/6e9xthHRmlK+7zRNSa+NYfsV//qdOxHUM9blwimSouV1oNU98aXgkCGAqCUl97LMe9MCOpwU5i03az8GdX4MtIHOnjecZSMbQCd8RH64sltaacrRA+uS8YKvkN+A/dV6uL7x9il/So3SkOiu+ddFM+pMigP3JNIhwXmJXHGNC4lJURi1IraxW9uijL2mFlTwXQx2hxL1rlufF9mS9+Nf588a0tY6q4nLCVFGJqCvute17Ks1BursdSaSFvn32b2jzTqhiEDmskD1w5OR/z9j6yYrxZHZUz9kNRKYgk0izRZAJ5fK/YxgOIwXzvvey6RX3bg135yiLu6uhGhBcw/uOncwzdLRMAJfc8zHVQs34RoMTJAwu2tzt+TTXnIoKUiOYWAy2uf3AEV7X8hHNHo0YvtK36k/u61U9PARqdD3uZCaGN7jLspcGSIdolwKCORxckBEZLJnUEmC6xZ+R435w4ohiJvqC78ZI2JAJe/B8xzCfWseP9/80FnBim0JQFyqStRVUIk9R7G34DxtPoTa6PzdmvvoT
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR12MB6675.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39860400002)(136003)(366004)(451199021)(5660300002)(8676002)(52536014)(8936002)(54906003)(83380400001)(9686003)(6506007)(26005)(122000001)(38100700002)(38070700005)(186003)(41300700001)(478600001)(7696005)(71200400001)(55016003)(33656002)(66476007)(86362001)(66556008)(66946007)(66446008)(64756008)(76116006)(6916009)(4326008)(316002)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SYKpaaWNWJ7WWoCmd+mSs3FjHrsgzxui+lTKztySZe0oAPZ/hzv0WFsMu0Jk?=
- =?us-ascii?Q?Vorak1c5yuNEAsar1S74Vyb2QI1YRGzitwT1RHGRjMDPPeKbV2waPWwbiLCX?=
- =?us-ascii?Q?c9FQ+6ck0zAaUZVbd+RYeS0JVpzhnPYV+qsd1HeUInPYLSX0dF4xWgyfRZ2N?=
- =?us-ascii?Q?qOBoUtelis3lDEdn80PgqHcWE20BR2LFXdrNabBqFQw7spn1I7NVByiTFNUW?=
- =?us-ascii?Q?2zo6gu1WMx3LqLmhYOWoeE+j7nkkRt3D8SydSFSPyVL1WSqS2yhjFMzz2RgO?=
- =?us-ascii?Q?EcnekWiOGikmUCwgiWZe1izT5dbyejRrLeuXjli6X/UH7U41dNNJqDgw5wT1?=
- =?us-ascii?Q?sPKfLgSD6P57aKeTji55s8v0ff4Ju/9goeCvxXJD8yrYsil+OFFwcqPjysxj?=
- =?us-ascii?Q?e39y7Afxfeux3m2aZSQXlhpaMj0CFXZ1ieaPWMOGHc74316qzOVLA61jEC0x?=
- =?us-ascii?Q?YOzFZG59nsxiguq/ckXINrRNmIl4AbzIyggjS1Am1rbfsrWAwJjGdInvNbCF?=
- =?us-ascii?Q?XuSSO4eNU5WIJ10UC8YV6pgoXd5f+8WlKpfbUVNRDuIAJmUC0wbWA1N+1sY1?=
- =?us-ascii?Q?TKKky3LAopTMU8F6DK9OeG79/kf5t4wO/r+38GQyYhWXHlo1AWAgoASks6ZY?=
- =?us-ascii?Q?qodkc5TuVkjno30RClxZ8gYcaG4xE6EzTett5DC1A1MxfQP5w/bI13fwfe75?=
- =?us-ascii?Q?SYiU6X3VGR9p99NlreXY6hXyycNqKBQpnHNLUOok1DQUNtnnKpmJnewYktFz?=
- =?us-ascii?Q?mITzih88CjheI77bllrLTK0EmKGwNiOLfCY8zxwvvc4tyDw8UHdbliSVfhHq?=
- =?us-ascii?Q?qilMd9y2VVIIEC+Yh5bPTak9ANRqLOY6uZrvVlMELGybNEvEyEhIOt0CObd0?=
- =?us-ascii?Q?dvDlQvddSj8ySaZ+fdHKn00B84k3FfX3Jly9Q1ZOFTrmeBx+fpJ6mZSrR6ri?=
- =?us-ascii?Q?spRB1x+0yH+PCyUU/kwS+NvkHs42FSR/7zbFPir/p5tgpSnyqvN8/SVLQJwT?=
- =?us-ascii?Q?GE1HIRg3iwa5fGzJXSVLBBWqFR50KoTH4tkJCh7EgJopyHazVm0qcpRDZjP4?=
- =?us-ascii?Q?KIvxpC30PPQSIrn0Zxw2Sywpekh/SjhMM8TuMUcK5cQl6sURLqJTN7ejxJjJ?=
- =?us-ascii?Q?gp5jhHLj+UGwH4IR3FSGU7UCWWLhHi7rqxeBJaVROAoAfWYTLm44NZRZCUC8?=
- =?us-ascii?Q?vyR+YQfg2OYzGRpIvtM9UR3VejLHN5w86J7qmtPJdZv+uy3xY1I6FyTtoOWQ?=
- =?us-ascii?Q?O0iQ2vGb/eQ/ApBjQA/CSsv4MbZf7s1VgswX1/SzPUsTEFL82WtUUJ+ik9Kq?=
- =?us-ascii?Q?WU8IOZNXIu0FHrLd8p6+mWop4+16QzAeriM3hRRBEA7U9qpjepGJyvcuEDVO?=
- =?us-ascii?Q?z9WRkAxkBCLHjfuc3MN4PLOkQkHd/vnxsPld1lTgq93rBVBLOCbJ92Ui4v9P?=
- =?us-ascii?Q?K1a/bu1E6usQqXaKeXtVStU9F7tabc5mf0rv4rKN1DMSzMmJ05jBk2V1L7oa?=
- =?us-ascii?Q?tV7XqiY4vs/n8seoINptZ1lqxseG/qGicl7CtgD+kpGJEyWG98jSAsg7Ox06?=
- =?us-ascii?Q?O2DpMa0aitz2CiAnmtM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 17 May 2023 01:25:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1428C3C0C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684301088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ld8tmuZ729IEP2VIgrvdSghTu7kmfTWaYV5mzTpbirM=;
+        b=GGuMtV9m3zl3sO0UFMB4eXiMWoZd8pMpN7wDfdRB1AmMNYv7i4VhIU2juleQWhyOxcp3mT
+        AAGXxI0D6NhHkB+SO8J003KHMswQ5UbyxJxm9VSJodEW9rI1+W/w9Wr5IZmkCq2JaN86AC
+        Wi3TnqhZd6gAMWRZuzXBVoVveboBtaI=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-52-5FnhgUVNNfet1_nOsFS5xg-1; Wed, 17 May 2023 01:24:46 -0400
+X-MC-Unique: 5FnhgUVNNfet1_nOsFS5xg-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2ac79d95000so1034471fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:24:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684301085; x=1686893085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ld8tmuZ729IEP2VIgrvdSghTu7kmfTWaYV5mzTpbirM=;
+        b=MBBFsgfa8oYyKw7Czs2BiiR1h/tmoIaytuP7tTFwKSyagCjdXjCl0ZX0IfiVllgNie
+         uZ4PMqdkTNwUX45Ra7eaNvWiJwP/YkCWZD+Nd0n/J/q2fyyMkFparc7mrcSYeg3KKkGT
+         9VsFu8TioCgPCgtZJUEKs4IO6U6+3yC0+gKqdzo3rhM0+B2La4LlIRpuZVkgmNtiOV8S
+         VZFAwmDotzHF8M+kMtGaM6NQaHtb5u49RrZd8iacvwRrMiP2rWM0XBj8Tw93pwWGVnc+
+         neTowkwEmy7DIuV51HWphRdOiE/XmFI8K0qQm2YYndJH1wlZ72QrX0HFqaDY+5XblM8B
+         aOnA==
+X-Gm-Message-State: AC+VfDxUa3ld5ggX6ogu9gYJA7puLgevFChvxMWByVyMc0nO3kzP7zZx
+        7ZGmCXbwtERuG+JUN2brviRfaEXtupYNu5YAImslyfHLlIgd3oqVeFru6OsMoG6Cce+vS2WgkY5
+        PICbFXSy/CXv+AuqbDg2xDytJTVQqQcMUki0Qy+JW
+X-Received: by 2002:a2e:3808:0:b0:2ae:fee9:a810 with SMTP id f8-20020a2e3808000000b002aefee9a810mr1239973lja.51.1684301085091;
+        Tue, 16 May 2023 22:24:45 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ59rFW7HF/JG6U0/d+y3LDNIVqhrWaclO8AcXy6Uwk1agT7OM69OQsqAM4t1kZ9cE0wYr2qX2iGWXCKPbv/XYE=
+X-Received: by 2002:a2e:3808:0:b0:2ae:fee9:a810 with SMTP id
+ f8-20020a2e3808000000b002aefee9a810mr1239966lja.51.1684301084781; Tue, 16 May
+ 2023 22:24:44 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB6675.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 309d51fa-bda4-4739-ffc4-08db5696f1cf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 05:24:10.4624
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Xawu5MRr4emxFOofk+U/DfR1QJMLDOeFvq3VeZf1HPa8YTRNoFR1TokfTqz9fP4D
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9040
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230516095800.3549932-1-dtatulea@nvidia.com>
+In-Reply-To: <20230516095800.3549932-1-dtatulea@nvidia.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 17 May 2023 13:24:33 +0800
+Message-ID: <CACGkMEv7yFgaGHx_W_JE55ou=2orv+jH-wY4id14bhYARKTUkw@mail.gmail.com>
+Subject: Re: [PATCH] vdpa/mlx5: Fix hang when cvq commands are triggered
+ during device unregister
+To:     Dragos Tatulea <dtatulea@nvidia.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Eli Cohen <elic@nvidia.com>, gal@nvidia.com, tariqt@nvidia.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
->-----Original Message-----
->From: Charles Keepax <ckeepax@opensource.cirrus.com>
->Sent: Monday, May 15, 2023 6:25 PM
->To: Goud, Srinivas <srinivas.goud@amd.com>
->Cc: broonie@kernel.org; linux-spi@vger.kernel.org; linux-
->kernel@vger.kernel.org; patches@opensource.cirrus.com
->Subject: Re: [PATCH 1/2] spi: spi-cadence: Avoid read of RX FIFO before it=
-s
->ready
+On Tue, May 16, 2023 at 5:58=E2=80=AFPM Dragos Tatulea <dtatulea@nvidia.com=
+> wrote:
 >
->On Mon, May 15, 2023 at 12:04:38PM +0000, Goud, Srinivas wrote:
->> >-----Original Message-----
->> >From: Charles Keepax <ckeepax@opensource.cirrus.com>
->> >Sent: Tuesday, May 9, 2023 10:12 PM
->> >To: broonie@kernel.org
->> >Cc: Goud, Srinivas <srinivas.goud@amd.com>;
->> >linux-spi@vger.kernel.org; linux-kernel@vger.kernel.org;
->> >patches@opensource.cirrus.com
->> >Subject: [PATCH 1/2] spi: spi-cadence: Avoid read of RX FIFO before its=
- ready
->> >-		while (trans_cnt) {
->> >-			cdns_spi_read_rx_fifo(xspi, 1);
->> >-
->> >-			if (xspi->tx_bytes) {
->> >-				if (xspi->txbuf)
->> >-					cdns_spi_write(xspi, CDNS_SPI_TXD,
->> >-						       *xspi->txbuf++);
->> >-				else
->> >-					cdns_spi_write(xspi, CDNS_SPI_TXD,
->> >0);
->> >-				xspi->tx_bytes--;
->> >-			}
->> >-			trans_cnt--;
->> >-		}
->> >-		if (!xspi->tx_bytes) {
->> >-			/* Fixed delay due to controller limitation with
->> >-			 * RX_NEMPTY incorrect status
->> >-			 * Xilinx AR:65885 contains more details
->> >-			 */
->> >-			udelay(10);
->> >-			cdns_spi_read_rx_fifo(xspi, xspi->rx_bytes);
->> >+		cdns_spi_read_rx_fifo(xspi, trans_cnt);
->> Cadence SPI configured in Slave mode,  when threshold is half of FIFO
->> depth cdns_spi_read_rx_fifo() function continuously in read mode, due to
->this we see incorrect data received on the Master side as Slave is failed =
-to
->update the TX FIFO on time.
+> Currently the vdpa device is unregistered after the workqueue that
+> processes vq commands is disabled. However, the device unregister
+> process can still send commands to the cvq (a vlan delete for example)
+> which leads to a hang because the handing workqueue has been disabled
+> and the command never finishes:
 >
->Apologies I am having a little trouble following this are you saying this =
-part of
->the patch cases issues for you running in slave mode?
-Yes, we see issue with this patch when we run in Slave mode.
-
-When any master is in continuous read mode (anything > FIFO depth),=20
-with updated logic cdns_spi_read_rx_fifo() function in cdns_spi_irq
-continuously in read loop to read complete half FIFO data.
-due to this Slave failed to write the TX FIFO on time and result in
-incorrect data in Master receive.=20
-Whereas in my previous patch, data read and write happening byte wise,
-by which we are making sure data availability in TXFIFO on time.
+>  [ 2263.095764] rcu: INFO: rcu_sched self-detected stall on CPU
+>  [ 2263.096307] rcu:        9-....: (5250 ticks this GP) idle=3Ddac4/1/0x=
+4000000000000000 softirq=3D111009/111009 fqs=3D2544
+>  [ 2263.097154] rcu:        (t=3D5251 jiffies g=3D393549 q=3D347 ncpus=3D=
+10)
+>  [ 2263.097648] CPU: 9 PID: 94300 Comm: kworker/u20:2 Not tainted 6.3.0-r=
+c6_for_upstream_min_debug_2023_04_14_00_02 #1
+>  [ 2263.098535] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS =
+rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
+>  [ 2263.099481] Workqueue: mlx5_events mlx5_vhca_state_work_handler [mlx5=
+_core]
+>  [ 2263.100143] RIP: 0010:virtnet_send_command+0x109/0x170
+>  [ 2263.100621] Code: 1d df f5 ff 85 c0 78 5c 48 8b 7b 08 e8 d0 c5 f5 ff =
+84 c0 75 11 eb 22 48 8b 7b 08 e8 01 b7 f5 ff 84 c0 75 15 f3 90 48 8b 7b 08 =
+<48> 8d 74 24 04 e8 8d c5 f5 ff 48 85 c0 74 de 48 8b 83 f8 00 00 00
+>  [ 2263.102148] RSP: 0018:ffff888139cf36e8 EFLAGS: 00000246
+>  [ 2263.102624] RAX: 0000000000000000 RBX: ffff888166bea940 RCX: 00000000=
+00000001
+>  [ 2263.103244] RDX: 0000000000000000 RSI: ffff888139cf36ec RDI: ffff8881=
+46763800
+>  [ 2263.103864] RBP: ffff888139cf3710 R08: ffff88810d201000 R09: 00000000=
+00000000
+>  [ 2263.104473] R10: 0000000000000002 R11: 0000000000000003 R12: 00000000=
+00000002
+>  [ 2263.105082] R13: 0000000000000002 R14: ffff888114528400 R15: ffff8881=
+66bea000
+>  [ 2263.105689] FS:  0000000000000000(0000) GS:ffff88852cc80000(0000) knl=
+GS:0000000000000000
+>  [ 2263.106404] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>  [ 2263.106925] CR2: 00007f31f394b000 CR3: 000000010615b006 CR4: 00000000=
+00370ea0
+>  [ 2263.107542] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000=
+00000000
+>  [ 2263.108163] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000000=
+00000400
+>  [ 2263.108769] Call Trace:
+>  [ 2263.109059]  <TASK>
+>  [ 2263.109320]  ? check_preempt_wakeup+0x11f/0x230
+>  [ 2263.109750]  virtnet_vlan_rx_kill_vid+0x5a/0xa0
+>  [ 2263.110180]  vlan_vid_del+0x9c/0x170
+>  [ 2263.110546]  vlan_device_event+0x351/0x760 [8021q]
+>  [ 2263.111004]  raw_notifier_call_chain+0x41/0x60
+>  [ 2263.111426]  dev_close_many+0xcb/0x120
+>  [ 2263.111808]  unregister_netdevice_many_notify+0x130/0x770
+>  [ 2263.112297]  ? wq_worker_running+0xa/0x30
+>  [ 2263.112688]  unregister_netdevice_queue+0x89/0xc0
+>  [ 2263.113128]  unregister_netdev+0x18/0x20
+>  [ 2263.113512]  virtnet_remove+0x4f/0x230
+>  [ 2263.113885]  virtio_dev_remove+0x31/0x70
+>  [ 2263.114273]  device_release_driver_internal+0x18f/0x1f0
+>  [ 2263.114746]  bus_remove_device+0xc6/0x130
+>  [ 2263.115146]  device_del+0x173/0x3c0
+>  [ 2263.115502]  ? kernfs_find_ns+0x35/0xd0
+>  [ 2263.115895]  device_unregister+0x1a/0x60
+>  [ 2263.116279]  unregister_virtio_device+0x11/0x20
+>  [ 2263.116706]  device_release_driver_internal+0x18f/0x1f0
+>  [ 2263.117182]  bus_remove_device+0xc6/0x130
+>  [ 2263.117576]  device_del+0x173/0x3c0
+>  [ 2263.117929]  ? vdpa_dev_remove+0x20/0x20 [vdpa]
+>  [ 2263.118364]  device_unregister+0x1a/0x60
+>  [ 2263.118752]  mlx5_vdpa_dev_del+0x4c/0x80 [mlx5_vdpa]
+>  [ 2263.119232]  vdpa_match_remove+0x21/0x30 [vdpa]
+>  [ 2263.119663]  bus_for_each_dev+0x71/0xc0
+>  [ 2263.120054]  vdpa_mgmtdev_unregister+0x57/0x70 [vdpa]
+>  [ 2263.120520]  mlx5v_remove+0x12/0x20 [mlx5_vdpa]
+>  [ 2263.120953]  auxiliary_bus_remove+0x18/0x30
+>  [ 2263.121356]  device_release_driver_internal+0x18f/0x1f0
+>  [ 2263.121830]  bus_remove_device+0xc6/0x130
+>  [ 2263.122223]  device_del+0x173/0x3c0
+>  [ 2263.122581]  ? devl_param_driverinit_value_get+0x29/0x90
+>  [ 2263.123070]  mlx5_rescan_drivers_locked+0xc4/0x2d0 [mlx5_core]
+>  [ 2263.123633]  mlx5_unregister_device+0x54/0x80 [mlx5_core]
+>  [ 2263.124169]  mlx5_uninit_one+0x54/0x150 [mlx5_core]
+>  [ 2263.124656]  mlx5_sf_dev_remove+0x45/0x90 [mlx5_core]
+>  [ 2263.125153]  auxiliary_bus_remove+0x18/0x30
+>  [ 2263.125560]  device_release_driver_internal+0x18f/0x1f0
+>  [ 2263.126052]  bus_remove_device+0xc6/0x130
+>  [ 2263.126451]  device_del+0x173/0x3c0
+>  [ 2263.126815]  mlx5_sf_dev_remove+0x39/0xf0 [mlx5_core]
+>  [ 2263.127318]  mlx5_sf_dev_state_change_handler+0x178/0x270 [mlx5_core]
+>  [ 2263.127920]  blocking_notifier_call_chain+0x5a/0x80
+>  [ 2263.128379]  mlx5_vhca_state_work_handler+0x151/0x200 [mlx5_core]
+>  [ 2263.128951]  process_one_work+0x1bb/0x3c0
+>  [ 2263.129355]  ? process_one_work+0x3c0/0x3c0
+>  [ 2263.129766]  worker_thread+0x4d/0x3c0
+>  [ 2263.130140]  ? process_one_work+0x3c0/0x3c0
+>  [ 2263.130548]  kthread+0xb9/0xe0
+>  [ 2263.130895]  ? kthread_complete_and_exit+0x20/0x20
+>  [ 2263.131349]  ret_from_fork+0x1f/0x30
+>  [ 2263.131717]  </TASK>
 >
->Thanks,
->Charles
+> The fix is to disable and destroy the workqueue after the device
+> unregister. It is expected that vhost will not trigger kicks after
+> the unregister. But even if it would, the wq is disabled already by
+> setting the pointer to NULL (done so in the referenced commit).
+>
+> Fixes: ad6dc1daaf29 ("vdpa/mlx5: Avoid processing works if workqueue was =
+destroyed")
+> Signed-off-by: Dragos Tatulea <dtatulea@nvidia.com>
 
-Thanks,
-Srinivas
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
+> ---
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
+x5_vnet.c
+> index e29e32b306ad..279ac6a558d2 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -3349,10 +3349,10 @@ static void mlx5_vdpa_dev_del(struct vdpa_mgmt_de=
+v *v_mdev, struct vdpa_device *
+>         mlx5_vdpa_remove_debugfs(ndev->debugfs);
+>         ndev->debugfs =3D NULL;
+>         unregister_link_notifier(ndev);
+> +       _vdpa_unregister_device(dev);
+>         wq =3D mvdev->wq;
+>         mvdev->wq =3D NULL;
+>         destroy_workqueue(wq);
+> -       _vdpa_unregister_device(dev);
+>         mgtdev->ndev =3D NULL;
+>  }
+>
+> --
+> 2.40.1
+>
+
