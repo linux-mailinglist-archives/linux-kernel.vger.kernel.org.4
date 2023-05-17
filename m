@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4DA705EA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15A5705EA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjEQEQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 00:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S232113AbjEQEUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 00:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232230AbjEQEQS (ORCPT
+        with ESMTP id S229509AbjEQEUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 00:16:18 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B10BE3C06
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:16:10 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxRPAJVWRkPWIJAA--.16424S3;
-        Wed, 17 May 2023 12:16:09 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_7MIVWRkQAxlAA--.41747S2;
-        Wed, 17 May 2023 12:16:08 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Sui Jingfeng <15330273260@189.cn>
-Subject: [PATCH] drm/drm_atomic_helper.c: fix a typo
-Date:   Wed, 17 May 2023 12:16:02 +0800
-Message-Id: <20230517041602.3225325-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 17 May 2023 00:20:38 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1D5AF;
+        Tue, 16 May 2023 21:20:37 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae54b623c2so1048725ad.3;
+        Tue, 16 May 2023 21:20:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684297237; x=1686889237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2aoFAuuRJ+3/FgXJuVSbqFP12TbWQw7U72znx29l5uc=;
+        b=heQMvSQ1dyrAsZJ8zQwEYDR/zCov6s8Sp52fRrdVadWJzdV6EQ9TIREO/His8NtXRP
+         qnDLa7s8qV/15DeIp0TYXdXgLmgFrPOmR/Ss1nEVIe9ayA1ng+j5r6xeN8v7lpQyIW1d
+         e4m06tVViNy2S8jVSYlkm/9IynBoeCQ64mkspHEgZ38vmp3D67su1UQm3Tlx4ckwesAy
+         QS55fBbLIqReCbnKT750tgoxaA6GWaeUPui0Fqw+a4TFzqF2OugY2bFJNIbnGnTrNp/W
+         Xix/1E7uYgMCpNkGwArB8bxypCrIaAyibcB/U8+IMnbA62qJqALBhJ8mE/MrUmxM630m
+         H2mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684297237; x=1686889237;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2aoFAuuRJ+3/FgXJuVSbqFP12TbWQw7U72znx29l5uc=;
+        b=RcHm0eJQ/hWg8RAHdnByLZke9U5rIxIIky75kQVCDCXO3qok3K989qm494JorMrM37
+         DRCR836impswol88dLqT29uPq3xErYpXz6bRMG47ldeljbSkE9pazjRyzSrkAd3rK5Oq
+         HEihd2uf2+Zz4v1okG2IyMkw4HI9VJ6qsBaQKISal/0nzYkID9j/RHWjlfoXTHM3ywG/
+         Vcozzlw6O8fQzNVz+5qcljqSXUebSex2WvfNjlUzjhYDSOAm8x+dKYb5fXD4GQhIJZYz
+         PrrTUrHWv8VX0CbuX4kOzwf3Ag7W696dMrcQOX5+gcsdFfhVIDW8ocC8Q05AC5Sk4/sj
+         AKag==
+X-Gm-Message-State: AC+VfDwEBomSjrF/8Y1xvaqlbcbki+yoP/KWFFkIZC+CYD4KXjKd8pD5
+        RVnt8Dfz6V00XPgIv2EH9ak=
+X-Google-Smtp-Source: ACHHUZ4vp2o4Yf3m9Fq/OZYBym9MUmCXdpyllWFF9srlJYzjkK/oJLc8OL+jdDtdZp6qJmNQFQHJiQ==
+X-Received: by 2002:a17:903:230e:b0:1ab:1b45:7972 with SMTP id d14-20020a170903230e00b001ab1b457972mr47914643plh.0.1684297236766;
+        Tue, 16 May 2023 21:20:36 -0700 (PDT)
+Received: from localhost.localdomain ([103.194.71.110])
+        by smtp.gmail.com with ESMTPSA id r15-20020a170903020f00b001aae625e422sm16383057plh.37.2023.05.16.21.20.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 21:20:36 -0700 (PDT)
+From:   Gopal Prasad <llyyr.public@gmail.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     llyyr <llyyr.public@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D sensor chip on some MSI boards.
+Date:   Wed, 17 May 2023 09:50:25 +0530
+Message-Id: <20230517042025.16942-1-llyyr.public@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_7MIVWRkQAxlAA--.41747S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrZw1Utw1fXF4xJrWUAw1kZrb_yoW3Krg_GF
-        1xXw4DGr90y3s0vw1FyanIvFySkr4IvFs5Ga18K39xtw1v9F43Crs8GryrZr1UXr18tFWq
-        q3ZFqr1fAr4xJjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        C7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        CVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jFOJ5UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <15330273260@189.cn>
+From: llyyr <llyyr.public@gmail.com>
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
+
+Signed-off-by: Gopal Prasad <llyyr.public@gmail.com>
 ---
- drivers/gpu/drm/drm_atomic_helper.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/nct6683.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-index e0ab555aad2c..41b8066f61ff 100644
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -3154,7 +3154,7 @@ int drm_atomic_helper_update_plane(struct drm_plane *plane,
- EXPORT_SYMBOL(drm_atomic_helper_update_plane);
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index a872f783e..f673f7d07 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -173,6 +173,7 @@ superio_exit(int ioreg)
+ #define NCT6683_CUSTOMER_ID_INTEL	0x805
+ #define NCT6683_CUSTOMER_ID_MITAC	0xa0e
+ #define NCT6683_CUSTOMER_ID_MSI		0x201
++#define NCT6683_CUSTOMER_ID_MSI2	0x200
+ #define NCT6683_CUSTOMER_ID_ASROCK		0xe2c
+ #define NCT6683_CUSTOMER_ID_ASROCK2	0xe1b
  
- /**
-- * drm_atomic_helper_disable_plane - Helper for primary plane disable using * atomic
-+ * drm_atomic_helper_disable_plane - Helper for primary plane disable using atomic
-  * @plane: plane to disable
-  * @ctx: lock acquire context
-  *
+@@ -1220,6 +1221,8 @@ static int nct6683_probe(struct platform_device *pdev)
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_MSI:
+ 		break;
++	case NCT6683_CUSTOMER_ID_MSI2:
++		break;
+ 	case NCT6683_CUSTOMER_ID_ASROCK:
+ 		break;
+ 	case NCT6683_CUSTOMER_ID_ASROCK2:
 -- 
-2.25.1
+2.40.1
 
