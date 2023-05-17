@@ -2,66 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DA8705EF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9862D705EF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbjEQEvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 00:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S231849AbjEQEvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 00:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjEQEvL (ORCPT
+        with ESMTP id S231694AbjEQEvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 00:51:11 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920592D63
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:50:44 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6ab094a7c04so188407a34.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684299044; x=1686891044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SdpDNOc9IaRuXWWVjAWL4lPisTwamC4JuamnxWVl6aE=;
-        b=ZohEZycebbexSIQM0Ql/0E6KK0YPr6BzbEZTe+tngAPEGD/paFD3oAqhjkfLHe9/Sf
-         OrYnlCEwKocjgVyBCijJ1WCKZlFh+hTVcjuK4669s1299beA2zJl6d8pOjCDe9yN7ZNV
-         TaENAEhYCD95ZvD+k6mj3Tvw3gf6BYQ7tEUvc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684299044; x=1686891044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SdpDNOc9IaRuXWWVjAWL4lPisTwamC4JuamnxWVl6aE=;
-        b=farZH7KHY7MCfJ5IVhf9LGGYTCV9hHTNOeskLpPn2xwdJtxAe34d+PZnb+eToMmTUG
-         UqQJLO4q+0CM+rIpORCFZx4/pJn8Rnxj0Cl3/yOfnJpmHhTZYEqF1M7Y9iR8P1yjg4el
-         2wHxnata/V1NKLgvoendmqCjIWrjT6VVzY3nkThrI1UV2Kg0ZuwrWtLpfR5JUp75s/CI
-         w9yEaDS6ueuXTJv2c7cR92UgASpXdEfeHcnWcqOF05fzROBCo6prWIOP13cYktCdrH/X
-         fNtSUKy1SXEZXX6Qn4+v+9mPVgrKGozqWfoCDjqGM4Kku0/Z9O+iGDsonUgGONTQ+Y3R
-         v7pw==
-X-Gm-Message-State: AC+VfDzgSY92Y/o3bOt3l56Fi0HkqnbIMcoTfzoqE5sGkvhmLJE+hoTd
-        Rvp7AS723l553ZWZXl7UkYYhCPzCjHRiBTI9jNcybA==
-X-Google-Smtp-Source: ACHHUZ6bP3yE1SLmRxIXkPdAaJJQitOTouGMseQ0lvlM4x1DeANqZcZ97RNjV1Jnv4U8agiHfeX6phHwNYamuOI+eN4=
-X-Received: by 2002:a05:6808:624e:b0:38c:1266:117e with SMTP id
- dt14-20020a056808624e00b0038c1266117emr13723618oib.44.1684299043940; Tue, 16
- May 2023 21:50:43 -0700 (PDT)
+        Wed, 17 May 2023 00:51:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DDC30D2;
+        Tue, 16 May 2023 21:51:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92D8D64168;
+        Wed, 17 May 2023 04:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81669C433D2;
+        Wed, 17 May 2023 04:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684299060;
+        bh=1A4N2cqACkxyyJfl2oSoqVFVLCI/m4E0p25SJpeFf2I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSOHjdPa779g0yJZEwvB03PDRBr2erJQZ4vx7/pabYc16D1kgrh0ouKhtgd8dqI/e
+         Su9cvdGXifPwY8MCRElYh5DpdNNjBFDsREb3O71TiZMg4WAoiFFXTUyd1szn1IWhx+
+         xpzEhQyRarIBp7tBROziY7DpThOmbaG0fcEnWtao=
+Date:   Wed, 17 May 2023 06:50:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v5 3/5] usb: misc: eud: Add driver support for SM6115 /
+ SM4250
+Message-ID: <2023051723-decibel-skiing-56ed@gregkh>
+References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
+ <20230516213308.2432018-4-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-References: <20230515130553.2311248-1-jeffxu@chromium.org> <20230515130553.2311248-4-jeffxu@chromium.org>
- <78bb0097-7dca-254f-45a6-5cea6baec0c4@intel.com> <CALmYWFvC55idHEyRiiuAwDOVv+rjP-3DejCfLW8c0iK8AGoJcw@mail.gmail.com>
-In-Reply-To: <CALmYWFvC55idHEyRiiuAwDOVv+rjP-3DejCfLW8c0iK8AGoJcw@mail.gmail.com>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Tue, 16 May 2023 21:50:31 -0700
-Message-ID: <CABi2SkXr6ubHFCCPBBZZhDzxOY+dtfbVa3rGYVxei+urhqhc3g@mail.gmail.com>
-Subject: Re: [PATCH 3/6] PKEY: Apply PKEY_ENFORCE_API to mprotect
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, luto@kernel.org,
-        jorgelo@chromium.org, keescook@chromium.org, groeck@chromium.org,
-        jannh@google.com, sroettger@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516213308.2432018-4-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,45 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 4:37=E2=80=AFPM Jeff Xu <jeffxu@google.com> wrote:
->
-> On Tue, May 16, 2023 at 4:19=E2=80=AFPM Dave Hansen <dave.hansen@intel.co=
-m> wrote:
-> >
-> > On 5/15/23 06:05, jeffxu@chromium.org wrote:
-> > >  /*
-> > >   * pkey=3D=3D-1 when doing a legacy mprotect()
-> > > + * syscall=3D=3Dtrue if this is called by syscall from userspace.
-> > > + * Note: this is always true for now, added as a reminder in case th=
-at
-> > > + * do_mprotect_pkey is called directly by kernel in the future.
-> > > + * Also it is consistent with __do_munmap().
-> > >   */
-> > >  static int do_mprotect_pkey(unsigned long start, size_t len,
-> > > -             unsigned long prot, int pkey)
-> > > +             unsigned long prot, int pkey, bool syscall)
-> > >  {
-> >
-> > The 'syscall' seems kinda silly (and a bit confusing).  It's easy to
-> > check if the caller is a kthread or has a current->mm=3D=3DNULL.  If yo=
-u
-> > *really* want a warning, I'd check for those rather than plumb a
-> > apparently unused argument in here.
-> >
-> > BTW, this warning is one of those things that will probably cause some
-> > amount of angst.  I'd move it to the end of the series or just axe it
-> > completely.
->
-Okay, I will move the logging part to the end of the series.
+On Wed, May 17, 2023 at 03:03:06AM +0530, Bhupesh Sharma wrote:
+> Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
 
+Why is the subject line duplicated here?
 
-> Agreed. syscall is not a good name here.
-> The intention is to check this at the system call entry point
-> For example, munmap can get called inside mremap(), but by that time
-> mremap() should already check that all the memory is writeable.
->
-> I will remove "syscall" from do_mprotect_pkey signature, it seems it caus=
-ed
-> more confusion than helpful.  I will keep the comments/note in place to r=
-emind
-> future developer.
+> On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
+> needs to be accessed only via the secure world (through 'scm'
+> calls).
+> 
+> Also, the enable bit inside 'tcsr_check_reg' needs to be set
+> first to set the eud in 'enable' mode on these SoCs.
+> 
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>  drivers/usb/misc/Kconfig    |  1 +
+>  drivers/usb/misc/qcom_eud.c | 69 +++++++++++++++++++++++++++++++++----
+
+Given that you didn't cc the usb maintainer, I'm guessing you don't want
+this patch applied?
+
+>  2 files changed, 63 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index 99b15b77dfd5..fe1b5fec1dfc 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
+>  config USB_QCOM_EUD
+>  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> +	select QCOM_SCM
+
+How well is that going to work on building on non-QCOM systems?  Can
+QCOM_SCM build if COMPILE_TEST is enabled?  select is rough to get
+right, are you sure it's correct here?  If so, some documentation in the
+changelog would be appreciated.
+
+>  	select USB_ROLE_SWITCH
+>  	help
+>  	  This module enables support for Qualcomm Technologies, Inc.
+> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> index b7f13df00764..10d194604d4c 100644
+> --- a/drivers/usb/misc/qcom_eud.c
+> +++ b/drivers/usb/misc/qcom_eud.c
+> @@ -5,12 +5,14 @@
+>  
+>  #include <linux/bitops.h>
+>  #include <linux/err.h>
+> +#include <linux/firmware/qcom/qcom_scm.h>
+
+There's no rule to keep these sorted, but it's your choice...
+
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/sysfs.h>
+> @@ -22,23 +24,33 @@
+>  #define EUD_REG_VBUS_INT_CLR	0x0080
+>  #define EUD_REG_CSR_EUD_EN	0x1014
+>  #define EUD_REG_SW_ATTACH_DET	0x1018
+> -#define EUD_REG_EUD_EN2        0x0000
+> +#define EUD_REG_EUD_EN2		0x0000
+
+Why the coding style cleanup in the same patch?  Remember, changes only
+do one thing, and you have already listed 2 things in your commit
+message :(
+
+>  
+>  #define EUD_ENABLE		BIT(0)
+> -#define EUD_INT_PET_EUD	BIT(0)
+> +#define EUD_INT_PET_EUD		BIT(0)
+
+Again, why this change?
+
+thanks,
+
+greg k-h
