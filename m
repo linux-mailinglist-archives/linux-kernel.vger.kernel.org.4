@@ -2,110 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1D0705C73
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BCC705C76
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjEQBcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 21:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
+        id S231543AbjEQBdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 21:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjEQBcv (ORCPT
+        with ESMTP id S231496AbjEQBdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 21:32:51 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B0C3A80;
-        Tue, 16 May 2023 18:32:50 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0ViqT6U4_1684287167;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0ViqT6U4_1684287167)
-          by smtp.aliyun-inc.com;
-          Wed, 17 May 2023 09:32:48 +0800
-Message-ID: <1684287159.5055063-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v1] virtio_pci: Optimize virtio_pci_device structure size
-Date:   Wed, 17 May 2023 09:32:39 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Feng Liu <feliu@nvidia.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Bodong Wang <bodong@nvidia.com>, Feng Liu <feliu@nvidia.com>,
-        Jiri Pirko <jiri@nvidia.com>,
-        <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230516135446.16266-1-feliu@nvidia.com>
-In-Reply-To: <20230516135446.16266-1-feliu@nvidia.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 16 May 2023 21:33:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E06C3C00
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:32:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF65E61BC4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE958C433A4;
+        Wed, 17 May 2023 01:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684287176;
+        bh=rg77yQfSpeOMSnNWxehfQlKpM4cPkoDtVLTfLguYlzo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DlM6sMKRZAS30k+VxniJv2P0kk3jnTjgt3BuUnbXorxoUya/BuqaaAObJvJPDNnAo
+         SGbLKBhScpO3q1/1+dB3grQuQxxbiamA28xXLPXmU17WLjBhFeyGTsP3d9BfG+/KQY
+         Z1i3oEC6F5Joi5NCXOT7h9i/RaQV9kUtmOAoyLd7glJtHJwLfAAVazst2KJwLWawul
+         tIgKVSQyNDARKcxeCJfCIg1wtktC6XFryOVIHSc6Em4sufD97LRIqk+PDh/JNhYBgW
+         SIZ2tetjYFmIMkS5wPr7rnlRf6gS09KLi75OUVxY7qZePXhBrBNESkWm27yIHkLUXt
+         jmWc774sYG/kw==
+Message-ID: <8c91663e-dfca-4b64-dc39-5a130fbb99a7@kernel.org>
+Date:   Wed, 17 May 2023 09:32:53 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [f2fs-dev] [PATCH] f2fs: maintain six open zones for zoned
+ devices
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Daeho Jeong <daehojeong@google.com>
+References: <20230505155040.87561-1-jaegeuk@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230505155040.87561-1-jaegeuk@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 09:54:46 -0400, Feng Liu <feliu@nvidia.com> wrote:
-> Improve the size of the virtio_pci_device structure, which is commonly
-> used to represent a virtio PCI device. A given virtio PCI device can
-> either of legacy type or modern type, with the
-> struct virtio_pci_legacy_device occupying 32 bytes and the
-> struct virtio_pci_modern_device occupying 88 bytes. Make them a union,
-> thereby save 32 bytes of memory as shown by the pahole tool. This
-> improvement is particularly beneficial when dealing with numerous
-> devices, as it helps conserve memory resources.
->
-> Before the modification, pahole tool reported the following:
-> struct virtio_pci_device {
-> [...]
->         struct virtio_pci_legacy_device ldev;            /*   824    32 */
->         /* --- cacheline 13 boundary (832 bytes) was 24 bytes ago --- */
->         struct virtio_pci_modern_device mdev;            /*   856    88 */
->
->         /* XXX last struct has 4 bytes of padding */
-> [...]
->         /* size: 1056, cachelines: 17, members: 19 */
-> [...]
-> };
->
-> After the modification, pahole tool reported the following:
-> struct virtio_pci_device {
-> [...]
->         union {
->                 struct virtio_pci_legacy_device ldev;    /*   824    32 */
->                 struct virtio_pci_modern_device mdev;    /*   824    88 */
->         };                                               /*   824    88 */
-> [...]
-> 	/* size: 1024, cachelines: 16, members: 18 */
-> [...]
-> };
->
-> Signed-off-by: Feng Liu <feliu@nvidia.com>
-> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-
-Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-
-Thanks.
-
+On 2023/5/5 23:50, Jaegeuk Kim wrote:
+> From: Daeho Jeong <daehojeong@google.com>
+> 
+> To keep six open zone constraints, make them not to be open over six
+> open zones.
+> 
+> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 > ---
->  drivers/virtio/virtio_pci_common.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
-> index 23112d84218f..4b773bd7c58c 100644
-> --- a/drivers/virtio/virtio_pci_common.h
-> +++ b/drivers/virtio/virtio_pci_common.h
-> @@ -45,9 +45,10 @@ struct virtio_pci_vq_info {
->  struct virtio_pci_device {
->  	struct virtio_device vdev;
->  	struct pci_dev *pci_dev;
-> -	struct virtio_pci_legacy_device ldev;
-> -	struct virtio_pci_modern_device mdev;
-> -
-> +	union {
-> +		struct virtio_pci_legacy_device ldev;
-> +		struct virtio_pci_modern_device mdev;
-> +	};
->  	bool is_legacy;
->
->  	/* Where to read and clear interrupt */
-> --
-> 2.37.1 (Apple Git-137.1)
->
+>   fs/f2fs/data.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>   fs/f2fs/f2fs.h |  5 +++++
+>   2 files changed, 62 insertions(+)
+> 
+> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> index 7dd92a9028b1..bb9de0a02143 100644
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -383,6 +383,17 @@ static void f2fs_write_end_io(struct bio *bio)
+>   	bio_put(bio);
+>   }
+>   
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +static void f2fs_zone_write_end_io(struct bio *bio)
+> +{
+> +	struct f2fs_bio_info *io = (struct f2fs_bio_info *)bio->bi_private;
+> +
+> +	bio->bi_private = io->bi_private;
+> +	complete(&io->zone_wait);
+> +	f2fs_write_end_io(bio);
+> +}
+> +#endif
+> +
+>   struct block_device *f2fs_target_device(struct f2fs_sb_info *sbi,
+>   		block_t blk_addr, sector_t *sector)
+>   {
+> @@ -639,6 +650,10 @@ int f2fs_init_write_merge_io(struct f2fs_sb_info *sbi)
+>   			INIT_LIST_HEAD(&sbi->write_io[i][j].io_list);
+>   			INIT_LIST_HEAD(&sbi->write_io[i][j].bio_list);
+>   			init_f2fs_rwsem(&sbi->write_io[i][j].bio_list_lock);
+> +#ifdef CONFIG_BLK_DEV_ZONED
+
+init_completion(&io->zone_wait);
+
+> +			sbi->write_io[i][j].zone_pending_bio = NULL;
+> +			sbi->write_io[i][j].bi_private = NULL;
+> +#endif
+>   		}
+>   	}
+>   
+> @@ -965,6 +980,26 @@ int f2fs_merge_page_bio(struct f2fs_io_info *fio)
+>   	return 0;
+>   }
+>   
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +static bool is_end_zone_blkaddr(struct f2fs_sb_info *sbi, block_t blkaddr)
+> +{
+> +	int devi = 0;
+> +
+> +	if (f2fs_is_multi_device(sbi)) {
+> +		devi = f2fs_target_device_index(sbi, blkaddr);
+> +		if (blkaddr < FDEV(devi).start_blk ||
+> +		    blkaddr > FDEV(devi).end_blk) {
+> +			f2fs_err(sbi, "Invalid block %x", blkaddr);
+> +			return false;
+> +		}
+> +		blkaddr -= FDEV(devi).start_blk;
+> +	}
+> +	return bdev_zoned_model(FDEV(devi).bdev) == BLK_ZONED_HM &&
+> +		f2fs_blkz_is_seq(sbi, devi, blkaddr) &&
+> +		(blkaddr % sbi->blocks_per_blkz == sbi->blocks_per_blkz - 1);
+> +}
+> +#endif
+> +
+>   void f2fs_submit_page_write(struct f2fs_io_info *fio)
+>   {
+>   	struct f2fs_sb_info *sbi = fio->sbi;
+> @@ -975,6 +1010,16 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
+>   	f2fs_bug_on(sbi, is_read_io(fio->op));
+>   
+>   	f2fs_down_write(&io->io_rwsem);
+> +
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +	if (f2fs_sb_has_blkzoned(sbi) && btype < META && io->zone_pending_bio) {
+> +		wait_for_completion_io(&io->zone_wait);
+> +		bio_put(io->zone_pending_bio);
+> +		io->zone_pending_bio = NULL;
+> +		io->bi_private = NULL;
+> +	}
+> +#endif
+> +
+>   next:
+>   	if (fio->in_list) {
+>   		spin_lock(&io->io_lock);
+> @@ -1038,6 +1083,18 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
+>   	if (fio->in_list)
+>   		goto next;
+>   out:
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +	if (f2fs_sb_has_blkzoned(sbi) && btype < META &&
+> +			is_end_zone_blkaddr(sbi, fio->new_blkaddr)) {
+> +		bio_get(io->bio);
+> +		init_completion(&io->zone_wait);
+
+reinit_completion(&io->zone_wait);
+
+Thanks,
+
+> +		io->bi_private = io->bio->bi_private;
+> +		io->bio->bi_private = io;
+> +		io->bio->bi_end_io = f2fs_zone_write_end_io;
+> +		io->zone_pending_bio = io->bio;
+> +		__submit_merged_bio(io);
+> +	}
+> +#endif
+>   	if (is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN) ||
+>   				!f2fs_is_checkpoint_ready(sbi))
+>   		__submit_merged_bio(io);
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 7afc9aef127a..0f05c1dd633f 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -1218,6 +1218,11 @@ struct f2fs_bio_info {
+>   	struct bio *bio;		/* bios to merge */
+>   	sector_t last_block_in_bio;	/* last block number */
+>   	struct f2fs_io_info fio;	/* store buffered io info. */
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +	struct completion zone_wait;	/* condition value for the previous open zone to close */
+> +	struct bio *zone_pending_bio;	/* pending bio for the previous zone */
+> +	void *bi_private;		/* previous bi_private for pending bio */
+> +#endif
+>   	struct f2fs_rwsem io_rwsem;	/* blocking op for bio */
+>   	spinlock_t io_lock;		/* serialize DATA/NODE IOs */
+>   	struct list_head io_list;	/* track fios */
