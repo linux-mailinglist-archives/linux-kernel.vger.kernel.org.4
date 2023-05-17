@@ -2,55 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE989705D5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C822B705D5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbjEQCfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S232107AbjEQCfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjEQCfV (ORCPT
+        with ESMTP id S229533AbjEQCft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:35:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4366D49CE
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:35:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA871640E8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:35:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9DBC4339B;
-        Wed, 17 May 2023 02:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684290919;
-        bh=zmqv6MjM7oNtFc9qzavUTqOwali/HD/2c4swdlVL9iM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lPG0UaCSc3yYi7kqWgyXuY+XfrjqyLQZq8hVNijuB7BAeftnsErlXkuPVE+2K2rbL
-         6ZCx9VqiNcVIFjv+i9kduPtEvFVsp0u6vJcC3+LuhqBpbD1B7u7AmzpdN1Zs7yW5OB
-         hbSVIYOR/PeqY7BOrKfD+TVxiHGJ11A1ChFk3/1AA66peMylkwhVuVMvn5v8SJmRAc
-         I4MvYbyusg6yNbahSqtb6bV6zLvmtXUJ4q3m/l1L+yLnUJ2OjXULi4oW7/f9fAZQEA
-         bdLFU9ojbHyJU8vgBUNUTaSt3JDDZVIdqKzzRJqn1wzbfZQUg03LJOjNUqPi19z3X1
-         3UWx2RgVih19A==
-Date:   Wed, 17 May 2023 10:35:15 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Tim Van Patten <timvp@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, robbarnes@google.com,
-        lalithkraj@google.com, rrangel@chromium.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Subject: Re: [PATCH] [v9] platform/chrome: cros_ec_lpc: Move host command to
- prepare/complete
-Message-ID: <ZGQ9Y+vqWhQLHAQh@google.com>
-References: <20230515142552.1.I17cae37888be3a8683911991602f18e482e7a621@changeid>
+        Tue, 16 May 2023 22:35:49 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639744ED3;
+        Tue, 16 May 2023 19:35:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0Viqoj7k_1684290929;
+Received: from 30.240.113.228(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Viqoj7k_1684290929)
+          by smtp.aliyun-inc.com;
+          Wed, 17 May 2023 10:35:30 +0800
+Message-ID: <18b27158-a8fb-e1d9-f85e-f12620b69bfb@linux.alibaba.com>
+Date:   Wed, 17 May 2023 10:35:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515142552.1.I17cae37888be3a8683911991602f18e482e7a621@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH v4 3/4] drivers/perf: add DesignWare PCIe PMU driver
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     yangyicong@huawei.com, will@kernel.org,
+        Jonathan.Cameron@huawei.com, baolin.wang@linux.alibaba.com,
+        robin.murphy@arm.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        rdunlap@infradead.org, mark.rutland@arm.com,
+        zhuo.song@linux.alibaba.com
+References: <ZGPXWzwrZPZTIMJd@bhelgaas>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <ZGPXWzwrZPZTIMJd@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +48,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 02:25:52PM -0600, Tim Van Patten wrote:
-> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
-> .prepare() and cros_ec_lpc_complete() during .complete(). This moves the
-> host command that the AP sends and allows the EC to log entry/exit of
-> AP's suspend/resume more accurately.
 
-I can understand the patch wants to notify EC earlier/later when the system
-suspend/resume.  But what is the issue addressed?  What happens if the
-measurement of suspend/resume duration is not that accurate?
 
-Copied from my previous mail:
-* Should it move the callbacks?
-  * Is it appropriate to call cros_ec_suspend() when PM is still in prepare
-    phase and call cros_ec_resume() when PM is already in complete phase?
+On 2023/5/17 03:19, Bjorn Helgaas wrote:
+> On Tue, May 16, 2023 at 09:01:09PM +0800, Shuai Xue wrote:
+>> ...
+> 
+>> +#include <linux/pci.h>
+>> +#include <linux/bitfield.h>
+>> +#include <linux/bitops.h>
+>> +#include <linux/cpuhotplug.h>
+>> +#include <linux/cpumask.h>
+>> +#include <linux/device.h>
+>> +#include <linux/errno.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/list.h>
+>> +#include <linux/perf_event.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/smp.h>
+>> +#include <linux/sysfs.h>
+>> +#include <linux/types.h>
+> 
+> Typically in alpha order.
 
-It seems prepare() is a more general callback.  It could be followed by
-suspend(), freeze(), or poweroff()[1].  Do we expect the change?  For example,
-the system is going to power off but EC gets notification about the system
-should be going to suspend.  Same as complete().
+Got it, I will reorder them.
 
-Moreover, cros_ec_suspend() and cros_ec_resume() do more than just notify EC.
-E.g. [2].
+> 
+>> +#define DWC_PCIE_VSEC_RAS_DES_ID		0x02
+>> +
+>> +#define DWC_PCIE_EVENT_CNT_CTL			0x8
+> 
+> Add a blank line here.
 
-What about other interfaces (i2c, spi, uart)?  Do they also need to change
-the callbacks?
+Sure, will add it.
 
-[1]: https://elixir.bootlin.com/linux/v6.4-rc1/source/include/linux/pm.h#L74
-[2]: https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/platform/chrome/cros_ec.c#L351
+> 
+>> +/*
+>> + * Event Counter Data Select includes two parts:
+> 
+>> +#define DWC_PCIE_EVENT_CNT_DATA			0xC
+>> +#define DWC_PCIE_DURATION_4US			0xff
+> ...
+> Pick upper-case hex or lower-case hex and use consistently.
 
-> Changes in v9:
-> - Remove log statements.
-> - Ignore return value from cros_ec_resume().
+Will pick upper-case hex for all macros.
 
-The change logs are not part of commit message.  They should put after "---".
+> 
+>> +#define DWC_PCIE_LANE_EVENT_MAX_PERIOD		(GENMASK_ULL(31, 0))
+>> +#define DWC_PCIE_TIME_BASED_EVENT_MAX_PERIOD	(GENMASK_ULL(63, 0))
+> 
+> Unnecessary outer "()".
+
+Ok, will remove it.
+
+> 
+>> +struct dwc_pcie_pmu {
+>> +	struct pci_dev		*pdev;		/* Root Port device */
+>> +	u32			ras_des;	/* RAS DES capability offset */
+> 
+> u16 is enough to address all of config space.
+
+Go it. will fix in next version.
+
+Thank you :)
+
+Best Regards,
+Shuai
+
+
