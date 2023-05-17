@@ -2,130 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55040706A7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37048706A80
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjEQOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S231152AbjEQOEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjEQOEM (ORCPT
+        with ESMTP id S229654AbjEQOEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:04:12 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B922E58;
-        Wed, 17 May 2023 07:04:11 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 17 May 2023 10:04:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B7D1BF5;
+        Wed, 17 May 2023 07:04:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QLvwg1DH4z49Q47;
-        Wed, 17 May 2023 17:04:03 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1684332243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=F9dB5jfPE0ZTFCjOnm24Lze21kK2ZvFO8Uv2gcQfgfY=;
-        b=K66yeZ1o6g42gX3bNGnxD3PL6onWkDhVcqbb4//yDM5OVbrJO6Mb9BmSKWqTG0av8GKmJ4
-        tvPrcE0kXyhjjeA+UaTYjZMvfv7a3Ds9aXYxbET00sc/WRg6uCUlIJljzNsmrZ/aj4P2Sg
-        6P95ebWDMpR73Vt/VFp7F5qBC+lqFWXzvdLehoY65cAIjxQ5RsyRiHFJDeyNg2fj0x8FOT
-        IsjLqqFsQO2zRvvsOnG+qAlG9/EaWV6a+UbLPgzGdUOBHq4uibpJOs01hxZ3jUmX/pI98X
-        AZwDMWMGRlW5lqgkfKkDKg3Cd/lt2WSL+bCRfX6ijjnzmqp/K2EAdMIRAagKpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1684332243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=F9dB5jfPE0ZTFCjOnm24Lze21kK2ZvFO8Uv2gcQfgfY=;
-        b=v523sTRIXZpWFCe4PqZWhgSv4kTAQYjGRoxHaFQIzJZrKFvLLPTDLYl3Yb69zNftUvrQeg
-        Kwuhqo2Jcme4714QO/2gVY4i7i9iyzzH5iBOsPUchZB4wPzgFjzL+cWxSD5knYmtquL2ZE
-        oOU7pv2wPmU+LP6jOrbIP+gszp4JD+FGVhG3b8omdeRBCPBjMNbygY/j3yzvijswWfeIxg
-        EuxqSaojsoMIGgkL0AJIXjIy9au3KWoXSPb5YrCyJds136aE5ki+bzPZp/u4JW2Da6Fl35
-        xNHRbkQsoRsWoIuutbAr133aSs9pfVv2kPSQndJVFyuWKSUXwqWIAD6IBl+6DA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1684332243; a=rsa-sha256;
-        cv=none;
-        b=qQBl3cRVCUGD1iDNIfJPyhRAIO8xrdyQx3uEezI1IiygR1az9UeQCF6s1QXxAAjH79dDey
-        u3e6un9WVBfAw2285yjy2RLAne4/z/M5odAE4z2iQ3J440E4WLph05t1lULOTa5LIu0zOy
-        rz5EfovJqwieUIYnRfJXd6pw22WL9tVvGBGECRsHlAd/fa0mNx2zTwi2vbBbWZ7XAxsdDJ
-        JTGxKGnU2TvyhBdAkGiOH1FBw6W6zvpRNUh3gvAz/S61UZKgS4sVlPurtQXNNJ/7OEvmN+
-        iRGppv3k6vpTP1gFXcKQQ8e9xeYigpJXOEo+T7PXsdBl6hpo64qwJUcAu25/lg==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 8C066634C94;
-        Wed, 17 May 2023 17:04:02 +0300 (EEST)
-Date:   Wed, 17 May 2023 17:04:02 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     shravan kumar <shravan.chippa@microchip.com>
-Cc:     paul.j.murphy@intel.com, daniele.alessandrelli@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v13 1/1] media: i2c: imx334: update pixel, hblank and
- link frequency
-Message-ID: <ZGTe0ldLYb4QYZGp@valkosipuli.retiisi.eu>
-References: <20230414123311.23923-1-shravan.chippa@microchip.com>
- <20230414123311.23923-2-shravan.chippa@microchip.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9CC86377C;
+        Wed, 17 May 2023 14:04:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75AAC433D2;
+        Wed, 17 May 2023 14:04:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684332275;
+        bh=NZnDYJtiCeENbcF7LOJTWubrTiazOVbwrHQWcqyHtg8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WA2H4SC9ezMAQVyw4AE1XGBbdmygIDUhMfolEcwW0mnysWd3h2F1xi9FfyJHKVoZT
+         OvBjTO4YZvQW7AmYEdvRITeT563w+gEWSUIjBBBLMzej7TUXTNGSRIa+RCAOKBEm7O
+         4Q70GhGTDJH5gZFBziN9sj+/jwP5WuO35M5Gh7P46IorbJSequ0QQflM06+R2me6Gg
+         1yxfKvyM7p9rUu7DHuC94RvOcmxxlEiMDou8G6a7tdfDooQL76cDAGUyXtZvZcz4bR
+         lzO1QDAS8ZpHGsDDjI9hzmckIpKuTl5NVg3rJKbe3hnnn+DafbOxhkhd349+MWAJdM
+         DbEoFiNQN6J0g==
+Date:   Wed, 17 May 2023 17:04:27 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <ZGTe6zFYL25fNwcw@kernel.org>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+ <202305111525.67001E5C4@keescook>
+ <ZF6Ibvi8U9B+mV1d@moria.home.lan>
+ <202305161401.F1E3ACFAC@keescook>
+ <ZGPzocRpSlg+4vgN@moria.home.lan>
+ <ZGP54T0d89TMySsf@casper.infradead.org>
+ <ZGRmC2Qhe6oAHPIm@moria.home.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230414123311.23923-2-shravan.chippa@microchip.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZGRmC2Qhe6oAHPIm@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 06:03:11PM +0530, shravan kumar wrote:
-> From: Shravan Chippa <shravan.chippa@microchip.com>
+On Wed, May 17, 2023 at 01:28:43AM -0400, Kent Overstreet wrote:
+> On Tue, May 16, 2023 at 10:47:13PM +0100, Matthew Wilcox wrote:
+> > On Tue, May 16, 2023 at 05:20:33PM -0400, Kent Overstreet wrote:
+> > > On Tue, May 16, 2023 at 02:02:11PM -0700, Kees Cook wrote:
+> > > > For something that small, why not use the text_poke API?
+> > > 
+> > > This looks like it's meant for patching existing kernel text, which
+> > > isn't what I want - I'm generating new functions on the fly, one per
+> > > btree node.
+> > > 
+> > > I'm working up a new allocator - a (very simple) slab allocator where
+> > > you pass a buffer, and it gives you a copy of that buffer mapped
+> > > executable, but not writeable.
+> > > 
+> > > It looks like we'll be able to convert bpf, kprobes, and ftrace
+> > > trampolines to it; it'll consolidate a fair amount of code (particularly
+> > > in bpf), and they won't have to burn a full page per allocation anymore.
+> > > 
+> > > bpf has a neat trick where it maps the same page in two different
+> > > locations, one is the executable location and the other is the writeable
+> > > location - I'm stealing that.
+> > 
+> > How does that avoid the problem of being able to construct an arbitrary
+> > gadget that somebody else will then execute?  IOW, what bpf has done
+> > seems like it's working around & undoing the security improvements.
+> > 
+> > I suppose it's an improvement that only the executable address is
+> > passed back to the caller, and not the writable address.
 > 
-> Update pixel_rate and link frequency for 1920x1080@30
-> while changing mode.
+> Ok, here's what I came up with. Have not tested all corner cases, still
+> need to write docs - but I think this gives us a nicer interface than
+> what bpf/kprobes/etc. have been doing, and it does the sub-page sized
+> allocations I need.
 > 
-> Update vblank value while changing mode
+> With an additional tweak to module_alloc() (not done in this patch yet)
+> we avoid ever mapping in pages both writeable and executable:
 > 
-> Add support to handle multiple link frequencies.
+> -->--
 > 
-> Add dummy ctrl cases for pixel_rate and link frequency
-> to avoid error while changing the modes dynamically.
+> From 6eeb6b8ef4271ea1a8d9cac7fbaeeb7704951976 Mon Sep 17 00:00:00 2001
+> From: Kent Overstreet <kent.overstreet@linux.dev>
+> Date: Wed, 17 May 2023 01:22:06 -0400
+> Subject: [PATCH] mm: jit/text allocator
 > 
-> Update default link frequency from device tree max link
-> frequency value.
+> This provides a new, very simple slab allocator for jit/text, i.e. bpf,
+> ftrace trampolines, or bcachefs unpack functions.
 > 
-> Update init_cfg() function to update the link frequency
-> menu_skip_mask value.
-> 
-> Suggested-by: Sakari Ailus <sakari.ailus@iki.fi>
-> Signed-off-by: Shravan Chippa <shravan.chippa@microchip.com>
+> With this API we can avoid ever mapping pages both writeable and
+> executable (not implemented in this patch: need to tweak
+> module_alloc()), and it also supports sub-page sized allocations.
 
-Applied with the following diff:
+This looks like yet another workaround for that module_alloc() was not
+designed to handle permission changes. Rather than create more and more
+wrappers for module_alloc() we need to have core API for code allocation,
+apparently on top of vmalloc, and then use that API for modules, bpf,
+tracing and whatnot.
 
-diff --git a/drivers/media/i2c/imx334.c b/drivers/media/i2c/imx334.c
-index d4c9986aee597..93fc1716e00a1 100644
---- a/drivers/media/i2c/imx334.c
-+++ b/drivers/media/i2c/imx334.c
-@@ -118,6 +118,7 @@ struct imx334_mode {
-  * @vblank: Vertical blanking in lines
-  * @cur_mode: Pointer to current selected sensor mode
-  * @mutex: Mutex for serializing sensor controls
-+ * @menu_skip_mask: Menu skip mask for link_freq_ctrl
-  * @cur_code: current selected format code
-  * @streaming: Flag indicating streaming state
-  */
+There was quite lengthy discussion about how to handle code allocations
+here:
 
+https://lore.kernel.org/linux-mm/20221107223921.3451913-1-song@kernel.org/
+ 
+and Song is already working on improvements for module_alloc(), e.g. see
+commit ac3b43283923 ("module: replace module_layout with module_memory")
+
+Another thing, the code below will not even compile on !x86.
+
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> 
+> diff --git a/include/linux/jitalloc.h b/include/linux/jitalloc.h
+> new file mode 100644
+> index 0000000000..f1549d60e8
+> --- /dev/null
+> +++ b/include/linux/jitalloc.h
+> @@ -0,0 +1,9 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_JITALLOC_H
+> +#define _LINUX_JITALLOC_H
+> +
+> +void jit_update(void *buf, void *new_buf, size_t len);
+> +void jit_free(void *buf);
+> +void *jit_alloc(void *buf, size_t len);
+> +
+> +#endif /* _LINUX_JITALLOC_H */
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 4751031f3f..ff26a4f0c9 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1202,6 +1202,9 @@ config LRU_GEN_STATS
+>  	  This option has a per-memcg and per-node memory overhead.
+>  # }
+>  
+> +config JITALLOC
+> +	bool
+> +
+>  source "mm/damon/Kconfig"
+>  
+>  endmenu
+> diff --git a/mm/Makefile b/mm/Makefile
+> index c03e1e5859..25e82db9e8 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -138,3 +138,4 @@ obj-$(CONFIG_IO_MAPPING) += io-mapping.o
+>  obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
+>  obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
+>  obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
+> +obj-$(CONFIG_JITALLOC) += jitalloc.o
+> diff --git a/mm/jitalloc.c b/mm/jitalloc.c
+> new file mode 100644
+> index 0000000000..7c4d621802
+> --- /dev/null
+> +++ b/mm/jitalloc.c
+> @@ -0,0 +1,187 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/gfp.h>
+> +#include <linux/highmem.h>
+> +#include <linux/jitalloc.h>
+> +#include <linux/mm.h>
+> +#include <linux/moduleloader.h>
+> +#include <linux/mutex.h>
+> +#include <linux/set_memory.h>
+> +#include <linux/vmalloc.h>
+> +
+> +#include <asm/text-patching.h>
+> +
+> +static DEFINE_MUTEX(jit_alloc_lock);
+> +
+> +struct jit_cache {
+> +	unsigned		obj_size_bits;
+> +	unsigned		objs_per_slab;
+> +	struct list_head	partial;
+> +};
+> +
+> +#define JITALLOC_MIN_SIZE	16
+> +#define NR_JIT_CACHES		ilog2(PAGE_SIZE / JITALLOC_MIN_SIZE)
+> +
+> +static struct jit_cache jit_caches[NR_JIT_CACHES];
+> +
+> +struct jit_slab {
+> +	unsigned long		__page_flags;
+> +
+> +	struct jit_cache	*cache;
+> +	void			*executably_mapped;;
+> +	unsigned long		*objs_allocated; /* bitmap of free objects */
+> +	struct list_head	list;
+> +};
+> +
+> +#define folio_jit_slab(folio)		(_Generic((folio),			\
+> +	const struct folio *:		(const struct jit_slab *)(folio),	\
+> +	struct folio *:			(struct jit_slab *)(folio)))
+> +
+> +#define jit_slab_folio(s)		(_Generic((s),				\
+> +	const struct jit_slab *:	(const struct folio *)s,		\
+> +	struct jit_slab *:		(struct folio *)s))
+> +
+> +static struct jit_slab *jit_slab_alloc(struct jit_cache *cache)
+> +{
+> +	void *executably_mapped = module_alloc(PAGE_SIZE);
+> +	struct page *page;
+> +	struct folio *folio;
+> +	struct jit_slab *slab;
+> +	unsigned long *objs_allocated;
+> +
+> +	if (!executably_mapped)
+> +		return NULL;
+> +
+> +	objs_allocated = kcalloc(BITS_TO_LONGS(cache->objs_per_slab), sizeof(unsigned long), GFP_KERNEL);
+> +	if (!objs_allocated ) {
+> +		vfree(executably_mapped);
+> +		return NULL;
+> +	}
+> +
+> +	set_vm_flush_reset_perms(executably_mapped);
+> +	set_memory_rox((unsigned long) executably_mapped, 1);
+> +
+> +	page = vmalloc_to_page(executably_mapped);
+> +	folio = page_folio(page);
+> +
+> +	__folio_set_slab(folio);
+> +	slab			= folio_jit_slab(folio);
+> +	slab->cache		= cache;
+> +	slab->executably_mapped	= executably_mapped;
+> +	slab->objs_allocated = objs_allocated;
+> +	INIT_LIST_HEAD(&slab->list);
+> +
+> +	return slab;
+> +}
+> +
+> +static void *jit_cache_alloc(void *buf, size_t len, struct jit_cache *cache)
+> +{
+> +	struct jit_slab *s =
+> +		list_first_entry_or_null(&cache->partial, struct jit_slab, list) ?:
+> +		jit_slab_alloc(cache);
+> +	unsigned obj_idx, nr_allocated;
+> +
+> +	if (!s)
+> +		return NULL;
+> +
+> +	obj_idx = find_first_zero_bit(s->objs_allocated, cache->objs_per_slab);
+> +
+> +	BUG_ON(obj_idx >= cache->objs_per_slab);
+> +	__set_bit(obj_idx, s->objs_allocated);
+> +
+> +	nr_allocated = bitmap_weight(s->objs_allocated, s->cache->objs_per_slab);
+> +
+> +	if (nr_allocated == s->cache->objs_per_slab) {
+> +		list_del_init(&s->list);
+> +	} else if (nr_allocated == 1) {
+> +		list_del(&s->list);
+> +		list_add(&s->list, &s->cache->partial);
+> +	}
+> +
+> +	return s->executably_mapped + (obj_idx << cache->obj_size_bits);
+> +}
+> +
+> +void jit_update(void *buf, void *new_buf, size_t len)
+> +{
+> +	text_poke_copy(buf, new_buf, len);
+> +}
+> +EXPORT_SYMBOL_GPL(jit_update);
+> +
+> +void jit_free(void *buf)
+> +{
+> +	struct page *page;
+> +	struct folio *folio;
+> +	struct jit_slab *s;
+> +	unsigned obj_idx, nr_allocated;
+> +	size_t offset;
+> +
+> +	if (!buf)
+> +		return;
+> +
+> +	page	= vmalloc_to_page(buf);
+> +	folio	= page_folio(page);
+> +	offset	= offset_in_folio(folio, buf);
+> +
+> +	if (!folio_test_slab(folio)) {
+> +		vfree(buf);
+> +		return;
+> +	}
+> +
+> +	s = folio_jit_slab(folio);
+> +
+> +	mutex_lock(&jit_alloc_lock);
+> +	obj_idx = offset >> s->cache->obj_size_bits;
+> +
+> +	__clear_bit(obj_idx, s->objs_allocated);
+> +
+> +	nr_allocated = bitmap_weight(s->objs_allocated, s->cache->objs_per_slab);
+> +
+> +	if (nr_allocated == 0) {
+> +		list_del(&s->list);
+> +		kfree(s->objs_allocated);
+> +		folio_put(folio);
+> +	} else if (nr_allocated + 1 == s->cache->objs_per_slab) {
+> +		list_del(&s->list);
+> +		list_add(&s->list, &s->cache->partial);
+> +	}
+> +
+> +	mutex_unlock(&jit_alloc_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(jit_free);
+> +
+> +void *jit_alloc(void *buf, size_t len)
+> +{
+> +	unsigned jit_cache_idx = ilog2(roundup_pow_of_two(len) / 16);
+> +	void *p;
+> +
+> +	if (jit_cache_idx < NR_JIT_CACHES) {
+> +		mutex_lock(&jit_alloc_lock);
+> +		p = jit_cache_alloc(buf, len, &jit_caches[jit_cache_idx]);
+> +		mutex_unlock(&jit_alloc_lock);
+> +	} else {
+> +		p = module_alloc(len);
+> +		if (p) {
+> +			set_vm_flush_reset_perms(p);
+> +			set_memory_rox((unsigned long) p, DIV_ROUND_UP(len, PAGE_SIZE));
+> +		}
+> +	}
+> +
+> +	if (p && buf)
+> +		jit_update(p, buf, len);
+> +
+> +	return p;
+> +}
+> +EXPORT_SYMBOL_GPL(jit_alloc);
+> +
+> +static int __init jit_alloc_init(void)
+> +{
+> +	for (unsigned i = 0; i < ARRAY_SIZE(jit_caches); i++) {
+> +		jit_caches[i].obj_size_bits	= ilog2(JITALLOC_MIN_SIZE) + i;
+> +		jit_caches[i].objs_per_slab	= PAGE_SIZE >> jit_caches[i].obj_size_bits;
+> +
+> +		INIT_LIST_HEAD(&jit_caches[i].partial);
+> +	}
+> +
+> +	return 0;
+> +}
+> +core_initcall(jit_alloc_init);
+> 
 
 -- 
-Sakari Ailus
+Sincerely yours,
+Mike.
