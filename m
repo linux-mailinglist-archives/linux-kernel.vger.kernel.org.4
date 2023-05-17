@@ -2,276 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF0270765B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C25B70765F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjEQXWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 19:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S229676AbjEQXW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 19:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjEQXWS (ORCPT
+        with ESMTP id S229527AbjEQXW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 19:22:18 -0400
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2C52D47;
-        Wed, 17 May 2023 16:22:17 -0700 (PDT)
-Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
-        by mx0a-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HMtI1F027611;
-        Wed, 17 May 2023 16:22:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
- bh=a+s+FiRvl26AMlqx/feNN+g7mWF46Urr8/dHevO4uWM=;
- b=pKB3bwtt+HlMfhyzepO0iTnTV4kScnrHaKbx3O9Y5RSgUM9g9Qeay6qb/I0EivQVQEGz
- 6ys9pDYdmcoZhzDEDn7jN8e/QyyXWl3EVWvWxkNe70IwxtNyGYxwhYI0KdJU+ygRBzN/
- zl23lVGqdE7qLuXcj9WmbszHqHaJ7rEGe1df9VDB5yk0tSqoiGk5Pbp2rlUzQFLy/L5i
- dnsRWu1LGwYL707xbKR3Zkfi24NXzuamnGXDUuJgk3pqEx0++0AAAQ0/tU84kf1tM9yu
- oP4QFaO3urNod/gStd/TKTcFLbIQYMkGFEMnMXFQVDvcPHJaYnSVlj2ooecEwgJx0q8d aQ== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-        by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 3qj9t4x1h3-1
+        Wed, 17 May 2023 19:22:56 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120DC30E6;
+        Wed, 17 May 2023 16:22:49 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HMxhPP019648;
+        Wed, 17 May 2023 23:22:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hUbA3URmTGJE56PdDudnP72n27MNQz3qCtNpALMkXtE=;
+ b=FZsV5olTVz8TVObt978fI7iG6K2N0NENjqvygPHMnCXvJe1aQaB1mrRdc43YXjYBtC5v
+ mDN2W4OHiuYEBGY8kBA/G50RMCCc6uyT69TBMa1Uue7J2SKsQt5ncnR09dbNF++lc+lf
+ QzVH9DvmMlpjIL12ZWmQOFP07ApLiWsPevCptoby/dRAJp7Nz82lRKGH7hHGioU3Akaw
+ bF+pLFPRD0Ek3wjtBLSI77PH0xrJSqUvdsg3xXZtbi5EqEfBWJAUKKPyYBAmEsoTNiy0
+ US3x1YpcL5ZCxkkfQQbFIq0+jy83cGTSlnXAbZlIaK0D+ITYDziDkvRJKYBMq1qny1VB 0Q== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qmts29yk1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 16:21:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1684365719; bh=a+s+FiRvl26AMlqx/feNN+g7mWF46Urr8/dHevO4uWM=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=MWiHZXjoJaSgJ7gSrT+KQHjQE11ucmi3uvRoOAV4NXapjGN0FIIUvSCmfIRWox3A9
-         XYwjnMkMEAANMQwjelR65Zhfg72zr6bMdrVMD3Qs4eR53Zmvlqxmz/IZqu617tTu5u
-         yhSp/+B9rPFd/+LLZWu+4eZ3tibs/T63/7R6eezlfN00A8lwhTKhJOcJGAP7UZzr3p
-         pOuq4qxDfdyhElCR2M8BNEs/+74PsUclxZOjoOGn4dw1ByjZK8aHpCWV1YtTUiSa6r
-         VNgUKcSvC2BBSo2RcvqdHq/whFo/fPjFxqEnBzeM/WOM3gukCFIDrNSaxjRArhJ+l9
-         s0PLRAIndpN4w==
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits)
-         client-signature RSA-PSS (2048 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CA826404A8;
-        Wed, 17 May 2023 23:21:57 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id CDD23A006D;
-        Wed, 17 May 2023 23:21:56 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=CvThzLC9;
-        dkim-atps=neutral
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2047.outbound.protection.outlook.com [104.47.51.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 7049140637;
-        Wed, 17 May 2023 23:21:54 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hEY9f5mGLrFStcrR6/rgK2FbLMgtlA2ocEENa9XqurYMzxgl3jFnMQYpbfjWSbhJfBt3VhRmoOJd30QGl0NCgi9FTwl6JSh3N+9DBD1C4Qq0hxkZAZutv1ZYtw/bUm77rgqzWQi8BLacXeFimJDRFCG0d/7DLSeFGFtJqdO7coAYqpeHIfXm4vqB+TRQ2iZDsojajgvnMtjyo6vTrjxtRSzabdusAvuHMvhHPMNj9LFlR8sczu1xEAww5kKKxSi7VDrk0lEDQ/DuE0Vt9IP+anDijj8OASENZTTMn7oOwjYGG9rBPVylkXZUoJ9My9ozYrg1+s8Ipofpe5kUstZCmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a+s+FiRvl26AMlqx/feNN+g7mWF46Urr8/dHevO4uWM=;
- b=Lw/DVWuQndT6fOz8NQORHgY4mAw17gnWz9/gPljVKKN+MPm2RjB2uKV8aX0V6qfkhL7Tqr+pJ1+0cDdTCbZ176/7sW1MknkPwdr46dJ34n4y+79csUMXV4hE84v7NbvvDti2uZywMMYTfLdzdEEG8XqfSUBiY2+9u7LmxfKyNvjwzdqPZ/0oj+AaVHDWM+ZJCA/1pFKs6GGxeu04L7m6fotp/B3IjllTaRl/XaY0v1O2wUPuSzHwjevwrhNCDeiCCw7L3QnBgNMJwvqWOCPdq0DLbVpI4MPWg+ipEELCEEEd8U6LrxJ+WQ308zcCuziB/GFLvPar+capfWocUsK4AA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a+s+FiRvl26AMlqx/feNN+g7mWF46Urr8/dHevO4uWM=;
- b=CvThzLC9AGUPvmSy70uW84+UNtcC4YBp8YiiS7majc+Rzn88hHH0s+il5wdbNCB7zrThrIHW9nswNBSvGVJhTg/aK1U6bDDvHUnMbcX4eX0Nx8gus/r8Q90uQiiRe74otmfLZEWzvjEVQ5R5hHSsTzrQmawqdnT7IC8wknq1+hA=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by MN0PR12MB6080.namprd12.prod.outlook.com (2603:10b6:208:3c8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
- 2023 23:21:51 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::3400:81ff:f191:b312]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::3400:81ff:f191:b312%5]) with mapi id 15.20.6387.033; Wed, 17 May 2023
- 23:21:50 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Johan Hovold <johan@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>
-Subject: Re: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Thread-Topic: [PATCH v8 3/9] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Thread-Index: AQHZhifwmS3nkBg8RUifIdaehLDgz69c0rwAgAAvrwCAAMucgIAAAvoAgABKNICAAQUugA==
-Date:   Wed, 17 May 2023 23:21:50 +0000
-Message-ID: <20230517232147.4ds4rvvexwzqbzdx@synopsys.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-4-quic_kriskura@quicinc.com>
- <ZGNy6FvVrBjYmorz@hovoldconsulting.com>
- <b2954b92-8b12-700a-af50-b914af7b0ace@quicinc.com>
- <cacc5813-404a-c2ef-e768-20f2acd696d9@quicinc.com>
- <20230517032124.rdh7ehnair3wjuvm@synopsys.com>
- <ZGSGc-X5Oir8wddK@hovoldconsulting.com>
-In-Reply-To: <ZGSGc-X5Oir8wddK@hovoldconsulting.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR12MB4791:EE_|MN0PR12MB6080:EE_
-x-ms-office365-filtering-correlation-id: 3a33db8a-4375-425e-caa6-08db572d7e47
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SWIHAQZIunCK/ci8uQasV/WQy17jqnlXngnSPNiGtkM+yXz4RYW80LVps5wUfHvueUbcbDDrDhVFBXQUbUm/GG7YrqbXsghoVGkOACMYaSCjj5P+/NnbmhmCUQ51nf0mqjtFKtbF/dRdqC9E23dPGlSDor1/Rbzv05HbmM2KtTzV4RX6Zt08t64O29NQo0p2o117RaePU5zrTBYlkV8PnVZi6Pr5A+Vh8gEi1F7xsXI343orzqSDGrJFBAONLx0cTTImgT+2iOwmeQowx5CdYavtirnSRcK5q/s+/VYm0bBd4SBc4Bl2PrrOSNkUwv3yllQo1NPJO1DwywhVruJSSP90T8h7/Oc60ElnQZmfdPsNfN6P/93SlBmeCNgsTL9dQY6ATbiCSdNXsxwHEXNdEKaL6mIH8S+LoX77QuKU6xUiSn3XUe+V65r+Cr8iFfwxHb48jVp61aLRVU9zO6CJC0W3Yjnj8KB+/BPucoMcfDL17gs/HDwEumnMz1j9CWTGH6GKxHkN7UId3Uf06t0G/xLFxWLZ3PJjjlkgp3G3JK5bgqT+Nw0eLtbBwIUcBhK/NFHobyri8sx+rAFD+Lm4Dc60xneGUYIpdbwfMjx7LmYlvMvHfb7WUcKJJYN3z5QF
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(136003)(366004)(39860400002)(346002)(451199021)(5660300002)(71200400001)(41300700001)(83380400001)(2906002)(2616005)(38070700005)(36756003)(86362001)(122000001)(38100700002)(186003)(1076003)(26005)(6506007)(6512007)(8936002)(7416002)(8676002)(53546011)(66476007)(66946007)(66446008)(76116006)(66556008)(64756008)(6486002)(478600001)(6916009)(54906003)(316002)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b1liYkFMNGFUdHEwYUFlcUFCNWNoTUJSLytVdTF1T0JqajhTNnhHWkJlSTdj?=
- =?utf-8?B?TkJOSFpSanVQOXJXbmZIeWFxRWxXNUw0SHVSUnlmVmd5SnJrUTJWL2lkaEdK?=
- =?utf-8?B?Z1dQTm14TDlmb0h3c3ZFL0toZWhzM2hEOFk4Z25nSG5BQlZBTzdIOE4zakRF?=
- =?utf-8?B?bzdMV1haaC9aRGZvZlk4Z3QvYWN2NTRQclFMbGVPR2IyL1h1aHgrcWNsSzlS?=
- =?utf-8?B?Zk9PQml3WlZHVkRvUkQxUzg1N2hCZmovNXBnNzVzUzBLbGRtN3pKbHUwVlha?=
- =?utf-8?B?OUV1ME1XV2FkOU5VMUdBc3NUeDB1dzJzSmh6UmNGU1E0WHY5dFpWZkMraXlk?=
- =?utf-8?B?UnNrK2dBK3pnenovb3hYSTluemxadHNZdzJMSkpKYmFXSFV3MGkvQnRxWXJB?=
- =?utf-8?B?UVZNRkt4MXozaVMxa25ZWGFGR1B3dWZleGVvNFZSdE1VME01VUNzZmRiWUxY?=
- =?utf-8?B?cm5pYnFGbWJ4andRZHhyem5ZRGJEK1d0T2F1bEpsM0xjVXpTcm4xcnFRcGlN?=
- =?utf-8?B?aWNTcjZyWVZDN0NlVmlhcnZGNTRCU1hLL0poMWJpaDQxVXJPWWFaY2grOEVa?=
- =?utf-8?B?Tkp0cG5DcEVHcXBvQ0pBN1M0dnNRRjBUVERVcEdZb3ZvMHZENEpQY3dCU3RX?=
- =?utf-8?B?TGRZZEgrSFAvdFFHaVd0KzVBcDBaNGJuZUpabjczVURvZ1dIei9kcVlBcFE5?=
- =?utf-8?B?QjlVWUlKdUIybHFzUFFpelFLeldGVHhtQ3QycUlkaVY2Z3F4QStQYjd5Mkpw?=
- =?utf-8?B?azZQc1ZHVXFqVzJyZ05JZ1J6Uy9oaUZ3bXArVmNYVzRFc0dDTGF1ZWJtOHZJ?=
- =?utf-8?B?RDNKcVFWeVV6RUFUZElCcC84NnYxeXlwbi8wNFRjN2xQdWdFODJVMm5CZHd4?=
- =?utf-8?B?WXErcStDSHFJbzJDZ3RFcWFQN0FzNFVCSm4rSGtGeUN0TEpmbzZpMllOOUND?=
- =?utf-8?B?MHpiU3oxcXRyWkV5NG42Rk04UTFpTE9ZRXdLSG5GenA2SVRud294K1dZK1Nw?=
- =?utf-8?B?dDBQQ3psb08vQVJHNjliVERPTmF3T0RqV2w4N09NN2pFWXRMRVVYVy90cU1u?=
- =?utf-8?B?eG1uQzhVZVJDVXpZWGpSNGNBU3lkY2l5azFkaTdEQWovMHBnTDZOdkUxbUpw?=
- =?utf-8?B?WE1RQ0VOSmtEQjZXRXpaZlBycEtJYWxyWC92OUpQTEJBZEh2dHJiQjNvRG5a?=
- =?utf-8?B?WDJEaGk3MTM5V3czelRKTVVMOEpSYUpPNjlBQW5HTXVDd0c0Mmc4SUYwSTRL?=
- =?utf-8?B?T3YrQ0tsMG9BNGcvdVorclBBQ2JuTkk3MUFjYm9zQllpUDdFSjlVOU1Dclo4?=
- =?utf-8?B?bGVnOWdURVFDSUttbStqakREVm9lbU45Y3pnQVJJSjNsY0lOdTI3RXppUUE2?=
- =?utf-8?B?M0hLWUI1RVdMQmdndTJpNEJtUStkSkIxdHVpUmNsWW4zczY2T2V4cUlNdDJ4?=
- =?utf-8?B?V0hSV1VDOVY1MkZ6SVllVXhQR2EyZ2Y2L1BrNTdlbXpVMkRxQkFEeS9kc1RU?=
- =?utf-8?B?WmlLUEwxazZYV0x6M29MZGRJZnptVml4K0JscFdXT3BzZ0N4bXp5aWt1aDBa?=
- =?utf-8?B?WDZwRXVpVEx6cHp0Y1FKTUxhQVJNc3hWMGhQcy9MOVdZeUp5ZU56MXN1eU8v?=
- =?utf-8?B?YnRPRXBwS2RneTA1YzFTWHBoUDB3bE5zL1dCU2VVN29pNUJySGtZREtjZGJm?=
- =?utf-8?B?Q2hTZWJwM2ZRbGcwSDJmS0svWDVmZnpxeTZoeE1QdWVmcDVSYUYvclhhYzdK?=
- =?utf-8?B?dmFXZWVaZkFwSFNvREUzMm8zN1pwc201VER0YlZzOEJLNDJ2ZGI2MGxPUVZk?=
- =?utf-8?B?NHlJWDNpWWdPcUUxNXJvblN6SmZsZVp1UnNGUWZ6OE8vTlZHY2JhNjVSOHlQ?=
- =?utf-8?B?bVUzNzhTbGJBK1dUQy9MaENqVnh5dXRKUkhhTkpYc2lleEpLbjNJV0djYnhq?=
- =?utf-8?B?MG9RVUdCY1BnUjM5bDdra3p0Yy9BTVJFaFV6Y1BJS01hWUROR1lZeTh3MVBM?=
- =?utf-8?B?NkpxeExnZkZyVGdZM05YRndPejR1UE1zM21mWVJmUHhnN3BqTGx2ZVpFeFZB?=
- =?utf-8?B?NE45OWMyU1ZVSFA4MHhKNmI3NDVSa2U3aEN1cVVVanhPN0EvYXJrTVlsa0lz?=
- =?utf-8?Q?totYAEvXE8985T6s4RGfLL4/c?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A05A14EC532138438AD61128300459E8@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 17 May 2023 23:22:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34HNMcfJ032549
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 23:22:39 GMT
+Received: from [10.110.94.204] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 17 May
+ 2023 16:22:38 -0700
+Message-ID: <51f0439c-a5e8-b47a-21af-7bbbc944ca53@quicinc.com>
+Date:   Wed, 17 May 2023 16:22:37 -0700
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RnA4NTFpTjQ3R1M1SWs2YmRKeTJDeEdkanR2Q2ZzdEFtOFRYdm5wUEFQT2dr?=
- =?utf-8?B?WkNHdGVIWDg2TmVkSDhqbGdhcTV2VkhGQng4QzBLOUFaaHNQaGJGTnFueGYr?=
- =?utf-8?B?V2JrUCt6ako4MDY4Y0YzMWJTUlh3THNyZzNSbDVuWXpaN1pZZzJNU3JCSXBW?=
- =?utf-8?B?RVBneS9RdTVUMkZjckhJeWJNdUVOaFI1cjFDdDArVnh4Ym43a1BYaDBVdkxa?=
- =?utf-8?B?cU96cXB4NzBnQ3ArdmpUR0p3TmIvZEdQUHNySmtiY0tOUVBrRDhKc1FvR3ZH?=
- =?utf-8?B?ZThmZityRlREWS9obnpwbW9VakdRQ0dDK2crNVRiTzcweW85OFBqNkc0ZHhL?=
- =?utf-8?B?N0JjTGZyeEx0YXhVeTdNTUJTcE51NmlDUFgrZ0Vldkc5Mk9XSlFheS9idjB1?=
- =?utf-8?B?ZG1JSUlUWEZvRVpxTVVLTXR4UlIvSGk4WHcvSW1IeTFYc2hJZloxenk5N1hI?=
- =?utf-8?B?TGwyL3J1cDZkOHplUGF6bVliL1Q5R3BvRGZZUVJKaEp2ejZqL3k2Ly9tOFpP?=
- =?utf-8?B?eGUyTllKSmRQMnhRVk1lVnFwN2FwcU9sdEVGN1BzbjZnMTNuYWk2bUEreWY3?=
- =?utf-8?B?ZTBMR1Q5cE1GaGVsNEY4ZGhHMnprNjR0K2w5dkY3aTFrTTg4dDlFQlgzaTBX?=
- =?utf-8?B?OEhydjlZdDJiby9pVGhxUmVVeHN2OVZqTXVKZWdLZWlST0dCYkxTR0NzWkdt?=
- =?utf-8?B?OUMvZ0pxb2xJbU9BTnBuNGdSSEgzY3NrUTFCWldzSHJ3OXlHT2F2cElkUzE2?=
- =?utf-8?B?TkRlekZ0UURYRGM2Q25VSyt3dWpnT1ZTTk0wU25PbmlZK2ZTTDZjZDRuR3Ev?=
- =?utf-8?B?VG1RdTlvd3Q2eEtpbkEramlWdDYyb3ZRcWh2b2luR1ZERU95V3RERzk1b1BP?=
- =?utf-8?B?endac3ZONHJDY21vYlUvelJHd3JyVmZkb05GQW43NDZpQWhwOUNJSFFRam9Z?=
- =?utf-8?B?dVlnb0tzU1ZUaXFmYXM3enJLS1ovQnEvTGJVUzVhbjl3ZVY4S2lRVnR0NmJt?=
- =?utf-8?B?RXFwYkxYeDhvcjlRSVZwNFVTenl5bFpSYWNDa3NKb3VxN1V0TmJxQ0tFWnFv?=
- =?utf-8?B?K3psVGdjZkJKTzZ6M0QvVVJKSnpRbE8vKzl4UG5mWXpXOTZSelVhbFhBem5j?=
- =?utf-8?B?M2plS2ZETVphUGJEMXUwd3gvOUYrYVhkdHFEbXlWdCtPRFoxNG5Xdm01dzhS?=
- =?utf-8?B?TElqTEZIYWh1SVV3dTVQRUtkUXk0ZS9VUGx6Q25aK0dqbGZPak5zYlN6eElp?=
- =?utf-8?B?NWlWb0MvVzVTRjUxUUZnT3cxaW42bDZxSXg3T3paMkRUK2cyM3B4TnUxNWJY?=
- =?utf-8?B?QWFVSXVXdzlhMDdDV3h2REpmYlZzZGI5UTZVUStSOW5VZ1lPalVKN2pTOG05?=
- =?utf-8?B?a2RFcWtOTzFpZEE9PQ==?=
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a33db8a-4375-425e-caa6-08db572d7e47
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 23:21:50.6527
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ugJAtXeakFWOVDBV+WhHjiyxEyInXQuu6NupXFOlUtjNgQHEe4GcJG2LqFExW9G0v6y4zuNunXH8tE5EoU30cg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6080
-X-Proofpoint-GUID: e7R1HwO1O2xUyQakz-Mda0yYYzJP2hj-
-X-Proofpoint-ORIG-GUID: e7R1HwO1O2xUyQakz-Mda0yYYzJP2hj-
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v10 7/8] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
+ chipsets
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+CC:     <freedreno@lists.freedesktop.org>, <quic_sbillaka@quicinc.com>,
+        <andersson@kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <quic_jesszhan@quicinc.com>, <swboyd@chromium.org>,
+        <sean@poorly.run>, <linux-kernel@vger.kernel.org>
+References: <1684360919-28458-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684360919-28458-8-git-send-email-quic_khsieh@quicinc.com>
+ <w7xre5jdot3fpe3ldj6vcnvribpbalfvova5hhmbgvgvkrcm34@xqvsc5ga2knb>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <w7xre5jdot3fpe3ldj6vcnvribpbalfvova5hhmbgvgvkrcm34@xqvsc5ga2knb>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SMtPvud4DbmpjK5WAPRtu_wd9bpczX6U
+X-Proofpoint-ORIG-GUID: SMtPvud4DbmpjK5WAPRtu_wd9bpczX6U
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-17_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501 suspectscore=0
- adultscore=0 clxscore=1015 mlxscore=0 mlxlogscore=809 malwarescore=0
- lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305170191
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305170191
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCBNYXkgMTcsIDIwMjMsIEpvaGFuIEhvdm9sZCB3cm90ZToNCj4gT24gV2VkLCBNYXkg
-MTcsIDIwMjMgYXQgMDM6MjE6MjRBTSArMDAwMCwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPiA+IE9u
-IFdlZCwgTWF5IDE3LCAyMDIzLCBLcmlzaG5hIEt1cmFwYXRpIFBTU05WIHdyb3RlOg0KPiA+ID4g
-T24gNS8xNi8yMDIzIDg6MzIgUE0sIEtyaXNobmEgS3VyYXBhdGkgUFNTTlYgd3JvdGU6DQo+ID4g
-PiA+IE9uIDUvMTYvMjAyMyA1OjQxIFBNLCBKb2hhbiBIb3ZvbGQgd3JvdGU6DQo+IA0KPiA+ID4g
-PiA+IFlvdSBzaG91bGQgbm90IG1ha2UgYW5vdGhlciBjb3B5IG9mIHhoY2lfZmluZF9uZXh0X2V4
-dF9jYXAoKSwgYnV0IHJhdGhlcg0KPiA+ID4gPiA+IHVzZSBpdCBkaXJlY3RseS4NCj4gPiA+ID4g
-PiANCj4gPiA+ID4gPiBXZSBhbHJlYWR5IGhhdmUgZHJpdmVycyBvdXRzaWRlIG9mIHVzYi9ob3N0
-IHVzaW5nIHRoaXMgZnVuY3Rpb24gc28gaXQNCj4gPiA+ID4gPiBzaG91bGQgYmUgZmluZSB0byBk
-byB0aGUgc2FtZSBmb3Igbm93Og0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IMKgwqDCoMKgI2luY2x1
-ZGUgIi4uL2hvc3QveGhjaS1leHQtY2Fwcy5oIg0KPiANCj4gPiA+ID4gIMKgIFRoaXMgd2FzIHRo
-ZSBhcHByb2FjaCB3aGljaCB3ZSBmb2xsb3dlZCB3aGVuIHdlIGZpcnN0IGludHJvZHVjZWQgdGhl
-DQo+ID4gPiA+IHBhdGNoIFsxXS4gQnV0IFRoaW5oIHN1Z2dlc3RlZCB0byBkdXBsaWNhdGUgY29k
-ZSBzbyB0aGF0IHdlIGNhbiBhdm9pZA0KPiA+ID4gPiBhbnkgZGVwZW5kZW5jeSBvbiB4aGNpICh3
-aGljaCBzZWVtcyB0byBiZSByaWdodCkuIFNvIHNpbmNlIGl0cyBqdXN0IG9uZQ0KPiA+ID4gPiBm
-dW5jdGlvbiwgSSBkdXBsaWNhdGVkIGl0IGhlcmUuDQo+IA0KPiA+ID4gICBXb3VsZCBsaWtlIHRv
-IGtub3cgeW91ciBvcGluaW9uIGhlcmUgb24gaG93IHRvIHByb2NlZWQgZnVydGhlci4NCj4gDQo+
-ID4gUGxlYXNlIGtlZXAgdGhlbSBzZXBhcmF0ZWQuIFRoZSB4aGNpLWV4dC1jYXBzLmggaXMgZm9y
-IHhoY2kgZHJpdmVyIG9ubHkuDQo+ID4gSXQncyBub3QgbWVhbnQgdG8gYmUgZXhwb3NlZCB0byBv
-dGhlciBkcml2ZXJzLiBTYW1lIHdpdGggb3RoZXIgKi5oIGZpbGVzDQo+ID4gdW5kZXIgZHJpdmVy
-cy91c2IvaG9zdC4NCj4gDQo+IEFzIEkgbWVudGlvbmVkIGVhcmxpZXIsIGl0IGlzIGFscmVhZHkg
-dXNlZCBieSB0aGUgeGRiYyBlYXJseXByaW50aw0KPiBkcml2ZXIgd2hpY2ggbGl2ZXMgb3V0c2lk
-ZSBvZiBkcml2ZXJzL3VzYi9ob3N0LCBldmVuIGlmIHN1Y2ggYSBkZWJ1Zw0KPiBkcml2ZXIgY291
-bGQgYmUgY29uc2lkZXJlZCBhIHNwZWNpYWwgY2FzZS4NCj4gDQo+IElmIGl0IHR1cm5zIG91dCB0
-aGF0IHRoZXJlJ3Mgbm8gd2F5IHRvIGF2b2lkIG1hcHBpbmcgdGhvc2UgcmVnaXN0ZXJzDQo+IGZy
-b20gdGhlIHFjb20gZ2x1ZSBkcml2ZXIsIHRoZW4gSSB0aGluayBhdCBsZWFzdCB0aGUgcmVnaXN0
-ZXIgZGVmaW5lcw0KPiBuZWVkIHRvIGJlIHByb3ZpZGVkIGluIGEgZ2xvYmFsIGhlYWRlciByYXRo
-ZXIgdGhhbiBiZWluZyBjb3BpZWQNCj4gdmVyYmF0aW0uDQoNCkl0IHdvdWxkIGJlIGdvb2QgdG8g
-cHJvcGVybHkgZGVmaW5lIHRoZSBnbG9iYWwgaGVhZGVyIHdpdGggY29tbW9uDQpvZmZzZXQvaW50
-ZXJmYWNlIHRoYXQgY2FuIGJlIHB1YmxpYyBmb3Igb3RoZXIgZHJpdmVycy4NCg0KPiANCj4gQnV0
-IGhvcGVmdWxseSB0aGF0IGNhbiBiZSBhdm9pZGVkIHRvbyBhcyB0aGUgeGhjaSBkcml2ZXIgYWxy
-ZWFkeSBwYXJzZXMNCj4gdGhlc2UgcmVnaXN0ZXJzIGFuZCBzdG9yZXMgdGhlIHBvcnQgaW5mb3Jt
-YXRpb24sIGV2ZW4gaWYgYWNjZXNzaW5nIHRoYXQNCj4gZGF0YSBtYXkgcmVxdWlyZSBhIGJpdCBt
-b3JlIHdvcmsgY3VycmVudGx5Lg0KPiANCg0KTm90IG1hbnkgZHJpdmVycyBvdXRzaWRlIG9mIHho
-Y2kgc2hvdWxkIGNhcmUgYWJvdXQgaXRzIHJlZ2lzdGVycyBleGNlcHQNCmZvciBzb21lIHNwZWNp
-YWwgY2FzZXMuIEV2ZW4gZm9yIHRob3NlIHNwZWNpYWwgY2FzZXMsIG9ubHkgYSBzbWFsbA0Kc3Vi
-c2V0IG9mIHhoY2kgcmVnaXN0ZXJzIGFyZSB1c2VkLiBTbyB3ZSBtYXkgbm90IG5lZWQgYSBnbG9i
-YWwgaGVhZGVyDQpmb3IgdGhhdC4NCg0KV2hhdCB3ZSBtYXkgbmVlZCBpcyBhIGdsb2JhbCBoZWFk
-ZXIgdGhhdCBob2xkcyBhbGwgdGhlIHhoY2kNCnF1aXJrcy9jb25maWdzIHdpdGggZGVmaW5lZCBp
-bnRlcmZhY2UgZm9yIGRyaXZlcnMgb3V0c2lkZSBvZiB4aGNpIGNhbg0KdXNlIGFuZCBwYXNzIHRo
-b3NlIGNvbmZpZ3MgdG8geGhjaSAoc3VjaCBhcyBmcm9tIGR3YzMpLiBUaGlzIHJlcXVpcmVzDQpz
-b21lIHdvcmsuDQoNClRoYW5rcywNClRoaW5o
+
+
+On 5/17/2023 3:47 PM, Marijn Suijten wrote:
+> Title: "DPU >= 7.0" instead of "relevant chipsets" to match the others.
+> 
+> On 2023-05-17 15:01:58, Kuogee Hsieh wrote:
+>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>
+>> Add DSC 1.2 hardware blocks to the catalog with necessary sub-block and
+>> feature flag information.  Each display compression engine (DCE) contains
+>> dual DSC encoders so both share same base address but with
+>> its own different sub block address.
+> 
+> If you reword it, also reflow this line.
+> 
+>>
+>> changes in v4:
+>> -- delete DPU_DSC_HW_REV_1_1
+>> -- re arrange sc8280xp_dsc[]
+>>
+>> changes in v4:
+>> -- fix checkpatch warning
+>>
+>> changes in v10:
+>> -- remove hard slice from commit text
+> 
+> It is still mentioned in the diff though, that's why I originally
+> requested a better place to describe it.
+> 
+>> -- replace DPU_DSC_NATIVE_422_EN with DPU_DSC_NATIVE_42x_EN
+>> -- change DSC_BLK_1_2 .len from 0x100 to 0x29c
+>>
+>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+>>
+>> kuogee: catalog.h
+> 
+> What's this for?  This file isn't touched in this patch.
+> 
+>> ---
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h | 14 ++++++++++++
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  7 ++++++
+>>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   | 16 ++++++++++++++
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h | 14 ++++++++++++
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 14 ++++++++++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 25 +++++++++++++++++++++-
+>>   6 files changed, 89 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+>> index 500cfd0..d90486f 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+>> @@ -153,6 +153,18 @@ static const struct dpu_merge_3d_cfg sm8350_merge_3d[] = {
+>>   	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+>>   };
+>>   
+>> +/*
+>> + * NOTE: Each display compression engine (DCE) contains dual hard
+>> + * slice DSC encoders so both share same base address but with
+>> + * its own different sub block address.
+>> + */
+>> +static const struct dpu_dsc_cfg sm8350_dsc[] = {
+>> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+>> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+>> +};
+>> +
+>>   static const struct dpu_intf_cfg sm8350_intf[] = {
+>>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+>> @@ -215,6 +227,8 @@ const struct dpu_mdss_cfg dpu_sm8350_cfg = {
+>>   	.dspp = sm8350_dspp,
+>>   	.pingpong_count = ARRAY_SIZE(sm8350_pp),
+>>   	.pingpong = sm8350_pp,
+>> +	.dsc_count = ARRAY_SIZE(sm8350_dsc),
+>> +	.dsc = sm8350_dsc,
+>>   	.merge_3d_count = ARRAY_SIZE(sm8350_merge_3d),
+>>   	.merge_3d = sm8350_merge_3d,
+>>   	.intf_count = ARRAY_SIZE(sm8350_intf),
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+>> index 5646713..52609b8 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+>> @@ -93,6 +93,11 @@ static const struct dpu_pingpong_cfg sc7280_pp[] = {
+>>   	PP_BLK_DITHER("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
+>>   };
+>>   
+>> +/* NOTE: sc7280 only has one DSC hard slice encoder */
+>> +static const struct dpu_dsc_cfg sc7280_dsc[] = {
+>> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+>> +};
+>> +
+>>   static const struct dpu_intf_cfg sc7280_intf[] = {
+>>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+>> @@ -149,6 +154,8 @@ const struct dpu_mdss_cfg dpu_sc7280_cfg = {
+>>   	.mixer = sc7280_lm,
+>>   	.pingpong_count = ARRAY_SIZE(sc7280_pp),
+>>   	.pingpong = sc7280_pp,
+>> +	.dsc_count = ARRAY_SIZE(sc7280_dsc),
+>> +	.dsc = sc7280_dsc,
+>>   	.intf_count = ARRAY_SIZE(sc7280_intf),
+>>   	.intf = sc7280_intf,
+>>   	.vbif_count = ARRAY_SIZE(sdm845_vbif),
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+>> index 808aacd..a84cf36 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+>> @@ -141,6 +141,20 @@ static const struct dpu_merge_3d_cfg sc8280xp_merge_3d[] = {
+>>   	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+>>   };
+>>   
+>> +/*
+>> + * NOTE: Each display compression engine (DCE) contains dual hard
+>> + * slice DSC encoders so both share same base address but with
+>> + * its own different sub block address.
+>> + */
+>> +static const struct dpu_dsc_cfg sc8280xp_dsc[] = {
+>> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+>> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+>> +	DSC_BLK_1_2("dce_2_0", DSC_4, 0x82000, 0x29c, 0, dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_2_1", DSC_5, 0x82000, 0x29c, 0, dsc_sblk_1),
+>> +};
+>> +
+>>   /* TODO: INTF 3, 8 and 7 are used for MST, marked as INTF_NONE for now */
+>>   static const struct dpu_intf_cfg sc8280xp_intf[] = {
+>>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>> @@ -216,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8280xp_cfg = {
+>>   	.dspp = sc8280xp_dspp,
+>>   	.pingpong_count = ARRAY_SIZE(sc8280xp_pp),
+>>   	.pingpong = sc8280xp_pp,
+>> +	.dsc_count = ARRAY_SIZE(sc8280xp_dsc),
+>> +	.dsc = sc8280xp_dsc,
+>>   	.merge_3d_count = ARRAY_SIZE(sc8280xp_merge_3d),
+>>   	.merge_3d = sc8280xp_merge_3d,
+>>   	.intf_count = ARRAY_SIZE(sc8280xp_intf),
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+>> index 1a89ff9..1620622 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+>> @@ -161,6 +161,18 @@ static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
+>>   	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
+>>   };
+>>   
+>> +/*
+>> + * NOTE: Each display compression engine (DCE) contains dual hard
+>> + * slice DSC encoders so both share same base address but with
+>> + * its own different sub block address.
+>> + */
+>> +static const struct dpu_dsc_cfg sm8450_dsc[] = {
+>> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+>> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+>> +};
+>> +
+>>   static const struct dpu_intf_cfg sm8450_intf[] = {
+>>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+>> @@ -223,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8450_cfg = {
+>>   	.dspp = sm8450_dspp,
+>>   	.pingpong_count = ARRAY_SIZE(sm8450_pp),
+>>   	.pingpong = sm8450_pp,
+>> +	.dsc_count = ARRAY_SIZE(sm8450_dsc),
+>> +	.dsc = sm8450_dsc,
+>>   	.merge_3d_count = ARRAY_SIZE(sm8450_merge_3d),
+>>   	.merge_3d = sm8450_merge_3d,
+>>   	.intf_count = ARRAY_SIZE(sm8450_intf),
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>> index 497b34c..6582a14 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+>> @@ -165,6 +165,18 @@ static const struct dpu_merge_3d_cfg sm8550_merge_3d[] = {
+>>   	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
+>>   };
+>>   
+>> +/*
+>> + * NOTE: Each display compression engine (DCE) contains dual hard
+>> + * slice DSC encoders so both share same base address but with
+>> + * its own different sub block address.
+>> + */
+>> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
+>> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+>> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+>> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+>> +};
+>> +
+>>   static const struct dpu_intf_cfg sm8550_intf[] = {
+>>   	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+>> @@ -227,6 +239,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
+>>   	.dspp = sm8550_dspp,
+>>   	.pingpong_count = ARRAY_SIZE(sm8550_pp),
+>>   	.pingpong = sm8550_pp,
+>> +	.dsc_count = ARRAY_SIZE(sm8550_dsc),
+>> +	.dsc = sm8550_dsc,
+>>   	.merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
+>>   	.merge_3d = sm8550_merge_3d,
+>>   	.intf_count = ARRAY_SIZE(sm8550_intf),
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index f2a1535..9612ab5 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -1,6 +1,6 @@
+>>   // SPDX-License-Identifier: GPL-2.0-only
+>>   /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+>> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+>> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>>    */
+>>   
+>>   #define pr_fmt(fmt)	"[drm:%s:%d] " fmt, __func__, __LINE__
+>> @@ -522,6 +522,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+>>   /*************************************************************
+>>    * DSC sub blocks config
+>>    *************************************************************/
+>> +static const struct dpu_dsc_sub_blks dsc_sblk_0 = {
+>> +	.enc = {.base = 0x100, .len = 0x100},
+>> +	.ctl = {.base = 0xF00, .len = 0x10},
+>> +};
+>> +
+>> +static const struct dpu_dsc_sub_blks dsc_sblk_1 = {
+>> +	.enc = {.base = 0x200, .len = 0x100},
+>> +	.ctl = {.base = 0xF80, .len = 0x10},
+>> +};
+>> +
+>>   #define DSC_BLK(_name, _id, _base, _features) \
+>>   	{\
+>>   	.name = _name, .id = _id, \
+>> @@ -529,6 +539,19 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+>>   	.features = _features, \
+>>   	}
+>>   
+>> +/*
+>> + * NOTE: Each display compression engine (DCE) contains dual hard
+>> + * slice DSC encoders so both share same base address but with
+>> + * its own different sub block address.
+>> + */
+> 
+> I still think this comment is superfluous (and doesn't even apply
+> generically, see i.e. sc7280) and should best be kept exclusively in the
+> SoC-specific catalog files.
+> 
+> - Marijn
+> 
+
+sc7280 is the only exception as it has only one encoder. But, by and 
+large, for all other chipsets this is true and hence kept here.
+
+The main reason for this comment is people should not get confused that 
+how come two DSC encoders have the same base address.
+
+>> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
+>> +	{\
+>> +	.name = _name, .id = _id, \
+>> +	.base = _base, .len = _len, \
+>> +	.features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
+>> +	.sblk = &_sblk, \
+>> +	}
+>> +
+>>   /*************************************************************
+>>    * INTF sub blocks config
+>>    *************************************************************/
+>> -- 
+>> 2.7.4
+>>
