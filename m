@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D3B707300
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3013870730B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjEQU2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
+        id S229538AbjEQUaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjEQU2b (ORCPT
+        with ESMTP id S229510AbjEQUaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:28:31 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B011FFA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:28:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 17 May 2023 16:30:21 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8982835AD;
+        Wed, 17 May 2023 13:30:18 -0700 (PDT)
+Received: from darkstar.musicnaut.iki.fi (85-76-146-199-nat.elisa-mobile.fi [85.76.146.199])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E302B22665;
-        Wed, 17 May 2023 20:28:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684355307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4QM4VF60zwzyWs;
+        Wed, 17 May 2023 23:30:13 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1684355415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TsMoPVln3DJjIjic43H/HtxMvkVu6MN2Vg/Yi5CKxAc=;
-        b=lobWVl+tPn6RYkrzquAbpPUUU+0Xz3FGiQpyqiBgi6fEB88yTOvwta18Ms+4tl7A2QTPRX
-        B4ZuDUgOAEqOvEe4RVMEqqo2x8IcneYnAawRHzVJ/RMX8F2DbHJ0fc7W8iNuSkAPj45lm+
-        yZxF+FLgC6p0jHke+Snk3j6H/onTfYU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684355307;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=hTkUMKFrciCQ4jvTUoCLaFdooSw1ob2FrpRn38lXzSc=;
+        b=zFSqMzYpKIoO2u9ou920IiHgMUT6AJ4zTnOheAdfxrpUGH7C7Ms1V2Rl5w1p9jZwSR06an
+        uklHtEjV39RsP+eSV3D3EhNHvJC9RzGOO9UppS7bmngSQvnv0wTIl6qEKYNPcClXqztNt0
+        0TrdBA4L8eovau8osgSuF/OJ6O6RiNs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1684355415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TsMoPVln3DJjIjic43H/HtxMvkVu6MN2Vg/Yi5CKxAc=;
-        b=fyGYrSMmNoM1O7B5tvabbnmyStk5593LkcVqzur8fCsa9p7ej8JQ5PgkeHpVUVWRbEbxeK
-        mACeXQJmqBjcJICw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 582BB13478;
-        Wed, 17 May 2023 20:28:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3k41FOs4ZWSQCAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 17 May 2023 20:28:27 +0000
-Date:   Wed, 17 May 2023 22:28:26 +0200
-Message-ID: <87353u1z4l.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
-        Arnd Bergmann <arnd@arndb.de>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ALSA: emu10k1: fix 64-bit integer division
-In-Reply-To: <20230517201920.592909-1-arnd@kernel.org>
-References: <20230517201920.592909-1-arnd@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=hTkUMKFrciCQ4jvTUoCLaFdooSw1ob2FrpRn38lXzSc=;
+        b=MseZBiMF3JsOdjPfUiXfvsFdWJHKy/+NCnhp7jv/O/Thws6O18OalODIcnGze7eMrJGvQW
+        cYy6b6gSYvMe+12PRjfTg27fJj7tSTzmqGiAc+mu6NIhoeujqB4j2pu7lD8lVALb7Dqk/e
+        G612Mn780vfcocyGetTmDEo9mNt0FwE=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684355415; a=rsa-sha256; cv=none;
+        b=N0eWTuiTSlWvCqqFgNs3lGYhdcQDcTkJNp7aeODqoJNFSAu0lYRvEVO5WlYNrdEDzS1nNs
+        gLvJdu8WXbtSegTRz74AKm4FlJs5LLTLz2FVTGvvCBkEWJ7s29ekpkRe98AiEye6aRXSSt
+        Y1l1Z+SjdvgjCuX3c4rUCRsnZ9C68Wo=
+Date:   Wed, 17 May 2023 23:30:11 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Helge Deller <deller@gmx.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] ARM/mmc: Convert old mmci-omap to GPIO descriptors
+Message-ID: <20230517203011.GH271152@darkstar.musicnaut.iki.fi>
+References: <20230430-nokia770-regression-v4-0-9b6dc5536b17@linaro.org>
+ <20230430-nokia770-regression-v4-2-9b6dc5536b17@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230430-nokia770-regression-v4-2-9b6dc5536b17@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 22:19:17 +0200,
-Arnd Bergmann wrote:
-> 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Division of 64-bit values causes a link failure on 32-bit targets, depending
-> on compiler version and target architecture:
-> 
-> ERROR: modpost: "__divdi3" [sound/pci/emu10k1/snd-emu10k1.ko] undefined!
-> ERROR: modpost: "__udivdi3" [sound/pci/emu10k1/snd-emu10k1.ko] undefined!
-> 
-> Replace these with the safe div_u64() helpers.
-> 
-> Fixes: bb5ceb43b7bf ("ALSA: emu10k1: fix non-zero mixer control defaults in highres mode")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi,
 
-Another fix patch was already submitted and merged:
- https://lore.kernel.org/r/20230517164800.3650699-1-oswald.buddenhagen@gmx.de
+This one has some issue as mmci-omap is unable to find the GPIOs on 770.
 
-Let me know if you still hit the issue with that patch.
+On Mon, May 08, 2023 at 11:20:07PM +0200, Linus Walleij wrote:
+> +static struct gpiod_lookup_table nokia770_mmc_gpio_table = {
+> +	.dev_id = "mmci-omap",
 
+Changing this to "mmci-omap.1" helped, not sure if that is a correct way.
+Most likely N800 and N810 are broken as well.
 
-thanks,
-
-Takashi
+A.
