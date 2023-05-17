@@ -2,133 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6594E70630E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A87370630D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjEQIiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
+        id S230510AbjEQIiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjEQIhx (ORCPT
+        with ESMTP id S230342AbjEQIhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:37:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B4EE5D
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:36:52 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H86rNR032593;
-        Wed, 17 May 2023 08:36:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=k5ezE3oty8ShAQ0hZ/r7CNmwk8Sn0FZoFnTfrFKJtAA=;
- b=Fim/btnHSuJ6+sxpBD5e04I7Uei98jRkXcaGiq13X2A+Kv+eryDJbtGNQ+2yX5yKkgFW
- oxaszOVCj8GyoD/IT/e9blnolJ9n+LmcNxxHxJ/HJjXW0NT9NYR19sc4CvdZyEryhWIZ
- SYA9iMEoF5pnOP/SVvoSEpbsSWDR2VXlTSci6NGsjMk4HiPxSMeROQ8HyrorIBBxCydo
- qarR5g4OxbLYSZ3Bn1ZwkdU25ZtVTiKpZh8gWeg3dtiSdtncGltgSo4YJkplib/7Pesa
- 2tsPfrCFDJ25TqFhpwucbIR5M3h3l0xML+pyzjXJPuY2GFIor1T+fmttMj2Y9yrie5tv 9Q== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmtwph7sr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 08:36:35 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H3rLOO025501;
-        Wed, 17 May 2023 08:36:32 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qj2651qcm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 08:36:32 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34H8aU4w39846632
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 08:36:30 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0172A2004D;
-        Wed, 17 May 2023 08:36:30 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E2CB820040;
-        Wed, 17 May 2023 08:36:26 +0000 (GMT)
-Received: from [9.43.46.213] (unknown [9.43.46.213])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 08:36:26 +0000 (GMT)
-Message-ID: <61cd5edb-3cce-823b-d3c5-affd1d898a9e@linux.ibm.com>
-Date:   Wed, 17 May 2023 14:06:24 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: arch/powerpc/kexec/relocate_32.o: warning: objtool: .text+0x2bc:
- unannotated intra-function call
-To:     kernel test robot <lkp@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <202305161316.4TNTsLUj-lkp@intel.com>
-Content-Language: en-US
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-In-Reply-To: <202305161316.4TNTsLUj-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uG9NiPj5_68t4ODaYwi588OATSrShghQ
-X-Proofpoint-GUID: uG9NiPj5_68t4ODaYwi588OATSrShghQ
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 17 May 2023 04:37:51 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892481A5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:36:45 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bc2feb320so663465a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684312604; x=1686904604;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g7ruM67WgRDIXbVKb/F6e9gFEQIj+XoUWJErkIr/uRg=;
+        b=ItSaBxJTJ1tBihpooE/eT24WtPMlJ5sdTHYC9l471aIHQkuvYcRgVDLGm7zaeDx0Bc
+         a36OA5ogxSHq9sO1144MHXOcUG5Y3QLpR0e9Nik2MR31WkUIXZCe22sI2gI5wNCKz9kr
+         VZFFD4gmzMImzYaEayluE6x8Bj/dRjpcOwJJ0I2IaJyRb5IQlBbalaf975PvfR5UQzvO
+         QDftdV7RP/vABR+XhsI+BRLDSXSbgoK7J8NZfoBdlxRZV25GHkcooq7gvv7SUuZgHDrF
+         rGnC1nOr+QXN37dAKP6xpSljkn9O6VjZGEA2ymJpMtcTFUyxMhZkBFxEmJGsuFMnqlNx
+         P3cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684312604; x=1686904604;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g7ruM67WgRDIXbVKb/F6e9gFEQIj+XoUWJErkIr/uRg=;
+        b=NaiEjhaVEjfj3Ok9EthrVqqWli3S0Sm6K/UNLATzkhF0XRmtC7HJCqedTqQKUFrGm+
+         wf1VeDi8ykpgijzQxb597Mu5ax8bgs/Zew0GEPkbGBeu/Sl3fMy8e8fJk+JukuPw4rOG
+         34gkK1QFz30DO24i3gB408tnI6DCNDQ3pdT6Rx7LH7OkN34lpeIiBAxwnKH22IVJYdPK
+         L8NUIJN58yfbQV3gaZ2MDeS40N2gqvVb5vB768F1j+fAZHsLRJXEoYAQc43GiocCtPmW
+         adKJQ6ICfP02E+DyJdZMYwI2QkK/P8d6wmGwq+IN53a6Jm29i1CUlCc8mE23Nmb7Ho5I
+         fZbw==
+X-Gm-Message-State: AC+VfDwCDToEJTnfioWTB0VzZAAHIvAs9MSr3xJ1n5966TDbc2ZcM8j2
+        4ZTG5W5erKrzGm4hE4WInlEU7w==
+X-Google-Smtp-Source: ACHHUZ7mi58zcftzLkvCYSEZqALyJYLyJJAqnIEVZEYRSCl/2H4HV/w7hE9ZWWBQ9pRBw86G0ihu6Q==
+X-Received: by 2002:a17:907:8a14:b0:94f:6218:191f with SMTP id sc20-20020a1709078a1400b0094f6218191fmr39457018ejc.52.1684312603985;
+        Wed, 17 May 2023 01:36:43 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id ta26-20020a1709078c1a00b009663b1addb0sm11911626ejc.224.2023.05.17.01.36.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 01:36:43 -0700 (PDT)
+Message-ID: <38ae4ceb-da21-d73e-9625-1918b4ab4e16@linaro.org>
+Date:   Wed, 17 May 2023 10:36:42 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 spamscore=0 phishscore=0 impostorscore=0
- malwarescore=0 clxscore=1011 mlxlogscore=999 suspectscore=0
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305170070
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment option
+Content-Language: en-US
+To:     Ivan Mikhaylov <fr0st61te@gmail.com>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Paul Fertser <fercerpav@gmail.com>
+References: <20230509143504.30382-1-fr0st61te@gmail.com>
+ <20230509143504.30382-4-fr0st61te@gmail.com>
+ <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
+ <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
+ <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
+ <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
+ <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
+ <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 16/05/2023 13:47, Ivan Mikhaylov wrote:
+hy this is property of the hardware. I
+>>>> understand
+>>>> that this is something you want Linux to do, but DT is not for
+>>>> that
+>>>> purpose. Do not encode system policies into DT and what above
+>>>> commit
+>>>> says is a policy.
+>>>>
+>>>
+>>> Krzysztof, okay then to which DT subsystem it should belong? To
+>>> ftgmac100 after conversion?
+>>
+>> To my understanding, decision to add some numbers to MAC address does
+>> not look like DT property at all. Otherwise please help me to
+>> understand
+>> - why different boards with same device should have different
+>> offset/value?
+>>
+>> Anyway, commit msg also lacks any justification for this.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Krzysztof, essentially some PCIe network cards have like an additional
+> *MII interface which connects directly to a BMC (separate SoC for
+> managing a motherboard) and by sending special ethernet type frames
+> over that connection (called NC-SI) the BMC can obtain MAC, get link
+> parameters etc. So it's natural for a vendor to allocate two MACs per
+> such a board with PCIe card intergrated, with one MAC "flashed into"
+> the network card, under the assumption that the BMC should
 
-On 5/16/23 11:19, kernel test robot wrote:
-> Hi Sathvika,
->
-> First bad commit (maybe != root cause):
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
-> commit: c984aef8c8326035570ff6e01d0ff9e79a5dfa76 objtool/powerpc: Add --mcount specific implementation
-> date:   6 months ago
-> config: powerpc-randconfig-r006-20230516 (https://download.01.org/0day-ci/archive/20230516/202305161316.4TNTsLUj-lkp@intel.com/config)
-> compiler: powerpc-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c984aef8c8326035570ff6e01d0ff9e79a5dfa76
->          git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->          git fetch --no-tags linus master
->          git checkout c984aef8c8326035570ff6e01d0ff9e79a5dfa76
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202305161316.4TNTsLUj-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> arch/powerpc/kexec/relocate_32.o: warning: objtool: .text+0x2bc: unannotated intra-function call
+Who makes the assumption that next MAC should differ by 1 or 2?
 
-Please find link to a patch that addresses the above reported warning: 
-https://lore.kernel.org/linuxppc-dev/20221215115258.80810-1-sv@linux.ibm.com/. 
-This patch still applies cleanly atop powerpc/merge branch and I don't 
-see the warning anymore.
+> automatically use the next MAC. So it's the property of the hardware as
+> the vendor designs it, not a matter of usage policy.
+> 
+> Also at the nvmem binding tree is "nvmem-cell-cells" which is literally
+> the same as what was proposed but on different level.
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/Documentation/devicetree/bindings/nvmem?id=7e2805c203a6c8dc85c1cfda205161ed39ae82d5
 
-Thanks,
-Sathvika
+How is this similar? This points the location of mac address on some NV
+storage. You add fixed value which should be added to the Ethernet.
+
+I might be missing the context but there is no DTS example nor user of
+this property, so how can I get such?
+
+Best regards,
+Krzysztof
+
