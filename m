@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E2A7066C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C7A7066C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjEQLdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
+        id S229485AbjEQLdN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 May 2023 07:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjEQLdF (ORCPT
+        with ESMTP id S229505AbjEQLdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:33:05 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B4B183
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:33:04 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-56186035b61so6450067b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684323183; x=1686915183;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HvwENPq8tz9NntrqfQSfZoeD7LfbRJhmcL0T3gzk8cQ=;
-        b=N2DxmYlr27xb0YitGC/hgEDkTgMt7b1iKxAHC68gdSzL+L0v1G35idBVkCx6Ybj8W6
-         YsyR4O5U8mzovWTQWLq9K8q5W7NFgg7GUl5wzSCxsiUyip8nBe4tUmBhMRnFbe6ldOZB
-         f0Mg5faItUv/poG4hvzPUzKZPe/Ox/0uGUty/0pYiZSYTN0pdzIWgnzKLo2ADFGAPzB2
-         V5L7ovVNnhItXHGFqjn1wCvBlsxTfBs8AlbxNAXY7yOAKRnVACWuIicPwt0p7wRkwL/Y
-         zWW41o4E9Ulolm/FBenBlsL6vyJtF9wEAUPPnZfM9UYt4Yc+L6cf5mSC8yofzX/xByUG
-         PT3g==
+        Wed, 17 May 2023 07:33:09 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91DC3586;
+        Wed, 17 May 2023 04:33:08 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9659dee48edso14904766b.0;
+        Wed, 17 May 2023 04:33:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684323183; x=1686915183;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HvwENPq8tz9NntrqfQSfZoeD7LfbRJhmcL0T3gzk8cQ=;
-        b=DP8Lo/49nukr/zOztSu+TpC2ICaUO/r9CG0my07HnA06+fTQdNmwtRIXUlaiIO41j6
-         ESDJXlWNofHemn3V2FVgvuna0bTp2HUOwMkcIHYGLPa6HyaL/h6xkVPDINnhPML+1IaO
-         UuydmHOJ06xkujrq2HFFWyd2flP/5+1rvkDwn/g8Ww4gqfEVfD/5G1IpQYH24HwEehOM
-         j44yX/bYMfipOWzVEa+YAq9SNjWS1RTGzrZ5Sz6axSGbIBc4fUbHsKCAHfhDi9DpTyzm
-         lUWDcZd+61NK2CDUiqnAzK+NG3ZWpxeiQSlgadgJFooKlmGU88H/PDL6BQX5F8WqjKJt
-         s9dA==
-X-Gm-Message-State: AC+VfDyrWtO0jYPlJVLXcJNUPBsMf5/Wz/bZssTqt2YSXXGeCLnsWs2E
-        gJwqKdnNzjQVE9/9qzoTn5LXpQ==
-X-Google-Smtp-Source: ACHHUZ7QI6oEtWWpej1fkbLVHNVY3j0sKPynjITx+DFobNdeMqR68LNW0+OB/2tJfik76Ijyk66Giw==
-X-Received: by 2002:a0d:e255:0:b0:561:904d:27d9 with SMTP id l82-20020a0de255000000b00561904d27d9mr4059441ywe.4.1684323183452;
-        Wed, 17 May 2023 04:33:03 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k1-20020a819301000000b005617251bb95sm593292ywg.84.2023.05.17.04.33.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 04:33:03 -0700 (PDT)
-Date:   Wed, 17 May 2023 04:32:50 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-cc:     Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org,
-        willy@infradead.org, markhemm@googlemail.com, rientjes@google.com,
-        surenb@google.com, shakeelb@google.com, fvdl@google.com,
-        quic_pkondeti@quicinc.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V7 2/2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
- for shmem
-In-Reply-To: <eeeba374-9247-96fd-c9f5-8cba8761f1b9@quicinc.com>
-Message-ID: <aa4352d8-a549-32e5-874f-1cfee2a5b3e@google.com>
-References: <cover.1676378702.git.quic_charante@quicinc.com> <631e42b6dffdcc4b4b24f5be715c37f78bf903db.1676378702.git.quic_charante@quicinc.com> <2d56e1dd-68b5-c99e-522f-f8dadf6ad69e@google.com> <eeeba374-9247-96fd-c9f5-8cba8761f1b9@quicinc.com>
+        d=1e100.net; s=20221208; t=1684323187; x=1686915187;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rl9g4P9fn/ow2SVfxZLfrDHoUGbKllbUHO/i8DHz10U=;
+        b=dQCQHHR6fdQzKMoP0z3RcmA0E99oTgixH7FaiQaX6olAgz6TtSdmqEPDFrggOhXyMS
+         9UhosN1gPdEnOBbX1O9VCY4gIVEIGO6NQXLD6+b8+Bxt75LonXkJByNkNgBCcHUYjnO3
+         sJtqCQkxcPEGumDflGZUv1A/l3skE+FMWhkY/VBTPxrq9TYGtKRBJC25qBtxBCN284J7
+         i45GU5n6VKAcL49bbuSmfuh7w81oxehumPjnWeLgyYOAYm64Fj4iJD1ppRFAjIItdPLu
+         9vlfa5++bhdu9z3WNp5QKBekg2Wt2uNod89pQO6G7ycjAK+7GwPwgDRVcDJ1GE9yLUI3
+         1GHQ==
+X-Gm-Message-State: AC+VfDzXCWeEipkPEDSX4EzxT6AzMWVwGtv1JKmtRn/hoiIopAwXzUaK
+        sttX8QR7tY9AUXqJvFJWY9MGWGaDewZHkYMB+IE=
+X-Google-Smtp-Source: ACHHUZ50fbAAxtJUeYyoZEDxDXkML5PHCTkLAd8EIK8CYo/D7X7qDb8I8MVqT33c2HnEOnEdnVmr2s3OtHNkqVDZnEE=
+X-Received: by 2002:a17:906:ce:b0:965:9db5:3821 with SMTP id
+ 14-20020a17090600ce00b009659db53821mr1937007eji.7.1684323186699; Wed, 17 May
+ 2023 04:33:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517105235.29176-1-ilpo.jarvinen@linux.intel.com> <20230517105235.29176-3-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20230517105235.29176-3-ilpo.jarvinen@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 17 May 2023 13:32:55 +0200
+Message-ID: <CAJZ5v0jUG+4ey18VX5OJyzxXJDfDtxasH-HRYeba-oAB9VJJ8A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] PCI: pciehp: Use RMW accessors for changing LNKCTL
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Jesse Barnes <jbarnes@virtuousgeek.org>,
+        Yinghai Lu <yinghai@kernel.org>, linux-kernel@vger.kernel.org,
+        Dean Luick <dean.luick@cornelisnetworks.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023, Charan Teja Kalla wrote:
-> On 4/21/2023 5:37 AM, Hugh Dickins wrote:
-> > This is where I ran out of time.  I'm afraid all the focus on
-> > fadvise_calc_endbyte() has distracted you from looking at the DONTNEED
-> > in mm/fadvise.c: where there are detailed comments on why and how it
-> > then narrows the DONTNEED range.  And aside from needing to duplicate
-> > that here for shmem (or put it into another or combined helper), it
-> > implies to me that shmem_isolate_pages_range() needs to do a similar
-> > narrowing, when it finds that the range overlaps part of a large folio.
-> > 
-> Sure, will include those range calculations for shmem pages too.
+On Wed, May 17, 2023 at 12:53 PM Ilpo Järvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> As hotplug is not the only driver touching LNKCTL, use the RMW
+> capability accessor which handles concurrent changes correctly.
+>
+> Fixes: 7f822999e12a ("PCI: pciehp: Add Disable/enable link functions")
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Cc: stable@vger.kernel.org
 
-Oh, I forgot this issue, you would have liked me to look at V8 by now,
-to see whether I agree with your resolution there.  Sorry, no, I've
-not been able to divert my concentration to it yet.
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-And it's quite likely that I shall disagree, because I've a history of
-disagreeing even with myself on such range widening/narrowing issues -
-reconciling conflicting precedents is difficult :(
-
-> 
-> > Something that has crossed my mind as a worry, but I've not had time
-> > to look further into (maybe it's no concern at all) is the question
-> > of this syscall temporarily isolating a very large number of folios,
-> > whether they need to be (or perhaps already are) counted in
-> > NR_ISOLATED_ANON, whether too many isolated needs to be limited.
-> 
-> They are _not_ counted as ISOLATED_ANON now as this operation is for a
-> small duration. I do see there exists too_many_isolated() checks in
-> direct reclaim/compaction logic where it is necessary to stop the
-> multiple processes in the direct reclaim from isolating too many pages.
-> 
-> I am not able to envisage such problem here, where usually single
-> process doing the fadvise operation on a file. Even If the file is
-> opened by multiple processes and do fadvise, the operation is limited
-> only to the pages of this file and doesn't impact the system.
-> 
-> Please let me know if I'm missing something where I should be counting
-> these as NR_ISOLATED.
-
-Please grep for NR_ISOLATED, to see where and how they get manipulated
-already, and follow the existing examples.  The case that sticks in my
-mind is in mm/mempolicy.c, where the migrate_pages() syscall can build
-up a gigantic quantity of transiently isolated pages: your syscall can
-do the same, so should account for itself in the same way.
-
-I'm not claiming that mm/vmscan.c's too_many_isolated(), and the way it
-gets used by shrink_inactive_list(), is perfect: not at all.  But please
-follow existing convention.
-
-Sorry, that's all for now.
-Hugh
+> ---
+>  drivers/pci/hotplug/pciehp_hpc.c | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
+> index f8c70115b691..26623e2884a3 100644
+> --- a/drivers/pci/hotplug/pciehp_hpc.c
+> +++ b/drivers/pci/hotplug/pciehp_hpc.c
+> @@ -332,17 +332,11 @@ int pciehp_check_link_status(struct controller *ctrl)
+>  static int __pciehp_link_set(struct controller *ctrl, bool enable)
+>  {
+>         struct pci_dev *pdev = ctrl_dev(ctrl);
+> -       u16 lnk_ctrl;
+>
+> -       pcie_capability_read_word(pdev, PCI_EXP_LNKCTL, &lnk_ctrl);
+> +       pcie_capability_clear_and_set_word(pdev, PCI_EXP_LNKCTL,
+> +                                          PCI_EXP_LNKCTL_LD,
+> +                                          !enable ? PCI_EXP_LNKCTL_LD : 0);
+>
+> -       if (enable)
+> -               lnk_ctrl &= ~PCI_EXP_LNKCTL_LD;
+> -       else
+> -               lnk_ctrl |= PCI_EXP_LNKCTL_LD;
+> -
+> -       pcie_capability_write_word(pdev, PCI_EXP_LNKCTL, lnk_ctrl);
+> -       ctrl_dbg(ctrl, "%s: lnk_ctrl = %x\n", __func__, lnk_ctrl);
+>         return 0;
+>  }
+>
+> --
+> 2.30.2
+>
