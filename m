@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C46706BD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5ED706BD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjEQO5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S231861AbjEQO53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjEQO5Q (ORCPT
+        with ESMTP id S229690AbjEQO5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:57:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD6FE77
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:56:50 -0700 (PDT)
+        Wed, 17 May 2023 10:57:19 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B41B86B4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:57:00 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F129B22564;
-        Wed, 17 May 2023 14:56:48 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8C80C22593;
+        Wed, 17 May 2023 14:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684335408; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1684335419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9ibgoaQed0YOZPO31PdHH3INact4M7VrxIu1eAcWFcw=;
-        b=Eaxtbu7+hesNpvOcSw4cLsY18CTAqscNbzhT4X18jGx30XFI6n1qIyCL1zgbopNwqJoNbT
-        a5zyAn9gAqSzBMniSmFkrzfYmWh/pu3blbeXQyM/xqnKp45taJeZWn35v98r7jtEnQauQs
-        7iSBSoqjbNW5uDY2IwJ1oOQHKRh7rPQ=
+        bh=CCW0GSVzxQIr22NMJ3VJJ2BVu5t1BOc63dfYXKfxO18=;
+        b=d3l3jgdyGFM/s1sCSrw7VbD0oowiqXOHwcAFY+k/eVOFhofzYpLshx5Ux9n7tYKNF6qsz4
+        J1eCaGUEuEeEljIkUN3Xe5BTFyyuYT7rU27t+eOichhiRwKiCpY/ZPtvMt5kNfb/mGEIk+
+        WY1nSLZiN9yawymFCg9V7SeZe65ehDY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684335408;
+        s=susede2_ed25519; t=1684335419;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9ibgoaQed0YOZPO31PdHH3INact4M7VrxIu1eAcWFcw=;
-        b=atJLcGeW0wJEnF7iVC+vqWmSmlLSAO9qdHZCKgN5ccbhmOSwvyXLe7gTLwsgLAUpFy4OY2
-        R9TLcAIcjSlGppAg==
+        bh=CCW0GSVzxQIr22NMJ3VJJ2BVu5t1BOc63dfYXKfxO18=;
+        b=rvSYSb3NIVYjyn7W0VOR+nto5H5blgLZClSXb6sibCtryE7HbXVhO+0naD4qnv9KZniAR1
+        WoCY9qYXozr5DlCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C804013358;
-        Wed, 17 May 2023 14:56:48 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5B73913358;
+        Wed, 17 May 2023 14:56:59 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id MVC6LzDrZGT3dAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 17 May 2023 14:56:48 +0000
-Date:   Wed, 17 May 2023 16:56:48 +0200
-Message-ID: <87ilcr0zwv.wl-tiwai@suse.de>
+        id QpUsFTvrZGQNdQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 17 May 2023 14:56:59 +0000
+Date:   Wed, 17 May 2023 16:56:58 +0200
+Message-ID: <87h6sb0zwl.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
         Arnd Bergmann <arnd@arndb.de>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] ALSA: cs46xx: mark snd_cs46xx_download_image as static
-In-Reply-To: <20230516195046.550584-1-arnd@kernel.org>
+Subject: Re: [PATCH 2/2] ALSA: oss: avoid missing-prototype warnings
+In-Reply-To: <20230516195046.550584-2-arnd@kernel.org>
 References: <20230516195046.550584-1-arnd@kernel.org>
+        <20230516195046.550584-2-arnd@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -70,19 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 21:50:41 +0200,
+On Tue, 16 May 2023 21:50:42 +0200,
 Arnd Bergmann wrote:
 > 
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> snd_cs46xx_download_image() was originally called from dsp_spos.c, but
-> is now local to cs46xx_lib.c. Mark it as 'static' to avoid a warning
-> about it lacking a declaration, and '__maybe_unused' to avoid a warning
-> about it being unused when CONFIG_SND_CS46XX_NEW_DSP is disabled:
+> Two functions are defined and used in pcm_oss.c but also optionally
+> used from io.c, with an optional prototype. If CONFIG_SND_PCM_OSS_PLUGINS
+> is disabled, this causes a warning as the functions are not static
+> and have no prototype:
 > 
-> sound/pci/cs46xx/cs46xx_lib.c:534:5: error: no previous prototype for 'snd_cs46xx_download_image'
+> sound/core/oss/pcm_oss.c:1235:19: error: no previous prototype for 'snd_pcm_oss_write3' [-Werror=missing-prototypes]
+> sound/core/oss/pcm_oss.c:1266:19: error: no previous prototype for 'snd_pcm_oss_read3' [-Werror=missing-prototypes]
 > 
-> Fixes: 89f157d9e6bf ("[ALSA] cs46xx - Fix PM resume")
+> Avoid this by making the prototypes unconditional.
+> 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
 Thanks, applied now.
