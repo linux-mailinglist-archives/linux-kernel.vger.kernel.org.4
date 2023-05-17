@@ -2,168 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE0F706034
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FE0706037
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjEQGeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 02:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
+        id S229981AbjEQGfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 02:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232617AbjEQGeL (ORCPT
+        with ESMTP id S229460AbjEQGfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 02:34:11 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEE33C06
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:34:04 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f417ea5252so2501015e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684305243; x=1686897243;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OpTLZX9KtlAuj1Cffw1z+96W8NMTOQYC35BDi4+L6fc=;
-        b=Gf/C3ZqVHbsEB6YKahXvqpjJgBu4gmKvRSW+lGXWxWqoaaDo3fOYjZBa+5vTl98D4o
-         tBO0gLpf4GuNgdoTKqqyL6kggSTNSUdSsp4R+LD1JL+IMXiA3v7AGs+zpBZ1Gbm7AaVB
-         lf3qvTlrEzDYI6SiyOTuqT4V8OTgjrDAZToEV4I+YM2icik9u3KuT9hb+MTbhJ0QDyrx
-         EUP5s42uUBTGYNGkZXNZlWxO4w0SGr3HgTLWD+AQoatYY7HIbAy9xHwUq/XRxGq1raKb
-         dp6+H+9fvNasxXLxaSYmrfGHR0ons0xeFsQOaI3g2v3fizk2PqL/3SyZHmz0aIKhGnXu
-         DAjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684305243; x=1686897243;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OpTLZX9KtlAuj1Cffw1z+96W8NMTOQYC35BDi4+L6fc=;
-        b=LG8zS8IvofsY+RXihZQ6xex592xZOil2NJR4STjsKmRwQ2DPSWvGR+2NgUXeKvO4VZ
-         Fd35D+ggGFLYz/9kpoZvrAY69XsDB6TFDJs3SF7b/3wJjRI9uxfA3eOXOtMZnWXpP3d4
-         zmyv7dVRv2PZUlQDxwn9OlInunrntRyetHaALGRBM2vIEmOA5FAO7i5s7lkKuC2WhhsV
-         t8oOVHycxKmUo391+5Toz9sqF+Jf3vE2Dlym7P6jqSYhXoZVG0drTyYrQ4p4FAdnLOBV
-         /VDKQ4SpyRX1QjDt8QUjhXHXbTRiX2lUU+44Fq+lx3j33BN9+tmpuuNYTZD4TEvkaLzd
-         IiSQ==
-X-Gm-Message-State: AC+VfDymiwxmL8NI48hCguprzZKMuPZM0HF4sMZhDrMe7R0QfbvFFwhW
-        G9N1O8aKkKYQRK+Xl8+AZ/F9+7K0wZaGPUtk/JPq1w==
-X-Google-Smtp-Source: ACHHUZ71GE4h3Ar8VfQUiWo22IRSBv5ttVtQNSLUBPBoPH8eMTBu0NUl70AEvntkEM7vyQhaU/sudjfs814G2Jpsmkc=
-X-Received: by 2002:a5d:4c82:0:b0:309:38af:91c6 with SMTP id
- z2-20020a5d4c82000000b0030938af91c6mr2390353wrs.68.1684305242680; Tue, 16 May
- 2023 23:34:02 -0700 (PDT)
+        Wed, 17 May 2023 02:35:17 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B9930F7;
+        Tue, 16 May 2023 23:35:15 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id A0961164A94;
+        Wed, 17 May 2023 08:35:11 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1684305312; bh=OLBy/x4SffLRIOOouJqRnn62gILl6SxpisS1Gqyl1uc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H41WNv6w/2JbwP/Snmi4AP7/GpeB5JStxv3IZhBqAeNNqhG+gfIAMUFYoClvkd3p3
+         wmS0syF6/BK/hhoR2y/vDfDPnPT/vhhcKyvpDCQVeLDQfTyPzHwpaRKQ9q4kfZGHy1
+         vH3Gb40ebT6bnnqA4fZQtCC9eNBRH45oOixeX6DK4F9PdE2EsEFroG180PKge9Gk6Z
+         KFQD3xSAYDxgZ79tP8S1ERZwfJcG4f08/p2I1ESaNEeupqvToKY2ZLCfA9DILOJr+a
+         cwWMGPNN/R7EdGRUlfSSoWIKl6g/cPg5ZVPhKLRTskMDpyonlv0x6wxEOgG+zdJpQ/
+         /NbPvNlYZyqRw==
+Date:   Wed, 17 May 2023 08:35:10 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2 RESEND 4/7] swiotlb: Dynamically allocated bounce
+ buffers
+Message-ID: <20230517083510.0cd7fa1a@meshulam.tesarici.cz>
+In-Reply-To: <ZGPEgsplBSsI9li3@arm.com>
+References: <cover.1683623618.git.petr.tesarik.ext@huawei.com>
+        <346abecdb13b565820c414ecf3267275577dbbf3.1683623618.git.petr.tesarik.ext@huawei.com>
+        <BYAPR21MB168874BC467BFCEC133A9DCDD7789@BYAPR21MB1688.namprd21.prod.outlook.com>
+        <20230516061309.GA7219@lst.de>
+        <20230516083942.0303b5fb@meshulam.tesarici.cz>
+        <ZGPEgsplBSsI9li3@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-References: <20230516213308.2432018-1-bhupesh.sharma@linaro.org>
- <20230516213308.2432018-4-bhupesh.sharma@linaro.org> <2023051723-decibel-skiing-56ed@gregkh>
-In-Reply-To: <2023051723-decibel-skiing-56ed@gregkh>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Wed, 17 May 2023 12:03:51 +0530
-Message-ID: <CAH=2Ntx9LcH9Bm_n6u6KgN7oQXw7XhoxUuRBKEzk79btRxtt6w@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] usb: misc: eud: Add driver support for SM6115 / SM4250
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Catalin,
 
-On Wed, 17 May 2023 at 10:21, Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, May 17, 2023 at 03:03:06AM +0530, Bhupesh Sharma wrote:
-> > Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
->
-> Why is the subject line duplicated here?
->
-> > On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> > needs to be accessed only via the secure world (through 'scm'
-> > calls).
-> >
-> > Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> > first to set the eud in 'enable' mode on these SoCs.
-> >
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/usb/misc/Kconfig    |  1 +
-> >  drivers/usb/misc/qcom_eud.c | 69 +++++++++++++++++++++++++++++++++----
->
-> Given that you didn't cc the usb maintainer, I'm guessing you don't want
-> this patch applied?
+On Tue, 16 May 2023 18:59:30 +0100
+Catalin Marinas <catalin.marinas@arm.com> wrote:
 
-Oops, I will do that in the next version.
+> On Tue, May 16, 2023 at 08:39:42AM +0200, Petr Tesa=C5=99=C3=ADk wrote:
+> > On Tue, 16 May 2023 08:13:09 +0200
+> > Christoph Hellwig <hch@lst.de> wrote: =20
+> > > On Mon, May 15, 2023 at 07:43:52PM +0000, Michael Kelley (LINUX) wrot=
+e: =20
+> > > > FWIW, I don't think the approach you have implemented here will be
+> > > > practical to use for CoCo VMs (SEV, TDX, whatever else).  The probl=
+em
+> > > > is that dma_direct_alloc_pages() and dma_direct_free_pages() must
+> > > > call dma_set_decrypted() and dma_set_encrypted(), respectively.  In=
+ CoCo
+> > > > VMs, these calls are expensive because they require a hypercall to =
+the host,
+> > > > and the operation on the host isn't trivial either.  I haven't meas=
+ured the
+> > > > overhead, but doing a hypercall on every DMA map operation and on
+> > > > every unmap operation has long been something we thought we must
+> > > > avoid.  The fixed swiotlb bounce buffer space solves this problem by
+> > > > doing set_decrypted() in batch at boot time, and never
+> > > > doing set_encrypted().   =20
+> > >=20
+> > > I also suspect it doesn't really scale too well due to the number of
+> > > allocations.  I suspect a better way to implement things would be to
+> > > add more large chunks that are used just like the main swiotlb buffer=
+s.
+> > >=20
+> > > That is when we run out of space try to allocate another chunk of the
+> > > same size in the background, similar to what we do with the pool in
+> > > dma-pool.c.  This means we'll do a fairly large allocation, so we'll
+> > > need compaction or even CMA to back it up, but the other big upside
+> > > is that it also reduces the number of buffers that need to be checked
+> > > in is_swiotlb_buffer or the free / sync side. =20
+> >=20
+> > I have considered this approach. The two main issues I ran into were:
+> >=20
+> > 1. MAX_ORDER allocations were too small (at least with 4K pages), and
+> >    even then they would often fail.
+> >=20
+> > 2. Allocating from CMA did work but only from process context.
+> >    I made a stab at modifying the CMA allocator to work from interrupt
+> >    context, but there are non-trivial interactions with the buddy
+> >    allocator. Making them safe from interrupt context looked like a
+> >    major task. =20
+>=20
+> Can you kick off a worker thread when the swiotlb allocation gets past
+> some reserve limit? It still has a risk of failing to bounce until the
+> swiotlb buffer is extended.
 
-> >  2 files changed, 63 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> > index 99b15b77dfd5..fe1b5fec1dfc 100644
-> > --- a/drivers/usb/misc/Kconfig
-> > +++ b/drivers/usb/misc/Kconfig
-> > @@ -147,6 +147,7 @@ config USB_APPLEDISPLAY
-> >  config USB_QCOM_EUD
-> >       tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> >       depends on ARCH_QCOM || COMPILE_TEST
-> > +     select QCOM_SCM
->
-> How well is that going to work on building on non-QCOM systems?  Can
-> QCOM_SCM build if COMPILE_TEST is enabled?  select is rough to get
-> right, are you sure it's correct here?  If so, some documentation in the
-> changelog would be appreciated.
+Yes, this can be done, and some form of a worker thread is in fact on
+my roadmap. Initially, I want to see the impact of a "dumb" algorithm
+and get some feedback from people like you. Glad your ideas move in a
+similar direction as mine. :-)
 
-Ok, I will double check.
+> > I also had some fears about the length of the dynamic buffer list. I
+> > observed maximum length for block devices, and then it roughly followed
+> > the queue depth. Walking a few hundred buffers was still fast enough.
+> > I admit the list length may become an issue with high-end NVMe and
+> > I/O-intensive applications. =20
+>=20
+> You could replace the list with an rbtree, O(log n) look-up vs O(n),
+> could be faster if you have many bounces active.
 
-> >       select USB_ROLE_SWITCH
-> >       help
-> >         This module enables support for Qualcomm Technologies, Inc.
-> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> > index b7f13df00764..10d194604d4c 100644
-> > --- a/drivers/usb/misc/qcom_eud.c
-> > +++ b/drivers/usb/misc/qcom_eud.c
-> > @@ -5,12 +5,14 @@
-> >
-> >  #include <linux/bitops.h>
-> >  #include <linux/err.h>
-> > +#include <linux/firmware/qcom/qcom_scm.h>
->
-> There's no rule to keep these sorted, but it's your choice...
+I could also do it for individual allocations. And I did it.
 
-Sure.
+First, the paddr lookup does not search for a specific key in the tree,
+but rather for a match within a range. The maple tree was invented for
+exactly this purpose, so that's what I tried. There are some caveats
+when using maple trees from interrupt context, but I made the necessary
+modifications in my local tree.
 
-> >  #include <linux/interrupt.h>
-> >  #include <linux/io.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of.h>
-> > +#include <linux/of_device.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/sysfs.h>
-> > @@ -22,23 +24,33 @@
-> >  #define EUD_REG_VBUS_INT_CLR 0x0080
-> >  #define EUD_REG_CSR_EUD_EN   0x1014
-> >  #define EUD_REG_SW_ATTACH_DET        0x1018
-> > -#define EUD_REG_EUD_EN2        0x0000
-> > +#define EUD_REG_EUD_EN2              0x0000
->
-> Why the coding style cleanup in the same patch?  Remember, changes only
-> do one thing, and you have already listed 2 things in your commit
-> message :(
+I ran my tests against a SATA virtio disk in an x86-64 VM booted with
+swiotlb=3Dforce. The results were:
 
-Sure, will spin a separate patch for cleanups.
+     Compared to plain linked list
+small-rw       -6.6%  (4KiB, 1 thread)
+parallel-rw   -10.5%  (64KiB, 4 threads)
+big-rw         -8.5%  (1MiB, 1 thread)
 
-> >  #define EUD_ENABLE           BIT(0)
-> > -#define EUD_INT_PET_EUD      BIT(0)
-> > +#define EUD_INT_PET_EUD              BIT(0)
->
-> Again, why this change?
+Of course, these numbers say nothing about the performance of a maple
+tree for tracking additional swiotlb chunks, because the mix of
+additions, deletions and lookups will be different, but my point is
+that a "better" data structure may not always be better.
 
-Ack.
-Will send a v6 shortly.
+My testing also suggests that the lookup path is extremely hot. It was
+very sensitive even to small changes (like moving the flag setting
+before deletion).
 
-Thanks,
-Bhupesh
+Anyway, my greatest objection to allocating additional swiotlb chunks is
+that _all_ of them must be searched to determine that the physical
+address does _not_ belong to a swiotlb, incurring performance penalty
+for non-constrained (presumably fast) devices that do not need a
+swiotlb. Sure, this is irrelevant for CoCo VMs where all devices must
+use swiotlb, but we've seen other scenarios which benefit from a
+dynamically sized swiotlb. It's a bit frustrating if a cheap wifi
+adapter reduces your disk performance...
+
+Besides, if the list or tree of swiotlb chunks is protected with a
+lock, this lock becomes contended.
+
+Last but not least, the allocation size is dynamic in theory, but it
+would most likely never shrink, because a swiotlb chunk can be freed
+only if it is completely unused, which may never happen after a spike,
+because some mappings are rather long-lived (which is probably wrong
+but it's the current state).
+
+Much of the above can be solved if additional swiotlb chunks are
+allocated per device. OTOH I am a bit concerned about increasing memory
+requirements. After all, one of the use cases is to reduce kernel
+memory footprint on mobile devices.
+
+To say something positive, I have also found one upside to additional
+swiotlb chunks: They make it possible to meet all alignment and boundary
+crossing constraints (unlike plain CMA allocations).
+
+Petr T
