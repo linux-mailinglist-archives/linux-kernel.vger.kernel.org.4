@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166D87068DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11AF7068E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:06:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjEQNE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S231425AbjEQNGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbjEQNEr (ORCPT
+        with ESMTP id S229746AbjEQNGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:04:47 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062C910D4;
-        Wed, 17 May 2023 06:04:40 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f13a72ff53so967302e87.0;
-        Wed, 17 May 2023 06:04:39 -0700 (PDT)
+        Wed, 17 May 2023 09:06:00 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492C21A2;
+        Wed, 17 May 2023 06:05:59 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so514338b3a.2;
+        Wed, 17 May 2023 06:05:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684328678; x=1686920678;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RXTNzq4gj2DUSkJyMltIversR9A5IgG2YoQBaj5QOI4=;
-        b=F3mdyJ0H05m0mG6Ij3Gl3+HDT89YBI6PdRTY5+N7j3g62sivDD6f7o8AROyQXynSb4
-         kVy2pWUHXkhce2WlOaKVLjemkkiDEmM+/EJoY3tOGzC5PaFqmvjvoYZcpFWZcBUTpNCK
-         SJS2YN1mRy/AP8KlBZG9cSLU7ncmj0LlBZvzcxvVMmzzzZj9dz4hpGWKY7+jl0xfZcP1
-         gil+7EJT/tj07+4n09esOqDqKGwHkcrLgjXPD+Vfz/JEu+nCml32KQ9prR0mHHm0v2tT
-         vuf7LW+8wdmThpWBHh26vjXPpxY+kjcOkRbRdoPcfpN9wnh33jF8Pn3VD/uc6D1zoRPH
-         fw3w==
+        d=gmail.com; s=20221208; t=1684328759; x=1686920759;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mtyFrGfqKkakJXFw6p+ddnB6eN6diQD5RAmdRXKE4A4=;
+        b=DNj9p/rNZpttjQvvi7Jm4nTonkfssVDW8efMg1RxiXGPoGysbBJrF+4LDsaDvxEeqD
+         6FbvWZOToK3LZ1Q0i9SZ5SyANE0TtOaGzkn7h765fCrEykwM6q5JoMLReBb3uywyjjoP
+         yPAKc8r0lFrwU3HM7kP/mPbOHTwVd7Popqbgi7R3kdnJdkv3ioGzS2IW1i6nJYkkOtIa
+         Pt7JA2k5t4i2BQ3zbf0lIe83A4t25b6Pis/p2iRMQRozkHxSlglSqROG2OiCw0cRZn9Z
+         8Tw3x+vlMsHGV1y0Ockl9Ei7zUwN+MhRXxKynBLyVAcMRtRM7UgWhTCUQ/TAUAIeHYHn
+         rPJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684328678; x=1686920678;
-        h=mime-version:references:in-reply-to:message-id:cc:to:subject:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RXTNzq4gj2DUSkJyMltIversR9A5IgG2YoQBaj5QOI4=;
-        b=D/l8FbZi6q+mh6iB1jpLp3IN/FFI6oJymAvXSMHH2y5Fq96LO4/HpUOo2BAP4GdLmb
-         rd+WnJFvi2SU0UUbTml9hp1w6tWRcZ7EzQGPWzeY+U4+Y3s0l+GLZuhK72Kc7PfzIghY
-         oIKKOigRQp3eknUn3lzN37nYtVrNaHwtP0bzCo8l9XCRBFPfti1PDQx+x5DZ7P8e8BW+
-         wrznZogxhQAz1gZN/XjDcB3yO4LatbF25QdYrka2MzcrIfPbmhyycNNDYgLClOTXwyta
-         quW9WtQFNygqxWTHcbeafmmBJvkV97lAs0qfpTwp8wrIGhed4ELYNYqJksrnu0K+HeqK
-         IXNA==
-X-Gm-Message-State: AC+VfDxXbaetZ2o25et4bTj1dNmiZClAuqwpJXgWC12F9Oz+GnVvB8Q2
-        1bsQVcoRGR3uQbnWGnbGYVE=
-X-Google-Smtp-Source: ACHHUZ6gsVowCQgHci05MdbfSLlrwisfgvOTvW0R83NzJYmlUD0JwDW5Bhvdw2NzRR6rLa2bXBsp/w==
-X-Received: by 2002:ac2:538a:0:b0:4f3:983b:cc47 with SMTP id g10-20020ac2538a000000b004f3983bcc47mr164495lfh.66.1684328677916;
-        Wed, 17 May 2023 06:04:37 -0700 (PDT)
-Received: from [10.8.28.198] ([89.201.166.50])
-        by smtp.gmail.com with ESMTPSA id q29-20020ac2515d000000b004f392625952sm385402lfd.26.2023.05.17.06.04.36
+        d=1e100.net; s=20221208; t=1684328759; x=1686920759;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mtyFrGfqKkakJXFw6p+ddnB6eN6diQD5RAmdRXKE4A4=;
+        b=h41XeAdhUKEWZnk+Uw6NTVhs8i/MbL7rRqJ2mbBjHPgtIgCFUp9Tv82MNmrHNiOSN/
+         qY3J6LCoVSoLpbYT8eu0/77CybyGTiIs6WvE6s/kckq/2F4BwvrV+qR52qsNPEtL4dx5
+         D/x4scRkLBYEATl3ZYjVKvCiVYmhmQ3CZDddfj9W9V4OV2cJshuwHLbTGbVtHHe97Fid
+         Hh5nzv0aCRERV3szUzE5rB40+6opmfYwxKPA/NNQgtpsmMl0tCWjUwJwb1N90iFVH20t
+         x30B8mUUYQ7RKOyFjH4FWFshYChY7uwmGfIHWHDRtU09DXvJw5X5py4BYblnwgf/H2oP
+         /kDQ==
+X-Gm-Message-State: AC+VfDxdP5W1oRtPXZ6WYgx6Nc4GfZVOCUSZ44xXbOLEVO/M6WjINRX/
+        rudKf9W2ukMY8jJJPNcWfs72gRp1afD2mA==
+X-Google-Smtp-Source: ACHHUZ7IOyaW4XbBAbuRkSoKVhCmX8H25L3dq2CXvCQ9FdgToR71UHsqrgXFzLPSTpd2DDDh9MmPgA==
+X-Received: by 2002:a05:6a00:1996:b0:63d:47ab:65ed with SMTP id d22-20020a056a00199600b0063d47ab65edmr984178pfl.7.1684328758586;
+        Wed, 17 May 2023 06:05:58 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-43.three.co.id. [116.206.12.43])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa793b4000000b0063d2bb0d107sm15229351pff.64.2023.05.17.06.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:04:37 -0700 (PDT)
-Date:   Wed, 17 May 2023 15:04:29 +0200
-From:   Paulo <pavacic.p@gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: display: panel: add
- panel-mipi-dsi-bringup
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        neil.armstrong@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, sam@ravnborg.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Message-Id: <HB0TUR.1IPEEV2C5LMB1@gmail.com>
-In-Reply-To: <CAMty3ZCAP6CRsJWMUZZ6+hd5igX3NgyNfhdEv2FwuDtqj4iaaA@mail.gmail.com>
-References: <CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com>
-        <023f6cf9-0f08-f27e-d203-5ff78faf110f@linaro.org>
-        <CAO9szn1EsbuPSRrOW8CLqhp+QUcL=9NE93FAwsg2n3htd_aJTw@mail.gmail.com>
-        <CAMty3ZCAP6CRsJWMUZZ6+hd5igX3NgyNfhdEv2FwuDtqj4iaaA@mail.gmail.com>
-X-Mailer: geary/43.0
+        Wed, 17 May 2023 06:05:58 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 977BC104714; Wed, 17 May 2023 20:05:54 +0700 (WIB)
+Date:   Wed, 17 May 2023 20:05:54 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH v11 11/11] Documentation: tracing/probes: Add fprobe
+ event tracing document
+Message-ID: <ZGTRMsLQ3QqvCGew@debian.me>
+References: <168432112492.1351929.9265172785506392923.stgit@mhiramat.roam.corp.google.com>
+ <168432122914.1351929.944185321099763072.stgit@mhiramat.roam.corp.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ky6EilGNz1vHfqqH"
+Content-Disposition: inline
+In-Reply-To: <168432122914.1351929.944185321099763072.stgit@mhiramat.roam.corp.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,53 +81,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17 2023 at 05:50:22 PM +0530, Jagan Teki
-<jagan@amarulasolutions.com> wrote:
- > Just to add a few pieces of information for you to understand better
- > on the context of dsi panels. DSI panels can be part of 
-panel-simple.c
- > or panel-<vendor-part>.c DSI panels whose init and exit sequence is
- > generic are suitable to add it in panel-simple and have bindings on
- > panel-simple.yml.
 
-This panel doesn't fit that well into panel-simple.c since it has
-initialization sequence. For that reason it would fit more into
-panel-sortofsimple.c which didn't exist so I have created new driver
-and called it panel-mipi-dsi-bringup.c.
+--ky6EilGNz1vHfqqH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- > Some DSI panels have specific init and exit
- > sequences in terms of power, reset and DCS then those have separate
- > drivers to handle and whose driver name must be panel-<vendor-part>.c
- > or similar and bindings also follow a similar naming convention.
+On Wed, May 17, 2023 at 08:00:29PM +0900, Masami Hiramatsu (Google) wrote:
+> +As same as other dynamic events, fprobe events and tracepoint probe
+> +events are defined via `dynamic_events` interface file on tracefs.
 
-I have made a driver exactly for that purpose. Driver that allows
-adding new panels which have specific init sequences (and of course 
-timings and other stuff). fannal,c3004 can be seen as a working example.
+Backquotes are rendered as italics instead. If you mean keyword/identifier,
+inline it with double backquotes (like ``foo``). Or you can skip formatting
+it instead (to be consistent with other keywords).
 
-Here is code snippet from the driver:
-```
-static const struct brup_panel_info brup_fannal_c3004_panel_info = {
- .display_mode = &brup_fannal_c3004_display_mode,
- .num_of_dsi_lanes = 2, //how many wires are connected to the panel
- .video_mode = BRUP_VIDEO_MODES[BRUP_SYNC_PULSE],
- .mipi_dsi_format = MIPI_DSI_FMT_RGB888,
- .mipi_dsi_mode_flags =
-  MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_VSYNC_FLUSH |
-  MIPI_DSI_MODE_VIDEO_HSE | MIPI_DSI_MODE_NO_EOT_PACKET,
- .bus_flags = DRM_BUS_FLAG_DE_LOW | DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE,
- .panel_enable_function = &brup_panel_fannal_c3004_enable_function
-};
-```
-where enable function is function with init sequence and other values 
-are values that might be different for different displays.
+> +For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
 
-All the inputs are appreciated as this is my first time submitting 
-patch. If you see anything that is odd to you please reach out to me.
-All in all I believe I now understand how should device tree look and 
-the reasons/ideology behind it.
+Did you mean using :doc: directive instead?
 
-Best regards,
-Paulo
+---- >8 ----
+diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fpro=
+betrace.rst
+index eca64ad7216a1c..0cf8ed84bd6651 100644
+--- a/Documentation/trace/fprobetrace.rst
++++ b/Documentation/trace/fprobetrace.rst
+@@ -64,7 +64,7 @@ Synopsis of fprobe-events
+   (\*4) this is useful for fetching a field of data structures.
+   (\*5) "u" means user-space dereference.
+=20
+-For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
++For the details of TYPE, see :doc:`kprobetrace`.
+=20
+ BTF arguments
+ -------------
 
+On the other hand, you can also directly link to intended doc section:
 
+---- >8 ----
+diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fpro=
+betrace.rst
+index eca64ad7216a1c..83892c7512726c 100644
+--- a/Documentation/trace/fprobetrace.rst
++++ b/Documentation/trace/fprobetrace.rst
+@@ -64,7 +64,7 @@ Synopsis of fprobe-events
+   (\*4) this is useful for fetching a field of data structures.
+   (\*5) "u" means user-space dereference.
+=20
+-For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
++For the details of TYPE, see :ref:`kprobetrace documentation <kprobetrace_=
+types>`.
+=20
+ BTF arguments
+ -------------
+diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kpro=
+betrace.rst
+index 651f9ab53f3ee9..8a2dfee3814544 100644
+--- a/Documentation/trace/kprobetrace.rst
++++ b/Documentation/trace/kprobetrace.rst
+@@ -66,6 +66,8 @@ Synopsis of kprobe_events
+   (\*3) this is useful for fetching a field of data structures.
+   (\*4) "u" means user-space dereference. See :ref:`user_mem_access`.
+=20
++.. _kprobetrace_types:
++
+ Types
+ -----
+ Several types are supported for fetchargs. Kprobe tracer will access memory
 
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--ky6EilGNz1vHfqqH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGTRLwAKCRD2uYlJVVFO
+owQ8AQC1x1fvlyM1knwxxY3/PxegbkGTRhiar2QW5YX+U8h14QEA+N0PVJKuJDXx
+S/hl51lE9DLUn17lZ4MQhaMmp222kQA=
+=WlLN
+-----END PGP SIGNATURE-----
+
+--ky6EilGNz1vHfqqH--
