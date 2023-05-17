@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98DF97066B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1ED70667C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjEQLa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S229545AbjEQLSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbjEQLay (ORCPT
+        with ESMTP id S230385AbjEQLSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:30:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1772D5D;
-        Wed, 17 May 2023 04:30:53 -0700 (PDT)
-X-UUID: 26155172f4a411ed9cb5633481061a41-20230517
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=XqVR2v7ZkYxssEYFiD1aCjMmvqT466hEfnZaJrdFhkU=;
-        b=qHZ12JHFv1DnOE7JdDHAS5OzFBkVbJUxX0G+9Rh+skFib8o7h5aA+tpysNRk1ahe720Kdq08wHxmYE4TuC/drkJrz7DMTZskPE/zQtNgyk1bVxSN7MYl2OGkp1S9G9WDoxXELFMio+F7oRjen5fEIFMCr6FjmWFcn8RlaH9r4Co=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:cd79d2b8-7113-4f40-99f4-7752a216cfaf,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.25,REQID:cd79d2b8-7113-4f40-99f4-7752a216cfaf,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:407825c1-e32c-4c97-918d-fbb3fc224d4e,B
-        ulkID:230517191537KSX9L8LU,BulkQuantity:0,Recheck:0,SF:48|38|29|28|17|19,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 26155172f4a411ed9cb5633481061a41-20230517
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1113008477; Wed, 17 May 2023 19:15:36 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 17 May 2023 19:15:36 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 19:15:36 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <perex@perex.cz>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>
-CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH 5/5] ASoC: dt-bindings: mediatek,mt8188-mt6359: update properties
-Date:   Wed, 17 May 2023 19:15:34 +0800
-Message-ID: <20230517111534.32630-6-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230517111534.32630-1-trevor.wu@mediatek.com>
-References: <20230517111534.32630-1-trevor.wu@mediatek.com>
+        Wed, 17 May 2023 07:18:18 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB495FE4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:18:03 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-561d249f045so2852017b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1684322276; x=1686914276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2WCELhKKHIosJqimbc1keXrYAK+9jP7I652VYp3oomc=;
+        b=Sr9bMRUCBLk/cK5Y7vzL4ws/XWFokZJidhi87yFG15dr/w+u5nV4QmLODp5NEJWKNC
+         CeHP1/f250JUltkvHI7jQwbt/S2BQ+NqyFXz6rusUXTqnT45YM0SfMjQvtueDZ61c/he
+         fcGVN/It/8I3WPEBWy7fTmxpT3TgphO4/+y6c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684322276; x=1686914276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2WCELhKKHIosJqimbc1keXrYAK+9jP7I652VYp3oomc=;
+        b=c8fsY0sxaVoaTcEjYVjDGnEuK0s3ZPg0TwGAGwmO49FV9YIkOAVnrm8iT+EXUNyuI1
+         wkcRmABcM2GXGZloZc4aUvcYmlnasvTKCwVmFm6t3g88O9Vg9rGGyyYQs/aid65xjvwy
+         FZgsd22CWSU8ejCTxewmFhPZRanFPOecDZo2JkXFX/2Q8C3geihPCxoGUE2WSD/D1che
+         E9XbZ4EgnAB7Ke4iJaMfJjO2gila59f/A9bMRwGc9fInYzh2KwKbhcczcCBr/fLNO8Cw
+         zKHAsPFWIuA1ZAYJdNaNr1af/3bK2GvJXS6sHeknuVbvYLzxJbSfw766EGG4FbPCXqtF
+         Ezhw==
+X-Gm-Message-State: AC+VfDxovpjSzOtr1HiwcgHNJ2EOfbeEG0SdVM0qlZ5bXQhNg7s+Sph1
+        QeUWnTZYKzBZGCmkqmCt1OrJhdtrEXheYpoHCmLelA==
+X-Google-Smtp-Source: ACHHUZ7ho45fN+FqzJuMIFp6n4beIoWDVJzPSkpc/MqVOHha2wui277QosfgqSZKcOiFyTT21OZ00RXZ08i0odI/RxE=
+X-Received: by 2002:a0d:d54d:0:b0:55a:7722:1401 with SMTP id
+ x74-20020a0dd54d000000b0055a77221401mr36177609ywd.31.1684322276576; Wed, 17
+ May 2023 04:17:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-5-aford173@gmail.com>
+ <CAMty3ZAU3NG8yk1dFB4Y3QtCZ7j7XUTqKHkJVKhhOduc4V5XpQ@mail.gmail.com>
+In-Reply-To: <CAMty3ZAU3NG8yk1dFB4Y3QtCZ7j7XUTqKHkJVKhhOduc4V5XpQ@mail.gmail.com>
+From:   Jagan Teki <jagan@amarulasolutions.com>
+Date:   Wed, 17 May 2023 16:47:44 +0530
+Message-ID: <CAMty3ZAd1EWAfZ6d3TndapSLp7CgY8XRc8JfYt532gsGrgUNiQ@mail.gmail.com>
+Subject: Re: [PATCH V6 4/6] drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Inki Dae <inki.dae@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,88 +79,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible string "mediatek,mt8188-nau8825" to support new board
-with nau8825 codec.
+On Wed, May 17, 2023 at 4:34=E2=80=AFPM Jagan Teki <jagan@amarulasolutions.=
+com> wrote:
+>
+> Hi Adam,
+>
+> On Tue, May 16, 2023 at 5:27=E2=80=AFAM Adam Ford <aford173@gmail.com> wr=
+ote:
+> >
+> > In order to support variable DPHY timings, it's necessary
+> > to enable GENERIC_PHY_MIPI_DPHY so phy_mipi_dphy_get_default_config
+> > can be used to determine the nominal values for a given resolution
+> > and refresh rate.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> > ---
+> >  drivers/gpu/drm/bridge/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/Kconfig b/drivers/gpu/drm/bridge/Kc=
+onfig
+> > index f076a09afac0..82c68b042444 100644
+> > --- a/drivers/gpu/drm/bridge/Kconfig
+> > +++ b/drivers/gpu/drm/bridge/Kconfig
+> > @@ -227,6 +227,7 @@ config DRM_SAMSUNG_DSIM
+> >         select DRM_KMS_HELPER
+> >         select DRM_MIPI_DSI
+> >         select DRM_PANEL_BRIDGE
+> > +       select GENERIC_PHY_MIPI_DPHY
+>
+> Is it really required? phy is optional as it is not required for
+> imx8mm/n/p as of now. May be we can add it while supporting it.
 
-ADDA_BE is used to connect to mt6359. For the machine, it must be
-fixed to the same codec and configured on the machine driver. Remove
-ADDA_BE from items of link-name.
+Haa, look like the next patch is using it. sorry.
 
-Introduce two properties "dai-format" and "mediatek,clk-provider" under
-dai-link subnode to configure dai-link parameters via dts.
-
-"codec" property is removed from required property of dai-link subnode.
-For co-clock case, it's possible two dai-links should be configured to
-the same format, but only one dai-link builds link with codec.
-
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
----
- .../sound/mediatek,mt8188-mt6359.yaml         | 27 ++++++++++++++++---
- 1 file changed, 23 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-index 6640272b3f4f..05e532b5d50a 100644
---- a/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-+++ b/Documentation/devicetree/bindings/sound/mediatek,mt8188-mt6359.yaml
-@@ -11,7 +11,9 @@ maintainers:
- 
- properties:
-   compatible:
--    const: mediatek,mt8188-mt6359-evb
-+    enum:
-+      - mediatek,mt8188-mt6359-evb
-+      - mediatek,mt8188-nau8825
- 
-   model:
-     $ref: /schemas/types.yaml#/definitions/string
-@@ -42,7 +44,6 @@ patternProperties:
-           we are going to update parameters in this node.
-         items:
-           enum:
--            - ADDA_BE
-             - DPTX_BE
-             - ETDM1_IN_BE
-             - ETDM2_IN_BE
-@@ -62,11 +63,28 @@ patternProperties:
-         required:
-           - sound-dai
- 
-+      dai-format:
-+        description: audio format.
-+        items:
-+          enum:
-+            - i2s
-+            - right_j
-+            - left_j
-+            - dsp_a
-+            - dsp_b
-+
-+      mediatek,clk-provider:
-+        $ref: /schemas/types.yaml#/definitions/string
-+        description: Indicates dai-link clock master.
-+        items:
-+          enum:
-+            - cpu
-+            - codec
-+
-     additionalProperties: false
- 
-     required:
-       - link-name
--      - codec
- 
- additionalProperties: false
- 
-@@ -87,7 +105,8 @@ examples:
-             "AIN1", "Headset Mic";
-         dai-link-0 {
-             link-name = "ETDM3_OUT_BE";
--
-+            dai-format = "i2s";
-+            mediatek,clk-provider = "cpu";
-             codec {
-                 sound-dai = <&hdmi0>;
-             };
--- 
-2.18.0
-
+Thanks,
+Jagan.
