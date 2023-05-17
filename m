@@ -2,81 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90733705FA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC102705F94
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbjEQF6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 01:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S232533AbjEQFtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 01:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbjEQF6c (ORCPT
+        with ESMTP id S232528AbjEQFtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 01:58:32 -0400
-X-Greylist: delayed 453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 16 May 2023 22:58:31 PDT
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C202729;
-        Tue, 16 May 2023 22:58:30 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-172-149.tukw.qwest.net [174.21.172.149])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 99B0F6DF;
-        Tue, 16 May 2023 22:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1684302655;
-        bh=+tnO7BfGQlwxHNrnSuMx4B9JwM2zlElAG5v5xkIN+3I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ktyoLfJKpbYfN2B3AvyqFhl3/c3kf+aDNoHoiEsmcuj0tBaaXlib2p5HoV+9fkqYD
-         iw7Gb4JZGpRBRxGEYo3b1c4DgbU8LrGBFrkN3YNKtENofZ4nNvh5bvopi1Lr7SXxHl
-         H5pAI55ICD7/aEugtJ1io23O3N1OhWogfRw4lQOU=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Bamvor Jian Zhang <bamv2005@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Zev Weiss <zev@bewilderbeest.net>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@kernel.org
-Subject: [PATCH] gpio: mockup: Fix mode of debugfs files
-Date:   Tue, 16 May 2023 22:47:56 -0700
-Message-Id: <20230517054756.11119-1-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.40.1
+        Wed, 17 May 2023 01:49:35 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF0440EF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:49:33 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34H5n0gn091258;
+        Wed, 17 May 2023 00:49:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684302540;
+        bh=eNrolphY6yk67IJIelraK50kaxoNQrZkHDoM8K/Tsc8=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=HgcZ4703Eq2e1z6I5DbXOxHQafDbSgseThsDnnFFUw8aJUIaW1q/cMa339wLSqhv/
+         IiBEM1amhxnTt42QQMLRd355NKsJP1qXacYQBB4iBqVIUE278LsAiby1bKmDf/aUKZ
+         nfqjM/NtCNwY457b+iMX3AiL+4T1XX1VEJxm4QHk=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34H5n0vG091236
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 17 May 2023 00:49:00 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
+ May 2023 00:48:58 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 17 May 2023 00:48:58 -0500
+Received: from [172.24.217.121] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34H5mqD2013298;
+        Wed, 17 May 2023 00:48:53 -0500
+Message-ID: <1b95b75d-1b81-806b-7b7f-34cd93c9d0ec@ti.com>
+Date:   Wed, 17 May 2023 11:18:52 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 4/8] drm/bridge: mhdp8546: Set input_bus_flags from
+ atomic_check
+Content-Language: en-US
+To:     <neil.armstrong@linaro.org>, Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230509093036.3303-1-a-bhatia1@ti.com>
+ <20230509093036.3303-5-a-bhatia1@ti.com>
+ <b43f0808-8ac8-746f-6cbc-5396722261aa@linaro.org>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <b43f0808-8ac8-746f-6cbc-5396722261aa@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver's debugfs files have had a read operation since commit
-2a9e27408e12 ("gpio: mockup: rework debugfs interface"), but were
-still being created with write-only mode bits.  Update them to
-indicate that the files can also be read.
+Hi Neil,
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Fixes: 2a9e27408e12 ("gpio: mockup: rework debugfs interface")
-Cc: stable@kernel.org # v5.1+
----
- drivers/gpio/gpio-mockup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 16-May-23 12:54, Neil Armstrong wrote:
+> On 09/05/2023 11:30, Aradhya Bhatia wrote:
+>> From: Nikhil Devshatwar <nikhil.nd@ti.com>
+>>
+>> input_bus_flags are specified in drm_bridge_timings (legacy) as well
+>> as drm_bridge_state->input_bus_cfg.flags
+>>
+>> The flags from the timings will be deprecated. Bridges are supposed
+>> to validate and set the bridge state flags from atomic_check.
+>>
+>> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+>> [a-bhatia1: replace timings in cdns_mhdp_platform_info by
+>> input_bus_flags]
+>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+>> ---
+>>
+>> Notes:
+>>
+>>      changes from v5:
+>>      * removed the wrongly addded return statement in tfp410 driver.
+>>      * replaced the timings field in cdns_mhdp_platform_info by
+>>        input_bus_flags field, in order to get rid of bridge->timings
+>>        altogether.
+>>
+>>   drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c  | 11 ++++++++---
+>>   drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h  |  2 +-
+>>   drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c |  9 ++++-----
+>>   drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h |  2 +-
+>>   4 files changed, 14 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>> index 623e4235c94f..a677b1267525 100644
+>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+>> @@ -2189,6 +2189,13 @@ static int cdns_mhdp_atomic_check(struct
+>> drm_bridge *bridge,
+>>           return -EINVAL;
+>>       }
+>>   +    /*
+>> +     * There might be flags negotiation supported in future.
+>> +     * Set the bus flags in atomic_check statically for now.
+>> +     */
+>> +    if (mhdp->info)
+>> +        bridge_state->input_bus_cfg.flags =
+>> *mhdp->info->input_bus_flags;
+>> +
+>>       mutex_unlock(&mhdp->link_mutex);
+>>       return 0;
+>>   }
+>> @@ -2554,8 +2561,6 @@ static int cdns_mhdp_probe(struct
+>> platform_device *pdev)
+>>       mhdp->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
+>>                  DRM_BRIDGE_OP_HPD;
+>>       mhdp->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
+>> -    if (mhdp->info)
+>> -        mhdp->bridge.timings = mhdp->info->timings;
+> 
+> Won't this cause a breakage because at this point in time
+> bridge.timings->input_bus_flags
+> seems to be still used by tidss right ?
+> 
 
-diff --git a/drivers/gpio/gpio-mockup.c b/drivers/gpio/gpio-mockup.c
-index e6a7049bef64..b32063ac845a 100644
---- a/drivers/gpio/gpio-mockup.c
-+++ b/drivers/gpio/gpio-mockup.c
-@@ -369,7 +369,7 @@ static void gpio_mockup_debugfs_setup(struct device *dev,
- 		priv->offset = i;
- 		priv->desc = gpiochip_get_desc(gc, i);
- 
--		debugfs_create_file(name, 0200, chip->dbg_dir, priv,
-+		debugfs_create_file(name, 0600, chip->dbg_dir, priv,
- 				    &gpio_mockup_debugfs_ops);
- 	}
- }
--- 
-2.40.1
+tidss was using the bridge.timings->input_bus_flags before the 7th
+patch[1] in this series.
 
+After the patch, it only relies on bridge_state and display_info for bus
+flags and formats.
+
+
+Regards
+Aradhya
+
+[1]: https://lore.kernel.org/all/20230509093036.3303-8-a-bhatia1@ti.com/
+
+
+> 
+>>         ret = phy_init(mhdp->phy);
+>>       if (ret) {
+>> @@ -2642,7 +2647,7 @@ static const struct of_device_id mhdp_ids[] = {
+>>   #ifdef CONFIG_DRM_CDNS_MHDP8546_J721E
+>>       { .compatible = "ti,j721e-mhdp8546",
+>>         .data = &(const struct cdns_mhdp_platform_info) {
+>> -          .timings = &mhdp_ti_j721e_bridge_timings,
+>> +          .input_bus_flags = &mhdp_ti_j721e_bridge_input_bus_flags,
+>>             .ops = &mhdp_ti_j721e_ops,
+>>         },
+>>       },
+>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>> index bedddd510d17..bad2fc0c7306 100644
+>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.h
+>> @@ -336,7 +336,7 @@ struct cdns_mhdp_bridge_state {
+>>   };
+>>     struct cdns_mhdp_platform_info {
+>> -    const struct drm_bridge_timings *timings;
+>> +    const u32 *input_bus_flags;
+>>       const struct mhdp_platform_ops *ops;
+>>   };
+>>   diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>> index dfe1b59514f7..12d04be4e242 100644
+>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.c
+>> @@ -71,8 +71,7 @@ const struct mhdp_platform_ops mhdp_ti_j721e_ops = {
+>>       .disable = cdns_mhdp_j721e_disable,
+>>   };
+>>   -const struct drm_bridge_timings mhdp_ti_j721e_bridge_timings = {
+>> -    .input_bus_flags = DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE |
+>> -               DRM_BUS_FLAG_SYNC_SAMPLE_NEGEDGE |
+>> -               DRM_BUS_FLAG_DE_HIGH,
+>> -};
+>> +const u32
+>> +mhdp_ti_j721e_bridge_input_bus_flags =
+>> DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE |
+>> +                       DRM_BUS_FLAG_SYNC_SAMPLE_NEGEDGE |
+>> +                       DRM_BUS_FLAG_DE_HIGH;
+>> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>> b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>> index 97d20d115a24..5ddca07a4255 100644
+>> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-j721e.h
+>> @@ -14,6 +14,6 @@
+>>   struct mhdp_platform_ops;
+>>     extern const struct mhdp_platform_ops mhdp_ti_j721e_ops;
+>> -extern const struct drm_bridge_timings mhdp_ti_j721e_bridge_timings;
+>> +extern const u32 mhdp_ti_j721e_bridge_input_bus_flags;
+>>     #endif /* !CDNS_MHDP8546_J721E_H */
+> 
