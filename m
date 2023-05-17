@@ -2,155 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2BB1706B07
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8F0706B12
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjEQO0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S231736AbjEQO2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjEQOZ7 (ORCPT
+        with ESMTP id S231691AbjEQO2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:25:59 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259CC131;
-        Wed, 17 May 2023 07:25:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AMSHJv2jYvo7rQjWBB9Ng8zQMZvaR/e6tP4pitmM19Dx6KeMU9yL3e3iMKxARoJEK/F5l/IcuR+YggqDLd0s30xktJIQ7j4qBUJDkJqabKWuqzOg+LmPeY3hNXBSykqKpMYE/lADP5yq1tqFUu5hZLClx4+VusgBRfvPOqYt+CCW7b1x70EudOWFkscXSiZyQ9hbLNb+2Cs5hoy0LzJdw61q8lMYrXF0doGyLoSJAKfu4ePXwt1cCi3eJlqvQ7ynPZdf1pGV0Gxk4QhP5CUWbvtigIHpiFnA+/ymUTlkuFECA7O4tQO2WvkzrB6ZLcv0n8Hmj/UVSXOR2JuW0yxG7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yh8tdUsHJFWhmuCkZ0Km+9N9qbLjAglqN+8cw4cW43U=;
- b=lpIKwsp6P2z9lr9qdPsDdj9wt4rtxABRu8lB+vCvaTg2CH98llRyH8y9poz9Px3vV7TCwK95HqWY2weNjUc3mN+s0QaNnfPzj4s6cmTUY4ldN0oUv5yr7fys6pZ/hVdERte6MenqaubKlceNnlWBXPbQsk7H8sP1DCTh0YoTS2f0sc0WLZfqkb26xM6ld946l3VfvlCGuNRK07BNTsnJyTYsQA2CHuJJ7mn6yBtWTJtDpRL62AR18u+VXFbpe93Bp+mblcIL5ap+NS45hkxvlAqqoTMj6xRzXQU0HL8cSlK5VlTqxN4kIj0P8enCL7afJjacQXUgPVHIBdqNAiHfhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yh8tdUsHJFWhmuCkZ0Km+9N9qbLjAglqN+8cw4cW43U=;
- b=lKJkBDSTVkA1aST8HRYS8rMSGrp2bMmEF91YLRJYGPR/IRaTrcscTxr4rF1jNhXSkzsIMwjRo9kUghSqvmG96s4Oc9EOHXuxG0b8ydKdJBrUC2R+ALmYJ9A9P9i+biAkZ3umhsxSTUJLyh0z96xqeoxBXP6pEzRpi1BofdrEv5iAXEs14vGeMbWDe8gomcHqdWaNHR+zbVFqEE05STZE44ocmdGngPo/XHOoXnah6TqPtMUWnz8yMzalHMnd9H74/I7oe5HvXWJPVK+fFvtdj0pdpU5pAWu7iy6OZ/V04DzPhr9H4vHlFMFUbCK67qj/pjoz6/kInsfKuzK6N2Z3ag==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM4PR12MB5056.namprd12.prod.outlook.com (2603:10b6:5:38b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
- 2023 14:25:56 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6411.017; Wed, 17 May 2023
- 14:25:56 +0000
-Date:   Wed, 17 May 2023 11:25:54 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
-        kevin.tian@intel.com, alex.williamson@redhat.com,
-        tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
-        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
-        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V5 00/11] vfio/pci: Support dynamic allocation of MSI-X
- interrupts
-Message-ID: <ZGTj8oD4VW15eo6K@nvidia.com>
-References: <cover.1683740667.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1683740667.git.reinette.chatre@intel.com>
-X-ClientProxiedBy: BL1PR13CA0280.namprd13.prod.outlook.com
- (2603:10b6:208:2bc::15) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5056:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03f0a710-ca9c-40e0-183b-08db56e2a06f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zmJLVaW+c8XAT1LEcvquMeAQuvmyzEIxbDyMfVX2syZk6e1/hbV9z0bk9s4em8KD37LuFVHkqLzCkFURlrTkKFGTOlj4nZtWe0meb7S1NUiSTsUQOXtN4fMQ7urnA1qNDjnk0sYU7YR6FzDkNL8m+TWlwkA5gUgQhnGGn/niiIQEasQpOO9U8H54pMQfwQH13OfdWEzTeeVp38JMrWZjlyZ5E0nkEEJciuqtSef3xAGNyY7Qtb8kQZXNw/gfqrH3nP8qUUoYDAVxHua43rBck4C3O6En+UGk+vTpdgeIV3kJ7hbmRZYSHpeun9n2cW7XVlEiWNf4Zzl3Tk0uojYw5swDyBFvNwN6wsumfCFyjC5nrOq9U7ZR/eWm0RXUtK1cPP5fHSARboFp/IFCyovVzq3Kt2/0lnr47deRbiR/7N9nqACag4jMpyIVvkIpYp7UtnEpnlMahRdSvL2amAfTEJAoIyrYO67Y+xAp+wIJKGpIHLd4LyawN/RIH9ONTKkX1qKPqCKxAfyeIyAFdEUVZHUirN9JqrtJrJ0t57rwn/HUf3E3WUp8wotCxnFZu47N
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(39860400002)(396003)(136003)(451199021)(4326008)(478600001)(316002)(7416002)(8936002)(2906002)(6916009)(41300700001)(66476007)(66556008)(66946007)(8676002)(5660300002)(6486002)(6512007)(26005)(6506007)(186003)(83380400001)(36756003)(2616005)(86362001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lL5Dro+KxwBMpaDVgqARQZeNkenG4/uX4ALKv3wnsM6RXFu5lbNDkFdXp8Ig?=
- =?us-ascii?Q?Fmbs4bwmOq0hl4B9pM+fBC2hN233odd6QVS8Lv6xSpHL9IngeDpVme6uuhNn?=
- =?us-ascii?Q?UKlBKBpssKVsL9fsApf1u1qBk8+NC4I5/PqOvKs7esmpL1LyV346Uh2I2W12?=
- =?us-ascii?Q?dXJqjHfEkhrfIgfv5a56m2AP8PSQ6LNWj/CuaxjQ1F958y4+g2sMnmE6F3GG?=
- =?us-ascii?Q?e7p3dhxW5sxYbvyfJ38Gs2Jcpmq7P0oKK6dEOogILUQVn8H5KtfVcsaykDIR?=
- =?us-ascii?Q?Ln2FRcDEvQ9q6KDznmcstoNDDvqw6ameyzmIajRHZE0IXVSzwCxhe+5qmn4H?=
- =?us-ascii?Q?+soSy01tGeAOW5Ahraiw96/vHr8sa2UoeOsvZLzSGdO4/W2RhNi71Wq8sPPG?=
- =?us-ascii?Q?m8iI+aJYPSL0DRY/0vikPFT/BruesXKfoMkUs0FBieY89foR4+qnrXe5g0c3?=
- =?us-ascii?Q?7xUZijJor+G3vfQ0bDmg2WbOvxS+EYNxeggSL1Y3AOLMrc3EMVeTZ541wXNE?=
- =?us-ascii?Q?a+hHp0EedKsvFtgI4wBqh4kNBlTZIC6HOsDcvSjNsZASnlvtF50NUUNIhT+k?=
- =?us-ascii?Q?cLfrY1EDjKGusTx14bJsGYSsNeo+Swj9AQrkjkGC3bwazKhISIkYL01xdf2m?=
- =?us-ascii?Q?ispRNzLLI3wD2H0yGBAFbgEQAIBSsb8nIKxxr4PWUqs6sWlDDVJQX5hOF1oZ?=
- =?us-ascii?Q?SPtfe2DgcExbAziUQbN9f8w1XcjEwQvArMyKut0/VB4VyZepSJyr2FeFjzMy?=
- =?us-ascii?Q?dd7GanJBb3CZ3qWOIkRw7mqziUOF8go0raN8f1hMHyw+FOVHew97F44OIewJ?=
- =?us-ascii?Q?TtXhtROn+NTv6a22SOI2M7RzwWNr414/rTGlQ9DvU0IBrDL8HfE+q/1s02kj?=
- =?us-ascii?Q?6e71LbEecSyy4p3S9TQJs8OMWREay1quFMu5d06F6Jt8TOtJIe+VEQTesunx?=
- =?us-ascii?Q?zvzxXLZcirwjohXU1xMc0jwUeyUNCPUsyCtI5ubOKJ098r5cpZHd0ORUEXpW?=
- =?us-ascii?Q?hkDuSI+2gSe4KenVziNTKOCWTWezWKJF3soiEL25ZC+wygZXDD5ZggzCsH9P?=
- =?us-ascii?Q?tm1FJoG7gkTBS76U5XSUKCMYq7tmWfpGChoazUJuGiCFJg76za1w00TdtuLE?=
- =?us-ascii?Q?m9Uaq7TOXsucjZJ/BZozL9/HLe8LPvZa1wHiuH0OBU354ZBbUDK5U0z+pDMO?=
- =?us-ascii?Q?Fl5/GzgDuTe4X8kkPnWpxZ+s6tCCC9/5vvhR+Zm+VbVaFKzAUot1UleorV9M?=
- =?us-ascii?Q?ev/75MWoRan9zfmJp5wUdCtMFKwNkcBbolNGjtoUo5o8nB8o+usexq7Orau4?=
- =?us-ascii?Q?ctqKCzMlrM4pAVnx5uymAmJ6d3xJtKNtTTGksDSK06ozJmRXSF2ROTZ/UlCj?=
- =?us-ascii?Q?uUf8WdIfBJTpG8x8w3U7AV35t695C+GSVN1zihN5cgdd2ZLRPb6ZaLhDDE/7?=
- =?us-ascii?Q?V5qngvEUSt7hBMMfnmJ4ClHHXEvzsi1F6tDDPhRvqU3DxATLHU6bkKz9Z6gu?=
- =?us-ascii?Q?F1d/LhHWphR8O44YgA1Ncci+l/WydRMeZc9cwXvihLZcjhCSy6FZcev5UFy3?=
- =?us-ascii?Q?7oDIcTl73keHSLPw8ultr/gGypTMfds45J6j3Tv6?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03f0a710-ca9c-40e0-183b-08db56e2a06f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 14:25:55.8567
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IDg3gf2vngdcrOfswsCrgwPsRgawy/VQb9jXXAPLABTazJVXKWtoxDCOvAY0pYGw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5056
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Wed, 17 May 2023 10:28:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274387EE4;
+        Wed, 17 May 2023 07:27:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AF0A63A0C;
+        Wed, 17 May 2023 14:27:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8431DC433EF;
+        Wed, 17 May 2023 14:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684333678;
+        bh=AoRYpT1YLThZVxUKY9ePgVwDgIFfFF9PtIMUgbNxJyM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WUNzXiJRJbiyKq9aqV065F7GO6DlSJst8wqq9ksE45jev/z5BNZjACDIsU+CKWd2p
+         YgjGdckmgkxBOYGmqbO/Q7DmiNaGJvtGLhQQtz66t4NP/id+Uo0xu+RUnqZF6ypu4X
+         FFZtvKjWpBheV7AQNhVpo1Hp4lfMZ0AfY5VaaItM8xbTSl5SojwEZIseT1QiWOyUeJ
+         LeYUIrL2ez1oYq8e4XSBAeTn2ReJaBV8RZFEYpvmNI4OQI6b//O81nIMFwAGKKM2qy
+         d5iS608w4+1IOEz2k6JrXrTWYbS3l4RsjV0WCQ9ODtU1E64QoYkryjNgQo+2XTUAyC
+         R+33bZ4yB6rVg==
+Date:   Wed, 17 May 2023 23:27:51 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Ze Gao <zegao2021@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Conor Dooley <conor@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Ze Gao <zegao@tencent.com>
+Subject: Re: [PATCH v3 2/4] fprobe: make fprobe_kprobe_handler recursion
+ free
+Message-Id: <20230517232751.09126a6cec8786a954e54bcf@kernel.org>
+In-Reply-To: <20230517034510.15639-3-zegao@tencent.com>
+References: <20230517034510.15639-1-zegao@tencent.com>
+        <20230517034510.15639-3-zegao@tencent.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 08:44:27AM -0700, Reinette Chatre wrote:
-> 
-> Qemu allocates interrupts incrementally at the time the guest unmasks an
-> interrupt, for example each time a Linux guest runs request_irq().
-> 
-> Dynamic allocation of MSI-X interrupts was not possible until v6.2 [1].
-> This prompted Qemu to, when allocating a new interrupt, first release all
-> previously allocated interrupts (including disable of MSI-X) followed
-> by re-allocation of all interrupts that includes the new interrupt.
-> Please see [2] for a detailed discussion about this issue.
-> 
-> Releasing and re-allocating interrupts may be acceptable if all
-> interrupts are unmasked during device initialization. If unmasking of
-> interrupts occur during runtime this may result in lost interrupts.
-> For example, consider an accelerator device with multiple work queues,
-> each work queue having a dedicated interrupt. A work queue can be
-> enabled at any time with its associated interrupt unmasked while other
-> work queues are already active. Having all interrupts released and MSI-X
-> disabled to enable the new work queue will impact active work queues.
-> 
-> This series builds on the recent interrupt sub-system core changes
-> that added support for dynamic MSI-X allocation after initial MSI-X
-> enabling.
-> 
-> Add support for dynamic MSI-X allocation to vfio-pci. A flag
-> indicating lack of support for dynamic allocation already exist:
-> VFIO_IRQ_INFO_NORESIZE and has always been set for MSI and MSI-X. With
-> support for dynamic MSI-X the flag is cleared for MSI-X when supported,
-> enabling Qemu to modify its behavior.
-> 
-> Any feedback is appreciated
+On Wed, 17 May 2023 11:45:07 +0800
+Ze Gao <zegao2021@gmail.com> wrote:
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Current implementation calls kprobe related functions before doing
+> ftrace recursion check in fprobe_kprobe_handler, which opens door
+> to kernel crash due to stack recursion if preempt_count_{add, sub}
+> is traceable in kprobe_busy_{begin, end}.
+> 
+> Things goes like this without this patch quoted from Steven:
+> "
+> fprobe_kprobe_handler() {
+>    kprobe_busy_begin() {
+>       preempt_disable() {
+>          preempt_count_add() {  <-- trace
+>             fprobe_kprobe_handler() {
+> 		[ wash, rinse, repeat, CRASH!!! ]
+> "
+> 
+> By refactoring the common part out of fprobe_kprobe_handler and
+> fprobe_handler and call ftrace recursion detection at the very beginning,
+> the whole fprobe_kprobe_handler is free from recursion.
+> 
+> Signed-off-by: Ze Gao <zegao@tencent.com>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Link: https://lore.kernel.org/linux-trace-kernel/20230516071830.8190-3-zegao@tencent.com
+> ---
+>  kernel/trace/fprobe.c | 59 ++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 44 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index 9abb3905bc8e..097c740799ba 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
+>  	char data[];
+>  };
+>  
+> -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> -			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> +static inline void __fprobe_handler(unsigned long ip, unsigned long
+> +		parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fregs)
 
-Jason
+OK, I picked up this series to probes/fixes. Note that I fixed this line 
+because the "unsigned long parent_ip" was split into 2 lines.
+
+Thank you,
+
+
+>  {
+>  	struct fprobe_rethook_node *fpr;
+>  	struct rethook_node *rh = NULL;
+>  	struct fprobe *fp;
+>  	void *entry_data = NULL;
+> -	int bit, ret;
+> +	int ret;
+>  
+>  	fp = container_of(ops, struct fprobe, ops);
+> -	if (fprobe_disabled(fp))
+> -		return;
+> -
+> -	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> -	if (bit < 0) {
+> -		fp->nmissed++;
+> -		return;
+> -	}
+>  
+>  	if (fp->exit_handler) {
+>  		rh = rethook_try_get(fp->rethook);
+>  		if (!rh) {
+>  			fp->nmissed++;
+> -			goto out;
+> +			return;
+>  		}
+>  		fpr = container_of(rh, struct fprobe_rethook_node, node);
+>  		fpr->entry_ip = ip;
+> @@ -61,23 +53,60 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  		else
+>  			rethook_hook(rh, ftrace_get_regs(fregs), true);
+>  	}
+> -out:
+> +}
+> +
+> +static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> +		struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> +{
+> +	struct fprobe *fp;
+> +	int bit;
+> +
+> +	fp = container_of(ops, struct fprobe, ops);
+> +	if (fprobe_disabled(fp))
+> +		return;
+> +
+> +	/* recursion detection has to go before any traceable function and
+> +	 * all functions before this point should be marked as notrace
+> +	 */
+> +	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> +	if (bit < 0) {
+> +		fp->nmissed++;
+> +		return;
+> +	}
+> +	__fprobe_handler(ip, parent_ip, ops, fregs);
+>  	ftrace_test_recursion_unlock(bit);
+> +
+>  }
+>  NOKPROBE_SYMBOL(fprobe_handler);
+>  
+>  static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
+>  				  struct ftrace_ops *ops, struct ftrace_regs *fregs)
+>  {
+> -	struct fprobe *fp = container_of(ops, struct fprobe, ops);
+> +	struct fprobe *fp;
+> +	int bit;
+> +
+> +	fp = container_of(ops, struct fprobe, ops);
+> +	if (fprobe_disabled(fp))
+> +		return;
+> +
+> +	/* recursion detection has to go before any traceable function and
+> +	 * all functions called before this point should be marked as notrace
+> +	 */
+> +	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> +	if (bit < 0) {
+> +		fp->nmissed++;
+> +		return;
+> +	}
+>  
+>  	if (unlikely(kprobe_running())) {
+>  		fp->nmissed++;
+>  		return;
+>  	}
+> +
+>  	kprobe_busy_begin();
+> -	fprobe_handler(ip, parent_ip, ops, fregs);
+> +	__fprobe_handler(ip, parent_ip, ops, fregs);
+>  	kprobe_busy_end();
+> +	ftrace_test_recursion_unlock(bit);
+>  }
+>  
+>  static void fprobe_exit_handler(struct rethook_node *rh, void *data,
+> -- 
+> 2.40.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
