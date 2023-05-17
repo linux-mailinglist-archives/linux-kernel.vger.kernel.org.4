@@ -2,128 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555A2707176
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F9F70717E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjEQTFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S229753AbjEQTHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjEQTFt (ORCPT
+        with ESMTP id S229721AbjEQTHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:05:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EC340CF;
-        Wed, 17 May 2023 12:05:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4063C648FC;
-        Wed, 17 May 2023 19:05:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FE76C433EF;
-        Wed, 17 May 2023 19:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684350347;
-        bh=PvhIcwG5owKyZJyFcH/6pJobQ3iaAEwWPonfwNpH3ew=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=WXIh9IfHWKaFwsll0iIfzbT6bTMEcRHtrA/k6Bn0LQcTWKSEhE5eKWA6KsAIZMfUy
-         zsndbrKHQnQI3U94pFQTsW/9RpWk/GVMdxYxHwFFeI73pohmxbQwTnhs3hvE3Iukwc
-         HGKEOhoi79giKe3eADixMxoue3SMeDU/Qi3M1OIeyxOLB09KsZ8LlgTVDNMwtjsIBx
-         qqLE6UqtcfGSPX/F0sRBNBUYPdCrWGW/Zmm6046p3T9SPqO1KagCcMv92mPNkj+jCm
-         mZ+t7zxdYsj/Us4SzT2VCrlXS8V/OeK4g4CMWcLrjSSw6ESFVX+16np9/4HHURvIz6
-         HOtDJaZT+me2A==
-Message-ID: <a55a7bfc8be6210dfc7e7721825ac915795a48cf.camel@kernel.org>
-Subject: Re: [PATCH] nfsd: make a copy of struct iattr before calling
- notify_change
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Zhi Li <yieli@redhat.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 17 May 2023 15:05:45 -0400
-In-Reply-To: <74D303B1-08F8-4CDF-8732-9352FFDEC463@oracle.com>
-References: <20230517162645.254512-1-jlayton@kernel.org>
-         <74D303B1-08F8-4CDF-8732-9352FFDEC463@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Wed, 17 May 2023 15:07:15 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886C51FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:07:12 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-965cc5170bdso178923766b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684350431; x=1686942431;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sjU63skqCTcgfqPTFoQRuF0AORaTbY/dYzoZwYojga4=;
+        b=z3HRdzYzgb7UjvGGZLE0de4RfGjaC3dI0a5ll2R9nl/7xPCLVCo6CX8Q+/eerHdHrA
+         4tmNsl3Sx/I7IroS6mDSOx6dq1wo8qrru60XTcxUHwPGg3yeYmf7tgbXlZgiAvrioC2T
+         diG3ZxUu5VsXgk41DBmU10v8tBjqQAvrecXI6ZsAkiU4yTYwMXO86rxvoVH0fwYSkgrj
+         IF85hR4z3BqaWt1enBIlbjTdw9ii3619h0krlsqr+NNP6I1hQjehH0zS0c1gADaIBKg7
+         97WLq08U44+9SpvlzXtiT44t7eFJdS0f9+qxVOxWiO+f16TT67aOJtSm9Axabe69fh0P
+         BJgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684350431; x=1686942431;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sjU63skqCTcgfqPTFoQRuF0AORaTbY/dYzoZwYojga4=;
+        b=VUnfMc53tFkfLItIkVr/ZjxfpQxdJ9LdgNcIm9cyfH3Vm5hNGrYivKNK6d/quIabUx
+         47PgKCIh2XfCpB+rSdLtOubo0WezpfUdFVJyNPMbF/QpUcUADb7Se3pm6zKBBxQVPgf4
+         tmsGnTKDG9d6TXhsXZ4y89KGATpKjgtC+DAtMPImOtqIFtRLp4Y23Dx7x1bB9HD5hlR0
+         l7LPqJ4ilPTE4RrLMAZsTsKhs/oruwP0CQKiHEQmqJ1++GZTu11DMyxGhRZGGr/QoPfu
+         gbZ/aFZQN/2fePR+WUf461xrbxf0tTQR5zY5oaI7fXoFqiLX4z39hRzN6slJr8QUTgBk
+         z5/g==
+X-Gm-Message-State: AC+VfDwSrUMYObYPy3Fo2X7EeMAu2q7QL2KkuCCfUI+RseBq3LCsP0LN
+        liQVpqq/Njk/EcWjzB1PSe2Tdg==
+X-Google-Smtp-Source: ACHHUZ5B92EqkTOQwxl3OS8GU6Zy19JKsxA9kUMtqvA27n8/1/XjFdFaEe6RdAnyp6Qb4IEtOSqE5Q==
+X-Received: by 2002:a17:907:7b98:b0:947:55ad:dd00 with SMTP id ne24-20020a1709077b9800b0094755addd00mr40841052ejc.26.1684350430968;
+        Wed, 17 May 2023 12:07:10 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d7a:e7cc:21b3:c435? ([2a02:810d:15c0:828:d7a:e7cc:21b3:c435])
+        by smtp.gmail.com with ESMTPSA id hs32-20020a1709073ea000b009534211cc97sm12663542ejc.159.2023.05.17.12.07.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 12:07:09 -0700 (PDT)
+Message-ID: <a10695f5-e7d6-7fac-695c-a5b1c17ad56a@linaro.org>
+Date:   Wed, 17 May 2023 21:07:06 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: pmi8998: add flash LED
+To:     Dylan Van Assche <me@dylanvanassche.be>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        amartinz@shiftphones.com
+References: <20230517182133.72590-1-me@dylanvanassche.be>
+ <20230517182133.72590-2-me@dylanvanassche.be>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230517182133.72590-2-me@dylanvanassche.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-17 at 17:47 +0000, Chuck Lever III wrote:
->=20
-> > On May 17, 2023, at 12:26 PM, Jeff Layton <jlayton@kernel.org> wrote:
-> >=20
-> > notify_change can modify the iattr structure. In particular it can can
-> > end up setting ATTR_MODE when ATTR_KILL_SUID is already set, causing a
-> > BUG() if the same iattr is passed to notify_change more than once.
-> >=20
-> > Make a copy of the struct iattr before calling notify_change.
-> >=20
-> > Fixes: 34b91dda7124 NFSD: Make nfsd4_setattr() wait before returning NF=
-S4ERR_DELAY
-> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2207969
-> > Reported-by: Zhi Li <yieli@redhat.com>
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> > fs/nfsd/vfs.c | 4 +++-
-> > 1 file changed, 3 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
-> > index c4ef24c5ffd0..ad0c5cd900b1 100644
-> > --- a/fs/nfsd/vfs.c
-> > +++ b/fs/nfsd/vfs.c
-> > @@ -538,7 +538,9 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh =
-*fhp,
-> >=20
-> > inode_lock(inode);
-> > for (retries =3D 1;;) {
-> > - host_err =3D __nfsd_setattr(dentry, iap);
-> > + struct iattr attrs =3D *iap;
->=20
-> This construct always makes me queazy. I'm never sure if an
-> initializer inside a loop is "only once" or "every time". I
-> fixed a bug like this once.
->=20
-> But if you've tested it and it addresses the BUG, then let's
-> go with this. I can apply it to nfsd-fixes.
->=20
+On 17/05/2023 20:21, Dylan Van Assche wrote:
+> Qualcomm PMIC PMI8998 has a 3 channel flash LED driver which is used
+> by many phones for 1 or 2 flash LEDs. Each LED can be used in flash mode
+> or torch mode. Add the flash LED node to PMI8998 DTS.
+> 
+> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> ---
+>  arch/arm64/boot/dts/qcom/pmi8998.dtsi | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/pmi8998.dtsi b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+> index ffe587f281d8..89f959353ad5 100644
+> --- a/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pmi8998.dtsi
+> @@ -60,6 +60,12 @@ pmi8998_lpg: pwm {
+>  			status = "disabled";
+>  		};
+>  
+> +		pmi8998_flash: led-controller@d300 {
+> +			compatible = "qcom,spmi-flash-led";
 
+This cannot be alone.
 
-I've done some light testing with this kernel, but this was found by Zhi
-while testing with the lustre racer test, so it involves some raciness.
-I've never hit this myself.
+It does not look like you tested the DTS against bindings. Please run
+`make dtbs_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-I'm pretty sure though that this has to be initialized every time. The
-assignment is inside the loop, after all. I'm ok with moving the
-assignment to a different line if you like though:
+Best regards,
+Krzysztof
 
-	struct iattr attrs;
-
-	attrs =3D *iap;
-	...
-
-> > +
-> > + host_err =3D __nfsd_setattr(dentry, &attrs);
-> > if (host_err !=3D -EAGAIN || !retries--)
-> > break;
-> > if (!nfsd_wait_for_delegreturn(rqstp, inode))
-> > --=20
-> > 2.40.1
-> >=20
->=20
-> --
-> Chuck Lever
->=20
->=20
-
---=20
-Jeff Layton <jlayton@kernel.org>
