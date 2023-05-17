@@ -2,150 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5462706D05
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933E7706D0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbjEQPjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S231989AbjEQPjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjEQPiz (ORCPT
+        with ESMTP id S232023AbjEQPjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:38:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168A955A9;
-        Wed, 17 May 2023 08:38:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 17 May 2023 11:39:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB639EC7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:39:19 -0700 (PDT)
+Received: from [IPV6:2a0c:5a83:9203:ad00:6a82:5fb2:6bd2:f97e] (unknown [IPv6:2a0c:5a83:9203:ad00:6a82:5fb2:6bd2:f97e])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E075637D1;
-        Wed, 17 May 2023 15:38:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C29AAC433D2;
-        Wed, 17 May 2023 15:38:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684337932;
-        bh=ot117eyBcpKD0lDl8KwZo2loZvZmFI8RKHgET2Hw/B0=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=KeFPgiIrgtU1zQADue6RwkBhSzujQMlHuWiV8fEksVBT9qyU5/PVNZKOCYI+uhSIn
-         i+9+sfpO7OHx9piHllBum6g8ODArFboBQeiVqQkArJz+bdFm7RPLWNm0o8w3fr8zPU
-         eDP/osqbozuYfT13eRP2y4gx/kGvkavh6Las2OxJb233Bx6WKe21N1MEXj/j+vccPj
-         k4A9o3Yk7vPeiph+MZAcchrEr7kYAMSb7kQNF+7cabp+ZZ05LOVWkBU9PmseQ+X3WQ
-         QSdfaaj6jDceK5h8shLqMBm0gVRhyqnoTS/VfbBSF30iwq3IvBrOhBp4CH/DV94kLl
-         9ROlmq1nfaUeg==
-Date:   Wed, 17 May 2023 08:38:49 -0700
-From:   Kees Cook <kees@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        syzbot <syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com>,
-        Kees Cook <keescook@chromium.org>
-CC:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
-        linux-hardening@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5Bsyzbot=5D_=5Bkernel=3F=5D_linux-next_test_error=3A?= =?US-ASCII?Q?_UBSAN=3A_array-index-out-of-bounds_in_alloc=5Fpid?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230517-bushaltestelle-super-e223978c1ba6@brauner>
-References: <000000000000c6de2a05fbdecbbb@google.com> <20230517-bushaltestelle-super-e223978c1ba6@brauner>
-Message-ID: <E41CCE0E-6274-432E-841A-A79FB996CFB0@kernel.org>
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2F494660592C;
+        Wed, 17 May 2023 16:39:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684337957;
+        bh=uKJy4pRowB3D34xI/kCqED8xTiizsjkeJjkVA+sWiDg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=J3RJBjgQgnVA+7J1qy5wo1XnaBI4eFQ40N2q3EzZPqWSkG4VeLp/HmJIF9KybDYrD
+         p2w+b3Zu/piTF52kCxT5tAT38LiKVEzzDk6dmf6GTAK5aDnanaWtY8rwA7gy4bCd0e
+         /CDRSAWiCmBkhOVGD8zd3T0ysX85HEgrD068tSrV9z3YedxGJTxfoliXX/bEJ5YbuU
+         vie1nXy2EBglJCCKdTAVBlEIy7kOvrgttcXXcGwhph9evDqm1XGYlRkX5W+QSp7uQp
+         /ovShfAMmFjJ3uqoynZvC2GBYeZUR/6U3z7J9+YzBKE6ApI7rSnmAjP7e731LJ3agF
+         CL9Sl1agVbzWg==
+Message-ID: <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com>
+Date:   Wed, 17 May 2023 17:39:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        regressions@lists.linux.dev,
+        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+        denys.f@collabora.com, kernelci@lists.linux.dev
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com>
+ <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+ <CAKwvOdmSrAxx-YY1Na3BSdYuxXCPKK+F0K5V6i+adTn_bVJEsw@mail.gmail.com>
+ <89961dfc-d40f-78e4-5d34-b86b7d152182@collabora.com>
+ <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
+ <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com>
+ <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
+From:   =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
+In-Reply-To: <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On May 17, 2023 1:25:08 AM PDT, Christian Brauner <brauner@kernel=2Eorg> wr=
-ote:
->On Wed, May 17, 2023 at 12:40:03AM -0700, syzbot wrote:
->> Hello,
->>=20
->> syzbot found the following issue on:
->>=20
->> HEAD commit:    065efa589871 Add linux-next specific files for 20230517
->> git tree:       linux-next
->> console output: https://syzkaller=2Eappspot=2Ecom/x/log=2Etxt?x=3D17f27=
-bb2280000
->> kernel config:  https://syzkaller=2Eappspot=2Ecom/x/=2Econfig?x=3D821ee=
-b02ef201bcc
->> dashboard link: https://syzkaller=2Eappspot=2Ecom/bug?extid=3Dac3b41786=
-a2d0565b6d5
->> compiler:       gcc (Debian 10=2E2=2E1-6) 10=2E2=2E1 20210110, GNU ld (=
-GNU Binutils for Debian) 2=2E35=2E2
->>=20
->> Downloadable assets:
->> disk image: https://storage=2Egoogleapis=2Ecom/syzbot-assets/dbbd691e9e=
-5a/disk-065efa58=2Eraw=2Exz
->> vmlinux: https://storage=2Egoogleapis=2Ecom/syzbot-assets/e5b9541c3979/=
-vmlinux-065efa58=2Exz
->> kernel image: https://storage=2Egoogleapis=2Ecom/syzbot-assets/44cf3f3a=
-aabb/bzImage-065efa58=2Exz
->>=20
->> IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
->> Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller=2Eappspotmail=2Ecom
->>=20
->> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
->> UBSAN: array-index-out-of-bounds in kernel/pid=2Ec:244:15
->
->Only way I see this happening is if the logic in
->kernel/pid_namespace=2Ec:create_pid_cachep() which sets the object size
->for the struct pid allocation of this pid namespace based on
->parent_pid_namespace->level + 1 is broken=2E The way this works is:
->
->    struct pid
->    {
->            [snip]
->            struct upid numbers[1];
+Hi Nick,
 
-I was *just* looking at this fake flex array during LSS last week=2E It wa=
-s one of two core structs still using the ancient 1-element style=2E
+On 16/5/23 1:01, Nick Desaulniers wrote:
+> Can you please help verify this failure by hand, and see if applying
+> https://github.com/ClangBuiltLinux/linux/commit/45c4fb6095d872785e077942da896d65d87ab56b.patch
+> helps?  If you can repro; mind sharing your precise steps to reproduce?
 
->    };
->
->    create_pid_namespace()
->    {
->            unsigned int level =3D parent_pid_ns->level + 1;
->            ns->pid_cachep =3D create_pid_cachep(level);
->    }
->
->and then during fork:
->
->    alloc_pid()
->    {
->            pid =3D kmem_cache_alloc(ns->pid_cachep, GFP_KERNEL);
->    }
->
->So effectively, the wrong level must've been set in
->create_pid_namespace() so that the flexible array allocation is too
->small=2E
->
->I don't have time to debug this tbh=2E Ccing Kees maybe there's some
->flexible array stuff going on I'm unaware of=2E
+I ran a few tests but the commit that introduced your changes
+passes every time. There's a chance that the bisector got misled
+due to the test runs failing for whatever reason unrelated to the
+patch. There's definitely something introducing a bug somewhere,
+as current mainline/master makes this test fail on this target
+when kernel/configs/debug.config is applied, but it must be
+somewhere else. I'll investigate this some more to see what I can
+find.
 
-Yes, I think it's due to:
-https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/kees/linux=2Egit/commi=
-t/?h=3Dfor-next/hardening&id=3D2d47c6956ab3c8b580a59d7704aab3e2a4882b6c
+About the steps to reproduce it, we're using the current KernelCI
+tools (kci_build) to generate the kernel. To actually launch the
+tests I'm submitting jobs to Collabora's LAVA lab, which is
+something that isn't available to external users, so it might be
+a bit hard for you to reproduce the exact environment from the
+original test. If you need to test something, I can do it for
+you.
 
-This makes the sanitizer treat only [0]-arrays as flex arrays=2E
-
-Though I wonder why Clang hasn't warned about this yet=2E
-
-Regardless, we'll need to fix struct pid=2E Since it uses a static initial=
-izer for "numbers[0]", this will need a bit of a tweak, but I've got patche=
-s for this=2E I hadn't sent them yet because I was still studying the use o=
-f the "levels" member which is off by one for the count of "numbers" elemen=
-ts, which some code already has to work around (using "<=3D" when iterating=
- and "+ 1" for some outputs)=2E=2E=2E
-
-
-
---=20
-Kees Cook
+Thanks,
+Ricardo
