@@ -2,199 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD012706D23
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150D0706C3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjEQPqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
+        id S231146AbjEQPJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjEQPqf (ORCPT
+        with ESMTP id S229529AbjEQPJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:46:35 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B714558B;
-        Wed, 17 May 2023 08:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=iYZEtg7pd8shIjXTbUZsXmOLd2eioSqHBYcaXseCGHM=; b=pA8xXVO8YNlITcRaUxTfPVrXlp
-        kwsY1TLAN8mrJTMjsi3L6fMVynx3eBwFr02/75gER+fw3W7dm0SX219XgTrrXuLbScJpxmTZLHi8b
-        1cQRiiBsdg/mxOIp8wmwJ41oL3zFBpkKUJm5rGkGrXi75XoM6msGU5Y2tDyjsonjIpdQ=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:45486 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pzIkz-0007IE-78; Wed, 17 May 2023 11:08:02 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lech Perczak <l.perczak@camlintechnologies.com>,
-        =?UTF-8?q?Tomasz=20Mo=C5=84?= <tomasz.mon@camlingroup.com>
-Cc:     hugo@hugovil.com, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 17 May 2023 11:07:47 -0400
-Message-Id: <20230517150746.3823249-2-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230517150746.3823249-1-hugo@hugovil.com>
-References: <20230517150746.3823249-1-hugo@hugovil.com>
+        Wed, 17 May 2023 11:09:09 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91448A7D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:08:40 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30781184e78so96928f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684336099; x=1686928099;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+JjSYdtG2EYbhgl3W9Z4sL1bQQEtMVmhKqEqC/AduCo=;
+        b=e56FF/cP746ZZHhOr8xJup1GjD+pmXzaBRsfVX5AX1w7yI3WCnRq4e0mMlBVve1jx5
+         1c1EVvCcZnvbxA1qFXULADgUWz7C2mU9+QRMagTimu8qcDlkqLCbR9MrMQMsChocvDNA
+         +dqyfMV7GI6SkC9ZFFaknX4/WT6C37GGp5mbr2jNbSroUBuQsjpsHNwfTnsPo8CiRRYr
+         KUlXiQTOeVOjfxQrJRcdIvVG9nQDox+ggF3IE3ZsJJI28HVdLn8E+fKz8KhSJ3BeBziV
+         tYSk2Vy6fupt2hRI4m/EvNj84uZ4/DjuajdUuKeqvGTHiwu7CPsPOWkL7hV2i4rbl8lS
+         CUHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684336099; x=1686928099;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+JjSYdtG2EYbhgl3W9Z4sL1bQQEtMVmhKqEqC/AduCo=;
+        b=JqNnnfFU1Kq0mQ16ZwLCFFHW05xiPDnTriYg3NFjNDqfTnr3Qv3L2anktEvPP+hQLZ
+         lk6eQmCsdii73Kj329t2dCZ8NLSdNTYcwGJmoTVy3wYSxAYvGkiSxO6mG9Gep3dhv9Ho
+         Nk0kfd/nzZUUYwzyr+9idP1iRJ2TkqxZL25X2PmDQLdUPcbeGl/cWYTLfNAgXuYv7T5d
+         1FapPgDtJh9TliKp+cQs+9wHXB76pwp5fRydiXAyhovqUn+99SexQpWyG4+Mj5Kdc/rS
+         REENYIXWyfJfaBJTMI2hrmiqIxTUVyfxZgLH1+tJtE3lby8jNcLwXVvM9MDiSAPUP+Oa
+         2Uvw==
+X-Gm-Message-State: AC+VfDz0Z5t5vth1a6wDly/8yxZJmfI7+u9JXXGv6nY6vALy4+y9wDKh
+        /SraTMaQGeLAn3DslhSIfkAQUA==
+X-Google-Smtp-Source: ACHHUZ5NEOYsUCmUojYedI/sjZ+jmm3UJJ7uGK1T1t2wN1itwkO0Gv7qCC2f0mNk75s/OIg9c810Mw==
+X-Received: by 2002:adf:ffc7:0:b0:307:d04a:60d8 with SMTP id x7-20020adfffc7000000b00307d04a60d8mr1231689wrs.0.1684336099525;
+        Wed, 17 May 2023 08:08:19 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id e17-20020adfe7d1000000b00300aee6c9cesm3142028wrn.20.2023.05.17.08.08.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 08:08:17 -0700 (PDT)
+Date:   Wed, 17 May 2023 18:08:14 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Chuck Lever <chuck.lever@oracle.com>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        lkft-triage@lists.linaro.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: qemu-arm64: kernel BUG at fs/inode.c:1763!
+Message-ID: <20680bb5-71c0-4945-a058-05f43bbd03f4@kili.mountain>
+References: <CA+G9fYszs5wPp+TWJeVZsdRjnBTXTa8i3YY3qV9SHbB1+R2+4Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYszs5wPp+TWJeVZsdRjnBTXTa8i3YY3qV9SHbB1+R2+4Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: [PATCH 2/2] serial: sc16is7xx: fix regression with GPIO configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+The fs/inode.c:1763 bug is more stuff from net/handshake testing, so
+lets add Chuck to the CC list.
 
-Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
-and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-changed the function of the GPIOs pins to act as modem control
-lines without any possibility of selecting GPIO function.
+regards,
+dan carpenter
 
-As a consequence, applications that depends on GPIO lines configured
-by default as GPIO pins no longer work as expected.
-
-Also, the change to select modem control lines function was done only
-for channel A of dual UART variants (752/762). This was not documented
-in the log message.
-
-This new patch allows to specify GPIO or modem control line function
-in the device tree, and for each of the ports (A or B).
-
-This is done by using the new device-tree property named
-"modem-control-line-ports" (property added in separate patch).
-
-Boards that need to have GPIOS configured as modem control lines
-should add that property to their device tree. Here is a list of
-boards using the sc16is7xx driver in their device tree and that may
-need to be modified:
-    arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
-    mips/boot/dts/ingenic/cu1830-neo.dts
-    mips/boot/dts/ingenic/cu1000-neo.dts
-
-Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control lines")
-Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- drivers/tty/serial/sc16is7xx.c | 42 ++++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index a7c4da3cfd2b..1a3143331c1f 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -236,7 +236,8 @@
- 
- /* IOControl register bits (Only 75x/76x) */
- #define SC16IS7XX_IOCONTROL_LATCH_BIT	(1 << 0) /* Enable input latching */
--#define SC16IS7XX_IOCONTROL_MODEM_BIT	(1 << 1) /* Enable GPIO[7:4] as modem pins */
-+#define SC16IS7XX_IOCONTROL_MODEM_A_BIT	(1 << 1) /* Enable GPIO[7:4] as modem A pins */
-+#define SC16IS7XX_IOCONTROL_MODEM_B_BIT	(1 << 2) /* Enable GPIO[3:0] as modem B pins */
- #define SC16IS7XX_IOCONTROL_SRESET_BIT	(1 << 3) /* Software Reset */
- 
- /* EFCR register bits */
-@@ -306,7 +307,6 @@ struct sc16is7xx_devtype {
- 	char	name[10];
- 	int	nr_gpio;
- 	int	nr_uart;
--	int	has_mctrl;
- };
- 
- #define SC16IS7XX_RECONF_MD		(1 << 0)
-@@ -447,35 +447,30 @@ static const struct sc16is7xx_devtype sc16is74x_devtype = {
- 	.name		= "SC16IS74X",
- 	.nr_gpio	= 0,
- 	.nr_uart	= 1,
--	.has_mctrl	= 0,
- };
- 
- static const struct sc16is7xx_devtype sc16is750_devtype = {
- 	.name		= "SC16IS750",
--	.nr_gpio	= 4,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 1,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is752_devtype = {
- 	.name		= "SC16IS752",
--	.nr_gpio	= 0,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 2,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is760_devtype = {
- 	.name		= "SC16IS760",
--	.nr_gpio	= 4,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 1,
--	.has_mctrl	= 1,
- };
- 
- static const struct sc16is7xx_devtype sc16is762_devtype = {
- 	.name		= "SC16IS762",
--	.nr_gpio	= 0,
-+	.nr_gpio	= 8,
- 	.nr_uart	= 2,
--	.has_mctrl	= 1,
- };
- 
- static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
-@@ -1457,12 +1452,6 @@ static int sc16is7xx_probe(struct device *dev,
- 				     SC16IS7XX_EFCR_RXDISABLE_BIT |
- 				     SC16IS7XX_EFCR_TXDISABLE_BIT);
- 
--		/* Use GPIO lines as modem status registers */
--		if (devtype->has_mctrl)
--			sc16is7xx_port_write(&s->p[i].port,
--					     SC16IS7XX_IOCONTROL_REG,
--					     SC16IS7XX_IOCONTROL_MODEM_BIT);
--
- 		/* Initialize kthread work structs */
- 		kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc);
- 		kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_proc);
-@@ -1498,6 +1487,25 @@ static int sc16is7xx_probe(struct device *dev,
- 					 prop, p, u)
- 			if (u < devtype->nr_uart)
- 				s->p[u].irda_mode = true;
-+
-+		val = 0;
-+
-+		of_property_for_each_u32(dev->of_node, "modem-control-line-ports",
-+					 prop, p, u)
-+			if (u < devtype->nr_uart) {
-+				/* Use GPIO lines as modem control lines */
-+				if (u == 0)
-+					val |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
-+				else if (u == 1)
-+					val |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
-+			}
-+
-+		if (val)
-+			regmap_update_bits(
-+				s->regmap,
-+				SC16IS7XX_IOCONTROL_REG << SC16IS7XX_REG_SHIFT,
-+				SC16IS7XX_IOCONTROL_MODEM_A_BIT |
-+				SC16IS7XX_IOCONTROL_MODEM_B_BIT, val);
- 	}
- 
- #ifdef CONFIG_GPIOLIB
--- 
-2.30.2
-
+On Wed, May 17, 2023 at 06:39:57PM +0530, Naresh Kamboju wrote:
+> Following kernel crash noticed while booting qemu-arm64 kunit builds on
+> Linux next version 6.4.0-rc2-next-20230517.
+> 
+> WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781 __alloc_pages
+> kernel BUG at fs/inode.c:1763!
+> WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:128
+> ct_kernel_exit.constprop.0+0xe0/0xe8
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Detailed Crash log:
+> =========
+> <4>[  800.148388] ------------[ cut here ]------------
+> <4>[  800.150072] WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781
+> __alloc_pages+0x998/0x13e8
+> <4>[  800.151978] Modules linked in:
+> <4>[  800.153337] CPU: 1 PID: 1436 Comm: kunit_try_catch Tainted: G
+> B            N 6.4.0-rc2-next-20230517 #1
+> <4>[  800.154662] Hardware name: linux,dummy-virt (DT)
+> <4>[  800.155921] pstate: 22400005 (nzCv daif +PAN -UAO +TCO -DIT
+> -SSBS BTYPE=--)
+> <4>[  800.157079] pc : __alloc_pages+0x998/0x13e8
+> <4>[  800.158148] lr : __kmalloc_large_node+0xc0/0x1b8
+> <4>[  800.159238] sp : ffff80000b5e7aa0
+> <4>[  800.160154] x29: ffff80000b5e7aa0 x28: 0000000000000000 x27:
+> 0000000000000000
+> <4>[  800.161762] x26: ffff0000c4509f00 x25: ffff800008087a98 x24:
+> ffffd0168ffa8460
+> <4>[  800.163283] x23: 1ffff000016bcf74 x22: 0000000000040dc0 x21:
+> 0000000000000000
+> <4>[  800.164813] x20: 0000000000000015 x19: 0000000000000000 x18:
+> 000000000000000b
+> <4>[  800.166307] x17: 00000000bd2c963e x16: 00000000a2b18575 x15:
+> 0000000033b8949b
+> <4>[  800.167831] x14: 000000006d0ad0a4 x13: 00000000e32f85f5 x12:
+> ffff7000016bcfa1
+> <4>[  800.169363] x11: 1ffff000016bcfa0 x10: ffff7000016bcfa0 x9 :
+> 000000000000f204
+> <4>[  800.170928] x8 : 00000000f2000000 x7 : 00000000f2f2f2f2 x6 :
+> 00000000f3f3f3f3
+> <4>[  800.172467] x5 : 0000000000040dc0 x4 : ffff0000c614e900 x3 :
+> 0000000000000000
+> <4>[  800.173976] x2 : 0000000000000000 x1 : 0000000000000001 x0 :
+> ffffd01696633000
+> <4>[  800.175603] Call trace:
+> <4>[  800.176314]  __alloc_pages+0x998/0x13e8
+> <4>[  800.177355]  __kmalloc_large_node+0xc0/0x1b8
+> <4>[  800.178401]  __kmalloc+0x158/0x1c0
+> <4>[  800.179350]  handshake_req_alloc+0x70/0xb8
+> <4>[  800.180510]  handshake_req_alloc_case+0xa4/0x188
+> <4>[  800.181598]  kunit_try_run_case+0x88/0x120
+> <4>[  800.182614]  kunit_generic_run_threadfn_adapter+0x38/0x60
+> <4>[  800.183809]  kthread+0x194/0x1b0
+> <4>[  800.184813]  ret_from_fork+0x10/0x20
+> <4>[  800.185873] ---[ end trace 0000000000000000 ]---
+> <6>[  800.202972]         ok 6 handshake_req_alloc excessive privsize
+> <6>[  800.217425]         ok 7 handshake_req_alloc all good
+> <6>[  800.219182]     # req_alloc API fuzzing: pass:7 fail:0 skip:0 total:7
+> <6>[  800.222082]     ok 1 req_alloc API fuzzing
+> <6>[  800.243148]     ok 2 req_submit NULL req arg
+> <6>[  800.260195]     ok 3 req_submit NULL sock arg
+> <6>[  800.274397]     ok 4 req_submit NULL sock->file
+> <6>[  800.294631]     ok 5 req_lookup works
+> <6>[  800.310289]     ok 6 req_submit max pending
+> <6>[  800.326669]     ok 7 req_submit multiple
+> <6>[  800.342645]     ok 8 req_cancel before accept
+> <4>[  800.359161] ------------[ cut here ]------------
+> <2>[  800.360659] kernel BUG at fs/inode.c:1763!
+> <0>[  800.362464] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+> <4>[  800.364079] Modules linked in:
+> <4>[  800.364978] CPU: 0 PID: 9 Comm: kworker/0:1 Tainted: G    B   W
+>       N 6.4.0-rc2-next-20230517 #1
+> <4>[  800.366607] Hardware name: linux,dummy-virt (DT)
+> <4>[  800.368282] Workqueue: events delayed_fput
+> <4>[  800.369511] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT
+> -SSBS BTYPE=--)
+> <4>[  800.370861] pc : iput+0x2c4/0x328
+> <4>[  800.371839] lr : iput+0x3c/0x328
+> <4>[  800.372882] sp : ffff800008107b50
+> <6>[  800.375744]     ok 9 req_cancel after accept
+> <4>[  800.376704] x29: ffff800008107b50 x28: ffffd016924f7400 x27:
+> ffff0000c08d4da0
+> <4>[  800.379288] x26: ffff0000c042f918 x25: ffff0000cc273918 x24:
+> ffff0000cc273900
+> <4>[  800.381160] x23: 0000000000000000 x22: ffff0000c042f9b8 x21:
+> ffffd016924f7b40
+> <4>[  800.383408] x20: ffff0000c042f880 x19: ffff0000c042f880 x18:
+> 000000000000000b
+> <4>[  800.385535] x17: ffffd0168fb6f094 x16: ffffd0168fb6ee10 x15:
+> ffffd0168fb6ebd4
+> <4>[  800.387985] x14: ffffd0168f7d5de8 x13: ffffd0168f617f98 x12:
+> ffff700001020f53
+> <4>[  800.389672] x11: 1ffff00001020f52 x10: ffff700001020f52 x9 :
+> ffffd0168fb67384
+> <4>[  800.392442] x8 : ffff800008107a98 x7 : 0000000000000000 x6 :
+> 0000000000000008
+> <4>[  800.395053] x5 : ffff800008107a58 x4 : 0000000000000001 x3 :
+> dfff800000000000
+> <4>[  800.397652] x2 : 0000000000000007 x1 : ffff0000c042f918 x0 :
+> 0000000000000060
+> <4>[  800.400110] Call trace:
+> <4>[  800.401352]  iput+0x2c4/0x328
+> <4>[  800.402741]  dentry_unlink_inode+0x12c/0x240
+> <4>[  800.404519]  __dentry_kill+0x16c/0x2b0
+> <4>[  800.406047]  dput+0x24c/0x438
+> <4>[  800.407331]  __fput+0x140/0x3b0
+> <4>[  800.409152]  delayed_fput+0x64/0x80
+> <4>[  800.410708]  process_one_work+0x3cc/0x7d0
+> <4>[  800.413032]  worker_thread+0xa4/0x6a0
+> <4>[  800.415041]  kthread+0x194/0x1b0
+> <6>[  800.416283]     ok 10 req_cancel after done
+> <4>[  800.416205]  ret_from_fork+0x10/0x20
+> <0>[  800.419090] Code: 17ffffc4 97fffb54 17ffffd4 d65f03c0 (d4210000)
+> <4>[  800.421577] ---[ end trace 0000000000000000 ]---
+> <6>[  800.424335] note: kworker/0:1[9] exited with irqs disabled
+> <6>[  800.428252] note: kworker/0:1[9] exited with preempt_count 1
+> <4>[  800.435635] ------------[ cut here ]------------
+> <4>[  800.436529] WARNING: CPU: 0 PID: 0 at
+> kernel/context_tracking.c:128 ct_kernel_exit.constprop.0+0xe0/0xe8
+> <4>[  800.439070] Modules linked in:
+> <4>[  800.440326] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B D W
+>     N 6.4.0-rc2-next-20230517 #1
+> <4>[  800.442196] Hardware name: linux,dummy-virt (DT)
+> <4>[  800.443408] pstate: 224003c5 (nzCv DAIF +PAN -UAO +TCO -DIT
+> -SSBS BTYPE=--)
+> <4>[  800.445031] pc : ct_kernel_exit.constprop.0+0xe0/0xe8
+> <4>[  800.446629] lr : ct_kernel_exit.constprop.0+0x20/0xe8
+> <4>[  800.448263] sp : ffffd01694ed7cd0
+> <4>[  800.449375] x29: ffffd01694ed7cd0 x28: 00000000437e90ac x27:
+> 0000000000000000
+> <4>[  800.451354] x26: ffffd01694ef1e40 x25: 0000000000000000 x24:
+> 0000000000000000
+> <4>[  800.453397] x23: ffffd01694ee2ba0 x22: 1ffffa02d29dafb4 x21:
+> 0000000000000000
+> <4>[  800.455573] x20: ffffd01692f29c20 x19: ffff0000da667c20 x18:
+> 000000000000000b
+> <4>[  800.457649] x17: 000000000055a8d0 x16: 000000006cbc159c x15:
+> ffffd0168fb6865c
+> <4>[  800.459662] x14: ffffd0168fb680ec x13: ffffd0168fb3b03c x12:
+> ffff7a02d29daf81
+> <4>[  800.461787] x11: 1ffffa02d29daf80 x10: ffff7a02d29daf80 x9 :
+> dfff800000000000
+> <4>[  800.463827] x8 : ffffd01694ed7c08 x7 : 0000000000000000 x6 :
+> 0000000000000008
+> <4>[  800.465864] x5 : ffffd01694ed7bc8 x4 : 0000000000000001 x3 :
+> dfff800000000000
+> <4>[  800.467860] x2 : 4000000000000002 x1 : 4000000000000000 x0 :
+> ffff2fea4773e000
+> <4>[  800.469981] Call trace:
+> <4>[  800.470946]  ct_kernel_exit.constprop.0+0xe0/0xe8
+> <4>[  800.472535]  ct_idle_enter+0x10/0x20
+> <4>[  800.473923]  default_idle_call+0x58/0x90
+> <4>[  800.475213]  do_idle+0x304/0x388
+> <4>[  800.476492]  cpu_startup_entry+0x2c/0x40
+> <4>[  800.477885]  rest_init+0x120/0x128
+> <4>[  800.478830]  arch_call_rest_init+0x1c/0x28
+> <4>[  800.479961]  start_kernel+0x2f8/0x3c0
+> <4>[  800.482015]  __primary_switched+0xc0/0xd0
+> <4>[  800.483086] ---[ end trace 0000000000000000 ]---
+> <6>[  800.487780]     ok 11 req_destroy works
+> <6>[  800.488283] # Handshake API tests: pass:11 fail:0 skip:0 total:11
+> <6>[  800.491161] # Totals: pass:17 fail:0 skip:0 total:17
+> <6>[  800.495059] ok 75 Handshake API tests
+> <6>[  800.514129] uart-pl011 9000000.pl011: no DMA platform data
+> 
+> links,
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/log
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/history/
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/tests/
+> 
+> Steps to reproduce:
+> =================
+> # To install tuxrun on your system globally:
+> # sudo pip3 install -U tuxrun==0.42.0
+> #
+> # See https://tuxrun.org/ for complete documentation.
+> 
+> tuxrun   \
+>  --runtime podman   \
+>  --device qemu-arm64   \
+>  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/Image.gz
+>   \
+>  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/modules.tar.xz
+>   \
+>  --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2PeQhlPkvTmtoQVO1F0CQ7lAsm5/images/juno/lkft-tux-image-juno-20230511150149.rootfs.ext4.gz
+>   \
+>  --parameters SKIPFILE=skipfile-lkft.yaml   \
+>  --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
+>  --tests kunit   \
+>  --timeouts boot=30
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
