@@ -2,163 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37101706F35
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E1F706F39
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjEQRSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S229564AbjEQRUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEQRSL (ORCPT
+        with ESMTP id S229445AbjEQRUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:18:11 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3C740E5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:18:06 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so1297983e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:18:06 -0700 (PDT)
+        Wed, 17 May 2023 13:20:04 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F0A272B
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:20:03 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae4e49727eso11741245ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:20:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684343885; x=1686935885;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t/W+xyRZOrFaXXUosMsho+Wtkn3dRl1nHYsHDumTX8E=;
-        b=M7E8jA+AmNT97OdIY8EZEME/eE+/AXzah9OG3V8PaBGWJidzVYSF79fCHwsuldXoEW
-         3wVSO7Pe4WzDijxQujtsuoTQFfCyLlAVfYjPn4s0+18O3QY5mga3S5tAt6SC8I4bMZrJ
-         OeC0ztHE27ts2V4VdqDV6AK/zAFJ+oMde7kJbDBkuVMXBr9aAWumVVbtWOxpVoDjm7gP
-         dwocPRjQB6ttH9S2QDR+xLBBKpZ+lJMb2Tm0seZVVK1YzEHdbqpDAWfcxHZ7um/TcF1c
-         xXeKo9YrExNsV4ek9RCSFvP5fKVLXHZKOP38BHUoFgWjNEqFoVvdQ1dAxUUqHqQPRzA1
-         38YQ==
+        d=google.com; s=20221208; t=1684344002; x=1686936002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gA4GEkw6Mvu6f7ZlzBV9HkqublrMhw+ZD7wnWlVurlY=;
+        b=Vn37ASA4fpooxlne/eIyFg3gzMwQTlgBd2XEo9pIoaSE1kWELMmWJq4+hNrPFq5v4P
+         XUZ0qY668TiAm9nplrMPSMSmzuUkoGOEo1OXg2dG8GN3A/Sh05uEB+ffFit62kBsjnm6
+         a831OyGVKX4xUslo0UUanQtanXugGGLXr3xsTMuoGcPGT1UII2znsBRvCIoYHz2v/biC
+         aJfB3gRszJSQJTBiawVNZ47wGDaVjf0PRN1kqaQtClOgyqRgUJkm+NlJYlE+sX9InNWh
+         OrNTWhqq2rqt2nAdN6TOgN+55p2R/XVbOUXT9OjXQGREKkfqy/HEK7bTFhX3izQMpkSe
+         r6Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684343885; x=1686935885;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t/W+xyRZOrFaXXUosMsho+Wtkn3dRl1nHYsHDumTX8E=;
-        b=HYp+FopNI3TlU3XYo+VMItq6m4m1g88/5Xey6nZSvxI1Njl/u5PRWSxyrLZyQZE9n6
-         /bl1oaPo9kr891eupLCi5FKjgfPoV3keFUWfHNHED217VUm66RPrhUyAaWIudToC0M/l
-         diO+gw6JVa+L1yK0P3hkEztnK73A6Mj2BpJosd98Pg2Zte2ZQ5Qok1C/o/H++/OOEEtl
-         H64OM8pUTjyIsvGzpYRReNYfi1ge6FnoMKkOZ42RVEHKgpIu1aGCGUCEe0jbBj1ju0e/
-         dzqj7bIKRMCdXI3BYkIR9KVpvKv/NMPNS9885ATDaPhM5cvdbdYmo5qqPuiXHQU5Awfq
-         vYxw==
-X-Gm-Message-State: AC+VfDzzJgfRTuCi7VgMrcAdF20/DAD3q16NgcbwaU1Prdq8na61fm4P
-        nz4PZyCP3KuR1hNB9vqYVXUK3g==
-X-Google-Smtp-Source: ACHHUZ7qL3cLZD9LGj91BXwss6hJFPqDLP8pRWU4pQowx5XVm0GxnZn5iAX20K55cchMNdGFcvo7wg==
-X-Received: by 2002:a05:6512:75:b0:4ec:8816:f4fc with SMTP id i21-20020a056512007500b004ec8816f4fcmr481324lfo.6.1684343885003;
-        Wed, 17 May 2023 10:18:05 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id j18-20020ac24552000000b004f140788184sm1038284lfm.289.2023.05.17.10.18.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 10:18:04 -0700 (PDT)
-Message-ID: <f6a491ce-57ad-66c8-8fa2-933bf208adac@linaro.org>
-Date:   Wed, 17 May 2023 19:18:01 +0200
+        d=1e100.net; s=20221208; t=1684344002; x=1686936002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gA4GEkw6Mvu6f7ZlzBV9HkqublrMhw+ZD7wnWlVurlY=;
+        b=HomODkiRwGq5mW63qbU/2PZ2aKAX5+pirZSXSUupXJpFkrQaT/6Am3B1/68IqWDz+9
+         4h8hac3jEhiEEBzpnlAaihehu7i28srFQChDVl8yhNRy5dnh+msHKWPNc8oPFbqgX7Kh
+         3vqqtc0HjRQYSjB+Y9zPbYTZRMv5TUvCr5+15q1jwOzsRZT2VcP5+5JVbAmFK/wotFOy
+         PUc/YSbUZ1qboVaonBY5yDqzLEh/XJHtaQ0l/NWosKy3Fi3OdEVzKZ6FDLeU2Gmqha0Q
+         pZvScpWToJ512IBbnbX005iUNzjvCUM96nGcYVUWYIbtm52u6iVztaYxofJoz8ZPwpTA
+         Pn0Q==
+X-Gm-Message-State: AC+VfDy4yhnOF08jQ3++7S2Q5nDCoA7SM3WKWX+8mgO50ezeaQAolIkp
+        oLGgq3l5n7MwCc7y2smNnLWViS9KzvCL3PUeravwTA==
+X-Google-Smtp-Source: ACHHUZ5oaROI1i0tAOAu+6S33dZ4AKg8K7dRMzns2n8kWIagHNKeQSwfYLT50UbPDUsyy7EeEr7bk4iEJXyvdlmA5vg=
+X-Received: by 2002:a17:90a:be15:b0:23f:81c0:eadd with SMTP id
+ a21-20020a17090abe1500b0023f81c0eaddmr335771pjs.47.1684344002532; Wed, 17 May
+ 2023 10:20:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH][next] media: venus: hfi_cmds: Replace fake flex-array
- with flexible-array member
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <ZGQn63U4IeRUiJWb@work>
- <8f9ca4a1-26ee-cd37-6c15-abdc832d77b3@linaro.org>
-In-Reply-To: <8f9ca4a1-26ee-cd37-6c15-abdc832d77b3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230517115955.1078339-1-badhri@google.com> <c7f19b4e-469c-4e40-bd2e-e864ca5f7872@rowland.harvard.edu>
+In-Reply-To: <c7f19b4e-469c-4e40-bd2e-e864ca5f7872@rowland.harvard.edu>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Wed, 17 May 2023 10:19:25 -0700
+Message-ID: <CAPTae5JB2LLEF7ZNaJxMnF==8WCWoEYvmF_FK3F=BDq0Hko0xQ@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
+        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
+        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 17, 2023 at 7:44=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Wed, May 17, 2023 at 11:59:55AM +0000, Badhri Jagan Sridharan wrote:
+> > chipidea udc calls usb_udc_vbus_handler from udc_start gadget
+> > ops causing a deadlock. Avoid this by offloading usb_udc_vbus_handler
+> > processing.
+>
+> Surely that is the wrong approach.
+>
+> The real problem here is that usb_udc_vbus_handler() gets called from
+> within a udc_start routine.  But this is totally unnecessary, because
+> the UDC core will call usb_udc_connect_control_locked() itself, later on
+> during gadget_bind_driver().
+
+Hi Alan,
+
+usb_udc_vbus_handler sets the udc->vbus flag as well apart from
+calling usb_udc_connect_control_locked().  So, removing usb_udc_vbus_handle=
+r
+from chip specific start callback might prevent the controller from
+starting.
+
+void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+{
+struct usb_udc *udc =3D gadget->udc;
+
+mutex_lock(&udc->connect_lock);
+if (udc) {
+udc->vbus =3D status;
+usb_udc_connect_control_locked(udc);
+
+Thanks,
+Badhri
 
 
-On 17.05.2023 04:11, Konrad Dybcio wrote:
-> 
-> 
-> On 17.05.2023 03:03, Gustavo A. R. Silva wrote:
->> One-element arrays are deprecated, and we are replacing them with flexible
->> array members instead. So, replace one-element arrays with flexible-array
->> members in struct hfi_sys_set_resource_pkt, and refactor the rest of
->> the code, accordingly.
->>
->> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
->> routines on memcpy() and help us make progress towards globally
->> enabling -fstrict-flex-arrays=3 [1].
->>
->> The only binary differences seen before/after changes are the
->> following:
->>
->>      17ba:      mov    %rbx,%rdi
->>      17bd:      call   17c2 <pkt_sys_set_resource+0x42>
->>                         17be: R_X86_64_PLT32    __tsan_write4-0x4
->> -    17c2:      movl   $0x14,(%rbx)
->> +    17c2:      movl   $0x10,(%rbx)
->>      17c8:      lea    0x4(%rbx),%rdi
->>      17cc:      call   17d1 <pkt_sys_set_resource+0x51>
->>                         17cd: R_X86_64_PLT32    __tsan_write4-0x4
->>
->> which is expected once this accounts for the following line of code
->> at  drivers/media/platform/qcom/venus/hfi_cmds.c:73
->>
->> 73         pkt->hdr.size = sizeof(*pkt);
->>
->> and as *pkt is of type struct hfi_sys_set_resource_pkt, sizeof(*pkt) is
->> reduced by 4 bytes, due to the flex-array transformation.
->>
->> Link: https://github.com/KSPP/linux/issues/79
->> Link: https://github.com/KSPP/linux/issues/293
->> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
->> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->> ---
->>  drivers/media/platform/qcom/venus/hfi_cmds.c | 2 +-
->>  drivers/media/platform/qcom/venus/hfi_cmds.h | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
->> index 3f74d518ad08..7c82e212434e 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
->> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
->> @@ -83,7 +83,7 @@ int pkt_sys_set_resource(struct hfi_sys_set_resource_pkt *pkt, u32 id, u32 size,
->>  		res->size = size;
->>  		res->mem = addr;
->>  		pkt->resource_type = HFI_RESOURCE_OCMEM;
->> -		pkt->hdr.size += sizeof(*res) - sizeof(u32);
->> +		pkt->hdr.size += sizeof(*res);
->>  		break;
->>  	}
->>  	case VIDC_RESOURCE_NONE:
->> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
->> index ba74d03eb9cd..dd9c5066442d 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_cmds.h
->> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
->> @@ -56,7 +56,7 @@ struct hfi_sys_set_resource_pkt {
->>  	struct hfi_pkt_hdr hdr;
->>  	u32 resource_handle;
->>  	u32 resource_type;
->> -	u32 resource_data[1];
->> +	u32 resource_data[];
-> Would making this an u32* be a better resolution?
-Nevermind, I overthought this by thinking in the terms of its size
-and not the data within the struct...
-
-Maybe struct_size could be used instead of subtracting sizeof(u32)
-though?
-
-Konrad
-> 
-> Konrad
->>  };
->>  
->>  struct hfi_sys_release_resource_pkt {
+>
+> So a proper solution would be simply to remove the unnecessary
+> usb_udc_vbus_handler() call from the chipidea driver (and similarly for
+> the max3420_udc driver).
+>
+> Similar changes may be needed in these drivers' udc_stop routines.
+>
+> Alan Stern
