@@ -2,159 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2699706CEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C6E706D00
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjEQPfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S230270AbjEQPiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjEQPfa (ORCPT
+        with ESMTP id S230039AbjEQPiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:35:30 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2115.outbound.protection.outlook.com [40.107.93.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1B6A5DE;
-        Wed, 17 May 2023 08:35:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bD3T165b85NeITIVT8eBlcBh6lu+BT9CSexggqv8IlungErks3H3pd7akZwpKJwtEG0CxBRg6vzPyZG9+2wOmnOObevO20yHZGIoi2C6QanJMolb4EEvIRrWeKwR1gebDTVbUwzVsgPQfyYrvQPHPVQcVtA07DkoozWilEWcNI7iAIy6WgQZhDmOkZgZz0JarsFCBt6S+wp3Z5f3GoCcy06nP4vHBSSn1BLg/jf3mQUMzXYAdLNni58H8DXG2OJCbxB8M8LV04Ms3gzBDDsGliSVdRE9yJBMZFL2TDFonsZSy7lwX2noPG8ZVAv6zFB7xWjevk6MzjZEg61WG9jRsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HZVNi/DiWxn99F4pi7d3yPC9aH+eFthHqWxC1nEdP60=;
- b=RZMpBilHR+EKAgm0ShQ/Y3OzmcwaAVAAFPsdSHCzkSSljTyPaTIe/LZACFZJ18Ld5XE7ZIzH9HvfV1akj/+HbO98/j9PyT//kXC9YJicL1sLy7KePK9+P8Wz2aeMPz5BqckXibtdEZhq1r6wR8bLRx7GQBS/Iaw73sHwbD8dlYBEGdoA5EfA+mduyiU30+W6mnsNd1mPIe/9fZJTixhoXLRSpZF7iZOIZqc/SpvlRx0YVkqEilGduMNw19VTqXno4H4y/QCFQ1QUAPm2Rq+gyjCtdrJY7djrBNoaHMm/9e0/0SPn9RSvB1zKpDKDqmyEwCotC+HwUQeTz3UDWI2LbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HZVNi/DiWxn99F4pi7d3yPC9aH+eFthHqWxC1nEdP60=;
- b=j1GxbATeKnsqIkdztDTKrqxzBTnxNa+9YMb4uLnRLdj8+hKKma7ZvGzcHPvUCaVoNMlvxcpQSQTjOP+xTLt8lyUF4yhgrbxINM8iA5KMcS+jipU3yxsCj45t02/BG0r0wglRYHSQIvO1e8DdNGtOvaihUR5UENHvn/r4+qNQw6E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB3954.namprd13.prod.outlook.com (2603:10b6:5:2a3::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Wed, 17 May
- 2023 15:34:40 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.033; Wed, 17 May 2023
- 15:34:40 +0000
-Date:   Wed, 17 May 2023 17:34:32 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     netdev@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 0/3] WAKE_FILTER for Broadcom PHY
-Message-ID: <ZGT0CDSEI3MO5SKa@corigine.com>
-References: <20230516231713.2882879-1-florian.fainelli@broadcom.com>
- <ZGSdMM32YnloAlIf@corigine.com>
- <daff5610-0ad2-9e08-b9cb-dcbc6d7938f6@broadcom.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <daff5610-0ad2-9e08-b9cb-dcbc6d7938f6@broadcom.com>
-X-ClientProxiedBy: AM0PR06CA0130.eurprd06.prod.outlook.com
- (2603:10a6:208:ab::35) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 17 May 2023 11:38:17 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DED5FEB;
+        Wed, 17 May 2023 08:38:14 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 5B3D8846BF;
+        Wed, 17 May 2023 17:38:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1684337893;
+        bh=M2eZPFSQ41Q2D5uOI+yQoYDb47PQYn5beh6o3SR5YPU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Yj+yFxg/67nXD6F8KdjGNlHeJUvviQO5I5ySKPLO/v3UuNNeAQbbAQon1X4iYoFH+
+         4ng+9TJsrfKE3Ri/aRLHPEd28tFXh0dw8+94gAYvLhuN2k3MsRBjDYN9/zy9BwEJTM
+         j0BwNM9pp2jMIaGjsGL3n+LqWMcKZ0R0OSN3e7jf014CyrDIAXaMQqkYCCarukQE8n
+         gAow4a/1AB+IYMC93ztJlaa6MI5oUPyvpbtsqOmVFZf4qMxcldl463dSI9mgLvtDhc
+         74pLarpGSdMH/IpdCsBMWblZJ+J3RIo5DcqfaRZWGbPoCdP7/Rq0gbuyVQ9GgZGE2h
+         GpuGffaI6X3tw==
+Message-ID: <dc5fae3e-28e8-92eb-612e-ee447d6eebfa@denx.de>
+Date:   Wed, 17 May 2023 17:38:11 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3954:EE_
-X-MS-Office365-Filtering-Correlation-Id: fecf84bb-cc55-4ab2-b704-08db56ec3aa9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aKSStlO03Hq2Ga3dxC/iSRNtQ9gDB992E6MqVI3aw4UvI9GZ1mdM0ntDzroSvZ9p6BLWW7showdb4KRBFxeldI8vWX5ND/qOYx9RcFuFbF/vraM1A2UsDUj9YYfGe4KAXheRhgqF9zxJRX7ULGZsz9/Aj49ZDPuWLOEIaM6p/1/3xFHu0mZQTc9eTSBZeoojuX+G7AKrQ9nmQC9tt6MKOKRFyAoIpPr+KVA1rNV5pYHZ3HyePB1Z4drmTA6LWIxf+VrQxndmLQB3Wb9HJ3YU9n8fikB9gbj1Pj1ZiBXtenkH10q3qYCsD4k1fwV00CUibMtI4LdNlYVu3bf9P98j4QvMMkXZRbc5kXVU9EcfgN61WnavOymmvk59JbXUcloUZHYzqube53Jmhiab3jp2933QvMNUah1kCPxe63N9/cwDAbARYMa9yQXbf7Zmlz7E4vkj049MJbaSSGFt/A4V13jQPAnAtUom6okfbgQQ6LgLTCAgXLoHAr95abkQpfkBQ6A0D1Nb5T3Kn1o6LWgs9q0SkouUc/jyEHwyIMNT+MchPnEfvza5GMxkw3PdgJpt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(376002)(396003)(39830400003)(451199021)(41300700001)(54906003)(86362001)(38100700002)(316002)(5660300002)(44832011)(7416002)(2906002)(478600001)(8936002)(4326008)(66556008)(66946007)(6916009)(8676002)(66476007)(6486002)(6666004)(36756003)(6512007)(6506007)(53546011)(186003)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZQdjuv3Q1l3oPcTdu9a8CocgwGSbKBMzkrNhkoulj13ncgtEOaDbgW0Mafos?=
- =?us-ascii?Q?Ef8V8IqAv1g2YBCgcx8hsWBbzLJ6sv2/uPUgWE73r5bbD1AvVJNKpq3QBQHv?=
- =?us-ascii?Q?uOBKirqjD6IeRM6odbaLjMJZzJDFwBCRZQOElrNi+Al8ZhnMiAnyyyz6cZWo?=
- =?us-ascii?Q?N8V20xAmqeVrwOF3Ph0Gq7pZrgvpSPtb+Yp2laUVmDLCvHHcdesIRFVk2C5O?=
- =?us-ascii?Q?JXLWjy/WKbX8zinItVqYeYMr8iZHpeG8Oknv4xC0/8s4tmLc9GZ7lyJXhd1b?=
- =?us-ascii?Q?5lSYiJPp3li2LSfXRuYB0j2kU+lmZqy+rbigrQfBmQQyuMkB9VpJTXGjBDiU?=
- =?us-ascii?Q?OMG9jdz/lkXHf3a4xGwfP9Pgazxghfk/9TiWb05isI12Kalm58QRFUyBeJXn?=
- =?us-ascii?Q?R0F6dqL31C03ZA2B+BRvM4FaydMFMaROkO2Eby7AXiF7nIcetgDckY8DzLMm?=
- =?us-ascii?Q?sq5q97IT3O6qf12Lqnpz2jp2uWkBUS8b+kU16AELMMTc3aKDVnM55E4liVgD?=
- =?us-ascii?Q?J2GjB+bZpwGCx4skJk6Xm2vRikz/LI67tXcPlJBUWYl6HIoSv5B93Hc/83Xy?=
- =?us-ascii?Q?PGjh5kzGkrpAV+whjh3Bzd7N3o0NHQTH1XI//S2TaafpPHmEI28o4uOw7DO7?=
- =?us-ascii?Q?t5fY2e1OKDg4TmDVw2LNbTroN0KugeCi1bkUPG6lQzln5lU7zsxO6Jcizcbn?=
- =?us-ascii?Q?6NEqZnMap4xTzvRDC8FkHnMvm0bMAmwcSRSEpCMqve8tP7kGNta15oyKGtcH?=
- =?us-ascii?Q?ixx4aVS2yg74+8CIXyvHhftAVg2DOUUUsAENAY++g7D/vZuaT84Y8QYay/Wi?=
- =?us-ascii?Q?JROU8Vi35u4CShwUHZymMkwq4C5pBkzufBLrMEIOXPFErWRfUE5RPNdRi/+b?=
- =?us-ascii?Q?rc7nxDO8qdDzb7+oUPwre4x4ODlpN6QX/HxJ2yb/BZ+OGlcYWfECtIJUu11T?=
- =?us-ascii?Q?eq5PP7jhxHUKQi27DXKeImAysbOXBHtUzWjvE2jCrcskS/vsKF1fpwV/iYlb?=
- =?us-ascii?Q?mV2yxoNWOpm93E8sqcblIXvW1s75NcbTkvSTA1i81QpgdbcUBjWbRkjnK3DB?=
- =?us-ascii?Q?xMxbbAiwLRPlOnKKa86GpK7eH2POCgVrfrqu4ZZ1c/bahup4JaHUHTprKtcS?=
- =?us-ascii?Q?eJ/2d+QC8/9iOl7a3mISaYt87mTy9jd/spxegtoH0H8Bns/VYhcQpjiIZYHh?=
- =?us-ascii?Q?cThakEmdMHNmG/4WA+/flkKCUsOktyaS75yQvOndtdH/bIYa0zo84299eX4s?=
- =?us-ascii?Q?OZBy4jcBwlj3dQg5+rWeRwUo3Wy1V5QNfsHWSHJFoglLsXU61fCr5vHz8u3G?=
- =?us-ascii?Q?20sudIT+1ye8PHXc1euMYBeJ832NI+FcCcZJ6DkOmU7mMgMwzKgpihfI3rea?=
- =?us-ascii?Q?RMI4YiPh+Msuob2py/OiBvXXIiNdEzUfsFAcKWpT/hhNLxm2x5TEmpxrZex5?=
- =?us-ascii?Q?uxVR8bpphijAhaxuCXeAcaJCbI0/aQm40/GV6wAm9h+swjvpt8+b/Btxzy+o?=
- =?us-ascii?Q?/QZQd3blk47sC23Jxa+O4eBeUoAutqUeAsVoUQteHD8WipNENRh2qoQ3aDqO?=
- =?us-ascii?Q?dySjamAOBPZOlQswPI/coQ9miFJh2R4LPqnxY6lqFCY23iUIU3EZtC54aed+?=
- =?us-ascii?Q?aCCYo9cn+cUS9gRBuzHvqlUR8IKj4SKOohEHAOCakPgqQVC3GiUxdCr9WHvF?=
- =?us-ascii?Q?pWC2cQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fecf84bb-cc55-4ab2-b704-08db56ec3aa9
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 15:34:40.0940
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4Zay7Qz3/+sDD2jnL8zUMDd3GxdDwrvWLcNDH3eCokR9FbgiIKrbi4Y4PMFxtVKLdXkAu2OmDLFep6heqlaX5kMp32zw1QzeUlR3/P9eV+s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3954
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/3] STM32 warning cleanup
+Content-Language: en-US
+To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@dh-electronics.com
+References: <20230517132214.254757-1-raphael.gallais-pou@foss.st.com>
+ <56bcad63-a32e-63fc-1c20-15909f2788b5@denx.de>
+ <c617bb64-e7fd-c3de-6e29-6dd7c5896d16@foss.st.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <c617bb64-e7fd-c3de-6e29-6dd7c5896d16@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 08:18:25AM -0700, Florian Fainelli wrote:
+On 5/17/23 16:38, Raphael Gallais-Pou wrote:
+> 
+> On 5/17/23 16:06, Marek Vasut wrote:
+>> On 5/17/23 15:22, Raphael Gallais-Pou wrote:
+>>> This serie aims to reduce the number of device-tree warnings of
+>>> following boards :
+>>>
+>>>     - STM32F429-DISCO
+>>>     - STM32MP15*
+>>>
+>>> Those warnings were appearing either during build or when checking
+>>> dt-bindings and concern mostly LTDC and DSI IPs and were due to the
+>>> following cases:
+>>>
+>>>     - panel-dsi@0 nodes that needed
+>>>     - unnecessary #address-cells and #size-cells properties
+>>>     - residual 'reg' field on single endpoints
+>>>
+>>> Raphael Gallais-Pou (3):
+>>>     ARM: dts: stm32: fix warnings on stm32f469-disco board
+>>>     dt-bindings: display: st,stm32-dsi: Remove unnecessary fields
+>>>     ARM: dts: stm32: fix several DT warnings on stm32mp15
+>>>
+>>>    .../devicetree/bindings/display/st,stm32-dsi.yaml      |  2 --
+>>>    arch/arm/boot/dts/stm32f469-disco.dts                  |  4 ++--
+>>>    arch/arm/boot/dts/stm32mp151.dtsi                      |  5 -----
+>>>    arch/arm/boot/dts/stm32mp157.dtsi                      |  7 -------
+>>>    .../dts/stm32mp157a-icore-stm32mp1-ctouch2-of10.dts    |  6 ++++--
+>>>    .../boot/dts/stm32mp157a-icore-stm32mp1-edimm2.2.dts   |  6 ++++--
+>>>    .../stm32mp157a-microgea-stm32mp1-microdev2.0-of7.dts  |  3 +--
+>>>    arch/arm/boot/dts/stm32mp157c-dk2.dts                  |  8 ++++++++
+>>>    arch/arm/boot/dts/stm32mp157c-ev1.dts                  | 10 +++++++---
+>>>    arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts              |  3 +--
+>>>    arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi     |  6 +-----
+>>>    arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                 |  3 +--
+>>>    12 files changed, 29 insertions(+), 34 deletions(-)
+>>>
+>>
+>> Is this a V2 series ?
+> 
+> Hi Marek
 > 
 > 
-> On 5/17/2023 2:24 AM, Simon Horman wrote:
-> > On Tue, May 16, 2023 at 04:17:10PM -0700, Florian Fainelli wrote:
-> > > This patch series adds support for WAKE_FILTER to the Broadcom PHY with
-> > > the narrow use case of being able to program a custom Ethernet MAC DA to
-> > > be waking up from.
-> > > 
-> > > This is currently useful for Set-top-box applications where we might
-> > > want to wake-up from select multicast MAC DA pertaining to mDNS for
-> > > instance (Wake-on-Cast typically).
-> > > 
-> > > The approach taken here is the same as what has been pioneered and
-> > > proposed before for the GENET and SYSTEMPORT drivers.
-> > > 
-> > > Thanks!
-> > 
-> > Hi Florian,
-> > 
-> > I hate to be a pain.
-> > But this series doesn't apply on net-next.
+> yes it was,
 > 
-> Right, that's because it depends upon "[PATCH net-next] net: phy: broadcom:
-> Register dummy IRQ handler". I did not make that clear in the cover letter
-> but definitively should have.
+> Thanks for highlighting it to me.
 
-Thanks Florian, got it.
-
-Of course review can occur within that context.
-But perhaps it is best to repost once those patches are in,
-so the CI can run.
-
+You're welcome, I see a V3 now, thanks !
