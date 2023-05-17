@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4918E707401
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82039707404
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjEQVT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 17:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S230215AbjEQVTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 17:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjEQVTQ (ORCPT
+        with ESMTP id S230004AbjEQVTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 17:19:16 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41DFD2E8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:18:57 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64354231003so376561b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:18:57 -0700 (PDT)
+        Wed, 17 May 2023 17:19:14 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D54AD2D9;
+        Wed, 17 May 2023 14:18:56 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6ab113d8589so1133922a34.3;
+        Wed, 17 May 2023 14:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684358316; x=1686950316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
-        b=mLEnL4+900Y3v1EqzSKYSJxW7S1yg/ELTQklPqGBcRBmawcubhgNP+sNXAvPz5XNQZ
-         bzYl/HCY0Gj0DjZz+yT+WpWJqnVxfV3I19QTXwM0TPs36dZnrb/kF1uLJuBQMC7ho3yw
-         D1VKf+c0humm1eT7OVArCXHOWmozEY2C4uwlCqgpNpe/JaziXFyfnlJchrdZ5pCFgSdQ
-         PSvtFyKcpeq4GUJctxBrsUFZYnWtuNtlXDM/uWayPRI1dDFGYaZywPPGal1mPWBz471K
-         ojUvE7j/m7OK1Hd3955o538yns9ywuFX4wL36FXlP6CP49dHP2T+PA4pRMEkg4HDfm2N
-         Q7bg==
+        d=gmail.com; s=20221208; t=1684358312; x=1686950312;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6vL2fsfxq6/38TDdxu0CBw8vPRGY2/MXlHJiOSzTok=;
+        b=Y17VeasKT/R0ZHCm8xlJ33mSiSE2pBG+Pzej6dc7OpxPh/vJYpVoNsa1ejlkrZMJ2N
+         yUFR5J2olLz4pc1XvXxgxmKPOLbopDaqydk9E30DjUIJmxJj05NcE89mAITWk3B7L9EO
+         sP59s6IfUdxhBnmy7ghAIVBtWPCzkYF5XSmmG7FoU6M1M+1qGapJCDCXmqvcXN99EB+Y
+         GgbPG+7Z3h1VCiv8JD4uLehwl2ONHCKwS2K3FCjVZaHDom6uOMIgE4AEzfCM9h9cnOpt
+         7PrgK5Xue9xOEdgLDbWJnLcCsMmXl8UnNF9yFZktt+NQ4RReFy+Z8TtlKP6Jcaxah4qH
+         wsRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684358316; x=1686950316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nsC+YIR9GPviDXHSlkV5AONTmzt9XmYN5GUXlOjFZyw=;
-        b=TzUQMF1UNBhtyWkBzzL0jezu0GoyjLxd5aNQsPmTc5KK9QaBX+7HWHCmoasr1BXanb
-         iT9HHWcskdzu8NfoMPb8zu5XlNd7v4Uhhdfph6D8DATCpwlRLAjfLYVe0yVpaTXzuN+a
-         aCFihyiKvmwfd7bf6FXUrj9opkIYAtci+oR0dReNZqaCIUjlAUj0DAqmZVtKaHB+zejQ
-         2TCYTzKkMJkC/XBpzKPR5khtFNclJjZNiunKfLUGX6T3aQab5eXrJynB9dB0/hLsmndq
-         R9Gxtfj0TqSAjv408uzJzAJHfL3EQMzuT9VuYkbekb0VXUdgZf/A8Gx+u8OTVmQ+T8q8
-         MTuA==
-X-Gm-Message-State: AC+VfDyEsJgh04QPoy+haX3loy/OOaFZihREFLEuUKQ8j/8XVitYtL3Q
-        1m59xXRBK+eWaeMoQ9GOS9EOyg==
-X-Google-Smtp-Source: ACHHUZ7ZROYmKec5DJ3xETJ6t99Gy8RZhTD5iWOnz0B+vLWZcQYsGJlm6hN9VNbIaLXHbMbdKvjBVQ==
-X-Received: by 2002:aa7:8882:0:b0:63b:54e4:871b with SMTP id z2-20020aa78882000000b0063b54e4871bmr778781pfe.8.1684358316360;
-        Wed, 17 May 2023 14:18:36 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:6bed:7a51:340a:a439:1b87])
-        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b0064cb6206463sm4359210pfo.85.2023.05.17.14.18.32
+        d=1e100.net; s=20221208; t=1684358312; x=1686950312;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N6vL2fsfxq6/38TDdxu0CBw8vPRGY2/MXlHJiOSzTok=;
+        b=K6/mcUlGZR07f/TxN/E2ZUplhwMhnEVsyED1RlvHDBC4VmM0ac00R8O8XhrsQINHCk
+         Rf4KB/ZrMJSp+mDjVhaMqLgqvJCQTB1X+SZsSp4Bfac/GK1dSocn/Dv8wYY3OiZCmfaH
+         /RkUwJ1Op0DlGUUPl58l8KVjLEnpZaJGrGyfYKaj9/7r2bsqjsNVOqswm6+zJ/qEU4qG
+         5tOzLHXDXkAEiL4753k03SUd1IVIswZouaGoWzicg/RHx24rMntkaqV6Zy3X8pIDpEFN
+         DLFOEAwZTwuhK7gkvDQWZTIUWA7o2ildbb2tCax3kFR9ezqbM1zAAKhQHsnCOWuQJA8e
+         c08Q==
+X-Gm-Message-State: AC+VfDykTxqSiEXVgMJzO/ak5j271KNhAWJEkBNykOWjHiJyDEIqhjdM
+        vln1+NPcO2hS1YEMzEtBQQ==
+X-Google-Smtp-Source: ACHHUZ7AbL6ppLXitT2ot9B7QQumEOQTXwgSdkGmZx5UgJBDcuWyvJP9GvkN7ysF2NCBRu85Uus5RQ==
+X-Received: by 2002:a05:6830:1659:b0:6ab:31ed:85ef with SMTP id h25-20020a056830165900b006ab31ed85efmr89568otr.27.1684358312444;
+        Wed, 17 May 2023 14:18:32 -0700 (PDT)
+Received: from C02FL77VMD6R ([208.184.112.130])
+        by smtp.gmail.com with ESMTPSA id dj15-20020a0568303a8f00b006a65be836acsm46300otb.16.2023.05.17.14.18.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 14:18:36 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
-        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
-Subject: [PATCH v6 6/6] arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
-Date:   Thu, 18 May 2023 02:47:56 +0530
-Message-Id: <20230517211756.2483552-7-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
-References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
+        Wed, 17 May 2023 14:18:32 -0700 (PDT)
+Date:   Wed, 17 May 2023 14:18:28 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+Message-ID: <ZGVEpHMkerjA2+0V@C02FL77VMD6R>
+References: <cover.1683326865.git.peilin.ye@bytedance.com>
+ <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
+ <20230517114825.5d7c85a4@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517114825.5d7c85a4@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,66 +85,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the USB-C type port on the Qualcomm QRB4210-RB2 board
-can be set primarily in a 'device' configuration (with the default
-DIP switch settings), it makes sense to enable the EUD debug
-peripheral on the board by default by setting the USB 'dr_mode' property
-as 'otg'.
+On Wed, May 17, 2023 at 11:48:25AM -0700, Jakub Kicinski wrote:
+> >             } else {
+> > -                   dev_queue = dev_ingress_queue(dev);
+> > -                   old = dev_graft_qdisc(dev_queue, new);
+> > +                   old = dev_graft_qdisc(dev_queue, NULL);
+> > +
+> > +                   /* {ingress,clsact}_destroy() "old" before grafting "new" to avoid
+> > +                    * unprotected concurrent accesses to net_device::miniq_{in,e}gress
+> > +                    * pointer(s) in mini_qdisc_pair_swap().
+> > +                    */
+> > +                   qdisc_notify(net, skb, n, classid, old, new, extack);
+> > +                   qdisc_destroy(old);
+> > +
+> > +                   dev_graft_qdisc(dev_queue, new);
+>
+> BTW can't @old be NULL here?
 
-Now, the EUD debug peripheral can be enabled by executing:
- $ echo 1 > /sys/bus/platform/drivers/qcom_eud/1610000.eud/enable
+ingress_queue->qdisc_sleeping is initialized to &noop_qdisc (placeholder)
+in dev_ingress_queue_create(), and dev_graft_qdisc() also grafts
+&noop_qdisc to represent "there's no Qdisc":
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 27 +++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+	/* ... and graft new one */
+	if (qdisc == NULL)
+		qdisc = &noop_qdisc;
+	dev_queue->qdisc_sleeping = qdisc;
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 1a0776a0cfd0..0ce72f1ebc10 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -30,6 +30,10 @@ vph_pwr: vph-pwr-regulator {
- 	};
- };
- 
-+&eud {
-+	status = "okay";
-+};
-+
- &qupv3_id_0 {
- 	status = "okay";
- };
-@@ -253,7 +257,28 @@ &usb {
- 
- &usb_dwc3 {
- 	maximum-speed = "super-speed";
--	dr_mode = "peripheral";
-+
-+	/*
-+	 * There is only one USB DWC3 controller on QRB4210 board and it is connected
-+	 * via a DIP Switch:
-+	 * - to either an USB - C type connector or an USB - A type connector
-+	 *   (via a GL3590-S hub), and
-+	 * - to either an USB - A type connector (via a GL3590-S hub) or a connector
-+	 *   for further connection with a mezzanine board.
-+	 *
-+	 * All of the above hardware muxes would allow us to hook things up in
-+	 * different ways to some potential benefit for static configurations (for e.g.
-+	 * on one hand we can have two USB - A type connectors and a USB - Ethernet
-+	 * connection available and on the other we can use the USB - C type in
-+	 * peripheral mode).
-+	 *
-+	 * Note that since the USB - C type can be used only in peripehral mode,
-+	 * so hardcoding the mode to 'peripheral' here makes sense.
-+	 *
-+	 * However since we want to use the EUD debug device, we set the mode as
-+	 * 'otg' here.
-+	 */
-+	dr_mode = "otg";
- };
- 
- &usb_hsphy {
--- 
-2.38.1
+So @old can't be NULL here.
+
+Thanks,
+Peilin Ye
 
