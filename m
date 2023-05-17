@@ -2,164 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C3F706834
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C7C706839
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjEQMdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S231439AbjEQMeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjEQMdD (ORCPT
+        with ESMTP id S231266AbjEQMeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:33:03 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B219910DA;
-        Wed, 17 May 2023 05:33:02 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso560979a91.1;
-        Wed, 17 May 2023 05:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684326782; x=1686918782;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7D3rDce72bLIoO6oLXhfpSEMdrIa1Yjrhw5vz5N95a8=;
-        b=Ij/SkTnSNg1uVouGd8+mzwQ9Kd07RBue4VFoqhXQrnSVECRTHVcLGCdRNIhvPZcosX
-         Pe0vi63jACRiH9ypKtby6g8iIs6C5+q0tmuhC8nO/yWzzRyTvZgAo1PjCeX52nEn3ZeF
-         Xi/6Cro5Pep/fMoqYlDW1kGgkyUhuNd8Cwjs+lio4Ndgj5VRbtMtcTjM7SArWfKJjhS0
-         3tg6EF9TBz3mHWRpljaEyhYArUicbxpzHhrH9I2k6h5oCS2J85QcwB3Yt6bduNZABFxs
-         kNpNICDKrqxt/vz5dCwoXPPnxK5JaVRE2ccqCv21j9BMyTe388CLOp119PjJ5Gag6pt0
-         yxfQ==
+        Wed, 17 May 2023 08:34:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8673A3C3B
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684326797;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8z2vZD/Mt9cHAxNPllMtq5Gn202/y1MZsQVh5pJbJGM=;
+        b=ib+M0AL8v9877lvme7UrMuz2yL57uu8VI6R7XiC8iAZxjn6GOAxWJY/R2BYZc69Pvs7jhA
+        jOTrRuCpiOl/rvf21NMBL2xy/vUFWHHGWX9EZFa7WVma6B7gYCn7hME0YjrqOEzIWG5rUs
+        Scx3GDsOhHg9Q1MbzS7Zw3CAsD6leq4=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-YKb3YLolP4yhr5_cYSseyw-1; Wed, 17 May 2023 08:33:16 -0400
+X-MC-Unique: YKb3YLolP4yhr5_cYSseyw-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6213569ba95so10570746d6.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:33:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684326782; x=1686918782;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7D3rDce72bLIoO6oLXhfpSEMdrIa1Yjrhw5vz5N95a8=;
-        b=PXf3f7MRGWtGZK/2ovHXejBl4G4LtiwTMFSZ5OkZ3XfW9M2FjjsL9qNOcpgaFQJamG
-         q74Hdsx2EKxJD0d0bsvTyexFT6IQJ0q1REcdWSN8UQz7hhMW97vYucIUjSNyMFeQOgPt
-         /d9U9qxujoeN/E81Z8UX9TQKtZ0MnxGMZ5jagLpZEAtOTcXzwV3CvGKhIMuqh4OMFDA/
-         m2L3Nce3j9S4lMpLZ78cCM1NYYrpTmBZ5V4+81qdHFOoDRwad5SPyQCMdgpIrngAMRf/
-         XgNu4NceIYnHngzojaxp8PonYJDzJYnGX1EKvgcsxkLXaR+63n4/TxY4bVtpohczJChL
-         jeAg==
-X-Gm-Message-State: AC+VfDymlM9WdR+wiyPtRBgTFjffYVFJGf3bGsJ9qcnu8R93eMcjIAb8
-        rDXg02VI0QNX+C2m0O3WtBw=
-X-Google-Smtp-Source: ACHHUZ7xLJWFnp0aOOOLPyCBWRSErrcjlxEjfVKX6+gY6tQgxhV4ZDDSGp6vtV9P7HYnUmOyj+3uBg==
-X-Received: by 2002:a17:90a:e518:b0:253:283e:be53 with SMTP id t24-20020a17090ae51800b00253283ebe53mr4596803pjy.42.1684326782125;
-        Wed, 17 May 2023 05:33:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id np12-20020a17090b4c4c00b0025063e893c9sm1430863pjb.55.2023.05.17.05.33.01
+        d=1e100.net; s=20221208; t=1684326795; x=1686918795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8z2vZD/Mt9cHAxNPllMtq5Gn202/y1MZsQVh5pJbJGM=;
+        b=clv7Pgjy/Rir9RviXLz74FPJ9VV/fg5uiK9+fc4mOAON6ygo2XkEi1NtM1WrSv92AR
+         hLNKXlsRIRJ3pQayiBk6mATmc0vaqxJqy1htXTmHE4xEEwAlYkpJJaGfVPOhvnIilVBk
+         BwQFDsDln/vlbntD8O7RYd2HU/ibjvTVfCUJkds2X8z35EJDezj4O4uaTpApU2inf84O
+         n7Z7PT+z5B89H3CbdztaJHJHMMLtGnMd81H0/CJMpaL+wdOHQZz/0S3suKSXOb2sdga5
+         2co/ImDsOj6KheGiC5sppeFG1z8ddrdi7V1K3UUEaZOHF6NJzCEAREOYJSJ3gi8RM+vh
+         8tWw==
+X-Gm-Message-State: AC+VfDw7runbiYMXTiR6M7YDmbutliUjvPdRQjmg4VYAhz/8xBAkdm9q
+        pD/CEbxevO7l1f2XSFU8dOIb2J7wvUYfoTWwfT6UxYzGOi6rq9HvL3C2OWU0Oq8yl/IE4uCyFhG
+        4kMoOXP5oxet0IRktqIdCFGBRIq2XmqQT
+X-Received: by 2002:a05:6214:501b:b0:5ef:45a7:a3c0 with SMTP id jo27-20020a056214501b00b005ef45a7a3c0mr64278010qvb.27.1684326795650;
+        Wed, 17 May 2023 05:33:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6lcwZCrP5ym6tgc0dTs+Pyybh7A+czybYSDpfRXvVjBpMBMbt7jNR80EZ4gMhVuD96wNBLdQ==
+X-Received: by 2002:a05:6214:501b:b0:5ef:45a7:a3c0 with SMTP id jo27-20020a056214501b00b005ef45a7a3c0mr64277993qvb.27.1684326795438;
+        Wed, 17 May 2023 05:33:15 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id j5-20020a37c245000000b007595df328dcsm564251qkm.115.2023.05.17.05.33.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:33:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 May 2023 05:33:00 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, markgross@kernel.org,
-        hdegoede@redhat.com, Shyam-sundar.S-k@amd.com,
-        linux-edac@vger.kernel.org, clemens@ladisch.de, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, mario.limonciello@amd.com,
-        babu.moger@amd.com
-Subject: Re: [PATCH 6/6] hwmon: (k10temp) Reduce k10temp_get_ccd_support()
- parameters
-Message-ID: <612fc1c9-f9e1-4d88-9f5c-bbcf006d6a2b@roeck-us.net>
-References: <20230516202430.4157216-1-yazen.ghannam@amd.com>
- <20230516202430.4157216-7-yazen.ghannam@amd.com>
+        Wed, 17 May 2023 05:33:15 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] lib80211: remove unused variables iv32 and iv16
+Date:   Wed, 17 May 2023 08:33:10 -0400
+Message-Id: <20230517123310.873023-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516202430.4157216-7-yazen.ghannam@amd.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:24:30PM -0500, Yazen Ghannam wrote:
-> Currently, k10temp_get_ccd_support() takes as input "pdev" and "data".
-> However, "pdev" is already included in "data". Furthermore, the "pdev"
-> parameter is no longer used in k10temp_get_ccd_support(), since its use
-> was moved into read_ccd_temp_reg().
-> 
-> Drop the "pdev" input parameter as it is no longer needed.
-> 
-> No functional change is intended.
-> 
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+clang with W=1 reports
+net/wireless/lib80211_crypt_tkip.c:667:7: error: variable 'iv32'
+  set but not used [-Werror,-Wunused-but-set-variable]
+                u32 iv32 = tkey->tx_iv32;
+                    ^
+This variable not used so remove it.
+Then remove a similar iv16 variable.
+Remove the comment because the length is returned.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ net/wireless/lib80211_crypt_tkip.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-> ---
->  drivers/hwmon/k10temp.c | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-> index 06af1fe38af7..873dbe0f5806 100644
-> --- a/drivers/hwmon/k10temp.c
-> +++ b/drivers/hwmon/k10temp.c
-> @@ -379,8 +379,7 @@ static const struct hwmon_chip_info k10temp_chip_info = {
->  	.info = k10temp_info,
->  };
->  
-> -static void k10temp_get_ccd_support(struct pci_dev *pdev,
-> -				    struct k10temp_data *data, int limit)
-> +static void k10temp_get_ccd_support(struct k10temp_data *data, int limit)
->  {
->  	u32 regval;
->  	int i;
-> @@ -435,18 +434,18 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  		case 0x11:	/* Zen APU */
->  		case 0x18:	/* Zen+ APU */
->  			data->ccd_offset = 0x154;
-> -			k10temp_get_ccd_support(pdev, data, 4);
-> +			k10temp_get_ccd_support(data, 4);
->  			break;
->  		case 0x31:	/* Zen2 Threadripper */
->  		case 0x60:	/* Renoir */
->  		case 0x68:	/* Lucienne */
->  		case 0x71:	/* Zen2 */
->  			data->ccd_offset = 0x154;
-> -			k10temp_get_ccd_support(pdev, data, 8);
-> +			k10temp_get_ccd_support(data, 8);
->  			break;
->  		case 0xa0 ... 0xaf:
->  			data->ccd_offset = 0x300;
-> -			k10temp_get_ccd_support(pdev, data, 8);
-> +			k10temp_get_ccd_support(data, 8);
->  			break;
->  		}
->  	} else if (boot_cpu_data.x86 == 0x19) {
-> @@ -459,21 +458,21 @@ static int k10temp_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  		case 0x21:		/* Zen3 Ryzen Desktop */
->  		case 0x50 ... 0x5f:	/* Green Sardine */
->  			data->ccd_offset = 0x154;
-> -			k10temp_get_ccd_support(pdev, data, 8);
-> +			k10temp_get_ccd_support(data, 8);
->  			break;
->  		case 0x40 ... 0x4f:	/* Yellow Carp */
->  			data->ccd_offset = 0x300;
-> -			k10temp_get_ccd_support(pdev, data, 8);
-> +			k10temp_get_ccd_support(data, 8);
->  			break;
->  		case 0x60 ... 0x6f:
->  		case 0x70 ... 0x7f:
->  			data->ccd_offset = 0x308;
-> -			k10temp_get_ccd_support(pdev, data, 8);
-> +			k10temp_get_ccd_support(data, 8);
->  			break;
->  		case 0x10 ... 0x1f:
->  		case 0xa0 ... 0xaf:
->  			data->ccd_offset = 0x300;
-> -			k10temp_get_ccd_support(pdev, data, 12);
-> +			k10temp_get_ccd_support(data, 12);
->  			break;
->  		}
->  	} else {
-> -- 
-> 2.34.1
-> 
+diff --git a/net/wireless/lib80211_crypt_tkip.c b/net/wireless/lib80211_crypt_tkip.c
+index 1b4d6c87a5c5..9b411b6a7b5d 100644
+--- a/net/wireless/lib80211_crypt_tkip.c
++++ b/net/wireless/lib80211_crypt_tkip.c
+@@ -662,12 +662,6 @@ static int lib80211_tkip_get_key(void *key, int len, u8 * seq, void *priv)
+ 	memcpy(key, tkey->key, TKIP_KEY_LEN);
+ 
+ 	if (seq) {
+-		/* Return the sequence number of the last transmitted frame. */
+-		u16 iv16 = tkey->tx_iv16;
+-		u32 iv32 = tkey->tx_iv32;
+-		if (iv16 == 0)
+-			iv32--;
+-		iv16--;
+ 		seq[0] = tkey->tx_iv16;
+ 		seq[1] = tkey->tx_iv16 >> 8;
+ 		seq[2] = tkey->tx_iv32;
+-- 
+2.27.0
+
