@@ -2,57 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F46706B97
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53387706B9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjEQOu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S232181AbjEQOwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjEQOu5 (ORCPT
+        with ESMTP id S229924AbjEQOv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:50:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF7C40C0;
-        Wed, 17 May 2023 07:50:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B29A36481A;
-        Wed, 17 May 2023 14:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BEF2C433EF;
-        Wed, 17 May 2023 14:50:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684335052;
-        bh=8I67luAksBCL72+meHCMN8MBL7RhGxwexXQRG0RpqDQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=qUWfDk+i2yXv7J9MhJbZBLjKRMGgL6whFTdU7YNAeRKAslCwfkZ0uu36FniV0PGoD
-         2LKSjRxPljASyj1bfOozDGNrgsmGFwvlyb+oNv+iS70fjlEQpU5bHGYPhFnCGYyhLi
-         4kPl91ugCsgauLB+ix/5ci9SbDnPcBlIWgpkRFH2fLouplPEw/XHzzF2JrbR6wHZJ9
-         pOsDGy28GRzma75ffQTQgY/6M40lmW3vDnbWlNhIwgDq1tQkZaqIWJ2X0vLbWZgUdq
-         2mgFU/rPyj0yOY9sL5N7JTrNmMqzNGIPq1NI/0JMI3axFH6bqQb8ZI1VyM6xHzvKQq
-         hHxS0voC+lQRw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Min-Hua Chen <minhuadotchen@gmail.com>
-Cc:     alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230516223700.185569-1-minhuadotchen@gmail.com>
-References: <20230516223700.185569-1-minhuadotchen@gmail.com>
-Subject: Re: [PATCH] ASoC: tegra: tegra210_adx: fix snd_pcm_format_t type
-Message-Id: <168433504910.453649.10010887587375335670.b4-ty@kernel.org>
-Date:   Wed, 17 May 2023 23:50:49 +0900
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 17 May 2023 10:51:58 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF912D7E;
+        Wed, 17 May 2023 07:51:56 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 10A63320030E;
+        Wed, 17 May 2023 10:51:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 17 May 2023 10:51:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684335110; x=1684421510; bh=U9
+        81mgJN5ZcIFGHHfNRtTYm9tIIshD/j5t+czAqBesk=; b=Ca9f/D4SJr14QvZGkc
+        +q7KTRGXT7JBFRrs75d+HJ2OHOSFueAY0un/ZGcKbVEoscZFW6SjqbiPXereZTY1
+        4lcT5rbc2J//JZIJSnLiqFoKjl+7sEm3mRPxHdA8kVhx6i+8Gv6Gs3tgeghB9AVx
+        tiFExJee1gfnnXfCGEqrMCOAyztqrVmVbbh4Vx8kBzBcchhCWGq9jE4AWpdrn/zc
+        KlbDH9cn2VZKKpo3BlHq2vmDVsjsuLASyEKUhF08I7lpQUUHqQi2ze3FpKl0U9IV
+        yp0n5gg/GsUfq8IoMt1JUB+wlGdGrbDiz4LfVQ/hM2UiQ/AKZgZzMrsWIQF+mwUG
+        o5Pg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684335110; x=1684421510; bh=U981mgJN5ZcIF
+        GHHfNRtTYm9tIIshD/j5t+czAqBesk=; b=EMWrwTfyiN4WwFm97r9VWWS6w2uAq
+        LgvmOB2bNzX3Nj1iJRBecCwthhPNqACErPlWa7ntFlYoaEwBhGN78KcLN3yBTNyu
+        Aqk3H67Dg6iVzIE2eoyn3hmWBvqBblRgzb3TZygGJHtSCh3YrmYDvNM1AlrxXI+/
+        YZMWcHS8mskGNb1OcG10Hh5tBRVj/WtG2lS25NQwWzGjSsjt1yoy6lceEwD7hdEp
+        ICxlryjGqFpBvOblk/or/mLmEinMRAIO7vCr/4QUi2/F6B8hv2rXwNtgp21zzcmi
+        W3WRrfgi52k7r9ApnTs4X2/2idzkX3KZD72Lp+8DQ9oBBrfMF6Te9k6Qg==
+X-ME-Sender: <xms:BOpkZAX-ah2gC9qXHRhxL9Jdqt9kqu-VKcGSuWg1GW_5ZN0t_KBOcg>
+    <xme:BOpkZEnCWHECQenDSE928iVzgjeKtfqwlYib_ujabtOEKkQ-iVrevetsmAAqV2PXz
+    oO1vUF8ZrqpGe5ciQc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgkedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:BOpkZEanBGI8-zi50JEHLFiN5OCN7u3f1N-fS6wbkXOhNFZcQlB9RQ>
+    <xmx:BOpkZPWIrxfeze0hM1uxKpTiRjSQF0E2dM8RjNSgq_9LgDgcz5l8Gg>
+    <xmx:BOpkZKky6b4GKmAWHHstx-M_Q2MTJ0Mg84yM6a-OyBPfxMEqp1e5aA>
+    <xmx:BupkZNFPTGYv1tkCdtIpLzc7PK5bJcAAEF0LFfyPqwuQNavihPAm3g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9F93DB60086; Wed, 17 May 2023 10:51:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <83422cf8-5d77-4e2f-a854-c2b9a9a94d75@app.fastmail.com>
+In-Reply-To: <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
+References: <20230517131102.934196-5-arnd@kernel.org>
+ <e1a07eed22cb33af2733bdffe42b09f0.paul@paul-moore.com>
+Date:   Wed, 17 May 2023 16:51:28 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Paul Moore" <paul@paul-moore.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, x86@kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Eric Paris" <eparis@redhat.com>,
+        "Dennis Zhou" <dennis@kernel.org>, "Tejun Heo" <tj@kernel.org>,
+        "Christoph Lameter" <cl@linux.com>, "Pavel Machek" <pavel@ucw.cz>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Waiman Long" <longman@redhat.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        audit@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 4/14] audit: avoid missing-prototype warnings
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +108,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 06:36:59 +0800, Min-Hua Chen wrote:
-> use snd_pcm_format_t instead of unsigned int to fix
-> the following sparse warnings:
-> 
-> sound/soc/tegra/tegra210_adx.c:125:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
-> sound/soc/tegra/tegra210_adx.c:128:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
-> sound/soc/tegra/tegra210_adx.c:131:14: sparse: warning: restricted snd_pcm_format_t degrades to integer
-> 
-> [...]
+On Wed, May 17, 2023, at 16:33, Paul Moore wrote:
+> On May 17, 2023 Arnd Bergmann <arnd@kernel.org> wrote:
 
-Applied to
+> We probably should move the audit_serial() and auditsc_get_stamp()
+> away from the watch/mark/tree functions, but that isn't your problem.
+>
+> Anyway, this looks okay to me; do you have a problem if I merge this
+> via the audit/next branch or were you hoping to have this go in
+> through a different tree?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Merging it through your tree is probably best, Andrew can either
+pick the ones that nobody else took, or I can resend the rest.
 
-Thanks!
 
-[1/1] ASoC: tegra: tegra210_adx: fix snd_pcm_format_t type
-      commit: 35f8a9d87ca4f920526e6063df570490b41295fc
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+    Arnd
