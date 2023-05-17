@@ -2,121 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D643570694D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0F5706978
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjEQNNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S231873AbjEQNQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjEQNNb (ORCPT
+        with ESMTP id S231891AbjEQNQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:13:31 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4157A80
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:13:08 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-510b56724caso9417914a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684329186; x=1686921186;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RsCYEtDB1ffr+2Y+/vC2jddSRU/GNfdHR9H1LD49MZ4=;
-        b=AY4YtKtj0ujl9+Mmw+CN96C9qS1pl/EP9v0K0ELoQazLV651LI2GjmChiUhIn9r2bh
-         xeXqQ7sJ+WCpNmAkbF/6YEdSVcYfmd4qodUP7gpKPgdFLvMnYB/UO0H+iwNfBl4MC95G
-         Mvdm+rLhHfM7lKzFEQQU+sXSGNyWozdxEnKOiIuZZDLsZIo8GgVLUbGrrLGBvq2kDErf
-         oMVN90lZnHHJpP6NHBpoca10ZkD2n8Kx40bij1U3jH3g646VVOZSQBeQPNozefNIPv4H
-         V+ae/JgK7z4xmgoihVFr+QScA1c4i2uNL66UzChrtQO2FLWQzf3LBB2Tk7pS2WRBRcyy
-         5cYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684329186; x=1686921186;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RsCYEtDB1ffr+2Y+/vC2jddSRU/GNfdHR9H1LD49MZ4=;
-        b=Ijrev1KcpaXHBFh9u1z57jCc0WrcvRGZOFG4JIHH/In+MFjmVEqbwYPZ5FxFWk50Fd
-         lkoo1MYbZ8NDWZot26VRVfyiZrLz5Tc4zLwjspFP/Upo48PvoNPGdFzUkO2/DUVtqSrG
-         jXSf77ItMuUzRGvp51mScTRCBj+tjy5sas5goaOzUWK5ZpJ2o2hJHMkQGIWFHIXCWPdl
-         CR4qr/HenO2kjkOVpZDchDnb18vwhshIlh4J32ImxyoaVOS1C/Lmk6yE6XaMpzNCKc5x
-         mhz6FsyGa8Bjl6K4ASRgemfwXtPM6DJ6pv6EyQrodm8ih0j1Kahiuoxrq1zPZZL0gZDp
-         v+dQ==
-X-Gm-Message-State: AC+VfDypClUzS0KgT6ZxlvTkHIvgS0HyCNLmd92xpFa6raIThxbS0qUN
-        SU0Jif8WTio4s3NclrwqbVOkig==
-X-Google-Smtp-Source: ACHHUZ4KHT9X6WEz67mV7Zi3b4JfOl7XqzWOKK6QNiEjbdiMOUpttEUxIbNwfYMDn2EKItI3M03jZQ==
-X-Received: by 2002:a17:907:1621:b0:968:892b:1902 with SMTP id hb33-20020a170907162100b00968892b1902mr2122535ejc.6.1684329186304;
-        Wed, 17 May 2023 06:13:06 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id hs32-20020a1709073ea000b009534211cc97sm12291184ejc.159.2023.05.17.06.13.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:13:05 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com
-Subject: [GIT PULL 2/2] ARM: dts: cleanup for v6.5
-Date:   Wed, 17 May 2023 15:12:55 +0200
-Message-Id: <20230517131255.471002-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
-References: <20230517131255.471002-1-krzysztof.kozlowski@linaro.org>
+        Wed, 17 May 2023 09:16:15 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6011F19BD;
+        Wed, 17 May 2023 06:15:57 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HD7x74026019;
+        Wed, 17 May 2023 13:15:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=71IzhU/suCxEImZQzd6oJwcMiRsUMV86qQoas5G5IMk=;
+ b=eRlTWR9IftmQW4Hg/mYxMGxfpMN0X5J5SR+uNb7uSUNUV7l+L+Z91W5sFRfpj5/iY5px
+ dNPTY4uIvtc/i7UTGBG/M/r1wOCWU2rhWtNVYNdVl1bALfQ3GBushTAPtgLvHyrBjMGa
+ /UvUc7vCni+jLgBGBw2mCxXRIVPm2lvQLVhlm3AlqPWtEz6W4XQo7VUeg7S8JkYxj0z8
+ ZImSPF1PGDGpjO+SRE/mI2VKW4dSH9F0pyhwCso773IlduEmPWctbUN62pUtCzMmW/+j
+ GM5nw6OsWFQKHxceoGiFqBjfoMBtSD66suy6rtoJ526ldiY0dvXf42B9TfuT6mbk/tQ+ 2Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmybp8v21-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 13:15:27 +0000
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HD9Bfa004295;
+        Wed, 17 May 2023 13:15:26 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmybp8uye-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 13:15:26 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34HB7a8h007890;
+        Wed, 17 May 2023 13:15:23 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qj1tdstk0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 13:15:23 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HDFJjC24642088
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 May 2023 13:15:20 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CB9002004B;
+        Wed, 17 May 2023 13:15:19 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B6462004E;
+        Wed, 17 May 2023 13:15:19 +0000 (GMT)
+Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 17 May 2023 13:15:19 +0000 (GMT)
+Date:   Wed, 17 May 2023 15:15:17 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        linux-fsdevel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-parisc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH] procfs: consolidate arch_report_meminfo declaration
+Message-ID: <ZGTTZR3bHUhPCGq0@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+References: <20230516195834.551901-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516195834.551901-1-arnd@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Q66ERUsCq6HtIz6K7EGCib7iL32KIdom
+X-Proofpoint-ORIG-GUID: yDb9qc7hnBY0DujT-LhQIqBO5YaGtBo1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=975 mlxscore=0 spamscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305170106
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On Tue, May 16, 2023 at 09:57:29PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The arch_report_meminfo() function is provided by four architectures,
+> with a __weak fallback in procfs itself. On architectures that don't
+> have a custom version, the __weak version causes a warning because
+> of the missing prototype.
+> 
+> Remove the architecture specific prototypes and instead add one
+> in linux/proc_fs.h.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/parisc/include/asm/pgtable.h    | 3 ---
+>  arch/powerpc/include/asm/pgtable.h   | 3 ---
+>  arch/s390/include/asm/pgtable.h      | 3 ---
+>  arch/s390/mm/pageattr.c              | 1 +
+>  arch/x86/include/asm/pgtable.h       | 1 +
+>  arch/x86/include/asm/pgtable_types.h | 3 ---
+>  arch/x86/mm/pat/set_memory.c         | 1 +
+>  include/linux/proc_fs.h              | 2 ++
+>  8 files changed, 5 insertions(+), 12 deletions(-)
+...
+> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+> index 6822a11c2c8a..c55f3c3365af 100644
+> --- a/arch/s390/include/asm/pgtable.h
+> +++ b/arch/s390/include/asm/pgtable.h
+> @@ -42,9 +42,6 @@ static inline void update_page_count(int level, long count)
+>  		atomic_long_add(count, &direct_pages_count[level]);
+>  }
+>  
+> -struct seq_file;
+> -void arch_report_meminfo(struct seq_file *m);
+> -
+>  /*
+>   * The S390 doesn't have any external MMU info: the kernel page
+>   * tables contain all the necessary information.
+> diff --git a/arch/s390/mm/pageattr.c b/arch/s390/mm/pageattr.c
+> index 5ba3bd8a7b12..ca5a418c58a8 100644
+> --- a/arch/s390/mm/pageattr.c
+> +++ b/arch/s390/mm/pageattr.c
+> @@ -4,6 +4,7 @@
+>   * Author(s): Jan Glauber <jang@linux.vnet.ibm.com>
+>   */
+>  #include <linux/hugetlb.h>
+> +#include <linux/proc_fs.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/mm.h>
+>  #include <asm/cacheflush.h>
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+For s390:
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-cleanup-6.5
-
-for you to fetch changes up to 21f475946d89911e31bccd02f8a7ce40b8f52a70:
-
-  ARM: dts: en7523: add missing cache properties (2023-05-16 18:26:24 +0200)
-
-----------------------------------------------------------------
-Minor improvements in ARM DTS for v6.5
-
-Minor improvements to fix dtbs_check warnings:
-1. STE: Align UART nodes with bindings.
-2. EN7523: add missing cache properties.
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (2):
-      ARM: dts: ste: align UART node name with bindings
-      ARM: dts: en7523: add missing cache properties
-
- arch/arm/boot/dts/en7523.dtsi                      | 2 ++
- arch/arm/boot/dts/ste-dbx5x0.dtsi                  | 6 +++---
- arch/arm/boot/dts/ste-href.dtsi                    | 6 +++---
- arch/arm/boot/dts/ste-hrefprev60.dtsi              | 2 +-
- arch/arm/boot/dts/ste-nomadik-nhk15.dts            | 2 +-
- arch/arm/boot/dts/ste-nomadik-s8815.dts            | 2 +-
- arch/arm/boot/dts/ste-nomadik-stn8815.dtsi         | 6 +++---
- arch/arm/boot/dts/ste-snowball.dts                 | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-codina-tmo.dts | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-codina.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-gavini.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-golden.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-janice.dts     | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-kyle.dts       | 6 +++---
- arch/arm/boot/dts/ste-ux500-samsung-skomer.dts     | 6 +++---
- 15 files changed, 38 insertions(+), 36 deletions(-)
+Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
