@@ -2,94 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE88D7070BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0AF7070BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjEQSYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 14:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
+        id S229635AbjEQSZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 14:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEQSYW (ORCPT
+        with ESMTP id S229653AbjEQSZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 14:24:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D6ED867
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684347818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZqvbTDaQlB5Q2U1EnVBHO24QPkqAoM+X9DFpf2XubEo=;
-        b=YqBQpP86UzQLZBT1KyIk8VzNcjKRVjKffUYg6r4mNFts6Y2lX+i2gDHll/KUsDExUWQP61
-        IBj33yqt3dCRg9x7N6P0kZ+e1FAZh/Rol6yoH+adlzzz4BnaQQ3ZrRBSj20I1er19NMHB5
-        snyK4T/8W8H9LPH2ztv9r50ZmB7uFCg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-255-XaNWTMGhOc-ZoU59GQcWPw-1; Wed, 17 May 2023 14:23:36 -0400
-X-MC-Unique: XaNWTMGhOc-ZoU59GQcWPw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f4fa463282so7955465e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:23:36 -0700 (PDT)
+        Wed, 17 May 2023 14:25:11 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D61583DA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:25:10 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64389a44895so877381b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:25:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684347909; x=1686939909;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=45x6aIah125jOfw5DAw6akq7zYqDXWAyHyu9qSo7fA0=;
+        b=H4099AwsRNj44sSGT6ogy8ufHfUuk1mCMpajqaFZm2RTsiOdTWnzN9o7fIL1fi+EN/
+         DpMuUzPEUrTkIZFJWr7HT+5pu/aGMFZ9bFyqkVh4QGn8PH6i3QHtZBcMqwbgsN1Q26F9
+         IaNgpyu3EyiCRbB+GFhmdhMe3m9A6KuTRo4ag=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684347815; x=1686939815;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZqvbTDaQlB5Q2U1EnVBHO24QPkqAoM+X9DFpf2XubEo=;
-        b=FfLCosv/hsVQ4LEgxqa3gPOccpd8zInXATmk0v+6DiKC++io3UhqD8direQeLK0xhN
-         dGmdiyM1hSQU08fci6uye/ZKqMX6P3gnXcdZME58Ey76yGhpA0PnB0Ufn686wr3nbUXY
-         NfSSoF0WxFc7+MeN4m1tNpFNxTyYkApdL32ZhUk+gfvyM632MO5qX+pxF3+VkhWshWgd
-         44AjjADaNJ9oQIz5ew0HqF7ac+VfIk/FCABPrWMmhXpd7bDWRVM3ZwS/EkYmHw3Jgo1c
-         Ch7C3+GIs25+Dtfx69rljepkKIVFax4cKZz66hdKDkgUFaNnbMctnLXTXnqzFEaz6+X+
-         zY1w==
-X-Gm-Message-State: AC+VfDwuL3Sv8qZob1qrEbLlep/clQ9sx+vou2Zy5UnC6gI9AsxsRV+o
-        5uU0l98/WaNK9kWpJs3C4UZpp1cU312BNwS0+b8B0VUEWT/4cDueWVqIjPjR6DyVaK4wPvjqers
-        RsV6Kht3HeqegSNBZMjkigUjA
-X-Received: by 2002:a7b:c047:0:b0:3f5:f04:4607 with SMTP id u7-20020a7bc047000000b003f50f044607mr7312216wmc.22.1684347815733;
-        Wed, 17 May 2023 11:23:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5aghbMPeDps3xUcJWgRTN4G72ejk+Q9UkoksMRs7xKUZqCHs8zsQJ6GCxmBST8kSnxNSrUtw==
-X-Received: by 2002:a7b:c047:0:b0:3f5:f04:4607 with SMTP id u7-20020a7bc047000000b003f50f044607mr7312200wmc.22.1684347815381;
-        Wed, 17 May 2023 11:23:35 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:3900:757e:83f8:a99d:41ae? (p200300cbc7073900757e83f8a99d41ae.dip0.t-ipconnect.de. [2003:cb:c707:3900:757e:83f8:a99d:41ae])
-        by smtp.gmail.com with ESMTPSA id q17-20020adfea11000000b0030639a86f9dsm3578463wrm.51.2023.05.17.11.23.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 11:23:34 -0700 (PDT)
-Message-ID: <d4773626-6cf0-c929-c775-a84ac41fd719@redhat.com>
-Date:   Wed, 17 May 2023 20:23:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] tee: add FOLL_LONGTERM for CMA case when alloc shm
-Content-Language: en-US
-To:     Sumit Garg <sumit.garg@linaro.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Xiaoming Ding <xiaoming.ding@mediatek.com>
-Cc:     Jens Wiklander <jens.wiklander@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1684347909; x=1686939909;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=45x6aIah125jOfw5DAw6akq7zYqDXWAyHyu9qSo7fA0=;
+        b=hoFZ9t90v0ay7u2TucxAqfQOn7bUBuPHzQNpPfVpz7E465f2yUgkDZKGVj2RJmzgEg
+         V6rIaXB8RNaWLa9ZSQzs1mATDkqwPtCrSYvP5frK5POaIhKqqVO3e5+iQBwB2Ojx6nvi
+         mUpGzgZn1aGXJjtnRtx5pSuMJNIchiY1FdaHJFrlVGol5sTb8JmayGJVd7sY02Ns5Bnx
+         xVbm/0EtjESRloc7O8wsgCqmrJzLxAtDL7hHSRwKynxY0mJGikOkAodcyzZmQg+hfiak
+         xxaeTQsSupVZP5v6fgA7rmjOtZoaWP/45Rt8TbdQZwfkoMA+xMjH4VBhMjUQWJHPjLB9
+         nchw==
+X-Gm-Message-State: AC+VfDzVCMc8lzTKbCi/W9m+fQiEPuJUQ3jVpcJcrHh13SeDWv1yu0NJ
+        vX8TIWJdAbAp7W+CtzAb3uf0sg==
+X-Google-Smtp-Source: ACHHUZ7HRV57oX9mtBvMxH/rRkgfAocqgjQoyV0w1AqbEJxyB1hldkewGUNpqsBE+e10ortGtNQ0Lw==
+X-Received: by 2002:a05:6a20:1590:b0:105:5086:fd42 with SMTP id h16-20020a056a20159000b001055086fd42mr20303935pzj.45.1684347909705;
+        Wed, 17 May 2023 11:25:09 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y24-20020aa78558000000b00634a96493f7sm13122932pfn.128.2023.05.17.11.25.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 11:25:09 -0700 (PDT)
+Date:   Wed, 17 May 2023 11:25:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, fei.xu@mediatek.com,
-        srv_heupstream@mediatek.com, linux-mm@kvack.org
-References: <20230517031856.19660-1-xiaoming.ding@mediatek.com>
- <ZGSDoVKKVqCkbaCB@infradead.org>
- <CAFA6WYO+AvnbuAdWyBAQ8HkLaOno7PXdsPb9SubxrGNvAm4UnQ@mail.gmail.com>
- <ZGSLiiK/JzD5KMd7@infradead.org>
- <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
- <ZGSgCZrg+RjAbGO1@infradead.org>
- <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH] firmware: meson_sm: Fix memcpy vs iomem type warnings
+Message-ID: <202305171124.4EB0D65@keescook>
+References: <20221012185234.never.936-kees@kernel.org>
+ <166602031304.3572695.12870664862275915316.b4-ty@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166602031304.3572695.12870664862275915316.b4-ty@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,33 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.05.23 12:19, Sumit Garg wrote:
-> On Wed, 17 May 2023 at 15:06, Christoph Hellwig <hch@infradead.org> wrote:
->>
->> On Wed, May 17, 2023 at 02:56:13PM +0530, Sumit Garg wrote:
->>> Do you mean a pinned user-space page can be paged out automatically?
->>
->> No, pinned pages can't be paged out.
->>
->> But a short term pin implies it will be release after a short delay,
->> and it is feasible for wait for the pin to go away.
+*thread necromancy*
+
+On Mon, Oct 17, 2022 at 05:25:13PM +0200, Neil Armstrong wrote:
+> Hi,
 > 
-> Okay, I see. I would be interested to know the ranges for that short
-> delay. I guess it may depend on how much memory pressure there is...
+> On Wed, 12 Oct 2022 11:53:16 -0700, Kees Cook wrote:
+> > Use memcpy_{toio,fromio}() instead of memcpy(). Silences warnings from
+> > Sparse:
+> > 
+> > drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 1 (different address spaces)
+> > drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
+> > drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
+> > drivers/firmware/meson/meson_sm.c:170:17: warning: incorrect type in argument 2 (different address spaces)
+> > drivers/firmware/meson/meson_sm.c:170:17:    expected void const *
+> > drivers/firmware/meson/meson_sm.c:170:17:    got void [noderef] __iomem *sm_shmem_out_base
+> > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+> > drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
+> > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+> > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+> > drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
+> > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+> > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+> > drivers/firmware/meson/meson_sm.c:206:9:    expected void const *
+> > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+> > drivers/firmware/meson/meson_sm.c:206:9: warning: incorrect type in argument 1 (different address spaces)
+> > drivers/firmware/meson/meson_sm.c:206:9:    expected void *
+> > drivers/firmware/meson/meson_sm.c:206:9:    got void [noderef] __iomem *sm_shmem_in_base
+> > 
+> > [...]
 > 
+> Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.2/drivers)
+> 
+> [1/1] firmware: meson_sm: Fix memcpy vs iomem type warnings
+>       https://git.kernel.org/amlogic/c/7dc69c7d073e6004a281db8f7f15cf6ebf702ea0
+> 
+> These changes has been applied on the intermediate git tree [1].
+> 
+> The v6.2/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+> for inclusion in their intermediate git branches in order to be sent to Linus during
+> the next merge window, or sooner if it's a set of fixes.
+> 
+> In the cases of fixes, those will be merged in the current release candidate
+> kernel and as soon they appear on the Linux master branch they will be
+> backported to the previous Stable and Long-Stable kernels [2].
+> 
+> The intermediate git branches are merged daily in the linux-next tree [3],
+> people are encouraged testing these pre-release kernels and report issues on the
+> relevant mailing-lists.
+> 
+> If problems are discovered on those changes, please submit a signed-off-by revert
+> patch followed by a corrective changeset.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
-In general: if user space controls it -> possibly forever -> long-term. 
-Even if in most cases it's a short delay: there is no trusting on user 
-space.
-
-For example, iouring fixed buffers keep pages pinned until user space 
-decides to unregistered the buffers -> long-term.
-
-Short-term is, for example, something like O_DIRECT where we pin -> DMA 
--> unpin in essentially one operation.
+Hi! This change seems to have never been mainlined and seems to have
+disappeared from linux-next.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Kees Cook
