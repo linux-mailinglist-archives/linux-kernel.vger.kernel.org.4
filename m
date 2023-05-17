@@ -2,146 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E327073DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14BF7073E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjEQVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 17:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S229882AbjEQVTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 17:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjEQVPD (ORCPT
+        with ESMTP id S229914AbjEQVS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 17:15:03 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC40C93E2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:14:56 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-623914a4bf0so524786d6.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:14:56 -0700 (PDT)
+        Wed, 17 May 2023 17:18:59 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D2F8A6C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:18:35 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64388cf3263so928256b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 14:18:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684358090; x=1686950090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R/UDshlYMhETGULfkRrgD+JuGa+CGdea1mThx2z5Su4=;
-        b=aiZXg/57wbN2dPigF7ZEAnt1bLEr0+EkXv5tno+1mzBI8/2zm0ZRKZ6fXMm+/3JDxf
-         pURP/paJyY2BFBZ/FVzV2avaqijUdeaw+7UxKKJswmA1o5VvWbgooVrEhF2YxdcejuuX
-         /6zwiYFwdkcxoLiPrGAmvyTdf9Mr6a8j6R9lCbjYXC0Cc6F/eE1uSpWd70k45ET71mdb
-         V//PtAoisuohwR02bPMc1AkMw6rBChzu8l9FBYQcIdGdhUfX7uN9jeD6N62HjYpofFDW
-         tSkseF4+B0gbO4lP3XSbBxCqGpYgMTCeURCTDbKa+QyvySyTWOdC2rp69j4eHeQlfFAm
-         nFVg==
+        d=linaro.org; s=google; t=1684358289; x=1686950289;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XpAvosdd1eXz6xBGZNhl2uL6xAQHXk+cg9rPnks65Ww=;
+        b=A8/qm8Uu1A8hzu7WEGSSdRCugGYhdHhkr9HpMFBbuoDod8Y+mPSfuDNYU6vvbeWz9A
+         eVkWFtprc7WxQCXBREnaC0qPUP7qwEY6+hRVNGMk8SJa5uyQj5bZD2d0XEOcqyypCo21
+         EyxA5YJ/KN0Lk81JJp+i1e/UOjOhhIrYS/Xckvsv3Q0PvS8OJa5Pmddo1aeDPd2L11aA
+         CCa5by/kUJzZZTDXSbaWRRzKHqXlJWFKJZk7eZkutF6SW6KN8sT+U7HM5q1fwujDgVpf
+         +Zzz9VbIeJhJnla9Gt7dQb1cr7IQlGltD6asn1Js0ZL4u9qj4bQch4gEMXccKezPJiPE
+         K3rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684358090; x=1686950090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R/UDshlYMhETGULfkRrgD+JuGa+CGdea1mThx2z5Su4=;
-        b=HzL1f9KqApSvmIzR9+yaBpw8jmnHhkBhrs0Fg6JwaLIo9r7bn8hs5FlcHMs5tDXd6I
-         +p4CaoATjBQ6dAmZCuPSROhIPwGOhbiOiYvxVkddwMuHApikJyoWQ3yMP9YiogMXSGLr
-         KrDwl9pGMSqsDKN0SM9CiZcnsJNmElE40u/THZA1Gz8EduJOYZlb6QP2KBLOpjHu9SNT
-         eJTzLOUx5hY/KB080sO3/RKQH4uZtacLvHPuiBri1TgZDecBRzybCdFpQ8YNGjNqjZXM
-         IF5AkgkG0aQJvLGaMyBSsJejcFew/TVQcKLjvW2TPc+hoJtgjvm+M2TwZ9HQizkLdIt0
-         pKxg==
-X-Gm-Message-State: AC+VfDxPpdQq1Dm2LekfepoFgNxtOtXzkTqeHnvUnftK6t1y7sDJuwxN
-        FQELA1GuRnE9amZtJiH67wQowwoJWH3Eq8Sf0xsZfQ==
-X-Google-Smtp-Source: ACHHUZ6SC7EHtBR33soA7BCb7guA5Vlem1U3ixeI40PoHt9yvur4P2vLV0m2njmTyr2W1PY32lNX/I8SXOMJOoixEcU=
-X-Received: by 2002:a05:6214:2a86:b0:623:9218:58e1 with SMTP id
- jr6-20020a0562142a8600b00623921858e1mr66310qvb.31.1684358089847; Wed, 17 May
- 2023 14:14:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684358289; x=1686950289;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XpAvosdd1eXz6xBGZNhl2uL6xAQHXk+cg9rPnks65Ww=;
+        b=eoDQZkI9mLRPE/sILfzOPfSNyzN5Sq/oRHaT8twM9oNqaj6E8IzL0KdcRah96VKjPL
+         Yw894jTxrvCwiN6TImvsz5Ea9rT2POBOCWGQNwIaR8dzafygNnT2ZytBDVZfsN2pzdlE
+         WDhSSesDx2JdOGL9iaY9ztwQ8ui7l1jeCSUrspaANp1SKteh4qyhZ/hHJ79jHvJjdiOi
+         Rwvbt2x1qDg+8UWu1KhaH8R605+3N0PfvF//57rUwuL2/oHc3ezn7WsvPTgeYDQSMT6C
+         uqd8PW2uT2zLZWVS4TdZ11sit00P+H45rvAyS9XACLad394CONk+MF6XP8D/Lv1CCuAh
+         TOFg==
+X-Gm-Message-State: AC+VfDxJEX+rYMv0c8jqVTl0K2MHoOymb1fUolBhD/W9yVm/X/0lCvEU
+        adrX9Ap8Xc82LFKIT/tQV6FB4g==
+X-Google-Smtp-Source: ACHHUZ4HuP1vid4GoKR3tu25xffmcTE3jioteGTBdN1SzeMexxdb+WNA0yll9epS1r1c8XfrLhoq7w==
+X-Received: by 2002:a05:6a00:198b:b0:624:2e60:f21e with SMTP id d11-20020a056a00198b00b006242e60f21emr1277364pfl.29.1684358288668;
+        Wed, 17 May 2023 14:18:08 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:6bed:7a51:340a:a439:1b87])
+        by smtp.gmail.com with ESMTPSA id n18-20020aa79052000000b0064cb6206463sm4359210pfo.85.2023.05.17.14.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 14:18:08 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
+Subject: [PATCH v6 0/6] Add Qualcomm SM6115 / SM4250 EUD dt-bindings & driver support
+Date:   Thu, 18 May 2023 02:47:50 +0530
+Message-Id: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-11-masahiroy@kernel.org>
-In-Reply-To: <20230514152739.962109-11-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 17 May 2023 14:14:39 -0700
-Message-ID: <CAKwvOdmA1q1ojTWq79VK4HJqKfMHA=8VB9q61xJoKyYsegv3tg@mail.gmail.com>
-Subject: Re: [PATCH v5 10/21] modpost: rename find_elf_symbol() and find_elf_symbol2()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 8:28=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> find_elf_symbol() and find_elf_symbol2() are not good names.
->
-> Rename them to find_tosym(), find_fromsym(), respectively.
+Changes since v5:
+----------------
+- v5 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230516213308.2432018-1-bhupesh.sharma@linaro.org/
+- Addressed Mani's comment and added Fixes tag for [PATCH 1/6].
+  Also collected his Ack for this patch.
+- Fixed [PATCH 4/6] as per Greg's comments and added a separate patch
+  for identation issues -> [PATCH 3/6].
 
-The comments maybe could be updated, too. The end of the comment looks
-wrong for both.
+Changes since v4:
+----------------
+- v4 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230505064039.1630025-1-bhupesh.sharma@linaro.org/
+- Addressed Konrad's review comments regarding EUD driver code.
+- Also collected his R-B for [PATCH 4/5 and 5/5].
+- Fixed the dt-bindings as per Krzysztof's comments.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Changes since v3:
+----------------
+- v3 can be viewed here: https://www.spinics.net/lists/linux-arm-msm/msg137025.html 
+- Addressed Konrad's review comments regarding mainly the driver code.
+  Also fixed the .dtsi as per his comments.
+- Also collected his R-B for [PATCH 1/5].
 
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> Changes in v5:
->   - Change the names
->
->  scripts/mod/modpost.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 3b7b78e69137..0d2c2aff2c03 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1124,8 +1124,8 @@ static inline int is_valid_name(struct elf_info *el=
-f, Elf_Sym *sym)
->   * In other cases the symbol needs to be looked up in the symbol table
->   * based on section and address.
->   *  **/
-> -static Elf_Sym *find_elf_symbol(struct elf_info *elf, Elf64_Sword addr,
-> -                               Elf_Sym *relsym)
-> +static Elf_Sym *find_tosym(struct elf_info *elf, Elf64_Sword addr,
-> +                          Elf_Sym *relsym)
->  {
->         Elf_Sym *sym;
->         Elf_Sym *near =3D NULL;
-> @@ -1168,8 +1168,8 @@ static Elf_Sym *find_elf_symbol(struct elf_info *el=
-f, Elf64_Sword addr,
->   * The ELF format may have a better way to detect what type of symbol
->   * it is, but this works for now.
->   **/
-> -static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
-> -                                unsigned int secndx)
-> +static Elf_Sym *find_fromsym(struct elf_info *elf, Elf_Addr addr,
-> +                            unsigned int secndx)
->  {
->         Elf_Sym *sym;
->         Elf_Sym *near =3D NULL;
-> @@ -1207,10 +1207,10 @@ static void default_mismatch_handler(const char *=
-modname, struct elf_info *elf,
->         const char *tosym;
->         const char *fromsym;
->
-> -       from =3D find_elf_symbol2(elf, r->r_offset, fsecndx);
-> +       from =3D find_fromsym(elf, r->r_offset, fsecndx);
->         fromsym =3D sym_name(elf, from);
->
-> -       to =3D find_elf_symbol(elf, r->r_addend, sym);
-> +       to =3D find_tosym(elf, r->r_addend, sym);
->         tosym =3D sym_name(elf, to);
->
->         /* check whitelist - we may ignore it */
-> --
-> 2.39.2
->
+Changes since v2:
+----------------
+- v2 can be viewed here: https://www.spinics.net/lists/linux-arm-msm/msg137025.html 
+- Addressed Bjorn and Krzysztof's comments.
+- Added [PATCH 1/5] which fixes the 'qcom_eud' sysfs path. 
+- Added [PATCH 5/5] to enable EUD for Qualcomm QRB4210-RB2 boards.
 
+Changes since v1:
+----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org
+- Added Krzysztof in Cc list.
+- Fixed the following issue reported by kernel test bot:
+  >> ERROR: modpost: "qcom_scm_io_writel" [drivers/usb/misc/qcom_eud.ko] undefined!
 
---=20
-Thanks,
-~Nick Desaulniers
+This series adds the dt-binding and driver support for SM6115 / SM4250
+EUD (Embedded USB Debugger) block available on Qualcomm SoCs.
+
+It also enables the same for QRB4210-RB2 boards by default (the user
+still needs to enable the same via sysfs).
+
+The EUD is a mini-USB hub implemented on chip to support the USB-based debug
+and trace capabilities.
+
+EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH.
+
+Bhupesh Sharma (6):
+  usb: misc: eud: Fix eud sysfs path (use 'qcom_eud')
+  dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
+  usb: misc: eud: Fix indentation issues
+  usb: misc: eud: Add driver support for SM6115 / SM4250
+  arm64: dts: qcom: sm6115: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
+
+ Documentation/ABI/testing/sysfs-driver-eud    |  2 +-
+ .../bindings/soc/qcom/qcom,eud.yaml           | 42 ++++++++++-
+ arch/arm64/boot/dts/qcom/qrb4210-rb2.dts      | 27 +++++++-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 50 ++++++++++++++
+ drivers/usb/misc/Kconfig                      |  2 +-
+ drivers/usb/misc/qcom_eud.c                   | 69 +++++++++++++++++--
+ 6 files changed, 179 insertions(+), 13 deletions(-)
+
+-- 
+2.38.1
+
