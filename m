@@ -2,217 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660A0705C81
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C72705C86
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjEQBhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 21:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S231586AbjEQBjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 21:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjEQBhf (ORCPT
+        with ESMTP id S231496AbjEQBjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 21:37:35 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD333C06
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:37:34 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-33164ec77ccso57265ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:37:34 -0700 (PDT)
+        Tue, 16 May 2023 21:39:14 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442D5BA;
+        Tue, 16 May 2023 18:39:13 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GJxVTo010616;
+        Wed, 17 May 2023 01:39:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=WIvendoBg1kZVZHpdCRTUUmDBfpXnofqOaQvC4VKhR0=;
+ b=ALJP11wQvon0LkPgvP6sWKT/OKsZH6lN3UP0x38chzXcrfJQIWJ3esuMjJAKWls4mc4k
+ 3wWZQCGwsmXL/gkOXY4XMQp7wdySebhtc7SOGg5pOlGttzPQcdMbpALVsaD/SgpBhEVa
+ KFf+LrsHzi2EUiXMDWAdrjP+IRmvqu8q/P0FHpW/6d2sxvOYqoR6cBKYRT66qjGohWHt
+ b8LhPxEAUXmJi5L+zDyxAoDgjCC1EeF7lFmShKpQALB9Tfw7/o1wJpGrzCl4dWKqPp/a
+ aBCED1vi3jAvddAKa48JsvVE2VinjCK28HuqnZ2ja2wG603Q2rmDn0nrDkOgFVNNFRVh KA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj1fc4phk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 May 2023 01:39:06 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34GN2W44025051;
+        Wed, 17 May 2023 01:39:05 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qj104t98e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 May 2023 01:39:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UMRrsLUg9wEBUG+AYJa9I6SebH1YrXbwXxKTB1VZOovkxZs1ic5WSGvkweWIt96nZEp1SVXoz3fl1cSJh3T0Dgzk1c8WRReSDKU3uUz12xAWYLmxmi1vlByGlsFY25wh6sXY+yJhDeEY9ohZCHOvSK8HvpW0NOHA/Ezjy5bYwLmuStsJN6L9UyPkEM031azGOYFxMPVECXcEWppFpJIBkmyBYqgkgxgML51heChXou2BC9WTaaFt9hWsJiTRTWyV4zJR8ZiMSJsgmxrNIQF1s0DAXUz0VS0CwxPUwONsSZpk3xh5xAVyjGCAbNN2XUw06RTZ9pzFHCb0m+V4B+lk5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WIvendoBg1kZVZHpdCRTUUmDBfpXnofqOaQvC4VKhR0=;
+ b=XtfyP/yozHNeLkSU/w7HcgscTKObXrF32NfPMDR33WtuyyjwxMNVez6lyUIbvfxBWtmXDjXTD+oq5hYV7o4OhDJsGVzJJaFiA4Y9i8V0SgLO3f3z9+sa7/ca1ffUrz5PXL1xa8B4ZYiMorlLyR0JccOxPztZ76uRhyYxrnGo3VRl0YA54LxgvCho5E/1ZGuOHTf04jxgbrPFiw+Ic9TZsfABiSWrjn6PBgkz06daf/D8w1YfvPZNtKRAIXc0VxJ6U4sUBy8V3TtSkKs5Ddd9yebwBGguQRR8IhwMU69zUmfCSV58OMsvoDm6JzWfhB9/PtJgSzQWyVExwqmvbvylkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684287454; x=1686879454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QLugHt0XGPwYTpMjCAQObsffP9JpeGqJnJJt+CEzfkw=;
-        b=bVTAd5SO8NoTEqY8WvVpici8dg2AJF+dp7I0LnvvkPfdcwDNGaZNyd9AJHKI6atf4y
-         I9ui03BXIdH2uqHnitcgCBq151W6TYHraYtG2uM/cA42aUOG7SDWjT46iPhVHOLfQhpd
-         cLb4pgJrYFz7Z5x95Vtw17j5uuh9OE9rEnwI+PUr5ySb9Ls5pnIYhqFZhb0HxHid9mhm
-         +U6Es6zGE5ho/3P3faKVgUhZ6BhfRl6P4WvBQIV5PP0GUfkZwrDFuiCs1HQrGfB+L9bl
-         pxBmE0eDGdapX3w/SzQd370Pn2582BdELI3PnyXY8L5KR22eCiB0cF07R8UJxHQgFxV7
-         6erg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684287454; x=1686879454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QLugHt0XGPwYTpMjCAQObsffP9JpeGqJnJJt+CEzfkw=;
-        b=PHkB/Rb2hpGaix1x7x+gy8tgyNrVM43ukB+riNPMPaXiGkHRQR3bKMKJxvmia0AkkS
-         2FNSDXtybevJLdhPU7NA1sULVnEQS4h6RKO+un91JTGIwBkNMVBQ8KWkhqHQiyvxGGHV
-         LCZSzkAkyEDVxM0A9az/zVp1d+C5zpKEAhDbxaPlwJR9iXL0akZAR5lTrqqndm9jRsqc
-         BZWlwhHaPwnml6HFRsEUYivQD2ZeXeUqUNCCu2pereUoTjEln1tDy7kuCFD+398xCqMF
-         4cvRAX+kmaDkn8XnAw34593T6nyp+B7cyMra2MTmOGqIIGvZjKpkqqqeNsEaY0Z4ohjw
-         e3bA==
-X-Gm-Message-State: AC+VfDyRkXDM6BMMqO9sqQPpFoddDmZlEf97CnEvKlmu7vmN1ZjjkVst
-        rUXZbsZfvpIwH1cYyC/Ux9xXZ6C7UeJDGaOr66JTtJp0AiWA/feuYoh6/jYm
-X-Google-Smtp-Source: ACHHUZ6dZfD1Ix5kE87yhR1ityHzz0e/73f67Hdq1xOZtlUzUQebA+DIVW/8Pry1HP7JugJAoQpPKt/YljP3mLUFfFU=
-X-Received: by 2002:a05:6e02:1a4a:b0:331:948c:86f3 with SMTP id
- u10-20020a056e021a4a00b00331948c86f3mr64152ilv.19.1684287453632; Tue, 16 May
- 2023 18:37:33 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WIvendoBg1kZVZHpdCRTUUmDBfpXnofqOaQvC4VKhR0=;
+ b=Gpoh+52j9luQaf/nd7Cu2mW5/9c9o6iOYd9FuyLGzNmYPvMZCqcro0CLEImn+ASwA4PvLwd7P5uWPLpTV8sTOyfFP40xxcqWWiJSfL9f0zPRZqq4NQWfYEk+HUpQU8gg6F6RGavxqfc4rXQoJZZbSXCcstzpxlrkcUFlhiseypk=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by BLAPR10MB4867.namprd10.prod.outlook.com (2603:10b6:208:321::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Wed, 17 May
+ 2023 01:39:03 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::9a52:4c2f:9ec1:5f16]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::9a52:4c2f:9ec1:5f16%7]) with mapi id 15.20.6387.033; Wed, 17 May 2023
+ 01:39:03 +0000
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        azeems@google.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] scsi: bfa: Replace all non-returning strlcpy with strscpy
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1ttwbu47w.fsf@ca-mkp.ca.oracle.com>
+References: <20230516013345.723623-1-azeemshaikh38@gmail.com>
+Date:   Tue, 16 May 2023 21:38:56 -0400
+In-Reply-To: <20230516013345.723623-1-azeemshaikh38@gmail.com> (Azeem Shaikh's
+        message of "Tue, 16 May 2023 01:33:45 +0000")
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P302CA0002.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c2::8) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-References: <20230512235755.1589034-1-pcc@google.com> <20230512235755.1589034-2-pcc@google.com>
- <7471013e-4afb-e445-5985-2441155fc82c@redhat.com> <ZGJtJobLrBg3PtHm@arm.com> <91246137-a3d2-689f-8ff6-eccc0e61c8fe@redhat.com>
-In-Reply-To: <91246137-a3d2-689f-8ff6-eccc0e61c8fe@redhat.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Tue, 16 May 2023 18:37:22 -0700
-Message-ID: <CAMn1gO4cbEmpDzkdN10DyaGe=2Wg4Y19-v8gHRqgQoD4Bxd+cw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: Move arch_do_swap_page() call to before swap_free()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
-        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "surenb@google.com" <surenb@google.com>,
-        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
-        <chinwen.chang@mediatek.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
-        <Kuan-Ying.Lee@mediatek.com>,
-        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        vincenzo.frascino@arm.com,
-        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
-        eugenis@google.com, Steven Price <steven.price@arm.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|BLAPR10MB4867:EE_
+X-MS-Office365-Filtering-Correlation-Id: feb9885b-dadf-4066-50c3-08db56777ed6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qpJD9yEnSP7Lpb3yEf4BuKCn2gR8Z/CipMZTuKSmWGv7jta6tkTcFnj4cxhLWe4dlckZ5Ucjdq77g3w2gvTXUailWr+29EIcwTwKKd2cN9uif7QYKQi6j5oB7IdhO22wJoSdv0T3CqkzV+F+2i1rA0jaBpBdk6Lkt/qIIGGF4mOgZlFqWtrMPm4kUksU2CjwlfV9Pj3bp5AeQSiDP8o2cy/4VgPiRMbxOzODNVA78gszshKjaVLI1vqQonu2jGvtjJAdlo8AGbqoV/BUmMpW7LtBfepsa2Hfx4xaNVJ5lC10UkJmFtOaMRDheDAQRo9asoWKIdp+h/Jyjow+EKLjbRAG8BF296XDtZRuaLu8MRBZjkgt6Zwmcr4saJIof+QnHv3FFFnBCX6HWTYWT/VpzkZ9QtFKs+vDzPyhPXh/uRm9qBCd8QlJYqoVVfZoDdXW0K3iXKKz2cBfd5nApagf+YkCNZmSNz3fVnzZbjyfHXLB+AFbJyka1ZkzesB3HOiJmrkTfIv8GeeZNspEksqSTbDr3oywSf8SlAgSB1SjijXg3+Us4lFJfXeZwkqcmY4Bp7hCS9OpE6WRAt5d4yE7ZgMDEfLRDkH5uHcQqsxGZNk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(136003)(376002)(346002)(396003)(451199021)(54906003)(2906002)(4744005)(5660300002)(83380400001)(8676002)(8936002)(41300700001)(316002)(66476007)(66556008)(66946007)(478600001)(4326008)(6916009)(36916002)(6666004)(6486002)(26005)(6506007)(6512007)(86362001)(107886003)(186003)(38100700002)(156123004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WRdCtvtmdYhmVYuXND87250UlWJPI9Fs86KmSUK1POFJCj49BFmg1Hs4F7G/?=
+ =?us-ascii?Q?XtKTWxcAdlzZ6Qlz0zsR6n1EhCwlXk2j9IqREggMoMwplKGmjSaJInJyUyPB?=
+ =?us-ascii?Q?IdmAS7U0nIvnDktwmdmSUlWC3OiXsjw1qNGpFbqZVkdP7R+GAUQEb8Rd1383?=
+ =?us-ascii?Q?Edub+xAu+PJrhA29nWQabA/9PTSxFUYlKlm+5+ew0nybgvsqTnfVTmLHEesu?=
+ =?us-ascii?Q?jhT/r7jZr9n8/kwtdEDMdIszFFnOTWKoiudU4mZomjRHTSa00hYdLrO+79xS?=
+ =?us-ascii?Q?c6HVHx2dorYaesP2WuvOWUyPQM8D0VMcMt6A1pc3uEiYdpeU+3zhS/DucddQ?=
+ =?us-ascii?Q?5E4AtqzTwChWOVvgTegc0wCKibISYd8DGwSTxAgAHTseQiyA4FJ3+0T+3jUR?=
+ =?us-ascii?Q?s8S/hbgrl+6hjMHJUREbHnWqFEXPpSQq2JHknFO7EhrXSqpK4FLNNUp8rMNk?=
+ =?us-ascii?Q?RLnMB5UssZ5NPjcdwDD144ATdpimvojBbwuPmwkxZK3uQs+fPKGDPTI0E4KD?=
+ =?us-ascii?Q?sV/190eI2tuUtkcWCLi3mjCKq/1PVnfcys812ZCgLlBhr/cbnRL8ZFgJcAdf?=
+ =?us-ascii?Q?XzSanQGpR1hdfhzVuXrOsa/ym78CpEAuI20RXB8QNCn+6Ezu6snEKrdkjykQ?=
+ =?us-ascii?Q?o8mWJy4FMPM81cPHwUrMPFpUq9BaWZcA0wEy0kEGAhNHdaVOwpmtYzwvb4Ed?=
+ =?us-ascii?Q?4Auh71nnny80SPA/IetU2zJgkVwEqca8cN8bTfukxkpVk9N/Ct1/1Hst2C42?=
+ =?us-ascii?Q?eZ1YZDqMmFGRIHG+jGf5Yoc6ucSjgR9UGRC5SKQ9IblIDlUfUnJGEJ4BKjDf?=
+ =?us-ascii?Q?oLrc/m6A/Cje9lF2U66MmkjdwIw5hLtbxBSZ+sA2cnPEVS4URZZnKuz4bqED?=
+ =?us-ascii?Q?JmWJV9zw+Af9piGYbHmECHK5eya0pPBY5Tt1SU+JJhsvxQ2eJpIUXpHx80oe?=
+ =?us-ascii?Q?na9LrUATWftL4VBB4VYQcYxSKzHHPRNLHWF7X2puYOroW2azzF2QdXOneVTE?=
+ =?us-ascii?Q?PsB7ybZ6fuTFPesMZ/N/bZChTTx319SEOelyUpfCbU4zzVZJc2YFjIKFNyzH?=
+ =?us-ascii?Q?frOSnABNIhFQTz16Tn7C8ro1jCv5Mr2t7sc540vQH8ZYQup1gMsqEFD1Kpg8?=
+ =?us-ascii?Q?4j/5KPWYMA4tCJMSxk945fQXv76dCBmyCwqmlBDIolcmRJcNgoOMiEksfa2I?=
+ =?us-ascii?Q?FrWoJvhCcgCa2DusuQ1chBn+/o/lIzvL4528Cp24/WmYlkCIJryE+2j35kTS?=
+ =?us-ascii?Q?7NCTXtFTXFWY7RN0a3QrYKixqLDPWuG8GaNBgZo24J6OH1dmxcChIzgV5IF+?=
+ =?us-ascii?Q?WOwBZkj/tPBgQsUuZqScaxkq4wBb++1D7RUOboKy03wrWPTR7xFu4iSfn9KM?=
+ =?us-ascii?Q?/GWCCcvFMqWBzvWooxscYkOhr/dthdoi1ZFKrZ86NPSkmya3yaA4/G73rtZj?=
+ =?us-ascii?Q?G0hcEZg5kN1GiKTjXRHfBE41614WF5XstudQy1MbtPKZFC2bxz237scihaX9?=
+ =?us-ascii?Q?PbBCc7VXe6FndozYMYct6gVCyIAkO4lgnWvt1ATQIckYkYY0FQjRXa0QLwLG?=
+ =?us-ascii?Q?3VlpJ96WGSwVWscKh+28YrXGQXAN/+DbjCIFEaRdHwdgStAkWuMHTzT1Loo4?=
+ =?us-ascii?Q?OQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: PI7snEL8BU5IYpCSKhzw6bHJwKPK+0ZdWNzlTdBllMkAYQrXfoaeTh+DDO9VX0cutt1ks+h52jilbCqyBdj5OYZpASbX0/9kEQqV46wljBaFat9T5ZE1EI+MdXai1+rzCKCSpLqF4CZZWmggrPJfpGc13xLsFU/YVOtJ8PdPbKvYxS9O+2i9vhlTfsN8e2nRa8M2DK8KthDOnc9UhC+orHBL/1j0Wni5jy34KljSYFzf1DcJb03w/4Q/ef8kU+hWnPQ9FRk9f8dRp2owYJJs/f3H6CE3cYq4XKgaMgd5IOq0W1f6TNbzgLZox0NzY9n5wQ+/8AjK/F38IhickhVn40JdjEyWHnzwry82+tTuLQuuYEBi32WGLthlghkEfUPL4ISAcPbaydPv1wctBpYjbKOx/5lErdRlIpjnBIlyVp5gka6z4jFva3e6y+1KEwIawBOQUij5wl6iJolDnTw5G0cf2z+VnJAuvXy8ekv9822TTgKvXU8MsTpid9Vp5lAFEk0EGOz2ofP2vQZwjzX4/SozzZ2TKN7RYzrNdK6PwlayDVBZW1Reo7aEozj3AFqDj5F3nwBwKaFnQO4zidZL41g5RTMBqGxksFz9oEF9taRNXIfyhpfcAr99d58TaJSZ0Q0h8yrT4SaSuDYY7Q2t1lpsQbXz9wlmzutmVdSmSUrxFP0kD0GxD9O3TXc7MxVO6fhB2xuS+yrnO5HVS9XTslBIOHEPBjFHUi2hJxMA/+S44V1t38zoHDUnksSYeMqhxx7yYNHybQRMgTFIH9hOYnMmlQD1h52LqCstDS0cZ8vZ9M/nK8lr/h9/t5aRz3T6o74ZEnQiYEIgiFDvxDzpiz+OSkr7nb7pMr61gu90F15DSjLYdhWlmZ9emjRyWfM5
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: feb9885b-dadf-4066-50c3-08db56777ed6
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2023 01:39:03.3398
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pBgjAukLoQDgh6Sz2c3NIoxffOj/ZR7VyQ8kqC6q/Tb39PhG4RAwcPKudXb/28fcIOCVb4prAL7vvJDqaUb2LWZ9uX/9tAzYzYTzdMXcrHY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4867
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305170012
+X-Proofpoint-ORIG-GUID: 75rew0ZpDqQ4BV23f2yDHKsu4ECiC0FK
+X-Proofpoint-GUID: 75rew0ZpDqQ4BV23f2yDHKsu4ECiC0FK
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 5:31=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 15.05.23 19:34, Catalin Marinas wrote:
-> > On Sat, May 13, 2023 at 05:29:53AM +0200, David Hildenbrand wrote:
-> >> On 13.05.23 01:57, Peter Collingbourne wrote:
-> >>> diff --git a/mm/memory.c b/mm/memory.c
-> >>> index 01a23ad48a04..83268d287ff1 100644
-> >>> --- a/mm/memory.c
-> >>> +++ b/mm/memory.c
-> >>> @@ -3914,19 +3914,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> >>>             }
-> >>>     }
-> >>> -   /*
-> >>> -    * Remove the swap entry and conditionally try to free up the swa=
-pcache.
-> >>> -    * We're already holding a reference on the page but haven't mapp=
-ed it
-> >>> -    * yet.
-> >>> -    */
-> >>> -   swap_free(entry);
-> >>> -   if (should_try_to_free_swap(folio, vma, vmf->flags))
-> >>> -           folio_free_swap(folio);
-> >>> -
-> >>> -   inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
-> >>> -   dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
-> >>>     pte =3D mk_pte(page, vma->vm_page_prot);
-> >>> -
-> >>>     /*
-> >>>      * Same logic as in do_wp_page(); however, optimize for pages tha=
-t are
-> >>>      * certainly not shared either because we just allocated them wit=
-hout
-> >>> @@ -3946,8 +3934,21 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> >>>             pte =3D pte_mksoft_dirty(pte);
-> >>>     if (pte_swp_uffd_wp(vmf->orig_pte))
-> >>>             pte =3D pte_mkuffd_wp(pte);
-> >>> +   arch_do_swap_page(vma->vm_mm, vma, vmf->address, pte, vmf->orig_p=
-te);
-> >>>     vmf->orig_pte =3D pte;
-> >>> +   /*
-> >>> +    * Remove the swap entry and conditionally try to free up the swa=
-pcache.
-> >>> +    * We're already holding a reference on the page but haven't mapp=
-ed it
-> >>> +    * yet.
-> >>> +    */
-> >>> +   swap_free(entry);
-> >>> +   if (should_try_to_free_swap(folio, vma, vmf->flags))
-> >>> +           folio_free_swap(folio);
-> >>> +
-> >>> +   inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
-> >>> +   dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
-> >>> +
-> >>>     /* ksm created a completely new copy */
-> >>>     if (unlikely(folio !=3D swapcache && swapcache)) {
-> >>>             page_add_new_anon_rmap(page, vma, vmf->address);
-> >>> @@ -3959,7 +3960,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> >>>     VM_BUG_ON(!folio_test_anon(folio) ||
-> >>>                     (pte_write(pte) && !PageAnonExclusive(page)));
-> >>>     set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
-> >>> -   arch_do_swap_page(vma->vm_mm, vma, vmf->address, pte, vmf->orig_p=
-te);
-> >>>     folio_unlock(folio);
-> >>>     if (folio !=3D swapcache && swapcache) {
-> >>
-> >>
-> >> You are moving the folio_free_swap() call after the folio_ref_count(fo=
-lio)
-> >> =3D=3D 1 check, which means that such (previously) swapped pages that =
-are
-> >> exclusive cannot be detected as exclusive.
-> >>
-> >> There must be a better way to handle MTE here.
-> >>
-> >> Where are the tags stored, how is the location identified, and when ar=
-e they
-> >> effectively restored right now?
-> >
-> > I haven't gone through Peter's patches yet but a pretty good descriptio=
-n
-> > of the problem is here:
-> > https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d434.ca=
-mel@mediatek.com/.
-> > I couldn't reproduce it with my swap setup but both Qun-wei and Peter
-> > triggered it.
-> >
-> > When a tagged page is swapped out, the arm64 code stores the metadata
-> > (tags) in a local xarray indexed by the swap pte. When restoring from
-> > swap, the arm64 set_pte_at() checks this xarray using the old swap pte
-> > and spills the tags onto the new page. Apparently something changed in
-> > the kernel recently that causes swap_range_free() to be called before
-> > set_pte_at(). The arm64 arch_swap_invalidate_page() frees the metadata
-> > from the xarray and the subsequent set_pte_at() won't find it.
-> >
-> > If we have the page, the metadata can be restored before set_pte_at()
-> > and I guess that's what Peter is trying to do (again, I haven't looked
-> > at the details yet; leaving it for tomorrow).
->
-> Thanks for the details! I was missing that we also have a hook in
-> swap_range_free().
->
-> >
-> > Is there any other way of handling this? E.g. not release the metadata
-> > in arch_swap_invalidate_page() but later in set_pte_at() once it was
-> > restored. But then we may leak this metadata if there's no set_pte_at()
-> > (the process mapping the swap entry died).
->
-> That was my immediate thought: do we really have to hook into
-> swap_range_free() at all?
 
-As I alluded to in another reply, without the hook in
-swap_range_free() I think we would either end up with a race or an
-effective memory leak in the arch code that maintains the metadata for
-swapped out pages, as there would be no way for the arch-specific code
-to know when it is safe to free it after swapin.
+Azeem,
 
-> And I also wondered why we have to do this
-> from set_pte_at() and not do this explicitly (maybe that's the other
-> arch_* callback on the swapin path).
+> strlcpy() reads the entire source buffer first. This read may exceed
+> the destination size limit. This is both inefficient and can lead to
+> linear read overflows if a source string is not NUL-terminated [1]. In
+> an effort to remove strlcpy() completely [2], replace strlcpy() here
+> with strscpy(). No return values were used, so direct replacement is
+> safe.
 
-I don't think it's necessary, as the set_pte_at() call sites for
-swapped in pages are known. I'd much rather do this via an explicit
-hook at those call sites, as the existing approach of implicit
-restoring seems too subtle and easy to be overlooked when refactoring,
-as we have seen with this bug. In the end we only have 3 call sites
-for the hook and hopefully the comments that I'm adding are sufficient
-to ensure that any new swapin code should end up with a call to the
-hook in the right place.
+Applied to 6.5/scsi-staging, thanks!
 
-Peter
+-- 
+Martin K. Petersen	Oracle Linux Engineering
