@@ -2,155 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AFA9705D41
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F53705D3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjEQC1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S232041AbjEQC1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjEQC1s (ORCPT
+        with ESMTP id S231278AbjEQC1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:27:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADD8268A
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:27:20 -0700 (PDT)
-X-UUID: 404bf158f45a11edb20a276fd37b9834-20230517
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=nYcNa1U2hxMXAsaheDvMwQHpaoPx+7Gfb4BUUDZeS7c=;
-        b=buUUs8YAV65neXQs4VTk7q1d5RjgDEE/q9cykVv4Wbj08iJuiHL2FpEG4DvWmTRqiZxS00mzjYMvZKJd3jXVNtGFRRLjQVvMCT6A1xmkX7Jsatj25tGh3GqXj0TohSeUMcqwPFnNTpO7R6pkBEZZ49I9FtDbP1LNCiREk6Fd1Is=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:c52d6a5e-cf6a-4bd1-a663-6ec42fd28490,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:1fc10c6c-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 404bf158f45a11edb20a276fd37b9834-20230517
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <walter.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1405807776; Wed, 17 May 2023 10:26:38 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 17 May 2023 10:26:36 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 17 May 2023 10:26:36 +0800
-From:   <walter.chang@mediatek.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        John Stultz <jstultz@google.com>
-CC:     <wsd_upstream@mediatek.com>, <stanley.chu@mediatek.com>,
-        <Chun-hung.Wu@mediatek.com>, <Freddy.Hsin@mediatek.com>,
-        <walter.chang@mediatek.com>,
-        Chun-Hung Wu <chun-hung.wu@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v5 4/4] clocksource/drivers/timer-mediatek: Make timer-mediatek become loadable module
-Date:   Wed, 17 May 2023 10:25:48 +0800
-Message-ID: <20230517022557.24388-5-walter.chang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230517022557.24388-1-walter.chang@mediatek.com>
-References: <20230517022557.24388-1-walter.chang@mediatek.com>
+        Tue, 16 May 2023 22:27:44 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863355FE1;
+        Tue, 16 May 2023 19:27:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rw5KQ9Ii6gbtDWbJw1HW3+96fiC65KOBcUoDOwNFrlFVJ6NHiKD5ToYlf40v+D91+jMbRiKOfxoIXV6Tyx8yInAoHSoZ9kWAa36PFeuzdki8bGSiNlc2AJxHFA3L84CRgg04dXQv9mc8MNzjRWTAiASQPKe1TpraXh5ob5lbDa4YMNdNgVamGSvMG7U8Jcx5WJ/Mrr4yUcj+IRuQlCwFRET7ZDlMZ99CBkT7TBHRMGNOdhtaAovuh9nyhVnKdWAytSMMe872BUAnKNXtBwBrR0STIZy4RCDSlvcL9IR7F9enJY286U4YvDKpcAtwmxvLQeu7FCrCSwD0hnLbJyk+ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oh+jtBDcQGwKL47a/sTYNeBB8dtEGr5uAwWvDP8A28U=;
+ b=cjI9rfNHyuGjqn5eWNtWxGeEkHpHAncNyDxbqWlCddNjLyefWOpkmpAv3dzFmr+vUvDYeRpIUmxcQjLJ1eDbOt10uslxaKouCbkk5PGt8ypNiT96MuF/weZWKcf5pasctuaol4QYVOQEyIvHQioXk5vpBXmVWYj5no9Ze9+P6eFZE0h/aCQfiSpoZuz2Sg8QXd+NWu+oBGIeVjVsLbh6UeCso+7cDesKNZ6YsqGKf34IaON+1Io964lBgQAdq/7FN0X2xXddTz+pI/5iJS1oBBoIWB9pWnFryIprWM4PhKhx5RFQsPFuYseQ6y3BasSlqNjpdtpArOcEgEQS3FqCEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oh+jtBDcQGwKL47a/sTYNeBB8dtEGr5uAwWvDP8A28U=;
+ b=V5UI8iMWxWA5SNTBmjgCxrZwe0RW/XcBshERDXL7ftbQEgAJ5VHIatLCzn1dJVAeZIFC0ILf9iDAbt5wXO7bxtElmdb4rqjwKrOJcyGNiv41p9uLFq1bYHQDY5pZ1WQCHQtdW20hUUKm9uU3XmqW9S/ZKumv+IVd0+Gr1m41a7I=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by PH8PR21MB3815.namprd21.prod.outlook.com (2603:10b6:510:215::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.4; Wed, 17 May
+ 2023 02:26:37 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::a4f7:2466:97b5:bd31]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::a4f7:2466:97b5:bd31%5]) with mapi id 15.20.6433.005; Wed, 17 May 2023
+ 02:26:35 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>
+CC:     Mark Rutland <Mark.Rutland@arm.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "kernel@xen0n.name" <kernel@xen0n.name>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "svens@linux.ibm.com" <svens@linux.ibm.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "wanpengli@tencent.com" <wanpengli@tencent.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "longman@redhat.com" <longman@redhat.com>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        "jstultz@google.com" <jstultz@google.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [RFC][PATCH 7/9] x86/tsc: Provide sched_clock_noinstr()
+Thread-Topic: [RFC][PATCH 7/9] x86/tsc: Provide sched_clock_noinstr()
+Thread-Index: AQHZgfVJgXDGJCXHgkicklmkIOtQvK9Q6JGAgAzfthA=
+Date:   Wed, 17 May 2023 02:26:35 +0000
+Message-ID: <BYAPR21MB1688853D01CABA74B51DA841D77E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230508211951.901961964@infradead.org>
+ <20230508213147.853677542@infradead.org>
+ <20230508214419.GA2053935@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230508214419.GA2053935@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5329c7e3-bfca-439e-a9df-2326ba163ea2;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-17T02:20:07Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH8PR21MB3815:EE_
+x-ms-office365-filtering-correlation-id: c63e16e8-eeb6-4a29-5a22-08db567e22e0
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: waLSHBo/lES7jG6wG1LW2+XHWMJJ/G6gPu3InDad+lxE6TkKdxwR3D7dsrY8WCylV9F0iqMvmaVdgHDityFP3P7+ztGrLMft8oRqJrLHdjv4RYxXUli8Z2GacmEgbDrKp+1cid6tdluuqXX/EB1xL0X0XkKn51pGsmDfUVBUftXvZ8L0PiqvYDB7kAYIbnpPx4V0AjlccRG+k1m1FmH5YSv3uvX+28cJiVfM80vy7sMLzzCAEtLmDSNAWioP7/S9sdmDXc4IIfOtJ0nEg/3dPVVD7Whrhnw//ZxMMK+86brRfIUzsCZb2ZVu2hoN5wgET+jHoWArBqgntl8HosCs+VFST+Zw4J59FkL4FX2Yx28j4NBa+xCJPNy+yQf9/t9SXh3TOW5TICHEpo7zwqAlyxN7PdJz+P6Dli4qe/2hC3NJsEM7SGzvJDPeHygoaVVwjNJwfCkpAJYUXGRGVrU/tNkNiOUByR6PF/MJVRrtl/7MhUWGb6AyUCiwuaGdlE//h/dWN9cDhTzYTa7iWjbwckC2CAYVJzh/Ps+9k2Mte+Xf7kEHrBF7EoCI3dq+gbhI37pEzN6poQvUr2kQqsiPNQyAXp1jQIsTQK9gPdO9ZkRdjZ7wentXcQ+KxWbty2sekt1G1ApCY3K16vjvX0cn9WshYTSrhUOhE1yUMWNzkAk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39860400002)(376002)(396003)(136003)(451199021)(83380400001)(6506007)(26005)(2906002)(33656002)(8990500004)(186003)(9686003)(38070700005)(52536014)(7416002)(86362001)(7696005)(5660300002)(55016003)(7406005)(71200400001)(8676002)(478600001)(64756008)(8936002)(10290500003)(54906003)(38100700002)(110136005)(41300700001)(66476007)(316002)(66446008)(122000001)(76116006)(4326008)(786003)(82960400001)(66946007)(82950400001)(66556008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WdBIUJO4K6JFXQfd53wgHzYQWp2Ie+ouaIGbeG4jIET39gzz+QIUB13AAGed?=
+ =?us-ascii?Q?IeRD2NPpriFCuLUdTlPqJSXktq7FSZZQs3ErBZeZipBs2cUNQCdwh2G3Xpz7?=
+ =?us-ascii?Q?FM0BNIoyWKTSJyHyE5Uk5nEjOLFVFkkTPleynUjUo6oq0VkYFEhZXhEourP+?=
+ =?us-ascii?Q?1s5NhleSN2j+fN5CRhSjjQEDCI9P08vZIbgE/R5oB7pNOGO7OvXUKuq9oXL7?=
+ =?us-ascii?Q?Xv9hPOOF5kPtblZAWhtW7TkhLWr2w6R4sJc8OOeJb2n20/KKk7D5bfpJ4MUz?=
+ =?us-ascii?Q?shuGlxprq6aomK1mvNNj/FBpmET3qtE+bv87WDpZfw+/UAUKsAITSrqYrJYW?=
+ =?us-ascii?Q?hI5CUpT1NDaPSfSkK9VXLCklhag8Y/9nrDGuHydFWiDI3NVGvJVTmMhXJTSz?=
+ =?us-ascii?Q?5+iLBsos38ba3+l8gqlrkuijwfm50zUJr805w72i6iegmKee3jRz9yj8z3R6?=
+ =?us-ascii?Q?NSgaRn313LIAGlG1C8ORR3gOGb3vzSHsa+Nqk5KR6splu67pIs0SYnWx3i/l?=
+ =?us-ascii?Q?H9dA7Uzdy2oxzo5sHg3BHIYyDa4GWvKtEKqdTz+jZ+HcwTdvBwSnPTEUM+Ih?=
+ =?us-ascii?Q?GBz26fFo1A7MCYEpf4VHuBtXiPTNB29Jy1NtuJfptbolkdAO7Ws75jDBebtc?=
+ =?us-ascii?Q?+yzjMcZeHLKScZthMjqbsYSJY2lrV1M0xqtz1MAgVFB2AggdgpwntW9Vkpgg?=
+ =?us-ascii?Q?JJCjpqlsKq4dtV6O4PIBgLr/SdKAc/+gat8qQ5xJkf3e9Atf2eAyZsKqqs7m?=
+ =?us-ascii?Q?CMFbrMwIt5T/VMOScU2Q+/vseMA4rPNg+MRGdOFUCQ1EONIRFhIvbhawjR1a?=
+ =?us-ascii?Q?zjy6XPvKaM07B/fgkhnq6JQS8heMwT6uxor6vFUaDJmDJvI+PbFkz96cz7fq?=
+ =?us-ascii?Q?f0WHlxrZknHZcmWm+UA/yM4uTbt1hr2mUetpOY06ordtsIoT6XY3riWHG70r?=
+ =?us-ascii?Q?b1TXf7/hMFhPcC1/Q6wMZvRXmZEwkvqLhlplcJDxkkgrG23Kmq2A3W9OUqRK?=
+ =?us-ascii?Q?da1NPOI7JXwSdABJuKGdyD+EMF//+S9m3cTOBm/lZHwns3YAl9+36W7BMYoC?=
+ =?us-ascii?Q?ml8MHPzSPe+UXBkijErSycGQMBmmKeYnAzs11DU5vqj5c8dnIljLdScHef1J?=
+ =?us-ascii?Q?Jp257rJ2OdJOG6Uj/qcSw29+lzDTUtjMyAJkzMHe1yBEg/otRywl8zk+TAOB?=
+ =?us-ascii?Q?O5qs8UR/7kQe6V/eLIBqHMkH/ec8puT/NoTo6/1XW1QewmuVCuYoaljE4PTP?=
+ =?us-ascii?Q?oLxETYSF9CEXwN17/83XACkuuIKUPf25MFF4Zowcg6glcX9d1ZG4O/O+ekJK?=
+ =?us-ascii?Q?COXyi25z1a0YLZx76vgqF+WrkEQFW1fQZDWyOcBVY8stgCJvU8Elw0ved7MQ?=
+ =?us-ascii?Q?E81rci+C1CrG6oo4N6NzwJN53LV+7cD85JZoMTq8IGqvIVCCdVVOY5GaOh7l?=
+ =?us-ascii?Q?4VXsWVIezPqw128XOqaPsKdrGZMJW5c+u+uUf1CtpQcfY0SC5sOBPG4S76dz?=
+ =?us-ascii?Q?+kwHbf5JJ+1yDqUInRGRTQ48LP/T1sTLH1W79BHLZnsoWou99/MTq1kt5y2+?=
+ =?us-ascii?Q?tHksHD5aCKdSkbyYS7XfxgyCaxjqFrU6UJZ8no7llmxGjOw0XqOrhZeTCz9a?=
+ =?us-ascii?Q?GQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c63e16e8-eeb6-4a29-5a22-08db567e22e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 02:26:35.3749
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FPZ4GOpGAuIx5bJtFl3Vkxr0ZAvJKjBDnZZrBToKIBr8lPXi7HEHtm0565mKm9ITiPtESmoeBR8nkfYMI0m0GhP0cax1h0qvGzwYwhXj3I8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR21MB3815
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+From: Peter Zijlstra <peterz@infradead.org> Sent: Monday, May 8, 2023 2:44 =
+PM
+>=20
+> On Mon, May 08, 2023 at 11:19:58PM +0200, Peter Zijlstra wrote:
+>=20
+> > --- a/drivers/clocksource/hyperv_timer.c
+> > +++ b/drivers/clocksource/hyperv_timer.c
+> > @@ -408,9 +408,9 @@ static u64 notrace read_hv_clock_tsc_cs(
+> >  	return read_hv_clock_tsc();
+> >  }
+> >
+> > -static u64 notrace read_hv_sched_clock_tsc(void)
+> > +static u64 noinstr read_hv_sched_clock_tsc(void)
+> >  {
+> > -	return (read_hv_clock_tsc() - hv_sched_clock_offset) *
+> > +	return (hv_read_tsc_page(hv_get_tsc_page()) - hv_sched_clock_offset) =
+*
+> >  		(NSEC_PER_SEC / HV_CLOCK_HZ);
+> >  }
+> >
+> > --- a/include/clocksource/hyperv_timer.h
+> > +++ b/include/clocksource/hyperv_timer.h
+> > @@ -38,7 +38,7 @@ extern void hv_remap_tsc_clocksource(voi
+> >  extern unsigned long hv_get_tsc_pfn(void);
+> >  extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
+> >
+> > -static inline notrace u64
+> > +static __always_inline notrace u64
+> >  hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur=
+_tsc)
+> >  {
+> >  	u64 scale, offset;
+> > @@ -85,7 +85,7 @@ hv_read_tsc_page_tsc(const struct ms_hyp
+> >  	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
+> >  }
+> >
+> > -static inline notrace u64
+> > +static __always_inline notrace u64
+> >  hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
+> >  {
+> >  	u64 cur_tsc;
+>=20
+> Hyper-V folks!
+>=20
+> While reviewing all this I found the following 'gem':
+>=20
+> hv_init_clocksource()
+>   hv_setup_sched_clock()
+>     paravirt_set_sched_clock(read_hv_sched_clock_msr)
+>=20
+> read_hv_sched_clock_msr() [notrace]
+>   read_hv_clock_msr()     [notrace]
+>     hv_get_register()      *traced*
+>       hv_get_non_nested_register() ...
+>         hv_ghcb_msr_read()
+> 	  WARN_ON(in_nmi())
+> 	  ...
+> 	  local_irq_save()
+>=20
+>=20
+> Note that:
+>=20
+>  a) sched_clock() is used in NMI context a *LOT*
+>  b) sched_clock() is notrace (or even noinstr with these patches)
+>     and local_irq_save() implies tracing
+>=20
+>=20
+> Can you pretty please:
+>=20
+>  1) delete all this; or,
+>  2) fix it in a hurry?
+>=20
 
-Make the timer-mediatek driver which can register
-an always-on timer as tick_broadcast_device on
-MediaTek SoCs become loadable module in GKI.
+Peter -- I've sent you an RFC patch to incorporate into your broader
+patch set.  I think it probably makes sense for all the Hyper-V
+stuff to be a separate patch.
 
-Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
-Signed-off-by: Walter Chang <walter.chang@mediatek.com>
-Tested-by: Walter Chang <walter.chang@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clocksource/Kconfig          |  2 +-
- drivers/clocksource/timer-mediatek.c | 33 ++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+), 1 deletion(-)
+I haven't previously worked with the details of notrace vs. noinstr,
+but I followed the patterns elsewhere in patch set. Please review
+to see if it seems correct.
 
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 526382dc7482..62103c0807f7 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -472,7 +472,7 @@ config SYS_SUPPORTS_SH_CMT
- 	bool
- 
- config MTK_TIMER
--	bool "Mediatek timer driver" if COMPILE_TEST
-+	tristate "MediaTek timer driver"
- 	depends on HAS_IOMEM
- 	select TIMER_OF
- 	select CLKSRC_MMIO
-diff --git a/drivers/clocksource/timer-mediatek.c b/drivers/clocksource/timer-mediatek.c
-index 7bcb4a3f26fb..afeacb509481 100644
---- a/drivers/clocksource/timer-mediatek.c
-+++ b/drivers/clocksource/timer-mediatek.c
-@@ -13,6 +13,9 @@
- #include <linux/clocksource.h>
- #include <linux/interrupt.h>
- #include <linux/irqreturn.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
- #include <linux/sched_clock.h>
- #include <linux/slab.h>
- #include "timer-of.h"
-@@ -337,5 +340,35 @@ static int __init mtk_gpt_init(struct device_node *node)
- 
- 	return 0;
- }
-+
-+#ifndef MODULE
- TIMER_OF_DECLARE(mtk_mt6577, "mediatek,mt6577-timer", mtk_gpt_init);
- TIMER_OF_DECLARE(mtk_mt6765, "mediatek,mt6765-timer", mtk_syst_init);
-+#else
-+static int mtk_timer_probe(struct platform_device *pdev)
-+{
-+	int (*timer_init)(struct device_node *node);
-+	struct device_node *np = pdev->dev.of_node;
-+
-+	timer_init = of_device_get_match_data(&pdev->dev);
-+	return timer_init(np);
-+}
-+
-+static const struct of_device_id mtk_timer_match_table[] = {
-+	{ .compatible = "mediatek,mt6577-timer", .data = mtk_gpt_init },
-+	{ .compatible = "mediatek,mt6765-timer", .data = mtk_syst_init },
-+	{ /* sentinel */ }
-+};
-+
-+static struct platform_driver mtk_timer_driver = {
-+	.probe = mtk_timer_probe,
-+	.driver = {
-+		.name = "mediatek-timer",
-+		.of_match_table = mtk_timer_match_table,
-+	},
-+};
-+module_platform_driver(mtk_timer_driver);
-+
-+MODULE_DESCRIPTION("MediaTek Timer driver");
-+MODULE_LICENSE("GPL v2");
-+#endif
--- 
-2.18.0
+One thing:  In the cases where I added __always_inline, I dropped
+any notrace or noinstr annotations.  I presume such code always
+takes on the attributes of the caller.  If that's not correct, let me know.
 
+Michael
