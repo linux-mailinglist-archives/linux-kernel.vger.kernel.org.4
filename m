@@ -2,88 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3731F7072FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7558C7072FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjEQUZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
+        id S229699AbjEQU0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjEQUZR (ORCPT
+        with ESMTP id S229475AbjEQU0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:25:17 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3E283FA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:25:15 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2ac770a99e2so13174691fa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684355113; x=1686947113;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gm3y2wIKXeo4RLdtNri9QzjjhdM2vmdYj4Pt4IbNgeQ=;
-        b=T3UU2KsQKVP7jzVL0YJ9F+QUdQsuiP1YJmhRbdmpoDAZBtYZASegDO0CGJ0SlOQoSV
-         QPRQHD4KchB4UXReT/BvncaFoxApXXHWzVtWBhaoUjuo3CS+p7rA8pGgi7wf9Wp+I25y
-         T4S/NQWlvOnp3aCcfBuhKbAc2ieIsaLhnYe5plu4ClZNDqAxFD44i65ORMH9CgV9W0Ph
-         g10aUdmJ70+dVSaJGtvYNKLL2DuJCN7CHlaFmxHCK+PvM5QRy7vgJu4IYlI3KuPkhUMM
-         OU4hByTHiiULBMS8WrbdWQl+QcsQfv8sCqp/FN985t56olljbCVr7pjrINH+/m5AtsO4
-         HQ9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684355113; x=1686947113;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gm3y2wIKXeo4RLdtNri9QzjjhdM2vmdYj4Pt4IbNgeQ=;
-        b=Axz3XNfPMQsFrcn748UYPddR3aBF5P/Kmkj7OkyZ51PTNlwFYRL9PaYUp0SnDjKkEC
-         MRvHtjwEv1tAUFt+J21iceKQ0H3E4cyZfVb9oBGcDMs7TKtfkiXwN/eA8HCzmhNr7q0Z
-         gItqPhQ/QM2Ur9uMuGV9l+jchWZkPfNbucS8p2uhRmfn+ZnhtWEoHRi2DKbG5XXIctzA
-         kSsmjhoVdL2Ekt8Kc+owqRyd7/1hADxqsr9w6T+NRp6eSmt9hy2MXOdhRtnbPBUqcdiF
-         oWyGDfkKJipMvmdmqH76JAMAhFChWYf402GIGlUs9QltqLdWNCTMtTq7/PHvnYhYuAUl
-         mu3g==
-X-Gm-Message-State: AC+VfDzTgs2wP2WCeCqPI3cxdMuvMtiXw3dLvPmXnDjx1sQGUciUv/q0
-        iYu4rmIRKUqE7KKceQLZu9zNUw==
-X-Google-Smtp-Source: ACHHUZ7R9mpYrHl5GpfD2kyel38ZdFHESzb8buFCHSAUaVXx3wxYh2W6X5t0lDlBw2zfZpGSaAA/NA==
-X-Received: by 2002:a2e:999a:0:b0:2ae:d269:5a1e with SMTP id w26-20020a2e999a000000b002aed2695a1emr5041062lji.21.1684355113248;
-        Wed, 17 May 2023 13:25:13 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id y5-20020a2e95c5000000b002addbc16a54sm2021760ljh.41.2023.05.17.13.25.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 13:25:12 -0700 (PDT)
-Message-ID: <13f7055b-8ec2-68c3-06a4-d650f76c0ac2@linaro.org>
-Date:   Wed, 17 May 2023 22:25:10 +0200
+        Wed, 17 May 2023 16:26:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F73135AD;
+        Wed, 17 May 2023 13:26:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684355210; x=1715891210;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=y3Lpo6i1Ow+VK1b2cyEfFgMYbY83bMwZmtqUkDzDvbc=;
+  b=T79ohFZVn5Kf9Ds45hRvm/Y2Up0QN8Xtnjxt5BD+s0qB+wllNtfkUYs7
+   BiZOfVyF3Tj4C/ppPbf+A5hPjmvkuksivBobWO2BvB2SYVliSawscE961
+   v6Ernd4Qsqn7XYpwV/E+hC9pvSWCFnlOnDc0MdcszxzGHY5WvMR5VpTJa
+   v58go9NpOf9JG8VBJBEpnjp7pnuzh2szpz4O5em0hOGy62VIoxrjC9ujA
+   UHOe3HzVzBPwRkv/7tEeDIswqvjEx9HDR9d5/mlS8tH2x+6Kj2nvfbbXa
+   KMYw7oUKPeLhu1rAUGDIcqRMG39Vjrp7w1tuYUkHEBQ17AOoBhUqOqtdl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="332234960"
+X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
+   d="scan'208";a="332234960"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 13:26:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="876162795"
+X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
+   d="scan'208";a="876162795"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga005.jf.intel.com with ESMTP; 17 May 2023 13:26:49 -0700
+Received: from [10.251.17.142] (kliang2-mobl1.ccr.corp.intel.com [10.251.17.142])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 17A81580AF7;
+        Wed, 17 May 2023 13:26:47 -0700 (PDT)
+Message-ID: <7b7a9c75-bf81-922f-42ea-8e99852f7a7a@linux.intel.com>
+Date:   Wed, 17 May 2023 16:26:47 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 00/18] Venus QoL / maintainability fixes
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 00/15] Event, metric and metric group improvements
 Content-Language: en-US
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        stable@vger.kernel.org
-References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
- <f9904e82-4756-2add-3c7e-e019ce966515@linaro.org>
- <049c7e3e-eaf2-0253-bf5b-83b9e8f949ab@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <049c7e3e-eaf2-0253-bf5b-83b9e8f949ab@quicinc.com>
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20230517173805.602113-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230517173805.602113-1-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,61 +81,144 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 16.05.2023 14:57, Vikash Garodia wrote:
+On 2023-05-17 1:37 p.m., Ian Rogers wrote:
+> Update Intel events to the latest at: https://github.com/intel/perfmon
+> TMA info metrics are renamed for consistency and a fix is added that
+> adds back in the Valkyrie metrics such as memory_bandwidth_total,
+> memory_bandwidth_read and memory_bandwidth_write on icelakex.
 > 
-> On 5/12/2023 8:31 AM, Bryan O'Donoghue wrote:
->> On 04/05/2023 09:00, Konrad Dybcio wrote:
->>> Tested on 8250, but pretty please test it on your boards too!
->>
->> What's the definition of test here ?
->>
->> I ran this
->>
->> ffplay -codec:video h264_v4l2m2m FantasticFour-ROTSS.mp4
->>
->> and this
->>
->> ffplay -codec:video vp8_v4l2m2m /mnt/big-buck-bunny_trailer.webm
->>
->> on db410c with no errors. Then again I applied and disapplied the 8x8 264 fix to
->> that branch and saw no discernable difference so I'm not very confident we have
->> good coverage.
->>
->> @Stan @Vikash could you give some suggested tests for coverage here ?
+> Add a new feature to perf list to show a description of a metricgroup
+> via a new metricgroups.json file, add this for the generated Intel
+> metrics. The descriptions looks like:
 > 
-> I could think of below test aspects for this series
-> 1. Suspend Resume
-> 2. Concurrency test
-> 3. Module load -> video usecase -> module unload -> module load -> video
-> usecase. This would ensure video firmware is reloaded and functional.
-> 4. Video playback and encode for all supported resolution and codecs.
-> 5. In general, video playback with more test content.
+> ```
+> $ perf list
+> ...
+> tma_frontend_bound_group: [Metrics contributing to tma_frontend_bound category]
+>   tma_fetch_bandwidth
+>        [This metric represents fraction of slots the CPU
+>         was stalled due to Frontend bandwidth issues]
+>   tma_fetch_latency
+>        [This metric represents fraction of slots the CPU
+>         was stalled due to Frontend latency issues]
+> ...
+> ```
 > 
-> I would be testing the series with stability test suite on CrOS. That would be
-> either on sc7180 or sc7280 setup.
+> v2/v3. Reword "Grouping from metrics spreadsheet" to "Grouping from
+>        Top-down Microarchitecture Analysis Metrics spreadsheet" as
+>        suggested by Kan Liang.
 > 
-> Konrad, you can post the new version as one patch needs to be dropped. Test can
-> be done on the new version. There are few patches in the series pending review,
-> which can be done in parallel.
-Sure, working on it!
+> Ian Rogers (15):
+>   perf vendor events intel: Update alderlake events/metrics
+>   perf vendor events intel: Update broadwell variant events/metrics
+>   perf vendor events intel: Update cascadelakex events/metrics
+>   perf vendor events intel: Update elkhartlake events
+>   perf vendor events intel: Update haswell(x) metrics
+>   perf vendor events intel: Update icelake/icelakex events/metrics
+>   perf vendor events intel: Update ivybridge/ivytown metrics
+>   perf vendor events intel: Update jaketown metrics
+>   perf vendor events intel: Update sandybridge metrics
+>   perf vendor events intel: Update sapphirerapids events/metrics
+>   perf vendor events intel: Update skylake/skylakex events/metrics
+>   perf vendor events intel: Update snowridgex events
+>   perf vendor events intel: Update tigerlake events/metrics
+>   perf jevents: Add support for metricgroup descriptions
+>   perf vendor events intel: Add metricgroup descriptions for all models
 
-Konrad
+Thanks Ian.
+
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks,
+Kan
 > 
-> -Vikash
+>  tools/perf/builtin-list.c                     |   11 +-
+>  .../arch/x86/alderlake/adl-metrics.json       | 1314 ++++++++--------
+>  .../pmu-events/arch/x86/alderlake/cache.json  |    9 +
+>  .../pmu-events/arch/x86/alderlake/memory.json |    6 +-
+>  .../arch/x86/alderlake/metricgroups.json      |  122 ++
+>  .../arch/x86/alderlaken/adln-metrics.json     |  276 ++--
+>  .../arch/x86/alderlaken/metricgroups.json     |   26 +
+>  .../arch/x86/broadwell/bdw-metrics.json       |  580 +++----
+>  .../arch/x86/broadwell/floating-point.json    |   15 +
+>  .../arch/x86/broadwell/metricgroups.json      |  107 ++
+>  .../arch/x86/broadwellde/bdwde-metrics.json   |  556 +++----
+>  .../arch/x86/broadwellde/floating-point.json  |   15 +
+>  .../arch/x86/broadwellde/metricgroups.json    |  107 ++
+>  .../arch/x86/broadwellx/bdx-metrics.json      |  796 ++++++----
+>  .../arch/x86/broadwellx/floating-point.json   |   15 +
+>  .../arch/x86/broadwellx/metricgroups.json     |  107 ++
+>  .../arch/x86/cascadelakex/clx-metrics.json    | 1231 +++++++++------
+>  .../arch/x86/cascadelakex/floating-point.json |   31 +
+>  .../arch/x86/cascadelakex/metricgroups.json   |  114 ++
+>  .../arch/x86/cascadelakex/pipeline.json       |   23 +-
+>  .../arch/x86/elkhartlake/cache.json           |    7 +
+>  .../arch/x86/elkhartlake/memory.json          |    2 +
+>  .../arch/x86/elkhartlake/other.json           |   10 +
+>  .../arch/x86/elkhartlake/pipeline.json        |    3 +
+>  .../arch/x86/haswell/hsw-metrics.json         |  484 +++---
+>  .../arch/x86/haswell/metricgroups.json        |  107 ++
+>  .../arch/x86/haswellx/hsx-metrics.json        |  700 ++++++---
+>  .../arch/x86/haswellx/metricgroups.json       |  107 ++
+>  .../pmu-events/arch/x86/icelake/cache.json    |   18 +
+>  .../arch/x86/icelake/icl-metrics.json         |  950 ++++++------
+>  .../arch/x86/icelake/metricgroups.json        |  113 ++
+>  .../arch/x86/icelakex/icx-metrics.json        | 1306 +++++++++-------
+>  .../arch/x86/icelakex/metricgroups.json       |  114 ++
+>  .../arch/x86/ivybridge/ivb-metrics.json       |  526 +++----
+>  .../arch/x86/ivybridge/metricgroups.json      |  107 ++
+>  .../arch/x86/ivytown/ivt-metrics.json         |  534 +++----
+>  .../arch/x86/ivytown/metricgroups.json        |  107 ++
+>  .../arch/x86/jaketown/jkt-metrics.json        |  224 +--
+>  .../arch/x86/jaketown/metricgroups.json       |  100 ++
+>  tools/perf/pmu-events/arch/x86/mapfile.csv    |   31 +-
+>  .../arch/x86/sandybridge/metricgroups.json    |  100 ++
+>  .../arch/x86/sandybridge/snb-metrics.json     |  222 +--
+>  .../arch/x86/sapphirerapids/memory.json       |    6 +-
+>  .../arch/x86/sapphirerapids/metricgroups.json |  118 ++
+>  .../arch/x86/sapphirerapids/spr-metrics.json  | 1357 ++++++++++-------
+>  .../sapphirerapids/uncore-interconnect.json   |    2 +-
+>  .../x86/sapphirerapids/uncore-memory.json     |    8 +-
+>  .../arch/x86/skylake/floating-point.json      |    8 +
+>  .../arch/x86/skylake/metricgroups.json        |  113 ++
+>  .../pmu-events/arch/x86/skylake/pipeline.json |   15 +-
+>  .../arch/x86/skylake/skl-metrics.json         |  875 ++++++-----
+>  .../arch/x86/skylakex/floating-point.json     |   31 +
+>  .../arch/x86/skylakex/metricgroups.json       |  114 ++
+>  .../arch/x86/skylakex/pipeline.json           |   23 +-
+>  .../arch/x86/skylakex/skx-metrics.json        | 1183 ++++++++------
+>  .../pmu-events/arch/x86/snowridgex/cache.json |    7 +
+>  .../arch/x86/snowridgex/memory.json           |    2 +
+>  .../pmu-events/arch/x86/snowridgex/other.json |   10 +
+>  .../arch/x86/snowridgex/pipeline.json         |    3 +
+>  .../x86/snowridgex/uncore-interconnect.json   |   14 +-
+>  .../arch/x86/snowridgex/uncore-io.json        |    8 -
+>  .../arch/x86/snowridgex/uncore-memory.json    |    7 +-
+>  .../arch/x86/snowridgex/uncore-power.json     |    6 +-
+>  .../pmu-events/arch/x86/tigerlake/cache.json  |   18 +
+>  .../arch/x86/tigerlake/metricgroups.json      |  113 ++
+>  .../arch/x86/tigerlake/pipeline.json          |    1 +
+>  .../arch/x86/tigerlake/tgl-metrics.json       |  970 ++++++------
+>  tools/perf/pmu-events/empty-pmu-events.c      |    5 +
+>  tools/perf/pmu-events/jevents.py              |   49 +-
+>  tools/perf/pmu-events/pmu-events.h            |    2 +
+>  70 files changed, 9985 insertions(+), 6416 deletions(-)
+>  create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/broadwell/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellde/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/broadwellx/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/haswell/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/haswellx/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/icelake/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/icelakex/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/ivybridge/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/ivytown/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/jaketown/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/sandybridge/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/skylake/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/skylakex/metricgroups.json
+>  create mode 100644 tools/perf/pmu-events/arch/x86/tigerlake/metricgroups.json
 > 
->>
->> @Konrad - get a db410c !
->>
->> My superficial first-pass on this series looks good but, before giving a
->> Tested-by here, I think we should define a set of coverage tests, run them - the
->> upper end on sm8250 and lower end msm8916 "makes sense to me"
->>
->> 20? different gstreamer tests at different formats and different sizes on our
->> selected platforms db410c, rb5, rb3 I have - also an 820 I haven't booted and an
->> enforce sdm660.
->>
->> Which tests will we use to validate this series and subsequent series to ensure
->> we don't have more regressions ?
->>
->> ---
->> bod
