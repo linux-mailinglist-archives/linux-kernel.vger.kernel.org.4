@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960EF70653D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE1C706542
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjEQKaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
+        id S230371AbjEQKaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjEQKaH (ORCPT
+        with ESMTP id S230320AbjEQKar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:30:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AF13593;
-        Wed, 17 May 2023 03:30:05 -0700 (PDT)
-Date:   Wed, 17 May 2023 10:30:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684319403;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F22RJkxJI1b+I5i2VjSwwVk+cR/vRtmgdQGDjBJl8+E=;
-        b=vh6KVmOVFhmKJDa42ZIqnWSSGLjL/+EJnrt8m2e6nE0crl935+evN1p1+IVH5zF61lnKB2
-        AAeJtZPBiDrapQ30NFT8mYKnq5PYTUYa6XQKMFFNDbDlKQfm4bAdACPetk4g9bUXaHkiFV
-        9RShdmzpX0gHswJwwoUgI6mVSZldzpoosHOJqc3vrMa6dKuP/toP489P0LckppyIxU5/vo
-        IR7+Bfr26Rt+cBDFiW5pKgT+GywZExq3PRUk3W6r3GgHWoQoZFumWbxOM102pF2Rtb73lz
-        NH6lBK/SlKkCeWhoPglP5ozo4dPrWqmdKXb5CJDjIWCeRNFRJuLWDcNMzDJcKQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684319403;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F22RJkxJI1b+I5i2VjSwwVk+cR/vRtmgdQGDjBJl8+E=;
-        b=O7+KbNlw/TX60LnXJR9m95XutrpkvfMq+Eti4/9xvRDcTcw/aJE2NhyzIlf4STxVq8yjNp
-        uZ+V9EApo7tY/vAQ==
-From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/retbleed: Add __x86_return_thunk alignment checks
-Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        Wed, 17 May 2023 06:30:47 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6396F3C30;
+        Wed, 17 May 2023 03:30:46 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510bcd2d6b8so5350034a12.0;
+        Wed, 17 May 2023 03:30:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684319445; x=1686911445;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Prd49snigix6d9LdTUvvFg72tuSsEwzo0jpnKwNXRk=;
+        b=HywP0zbgay4cg4mxORoYrmaGv4C/3y72Z0Pbsy8KBYJwwp5cgkaTqpICbcRrGdZwuy
+         qj8i0Wq3tm6XhJYg8swdd0/XufEy17x2ensngDJA4KvCxxbNBmXCnfT8u2W4KWro1vI/
+         Sp6OpXQNdWPoe2Zgtss/aoRUeMpG5vx6NOpRJRGYln3CtmCPVI6vdaZXIixxUzRUex/x
+         4NiTJEeTo5Zjl6EQkYP+13eis6/9hUGvZ+tQJpdvoLmk7g2tUn0N6Zs3P486E6RJgxT4
+         vIEKPqPIGvqB+IKP1T1c2wgFKboPHGHMGIu8dL0DrEupc/ezhtB+xDni2QNotUXjCZWc
+         sg3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684319445; x=1686911445;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Prd49snigix6d9LdTUvvFg72tuSsEwzo0jpnKwNXRk=;
+        b=mIEz10suotWPYTdPqyeqCBzUnXQ03EZN5DBlZtPtCfXPCSl666bkABH26ujs6LA8ii
+         31mUTYwwdDUratv6PdGwtzKS04rRXlzV0q2bNkpQRXxVJGYBDQ1Lf0ndYMnPVa6ViLfp
+         B+VIgGwvFtjyArQUJqgUKMcX4xOvsM94bx7tgJ7odai42GzsiF99eLJZz8ei8+O9LFwc
+         Cj6Ha8MYUeuAz/+8RLf9BR7XITcOVOVJmLvmU/j6X02a/13240tI0BT0kIUxkBirViuE
+         50WMBlAVhFCZx996c8DAe5abi+xonv+8X/uX5FufatBXjRR6xsNpg4zRaik/GlWXY/7i
+         aqig==
+X-Gm-Message-State: AC+VfDwVF/PEySJuDHK+xlbOVeDHO0H/yHhgkUBq2EKixbpVmpoghO0n
+        cwdnBGjkn3qZhQvX6Wnucmb7lWU6NyVepsvZ
+X-Google-Smtp-Source: ACHHUZ7jof1crDpMo1bbefAPH1Qr/iEut2c1Eu+Xb1yf+6IIXvEzXJHsU0MP7dWVWCB6HrLTFemQwA==
+X-Received: by 2002:a17:907:869f:b0:966:4669:7e8d with SMTP id qa31-20020a170907869f00b0096646697e8dmr1688616ejc.16.1684319444582;
+        Wed, 17 May 2023 03:30:44 -0700 (PDT)
+Received: from wslxew193.fritz.box (p200300c78700c900d536eaeb32769819.dip0.t-ipconnect.de. [2003:c7:8700:c900:d536:eaeb:3276:9819])
+        by smtp.gmail.com with ESMTPSA id bu2-20020a170906a14200b0096654fdbe34sm12235758ejb.142.2023.05.17.03.30.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 03:30:44 -0700 (PDT)
+From:   Boerge Struempfel <boerge.struempfel@gmail.com>
+Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
+        andy.shevchenko@gmail.com, festevam@gmail.com,
+        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230515140726.28689-1-bp@alien8.de>
-References: <20230515140726.28689-1-bp@alien8.de>
+Subject: [PATCH 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
+Date:   Wed, 17 May 2023 12:30:05 +0200
+Message-Id: <20230517103007.26287-1-boerge.struempfel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Message-ID: <168431940157.404.1281647175804224989.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+Some spi controller switch the mosi line to high, whenever they are
+idle. This may not be desired in all use cases. For example neopixel
+leds can get confused and flicker due to misinterpreting the idle state.
+Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+can be overwritten on a per device basis.
 
-Commit-ID:     f220125b999b2c9694149c6bda2798d8096f47ed
-Gitweb:        https://git.kernel.org/tip/f220125b999b2c9694149c6bda2798d8096f47ed
-Author:        Borislav Petkov (AMD) <bp@alien8.de>
-AuthorDate:    Mon, 15 May 2023 16:07:26 +02:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 17 May 2023 12:14:21 +02:00
-
-x86/retbleed: Add __x86_return_thunk alignment checks
-
-Add a linker assertion and compute the 0xcc padding dynamically so that
-__x86_return_thunk is always cacheline-aligned. Leave the SYM_START()
-macro in as the untraining doesn't need ENDBR annotations anyway.
-
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Link: https://lore.kernel.org/r/20230515140726.28689-1-bp@alien8.de
+Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
 ---
- arch/x86/kernel/vmlinux.lds.S | 4 ++++
- arch/x86/lib/retpoline.S      | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ include/uapi/linux/spi/spi.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 25f1552..03c885d 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -508,4 +508,8 @@ INIT_PER_CPU(irq_stack_backing_store);
-            "fixed_percpu_data is not at start of per-cpu area");
- #endif
+diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
+index 9d5f58059703..ca56e477d161 100644
+--- a/include/uapi/linux/spi/spi.h
++++ b/include/uapi/linux/spi/spi.h
+@@ -28,6 +28,7 @@
+ #define	SPI_RX_OCTAL		_BITUL(14)	/* receive with 8 wires */
+ #define	SPI_3WIRE_HIZ		_BITUL(15)	/* high impedance turnaround */
+ #define	SPI_RX_CPHA_FLIP	_BITUL(16)	/* flip CPHA on Rx only xfer */
++#define SPI_MOSI_IDLE_LOW	_BITUL(17)	/* leave mosi line low when idle */
  
-+#ifdef CONFIG_RETHUNK
-+. = ASSERT((__x86_return_thunk & 0x3f) == 0, "__x86_return_thunk not cacheline-aligned");
-+#endif
-+
- #endif /* CONFIG_X86_64 */
-diff --git a/arch/x86/lib/retpoline.S b/arch/x86/lib/retpoline.S
-index b3b1e37..3fd066d 100644
---- a/arch/x86/lib/retpoline.S
-+++ b/arch/x86/lib/retpoline.S
-@@ -143,7 +143,7 @@ SYM_CODE_END(__x86_indirect_jump_thunk_array)
-  *    from re-poisioning the BTB prediction.
+ /*
+  * All the bits defined above should be covered by SPI_MODE_USER_MASK.
+@@ -37,6 +38,6 @@
+  * These bits must not overlap. A static assert check should make sure of that.
+  * If adding extra bits, make sure to increase the bit index below as well.
   */
- 	.align 64
--	.skip 63, 0xcc
-+	.skip 64 - (__x86_return_thunk - zen_untrain_ret), 0xcc
- SYM_START(zen_untrain_ret, SYM_L_GLOBAL, SYM_A_NONE)
- 	ANNOTATE_NOENDBR
- 	/*
+-#define SPI_MODE_USER_MASK	(_BITUL(17) - 1)
++#define SPI_MODE_USER_MASK	(_BITUL(18) - 1)
+ 
+ #endif /* _UAPI_SPI_H */
+-- 
+2.25.1
+
