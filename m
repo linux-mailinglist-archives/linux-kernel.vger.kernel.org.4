@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB7070643F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B1B706447
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjEQJgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S230135AbjEQJi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjEQJgP (ORCPT
+        with ESMTP id S229542AbjEQJix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:36:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B86210C
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:36:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gtYEL+cNF7JBOxTUOl920ZwaVms6oMpqn+5use50Dtc=; b=zTihcchDPUHLMoURHpwYR6cQZM
-        stP81hCQFi1oM6TlF5VeYFxwswzfvO73CQXC+d0HK4KBesR0iicRSupkwNvKr2oAjUoX0v93RoKQY
-        NFD++5fvKU9r6s/tGhD0GdE4IP/r2EhdGaxKMWIila8PRiF0TQzsn38p67AUPig4SgItiNrX8xjnS
-        NKjtEziY2Rth+74sQNv8i5JUzpa6sTLxJ8+DSTARpanLoH08XAXRxr6bV5CL1cMwuriptuEeijwuQ
-        wUN9r1fPuic8B9pLBmkXUYhGWzKwHWQ1HNLCXQ7wI3w4AsPE2OR4piTLjOyU1udqLVeCm6e4+rchU
-        ViVrwtNg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzDZp-0095AA-1E;
-        Wed, 17 May 2023 09:36:09 +0000
-Date:   Wed, 17 May 2023 02:36:09 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Xiaoming Ding <xiaoming.ding@mediatek.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, fei.xu@mediatek.com,
-        srv_heupstream@mediatek.com, linux-mm@kvack.org
-Subject: Re: [PATCH] tee: add FOLL_LONGTERM for CMA case when alloc shm
-Message-ID: <ZGSgCZrg+RjAbGO1@infradead.org>
-References: <20230517031856.19660-1-xiaoming.ding@mediatek.com>
- <ZGSDoVKKVqCkbaCB@infradead.org>
- <CAFA6WYO+AvnbuAdWyBAQ8HkLaOno7PXdsPb9SubxrGNvAm4UnQ@mail.gmail.com>
- <ZGSLiiK/JzD5KMd7@infradead.org>
- <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
+        Wed, 17 May 2023 05:38:53 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24C240C1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684316331; x=1715852331;
+  h=from:to:subject:in-reply-to:references:date:message-id:
+   mime-version;
+  bh=CNGqGF8c6TYzh812PwaejYLAHsNgbc/gb9bSy9QoNbo=;
+  b=E/WmMibq2L1kB6srTqhqMeolSADe56AG7PKFDZR0P6tA89WQ2Ekb7vRN
+   UibU/Q98Bgd5/M8o0jhRyMkQPovvhfVt4kZj0OpwttuJTCNQi5vrrBH4k
+   it7+ztMaVgNss/vL0j8cuqzyDat3Yk55SlHYw2r2LYtXKFhkjYxzAsuE3
+   +Xj8moW5J0jQO4rKRWh/Hk+SunHjRV2/YV6Ed6M3piSXGZlrZJWPIrHc6
+   T5EOy22q52T08Vquhri8I7GqhsfNc5b/gdqpI+yfmVnI82e/xLM6SNKJ8
+   88uNbdDPe52b797wwg34poCDS/Mh2Q5GrlfkYknJdo4Z4V05ryGgzPdW0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="331329006"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="331329006"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 02:38:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="948199481"
+X-IronPort-AV: E=Sophos;i="5.99,281,1677571200"; 
+   d="scan'208";a="948199481"
+Received: from pakurapo-mobl3.ger.corp.intel.com (HELO localhost) ([10.252.50.207])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 02:38:47 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH] drm/i915: constify pointers to hwmon_channel_info
+In-Reply-To: <2a1b81da-39c8-4111-7e42-18f5f2f557c4@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230511175446.282041-1-krzysztof.kozlowski@linaro.org>
+ <87cz2zgvdd.fsf@intel.com>
+ <2a1b81da-39c8-4111-7e42-18f5f2f557c4@linaro.org>
+Date:   Wed, 17 May 2023 12:38:44 +0300
+Message-ID: <87a5y3guvv.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,22 +68,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 02:56:13PM +0530, Sumit Garg wrote:
-> Do you mean a pinned user-space page can be paged out automatically?
+On Wed, 17 May 2023, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> On 17/05/2023 11:28, Jani Nikula wrote:
+>> On Thu, 11 May 2023, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>> Statically allocated array of pointers to hwmon_channel_info can be made
+>>> const for safety.
+>>>
+>>> Acked-by: Jani Nikula <jani.nikula@intel.com>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> 
+>> FYI we'll merge this once we've done a backmerge to get the hwmon
+>> changes to our tree.
+>
+> There are no dependencies. hwmon changes are already in rc1.
 
-No, pinned pages can't be paged out.
+That's what I'm saying, drm-intel-next doesn't have rc1. :)
 
-But a short term pin implies it will be release after a short delay,
-and it is feasible for wait for the pin to go away.
+BR,
+Jani.
 
-For a long term pin waiting is not an option, and anyone wanting to
-do something with the pinned page that requires it to not be pinned
-must simply give up.
+>
+> Best regards,
+> Krzysztof
+>
 
-> Just FYI, the underlying use-case for TEE registered shared memory is
-> that the references to pinned pages are provided to TEE implementation
-> to operate upon. This can happen over multiple syscalls and we want
-> the pinned pages to be always in RAM as otherwise the physical
-> addresses may change if they are paged out in between.
-
-That's a very use clear case for a long term pin.
+-- 
+Jani Nikula, Intel Open Source Graphics Center
