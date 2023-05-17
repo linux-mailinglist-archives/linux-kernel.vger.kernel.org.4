@@ -2,154 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9076B706C42
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0569F706C45
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbjEQPKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S231556AbjEQPKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjEQPKT (ORCPT
+        with ESMTP id S231542AbjEQPKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:10:19 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0F835A5;
-        Wed, 17 May 2023 08:10:01 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9659c5b14d8so136119366b.3;
-        Wed, 17 May 2023 08:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684336200; x=1686928200;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RbHR3p/aSwGiwoZdp2CXqzfCqmJLbldvSD60wsj1Fzs=;
-        b=jHNY7YUQq7T5u7nBwuVtfqJOHyeYlzKXv+ooTfcFyKORavnxs8v9xgsa5X09yq5+oF
-         0yJlPl+gNCXgkVEEA1lmjzsnM+FeXzZ8RMTq9UXaZF514rYjhkALhBPZh//eg3CdVYoD
-         sDDShdi+8y6B/+2XvFQHvkJP4AyFxtpr1Wpp+YEymFNole9yPq8mWDQoEo2dZJ0+8PEY
-         p4ayoD9o/wofATVFsQeMUNH2yNnSPfZqRQTwK7fmnyLjmL1O8g3m1SymuPfIlS1ae7d6
-         KlIampzTO1eXgcl9QqAkTW4Q3njVKtnTadDUUhwiTF7CPE5yx1JgyREVP2ueLR2R+NCL
-         zAJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684336200; x=1686928200;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RbHR3p/aSwGiwoZdp2CXqzfCqmJLbldvSD60wsj1Fzs=;
-        b=D45EqTWkh863VhYWGpsu2+VHKeQNxmiflzHIvnsLSDrheXVNj8sgFmSj3jqE00XCcb
-         bGfGrfkTIiS8OmgTiLWnDgs8CodCDhYmSmoV4CJZ9hLmJP599SqNiwKRwJdr5rj0KScV
-         9gNVvVL4tQU/R+2XGNyKltXzAAGs2UrHnU5d1uSMnv6Xp0OYhRPTIr8KI85897z9DPR/
-         18jQoHFBL8mPrYfvG3aIxvP4GmgSaEjp2xTSegDFVSYQoDaUfJTkx6Iz2NVsR0HZrl/2
-         alHAe3FmF1i58f1+K+jLmhqxBzB6nNbCxzqirA+xWy/n23TvJygYCLAjucI6U3/PORMZ
-         RvnA==
-X-Gm-Message-State: AC+VfDy+nCXjg8HTtaH0D2pvurovIUE4QEmt7VRfa2hpqThZ/JPoy9Tp
-        TU5P0exifsRyBncM9HhRuCk=
-X-Google-Smtp-Source: ACHHUZ4sorPC+/RpGxDAM+RiswTD01mb/F0FjwwmcxR8Y5NPGoupZIgsSlQwp8ACSQZXGcUniFMyXg==
-X-Received: by 2002:a17:907:948e:b0:96a:ec5c:685b with SMTP id dm14-20020a170907948e00b0096aec5c685bmr12951001ejc.29.1684336199815;
-        Wed, 17 May 2023 08:09:59 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id e26-20020a170906845a00b00965cd15c9bbsm12413901ejy.62.2023.05.17.08.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 08:09:59 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        Charlemagne Lasse <charlemagnelasse@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH] locking/arch: Avoid variable shadowing in local_try_cmpxchg()
-Date:   Wed, 17 May 2023 17:09:40 +0200
-Message-Id: <20230517150940.172430-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 17 May 2023 11:10:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C81987;
+        Wed, 17 May 2023 08:10:13 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 81954660588A;
+        Wed, 17 May 2023 16:10:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684336212;
+        bh=BrW8utkPJOxoIND7izOm/XEslPXwZWFXJRck8b/4gfM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FuRybqK3UvoHRJVoF0gtJq7kqiuCcsKekfjjhb5FSLWjBNJklmmij6wRSym/gTVSd
+         PeUmkXloGmT8DMC7ypKNSwpPCi7HwtIsTfb5dDltnzn7XyId5bDAHyBsuq99dbKbaO
+         qV2acIPdh7HYFcfPWTHkypsPGJEgiqHDkL/41RfQYK3JvWfyc3bM/eqAEChYLWPkUK
+         e3xuHQXJ9jR9m+sngBhcfi4FCD0PuoDq5/oqFLOmikXaNrbDjoHuuBLeYPTDFrkxOJ
+         0mRHrdJiPmYhd52jCx+gvylcbI/CezvomXKablFTISBJWRzIu6KZ9eO8GooGD38j+K
+         u5x+MqDbpHy1w==
+Message-ID: <aee5f540-4f8b-f087-57d4-bfdafa4a0568@collabora.com>
+Date:   Wed, 17 May 2023 17:10:08 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 2/5] ASoC: mediatek: mt8188-mt6359: register hdmi/dp jack
+ pins
+Content-Language: en-US
+To:     =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20230517111534.32630-1-trevor.wu@mediatek.com>
+ <20230517111534.32630-3-trevor.wu@mediatek.com>
+ <154497b3-f5c7-45d6-edd5-729642b80be5@collabora.com>
+ <9685a64561fc90d592481ae5e95d1e849fe3c55b.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <9685a64561fc90d592481ae5e95d1e849fe3c55b.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several architectures define arch_try_local_cmpxchg macro using
-internal temporary variables named __old or _old. Uglify equally
-named variable in local_try_cmpxchg() with additional underscore
-to avoid variable shadowing warning.
+Il 17/05/23 14:10, Trevor Wu (吳文良) ha scritto:
+> On Wed, 2023-05-17 at 13:31 +0200, AngeloGioacchino Del Regno wrote:
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>>
+>>
+>> Il 17/05/23 13:15, Trevor Wu ha scritto:
+>>> Some userspace applications need jack control events, so register
+>>> hdmi
+>>> and dp jack pins to activate jack control events.
+>>>
+>>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+>>> ---
+>>>    sound/soc/mediatek/mt8188/mt8188-mt6359.c | 27
+>>> +++++++++++++++++++----
+>>>    1 file changed, 23 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+>>> b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+>>> index 833bc362dad2..6c3f36e2fffd 100644
+>>> --- a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+>>> +++ b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+>>> @@ -151,6 +151,20 @@ struct mt8188_mt6359_priv {
+>>>        struct snd_soc_jack hdmi_jack;
+>>>    };
+>>>
+>>> +static struct snd_soc_jack_pin mt8188_hdmi_jack_pins[] = {
+>>> +     {
+>>> +             .pin = "HDMI",
+>>
+>> "HDMI Jack" is more consistent with the snd_soc_jack_new_pins() call
+>> performed
+>> later.
+> 
+> Hi Angelo,
+> 
+> I see jack_kctl_name_gen() will append "Jack" to the name if I don't
+> name the pin "HDMI Jack". Do you mean that I could directly use "HDMI
+> Jack" because ALSA uses the name finally?
+> 
 
-Fixes: d994f2c8e241 ("locking/arch: Wire up local_try_cmpxchg()")
-Reported-by: Charlemagne Lasse <charlemagnelasse@gmail.com>
-Closes: https://lore.kernel.org/lkml/CAFGhKbyxtuk=LoW-E3yLXgcmR93m+Dfo5-u9oQA_YC5Fcy_t9g@mail.gmail.com/
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Jun Yi <yijun@loongson.cn>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
----
- arch/loongarch/include/asm/local.h | 4 ++--
- arch/mips/include/asm/local.h      | 4 ++--
- arch/x86/include/asm/local.h       | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+You're right and I just checked; the comment even says
+'remove redundant " Jack" from src_name'
 
-diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
-index 83e995b30e47..4c6e4ed23433 100644
---- a/arch/loongarch/include/asm/local.h
-+++ b/arch/loongarch/include/asm/local.h
-@@ -63,8 +63,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
- 
- static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
- {
--	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
--	return try_cmpxchg_local(&l->a.counter, __old, new);
-+	typeof(l->a.counter) *___old = (typeof(l->a.counter) *) old;
-+	return try_cmpxchg_local(&l->a.counter, ___old, new);
- }
- 
- #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
-diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
-index 5daf6fe8e3e9..de276e2ebb64 100644
---- a/arch/mips/include/asm/local.h
-+++ b/arch/mips/include/asm/local.h
-@@ -101,8 +101,8 @@ static __inline__ long local_cmpxchg(local_t *l, long old, long new)
- 
- static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
- {
--	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
--	return try_cmpxchg_local(&l->a.counter, __old, new);
-+	typeof(l->a.counter) *___old = (typeof(l->a.counter) *) old;
-+	return try_cmpxchg_local(&l->a.counter, ___old, new);
- }
- 
- #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
-diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
-index 56d4ef604b91..36cf5ca83ccb 100644
---- a/arch/x86/include/asm/local.h
-+++ b/arch/x86/include/asm/local.h
-@@ -127,8 +127,8 @@ static inline long local_cmpxchg(local_t *l, long old, long new)
- 
- static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
- {
--	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
--	return try_cmpxchg_local(&l->a.counter, __old, new);
-+	typeof(l->a.counter) *___old = (typeof(l->a.counter) *) old;
-+	return try_cmpxchg_local(&l->a.counter, ___old, new);
- }
- 
- /* Always has a lock prefix */
--- 
-2.40.1
+So yes, the current names are fine. Sorry about that.
+
+Regards,
+Angelo
 
