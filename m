@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3C1705FAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19AF5705FB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjEQF7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 01:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S232012AbjEQGAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 02:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbjEQF7B (ORCPT
+        with ESMTP id S229661AbjEQGAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 01:59:01 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 230FC2D67;
-        Tue, 16 May 2023 22:58:52 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 3DE4F8164;
-        Wed, 17 May 2023 05:58:51 +0000 (UTC)
-Date:   Wed, 17 May 2023 08:58:50 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc:     Arnd Bergmann <arnd@kernel.org>, soc@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 07/13] ARM: omap1: add missing include
-Message-ID: <20230517055850.GL14287@atomide.com>
-References: <20230516153109.514251-1-arnd@kernel.org>
- <20230516153109.514251-8-arnd@kernel.org>
- <20230516231821.GC271152@darkstar.musicnaut.iki.fi>
+        Wed, 17 May 2023 02:00:45 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156D126A1;
+        Tue, 16 May 2023 23:00:44 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id C43D85C01C7;
+        Wed, 17 May 2023 02:00:40 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 17 May 2023 02:00:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684303240; x=1684389640; bh=b+5PKyknPkYcK
+        IktJykWfMQ2ZNruWkKZ/Da362HiLq4=; b=Jtvf/z12zJDb6on6nsKKmmBiKQYCU
+        nNU9ppaj1CPOFF4USYlfmYG2VIyCjx9n9SPkDAsyvWdf3GuoZYlFd4ySoCdz5lSB
+        aICT6PEKjh6dXBl+bneqo8pSd8ZRdp2f9x32vDzznGfMWRpLC3b9HhacFHIP9JRZ
+        3md7AXmLUmFK1O5HQ+D6f9kGAeTLOHNIojTwWhX02X1jlnJDrNDLL4JOgzop27tw
+        gJDSldHJdaQrbsM7D4bThzx42CHUeZmQk8Wupqy9FNXNqrGntcm0wroJ50g8basa
+        TSrIn2cmHALT1tmeC3DDCWepN3PvgEeUXHwLk3oDCrrxBOeBHPcqjVNmQ==
+X-ME-Sender: <xms:iG1kZH0Tnbe-77abz2dcGS08XOkF1iAQ_HE_DzPkk6gnd2oer3MAVw>
+    <xme:iG1kZGG2lfIcuD4Mufj7JG37MUrej7Dyd4wZ0n_0vpYBO7CBoYunITJzoP999vLan
+    VonVD5AqylvuHg>
+X-ME-Received: <xmr:iG1kZH4lZgJVly8P1GOnoyW44UtDlk2vwqUhYaSVzyn7PstjCD0XYGywaGKPV_ux_7gME_fq98cwUFqbFX4b36j8M4g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeitddgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihgu
+    ohhstghhrdhorhhgqeenucggtffrrghtthgvrhhnpeehhfdtjedviefffeduuddvffegte
+    eiieeguefgudffvdfftdefheeijedthfejkeenucffohhmrghinhepkhgvrhhnvghlrdho
+    rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:iG1kZM2WOORpdKZxsXNPo9pfToo8xX2JNm4ctTnAs3I6sM2DxWd0YA>
+    <xmx:iG1kZKEn1AoBp0yjNFts8kaiUUioIhJIfAShWugx_siDtJ540XscSw>
+    <xmx:iG1kZN8hQt-ycQo4TwNFPdr4WPS5RWjC6DfVf7VXChki9YcERGPJ5g>
+    <xmx:iG1kZN2azbljODst3GA4GACfvpbSRXSop0xNU-6sQeJk3USPMH5CPA>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 17 May 2023 02:00:39 -0400 (EDT)
+Date:   Wed, 17 May 2023 09:00:37 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, dsahern@gmail.com, shuah@kernel.org,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net
+Subject: Re: [PATCH] selftests: fib_tests: mute cleanup error message
+Message-ID: <ZGRthdt5u88zs6xy@shredder>
+References: <20230517041119.202072-1-po-hsu.lin@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230516231821.GC271152@darkstar.musicnaut.iki.fi>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20230517041119.202072-1-po-hsu.lin@canonical.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,17 +75,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Aaro Koskinen <aaro.koskinen@iki.fi> [230516 23:18]:
-> On Tue, May 16, 2023 at 05:31:03PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The omap_serial_wakeup_init() declaration is not visible where it is
-> > defined, so make sure "common.h" is included here, avoiding:
-> > 
-> > arch/arm/mach-omap1/serial.c:221:12: error: no previous prototype for 'omap_serial_wakeup_init' [-Werror=missing-prototypes]
-> > 
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, May 17, 2023 at 12:11:19PM +0800, Po-Hsu Lin wrote:
+> In the end of the test, there will be an error message induced by the
+> `ip netns del ns1` command in cleanup()
 > 
-> Acked-by: Aaro Koskinen <aaro.koskinen@iki.fi>
+>   Tests passed: 201
+>   Tests failed:   0
+>   Cannot remove namespace file "/run/netns/ns1": No such file or directory
+> 
+> Redirect the error message to /dev/null to mute it.
+> 
+> Fixes: a0e11da78f48 ("fib_tests: Add tests for metrics on routes")
 
-Acked-by: Tony Lindgren <tony@atomide.com>
+I don't think this tag is correct. More likely that this is caused by
+commit b60417a9f2b8 ("selftest: fib_tests: Always cleanup before exit").
+
+You can even reproduce it with '-h':
+
+# ./fib_tests.sh -h
+usage: fib_tests.sh OPTS
+[...]
+Cannot remove namespace file "/var/run/netns/ns1": No such file or directory
+
+Reverting the commit I mentioned makes it go away.
+
+Also, please use "PATCH net" prefix:
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#tl-dr
