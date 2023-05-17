@@ -2,124 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A93E70670B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC0570670C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjEQLoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S231314AbjEQLpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbjEQLoe (ORCPT
+        with ESMTP id S229670AbjEQLpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:44:34 -0400
-Received: from out-52.mta1.migadu.com (out-52.mta1.migadu.com [95.215.58.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AC8526A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:44:31 -0700 (PDT)
-Date:   Wed, 17 May 2023 19:44:25 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684323869;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RegapNMmBRLNA96VPuIn7tHsjnNMlPNK377aEwnN62o=;
-        b=Mgk2CvWl0v3IXJRZ6SMhHReIo64SfJOYgVCY5vOhiahiPJZ2fyMk7abL+Kn0A/J7R+agKx
-        lsLxBsW1m1Lf7M3C0zPSxGWexXOqE9nje/qyfVuTomtB1uy9r7/zkmlQFj5yufVKIXjPix
-        DD2UTDQUulxm4cYihsFjbzKNK8BHng8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     manivannan.sadhasivam@linaro.org, vkoul@kernel.org
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v10 0/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <ZGS+GQ+Y7vLa4pFH@chq-MS-7D45>
-References: <20230517030115.21093-1-cai.huoqing@linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230517030115.21093-1-cai.huoqing@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 07:45:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E343C34
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:45:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A01B263B98
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 11:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B089C433EF;
+        Wed, 17 May 2023 11:45:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684323909;
+        bh=Pl/3iCxyHHtJe5w8z06rafMQpXhqLtwHhZd4a25cO1E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jJcKmLbxnxaiy0gZcDfQuxkJy5jpWO52wFlj3ysLl1alj2xeA1ex3feK/RjEbOYKN
+         MRegVfZwk2NnSyvkweT3LRH7cDXFNDlnYqJyYlvzY2por9kJ4PaIANYN8nUT8xWvgX
+         C2gRuZ9am56/l/TF+TJgHh/tTyWu0x0ypQ++dbvXzhsIgLSUVnrgHMZqZ5Q2HDoRRB
+         kCA20nZ04Zw+Six0P2v5VM2p0Yyw/Zleoq/fW+LjA3CJVGHO8FmA18piUZdF1mawZc
+         o3POh2DVn48I1JclrqZmQn3S/d3HhiNLyWR7rGDDiL6j7Fyx+bW9rR1mbPDGv0goRR
+         BtYL9J9N/Ytlw==
+Date:   Wed, 17 May 2023 20:45:05 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: Re: kernel/trace/fprobe.c:59 fprobe_handler() error: uninitialized
+ symbol 'ret'.
+Message-Id: <20230517204505.f6411ff8ed3f782ae23e1af9@kernel.org>
+In-Reply-To: <d3467332-3d5f-488a-b156-064cbd3d7873@kili.mountain>
+References: <d3467332-3d5f-488a-b156-064cbd3d7873@kili.mountain>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17 5月 23 11:01:10, Cai Huoqing wrote:
-> Add support for HDMA NATIVE, as long the IP design has set
-> the compatible register map parameter-HDMA_NATIVE,
-> which allows compatibility for native HDMA register configuration.
-> 
-> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> And the native HDMA registers are different from eDMA,
-> so this patch add support for HDMA NATIVE mode.
-> 
-> HDMA write and read channels operate independently to maximize
-> the performance of the HDMA read and write data transfer over
-> the link When you configure the HDMA with multiple read channels,
-> then it uses a round robin (RR) arbitration scheme to select
-> the next read channel to be serviced.The same applies when
-> youhave multiple write channels.
-> 
-> The native HDMA driver also supports a maximum of 16 independent
-> channels (8 write + 8 read), which can run simultaneously.
-> Both SAR (Source Address Register) and DAR (Destination Address Register)
-> are aligned to byte.
+Hi Dan,
 
-+ Manivannan Sadhasivam
+Sorry, I missed my fix :(
 
+https://lore.kernel.org/all/168100731160.79534.374827110083836722.stgit@devnote2/
+
+That will fix the problem, could you test it?
+
+Thanks,
+
+On Mon, 8 May 2023 08:17:09 +0300
+Dan Carpenter <dan.carpenter@linaro.org> wrote:
+
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   2e1e1337881b0e9844d687982aa54b31b1269b11
+> commit: 39d954200bf6ad503c722e44d0be80c7b826fa42 fprobe: Skip exit_handler if entry_handler returns !0
+> config: i386-randconfig-m041-20230501 (https://download.01.org/0day-ci/archive/20230506/202305061702.6h3JzCPA-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
 > 
-> Cai Huoqing (1):
->   dmaengine: dw-edma: Add support for native HDMA
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <error27@gmail.com>
+> | Link: https://lore.kernel.org/r/202305061702.6h3JzCPA-lkp@intel.com/
 > 
-> Cai huoqing (3):
->   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
->     dw_edma_plat_ops
->   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
->     abstract controller operation
->   dmaengine: dw-edma: Add HDMA DebugFS support
+> smatch warnings:
+> kernel/trace/fprobe.c:59 fprobe_handler() error: uninitialized symbol 'ret'.
 > 
-> Tested-by: Serge Semin <fancer.lancer@gmail.com>
+> vim +/ret +59 kernel/trace/fprobe.c
 > 
-> v9->v10:
->   1.Update commit log.
->   2.rebase for dma-next
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  23  static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  24  			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  25  {
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  26  	struct fprobe_rethook_node *fpr;
+> 76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  27) 	struct rethook_node *rh = NULL;
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  28  	struct fprobe *fp;
+> 76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  29) 	void *entry_data = NULL;
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  30) 	int bit, ret;
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  31  
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  32  	fp = container_of(ops, struct fprobe, ops);
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  33  	if (fprobe_disabled(fp))
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  34  		return;
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  35  
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  36  	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  37  	if (bit < 0) {
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  38  		fp->nmissed++;
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  39  		return;
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  40  	}
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  41  
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  42  	if (fp->exit_handler) {
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  43  		rh = rethook_try_get(fp->rethook);
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  44  		if (!rh) {
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  45  			fp->nmissed++;
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  46  			goto out;
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  47  		}
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  48  		fpr = container_of(rh, struct fprobe_rethook_node, node);
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  49  		fpr->entry_ip = ip;
+> 76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  50) 		if (fp->entry_data_size)
+> 76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  51) 			entry_data = fpr->data;
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  52  	}
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  53  
+> 76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  54) 	if (fp->entry_handler)
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  55) 		ret = fp->entry_handler(fp, ip, ftrace_get_regs(fregs), entry_data);
+> 76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  56) 
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  57) 	/* If entry_handler returns !0, nmissed is not counted. */
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  58) 	if (rh) {
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02 @59) 		if (ret)
 > 
-> v9 link:
->   https://lore.kernel.org/lkml/20230413033156.93751-1-cai.huoqing@linux.dev/
+> I reported this one earlier.  The code assumes that if there is an
+> -exit_handler there is also an ->entry_handler().  You had said you
+> would just initialized ret = 0;
 > 
->  drivers/dma/dw-edma/Makefile                 |   8 +-
->  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
->  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
->  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
->  drivers/dma/dw-edma/dw-edma-v0-core.c        |  85 +++++-
->  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
->  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 296 +++++++++++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 170 +++++++++++
->  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
->  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 129 ++++++++
->  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
->  include/linux/dma/edma.h                     |   7 +-
->  13 files changed, 807 insertions(+), 91 deletions(-)
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
->  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  60) 			rethook_recycle(rh);
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  61) 		else
+> 76d0de5729c056 Masami Hiramatsu (Google  2023-02-02  62) 			rethook_hook(rh, ftrace_get_regs(fregs), true);
+> 39d954200bf6ad Masami Hiramatsu (Google  2023-02-02  63) 	}
+> 5b0ab78998e325 Masami Hiramatsu          2022-03-15  64  out:
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  65  	ftrace_test_recursion_unlock(bit);
+> cad9931f64dc7f Masami Hiramatsu          2022-03-15  66  }
 > 
 > -- 
-> 2.34.1
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
 > 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
