@@ -2,48 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E925370629B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E4670629F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjEQIRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
+        id S230083AbjEQITU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjEQIRr (ORCPT
+        with ESMTP id S229895AbjEQITS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:17:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91573139;
-        Wed, 17 May 2023 01:17:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBEA81FB;
-        Wed, 17 May 2023 01:18:28 -0700 (PDT)
-Received: from [10.34.100.110] (e126645.nice.arm.com [10.34.100.110])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15C713F663;
-        Wed, 17 May 2023 01:17:41 -0700 (PDT)
-Message-ID: <a1075da1-4ff1-4a8b-2902-3954db717ded@arm.com>
-Date:   Wed, 17 May 2023 10:17:37 +0200
+        Wed, 17 May 2023 04:19:18 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FE410EF;
+        Wed, 17 May 2023 01:19:17 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-51f6461af24so277597a12.2;
+        Wed, 17 May 2023 01:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684311557; x=1686903557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TEV6UskM3XbK5S9GbqWMhXe1iQQdPul0K2M1kn2nZ4I=;
+        b=Y1z8PDrYZDsAaoYM5lQ2pYjq2SlJP3HjVolaOCncqewUNxeGPpKOeBhbwWtmERGhSl
+         Rc4CwdzG/r7bznAzp6ztkdTSW2nWQsI538E2tS9GmCr+0GM1c3xDHgdXZghRBYUxbvzm
+         3c2bfG+Olm4kZynh2LdeXhrzYbnIcNHYhHOOJzSzX2SNKG9UgaNYBDeuycEoA0EWYcsf
+         kqC5gUbtFKGx/yzfKdV4VKjwb5hIX992Fb+ZsFn5v7FFdi2nD3eNh4f5Hi9Th1BdCP5Q
+         /K3wREKF1SYUfsxK4IeWOW3Y1c22ZNRT5q2yRMcqYBNmCtNV05d7FRzW/6Dq8lQQQaw8
+         rjBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684311557; x=1686903557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TEV6UskM3XbK5S9GbqWMhXe1iQQdPul0K2M1kn2nZ4I=;
+        b=Cr6vqXWux+18oDRmtio4NrV++KOBeGUdd1564bYr9GIdfWhuv5sIuNrxJvKKBaiJBk
+         RaxTKHE8QWORYYegN5aIIfjOeGRFnNBSgXZe78PvK7J2aPMsnD90cSdtlulJlz9mcBYN
+         vJcFnT9mY5Bop7mOLiMiVQJI773CdqH2cCTZux3lrVCkMG4F3YhmLbVdSJWsWe4F0WOe
+         IhvX4+ZYQPYyG7HI1ZvAO7K+XQAMzKU+9XdSIZ/ZnVA3izAUOhfYCfWfDMUaHZVopQ6A
+         1Bhqn3c2pl2R43zbWKXordlyf8gREG67tGbTzdi6EXg9RDs48GeVuV5cPK5kzSI2mSCt
+         6/5w==
+X-Gm-Message-State: AC+VfDzm2b1m2+JgBBFgnSi6jr1m3ufI5rnHcx3FcipteeRG/Rftg0tf
+        z0Wj+UoKbESjnRZGR1KFT10=
+X-Google-Smtp-Source: ACHHUZ4G4fk5rt0WdvD2RK98Kt1wKOayGB7abc1lBmKmpZ/TkZxJGEImsp44tUcaOm1qesS3ln/8rg==
+X-Received: by 2002:a05:6a20:8e0c:b0:106:dfc8:6f4e with SMTP id y12-20020a056a208e0c00b00106dfc86f4emr6857291pzj.32.1684311556717;
+        Wed, 17 May 2023 01:19:16 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id w25-20020aa78599000000b00649281e2f03sm11172261pfn.141.2023.05.17.01.19.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 01:19:16 -0700 (PDT)
+Message-ID: <7d3371ce-de5a-11b2-964e-9be122da2cde@gmail.com>
+Date:   Wed, 17 May 2023 16:19:03 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] cpufreq: CPPC: keep target core awake when reading
- its cpufreq rate
-Content-Language: en-US
-To:     Zeng Heng <zengheng4@huawei.com>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        wangxiongfeng2@huawei.com, xiexiuqi@huawei.com,
-        liwei391@huawei.com, linux-acpi@vger.kernel.org,
-        weiyongjun1@huawei.com, lenb@kernel.org, viresh.kumar@linaro.org,
-        rafael@kernel.org, sumitg@nvidia.com,
-        Yang Shi <yang@os.amperecomputing.com>
-References: <20230516133248.712242-1-zengheng4@huawei.com>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20230516133248.712242-1-zengheng4@huawei.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [EXTERNAL] [RFC PATCH V6 13/14] x86/hyperv: Add smp support for
+ sev-snp guest
+To:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "pangupta@amd.com" <pangupta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-14-ltykernel@gmail.com>
+ <PUZP153MB074906CBC3E7B13AEFD17472BE799@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <PUZP153MB074906CBC3E7B13AEFD17472BE799@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,100 +113,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Ionela, Sumit, Yang,
-
-Hello Zeng,
-
-I think solutions around related issues were suggested at:
-
-[1] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
-[2] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
-[3] https://lore.kernel.org/all/ZEl1Fms%2FJmdEZsVn@arm.com/
-
-About this patch, it seems to mean that CPPC counters of CPUx are always
-accessed from CPUx, even when they are not AMUs. For instance CPPC
-counters could be memory mapped and accessible from any CPU.
-cpu_has_amu_feat() should allow to probe if a CPU uses AMUs or not,
-and [2] had an implementation using it.
-
-Another comment about PATCH 2/2 is that if the counters are accessed
-through FFH, arm64 version of cpc_read_ffh() is calling
-counters_read_on_cpu(), and a comment in counters_read_on_cpu() seems
-to specify the function must be called with interrupt enabled.
-
-I think the best solution so far was the one at [3], suggested by Ionela,
-but it doesn't seem to solve your issue. Indeed, it is not checked whether
-the counters are AMU counters and that they must be remotely read (to
-have the CPU awake),
-
-Regards,
-Pierre
-
-
-On 5/16/23 15:32, Zeng Heng wrote:
-> As ARM AMU's document says, all counters are subject to any changes
-> in clock frequency, including clock stopping caused by the WFI and WFE
-> instructions.
+On 5/16/2023 1:16 PM, Saurabh Singh Sengar wrote:
+>> +		(struct hv_enable_vp_vtl *)ap_start_input_arg;
+>> +	memset(start_vp_input, 0, sizeof(*start_vp_input));
+>> +	start_vp_input->partition_id = -1;
+>> +	start_vp_input->vp_index = cpu;
+>> +	start_vp_input->target_vtl.target_vtl = ms_hyperv.vtl;
+>> +	*(u64 *)&start_vp_input->vp_context = __pa(vmsa) | 1;
+>> +
+>> +	do {
+>> +		ret = hv_do_hypercall(HVCALL_START_VP,
+>> +				      start_vp_input, NULL);
+>> +	} while (hv_result(ret) == HV_STATUS_TIME_OUT && retry--);
+> can we restore local_irq here ?
 > 
-> Therefore, using smp_call_on_cpu() to trigger target CPU to
-> read self's AMU counters, which ensures the counters are working
-> properly during calculation.
+>> +
+>> +	if (!hv_result_success(ret)) {
+>> +		pr_err("HvCallStartVirtualProcessor failed: %llx\n", ret);
+>> +		goto done;
+> No need of goto here.
 > 
-> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
-> ---
->   drivers/cpufreq/cppc_cpufreq.c | 30 +++++++++++++++++++-----------
->   1 file changed, 19 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 022e3555407c..910167f58bb3 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -837,9 +837,24 @@ static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
->   	return (reference_perf * delta_delivered) / delta_reference;
->   }
->   
-> +static int cppc_get_perf_ctrs_smp(void *val)
-> +{
-> +	int cpu = smp_processor_id();
-> +	struct cppc_perf_fb_ctrs *fb_ctrs = val;
-> +	int ret;
-> +
-> +	ret = cppc_get_perf_ctrs(cpu, fb_ctrs);
-> +	if (ret)
-> +		return ret;
-> +
-> +	udelay(2); /* 2usec delay between sampling */
-> +
-> +	return cppc_get_perf_ctrs(cpu, fb_ctrs + 1);
-> +}
-> +
->   static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->   {
-> -	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
-> +	struct cppc_perf_fb_ctrs fb_ctrs[2] = {0};
->   	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
->   	struct cppc_cpudata *cpu_data = policy->driver_data;
->   	u64 delivered_perf;
-> @@ -847,19 +862,12 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
->   
->   	cpufreq_cpu_put(policy);
->   
-> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t0);
-> -	if (ret)
-> -		return ret;
-> -
-> -	udelay(2); /* 2usec delay between sampling */
-> -
-> -	ret = cppc_get_perf_ctrs(cpu, &fb_ctrs_t1);
-> +	ret = smp_call_on_cpu(cpu, cppc_get_perf_ctrs_smp, fb_ctrs, 1);
->   	if (ret)
->   		return ret;
->   
-> -	delivered_perf = cppc_perf_from_fbctrs(cpu_data, &fb_ctrs_t0,
-> -					       &fb_ctrs_t1);
-> -
-> +	delivered_perf = cppc_perf_from_fbctrs(cpu_data, fb_ctrs,
-> +					       fb_ctrs + 1);
->   	return cppc_cpufreq_perf_to_khz(cpu_data, delivered_perf);
->   }
->   
+
+Nice catch. The goto label should be removed here. Will update in the 
+next version.
