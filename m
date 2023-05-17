@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFD7705CB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B80705CC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbjEQB6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 21:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S231704AbjEQCAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231517AbjEQB6I (ORCPT
+        with ESMTP id S230436AbjEQCAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 21:58:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D5B40C2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 18:58:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC06E63F1E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:58:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C58C433EF;
-        Wed, 17 May 2023 01:58:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684288686;
-        bh=iZPh21wWGEBlWp0JhELY/nnSc0qMTktgaIMhNOa939Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lccZN5Z72cMdKzTCsD8HEpTEg348OV+fYQvFpY+yBaJW9dd0IRieqEZXcaK5E9hV4
-         NNzHD2l+2ZuMwY1ibFhGmgv07BeKp+LSZrGZmcGIiUt/kaGa0mdjYMWv/syN8MWvXI
-         ioYoGte6fx/AJhwCFQeJfH/PketNR2dOxJdG/wcWZhJj3cMjP1lgZIN/BcvH+GSm3i
-         N9sGY8fyiJFB5kW7IknjlGsVJMDe4PqKJmEGZFbbyp9P1V+YSS1DvM2aZZXJ+uMwNv
-         BLiLEi6UsikOXuPwCjL8r6lBX+PEt+E5Uhjuxt03FWkZCpRSj0FPKHM7yvgXFe4oad
-         508O7ZlYAhhgw==
-Message-ID: <2c8e3028-ea3c-d751-1ee6-74b1aca14992@kernel.org>
-Date:   Wed, 17 May 2023 09:58:04 +0800
+        Tue, 16 May 2023 22:00:33 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D865A49C1;
+        Tue, 16 May 2023 19:00:26 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bcb4a81ceso339780a12.2;
+        Tue, 16 May 2023 19:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684288825; x=1686880825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HKuJtUgRGoAveoB6dPRcY53BxMHmJW4YivLP7XJy1Ow=;
+        b=oEJH3YQ6WJ1R0OeRcB1/RwAm81/CWoDJLhbS/+eBIUbEEgBfrBcwY4jg02JHw4xZGl
+         2IJfYYQjgXKHbc1Ai3f81W4K9sTZCQAO+WSkEMbI1vQD/TyYDVSLtlwqQEy19TIbmi/y
+         IJ/MxVA0NVWR4uhCrNUVK513twP+NIU3bPu/zGrg+ZsRCsm7yAAOOVkPR5qvMvkucsXm
+         jG7Ood62c+ARTTr3hKMnTWA2o7RoVGHzT3y2QwOE9VPCWREMHlmxAO/DDiyFMJFJMxB6
+         q/w0HkiATVBsVpcbCZDmPe++RtEEFQXqwUBKisYQhi+wnYe9t+yadRw0fyTFkZO2Zd2M
+         nQ0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684288825; x=1686880825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HKuJtUgRGoAveoB6dPRcY53BxMHmJW4YivLP7XJy1Ow=;
+        b=VPi+8BxDzwZ3NUcno3hAt7y7XRmk8puKqtDUW0s0v5cvp9SSlxaq/bX/c6R+oGZnzL
+         DUWhNPpsLVqOMQExHcLKeBoqgKCc34dodv52FyzephKw+MYKE8zynKeQArcYGgGO54Y4
+         9M2zjlWi78AXAPwvZTtb4cGWk0+j+YUZAIwRXHMlNamudgGsyhrI1xMxlVYYgMoPjBnp
+         06htJ9aQOeRb3rQDn3TSnzKuzSxg9mwTzMSei3/epgPVCu4cxKsukHnSJPs7XiDW/2Rx
+         o8x26cLymIF1JMBZUEL/nI9No2GUI4D1h2YqO7rCc4PGCc1ctleOmgcWuPpd9oOh1Vmq
+         peEg==
+X-Gm-Message-State: AC+VfDwiavPPvboqUU1lv/blJ3LtnMotcyMoK8OJaP2sqX7mCBxJC8Bs
+        REizXsSX5GsP3tN37oWVmh7I2Zi8AfesdMqGDs4=
+X-Google-Smtp-Source: ACHHUZ5ODPhwCTAYdcAaNc6Khvr+LCB4zW0u1dxcHa+DA93pmjpNLl78rK2aOOMj6HEyRyZD4FRw1jZuCyKZ5xevtzQ=
+X-Received: by 2002:a50:fb87:0:b0:50b:c72a:2b26 with SMTP id
+ e7-20020a50fb87000000b0050bc72a2b26mr857161edq.9.1684288824921; Tue, 16 May
+ 2023 19:00:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] f2fs: move the conditional statement after holding
- the inode lock in f2fs_move_file_range()
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-References: <20230506144257.9611-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230506144257.9611-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230516071830.8190-1-zegao@tencent.com> <20230516071830.8190-5-zegao@tencent.com>
+ <20230516102006.76dfd68a@gandalf.local.home>
+In-Reply-To: <20230516102006.76dfd68a@gandalf.local.home>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Wed, 17 May 2023 10:00:13 +0800
+Message-ID: <CAD8CoPA=VQOnnZujzH7n3X1t=PpoduB20vM0KQh8aPubySzCzw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] rehook, fprobe: do not trace rethook related functions
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Ze Gao <zegao@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/6 22:42, Yangtao Li wrote:
-> For judging the inode flag state, the inode lock must be held.
-> BTW, add compressd file check and to avoid 'if' nesting.
+Got it!  Thank you, Steevn.  Maybe I can give it a try later :)
 
-Please describe what's the detail problem if we check the flag w/o inode
-lock.
+Regards,
+Ze
 
-Can we use one single patch to fix all similar issues?
-
-Thanks,
-
-> 
-> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Fixes: 4dd6f977fc77 ("f2fs: support an ioctl to move a range of data blocks")
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> v2:
-> -add unlock
->   fs/f2fs/file.c | 18 ++++++++++++------
->   1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index 78aa8cff4b41..42a9b683118c 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -2790,9 +2790,6 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
->   	if (!S_ISREG(src->i_mode) || !S_ISREG(dst->i_mode))
->   		return -EINVAL;
->   
-> -	if (IS_ENCRYPTED(src) || IS_ENCRYPTED(dst))
-> -		return -EOPNOTSUPP;
-> -
->   	if (pos_out < 0 || pos_in < 0)
->   		return -EINVAL;
->   
-> @@ -2804,10 +2801,19 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
->   	}
->   
->   	inode_lock(src);
-> -	if (src != dst) {
-> +	if (src != dst && !inode_trylock(dst)) {
->   		ret = -EBUSY;
-> -		if (!inode_trylock(dst))
-> -			goto out;
-> +		goto out;
-> +	}
-> +
-> +	if (IS_ENCRYPTED(src) || IS_ENCRYPTED(dst)) {
-> +		ret = -EOPNOTSUPP;
-> +		goto out_unlock;
-> +	}
-> +
-> +	if (f2fs_compressed_file(src) || f2fs_compressed_file(dst)) {
-> +		ret = -EOPNOTSUPP;
-> +		goto out_unlock;
->   	}
->   
->   	ret = -EINVAL;
+On Tue, May 16, 2023 at 10:20=E2=80=AFPM Steven Rostedt <rostedt@goodmis.or=
+g> wrote:
+>
+> On Tue, 16 May 2023 15:18:30 +0800
+> Ze Gao <zegao2021@gmail.com> wrote:
+>
+> >  CFLAGS_REMOVE_early.o                =3D $(CC_FLAGS_FTRACE)
+> > +CFLAGS_REMOVE_rethook.o              =3D $(CC_FLAGS_FTRACE)
+> >
+> >  endif
+> >
+> > diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+> > index dd61752f4c96..4070a01c11b7 100644
+> > --- a/arch/x86/kernel/Makefile
+> > +++ b/arch/x86/kernel/Makefile
+> > @@ -17,6 +17,7 @@ CFLAGS_REMOVE_ftrace.o =3D -pg
+> >  CFLAGS_REMOVE_early_printk.o =3D -pg
+> >  CFLAGS_REMOVE_head64.o =3D -pg
+> >  CFLAGS_REMOVE_sev.o =3D -pg
+> > +CFLAGS_REMOVE_rethook.o =3D -pg
+>
+> Unrelated to this patch, but someday we need to change the -pg above to
+> $(CC_FLAGS_FTRACE).
+>
+> -- Steve
+>
+>
+> >  endif
+> >
+> >  KASAN_SANITIZE_head$(BITS).o                         :=3D n
+> > --
