@@ -2,200 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D36705CFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB03705D01
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjEQCQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
+        id S231440AbjEQCR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjEQCQG (ORCPT
+        with ESMTP id S231264AbjEQCRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:16:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395D459CA;
-        Tue, 16 May 2023 19:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684289734; x=1715825734;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=jSz0Axee3NHwqz1qYu49luKzlDJPIa0b+M3/N0g0OWM=;
-  b=kULb2J7j7bZFFxkbFsx2C/bgcWKzA1jOFAs3Oy0rCE5xQXqbPjHSh4bC
-   w5OwZSPFIRYsoFZGcYI9Mc8gsgjrPo6TJVFLx1kfmKGT6nq1qcmTIUYOY
-   ecoK4kP16PBplA5R+vWw0raieEu+DN3pF0MwtRMay9CSP6tMp7iGiLtf7
-   yUTDcuH6Du1hLsNVTNH4tJkg/6vbJyIRHD8PWy9ABhrRncfE+nKb919CR
-   4VObV4k3jqOlf5KKteuP1T+LWSKyCEixOVCQMUzOtoGcARmR5H/0Cc8jW
-   JtJlTptFVppVYUjT3l0C8pgYTt4epNQH2SxTTrP4szryChpME/iss+gaB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="417299182"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="417299182"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 19:15:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="732210750"
-X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
-   d="scan'208";a="732210750"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga008.jf.intel.com with ESMTP; 16 May 2023 19:15:06 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 19:15:06 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 16 May 2023 19:15:05 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 19:15:05 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 16 May 2023 19:15:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T4T4Ch4iK+3oU6Q43/1itE9K45FEDwmgBV58qv2g6xSUinsVrJqxHknKhsOVLe7N07D64TTzHO7OVYOPkh6+aANxzWU5obr7zekTaiBeEL9BrPt2iJgXLIIF/4SOZ59U3YhhO0vZ3FLc3aR13FUDKW5IwIQM6j8SmG+SwnBaKLkNtdPqnho/PdZ9dY+AEU0GmzFzcty0PZaXzo4AAY0iIpq6UWXE33sTAu0Ya5BoAErbuiWFRVKmP72zL7AIHLDxviHEph9np9JbsJd5kpyKZqW2fromeaMJbkHxogsTaW/a4j7y394TjmOi/Caphl5kdg5yNzhfNcBXwR7CL5yXuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FqyOLVsCzfNiuLLND7SVkcnFoERTDJIu0WA/Bzmfxf4=;
- b=T0zyZeW3xeTU+1cYwdMxCvUyhTUSo/Cv536it3dIuuwqhVesqO2ns2af0qLAM11Qre1wJ3z+gv2j2nMorBN4Z1LhrlgWHaccAoOAyk+KVc0+q4w7gAWtfhQEnxISdbqHb9192dJfaJEsvgbFyNn0F/909+19qDwTmEHfJhy1pjTiHyRu32pic6U6w1rMiEkRxiCrOQx4Hv2eXbmA2uSPlEZwW6PlC7in85qtTfYTtvNcRt/oaOIblDL9HsQFha8jXZpgFTQTSeRBaDHNGSbL6S/Uikkfnck35fCZZ2gsqqrbVQX0DyF7+Kr0B9qQgVvL7Ba4BACGw9UJi+n0G7I9UA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DM4PR11MB8201.namprd11.prod.outlook.com (2603:10b6:8:18a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Wed, 17 May
- 2023 02:14:59 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::73e9:b405:2cae:9174]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::73e9:b405:2cae:9174%5]) with mapi id 15.20.6387.033; Wed, 17 May 2023
- 02:14:59 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>
-CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "darwi@linutronix.de" <darwi@linutronix.de>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Liu, Jing2" <jing2.liu@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "tom.zanussi@linux.intel.com" <tom.zanussi@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V5 00/11] vfio/pci: Support dynamic allocation of MSI-X
- interrupts
-Thread-Topic: [PATCH V5 00/11] vfio/pci: Support dynamic allocation of MSI-X
- interrupts
-Thread-Index: AQHZhB+PoaHMIm+N6kmnr0VVXmGkHK9diiwAgAA4KeA=
-Date:   Wed, 17 May 2023 02:14:59 +0000
-Message-ID: <BN9PR11MB52766D2B3D4EEA58D540FA858C7E9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1683740667.git.reinette.chatre@intel.com>
- <20230516165320.229b4928.alex.williamson@redhat.com>
-In-Reply-To: <20230516165320.229b4928.alex.williamson@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM4PR11MB8201:EE_
-x-ms-office365-filtering-correlation-id: 86fd4f8b-1c13-43f4-d153-08db567c8439
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZfSziJ14PUr5DKzXGc7213LCxaDHLS1y8s0zoydECb4evCsDt0SNjrFdDG+EO3SsahRB84xXsxazRlSAKZGzh3vblZ9VTzsICxf8VR7HG0nbSURbVZHNKAukonbmPtY/AhVLbDPbrP/EbtZ37wtHL9qR10TixsDoKw+ekTy/2ZWhi/VCnzL24a4Fa2W2dmHb8z87np95XxrDMQNpalPlSN7MWri4UdQO3oWvX/EYIn5JpT2mZvisecaRjgCLBqK7xBYP5wa34vRo4bgTEvRB8VDVAt4ipi++t0e50Yb7PuPiSIUMcIjiSWnnr4FnH/Uf1s08FTw+B0Rd+wEW2jNLoQBT7af4tt9CnR4NYM/TTnakLth03Ig0yvvIbYxvWdwIuawjxDoggm2GqeKd3wj75S8c9bfyHCDJHq7EOHQlxVfvPwNb3Q5NRkF3LjtM1JC0gtzsnLRNSzhLANWd+LVrJ6Z/KmPecUtH6KpOjanU3LxLDT/GBbqhFMQCEGpfSw9snW4Gq0aqVHDnC88W+3R+1zXlIuhZFufglIPWWjNXImTZECADMGXE5r4JcYZrKSzXR7f/wsw394Ajy0tGRcaP22nNAX4kUXdfuoNkpkH4Gzo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199021)(54906003)(86362001)(110136005)(478600001)(966005)(55016003)(9686003)(186003)(6506007)(7696005)(41300700001)(26005)(71200400001)(33656002)(316002)(122000001)(38100700002)(66446008)(4326008)(76116006)(66556008)(64756008)(66946007)(6636002)(82960400001)(66476007)(52536014)(5660300002)(2906002)(38070700005)(8676002)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7vT/aIxjGhnDUF9Xba1FLXuQxn/K6hIYeHA7IEfHXEcUl4GrnLfa4TFKh6/R?=
- =?us-ascii?Q?SqROyBOoOukq/sAKauWyrCKxjURAA+xlskSAai4ND2mp/NdMBtepQIomRHFt?=
- =?us-ascii?Q?HiKT4bZ4HuK4VbDR04bulsv4ECqQKcGW09VOPDTmEINJXxQY6Fe1YhT0ieTI?=
- =?us-ascii?Q?YbPJFZ/CX/mT3vcX16DBK+Kc3Fqb/0hsO+rubmXhiwdzyO7WYUDYaiHF2SyH?=
- =?us-ascii?Q?BZX1kAAAMLFq3ZOgFcxdUgLy7YuKsfqwiliY/v+pkA0Y5qPMLort0jZFUtaG?=
- =?us-ascii?Q?OU7yGTZuHYDCWSQxOoVNVtgnjAYQjFHOKfp65vXgvwVbtxf1UBmObrWNBr1z?=
- =?us-ascii?Q?4LdMXgdeY+JYr7gb8WkjUmuFWn0mNBqNaoVSPjGsXO0Ps4MbiYBdwS268/vA?=
- =?us-ascii?Q?URpUUoIPTIuBkZMmtCWVgxzOyShM5/scowy/9YvqjZaPpTuKH0Vx6qk1iqIu?=
- =?us-ascii?Q?Le06HXV71rg9NoN1T/9CpshTCAQXtXJbExFMzzXAB/TCzaH2GLeJ1rEGIw/n?=
- =?us-ascii?Q?B6AVAmh0PD0lTNkr4r8aYBm+vaJZALvAATIwx7TMF61/m3MH1qv9ye5kPayr?=
- =?us-ascii?Q?XEsXemekc6zqmxA0SoKEQzaTH4F8m3NPnfAG3Jc2fMs1DaEmop+LSoyipsk0?=
- =?us-ascii?Q?PRgq0m5LCPToZwRhclj8CwrIg9BMfsL/GZJywRcTHc+m2yQScTDiv6ZT3R7Q?=
- =?us-ascii?Q?Gc9d3JPwp3yI1RjW6t1L3fws1xCwwwMbmJXYpdShP58N2hrqMxjzIQUsnBYH?=
- =?us-ascii?Q?NdKEhOruDgbk05llnoC92NEYUg7R9mTcMjbK5WJQYpisFSo8UyWA8OYtY6L2?=
- =?us-ascii?Q?EXQuXsIXSrUHO73MqAPPOn35Pbx3MxK0sWT5EhKzYLpakDxborJmUsBdKk5j?=
- =?us-ascii?Q?U0mvWsyTfnLagG3vzAQTldFTuXJHw24rjuN7eMVsSEf/PSDWHCIfaH6vg5xR?=
- =?us-ascii?Q?/Niyg0G/6ixO4QdpyvOTcEy/g9ssdUT1Ec8EWNlemgB/dmj85wo+uhyqAU13?=
- =?us-ascii?Q?ZCJFYY6+g8RwgdTdggG+cLJ/gNh7mfCvYFhSZrMSJyfbQOMo47IdQX9lwKXh?=
- =?us-ascii?Q?p64secuspL+pCVZ685/P3AV1ZNTW5tias93YzXeFFOCyi+fASqDHbiCiKkkA?=
- =?us-ascii?Q?Yak/fwyKqBLD6glWmDiVD8CJxurRQOsYhE6yGUf0Zv9Yn77brHsQw96OgSd/?=
- =?us-ascii?Q?QEHQJPOJNJLg8ERwkmZoFWJiGKdEcT/hdWFFOJVdH5Ok9yfq5Bjbt6mYQSR1?=
- =?us-ascii?Q?+hGoR7mZGhn+O4cs+WphjUtwJGXs33YAJS7hsxZgk3jxYDffPYXbodInZvxl?=
- =?us-ascii?Q?jo6767BJFIcjpUTBjggdBbWDk6AmrjBuGHVxAYBgzejowGVkIYmYdnVozVwf?=
- =?us-ascii?Q?9ww/axDnyvVIuL0KotQ77mJe+dgxAMuvUMFXr941e521yCqDMdyC02wJptiN?=
- =?us-ascii?Q?dJZd/vUJILlQN3VRlfZKjOw83amEfqKe9Fm52Cw9K5/qv6ujwrrplF1VzmL9?=
- =?us-ascii?Q?0+zg7b9At3s7iwihAIFHlXZqgWzrWWhhLlcI4/FghnVFP3PUmVG1skP96AwS?=
- =?us-ascii?Q?hptscpo2lYyUgRMbZ63bnchTLev49ResobpFsmix?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 16 May 2023 22:17:24 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D3AE4A
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:17:23 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6ab094a7c04so155123a34.3
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bitbyteword.org; s=google; t=1684289842; x=1686881842;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jg/iSy/nvkPTXRIMKkgFpn6nfdytrQLA5s0+0oJiqtQ=;
+        b=WQmO1erorAqp4OY2y0UFSiIyYYMezfvLzuwU09QHo0/wfSmJpxk+apgEhA++kvH1Oe
+         V21nfQ3pKpx8nnbkI4HoxD+erL79wFfSCu7NjZZnmKo65pKeYzfP3hEfK+CGvzRhHESR
+         0GYZ+hSZxwtoJL3XykptS+f3MGx50RtejAo81v8DzZVNUPk72xOZLY5++sdd0RIr9TXb
+         kNzZpPIaQqlATc4/+k/XjKq88bpLW7F/09t4Rmpxblrd/r1n3Pld/5v/SiDXMgWmXWF8
+         mv2UIECsP9NI6WzaLWnjCozbQaAbbE2BixLWGLq2BnKZiEz0plWFRTs3iGx3CJbpVTMp
+         GsUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684289842; x=1686881842;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jg/iSy/nvkPTXRIMKkgFpn6nfdytrQLA5s0+0oJiqtQ=;
+        b=TMezQsMTwrkqOYtI8PsHZonr/M39mr8rUlvErLLAAyUn8T/ds23/krxOIPRR+TfvdO
+         rRez4ywUZeNiM8i0A/fKJzU0Rbmu3UnFDAvK0o2nrjFwRv3r6yrFjVLSRRw4mNi9FWmH
+         e1rUMfqVvmSydu4DpBan5rrHOkL5CUnI2h/17McIOrGbWgCGSvv0BwJOYq/JvG41SE9l
+         UoL8DFekPXb+r+SmkLM7NOPHHj8LPio5qF1adqMBTIzSRK5liP9/B8IOrIupZFwO7uJa
+         8qeUBPCBvfSjcHi5CRDSvQHmdew950oa8JJAB4bdpRrZXaiuYZ4a+6//jTWjS5UGV5k0
+         hlJg==
+X-Gm-Message-State: AC+VfDwgTehq2f5D8lfEHippzx7Uh1QXV/W7oqDuPpsbGlui/8A3R0d8
+        RG+SGrfcOpvR4w6c5RCO0HsIJEI4xGwm8zlOsdMXHg==
+X-Google-Smtp-Source: ACHHUZ6V+DuFmwFCSct6No1tadnX2CtFjc1H/zPrUuXhC8QzRTOLP/3lSU66HnRHFtS2mWvjITr0obl2eoA4yRKALy4=
+X-Received: by 2002:a05:6830:1654:b0:6ad:da5d:5357 with SMTP id
+ h20-20020a056830165400b006adda5d5357mr3708589otr.38.1684289842664; Tue, 16
+ May 2023 19:17:22 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86fd4f8b-1c13-43f4-d153-08db567c8439
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 02:14:59.7184
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Lve8h4UUc9aLw5vlwVm8swvnqfkU6AClFYuzEY9inWTRoaSYEwEki7CJQTv/fPSnQNDTbDtLXv57FwzWrGNChg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB8201
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230515025716.316888-1-vineeth@bitbyteword.org>
+ <20230515025716.316888-3-vineeth@bitbyteword.org> <20230515100616.33ba5dd9@luca64>
+ <CAO7JXPgq8V5yHM6F2+iXf4XJ9cyT30Hn4ot5b2k7srjsaPc3JQ@mail.gmail.com>
+ <20230516093729.0771938c@luca64> <CAO7JXPh5uLV4QjAEi6bJXfAGSsZ=XsnCyzrvKS8m35BGbRPYJw@mail.gmail.com>
+ <20230516181928.1991acbd@nowhere>
+In-Reply-To: <20230516181928.1991acbd@nowhere>
+From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date:   Tue, 16 May 2023 22:17:11 -0400
+Message-ID: <CAO7JXPhHFdgjHsvh0VJNNcV+ax60_3-h=5kVKi2W1TRMvxu+2A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] sched/deadline: Fix reclaim inaccuracy with SMP
+To:     luca abeni <luca.abeni@santannapisa.it>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Alex Williamson <alex.williamson@redhat.com>
-> Sent: Wednesday, May 17, 2023 6:53 AM
->=20
-> On Thu, 11 May 2023 08:44:27 -0700
-> Reinette Chatre <reinette.chatre@intel.com> wrote:
->=20
-> > Changes since V4:
-> > - V4:
-> https://lore.kernel.org/lkml/cover.1682615447.git.reinette.chatre@intel.c=
-om
-> /
-> > - Add Kevin's Reviewed-by tag as applicable.
-> > - Treat non-existing INTx interrupt context as kernel bug with WARN. Th=
-is
-> >   exposed an issue in the scenario where INTx mask/unmask may occur
-> without
-> >   INTx enabled. This is fixed by obtaining the interrupt context later
-> >   (right before use) within impacted functions: vfio_pci_intx_mask() an=
-d
-> >   vfio_pci_intx_unmask_handler(). (Kevin)
-> > - Treat pci_irq_vector() returning '0' for a MSI/MSI-X interrupt as a k=
-ernel
-> >   bug via a WARN instead of ignoring this value. (Kevin)
-> > - Improve accuracy of comments. (Kevin)
-> > - Please refer to individual patches for local changes.
->=20
-> Looks good to me.
->=20
-> Kevin, do you want to add any additional reviews or check the changes
-> made based on your previous comments?
->=20
+Hi Luca,
 
-Good to me too. I've given the remaining reviewed-by's.
+On Tue, May 16, 2023 at 12:19=E2=80=AFPM luca abeni <luca.abeni@santannapis=
+a.it> wrote:
+>
+> > I was thinking it should probably
+> > be okay for tasks to reclaim differently based on what free bw is
+> > left on the cpu it is running. For eg: if cpu 1 has two tasks of bw
+> > .3 each, each task can reclaim "(.95 - .6) / 2" and another cpu with
+> > only one task(.3 bandwidth) reclaims (.95 - .3). So both cpus
+> > utilization is .95 and tasks reclaim what is available on the cpu.
+>
+> I suspect (but I am not sure) this only works if tasks do not migrate.
+>
+From what I am seeing, if the reserved bandwidth of all tasks on a cpu
+is less than Umax, then this works. Even with migration, if the task
+lands on another cpu where the new running_bw < Umax, then it runs and
+reclaims the free bandwidth. But this breaks if running_bw > Umax and
+it can happen if total_bw is within limits, but a cpu is overloaded.
+For eg: four tasks with reservation (7, 10) on a three cpu system.
+Here two cpus will have running_bw =3D .7 but third cpu will be 1.4
+even though total_bw =3D 2.80 which is less than the limit of 2.85.
+
+>
+> > With "1 - Uinact", where Uinact accounts for a portion of global free
+> > bandwidth, tasks reclaim proportionately to the global free bandwidth
+> > and this causes tasks with lesser bandwidth to reclaim lesser when
+> > compared to higher bandwidth tasks even if they don't share the cpu.
+> > This is what I was seeing in practice.
+>
+> Just to be sure: is this with the "original" Uextra setting, or with
+> your new "Uextra =3D Umax - this_bw" setting?
+> (I am not sure, but I suspect that "1 - Uinact - Uextra" with your new
+> definition of Uextra should work well...)
+>
+I am seeing this with original Uextra setting where the global bandwidth
+is accounted. With "Uextra =3D Umax - this_bw", reclaiming seems to be
+correct and I think it is because it considers local bandwidth only.
+
+> > With dq =3D -(max{u_i, (Umax - Uinact - Uextra)} / Umax) * dt (1)
+> > TID[636]: RECLAIM=3D1, (r=3D3ms, d=3D100ms, p=3D100ms), Util: 95.08
+> > TID[635]: RECLAIM=3D1, (r=3D3ms, d=3D100ms, p=3D100ms), Util: 95.07
+> > TID[637]: RECLAIM=3D1, (r=3D3ms, d=3D100ms, p=3D100ms), Util: 95.06
+> >
+> > With dq =3D -(max{u_i, (1 - Uinact - Uextra)} / Umax) * dt (2)
+> > TID[601]: RECLAIM=3D1, (r=3D3ms, d=3D100ms, p=3D100ms), Util: 35.65
+> > TID[600]: RECLAIM=3D1, (r=3D3ms, d=3D100ms, p=3D100ms), Util: 35.65
+> > TID[602]: RECLAIM=3D1, (r=3D3ms, d=3D100ms, p=3D100ms), Util: 35.65
+>
+> Maybe I am missing something and I am misunderstanding the situation,
+> but my impression was that this is the effect of setting
+>         Umax - \Sum(u_i / #cpus in the root domain)
+> I was hoping that with your new Umax setting this problem could be
+> fixed... I am going to double-check my reasoning.
+>
+Even with the Umax_reclaim changes, equation (1) is the one which
+reclaims upto 95% when number of tasks is less than the number of
+cpus. With more tasks than cpus, eq (1) still reclaims more than
+eq (2) and cpu utilization caps at 95%. I also need to dig more to
+understand the reason behind this.
+
+Thanks for looking into this, I will also study more on this and
+keep you posted..
+
+Thanks,
+Vineeth
