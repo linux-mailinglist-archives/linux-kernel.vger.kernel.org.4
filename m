@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5E0706CD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43154706CDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbjEQP3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S231968AbjEQP3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbjEQP2N (ORCPT
+        with ESMTP id S232372AbjEQP21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:28:13 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D1A358B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:27:17 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba2b9ecfadaso1516116276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:27:17 -0700 (PDT)
+        Wed, 17 May 2023 11:28:27 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0004A5C9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:27:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561b742276fso15542147b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684337236; x=1686929236;
+        d=google.com; s=20221208; t=1684337239; x=1686929239;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xo70dYhEcfCgGbPC8sbOAVfsz7lHN99PYmfDYjMXA94=;
-        b=gMdU4bD322wqDMNV9koAXPHXH4hb6CTWBdlu2bSu8PZ+49NpgyircVTQrcqIugyIE9
-         nyRShtcUk5GWNZd+1iaoN0UTkPQ3vbFSuQSDAr8MhWFmYxWlh+gEkSBW658rmpymPsgV
-         xaG1OZnEhLxZbcZ1KnsDoz99oXvcvrmpWy+Zn7MtLbAupJ6nK9jdn9AO48MAE+IqokpJ
-         R+RYO9WY5SizzzLeVWGOirbQQATb4zhFKibq6cjI2NLHgpwd+965IGZB5eKftUCilKPG
-         +OMQSZDvucSRQQSQRMZvMF8ZPs36QK28LgbyL46cLmkaOX9qKaNrHUDoQ3QE+Nc6LFMg
-         a3qg==
+        bh=GBU6awRn4alNUS7kbcVDPFXNZzhV7w4ki0bRCslYQI0=;
+        b=XYFNxitsRGh1865B/oWLVOsYbzXij0N7AOyg3/jmsXQqntbR8ujhJFGAapkQfhO+D9
+         Hv5wdDNFAuhHChMxvaXm90dfdW5b5eP9cihFVuxPkl1zf2RGRyuCCQVFUqW5dk9zkR9K
+         4qFp/1EbGgfL8ZA5wdHDqq12MQMrA7ojEy3JPZpChb75b9r83WMmxYu/79UU+OVIoft3
+         2VWuyzUQFnlpspn933VHTPiYX1u33jOW700NqY6SkKUvj0dQW2Mm273sCDzkmQbYFEtq
+         RwSl+inddW61MqDRaszw2g7RoO1VEOcw68nxm/raS9M5pwf9LEB8mv6HG5ibA0DH9f1Q
+         jXkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684337236; x=1686929236;
+        d=1e100.net; s=20221208; t=1684337239; x=1686929239;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xo70dYhEcfCgGbPC8sbOAVfsz7lHN99PYmfDYjMXA94=;
-        b=bSRdeRlevvAfwNu3FSxhQUAknStLTfYkZgA8HRwNU7DfyBhzeYZjrwvunp3Ytujxsv
-         ygLZtBEMWq8jYOPSY6iZIBTXKJAVkK5ZdhJsBby2kz6jIr/3INe9j8Jf/7g0NwzWzHsv
-         sGfFiEw+B8eps0gc6PR3vc/46VniZOI8lKfcZrRwUiPeUBnDO8yFRjZiOGfBAw4T7dxO
-         UDhUMqa109mvff349IRn27b793ot5k6fO/Yc2CRrInf/nyWijU5JNHN7ZNs2rYtspz4s
-         8T9dgWG5VZePhsRplHOxqXmhDSoQ+8198qTjufxBtQSU2X6ylriRj7WIpnHk6wsbFQ7x
-         cYkA==
-X-Gm-Message-State: AC+VfDwTDNQoh/5DN78PKeKcBt6uFJnrD1qUVGRQKa185yS3FBy3kGBK
-        7zVXrG1yAlDMfZ32FV+od3LERta1vVaw
-X-Google-Smtp-Source: ACHHUZ6Hm9l39kcH6VLHakbh3lCn8HOFPikxtQaLmOcYle3x646+kRdIUtZ54VrtsXlGYXuIPAgcM7d3A32z
+        bh=GBU6awRn4alNUS7kbcVDPFXNZzhV7w4ki0bRCslYQI0=;
+        b=EpJEWe2XR3MrDbvrZ8GNxoLVfQ9+iMAoZOJxQ6QXBA81Du8KUge25tpYxw6uWKriOJ
+         6rFXjToFiwLWLgy6voUwp9e0TzV5U6N1Yp0dXAp83VOYmc2/8W4P7t4eidR8Ot21E7P7
+         xUqwCaGHxstrcmTV7GUYXjivylHPB0Ompm085nw7FTSkiOymhE8spvF2e2lJWibM7JdK
+         4S5WczoxSwugu31tS4b1HRuKSjbaIrgVMVhkkduosUUradeeazLZyUkx6Vdb43oo7tZ7
+         2t93/T/JsPVquWGxL2BsX6VOpFzRGEKIDyc9QIPOJhK7/H0NJiKZX6PI7zJwHS/OqOM+
+         ZbpQ==
+X-Gm-Message-State: AC+VfDx/f8zMrc2YASSID5HirSy2hQDLpr3W5Yd43vuWf0l3XYGb44Ee
+        AlxFh7zC36+grVAtjJXJ9lluCNW1y/OI
+X-Google-Smtp-Source: ACHHUZ6qLB1jDGbekrC+d5QiIJWmUlWDSwKPsa8uT01i3PwgJ/sNnJBntBVCDN5r7eNi7Dqf6QEPKaubzIUI
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:628b:7e78:d09b:39b])
- (user=irogers job=sendgmr) by 2002:a25:ab84:0:b0:ba8:337a:d8a3 with SMTP id
- v4-20020a25ab84000000b00ba8337ad8a3mr3114681ybi.11.1684337236726; Wed, 17 May
- 2023 08:27:16 -0700 (PDT)
-Date:   Wed, 17 May 2023 08:26:25 -0700
+ (user=irogers job=sendgmr) by 2002:a81:7e44:0:b0:55d:8472:4597 with SMTP id
+ p4-20020a817e44000000b0055d84724597mr24422113ywn.10.1684337239194; Wed, 17
+ May 2023 08:27:19 -0700 (PDT)
+Date:   Wed, 17 May 2023 08:26:26 -0700
 In-Reply-To: <20230517152626.563559-1-irogers@google.com>
-Message-Id: <20230517152626.563559-15-irogers@google.com>
+Message-Id: <20230517152626.563559-16-irogers@google.com>
 Mime-Version: 1.0
 References: <20230517152626.563559-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Subject: [PATCH v2 14/15] perf jevents: Add support for metricgroup descriptions
+Subject: [PATCH v2 15/15] perf vendor events intel: Add metricgroup
+ descriptions for all models
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -72,196 +73,2062 @@ To:     Peter Zijlstra <peterz@infradead.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Metrics have a field where the groups they belong to are listed like
-the following from
-tools/perf/pmu-events/arch/x86/skylakex/skx-metrics.json:
+Add metric group descriptions created by:
+https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
+The descriptions add some additional detail in perf list.
 
-        "MetricGroup": "PGO;TmaL1;TopdownL1;tma_L1_group",
-        "MetricName": "tma_frontend_bound",
-
-The metric groups are shown in 'perf list' like the following where
-TopdownL1 is a metric group:
-
-TopdownL1:
-  tma_backend_bound
-       [This category represents fraction of slots where no uops are being
-        delivered due to a lack of required resources for accepting new uops
-        in the Backend]
-  tma_bad_speculation
-       [This category represents fraction of slots wasted due to incorrect
-        speculations]
-  tma_frontend_bound
-       [This category represents fraction of slots where the processor's
-        Frontend undersupplies its Backend]
-  tma_retiring
-       [This category represents fraction of slots utilized by useful work
-        i.e. issued uops that eventually get retired]
-
-This patch adds support for a new json file in each model directory
-called metricgroups.json that comprises a dictionary containing
-entries that map from a metric group to a description:
-
-{
-...
-    "TopdownL1": "Metrics for top-down breakdown at level 1",
-...
-}
-
-perf list is then updated to support this changing the above output
-to:
-
-TopdownL1: [Metrics for top-down breakdown at level 1]
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-list.c                | 11 ++++--
- tools/perf/pmu-events/empty-pmu-events.c |  5 +++
- tools/perf/pmu-events/jevents.py         | 49 +++++++++++++++++++++++-
- tools/perf/pmu-events/pmu-events.h       |  2 +
- 4 files changed, 62 insertions(+), 5 deletions(-)
+ .../arch/x86/alderlake/metricgroups.json      | 122 ++++++++++++++++++
+ .../arch/x86/alderlaken/metricgroups.json     |  26 ++++
+ .../arch/x86/broadwell/metricgroups.json      | 107 +++++++++++++++
+ .../arch/x86/broadwellde/metricgroups.json    | 107 +++++++++++++++
+ .../arch/x86/broadwellx/metricgroups.json     | 107 +++++++++++++++
+ .../arch/x86/cascadelakex/metricgroups.json   | 114 ++++++++++++++++
+ .../arch/x86/haswell/metricgroups.json        | 107 +++++++++++++++
+ .../arch/x86/haswellx/metricgroups.json       | 107 +++++++++++++++
+ .../arch/x86/icelake/metricgroups.json        | 113 ++++++++++++++++
+ .../arch/x86/icelakex/metricgroups.json       | 114 ++++++++++++++++
+ .../arch/x86/ivybridge/metricgroups.json      | 107 +++++++++++++++
+ .../arch/x86/ivytown/metricgroups.json        | 107 +++++++++++++++
+ .../arch/x86/jaketown/metricgroups.json       | 100 ++++++++++++++
+ .../arch/x86/sandybridge/metricgroups.json    | 100 ++++++++++++++
+ .../arch/x86/sapphirerapids/metricgroups.json | 118 +++++++++++++++++
+ .../arch/x86/skylake/metricgroups.json        | 113 ++++++++++++++++
+ .../arch/x86/skylakex/metricgroups.json       | 114 ++++++++++++++++
+ .../arch/x86/tigerlake/metricgroups.json      | 113 ++++++++++++++++
+ 18 files changed, 1896 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/alderlaken/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/broadwell/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/broadwellde/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/broadwellx/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/cascadelakex/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/haswell/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/haswellx/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/icelake/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/icelakex/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/ivybridge/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/ivytown/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/jaketown/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sandybridge/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/sapphirerapids/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/skylake/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/skylakex/metricgroups.json
+ create mode 100644 tools/perf/pmu-events/arch/x86/tigerlake/metricgroups.json
 
-diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-index c6bd0aa4a56e..e8520a027b45 100644
---- a/tools/perf/builtin-list.c
-+++ b/tools/perf/builtin-list.c
-@@ -192,9 +192,14 @@ static void default_print_metric(void *ps,
- 		if (group && print_state->metricgroups) {
- 			if (print_state->name_only)
- 				printf("%s ", group);
--			else if (print_state->metrics)
--				printf("\n%s:\n", group);
--			else
-+			else if (print_state->metrics) {
-+				const char *gdesc = describe_metricgroup(group);
-+
-+				if (gdesc)
-+					printf("\n%s: [%s]\n", group, gdesc);
-+				else
-+					printf("\n%s:\n", group);
-+			} else
- 				printf("%s\n", group);
- 		}
- 		zfree(&print_state->last_metricgroups);
-diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
-index e74defb5284f..a630c617e879 100644
---- a/tools/perf/pmu-events/empty-pmu-events.c
-+++ b/tools/perf/pmu-events/empty-pmu-events.c
-@@ -420,3 +420,8 @@ int pmu_for_each_sys_metric(pmu_metric_iter_fn fn __maybe_unused, void *data __m
- {
- 	return 0;
- }
-+
-+const char *describe_metricgroup(const char *group __maybe_unused)
+diff --git a/tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json b/tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json
+new file mode 100644
+index 000000000000..dfa15ed2cee1
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/alderlake/metricgroups.json
+@@ -0,0 +1,122 @@
 +{
-+	return NULL;
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "IntVector": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_assists_group": "Metrics contributing to tma_assists category",
++    "tma_backend_bound_aux_group": "Metrics contributing to tma_backend_bound_aux category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_base_group": "Metrics contributing to tma_base category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_int_operations_group": "Metrics contributing to tma_int_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_machine_clears_group": "Metrics contributing to tma_machine_clears category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_mem_scheduler_group": "Metrics contributing to tma_mem_scheduler category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_nuke_group": "Metrics contributing to tma_nuke category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_resource_bound_group": "Metrics contributing to tma_resource_bound category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
 +}
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 487ff01baf1b..8fca7c9adee0 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -37,6 +37,8 @@ _pending_metrics = []
- _pending_metrics_tblname = None
- # Global BigCString shared by all structures.
- _bcs = None
-+# Map from the name of a metric group to a description of the group.
-+_metricgroups = {}
- # Order specific JsonEvent attributes will be visited.
- _json_event_attributes = [
-     # cmp_sevent related attributes.
-@@ -512,6 +514,17 @@ def preprocess_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
-   if not item.is_file() or not item.name.endswith('.json'):
-     return
- 
-+  if item.name == 'metricgroups.json':
-+    metricgroup_descriptions = json.load(open(item.path))
-+    for mgroup in metricgroup_descriptions:
-+      assert len(mgroup) > 1, parents
-+      description = f"{metricgroup_descriptions[mgroup]}\\000"
-+      mgroup = f"{mgroup}\\000"
-+      _bcs.add(mgroup)
-+      _bcs.add(description)
-+      _metricgroups[mgroup] = description
-+    return
-+
-   topic = get_topic(item.name)
-   for event in read_json_events(item.path, topic):
-     if event.name:
-@@ -548,7 +561,7 @@ def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
- 
-   # Ignore other directories. If the file name does not have a .json
-   # extension, ignore it. It could be a readme.txt for instance.
--  if not item.is_file() or not item.name.endswith('.json'):
-+  if not item.is_file() or not item.name.endswith('.json') or item.name == 'metricgroups.json':
-     return
- 
-   add_events_table_entries(item, get_topic(item.name))
-@@ -911,6 +924,38 @@ int pmu_for_each_sys_metric(pmu_metric_iter_fn fn, void *data)
- }
- """)
- 
-+def print_metricgroups() -> None:
-+  _args.output_file.write("""
-+static const int metricgroups[][2] = {
-+""")
-+  for mgroup in sorted(_metricgroups):
-+    description = _metricgroups[mgroup]
-+    _args.output_file.write(
-+        f'\t{{ {_bcs.offsets[mgroup]}, {_bcs.offsets[description]} }}, /* {mgroup} => {description} */\n'
-+    )
-+  _args.output_file.write("""
-+};
-+
-+const char *describe_metricgroup(const char *group)
+diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/metricgroups.json b/tools/perf/pmu-events/arch/x86/alderlaken/metricgroups.json
+new file mode 100644
+index 000000000000..ca46d4202c46
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/alderlaken/metricgroups.json
+@@ -0,0 +1,26 @@
 +{
-+        int low = 0, high = ARRAY_SIZE(metricgroups) - 1;
-+
-+        while (low <= high) {
-+                int mid = (low + high) / 2;
-+                const char *mgroup = &big_c_string[metricgroups[mid][0]];
-+                int cmp = strcmp(mgroup, group);
-+
-+                if (cmp == 0) {
-+                        return &big_c_string[metricgroups[mid][1]];
-+                } else if (cmp < 0) {
-+                        low = mid + 1;
-+                } else {
-+                        high = mid - 1;
-+                }
-+        }
-+        return NULL;
++    "Power": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_backend_bound_aux_group": "Metrics contributing to tma_backend_bound_aux category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_base_group": "Metrics contributing to tma_base category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_machine_clears_group": "Metrics contributing to tma_machine_clears category",
++    "tma_mem_scheduler_group": "Metrics contributing to tma_mem_scheduler category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_nuke_group": "Metrics contributing to tma_nuke category",
++    "tma_resource_bound_group": "Metrics contributing to tma_resource_bound category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category"
 +}
-+""")
- 
- def main() -> None:
-   global _args
-@@ -993,7 +1038,7 @@ struct compact_pmu_event {
- 
-   print_mapping_table(archs)
-   print_system_mapping_table()
--
-+  print_metricgroups()
- 
- if __name__ == '__main__':
-   main()
-diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
-index 3549e6971a4d..8cd23d656a5d 100644
---- a/tools/perf/pmu-events/pmu-events.h
-+++ b/tools/perf/pmu-events/pmu-events.h
-@@ -93,4 +93,6 @@ const struct pmu_metrics_table *find_sys_metrics_table(const char *name);
- int pmu_for_each_sys_event(pmu_event_iter_fn fn, void *data);
- int pmu_for_each_sys_metric(pmu_metric_iter_fn fn, void *data);
- 
-+const char *describe_metricgroup(const char *group);
-+
- #endif
+diff --git a/tools/perf/pmu-events/arch/x86/broadwell/metricgroups.json b/tools/perf/pmu-events/arch/x86/broadwell/metricgroups.json
+new file mode 100644
+index 000000000000..0ff852912787
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/broadwell/metricgroups.json
+@@ -0,0 +1,107 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellde/metricgroups.json b/tools/perf/pmu-events/arch/x86/broadwellde/metricgroups.json
+new file mode 100644
+index 000000000000..0ff852912787
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/broadwellde/metricgroups.json
+@@ -0,0 +1,107 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/broadwellx/metricgroups.json b/tools/perf/pmu-events/arch/x86/broadwellx/metricgroups.json
+new file mode 100644
+index 000000000000..0ff852912787
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/broadwellx/metricgroups.json
+@@ -0,0 +1,107 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/cascadelakex/metricgroups.json b/tools/perf/pmu-events/arch/x86/cascadelakex/metricgroups.json
+new file mode 100644
+index 000000000000..cf217931acc5
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/cascadelakex/metricgroups.json
+@@ -0,0 +1,114 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "IoBW": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/haswell/metricgroups.json b/tools/perf/pmu-events/arch/x86/haswell/metricgroups.json
+new file mode 100644
+index 000000000000..0ff852912787
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/haswell/metricgroups.json
+@@ -0,0 +1,107 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/haswellx/metricgroups.json b/tools/perf/pmu-events/arch/x86/haswellx/metricgroups.json
+new file mode 100644
+index 000000000000..0ff852912787
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/haswellx/metricgroups.json
+@@ -0,0 +1,107 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/icelake/metricgroups.json b/tools/perf/pmu-events/arch/x86/icelake/metricgroups.json
+new file mode 100644
+index 000000000000..dfaf030e07ae
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/icelake/metricgroups.json
+@@ -0,0 +1,113 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/icelakex/metricgroups.json b/tools/perf/pmu-events/arch/x86/icelakex/metricgroups.json
+new file mode 100644
+index 000000000000..cf217931acc5
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/icelakex/metricgroups.json
+@@ -0,0 +1,114 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "IoBW": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/ivybridge/metricgroups.json b/tools/perf/pmu-events/arch/x86/ivybridge/metricgroups.json
+new file mode 100644
+index 000000000000..0ff852912787
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/ivybridge/metricgroups.json
+@@ -0,0 +1,107 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/ivytown/metricgroups.json b/tools/perf/pmu-events/arch/x86/ivytown/metricgroups.json
+new file mode 100644
+index 000000000000..0ff852912787
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/ivytown/metricgroups.json
+@@ -0,0 +1,107 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/jaketown/metricgroups.json b/tools/perf/pmu-events/arch/x86/jaketown/metricgroups.json
+new file mode 100644
+index 000000000000..632dc785b02f
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/jaketown/metricgroups.json
+@@ -0,0 +1,100 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/sandybridge/metricgroups.json b/tools/perf/pmu-events/arch/x86/sandybridge/metricgroups.json
+new file mode 100644
+index 000000000000..632dc785b02f
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/sandybridge/metricgroups.json
+@@ -0,0 +1,100 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/sapphirerapids/metricgroups.json b/tools/perf/pmu-events/arch/x86/sapphirerapids/metricgroups.json
+new file mode 100644
+index 000000000000..3f29e193e1a6
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/sapphirerapids/metricgroups.json
+@@ -0,0 +1,118 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "IntVector": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IoBW": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_assists_group": "Metrics contributing to tma_assists category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_int_operations_group": "Metrics contributing to tma_int_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_bandwidth_group": "Metrics contributing to tma_mem_bandwidth category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/skylake/metricgroups.json b/tools/perf/pmu-events/arch/x86/skylake/metricgroups.json
+new file mode 100644
+index 000000000000..dfaf030e07ae
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/skylake/metricgroups.json
+@@ -0,0 +1,113 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/skylakex/metricgroups.json b/tools/perf/pmu-events/arch/x86/skylakex/metricgroups.json
+new file mode 100644
+index 000000000000..cf217931acc5
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/skylakex/metricgroups.json
+@@ -0,0 +1,114 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "IoBW": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
+diff --git a/tools/perf/pmu-events/arch/x86/tigerlake/metricgroups.json b/tools/perf/pmu-events/arch/x86/tigerlake/metricgroups.json
+new file mode 100644
+index 000000000000..dfaf030e07ae
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/tigerlake/metricgroups.json
+@@ -0,0 +1,113 @@
++{
++    "Backend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Bad": "Grouping from metrics spreadsheet",
++    "BadSpec": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BigFoot": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "BrMispredicts": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Branches": "Grouping from metrics spreadsheet",
++    "CacheMisses": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "CodeGen": "Grouping from metrics spreadsheet",
++    "Compute": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Cor": "Grouping from metrics spreadsheet",
++    "DSB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DSBmiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "DataSharing": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Fed": "Grouping from metrics spreadsheet",
++    "FetchBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FetchLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Flops": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "FpScalar": "Grouping from metrics spreadsheet",
++    "FpVector": "Grouping from metrics spreadsheet",
++    "Frontend": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "HPC": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "IcMiss": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "InsType": "Grouping from metrics spreadsheet",
++    "L2Evicts": "Grouping from metrics spreadsheet",
++    "LSD": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MachineClears": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Mem": "Grouping from metrics spreadsheet",
++    "MemoryBW": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryBound": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryLat": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "MemoryTLB": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Memory_BW": "Grouping from metrics spreadsheet",
++    "Memory_Lat": "Grouping from metrics spreadsheet",
++    "MicroSeq": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "OS": "Grouping from metrics spreadsheet",
++    "Offcore": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PGO": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Pipeline": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "PortsUtil": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Power": "Grouping from metrics spreadsheet",
++    "Prefetches": "Grouping from metrics spreadsheet",
++    "Ret": "Grouping from metrics spreadsheet",
++    "Retire": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SMT": "Grouping from metrics spreadsheet",
++    "Server": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "Snoop": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "SoC": "Grouping from metrics spreadsheet",
++    "Summary": "Grouping from metrics spreadsheet",
++    "TmaL1": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL2": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TmaL3mem": "Grouping from Top-down Microarchitecture Analysis Metrics spreadsheet",
++    "TopdownL1": "Metrics for top-down breakdown at level 1",
++    "TopdownL2": "Metrics for top-down breakdown at level 2",
++    "TopdownL3": "Metrics for top-down breakdown at level 3",
++    "TopdownL4": "Metrics for top-down breakdown at level 4",
++    "TopdownL5": "Metrics for top-down breakdown at level 5",
++    "TopdownL6": "Metrics for top-down breakdown at level 6",
++    "tma_L1_group": "Metrics for top-down breakdown at level 1",
++    "tma_L2_group": "Metrics for top-down breakdown at level 2",
++    "tma_L3_group": "Metrics for top-down breakdown at level 3",
++    "tma_L4_group": "Metrics for top-down breakdown at level 4",
++    "tma_L5_group": "Metrics for top-down breakdown at level 5",
++    "tma_L6_group": "Metrics for top-down breakdown at level 6",
++    "tma_alu_op_utilization_group": "Metrics contributing to tma_alu_op_utilization category",
++    "tma_backend_bound_group": "Metrics contributing to tma_backend_bound category",
++    "tma_bad_speculation_group": "Metrics contributing to tma_bad_speculation category",
++    "tma_branch_resteers_group": "Metrics contributing to tma_branch_resteers category",
++    "tma_core_bound_group": "Metrics contributing to tma_core_bound category",
++    "tma_dram_bound_group": "Metrics contributing to tma_dram_bound category",
++    "tma_dtlb_load_group": "Metrics contributing to tma_dtlb_load category",
++    "tma_dtlb_store_group": "Metrics contributing to tma_dtlb_store category",
++    "tma_fetch_bandwidth_group": "Metrics contributing to tma_fetch_bandwidth category",
++    "tma_fetch_latency_group": "Metrics contributing to tma_fetch_latency category",
++    "tma_fp_arith_group": "Metrics contributing to tma_fp_arith category",
++    "tma_fp_vector_group": "Metrics contributing to tma_fp_vector category",
++    "tma_frontend_bound_group": "Metrics contributing to tma_frontend_bound category",
++    "tma_heavy_operations_group": "Metrics contributing to tma_heavy_operations category",
++    "tma_issue2P": "Metrics related by the issue $issue2P",
++    "tma_issueBC": "Metrics related by the issue $issueBC",
++    "tma_issueBM": "Metrics related by the issue $issueBM",
++    "tma_issueBW": "Metrics related by the issue $issueBW",
++    "tma_issueD0": "Metrics related by the issue $issueD0",
++    "tma_issueFB": "Metrics related by the issue $issueFB",
++    "tma_issueFL": "Metrics related by the issue $issueFL",
++    "tma_issueL1": "Metrics related by the issue $issueL1",
++    "tma_issueLat": "Metrics related by the issue $issueLat",
++    "tma_issueMC": "Metrics related by the issue $issueMC",
++    "tma_issueMS": "Metrics related by the issue $issueMS",
++    "tma_issueMV": "Metrics related by the issue $issueMV",
++    "tma_issueRFO": "Metrics related by the issue $issueRFO",
++    "tma_issueSL": "Metrics related by the issue $issueSL",
++    "tma_issueSO": "Metrics related by the issue $issueSO",
++    "tma_issueSmSt": "Metrics related by the issue $issueSmSt",
++    "tma_issueSpSt": "Metrics related by the issue $issueSpSt",
++    "tma_issueSyncxn": "Metrics related by the issue $issueSyncxn",
++    "tma_issueTLB": "Metrics related by the issue $issueTLB",
++    "tma_l1_bound_group": "Metrics contributing to tma_l1_bound category",
++    "tma_l3_bound_group": "Metrics contributing to tma_l3_bound category",
++    "tma_light_operations_group": "Metrics contributing to tma_light_operations category",
++    "tma_load_op_utilization_group": "Metrics contributing to tma_load_op_utilization category",
++    "tma_mem_latency_group": "Metrics contributing to tma_mem_latency category",
++    "tma_memory_bound_group": "Metrics contributing to tma_memory_bound category",
++    "tma_microcode_sequencer_group": "Metrics contributing to tma_microcode_sequencer category",
++    "tma_mite_group": "Metrics contributing to tma_mite category",
++    "tma_ports_utilization_group": "Metrics contributing to tma_ports_utilization category",
++    "tma_ports_utilized_0_group": "Metrics contributing to tma_ports_utilized_0 category",
++    "tma_ports_utilized_3m_group": "Metrics contributing to tma_ports_utilized_3m category",
++    "tma_retiring_group": "Metrics contributing to tma_retiring category",
++    "tma_serializing_operation_group": "Metrics contributing to tma_serializing_operation category",
++    "tma_store_bound_group": "Metrics contributing to tma_store_bound category",
++    "tma_store_op_utilization_group": "Metrics contributing to tma_store_op_utilization category"
++}
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
