@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E534707680
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F804707688
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjEQXhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 19:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
+        id S229724AbjEQXmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 19:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjEQXhj (ORCPT
+        with ESMTP id S229501AbjEQXmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 19:37:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA80115;
-        Wed, 17 May 2023 16:37:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FA6164BDC;
-        Wed, 17 May 2023 23:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9EBC433D2;
-        Wed, 17 May 2023 23:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684366656;
-        bh=vuVnTgWxQpmJvzDxdn+D8W/c3eqLsteSK4ZcsNFRCWM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZR4CEugP/P7xzTDnDOwqF8irR5Aqly5oOVFgm39EYAr3YxL/mz15CQYmt07ORgnNT
-         mWq5eSMHGxolIF3ruJl/f1MCNIuW1BdMldwb3RqUNpJPXFM5xitC9aPCRZMcP3kR1B
-         n1PoRgntGJfHRH8WY0ktB5Is4aIu9sOruaZlivc1RI3R4Jdzrz8XdGrfDQZ+bgSa/t
-         CBxkcPhaQbK+fhkCS52rm6JIlh2WPixlOyl4ECJQwSBmBXlktkEFsnjuYQzv1SK5d3
-         6EwoyHO4KIK6EwpsSxdnNgFRuQMsmkZHxGUU0e5Bl7K78qrq8GWSl5EIQr3YhuJjFC
-         yE5isIMMgJW5A==
-Date:   Wed, 17 May 2023 17:38:26 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] ALSA: mixart: Replace one-element arrays with simple
- object declarations
-Message-ID: <ZGVlcpuvx1rSOMP8@work>
+        Wed, 17 May 2023 19:42:20 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C20149E8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:42:20 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ae557aaf1dso10939655ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684366939; x=1686958939;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R+PtovZvYqYzb6rdBWxcjpXWIgQA2DVctfW2duNZpLU=;
+        b=QBIL4Gf66xC10MSiEmh/Y4/q+KGXN+g/irHWvDJkTkhDXGyl+AqoRywOth7u5X70A5
+         I0meNKmbC6dcrd9TCXaQHUvei/hP1hjW1EDsMBWjo1Zjh1GLzRpBGMI3ytV/qsG83S4V
+         rI+RW0v7vVKGMEfP06f6Q7U4WcJUj+AA4kiMTNVPfS6WM6e+qoQo+evXBvOGptcRPgpB
+         ZknVgpst9Yvy8VFsJdB8s6QNfYDTOHQNwMolKhp4Q40CpS44SF2sHhj8mL1KZzp+3Jol
+         Rc3nQ7C2S+L2TIgZeNYOQaTw7XD3hnFbER/nNdBgHFROyxjgbWYWpnGbRABCLH7KqAOo
+         KmPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684366939; x=1686958939;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R+PtovZvYqYzb6rdBWxcjpXWIgQA2DVctfW2duNZpLU=;
+        b=dW1qG3CgnWSuXsHzKSm+DnNfVoGQ+nv0f+jsseQJCnUR8UPox103PVV5MoCYbYvxfb
+         Jkdihv1KKvxCyx9zUVBamWAa8G84cO8m9WJ50eD57imTQLH3y0AKBEezr+2YC5kuSVXy
+         vbvfsRC/kTCFNLVRhHriLo1LHf2NifeNTwbni6JDukFfsqbbXtl+S+altgBPNgZmoyXQ
+         3p9OJvK7El9SK+5Xb/cMFgzh74U/U5kn/qnWMrTlRrabM8USqzxdvNeyPgQ4liKrGvBf
+         bBG0ajbc67BRixEuQVrQI8TGDh+6tWMIS2doQmLRDRW+nOlcjZ/xJbq1DX24lBFbw4Sa
+         rOxQ==
+X-Gm-Message-State: AC+VfDyhmT50Q504q7b/ZOsHR/CbCKHO/Vz9lViuKGKhkLhrhLMtRsXW
+        jgMU6CZrVIOWr5AcoccR0cg=
+X-Google-Smtp-Source: ACHHUZ4if+bS6cRA7xGN6UZkvohloZYh/vkcXS7IWJhQFkuA1C25/lc3mdgoLXr6uU8qmCMsbhvjKQ==
+X-Received: by 2002:a17:903:2606:b0:1ac:727b:3a60 with SMTP id jd6-20020a170903260600b001ac727b3a60mr574456plb.4.1684366939443;
+        Wed, 17 May 2023 16:42:19 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902900900b001a2104d706fsm1059809plp.225.2023.05.17.16.42.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 16:42:19 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, minhuadotchen@gmail.com,
+        perex@perex.cz, peter.ujfalusi@gmail.com, tiwai@suse.com
+Subject: Re: [PATCH] ALSA: ti: Use pcm_for_each_format() macro for PCM format iteration
+Date:   Thu, 18 May 2023 07:42:15 +0800
+Message-Id: <20230517234215.3520-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZGTltcv6hSlJWLnh@finisterre.sirena.org.uk>
+References: <ZGTltcv6hSlJWLnh@finisterre.sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,115 +73,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members, instead. However, in this case it seems those one-element
-arrays have never actually been used as fake flexible arrays.
+Hi Mark,
 
-See this code that dates from Linux-2.6.12-rc2 initial git repository build
-(commit 1da177e4c3f4 ("Linux-2.6.12-rc2")):
+>On Wed, May 17, 2023 at 09:01:22PM +0800, Min-Hua Chen wrote:
+>> Use pcm_for_each_format for the PCM format iteration and fix the
+>> following sparse warnings.
+>
+>Please submit patches using subject lines reflecting the style for the
+>subsystem, this makes it easier for people to identify relevant patches.
+>Look at what existing commits in the area you're changing are doing and
+>make sure your subject lines visually resemble what they're doing.
 
-sound/pci/mixart/mixart_core.h:
- 215 struct mixart_stream_state_req
- 216 {
- 217         u32                 delayed;
- 218         u64                 scheduler;
- 219         u32                 reserved4np[3];
- 220         u32                 stream_count;  /* set to 1 for instance */
- 221         struct mixart_flow_info  stream_info;   /* could be an array[stream_cou    nt] */
- 222 } __attribute__((packed));
+Thanks for your comment. I think the subject should be changed to: 
+"ASoC: ti: davinci-mcasp: Use pcm_for_each_format() macro".
 
-sound/pci/mixart/mixart.c:
- 388
- 389         memset(&stream_state_req, 0, sizeof(stream_state_req));
- 390         stream_state_req.stream_count = 1;
- 391         stream_state_req.stream_info.stream_desc.uid_pipe = stream->pipe->group_uid;
- 392         stream_state_req.stream_info.stream_desc.stream_idx = stream->substream->number;
- 393
+>There's no need to resubmit to fix this alone.
 
-So, taking the code above as example, replace multiple one-element
-arrays with simple object declarations, and refactor the rest of the
-code, accordingly.
+thanks
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
-
-This results in no differences in binary output.
-
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/296
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- sound/pci/mixart/mixart.c      | 8 ++++----
- sound/pci/mixart/mixart_core.h | 7 +++----
- 2 files changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/sound/pci/mixart/mixart.c b/sound/pci/mixart/mixart.c
-index 1b078b789604..7ceaf6a7a77e 100644
---- a/sound/pci/mixart/mixart.c
-+++ b/sound/pci/mixart/mixart.c
-@@ -98,7 +98,7 @@ static int mixart_set_pipe_state(struct mixart_mgr *mgr,
- 
- 	memset(&group_state, 0, sizeof(group_state));
- 	group_state.pipe_count = 1;
--	group_state.pipe_uid[0] = pipe->group_uid;
-+	group_state.pipe_uid = pipe->group_uid;
- 
- 	if(start)
- 		request.message_id = MSG_STREAM_START_STREAM_GRP_PACKET;
-@@ -185,7 +185,7 @@ static int mixart_set_clock(struct mixart_mgr *mgr,
- 	clock_properties.clock_mode = CM_STANDALONE;
- 	clock_properties.frequency = rate;
- 	clock_properties.nb_callers = 1; /* only one entry in uid_caller ! */
--	clock_properties.uid_caller[0] = pipe->group_uid;
-+	clock_properties.uid_caller = pipe->group_uid;
- 
- 	dev_dbg(&mgr->pci->dev, "mixart_set_clock to %d kHz\n", rate);
- 
-@@ -565,8 +565,8 @@ static int mixart_set_format(struct mixart_stream *stream, snd_pcm_format_t form
- 
- 	stream_param.pipe_count = 1;      /* set to 1 */
- 	stream_param.stream_count = 1;    /* set to 1 */
--	stream_param.stream_desc[0].uid_pipe = stream->pipe->group_uid;
--	stream_param.stream_desc[0].stream_idx = stream->substream->number;
-+	stream_param.stream_desc.uid_pipe = stream->pipe->group_uid;
-+	stream_param.stream_desc.stream_idx = stream->substream->number;
- 
- 	request.message_id = MSG_STREAM_SET_INPUT_STAGE_PARAM;
- 	request.uid = (struct mixart_uid){0,0};
-diff --git a/sound/pci/mixart/mixart_core.h b/sound/pci/mixart/mixart_core.h
-index 2f0e29ed5d63..ac74b2133c97 100644
---- a/sound/pci/mixart/mixart_core.h
-+++ b/sound/pci/mixart/mixart_core.h
-@@ -231,7 +231,7 @@ struct mixart_group_state_req
- 	u64           scheduler;
- 	u32           reserved4np[2];
- 	u32           pipe_count;    /* set to 1 for instance */
--	struct mixart_uid  pipe_uid[1];   /* could be an array[pipe_count] */
-+	struct mixart_uid  pipe_uid;
- } __attribute__((packed));
- 
- struct mixart_group_state_resp
-@@ -314,7 +314,7 @@ struct mixart_clock_properties
- 	u32 format;
- 	u32 board_mask;
- 	u32 nb_callers; /* set to 1 (see below) */
--	struct mixart_uid uid_caller[1];
-+	struct mixart_uid uid_caller;
- } __attribute__((packed));
- 
- struct mixart_clock_properties_resp
-@@ -401,8 +401,7 @@ struct mixart_stream_param_desc
- 	u32 reserved4np[3];
- 	u32 pipe_count;                           /* set to 1 (array size !) */
- 	u32 stream_count;                         /* set to 1 (array size !) */
--	struct mixart_txx_stream_desc stream_desc[1];  /* only one stream per command, but this could be an array */
--
-+	struct mixart_txx_stream_desc stream_desc;
- } __attribute__((packed));
- 
- 
--- 
-2.34.1
-
+cheers,
+Min-Hua
