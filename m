@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E1A706331
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44970706332
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjEQImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
+        id S230089AbjEQInP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjEQIml (ORCPT
+        with ESMTP id S229708AbjEQInN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:42:41 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B805E5A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:42:39 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso454367a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684312958; x=1686904958;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kFIUj6ro/7QaDjaQIGgghoO002lQDLToBv6wXhWPCX0=;
-        b=WsuLM9Xg+vZVOIz66BMTOxK1sgHEmBl+UtpBWhnUyTcpDLAXgdTeOUY/Hd80j+Kqej
-         zTr0zn+KfDU6sNL62BulsPoB2PMhmNDQwr9Rw8vB/PRr+Q4SZTrXAGxmv/+1wLsaFOA3
-         3JWKefmWffxm+7+U3sfpd4lWZC+NoOEizXE9eZqfN20vLB1f6M1oxnDoY+yrevnZkQ4r
-         ePfPx8XJfbxeA1SmGwZX85LxyBFmL4JGeLscw9ov+yrzEp7n9SFFkrsM71PJUbLIMcwA
-         dX4Fl6aE6aybLflkQ/HSNBdYJXCCRKvh521eDtUCDvuNnXlcMoHcbau200ENpgo+1ZJ8
-         u8zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684312958; x=1686904958;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kFIUj6ro/7QaDjaQIGgghoO002lQDLToBv6wXhWPCX0=;
-        b=GRjSw0cxr/9BsFNpp9zCGBHLybr8edDFnm/4algFixm11xczIEKkjt37rpoa3H/G3T
-         nr8zbEYQ+kxbArgXHy7ACplD4bu10uTfG1mL4b0qxgxy+Ug5LvKx29U/lstiAS+PJSW9
-         yU0UsytJLVlXmC3Q86uvatDfXh4HtiR0ex5iTgP9OJBIr694JKpdhNLxFHhEmiijdoaN
-         VMtx8y4COZHgDLNvrD6M1ePbjlILm5g8/uZm0UIh4b7JOdWDD781CxbHgTp3RkFFhzkL
-         ZSFOGatkdtHPfl5F0IXisx2y13yE6LcjtwhGb/KVelLgI2ZMT2mWzqG1hKQs47qH3Ks3
-         t3uQ==
-X-Gm-Message-State: AC+VfDyKDRBa7bIgHZ+Q1Zc04Yz/0UChWCMv4/KH0zwW9KEZ7KAY8+pW
-        HTmFljpqqhNDMNCQbYXcAJvLng==
-X-Google-Smtp-Source: ACHHUZ4yPBbQnTGIfddhY+24VgUcqsDAvv04zPUMNv2+UQYWXq+3onI4CXFeTRFpBFRLkBak/4cuIw==
-X-Received: by 2002:a17:907:728d:b0:96a:5bdd:7557 with SMTP id dt13-20020a170907728d00b0096a5bdd7557mr21556402ejc.70.1684312958055;
-        Wed, 17 May 2023 01:42:38 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c9ff:4c84:dd21:568d? ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
-        by smtp.gmail.com with ESMTPSA id e17-20020a170906845100b0095844605bb8sm12113783ejy.10.2023.05.17.01.42.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 01:42:37 -0700 (PDT)
-Message-ID: <5695d61d-fdee-dcc2-3747-8e6506cd74e6@linaro.org>
-Date:   Wed, 17 May 2023 10:42:36 +0200
+        Wed, 17 May 2023 04:43:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41872DC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:43:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFF1D643E6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C38C433D2;
+        Wed, 17 May 2023 08:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684312991;
+        bh=FrnAsONyc+Le8DGkA8Xm+odhQ87aaSFTQsnOsAprNns=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EcjPgRPJ9y2TMcoMBIjgPfMVCGjktyrY1r4/MabiKVb2/H5jHNS9upaRIh2oLmJqq
+         NAZ1Z5mAIl05WUjG2o72TGSPJ8EcTQlv2+btFmdr8RhMZczr0bHzSPocxLKxJakae4
+         vU1DJ4OJNgG1jm/xQdydjICS8KE9dx0TMpEs81KOWo/DTpUvl+ALAqBmnOm4LF1QQC
+         fFC2Se6XYf0d0pKR57OPsJq4RSyIdutYY01M0dLnIGb5rClNOPAki1/BACAf9hKAtq
+         xKp+v4B8legptTidynw5Ib8GlrVIGK5/EW3uK7X1gdjqDoFXINH8/fqPyd3rF05bNY
+         0FyihkP1jaI5g==
+Date:   Wed, 17 May 2023 10:43:06 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, anton@tuxera.com,
+        linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v2] ntfs: Add myself as a reviewer
+Message-ID: <20230517-keimen-teesieb-d606296295ba@brauner>
+References: <20230517070739.6505-1-linkinjeon@kernel.org>
+ <4125c148-a4f4-edd2-3009-0283246f8a95@gmail.com>
+ <CAKYAXd_=kXjKnmfiSEuTLG0fd6Ezj+7_R_ZSWntbvUgQ9Hyx0w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: mfd: gateworks-gsc: remove unnecessary
- fan-controller nodes
-Content-Language: en-US
-To:     Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230516153314.453095-1-tharvey@gateworks.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230516153314.453095-1-tharvey@gateworks.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKYAXd_=kXjKnmfiSEuTLG0fd6Ezj+7_R_ZSWntbvUgQ9Hyx0w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 17:33, Tim Harvey wrote:
-> Remove the unnecessary #address-cells and #size-cells nodes from
-> the fan-controller.
+On Wed, May 17, 2023 at 05:26:59PM +0900, Namjae Jeon wrote:
+> 2023-05-17 16:37 GMT+09:00, Bagas Sanjaya <bagasdotme@gmail.com>:
+> > On 5/17/23 14:07, Namjae Jeon wrote:
+> >> I'm volunteering to help review patches for current unmaintained
+> >> ntfs filesytem.
+> >>
+> >> Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+> >> ---
+> >>  MAINTAINERS | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/MAINTAINERS b/MAINTAINERS
+> >> index e2fd64c2ebdc..c2cecb2059d7 100644
+> >> --- a/MAINTAINERS
+> >> +++ b/MAINTAINERS
+> >> @@ -14928,6 +14928,7 @@ F:	drivers/ntb/hw/intel/
+> >>
+> >>  NTFS FILESYSTEM
+> >>  M:	Anton Altaparmakov <anton@tuxera.com>
+> >> +R:	Namjae Jeon <linkinjeon@kernel.org>
+> >>  L:	linux-ntfs-dev@lists.sourceforge.net
+> >>  S:	Supported
+> >>  W:	http://www.tuxera.com/
+> >
+> > Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Thanks for your ack!
+> >
+> > Anyway, what about also adding linux-mm list so that akpm can
+> > pick patches?
+> Hm.. I think that MM folks probably don't like to see fs patches on mm list...
+> And as far as I know, Christian is going to picks up the ntfs patches.
+> Christian, right?
 
-Say why they are unnecessary (e.g. does not have any children).
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+I've picked up your patch already. A notification should be sent
+shortly.
