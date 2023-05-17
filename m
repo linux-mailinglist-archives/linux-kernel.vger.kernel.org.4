@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46F3706873
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B741870687C
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 14:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjEQMn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 08:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
+        id S231495AbjEQMoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 08:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjEQMnZ (ORCPT
+        with ESMTP id S229762AbjEQMoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 08:43:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3806B26A3;
-        Wed, 17 May 2023 05:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684327382; x=1715863382;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0wb+aIX7/letJ9Gm0YD6AnxqCsFTli+EhhB+a+U+28w=;
-  b=SslVsAW6FXxd6f+ZaTufH/c+hLAJ9l11/xgsByN612z5cC8s5s6XMelE
-   0sy30NWoZAs9c+YJoGC33M9VbTinrNftGu8unetDRJLA2yLXyTDBbhS6O
-   D0O6iL36mNXP+YPW/VvinXJz+VKs5FGlPNIKI+q2zEE8O74jiBwYeqFnk
-   7bgSlHookIZdbvFS/nnx4OASyoHhttO0VQnEMGJeccBtb0R4v5ijX23Yx
-   OTunpIyBfX5kgbcw73X0NDVe21psEPu8Ve8d6fdEjgF0h8ZxqQsuCwdt9
-   dFSuJh+/0pnt+XTVbjoFl/a+SLPQh8LISZmin/b7B4763T+jmKjtyheeR
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,282,1677567600"; 
-   d="asc'?scan'208";a="152529056"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 05:42:51 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 17 May 2023 05:42:51 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 17 May 2023 05:42:49 -0700
-Date:   Wed, 17 May 2023 13:42:28 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc:
- convert to yaml
-Message-ID: <20230517-degrading-stoppage-54f7769f1956@wendy>
-References: <20230517094119.2894220-1-claudiu.beznea@microchip.com>
- <20230517094119.2894220-3-claudiu.beznea@microchip.com>
+        Wed, 17 May 2023 08:44:09 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51BE2D4E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:44:06 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba82d82bd39so923578276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 05:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684327446; x=1686919446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gNevE736BEsxBU0FmwLJIhGqBiG7yoAC/t6/uUIBMdY=;
+        b=FMlLS0aECYmfOvG19PTRQ4JzQVOPvgp3keEl4q4lBIcarONNex1FSS2aSSOrdLjxfE
+         OYiPfSd3p8dfD1QItx7D8wl2cvYk/x1+YjFMYiLcupDwHagK7bMFjrihVjrw89h1isK/
+         BL8m4dOesp9dOvFJIsPhRXwRJJZw0WXMjrRaZLCGs1aGyZghu3sRXCSFqAbHEbi4bEe9
+         sb34beQApq2PcsJ82bacmFQQUt6j72BaQNjANrnbsGmWxQJeZKXoqvssjMl8KTkBxSm2
+         hNmUL8hfNmz56/sTiGz6zGIXfLgQdcu9zLtf9Q3wfq58AlUNYHc4mTp5/+V36z6r3Z0n
+         03CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684327446; x=1686919446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gNevE736BEsxBU0FmwLJIhGqBiG7yoAC/t6/uUIBMdY=;
+        b=afKyr4HemXBl06NWXBFj8PyM/v1pB/GH1way0m0NrBB6fVbmxJ6c9ZDzQTHLZjxNlk
+         dKGqQBNmaEzfMriQ1e++8jyqiXbFL8zg1ZMW6L1DX6NpAK/fosYLt5FKnHL8eVY/8rBS
+         VDzdlb3+PGPQpI9YHOJyOevWXWG2oJ4IHTXbeGFCMrDDIZy8LgW2BSriafk14jTh6+Qi
+         2vHKLQNoSFe/NH+bgR5yYZCP9O8GvSXYGA59H0M+Bu+/QQOdxKxYJY/cazzUWsT1gJny
+         DZlKxXgX68DmWpyNicPhOgkCgZ4K/UojWbBc5Q46j1ybQSJ5TWtvaFLgenSShIraYKpQ
+         DQug==
+X-Gm-Message-State: AC+VfDx7DrBMXGawsGYcQcWsJu3ZiRZTy2afhP6W2OHL0ptSKwP2DWu7
+        Gf4ODIPGJ90Oeg9dX76tw6+BkfgKZtiGgybfQIn6cg==
+X-Google-Smtp-Source: ACHHUZ4prpZ1ZwoDxxoHkrbtIQ9L4j9bzrbZd//ns/O1W/Gj5TZTAbzyimVq3qT7URmcD+Feztnv9pZGkl2jlaxwl+I=
+X-Received: by 2002:a25:1504:0:b0:ba7:382f:6380 with SMTP id
+ 4-20020a251504000000b00ba7382f6380mr12543280ybv.24.1684327445737; Wed, 17 May
+ 2023 05:44:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ssdu9SzKEXVS/OPM"
-Content-Disposition: inline
-In-Reply-To: <20230517094119.2894220-3-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1684220962.git.mazziesaccount@gmail.com>
+In-Reply-To: <cover.1684220962.git.mazziesaccount@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 17 May 2023 14:43:54 +0200
+Message-ID: <CACRpkdYPZWNTOW6c0q1+q64JRvxUXswQqm6j5N5KaAWO=sSUaQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] fix fwnode_irq_get[_byname()] returnvalue
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        netdev@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---ssdu9SzKEXVS/OPM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 16, 2023 at 9:12=E2=80=AFAM Matti Vaittinen
+<mazziesaccount@gmail.com> wrote:
 
-On Wed, May 17, 2023 at 12:41:16PM +0300, Claudiu Beznea wrote:
-> Convert Atmel PMC documentation to yaml. Along with it clock names
-> were adapted according to the current available device trees as
-> different controller versions accept different clock (some of them
-> have 3 clocks as input, some has 2 clocks as inputs and some with 2
-> input clocks uses different clock names).
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
+> zero if mapping the IRQ fails. This contradicts the
+> fwnode_irq_get_byname() documentation. Furthermore, returning zero or
+> errno on error is unepected and can easily lead to problems
+> like:
 
-Looks good to me now Claudiu, thanks!
+Also, zero is not really a valid IRQ, it means NO_IRQ:
+https://lwn.net/Articles/470820/
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+I'll apply the pinctrl patches.
 
-Cheers,
-Conor.
-
---ssdu9SzKEXVS/OPM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGTLtAAKCRB4tDGHoIJi
-0liRAQDsZjU9B15a9rnhIN17ei53YY8w3HzELiqszr4hvKfR1wEAjsnlJtzq5Z1w
-U3kVEcygfCm3gQJxqEJTxAHcJtr6IgI=
-=bdpZ
------END PGP SIGNATURE-----
-
---ssdu9SzKEXVS/OPM--
+Yours,
+Linus Walleij
