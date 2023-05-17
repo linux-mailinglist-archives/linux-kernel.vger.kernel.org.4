@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81168707142
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90845707121
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjEQSwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 14:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        id S229753AbjEQStR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 14:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjEQSwc (ORCPT
+        with ESMTP id S229477AbjEQStP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 14:52:32 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4CFD2CB;
-        Wed, 17 May 2023 11:52:12 -0700 (PDT)
+        Wed, 17 May 2023 14:49:15 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38C37ED0;
+        Wed, 17 May 2023 11:49:12 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; t=1684349340; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=JE2a4Q39VW0eBS9d63No9rcptrfd78Cm6kliAwVABGOjR5dZRTUXyOzyK4vEUFi9rW
-    MYH7b+gdvfzscwAwYUKOduyOO0XFp5Y5hE9skriOGfAIc6nDu/aA/zN50Wd3jUhoiNPh
-    uSmMtWD9vVNmsF/Jrj27bpNLkBinvaHyrPX1R9bikaXRImbYfJQAb3j/HV20H4jtFDhU
-    v0bSj7RrFBhQxpihoJHpaYe85EMzG7Rc15U7htZZRmIrJOyFby41rbB6//wKYyJImYwj
-    7T8kOQ5iJaMzzM1MlMCzELGUuo3ndcPQnusjoSbHmSRLR3eKtMf3hsYUDF5maTHnb6mL
-    IR7A==
+    b=Kb9ATq8cgnXihHjfx6fsgp545NsgOhevt6NK59jICYosRWQQjB+oDeaBgAmz3YUv/F
+    rrJ8ifUUyy2h54Tezj6E4bHCJjOLzmXo+jY6feM20gIT32XhHCeRJUkIFbgYW5W8DeRI
+    38rfd7gd4ErtLAw19pDdIlu23Ix89Vjv2ODY/vjCSLgqT3CjY2WtNFZpnIoonVBSh2NI
+    MJiO+jGC2kdAudWYUQEoXHvtr4rUcVyvsLrE8cDx9BnLsQzn+KgBr7rrRxn2igF2RBqA
+    PfsW1p/hy3ri5CQA/sC3V3F0caRCgeulqD9KSrw1bcm14QKOLu7OgvWJI+ZnESWZGj9f
+    VsaA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684349340;
     s=strato-dkim-0002; d=strato.com;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=X46tblRzBgSr7BihipJNIfc87cSRxLaTk9bOHAuw2I0=;
-    b=kSDibsfXvcjxJwPSa/CVD/6nKN31PibjUuNmZSeTZYGLQWHHFFkk6DQy8kiLmXP8uN
-    CTXZIJk7dR8BenEmZ7fBZoA5nmUVOigkHwsjGihEEmdlUK6hsEuE8Wws9iIxpv5c1Y8I
-    0p1YEMGYnEOj87bqQRIGXqLUpiQEn7gFkmOa3vH76PJVRg0pXz9o+j+W/e9GF3N8OJx4
-    ssSCaYX6PldcJuwvG/aJ9mzONHvLgqgj2Qkm1ei4CDahaYXnJbIJfUaaBb6Akbt0XQVU
-    iGGG32uhcH6NUtm6S9KKKgbFL6CDHAsFHh3n7JS4G8z6usuWgnWoDCxg7TL/Ml08gCfg
-    3caA==
+    bh=Hk0tnh+hTFfXKNgIR8FDn7Sblt76hroYTDj/mKNNR1U=;
+    b=IbhyqwmZB+GRWuBmqxUHV6/7KvrYehwnlSoA5//qh2md76i1LMDu7xIzwW+BRkfA8H
+    VsWFasmTnijAkS/gZP97S4yX8iq8CX7NRoR01EkMsDiK0276OvDQLFySLhkAk4fd8BxQ
+    5Q2WpGllRLcFEzq9y8SRlHes7AMYcyS/58oIEakNXNdqBQ1XSpnczzaMZUIfyXIy40Uh
+    4cARroRRv1Xu1oc/DS0VI+c+JPgY3wjUqGxf7LRz7k3Pmnl9oQquuHDlEPyMz5zLmu8t
+    GZHhSghQDrlOyK4zy6IAkVxa/65Ef46V6a6p1PkSOa3K2YfXQb0BA5SxiRBCl2IALmPh
+    6X2w==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -42,35 +42,35 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684349340;
     s=strato-dkim-0002; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=X46tblRzBgSr7BihipJNIfc87cSRxLaTk9bOHAuw2I0=;
-    b=GFgFhZ1nwokA3Dz5QjEQ+MYK2yVkN+w0pDpRhCcxATBdZsFIpJxUBuMvlq4fwS+t13
-    ECAMuZPmvfbHyiIUpl+kYChefB2uJDPNbWIja85/YNznmdBPVxBuDNbt2Coq0r6P8Uyd
-    fsW2cPpnrVZeCXb2YfXvCXPxoXRVDZbjEv1uSB2RzWbXaPbUdNlY0nRI8v/txg94a7LB
-    Te1WOMUNywVNXVZJPl/luEawwT3t6XfXceqXwt36KWhMpUpB0TO5dbpj8rpqgDTeBbsa
-    bbchM3V0A249Zx7CCKu5vss8GEcYOLm0pjiyI69K1+tsczge+xytSpqial68c/j6bkhH
-    Ek9Q==
+    bh=Hk0tnh+hTFfXKNgIR8FDn7Sblt76hroYTDj/mKNNR1U=;
+    b=FuMhPSALi43p29a5Ao0/R+2Qd+Ai31Wx8Fz40DqN7O6lgcFt4FczM5bT5WPWT5WTOd
+    r0apNc0tWpOjoQgQiEIxF5hMtcV12Iy1WZt/K1Na4sw4EYg6d0UWZhWwXzR7sG8y17lz
+    DXgDzIkdVP22cE32kPO1qAMvfUkwyoFxse4g37uan/NxWz83agwKE0FgvHeULk1o07HZ
+    Nj3vt+YI+tZq8B/gtmKbQkP3YpDYI1VAsUS+wI3MGhsif/jglB3jVjdK3pMNYfe8oEGQ
+    ImvzfA//Si4Y2PRekd4F2oBuU3mDuPFJ4uSpsm1/66wIW0Q1J9SErapdcIL105Cip5yZ
+    CIRw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684349340;
     s=strato-dkim-0003; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=X46tblRzBgSr7BihipJNIfc87cSRxLaTk9bOHAuw2I0=;
-    b=eBw36avkcF1NlC9Q+AdC60Ya2duLHm1SSkGCgO+Ot6IewiweDC5FUg8UueKAy5VqPr
-    SLoDoKCDF0FjMZdHOlAg==
+    bh=Hk0tnh+hTFfXKNgIR8FDn7Sblt76hroYTDj/mKNNR1U=;
+    b=T6KLFs+R/4k17oV4zYUqxypHzQbT+n7RhhsR86eGWBtiyqRPJsdSx2m4/NFlXpDJ04
+    uCifT7ErmnAAuOojcLCQ==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4ly9TY="
 Received: from [192.168.244.3]
     by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4HImxBIJ
+    with ESMTPSA id j6420az4HIn0BIK
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Wed, 17 May 2023 20:48:59 +0200 (CEST)
+    Wed, 17 May 2023 20:49:00 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Wed, 17 May 2023 20:48:43 +0200
-Subject: [PATCH 4/8] arm64: dts: qcom: msm8916: Disable audio codecs by
- default
+Date:   Wed, 17 May 2023 20:48:44 +0200
+Subject: [PATCH 5/8] arm64: dts: qcom: pm8916: Move default regulator
+ "-supply"s
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230510-msm8916-regulators-v1-4-54d4960a05fc@gerhold.net>
+Message-Id: <20230510-msm8916-regulators-v1-5-54d4960a05fc@gerhold.net>
 References: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
 In-Reply-To: <20230510-msm8916-regulators-v1-0-54d4960a05fc@gerhold.net>
 To:     Bjorn Andersson <andersson@kernel.org>
@@ -83,97 +83,64 @@ Cc:     Andy Gross <agross@kernel.org>,
         Stephan Gerhold <stephan@gerhold.net>
 X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not every device has something connected to the digital audio codec
-in MSM8916 and/or the analog audio codec in PM8916. Disable those by
-default so the hardware is only powered up when necessary.
+Some of the power supplies for the analog audio codec in PM8916 are
+wired externally. While most boards use the regulators currently
+specified in pm8916.dtsi, in theory it could be connected differently.
+
+We already have msm8916-pm8916.dtsi that models that standard setup
+used by most devices so move the -supply properties there and keep
+the base pm8916.dtsi independent.
+
+Currently all MSM8916 boards in mainline make use of
+msm8916-pm8916.dtsi, so it is not necessary to adjust any other boards.
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
- arch/arm64/boot/dts/qcom/apq8016-sbc.dts       | 5 +++++
- arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts | 5 +++++
- arch/arm64/boot/dts/qcom/msm8916.dtsi          | 1 +
- arch/arm64/boot/dts/qcom/pm8916.dtsi           | 1 +
- 4 files changed, 12 insertions(+)
+ arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/pm8916.dtsi         | 3 ---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-index 3ec449f5cab7..7d7af6406c39 100644
---- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-+++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-@@ -310,6 +310,10 @@ &lpass {
- 	status = "okay";
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+index 6eb5e0a39510..5b3ed7137e1f 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916-pm8916.dtsi
+@@ -35,6 +35,12 @@ &usb_hs_phy {
+ 	v3p3-supply = <&pm8916_l13>;
  };
  
-+&lpass_codec {
-+	status = "okay";
++&wcd_codec {
++	vdd-cdc-io-supply = <&pm8916_l5>;
++	vdd-cdc-tx-rx-cx-supply = <&pm8916_l5>;
++	vdd-micbias-supply = <&pm8916_l13>;
 +};
 +
- &mdss {
- 	status = "okay";
+ &wcnss {
+ 	vddpx-supply = <&pm8916_l7>;
  };
-@@ -399,6 +403,7 @@ &usb_hs_phy {
- };
- 
- &wcd_codec {
-+	status = "okay";
- 	clocks = <&gcc GCC_CODEC_DIGCODEC_CLK>;
- 	clock-names = "mclk";
- 	qcom,mbhc-vthreshold-low = <75 150 237 450 500>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-index baa7bb86cdd5..8197710372ad 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-@@ -218,6 +218,10 @@ &lpass {
- 	status = "okay";
- };
- 
-+&lpass_codec {
-+	status = "okay";
-+};
-+
- &pm8916_resin {
- 	status = "okay";
- 	linux,code = <KEY_VOLUMEDOWN>;
-@@ -302,6 +306,7 @@ &usb_hs_phy {
- };
- 
- &wcd_codec {
-+	status = "okay";
- 	qcom,micbias-lvl = <2800>;
- 	qcom,mbhc-vthreshold-low = <75 150 237 450 500>;
- 	qcom,mbhc-vthreshold-high = <75 150 237 450 500>;
-diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-index 7e0fa37a3adf..d5081a356288 100644
---- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
-@@ -1551,6 +1551,7 @@ lpass_codec: audio-codec@771c000 {
- 				 <&gcc GCC_CODEC_DIGCODEC_CLK>;
- 			clock-names = "ahbix-clk", "mclk";
- 			#sound-dai-cells = <1>;
-+			status = "disabled";
- 		};
- 
- 		sdhc_1: mmc@7824000 {
 diff --git a/arch/arm64/boot/dts/qcom/pm8916.dtsi b/arch/arm64/boot/dts/qcom/pm8916.dtsi
-index f4fb1a92ab55..33ca1002fb75 100644
+index 33ca1002fb75..864bb1cd68db 100644
 --- a/arch/arm64/boot/dts/qcom/pm8916.dtsi
 +++ b/arch/arm64/boot/dts/qcom/pm8916.dtsi
-@@ -178,6 +178,7 @@ wcd_codec: audio-codec@f000 {
- 			vdd-cdc-tx-rx-cx-supply = <&pm8916_l5>;
- 			vdd-micbias-supply = <&pm8916_l13>;
+@@ -174,9 +174,6 @@ wcd_codec: audio-codec@f000 {
+ 					  "cdc_ear_cnp_int",
+ 					  "cdc_hphr_cnp_int",
+ 					  "cdc_hphl_cnp_int";
+-			vdd-cdc-io-supply = <&pm8916_l5>;
+-			vdd-cdc-tx-rx-cx-supply = <&pm8916_l5>;
+-			vdd-micbias-supply = <&pm8916_l13>;
  			#sound-dai-cells = <1>;
-+			status = "disabled";
+ 			status = "disabled";
  		};
- 	};
- };
 
 -- 
 2.40.1
