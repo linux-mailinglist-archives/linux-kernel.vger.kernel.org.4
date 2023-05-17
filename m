@@ -2,121 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6130E7060BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC9A7060BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjEQHGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
+        id S229756AbjEQHGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjEQHGH (ORCPT
+        with ESMTP id S229866AbjEQHGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:06:07 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DA12D43
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:06:05 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pzBEI-0003Y1-5h; Wed, 17 May 2023 09:05:46 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 23D171C6CDD;
-        Wed, 17 May 2023 07:05:44 +0000 (UTC)
-Date:   Wed, 17 May 2023 09:05:43 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Martin Jerabek <martin.jerabek01@gmail.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] can: ctucanfd: Fix an error handling path in
- ctucan_probe_common()
-Message-ID: <20230517-lugged-wreckage-65f6d28379ac-mkl@pengutronix.de>
-References: <4b78c848826fde1b8a3ccd53f32b80674812cb12.1684182962.git.christophe.jaillet@wanadoo.fr>
- <20230515-finisher-plating-8ab57747fea5-mkl@pengutronix.de>
- <86ff131e-c1d2-ca1f-89a4-37cec62877f4@wanadoo.fr>
+        Wed, 17 May 2023 03:06:25 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F84A4EE4
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:06:22 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-ba76528fe31so7642875276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:06:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684307181; x=1686899181;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T/zxxil+VhAqh7Vb2byWsHY9sGimD5DEVksV2dqzcfQ=;
+        b=DYSCAO0HHRjnMcyDD2NtCj8dRPPdYnKvGaaQwh3nXzkVQEEtPcbhawIrokA8sNoCqy
+         BeIyICylfUDhdBQfbliRrrL4up+ylxJXLmqfGxAsr+5FuQlzoI5uaecBIOwJLZl2LwGq
+         c9MzgOFC1sPFna03ZJCZIeUlURz2Njg59ohazfpovltTJ8dc7NO5/xyYlYu9/hj+PAAu
+         RVVPtP7Y5sieZMbKVL58IJvWcIfKnENj8w3N6WoOLtkWpvwX6pw42ykxPgthDckXhZs/
+         qf5TOyn1DzLxApkb3wIl3pykIV9gWdFvpMXKApOcPi++HFaK984PHs1rcWLVwwXtIYNT
+         Avkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684307181; x=1686899181;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T/zxxil+VhAqh7Vb2byWsHY9sGimD5DEVksV2dqzcfQ=;
+        b=TGJNQz5qhdRWCW/91DFJd7sZdhRGa25LM+4Tyevk40lOjw8gu5G3Ca1+Yo/1pDelYQ
+         KipM6zkbvSwOhU6WlKCEpZz1lkd+dA1GlxJ2/2u+wKen05QQ5Eqhs0aT5FfFw3MrjMaP
+         8IhVCT2VwYNnPtSfnzSb5W/fwEmKj9ZjBYGoASK3EGklkJQRGQPFayjIaKNvHj4JbJ8R
+         XRRmgisz+xsfCBGMqs4sUXbhoZ3ghRLVJvSUcesc3zxs0Wtv2PU+RAeBIk9yq8HklgFg
+         PAJjdgXkFVHKSVHkti+vS0vqnGHf0R2dh9f40atDj53OVMXc1oT9sm6B5k9ODD9CQtVh
+         uFEw==
+X-Gm-Message-State: AC+VfDxXqNUPQAh+nGGD4CXKIcABduGCpH7UpXtF0lbmdUXXCn2zzs1+
+        I1rzgyNyV2DFcR69OzG10wnoy9Doe8tBge6m2r/QnQ==
+X-Google-Smtp-Source: ACHHUZ6piA3LP1edrkxG4tjIbGATpuytH8hZFaArRavh0H4Dg47540oTd8P7OjPHgQMlDaTS8Rdwgp38T0sLiuDWbAI=
+X-Received: by 2002:a0d:ea07:0:b0:561:987e:27a with SMTP id
+ t7-20020a0dea07000000b00561987e027amr868541ywe.10.1684307181571; Wed, 17 May
+ 2023 00:06:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cb56oybfxv4tulij"
-Content-Disposition: inline
-In-Reply-To: <86ff131e-c1d2-ca1f-89a4-37cec62877f4@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20230516200516.554663-1-arnd@kernel.org>
+In-Reply-To: <20230516200516.554663-1-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 17 May 2023 09:06:10 +0200
+Message-ID: <CACRpkdZvizr_gFHjAPzzmAtjugu4_gO_g53-BurG4+2j8cwfYQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] irqchip: ftintc010: mark all function static
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 16, 2023 at 10:05=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wr=
+ote:
 
---cb56oybfxv4tulij
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Two functions were always global but never had any callers
+> outside of this file:
+>
+> drivers/irqchip/irq-ftintc010.c:128:39: error: no previous prototype for =
+'ft010_irqchip_handle_irq'
+> drivers/irqchip/irq-ftintc010.c:165:12: error: no previous prototype for =
+'ft010_of_init_irq'
+>
+> Fixes: b4d3053c8ce9 ("irqchip: Add a driver for Cortina Gemini")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-On 16.05.2023 18:47:17, Christophe JAILLET wrote:
-> Le 15/05/2023 =C3=A0 22:51, Marc Kleine-Budde a =C3=A9crit=C2=A0:
-> > On 15.05.2023 22:36:28, Christophe JAILLET wrote:
-> > > If register_candev() fails, a previous netif_napi_add() needs to be u=
-ndone.
-> > > Add the missing netif_napi_del() in the error handling path.
-> >=20
-> > What about this path:
-> > free_candev(ndev) -> free_netdev() -> netif_napi_del()
-> >=20
-> > | https://elixir.bootlin.com/linux/v6.3.2/source/net/core/dev.c#L10714
-> >=20
-> > Marc
-> >=20
->=20
-> Ok, thanks for the review,
->=20
-> so in fact this is the netif_napi_del() call in ctucan_platform_remove()
-> that can be removed instead.
->=20
-> Harmless, but would be more consistent.
-> I'll send a patch for that.
+It's a leftover from when this was called from boardfile code.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Make it so!
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---cb56oybfxv4tulij
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRkfMQACgkQvlAcSiqK
-BOgosQf/XCnxCLojV+HufFxherLeMBZXjrkGa6+8BZsdUIlbCtcwNnEu9Zg2kSyH
-dz6D/3L9JPbkedMiJvoExn+Rw5vMPmPLR2+uVwvUIppjZcvCXKTwzRfPx2XqeH4h
-zlGG+RziMo+yxWI/zE4DIMfuTzcETxkPsceifGxIdkxKJopdXzkojo6/I2bGtjOg
-ZDbrcrGy7KYHDErY0j0gKgjzsRcR0mP8wrsQJO33VtRuGnUIiOrTWysJlqzU0gt8
-nH8a/Se7jgFJ6mNjGChPykhCASUDKNFxtxrSPW0yb2YIUvE2DnhbpDdkJcOFxdaU
-G/BSiE3NUIIl+xF7oXOAnthhrNCBDQ==
-=YZRf
------END PGP SIGNATURE-----
-
---cb56oybfxv4tulij--
+Yours,
+Linus Walleij
