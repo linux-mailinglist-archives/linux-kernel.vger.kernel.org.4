@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE929705FD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55821705FE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbjEQGVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 02:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S232657AbjEQGXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 02:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbjEQGVF (ORCPT
+        with ESMTP id S232660AbjEQGXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 02:21:05 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F432690
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:21:04 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30644c18072so169582f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:21:04 -0700 (PDT)
+        Wed, 17 May 2023 02:23:38 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D409B30D6
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:23:14 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6436dfa15b3so241889b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 23:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684304463; x=1686896463;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s3ZoBkyA20S5DTdyyP5tByv+QSgEyMwfqwV8c9kD140=;
-        b=P8RRYSTStyO/5/f4NJKVG/ZHYLkeB6wgqmu7btxrr1iDGqSIuosSv/k72eOWuTOeIl
-         F7xdz4xLlW1UC4r5Z/syHHyLjEnR9x1A0xJqqpsFqX1LurpTok0el2TCr/d32/l8WnH9
-         1OcIFDCPzgTpYA04t/WYA95u6kp51qoIzg/6RbxFxS4gwQOfbXLaLaUNVI5fYTmic8D4
-         DzqiGeK26Wt3/7WZkOnLO5yKB6QYmF5ELWQO2HObuZ2JCG1FqGJ0/MKSJjsOGKf1GcgJ
-         O160RMjH5y0ZybGk7Z7y8ydtdq1G5nwZSsvHljNA9Dkd+7bDP+u5/iXAu75FCLOWfDqb
-         r3Pw==
+        d=bytedance.com; s=google; t=1684304594; x=1686896594;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S8xG/ucQIOaIYGpSjCWzsY6cnPGAUcadaAlpMAVKgmI=;
+        b=gzfNDUbPPhjD5Fp/5SaloCYxFwtQf+d4QOB9BBz/TRq6p0c1tffvaWPQzOElg/ecap
+         bLU/4osg+td8ASq34TGx+mJSfL0gJKs8ro3OGz6MPgL6oafoseR70kpCvBvByl2OGKrU
+         +4vbxBr4K295RoNsPlLjQqk7U68panLzb83C+8caM3ZXdt3X5vCb3d26x5mzmBUvep0E
+         L6nWcfq6J+r59wO9LwtlPEBN3QTaoJNDlBwvKReQdMWsSGd5R3EQWtgqHP9MddNrktGd
+         f1cH0GmtFzm6YDfCncHQUz6YLRXGZ4PUtVyDTX7shZ7R93QUgY65WU6Tr0TB+qLH8TOI
+         +T/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684304463; x=1686896463;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s3ZoBkyA20S5DTdyyP5tByv+QSgEyMwfqwV8c9kD140=;
-        b=L+hlElO42i81zv1ynGp0OOMXhIKPv9KFsJFnQi5mO/cQKRRJJCQPH2H8qxVAC3JhCE
-         z5bgjsq9DtsWRId4D5YjG4U1/dnQHyof9XIRJ41kDM1IotYCFmvCESUG6zE01TY0iF8X
-         NGz9Ba81F6ouHuB945DWAbbqRTUBH2j5F1nqfj6fcE86RKeu9Ex6vckGlGgzlb31sFz3
-         4lrnLb7hSAPOCytaBZcwnxhBR9oxpuzKYSbTXdDh6YrbIjhOzfGfdywUMA8EXg1Fjh8M
-         qNgMtcpp6NMLN6An83L30Q4fygi/tSKztSbdFIHgnH7QHkFL9Txb7Hhkp7Ox702ZVELr
-         1VwA==
-X-Gm-Message-State: AC+VfDzWzk0bd14KBLu1bS72tcgeD++5eoVcN+Mt2by0vM4qyqxhQYE0
-        b+xyjb9eCq7MtyJZKCrFuqo2pVH0VPXv9Q==
-X-Google-Smtp-Source: ACHHUZ618y+YEYNwPVMIefe4aIrlbudzEMK7Q3k92kQNoGobewTK+u0fSxZmD1lu5xRSbrgBq/vuIA==
-X-Received: by 2002:a5d:550c:0:b0:2f6:987f:a0f5 with SMTP id b12-20020a5d550c000000b002f6987fa0f5mr26388667wrv.5.1684304462838;
-        Tue, 16 May 2023 23:21:02 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id f12-20020adff8cc000000b002fe13ec49fasm1508567wrq.98.2023.05.16.23.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 23:21:01 -0700 (PDT)
-Date:   Wed, 17 May 2023 07:21:00 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2] mm: userfaultfd: avoid passing an invalid range to
- vma_merge()
-Message-ID: <1f94f0be-a3fa-4539-9278-0e876f693c09@lucifer.local>
-References: <ZGKjvceDfpKMxtfb@x1n>
- <bcfb0376-ccf4-4467-9da5-8ae6f1c86876@lucifer.local>
- <20abea10-5307-498b-b9df-8f0b2fed1701@lucifer.local>
- <ZGOcAOFOjx3XPGqO@x1n>
- <9739133c-3ee7-4e94-a6a8-783045a50ac6@lucifer.local>
- <ZGPn00ZqqQqdmk2e@x1n>
- <e90c2b38-805b-4df1-abdd-8ee460b12b72@lucifer.local>
- <ZGP4KSw/yD5ItTYu@x1n>
- <9174fd63-5d32-4b83-bf6b-27f9cb00bd9e@lucifer.local>
- <ZGQEhuXTBdzC2CGC@x1n>
+        d=1e100.net; s=20221208; t=1684304594; x=1686896594;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S8xG/ucQIOaIYGpSjCWzsY6cnPGAUcadaAlpMAVKgmI=;
+        b=J3xYdrfOOk65ubrYrEr2sVNZX4IpRqbZvu/iOMehGTpsADoX9l1QQNgKDfqM+9npJp
+         1ajkw4xbhVOj8geWJOpICWCYT1mjBG/sj3T9RwIPId9wgj1L5J0kgxOZ52H/jwUSRmtC
+         QYs3ckN6x6vDD7W26J8JWHYUXgR8Xl3c9Lm1m7qTj9ebf+C7ZeIJ386bQxV7YQKRwsrx
+         QDmsLm8dU6fqYirvM4tHi5Pm/JZhq1CvxxN92D4BLeG1VDDtcc5qKAf3PP/H+KRtbmlX
+         fnYa1V1ZWZZySDiw8IeR3sZX7OLKW2jFpZzgww1qTeN60yFRpgv7NDabphBV7zxkvkhs
+         HWaw==
+X-Gm-Message-State: AC+VfDxJQnpSjDsIaYsw1NcYPqJ4SHDhfyqCx95iqfOSf/+g9SBjbsy1
+        2c1kzvplTXvlKu32L/qQvH/aMQ==
+X-Google-Smtp-Source: ACHHUZ4mVrADD3DWoUpYWlg+nDKr8S6jQpmPIUFciDbeMFt538Frq9eoEbThtFrKwUslbTUTgNM6kA==
+X-Received: by 2002:a05:6a00:1149:b0:647:1cb7:b714 with SMTP id b9-20020a056a00114900b006471cb7b714mr32721060pfm.3.1684304594248;
+        Tue, 16 May 2023 23:23:14 -0700 (PDT)
+Received: from [10.3.43.196] ([61.213.176.13])
+        by smtp.gmail.com with ESMTPSA id x21-20020aa784d5000000b006259e883ee9sm13919400pfn.189.2023.05.16.23.23.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 May 2023 23:23:13 -0700 (PDT)
+Message-ID: <b0b69e9d-da8a-791b-545f-c521dc752b88@bytedance.com>
+Date:   Wed, 17 May 2023 14:21:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGQEhuXTBdzC2CGC@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Re: Re: Re: [PATCH v2 0/2] virtio: abstract virtqueue related
+ methods
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     stefanha@redhat.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20230517025424.601141-1-pizhenwei@bytedance.com>
+ <20230516234444-mutt-send-email-mst@kernel.org>
+ <8f3ca136-0276-49ca-d703-715c83cff557@bytedance.com>
+ <20230516235541-mutt-send-email-mst@kernel.org>
+ <949dd4db-89ea-4331-5fa7-700f96874ab3@bytedance.com>
+ <20230517020947-mutt-send-email-mst@kernel.org>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20230517020947-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,80 +83,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 06:32:38PM -0400, Peter Xu wrote:
-> On Tue, May 16, 2023 at 11:15:54PM +0100, Lorenzo Stoakes wrote:
-> > I'll try to address this in a later series, I don't think there's much use
-> > in going round in circles on this. If you dislike that series, you're
-> > welcome to provide negative feedback there, I don't think there's much use
-> > in discussing further here.
->
-> I'm happy to read it, sorry if any of my wording was intruding, I didn't
-> mean so.
+On 5/17/23 14:10, Michael S. Tsirkin wrote:
+> On Wed, May 17, 2023 at 12:58:10PM +0800, zhenwei pi wrote:
+>> On 5/17/23 11:57, Michael S. Tsirkin wrote:
+>>> On Wed, May 17, 2023 at 11:51:03AM +0800, zhenwei pi wrote:
+>>>>
+>>>>
+>>>> On 5/17/23 11:46, Michael S. Tsirkin wrote:
+>>>>> On Wed, May 17, 2023 at 10:54:22AM +0800, zhenwei pi wrote:
+>>>>>> v1 -> v2:
+>>>>>> - Suggested by MST, use fast path for vring based performance
+>>>>>> sensitive API.
+>>>>>> - Reduce changes in tools/virtio.
+>>>>>>
+>>>>>> Add test result(no obvious change):
+>>>>>> Before:
+>>>>>> time ./vringh_test --parallel
+>>>>>> Using CPUS 0 and 191
+>>>>>> Guest: notified 10036893, pinged 68278
+>>>>>> Host: notified 68278, pinged 3093532
+>>>>>>
+>>>>>> real	0m14.463s
+>>>>>> user	0m6.437s
+>>>>>> sys	0m8.010s
+>>>>>>
+>>>>>> After:
+>>>>>> time ./vringh_test --parallel
+>>>>>> Using CPUS 0 and 191
+>>>>>> Guest: notified 10036709, pinged 68347
+>>>>>> Host: notified 68347, pinged 3085292
+>>>>>>
+>>>>>> real	0m14.196s
+>>>>>> user	0m6.289s
+>>>>>> sys	0m7.885s
+>>>>>>
+>>>>>> v1:
+>>>>>> Hi,
+>>>>>>
+>>>>>> 3 weeks ago, I posted a proposal 'Virtio Over Fabrics':
+>>>>>> https://lists.oasis-open.org/archives/virtio-comment/202304/msg00442.html
+>>>>>>
+>>>>>> Jason and Stefan pointed out that a non-vring based virtqueue has a
+>>>>>> chance to overwrite virtqueue instead of using vring virtqueue.
+>>>>>>
+>>>>>> Then I try to abstract virtqueue related methods in this series, the
+>>>>>> details changes see the comment of patch 'virtio: abstract virtqueue related methods'.
+>>>>>>
+>>>>>> Something is still remained:
+>>>>>> - __virtqueue_break/__virtqueue_unbreak is supposed to use by internal
+>>>>>>      virtio core, I'd like to rename them to vring_virtqueue_break
+>>>>>>      /vring_virtqueue_unbreak. Is this reasonable?
+>>>>>
+>>>>> Why? These just set a flag?
+>>>>>
+>>>>
+>>>> Rename '__virtqueue_break' to 'vring_virtqueue_break', to make symbols
+>>>> exported from virtio_ring.ko have unified prefix 'vring_virtqueue_xxx'.
+>>>
+>>> I just do not see why you need these callbacks at all.
+>>>
+>>
+>> I use these callbacks for break/unbreak device like:
+>> static inline void virtio_break_device(struct virtio_device *dev)
+>> {
+>> 	struct virtqueue *vq;
+>>
+>> 	spin_lock(&dev->vqs_list_lock);
+>> 	list_for_each_entry(vq, &dev->vqs, list) {
+>> 		vq->__break(vq);
+>> 	}
+>> 	spin_unlock(&dev->vqs_list_lock);
+>> }
+> 
+> why do this? backend knows they are broken.
+> 
 
-No it's fine, I've perhaps not been clear, but this has all inspired an
-upcoming change so it's all good :)
+I grep 'virtio_break_device' in the latest code:
+arch/um/drivers/virtio_uml.c:1147:	virtio_break_device(&vu_dev->vdev);
+arch/um/drivers/virtio_uml.c:1285:	virtio_break_device(&vu_dev->vdev);
+drivers/crypto/virtio/virtio_crypto_core.c:269:	 
+virtio_break_device(vcrypto->vdev);
+drivers/s390/virtio/virtio_ccw.c:1251:			virtio_break_device(&vcdev->vdev);
+drivers/s390/virtio/virtio_ccw.c:1268:		virtio_break_device(&vcdev->vdev);
+drivers/firmware/arm_scmi/virtio.c:489: 
+virtio_break_device(vioch->vqueue->vdev);
+drivers/char/virtio_console.c:1956:	virtio_break_device(vdev);
 
->
-> I think there's chance at least on generalizing vma flag change cases, even
-> though I'm not sure whether vma_merge() needs change.  Maybe it can be
-> another layer on top of it while keeping vma_merge() as is, but I can't tell.
->
+Some virtio drivers use 'virtio_break_device'...
 
-Indeed, will dig in!
+>>>>>> - virtqueue_get_desc_addr/virtqueue_get_avail_addr/virtqueue_get_used_addr
+>>>>>>      /virtqueue_get_vring is vring specific, I'd like to rename them like
+>>>>>>      vring_virtqueue_get_desc_addr. Is this reasonable?
+>>>>>> - there are still some functions in virtio_ring.c with prefix *virtqueue*,
+>>>>>>      for example 'virtqueue_add_split', just keep it or rename it to
+>>>>>>      'vring_virtqueue_add_split'?
+>>>>>> zhenwei pi (2):
+>>>>>>      virtio: abstract virtqueue related methods
+>>>>>>      tools/virtio: implement virtqueue in test
+>>>>>>
+>>>>>>     drivers/virtio/virtio_ring.c | 285 +++++-----------------
+>>>>>>     include/linux/virtio.h       | 441 +++++++++++++++++++++++++++++++----
+>>>>>>     include/linux/virtio_ring.h  |  26 +++
+>>>>>>     tools/virtio/linux/virtio.h  | 355 +++++++++++++++++++++++++---
+>>>>>>     4 files changed, 807 insertions(+), 300 deletions(-)
+>>>>>>
+>>>>>> -- 
+>>>>>> 2.20.1
+>>>>>
+>>>>
+>>>> -- 
+>>>> zhenwei pi
+>>>
+>>
+>> -- 
+>> zhenwei pi
+> 
 
-> > We've seen a regression on invalid input to vma_merge() (explicitly I mean
-> > triggering a VM_WARN_ON()) and VMA fragmentation you were not aware of
-> > here, that does not strike me as a great + clear interface.
->
-> Yes, the code needs time to read through, even the interface.  I don't
-> think I fully digested that myself.
->
-> [...]
->
-> > Ah the thanks you get for contributing a regression fix _and_ a repro - a
-> > nack :) will you at least give me some kind of a tag... or buy me a beer?
-> > ;)
->
-> I can. :)
->
-> We actually met on the conference, if I'll be able to meet you somewhere
-> that's what I can do.
-
-Yeah was nice to meet! And only being tongue in cheek, I actually at this
-point do think your suggestion should replace my patch.
-
->
-> I was probably hashing in the words, sorry about that if so, and thanks for
-> looking at this issue!  I appreciate both your assertion patch and the png
-> documentation file.
->
-> It's just that I feel irresponsible when we were talking about having vma
-> not merged correctly but then the discussion tried to end at there saying
-> it kept so so it's fine.  IMHO we should look into that problem or
-> something could be missing here.  Then when I was looking into that
-> not-merged issue I found that it's not uffd that's special.
-
-Sure, we should try to keep all invocations as close as possible if we
-can. It does seem as you say that uffd got left behind on this.
-
->
-> > > Before that I'd like to know whether you agree that the new patch 1 (I'll
-> > > fixup the vma_prev() side effect) could be a better solution than the
-> > > current one, no matter whether we need a full revert or not.
-> >
-> > In principle it looks fine actually (pending Liam's assessment), case 4/5
-> > should handle it, but I feel like we need a comment (perhaps only in commit
-> > msg) to make clear that we are ensuring that the inputs to vma_merge() are
-> > either clamped to VMAs or case 4/5.
-> >
-> > Let's see what Liam thinks, then let me check it locally to give a final
-> > OK, if I may.
->
-> Sounds perfect here.  Thanks a lot.
-
-Great!
-
->
-> --
-> Peter Xu
->
+-- 
+zhenwei pi
