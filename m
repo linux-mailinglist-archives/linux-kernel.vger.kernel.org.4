@@ -2,88 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DCA7072AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1D47070EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbjEQUBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
+        id S229630AbjEQSiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 14:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjEQUBb (ORCPT
+        with ESMTP id S229533AbjEQSiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:01:31 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3049F5B8E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:01:29 -0700 (PDT)
-Received: (qmail 887386 invoked by uid 1000); 17 May 2023 16:01:28 -0400
-Date:   Wed, 17 May 2023 16:01:28 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
-        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1] usb: gadget: udc: core: Offload usb_udc_vbus_handler
- processing
-Message-ID: <c7cb96ea-628d-4591-908c-d6ea572ef5a0@rowland.harvard.edu>
-References: <20230517115955.1078339-1-badhri@google.com>
- <c7f19b4e-469c-4e40-bd2e-e864ca5f7872@rowland.harvard.edu>
- <CAPTae5JB2LLEF7ZNaJxMnF==8WCWoEYvmF_FK3F=BDq0Hko0xQ@mail.gmail.com>
+        Wed, 17 May 2023 14:38:07 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDFB524E;
+        Wed, 17 May 2023 11:38:05 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2ac89e6a5a1so11830611fa.0;
+        Wed, 17 May 2023 11:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684348684; x=1686940684;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FuipT8N9AIZhPuetrFCf6nkInGjCzh1d3K2+VTwrcZI=;
+        b=gC+vtXyeAJ6dSdPO9ckA5gFbeFI6fhGGVE+IeeHLh/LIpDM3DveIKb2PnQypN3RyCI
+         GfrhzjmpK1KfNaTuYgFK0AiYvAeNAQM2tB05rFKDaNFtuS6HyjITY7bNHQkaczRUo10E
+         oSYee6FmENAWY0/rtA93xOVPTLBwIqbm+salh6EXh0oIQqRIlKIFNOrt/3F8+wRTF+9N
+         lyo7L7pIuyoLah1EDY3ZNBdRbOI2jnalHE6bCfmTMzXspCtMt9OkIXr3jERyGocoVZ6Z
+         NPj/L+zzFiprF7/Mq7m2YpzbTh+pRGQ1YAIGKDp1OnV+822undYgBeyjgdWWz2xL2L3r
+         nAXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684348684; x=1686940684;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FuipT8N9AIZhPuetrFCf6nkInGjCzh1d3K2+VTwrcZI=;
+        b=mFa/sx9XQn8Yu2saLDBQ+o12+bfvlJ9fzUOkUBjn5tX9dX6vssqjdgmjkL6zHft1ZN
+         2ujyskQo16xFK+RBtX/EJ/Vi+xAgz5zTqdSeb0k653wmuRtE0S+Ua/7SrEQ5sH7pzBhY
+         l9I7UiQfJ+pXnFafQXzKCJrnt6ekKvH/Co9bUz/zbCndEZkJGcgOiNGeYOL4NnOWCDlP
+         PUSfLw5lkseztgwkFSKqkmmvUL6rBpZLlWe73dyY14K0p8bASqdaUDjlcn+fBeyAa60h
+         vPGQ/Kz57qs0xJiY0C3FtnfdoM8RYvkThn2gDA3jRyIlCXnZUkz/m3Eb4Z76fHPXMj0T
+         oNlQ==
+X-Gm-Message-State: AC+VfDz6AjiSMzdmiJfFGtqixz4j6fp5zHYzjDzpTg7ruDf6zyqE+hRy
+        bbGap5mUDYgt+WVzEFOL4Ag=
+X-Google-Smtp-Source: ACHHUZ6aSd8ko9LwiT1p/Y4sOJtZSnY3Z/munJAXGrvF4WuL83R/fb4/bH+qI5hWg4SkULozraJtkQ==
+X-Received: by 2002:a2e:800a:0:b0:2a7:96bd:9eb3 with SMTP id j10-20020a2e800a000000b002a796bd9eb3mr10581246ljg.3.1684348683477;
+        Wed, 17 May 2023 11:38:03 -0700 (PDT)
+Received: from [100.119.125.242] (95-31-187-187.broadband.corbina.ru. [95.31.187.187])
+        by smtp.gmail.com with ESMTPSA id t20-20020ac25494000000b004db0d26adb4sm3451405lfk.182.2023.05.17.11.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 11:38:02 -0700 (PDT)
+Message-ID: <5d7421b6a419a9645f97e6240b1dfbf47ffcab4e.camel@gmail.com>
+Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment
+ option
+From:   Ivan Mikhaylov <fr0st61te@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Paul Fertser <fercerpav@gmail.com>
+Date:   Wed, 17 May 2023 21:38:02 +0000
+In-Reply-To: <38ae4ceb-da21-d73e-9625-1918b4ab4e16@linaro.org>
+References: <20230509143504.30382-1-fr0st61te@gmail.com>
+         <20230509143504.30382-4-fr0st61te@gmail.com>
+         <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
+         <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
+         <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
+         <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
+         <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
+         <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
+         <38ae4ceb-da21-d73e-9625-1918b4ab4e16@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPTae5JB2LLEF7ZNaJxMnF==8WCWoEYvmF_FK3F=BDq0Hko0xQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:19:25AM -0700, Badhri Jagan Sridharan wrote:
-> On Wed, May 17, 2023 at 7:44 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Wed, May 17, 2023 at 11:59:55AM +0000, Badhri Jagan Sridharan wrote:
-> > > chipidea udc calls usb_udc_vbus_handler from udc_start gadget
-> > > ops causing a deadlock. Avoid this by offloading usb_udc_vbus_handler
-> > > processing.
-> >
-> > Surely that is the wrong approach.
-> >
-> > The real problem here is that usb_udc_vbus_handler() gets called from
-> > within a udc_start routine.  But this is totally unnecessary, because
-> > the UDC core will call usb_udc_connect_control_locked() itself, later on
-> > during gadget_bind_driver().
-> 
-> Hi Alan,
-> 
-> usb_udc_vbus_handler sets the udc->vbus flag as well apart from
-> calling usb_udc_connect_control_locked().  So, removing usb_udc_vbus_handler
-> from chip specific start callback might prevent the controller from
-> starting.
-> 
-> void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
-> {
-> struct usb_udc *udc = gadget->udc;
-> 
-> mutex_lock(&udc->connect_lock);
-> if (udc) {
-> udc->vbus = status;
-> usb_udc_connect_control_locked(udc);
+On Wed, 2023-05-17 at 10:36 +0200, Krzysztof Kozlowski wrote:
+> On 16/05/2023 13:47, Ivan Mikhaylov wrote:
+> hy this is property of the hardware. I
+> > > > > understand
+> > > > > that this is something you want Linux to do, but DT is not
+> > > > > for
+> > > > > that
+> > > > > purpose. Do not encode system policies into DT and what above
+> > > > > commit
+> > > > > says is a policy.
+> > > > >=20
+> > > >=20
+> > > > Krzysztof, okay then to which DT subsystem it should belong? To
+> > > > ftgmac100 after conversion?
+> > >=20
+> > > To my understanding, decision to add some numbers to MAC address
+> > > does
+> > > not look like DT property at all. Otherwise please help me to
+> > > understand
+> > > - why different boards with same device should have different
+> > > offset/value?
+> > >=20
+> > > Anyway, commit msg also lacks any justification for this.
+> > >=20
+> > > Best regards,
+> > > Krzysztof
+> > >=20
+> >=20
+> > Krzysztof, essentially some PCIe network cards have like an
+> > additional
+> > *MII interface which connects directly to a BMC (separate SoC for
+> > managing a motherboard) and by sending special ethernet type frames
+> > over that connection (called NC-SI) the BMC can obtain MAC, get
+> > link
+> > parameters etc. So it's natural for a vendor to allocate two MACs
+> > per
+> > such a board with PCIe card intergrated, with one MAC "flashed
+> > into"
+> > the network card, under the assumption that the BMC should
+>=20
+> Who makes the assumption that next MAC should differ by 1 or 2?
 
-Then add "udc->vbus = true;" at the appropriate spot in 
-gadget_bind_driver().
+Krzysztof, in this above case BMC does, BMC should care about changing
+it and doing it with current codebase without any options just by some
+hardcoded numbers which is wrong.
 
-Alan Stern
+>=20
+> > automatically use the next MAC. So it's the property of the
+> > hardware as
+> > the vendor designs it, not a matter of usage policy.
+> >=20
+> > Also at the nvmem binding tree is "nvmem-cell-cells" which is
+> > literally
+> > the same as what was proposed but on different level.
+> >=20
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/Documentation/devicetree/bindings/nvmem?id=3D7e2805c203a6c8dc85c1cfda205=
+161ed39ae82d5
+>=20
+> How is this similar? This points the location of mac address on some
+> NV
+> storage. You add fixed value which should be added to the Ethernet.
 
-PS: I just noticed that in max3420_udc.c, the max_3420_vbus_handler() 
-function calls usb_udc_vbus_handler() from within an interrupt handler.  
-This won't work, since interrupt handlers aren't allowed to sleep and 
-therefore can't lock mutexes.
+It's not the points the location, this particular option provides this
+increment for mac addresses to make use of them with multiple
+interfaces. Just part of above commit:
+"It's used as a base for calculating addresses for multiple interfaces.
+It's done by adding proper values. Actual offsets are picked by
+manufacturers and vary across devices."
+
+It is same as we talked before about mac-address-increment in openwrt
+project, if you want examples, you can look into their github. And same
+as we trying to achieve here.
+
+https://github.com/openwrt/openwrt/blob/master/target/linux/generic/pending=
+-5.15/682-of_net-add-mac-address-increment-support.patch
+
+"Lots of embedded devices use the mac-address of other interface
+extracted from nvmem cells and increments it by one or two. Add two
+bindings to integrate this and directly use the right mac-address for
+the interface. Some example are some routers that use the gmac
+mac-address stored in the art partition and increments it by one for
+the
+wifi. mac-address-increment-byte bindings is used to tell what byte of
+the mac-address has to be increased (if not defined the last byte is
+increased) and mac-address-increment tells how much the byte decided
+early has to be increased."
+
+Don't you see similarity with nvmem commit?
+
+>=20
+> I might be missing the context but there is no DTS example nor user
+> of
+> this property, so how can I get such?
+>=20
+
+I don't see it either in linux kernel DTS tree but it in DTS doc.
+
+Also, just a little bit history about older propositions
+https://lore.kernel.org/all/?q=3Dmac-address-increment
+https://lore.kernel.org/all/20200919214941.8038-5-ansuelsmth@gmail.com/
+
+
+Thanks.
+
+
