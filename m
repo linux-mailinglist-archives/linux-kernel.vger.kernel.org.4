@@ -2,102 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FED70753A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036D670753E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjEQWVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S229509AbjEQWV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjEQWU7 (ORCPT
+        with ESMTP id S229448AbjEQWV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:20:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C753940F4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:20:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 658CD64B99
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 22:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842E5C433EF;
-        Wed, 17 May 2023 22:20:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1684362029;
-        bh=NytFsz7TaWpQ0xHSi4FEPFoDMRh4D1j2c+g6k9t3n5Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Aq61Wmrq0K6xc/wL30oB3UkxyHJ6Uh9hXcZBrdPGcHI4q5pNWgufSkg5RwAAWDNoD
-         MAn83CSWtOuNJbqAT0yyjyU4mzXMtKbDQ3OTB5r9iKHpO6HXDytYgtMlea7n8vQKkP
-         LRBlUK9k2mYMbLsmmZ6RPvWFyz1LyUsMWhbDNPzk=
-Date:   Wed, 17 May 2023 15:20:28 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Michael Ellerman' <mpe@ellerman.id.au>,
-        "glider@google.com" <glider@google.com>,
-        "elver@google.com" <elver@google.com>,
-        "zhangpeng.00@bytedance.com" <zhangpeng.00@bytedance.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] mm: kfence: Fix false positives on big endian
-Message-Id: <20230517152028.86b6d2d5afa4541b4269131b@linux-foundation.org>
-In-Reply-To: <826f836f41db41eeb0fc32061994ac39@AcuMS.aculab.com>
-References: <20230505035127.195387-1-mpe@ellerman.id.au>
-        <826f836f41db41eeb0fc32061994ac39@AcuMS.aculab.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 18:21:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0222449DC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684362038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VcaEZoDJHfgt+J9YnbNiKZBp9/Lub2+teMXBeGVG5MA=;
+        b=USomMHhVhO69hrPJE7QFl+fBzn1oiUdUIm9YAtH0hh+L+mkImFfXq4nGwXUl9pP++w9TqE
+        C6Xvf2N5Ps6h2THRBazMT/T7V2HUkingfX/eIyQlsn3uVGzaF37qZBLdEQu+wlBtcCfZuR
+        XmfNe0QhNlAAVuDP5lOUBStXahVRc1E=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-375-7DcGfwBHOr2JaooFSIh2Vg-1; Wed, 17 May 2023 18:20:37 -0400
+X-MC-Unique: 7DcGfwBHOr2JaooFSIh2Vg-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f387d3b41eso1998141cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 15:20:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684362037; x=1686954037;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcaEZoDJHfgt+J9YnbNiKZBp9/Lub2+teMXBeGVG5MA=;
+        b=O3F9D/tzEHUvlGhfooA1+cJDg0qpAolOgyASqPKLlY/sQMRNc0VfZY1YSVwpXNRLIx
+         fUzQ2qrTxVKaqPHlSCoVxRxqIfssFl+IHrTx08J3reGdIAuB2yn7bBSAgnuy2jApFJb6
+         SGhk7Zr4oiJ3l3PhVPe/53hlNZhbMSFDqrUyTlm4R7BWKk/aefZsnM3PGSFjsm9YuoaX
+         lBQWNOK+WgmBpFPYErW7U4ym6Z3iATxnwDLKxFChBnvUWgxhd2su4CbxtjAZGA+cfE4P
+         e63vgprcchgMemtVNl0v90tylTurl+4jXxCzmAFkYBMxPhMb3Fy9DJMMAPkL21lH5eIx
+         EJMA==
+X-Gm-Message-State: AC+VfDyGBAwlpSKEs00yBhoCcxuOHmbD1lXxYYXl/ZRtgDvxa0iAmTHM
+        WPwlHe3fLlSjvOR1yAxxEq+9wlu/dFZkJsEsfTxBZUv8yHh5C4ua/KpC01vO6BvQiNIbJvCLHFd
+        A9IOrzt8W3nN+8etng71ocm7F
+X-Received: by 2002:a05:622a:1a27:b0:3f3:9680:c51d with SMTP id f39-20020a05622a1a2700b003f39680c51dmr8042884qtb.0.1684362037293;
+        Wed, 17 May 2023 15:20:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ51qVMVRnjdvCvS7y5TEkZzxFBB4mc/MDlORK64EYFltlS9Fb1BPgf2+NDqPVLOw0qxDZ9JXw==
+X-Received: by 2002:a05:622a:1a27:b0:3f3:9680:c51d with SMTP id f39-20020a05622a1a2700b003f39680c51dmr8042857qtb.0.1684362037020;
+        Wed, 17 May 2023 15:20:37 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05620a15cf00b0075784a8f13csm937274qkm.96.2023.05.17.15.20.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 15:20:36 -0700 (PDT)
+Date:   Wed, 17 May 2023 18:20:34 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Anish Moorthy <amoorthy@google.com>
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+Message-ID: <ZGVTMnVKNcQDM0x4@x1n>
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+ <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
+ <ZGVRUeCWr8209m8d@x1n>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZGVRUeCWr8209m8d@x1n>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 16:02:17 +0000 David Laight <David.Laight@ACULAB.COM> wrote:
-
-> From: Michael Ellerman
-> > Sent: 05 May 2023 04:51
+On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
+> On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
+> > On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
+> > <axelrasmussen@google.com> wrote:
+> > >
+> > > So the basic way to use this new feature is:
+> > >
+> > > - On the new host, the guest's memory is registered with userfaultfd, in
+> > >   either MISSING or MINOR mode (doesn't really matter for this purpose).
+> > > - On any first access, we get a userfaultfd event. At this point we can
+> > >   communicate with the old host to find out if the page was poisoned.
+> > > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
+> > >   so any future accesses will SIGBUS. Because the pte is now "present",
+> > >   future accesses won't generate more userfaultfd events, they'll just
+> > >   SIGBUS directly.
 > > 
-> > Since commit 1ba3cbf3ec3b ("mm: kfence: improve the performance of
-> > __kfence_alloc() and __kfence_free()"), kfence reports failures in
-> > random places at boot on big endian machines.
+> > I want to clarify the SIGBUS mechanism here when KVM is involved,
+> > keeping in mind that we need to be able to inject an MCE into the
+> > guest for this to be useful.
 > > 
-> > The problem is that the new KFENCE_CANARY_PATTERN_U64 encodes the
-> > address of each byte in its value, so it needs to be byte swapped on big
-> > endian machines.
+> > 1. vCPU gets an EPT violation --> KVM attempts GUP.
+> > 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
+> > 3. KVM finds that GUP failed and returns -EFAULT.
 > > 
-> > The compiler is smart enough to do the le64_to_cpu() at compile time, so
-> > there is no runtime overhead.
+> > This is different than if GUP found poison, in which case KVM will
+> > actually queue up a SIGBUS *containing the address of the fault*, and
+> > userspace can use it to inject an appropriate MCE into the guest. With
+> > UFFDIO_SIGBUS, we are missing the address!
 > > 
-> > Fixes: 1ba3cbf3ec3b ("mm: kfence: improve the performance of __kfence_alloc() and __kfence_free()")
-> > Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> > ---
-> >  mm/kfence/kfence.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > I see three options:
+> > 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
+> > this is pointless.
+> > 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
+> > UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
+> > instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
+> > accesses, just like how we get repeated signals for real poison.
+> > 3. Use this in conjunction with the additional KVM EFAULT info that
+> > Anish proposed (the first part of [1]).
 > > 
-> > diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-> > index 2aafc46a4aaf..392fb273e7bd 100644
-> > --- a/mm/kfence/kfence.h
-> > +++ b/mm/kfence/kfence.h
-> > @@ -29,7 +29,7 @@
-> >   * canary of every 8 bytes is the same. 64-bit memory can be filled and checked
-> >   * at a time instead of byte by byte to improve performance.
-> >   */
-> > -#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(0x0706050403020100))
-> > +#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^ (u64)(le64_to_cpu(0x0706050403020100)))
+> > I think option 3 is fine. :)
 > 
-> What at the (u64) casts for?
-> The constants should probably have a ul (or ull) suffix.
+> Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
+
+I just remember Axel mentioned this in the commit message, and just in case
+this is why option 4) was ruled out:
+
+        They expect that once poisoned, pages can never become
+        "un-poisoned". So, when we live migrate the VM, we need to preserve
+        the poisoned status of these pages.
+
+Just to supplement on this point: we do have unpoison (echoing to
+"debug/hwpoison/hwpoison_unpoison"), or am I wrong?
+
 > 
+> Besides what James mentioned on "missing addr", I didn't quickly see what's
+> the major difference comparing to the old hwpoison injection methods even
+> without the addr requirement. If we want the addr for MCE then it's more of
+> a question to ask.
+> 
+> I also didn't quickly see why for whatever new way to inject a pte error we
+> need to have it registered with uffd.  Could it be something like
+> MADV_PGERR (even if MADV_HWPOISON won't suffice) so you can inject even
+> without an userfault context (but still usable when uffd registered)?
+> 
+> And it'll be alawys nice to have a cover letter too (if there'll be a new
+> version) explaining the bits.
+> 
+> Thanks,
+> 
+> -- 
+> Peter Xu
 
-I tried that, didn't fix the sparse warnings described at
-https://lkml.kernel.org/r/202305132244.DwzBUcUd-lkp@intel.com.
+-- 
+Peter Xu
 
-Michael, have you looked into this?
-
-I'll merge it upstream - I guess we can live with the warnings for a while.
