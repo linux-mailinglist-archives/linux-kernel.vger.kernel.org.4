@@ -2,107 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656C6706D9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE2F706E0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjEQQF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S229621AbjEQQ0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjEQQF0 (ORCPT
+        with ESMTP id S229483AbjEQQ0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:05:26 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97109110;
-        Wed, 17 May 2023 09:05:25 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c30fbccd4so816815a12.0;
-        Wed, 17 May 2023 09:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684339525; x=1686931525;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JbDnB2PXIbg1nrLsvecGt1DuT+K73v6dCg1HZevcZvc=;
-        b=R+JAY/0n8zLGV8wFotOEzEJpiiGuPQJiOm3W4d16A9wrPM1VEk7cqZDc7jDh7VwHLe
-         bMfHTeB3HFe7LBnZYLy7u9GRO9cQp9E7/Jg/2Vbjq5L9P7NGAxrkq/yNS/oDK1S3rb0W
-         t9YJJ7xXTylFuZbhTJcmFSWCJJLRU12eopskn9Dy224gmIMOaP8JSFVepuxZfT10XCIw
-         0MjvLgzetNIOv0z0ngngo7kh8a3lsXnIfZ93k/eTETASKJZlEg2EBMgQDdx0Dmnrj3tY
-         nqyGZIaDur0HDgK+/Gy3hwzO3fth3LXQKpSiqX2QJsssWza9bQS3nZntIgG9rnIsZ30m
-         HADg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684339525; x=1686931525;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JbDnB2PXIbg1nrLsvecGt1DuT+K73v6dCg1HZevcZvc=;
-        b=N/43dhOqs62g2dLEahPWPiMST66f4C8siv5W+I5AwMX5gBHu67KYSA8kmk4DFFvxe8
-         RuoTmt/fNT+PnVS9FxTcJdlfW703mxCrvlxNkv2ikWUTej74MJghpTtFr3UE46CeC3Pk
-         rq3cle3jufoEasf67AlqMoir51tXzZnaGSllQyqTjj8RqRez37eRa9QJ3ENa9ka36IOH
-         3rjCHLDJ7i78LuA6ETvwExmTSTlAxgV9Ga9nzZdcvomNph3F/nShGwPCEIe9AJDuBzfI
-         B0F9ldHl62q+wi1tlQQb28pUMC+o15yUCezzMchtSvHjUf7OFqkmWOmA6SRL9XxRbLIy
-         bzbw==
-X-Gm-Message-State: AC+VfDzCzWMt/e1j4KCHHUoUZaK3dC5ccXbbGQVIyl/NYz/HcHYkv7dA
-        0urb4yrXU7WCVtZBboXVPBQ=
-X-Google-Smtp-Source: ACHHUZ4oolr6vSu2DCsqdae9ZtsRnHqAr8S5wkd9TDaX6Pz+T6IL71zNKd6ul4I9LTk3ZBgpweyczA==
-X-Received: by 2002:a17:90b:3645:b0:250:d137:e2ae with SMTP id nh5-20020a17090b364500b00250d137e2aemr168165pjb.23.1684339524459;
-        Wed, 17 May 2023 09:05:24 -0700 (PDT)
-Received: from Osmten.. ([103.84.150.101])
-        by smtp.gmail.com with ESMTPSA id o4-20020a17090ad20400b00250c1392ed3sm1761949pju.55.2023.05.17.09.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 09:05:23 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
-        wenst@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] lvts_thermal.c: Fix error checking for debugfs_create_dir
-Date:   Wed, 17 May 2023 21:03:26 +0500
-Message-Id: <20230517160326.10732-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 May 2023 12:26:01 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8D9FB;
+        Wed, 17 May 2023 09:25:59 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HG7taU028415;
+        Wed, 17 May 2023 16:25:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=dtAtxvqSEj1oMGBcMNSBCA1ooa+jT0qh9fn6NZ1A9Qg=;
+ b=dzNqe5kMPz8R8c3CWoFQJ0ctlj5qposLwoJSnyU+nMa3nzNK9j9L0ssiviklrzkOF1dE
+ RPOi4qAq6wbLCf/baMiLacJpKLLLOwOaNzLZq6hLeuD8HaZ4XdGHbfwL0crmnIq3vqUE
+ 8b09I7MJ9aQ6FQ5EDcg6yYlffQSNdslh3d19hzaAyhBj2cc9YQdhsL2Y3H/z2GdNWglg
+ ML/3lylyKIe/NfLml7CFFqh8nQCGynYloTj/V0BlxlZ7x9/dcF6KsHC07JdvVSe8gHXk
+ 4W7GL5YFIKmQXwDNvy7DZd1qBl9dXDh7qBbB409zayTPuMEGrortkVqV6guDun6zdR9m fA== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qn14yk3c0-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 16:25:59 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34HCc5xN020462;
+        Wed, 17 May 2023 16:03:41 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qj2651vts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 16:03:41 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HG3bjO7144138
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 17 May 2023 16:03:38 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D93C320049;
+        Wed, 17 May 2023 16:03:37 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 660E620040;
+        Wed, 17 May 2023 16:03:37 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.66])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 17 May 2023 16:03:37 +0000 (GMT)
+Date:   Wed, 17 May 2023 18:03:35 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Steffen Eiden <seiden@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+Subject: Re: [PATCH 3/5] s390/uvdevice: Add 'List Secrets' UVC
+Message-ID: <20230517180335.05599c6a@p-imbrenda>
+In-Reply-To: <20230512093153.206378-4-seiden@linux.ibm.com>
+References: <20230512093153.206378-1-seiden@linux.ibm.com>
+        <20230512093153.206378-4-seiden@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tKt5boysgt5Tb_R2hj2gzCfJzTC0ec-k
+X-Proofpoint-ORIG-GUID: tKt5boysgt5Tb_R2hj2gzCfJzTC0ec-k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_02,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 impostorscore=0
+ clxscore=1015 adultscore=0 spamscore=0 phishscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305170130
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the error checking in lvts_thermal.c in
-debugfs_create_dir. The correct way to check if an error occurred
-is 'IS_ERR' inline function.
+On Fri, 12 May 2023 11:31:51 +0200
+Steffen Eiden <seiden@linux.ibm.com> wrote:
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
----
- drivers/thermal/mediatek/lvts_thermal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Userspace can call the List Secrets Ultravisor Call
+> using IOCTLs on the uvdevice.
+> During the handling of the new IOCTL nr the uvdevice will do some sanity
+> checks first. Then, perform the Ultravisor command, and copy the answer
+> to userspace.
+> If the List Secrets UV facility is not present, UV will return
+> invalid command rc. This won't be fenced in the driver and does not
+> result in a negative return value. This is also true for any other
+> possible error code the UV can return.
+> 
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> ---
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index d0a3f95b7884..61386be78fa0 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -188,7 +188,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- 	int i;
- 
- 	lvts_td->dom_dentry = debugfs_create_dir(dev_name(dev), NULL);
--	if (!lvts_td->dom_dentry)
-+	if (IS_ERR(lvts_td->dom_dentry))
- 		return 0;
- 
- 	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
-@@ -197,7 +197,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- 
- 		sprintf(name, "controller%d", i);
- 		dentry = debugfs_create_dir(name, lvts_td->dom_dentry);
--		if (!dentry)
-+		if (IS_ERR(dentry))
- 			continue;
- 
- 		regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
--- 
-2.34.1
+[...]
+
+> diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
+> index ba3e60dc4ba8..5fcd719047ab 100644
+> --- a/drivers/s390/char/uvdevice.c
+> +++ b/drivers/s390/char/uvdevice.c
+> @@ -38,6 +38,7 @@ static const u64 ioctl_nr_to_uvc_bit[] __initconst = {
+>  	[UVIO_IOCTL_UVDEV_INFO_NR] = -1UL,
+>  	[UVIO_IOCTL_ATT_NR] = BIT_UVC_CMD_RETR_ATTEST,
+>  	[UVIO_IOCTL_ADD_SECRET_NR] = BIT_UVC_CMD_ADD_SECRET,
+> +	[UVIO_IOCTL_LIST_SECRETS_NR] = BIT_UVC_CMD_LIST_SECRETS,
+>  };
+>  
+>  static_assert(ARRAY_SIZE(ioctl_nr_to_uvc_bit) == UVIO_IOCTL_NUM_IOCTLS);
+> @@ -286,6 +287,57 @@ static int uvio_add_secret(struct uvio_ioctl_cb *uv_ioctl)
+>  	return ret;
+>  }
+>  
+> +/** uvio_list_secrets() - perform a List Secret UVC
+> + *
+> + * @uv_ioctl: ioctl control block
+> + *
+> + * uvio_list_secrets() performs the List Secret Ultravisor Call.
+> + * It verifies that the given userspace argument address is valid and its size
+> + * is sane. Every other check is made by the Ultravisor (UV) and won't result
+> + * in a negative return value. It builds the request, performs the UV-call,
+> + * and copies the result to userspace.
+> + *
+> + * The argument specifies the location for the result of the UV-Call.
+> + *
+> + * If the List Secrets UV facility is not present,
+> + * UV will return invalid command rc. This won't be fenced in the driver
+> + * and does not result in a negative return value.
+> + *
+> + * Context: might sleep
+> + *
+> + * Return: 0 on success or a negative error code on error.
+> + */
+> +static int uvio_list_secrets(struct uvio_ioctl_cb *uv_ioctl)
+> +{
+> +	void __user *user_buf_arg = (void __user *)uv_ioctl->argument_addr;
+> +	struct uv_cb_guest_addr uvcb = {
+> +		.header.len = sizeof(uvcb),
+> +		.header.cmd = UVC_CMD_LIST_SECRETS,
+> +	};
+> +	void *secrets = NULL;
+> +	int ret;
+> +
+> +	if (uv_ioctl->argument_len != UVIO_LIST_SECRETS_LEN)
+> +		return -EINVAL;
+> +
+> +	secrets = kvzalloc(uv_ioctl->argument_len, GFP_KERNEL);
+> +	if (!secrets)
+> +		return -ENOMEM;
+> +
+> +	uvcb.addr = (u64)secrets;
+
+I think you need virt_to_phys()
+
+> +	uv_call_sched(0, (u64)&uvcb);
+> +	uv_ioctl->uv_rc = uvcb.header.rc;
+> +	uv_ioctl->uv_rrc = uvcb.header.rrc;
+> +
+> +	if (copy_to_user(user_buf_arg, secrets, uv_ioctl->argument_len))
+> +		ret = -EFAULT;
+> +	else
+> +		ret = 0;
+> +
+> +	kvfree(secrets);
+> +	return ret;
+> +}
+> +
+>  static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp,
+>  				     unsigned long cmd)
+>  {
+> @@ -333,6 +385,9 @@ static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  	case UVIO_IOCTL_ADD_SECRET_NR:
+>  		ret = uvio_add_secret(&uv_ioctl);
+>  		break;
+> +	case UVIO_IOCTL_LIST_SECRETS_NR:
+> +		ret = uvio_list_secrets(&uv_ioctl);
+> +		break;
+>  	default:
+>  		ret = -ENOIOCTLCMD;
+>  		break;
 
