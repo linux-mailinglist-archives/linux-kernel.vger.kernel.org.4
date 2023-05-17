@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EA87060C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAE47060CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjEQHH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S229756AbjEQHId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEQHH5 (ORCPT
+        with ESMTP id S229461AbjEQHIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:07:57 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85981110
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:07:55 -0700 (PDT)
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-253340db64fso538051a91.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:07:55 -0700 (PDT)
+        Wed, 17 May 2023 03:08:32 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F73110;
+        Wed, 17 May 2023 00:08:30 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50db7f0a1b4so573921a12.3;
+        Wed, 17 May 2023 00:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684307309; x=1686899309;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Na2ABieNKtLxKAl3637bFV6QDvaly2yHP2hD1sEKlQ=;
+        b=jPSQNf4vNNAahIVMHkH+yTlI7QvYVnFddPXi8qWLoexwhlBoBgqDreeJD6UBzrR85G
+         0BlpJWtMNU1skVlh2RnuBdpQAP9X40vBKIs8Smet5yW23ZvE7Yy2FqXLUVS0Pn0W58A6
+         /lgNvH3HI0QSPivGq9GvjpfvwhOtFRrzq6UGmdhLgcZT+92Hiaj9I6a7apVcCC/YFW1s
+         G+/sYVYhM0ZjwZBFhoAQpx1P7yt7tmFbWp+eEbRSzXaZk+/7TLDkCO8l3Umb3rfEC7RX
+         ACqVpNZtsMukuzvEcIdpZIxuW3zO2GF1f1jq9B443HY3JTImyLM3v93JcGag3ea3CWTH
+         noGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684307274; x=1686899274;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1S6C7UJ7C3ix2ULoyU4X3+nn65qw+zwXqYKGbJZ+jiw=;
-        b=Uck3ixr64YNoZ/WBP8hRahmhLdk8aY+Ztc4Sz3AKUfx/UWQKYfEnj365uX8ySuCviR
-         t8RfpZPkpaYkLlMNG7cOsRcyKxp42DUVQVYlGLh+Rk4VSd/94p3qwZ37CgVpTN4eN9zI
-         zB5SGAYiiFb5tDVdFjMAFPM/8SAKSwvyXJkXhR3totI3yzdZKOccb24q9Oh/panN3aeF
-         8xQh1UvF5Jbebl3PBpuGL/bZoOFanek2tKutP7FkZYENJVHo0/AMFLpC8Xfhed2L2gkW
-         gybWyaJVKTj/LjNDxHK+vZ0lRW/EWzK1kdusmEIxGeXGtCfpzmQI71llluq/ukYAyjCw
-         95LQ==
-X-Gm-Message-State: AC+VfDzDfdP8uY2CHSwM6jSY4R32DYK2+OUotwm1/oejxtPr95aV/ULr
-        45EmZdpQ8Zxmy4sfQe/I2PTmMZZoOTA=
-X-Google-Smtp-Source: ACHHUZ7gP4FtZbfRxqTkCnO5n8lbjXiUTmJTIRTbYCJ/FEuD+M+noeodyusKmCzm8156hBUdG2qUPQ==
-X-Received: by 2002:a17:90a:9292:b0:253:2995:f4a6 with SMTP id n18-20020a17090a929200b002532995f4a6mr4325551pjo.38.1684307274455;
-        Wed, 17 May 2023 00:07:54 -0700 (PDT)
-Received: from localhost.localdomain ([211.49.23.9])
-        by smtp.gmail.com with ESMTPSA id nl9-20020a17090b384900b0024e2230fdafsm790962pjb.54.2023.05.17.00.07.52
+        d=1e100.net; s=20221208; t=1684307309; x=1686899309;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Na2ABieNKtLxKAl3637bFV6QDvaly2yHP2hD1sEKlQ=;
+        b=Dr3zvje+Q4wZGgBGNcCQA75CWtdXQV3kPpqL1B3d8K874WtFa1apCqfMrFhKODd2+W
+         7luxDxgCI/pu1DS0ZHENQYmDho/3LETSc11dW+MdnJltJlpoI7OnUz1R57rSLvERugwl
+         B5Kg6CprxpN0fPoQ5LHFfr+08nJf49ItMN+aYU/u5ImUD52okxwTKKizRRsqBHtz9bTZ
+         KjmFrqD7FhOLBtDUGoUzGLWc1trBEmoZRfxs8KRp+X+S1PkJi4IeM2xwAmuHEW1XQKpZ
+         GqySfk4x0/0iBHOhoDuzgDHpQBsfYDyfW3Wa58izK86GNcaNB64GrX+Px7CpFt4oxGIj
+         PteQ==
+X-Gm-Message-State: AC+VfDwgnC8sDOFUYGy+p88kvP7guV0tewlqfYa/QGKaM27gzuE6tHDc
+        DtJYfq/h+Mel5ykauAOajww=
+X-Google-Smtp-Source: ACHHUZ6D/bg8DZdF1/q9mPM1/Gx3MbL3e8VQapuROlxMlou8nyKqUtHk3nq/TedlhAkYFWhAM1Notw==
+X-Received: by 2002:a17:907:6d10:b0:96a:eb2:9c5e with SMTP id sa16-20020a1709076d1000b0096a0eb29c5emr25270833ejc.63.1684307309134;
+        Wed, 17 May 2023 00:08:29 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id hf27-20020a1709072c5b00b0096557203071sm11846455ejc.217.2023.05.17.00.08.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 00:07:54 -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-To:     brauner@kernel.org
-Cc:     anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
-        akpm@linux-foundation.org, Namjae Jeon <linkinjeon@kernel.org>
-Subject: [PATCH v2] ntfs: Add myself as a reviewer
-Date:   Wed, 17 May 2023 16:07:39 +0900
-Message-Id: <20230517070739.6505-1-linkinjeon@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 17 May 2023 00:08:28 -0700 (PDT)
+Date:   Wed, 17 May 2023 10:08:26 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v5] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
+Message-ID: <20230517070826.ywncgnuyoi67zttg@skbuf>
+References: <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
+ <20230515074525.53592-1-krzysztof.kozlowski@linaro.org>
+ <20230515105035.kzmygf2ru2jhusek@skbuf>
+ <20230516201000.49216ca0@kernel.org>
+ <124a5697-9bcf-38ec-ca0e-5fbcae069646@linaro.org>
+ <20230517070437.ixgvnru4a2wjgele@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517070437.ixgvnru4a2wjgele@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm volunteering to help review patches for current unmaintained
-ntfs filesytem.
+On Wed, May 17, 2023 at 10:04:37AM +0300, Vladimir Oltean wrote:
+> On Wed, May 17, 2023 at 09:01:38AM +0200, Krzysztof Kozlowski wrote:
+> > Yes, apologies, I usually forget the net-next tag.
+> > 
+> > Shall I resend?
+> 
+> Probably not.
 
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e2fd64c2ebdc..c2cecb2059d7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14928,6 +14928,7 @@ F:	drivers/ntb/hw/intel/
- 
- NTFS FILESYSTEM
- M:	Anton Altaparmakov <anton@tuxera.com>
-+R:	Namjae Jeon <linkinjeon@kernel.org>
- L:	linux-ntfs-dev@lists.sourceforge.net
- S:	Supported
- W:	http://www.tuxera.com/
--- 
-2.25.1
-
+Although patchwork marked it as "not a local patch", so no tests ran on
+it. Let's see what Jakub says.
+https://patchwork.kernel.org/project/netdevbpf/patch/20230515074525.53592-1-krzysztof.kozlowski@linaro.org/
