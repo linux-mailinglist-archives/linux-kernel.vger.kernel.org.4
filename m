@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2979C706BF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0768D706BF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbjEQPAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
+        id S232480AbjEQPAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbjEQO7z (ORCPT
+        with ESMTP id S232499AbjEQO7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 17 May 2023 10:59:55 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F92AD18
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:59:14 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561985d744fso14980607b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:59:14 -0700 (PDT)
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F69A257
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:59:16 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1ae438721e2so6207915ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:59:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684335552; x=1686927552;
+        d=google.com; s=20221208; t=1684335555; x=1686927555;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KKqoIZuPWcw9eVnTQaV/Yxm1zaZil6JyotfyFlNgjRY=;
-        b=TUFbOf6Vuteciew1H/sR8GFDllTU26HtBigIAOcm6RNblkHLxR1s1nxllnAGP+U6gw
-         6LetlTntu1sEwfssXYiaidtTavHjq/QXjXhiTXjaqX5+HFtni52UpqVqVCYFD9rfH0ql
-         Uvn/PhwowUE7pFmwze16n/YTEweKs7XEDJA6u953lHrDicn48O1FsUAdfNbl6VnC0/rR
-         QcLMnwEX+jxIZk8F+jP2Tw8gqmYmlQjhix0jgVbuDVGfgfBS8Nna8Hf0XBCkSpAWRcLn
-         L83rAuTyA5bxFDqwXcXNwdPa8PulsCEhXZN4tctpP+DhfuWrANs/C15RHq64A1vEDFz/
-         65kA==
+        bh=lI6N+gAi4DZYSVnV114efDFeKpz0k1rpLH9njpuRINE=;
+        b=VdO5yX2Mtt3uOQ2AaB3Q5XB3czFjGwA2fovuTpWU7v+Gys7pziSDULWXNnQnlh/ldX
+         UsKgUfZMpG91Xnv9oI5e6wggea5KzAsJPtPxE8sZLF+lQzDMwAXieu242N1cDu5tDpVs
+         ybGHBKCWMbZv4qCIoIGwZaS9SreYC50E/lUnTL/BV9dwCxbeU19Cj/vXXYJby3ymcVp+
+         GDwq2Y82oKaD5BzJjUw/5ROkCjU6mMtDcgXzkPjeU4Qb+w6eRlVNvQPa720O9CaXo4Un
+         TbnNL0SBw2RnLKa4hoWLJNhL6ftP84siAsYyzFR9c1s7Q2LdSa6DcZnNYI9pu/RSBgMm
+         hSOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335552; x=1686927552;
+        d=1e100.net; s=20221208; t=1684335555; x=1686927555;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KKqoIZuPWcw9eVnTQaV/Yxm1zaZil6JyotfyFlNgjRY=;
-        b=XTYZF8uSPYYUU8IuHZ7jm7Z+LubvDGxHZQG272zPCRGj3BIJTC2CY6a0kI8C/z+AC4
-         9dyJzEfB6Ye99R7avgbgfpNC0NA0lvf4Mli00D/jFmyg+i6u9kwAlo86xiNP4xLxuSgW
-         bC8v3225Z+idpdKRWpoVJ1+Xpr5J1HVHOUbIKlS7flIWSWoK4X/3ZYJi6rhKGSBWoY8L
-         jxGwoJUbMjZQDzpwqelS1uoax+V8Zp5iczEKQWO2xdhyJ/idFnMWm5zfnQ3b5R+gpZrT
-         aijgB0DDQWnZJjap5L0P5I0XvjF+8wami3saFuuMMp4N6bhe42BK6SIihnzv70y4vKUM
-         5MSQ==
-X-Gm-Message-State: AC+VfDxopWKdD/4AfyHH8VElSnfhA0yyqRT+5NagLB7+/tZkeT7F/xwy
-        IPsrWXKOwCTrTcUzGa1osbbaTZ6oGZih
-X-Google-Smtp-Source: ACHHUZ6N4HYRzQ3Z7NxRIwYgx8pZoI+LByxp+5DF2IYl0KvI6WWpkWjIJcQZotKUwdlgvE97nF4ub8C4g1CC
+        bh=lI6N+gAi4DZYSVnV114efDFeKpz0k1rpLH9njpuRINE=;
+        b=fBWNL4scUE3/QsLYp4ylzENOn6MltrwpIEoYqmSquYw0e7qVtw5gRDJ/d3JxiHRrWG
+         foROZjZMwIrxr7z9gHH7Zx3EdfVdO2QU3HUZn9GmTD+0nEfTSg43sJkw9ZD78cusQ1tv
+         vZwVWPpo/F1H8MiOJyrJJxS7mZHQSp5TcAvpdFpErr381tq0pdjT7lPpDklFDZqwf0Te
+         zOh9Tk7Ck2znYg/9zrPRP33t71yqHr2BmEyZp1OYixSjqmZsXx9sOghkVHEQ/E7mWx8h
+         kb17XBN0cPegQRiDmLS96tdQ1MAK6Me4f2/LxD4kMPATKHj5hjR7i1EA0wxy1oUbs3am
+         2efQ==
+X-Gm-Message-State: AC+VfDz1J279kQWPVaXD/q/oBatM0hgc9+295Lvu2B57ISAwSDyZgRKZ
+        AR6tMmxqjRklOomdZiZFExwuTexg+u/i
+X-Google-Smtp-Source: ACHHUZ6tg9xCmYqqW9Dcj2t83D3ZIEdg28KNdMklhDpiZRaz2/Kct1tJYmDNWbltkBzSuqq/mfchZfLPgg1h
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:628b:7e78:d09b:39b])
- (user=irogers job=sendgmr) by 2002:a81:4314:0:b0:561:8c16:2b66 with SMTP id
- q20-20020a814314000000b005618c162b66mr1686499ywa.4.1684335552162; Wed, 17 May
- 2023 07:59:12 -0700 (PDT)
-Date:   Wed, 17 May 2023 07:57:56 -0700
+ (user=irogers job=sendgmr) by 2002:a17:902:8f98:b0:1ad:c1ca:55ae with SMTP id
+ z24-20020a1709028f9800b001adc1ca55aemr6879014plo.13.1684335554831; Wed, 17
+ May 2023 07:59:14 -0700 (PDT)
+Date:   Wed, 17 May 2023 07:57:57 -0700
 In-Reply-To: <20230517145803.559429-1-irogers@google.com>
-Message-Id: <20230517145803.559429-17-irogers@google.com>
+Message-Id: <20230517145803.559429-18-irogers@google.com>
 Mime-Version: 1.0
 References: <20230517145803.559429-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Subject: [PATCH v1 16/23] perf pmu: Remove perf_pmu__hybrid_pmus list
+Subject: [PATCH v1 17/23] perf pmus: Prefer perf_pmu__scan over perf_pmus__for_each_pmu
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -92,202 +92,112 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than iterate hybrid PMUs, inhererently Intel specific, iterate
-all PMUs checking whether they are core. To only get hybrid cores,
-first call perf_pmu__has_hybrid.
+perf_pmus__for_each_pmu doesn't lazily initialize pmus making its use
+error prone. Just use perf_pmu__scan as this only impacts
+non-performance critical tests.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-record.c        |  1 -
- tools/perf/util/Build              |  1 -
- tools/perf/util/pmu-hybrid.c       | 39 ------------------------------
- tools/perf/util/pmu-hybrid.h       | 29 ----------------------
- tools/perf/util/pmu.c              |  7 ------
- tools/perf/util/pmu.h              |  2 --
- tools/perf/util/print-events.c     |  1 -
- tools/perf/util/python-ext-sources |  1 -
- 8 files changed, 81 deletions(-)
- delete mode 100644 tools/perf/util/pmu-hybrid.c
- delete mode 100644 tools/perf/util/pmu-hybrid.h
+ tools/perf/bench/pmu-scan.c     |  6 ++----
+ tools/perf/tests/event_groups.c |  7 ++-----
+ tools/perf/tests/parse-events.c | 11 ++++-------
+ tools/perf/util/pmus.h          |  2 --
+ 4 files changed, 8 insertions(+), 18 deletions(-)
 
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 42135be760ab..aaf18e487757 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -49,7 +49,6 @@
- #include "util/util.h"
- #include "util/pfm.h"
- #include "util/clockid.h"
--#include "util/pmu-hybrid.h"
- #include "util/off_cpu.h"
- #include "util/bpf-filter.h"
- #include "asm/bug.h"
-diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-index 21e4cdcba504..0d68be51a739 100644
---- a/tools/perf/util/Build
-+++ b/tools/perf/util/Build
-@@ -73,7 +73,6 @@ perf-y += pmu.o
- perf-y += pmus.o
- perf-y += pmu-flex.o
- perf-y += pmu-bison.o
--perf-y += pmu-hybrid.o
- perf-y += svghelper.o
- perf-$(CONFIG_LIBTRACEEVENT) += trace-event-info.o
- perf-y += trace-event-scripting.o
-diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
-deleted file mode 100644
-index 7fe943dd3217..000000000000
---- a/tools/perf/util/pmu-hybrid.c
-+++ /dev/null
-@@ -1,39 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <linux/list.h>
--#include <linux/compiler.h>
--#include <linux/string.h>
--#include <linux/zalloc.h>
--#include <sys/types.h>
--#include <errno.h>
--#include <fcntl.h>
--#include <sys/stat.h>
--#include <unistd.h>
--#include <stdio.h>
--#include <stdbool.h>
--#include <stdarg.h>
--#include <locale.h>
--#include <api/fs/fs.h>
--#include "fncache.h"
--#include "pmu-hybrid.h"
--
--LIST_HEAD(perf_pmu__hybrid_pmus);
--
--static struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name)
--{
+diff --git a/tools/perf/bench/pmu-scan.c b/tools/perf/bench/pmu-scan.c
+index f0f007843bb8..f4a6c37cbe27 100644
+--- a/tools/perf/bench/pmu-scan.c
++++ b/tools/perf/bench/pmu-scan.c
+@@ -40,13 +40,11 @@ static struct pmu_scan_result *results;
+ 
+ static int save_result(void)
+ {
 -	struct perf_pmu *pmu;
++	struct perf_pmu *pmu = NULL;
+ 	struct list_head *list;
+ 	struct pmu_scan_result *r;
+ 
+-	perf_pmu__scan(NULL);
 -
--	if (!name)
--		return NULL;
--
--	perf_pmu__for_each_hybrid_pmu(pmu) {
--		if (!strcmp(name, pmu->name))
--			return pmu;
--	}
--
--	return NULL;
--}
--
--bool perf_pmu__is_hybrid(const char *name)
--{
--	return perf_pmu__find_hybrid_pmu(name) != NULL;
--}
-diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
-deleted file mode 100644
-index 8dbcae935020..000000000000
---- a/tools/perf/util/pmu-hybrid.h
-+++ /dev/null
-@@ -1,29 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __PMU_HYBRID_H
--#define __PMU_HYBRID_H
--
--#include <linux/perf_event.h>
--#include <linux/compiler.h>
--#include <linux/list.h>
--#include <stdbool.h>
--#include "pmu.h"
--
--extern struct list_head perf_pmu__hybrid_pmus;
--
--#define perf_pmu__for_each_hybrid_pmu(pmu)	\
--	list_for_each_entry(pmu, &perf_pmu__hybrid_pmus, hybrid_list)
--
--bool perf_pmu__is_hybrid(const char *name);
--
--static inline int perf_pmu__hybrid_pmu_num(void)
--{
+-	perf_pmus__for_each_pmu(pmu) {
++	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
+ 		r = realloc(results, (nr_pmus + 1) * sizeof(*r));
+ 		if (r == NULL)
+ 			return -ENOMEM;
+diff --git a/tools/perf/tests/event_groups.c b/tools/perf/tests/event_groups.c
+index 029442b4e9c6..3d9a2b524bba 100644
+--- a/tools/perf/tests/event_groups.c
++++ b/tools/perf/tests/event_groups.c
+@@ -50,13 +50,10 @@ static int event_open(int type, unsigned long config, int group_fd)
+ 
+ static int setup_uncore_event(void)
+ {
 -	struct perf_pmu *pmu;
--	int num = 0;
++	struct perf_pmu *pmu = NULL;
+ 	int i, fd;
+ 
+-	if (list_empty(&pmus))
+-		perf_pmu__scan(NULL);
 -
--	perf_pmu__for_each_hybrid_pmu(pmu)
--		num++;
+-	perf_pmus__for_each_pmu(pmu) {
++	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
+ 		for (i = 0; i < NR_UNCORE_PMUS; i++) {
+ 			if (!strcmp(uncore_pmus[i].name, pmu->name)) {
+ 				pr_debug("Using %s for uncore pmu event\n", pmu->name);
+diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
+index 72a10bed84fd..277607ede060 100644
+--- a/tools/perf/tests/parse-events.c
++++ b/tools/perf/tests/parse-events.c
+@@ -108,11 +108,11 @@ static int test__checkevent_raw(struct evlist *evlist)
+ 	TEST_ASSERT_VAL("wrong number of entries", 0 != evlist->core.nr_entries);
+ 
+ 	perf_evlist__for_each_evsel(&evlist->core, evsel) {
+-		struct perf_pmu *pmu;
++		struct perf_pmu *pmu = NULL;
+ 		bool type_matched = false;
+ 
+ 		TEST_ASSERT_VAL("wrong config", test_perf_config(evsel, 0x1a));
+-		perf_pmus__for_each_pmu(pmu) {
++		while ((pmu = perf_pmu__scan(pmu)) != NULL) {
+ 			if (pmu->type == evsel->attr.type) {
+ 				TEST_ASSERT_VAL("PMU type expected once", !type_matched);
+ 				type_matched = true;
+@@ -2243,13 +2243,10 @@ static int test__terms2(struct test_suite *test __maybe_unused, int subtest __ma
+ 
+ static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+-	struct perf_pmu *pmu;
++	struct perf_pmu *pmu = NULL;
+ 	int ret = TEST_OK;
+ 
+-	if (list_empty(&pmus))
+-		perf_pmu__scan(NULL);
 -
--	return num;
--}
+-	perf_pmus__for_each_pmu(pmu) {
++	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
+ 		struct stat st;
+ 		char path[PATH_MAX];
+ 		struct dirent *ent;
+diff --git a/tools/perf/util/pmus.h b/tools/perf/util/pmus.h
+index d475e2960c10..257de10788e8 100644
+--- a/tools/perf/util/pmus.h
++++ b/tools/perf/util/pmus.h
+@@ -5,8 +5,6 @@
+ extern struct list_head pmus;
+ struct perf_pmu;
+ 
+-#define perf_pmus__for_each_pmu(pmu) list_for_each_entry(pmu, &pmus, list)
 -
--#endif /* __PMU_HYBRID_H */
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index acbf504c895a..bcf9d78a0003 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -32,7 +32,6 @@
- #include "string2.h"
- #include "strbuf.h"
- #include "fncache.h"
--#include "pmu-hybrid.h"
- #include "util/evsel_config.h"
+ const struct perf_pmu *perf_pmus__pmu_for_pmu_filter(const char *str);
  
- struct perf_pmu perf_pmu__fake;
-@@ -967,11 +966,6 @@ static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
- 	list_splice(&aliases, &pmu->aliases);
- 	list_add_tail(&pmu->list, &pmus);
- 
--	if (!strcmp(name, "cpu_core") || !strcmp(name, "cpu_atom"))
--		list_add_tail(&pmu->hybrid_list, &perf_pmu__hybrid_pmus);
--	else
--		INIT_LIST_HEAD(&pmu->hybrid_list);
--
- 	pmu->default_config = perf_pmu__get_default_config(pmu);
- 
- 	return pmu;
-@@ -2144,7 +2138,6 @@ void perf_pmu__destroy(void)
- 
- 	list_for_each_entry_safe(pmu, tmp, &pmus, list) {
- 		list_del(&pmu->list);
--		list_del(&pmu->hybrid_list);
- 
- 		perf_pmu__delete(pmu);
- 	}
-diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index 5f5de7c20ab6..cb51ad6e40fa 100644
---- a/tools/perf/util/pmu.h
-+++ b/tools/perf/util/pmu.h
-@@ -119,8 +119,6 @@ struct perf_pmu {
- 	struct list_head caps;
- 	/** @list: Element on pmus list in pmu.c. */
- 	struct list_head list;
--	/** @hybrid_list: Element on perf_pmu__hybrid_pmus. */
--	struct list_head hybrid_list;
- 
- 	/**
- 	 * @missing_features: Features to inhibit when events on this PMU are
-diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-index 69492cbd6921..8d823bc906e6 100644
---- a/tools/perf/util/print-events.c
-+++ b/tools/perf/util/print-events.c
-@@ -26,7 +26,6 @@
- #include "strlist.h"
- #include "tracepoint.h"
- #include "pfm.h"
--#include "pmu-hybrid.h"
- #include "thread_map.h"
- 
- #define MAX_NAME_LEN 100
-diff --git a/tools/perf/util/python-ext-sources b/tools/perf/util/python-ext-sources
-index aa5156c2bcff..d4c9b4cd35ef 100644
---- a/tools/perf/util/python-ext-sources
-+++ b/tools/perf/util/python-ext-sources
-@@ -39,5 +39,4 @@ util/affinity.c
- util/rwsem.c
- util/hashmap.c
- util/perf_regs.c
--util/pmu-hybrid.c
- util/fncache.c
+ #endif /* __PMUS_H */
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
