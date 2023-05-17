@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6D970672F
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37CA706736
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjEQLyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
+        id S231382AbjEQLy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbjEQLyO (ORCPT
+        with ESMTP id S231348AbjEQLyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:54:14 -0400
+        Wed, 17 May 2023 07:54:20 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B5A4EED;
-        Wed, 17 May 2023 04:54:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C51261A4;
+        Wed, 17 May 2023 04:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684324453; x=1715860453;
+  t=1684324457; x=1715860457;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WGOMQHnZTpw9dk6kO7DuPZBSvjfNXOGEhu//BHCo5Bk=;
-  b=2mZRUA9QlGPTNPZFnrdJxedWgGmNgp4wPst1UEcxvkkS63Qv2SQizk82
-   tKhaAapNPy69f3PneaA1a6R63rSeCnfzubFkBXoXE5MqxG9Xz9v6IGP0J
-   gADGInyY1SdLsetEyXQOrzJP+qNlk250NCEZRq5tQG6VxxoHszs1xvDCQ
-   FdtPea9TzABThN4GlbevCQIOIX/f+8MibL2IZIR6hqYb+ZbW6OyQSNjGg
-   GlWXGup98bo6xG4Q4aza7f/55TNVvGSNtxgUDrPZF6h6oSMOLfX8Ba0K1
-   3DotQ5/eBXxs74V6DI9UmiO8rUqO6rUrTMDK0dAu48o5BM+sHrUeSlriO
-   w==;
+  bh=RT0UlB3xEwYqeI/LH/lFegS8fsQcn4QNfOH63mMlj1o=;
+  b=w9aAqCWrHam+R1UsIlvXbMxfK2g06Otj7OhmeZORuNk78HgWzFsUHySp
+   8/UIZqBMZJglYYVXDkbQkFUhMFJmHSN7dRShLGzZlh0W4CL/5cRgHKzY4
+   BpOToRZ3asP1PIs2vnKYCyiHdwSbaQltgwrLfsEGtbgqlQX7DRJGBM5RX
+   FvgnmumJmWv8zincxyd38/+AzYcb0vAtGfGhBoDxHIlwHGQ98sqFCWLJi
+   XuPCLLffgInXSb8pAeupwyCmLWtUVCylNlE50t+v1s6Uph8uZCjvcg5jA
+   PJ2r/+LnjgKi29Dw9NPGb1loe7bOfoKzPBhyqVD/2Gi4gXGK63a4YNeaP
+   A==;
 X-IronPort-AV: E=Sophos;i="5.99,282,1677567600"; 
-   d="scan'208";a="214268314"
+   d="scan'208";a="225738592"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 04:54:13 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 04:54:16 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 17 May 2023 04:54:12 -0700
+ 15.1.2507.21; Wed, 17 May 2023 04:54:16 -0700
 Received: from ryan-Precision-5560.microchip.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Wed, 17 May 2023 04:54:08 -0700
+ 15.1.2507.21 via Frontend Transport; Wed, 17 May 2023 04:54:13 -0700
 From:   <Ryan.Wanner@microchip.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -49,9 +49,9 @@ CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
         Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH 2/3] dt-bindings: pinctrl: at91-pio4: Add push-pull support
-Date:   Wed, 17 May 2023 13:54:05 +0200
-Message-ID: <048a41d1dcb3da0e845986a73eaac61a54c69269.1684313910.git.Ryan.Wanner@microchip.com>
+Subject: [PATCH 3/3] ARM: dts: at91: Return to boolean properties
+Date:   Wed, 17 May 2023 13:54:06 +0200
+Message-ID: <6f06be9e393c02563bc877498c8af75daf3b47f8.1684313910.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1684313910.git.Ryan.Wanner@microchip.com>
 References: <cover.1684313910.git.Ryan.Wanner@microchip.com>
@@ -70,27 +70,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Add generic push-pull support for pio4 driver.
+Returning back to commit 0dc23d1a8e17
+("arm: dts: at91: Fix boolean properties with values") as pinctrl driver no
+longer expects an integer value and expects a simple boolean property.
 
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 ---
- .../devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt    | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/at91-kizbox3-hs.dts      | 2 +-
+ arch/arm/boot/dts/at91-kizbox3_common.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-index e2b861ce16d8..774c3c269c40 100644
---- a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-+++ b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-@@ -37,7 +37,8 @@ right representation of the pin.
- Optional properties:
- - GENERIC_PINCONFIG: generic pinconfig options to use:
- 	- bias-disable, bias-pull-down, bias-pull-up, drive-open-drain,
--	  input-schmitt-enable, input-debounce, output-low, output-high.
-+	 drive-push-pull input-schmitt-enable, input-debounce, output-low,
-+	 output-high.
- 	- for microchip,sama7g5-pinctrl only:
- 		- slew-rate: 0 - disabled, 1 - enabled (default)
- - atmel,drive-strength: 0 or 1 for low drive, 2 for medium drive and 3 for
+diff --git a/arch/arm/boot/dts/at91-kizbox3-hs.dts b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+index 7075df6549e9..fec7269088d1 100644
+--- a/arch/arm/boot/dts/at91-kizbox3-hs.dts
++++ b/arch/arm/boot/dts/at91-kizbox3-hs.dts
+@@ -225,7 +225,7 @@ pinctrl_pio_zbe_rst: gpio_zbe_rst {
+ 		pinctrl_pio_io_reset: gpio_io_reset {
+ 			pinmux = <PIN_PB30__GPIO>;
+ 			bias-disable;
+-			drive-open-drain = <1>;
++			drive-open-drain;
+ 			output-low;
+ 		};
+ 		pinctrl_pio_input: gpio_input {
+diff --git a/arch/arm/boot/dts/at91-kizbox3_common.dtsi b/arch/arm/boot/dts/at91-kizbox3_common.dtsi
+index abe27adfa4d6..465664628419 100644
+--- a/arch/arm/boot/dts/at91-kizbox3_common.dtsi
++++ b/arch/arm/boot/dts/at91-kizbox3_common.dtsi
+@@ -211,7 +211,7 @@ pinctrl_flx4_default: flx4_i2c6_default {
+ 		pinmux = <PIN_PD12__FLEXCOM4_IO0>, //DATA
+ 		<PIN_PD13__FLEXCOM4_IO1>; //CLK
+ 		bias-disable;
+-		drive-open-drain = <1>;
++		drive-open-drain;
+ 	};
+ 
+ 	pinctrl_pwm0 {
 -- 
 2.39.2
 
