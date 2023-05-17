@@ -2,145 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41428705F0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09151705F13
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 07:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjEQFCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 01:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S232056AbjEQFGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 01:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjEQFCv (ORCPT
+        with ESMTP id S229646AbjEQFGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 01:02:51 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF2E2136
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 22:02:49 -0700 (PDT)
-X-UUID: 97ba50cf53c147aaa6f2d5b5e43098f3-20230517
-X-CID-O-RULE: Release_Ham
-X-CID-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:d2b87ce7-df4a-4b37-adae-eb666f7a01d2,IP:15,
-        URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-INFO: VERSION:1.1.22,REQID:d2b87ce7-df4a-4b37-adae-eb666f7a01d2,IP:15,UR
-        L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-5
-X-CID-META: VersionHash:120426c,CLOUDID:73f4116c-2f20-4998-991c-3b78627e4938,B
-        ulkID:230517130233VKXSJLJ6,BulkQuantity:0,Recheck:0,SF:17|19|44|38|24|102,
-        TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 97ba50cf53c147aaa6f2d5b5e43098f3-20230517
-X-User: liucong2@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <liucong2@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 247450098; Wed, 17 May 2023 13:02:31 +0800
-From:   Cong Liu <liucong2@kylinos.cn>
-To:     liucong2@kylinos.cn, Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/i915: Fix memory leaks in function live_nop_switch
-Date:   Wed, 17 May 2023 13:02:03 +0800
-Message-Id: <20230517050204.4111874-1-liucong2@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230508085016.437836-1-liucong2@kylinos.cn>
-References: <20230508085016.437836-1-liucong2@kylinos.cn>
+        Wed, 17 May 2023 01:06:06 -0400
+Received: from smtp.gentoo.org (dev.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0673B213B;
+        Tue, 16 May 2023 22:06:02 -0700 (PDT)
+Message-ID: <3f451539-3e3b-a7ca-b8ee-f89f4c723770@gentoo.org>
+Date:   Wed, 17 May 2023 07:06:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   zzam@gentoo.org
+Subject: Re: [PATCH 04/24] media: dvb-usb: az6027: fix three null-ptr-deref in
+ az6027_i2c_xfer()
+Content-Language: en-GB
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Wei Chen <harperchen1110@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
+ <db96cbf981898a8fce928b93f8ffc93288ea46f0.1684000646.git.mchehab@kernel.org>
+In-Reply-To: <db96cbf981898a8fce928b93f8ffc93288ea46f0.1684000646.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Be sure to properly free the allocated memory before exiting
-the live_nop_switch function.
+Am 13.05.23 um 19:57 schrieb Mauro Carvalho Chehab:
+> From: Wei Chen <harperchen1110@gmail.com>
+> 
+> In az6027_i2c_xfer, msg is controlled by user. When msg[i].buf is null,
+> commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+> fix the null-ptr-deref bug when msg[i].addr is 0x99. However, null-ptr-deref
+> also happens when msg[i].addr is 0xd0 and 0xc0. We add check on msg[i].len to
+> prevent null-ptr-deref.
+> 
+Some added checks still allow too short buffers.
+> Link: https://lore.kernel.org/linux-media/20230310165604.3093483-1-harperchen1110@gmail.com
+> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> ---
+>   drivers/media/usb/dvb-usb/az6027.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/media/usb/dvb-usb/az6027.c b/drivers/media/usb/dvb-usb/az6027.c
+> index 7d78ee09be5e..a31c6f82f4e9 100644
+> --- a/drivers/media/usb/dvb-usb/az6027.c
+> +++ b/drivers/media/usb/dvb-usb/az6027.c
+> @@ -988,6 +988,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
+>   			/* write/read request */
+>   			if (i + 1 < num && (msg[i + 1].flags & I2C_M_RD)) {
+>   				req = 0xB9;
+> +				if (msg[i].len < 1) {
+> +					i = -EOPNOTSUPP;
+> +					break;
+> +				}
 
-Signed-off-by: Cong Liu <liucong2@kylinos.cn>
-Suggested-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
----
- .../gpu/drm/i915/gem/selftests/i915_gem_context.c  | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+The following line accesses the elements 0 and 1. Shouldn't this code 
+check for msg[i].len < 2.
+Or even msg[i].len != 2? Too long input seems just to get ignored.
 
-diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
-index a81fa6a20f5a..2fb125d0cb5e 100644
---- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_context.c
-@@ -66,7 +66,7 @@ static int live_nop_switch(void *arg)
- 		ctx[n] = live_context(i915, file);
- 		if (IS_ERR(ctx[n])) {
- 			err = PTR_ERR(ctx[n]);
--			goto out_file;
-+			goto out_ctx;
- 		}
- 	}
- 
-@@ -82,7 +82,7 @@ static int live_nop_switch(void *arg)
- 			this = igt_request_alloc(ctx[n], engine);
- 			if (IS_ERR(this)) {
- 				err = PTR_ERR(this);
--				goto out_file;
-+				goto out_ctx;
- 			}
- 			if (rq) {
- 				i915_request_await_dma_fence(this, &rq->fence);
-@@ -96,7 +96,7 @@ static int live_nop_switch(void *arg)
- 			intel_gt_set_wedged(to_gt(i915));
- 			i915_request_put(rq);
- 			err = -EIO;
--			goto out_file;
-+			goto out_ctx;
- 		}
- 		i915_request_put(rq);
- 
-@@ -107,7 +107,7 @@ static int live_nop_switch(void *arg)
- 
- 		err = igt_live_test_begin(&t, i915, __func__, engine->name);
- 		if (err)
--			goto out_file;
-+			goto out_ctx;
- 
- 		end_time = jiffies + i915_selftest.timeout_jiffies;
- 		for_each_prime_number_from(prime, 2, 8192) {
-@@ -120,7 +120,7 @@ static int live_nop_switch(void *arg)
- 				this = igt_request_alloc(ctx[n % nctx], engine);
- 				if (IS_ERR(this)) {
- 					err = PTR_ERR(this);
--					goto out_file;
-+					goto out_ctx;
- 				}
- 
- 				if (rq) { /* Force submission order */
-@@ -165,7 +165,7 @@ static int live_nop_switch(void *arg)
- 
- 		err = igt_live_test_end(&t);
- 		if (err)
--			goto out_file;
-+			goto out_ctx;
- 
- 		pr_info("Switch latencies on %s: 1 = %lluns, %lu = %lluns\n",
- 			engine->name,
-@@ -173,6 +173,8 @@ static int live_nop_switch(void *arg)
- 			prime - 1, div64_u64(ktime_to_ns(times[1]), prime - 1));
- 	}
- 
-+out_ctx:
-+	kfree(ctx);
- out_file:
- 	fput(file);
- 	return err;
--- 
-2.34.1
+>   				index = (((msg[i].buf[0] << 8) & 0xff00) | (msg[i].buf[1] & 0x00ff));
+>   				value = msg[i].addr + (msg[i].len << 8);
+>   				length = msg[i + 1].len + 6;
+> @@ -1001,6 +1005,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
+>   
+>   				/* demod 16bit addr */
+>   				req = 0xBD;
+> +				if (msg[i].len < 1) {
+> +					i = -EOPNOTSUPP;
+> +					break;
+> +				}
+Same here, at least two elements are used.
 
+>   				index = (((msg[i].buf[0] << 8) & 0xff00) | (msg[i].buf[1] & 0x00ff));
+>   				value = msg[i].addr + (2 << 8);
+>   				length = msg[i].len - 2;
+> @@ -1026,6 +1034,10 @@ static int az6027_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[], int n
+>   			} else {
+>   
+>   				req = 0xBD;
+> +				if (msg[i].len < 1) {
+> +					i = -EOPNOTSUPP;
+> +					break;
+> +				}
+>   				index = msg[i].buf[0] & 0x00FF;
+>   				value = msg[i].addr + (1 << 8);
+>   				length = msg[i].len - 1;
 
-No virus found
-		Checked by Hillstone Network AntiVirus
