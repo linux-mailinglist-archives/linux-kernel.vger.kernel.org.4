@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1C4706C38
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:08:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5AF706D20
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 17:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjEQPIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 11:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S231228AbjEQPqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 11:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjEQPIg (ORCPT
+        with ESMTP id S229572AbjEQPqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 11:08:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524D88A7D;
-        Wed, 17 May 2023 08:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684336088; x=1715872088;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m3M2b/UpB2Fp67mqL0iGGBx6gX63ZHkbp9fZFhoFbDc=;
-  b=LNktfhyb5vDqIPrqV7/yvy2WlB865lqQnQZHhYPQWj/67OArkLyXzWMK
-   StJ5rhDaIBFFL8BehlI5pC4FsgqlZ70NoKwczxnYzsTT/zlzvC8B2PfZ+
-   LHv3wmRf5qhtZn6w8gSKazCdL2UWa7cgcKkweqhs+r10OhobZfZeGiURa
-   F3r6XB6hjqs4ZFq0tPa9vGCXOKnySo8GR315xpApPrCALnhwW+XY70lPp
-   dJ/9Ct9i5by0rgG5b2i297EZ9R5vUvWz3u8/az3LRAr52Lr+XwanlybU5
-   JoUCE26iayD3RC8EjFGgD5FEjPQR28JMqcguPGTEVzae5Fp5hjbQdDsdq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="354083128"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="354083128"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:07:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="652277994"
-X-IronPort-AV: E=Sophos;i="5.99,282,1677571200"; 
-   d="scan'208";a="652277994"
-Received: from cbrown-mobl1.amr.corp.intel.com (HELO [10.212.129.207]) ([10.212.129.207])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 08:07:07 -0700
-Message-ID: <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com>
-Date:   Wed, 17 May 2023 08:07:07 -0700
+        Wed, 17 May 2023 11:46:33 -0400
+X-Greylist: delayed 2218 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 08:46:30 PDT
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07848558B;
+        Wed, 17 May 2023 08:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=IDRJwtLsO/yeHBOhvU39bxW+bfvC/DJiGxuwhVpGSJI=; b=L
+        72JGwLZ0CrNmH62H4XitVMSAiKLvB3sUcq9nYXl1a5dZnNwCSf/oTYOWWZL2eGdDgNXtrLmCgyyHh
+        5q/7HgvpsAkUynIPxSStqmKtzbi7GVodVJDEIWY7jLyya5lEez0iOLOvKPsUn5he8gmCAstPhI3mq
+        Aogs2YJY4Tl4AmKE=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:45486 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pzIkw-0007IE-6L; Wed, 17 May 2023 11:07:59 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     hugo@hugovil.com, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 17 May 2023 11:07:46 -0400
+Message-Id: <20230517150746.3823249-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-Content-Language: en-US
-To:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>
-Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        akpm@linux-foundation.org, jeffxu@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
- <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
- <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
- <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: [PATCH 1/2] dt-bindings: sc16is7xx: Add property to change GPIO function
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 03:51, Stephen Röttger wrote:
-> On Wed, May 17, 2023 at 12:41 AM Dave Hansen <dave.hansen@intel.com> wrote:
->> Can't run arbitrary instructions, but can make (pretty) arbitrary syscalls?
-> 
-> The threat model is that the attacker has arbitrary read/write, while other
-> threads run in parallel. So whenever a regular thread performs a syscall and
-> takes a syscall argument from memory, we assume that argument can be attacker
-> controlled.
-> Unfortunately, the line is a bit blurry which syscalls / syscall arguments we
-> need to assume to be attacker controlled. 
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Ahh, OK.  So, it's not that the *attacker* can make arbitrary syscalls.
-It's that the attacker might leverage its arbitrary write to trick a
-victim thread into turning what would otherwise be a good syscall into a
-bad one with attacker-controlled content.
+Some variants in this series of uart controllers have GPIO pins that
+are shared between GPIO and modem control lines.
 
-I guess that makes the readv/writev-style of things a bad idea in this
-environment.
+The pin mux mode (GPIO or modem control lines) can be set for each
+ports (channels) supported by the variant.
 
->>> Sigreturn is a separate problem that we hope to solve by adding pkey
->>> support to sigaltstack
->>
->> What kind of support were you planning to add?
-> 
-> We’d like to allow registering pkey-tagged memory as a sigaltstack. This would
-> allow the signal handler to run isolated from other threads. Right now, the
-> main reason this doesn’t work is that the kernel would need to change the pkru
-> state before storing the register state on the stack.
-> 
->> I was thinking that an attacker with arbitrary write access would wait
->> until PKRU was on the userspace stack and *JUST* before the kernel
->> sigreturn code restores it to write a malicious value.  It could
->> presumably do this with some asynchronous mechanism so that even if
->> there was only one attacker thread, it could change its own value.
-> 
-> I’m not sure I follow the details, can you give an example of an asynchronous
-> mechanism to do this? E.g. would this be the kernel writing to the memory in a
-> syscall for example?
+This adds a property to the device tree to set the GPIO pin mux to
+modem control lines on selected ports if needed.
 
-I was thinking of all of the IORING_OP_*'s that can write to memory or
-aio(7).
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ .../bindings/serial/nxp,sc16is7xx.txt         | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+index 0fa8e3e43bf8..426b7285ad50 100644
+--- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
++++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+@@ -23,6 +23,9 @@ Optional properties:
+     1 = active low.
+ - irda-mode-ports: An array that lists the indices of the port that
+ 		   should operate in IrDA mode.
++- modem-control-line-ports: An array that lists the indices of the port that
++			    should have shared GPIO lines configured as modem
++			    control lines.
+ 
+ Example:
+         sc16is750: sc16is750@51 {
+@@ -35,6 +38,17 @@ Example:
+                 #gpio-cells = <2>;
+         };
+ 
++	sc16is752: sc16is752@54 {
++		compatible = "nxp,sc16is752";
++		reg = <0x54>;
++		clocks = <&clk20m>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
++		modem-control-line-ports = <1>; /* Port 1 as modem control lines */
++		gpio-controller; /* Port 0 as GPIOs */
++		#gpio-cells = <2>;
++	};
++
+ * spi as bus
+ 
+ Required properties:
+@@ -59,6 +73,9 @@ Optional properties:
+     1 = active low.
+ - irda-mode-ports: An array that lists the indices of the port that
+ 		   should operate in IrDA mode.
++- modem-control-line-ports: An array that lists the indices of the port that
++			    should have shared GPIO lines configured as modem
++			    control lines.
+ 
+ Example:
+ 	sc16is750: sc16is750@0 {
+@@ -70,3 +87,14 @@ Example:
+ 		gpio-controller;
+ 		#gpio-cells = <2>;
+ 	};
++
++	sc16is752: sc16is752@0 {
++		compatible = "nxp,sc16is752";
++		reg = <0>;
++		clocks = <&clk20m>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
++		modem-control-line-ports = <1>; /* Port 1 as modem control lines */
++		gpio-controller; /* Port 0 as GPIOs */
++		#gpio-cells = <2>;
++	};
+-- 
+2.30.2
+
