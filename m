@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D7A706BE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB200706BE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbjEQO6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:58:47 -0400
+        id S232073AbjEQO6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:58:51 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjEQO6n (ORCPT
+        with ESMTP id S231745AbjEQO6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:58:43 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313AD4C3D
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:58:36 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5618857518dso8221987b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:58:36 -0700 (PDT)
+        Wed, 17 May 2023 10:58:45 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF0310D2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:58:38 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba7831dfe95so1429699276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684335515; x=1686927515;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e7J6VZXaspRffiPWCs6qbIb2JCSbaV6rph0RrfEcGYk=;
-        b=2PIxF4UyeLmsWrhMRBIccWHdjqFVWRcx9SR3+tAY0D3mahBohC7OBiN09QOyM/wsBk
-         ZJ1zpCOJrOSn+VSjBupJd7H+HHo5CTXYsgS465pNWd8zB0b4zvO23jPCYBDjhGbz0mI5
-         ZvHB7X4BMTE2QiztWutNtfUmuQ0UUIV4aBfRLjTeQ1v4HNqPz6eiRnq9UqETieUY7qHi
-         kQNUUYKeUnhjFGB7w5c4RKsGFA5YcPs1+04r40Ma9FukRMsLlI8N3TEW2uxFXri+9kL1
-         XpWwW6Qh2s8U9bjVh9q8r+jADUevprsk2VOA/ndGkCil2FCb4FOTXksLSJUKYB/FW5hR
-         +uGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684335515; x=1686927515;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1684335518; x=1686927518;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7J6VZXaspRffiPWCs6qbIb2JCSbaV6rph0RrfEcGYk=;
-        b=f2uGr3I8HlqpW4iNw0UVyngyYLkE7xoajcf4Qc1IGak+KDv42bglyfr5UmR3Qz6NPQ
-         xSCOnln662jot4aThbd5lhSgT8BQaFCH288t4MyUpMv9EipFBuDaumLpzOK5EjGtkHaf
-         JzM9i+vYoH1IZdw9GrVtlwuHf/BfYG16mVTDe/gAh1veaIX4a8n87R+lIp5XvZ/aapce
-         Dz3mTbLDFFJ8Fhj6fwTchOyWwOlTog1s+QYQLJ1CYthujkxD1gHkSGIGUG1jfBXieqRO
-         puwMDle55bkgPjzia4hWKZUl7QVsxek/7sAXMYc1yDnOHOyV/yERAhk/8wOIBG4b+9g8
-         +isQ==
-X-Gm-Message-State: AC+VfDwVbkPU6qhdUjg4C/7hKVjmV4AA2nNvoawvyoLL39HQQw4VGwB0
-        T6MTPJIOJOo6O4aVQnYn7SrRylR6cWF1
-X-Google-Smtp-Source: ACHHUZ78JTFqpqUW+hSz+xcojePuu9xMCSe5wLOwAj1fmNBR8lV9lMWLFiNrA64CyK/9C5/cR6A2DV2nnzuU
+        bh=3eVxch5HkrXcvtZDoKB8mG6yQaW8EDMVFT2dDJ7c0EQ=;
+        b=Qw6z/kLBpcVq/JoVK0qd8TrvOLjxRkkeofCkZw3VawfY33PEQp6ysLlKqe+Qpek5H+
+         QxTi+LoeomBzGF9tiUHgFW8dMumnWrf/fSBPYKothRxMPZgEK6GO8vhCtPmU6L04W4NU
+         LK96K16jx20km3YCBU/fs6zuU2YX4PYzrDZLh56oEiP+YtqyWCbo+z/c8s+S/kYWkFsC
+         9uK14XAtSFVI4cLv0Ynj1p6InakNMLliOndxsCK6MefMkZVnILNEWuLPf6dAyZDhLtRa
+         YU/QXfDsNWihyiNQNZipuzDFwlaVVSjDQEdhJ9FjpbUjW27X4ey4iMz2tSQWHtBMkLMY
+         34fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684335518; x=1686927518;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3eVxch5HkrXcvtZDoKB8mG6yQaW8EDMVFT2dDJ7c0EQ=;
+        b=cK+WZOGhi2QnGrYJzcl9UtDGgliLk7zYORGQuKgTN032CLx0iYUiSq+mljAGqT5c0c
+         AMadX7MH8w5323vfUsXqCtXVo+qFgWOgOytepjCjxnlyKlddlBRnqcvtSibBipzAPLTh
+         D+BqnQrFFcSHxkb4w/X0icCxBRawuP00A5Eb1GeUuf9ypjbO/hu5GZpb4XimCXPb5wuH
+         9IpLuMQOVMbCsczfaHxSE4hjWg2Y34ukVxPxl+kM/8CdL5w2ezJso5jUUnJpFxv5nShE
+         t/qHQJeGJw1p1ED7yM09EmZyLYJvW0ttsOkzYTE+Ga2zxgOEyX0spbcDK+lb03DEs4p5
+         nIaA==
+X-Gm-Message-State: AC+VfDxFDX8Zuj32y6N75CPLPcEb12l6upXhHvtNBsMAwNxHmOfG97gZ
+        0rDqKkwWNnenVG+WGYcK+kKziT29093P
+X-Google-Smtp-Source: ACHHUZ7Zbu4vTTvAzvR4DKN2J4WvTul1Bk0aZxVEhErOU5DQzLZoacUnDMePsK57bZidTKQfzfTq0jLeWMn7
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:628b:7e78:d09b:39b])
- (user=irogers job=sendgmr) by 2002:a81:ec10:0:b0:561:4bb5:1784 with SMTP id
- j16-20020a81ec10000000b005614bb51784mr8311572ywm.2.1684335515399; Wed, 17 May
- 2023 07:58:35 -0700 (PDT)
-Date:   Wed, 17 May 2023 07:57:40 -0700
-Message-Id: <20230517145803.559429-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:26c4:0:b0:ba8:4ba3:5b54 with SMTP id
+ m187-20020a2526c4000000b00ba84ba35b54mr1544087ybm.11.1684335517684; Wed, 17
+ May 2023 07:58:37 -0700 (PDT)
+Date:   Wed, 17 May 2023 07:57:41 -0700
+In-Reply-To: <20230517145803.559429-1-irogers@google.com>
+Message-Id: <20230517145803.559429-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230517145803.559429-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Subject: [PATCH v1 00/23] PMU refactoring and improvements
+Subject: [PATCH v1 01/23] perf tools: Warn if no user requested CPUs match
+ PMU's CPUs
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -97,111 +100,304 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Separate the code in pmu.[ch] from the set/list of PMUs case and the
-particular PMU case. Move the set/list of PMUs case code into
-pmus.[ch]. Clean up hybrid code and remove hybrid PMU list, it is
-sufficient to scan PMUs looking for core ones. Add core PMU list and
-perf_pmus__scan_core that just reads core PMUs. Switch code that skips
-non-core PMUs during a perf_pmus__scan, to use the
-perf_pmus__scan_core variant. Don't scan sysfs for PMUs if all such
-PMUs have been previously scanned/loaded. Scanning just just core
-PMUs, for the cases it is applicable, can improve the sysfs reading
-time by more than 4 fold on my laptop, as servers generally have many
-more uncore PMUs the improvement there should be larger:
+In commit 1d3351e631fc ("perf tools: Enable on a list of CPUs for hybrid")
+perf on hybrid will warn if a user requested CPU doesn't match the PMU
+of the given event but only for hybrid PMUs. Make the logic generic
+for all PMUs and remove the hybrid logic.
 
+Warn if a CPU is requested that is offline for uncore events. Warn if
+a CPU is requested for a core PMU, but the CPU isn't within the cpu
+map of that PMU.
+
+For example on a 16 (0-15) CPU system:
 ```
-$ perf bench internals pmu-scan -i 1000
-Computing performance of sysfs PMU event scan for 1000 times
-  Average core PMU scanning took: 989.231 usec (+- 1.535 usec)
-  Average PMU scanning took: 4309.425 usec (+- 74.322 usec)
+$ perf stat -e imc_free_running/data_read/,cycles -C 16 true
+WARNING: Requested CPU(s) '16' not supported by PMU 'uncore_imc_free_running_1' for event 'imc_free_running/data_read/'
+WARNING: Requested CPU(s) '16' not supported by PMU 'uncore_imc_free_running_0' for event 'imc_free_running/data_read/'
+WARNING: Requested CPU(s) '16' not supported by PMU 'cpu' for event 'cycles'
+
+ Performance counter stats for 'CPU(s) 16':
+
+   <not supported> MiB  imc_free_running/data_read/
+   <not supported>      cycles
+
+       0.000570094 seconds time elapsed
 ```
 
-The patch "perf pmu: Separate pmu and pmus" moves and renames a lot of
-functions, and is consequently large. The changes are trivial, but
-kept together to keep the overall number of patches more reasonable.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/builtin-record.c     |  6 +--
+ tools/perf/builtin-stat.c       |  5 +--
+ tools/perf/util/cpumap.h        |  2 +-
+ tools/perf/util/evlist-hybrid.c | 74 ---------------------------------
+ tools/perf/util/evlist-hybrid.h |  1 -
+ tools/perf/util/evlist.c        | 44 ++++++++++++++++++++
+ tools/perf/util/evlist.h        |  2 +
+ tools/perf/util/pmu.c           | 33 ---------------
+ tools/perf/util/pmu.h           |  4 --
+ 9 files changed, 49 insertions(+), 122 deletions(-)
 
-Ian Rogers (23):
-  perf tools: Warn if no user requested CPUs match PMU's CPUs
-  perf evlist: Remove evlist__warn_hybrid_group
-  perf evlist: Remove __evlist__add_default
-  perf evlist: Reduce scope of evlist__has_hybrid
-  perf pmu: Remove perf_pmu__hybrid_mounted
-  perf pmu: Detect ARM and hybrid PMUs with sysfs
-  perf pmu: Add is_core to pmu
-  perf pmu: Rewrite perf_pmu__has_hybrid to avoid list
-  perf x86: Iterate hybrid PMUs as core PMUs
-  perf topology: Avoid hybrid list for hybrid topology
-  perf evsel: Compute is_hybrid from PMU being core
-  perf header: Avoid hybrid PMU list in write_pmu_caps
-  perf metrics: Remove perf_pmu__is_hybrid use
-  perf stat: Avoid hybrid PMU list
-  perf mem: Avoid hybrid PMU list
-  perf pmu: Remove perf_pmu__hybrid_pmus list
-  perf pmus: Prefer perf_pmu__scan over perf_pmus__for_each_pmu
-  perf x86 mem: minor refactor to is_mem_loads_aux_event
-  perf pmu: Separate pmu and pmus
-  perf pmus: Split pmus list into core and uncore
-  perf pmus: Allow just core PMU scanning
-  perf pmus: Avoid repeated sysfs scanning
-  perf pmus: Ensure all PMUs are read for find_by_type
-
- tools/perf/arch/arm/util/auxtrace.c   |   7 +-
- tools/perf/arch/arm/util/cs-etm.c     |   4 +-
- tools/perf/arch/arm64/util/pmu.c      |   6 +-
- tools/perf/arch/x86/tests/hybrid.c    |   7 +-
- tools/perf/arch/x86/util/auxtrace.c   |   5 +-
- tools/perf/arch/x86/util/evlist.c     |  25 +-
- tools/perf/arch/x86/util/evsel.c      |  27 +-
- tools/perf/arch/x86/util/intel-bts.c  |   4 +-
- tools/perf/arch/x86/util/intel-pt.c   |   4 +-
- tools/perf/arch/x86/util/mem-events.c |  17 +-
- tools/perf/arch/x86/util/perf_regs.c  |  15 +-
- tools/perf/arch/x86/util/topdown.c    |   5 +-
- tools/perf/bench/pmu-scan.c           |  60 ++--
- tools/perf/builtin-c2c.c              |   9 +-
- tools/perf/builtin-list.c             |   4 +-
- tools/perf/builtin-mem.c              |   9 +-
- tools/perf/builtin-record.c           |  29 +-
- tools/perf/builtin-stat.c             |  15 +-
- tools/perf/builtin-top.c              |  10 +-
- tools/perf/tests/attr.c               |   4 +-
- tools/perf/tests/event_groups.c       |   7 +-
- tools/perf/tests/parse-events.c       |  15 +-
- tools/perf/tests/parse-metric.c       |   4 +-
- tools/perf/tests/pmu-events.c         |   6 +-
- tools/perf/tests/switch-tracking.c    |   4 +-
- tools/perf/tests/topology.c           |   4 +-
- tools/perf/util/Build                 |   2 -
- tools/perf/util/cpumap.h              |   2 +-
- tools/perf/util/cputopo.c             |  16 +-
- tools/perf/util/env.c                 |   5 +-
- tools/perf/util/evlist-hybrid.c       | 162 ---------
- tools/perf/util/evlist-hybrid.h       |  15 -
- tools/perf/util/evlist.c              |  67 +++-
- tools/perf/util/evlist.h              |   9 +-
- tools/perf/util/evsel.c               |  57 +--
- tools/perf/util/evsel.h               |   3 -
- tools/perf/util/header.c              |  27 +-
- tools/perf/util/mem-events.c          |  17 +-
- tools/perf/util/metricgroup.c         |   9 +-
- tools/perf/util/parse-events.c        |  24 +-
- tools/perf/util/parse-events.y        |   3 +-
- tools/perf/util/pfm.c                 |   6 +-
- tools/perf/util/pmu-hybrid.c          |  52 ---
- tools/perf/util/pmu-hybrid.h          |  32 --
- tools/perf/util/pmu.c                 | 482 ++------------------------
- tools/perf/util/pmu.h                 |  26 +-
- tools/perf/util/pmus.c                | 477 ++++++++++++++++++++++++-
- tools/perf/util/pmus.h                |  15 +-
- tools/perf/util/print-events.c        |  15 +-
- tools/perf/util/python-ext-sources    |   1 -
- tools/perf/util/stat-display.c        |  21 +-
- 51 files changed, 819 insertions(+), 1032 deletions(-)
- delete mode 100644 tools/perf/util/evlist-hybrid.c
- delete mode 100644 tools/perf/util/evlist-hybrid.h
- delete mode 100644 tools/perf/util/pmu-hybrid.c
- delete mode 100644 tools/perf/util/pmu-hybrid.h
-
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index ec0f2d5f189f..9d212236c75a 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -4198,11 +4198,7 @@ int cmd_record(int argc, const char **argv)
+ 	/* Enable ignoring missing threads when -u/-p option is defined. */
+ 	rec->opts.ignore_missing_thread = rec->opts.target.uid != UINT_MAX || rec->opts.target.pid;
+ 
+-	if (evlist__fix_hybrid_cpus(rec->evlist, rec->opts.target.cpu_list)) {
+-		pr_err("failed to use cpu list %s\n",
+-		       rec->opts.target.cpu_list);
+-		goto out;
+-	}
++	evlist__warn_user_requested_cpus(rec->evlist, rec->opts.target.cpu_list);
+ 
+ 	rec->opts.target.hybrid = perf_pmu__has_hybrid();
+ 
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index bc45cee3f77c..612467216306 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -2462,10 +2462,7 @@ int cmd_stat(int argc, const char **argv)
+ 		}
+ 	}
+ 
+-	if (evlist__fix_hybrid_cpus(evsel_list, target.cpu_list)) {
+-		pr_err("failed to use cpu list %s\n", target.cpu_list);
+-		goto out;
+-	}
++	evlist__warn_user_requested_cpus(evsel_list, target.cpu_list);
+ 
+ 	target.hybrid = perf_pmu__has_hybrid();
+ 	if (evlist__create_maps(evsel_list, &target) < 0) {
+diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
+index e3426541e0aa..c1de993c083f 100644
+--- a/tools/perf/util/cpumap.h
++++ b/tools/perf/util/cpumap.h
+@@ -59,7 +59,7 @@ struct perf_cpu cpu__max_present_cpu(void);
+ /**
+  * cpu_map__is_dummy - Events associated with a pid, rather than a CPU, use a single dummy map with an entry of -1.
+  */
+-static inline bool cpu_map__is_dummy(struct perf_cpu_map *cpus)
++static inline bool cpu_map__is_dummy(const struct perf_cpu_map *cpus)
+ {
+ 	return perf_cpu_map__nr(cpus) == 1 && perf_cpu_map__cpu(cpus, 0).cpu == -1;
+ }
+diff --git a/tools/perf/util/evlist-hybrid.c b/tools/perf/util/evlist-hybrid.c
+index 57f02beef023..db3f5fbdebe1 100644
+--- a/tools/perf/util/evlist-hybrid.c
++++ b/tools/perf/util/evlist-hybrid.c
+@@ -86,77 +86,3 @@ bool evlist__has_hybrid(struct evlist *evlist)
+ 
+ 	return false;
+ }
+-
+-int evlist__fix_hybrid_cpus(struct evlist *evlist, const char *cpu_list)
+-{
+-	struct perf_cpu_map *cpus;
+-	struct evsel *evsel, *tmp;
+-	struct perf_pmu *pmu;
+-	int ret, unmatched_count = 0, events_nr = 0;
+-
+-	if (!perf_pmu__has_hybrid() || !cpu_list)
+-		return 0;
+-
+-	cpus = perf_cpu_map__new(cpu_list);
+-	if (!cpus)
+-		return -1;
+-
+-	/*
+-	 * The evsels are created with hybrid pmu's cpus. But now we
+-	 * need to check and adjust the cpus of evsel by cpu_list because
+-	 * cpu_list may cause conflicts with cpus of evsel. For example,
+-	 * cpus of evsel is cpu0-7, but the cpu_list is cpu6-8, we need
+-	 * to adjust the cpus of evsel to cpu6-7. And then propatate maps
+-	 * in evlist__create_maps().
+-	 */
+-	evlist__for_each_entry_safe(evlist, tmp, evsel) {
+-		struct perf_cpu_map *matched_cpus, *unmatched_cpus;
+-		char buf1[128], buf2[128];
+-
+-		pmu = perf_pmu__find_hybrid_pmu(evsel->pmu_name);
+-		if (!pmu)
+-			continue;
+-
+-		ret = perf_pmu__cpus_match(pmu, cpus, &matched_cpus,
+-					   &unmatched_cpus);
+-		if (ret)
+-			goto out;
+-
+-		events_nr++;
+-
+-		if (perf_cpu_map__nr(matched_cpus) > 0 &&
+-		    (perf_cpu_map__nr(unmatched_cpus) > 0 ||
+-		     perf_cpu_map__nr(matched_cpus) < perf_cpu_map__nr(cpus) ||
+-		     perf_cpu_map__nr(matched_cpus) < perf_cpu_map__nr(pmu->cpus))) {
+-			perf_cpu_map__put(evsel->core.cpus);
+-			perf_cpu_map__put(evsel->core.own_cpus);
+-			evsel->core.cpus = perf_cpu_map__get(matched_cpus);
+-			evsel->core.own_cpus = perf_cpu_map__get(matched_cpus);
+-
+-			if (perf_cpu_map__nr(unmatched_cpus) > 0) {
+-				cpu_map__snprint(matched_cpus, buf1, sizeof(buf1));
+-				pr_warning("WARNING: use %s in '%s' for '%s', skip other cpus in list.\n",
+-					   buf1, pmu->name, evsel->name);
+-			}
+-		}
+-
+-		if (perf_cpu_map__nr(matched_cpus) == 0) {
+-			evlist__remove(evlist, evsel);
+-			evsel__delete(evsel);
+-
+-			cpu_map__snprint(cpus, buf1, sizeof(buf1));
+-			cpu_map__snprint(pmu->cpus, buf2, sizeof(buf2));
+-			pr_warning("WARNING: %s isn't a '%s', please use a CPU list in the '%s' range (%s)\n",
+-				   buf1, pmu->name, pmu->name, buf2);
+-			unmatched_count++;
+-		}
+-
+-		perf_cpu_map__put(matched_cpus);
+-		perf_cpu_map__put(unmatched_cpus);
+-	}
+-	if (events_nr)
+-		ret = (unmatched_count == events_nr) ? -1 : 0;
+-out:
+-	perf_cpu_map__put(cpus);
+-	return ret;
+-}
+diff --git a/tools/perf/util/evlist-hybrid.h b/tools/perf/util/evlist-hybrid.h
+index aacdb1b0f948..19f74b4c340a 100644
+--- a/tools/perf/util/evlist-hybrid.h
++++ b/tools/perf/util/evlist-hybrid.h
+@@ -10,6 +10,5 @@
+ int evlist__add_default_hybrid(struct evlist *evlist, bool precise);
+ void evlist__warn_hybrid_group(struct evlist *evlist);
+ bool evlist__has_hybrid(struct evlist *evlist);
+-int evlist__fix_hybrid_cpus(struct evlist *evlist, const char *cpu_list);
+ 
+ #endif /* __PERF_EVLIST_HYBRID_H */
+diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+index a0504316b06f..5d0d99127a90 100644
+--- a/tools/perf/util/evlist.c
++++ b/tools/perf/util/evlist.c
+@@ -2465,3 +2465,47 @@ void evlist__check_mem_load_aux(struct evlist *evlist)
+ 		}
+ 	}
+ }
++
++/**
++ * evlist__warn_user_requested_cpus() - Check each evsel against requested CPUs
++ *     and warn if the user CPU list is inapplicable for the event's PMUs
++ *     CPUs. Uncore PMUs list a CPU in sysfs, but this may be overwritten by a
++ *     user requested CPU and so any online CPU is applicable. Core PMUs handle
++ *     events on the CPUs in their list and otherwise the event isn't supported.
++ * @evlist: The list of events being checked.
++ * @cpu_list: The user provided list of CPUs.
++ */
++void evlist__warn_user_requested_cpus(struct evlist *evlist, const char *cpu_list)
++{
++	struct perf_cpu_map *user_requested_cpus;
++	struct evsel *pos;
++
++	if (!cpu_list)
++		return;
++
++	user_requested_cpus = perf_cpu_map__new(cpu_list);
++	if (!user_requested_cpus)
++		return;
++
++	evlist__for_each_entry(evlist, pos) {
++		const struct perf_cpu_map *to_test;
++		struct perf_cpu cpu;
++		int idx;
++		bool warn = true;
++		const struct perf_pmu *pmu = evsel__find_pmu(pos);
++
++		to_test = pmu && pmu->is_uncore ? cpu_map__online() : evsel__cpus(pos);
++
++		perf_cpu_map__for_each_cpu(cpu, idx, to_test) {
++			if (perf_cpu_map__has(user_requested_cpus, cpu)) {
++				warn = false;
++				break;
++			}
++		}
++		if (warn) {
++			pr_warning("WARNING: Requested CPU(s) '%s' not supported by PMU '%s' for event '%s'\n",
++				cpu_list, pmu ? pmu->name : "cpu", evsel__name(pos));
++		}
++	}
++	perf_cpu_map__put(user_requested_cpus);
++}
+diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
+index e7e5540cc970..5e7ff44f3043 100644
+--- a/tools/perf/util/evlist.h
++++ b/tools/perf/util/evlist.h
+@@ -447,4 +447,6 @@ struct evsel *evlist__find_evsel(struct evlist *evlist, int idx);
+ 
+ int evlist__scnprintf_evsels(struct evlist *evlist, size_t size, char *bf);
+ void evlist__check_mem_load_aux(struct evlist *evlist);
++void evlist__warn_user_requested_cpus(struct evlist *evlist, const char *cpu_list);
++
+ #endif /* __PERF_EVLIST_H */
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index f4f0afbc391c..1e0be23d4dd7 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -2038,39 +2038,6 @@ int perf_pmu__match(char *pattern, char *name, char *tok)
+ 	return 0;
+ }
+ 
+-int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
+-			 struct perf_cpu_map **mcpus_ptr,
+-			 struct perf_cpu_map **ucpus_ptr)
+-{
+-	struct perf_cpu_map *pmu_cpus = pmu->cpus;
+-	struct perf_cpu_map *matched_cpus, *unmatched_cpus;
+-	struct perf_cpu cpu;
+-	int i, matched_nr = 0, unmatched_nr = 0;
+-
+-	matched_cpus = perf_cpu_map__default_new();
+-	if (!matched_cpus)
+-		return -1;
+-
+-	unmatched_cpus = perf_cpu_map__default_new();
+-	if (!unmatched_cpus) {
+-		perf_cpu_map__put(matched_cpus);
+-		return -1;
+-	}
+-
+-	perf_cpu_map__for_each_cpu(cpu, i, cpus) {
+-		if (!perf_cpu_map__has(pmu_cpus, cpu))
+-			RC_CHK_ACCESS(unmatched_cpus)->map[unmatched_nr++] = cpu;
+-		else
+-			RC_CHK_ACCESS(matched_cpus)->map[matched_nr++] = cpu;
+-	}
+-
+-	perf_cpu_map__set_nr(unmatched_cpus, unmatched_nr);
+-	perf_cpu_map__set_nr(matched_cpus, matched_nr);
+-	*mcpus_ptr = matched_cpus;
+-	*ucpus_ptr = unmatched_cpus;
+-	return 0;
+-}
+-
+ double __weak perf_pmu__cpu_slots_per_cycle(void)
+ {
+ 	return NAN;
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 0e0cb6283594..49033bb134f3 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -257,10 +257,6 @@ void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu);
+ bool perf_pmu__has_hybrid(void);
+ int perf_pmu__match(char *pattern, char *name, char *tok);
+ 
+-int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
+-			 struct perf_cpu_map **mcpus_ptr,
+-			 struct perf_cpu_map **ucpus_ptr);
+-
+ char *pmu_find_real_name(const char *name);
+ char *pmu_find_alias_name(const char *name);
+ double perf_pmu__cpu_slots_per_cycle(void);
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
