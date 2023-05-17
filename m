@@ -2,152 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C62C705CDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88E6705CDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjEQCLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S231777AbjEQCMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjEQCLf (ORCPT
+        with ESMTP id S230221AbjEQCME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:11:35 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B153F30F9
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:11:32 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ec8eca56cfso291636e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:11:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684289491; x=1686881491;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qaRPWIuvvo3gKtUu4wmte+gXSZRNUUE3b0hTHt7FVeI=;
-        b=qcc6+LY33iYMdnoWxQl0Nw3hnx8hftcEH6+291YxF+99TCvNIgIT9Vs1tRqlgy6SLp
-         NVAAkS3CXbxRYLfFun9TckrjqOY5WkGg90oS+nFoKUXPnKcFkoImqLT88o4noosnA6iU
-         qQOYLKfPXE1MGARk5WcEaEUy+IdeOKExF+FbZUTSSBXsK1BHsSfUdkRwbtgvtqmZZ4c1
-         Q4FdREnV9yVxHwc+GURkCulGJgftPo9056ZZ1V7LkLDQHFwZVmaZuUCqTHgzzWbLTQZv
-         ZDB6FJUr67rq/Ir2IPL585KDnLh1Bnob4EgFdNDI6nrg5uB1fnKtbg4I9VoUmp18rNE4
-         NGTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684289491; x=1686881491;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qaRPWIuvvo3gKtUu4wmte+gXSZRNUUE3b0hTHt7FVeI=;
-        b=V6F4Hyx8O1E+5Ddrv/0Q34T/RIkFHQN4yfgye07AaRl2yrhYORniYTG6jJSu/Tx87Y
-         ZxlfUuw4GCCTQoxieFc/9TGQ61si6M+B77r/y38McxLM2f4hwBrM+mDJ0wf/aFamuGcI
-         XIvBKNviuake0I+w40JeDvPNmeNoPNqEcfYf/ac6YIUgsJ832dfZcEgnj7o8+chdl6Rb
-         Lf03hrjy+hnk/s/G2xx/tV94ciow0no3b9hgqW//c3GPXQbC8fY/IwySbyefd64t+SKl
-         faHqB8uo2BLtVoieQF8Lpal+rxY6rcsgbSpPMZl1Pr+LZpxqQpcK8dz2Aequ0MF5YHJa
-         qdSw==
-X-Gm-Message-State: AC+VfDxR6YnGPNkUuzzhtupfYN88/Y/uwdNWGiCcN+FUQpnVNclQB8S0
-        ektfKJwKV074MU9Nu/YjcB3J4w==
-X-Google-Smtp-Source: ACHHUZ7+kHgnJiIdvaT/l2mo2jQRgHMKRqrizkhRNDelJvR9JTYZeGG7PdtVSV0XIuy4BZmDR8l7FA==
-X-Received: by 2002:a05:6512:11ec:b0:4ef:d482:9c91 with SMTP id p12-20020a05651211ec00b004efd4829c91mr7811176lfs.47.1684289490905;
-        Tue, 16 May 2023 19:11:30 -0700 (PDT)
-Received: from [192.168.58.94] (public-gprs529629.centertel.pl. [31.61.188.30])
-        by smtp.gmail.com with ESMTPSA id j4-20020a19f504000000b004f25ca0be7fsm2951942lfb.291.2023.05.16.19.11.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 19:11:30 -0700 (PDT)
-Message-ID: <8f9ca4a1-26ee-cd37-6c15-abdc832d77b3@linaro.org>
-Date:   Wed, 17 May 2023 04:11:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH][next] media: venus: hfi_cmds: Replace fake flex-array
- with flexible-array member
+        Tue, 16 May 2023 22:12:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF28EE47;
+        Tue, 16 May 2023 19:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684289523; x=1715825523;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=mZTcHvUCtMY292Fz+AHXdN01IjhKeGvXuqopFzq8/JM=;
+  b=kL+aEkVd1jJC72W3vYNU197jLlzXwJTCuGurICN6Gcklx4kR50PdbbDJ
+   1MHF38l9qFFTpe9RmzsFu/m6SbKMkrDsxF+scJ7R0xqsaMbwRgsrh8yGf
+   1SGhbxGIiLL5xJwZQlHhuLbTf/aXCekA98zr+5zzLXLpwnSt+OGWktfco
+   cEfVo7hQHJVVgakIBJ8J3h2OrL/1O28DoMWSEm0sk8mGmnxDNqQjR1kOg
+   Lqht37evPNB1MX/QHdiYAdyIQOfJh/K4lucpq37DUCZd9BnVUGMx7cUov
+   2f4gMfQ+PdH9SzQVgnXu47dtisc9pqxi8UHPRnkr/kKh707OmB0C3afWn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="379830033"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="379830033"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 19:12:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="1031517074"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="1031517074"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 16 May 2023 19:12:03 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 16 May 2023 19:12:03 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 16 May 2023 19:12:03 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 16 May 2023 19:12:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JahQu5fjuO+dhqcY/WkHDWO3zxg0mnsDmgyUXCG6iPLSYQ9aDhr87KP2FsWpkHPlfQ7OlT4dG7Wo90pvOBsNOZq9wjxxDv0Xom3P5FsaAV4tA3dU6UlcSq9H3XEmwjO1lCEE5e85dI1/S4o3wxsDqsQY9v1+Z4ki51D+Q9LxwRemlsVkA8QCLCgumgH7Lt4JItgTeC8vZuVdAxUvkjjJASyG7nbMRe9eAFM8GQspNxEvuB/5O45O9iUdJUfMYbUR6TbwjSbfOhm2j4K25TcBqJVj2ZpzK4nv3ZXnhmgQFgr/5z7H5PKf+C+Fogl1yAGr//VAjC5RquPQ0mu7DCJ20g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mZTcHvUCtMY292Fz+AHXdN01IjhKeGvXuqopFzq8/JM=;
+ b=dkXz3xDiT444htmb49sK9bKZgiOOw6Qvij10Rzmi41a7kmf5uzazkWA7KSxZcTSA4MQETWKVxQdBk8rKp/a1OwRugYAV1ywMotRjpla3b5dQD4BNR/K7kpbANAQJ4UeqAarGycm4JWKzlLtp1l60abzOeogpk/0iPcnGXCEUyFEK/6STqz0Xl5UoG9XHOgy0l9vY5x91aOpKxwXRq6QQT86ULpeUMrxLNjhK2A4Ms53MpAqYN3/ihbGrhVY91J9+3J+PcQJauJJBchSCP/NdCb7aY6wOUxr/Bsfiw4I1LhaoX0Ro6jwP4EKbXevD2ORJHokcwujdeXEsDw7wVd0ZiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SN7PR11MB7568.namprd11.prod.outlook.com (2603:10b6:806:34e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.29; Wed, 17 May
+ 2023 02:12:01 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::73e9:b405:2cae:9174]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::73e9:b405:2cae:9174%5]) with mapi id 15.20.6387.033; Wed, 17 May 2023
+ 02:12:01 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "darwi@linutronix.de" <darwi@linutronix.de>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Liu, Jing2" <jing2.liu@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "tom.zanussi@linux.intel.com" <tom.zanussi@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V5 03/11] vfio/pci: Prepare for dynamic interrupt context
+ storage
+Thread-Topic: [PATCH V5 03/11] vfio/pci: Prepare for dynamic interrupt context
+ storage
+Thread-Index: AQHZhB+NML0SOweBJ02fBu9B9TGuza9dwX7w
+Date:   Wed, 17 May 2023 02:12:01 +0000
+Message-ID: <BN9PR11MB5276B08334B4AD974D6302508C7E9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <cover.1683740667.git.reinette.chatre@intel.com>
+ <eab289693c8325ede9aba99380f8b8d5143980a4.1683740667.git.reinette.chatre@intel.com>
+In-Reply-To: <eab289693c8325ede9aba99380f8b8d5143980a4.1683740667.git.reinette.chatre@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <ZGQn63U4IeRUiJWb@work>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZGQn63U4IeRUiJWb@work>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SN7PR11MB7568:EE_
+x-ms-office365-filtering-correlation-id: b18abab6-0416-4efa-d5c3-08db567c19bf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lBBs46VYZ9NOwoCMW585xdv54vSEd7vK0rP2bXkDwMuMTV8a8HMvZoTQI0BrvPK3gSvmxeKuGVQUJY0/2DFeZLYEmCoIXpoT10YZrcYDFxJjOMtuoXrTi5gW8TFdFSXsCzM3UGO9w+Baeio40i4Qlujtaskq3N0b+tJb29C8yufWj5nROCP8i7mg+hQ4zGZUVKxqg9AjI7YfDcDA+D/ZHm7TNkJf+Z3yb3HzcTH9Gmqtz2izdmk+sWtrkqufl8uLZtfriRQodCJwllOx5sZ9apHQyuONjm5uzOpu1t+ZpOctafegXi1/44NWgBJtIpexitzrHGN6Hqegn7ITyarZdZCwT9LCLQg2HEyXNwBZmgw/4JgpNn0hAjdFOEpzpWCjwHDwtNzYIPnBmpXJ6Qwbg8jse/4gjRr4kdZP0W4ng2FU11LB6lA7J5qlBAafvz3CR9hkYTQHcqeAP5UEM7iyew0H+svN1c6vwsTAJDHDgc0/ZXMV83lRGxMNcdlw+nP2uDQRU5QmpGao7KMEAZgHr6Gs7QvrrqZbrNs/critc5yDNWJB3CGQiA1Zf0zyUWMPZXVV6eUXr3vptYHvTJJQ98T8MpACjtOzXGs5h0i38gK3qmGURKRpDbm1GgjzdbVV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(39860400002)(376002)(346002)(396003)(451199021)(33656002)(316002)(86362001)(54906003)(110136005)(66946007)(76116006)(66446008)(66556008)(66476007)(4326008)(478600001)(64756008)(7696005)(55016003)(52536014)(8676002)(2906002)(5660300002)(8936002)(38070700005)(82960400001)(4744005)(38100700002)(41300700001)(122000001)(6506007)(186003)(9686003)(83380400001)(26005)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?I2+We/WSn/aUOcjmF9YrtXF4jkgnFMdh2vYICtTUm6VkF9Ze/P8w8VIJdH9z?=
+ =?us-ascii?Q?2mi/rijvWQyNtgN5fOkmTI4TTsXEiLGU6dngSin8jSUkHU0wyelbRqfbPoBO?=
+ =?us-ascii?Q?vJT78IxoXuPibSYOGLpgSv9aD+wbRJkvGkmqlDe4jG7zFCgCs0nagjVSlvm1?=
+ =?us-ascii?Q?VbSQr4Zme7I0vT4JJFmGPOADqpJeQr0SH9khFFAvmGzTo34LoKLhY0IjAIat?=
+ =?us-ascii?Q?O0jYv1pZ0EYgigt++ueZCjVQR3/h7t0p/iv/nDxJGn83LcenKZ1xTWblfXhe?=
+ =?us-ascii?Q?CPg1PPbUFemK4ZK8V+HEb6DOWzH45Tnr9ZHOqi/Ex03i5Hl5xmh7o7M4+z1i?=
+ =?us-ascii?Q?LrEG9tlVxNEBxEqKU9LCsGaprY0EhFweFqnEDaB4Be8Btgyhhs/sQTwlV6lw?=
+ =?us-ascii?Q?JJgehlpl2WmIdz/cf/KnIKc7K/QMZEMKsyjk7jadXa7/qQmBmlnA7fM+mY97?=
+ =?us-ascii?Q?M1PFcMFkxuj8Eg5AXsvw5ndSMd7nR3XDS3HM99MfBw+8UHxLszAXF/VxP/qe?=
+ =?us-ascii?Q?e+y2O/E7u3DPjN3+b0ao3YOWxlrGYOl0FtQmyJpFej6jpILzub6KWYDZzT+T?=
+ =?us-ascii?Q?U7vp4z4WB1EMMqSme17akj1S4uFfcXhADLcaYp6E/LlCLoXxa/L26n/2Mg2U?=
+ =?us-ascii?Q?LPyRVrvEhEuvtX3FgNyLYeB8or+XVwxIuDEwYu04jGx748FwbJChM4MMNv5V?=
+ =?us-ascii?Q?qdRpsp8DfWP3H0FG/UOmeIE1kyLY1mZa1PD2vSTLpLqK9NyHr/FYEXNouNVd?=
+ =?us-ascii?Q?43cnGopGFcOQQthMy2Mrr/dAXkrix42a9UBqRiDp0d9980LhFvucXzg+yDbV?=
+ =?us-ascii?Q?eatsI80h8hStPfDWUNS1+cMqDcoXFBToDSAOYszDiDM9XPfidbvXuWvLIZDD?=
+ =?us-ascii?Q?BipaFDr9f60Dv1DJ/TQRBxyDkcq6AxeGn3dDzJylhmrU9Z7r+PF7dc/s3S8I?=
+ =?us-ascii?Q?T67dWe8FZuGPl4etNd9rcKaqNtGJEzm/XHHmneye0gxQiXnCvCIo08wcm7Iq?=
+ =?us-ascii?Q?SolSCzLCo+lhqbfJfWhmG3pUZjs+ZNBfNJ18jY72EyMFA4rZA9QwmmjW+Lbb?=
+ =?us-ascii?Q?gyTDUe4p8igMIev2wtNf+Lw5edpn74IumIsyOg3JZeIMs/WwCuxesZx9fTm8?=
+ =?us-ascii?Q?TXByDXjnOTakytNakxFDl/TRNhu8HGLgIIhKETirMAZUWWo+SJQnd49ALwvy?=
+ =?us-ascii?Q?J5c88SdyhS8Wm7PdlrC3V6PivF+rdPoINm4XZyzPPF4ekmwqeOUl9nsrPV7M?=
+ =?us-ascii?Q?D3/QpZlRxy6p3ID91uFYQ39PfntFsFC2PJxDkmzXD6ILdZt7QMuxLYVkVYd+?=
+ =?us-ascii?Q?iUrYhpG9zAdCH1F5Qt29Igcrb6rT/48JT9ifNcSajJM9ClQ9VuSbgJ9vflVR?=
+ =?us-ascii?Q?Nk7RHk/ZAkjCUKY4nXzzTC4RfiZ8BtNPOdQYppK5XC1oNiuYxR9GK8sAcDbg?=
+ =?us-ascii?Q?nrCAepGDAiiq42Tx3B7v6WEH4ZFQKAmdE/UEKZk7W0b4CQiibzqccmfv9yqd?=
+ =?us-ascii?Q?S6phWijBEuOl3mqWQpHIfEFN9CHjS0GhnRpFhQvZvpy6QvCV7x9vTgiFEvQ1?=
+ =?us-ascii?Q?A7QrMK9n0tZGbNPrmedE/hKlWO01w/PWRxk1Rgcm?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b18abab6-0416-4efa-d5c3-08db567c19bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2023 02:12:01.0396
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tZtPfbsjKrhAcbDtmRAf/Vpfs25VN7M+bHp0iR70mWASUrCggW8MGhBRs7ywhQvTHvlbYAC11qliWTEbcnszzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7568
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> From: Chatre, Reinette <reinette.chatre@intel.com>
+> Sent: Thursday, May 11, 2023 11:45 PM
+>=20
+> Interrupt context storage is statically allocated at the time
+> interrupts are allocated. Following allocation, the interrupt
+> context is managed by directly accessing the elements of the
+> array using the vector as index.
+>=20
+> It is possible to allocate additional MSI-X vectors after
+> MSI-X has been enabled. Dynamic storage of interrupt context
+> is needed to support adding new MSI-X vectors after initial
+> allocation.
+>=20
+> Replace direct access of array elements with pointers to the
+> array elements. Doing so reduces impact of moving to a new data
+> structure. Move interactions with the array to helpers to
+> mostly contain changes needed to transition to a dynamic
+> data structure.
+>=20
+> No functional change intended.
+>=20
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 
-
-On 17.05.2023 03:03, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in struct hfi_sys_set_resource_pkt, and refactor the rest of
-> the code, accordingly.
-> 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> The only binary differences seen before/after changes are the
-> following:
-> 
->      17ba:      mov    %rbx,%rdi
->      17bd:      call   17c2 <pkt_sys_set_resource+0x42>
->                         17be: R_X86_64_PLT32    __tsan_write4-0x4
-> -    17c2:      movl   $0x14,(%rbx)
-> +    17c2:      movl   $0x10,(%rbx)
->      17c8:      lea    0x4(%rbx),%rdi
->      17cc:      call   17d1 <pkt_sys_set_resource+0x51>
->                         17cd: R_X86_64_PLT32    __tsan_write4-0x4
-> 
-> which is expected once this accounts for the following line of code
-> at  drivers/media/platform/qcom/venus/hfi_cmds.c:73
-> 
-> 73         pkt->hdr.size = sizeof(*pkt);
-> 
-> and as *pkt is of type struct hfi_sys_set_resource_pkt, sizeof(*pkt) is
-> reduced by 4 bytes, due to the flex-array transformation.
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/293
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/media/platform/qcom/venus/hfi_cmds.c | 2 +-
->  drivers/media/platform/qcom/venus/hfi_cmds.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> index 3f74d518ad08..7c82e212434e 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-> @@ -83,7 +83,7 @@ int pkt_sys_set_resource(struct hfi_sys_set_resource_pkt *pkt, u32 id, u32 size,
->  		res->size = size;
->  		res->mem = addr;
->  		pkt->resource_type = HFI_RESOURCE_OCMEM;
-> -		pkt->hdr.size += sizeof(*res) - sizeof(u32);
-> +		pkt->hdr.size += sizeof(*res);
->  		break;
->  	}
->  	case VIDC_RESOURCE_NONE:
-> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.h b/drivers/media/platform/qcom/venus/hfi_cmds.h
-> index ba74d03eb9cd..dd9c5066442d 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_cmds.h
-> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.h
-> @@ -56,7 +56,7 @@ struct hfi_sys_set_resource_pkt {
->  	struct hfi_pkt_hdr hdr;
->  	u32 resource_handle;
->  	u32 resource_type;
-> -	u32 resource_data[1];
-> +	u32 resource_data[];
-Would making this an u32* be a better resolution?
-
-Konrad
->  };
->  
->  struct hfi_sys_release_resource_pkt {
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
