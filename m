@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987DC70729E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB497072A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjEQTyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S229487AbjEQT5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjEQTyM (ORCPT
+        with ESMTP id S229454AbjEQT5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:54:12 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5043693FD
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:53:52 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-95fde138693so83322466b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:53:52 -0700 (PDT)
+        Wed, 17 May 2023 15:57:06 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF44459E1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:57:05 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-338458a9304so4975ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:57:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684353231; x=1686945231;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S1CrqsM6REqqjoJg43OXDGuz7NrBfq2XBbMd1jfiYc8=;
-        b=nvFFiKYK8Inxz6gI7jNROeHfhT6g6NHZMY6a2hM/5cg9Sf84l/e8H0NbMLKIs47H+0
-         8VJUQzEyaVkXOB/ua7avOI/uAS+bfgVuMYkQH6ULHDWqaTHHdnxpTTvx5zLxIbDB9yX6
-         uUXe8WCWiaPDWdTIcxuAYYQXdXpYRgxP+BWGilbqkpk8k8fO6abnI0tzTv8mRdtDEg5T
-         Ux8gjXK+vWlMTwZlcGjIPnfyZ6uq+fR7cVZzKnpXo27aUnD+y5iuCjXHEPjHDw2G47Vj
-         Q+bg0DTGUYC7VBRn9krK3I8mtkpS4RIn/Q4A0BEZurur4dwUz6jcPrPk4lMFh+F+up3H
-         aszQ==
+        d=google.com; s=20221208; t=1684353425; x=1686945425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7PuhUAmuAWN2zg9B5H7JpxfVt8/E1PBqFeU+rQFkSJg=;
+        b=v5ZjVpaBb6iZa0hSwYV500ZA3Ke59Sg524tk3MudH+mTJ2OReFBmhRQeLlK3+NoO52
+         b9iIZnnf9pW6II0Jxv/lLOWCPoXob+8QM9YqfWtizoS3DcF/qiWtaJo5PpF+nN4HmmY3
+         4ZSfFzLCM0jWoDb2Yhn5BNFSYHAbKfxQl2aB2qvLNBui/rx6jgXOLH2+IvbOI3ZQH6H7
+         4qmCuGugwe0E9ctJomBfQLlIx1GvEGBwlpVt6ImTkB7mz26vqWLYmjUdqs5LEQgQp7Sy
+         jxLndMr9vXh66NGAGkSqTVJYyifkZjfPrHeg2FYQIC+zc2F405Z4nULPFkV9/et/BQ7q
+         j9Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684353231; x=1686945231;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S1CrqsM6REqqjoJg43OXDGuz7NrBfq2XBbMd1jfiYc8=;
-        b=KvTIClx0+SNnDkoRZisX340zA3pKzWQe3EgESgpZTAeCr9/dF64HsNYYZiooWHyMnu
-         Vr6H462ypxPe3V5W+Db6hY66gKlXMjz3jmWvCWEoQt9GlNnXZzxKwjOOX2Fh/lCkHiLO
-         ba2ja6/9GRCXR0vM0D3Do6DfrtPLqizrOnfqVJOPFZYy7qmZYCq+q5AjEu3l+8kthWwW
-         Hk6Vh2GR2IWYdjhFU2nVRQOl5X+A7TxF6XGMNdGRnyE/20D/lTHco5YIENx7IR7XrUg7
-         M5antGhayr9F/q/kpvnIc2P0g5jFcIGKLRKHIOGhtkvJzLooPsv/GtJlC8XAX4XyP2Wv
-         kvqA==
-X-Gm-Message-State: AC+VfDwapHtWZS7LhMKyISnha89AHJCshCGizkn6E/fndn2wvby48/x4
-        G8pmlsyy5/ETEIIvVeCXHCEWUA==
-X-Google-Smtp-Source: ACHHUZ6seXg68qlaecH8kXGxgTC8MS1cd368+AF+wm8KhxoThOghaoWEMvs7Dt2XSDe4oDfE36cyfA==
-X-Received: by 2002:a17:907:d24:b0:94a:4e86:31bc with SMTP id gn36-20020a1709070d2400b0094a4e8631bcmr3716917ejc.13.1684353230888;
-        Wed, 17 May 2023 12:53:50 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d7a:e7cc:21b3:c435? ([2a02:810d:15c0:828:d7a:e7cc:21b3:c435])
-        by smtp.gmail.com with ESMTPSA id jj8-20020a170907984800b00965c7c93655sm12525855ejc.213.2023.05.17.12.53.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 12:53:50 -0700 (PDT)
-Message-ID: <8b2248e5-a89e-a296-8044-0dc552754f35@linaro.org>
-Date:   Wed, 17 May 2023 21:53:49 +0200
+        d=1e100.net; s=20221208; t=1684353425; x=1686945425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7PuhUAmuAWN2zg9B5H7JpxfVt8/E1PBqFeU+rQFkSJg=;
+        b=S9R+LBJjlfKBOuxf3ddEG9sSw5NfcmdEfFSwAR1x4fEzrvHnFN7mr/iqUYMLs0sZhA
+         8e+IHINYPlL+acsMI43K972EoiAZalSgRjJu1qilFjc+9Rkp5ql0LcKv9+PyVZ75ybaJ
+         RBynqTAtfpsf9f0jUNiQHsV0YZVKFa1mxBhLdzb3ohbhgHvfYDKVXwvAslALh7Golzj2
+         tnwu/jD2VEPIZqmfD3tfsrbTiP/VQOkoWhD147eGfCIdNIea/jFlCFkxAgaNkmuViUvW
+         BzA+r7ZzoLjuuFtsHX0E+zWMxUwomJ/k8MRi+KDkNB67Ff9+KJTbBZ8jfXsy8Em92sv7
+         8Cvg==
+X-Gm-Message-State: AC+VfDzrMtM9k9gp9UOngx9YhWCQcKxuYeEyoFzAdCMoFCWM+Zu1UHvd
+        1zWSqgPTkzmtjhxX/8k0Ya0f3jzn4jUWQRz6DGILvg==
+X-Google-Smtp-Source: ACHHUZ5fNoYcY4gMzQWohPszL01/Ayk00Rs0kYmAmvMCIkuVDJUtmqG0jhf1cbaqfkK5bOymJYPt9ZrnB79F2+NTVUc=
+X-Received: by 2002:a05:6e02:198b:b0:32f:7831:dea5 with SMTP id
+ g11-20020a056e02198b00b0032f7831dea5mr3825ilf.8.1684353424981; Wed, 17 May
+ 2023 12:57:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] dt-bindings: power: qcom,rpmpd: Format RPMh levels
- better
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230517-topic-kailua-rpmhpd-v1-0-cd3013d051a6@linaro.org>
- <20230517-topic-kailua-rpmhpd-v1-2-cd3013d051a6@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230517-topic-kailua-rpmhpd-v1-2-cd3013d051a6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <ZGUYVjJk2DhX9UrC@yoga>
+In-Reply-To: <ZGUYVjJk2DhX9UrC@yoga>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 17 May 2023 12:56:52 -0700
+Message-ID: <CAP-5=fX3oLRgUzt6QhN+6bybp_WsS9gCuJ1484hq16FTWc3Dyg@mail.gmail.com>
+Subject: Re: [PATCH] perf: test: Add support for testing JSON generated by
+ perf data command
+To:     Anup Sharma <anupnewsmail@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,14 +78,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 15:19, Konrad Dybcio wrote:
-> After adding the missing levels with a nice, easy-to-read diff,
-> reformat the defines to make them nice to look at..
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Wed, May 17, 2023 at 11:09=E2=80=AFAM Anup Sharma <anupnewsmail@gmail.co=
+m> wrote:
+>
+> This commit adds support for testing the JSON output generated
+> by the perf data command's conversion to JSON functionality.
+> The test script now includes a validation step to ensure that
+> the resulting JSON file is contain valid data.
+>
+> As a newcomer to this community, any feedback on the implementation
+> is highly appreciated.
+>
+> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Congratulations on sending your first patch! Anup is this summer's
+Google Summer-of-Code contributor for the Linux perf tool. I'm sure
+everyone on the lists is looking forward to your contributions!
 
-Best regards,
-Krzysztof
+> ---
+>  .../shell/test_perf_data_converter_json.sh    | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100755 tools/perf/tests/shell/test_perf_data_converter_json.=
+sh
+>
+> diff --git a/tools/perf/tests/shell/test_perf_data_converter_json.sh b/to=
+ols/perf/tests/shell/test_perf_data_converter_json.sh
+> new file mode 100755
+> index 000000000000..88db96e38925
+> --- /dev/null
+> +++ b/tools/perf/tests/shell/test_perf_data_converter_json.sh
+> @@ -0,0 +1,64 @@
+> +#!/bin/sh
+> +# perf data json converter test
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +set -e
+> +
+> +err=3D0
+> +perfdata=3D$(mktemp /tmp/__perf_test.perf.data.XXXXX)
+> +result=3D$(mktemp /tmp/__perf_test.output.json.XXXXX)
+> +
+> +cleanup()
+> +{
+> +       rm -f ${perfdata}
+> +       rm -f ${result}
+> +       trap - exit term int
+> +}
+> +
+> +trap_cleanup()
+> +{
+> +       cleanup
+> +       exit ${err}
+> +}
+> +trap trap_cleanup exit term int
+> +
+> +check()
+> +{
+> +       if [ `id -u` !=3D 0 ]; then
+> +               echo "[Skip] No root permission"
+> +               err=3D2
+> +               exit
+> +       fi
+> +}
+> +
+> +test_json()
+> +{
+> +       echo "Testing perf data convertion to JSON"
+> +       perf record -o $perfdata -F 99 -a -g -- sleep 1 > /dev/null 2>&1
+> +       perf data convert --to-json $result --force -i $perfdata >/dev/nu=
+ll 2>&1
+> +       echo "Perf Data Converter to JSON [SUCCESS]"
+> +}
+> +
+> +validate_json_format()
+> +{
+> +       echo "Testing perf data converted to JSON format"
+> +       if [ -f "${result}" ]; then
 
+It can be a good idea to test for failure and early exit. It would
+avoid being as indented in the following if.
+
+> +               if jq '.' "${result}" > /dev/null 2>&1; then
+
+This assumes the jq program is available and it isn't by default on my
+distribution. We could test:
+if ! which jq; then
+but it may be better to depend on Python and json.loads - Python is
+already a dependency for a number of the tests.
+
+Thanks,
+Ian
+
+> +                   echo "The file contains valid JSON format [SUCCESS]"
+> +               else
+> +                   echo "The file does not contain valid JSON format [FA=
+ILED]"
+> +                   err=3D1
+> +               fi
+> +           else
+> +               echo "File not found [FAILED]"
+> +               err=3D2
+> +               exit
+> +           fi
+> +}
+> +
+> +check
+> +
+> +test_json
+> +validate_json_format
+> +
+> +exit ${err}
+> --
+> 2.34.1
+>
