@@ -2,86 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7F47070A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F35F7070AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbjEQSVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 14:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S229697AbjEQSWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 14:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjEQSVI (ORCPT
+        with ESMTP id S229932AbjEQSWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 14:21:08 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B34693D9;
-        Wed, 17 May 2023 11:21:03 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QM1d935d4z49Q47;
-        Wed, 17 May 2023 21:21:01 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1684347661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LQDStvIbW7UGWuPy2yJ4GFYZJS+LxAH2lk+n1n4DGtU=;
-        b=QJ4bDUPke+hqm25eN0peiCWpEhHv2l+qMs2EV15uHEP/l10jL1Cl95vXxLVlMFUmDkvguw
-        CXvBU60+kfZQECPxVVJSD+htmudhrz+oPoePIVYVA5BxFowd0Z9TQc4w8l9pVBiDLk4d3t
-        ARf/NlPdQXiDNCGDygM/cbGQoZr6Vl8XM25H6I5vP1Td25+gKhvc0ORO3vuW4laNS2q2JE
-        0v7Uuf+UhYPplc4BoElXYoGQosC1nNgz4NqMeLNrEsWuk1ngFM9IE6bbVjqcOHd2Q/C4Be
-        9PATwkJkhSVZQGzbd19bBs1SOjDSsPm53dcrLXlP6vZFtdfJjHLNLJdjVfMUTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1684347661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LQDStvIbW7UGWuPy2yJ4GFYZJS+LxAH2lk+n1n4DGtU=;
-        b=jqc2Kre3ntvqCmwH/e4vZt8H6sihFv9jff8xDCQfjulSqijtFf+b0DYTEc1fC8Rm4LbhxV
-        498gntV3EgVnRQv5FjDwFhYW70ukbTDndFGREGLcxc4uBSdQ+v3jb2Fm99BMMn9V2dFH8s
-        wweS1o2YfTvxV9hZIVATzjwAh4BxC/MAqqeZLDLvnTpr1r5FxiAxQ0Q7Je3THyR7WklMm+
-        NLUbtsToT9rzYeVqYHquUY8DB2DNIn2azmyRkVw2kbyrFNp6irBZ5OKF0IUVViD1Nj9NzP
-        A7Ecl7X8h31kvXRNr5fbr9hH5aLlSM87+yAofSVxIS2GnS1xL7ieIdrndJCtug==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1684347661; a=rsa-sha256;
-        cv=none;
-        b=AM1Ph2iur9qQRcG2eTc3eKOw9eY/7nF0CHrhsofRZDg5Y/20018SJk4mtAZcuHgOkuMzWE
-        LB+tSLn2fWcQanEu1ffy2/OZAIqZXw/hdlQ0abbC8ZLksObmxTQtUyoE044lTHH9HiQhVx
-        pxRMYkxsus/7C8lOGxRMoCPbJrjU8yTrsLEUVOiRhFAZWQfC/QcX9nQX0Si8mjsXN8ibHi
-        jn8EU99YexCcubRc2vRWltxWWGYQU6ebag3cxfLTBotVLGIE08xhRN19oPv2eO1SvqAjts
-        E5j0FYKci46IYUphqHcHHUr8yNO/cgJMh3d3azWgtKY22mNQF5aYLxZEP2oz8w==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id DE522634C94;
-        Wed, 17 May 2023 21:21:00 +0300 (EEST)
-Date:   Wed, 17 May 2023 21:21:00 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH] media: c8sectpfe: convert to gpio descriptors
-Message-ID: <ZGUbDFssUwXKTiDt@valkosipuli.retiisi.eu>
-References: <20230130131003.668888-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130131003.668888-1-arnd@kernel.org>
+        Wed, 17 May 2023 14:22:04 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF93F7EC5;
+        Wed, 17 May 2023 11:22:00 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 61F225C0046;
+        Wed, 17 May 2023 14:22:00 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 17 May 2023 14:22:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684347720; x=1684434120; bh=Dz
+        JffaXEI8AFQEMUkaUG2Da+r+V+XolUqabCMS6PQ/s=; b=fy24rRFPgz2m8U6BRa
+        s9V+MvrDPgmqKTYRKZqh3nBKFmbUj3/SXccdz2JhadmDZAXjviE7WJFQ4X9oZDoz
+        8RdMu7J5+eI0gCKvrYE6khsOzQhsBiYC6hrHoPHsfssop1Oh6YFYvkmQWBVkoAuj
+        /uT3f0B8mPwCu3Tv+fGBh8W2RdoDo9DTv9NjXELpS4vWitbCz+KCy6aTjCUINc17
+        yw1F6O7DCacB3u2gF9KE+LlcwMhDbzJeA6LSVQgrANHLzc84s4bKLE2xCL6VRwDd
+        XO9rf7NRCuI3veYFvhCrNKJxZskFhfGS5YrJxntqb85JZ9LDn0idYaiwPxkIyVmE
+        peBQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684347720; x=1684434120; bh=DzJffaXEI8AFQ
+        EMUkaUG2Da+r+V+XolUqabCMS6PQ/s=; b=k0C0quzwNqx94l8fUwWgRfWd+jMOg
+        hRDViSh1ZtrusuIBzxbdib5jRb4nBuPheDFOJRacx5BxGZfzO7/7JhUjU9pJ5sD/
+        wzrRcRwb7V337TZasazDdNGwQ50OrIoid20oB6RxfSFCsjQCATbhu5br93H6IjXP
+        bmRBsixoyr05HYLcL1SzhveidMG02rCLZMt4vjaYF5Tx2dDSwYqbnoKaNtH0ch1y
+        KkeaW02PrkAqcmSiLucBLF9JnP7y2pnBHTMWjiYuV05JkNYZDNxSgXrfFixbMSgy
+        2HzwJHnnHSUSUg0guLxMLI79hpyVJABnSKmU/YacPTTqbd/PWMGm62SqA==
+X-ME-Sender: <xms:SBtlZG7gj_FLVD4wCY9fZlDf79slCM7cq1F1ONKERrwU-EFG87pXPg>
+    <xme:SBtlZP5-Q68e0dK538Lz0HBIn889VWEHFAGVJ7GDw9QjvSn5WEp-CjOSRHb1FtoAr
+    Hb0_qPe_CW0ktZgePY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:SBtlZFeeXZF1F6hrUcDbAG2ygvAer8mT8csRuLvaTN4dgz_OjE2uFg>
+    <xmx:SBtlZDIBNrBGKhmjLn5vA6I6C_G2uiWkq1nfASyP4RPJqcllHPdLJw>
+    <xmx:SBtlZKIybT4vkWAMCc_mjrtE1sgpCvVg6t-t9DEVz1g9Tf_ci3mvGg>
+    <xmx:SBtlZC89jhJBNeG7h2fKcNb2oFMLmyBiks6MrzFdb88cRUVLC7R2kw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EEFD6B60086; Wed, 17 May 2023 14:21:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <2a7c0d21-3dde-4c9c-94b9-3839282ecf18@app.fastmail.com>
+In-Reply-To: <20230517153932.172081-1-martin@kaiser.cx>
+References: <20220815190748.102664-1-martin@kaiser.cx>
+ <20230517153932.172081-1-martin@kaiser.cx>
+Date:   Wed, 17 May 2023 20:21:19 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Martin Kaiser" <martin@kaiser.cx>,
+        "Abel Vesa" <abelvesa@kernel.org>,
+        "Stephen Boyd" <sboyd@kernel.org>
+Cc:     "Shawn Guo" <shawnguo@kernel.org>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Fabio Estevam" <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/2] ARM: imx25: print silicon revision at startup
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,25 +91,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Wed, May 17, 2023, at 17:39, Martin Kaiser wrote:
+> Resurrect the unused function to print the imx25 silicon revision at
+> startup.
+>
+> This patchset has been mentioned in a discussion today. Let's bring it to the
+> attention of the clk maintainers again. 
 
-On Mon, Jan 30, 2023 at 02:09:47PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The gpio usage in the function is fairly straightforward,
-> but the normal gpiod_get() interface cannot be used here
-> since the gpio is referenced by a child node of the device.
-> 
-> Using devm_fwnode_gpiod_get_index() is the best alternative
-> here.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Looks good to me, and fixes the warning about the function having
+no prototype, so
 
-I've picked
-<URL:https://patchwork.linuxtv.org/project/linux-media/patch/20230130131003.668888-1-arnd@kernel.org/>
-instead. I hope that's fine. Also cc Dmitry.
-
--- 
-Kind regards,
-
-Sakari Ailus
+Acked-by: Arnd Bergmann <arnd@arndb.de>
