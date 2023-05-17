@@ -2,122 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F1D70657E
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB700706562
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjEQKlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S230225AbjEQKgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjEQKlK (ORCPT
+        with ESMTP id S230396AbjEQKgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:41:10 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61BC46BC;
-        Wed, 17 May 2023 03:41:02 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HAWh8p030125;
-        Wed, 17 May 2023 10:39:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=6o4UB5d8iRIZZq7T331T96/YmtIoyPZJVO895cK7BU4=;
- b=Qlb1r1C79y4iKHdQAqanT8rbJmqF8hpDVpHADvfmHgcOzINGCqecTLs6lklqCmaeUKZi
- LNo2SCVe642Qo5fhaxr/ou+1QQFdZf6fudSYdsYn1zj0/qda6lUKaL4wNzWc8ZwCpOGB
- u1jr8Jeldv7dhRYFAZce4H8UEXUhr2sOKWsFIUzuyQCAdsrgpetZ/OvfYv7ko7U4WoTl
- WIlXuWOUiMllj0buN4FxHg1xFrqq9szJZkHJpe+PgAPCqpQU+mAWYxRNQNulh9twB9sp
- 7Sk1CAWsYA8brwf7ADoH4AMfmPk6bkEJB+etoy2gytNtvsvI4B1v7NCryfl9JlR+J5XJ Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmvpm9ncq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 10:39:33 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34HAWq5Q030869;
-        Wed, 17 May 2023 10:37:18 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmvpm9fk6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 10:37:18 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H5hGdl019589;
-        Wed, 17 May 2023 10:35:52 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdt3s3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 10:35:52 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34HAZmug51773938
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 10:35:48 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B38752004B;
-        Wed, 17 May 2023 10:35:48 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C636820043;
-        Wed, 17 May 2023 10:35:47 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 10:35:47 +0000 (GMT)
-Date:   Wed, 17 May 2023 12:35:46 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 15/23] s390: allow pte_offset_map_lock() to fail
-Message-ID: <20230517123546.672fb9b0@p-imbrenda>
-In-Reply-To: <94aec8fe-383f-892-dcbf-d4c14e460a7@google.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
-        <94aec8fe-383f-892-dcbf-d4c14e460a7@google.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Wed, 17 May 2023 06:36:10 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651213C30;
+        Wed, 17 May 2023 03:36:05 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id 03C5420B66;
+        Wed, 17 May 2023 12:36:00 +0200 (CEST)
+Date:   Wed, 17 May 2023 12:35:57 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Alistair <alistair@alistair23.me>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Francesco Dolcini <francesco@dolcini.it>
+Subject: Re: [PATCH v4 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
+ only when started
+Message-ID: <ZGStr1oZvmJ0XzSu@francesco-nb.int.toradex.com>
+References: <20230407030741.3163220-1-badhri@google.com>
+ <0cf8c588b701d7cf25ffe1a9217b81716e6a5c51.camel@alistair23.me>
+ <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8y_E68kURQ0ih8Y_-pXj5N6bPDOiuEZv
-X-Proofpoint-ORIG-GUID: ot2a0roI6HKgv_SkGdPLAhcx7gRQDDOX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_02,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- clxscore=1011 mlxscore=0 phishscore=0 spamscore=0 mlxlogscore=972
- malwarescore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305170081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -125,64 +48,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 22:01:16 -0700 (PDT)
-Hugh Dickins <hughd@google.com> wrote:
-
-> In rare transient cases, not yet made possible, pte_offset_map() and
-> pte_offset_map_lock() may not find a page table: handle appropriately.
+On Wed, May 17, 2023 at 12:23:39PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
+> [CCing Francesco Dolcini; and the regression list too, as it should be
+> in the loop for regressions:
+> https://docs.kernel.org/admin-guide/reporting-regressions.html]
 > 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  arch/s390/kernel/uv.c  |  2 ++
->  arch/s390/mm/gmap.c    |  2 ++
->  arch/s390/mm/pgtable.c | 12 +++++++++---
->  3 files changed, 13 insertions(+), 3 deletions(-)
+> On 16.05.23 14:53, Alistair wrote:
+> > On Fri, 2023-04-07 at 03:07 +0000, Badhri Jagan Sridharan wrote:
+> >> usb_udc_connect_control does not check to see if the udc has already
+> >> been started. This causes gadget->ops->pullup to be called through
+> >> usb_gadget_connect when invoked from usb_udc_vbus_handler even before
+> >> usb_gadget_udc_start is called. Guard this by checking for udc-
+> >>> started
+> >> in usb_udc_connect_control before invoking usb_gadget_connect.
+> > [...]
+> >> Cc: stable@vger.kernel.org
+> >> Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
+> >> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > 
+> > This patch causes a kernel hang when trying to boot with the
+> > usb/chipidea/udc.c driver.
+> > 
+> > The call stack below causes the hang:
+> > 
+> >  - gadget_bind_driver(struct device *dev)
+> >     - mutex_lock(&udc->connect_lock);
+> >     - usb_gadget_udc_start_locked(struct usb_udc *udc)
+> >         - udc->gadget->ops->udc_start(udc->gadget, udc->driver)
+> > 
+> > At which point we are calling ci_udc_start(..), but with the
+> > connect_lock mutex locked.
+> > 
+> > ci_udc_start() then calls usb_udc_vbus_handler() which tries to lock
+> > the connect_lock while it's already locked. Resulting in a kernel hang.
+> > 
+> > Reverting this patch fixes the hang.
 > 
-> diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-> index cb2ee06df286..3c62d1b218b1 100644
-> --- a/arch/s390/kernel/uv.c
-> +++ b/arch/s390/kernel/uv.c
-> @@ -294,6 +294,8 @@ int gmap_make_secure(struct gmap *gmap, unsigned long gaddr, void *uvcb)
->  
->  	rc = -ENXIO;
->  	ptep = get_locked_pte(gmap->mm, uaddr, &ptelock);
-> +	if (!ptep)
-> +		goto out;
->  	if (pte_present(*ptep) && !(pte_val(*ptep) & _PAGE_INVALID) && pte_write(*ptep)) {
->  		page = pte_page(*ptep);
->  		rc = -EAGAIN;
-> diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-> index dc90d1eb0d55..d198fc9475a2 100644
-> --- a/arch/s390/mm/gmap.c
-> +++ b/arch/s390/mm/gmap.c
-> @@ -2549,6 +2549,8 @@ static int __zap_zero_pages(pmd_t *pmd, unsigned long start,
->  		spinlock_t *ptl;
->  
->  		ptep = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
-> +		if (!ptep)
-> +			break;
+> Not my area of expertise, but I guess it might be the same error as this
+> one:
+> 
+> https://lore.kernel.org/all/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
+> 
+> Francesco sent a revert on Friday, but no reaction from Badhri Jagan
+> Sridharan or Greg yet afaics.
+> 
+> https://lore.kernel.org/all/20230512131435.205464-1-francesco@dolcini.it/
 
-so if pte_offset_map_lock fails, we abort and skip both the failed
-entry and the rest of the entries?
+Revert patches were applied and are in linux-next. I expect those to
+land in Linus tree with the next pull request from Greg.
 
-can pte_offset_map_lock be retried immediately if it fails? (consider
-that we currently don't allow THP with KVM guests)
+Francesco
 
-Would something like this:
-
-do {
-	ptep = pte_offset_map_lock(...);
-	mb();	/* maybe? */
-} while (!ptep);
-
-make sense?
-
-
-otherwise maybe it's better to return an error and retry the whole
-walk_page_range() in s390_enable_sie() ? it's a slow path anyway.
-
->  		if (is_zero_pfn(pte_pfn(*ptep)))
->  			ptep_xchg_direct(walk->mm, addr, ptep, __pte(_PAGE_INVALID));
->  		pte_unmap_unlock(ptep, ptl);
-
-[...]
