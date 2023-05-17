@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6CE7069FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61E0706A01
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjEQNe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S231148AbjEQNfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjEQNeP (ORCPT
+        with ESMTP id S232058AbjEQNfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:34:15 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF7493FB;
-        Wed, 17 May 2023 06:33:49 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ae52ce3250so6412065ad.2;
-        Wed, 17 May 2023 06:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684330429; x=1686922429;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rbMQ0v3qCDD0ikHRHPJXrlACnnN8XxCRviK30k53MMg=;
-        b=RdHpAmHAmgLsJMNhFGmDLliPlydekszKQt9Tz6yED4lbjlyJO4WP+zJvjbG2AEPCBE
-         qZYxCpEgK72p119skAHTvpTu/9wKzeUFsKVv/61qVsje+kxlLhrjYrzqvsRLhufEwVYx
-         FGTVULU3Nd+prqhRnzpbDs6IhiwIvP+9lKTvIKQQ8PzikNiQQVnkp7DpZkeNMUuPXz1I
-         b+rCUMMmkjCPF8Gp1mVtDNGaIVhndd6XCSwzm4MbruhtfDrYbaafrXrEbkfgcSJlgs8E
-         ZDi81QQF9NjPkeISnDfrD+Bby7q3cAnq4j92YpUmuJMo17tJvXPBzIka8C2pgw5A+yyb
-         a6ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684330429; x=1686922429;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rbMQ0v3qCDD0ikHRHPJXrlACnnN8XxCRviK30k53MMg=;
-        b=Ti7VTpASYhBag0yzRzjOJfViAJWjUOakuINHVOK95t8QWCVQ8ei71EQ5BRmNE2ku3U
-         yvElxLsb5t+l0cTdi9+sOEw/01FRqZDqIIkFjJjeNwrP1uyNKQS4hfUoIrlY7Zt9x8sK
-         x3xP4UOqfHSPpwaQ2RdIMiLFQ4odwJTtPA+c99tF0UM3iq1XRdBvUoyPcWZb1RJlCIOC
-         kUIhhGU57w7+20BZ5o+5rCm61qbezkPyKfGVFS12bO1xRvx4cb7ud2lD3LzTpBUn/G2z
-         GYKv6U9onCY3udd1cvl7LCu4Wy7Nk3bUtI+qg1bZJ1+u6uSb18UIsgn5U/EOWy8eHJYC
-         de2Q==
-X-Gm-Message-State: AC+VfDzOHcknG+7waMRzGqXdY7yB1dmo/qNxmGBvApnZQ+5jiLhF6vpg
-        75E0RD2luw4ZW+K5Mf4cwow=
-X-Google-Smtp-Source: ACHHUZ5neLbN65pdb8800vQuzivVb7/qsgL/pjdYn69YBg2IaPl14+iRcWaf3Y3bIRvpHHYhq3gkMw==
-X-Received: by 2002:a17:902:da91:b0:1ae:f37:c1ab with SMTP id j17-20020a170902da9100b001ae0f37c1abmr16417374plx.25.1684330429024;
-        Wed, 17 May 2023 06:33:49 -0700 (PDT)
-Received: from localhost.localdomain (n220246252240.netvigator.com. [220.246.252.240])
-        by smtp.gmail.com with ESMTPSA id m5-20020a170902db0500b001ac7f583f72sm17519253plx.209.2023.05.17.06.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 06:33:48 -0700 (PDT)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wed, 17 May 2023 09:35:39 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA88E7D89;
+        Wed, 17 May 2023 06:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1684330472; i=frank-w@public-files.de;
+        bh=H2eszAyur7OFqZ2pzsk7HhbR0lXfV8LZ3reUmipy0B4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=VH0KENZht12vdsiyi3H/WBCPDDbvdNwgaQnr9jclo18R+LrKqoHEwDhfYi8OtywgJ
+         s4GAM9d5D/gx7bV7t0WEKgk9J1wMgGV7kcYb+NMf6HYl208qBWVb4LtemEa/JNwimd
+         5lZhqAFg3OPniht7zmyjq8ljuIs1ikegfrxIltLOJ2vk80l6alRSsTULeZlN2Pq8iH
+         x0jtJG3/vnn89625G1EE4Ba5TXdFF5ISf24Xt7rflJu2qZl6CvOeO+JCGKgRPp9k/b
+         nUSur1tB5dXQFhWHJ+78GhfFCjG28GvxGavXpLD7OE3b3bBvKV6Mp1xCyaAx/rRvkN
+         XH0TlqbCw1D3Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [80.245.72.243] ([80.245.72.243]) by web-mail.gmx.net
+ (3c-app-gmx-bs48.server.lan [172.19.170.101]) (via HTTP); Wed, 17 May 2023
+ 15:34:32 +0200
+MIME-Version: 1.0
+Message-ID: <trinity-cf0185d3-81d6-4dfe-a1a3-2b091350d724-1684330472806@3c-app-gmx-bs48>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH v2] arm64: dts: qcom: sm8250-xiaomi-elish: remove redundant empty line
-Date:   Wed, 17 May 2023 21:33:40 +0800
-Message-Id: <20230517133340.21111-1-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.39.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "Hui.Liu" <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Lala Lin <lala.lin@mediatek.com>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Aw: [PATCH v1 1/7] dt-bindings: nvmem: mediatek: efuse: add support
+ for mt7986
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 17 May 2023 15:34:32 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20230421132047.42166-2-linux@fw-web.de>
+References: <20230421132047.42166-1-linux@fw-web.de>
+ <20230421132047.42166-2-linux@fw-web.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:+PriwoFuQ9abIMZuLjXiUflCoFiizPjfCrYouiPIvkfEKwb8FeC3a3oGc0qOF0DGHXWXO
+ PUsxuPO4DpTtMuUBWYXoPqjzUPNfjWcm3auHPZGfODybilSjmBZULSX3YfnEKD/hsG/HElg5m4g9
+ ukCFtztoUlVk7uSplewtpy4CzSVq0kAgPxzJNNkmHRb+J0X35KLEascX7qFpp6u8K4mhYN1vwqUr
+ 78AbCQf7ib1a3sAa+7zeXH0QMDQ+uDA3ecfFeMirKlqWQ8ku1UhjBmm/weaOxAUJ08UNcAgJc47N
+ so=
+UI-OutboundReport: notjunk:1;M01:P0:dEZsTW6b7+Y=;5hLcd+GMclPrdW8q7trNgwhEwVY
+ tpf7IGTVHcy6+k98XiI+ZUS7ST4eds6sI6ZgppahC4le+74rtOAGZCNL0g1HO4ZG+4NIr7OnR
+ 5CLWXgCx6NCitDGKOkH+2tHqtcJh3BtC6c7EWrlCNRJXAMQmqtCNFOGNixtDGlvlotPTVpNX/
+ v6gB8ZIjOH8MCmtfaozGR5pGevmC9CBvarDNVpy7+gN4QlJIJa+MngQyoop14rtBm8woOPHlb
+ Ud6/LPbFerg6fwOmfuzhYb01w+fuRy008SV1BhLPmeW7KpW5lj4uRw4Ke/VIY11rQcRy2iZLk
+ Hc+DFrQFDvWPXsMve+zZzzu+z7XtOKzDoWDCZKLTfH9hR1bONqkR9jwbSXTSAU1tLxHyRDqca
+ h9+F3Y+yx/Sgty+NwooK/VnB9SF+PQkvx3tmey8bsVootCePGajTJub0KRuQTxGNkNlrVPdQ9
+ xG2UlBoxOZTn3QKSQumb0LLUePU7EcHbNWJXRgXFJNdPWgySx2wGdfXv5mvXQ7imI0I21eb6F
+ wlcKeYcSceNGYWeiRvuvuRwmrYwg8/BXEOB+y+DTwND7cKHQ3Dtkqiid4tNCpDOKNvnMwYsKK
+ J6Zr1wIbSgbccYvCzw4/2zgdtKeV2zecNZo7766T4A6RBP9l20sauep3Zo7sCU6ldNW846yrD
+ CtegCevAAaXIOPzmi4br6XjxvdvJ0qjdD6U2HZdk+5/8EkNl0/se0PyYBlqnfvZMshS9wBGsn
+ 4yQIyNyHEXMDPvm7bOaix+N0lQVvtuN9e+oPWBg098soC4GcNJ6g2E/rznBmuJkYilDMqvErr
+ s7hidyOM4d+J7NmfpnG7Nrjw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove a redundant empty line introduced by
-  commit 51c4c2bd6f31 ("arm64: dts: qcom: sm8250-xiaomi-elish-boe: Add mdss and dsi panel")
+Hi,
 
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
----
-Changes in v2:
- - Drop fixes tag
+just a ping, can this be picked up?
 
- arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-index 8af6a0120a50..eaac00085894 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-common.dtsi
-@@ -504,7 +504,6 @@ panel_in_1: endpoint {
- 					remote-endpoint = <&dsi1_out>;
- 				};
- 			};
--
- 		};
- 	};
- };
--- 
-2.39.3
-
+regards Frank
