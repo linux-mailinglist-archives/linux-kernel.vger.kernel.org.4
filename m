@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8223570719D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BB07071A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjEQTMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 15:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S229954AbjEQTMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjEQTMS (ORCPT
+        with ESMTP id S229951AbjEQTM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 15:12:18 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FBBA5D3;
-        Wed, 17 May 2023 12:12:10 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-24e2b2a27ebso1224864a91.3;
-        Wed, 17 May 2023 12:12:10 -0700 (PDT)
+        Wed, 17 May 2023 15:12:27 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D81CA255
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:12:13 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae52ce3250so10175235ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684350729; x=1686942729;
+        d=chromium.org; s=google; t=1684350732; x=1686942732;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=belPChGY/La7XkZuio4MlHHNDT6JFtoyF+AdNUmOvSE=;
-        b=Y6p8Nx4GqfvFrtaGTVMQK/7Dp9vAmEtEXDMpT5L6tZQUjXtmHDgy2cgheNR/vGvIkr
-         UbSZbCuJcF7FVEBDwMv1dXfY258bYy8SVF8J7XqFIEZ2+tMdOn2GX8aLIxurHlZ8npcN
-         TIN1hJKbdBR24rwj8P852JroKawQLl/5yXPhPw5jJ/1Id7woRfFT4y+PX5rkAyXu+cbI
-         Il67x0OVh1C60eIDJ1T1tJcdqyEL7pPoTuZnH6/YQ1CT5aepni237X03kgojUiv5YT/c
-         6b2vKeoQqLH2UWxQju7I2+MlLGk3Idz5wLFaAst8xS0ydi/nRHk0HXiHg6ugSZl9tK3o
-         wq1Q==
+        bh=2TweVo7pe1RT0U4fJi1MmEd78Di3WvMfNoLR23I7nbs=;
+        b=lbYAiBBRmL5JG7kvR3ch5RRhu+skJcHwpvcGTQun5EtQJEpcQC3jTxCTGQOM3dVW8X
+         CrEjomYR2sZtOYw2xbyl9tOqhSYF/zT86dd11oD3tjkwXgF0T+QbRmX+4Bqihn7a/Yqh
+         gkQW0IJ+k9LTKm7tT9O4BR/ogticSCt2HQ3+c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684350729; x=1686942729;
+        d=1e100.net; s=20221208; t=1684350732; x=1686942732;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=belPChGY/La7XkZuio4MlHHNDT6JFtoyF+AdNUmOvSE=;
-        b=DDcTXeffYN9Cbv2MglPvo/4DlN6uzBtPDRDc73OuXCdIMoHJssuefjHyCkqu0KIw2i
-         0uKe6fJRS/Gu3ObQIFj25VteL3M5ow0or1JBGVtHtKi6Z3X207oX3/TQU+xbe28BMmwW
-         1h7KJ67U/hAvqAXXaRGDuwkqMmL3ke8Hba0X/L8w2a4TpxgfEuGqfl6yNEQZohXibXvJ
-         pISRLEiMIksYJm1QwOT0+JDpOdV95/t5kxkC/IijMm+3nFHf8DbCI/c7YFmhqgVjuK/D
-         dbiDYilUHdsK2AhYcAunpRvjZX4qyvW5p0obHtCN/hA3UHNcDrZNpzRWHyK+mUTL6DkD
-         ytDw==
-X-Gm-Message-State: AC+VfDzSQjoMZtDKSW9V3f2dUj5Uan30/K0znfLYtBubeb5xNJAierPu
-        2SjKgv4a031uL1IqyvKbIeNUuL4Y62k=
-X-Google-Smtp-Source: ACHHUZ6tMu01Q4ai0Y2K2iB2vTJD+vZhid6eNXamnu078f1AaaN9TgIVFyPhAOxUuwhUAN3cEu/YxA==
-X-Received: by 2002:a17:90a:2fcf:b0:24e:1f5:2e05 with SMTP id n15-20020a17090a2fcf00b0024e01f52e05mr721049pjm.13.1684350729404;
-        Wed, 17 May 2023 12:12:09 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:6ecb:b01b:2e2e:6c1])
-        by smtp.gmail.com with ESMTPSA id u13-20020a17090a890d00b0024dee5cbe29sm1975303pjn.27.2023.05.17.12.12.07
+        bh=2TweVo7pe1RT0U4fJi1MmEd78Di3WvMfNoLR23I7nbs=;
+        b=TJnpjGBYjjHmbA0EUYQZUFNZg7RzvzKAPA1BNwYMzWPhyp6QTGLDQGi4UXBDnCYfj1
+         8AK03iaf7yQWqVIt2IqlPwCbORGSBrrFFiLjkuqy0uJIDT5EvGMnq7yOp8hC8Hao8qXL
+         8VrrGMfRANA9Tv4FcEeQA1aFdxt4U1xJxIPnA2VRc4beP23s7RhrlAyKmFZK7PGNTG+m
+         KRjaNM4MJJf7GIkt4WNaABaSIsTpNmgtKSZcJAL+gCIQcBrvtlHeDPkMZp/PhSdfHF3R
+         l9axOWr/Nop//u2T+7iIqfgO71vhGVP51Nq8UrjRntSNbk/FLa+mXhlxYPl7ERLoR+dr
+         lMew==
+X-Gm-Message-State: AC+VfDyrShSE3+w7AI4J0/p6gPAA/l8xm3cx82+UwqFxnLsBcNWu/QFs
+        i48gx4Y72AAicvxq/m4LYbl1gg==
+X-Google-Smtp-Source: ACHHUZ7YR5PTferdj6NHTPRa9xPJnCLNgUmoVpZYWgZwyj3/ZkalIoXAhIaQ+cJHTVYO73t+U3vEJg==
+X-Received: by 2002:a17:902:9a46:b0:1ae:5f7e:c117 with SMTP id x6-20020a1709029a4600b001ae5f7ec117mr1313241plv.60.1684350732651;
+        Wed, 17 May 2023 12:12:12 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x21-20020a17090300d500b001a687c505e6sm18019526plc.232.2023.05.17.12.12.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 12:12:08 -0700 (PDT)
-Date:   Wed, 17 May 2023 12:12:05 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Wed, 17 May 2023 12:12:12 -0700 (PDT)
+Date:   Wed, 17 May 2023 12:12:11 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: c8sectpfe: convert to gpio descriptors
-Message-ID: <ZGUnBfqBLWkD7ZgD@google.com>
-References: <20230130131003.668888-1-arnd@kernel.org>
- <ZGUbDFssUwXKTiDt@valkosipuli.retiisi.eu>
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2][next] media: venus: hfi_cmds: Use struct_size()
+ helper
+Message-ID: <202305171212.11465CFF3@keescook>
+References: <cover.1684278538.git.gustavoars@kernel.org>
+ <fd52d6ddce285474615e4bd96931ab12a0da8199.1684278538.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZGUbDFssUwXKTiDt@valkosipuli.retiisi.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <fd52d6ddce285474615e4bd96931ab12a0da8199.1684278538.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 09:21:00PM +0300, Sakari Ailus wrote:
-> Hi Arnd,
+On Tue, May 16, 2023 at 05:14:49PM -0600, Gustavo A. R. Silva wrote:
+> Prefer struct_size() over open-coded versions of idiom:
 > 
-> On Mon, Jan 30, 2023 at 02:09:47PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The gpio usage in the function is fairly straightforward,
-> > but the normal gpiod_get() interface cannot be used here
-> > since the gpio is referenced by a child node of the device.
-> > 
-> > Using devm_fwnode_gpiod_get_index() is the best alternative
-> > here.
-> > 
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
 > 
-> I've picked
-> <URL:https://patchwork.linuxtv.org/project/linux-media/patch/20230130131003.668888-1-arnd@kernel.org/>
-> instead. I hope that's fine. Also cc Dmitry.
+> where count is the max number of items the flexible array is supposed to
+> contain.
+> 
+> Link: https://github.com/KSPP/linux/issues/160
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-What do you mean "instead"? This is the exact patch that started this
-thread, and it is broken (uses wrong name of the GPIO and wrong polarity).
-
-I'd much rather you picked up
-https://lore.kernel.org/all/Y92VLGLQJZ%2FUDRx1@google.com/
-
-Thanks.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Dmitry
+Kees Cook
