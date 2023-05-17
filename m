@@ -2,157 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9D8706AE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894A6706AEC
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjEQOSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S231511AbjEQOSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjEQOSV (ORCPT
+        with ESMTP id S230190AbjEQOSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:18:21 -0400
-Received: from out-60.mta0.migadu.com (out-60.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36756193
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:18:18 -0700 (PDT)
-Date:   Wed, 17 May 2023 10:18:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684333096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJ5xyIjdnqOODdgYyT/tGprQTvXceNzR+PcU18XJA2Y=;
-        b=DRkNRqw2cpxP72oh9ESo41gFutZSDl+YmWd79P8rLziplWE9cmhMThXeM5UNfH3kBgthIO
-        a2S1CSe8ZEfb6r9FtPGIm+83nqHbWlyB9vWkyhrNJhAK04eoQo+AdJg4SsVr1UUtpeiZoX
-        R3WCAJelUZMAB+z0U6eH56SZab8kKuQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        song@kernel.org
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <ZGTiI49s8+YjBxVX@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
- <202305111525.67001E5C4@keescook>
- <ZF6Ibvi8U9B+mV1d@moria.home.lan>
- <202305161401.F1E3ACFAC@keescook>
- <ZGPzocRpSlg+4vgN@moria.home.lan>
- <ZGP54T0d89TMySsf@casper.infradead.org>
- <ZGRmC2Qhe6oAHPIm@moria.home.lan>
- <ZGTe6zFYL25fNwcw@kernel.org>
+        Wed, 17 May 2023 10:18:39 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DCF7A9C
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:18:34 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-759200f12baso92010485a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684333113; x=1686925113;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PeihledOH06fF9rXlghvkbkJKeeeuSIzbFVA64CPmJo=;
+        b=BJhF72OgxhA9w3gBY1guoV959YY4b6jgV78Tac/3G6eOxbRWJ7ICg7D2u+p4Yzqp9Y
+         ubxGJ0Ped7udr+Dubp4BEg6gZPHQqLg17dT+HAfGhFygU+HV2PjrohHQmtBG2n5fjcDr
+         59/5XG0QVYs36f7QdVwQIBWVREzsqq3Mzjx4E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684333113; x=1686925113;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PeihledOH06fF9rXlghvkbkJKeeeuSIzbFVA64CPmJo=;
+        b=AC+zG5vAmDEPt/+YhefiA0ZeMSpH0kToe+PGqDPdRZAl1Gqo9rMLCK9uZxEEDWltGA
+         yg+BV8yA+kt+Veu+W0lpdWunUkvas8SIzBwsRmruYVlcvDOMa0YhAVHTca3VsA1g54CN
+         DbIKPxgWTOAo37bgCpBRAOpJZiKB2MkWrX7FvKBE1MS0BRZGoehFeb+8fOsuV+s8qWKX
+         IO/k1JGOC2JTNHUg2qPeFxmv0K4xYbnQvCtMr4Rz68N6M2QeQKjDvde9GiAK21Q4zMYu
+         SdzUI22lljxONQ96+ocKSd7zpb6P2r5F0f1ltRPAf9TvPi1oj0Z+q5cQ8DhgNLyTKLkf
+         0BEw==
+X-Gm-Message-State: AC+VfDwivje4dt4d3xpLlwiwh3Rq+88rHow2gQZovq8CIH5cqugFGqUm
+        SjlKq1nrJVz+KYRo+X5dp9Mv4vc09RAdvxadP/0=
+X-Google-Smtp-Source: ACHHUZ6jctYbzd8NKsPHALPsKBjdX7fVJGHopYXMp6506moal2tYvGZ4TpM2O0b33rSdGh2RJ0ZNPw==
+X-Received: by 2002:ac8:5911:0:b0:3f5:4902:2175 with SMTP id 17-20020ac85911000000b003f549022175mr8791329qty.35.1684333112874;
+        Wed, 17 May 2023 07:18:32 -0700 (PDT)
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com. [209.85.160.180])
+        by smtp.gmail.com with ESMTPSA id o11-20020ac8428b000000b003e4d9c91106sm7125142qtl.57.2023.05.17.07.18.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 07:18:31 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-3f38a9918d1so144681cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:18:30 -0700 (PDT)
+X-Received: by 2002:a05:622a:1892:b0:3ef:a55:7f39 with SMTP id
+ v18-20020a05622a189200b003ef0a557f39mr358230qtc.12.1684333109945; Wed, 17 May
+ 2023 07:18:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGTe6zFYL25fNwcw@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com> <1684325894-30252-2-git-send-email-quic_vnivarth@quicinc.com>
+In-Reply-To: <1684325894-30252-2-git-send-email-quic_vnivarth@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 17 May 2023 07:18:17 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Xbx9h3B1u5NcK7XeEKWC30pn=AWYToqYbAs+oNrV+7Ww@mail.gmail.com>
+Message-ID: <CAD=FV=Xbx9h3B1u5NcK7XeEKWC30pn=AWYToqYbAs+oNrV+7Ww@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] soc: qcom: geni-se: Add interfaces
+ geni_se_tx_init_dma() and geni_se_rx_init_dma()
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 05:04:27PM +0300, Mike Rapoport wrote:
-> On Wed, May 17, 2023 at 01:28:43AM -0400, Kent Overstreet wrote:
-> > On Tue, May 16, 2023 at 10:47:13PM +0100, Matthew Wilcox wrote:
-> > > On Tue, May 16, 2023 at 05:20:33PM -0400, Kent Overstreet wrote:
-> > > > On Tue, May 16, 2023 at 02:02:11PM -0700, Kees Cook wrote:
-> > > > > For something that small, why not use the text_poke API?
-> > > > 
-> > > > This looks like it's meant for patching existing kernel text, which
-> > > > isn't what I want - I'm generating new functions on the fly, one per
-> > > > btree node.
-> > > > 
-> > > > I'm working up a new allocator - a (very simple) slab allocator where
-> > > > you pass a buffer, and it gives you a copy of that buffer mapped
-> > > > executable, but not writeable.
-> > > > 
-> > > > It looks like we'll be able to convert bpf, kprobes, and ftrace
-> > > > trampolines to it; it'll consolidate a fair amount of code (particularly
-> > > > in bpf), and they won't have to burn a full page per allocation anymore.
-> > > > 
-> > > > bpf has a neat trick where it maps the same page in two different
-> > > > locations, one is the executable location and the other is the writeable
-> > > > location - I'm stealing that.
-> > > 
-> > > How does that avoid the problem of being able to construct an arbitrary
-> > > gadget that somebody else will then execute?  IOW, what bpf has done
-> > > seems like it's working around & undoing the security improvements.
-> > > 
-> > > I suppose it's an improvement that only the executable address is
-> > > passed back to the caller, and not the writable address.
-> > 
-> > Ok, here's what I came up with. Have not tested all corner cases, still
-> > need to write docs - but I think this gives us a nicer interface than
-> > what bpf/kprobes/etc. have been doing, and it does the sub-page sized
-> > allocations I need.
-> > 
-> > With an additional tweak to module_alloc() (not done in this patch yet)
-> > we avoid ever mapping in pages both writeable and executable:
-> > 
-> > -->--
-> > 
-> > From 6eeb6b8ef4271ea1a8d9cac7fbaeeb7704951976 Mon Sep 17 00:00:00 2001
-> > From: Kent Overstreet <kent.overstreet@linux.dev>
-> > Date: Wed, 17 May 2023 01:22:06 -0400
-> > Subject: [PATCH] mm: jit/text allocator
-> > 
-> > This provides a new, very simple slab allocator for jit/text, i.e. bpf,
-> > ftrace trampolines, or bcachefs unpack functions.
-> > 
-> > With this API we can avoid ever mapping pages both writeable and
-> > executable (not implemented in this patch: need to tweak
-> > module_alloc()), and it also supports sub-page sized allocations.
-> 
-> This looks like yet another workaround for that module_alloc() was not
-> designed to handle permission changes. Rather than create more and more
-> wrappers for module_alloc() we need to have core API for code allocation,
-> apparently on top of vmalloc, and then use that API for modules, bpf,
-> tracing and whatnot.
-> 
-> There was quite lengthy discussion about how to handle code allocations
-> here:
-> 
-> https://lore.kernel.org/linux-mm/20221107223921.3451913-1-song@kernel.org/
+Hi,
 
-Thanks for the link!
+On Wed, May 17, 2023 at 5:18=E2=80=AFAM Vijaya Krishna Nivarthi
+<quic_vnivarth@quicinc.com> wrote:
+>
+> The geni_se_xx_dma_prep() interfaces necessarily do DMA mapping before
+> initiating DMA transfers. This is not suitable for spi where framework
+> is expected to handle map/unmap.
+>
+> Expose new interfaces geni_se_xx_init_dma() which do only DMA transfer.
+>
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> ---
+> v1 -> v2:
+> - interfaces to take dma address as argument instead of its pointer
+> ---
+>  drivers/soc/qcom/qcom-geni-se.c  | 67 +++++++++++++++++++++++++++++-----=
+------
+>  include/linux/soc/qcom/geni-se.h |  4 +++
+>  2 files changed, 53 insertions(+), 18 deletions(-)
 
-Added Song to the CC.
+Mark and Bjorn will have to coordinate how they want to land this,
+since normally patch #1 would go through the Qualcomm tree and patch
+#2 through the SPI tree. In any case:
 
-Song, I'm looking at your code now - switching to hugepages is great,
-but I wonder if we might be able to combine our two approaches - with
-the slab allocator I did, do we have to bother with VMAs at all? And
-then it gets us sub-page sized allocations.
-
-> and Song is already working on improvements for module_alloc(), e.g. see
-> commit ac3b43283923 ("module: replace module_layout with module_memory")
-> 
-> Another thing, the code below will not even compile on !x86.
-
-Due to text_poke(), which I see is abstracted better in that patchset.
-
-I'm very curious why text_poke() does tlb flushing at all; it seems like
-flush_icache_range() is actually what's needed?
-
-text_poke() also only touching up to two pages, without that being
-documented, is also a footgun...
-
-And I'm really curious why text_poke() is needed at all. Seems like we
-could just use kmap_local() to create a temporary writeable mapping,
-except in my testing that got me a RO mapping. Odd.
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
