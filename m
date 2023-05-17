@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF8870644D
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CA1706452
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 11:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjEQJkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 05:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S229697AbjEQJlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 05:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjEQJkd (ORCPT
+        with ESMTP id S229933AbjEQJlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 05:40:33 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027D1420B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:40:33 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-77d05b9c4a6so191538241.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:40:32 -0700 (PDT)
+        Wed, 17 May 2023 05:41:10 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BDA40E5
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:41:09 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-77d049b9040so7760417241.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:41:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684316432; x=1686908432;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684316468; x=1686908468;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LahdGDO0/VUYJLEzlCMaKFa66DsQ4b5V1vjUC+JwrEk=;
-        b=3KEUP/ZVCCZt0OFSklJH30+qGQ7uzjlQN/7UcOSxXHeo+i9qO+9JJwEplM2I9dlPdi
-         HCsyHKp77jUUQQgJnaow7uHL88rqg+FIfFhmCMViruoUu9lcJXEY/BSLmU+1YZgIaUMZ
-         g1+WQ4ZpPoFPvQVzogK+m2sGfVTeC9KzUrPykTbph3wZ6AqMzBMR5exW8ToXXq4cd6jx
-         o2dBaVk5+8h3IgUiGvuVS5krOaduV0Txb0QmaGweTXyqBK8kkbyX8shu/7TUe7VZ4Y3y
-         JJabZ8inGbC6VOWIIW5qaLTiQpIFo+SZXzFuadg657B/IJ14cwClNUe6O9HKKh4YFN0z
-         +F4Q==
+        bh=Sq/IFKZKyX+IB89ZbjKiv/ig5JK+qk3imm5iXCJqO0M=;
+        b=aFAnRY+Wr4q819ZMJgkWFYqS5RUrLhLJrp38gGW2sv9uwFge4rVzFDJZoyvPQKK8pk
+         Z0d+OOL1c5iJ/cb+p5gByrCB8FBdbg5lLfeBlts0ecdB9Yv43Y7st8joTAZBw0/L3Ti9
+         ADnb+TnxLDGDIO6dsxhm6BIWPkQpjzbMrznNSX1wUkzWiZnnOXnluhoQN1fzMmlGaUAB
+         8On4SyccEHXfJGrXod5WF5rG97jR4o+M9/z/hBc/VP96NBtZ5Vq9SyGloEeXM7YRodfx
+         9cMrtL9Jm6lFY3rLMGe/3/TKNjwS5LWooqftxGZ2XAorXmFKTpmO74Spbl3Y/EWiZJxv
+         VYYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684316432; x=1686908432;
+        d=1e100.net; s=20221208; t=1684316468; x=1686908468;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LahdGDO0/VUYJLEzlCMaKFa66DsQ4b5V1vjUC+JwrEk=;
-        b=Ur9+9V5mQyCK1pxoEfxvv72Ov5g+gyCmeXyEwMvsM1LHF/IixR9uP6nWgP8oauCl2p
-         fZaD6LIUfrzBTQQrGX0iJw+LzlXpHdGzJugaR5c8hA4M/hx0tIXLRhybnU7PGhKcXPnk
-         CyV08KeLUn7cYAPCi5qJLcR8AW9SwN551/3+BJJqIgTdr8tREdgrJTQwHsU7iDdFWg57
-         Pmt71V9FVIij2EzYygEO6j+eoLMYw4k+EyrG4wSt50RweQwO/sXb5LUwPHYHDFTVbRgY
-         m67WE0OltheysxbJp4sQ1jtzZaRiPomu8A18lu+YlQ9j9SeTqzN6YPiKyuKN5tYt3ZQF
-         2cTw==
-X-Gm-Message-State: AC+VfDzwbUJfyl2qpdK2pUciffcjTbpEQWvAjyichdr49iFDYA7Y7uiX
-        tqtWq7KY79N9zKGptL5bApI9s2QpCZ9G+lwcLhQzJQ==
-X-Google-Smtp-Source: ACHHUZ6WmJyaYBzwQRsNEOYSVI/5u/LCg8m2qluTWKp+0Zc0ae5o6s63Z/oxuCmKHEo9+PGRDHXkGdUlADtyrCTjKeY=
-X-Received: by 2002:a67:ec47:0:b0:42e:65a6:d445 with SMTP id
- z7-20020a67ec47000000b0042e65a6d445mr15178029vso.5.1684316432143; Wed, 17 May
- 2023 02:40:32 -0700 (PDT)
+        bh=Sq/IFKZKyX+IB89ZbjKiv/ig5JK+qk3imm5iXCJqO0M=;
+        b=kXdMxnsS+7nkRTXrbNIERzLUKOZ1/+mCDJ0VugF3P97tNw/1qHMlJttz8cutAQx7A3
+         FXaILXifhozedVF5msxYW96rW0G2/9PllsHYCR+E0q/8r+hH0FasKDrS632kU2e5DAU9
+         1AyrRJWNRtzA0XTqGZKaHmVU8yU58OeHxMAgisM/+8S48A28V4y0pPW2kfSZxypzX8ZU
+         Y+IRZkvoo4CiI0vP1bMM2cpqHfPFDo4aqOIhfnvFPUCq6lIAyTaHiyP+NDzbaS0X9L1W
+         jZ1VMt8W5Ls1YJLmLpYWUOaeDiMM2pyseexFsNPZK3DPAS1pAXb12kxSyETs95JAV4R5
+         qX7g==
+X-Gm-Message-State: AC+VfDwCkb5BP1FglGUjW3sA234EJ488R+mdj1phNKSJAhdOyPokMbqE
+        72HwplhSgBMcRCrFZckUFbkzImfC2Q1BNwF8r+Fb9A==
+X-Google-Smtp-Source: ACHHUZ4YjpyYlgvfo8KGHpgh0GWzkYCR851yUBN4sNRfUbMSZJJvvB0n+pjZsdRUpzebhyQvam7dxS44VOBGN+Fo6ls=
+X-Received: by 2002:a05:6102:578a:b0:436:213e:b76 with SMTP id
+ dh10-20020a056102578a00b00436213e0b76mr537689vsb.1.1684316468682; Wed, 17 May
+ 2023 02:41:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515174026.494496-1-afd@ti.com>
-In-Reply-To: <20230515174026.494496-1-afd@ti.com>
+References: <20230515174518.494907-1-afd@ti.com>
+In-Reply-To: <20230515174518.494907-1-afd@ti.com>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 17 May 2023 11:40:21 +0200
-Message-ID: <CAMRc=Mfc51X-F5sq57Ywd8FC64pa5kCL9Joi9PExXSTAq5CCcQ@mail.gmail.com>
-Subject: Re: [PATCH v3] gpio: twl4030: Use devm_gpiochip_add_data() to
+Date:   Wed, 17 May 2023 11:40:58 +0200
+Message-ID: <CAMRc=MeiAD2ZQ-uAyR2GfceEeL4qHu9apE8HnimZKokzsNAu0Q@mail.gmail.com>
+Subject: Re: [PATCH v3] gpio: tps65086: Use devm_gpiochip_add_data() to
  simplify remove path
 To:     Andrew Davis <afd@ti.com>
 Cc:     Peter Tyser <ptyser@xes-inc.com>,
@@ -72,13 +72,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 7:40=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
+On Mon, May 15, 2023 at 7:45=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
 >
 > Use devm version of gpiochip add function to handle removal for us.
 >
+> While here update copyright and module author.
+>
 > Signed-off-by: Andrew Davis <afd@ti.com>
 > ---
->
 
 Applied, thanks!
 
