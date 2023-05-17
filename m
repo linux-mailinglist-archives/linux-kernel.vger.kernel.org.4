@@ -2,108 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE15A70615B
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07D370615F
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjEQHiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S230022AbjEQHjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjEQHhz (ORCPT
+        with ESMTP id S229887AbjEQHjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:37:55 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B2CE52
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:37:47 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64395e741fcso373355b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:37:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684309067; x=1686901067;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q7G2+GiqZTEnICnzzvagb14E08/JnnciwA1LRqGqYto=;
-        b=ZSUm/FDaXcxzgMtxnP6YATO77IXyq33I/jfofsuyf8enOnq24T9h+CAIBDPsz2kySA
-         J7qaZIBCnAhYD3EFzjBcizu9te4JqRi+AprJSeAp16uhhODAei1i7ut3oD3tjP0I1Tfn
-         YuY2cg/a+pSvNLqyKjzG2QSfzML3MJWSXh2tYEShzCPHnS8fCV4pGlEocM+nQpYVN4Hz
-         CKkASzrb+YTO0i9RV6PsCca6UxiOpXTOBpagaeOuZeJQ6PQ5G5pB++CODzvLaRIybhpX
-         DktRY1olDixF+WDSZKZkcFxRGWPwonGu8NMpK8FJigeafUm1Wco0x+OZMyhrUhfA9GYd
-         36fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684309067; x=1686901067;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q7G2+GiqZTEnICnzzvagb14E08/JnnciwA1LRqGqYto=;
-        b=jKu4Wa6LqfSmEzOQTjwwW5UWJUvp2n4nWUXMe/VTRqhXTNRAFdl2PBmZLsQYDA96+E
-         iAn1W3ZekBiaH4Li0a9taXiETf7K+n7WDdo0eO3ekvvxtUSftcDlnIiSNKmRSgc7HfOS
-         aIEwJCyEw9TFdZG8zJf+Y55W/EKQeltFP/IqC2WsdwawoA3EqzjmhBFoELv/YLIfKK++
-         C14UTd3WrAKTk8RBp19B7zpUrR614wG6p8RtVqVVJ72HevbTi4aQf9QNbqo1Ufgts7wj
-         JTMIrwjrkbKKka4TxY2cEZ2PZpcn74+LKs9wOX46WWAfuF3ZCg/LEmhLThmRJNpQ5xWr
-         JSSA==
-X-Gm-Message-State: AC+VfDy/raZOsr4rFmBvK3c7y5v8LqOloewi8eysphLkH0ISIDUJm2rd
-        bp2mEKvh23nZdvxHq5CrK5doVQO9ero=
-X-Google-Smtp-Source: ACHHUZ7uXnf2Pcr9J/EUDfhhMEUSGuw/KM22Lxow7nOEAFCHTidGVQenu0dqdTn/PJXfYht5nyuHGw==
-X-Received: by 2002:a05:6a00:1396:b0:646:6cc3:4a52 with SMTP id t22-20020a056a00139600b006466cc34a52mr41429384pfg.3.1684309066722;
-        Wed, 17 May 2023 00:37:46 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-12.three.co.id. [180.214.232.12])
-        by smtp.gmail.com with ESMTPSA id y24-20020aa78558000000b00634a96493f7sm12177713pfn.128.2023.05.17.00.37.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 00:37:46 -0700 (PDT)
-Message-ID: <4125c148-a4f4-edd2-3009-0283246f8a95@gmail.com>
-Date:   Wed, 17 May 2023 14:37:41 +0700
+        Wed, 17 May 2023 03:39:39 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFB2DA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BXLZ+yEa82RxkW3QXxkSn4CuUde79k4TvT+xYUt2yR0=; b=j8Oc/5AfxoC4ZTxrm8OxtCPW89
+        AGSE8ZI/sITlQVr3lH/MGL+wGFdkBbVkgxdzJ0SN09+8RXlto0WaU/tdqa9qfwmcFrq5nmSmhU5mA
+        3xTrWuRO8IQ9rZFUFxzv9fP0H9fxAPQODjDNvWZd7oFhsZ5rTviRzIFpk1juA38sdWRID68YhEJUV
+        W5ph04GCfXSLlEjH6FNTVeQs4+IBnLFqRmoQw4B9sH5DCtqTblh/k6m0y4PFLzxzJ2AE7Vbx3r1rx
+        NRaLxkgtltk9/yf5rfYQGndxwT/GFIRF0jsjdpQqg5DVuXFd0jxfU5MgBmvT0o6T1rVAdVNxLkc+D
+        Z4JmZD5w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pzBkp-008hYG-1F;
+        Wed, 17 May 2023 07:39:23 +0000
+Date:   Wed, 17 May 2023 00:39:23 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     zhenwei pi <pizhenwei@bytedance.com>
+Cc:     stefanha@redhat.com, mst@redhat.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] virtio: abstract virtqueue related methods
+Message-ID: <ZGSEq197W8VvOWCc@infradead.org>
+References: <20230517025424.601141-1-pizhenwei@bytedance.com>
+ <20230517025424.601141-2-pizhenwei@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] ntfs: Add myself as a reviewer
-To:     Namjae Jeon <linkinjeon@kernel.org>, brauner@kernel.org
-Cc:     anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-References: <20230517070739.6505-1-linkinjeon@kernel.org>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230517070739.6505-1-linkinjeon@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517025424.601141-2-pizhenwei@bytedance.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 14:07, Namjae Jeon wrote:
-> I'm volunteering to help review patches for current unmaintained
-> ntfs filesytem.
-> 
-> Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e2fd64c2ebdc..c2cecb2059d7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14928,6 +14928,7 @@ F:	drivers/ntb/hw/intel/
->  
->  NTFS FILESYSTEM
->  M:	Anton Altaparmakov <anton@tuxera.com>
-> +R:	Namjae Jeon <linkinjeon@kernel.org>
->  L:	linux-ntfs-dev@lists.sourceforge.net
->  S:	Supported
->  W:	http://www.tuxera.com/
+On Wed, May 17, 2023 at 10:54:23AM +0800, zhenwei pi wrote:
+> All the vring based virtqueue methods could be abstratct in theory,
+> MST suggested that add/get bufs and kick functions are quite perfmance
+> sensitive, so export these functions from virtio_ring.ko, drivers
+> still call them in a fast path.
 
-Acked-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Who is going to use this?  And why do you think every virtio users
+would want to pay for indirect calls just for your shiny new feature?
 
-Anyway, what about also adding linux-mm list so that akpm can
-pick patches?
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+This seems like an amazingly bad idea to me.
