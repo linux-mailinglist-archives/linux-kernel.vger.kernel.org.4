@@ -2,199 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97937062F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4E17062F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjEQIdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
+        id S230483AbjEQIde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjEQIcr (ORCPT
+        with ESMTP id S229691AbjEQIdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:32:47 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EA81BF8;
-        Wed, 17 May 2023 01:32:04 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so11482877b3a.0;
-        Wed, 17 May 2023 01:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684312324; x=1686904324;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aM66uzmo09xcCOOPPJQfJ1239TmOWVAFAFF8/sMHxJk=;
-        b=M2qSdXX5XEjDy8173X1BQyXgfZWxgjnuDh7lfxjiN34F/rl1WyhGxThNwxIdFPtsgi
-         nhPYtEGotdFU9fABOYPGOTeViZPn+sN1y3rteMpv+9zSSQzw7owwr6XhSuDET29KJnOq
-         SzUYzqxXFajwPr4esZUy4N9FcQbLvXlr8ylsB7lxL7RoGg0D2Cm87JzFrSJX7jS0UwPA
-         dlcw9V+VDEpkWCQUUgj1K9sIRZYsY+jmgYL6aB5i38iX2uRMu4QukHiJrUUteaShveAp
-         ySYsz0PO1XP1ZSXkjtYxT0oH9gJHHhxkE8wyRfluXoTQIChsYGEjGNXB+UuKiLjqVtn/
-         1m2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684312324; x=1686904324;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aM66uzmo09xcCOOPPJQfJ1239TmOWVAFAFF8/sMHxJk=;
-        b=Ld2ylL4LQkHm7qOz6DjR3UH8wwWYdlEe8cHQPFfHGUBw5EtJMW0qYYAWnNT7rDgF8g
-         s/ScyggPaDwpub0/lXoy8viD+V2DhKPrF2IZ2DOemD2elza7uuL0LOAI4XHc5JjLDdYb
-         ffB4ugOm2oR+F3FGwquCHA1WlzkcBIa1a/4eNlWhkssgqIWJ1Nvz96R0gKop2IWrTdbj
-         nmGu7huy48BegEvVZwUeoC+EMsfHVY/26KDqHgdyPeZtASGaS/TiNaQjLfId6PFOUR8y
-         QIFknrEIARI0I6/qaVLIfvDVFUMne/lXPBm+ss5SeJfS0C5MFvE3xZ3rVgWYLOchls9H
-         fMbQ==
-X-Gm-Message-State: AC+VfDxIVn/riSJTTICaWyCZ8MS6kXyVQOFO9KXpMQCqOuyTxdE2u3Q8
-        j31JTkiB0LvcZkVESLSR5FsyuZ4GYcW5T8m6GvU=
-X-Google-Smtp-Source: ACHHUZ4iyaYrxVZMxySGUTOPYWhxpLgFfi9ixRGluwwJJKuYvKkERWG25wDH/5UXmoUZ6NvcPCTfdzogMeS4zYeWaPw=
-X-Received: by 2002:a17:90a:1181:b0:24e:3413:c7ff with SMTP id
- e1-20020a17090a118100b0024e3413c7ffmr1926164pja.7.1684312324177; Wed, 17 May
- 2023 01:32:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230511135632.78344-1-bstruempfel@ultratronik.de> <BN7PR12MB280217A4D088BE2D951B9A6DDC789@BN7PR12MB2802.namprd12.prod.outlook.com>
-In-Reply-To: <BN7PR12MB280217A4D088BE2D951B9A6DDC789@BN7PR12MB2802.namprd12.prod.outlook.com>
-From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Date:   Wed, 17 May 2023 10:31:53 +0200
-Message-ID: <CAEktqcsFUT=2236bj37xAbcFO750UxQrbPvi+jczZmS-hNJSdA@mail.gmail.com>
-Subject: Re: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
-To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
-Cc:     "bstruempfel@ultratronik.de" <bstruempfel@ultratronik.de>,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 04:33:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAF95FCD
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:32:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28F2D643B7
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 08:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B3CC433D2;
+        Wed, 17 May 2023 08:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684312347;
+        bh=/KT/9/5y3aOR80T1KmoIa7l7+IUF8AgYbppNXtlsX6s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hfKqlGs0tmbepRV+oV02doIiz/paEfgVhuSfjpjIgBrtK7wp4ExjrZB7kV24AkDa+
+         ++a7CFVgbDYtWtsNLJD6gKsdwYqUs3b1jtC35/1+hZcx6BEzs0d3uX5Guc2HV0hQNY
+         oubZ6FXyyuDWPOzK4kz/yfYBN5j5+Ihnkrx467MyyJ5Q9RMXKqqYXl8l547P70qIBR
+         +tBU21pn2P2bkHsEdwX/XFA0yBHexWMWUzhvl5T6W52X+P2jD+X5XvZCHt3jWdTD1o
+         eTu3c/vLkOVZ9PUrKSefBUvutfndw6CAg1Wf/l8sgqMMt99+qzTExwsLETMI3LHteu
+         4XNf+L9sgOcAA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pzCa9-00Fmvp-A9;
+        Wed, 17 May 2023 09:32:25 +0100
+Date:   Wed, 17 May 2023 09:32:25 +0100
+Message-ID: <86ttwbl5nq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     zhengyan <zhengyan@asrmicro.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        meitaogao@asrmicro.com, qiaozhou@asrmicro.com,
+        zhizhouzhang@asrmicro.com
+Subject: Re: [PATCH] irqchip/gic-v3: workaround for ASR8601 when reading mpidr
+In-Reply-To: <20230517075500.43516-1-zhengyan@asrmicro.com>
+References: <20230517075500.43516-1-zhengyan@asrmicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: zhengyan@asrmicro.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, meitaogao@asrmicro.com, qiaozhou@asrmicro.com, zhizhouzhang@asrmicro.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mo., 15. Mai 2023 um 08:37 Uhr schrieb Mahapatra, Amit Kumar
-<amit.kumar-mahapatra@amd.com>:
+On Wed, 17 May 2023 08:55:00 +0100,
+zhengyan <zhengyan@asrmicro.com> wrote:
+> 
+> This patch add workaround for ASR8601, which uses an armv8.2
+> processor with a gic-500. ARMv8.2 uses Multiprocessor Affinity
+> Register to identify the logical address of the core by
+> | cluster | core | thread |.
+
+Not quite. The ARMv8.2 architecture doesn't say *any* of that. It is
+ARM's *implementations* that follow this scheme.
+
+> However, gic-500 only supports topologies with
+> affinity levels less than 2 as
+> | cluster | core|.
+> 
+> So it needs this patch to shift the MPIDR values
+> to ensure proper functionality
+> 
+> Signed-off-by: zhengyan <zhengyan@asrmicro.com>
+> ---
+>  drivers/irqchip/irq-gic-v3.c | 28 +++++++++++++++++++++++++++-
+>  1 file changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 6fcee221f201..435b98a8641e 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -39,6 +39,7 @@
+>  
+>  #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
+>  #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
+> +#define FLAGS_WORKAROUND_MPIDR_ASR8601		(1ULL << 2)
+
+What is ASR8601? Is it a system? Or an erratum number? For issues that
+are the result of a HW integration issue, please provide an official
+erratum number, and update Documentation/arm64/silicon-errata.rst.
+
 >
-> Hello,
->
-> > -----Original Message-----
-> > From: Boerge Struempfel <boerge.struempfel@gmail.com>
-> > Sent: Thursday, May 11, 2023 7:27 PM
-> > Cc: boerge.struempfel@gmail.com; bstruempfel@ultratronik.de; Mark
-> > Brown <broonie@kernel.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
-> > Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; NXP
-> > Linux Team <linux-imx@nxp.com>; linux-spi@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org
-> > Subject: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
-> >
-> > CAUTION: This message has originated from an External Source. Please use
-> > proper judgment and caution when opening attachments, clicking links, or
-> > responding to this email.
-> >
-> >
-> > By default, the imx spi controller uses a high mosi line, whenever it is idle.
-> > This may not be desired in all use cases. For example neopixel leds can get
-> > confused and flicker due to misinterpreting the idle state.
-> > Therefore, we introduce a new spi-mode bit, with which the idle behaviour
-> > can be overwritten on a per device basis.
-> >
-> > Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
-> > ---
-> >  drivers/spi/spi-imx.c        | 9 ++++++++-
-> >  drivers/spi/spi.c            | 2 ++
-> >  include/uapi/linux/spi/spi.h | 3 ++-
-> >  3 files changed, 12 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
-> > 34e5f81ec431e..6acab2b4ffaa5 100644
-> > --- a/drivers/spi/spi-imx.c
-> > +++ b/drivers/spi/spi-imx.c
-> > @@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller
-> > *controller, struct spi_device  #define MX51_ECSPI_CONFIG_SCLKPOL(cs)  (1
-> > << ((cs & 3) +  4))  #define MX51_ECSPI_CONFIG_SBBCTRL(cs)  (1 << ((cs & 3) +
-> > 8))
-> >  #define MX51_ECSPI_CONFIG_SSBPOL(cs)   (1 << ((cs & 3) + 12))
-> > +#define MX51_ECSPI_CONFIG_DATACTL(cs)  (1 << ((cs & 3) + 16))
-> >  #define MX51_ECSPI_CONFIG_SCLKCTL(cs)  (1 << ((cs & 3) + 20))
-> >
-> >  #define MX51_ECSPI_INT         0x10
-> > @@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct
-> > spi_imx_data *spi_imx,
-> >                 cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
-> >         }
-> >
-> > +       if (spi->mode & SPI_MOSI_IDLE_LOW)
-> > +               cfg |= MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
->
-> Kindly replace all occurrence of spi->chip_select with spi_get_chipselect(spi, 0)
-> https://github.com/torvalds/linux/commit/9e264f3f85a56cc109cc2d6010a48aa89d5c1ff1
-Thank you very much for noticing this. I have changed it for the next
-version of the patch.
->
-> > +       else
-> > +               cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
->
-> > +
-> >         if (spi->mode & SPI_CS_HIGH)
-> >                 cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
-> >         else
-> > @@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device
-> > *pdev)
-> >         spi_imx->controller->prepare_message = spi_imx_prepare_message;
-> >         spi_imx->controller->unprepare_message =
-> > spi_imx_unprepare_message;
-> >         spi_imx->controller->slave_abort = spi_imx_slave_abort;
-> > -       spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH |
-> > SPI_NO_CS;
-> > +       spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH
-> > | SPI_NO_CS |
-> > +                                        SPI_MOSI_IDLE_LOW;
-> >
-> >         if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
-> >             is_imx53_ecspi(spi_imx))
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c index
-> > 9291b2a0e8871..3ad538b317a84 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller
-> > *ctlr, struct spi_device *spi,
-> >                 spi->mode |= SPI_LSB_FIRST;
-> >         if (of_property_read_bool(nc, "spi-cs-high"))
-> >                 spi->mode |= SPI_CS_HIGH;
-> > +       if (of_property_read_bool(nc, "spi-mosi-idle-low"))
-> > +               spi->mode |= SPI_MOSI_IDLE_LOW;
-> >
-> >         /* Device DUAL/QUAD mode */
-> >         if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) { diff --git
-> > a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h index
-> > 9d5f580597039..ca56e477d1619 100644
-> > --- a/include/uapi/linux/spi/spi.h
-> > +++ b/include/uapi/linux/spi/spi.h
-> > @@ -28,6 +28,7 @@
-> >  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with 8 wires */
-> >  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedance
-> > turnaround */
-> >  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on Rx only xfer
-> > */
-> > +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low when
-> > idle */
-> >
-> >  /*
-> >   * All the bits defined above should be covered by SPI_MODE_USER_MASK.
-> > @@ -37,6 +38,6 @@
-> >   * These bits must not overlap. A static assert check should make sure of
-> > that.
-> >   * If adding extra bits, make sure to increase the bit index below as well.
-> >   */
-> > -#define SPI_MODE_USER_MASK     (_BITUL(17) - 1)
-> > +#define SPI_MODE_USER_MASK     (_BITUL(18) - 1)
-> >
-> >  #endif /* _UAPI_SPI_H */
-> > --
-> > 2.25.1
->
+>  #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+>  
+> @@ -659,6 +660,9 @@ static u64 gic_mpidr_to_affinity(unsigned long mpidr)
+>  {
+>  	u64 aff;
+>  
+> +	if (gic_data.flags & FLAGS_WORKAROUND_MPIDR_ASR8601)
+> +		mpidr >>= 8;
+> +
+>  	aff = ((u64)MPIDR_AFFINITY_LEVEL(mpidr, 3) << 32 |
+>  	       MPIDR_AFFINITY_LEVEL(mpidr, 2) << 16 |
+>  	       MPIDR_AFFINITY_LEVEL(mpidr, 1) << 8  |
+> @@ -970,6 +974,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+>  	 * Convert affinity to a 32bit value that can be matched to
+>  	 * GICR_TYPER bits [63:32].
+>  	 */
+> +	if (gic_data.flags & FLAGS_WORKAROUND_MPIDR_ASR8601)
+> +		mpidr >>= 8;
+> +
+>  	aff = (MPIDR_AFFINITY_LEVEL(mpidr, 3) << 24 |
+>  	       MPIDR_AFFINITY_LEVEL(mpidr, 2) << 16 |
+>  	       MPIDR_AFFINITY_LEVEL(mpidr, 1) << 8 |
+> @@ -1265,6 +1272,8 @@ static u16 gic_compute_target_list(int *base_cpu, const struct cpumask *mask,
+>  	unsigned long mpidr = cpu_logical_map(cpu);
+>  	u16 tlist = 0;
+>  
+> +	if (gic_data.flags & FLAGS_WORKAROUND_MPIDR_ASR8601)
+> +		mpidr >>= 8;
+>  	while (cpu < nr_cpu_ids) {
+>  		tlist |= 1 << (mpidr & 0xf);
+>  
+> @@ -1274,7 +1283,8 @@ static u16 gic_compute_target_list(int *base_cpu, const struct cpumask *mask,
+>  		cpu = next_cpu;
+>  
+>  		mpidr = cpu_logical_map(cpu);
+> -
+> +		if (gic_data.flags & FLAGS_WORKAROUND_MPIDR_ASR8601)
+> +			mpidr >>= 8;
+>  		if (cluster_id != MPIDR_TO_SGI_CLUSTER_ID(mpidr)) {
+>  			cpu--;
+>  			goto out;
+> @@ -1321,6 +1331,8 @@ static void gic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
+>  		u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
+>  		u16 tlist;
+>  
+> +		if (gic_data.flags & FLAGS_WORKAROUND_MPIDR_ASR8601)
+> +			cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu) >> 8);
+
+You've written the same check 5 times. Maybe you could start by
+refactoring that code so that the hack can be in a single place?
+
+>  		tlist = gic_compute_target_list(&cpu, mask, cluster_id);
+>  		gic_send_sgi(cluster_id, tlist, d->hwirq);
+>  	}
+> @@ -1729,6 +1741,15 @@ static bool gic_enable_quirk_cavium_38539(void *data)
+>  	return true;
+>  }
+>  
+> +static bool gic_enable_quirk_asr8601(void *data)
+> +{
+> +	struct gic_chip_data *d = data;
+> +
+> +	d->flags |= FLAGS_WORKAROUND_MPIDR_ASR8601;
+> +
+> +	return true;
+> +}
+> +
+>  static bool gic_enable_quirk_hip06_07(void *data)
+>  {
+>  	struct gic_chip_data *d = data;
+> @@ -1823,6 +1844,11 @@ static const struct gic_quirk gic_quirks[] = {
+>  		.mask	= 0xffffffff,
+>  		.init	= gic_enable_quirk_nvidia_t241,
+>  	},
+> +	{
+> +		.desc	= "GICv3: ASR 8601 MPIDR SHIFT",
+
+s/SHIFT/shift/
+
+> +		.compatible = "asr,asr8601-gic-v3",
+
+So ASR8601 *is* a system... Is it DT only?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
