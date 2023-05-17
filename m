@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BCB7075C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DD37075C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 01:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjEQXBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 19:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S229695AbjEQXCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 19:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjEQXBu (ORCPT
+        with ESMTP id S229694AbjEQXCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 19:01:50 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB91170E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:01:48 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1ae4baa77b2so10719215ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:01:48 -0700 (PDT)
+        Wed, 17 May 2023 19:02:14 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DB361AE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:02:06 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-528cdc9576cso923761a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 16:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684364508; x=1686956508;
+        d=chromium.org; s=google; t=1684364526; x=1686956526;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BzCe/htlM5mTAaSOzvP8pEpnyOYq7XwMu4hjpniWzo=;
-        b=B/J7qvOTlzVBF6bH+lZ1fSjUgxLBV+R4eZ+jYhz/z7+S5IILF0ehttCPGNSyoMI3ub
-         pZZlsX3zL98h9GWstYJknqvKryfgKw//T778pjlMZh+uODdCWwpS9hx/J36oaYLURxlS
-         cyqOXevDrp4eByr5L4zRgmx+xnpgp96/7O1Pw=
+        bh=NCOs9XFCFeYjn/qRnbFLhpqd0QIqRRTHRKO1/+0RAUk=;
+        b=hblzA3PbsTRQj6+lS+RlZl1Bd8A+m4ZU2gRkGKogDTW2wJqSkEx6ZBxuNyeQhCXmO/
+         7U6aPZGf5+vHz+ckkVvoPkEV42PklylLIZkRyTnzUlpACKLZIomqzSnqlpjZ0O8yve08
+         FxK3KLI7abAFw3PZBgAl5IPQmQOw7B7VwPl3Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684364508; x=1686956508;
+        d=1e100.net; s=20221208; t=1684364526; x=1686956526;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7BzCe/htlM5mTAaSOzvP8pEpnyOYq7XwMu4hjpniWzo=;
-        b=EcIN9dCbf5OK/z3XboGUgvEFbjlJizs2deAhzMQeaCQ/TeeAYR/3pKkteyJoFZ1J9x
-         pcxQr59EFKtL6aEtd2DFRVbh3bn0CoGFoE8mvSDe9PJEGxL7ryvt/oYeNm0lUNZq/Cp9
-         LDglQGqawug7TZUQ/bWKdMlLfUkpafudEdlrXwJrjmgXo/rN3/uC6vDiibKFqvDbUI5X
-         X7EARsxleLlwB08sPynLgHDSntQHZ3ONsdHYlv6x2cktWSk8/bWKk93ITbG1fMKfmyvH
-         nFdo8plbPZh4lbyns5JXNVUvbjKCQ33hhsabOZV2x/yV9xQcSXkxIjeB6aN65kGgSX5t
-         5Kow==
-X-Gm-Message-State: AC+VfDxXIlKPi+8evA/WE6wKx6oEv5u+TRrClBJl5/sKQasSZQ78+Ygo
-        UhTOzYmM/VehVwlZw+7l6lufWQ==
-X-Google-Smtp-Source: ACHHUZ54qKIN5A4ugmU6aiQY1NXaOIPnQ8RUOJisfyPF5LS+vhwZWZ17iQt+hucvIjzEZ21J39EIWQ==
-X-Received: by 2002:a17:902:e5c8:b0:1ad:fa2e:17fc with SMTP id u8-20020a170902e5c800b001adfa2e17fcmr530850plf.2.1684364508211;
-        Wed, 17 May 2023 16:01:48 -0700 (PDT)
+        bh=NCOs9XFCFeYjn/qRnbFLhpqd0QIqRRTHRKO1/+0RAUk=;
+        b=jsbV4nVjrZbkGj79hFwLn+ETIFFKcK738wF+Yh4voVb6idMyvKsf6zO55RMsbYPJ6J
+         ASHjw5VByzmGJ4TtWesw6EwQIHVfEXViJ8nFEo/uapKJGFFyemkcocsaVSobJvirGxNA
+         GKoSldqM9S1uwNcqKcELT2j2Vq01qIsFhGGX9OulPLny0xX58e48IGNSDuyCyCFZZyrs
+         8+u+lB8sFmEObd3JoTPOWt+zIDSziiIQIjhVQkr2aOAq8Hrq42f3MSSuW72jSd240O4F
+         dYsuMM3aJ5wvFQ2VdRR2uQz3bKRbrr/teGQVXOWALUXHYxfFma+FBXaivPU2hT89eWk8
+         mZRg==
+X-Gm-Message-State: AC+VfDyF0u5bVe3Ph9PdH4mRW38VP73bRDT3NUs8uqWAQ4o559xsO/j1
+        tiIkjKPaJ1KZQdKKlEqYP9K9e5+/0xkhhenu7DY=
+X-Google-Smtp-Source: ACHHUZ7Qe0iBjeZmvcgnaHOBEs733JZVei10a9MeOfdNB6l5X05u502QW9KQ28OgeMcXVjjkg2bwog==
+X-Received: by 2002:a17:902:ec8a:b0:19f:87b5:1873 with SMTP id x10-20020a170902ec8a00b0019f87b51873mr342789plg.62.1684364526317;
+        Wed, 17 May 2023 16:02:06 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p20-20020a170902a41400b0019719f752c5sm9901606plq.59.2023.05.17.16.01.47
+        by smtp.gmail.com with ESMTPSA id d15-20020a170902728f00b001a69c1c78e7sm18008090pll.71.2023.05.17.16.02.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 16:01:47 -0700 (PDT)
-Date:   Wed, 17 May 2023 16:01:47 -0700
+        Wed, 17 May 2023 16:02:05 -0700 (PDT)
+Date:   Wed, 17 May 2023 16:02:05 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
 Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
@@ -55,14 +55,15 @@ Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         James Smart <james.smart@broadcom.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2][next] scsi: lpfc: Use struct_size() helper
-Message-ID: <202305171601.B3FF9D0BB@keescook>
+Subject: Re: [PATCH 1/2][next] scsi: lpfc: Replace one-element array with
+ flexible-array member
+Message-ID: <202305171602.2C715B078F@keescook>
 References: <cover.1684358315.git.gustavoars@kernel.org>
- <99e06733f5f35c6cd62e05f530b93107bfd03362.1684358315.git.gustavoars@kernel.org>
+ <6c6dcab88524c14c47fd06b9332bd96162656db5.1684358315.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <99e06733f5f35c6cd62e05f530b93107bfd03362.1684358315.git.gustavoars@kernel.org>
+In-Reply-To: <6c6dcab88524c14c47fd06b9332bd96162656db5.1684358315.git.gustavoars@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -73,34 +74,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 03:23:01PM -0600, Gustavo A. R. Silva wrote:
-> Prefer struct_size() over open-coded versions of idiom:
+On Wed, May 17, 2023 at 03:22:45PM -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in a couple of structures, and refactor the rest of the code,
+> accordingly.
 > 
-> sizeof(struct-with-flex-array) + sizeof(typeof-flex-array-elements) * count
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
 > 
-> where count is the max number of items the flexible array is supposed to
-> contain.
+> This results in no differences in binary output.
 > 
-> Link: https://github.com/KSPP/linux/issues/160
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/295
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
 > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/scsi/lpfc/lpfc_ct.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-> index e880d127d7f5..3b95c56023bf 100644
-> --- a/drivers/scsi/lpfc/lpfc_ct.c
-> +++ b/drivers/scsi/lpfc/lpfc_ct.c
-> @@ -3748,8 +3748,7 @@ lpfc_vmid_cmd(struct lpfc_vport *vport,
->  		rap->obj[0].entity_id_len = vmid->vmid_len;
->  		memcpy(rap->obj[0].entity_id, vmid->host_vmid, vmid->vmid_len);
->  		size = RAPP_IDENT_OFFSET +
-> -			sizeof(struct lpfc_vmid_rapp_ident_list) +
-> -			sizeof(struct entity_id_object);
-> +			struct_size(rap, obj, rap->no_of_objects);
 
-Has rap->no_of_objects always been "1"? (i.e. there was a prior
-multiplication here before...
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
