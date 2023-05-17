@@ -2,75 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED38707354
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1F3707356
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjEQUt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S229843AbjEQUv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjEQUtw (ORCPT
+        with ESMTP id S229611AbjEQUv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:49:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7550A5EF
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:49:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B03260DD7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78240C433D2;
-        Wed, 17 May 2023 20:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1684356557;
-        bh=ESwHDFeH9sFs7LqoayE2LYshu3gFC0OnzfRGKxNaVuM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=wh1XKXEWZpvLmsUnr/6T6ZYtnllDQ4ytqasvLJwOG4J2KTVMQ+QrmP0j8gs1Iw/oG
-         H/8oA56+KSt0n0frYaPHICgsQYuNkwtiriDnXYFeSB5ZOJkSqaUkN8AY+oYKhrkICU
-         aWinx5bNyUeSEyuTjSFhHs9SY2k8RFAXI0zhEV3w=
-Date:   Wed, 17 May 2023 13:49:16 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Nick Terrell <terrelln@fb.com>, linux-mm@kvack.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] decompressor: provide missing prototypes
-Message-Id: <20230517134916.717bdcc4ba26e10462157ee9@linux-foundation.org>
-In-Reply-To: <20230517131936.936840-1-arnd@kernel.org>
-References: <20230517131936.936840-1-arnd@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 16:51:27 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E4A4EF8;
+        Wed, 17 May 2023 13:51:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=td3mHGkbZWK4bitS2wf7sSOv43WhAuUzx6ATNa2Tgf4=; b=ek
+        edixrKGZzWlRPN4admMXkmeIkDyls9+iPJOKFtXhNJMRqestd1tnzfFRCBZFNabqnlUDrCzXL3VCD
+        Z2aTEpbg8/j1FrMSret7OixMTIjsnjq3C1JbTLLbkw6NfDrDbJjn01GX5vnXrAuHd/7tifYZVEmVP
+        mu/65FFl91j8jLQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pzO7B-00DAiR-Ej; Wed, 17 May 2023 22:51:17 +0200
+Date:   Wed, 17 May 2023 22:51:17 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     alexis.lothore@bootlin.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        paul.arola@telus.com, scott.roberts@telus.com
+Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: enable support for
+ 88E6361 switch
+Message-ID: <9a836863-c279-490f-a49a-de4db5de9fd4@lunn.ch>
+References: <20230517203430.448705-1-alexis.lothore@bootlin.com>
+ <20230517203430.448705-3-alexis.lothore@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230517203430.448705-3-alexis.lothore@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 15:19:31 +0200 Arnd Bergmann <arnd@kernel.org> wrote:
-
-> From: Arnd Bergmann <arnd@arndb.de>
+On Wed, May 17, 2023 at 10:34:30PM +0200, alexis.lothore@bootlin.com wrote:
+> From: Alexis Lothoré <alexis.lothore@bootlin.com>
 > 
-> The entry points for the decompressor don't always have a prototype
-> included in the .c file:
-> 
-> lib/decompress_inflate.c:42:17: error: no previous prototype for '__gunzip' [-Werror=missing-prototypes]
-> lib/decompress_unxz.c:251:17: error: no previous prototype for 'unxz' [-Werror=missing-prototypes]
-> lib/decompress_unzstd.c:331:17: error: no previous prototype for 'unzstd' [-Werror=missing-prototypes]
-> 
-> include the correct headers for unxz and unzstd, and mark the
-> inflate function above as unconditionally 'static' to avoid
-> these warnings.
+> Marvell 88E6361 is an 8-port switch derived from the
+> 88E6393X/88E9193X/88E6191X switches family. It can benefit from the
+> existing mv88e6xxx driver by simply adding the proper switch description in
+> the driver. Main differences with other switches from this
+> family are:
+> - 8 ports exposed (instead of 11): ports 1, 2 and 8 not available
+> - No 5GBase-x nor SFI/USXGMII support
 
-These are errors, not warnings?
+So what exactly is supported for link modes?
 
-Under what circumstances do they occur?
+The way you reuse the 6393 ops, are these differences actually
+enforced? It looks like mv88e6393x_phylink_get_caps() will allow
+2500BaseX, 5GBaseX and 10GBaseR for port 10.
 
-Shouldn't we cc:stable?  If so, do we have a suitable Fixes: target?
+> +	[MV88E6361] = {
+> +		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6361,
+> +		.family = MV88E6XXX_FAMILY_6393,
+> +		.name = "Marvell 88E6361",
+> +		.num_databases = 4096,
+> +		.num_macs = 16384,
+> +		.num_ports = 11,
+> +		/* Ports 1, 2 and 8 are not routed */
+> +		.invalid_port_mask = BIT(1) | BIT(2) | BIT(8),
+> +		.num_internal_phys = 5,
 
+Which ports have internal PHYs? 2, 3, 4, 5, 6, 7 ?  What does
+mv88e6xxx_phy_is_internal() return for these ports, and
+mv88e6xxx_get_capsmv88e6xxx_get_caps()? I'm wondering if you actually
+need to list 8 here?
 
+     Andrew
