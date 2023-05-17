@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB700706562
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DCE70656B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjEQKgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S230282AbjEQKiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbjEQKgK (ORCPT
+        with ESMTP id S229585AbjEQKiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:36:10 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651213C30;
-        Wed, 17 May 2023 03:36:05 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 03C5420B66;
-        Wed, 17 May 2023 12:36:00 +0200 (CEST)
-Date:   Wed, 17 May 2023 12:35:57 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Alistair <alistair@alistair23.me>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Francesco Dolcini <francesco@dolcini.it>
-Subject: Re: [PATCH v4 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-Message-ID: <ZGStr1oZvmJ0XzSu@francesco-nb.int.toradex.com>
-References: <20230407030741.3163220-1-badhri@google.com>
- <0cf8c588b701d7cf25ffe1a9217b81716e6a5c51.camel@alistair23.me>
- <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
+        Wed, 17 May 2023 06:38:19 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F281897;
+        Wed, 17 May 2023 03:38:17 -0700 (PDT)
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1ECC51EC055F;
+        Wed, 17 May 2023 12:38:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1684319896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BatpuZgGB297seHuJ1mf9A2oYI8Ey7cYqz+SD9MShzA=;
+        b=DTcdYb5tLQuCNKHO13AecWbgmkfxmuXtwxeDV+7wclnNFMSFy60iBnUdnkMrEDj8sRIhJ7
+        hZTouQxaMTrZ6BzrEM+Fh7JnHlQNm383EDF0K4qylnp1goIvyV1ytD2TU4uQ0M7bR/4RVF
+        lTDkzOhkrse5A27l1yz3bJdCqQty4DE=
+Date:   Wed, 17 May 2023 12:38:15 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, mchehab@kernel.org, james.morse@arm.com,
+        rric@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.baryshkov@linaro.org, stable@vger.kernel.org
+Subject: Re: [RESEND PATCH v7 2/2] EDAC/qcom: Get rid of hardcoded register
+ offsets
+Message-ID: <20230517103815.GCZGSul9wCk4K8/XkN@fat_crate.local>
+References: <20230517062859.57371-1-manivannan.sadhasivam@linaro.org>
+ <20230517062859.57371-3-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1ac16f0a-3cca-40ca-c444-82719f85a24c@leemhuis.info>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20230517062859.57371-3-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,54 +55,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 12:23:39PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
-> [CCing Francesco Dolcini; and the regression list too, as it should be
-> in the loop for regressions:
-> https://docs.kernel.org/admin-guide/reporting-regressions.html]
+On Wed, May 17, 2023 at 11:58:59AM +0530, Manivannan Sadhasivam wrote:
+> The LLCC EDAC register offsets varies between each SoC. Hardcoding the
+> register offsets won't work and will often result in crash due to
+> accessing the wrong locations.
 > 
-> On 16.05.23 14:53, Alistair wrote:
-> > On Fri, 2023-04-07 at 03:07 +0000, Badhri Jagan Sridharan wrote:
-> >> usb_udc_connect_control does not check to see if the udc has already
-> >> been started. This causes gadget->ops->pullup to be called through
-> >> usb_gadget_connect when invoked from usb_udc_vbus_handler even before
-> >> usb_gadget_udc_start is called. Guard this by checking for udc-
-> >>> started
-> >> in usb_udc_connect_control before invoking usb_gadget_connect.
-> > [...]
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
-> >> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > 
-> > This patch causes a kernel hang when trying to boot with the
-> > usb/chipidea/udc.c driver.
-> > 
-> > The call stack below causes the hang:
-> > 
-> >  - gadget_bind_driver(struct device *dev)
-> >     - mutex_lock(&udc->connect_lock);
-> >     - usb_gadget_udc_start_locked(struct usb_udc *udc)
-> >         - udc->gadget->ops->udc_start(udc->gadget, udc->driver)
-> > 
-> > At which point we are calling ci_udc_start(..), but with the
-> > connect_lock mutex locked.
-> > 
-> > ci_udc_start() then calls usb_udc_vbus_handler() which tries to lock
-> > the connect_lock while it's already locked. Resulting in a kernel hang.
-> > 
-> > Reverting this patch fixes the hang.
+> Hence, get the register offsets from the LLCC driver matching the
+> individual SoCs.
 > 
-> Not my area of expertise, but I guess it might be the same error as this
-> one:
-> 
-> https://lore.kernel.org/all/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
-> 
-> Francesco sent a revert on Friday, but no reaction from Badhri Jagan
-> Sridharan or Greg yet afaics.
-> 
-> https://lore.kernel.org/all/20230512131435.205464-1-francesco@dolcini.it/
+> Cc: <stable@vger.kernel.org> # 6.0: 5365cea199c7 ("soc: qcom: llcc: Rename reg_offset structs to reflect LLCC version")
+> Cc: <stable@vger.kernel.org> # 6.0: c13d7d261e36 ("soc: qcom: llcc: Pass LLCC version based register offsets to EDAC driver")
+> Cc: <stable@vger.kernel.org> # 6.0
+> Fixes: a6e9d7ef252c ("soc: qcom: llcc: Add configuration data for SM8450 SoC")
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/edac/qcom_edac.c           | 116 ++++++++++++++---------------
+>  include/linux/soc/qcom/llcc-qcom.h |   6 --
+>  2 files changed, 58 insertions(+), 64 deletions(-)
 
-Revert patches were applied and are in linux-next. I expect those to
-land in Linus tree with the next pull request from Greg.
+In case Bjorn wants to pick this up:
 
-Francesco
+Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
 
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
