@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C33C707439
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8291F70743A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 23:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjEQV2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 17:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S229698AbjEQV2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 17:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjEQV23 (ORCPT
+        with ESMTP id S229756AbjEQV2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 17:28:29 -0400
+        Wed, 17 May 2023 17:28:36 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3670A1732;
-        Wed, 17 May 2023 14:28:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0711732;
+        Wed, 17 May 2023 14:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684358908; x=1715894908;
+  t=1684358914; x=1715894914;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=NxykSF0yuigVRyhmiAOlC2C/CUOtx/RaDUQ0PKhnCCg=;
-  b=ZOtsZOG03wjI4oGQUHS8j2qOdKNGc1Sl9kzWvbrgjgzE6/zI6LTMn5M8
-   wE4R05xPF2zl1W001Obi6f9SSU2PKXAOEhdlOlrPEf+ZHhQmlQUmepnem
-   XBgb+up9Nkwn1DIK/q3Tct8pOrqffZhU/PBcmv17uW9E+D4o5WBHsCewc
-   nK9lN28Y1PQsLpWUh/JA8vTdD0mEZZiSlDAk+cUOEp2H7JrNDu9sqWfYV
-   5I3RZyd0OCyO4IYk/R09wOIlT6UZpCrye2pz3MUpRUpa3adEdwZt+kGyA
-   GG+5ZIO5mUBIeDkq/PiLujDe+6uG30/GnL/20oNqHBbBpfsxf9id6PHjV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="341274725"
+  bh=Jnx73iYy2J9K7uSzhh1UHCYltU9kWEDXMbRP1gAejdg=;
+  b=XDnyEdJa3peeNKyCDIjED8FcQ21otfRujo+2azAu5X69ox+yYKswaV7X
+   8xstA+ZjtUCATAnR5B2EiAvg3TLY9B9GUBPkQpxXiJf/01Xcv8znYvj+R
+   LU8eaCcGkZJXEJUVUgOmsbf1YheDoKo1OZTiZwBxHNGF9vmkmrTG5ECq6
+   ZkwTqZwQ/qP5R/TcXtHGHljPseIAZv024P37sUub72k9MBVcI7TtHCT2C
+   ZXvrDQaV3cJAzt2fU/YWqbZQiyCXefz2wdi8CO0lU/2VRfyj0CwoHvb8W
+   Li3TkEG3y+QMzlz8k4P0tJW/nOA4ONJ7eoOxAgJr31VJhQcxqRk2xVRU1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="341274742"
 X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="341274725"
+   d="scan'208";a="341274742"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:28:27 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:28:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="826098073"
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="826098101"
 X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="826098073"
+   d="scan'208";a="826098101"
 Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.209.143.168])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:28:26 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 14:28:32 -0700
 From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Wed, 17 May 2023 14:28:10 -0700
-Subject: [PATCH 1/3] MAINTAINERS: Add additional reviewers for CXL
+Date:   Wed, 17 May 2023 14:28:11 -0700
+Subject: [PATCH 2/3] cxl/pci: Update comment
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230426-cxl-fixes-v1-1-870c4c8b463a@intel.com>
+Message-Id: <20230426-cxl-fixes-v1-2-870c4c8b463a@intel.com>
 References: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
 In-Reply-To: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
 To:     Dan Williams <dan.j.williams@intel.com>,
@@ -57,11 +57,11 @@ To:     Dan Williams <dan.j.williams@intel.com>,
 Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ira Weiny <ira.weiny@intel.com>
 X-Mailer: b4 0.13-dev-9a8cd
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684358895; l=755;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684358895; l=1155;
  i=ira.weiny@intel.com; s=20221211; h=from:subject:message-id;
- bh=NxykSF0yuigVRyhmiAOlC2C/CUOtx/RaDUQ0PKhnCCg=;
- b=QAV7YBg+rjyFhoKdx2BYoFW+h9Y+R92ISgTQ+oAVUr1GJzyQCVNbkg3AXzuRztMBtZzHXCLhV
- Y/X8fc+3lCEDMNTqyDyAVqeqGz2QPr2KhO6ZMTgYQK3UkCdrYPmQ+EU
+ bh=Jnx73iYy2J9K7uSzhh1UHCYltU9kWEDXMbRP1gAejdg=;
+ b=qkGtd7nkrQtcgTRmtBxYsjv0Oc1zXIwHHux3AtXqjz9qyaq+hw/zPWjcNATj6yt+ENdzDow8F
+ iumufjrji0iCD4P2hn2zZEoUxOnR8qIWwP8IHMo4EKO75otY7vulaXo
 X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
  pk=noldbkG+Wp1qXRrrkfY1QJpDf7QsOEthbOT7vm0PqsE=
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,28 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To get better coverage add Dave Jiang and Jonathan Cameron as reviewers.
+The existence of struct cxl_dev_id containing a single member is odd.
+The comment made sense when I wrote it but could be clarified.
 
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Update the comment and place it next to the odd looking structure.
+
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/cxl/pci.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90abe83c02f3..6f8568ec2731 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5169,6 +5169,8 @@ M:	Vishal Verma <vishal.l.verma@intel.com>
- M:	Ira Weiny <ira.weiny@intel.com>
- M:	Ben Widawsky <bwidawsk@kernel.org>
- M:	Dan Williams <dan.j.williams@intel.com>
-+R:	Dave Jiang <dave.jiang@intel.com>
-+R:	Jonathan Cameron <Jonathan.Cameron@Huawei.com>
- L:	linux-cxl@vger.kernel.org
- S:	Maintained
- F:	drivers/cxl/
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index f7a5b8e9c102..ad7a1276fdc5 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -469,6 +469,10 @@ static int cxl_alloc_irq_vectors(struct pci_dev *pdev)
+ 	return 0;
+ }
+ 
++/*
++ * Threaded irq dev_id's must be globally unique.  cxl_dev_id provides a unique
++ * wrapper object for each irq within the same cxlds.
++ */
+ struct cxl_dev_id {
+ 	struct cxl_dev_state *cxlds;
+ };
+@@ -506,7 +510,6 @@ static int cxl_event_req_irq(struct cxl_dev_state *cxlds, u8 setting)
+ 	if (FIELD_GET(CXLDEV_EVENT_INT_MODE_MASK, setting) != CXL_INT_MSI_MSIX)
+ 		return -ENXIO;
+ 
+-	/* dev_id must be globally unique and must contain the cxlds */
+ 	dev_id = devm_kzalloc(dev, sizeof(*dev_id), GFP_KERNEL);
+ 	if (!dev_id)
+ 		return -ENOMEM;
 
 -- 
 2.40.0
