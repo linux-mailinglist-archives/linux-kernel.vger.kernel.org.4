@@ -2,389 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96B6706301
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E40706308
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 10:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjEQIgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 04:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S229867AbjEQIhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 04:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjEQIfh (ORCPT
+        with ESMTP id S229560AbjEQIgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 04:35:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEBF6EBB
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:34:34 -0700 (PDT)
-Received: from [IPV6:2405:201:0:21ea:73f6:2283:f432:3936] (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: shreeya)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 749C96605908;
-        Wed, 17 May 2023 09:34:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684312472;
-        bh=R8euGctTnJV1TsCDaW1M9rNAIvMVvRG8DseVaRkcgCo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UD0DKGbwK3iCFKDE/jLgSeqIsI9J3MO+ycv6c6C65/r6bKZ+isB4q1x2RQVdvNaKU
-         BkMfxBcGcJOQKrK/E6y244z/zmv9VITr2mZ/Eiy2HmX0oIHiolRuFcswwEkEAHw+w9
-         h5Vi2opHJHNiUICxW4+W1lCWNGwIH2tP7GmfmxSqrjyU5e7uhh/CyJBxp3L9386Drv
-         vaQZ4aaAyf9WmXaecv/SMf0pHtbyRyadok54ByRzkcgGODJkm88/E97drZ+CyYkbbZ
-         1+zaRNArR4TkrpUWCregG6ItTui6Y3N1+JXkt9iG1gYUq+WyV0HeXEath87C6S90fG
-         ATk3BiZVwBuwQ==
-Message-ID: <8006944a-a47b-f103-98e4-6a3ee986cb6e@collabora.com>
-Date:   Wed, 17 May 2023 14:04:25 +0530
+        Wed, 17 May 2023 04:36:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E175FF9
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684312486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WoyE4KJMZkzKP/aXFBkcgtSqzW5vCFF351V1GgKfqTs=;
+        b=K1pZIcFPbED6EDpwG2Wx+TZzAosf3CUEOD0cI7FdjjDNSwjy3ZgXwWvZFw72zpROwEqiSx
+        j1Iml5RxmYlbAjzdroUSxiXjPkm01E38cgI5pWySx3PgKMxMcL/LF73RsU5wBMaN9lwk7b
+        Gd899R4pkM1ca9MugHFnag4lCMPTYDA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-515-ru_K_doNN6GJ1nZYudWt9w-1; Wed, 17 May 2023 04:34:45 -0400
+X-MC-Unique: ru_K_doNN6GJ1nZYudWt9w-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f420ec766dso3523985e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 01:34:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684312484; x=1686904484;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WoyE4KJMZkzKP/aXFBkcgtSqzW5vCFF351V1GgKfqTs=;
+        b=BjYItg7b98v0tOc485gMl/J4m9JUAsryh86tXrFrheHu7TEX4X/QIwX8kqj6suPZ+c
+         OKEsOq7V3y6R1RJjqBOru9elskEbs0+6KvGDZUYEFovw7CkDpA0t43vHXO+joca6Dqr6
+         px4AzucwfxuxxXvg9C3iW+QYkkphjr985W+DbI/spTRZ1Qon0WeOAuHt9zrJcWNwOg+R
+         nK05RuuNoLac87z/w48Rx4R3u/Ti1vHUpIRXVjfmKq2PHhF7uBdlNtbW9qFrndMA7PpG
+         EdEBz1BAKC4iKEVh+/xbANHfwVKd2HEhiVJuQSFKX8tOtQtAwT73Kf1mYHh9MephSS3G
+         XjbQ==
+X-Gm-Message-State: AC+VfDyxw/wxaEesRYItERoDdwyu3eHb7aIY880SYSOY3LQkGRvaP7yM
+        DujQvwNyynFFN1vpWPnIyeEzd1ijP1vAh13xoOXuAMSOKJmMTgbKa50KFZfpau2l26deRECz0Z8
+        iQrfrHF5+rLA/QeImlqvH5clW
+X-Received: by 2002:a05:600c:2307:b0:3f4:2cf3:a542 with SMTP id 7-20020a05600c230700b003f42cf3a542mr18563293wmo.6.1684312483861;
+        Wed, 17 May 2023 01:34:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ69xCz2yc3tWerUY2z+evrEEbLpsBdhPCID8fyE+1EMtIzuO7zBap/5z+L7vWNzh3MQYaHFXA==
+X-Received: by 2002:a05:600c:2307:b0:3f4:2cf3:a542 with SMTP id 7-20020a05600c230700b003f42cf3a542mr18563263wmo.6.1684312483462;
+        Wed, 17 May 2023 01:34:43 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:3900:757e:83f8:a99d:41ae? (p200300cbc7073900757e83f8a99d41ae.dip0.t-ipconnect.de. [2003:cb:c707:3900:757e:83f8:a99d:41ae])
+        by smtp.gmail.com with ESMTPSA id 7-20020a05600c028700b003f182cc55c4sm1505469wmk.12.2023.05.17.01.34.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 01:34:43 -0700 (PDT)
+Message-ID: <a9312c59-215a-1213-459e-bf42af555f0c@redhat.com>
+Date:   Wed, 17 May 2023 10:34:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        regressions@lists.linux.dev,
-        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
-        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
-        denys.f@collabora.com, ricardo.canuelo@collabora.com,
-        kernelci@lists.linux.dev
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com>
- <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
- <CAKwvOdmSrAxx-YY1Na3BSdYuxXCPKK+F0K5V6i+adTn_bVJEsw@mail.gmail.com>
- <89961dfc-d40f-78e4-5d34-b86b7d152182@collabora.com>
- <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com>
- <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/3] mm: Move arch_do_swap_page() call to before
+ swap_free()
 Content-Language: en-US
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
+        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "surenb@google.com" <surenb@google.com>,
+        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
+        <Kuan-Ying.Lee@mediatek.com>,
+        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        vincenzo.frascino@arm.com,
+        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        eugenis@google.com, Steven Price <steven.price@arm.com>,
+        stable@vger.kernel.org
+References: <20230512235755.1589034-1-pcc@google.com>
+ <20230512235755.1589034-2-pcc@google.com>
+ <7471013e-4afb-e445-5985-2441155fc82c@redhat.com>
+ <ZGLLSYuedMsViDQG@google.com> <ZGLr7CzUL0A+mCRp@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZGLr7CzUL0A+mCRp@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
-
-On 16/05/23 04:31, Nick Desaulniers wrote:
-> On Wed, May 3, 2023 at 3:33 PM Shreeya Patel
-> <shreeya.patel@collabora.com> wrote:
+On 16.05.23 04:35, Peter Collingbourne wrote:
+> On Mon, May 15, 2023 at 05:16:09PM -0700, Peter Collingbourne wrote:
+>> On Sat, May 13, 2023 at 05:29:53AM +0200, David Hildenbrand wrote:
+>>> On 13.05.23 01:57, Peter Collingbourne wrote:
+>>>> Commit c145e0b47c77 ("mm: streamline COW logic in do_swap_page()") moved
+>>>> the call to swap_free() before the call to set_pte_at(), which meant that
+>>>> the MTE tags could end up being freed before set_pte_at() had a chance
+>>>> to restore them. One other possibility was to hook arch_do_swap_page(),
+>>>> but this had a number of problems:
+>>>>
+>>>> - The call to the hook was also after swap_free().
+>>>>
+>>>> - The call to the hook was after the call to set_pte_at(), so there was a
+>>>>     racy window where uninitialized metadata may be exposed to userspace.
+>>>>     This likely also affects SPARC ADI, which implements this hook to
+>>>>     restore tags.
+>>>>
+>>>> - As a result of commit 1eba86c096e3 ("mm: change page type prior to
+>>>>     adding page table entry"), we were also passing the new PTE as the
+>>>>     oldpte argument, preventing the hook from knowing the swap index.
+>>>>
+>>>> Fix all of these problems by moving the arch_do_swap_page() call before
+>>>> the call to free_page(), and ensuring that we do not set orig_pte until
+>>>> after the call.
+>>>>
+>>>> Signed-off-by: Peter Collingbourne <pcc@google.com>
+>>>> Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+>>>> Link: https://linux-review.googlesource.com/id/I6470efa669e8bd2f841049b8c61020c510678965
+>>>> Cc: <stable@vger.kernel.org> # 6.1
+>>>> Fixes: ca827d55ebaa ("mm, swap: Add infrastructure for saving page metadata on swap")
+>>>> Fixes: 1eba86c096e3 ("mm: change page type prior to adding page table entry")
+>>>
+>>> I'm confused. You say c145e0b47c77 changed something (which was after above
+>>> commits), indicate that it fixes two other commits, and indicate "6.1" as
+>>> stable which does not apply to any of these commits.
 >>
->> On 04/05/23 02:45, Nick Desaulniers wrote:
->>> On Wed, May 3, 2023 at 2:02 PM Shreeya Patel
->>> <shreeya.patel@collabora.com> wrote:
->>>> Hi Nick,
->>>>
->>>> On 28/04/23 22:57, Nick Desaulniers wrote:
->>>>> On Thu, Apr 27, 2023 at 4:54 AM Shreeya Patel
->>>>> <shreeya.patel@collabora.com> wrote:
->>>>>> Hi Nick,
->>>>>>
->>>>>> On 19/09/22 22:38, Nick Desaulniers wrote:
->>>>>>> cc-ifversion is GCC specific. Replace it with compiler specific
->>>>>>> variants. Update the users of cc-ifversion to use these new macros.
->>>>>>>
->>>>>>> Link: https://github.com/ClangBuiltLinux/linux/issues/350
->>>>>>> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
->>>>>>> Suggested-by: Bill Wendling <morbo@google.com>
->>>>>>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->>>>>>> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->>>>>> KernelCI found this patch causes a regression in the
->>>>>> baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
->>>>>> see the bisection report for more details [2].
->>>>>>
->>>>>> Let me know if you have any questions.
->>>>>>
->>>>>>
->>>>>> [1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
->>>>> Hi Shreeya,
->>>>> Thanks for the report.
->>>>>
->>>>> When I click the above link, then click `multi_v7_defconfig+debug` to
->>>>> get the config necessary to reproduce, I get an HTTP 404.
->>>>> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/kernel.config
->>>>>
->>>>> Same for zImage
->>>>> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/zImage
->>>> Apologies for the broken links. We will try to fix the important ones if
->>>> we can but in the meantime,
->>>> following is the correct link that you can refer.
->>>>
->>>> config :-
->>>> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/config/kernel.config
->>>>
->>>> zImage :-
->>>> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/kernel/zImage
->>>>
->>>> If you notice, they are present under the kernel directory and same way
->>>> you can find links for other kernel
->>>> builds if you'd like to check them out.
->>>>
->>>>> If I click on the log
->>>>> https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/lab-collabora/baseline-qemu_arm-virt-gicv3-uefi.txt
->>>>> It looks like the machine powered up, then powered off. Is the test
->>>>> actually failing?
->>>> I recommend checking the html logs from the kernelci dashboard.
->>>> Also, FYI baseline.login test failure means that the device failed to
->>>> boot which I think is causing by the issues that you pointed out.
->>>>
->>>> <3>[    0.417001][    T1] UBSAN: array-index-out-of-bounds in
->>>> ../arch/arm/mach-sunxi/mc_smp.c:811:29
->>>>
->>>> And potentially another issue with ftrace
->>>>
->>>> <4>[    0.000000][    T0] WARNING: CPU: 0 PID: 0 at
->>>> kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4
->>>>
->>>>
->>>> Let me know if you need more information from my side to reproduce this
->>>> on your end.
->>>>
->>>>
->>>> Thanks,
->>>> Shreeya Patel
->>> Hi Shreeya,
->>> I may need your help to reproduce the failure.
-> Hi Shreeya,
-> Sorry for the delay, I was out traveling last week.  I still need help
-> reproducing. Trying this again from scratch, my VM is now failing to
-> boot regardless of whether I revert the patch in question or not.
->
-> Can you please help verify this failure by hand, and see if applying
-> https://github.com/ClangBuiltLinux/linux/commit/45c4fb6095d872785e077942da896d65d87ab56b.patch
-> helps?  If you can repro; mind sharing your precise steps to reproduce?
+>> Sorry, the situation is indeed a bit confusing.
+>>
+>> - In order to make the arch_do_swap_page() hook suitable for fixing the
+>>    bug introduced by c145e0b47c77, patch 1 addresses a number of issues,
+>>    including fixing bugs introduced by ca827d55ebaa and 1eba86c096e3,
+>>    but we haven't fixed the c145e0b47c77 bug yet, so there's no Fixes:
+>>    tag for it yet.
+>>
+>> - Patch 2, relying on the fixes in patch 1, makes MTE install an
+>>    arch_do_swap_page() hook (indirectly, by making arch_swap_restore()
+>>    also hook arch_do_swap_page()), thereby fixing the c145e0b47c77 bug.
+>>
+>> - 6.1 is the first stable version in which all 3 commits in my Fixes: tags
+>>    are present, so that is the version that I've indicated in my stable
+>>    tag for this series. In theory patch 1 could be applied to older kernel
+>>    versions, but it wouldn't fix any problems that we are facing with MTE
+>>    (because it only fixes problems relating to the arch_do_swap_page()
+>>    hook, which older kernel versions don't hook with MTE), and there are
+>>    some merge conflicts if we go back further anyway. If the SPARC folks
+>>    (the previous only user of this hook) want to fix these issues with ADI,
+>>    they can propose their own backport.
+>>
+>>>> @@ -3959,7 +3960,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>>>>    	VM_BUG_ON(!folio_test_anon(folio) ||
+>>>>    			(pte_write(pte) && !PageAnonExclusive(page)));
+>>>>    	set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
+>>>> -	arch_do_swap_page(vma->vm_mm, vma, vmf->address, pte, vmf->orig_pte);
+>>>>    	folio_unlock(folio);
+>>>>    	if (folio != swapcache && swapcache) {
+>>>
+>>>
+>>> You are moving the folio_free_swap() call after the folio_ref_count(folio)
+>>> == 1 check, which means that such (previously) swapped pages that are
+>>> exclusive cannot be detected as exclusive.
+>>
+>> Ack. I will fix this in v2.
+> 
+> I gave this some thought and concluded that the added complexity needed
+> to make this hook suitable for arm64 without breaking sparc probably
+> isn't worth it in the end, and as I explained in patch 2, sparc ought
+> to be moving away from this hook anyway. So in v2 I replaced patches 1
+> and 2 with a patch that adds a direct call to the arch_swap_restore()
+> hook before the call to swap_free().
 
+As a side note, I recall that sparc code might be a bit fragile and 
+eventually broken already (arch_unmap_one()):
 
+https://lkml.kernel.org/r/d98bd1f9-e9b7-049c-7bde-3348b074eb18@redhat.com
 
-No worries, even I was out traveling last week so wouldn't have been 
-able to help you either.
-Ricardo from my team is currently testing the patch that you have sent. 
-We will let you know
-the results soon.
-
-I haven't really tried to manually reproduce it myself yet but I'll 
-check and let you know what I can
-do on my end.
-
+-- 
 Thanks,
-Shreeya Patel
 
->>> $ wget https://storage.kernelci.org/mainline/master/v6.3/arm/multi_v7_defconfig+debug/gcc-10/config/kernel.config
->>> -O .config
->>> $ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make -j128 olddefconfig all -s
->>> <launch qemu>
->>> / # mount -t proc /proc
->>> / # cat /proc/version
->>> Linux version 6.3.0 (root@61385772abae) (arm-linux-gnueabihf-gcc
->>> (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian)
->>> 2.35.2) #2 SMP Wed May  3 21:10:27 UTC 2023
->>>
->>> I was able to boot the resulting kernel to a command line.  Perhaps
->>> there's something about the userspace image that tickles this? Can you
->>> supply the rootfs that's used in testing?
->>
->> Following is the link to the rootfs for a different kernel build which
->> has the same test case failing.
->> http://storage.kernelci.org/images/rootfs/buildroot/buildroot-baseline/20230414.0/armel/rootfs.cpio.gz
->>
->>
->> Lava job :-
->> https://lava.collabora.dev/scheduler/job/10135631
->>
->> You can usually get the rootfs link and many more information through
->> the "definition" present on Lava job dashboard.
->>
->> Kernelci test id for the above job :-
->> https://linux.kernelci.org/test/case/id/64497865a4bab57def2e85e8/
->>
->>
->> Thanks,
->> Shreeya Patel
->>
->>>>> I was able to boot ARCH=arm defconfig with CC=arm-linux-gnueabihf-gcc
->>>>> (Debian 10.2.1-6) in QEMU just fine.  So I'm going to need some more
->>>>> information to help reproduce what specifically is failing.
->>>>>
->>>>> Linux version 6.3.0 (root@61385772abae) (arm-linux-gnueabihf-gcc
->>>>> (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian)
->>>>> 2.35.2) #1 SMP Fri Apr 28 17:19:59 UTC 2023
->>>>>
->>>>> ---
->>>>>
->>>>> It does look like UBSAN is flagging an array OOB:
->>>>>
->>>>> <3>[    0.417001][    T1] UBSAN: array-index-out-of-bounds in
->>>>> ../arch/arm/mach-sunxi/mc_smp.c:811:29
->>>>>
->>>>> And potentially another issue with ftrace
->>>>>
->>>>> <4>[    0.000000][    T0] WARNING: CPU: 0 PID: 0 at
->>>>> kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4
->>>>>
->>>>>
->>>>>
->>>>>> [2] https://groups.io/g/kernelci-results/message/40804
->>>>>>
->>>>>>
->>>>>> Thanks,
->>>>>> Shreeya Patel
->>>>>>
->>>>>> #regzbot introduced: 88b61e3bff93
->>>>>>
->>>>>>> ---
->>>>>>> Changes v3 -> v4:
->>>>>>> * Split into its own patch again from series, as per Masahiro.
->>>>>>> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
->>>>>>>       clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
->>>>>>>
->>>>>>>      Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
->>>>>>>      Makefile                                    |  6 ++---
->>>>>>>      drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
->>>>>>>      scripts/Makefile.compiler                   | 10 ++++---
->>>>>>>      scripts/Makefile.extrawarn                  |  4 +--
->>>>>>>      5 files changed, 29 insertions(+), 22 deletions(-)
->>>>>>>
->>>>>>> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
->>>>>>> index 11a296e52d68..ee7e3ea1fbe1 100644
->>>>>>> --- a/Documentation/kbuild/makefiles.rst
->>>>>>> +++ b/Documentation/kbuild/makefiles.rst
->>>>>>> @@ -682,22 +682,27 @@ more details, with real examples.
->>>>>>>          In the above example, -Wno-unused-but-set-variable will be added to
->>>>>>>          KBUILD_CFLAGS only if gcc really accepts it.
->>>>>>>
->>>>>>> -    cc-ifversion
->>>>>>> -     cc-ifversion tests the version of $(CC) and equals the fourth parameter
->>>>>>> -     if version expression is true, or the fifth (if given) if the version
->>>>>>> -     expression is false.
->>>>>>> +    gcc-min-version
->>>>>>> +     gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
->>>>>>> +     or equal to the provided value and evaluates to y if so.
->>>>>>>
->>>>>>>          Example::
->>>>>>>
->>>>>>> -             #fs/reiserfs/Makefile
->>>>>>> -             ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
->>>>>>> +             cflags-$(call gcc-min-version, 70100) := -foo
->>>>>>>
->>>>>>> -     In this example, ccflags-y will be assigned the value -O1 if the
->>>>>>> -     $(CC) version is less than 4.2.
->>>>>>> -     cc-ifversion takes all the shell operators:
->>>>>>> -     -eq, -ne, -lt, -le, -gt, and -ge
->>>>>>> -     The third parameter may be a text as in this example, but it may also
->>>>>>> -     be an expanded variable or a macro.
->>>>>>> +     In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
->>>>>>> +     $(CONFIG_GCC_VERSION) is >= 7.1.
->>>>>>> +
->>>>>>> +    clang-min-version
->>>>>>> +     clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
->>>>>>> +     than or equal to the provided value and evaluates to y if so.
->>>>>>> +
->>>>>>> +     Example::
->>>>>>> +
->>>>>>> +             cflags-$(call clang-min-version, 110000) := -foo
->>>>>>> +
->>>>>>> +     In this example, cflags-y will be assigned the value -foo if $(CC) is clang
->>>>>>> +     and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
->>>>>>>
->>>>>>>          cc-cross-prefix
->>>>>>>          cc-cross-prefix is used to check if there exists a $(CC) in path with
->>>>>>> diff --git a/Makefile b/Makefile
->>>>>>> index 298f69060f10..411c8480b37e 100644
->>>>>>> --- a/Makefile
->>>>>>> +++ b/Makefile
->>>>>>> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
->>>>>>>
->>>>>>>      KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
->>>>>>>      KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
->>>>>>> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->>>>>>>
->>>>>>>      ifdef CONFIG_CC_IS_CLANG
->>>>>>>      KBUILD_CPPFLAGS += -Qunused-arguments
->>>>>>> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
->>>>>>>      KBUILD_CFLAGS += -Wno-maybe-uninitialized
->>>>>>>      endif
->>>>>>>
->>>>>>> -ifdef CONFIG_CC_IS_GCC
->>>>>>>      # The allocators already balk at large sizes, so silence the compiler
->>>>>>>      # warnings for bounds checks involving those possible values. While
->>>>>>>      # -Wno-alloc-size-larger-than would normally be used here, earlier versions
->>>>>>> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
->>>>>>>      # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
->>>>>>>      # choice, we must perform a versioned check to disable this warning.
->>>>>>>      # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
->>>>>>> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
->>>>>>> -endif
->>>>>>> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
->>>>>>> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->>>>>>>
->>>>>>>      # disable invalid "can't wrap" optimizations for signed / pointers
->>>>>>>      KBUILD_CFLAGS       += -fno-strict-overflow
->>>>>>> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
->>>>>>> index cb81ed2fbd53..d70838edba80 100644
->>>>>>> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
->>>>>>> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
->>>>>>> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
->>>>>>>      endif
->>>>>>>
->>>>>>>      ifdef CONFIG_CC_IS_GCC
->>>>>>> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
->>>>>>> +ifneq ($(call gcc-min-version, 70100),y)
->>>>>>>      IS_OLD_GCC = 1
->>>>>>>      endif
->>>>>>>      endif
->>>>>>> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
->>>>>>> index 94d0d40cddb3..9d18fb91890e 100644
->>>>>>> --- a/scripts/Makefile.compiler
->>>>>>> +++ b/scripts/Makefile.compiler
->>>>>>> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
->>>>>>>      cc-disable-warning = $(call try-run,\
->>>>>>>          $(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
->>>>>>>
->>>>>>> -# cc-ifversion
->>>>>>> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
->>>>>>> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
->>>>>>> +# gcc-min-version
->>>>>>> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
->>>>>>> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
->>>>>>> +
->>>>>>> +# clang-min-version
->>>>>>> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
->>>>>>> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
->>>>>>>
->>>>>>>      # ld-option
->>>>>>>      # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
->>>>>>> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
->>>>>>> index 6ae482158bc4..5769c1939d40 100644
->>>>>>> --- a/scripts/Makefile.extrawarn
->>>>>>> +++ b/scripts/Makefile.extrawarn
->>>>>>> @@ -48,7 +48,7 @@ else
->>>>>>>      ifdef CONFIG_CC_IS_CLANG
->>>>>>>      KBUILD_CFLAGS += -Wno-initializer-overrides
->>>>>>>      # Clang before clang-16 would warn on default argument promotions.
->>>>>>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
->>>>>>> +ifneq ($(call clang-min-version, 160000),y)
->>>>>>>      # Disable -Wformat
->>>>>>>      KBUILD_CFLAGS += -Wno-format
->>>>>>>      # Then re-enable flags that were part of the -Wformat group that aren't
->>>>>>> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
->>>>>>>      KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
->>>>>>>      KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
->>>>>>>      # Requires clang-12+.
->>>>>>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
->>>>>>> +ifeq ($(call clang-min-version, 120000),y)
->>>>>>>      KBUILD_CFLAGS += -Wformat-insufficient-args
->>>>>>>      endif
->>>>>>>      endif
->>>
->
->
+David / dhildenb
+
