@@ -2,192 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7F5705E2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D75705E38
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 05:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjEQDiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 23:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S232502AbjEQDmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 23:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjEQDiA (ORCPT
+        with ESMTP id S232490AbjEQDmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 23:38:00 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4523F134;
-        Tue, 16 May 2023 20:37:58 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vir4JUF_1684294672;
-Received: from 30.240.113.228(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Vir4JUF_1684294672)
-          by smtp.aliyun-inc.com;
-          Wed, 17 May 2023 11:37:54 +0800
-Message-ID: <10fa299e-f742-4c5c-e252-6bb7db772850@linux.alibaba.com>
-Date:   Wed, 17 May 2023 11:37:50 +0800
+        Tue, 16 May 2023 23:42:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130DF35A4;
+        Tue, 16 May 2023 20:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684294936; x=1715830936;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=bEq3/lkC7Pzz/AEGPXybBFp4PDg/dC0oORu6X+NdoEA=;
+  b=aIE3v1CCyqGb9c5+TfNpGJCHUP7fsEUqr4jx57vekT+CzIidHll86n/B
+   6+zq6PDJBlIyWT166yz+Osye/S1ohqOM6672v7sJrZz4/mPEs8xnzcK+s
+   pvgJIGJSV8lrcXitW2PrqhEZgd0OW6RMajZDGXOCxJu1u5qrFGrMhWHDe
+   2sMPJCencB/OLFAeove1TYm0Qa5REf1nkMjWgjY6YKJXNzsyspx5HNw5V
+   rscap0z4iUqcOWAEFE6+Rx/eF7dXcXTPCR1wJlUcwoNd8wMJwKHEe5Dfb
+   EGaT0uBqGJ8FEFLytWlRLKFSJ6lZiRx6Z+rbn+JbVZeicZv/v8K/UTknx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="379842594"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="379842594"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 20:42:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10712"; a="948103305"
+X-IronPort-AV: E=Sophos;i="5.99,280,1677571200"; 
+   d="scan'208";a="948103305"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2023 20:42:11 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        =?utf-8?B?UXVuLXdlaSBMaW4g?= =?utf-8?B?KOael+e+pOW0tCk=?= 
+        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "surenb@google.com" <surenb@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        =?utf-8?Q?C?=
+         =?utf-8?Q?hinwen_Chang_=28=E5=BC=B5=E9=8C=A6=E6=96=87=29?= 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        =?utf-8?Q?Kuan-Ying_Lee_=28=E6=9D=8E?=
+         =?utf-8?Q?=E5=86=A0=E7=A9=8E=29?= <Kuan-Ying.Lee@mediatek.com>,
+        =?utf-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        vincenzo.frascino@arm.com,
+        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        eugenis@google.com, Steven Price <steven.price@arm.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] mm: Call arch_swap_restore() from do_swap_page()
+References: <20230517022115.3033604-1-pcc@google.com>
+        <20230517022115.3033604-2-pcc@google.com>
+Date:   Wed, 17 May 2023 11:40:58 +0800
+In-Reply-To: <20230517022115.3033604-2-pcc@google.com> (Peter Collingbourne's
+        message of "Tue, 16 May 2023 19:21:11 -0700")
+Message-ID: <87353v7hh1.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v4 3/4] drivers/perf: add DesignWare PCIe PMU driver
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, helgaas@kernel.org,
-        yangyicong@huawei.com, will@kernel.org,
-        Jonathan.Cameron@huawei.com, baolin.wang@linux.alibaba.com,
-        robin.murphy@arm.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        rdunlap@infradead.org, mark.rutland@arm.com,
-        zhuo.song@linux.alibaba.com
-References: <20230516130110.59632-4-xueshuai@linux.alibaba.com>
- <202305170639.XU3djFZX-lkp@intel.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <202305170639.XU3djFZX-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Peter Collingbourne <pcc@google.com> writes:
 
+> Commit c145e0b47c77 ("mm: streamline COW logic in do_swap_page()") moved
+> the call to swap_free() before the call to set_pte_at(), which meant that
+> the MTE tags could end up being freed before set_pte_at() had a chance
+> to restore them. Fix it by adding a call to the arch_swap_restore() hook
+> before the call to swap_free().
+>
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
+> Link: https://linux-review.googlesource.com/id/I6470efa669e8bd2f841049b8c=
+61020c510678965
+> Cc: <stable@vger.kernel.org> # 6.1
+> Fixes: c145e0b47c77 ("mm: streamline COW logic in do_swap_page()")
+> Reported-by: Qun-wei Lin (=E6=9E=97=E7=BE=A4=E5=B4=B4) <Qun-wei.Lin@media=
+tek.com>
+> Closes: https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d=
+434.camel@mediatek.com/
+> ---
+> v2:
+> - Call arch_swap_restore() directly instead of via arch_do_swap_page()
+>
+>  mm/memory.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/mm/memory.c b/mm/memory.c
+> index f69fbc251198..fc25764016b3 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3932,6 +3932,13 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>  		}
+>  	}
+>=20=20
+> +	/*
+> +	 * Some architectures may have to restore extra metadata to the page
+> +	 * when reading from swap. This metadata may be indexed by swap entry
+> +	 * so this must be called before swap_free().
+> +	 */
+> +	arch_swap_restore(entry, folio);
+> +
+>  	/*
+>  	 * Remove the swap entry and conditionally try to free up the swapcache.
+>  	 * We're already holding a reference on the page but haven't mapped it
 
-On 2023/5/17 07:21, kernel test robot wrote:
-> Hi Shuai,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on pci/next]
-> [also build test ERROR on pci/for-linus soc/for-next linus/master v6.4-rc2 next-20230516]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Shuai-Xue/PCI-move-Alibaba-Vendor-ID-linux-pci_ids-h/20230517-013326
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-> patch link:    https://lore.kernel.org/r/20230516130110.59632-4-xueshuai%40linux.alibaba.com
-> patch subject: [PATCH v4 3/4] drivers/perf: add DesignWare PCIe PMU driver
-> config: sh-allmodconfig
-> compiler: sh4-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/f576345a26fff4584ed49f0f42e03c65d8a7f2bf
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Shuai-Xue/PCI-move-Alibaba-Vendor-ID-linux-pci_ids-h/20230517-013326
->         git checkout f576345a26fff4584ed49f0f42e03c65d8a7f2bf
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/perf/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202305170639.XU3djFZX-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    drivers/perf/dwc_pcie_pmu.c: In function '__dwc_pcie_pmu_probe':
->>> drivers/perf/dwc_pcie_pmu.c:507:24: error: implicit declaration of function 'pci_find_vsec_capability'; did you mean 'pci_find_ext_capability'? [-Werror=implicit-function-declaration]
->      507 |                 vsec = pci_find_vsec_capability(pdev, PCI_VENDOR_ID_ALIBABA,
->          |                        ^~~~~~~~~~~~~~~~~~~~~~~~
->          |                        pci_find_ext_capability
->    cc1: some warnings being treated as errors
+Should you add
 
-This will be fixed by:
+Suggested-by: David Hildenbrand <david@redhat.com>
 
-- remove COMPILE_TEST and add depend on PCI in kconfig
+for 1/3 and 2/3.
 
-Thank you.
-Shuai
+It looks good for me for swap code related part.  Feel free to add
 
-> 
-> vim +507 drivers/perf/dwc_pcie_pmu.c
-> 
->    487	
->    488	static int __dwc_pcie_pmu_probe(struct dwc_pcie_pmu_priv *priv)
->    489	{
->    490		struct pci_dev *pdev = NULL;
->    491		struct dwc_pcie_pmu *pcie_pmu;
->    492		char *name;
->    493		u32 bdf;
->    494		int ret;
->    495	
->    496		INIT_LIST_HEAD(&priv->pmu_nodes);
->    497	
->    498		/* Match the rootport with VSEC_RAS_DES_ID, and register a PMU for it */
->    499		for_each_pci_dev(pdev) {
->    500			u16 vsec;
->    501			u32 val;
->    502	
->    503			if (!(pci_is_pcie(pdev) &&
->    504			      pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT))
->    505				continue;
->    506	
->  > 507			vsec = pci_find_vsec_capability(pdev, PCI_VENDOR_ID_ALIBABA,
->    508							DWC_PCIE_VSEC_RAS_DES_ID);
->    509			if (!vsec)
->    510				continue;
->    511	
->    512			pci_read_config_dword(pdev, vsec + PCI_VNDR_HEADER, &val);
->    513			if (PCI_VNDR_HEADER_REV(val) != 0x04 ||
->    514			    PCI_VNDR_HEADER_LEN(val) != 0x100)
->    515				continue;
->    516			pci_dbg(pdev,
->    517				"Detected PCIe Vendor-Specific Extended Capability RAS DES\n");
->    518	
->    519			bdf = PCI_DEVID(pdev->bus->number, pdev->devfn);
->    520			name = devm_kasprintf(priv->dev, GFP_KERNEL, "dwc_rootport_%x",
->    521					      bdf);
->    522			if (!name)
->    523				return -ENOMEM;
->    524	
->    525			/* All checks passed, go go go */
->    526			pcie_pmu = devm_kzalloc(&pdev->dev, sizeof(*pcie_pmu), GFP_KERNEL);
->    527			if (!pcie_pmu) {
->    528				pci_dev_put(pdev);
->    529				return -ENOMEM;
->    530			}
->    531	
->    532			pcie_pmu->pdev = pdev;
->    533			pcie_pmu->ras_des = vsec;
->    534			pcie_pmu->nr_lanes = pcie_get_width_cap(pdev);
->    535			pcie_pmu->pmu = (struct pmu){
->    536				.module		= THIS_MODULE,
->    537				.attr_groups	= dwc_pcie_attr_groups,
->    538				.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
->    539				.task_ctx_nr	= perf_invalid_context,
->    540				.event_init	= dwc_pcie_pmu_event_init,
->    541				.add		= dwc_pcie_pmu_event_add,
->    542				.del		= dwc_pcie_pmu_event_del,
->    543				.start		= dwc_pcie_pmu_event_start,
->    544				.stop		= dwc_pcie_pmu_event_stop,
->    545				.read		= dwc_pcie_pmu_event_update,
->    546			};
->    547	
->    548			/* Add this instance to the list used by the offline callback */
->    549			ret = cpuhp_state_add_instance(dwc_pcie_pmu_hp_state,
->    550						       &pcie_pmu->cpuhp_node);
->    551			if (ret) {
->    552				pci_err(pcie_pmu->pdev,
->    553					"Error %d registering hotplug @%x\n", ret, bdf);
->    554				return ret;
->    555			}
->    556			ret = perf_pmu_register(&pcie_pmu->pmu, name, -1);
->    557			if (ret) {
->    558				pci_err(pcie_pmu->pdev,
->    559					"Error %d registering PMU @%x\n", ret, bdf);
->    560				cpuhp_state_remove_instance_nocalls(
->    561					dwc_pcie_pmu_hp_state, &pcie_pmu->cpuhp_node);
->    562				return ret;
->    563			}
->    564	
->    565			/* Add registered PMUs and unregister them when this driver remove */
->    566			list_add(&pcie_pmu->pmu_node, &priv->pmu_nodes);
->    567		}
->    568	
->    569		return 0;
->    570	}
->    571	
-> 
+Acked-by: "Huang, Ying" <ying.huang@intel.com>
+
+to 1/3 and 2/3.
+
+Best Regards,
+Huang, Ying
