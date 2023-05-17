@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BDB707319
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7216A70734B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjEQUfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S229505AbjEQUoZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 May 2023 16:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjEQUft (ORCPT
+        with ESMTP id S229449AbjEQUoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:35:49 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05CD9C;
-        Wed, 17 May 2023 13:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Ey8b2wCnPF7xdh+KB4nIGUzJfjRonObtGEtsoE4j8RY=; b=hEdIQoEqRA1lp9HnT03XaoaypF
-        nz9WgYdhYbDQeavrHE5nt10SgOO4N3Nv9ZIVLFx7GvCepeprs+swsOGNPHsJg2VIcFWGhkeJ0TVin
-        fR5XYxLHmmwzVwb/QgNeJoJZS2NvazKIwmKa/iBzxKRIyiRqCl5ThSUvgFERLrO3/PbM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pzNrv-00DAca-I1; Wed, 17 May 2023 22:35:31 +0200
-Date:   Wed, 17 May 2023 22:35:31 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v2 1/2] net: dsa: microchip: ksz8: Make flow
- control, speed, and duplex on CPU port configurable
-Message-ID: <da74fe43-6972-417e-981e-b7341945ae14@lunn.ch>
-References: <20230517121034.3801640-1-o.rempel@pengutronix.de>
- <20230517121034.3801640-2-o.rempel@pengutronix.de>
+        Wed, 17 May 2023 16:44:23 -0400
+X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 13:44:21 PDT
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5C730E0;
+        Wed, 17 May 2023 13:44:21 -0700 (PDT)
+Received: from omf18.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 846F9140519;
+        Wed, 17 May 2023 20:36:22 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id 5206C32;
+        Wed, 17 May 2023 20:36:19 +0000 (UTC)
+Message-ID: <4a8999ffb68c3044e14d1c319e80de44177022c4.camel@perches.com>
+Subject: Re: [PATCH] checkpatch: Check for strcpy and strncpy too
+From:   Joe Perches <joe@perches.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Wed, 17 May 2023 13:36:17 -0700
+In-Reply-To: <20230517201349.never.582-kees@kernel.org>
+References: <20230517201349.never.582-kees@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517121034.3801640-2-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Rspamd-Queue-Id: 5206C32
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
+X-Rspamd-Server: rspamout05
+X-Stat-Signature: 8yk6hhqdpxkz46ko453zis3y9fopcc6u
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+cqv/78fYjwUQhjcPMuWUWsULOChk42DI=
+X-HE-Tag: 1684355779-359496
+X-HE-Meta: U2FsdGVkX1+AvxqASz4if7H4iTq6FS7yJwsMLxC+XjnQHjY7Rr7eJuzYTcr1FJXsSH1z0W1DQMub9jnnslpVZw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 02:10:33PM +0200, Oleksij Rempel wrote:
-> Allow flow control, speed, and duplex settings on the CPU port to be
-> configurable. Previously, the speed and duplex relied on default switch
-> values, which limited flexibility. Additionally, flow control was
-> hardcoded and only functional in duplex mode. This update enhances the
-> configurability of these parameters.
+On Wed, 2023-05-17 at 13:13 -0700, Kees Cook wrote:
+> Warn about strcpy(), strncpy(), and strlcpy(). Suggest strscpy() and
+> include pointers to the open KSPP issues for each, which has further
+> details and replacement procedures.
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Cc: Andy Whitcroft <apw@canonical.com>
+> Cc: Joe Perches <joe@perches.com>
+> Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
+> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 > ---
->  drivers/net/dsa/microchip/ksz8.h       |  4 +++
->  drivers/net/dsa/microchip/ksz8795.c    | 47 ++++++++++++++++++++++++--
->  drivers/net/dsa/microchip/ksz_common.c |  1 +
->  3 files changed, 50 insertions(+), 2 deletions(-)
+>  scripts/checkpatch.pl | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
-> index e68465fdf6b9..ec02baca726f 100644
-> --- a/drivers/net/dsa/microchip/ksz8.h
-> +++ b/drivers/net/dsa/microchip/ksz8.h
-> @@ -58,5 +58,9 @@ int ksz8_switch_detect(struct ksz_device *dev);
->  int ksz8_switch_init(struct ksz_device *dev);
->  void ksz8_switch_exit(struct ksz_device *dev);
->  int ksz8_change_mtu(struct ksz_device *dev, int port, int mtu);
-> +void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
-> +			      unsigned int mode, phy_interface_t interface,
-> +			      struct phy_device *phydev, int speed, int duplex,
-> +			      bool tx_pause, bool rx_pause);
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index b30114d637c4..a90e0ede53ad 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -6997,10 +6997,22 @@ sub process {
+>  #			}
+>  #		}
 >  
->  #endif
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index f56fca1b1a22..75b98a5d53af 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -1371,6 +1371,51 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
->  	}
->  }
+> +# strcpy uses that should likely be strscpy
+> +		if ($line =~ /\bstrcpy\s*\(/) {
+> +			WARN("STRCPY",
+> +			     "Use of strcpy has been replaced with strscpy - see: https://github.com/KSPP/linux/issues/88\n" . $herecurr);
+
+I would prefer something like
+
+			"Prefer strscpy over strcpy etc..."
+
+as there are just too many existing uses of strcpy that can not
+easily be converted.
+
+$ git grep -w strcpy -- "*.[chS]" | wc -l
+2015
+
+> +		}
+> +
+>  # strlcpy uses that should likely be strscpy
+>  		if ($line =~ /\bstrlcpy\s*\(/) {
+>  			WARN("STRLCPY",
+> -			     "Prefer strscpy over strlcpy - see: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw\@mail.gmail.com/\n" . $herecurr);
+> +			     "Use of strlcpy has been replaced with strscpy - see: https://github.com/KSPP/linux/issues/89\n" . $herecurr);
+> +		}
+> +
+> +# strncpy uses that should likely be strscpy or strscpy_pad
+> +		if ($line =~ /\bstrncpy\s*\(/) {
+> +			WARN("STRNCPY",
+> +			     "Prefer strscpy, strscpy_pad, or __nonstring over strncpy - see: https://github.com/KSPP/linux/issues/90\n" . $herecurr);
+>  		}
 >  
-> +/**
-> + * ksz8_upstram_link_up - Configures the CPU/upstream port of the switch.
+>  # typecasts on min/max could be min_t/max_t
 
-Looks like a typ0: upstream
-
-> +static void ksz8_upstram_link_up(struct ksz_device *dev, int port, int speed,
-> +				 int duplex, bool tx_pause, bool rx_pause)
-> +{
-> +	u8 ctrl = 0;
-> +
-> +	if (duplex) {
-> +		if (tx_pause || rx_pause)
-> +			ctrl |= SW_FLOW_CTRL;
-> +	} else {
-> +		ctrl |= SW_HALF_DUPLEX;
-> +		if (tx_pause || rx_pause)
-> +			ctrl |= SW_HALF_DUPLEX_FLOW_CTRL;
-> +	}
-> +
-> +	if (speed == SPEED_10)
-> +		ctrl |= SW_10_MBIT;
-
-Other speeds don't need to be handled? Maybe a comment why 10 is
-special?
-
-	Andrew
-
----
-pw-bot: cr
