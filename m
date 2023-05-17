@@ -2,95 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65921705C49
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA18A705C4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 03:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjEQBTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 21:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
+        id S230494AbjEQBVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 21:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbjEQBTL (ORCPT
+        with ESMTP id S229452AbjEQBVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 21:19:11 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED3946B8;
-        Tue, 16 May 2023 18:18:57 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34H1Brql017084;
-        Wed, 17 May 2023 01:18:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=vIE2W4w77++8cdSRWw17/uGI+S/ioy1NWgJSZqgWq0k=;
- b=Say9xVllENx5owHUYNktS930wTKTj8lYf4apWDiNJdmpkFN1fzA4xTIhwLDuA4L5zsrJ
- 34n+lbO/P2Lmr4FjE3CSCZdrofFeXXRTgioGz0U31BpRh4j7QfSA6HxxtJHPjE0h1Sz6
- diqtBA7PNZlLOjYUt07LJF6fcl3T1cJj4Hzxusz8QC2ccj1toR2v+26xc2GOHeaFRcM5
- sC0o7moIQWWxPEHc04l39r7n/5Zqwdc8+LYNW5gtJkkzkJ7LSeG5dsV5Kz7lwoSYhjsz
- NmyMY+IZJtnGzfD6VzClwT0I/cRc4J/Kd0Y9GDj1Ql99a2GJ1rRRFPeylz+stamOoldo zw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmn22r4hu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 01:18:36 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34H1EoQV024877;
-        Wed, 17 May 2023 01:18:35 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qmn22r4h6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 01:18:35 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34H0JDLU025221;
-        Wed, 17 May 2023 01:18:34 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3qj265yy73-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 01:18:34 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34H1IXeB31392250
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 May 2023 01:18:33 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE9915805D;
-        Wed, 17 May 2023 01:18:32 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C63755805C;
-        Wed, 17 May 2023 01:18:30 +0000 (GMT)
-Received: from sig-9-77-133-203.ibm.com (unknown [9.77.133.203])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 17 May 2023 01:18:30 +0000 (GMT)
-Message-ID: <e8c470bcf50282680300cd04a6aba0d0dbdef035.camel@linux.ibm.com>
-Subject: Re: [PATCH 3/3] integrity: Remove EXPERIMENTAL from Kconfig
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
-        dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, jlee@suse.com, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Tue, 16 May 2023 21:18:30 -0400
-In-Reply-To: <20230508220708.2888510-4-eric.snowberg@oracle.com>
-References: <20230508220708.2888510-1-eric.snowberg@oracle.com>
-         <20230508220708.2888510-4-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LwaftEa0i45zaMhbeCaoP0_meuq_ur0_
-X-Proofpoint-GUID: YOAFi2lIcuThCqoQJupaJ-ottlMst4CO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-16_14,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- suspectscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305170006
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        Tue, 16 May 2023 21:21:43 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B750646B6;
+        Tue, 16 May 2023 18:21:42 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ae50da739dso1230065ad.1;
+        Tue, 16 May 2023 18:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684286502; x=1686878502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dc5kCvbNWz3KM2SNUBOoevcDuTxR/og4VBr5RaEEGus=;
+        b=QjV4sMA0vpAF1Zbq8t+2lq2LPbm+asq9DFF85vgRjw54vytEpt3eMOnlOZ3/hYKfut
+         fg37O2x85XtFIxq97+xB2BOJBHh4dc1CvKnJTbIVk4EEDr1W08nlgy6YLQZK0xCA0rjO
+         KPh2aYjCktdn8uBh4d3zdGAuX9/H1BOwNX8jTh4hD78yOV0XRhUJ6fTx70buM0VnQeEJ
+         wS92wzUnY7+GjMfeGtH7dhiMXPL1fuXoSJ4foNsQ54ccC8axf2ZOaeZOO5brr227n4kD
+         yntIrpI1EDAggAsOsiU3av2I70H5XXVG6R/2MXM6pe5s8rtWz2n7OBsjU5qJj/wC1qTk
+         bytA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684286502; x=1686878502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dc5kCvbNWz3KM2SNUBOoevcDuTxR/og4VBr5RaEEGus=;
+        b=feJq7z/ylHGY1ZfRZNGQZPfa4vLzMRjqVrqVWSY7VxMlusd1WsGVd3BQz8AgaZNNh7
+         lQSwr02mSfzfueXcXtYQ/4NDVptw6Wxf5wYViXOG6AYgy2M6QMP2muV97GgBj2P1ogD4
+         crwpk2vAZxKZYyJ2QjEu757wNFIg9yi5/dVM8Y5LVstbGJlH2RABlxEjrxreUb7pCj0w
+         EJ+EwB3r3B35VALo4prxWKfU9N3YNrVNwWFumc0nSKoDfyn+VVqH+T1My0lRwGcHIAQL
+         W+Hb5bZACzlJ6Im2VYQw7d5JUWvgfOqRQVRsxxS9PMHBRDN1scC4qzk9V6ItlGB28d2a
+         sQCA==
+X-Gm-Message-State: AC+VfDwkTaKQA20ULhifxK7ubuxRrtGZnQA1KaDFTEEBSJqmGRlwXsdm
+        msUgUMSPtuiZP7GZdXQ+zWY=
+X-Google-Smtp-Source: ACHHUZ7xl6fh/WH6JnOATEgOGGGGp3TvP/rtjK58iuVtwTmuT+XxljRplIMLnEAwpHLQ7L1bZrCE0Q==
+X-Received: by 2002:a17:902:ec85:b0:1ad:e746:ca50 with SMTP id x5-20020a170902ec8500b001ade746ca50mr22360069plg.2.1684286502180;
+        Tue, 16 May 2023 18:21:42 -0700 (PDT)
+Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
+        by smtp.gmail.com with ESMTPSA id ay8-20020a1709028b8800b001a9a3b3f931sm16181989plb.99.2023.05.16.18.21.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 May 2023 18:21:41 -0700 (PDT)
+Date:   Wed, 17 May 2023 09:21:36 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "johan@kernel.org" <johan@kernel.org>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "maz@kernel.org" <maz@kernel.org>,
+        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] gpiolib: Avoid side effects in gpio_is_visible()
+Message-ID: <ZGQsIEmrWlM0fK9v@sol>
+References: <20230512042806.3438373-1-chris.packham@alliedtelesis.co.nz>
+ <CACRpkdYz9ipNTo2ORXKWy5Q4uCpKL=9Gd+kK76pestX7Onuz-Q@mail.gmail.com>
+ <b36fcdf1-45ab-0c06-efe4-237df0612466@alliedtelesis.co.nz>
+ <CACRpkdbiSAFoJP_JB1d_6gQ+Xx7Y+mLAh=C6Za+fpyWuRe6Gbw@mail.gmail.com>
+ <31a23398-9b0e-4a19-3576-84fcfd3ce4b5@alliedtelesis.co.nz>
+ <ZGQH8/hH0Llx3rzZ@sol>
+ <a61415db-fa3f-2fce-9c21-08d8dd026960@alliedtelesis.co.nz>
+ <ZGQkEdZ6DoJbgiFh@sol>
+ <457859be-257a-5528-d5dd-d59c4c9c0636@alliedtelesis.co.nz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <457859be-257a-5528-d5dd-d59c4c9c0636@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,12 +85,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-08 at 18:07 -0400, Eric Snowberg wrote:
-> Remove the EXPERIMENTAL from the
-> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY Kconfig
-> now that digitalSignature usage enforcement is set.
+On Wed, May 17, 2023 at 01:07:25AM +0000, Chris Packham wrote:
 > 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> On 17/05/23 12:47, Kent Gibson wrote:
+> > On Tue, May 16, 2023 at 11:50:42PM +0000, Chris Packham wrote:
+> >> Hi Kent,
+> >>
+> >>
+> > Given appropriate line names, that is already something you can do with
+> > the libgpiod v2 tools.  Something like:
+> >
+> > `for x in gpiochip*; do gpioset -c x tx-dis=1; done`
+> Would that deal with the fact the GPIO lines are port1-tx-dis, 
+> port2-tx-dis, ... port96-tx-dis?
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+That is assuming the lines are all given the same name - "tx-dis".
+
+If the line names are all distinct, and you can generate the list, then
+you could provide that list to gpioset instead.
+e.g.
+`gpioset port1-tx-dis=1 port2-tx-dis=1 ....`
+
+and it will work out which lines are on which chips.
+
+Cheers,
+Kent.
 
