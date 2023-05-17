@@ -2,129 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1C8706E37
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18B1706E4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjEQQdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S229773AbjEQQhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjEQQdC (ORCPT
+        with ESMTP id S229602AbjEQQhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:33:02 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048372108
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:33:00 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561d5b34e10so5356747b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1684341179; x=1686933179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=seiQZ9YiOuM9ev2SDnncT8dHc6tNpiemL2yol+RQQmc=;
-        b=rARhUCmEST2pQfbq/THE9kQrsVUKD5cL8fz4mXj7808tMytYuZe7snXExsaIC0DinJ
-         r9gp+0RQBbC+st99eMXxz+oXJPzKNXaMQZohevPlt6IJR1f1ziqr22locJ6EsLGMVw/1
-         s+EMTIB0qyD6ZMGffR4ZeD2WQ0swHln2rxkCM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684341179; x=1686933179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=seiQZ9YiOuM9ev2SDnncT8dHc6tNpiemL2yol+RQQmc=;
-        b=KiIH/FNhJ0YmkLV7hLXU0xqjo53poGej0PFb1AMmKIzhGTm2HEfdyHclrLoM1Nwjx5
-         cFnV5KrC7k2zIFvFDbozcCpNVNWIMvA5y5+ho2W2v6tIDgBAH9aFDsB3QaDzPuMDhnAk
-         kfdDdT5B6CFxiJLMHP3JI5Pib7lbQGwVbzyzAIppqJNhChyc0i0VFIe6oTcIPvxOS5wX
-         T1W/V3EkdMdQgy7j2y6IAAgg7BwXgqq9bwz1NJbXFZV4DuRreG1fcJ9hzQxQX9b/nged
-         GewRTT3J4cKfcHA5Nl8baB9AaXA7X8+K81uwPbMrB32coz4zmC8NP6aNGuw/DyHcb6HO
-         8oCg==
-X-Gm-Message-State: AC+VfDyveqdyoUZ+27EkM0AgzcOqPivlXMy/aLB79+SkW6sbfl1cKxJ0
-        Tm7dF3NL7uUd096fE4eaK5szyYYeR64MlA9kqA2eKw==
-X-Google-Smtp-Source: ACHHUZ5G6ubA44duLT/TEAQihOcSC/J+UBoHnxsofv8biC5kLtL6cO4NiUzdIWWkBRLS62id8kmDPVQbLVllmNv99s8=
-X-Received: by 2002:a81:1b4c:0:b0:55a:776e:95f3 with SMTP id
- b73-20020a811b4c000000b0055a776e95f3mr1957775ywb.25.1684341179202; Wed, 17
- May 2023 09:32:59 -0700 (PDT)
+        Wed, 17 May 2023 12:37:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FFFB3;
+        Wed, 17 May 2023 09:37:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B71ED61A1E;
+        Wed, 17 May 2023 16:37:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B40C433D2;
+        Wed, 17 May 2023 16:37:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684341449;
+        bh=06Z0AwxSNoOJ/iYAWocPIk6y4yMewQTiHHzN6mMWoiQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bTlZa9I17UidvuKZJ03+fRwOBPrSNyjiibFWQgk5r0wxq0AMb4KnB8zfDynJSoxic
+         ct0XZmfFupS8SwQ5lyTKJx6z87Ez17nxmiBylp84BoytAyZ3KJsu1R5bAqjlVKZBD5
+         oAQq4XZ1QuVAkKXAlrVgG9hb5uFiBiQX9Ny06vaTjEiRdK1B/D32EY4+s0XDupoFLv
+         wujKRnugBiftnH8DsXGa+84L4DeNcNLt+Xgga6BW3wmeXgxNB9hCreDtxe7oGyD6vS
+         XeOZ4t3CLSShHYfh0AmZB7mS/RBiQOBh2TwaansRtTjpvXX2UJQ8sTvU0YKmvQn+xc
+         xoJi7fyi/CVQQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pzK9a-0006Wr-C1; Wed, 17 May 2023 18:37:30 +0200
+Date:   Wed, 17 May 2023 18:37:30 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
+ for qcom wrapper
+Message-ID: <ZGUCykpDFt9zgeTU@hovoldconsulting.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-7-quic_kriskura@quicinc.com>
+ <20230515222730.7snn2i33gkg6ctd2@ripper>
+ <bc347624-4539-4a3a-9399-9b4e272cdb32@quicinc.com>
 MIME-Version: 1.0
-References: <CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com>
- <023f6cf9-0f08-f27e-d203-5ff78faf110f@linaro.org> <CAO9szn1EsbuPSRrOW8CLqhp+QUcL=9NE93FAwsg2n3htd_aJTw@mail.gmail.com>
- <CAMty3ZCAP6CRsJWMUZZ6+hd5igX3NgyNfhdEv2FwuDtqj4iaaA@mail.gmail.com> <HB0TUR.1IPEEV2C5LMB1@gmail.com>
-In-Reply-To: <HB0TUR.1IPEEV2C5LMB1@gmail.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Wed, 17 May 2023 22:02:47 +0530
-Message-ID: <CAMty3ZCSUx-81m4SQcJZvUq3NyhzZbe8ow+LiV7iyUmVLCmNYQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: display: panel: add panel-mipi-dsi-bringup
-To:     Paulo <pavacic.p@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        neil.armstrong@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, sam@ravnborg.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc347624-4539-4a3a-9399-9b4e272cdb32@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, May 16, 2023 at 07:49:14AM +0530, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 5/16/2023 3:57 AM, Bjorn Andersson wrote:
+> > On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
 
-Please don't post, use inline replies.
+> >> -#define PWR_EVNT_IRQ_STAT_REG			0x58
+> >> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
+> >> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
+> >> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
+> >> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
+> >>   #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
+> >>   #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
+> >>   
+> >> @@ -93,6 +96,13 @@ struct dwc3_qcom {
+> >>   	struct icc_path		*icc_path_apps;
+> >>   };
+> >>   
+> >> +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
+> >> +			PWR_EVNT_IRQ1_STAT_REG,
+> >> +			PWR_EVNT_IRQ2_STAT_REG,
+> >> +			PWR_EVNT_IRQ3_STAT_REG,
+> >> +			PWR_EVNT_IRQ4_STAT_REG,
+> > 
+> > Seems to be excessive indentation of these...
+> > 
+> > Can you also please confirm that these should be counted starting at 1 -
+> > given that you otherwise talk about port0..N-1?
 
-On Wed, May 17, 2023 at 6:34=E2=80=AFPM Paulo <pavacic.p@gmail.com> wrote:
->
-> On Wed, May 17 2023 at 05:50:22 PM +0530, Jagan Teki
-> <jagan@amarulasolutions.com> wrote:
->  > Just to add a few pieces of information for you to understand better
->  > on the context of dsi panels. DSI panels can be part of
-> panel-simple.c
->  > or panel-<vendor-part>.c DSI panels whose init and exit sequence is
->  > generic are suitable to add it in panel-simple and have bindings on
->  > panel-simple.yml.
->
-> This panel doesn't fit that well into panel-simple.c since it has
-> initialization sequence. For that reason it would fit more into
-> panel-sortofsimple.c which didn't exist so I have created new driver
-> and called it panel-mipi-dsi-bringup.c.
->
->  > Some DSI panels have specific init and exit
->  > sequences in terms of power, reset and DCS then those have separate
->  > drivers to handle and whose driver name must be panel-<vendor-part>.c
->  > or similar and bindings also follow a similar naming convention.
->
-> I have made a driver exactly for that purpose. Driver that allows
-> adding new panels which have specific init sequences (and of course
-> timings and other stuff). fannal,c3004 can be seen as a working example.
->
-> Here is code snippet from the driver:
-> ```
-> static const struct brup_panel_info brup_fannal_c3004_panel_info =3D {
->  .display_mode =3D &brup_fannal_c3004_display_mode,
->  .num_of_dsi_lanes =3D 2, //how many wires are connected to the panel
->  .video_mode =3D BRUP_VIDEO_MODES[BRUP_SYNC_PULSE],
->  .mipi_dsi_format =3D MIPI_DSI_FMT_RGB888,
->  .mipi_dsi_mode_flags =3D
->   MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_VSYNC_FLUSH |
->   MIPI_DSI_MODE_VIDEO_HSE | MIPI_DSI_MODE_NO_EOT_PACKET,
->  .bus_flags =3D DRM_BUS_FLAG_DE_LOW | DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE=
-,
->  .panel_enable_function =3D &brup_panel_fannal_c3004_enable_function
-> };
-> ```
-> where enable function is function with init sequence and other values
-> are values that might be different for different displays.
->
-> All the inputs are appreciated as this is my first time submitting
-> patch. If you see anything that is odd to you please reach out to me.
-> All in all I believe I now understand how should device tree look and
-> the reasons/ideology behind it.
+>    I am fine with either way. Since this just denoted 4 different ports, 
+> I named them starting with 1. Either ways, we will run through array 
+> from (0-3), so we must be fine.
 
-So, the driver has to be panel-fannal-c3004.c and binding to be
-fannal,c3004.yaml.
+Actually, the USB ports are indexed from 1, so the above naming may or
+may not be correct depending on how they are defined.
 
-Thanks,
-Jagan.
+> >> +};
+> >> +
+> >>   static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
+> >>   {
+> >>   	u32 reg;
+> >> @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+> >>   {
+> >>   	u32 val;
+> >>   	int i, ret;
+> >> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> >>   
+> >>   	if (qcom->is_suspended)
+> >>   		return 0;
+> >>   
+> >> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
+> >> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
+> >> -		dev_err(qcom->dev, "HS-PHY not in L2\n");
+> >> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
+> > 
+> > In the event that the dwc3 core fails to acquire or enable e.g. clocks
+> > its drvdata will be NULL. If you then hit a runtime pm transition in the
+> > dwc3-qcom glue you will dereference NULL here. (You can force this issue
+> > by e.g. returning -EINVAL from dwc3_clk_enable()).
+> > 
+> > So if you're peaking into qcom->dwc3 you need to handle the fact that
+> > dwc might be NULL, here and in resume below.
+> > 
+> Thanks for catching this. You are right, there were instances where the 
+> we saw probe for dwc3 being deferred while the probe for dwc3-qcom was 
+> still successful [1]. In this case, if the dwc3 probe never happened and 
+> system tries to enter suspend, we might hit a NULL pointer dereference.
+
+I don't think we should be adding more of these layering violations. A
+parent device driver has no business messing with the driver data for a
+child device which may or may not even have probed yet.
+
+I added a FIXME elsewhere in the driver about fixing up the current
+instances that have already snuck in (which in some sense is even worse
+by accessing driver data of a grandchild device).
+
+We really need to try sort this mess out and how to properly handle the
+interactions between these layers (e.g. glue, dwc3 core and xhci). This
+will likely involve adding callbacks from the child to the parent, for
+example, when the child is suspending.
+
+Johan
