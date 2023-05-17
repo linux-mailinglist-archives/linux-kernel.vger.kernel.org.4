@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7570C706713
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CA6706716
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 13:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjEQLqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 07:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S230129AbjEQLqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 07:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjEQLqq (ORCPT
+        with ESMTP id S229921AbjEQLqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 07:46:46 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F015340DB
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:46:44 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52079a12451so413010a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:46:44 -0700 (PDT)
+        Wed, 17 May 2023 07:46:49 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FBF30C1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:46:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-24e5d5782edso786830a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684324004; x=1686916004;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RFzuu4N5fQjgRDDnnSeSZLGRU4lI0OQgLcecIxUQhiw=;
-        b=zbIyMbv7Wj7QKL0JlRXH1I1LWAzjbwqYQZELjaaH5JBLnOMywqLLxlnqGGz90Nv0YD
-         cOaR0Vx97w3xYx/z/lHkW5pzUvjdB+AJHz65heCAKNVgbhqhKDxsJSjSjytEebiU2iHD
-         51P7j7JRY8echQFn1xXxQG9WyTGTCOn2WxfOMSukSGGugX8Ml1+Bqyk9eTQ/P/OfAdqH
-         VUMfS2zM7xQOBj0hjfUYpc5NVV9GYPgw4FUDMfeyNQohgzo9d5MoosOeuSC8wySKOu4b
-         yUSLoKvwWrXwQLSRFvboh2RvJPVo3mHI/VzPCGrcjWwK6mKvOoLEkOTtbX1Z0bZrMEA2
-         2XgQ==
+        d=linaro.org; s=google; t=1684324008; x=1686916008;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RwNQCA9ozgCFKqQivomJuANGu4rucg7HtzAq9d/gM0o=;
+        b=z3+Ugw4k7EP8q1WKGKC5FCv+BJdDqyFA7a+iyE7kIv60S8X4NnTL1Wo4zmHQ/dGUwG
+         TBWUWU5jKvFKU5DmR+vGOBtGJe9qBeGnJ2g6Ce94WiTplmmHuj/ifJLa5xmJ5u7ivgbJ
+         3nFXw2G8RwvmuSTyPx3PlwEXpkkoCA4Q0e+wI+yx9EZeWLweViqZ68PPtDH8fFchEuai
+         V2uDi3SsrX5bTmaCj+eX5hLHlzxSJ5E9Xuvy1P0i0jkvTogyi7DosRcGQFHAg4+MSAiO
+         H/0Nm6oqYo5HKLExVW5ekrChA7JT+AwuqwTXeEB5r6+GzfFyMC0P9Jdu4kB58FoYASKD
+         LJjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684324004; x=1686916004;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RFzuu4N5fQjgRDDnnSeSZLGRU4lI0OQgLcecIxUQhiw=;
-        b=MFrljjgkHV1Z9oPh8FFKVgDb8EWKXLaq6L3EK6hFvEahf1lvftGrbS8WEeAqS3xoIj
-         ORqX3G8r2OpDHSxwDqEFOo2rZBRLfIV0s9ehjHjtBd4sTBeIKOfczSpCl0ccjthI9dXd
-         Ce8odRlZAf3x6nPGiii1ch5RQp/93ixHPs/s9QDTx3n4dOWgi09mGy9sU9wRVOqpno+4
-         gntXTvz+M34W11V153Ulvq6o9QErfxJqI9hO6LrlICQt3wbUuNVfuCUo5TuAYD71HQYx
-         cwGd1OnNldRqBNKUNCPAHQ92ED81/X/iaDNQIeiIa0mcSKGDAbSzyBngmTmIEdSp6X8j
-         dYIA==
-X-Gm-Message-State: AC+VfDyGlLXd0QffCCuTSetuURNYnPd/VhcZtWmSmZrDWVmHvmd8mSfM
-        p/UC8X2DGQrlmdSg3litoEdn
-X-Google-Smtp-Source: ACHHUZ6fMetp6J+mojm2mXSpPEDIeSGJUTqYYffReV3Lh5yumI/isAX6OLVOH1wtaSGSvIEsoPXaDQ==
-X-Received: by 2002:a17:90a:de91:b0:24b:2f85:13eb with SMTP id n17-20020a17090ade9100b0024b2f8513ebmr39318239pjv.30.1684324004344;
-        Wed, 17 May 2023 04:46:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684324008; x=1686916008;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RwNQCA9ozgCFKqQivomJuANGu4rucg7HtzAq9d/gM0o=;
+        b=Ykl/uikIu5eQ90B5WFpGEIUdvH0AyL+WfEp2tFak4Ww9DS9VnJ3SftvyHlTAXY4Xaq
+         Bh6F7Bqo0IwWGFICgl3L3DuGXs32U9KwK8wUVwaZAZzcE6Rt/H8clgHuT2mnPijMNJIr
+         s5lwiFzZdSBIkwboxIUC5XaQtu+rkpMRRKzhP5eWa8qL1bi+W9AQsQ1MOSs601ssoCuA
+         Rko5xbWbTpPoN//3PhEu3pd+tgJ4AHeCoElS5A0JV39pcSe0hg8O+YSRQ1mpnfkONhwV
+         PZy4DLwPlBwPh2k+++fvAhphBnMiIkC95HTPE3GDAEX1g8KEeeCj9ujI4K0vwnTY3ehQ
+         lNlw==
+X-Gm-Message-State: AC+VfDz7jF2yViLf8fmJge1RCdvzmQpL1gxefuY2PnPDiNhJMO1pLfbb
+        +QWM39g/xJSY/OwBp5Wa3gAt
+X-Google-Smtp-Source: ACHHUZ5EYEW/ICrZAuG6MA7oFcdnFAe59sZovawyPXM++2NcP0NFH11weDO7HnaNwSy6kGXljjWi6g==
+X-Received: by 2002:a17:90b:33c7:b0:250:69c7:a95e with SMTP id lk7-20020a17090b33c700b0025069c7a95emr33058167pjb.48.1684324008246;
+        Wed, 17 May 2023 04:46:48 -0700 (PDT)
 Received: from localhost.localdomain ([117.207.26.28])
-        by smtp.gmail.com with ESMTPSA id s12-20020a17090aba0c00b0025289bc1ce4sm1366971pjr.17.2023.05.17.04.46.40
+        by smtp.gmail.com with ESMTPSA id s12-20020a17090aba0c00b0025289bc1ce4sm1366971pjr.17.2023.05.17.04.46.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 04:46:43 -0700 (PDT)
+        Wed, 17 May 2023 04:46:47 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, bp@alien8.de, mchehab@kernel.org
 Cc:     james.morse@arm.com, rric@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v8 0/2] Fix crash when using Qcom LLCC/EDAC drivers
-Date:   Wed, 17 May 2023 17:16:33 +0530
-Message-Id: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v8 1/2] EDAC/qcom: Remove superfluous return variable assignment in qcom_llcc_core_setup()
+Date:   Wed, 17 May 2023 17:16:34 +0530
+Message-Id: <20230517114635.76358-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
+References: <20230517114635.76358-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,72 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+"ret" variable will be assigned on both success and failure cases. So there
+is no need to initialize it during start of qcom_llcc_core_setup().
 
-This series fixes the crash seen on the Qualcomm SM8450 chipset with the
-LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
-fixed LLCC register offsets for detecting the LLCC errors.
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/edac/qcom_edac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
-register offsets were changed. So accessing the fixed offsets causes the
-crash on this platform.
-
-So for fixing this issue, and also to make it work on future SoCs, let's
-pass the LLCC offsets from the Qcom LLCC driver based on the individual
-SoCs and let the EDAC driver make use of them.
-
-This series has been tested on SM8450 based dev board.
-
-Thanks,
-Mani
-
-Changes in v8:
-
-* Collected Ack
-* Modified the patch 1/2 to remove the ret variable initialization
-
-Changes in v7:
-
-* Rebased on top of v6.4-rc1
-
-Changes in v6:
-
-* Rebased on top of v6.3-rc1
-* Dropped the Kconfig patch that got applied
-
-Changes in v5:
-
-* Added fixes tag and CCed stable mentioning the dependency
-* Added a patch to fix the build error with COMPILE_TEST
-
-Changes in v4:
-
-* Dropped the patches that were already applied
-* Rebased on top of v6.1-rc5
-
-Changes in v3:
-
-* Instead of using SoC specific register offset naming convention, used
-  LLCC version based as suggested by Sai
-* Fixed the existing reg_offset naming convention to clearly represent
-  the LLCC version from which the offsets were changed
-* Added Sai's Acked-by to MAINTAINERS patch
-* Added a new patch that removes an extra error no assignment
-
-Changes in v2:
-
-* Volunteered myself as a maintainer for the EDAC driver since the current
-  maintainers have left Qualcomm and I couldn't get hold of them.
-
-Manivannan Sadhasivam (2):
-  EDAC/qcom: Remove superfluous return variable assignment in
-    qcom_llcc_core_setup()
-  EDAC/qcom: Get rid of hardcoded register offsets
-
- drivers/edac/qcom_edac.c           | 118 ++++++++++++++---------------
- include/linux/soc/qcom/llcc-qcom.h |   6 --
- 2 files changed, 59 insertions(+), 65 deletions(-)
-
+diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
+index 265e0fb39bc7..6140001f21c4 100644
+--- a/drivers/edac/qcom_edac.c
++++ b/drivers/edac/qcom_edac.c
+@@ -170,7 +170,7 @@ static int qcom_llcc_core_setup(struct regmap *llcc_bcast_regmap)
+ static int
+ qcom_llcc_clear_error_status(int err_type, struct llcc_drv_data *drv)
+ {
+-	int ret = 0;
++	int ret;
+ 
+ 	switch (err_type) {
+ 	case LLCC_DRAM_CE:
 -- 
 2.25.1
 
