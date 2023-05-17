@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00421705D16
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8BC705D0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 04:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjEQCWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 May 2023 22:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S231772AbjEQCV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 May 2023 22:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbjEQCWF (ORCPT
+        with ESMTP id S230176AbjEQCVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 May 2023 22:22:05 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B40155AD
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:43 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230517022140epoutp02bb12aa803138eb478c69d89f8c04f324~fzOweqZXI2346723467epoutp02i
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 02:21:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230517022140epoutp02bb12aa803138eb478c69d89f8c04f324~fzOweqZXI2346723467epoutp02i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1684290100;
-        bh=hh9AOH5Z6+Q4qtKEHWf8pxsRM/6yOBm4T7O51t8ive8=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=unfh36b9qzo/CN6fG5XUcxB0aKFBhS7a6gPH6YrvR7pMK0iD55tTctNNZTX6W4xUM
-         pulOPe5SgicyUsBpVTTDnAQ4QbUGWUPAwD/FM5uA5mHZEUM3aT2VFBXFeqK1fr1bp3
-         gLIypFt02uJ3i1YvSvnfFllwcMKTVqpZm/1cPJtw=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230517022139epcas2p2f6cb82e61bf97fbe82f527ea4fb2510f~fzOv_fE2O1659216592epcas2p2d;
-        Wed, 17 May 2023 02:21:39 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4QLcLC1v9zz4x9Q2; Wed, 17 May
-        2023 02:21:39 +0000 (GMT)
-X-AuditID: b6c32a47-e99fd70000002007-53-64643a335183
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F7.91.08199.33A34646; Wed, 17 May 2023 11:21:39 +0900 (KST)
+        Tue, 16 May 2023 22:21:25 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B5810CF
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:24 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8338f2103so234765276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 19:21:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684290083; x=1686882083;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DbvIotRGfeUI08jv8AEiwlw+JO4JY4xCfZlRx6U3EOo=;
+        b=KUAjUFSPrTObC3hg/4eFzGEAYHdVyshHZdyrXJc5KM2+ApESlbodJxFclR3YXvSKuy
+         kLOT6ZdR4Ohc4e6WLZv+NG13YniC23eIgKsDzKhXjT4gOGcOJ2uRdUt0pqfkKLiCkksk
+         lkw8+v3lrxIgT5X4LzGBewpBv4Dud1I+wY37cJ3oSnYl/yPDUDK/Up98aTyjDQ04NhMP
+         jTiiQChMP2VXsYI8jCvRhbkJjo5tai4Kx77eSn2JI3ORttioIag8vv05s95dP3/TmsMw
+         MbTWpSFmhHnKx78X/4B6zv31Tl0ERVcNveLr1aTw7w/wCj644yKhpI3JdT9AtVh1ISco
+         lYhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684290083; x=1686882083;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DbvIotRGfeUI08jv8AEiwlw+JO4JY4xCfZlRx6U3EOo=;
+        b=YgbQZyxEz/NqqkT1dOLxk/5eYzaIP/5Vq8p8cdqDF3AVXaWFMlGsiLzBeEJyqJ+/js
+         kK5SnIsdDAYNjxENQr0dgRVgK0C4GbRSx/VNX2ggZJcvsKMUVM1RGg88Sd98gXnIEppH
+         W4upg6nIJvq/iUWMIYqn9DNxHLWoZ1jowRF8skSRK5PvntEAiFlRh4CXFr1bPsrf7Ru/
+         8EMREEULK6ckyw9GgKbxo2AVKoFkv2HbbS0LE1FrRBWZISr+A5zH0UlXX2q1CL+SfQVk
+         JFFY7ruPyqcDZgYn7G8VTwn4hbFLqn4SrmURu4q9wjw3mF0cYnVxxmQvZlr2BMHDR+Zo
+         NJAw==
+X-Gm-Message-State: AC+VfDy9G+pBoeXzizfyHjMXakVs0PgRskJKowwgTPOvFtANHwvKDSLt
+        ZOVmwpS1Xc5KWwbUM6DPIaacMbk=
+X-Google-Smtp-Source: ACHHUZ4fdjqimU4JmDpRktxQF9oQ9T6d7e3Yb7VykHUg7Ik7O9Au34ajlZWnInBmmASi8g9Q5p5F+oI=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2d3:205:b3a7:7c59:b96b:adaa])
+ (user=pcc job=sendgmr) by 2002:a25:7708:0:b0:ba8:1b23:8e66 with SMTP id
+ s8-20020a257708000000b00ba81b238e66mr1996246ybc.9.1684290083311; Tue, 16 May
+ 2023 19:21:23 -0700 (PDT)
+Date:   Tue, 16 May 2023 19:21:10 -0700
+Message-Id: <20230517022115.3033604-1-pcc@google.com>
 Mime-Version: 1.0
-Subject: RE:(2) [PATCH v2 08/14] scsi: add scsi_alloc_integrity_sgtables()
- for integrity process
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     "hch@lst.de" <hch@lst.de>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "kbusch@kernel.org" <kbusch@kernel.org>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
-        "kch@nvidia.com" <kch@nvidia.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230512135224.GE32242@lst.de>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230517022038epcms2p525403cf12b641f785647487c8b41a57c@epcms2p5>
-Date:   Wed, 17 May 2023 11:20:38 +0900
-X-CMS-MailID: 20230517022038epcms2p525403cf12b641f785647487c8b41a57c
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCJsWRmVeSWpSXmKPExsWy7bCmma6xVUqKQcsbTovVd/vZLF4e0rRY
-        ufook8WiG9uYLP523WOymHToGqPF06uzmCz23tK2uLxrDpvF8uP/mCzWvX7PYvH7xxw2Bx6P
-        8/c2snhsXqHlcflsqcemVZ1sHhMWHWD02H2zgc2jt/kdm8fHp7dYPPq2rGL0+LxJzqP9QDdT
-        AHdUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5kkJeYm6qrZKLT4CuW2YO0OVK
-        CmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnALzAr3ixNzi0rx0vbzUEitDAwMjU6DC
-        hOyM4/9msxVc4ajo+vaZpYFxFUcXIyeHhICJxMdd91m7GLk4hAR2MEqcufKZpYuRg4NXQFDi
-        7w5hkBphgSSJGSfXsYPYQgJKEufWzGIEKREWMJC41WsOEmYT0JP4uWQGG0hYREBW4sqKepAw
-        s8AnZon/7wwgNvFKzGh/ygJhS0tsX76VEcTmFNCROLFjI1RcQ+LHsl5mCFtU4ubqt+ww9vtj
-        8xkhbBGJ1ntnoWoEJR783A0Vl5Q4dOgr2AkSAvkSGw4EQoRrJN4uPwBVoi9xrQNiFa+Ar8Sj
-        149ZQWwWAVWJruUXmCBqXCSW/2xjhDhfW2LZwtfMICOZBTQl1u/Sh5iuLHHkFgtEBZ9Ex+G/
-        7DAPNmz8jZW9Y94TJohWNYlFTUYTGJVnIcJ4FpJVsxBWLWBkXsUollpQnJueWmxUYAyP1uT8
-        3E2M4OSr5b6DccbbD3qHGJk4GA8xSnAwK4nwBvYlpwjxpiRWVqUW5ccXleakFh9iNAV6ciKz
-        lGhyPjD955XEG5pYGpiYmRmaG5kamCuJ80rbnkwWEkhPLEnNTk0tSC2C6WPi4JRqYDJ02fV5
-        ddvdK0/eMxy9FfC19p9R1uElnTeC2VrmKcWVb6jakG96sSjdwIcz2/3Lyu4j8Yk/fI4m3ZpQ
-        J5123OBwxZO/rw48fH/K+EOkcWNltnKUT7Pib4ej2QfaXczcmzb0Ltm1rUOTWXvywyP2vnc/
-        hm+IaJq0guthOYMam0Ok47q1/AUBTCIJXCqrPzecPD9R5cD8nb/fHax4Wr+R+WLXEclKVct/
-        syLDvNLc6r9XvOSV3nR7xbf1x6JTbxQbrJMU6uA7ctxf7V/yHme5/EI35v0ybw95F92d/yTr
-        2YtVdT+8tsUL9YhESje5XZ3qbybb9OPJxHCfsBPz1t58IvB54ZGNOte2u9Wq3Iva8kuJpTgj
-        0VCLuag4EQASSCZ0RwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
-References: <20230512135224.GE32242@lst.de>
-        <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
-        <20230510085607epcms2p3d2b2dfc5db42f77c41f570c361a41c6a@epcms2p3>
-        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p5>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Subject: [PATCH v3 0/3] mm: Fix bug affecting swapping in MTE tagged pages
+From:   Peter Collingbourne <pcc@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        "=?UTF-8?q?Qun-wei=20Lin=20=28=E6=9E=97=E7=BE=A4=E5=B4=B4=29?=" 
+        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "surenb@google.com" <surenb@google.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "=?UTF-8?q?Chinwen=20Chang=20=28=E5=BC=B5=E9=8C=A6=E6=96=87=29?=" 
+        <chinwen.chang@mediatek.com>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "=?UTF-8?q?Kuan-Ying=20Lee=20=28=E6=9D=8E=E5=86=A0=E7=A9=8E=29?=" 
+        <Kuan-Ying.Lee@mediatek.com>,
+        "=?UTF-8?q?Casper=20Li=20=28=E6=9D=8E=E4=B8=AD=E6=A6=AE=29?=" 
+        <casper.li@mediatek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        vincenzo.frascino@arm.com,
+        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
+        eugenis@google.com, Steven Price <steven.price@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Wed, May 10, 2023 at 05:56:07PM +0900, Jinyoung CHOI wrote:
->> + =C2=A0=20=C2=A0=20=C2=A0=20=C2=A0if=20(WARN_ON_ONCE(=21prot_sdb))=20=
-=7B=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0/*=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20*=20This=20can=20happen=20if=20someone=20(e.g.=
-=20multipath)=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20*=20queues=20a=20command=20to=20a=20device=20on=
-=20an=20adapter=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20*=20that=20does=20not=20support=20DIX.=0D=0A>>=
-=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20*/=0D=0A>>=20+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=
-=20=C2=A0=20=C2=A0return=20BLK_STS_IOERR;=0D=0A>=0D=0A>Nit:=20expand=20the=
-=20comment=20to=20take=20up=20all=2080=20characters=20now=20that=20you've=
-=0D=0A>unindented=20it.=0D=0A=0D=0AOK.=20I=20will=20fix=20it.=20Thank=20you=
-.=0D=0A=0D=0ABest=20Regards,=0D=0AJinyoung.
+This patch series reworks the logic that handles swapping in page
+metadata to fix a reported bug [1] where metadata can sometimes not
+be swapped in correctly after commit c145e0b47c77 ("mm: streamline COW
+logic in do_swap_page()").
+
+- Patch 1 fixes the bug itself, but still requires architectures
+  to restore metadata in both arch_swap_restore() and set_pte_at().
+
+- Patch 2 makes it so that architectures only need to restore metadata
+  in arch_swap_restore().
+
+- Patch 3 changes arm64 to remove support for restoring metadata
+  in set_pte_at().
+
+[1] https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d434.camel@mediatek.com/
+
+v3:
+- Added patch to call arch_swap_restore() from unuse_pte()
+- Rebased onto arm64/for-next/fixes
+
+v2:
+- Call arch_swap_restore() directly instead of via arch_do_swap_page()
+
+Peter Collingbourne (3):
+  mm: Call arch_swap_restore() from do_swap_page()
+  mm: Call arch_swap_restore() from unuse_pte()
+  arm64: mte: Simplify swap tag restoration logic
+
+ arch/arm64/include/asm/mte.h     |  4 ++--
+ arch/arm64/include/asm/pgtable.h | 14 ++----------
+ arch/arm64/kernel/mte.c          | 37 ++++++--------------------------
+ arch/arm64/mm/mteswap.c          |  7 +++---
+ mm/memory.c                      |  7 ++++++
+ mm/swapfile.c                    |  7 ++++++
+ 6 files changed, 28 insertions(+), 48 deletions(-)
+
+-- 
+2.40.1.606.ga4b1b128d6-goog
+
