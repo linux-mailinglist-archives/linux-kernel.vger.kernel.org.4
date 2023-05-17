@@ -2,83 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFF9705EAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9BD705EB3
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbjEQE2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 00:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
+        id S231893AbjEQEdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 00:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjEQE2c (ORCPT
+        with ESMTP id S229437AbjEQEc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 00:28:32 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E841BE3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:28:31 -0700 (PDT)
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3821F3F4D8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 04:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684297709;
-        bh=KBpfMGXFAKUC2kcFXYgmGlqf/+Ln1ijfI1krE7exXtI=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=dXeCS8HdQ1Mep1Zkhxu4SEHey5ySggR2Bt7l1v7yYcX2YLIeaf/Bdderesk24+U+N
-         bpHxmgSbpNCOdcvjkcjMKimSCHxIun2Cb6Y4OFZzwhVq8CKL59Rsm0ABgbBgtpYRcn
-         0KOHRYKRpCY8e+oQp+cFEz9DyyyhjkHlqtF19Cvho03cO5xTrlP25J36HWdjai2pvY
-         9xBVuIsmbSLY4rnichW0o9KzXdjDk20yd1uCEy7Fldmgfj4wFKI5IR5rUN6q2o4TnU
-         DVozZ0bNqKFqpvdpVNAUh6LEmJ2CXIbUncYd0DNtsVEOvWTGl5f/N8xYSjYaD6qBXS
-         7CFoDv9wj2O2w==
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-52855ba7539so171950a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:28:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684297708; x=1686889708;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KBpfMGXFAKUC2kcFXYgmGlqf/+Ln1ijfI1krE7exXtI=;
-        b=kchenC0bnWcKcQr5OMBViznOieJlBPk7KVOpeIzEnRm3+x4Gaf4lUNKLZcsRI/9wNU
-         Y56IOFul8f3DGbF9aw0HP2NkrFMkMF5wLzxmjGubMJcRUDufo8ZQ05fjROjUhlvTyBoE
-         N8H88KhgggKuMUAffZom1XxSaolSxQLp7AkZbSZNMQu+Ry8MH5onntr5yzaJq3Sn1oLf
-         HlV6UZVKgHaBOZzqDAQ3LyMnfKJtY+yHljgkj4Ws7C+cAhilR0n/bo02OTWLl7WEZe9X
-         6nWd8AtsRTc0bwPzQ4XFFLBpNKYr1fmzsOZmsPV+a9YfQur/q7tBYQvRokbQhljxaw2x
-         abuQ==
-X-Gm-Message-State: AC+VfDxC25+2UsjUa78ZDbVWjWheKOI+dJ6Xk575OMP4jNWYGn+RuRHi
-        UQaObvE7Wif1U/yAO/x6twXE1pj+EERmEUvnPcWYoRA1j7psZNmk+M30xLYMj3WuaGx4kZAnJRy
-        Am7SWFM/E3EIeXADdS7oIKwuwLOlN8FJvDlccf7x97pBQIGclss+IcUeqFQ==
-X-Received: by 2002:a05:6a21:78a0:b0:100:5082:611d with SMTP id bf32-20020a056a2178a000b001005082611dmr42889332pzc.32.1684297707764;
-        Tue, 16 May 2023 21:28:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4jauJJgzn0NahJYNuK4adOWvhtRhNxmWcFWppdTKAFqALS+hCZVtqdFpLGQnZ41PvugHRjHrY1TDbErkoB4eM=
-X-Received: by 2002:a05:6a21:78a0:b0:100:5082:611d with SMTP id
- bf32-20020a056a2178a000b001005082611dmr42889319pzc.32.1684297707499; Tue, 16
- May 2023 21:28:27 -0700 (PDT)
+        Wed, 17 May 2023 00:32:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4094F2D4F;
+        Tue, 16 May 2023 21:32:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 63B5D1FB;
+        Tue, 16 May 2023 21:33:39 -0700 (PDT)
+Received: from [10.163.70.237] (unknown [10.163.70.237])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BDF003F793;
+        Tue, 16 May 2023 21:32:48 -0700 (PDT)
+Message-ID: <28c7a088-bfdb-5172-c7c4-0a572ecda78a@arm.com>
+Date:   Wed, 17 May 2023 10:02:45 +0530
 MIME-Version: 1.0
-References: <20230516080327.359825-1-kai.heng.feng@canonical.com> <ZGNeG1O1yS229nPO@nimitz>
-In-Reply-To: <ZGNeG1O1yS229nPO@nimitz>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 17 May 2023 12:28:16 +0800
-Message-ID: <CAAd53p44LFmZowFjRFaNV3fFUbMp2zxJksnCTR-MyhNJYfTeJw@mail.gmail.com>
-Subject: Re: [PATCH] net: wwan: t7xx: Ensure init is completed before system sleep
-To:     Piotr Raczynski <piotr.raczynski@intel.com>
-Cc:     chandrashekar.devegowda@intel.com, linuxwwan@intel.com,
-        chiranjeevi.rapolu@linux.intel.com, haijun.liu@mediatek.com,
-        m.chetan.kumar@linux.intel.com, ricardo.martinez@linux.intel.com,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2 3/5] coresight: etm4x: Drop pid argument from
+ etm4_probe()
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org
+Cc:     scclevenger@os.amperecomputing.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230327050537.30861-1-anshuman.khandual@arm.com>
+ <20230327050537.30861-4-anshuman.khandual@arm.com>
+ <d995fec6-1d3f-df37-724e-67d929e9e0db@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <d995fec6-1d3f-df37-724e-67d929e9e0db@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,60 +60,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 6:42=E2=80=AFPM Piotr Raczynski
-<piotr.raczynski@intel.com> wrote:
->
-> On Tue, May 16, 2023 at 04:03:27PM +0800, Kai-Heng Feng wrote:
-> > When the system attempts to sleep while mtk_t7xx is not ready, the driv=
-er
-> > cannot put the device to sleep:
-> > [   12.472918] mtk_t7xx 0000:57:00.0: [PM] Exiting suspend, modem in in=
-valid state
-> > [   12.472936] mtk_t7xx 0000:57:00.0: PM: pci_pm_suspend(): t7xx_pci_pm=
-_suspend+0x0/0x20 [mtk_t7xx] returns -14
-> > [   12.473678] mtk_t7xx 0000:57:00.0: PM: dpm_run_callback(): pci_pm_su=
-spend+0x0/0x1b0 returns -14
-> > [   12.473711] mtk_t7xx 0000:57:00.0: PM: failed to suspend async: erro=
-r -14
-> > [   12.764776] PM: Some devices failed to suspend, or early wake event =
-detected
-> >
-> > Mediatek confirmed the device can take a rather long time to complete
-> > its initialization, so wait for up to 20 seconds until init is done.
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->
-> Does it fix any issue? Anyway target tree would help here I guess.
 
-It fixes "PM: failed to suspend async: error -14" mentioned in the
-commit message.
 
->
-> [...]
->
-> > +static int t7xx_pci_pm_prepare(struct device *dev)
-> > +{
-> > +     struct pci_dev *pdev =3D to_pci_dev(dev);
-> > +     struct t7xx_pci_dev *t7xx_dev;
-> > +
-> > +     t7xx_dev =3D pci_get_drvdata(pdev);
-> > +     if (!wait_for_completion_timeout(&t7xx_dev->init_done, 20 * HZ))
->
-> #define T7XX_INIT_TIMEOUT or something similar wouldn't do any harm here.
+On 3/31/23 16:36, Suzuki K Poulose wrote:
+> On 27/03/2023 06:05, Anshuman Khandual wrote:
+>> Coresight device pid can be retrieved from its iomem base address, which is
+>> stored in 'struct etm4x_drvdata'. This drops pid argument from etm4_probe()
+>> and 'struct etm4_init_arg'. Instead etm4_check_arch_features() derives the
+>> coresight device pid with a new helper coresight_get_pid(), right before it
+>> is consumed in etm4_hisi_match_pid().
+>>
+>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+>> Cc: Mike Leach <mike.leach@linaro.org>
+>> Cc: Leo Yan <leo.yan@linaro.org>
+>> Cc: coresight@lists.linaro.org
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>   .../coresight/coresight-etm4x-core.c          | 21 +++++++------------
+>>   include/linux/coresight.h                     | 12 +++++++++++
+>>   2 files changed, 20 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> index 5d77571a8df9..3521838ab4fb 100644
+>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+>> @@ -66,7 +66,6 @@ static u64 etm4_get_access_type(struct etmv4_config *config);
+>>   static enum cpuhp_state hp_online;
+>>     struct etm4_init_arg {
+>> -    unsigned int        pid;
+>>       struct device        *dev;
+>>       struct csdev_access    *csa;
+>>   };
+>> @@ -370,8 +369,10 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
+>>   }
+>>     static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
+>> -                      unsigned int id)
+>> +                     struct csdev_access *csa)
+>>   {
+>> +    unsigned int id = coresight_get_pid(csa);
+>> +
+> 
+> This throws up the following error on an ETE.
+> 
+> ete: trying to read unsupported register @fe0
+> 
+> So, I guess this must be performed only for iomem based
+> devices. System instruction based device must be identified
+> by MIDR_EL1/REVIDR_EL1 if needed for specific erratum.
+> This is not required now. So, we could bail out early
+> if we are system instruction based device.
 
-Sure, will do in next revision.
+Will bail out on non iomem devices via drvdata->base address switch.
 
->
-> > +             dev_warn(dev, "Not ready for system sleep.\n");
-> > +
-> > +     return 0;
->
-> So in case of a timeout you still return 0, is that OK?
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -373,9 +373,10 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
+ static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
+                                     struct csdev_access *csa)
+ {
+-       unsigned int id = coresight_get_pid(csa);
++       if (!drvdata->base)
++               return;
+ 
+-       if (etm4_hisi_match_pid(id))
++       if (etm4_hisi_match_pid(coresight_get_pid(csa)))
+                set_bit(ETM4_IMPDEF_HISI_CORE_COMMIT, drvdata->arch_features);
+ }
+ #else
 
-You are right, error code should be returned instead.
+> 
+> 
+>>       if (etm4_hisi_match_pid(id))
+>>           set_bit(ETM4_IMPDEF_HISI_CORE_COMMIT, drvdata->arch_features);
+>>   }
+>> @@ -385,7 +386,7 @@ static void etm4_disable_arch_specific(struct etmv4_drvdata *drvdata)
+>>   }
+>>     static void etm4_check_arch_features(struct etmv4_drvdata *drvdata,
+>> -                     unsigned int id)
+>> +                     struct csdev_access *csa)
+>>   {
+>>   }
+>>   #endif /* CONFIG_ETM4X_IMPDEF_FEATURE */
+>> @@ -1165,7 +1166,7 @@ static void etm4_init_arch_data(void *info)
+>>       etm4_os_unlock_csa(drvdata, csa);
+>>       etm4_cs_unlock(drvdata, csa);
+>>   -    etm4_check_arch_features(drvdata, init_arg->pid);
+>> +    etm4_check_arch_features(drvdata, csa);
+>>         /* find all capabilities of the tracing unit */
+>>       etmidr0 = etm4x_relaxed_read32(csa, TRCIDR0);
+>> @@ -2048,7 +2049,7 @@ static int etm4_add_coresight_dev(struct etm4_init_arg *init_arg)
+>>       return 0;
+>>   }
+>>   -static int etm4_probe(struct device *dev, u32 etm_pid)
+>> +static int etm4_probe(struct device *dev)
+>>   {
+>>       struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
+>>       struct csdev_access access = { 0 };
+>> @@ -2077,7 +2078,6 @@ static int etm4_probe(struct device *dev, u32 etm_pid)
+>>         init_arg.dev = dev;
+>>       init_arg.csa = &access;
+>> -    init_arg.pid = etm_pid;
+>>         /*
+>>        * Serialize against CPUHP callbacks to avoid race condition
+>> @@ -2124,7 +2124,7 @@ static int etm4_probe_amba(struct amba_device *adev, const struct amba_id *id)
+>>         drvdata->base = base;
+>>       dev_set_drvdata(dev, drvdata);
+>> -    ret = etm4_probe(dev, id->id);
+>> +    ret = etm4_probe(dev);
+>>       if (!ret)
+>>           pm_runtime_put(&adev->dev);
+>>   @@ -2146,12 +2146,7 @@ static int etm4_probe_platform_dev(struct platform_device *pdev)
+>>       pm_runtime_set_active(&pdev->dev);
+>>       pm_runtime_enable(&pdev->dev);
+>>   -    /*
+>> -     * System register based devices could match the
+>> -     * HW by reading appropriate registers on the HW
+>> -     * and thus we could skip the PID.
+>> -     */
+>> -    ret = etm4_probe(&pdev->dev, 0);
+>> +    ret = etm4_probe(&pdev->dev);
+>>         pm_runtime_put(&pdev->dev);
+>>       return ret;
+>> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
+>> index f19a47b9bb5a..f85b041ea475 100644
+>> --- a/include/linux/coresight.h
+>> +++ b/include/linux/coresight.h
+>> @@ -370,6 +370,18 @@ static inline u32 csdev_access_relaxed_read32(struct csdev_access *csa,
+>>       return csa->read(offset, true, false);
+>>   }
+>>   +#define CORESIGHT_PIDRn(i)    (0xFE0 + ((i) * 4))
+>> +
+>> +static inline u32 coresight_get_pid(struct csdev_access *csa)
+>> +{
+>> +    u32 i, pid = 0;
+>> +
+>> +    for (i = 0; i < 4; i++)
+>> +        pid |= csdev_access_relaxed_read32(csa, CORESIGHT_PIDRn(i)) << (i * 8);
+> 
+> Given the above, we could make this iomem specific.
 
-Kai-Heng
+We could change coresight_get_pid() to take iomem base address instead
+and fetch the pid. But is not the existing csdev_access based approach
+better and more generic ?
 
->
-> [...]
-> Thanks, Piotr.
+#define CORESIGHT_PIDRn(i)     (0xFE0 + ((i) * 4))
+
+static inline u32 coresight_get_pid(void __iomem *base)
+{
+       u32 i, pid = 0;
+
+	for (i = 0; i < 4; i++)
+                pid |= readl(base + CORESIGHT_PIDRn(i)) << (i * 8);
+
+       return pid;
+}
