@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76696706E13
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A648F706E14
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjEQQ0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S229661AbjEQQ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjEQQ0r (ORCPT
+        with ESMTP id S229634AbjEQQ0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:26:47 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275C21A7
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:26:46 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-76c304efb8fso6081539f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:26:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1684340805; x=1686932805;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/1UIr2O96eqQRKPgP1AV0SLkUICGyPPJvig8S9zbnRc=;
-        b=CdYixgdA73pqJh8OsVlHYLcRw1haMr3GeszWTuBgvrp0NVlCVUljOqwtL7hbmwMtVB
-         iZDiN+sKSL3gVveQgYyMFr+H6+ni96CS/+VaON8/ZgEYQz97l2gemWZMrXiPqwN0ac+s
-         k5zyhslT9oQdAg39XGFQ7KS9vdPy+LGYfwoF4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684340805; x=1686932805;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/1UIr2O96eqQRKPgP1AV0SLkUICGyPPJvig8S9zbnRc=;
-        b=NmnW/v6ZTsVUxZf1bp6/k3b1pCVzdcamhVAmvjKVtiHuvXegqI/bZdCj30U1tLvvVa
-         7Siod0jsSRG4NhtuYzQj5u23PTA38waUkqFB1h2U2DE5Yw4aIrvNc2oozh0Zipz3t5yR
-         Xig6xGntMe6MxKKCPJimnJwF4RBGui4KnvdNj5CEpsRpr6eBWFWsi8jzNsIrIdWifwr7
-         ++sHtiT5l0InJBa5711z7BipyDSMIkCStGz7kvSJtLHzk1YbrqAY6f0N6TSz+d9RmL3H
-         si4gZpsM7Ydj2LrF23Z18yMQsHZ1NZs593OaWPdNjYU2re5JqUQTRdj33JT5GZbb2YEp
-         i7DQ==
-X-Gm-Message-State: AC+VfDx+f26/RY4MnDhnkT86g1cOUbvHnOtCwlqSToPin6drxQ4re7iv
-        GG15/zmTxUIwVd/0xjHX1nXv8g==
-X-Google-Smtp-Source: ACHHUZ70fhXGKVnGJqC9bAhF6L5Zabpzl1hP3Kv6138nXbxN14WKXZhHZp9X2xMtWP3mT9LtVqoM0g==
-X-Received: by 2002:a05:6e02:12cf:b0:32b:51df:26a0 with SMTP id i15-20020a056e0212cf00b0032b51df26a0mr1987315ilm.2.1684340805478;
-        Wed, 17 May 2023 09:26:45 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id h4-20020a92c084000000b003317ebbc426sm6240049ile.47.2023.05.17.09.26.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 09:26:45 -0700 (PDT)
-Message-ID: <08abb08f-68d9-54d0-cb7a-ba56a73a9856@linuxfoundation.org>
-Date:   Wed, 17 May 2023 10:26:43 -0600
+        Wed, 17 May 2023 12:26:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3137130;
+        Wed, 17 May 2023 09:26:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FF0D63D9C;
+        Wed, 17 May 2023 16:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83718C433D2;
+        Wed, 17 May 2023 16:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684340807;
+        bh=sU1C7XJg/7VvloWpwX9yx2Ma9fhNOkvoRR16fGxVrx4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sZJlHjmztkvkLKxHbNj52fhsNhecUqM37bGatmGQxktUqEdItN6NL5LT81V2t091h
+         gPcnMFAc4lv9o6eMpujnLyfiItRFzKYUVq04zMGhsHGW8TlWs6aPW8/qBYsGTQd3bH
+         Yqul0tjCKB1OEQlFvxnj6oyty7r0DvSw62ycW3nV5MfdlkgPfgzublOcRIf2hxfnup
+         wO6fGalPgH4Yha0Fy6jCA5HXWHpPEpcQFbaO9ayWcfJ1QMlfeEWH4TpdoLo2N6cIn9
+         XdrYaNigaP+qblqjiHbOFziGE0A/8WhqPj7v0QnQB09sTVfVptanFsFJrBRx2ONgce
+         J9jFpKhWTDKag==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     Zhi Li <yieli@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] nfsd: make a copy of struct iattr before calling notify_change
+Date:   Wed, 17 May 2023 12:26:44 -0400
+Message-Id: <20230517162645.254512-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/2] selftests/ftrace: Add new test case which checks
- for optimized probes
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Akanksha J N <akanksha@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah@kernel.org, naveen.n.rao@linux.ibm.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230428163842.95118-1-akanksha@linux.ibm.com>
- <20230428163842.95118-3-akanksha@linux.ibm.com>
- <20230430105231.2e7f5bd8a3f879d2330485d2@kernel.org>
- <54bec864-5e4f-8432-a331-e4ea5fc2ba31@linuxfoundation.org>
- <20230512181517.607ff03d@rorschach.local.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230512181517.607ff03d@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/23 16:15, Steven Rostedt wrote:
-> On Mon, 8 May 2023 11:36:28 -0600
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
-> 
->>> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>>    
->>
->> Would you like this patch to go through kselftest tree?
-> 
-> Shuah, you can take it through your kselftest tree.
-> 
-> Thanks!
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> 
+notify_change can modify the iattr structure. In particular it can can
+end up setting ATTR_MODE when ATTR_KILL_SUID is already set, causing a
+BUG() if the same iattr is passed to notify_change more than once.
 
-Applied to linux-kselftest next for 6.5-rc1
+Make a copy of the struct iattr before calling notify_change.
 
-thanks,
--- Shuah
+Fixes: 34b91dda7124 NFSD: Make nfsd4_setattr() wait before returning NFS4ERR_DELAY
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2207969
+Reported-by: Zhi Li <yieli@redhat.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ fs/nfsd/vfs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+index c4ef24c5ffd0..ad0c5cd900b1 100644
+--- a/fs/nfsd/vfs.c
++++ b/fs/nfsd/vfs.c
+@@ -538,7 +538,9 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *fhp,
+ 
+ 	inode_lock(inode);
+ 	for (retries = 1;;) {
+-		host_err = __nfsd_setattr(dentry, iap);
++		struct iattr attrs = *iap;
++
++		host_err = __nfsd_setattr(dentry, &attrs);
+ 		if (host_err != -EAGAIN || !retries--)
+ 			break;
+ 		if (!nfsd_wait_for_delegreturn(rqstp, inode))
+-- 
+2.40.1
 
