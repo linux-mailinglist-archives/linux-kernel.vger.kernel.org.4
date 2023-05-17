@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F156E706994
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F1B706999
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 15:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjEQNUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 09:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
+        id S231898AbjEQNUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 09:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjEQNTn (ORCPT
+        with ESMTP id S231901AbjEQNTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 09:19:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04108173F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:19:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9423363BDA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF762C433EF;
-        Wed, 17 May 2023 13:19:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684329582;
-        bh=aywvvDRPNw0N00F0h3QEaRNcGvMODB+TxD21Tej3Lsk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZvaPaFRkLsehNX2loEbOvDVae+1gWgD0Ic2WOkv7wxF1IPFtcmlrUL0im6guBRNxR
-         +nkj2hepVCk7Vijdc0PYTMFjBI+/tbCyFFYyC2z7ntZ7SOh+IzX1gCsAo0UoETwQcx
-         t/XuI179xCx4vHxkPY0hEAokDqksHrgjMzNL6808mhV9F2tTenRXJY8hEVs8gd8duu
-         8/nSBouTPWLGEiHh01kNSsfMuFcd8gk+5ggFpmqrPp8YhxDQw5m5c2WM7jbYkDPAX+
-         85t3QZEdPuLNBImnMpJqCD2JAeERkLfZmmPIqQQWjLanTAnT6T9iQuJop1StyB9F6Z
-         sZe4Ql1zzScbQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Nick Terrell <terrelln@fb.com>
-Cc:     linux-mm@kvack.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] decompressor: provide missing prototypes
-Date:   Wed, 17 May 2023 15:19:31 +0200
-Message-Id: <20230517131936.936840-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 17 May 2023 09:19:52 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFDB1FFE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:19:50 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2ac770a99e2so7533231fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 06:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684329588; x=1686921588;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OODF9wHSCYG54VVweDgKeLp3U0OSPmTomqN20PFs+v4=;
+        b=c5F8lWdA8er+GioAFIIpWBSM+ENoKEBZFRo2n0NaOgnPJbtvms2bBc0l9oKHrFJY6w
+         sj2XTPTXQPpA8DorFvErDfm3RmX+HDb1YjCC3Oa9nlzI+fyS8YfHm6s2kvZW0W61E1wz
+         HLqGS2WAw2KpT6TOmNLVptCCIih/GCvMrCrdhRiTF4/GxaOSO9G3Bbc4oW/Fep0tzELs
+         8jg09OzywpT6NuWVtYt49ts+nHv57Y8/uF+Dok47j11MBGN3yyvtMCexSsI8BlUjwyEB
+         bF/bWOv8toDKj0DyHdnHpdbQ6aYMA6xrCBpPWugS9pTzqu50c3HfabyUcSKZcHnqc3Oq
+         aB+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684329588; x=1686921588;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OODF9wHSCYG54VVweDgKeLp3U0OSPmTomqN20PFs+v4=;
+        b=hg3G+jleA/elP+Fzkt1e7xlYqyL4f6Jj9hujtNHF3Zk3MEyaDBeWPD6t2LnXDx+n8O
+         LcYQN10RffofLls2oe9IWZiovWcW34n3/M7I9GmiTTTDPe3TAN0+XpThdGFkTod6Dtpb
+         oslJgVR/aN1QtLy8iGO91RNvwIKrN1aG/Iplz7U6sr8eC1o8cNfAvu4InFuAdQk4iBdy
+         XSSCJ8A5S1r5TkhgwwEmTYnYydFiLZZ8O6RltgXxRAlHs4d8NEIwb/qNTDMM/t16NvKY
+         v2AqogpDSnqm+4HoaIWSq6OUhoGQsnE1x8iOBU3gzNruqb4vNn1hRRmAwPEyJqe0TDg2
+         zRGQ==
+X-Gm-Message-State: AC+VfDyhK1nONSaz5BAYmkuNXkXXzSTYwcbY3Ak5obpOo+60K/OpIxod
+        75kiQtibQOC8uT9Ge4AM4X6MFCC6E4asJPZNCrI=
+X-Google-Smtp-Source: ACHHUZ5YHoV1sc0sDvIJe7GzTEZBYcyI9a8bSVuSNOj6PyJTPckaEaNmb5LBIlmjq+pwlCJRL81pGg==
+X-Received: by 2002:a2e:9cda:0:b0:2ac:dd01:e169 with SMTP id g26-20020a2e9cda000000b002acdd01e169mr9624045ljj.40.1684329588536;
+        Wed, 17 May 2023 06:19:48 -0700 (PDT)
+Received: from [10.167.154.1] ([2a00:f41:c93:874f:be7b:fb6c:26f9:307c])
+        by smtp.gmail.com with ESMTPSA id f7-20020a2e9187000000b002adadef95c0sm3007457ljg.124.2023.05.17.06.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 06:19:48 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/3] More RPMhPD levels + sm8550
+Date:   Wed, 17 May 2023 15:19:42 +0200
+Message-Id: <20230517-topic-kailua-rpmhpd-v1-0-cd3013d051a6@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAG7UZGQC/x2N0QrCMAwAf2Xk2cDWbij+iviQpdEGa1fSTYSxf
+ 7f4eAfH7VDFVCpcux1MPlp1yQ2GUwccKT8FNTQG1zvfT8MZ16Uo44s0bYRW3rEEDG7kkSd/YU/
+ Qypmq4GyUObY2byk1WUwe+v2vbvfj+AHfoVmsegAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684329587; l=899;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=aDhFrmJ9bpodLJ2PsX/rq6abMHr5lkvazPml98G0+2E=;
+ b=s2gQuNI95KZ6KxdNWjb+ZtlvuHxijBCqBeKkr6RxKItkZLr6qS+aXsAxza3TpJgErX/mIbiCC
+ 6xTku+nd/M2CnadFzvyjhvBZMX+dtjcjfFERToU9fJs1bF5FtkB42X6
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Bring in missing RPMhPd levels from downstream and add ones we'll
+need for GPU on SM8550.
 
-The entry points for the decompressor don't always have a prototype
-included in the .c file:
+Patch 1 adds the missing ones with an easy-to-read diff, patch 2
+reformats the block and patch 3 adds the necessary levels to 8550 dt.
 
-lib/decompress_inflate.c:42:17: error: no previous prototype for '__gunzip' [-Werror=missing-prototypes]
-lib/decompress_unxz.c:251:17: error: no previous prototype for 'unxz' [-Werror=missing-prototypes]
-lib/decompress_unzstd.c:331:17: error: no previous prototype for 'unzstd' [-Werror=missing-prototypes]
-
-include the correct headers for unxz and unzstd, and mark the
-inflate function above as unconditionally 'static' to avoid
-these warnings.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- lib/decompress_inflate.c | 2 +-
- lib/decompress_unxz.c    | 2 ++
- lib/decompress_unzstd.c  | 2 ++
- 3 files changed, 5 insertions(+), 1 deletion(-)
+Konrad Dybcio (3):
+      dt-bindings: power: qcom,rpmpd: add missing RPMH levels
+      dt-bindings: power: qcom,rpmpd: Format RPMh levels better
+      arm64: dts: qcom: sm8550: Add missing RPMhPD OPP levels
 
-diff --git a/lib/decompress_inflate.c b/lib/decompress_inflate.c
-index 6130c42b8e59..e19199f4a684 100644
---- a/lib/decompress_inflate.c
-+++ b/lib/decompress_inflate.c
-@@ -39,7 +39,7 @@ static long INIT nofill(void *buffer, unsigned long len)
- }
- 
- /* Included from initramfs et al code */
--STATIC int INIT __gunzip(unsigned char *buf, long len,
-+static int INIT __gunzip(unsigned char *buf, long len,
- 		       long (*fill)(void*, unsigned long),
- 		       long (*flush)(void*, unsigned long),
- 		       unsigned char *out_buf, long out_len,
-diff --git a/lib/decompress_unxz.c b/lib/decompress_unxz.c
-index 9f4262ee33a5..353268b9f129 100644
---- a/lib/decompress_unxz.c
-+++ b/lib/decompress_unxz.c
-@@ -102,6 +102,8 @@
-  */
- #ifdef STATIC
- #	define XZ_PREBOOT
-+#else
-+#include <linux/decompress/unxz.h>
- #endif
- #ifdef __KERNEL__
- #	include <linux/decompress/mm.h>
-diff --git a/lib/decompress_unzstd.c b/lib/decompress_unzstd.c
-index a512b99ae16a..bba2c0bb10cb 100644
---- a/lib/decompress_unzstd.c
-+++ b/lib/decompress_unzstd.c
-@@ -69,6 +69,8 @@
- # define UNZSTD_PREBOOT
- # include "xxhash.c"
- # include "zstd/decompress_sources.h"
-+#else
-+#include <linux/decompress/unzstd.h>
- #endif
- 
- #include <linux/decompress/mm.h>
+ arch/arm64/boot/dts/qcom/sm8550.dtsi   | 36 +++++++++++++++++++++++++-------
+ include/dt-bindings/power/qcom-rpmpd.h | 38 +++++++++++++++++++++-------------
+ 2 files changed, 52 insertions(+), 22 deletions(-)
+---
+base-commit: 065efa589871e93b6610c70c1e9de274ef1f1ba2
+change-id: 20230517-topic-kailua-rpmhpd-d24c4c538c3a
+
+Best regards,
 -- 
-2.39.2
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
