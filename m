@@ -2,133 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37849707598
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919D270759B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 00:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjEQWn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 18:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S229611AbjEQWrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 18:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEQWny (ORCPT
+        with ESMTP id S229484AbjEQWru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 18:43:54 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C86B40CD;
-        Wed, 17 May 2023 15:43:53 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-51f64817809so203135a12.1;
-        Wed, 17 May 2023 15:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684363433; x=1686955433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LieYOKCJXnWqNjni2ZgzrOlh3FdkTjA6itbHDewDbsg=;
-        b=DthQcgs7xqOphPki8LXGhEqd9v3/PJKocQknnJWvLKfiJREajOAV/4qhyTS/gqSink
-         y1UfBRmMHGayhCzRBtWLRxfY0qdUr2fZNIrCmV2XbpIXx2GMmXEsrgT9qlv+JjbYgEBA
-         wRXSlFOvdxwc3Rb4psoQYuDBMxyysP6/EiuwDsmNKQYjGWsg35xOXCqk9UHNPD6fYpCV
-         Ud9Cx3KJFoUc0Np4bknK7o4rdHyG3EPmwlNiaT7wKRza0PXd50ezM+Be2PgFldxJPZZT
-         PAG6xoGgTaE2I+P1WNtPxskD3uylO7l1awrJX5ZT9ssXIcBo/ETuVQwzCxqwvCkI0sdO
-         F8Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684363433; x=1686955433;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LieYOKCJXnWqNjni2ZgzrOlh3FdkTjA6itbHDewDbsg=;
-        b=cQTXdoxv3wVoPdJhuGgOTcQFVkhOPCyQYcxszFEJanYKnOXuctB86ZLCHO3ZKFuwFE
-         IUuVeBnvXMB8Rc8Be0XDenj+AYvghtrk52GoC+xculDiH8EGxOUi7HQDTwTIuNUpXyb9
-         eFNhxoN4q38hzWWGwj21btUViOTXZLgSWi9BriukzTPrtI31EZnRdoDeDX1nbdQiBlAe
-         +0MYhO98dkyxVLKRE7hKSisLDID5cFldZner9bmMaiuN/ESCkQlh1EGOKYrZeCmsGsZ9
-         5yumk8LQU3QRLwo1FOqwvFXVQQP7jqtQllXOjo+4yWhffhMXzKuYP/D55fzIAH5EXKWV
-         nXhQ==
-X-Gm-Message-State: AC+VfDxFcAnP6vdHFYeVaxD75fIxTth6mhrKobBN/UzhNL61DFdJxflv
-        lO5BuOYEMHKM5MYCUYkPnQ/oNd+Vi/MtCCyBa8k=
-X-Google-Smtp-Source: ACHHUZ72iAtOsfRpS39tC7fKeXg00DkEi5PM5JbSOZ3BiQGjYSY+qngEvBlTl62EH8YIQgK/PkiLT3m+JvcgsooMp+0=
-X-Received: by 2002:a17:902:ec84:b0:1ac:881b:494 with SMTP id
- x4-20020a170902ec8400b001ac881b0494mr5511269plg.0.1684363432701; Wed, 17 May
- 2023 15:43:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
-In-Reply-To: <20230517223007.178432-1-boerge.struempfel@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 17 May 2023 19:43:41 -0300
-Message-ID: <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
-To:     Boerge Struempfel <boerge.struempfel@gmail.com>
-Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wed, 17 May 2023 18:47:50 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF540CD;
+        Wed, 17 May 2023 15:47:48 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 964E9204C1;
+        Thu, 18 May 2023 00:47:46 +0200 (CEST)
+Date:   Thu, 18 May 2023 00:47:44 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v10 7/8] drm/msm/dpu: add DSC 1.2 hw blocks for relevant
+ chipsets
+Message-ID: <w7xre5jdot3fpe3ldj6vcnvribpbalfvova5hhmbgvgvkrcm34@xqvsc5ga2knb>
+References: <1684360919-28458-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684360919-28458-8-git-send-email-quic_khsieh@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1684360919-28458-8-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 7:30=E2=80=AFPM Boerge Struempfel
-<boerge.struempfel@gmail.com> wrote:
->
-> Some spi controller switch the mosi line to high, whenever they are
-> idle. This may not be desired in all use cases. For example neopixel
-> leds can get confused and flicker due to misinterpreting the idle state.
-> Therefore, we introduce a new spi-mode bit, with which the idle behaviour
-> can be overwritten on a per device basis.
->
-> Signed-off-by: Boerge Struempfel <boerge.struempfel@gmail.com>
->
->
-> Link for versions:
->   v1 and v2: https://lore.kernel.org/linux-spi/20230511135632.78344-1-bst=
-ruempfel@ultratronik.de/
->   v3: https://lore.kernel.org/linux-spi/20230517103007.26287-1-boerge.str=
-uempfel@gmail.com/T/#t
->
-> Changes from V3:
->   - Added missing paranthesis which caused builderrors
->
-> Changes from V2:
->   - Removed the device-tree binding since this should not be managed by
->     the DT but by the device itself.
->   - Replaced all occurences of spi->chip_select with the corresponding
->     macro spi_get_chipselect(spi,0)
->
-> Changes from V1:
->   - Added patch, introducing the new devicetree binding flag
->   - Split the generic spi part of the patch from the imx-spi specific
->     part
->   - Replaced SPI_CPOL and SPI_CPHA by the combined SPI_MODE_X_MASK bit
->     in the imx-spi.c modebits.
->   - Added the SPI_MOSI_IDLE_LOW bit to spidev
+Title: "DPU >= 7.0" instead of "relevant chipsets" to match the others.
 
-The change log should be placed below the --- line.
+On 2023-05-17 15:01:58, Kuogee Hsieh wrote:
+> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> 
+> Add DSC 1.2 hardware blocks to the catalog with necessary sub-block and
+> feature flag information.  Each display compression engine (DCE) contains
+> dual DSC encoders so both share same base address but with
+> its own different sub block address.
+
+If you reword it, also reflow this line.
+
+> 
+> changes in v4:
+> -- delete DPU_DSC_HW_REV_1_1
+> -- re arrange sc8280xp_dsc[]
+> 
+> changes in v4:
+> -- fix checkpatch warning
+> 
+> changes in v10:
+> -- remove hard slice from commit text
+
+It is still mentioned in the diff though, that's why I originally
+requested a better place to describe it.
+
+> -- replace DPU_DSC_NATIVE_422_EN with DPU_DSC_NATIVE_42x_EN
+> -- change DSC_BLK_1_2 .len from 0x100 to 0x29c
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+> 
+> kuogee: catalog.h
+
+What's this for?  This file isn't touched in this patch.
 
 > ---
->  include/uapi/linux/spi/spi.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
-> index 9d5f58059703..ca56e477d161 100644
-> --- a/include/uapi/linux/spi/spi.h
-> +++ b/include/uapi/linux/spi/spi.h
-> @@ -28,6 +28,7 @@
->  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with 8=
- wires */
->  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedance=
- turnaround */
->  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on R=
-x only xfer */
-> +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low wh=
-en idle */
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h | 14 ++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  7 ++++++
+>  .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   | 16 ++++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h | 14 ++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h | 14 ++++++++++++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 25 +++++++++++++++++++++-
+>  6 files changed, 89 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> index 500cfd0..d90486f 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> @@ -153,6 +153,18 @@ static const struct dpu_merge_3d_cfg sm8350_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+>  };
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sm8350_dsc[] = {
+> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+> +};
+> +
+>  static const struct dpu_intf_cfg sm8350_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -215,6 +227,8 @@ const struct dpu_mdss_cfg dpu_sm8350_cfg = {
+>  	.dspp = sm8350_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sm8350_pp),
+>  	.pingpong = sm8350_pp,
+> +	.dsc_count = ARRAY_SIZE(sm8350_dsc),
+> +	.dsc = sm8350_dsc,
+>  	.merge_3d_count = ARRAY_SIZE(sm8350_merge_3d),
+>  	.merge_3d = sm8350_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sm8350_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> index 5646713..52609b8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> @@ -93,6 +93,11 @@ static const struct dpu_pingpong_cfg sc7280_pp[] = {
+>  	PP_BLK_DITHER("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
+>  };
+>  
+> +/* NOTE: sc7280 only has one DSC hard slice encoder */
+> +static const struct dpu_dsc_cfg sc7280_dsc[] = {
+> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+> +};
+> +
+>  static const struct dpu_intf_cfg sc7280_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -149,6 +154,8 @@ const struct dpu_mdss_cfg dpu_sc7280_cfg = {
+>  	.mixer = sc7280_lm,
+>  	.pingpong_count = ARRAY_SIZE(sc7280_pp),
+>  	.pingpong = sc7280_pp,
+> +	.dsc_count = ARRAY_SIZE(sc7280_dsc),
+> +	.dsc = sc7280_dsc,
+>  	.intf_count = ARRAY_SIZE(sc7280_intf),
+>  	.intf = sc7280_intf,
+>  	.vbif_count = ARRAY_SIZE(sdm845_vbif),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> index 808aacd..a84cf36 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> @@ -141,6 +141,20 @@ static const struct dpu_merge_3d_cfg sc8280xp_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+>  };
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sc8280xp_dsc[] = {
+> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_2_0", DSC_4, 0x82000, 0x29c, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_2_1", DSC_5, 0x82000, 0x29c, 0, dsc_sblk_1),
+> +};
+> +
+>  /* TODO: INTF 3, 8 and 7 are used for MST, marked as INTF_NONE for now */
+>  static const struct dpu_intf_cfg sc8280xp_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+> @@ -216,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8280xp_cfg = {
+>  	.dspp = sc8280xp_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sc8280xp_pp),
+>  	.pingpong = sc8280xp_pp,
+> +	.dsc_count = ARRAY_SIZE(sc8280xp_dsc),
+> +	.dsc = sc8280xp_dsc,
+>  	.merge_3d_count = ARRAY_SIZE(sc8280xp_merge_3d),
+>  	.merge_3d = sc8280xp_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sc8280xp_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> index 1a89ff9..1620622 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> @@ -161,6 +161,18 @@ static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x65f00),
+>  };
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sm8450_dsc[] = {
+> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+> +};
+> +
+>  static const struct dpu_intf_cfg sm8450_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -223,6 +235,8 @@ const struct dpu_mdss_cfg dpu_sm8450_cfg = {
+>  	.dspp = sm8450_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sm8450_pp),
+>  	.pingpong = sm8450_pp,
+> +	.dsc_count = ARRAY_SIZE(sm8450_dsc),
+> +	.dsc = sm8450_dsc,
+>  	.merge_3d_count = ARRAY_SIZE(sm8450_merge_3d),
+>  	.merge_3d = sm8450_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sm8450_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> index 497b34c..6582a14 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> @@ -165,6 +165,18 @@ static const struct dpu_merge_3d_cfg sm8550_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_3", MERGE_3D_3, 0x66700),
+>  };
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
+> +static const struct dpu_dsc_cfg sm8550_dsc[] = {
+> +	DSC_BLK_1_2("dce_0_0", DSC_0, 0x80000, 0x29c, 0, dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_0_1", DSC_1, 0x80000, 0x29c, 0, dsc_sblk_1),
+> +	DSC_BLK_1_2("dce_1_0", DSC_2, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_0),
+> +	DSC_BLK_1_2("dce_1_1", DSC_3, 0x81000, 0x29c, BIT(DPU_DSC_NATIVE_42x_EN), dsc_sblk_1),
+> +};
+> +
+>  static const struct dpu_intf_cfg sm8550_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x34000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -227,6 +239,8 @@ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
+>  	.dspp = sm8550_dspp,
+>  	.pingpong_count = ARRAY_SIZE(sm8550_pp),
+>  	.pingpong = sm8550_pp,
+> +	.dsc_count = ARRAY_SIZE(sm8550_dsc),
+> +	.dsc = sm8550_dsc,
+>  	.merge_3d_count = ARRAY_SIZE(sm8550_merge_3d),
+>  	.merge_3d = sm8550_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sm8550_intf),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index f2a1535..9612ab5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /* Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
+> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  
+>  #define pr_fmt(fmt)	"[drm:%s:%d] " fmt, __func__, __LINE__
+> @@ -522,6 +522,16 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+>  /*************************************************************
+>   * DSC sub blocks config
+>   *************************************************************/
+> +static const struct dpu_dsc_sub_blks dsc_sblk_0 = {
+> +	.enc = {.base = 0x100, .len = 0x100},
+> +	.ctl = {.base = 0xF00, .len = 0x10},
+> +};
+> +
+> +static const struct dpu_dsc_sub_blks dsc_sblk_1 = {
+> +	.enc = {.base = 0x200, .len = 0x100},
+> +	.ctl = {.base = 0xF80, .len = 0x10},
+> +};
+> +
+>  #define DSC_BLK(_name, _id, _base, _features) \
+>  	{\
+>  	.name = _name, .id = _id, \
+> @@ -529,6 +539,19 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+>  	.features = _features, \
+>  	}
+>  
+> +/*
+> + * NOTE: Each display compression engine (DCE) contains dual hard
+> + * slice DSC encoders so both share same base address but with
+> + * its own different sub block address.
+> + */
 
-Should tools/spi/spidev_test.c be changed to include this new
-mosi-idle-low option?
+I still think this comment is superfluous (and doesn't even apply
+generically, see i.e. sc7280) and should best be kept exclusively in the
+SoC-specific catalog files.
+
+- Marijn
+
+> +#define DSC_BLK_1_2(_name, _id, _base, _len, _features, _sblk) \
+> +	{\
+> +	.name = _name, .id = _id, \
+> +	.base = _base, .len = _len, \
+> +	.features = BIT(DPU_DSC_HW_REV_1_2) | _features, \
+> +	.sblk = &_sblk, \
+> +	}
+> +
+>  /*************************************************************
+>   * INTF sub blocks config
+>   *************************************************************/
+> -- 
+> 2.7.4
+> 
