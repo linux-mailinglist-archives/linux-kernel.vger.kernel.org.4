@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE53707167
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E095370716B
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 21:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjEQS7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 14:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
+        id S229678AbjEQTCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 15:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjEQS67 (ORCPT
+        with ESMTP id S229530AbjEQTCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 14:58:59 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530D1210C;
-        Wed, 17 May 2023 11:58:58 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id A780A320098B;
-        Wed, 17 May 2023 14:58:53 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 17 May 2023 14:58:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1684349933; x=1684436333; bh=z3
-        Gk38lPhj5TpICvgGyoH4f3MvgXnScoogZHTKqe8Lc=; b=mlPB5pq+EpAI5ap//G
-        ukxSZPI/MD0kttTqH0Si5mk1LZjWPciePW2idBgAbxkHjaTgIdZjqCQb3KiqCh4w
-        Jk3f2dBK0JenGZ+PiT8KI6F3Cthqew+pLxHejG/qAVCO6syDrUayt9JzYuN59RZz
-        6MVGJLhnmRVuuoy3m7QuqAKU6iNmLMdtqBtb1P2j6PDzrpKSNIhs3mKMU/aLT7k+
-        HlAr9/qMAaRb4XkfdFR/EgSxYlT3ArWqaF+RwFp4QltOb3vhu9sTxix6w9R5BhbH
-        f2MGypm2o76VepnWF95LK5CFOjXbooF+oXi8JkMqRbqFwNVsD7q12OQh02pmCk0s
-        hZ5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684349933; x=1684436333; bh=z3Gk38lPhj5Tp
-        ICvgGyoH4f3MvgXnScoogZHTKqe8Lc=; b=PSvk1tUWCOc8qMEfusrcVLd5FORgy
-        Oz9VUGVlA5Up27Cb0dpKMjcN0to+GSQlF4uuVvgtUlTGAiOrlAu7+wZ4BeBdWrjS
-        JOP55vmbUvpngvNS2hOeV3kLiiUqvXq8P+vj8NrVMzKSL4QDk5Pl705+PGMgyYoI
-        T8DaGJIi9kRBzjwAFHEo9eJQ4SBB7U6J9UV2oNXyH/vXYogjGe+zHwLqpWOO7NuW
-        Ih9OOVQp/IDeEIP8ExjtJX+ndu3jDk+IMtcEJRaFWtARZH0IMXLsb/gtcPu1k+kC
-        IPJ1wxHaSO00lEi5rn2QHHJGX2yqWQHe9iWk6NpUolEi59MW0d7NDloEA==
-X-ME-Sender: <xms:7CNlZGpMLrfiQngb6PYD7h_8si0S-6-i3-pwHgDSBEyTEVn_sZpU8A>
-    <xme:7CNlZErhCz01BufsV3oq8zZ_oysedlnVDtsouqqOetW5yBX0Qh1lFKO_08yN9LPj5
-    DfNlwSEYgM30A>
-X-ME-Received: <xmr:7CNlZLPAD36SlkQRkErPjp4rgRmEHbRvlD2O9s6Eb508tzAm16rAY54q7Lb3NGM6SS1T55hNvS0DYdZULVH-KBznhsnhbiNBtzNlXw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiuddgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehge
-    dvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhroh
-    grhhdrtghomh
-X-ME-Proxy: <xmx:7SNlZF5KvfdxqJ8gguq38mSFb10dwFmseQxq7yqDQVuLp_rmIfxqmQ>
-    <xmx:7SNlZF7iVNuxMAQdcObARzq9f8RoG4-HatRMFl0oqqWbOUKIfh5Abg>
-    <xmx:7SNlZFhyE1p4hEcnp7s1fxuThBWHSVTcbJ5QHmNm-Rr1c9mCGVxEdA>
-    <xmx:7SNlZKrjY9owYptfaB5bPDvBlGf36-qRB6qkMRP10g-Sd0nMnzHw3g>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 May 2023 14:58:52 -0400 (EDT)
-Date:   Wed, 17 May 2023 20:58:49 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        heikki.krogerus@linux.intel.com, rafael@kernel.org,
-        ajayg@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
-        Sanket.Goswami@amd.com
-Subject: Re: [PATCH 2/2] usb: typec: ucsi: Don't create power supplies for
- dGPUs
-Message-ID: <2023051742-guiding-footing-3527@gregkh>
-References: <20230516182541.5836-1-mario.limonciello@amd.com>
- <20230516182541.5836-3-mario.limonciello@amd.com>
- <ZGULZU01tdqm1Xoc@smile.fi.intel.com>
+        Wed, 17 May 2023 15:02:32 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE2486AD
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:02:31 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6434e263962so895059b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 12:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684350151; x=1686942151;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5cQTCNheYZl+3yNBMCx3sHGYTeFIvig1PSLkqmRnl24=;
+        b=c4/xIh+TlUQipA53k5weP//Y9ntGrUcZcfCaC+Ro3CgAcfELru1Fwua2gzPbAkTxBJ
+         nJorT+TlzvlTJgfhob/eVzwHf/+d4pEhgSfC8n0AozlqfZY7nYbsoc6CK9P+UzlhNQfq
+         9l7QcA3K8bd9/EbKP8kNalAroP5gS6/wxxs8k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684350151; x=1686942151;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5cQTCNheYZl+3yNBMCx3sHGYTeFIvig1PSLkqmRnl24=;
+        b=G6XiyV9C3bPWlKHEpdORlw4XK4py9iDOZo5Ja8GZbjcuErgxZXI+SeG3dK1V0Myfo+
+         mJ5gFsQa0PYztErMyTQxtFFIXew1+gXYZpD5rF3MUWjOHcQ8AorfoDVAxd0796HBV2R/
+         NaFtmSmrYUqWllE4BlIasYx+TplV7vKKRKPhl3JZTCn89gZlyM8XlC/cWLUoFSwtwp0Q
+         iXHs9JgkkXLgBOntqznZya00tYN3pJIGoPj1mxC42rWIh/itm0SKaYATrRMWRK61VGFr
+         kO2z9BRkINf0IjoSsS/sy/TgHV6ZEzAvQIxRvnJ7CG0+bobn/UdI4zQTDy69n/Y5lGwP
+         S8DA==
+X-Gm-Message-State: AC+VfDyJ+w/mQeaV99kAVt/QvL+UqSqTeNNz+JTRqayEihG15VF0oiS8
+        eMnopCBcbXYGeiaFRKvgEQiPaw==
+X-Google-Smtp-Source: ACHHUZ5AQB3xPNC8HeE5B7ZSnQJ2q0B1Dhpm7pti083TO4i4yE+YkV+L4SebHFCZSa52EeGOU/k4+w==
+X-Received: by 2002:a05:6a20:4389:b0:105:6e1d:5605 with SMTP id i9-20020a056a20438900b001056e1d5605mr15348701pzl.62.1684350151063;
+        Wed, 17 May 2023 12:02:31 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id k3-20020aa790c3000000b0063d46ec5777sm15521703pfk.158.2023.05.17.12.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 12:02:30 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     ndesaulniers@google.com, masahiroy@kernel.org
+Cc:     Kees Cook <keescook@chromium.org>, linux-kbuild@vger.kernel.org,
+        nathan@kernel.org, linux-hardening@vger.kernel.org,
+        jpoimboe@kernel.org, llvm@lists.linux.dev, mbenes@suse.cz,
+        linux-kernel@vger.kernel.org, trix@redhat.com, peterz@infradead.org
+Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
+Date:   Wed, 17 May 2023 12:02:25 -0700
+Message-Id: <168435014337.2056649.7592777028793700479.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230407215406.768464-1-ndesaulniers@google.com>
+References: <20230407215406.768464-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGULZU01tdqm1Xoc@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 08:14:13PM +0300, Andy Shevchenko wrote:
-> On Tue, May 16, 2023 at 01:25:41PM -0500, Mario Limonciello wrote:
-> > power_supply_is_system_supplied() checks whether any power
-> > supplies are present that aren't batteries to decide whether
-> > the system is running on DC or AC.  Downstream drivers use
-> > this to make performance decisions.
-> > 
-> > Navi dGPUs include an UCSI function that has been exported
-> > since commit 17631e8ca2d3 ("i2c: designware: Add driver
-> > support for AMD NAVI GPU").
-> > 
-> > This UCSI function registers a power supply since commit
-> > 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-> > but this is not a system power supply.
-> > 
-> > As the power supply for a dGPU is only for powering devices connected
-> > to dGPU, create a device property to indicate that the UCSI endpoint
-> > is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
+On Fri, 7 Apr 2023 14:54:06 -0700, Nick Desaulniers wrote:
+> -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 and
+> Clang 3.2.  The minimum supported version of these according to
+> Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Drop
+> this cc-option check.
 > 
-> ...
 > 
-> > +static const struct property_entry dgpu_properties[] = {
-> > +	/* USB-C doesn't power the system */
-> > +	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
-> > +	{},
-> 
-> Comma is not needed in terminator entry.
 
-But it's encouraged!
+Applied to for-next/hardening, thanks!
+
+[1/1] ubsan: remove cc-option test for UBSAN_TRAP
+      https://git.kernel.org/kees/c/08e4044243a6
+
+-- 
+Kees Cook
+
