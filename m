@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 102B1707008
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292E1707015
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjEQRx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S229590AbjEQRzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEQRxZ (ORCPT
+        with ESMTP id S229592AbjEQRzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:53:25 -0400
+        Wed, 17 May 2023 13:55:33 -0400
 Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF057694;
-        Wed, 17 May 2023 10:53:14 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HHqxVj006456;
-        Wed, 17 May 2023 12:52:59 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4522AE48
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:55:32 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34HHtGuQ007084;
+        Wed, 17 May 2023 12:55:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684345979;
-        bh=r2fSf6f9qNV/yeQ0LXtwlx0ogRq/sdwCBuwOZP/DKDY=;
+        s=ti-com-17Q1; t=1684346116;
+        bh=ZdFx4WJk7gaa50DEFIuKLu7bef6RAjGgSB7wWhI1fE0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ct0BAjy2eaUZQ2QhecDjOg4hvmcvWaM5RleeaDeDIrL0BiN+3rObqHbtTTIPfzxjU
-         9jei65aK/PeTw5YQApUas/lIn8pcvuPr44OdD4Pz1GXo14TDwk+afFDVfc9Zx7ixMa
-         SjBgUX44NdtpXN2FOCToU53U7LtRCL/s12DSzrbg=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HHqxfn014263
+        b=Zj5/EobOmHNK6dbld/PufMWVa6QAmdKJ0g2Yp/sY6EQjnji4GK9a13D8riZA79kWP
+         QPThPn4sKRzio4cBccuMvG3XxebaAI/Re0BDCnuMdK4cerRJqbvxQMTRfSxzIRskO+
+         OwcE8U0xQKb5u0KF70j3o3hnewe0jKWG/eKyr+PY=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34HHtGQm023786
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 17 May 2023 12:52:59 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
- May 2023 12:52:59 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+        Wed, 17 May 2023 12:55:16 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE106.ent.ti.com
  (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
+ May 2023 12:55:15 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 17 May 2023 12:52:59 -0500
+ Frontend Transport; Wed, 17 May 2023 12:55:15 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34HHqxti028324;
-        Wed, 17 May 2023 12:52:59 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34HHtFjM104816;
+        Wed, 17 May 2023 12:55:15 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-CC:     Nishanth Menon <nm@ti.com>, <ssantosh@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH -next] soc: ti: smartreflex: Use devm_platform_ioremap_resource()
-Date:   Wed, 17 May 2023 12:52:58 -0500
-Message-ID: <168434593581.1537040.6212014212376315974.b4-ty@ti.com>
+To:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Simon Horman <horms@kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH] soc: ti: pruss: Avoid cast to incompatible function type
+Date:   Wed, 17 May 2023 12:55:15 -0500
+Message-ID: <168434598652.1537118.16232593863715460020.b4-ty@ti.com>
 X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230428062825.126448-1-yang.lee@linux.alibaba.com>
-References: <20230428062825.126448-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
+References: <20230418-pruss-clk-cb-v1-1-549a7e7febe4@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -65,20 +67,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang Li,
+Hi Simon Horman,
 
-On Fri, 28 Apr 2023 14:28:25 +0800, Yang Li wrote:
-> Convert platform_get_resource(),devm_ioremap_resource() to a single
-> call to devm_platform_ioremap_resource(), as this is exactly what this
-> function does.
+On Tue, 18 Apr 2023 13:41:48 +0200, Simon Horman wrote:
+> Rather than casting clk_unregister_mux to an incompatible function
+> type provide a trivial wrapper with the correct signature for the
+> use-case.
 > 
+> Reported by clang-16 with W=1:
 > 
+>  drivers/soc/ti/pruss.c:158:38: error: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>          ret = devm_add_action_or_reset(dev, (void(*)(void *))clk_unregister_mux,
+> 
+> [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
+NOTE: I think this is trivial fixup, which I think is better off for
+the next window.
 Thank you!
 
-[1/1] soc: ti: smartreflex: Use devm_platform_ioremap_resource()
-      commit: 9f60d9d310b94c5869a5b6a2f1707b90bd60245c
+[1/1] soc: ti: pruss: Avoid cast to incompatible function type
+      commit: 413552b360e72604b8c0cf3f60f9e6f01c8ff963
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
