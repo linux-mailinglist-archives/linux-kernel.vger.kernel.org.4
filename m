@@ -2,114 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2285B7061BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976E0706192
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjEQHwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
+        id S230154AbjEQHqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjEQHwg (ORCPT
+        with ESMTP id S229540AbjEQHqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:52:36 -0400
-X-Greylist: delayed 356 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 00:52:35 PDT
-Received: from out-41.mta1.migadu.com (out-41.mta1.migadu.com [95.215.58.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A69F3A9D
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:52:34 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684309598;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lYjBqehqUWvSOXsymQqye+/pd2/QBGQCCztad22+z+8=;
-        b=xoTnZwWNmd3UbNaJGG6QcrcKvZ9D6Y2wAV+JUnjezWa4UelfUEdPIBQafZcvTy7KHUldTM
-        bM1INjvJvYZLf9gXTym6Jo/bj1JaB+q65jnCK1R1PhB9E8zrAfGG6WuLr2RhHVV7hEpA3Z
-        O9KPdv9m2VcMDAydOH+hSzKxDVaPLTM=
-From:   Qi Zheng <qi.zheng@linux.dev>
-To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        muchun.song@linux.dev, Qi Zheng <zhengqi.arch@bytedance.com>,
-        Zhao Gongyi <zhaogongyi@bytedance.com>
-Subject: [PATCH] cgroup: fix missing cpus_read_{lock,unlock}() in cgroup_transfer_tasks()
-Date:   Wed, 17 May 2023 07:45:45 +0000
-Message-Id: <20230517074545.2045035-1-qi.zheng@linux.dev>
+        Wed, 17 May 2023 03:46:19 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3394DA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:46:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3af5s8KC0jpxinUkSVGtgdDvRiKlMHerb7s5Uk+tflw=; b=RqRDIbWTl+tBYvV2cZ6eAZpQL/
+        bGnVgkBSlpXag2KRy0e5FJub/0mmw+xUEfh5ra/t0xUb9hSwGSN33s0vRyTtssvZi+YzO3P+fMG6h
+        MtGw7Fggdfnw4n9dZJ+tXZm+Bbzo9P6npa7T732nj7pCM6W7D2LxJFIn9rlXQR1JduQeO0FgOJufy
+        NQbOjC5moKKdA3B6i6RqJZh/fCyfHOAGz2BKyvTxvHly3bTALQFe9CPfVwMtPnF8PDWLWAT1LgXK1
+        WkHQjpBXZlR8UTxhgrp4YzJprcZS5BRZ7YF/vJ9Gwp8gUGrjwc6vJjwp9WOHiP6RBfB0WJixCVszq
+        mgWQungg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pzBrN-008izE-1K;
+        Wed, 17 May 2023 07:46:09 +0000
+Date:   Wed, 17 May 2023 00:46:09 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     zhenwei pi <pizhenwei@bytedance.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, stefanha@redhat.com,
+        mst@redhat.com, jasowang@redhat.com, xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] virtio: abstract virtqueue related methods
+Message-ID: <ZGSGQWqbtdwGXurf@infradead.org>
+References: <20230517025424.601141-1-pizhenwei@bytedance.com>
+ <20230517025424.601141-2-pizhenwei@bytedance.com>
+ <ZGSEq197W8VvOWCc@infradead.org>
+ <9e4702f2-5473-2139-3858-ae58817bc7b5@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e4702f2-5473-2139-3858-ae58817bc7b5@bytedance.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qi Zheng <zhengqi.arch@bytedance.com>
+On Wed, May 17, 2023 at 03:43:03PM +0800, zhenwei pi wrote:
+> I have a plan to introduce 'Virtio Over Fabrics'(TCP&RDMA) as Virtio
+> transport, as mentioned in cover letter of this series:
+> 3 weeks ago, I posted a proposal 'Virtio Over Fabrics':
+> https://lists.oasis-open.org/archives/virtio-comment/202304/msg00442.html
 
-The commit 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock()
-deadlock") fixed the deadlock between cgroup_threadgroup_rwsem and
-cpus_read_lock() by introducing cgroup_attach_{lock,unlock}() and removing
-cpus_read_{lock,unlock}() from cpuset_attach(). But cgroup_transfer_tasks()
-was missed and not handled, which will cause th following warning:
-
- WARNING: CPU: 0 PID: 589 at kernel/cpu.c:526 lockdep_assert_cpus_held+0x32/0x40
- CPU: 0 PID: 589 Comm: kworker/1:4 Not tainted 6.4.0-rc2-next-20230517 #50
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- Workqueue: events cpuset_hotplug_workfn
- RIP: 0010:lockdep_assert_cpus_held+0x32/0x40
- <...>
- Call Trace:
-  <TASK>
-  cpuset_attach+0x40/0x240
-  cgroup_migrate_execute+0x452/0x5e0
-  ? _raw_spin_unlock_irq+0x28/0x40
-  cgroup_transfer_tasks+0x1f3/0x360
-  ? find_held_lock+0x32/0x90
-  ? cpuset_hotplug_workfn+0xc81/0xed0
-  cpuset_hotplug_workfn+0xcb1/0xed0
-  ? process_one_work+0x248/0x5b0
-  process_one_work+0x2b9/0x5b0
-  worker_thread+0x56/0x3b0
-  ? process_one_work+0x5b0/0x5b0
-  kthread+0xf1/0x120
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x1f/0x30
-  </TASK>
-
-So just use the cgroup_attach_{lock,unlock}() helper to fix it.
-
-Fixes: 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock")
-Reported-by: Zhao Gongyi <zhaogongyi@bytedance.com>
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- kernel/cgroup/cgroup-v1.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
-index aeef06c465ef..5407241dbb45 100644
---- a/kernel/cgroup/cgroup-v1.c
-+++ b/kernel/cgroup/cgroup-v1.c
-@@ -108,7 +108,7 @@ int cgroup_transfer_tasks(struct cgroup *to, struct cgroup *from)
- 
- 	cgroup_lock();
- 
--	percpu_down_write(&cgroup_threadgroup_rwsem);
-+	cgroup_attach_lock(true);
- 
- 	/* all tasks in @from are being moved, all csets are source */
- 	spin_lock_irq(&css_set_lock);
-@@ -144,7 +144,7 @@ int cgroup_transfer_tasks(struct cgroup *to, struct cgroup *from)
- 	} while (task && !ret);
- out_err:
- 	cgroup_migrate_finish(&mgctx);
--	percpu_up_write(&cgroup_threadgroup_rwsem);
-+	cgroup_attach_unlock(true);
- 	cgroup_unlock();
- 	return ret;
- }
--- 
-2.30.2
+Just don't do it.  Please define your own protocols over RDMA or TCP
+for exactly the operations you need (for many they will already exist)
+instead of piggyg backing on virtio and making everyone else pay the
+price.
 
