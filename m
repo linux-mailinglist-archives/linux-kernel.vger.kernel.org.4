@@ -2,197 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1D47070EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 20:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1C57072B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjEQSiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 14:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S229542AbjEQUIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEQSiH (ORCPT
+        with ESMTP id S229464AbjEQUIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 14:38:07 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDFB524E;
-        Wed, 17 May 2023 11:38:05 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2ac89e6a5a1so11830611fa.0;
-        Wed, 17 May 2023 11:38:05 -0700 (PDT)
+        Wed, 17 May 2023 16:08:35 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE85C659B
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:08:33 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-50d88a986afso1474247a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684348684; x=1686940684;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+        d=google.com; s=20221208; t=1684354112; x=1686946112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=FuipT8N9AIZhPuetrFCf6nkInGjCzh1d3K2+VTwrcZI=;
-        b=gC+vtXyeAJ6dSdPO9ckA5gFbeFI6fhGGVE+IeeHLh/LIpDM3DveIKb2PnQypN3RyCI
-         GfrhzjmpK1KfNaTuYgFK0AiYvAeNAQM2tB05rFKDaNFtuS6HyjITY7bNHQkaczRUo10E
-         oSYee6FmENAWY0/rtA93xOVPTLBwIqbm+salh6EXh0oIQqRIlKIFNOrt/3F8+wRTF+9N
-         lyo7L7pIuyoLah1EDY3ZNBdRbOI2jnalHE6bCfmTMzXspCtMt9OkIXr3jERyGocoVZ6Z
-         NPj/L+zzFiprF7/Mq7m2YpzbTh+pRGQ1YAIGKDp1OnV+822undYgBeyjgdWWz2xL2L3r
-         nAXw==
+        bh=WVkaYtQTj8iUhQoCH4E7KYFvPTbFMzSMw0B5Ujo6j7U=;
+        b=k/7Al0AtAF6zKhw0lzSRawbRH6pCbg1kV1kmPFxrNcXxZZYRNvdWDqo5+Or3482dNP
+         c5fXAAOIyOdgdQnsxZsnHrrdaSSFW6pS6MFD9QS3xPcTs7/2pKsMhqtcbzr7t9NAWTNt
+         /l5t3O8F+7nfkfHvCAVmULq94St6KRSnCzLp/wtq0RI1lvTJjYjREhVebxAfmpX790tX
+         bE9vFcQaAVvXxAKahSHmzirCs6T7b2PFBDoJfqyJbxUIb8VJgU/B6rWmDJUfZZ0Z+9iZ
+         6HIcs8qwMqxTNOhL9TeOLNkASwPfLLroCSB02PAeXZL/qmNASCFOEbmYw9mQZCnFAedm
+         d/Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684348684; x=1686940684;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=1e100.net; s=20221208; t=1684354112; x=1686946112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FuipT8N9AIZhPuetrFCf6nkInGjCzh1d3K2+VTwrcZI=;
-        b=mFa/sx9XQn8Yu2saLDBQ+o12+bfvlJ9fzUOkUBjn5tX9dX6vssqjdgmjkL6zHft1ZN
-         2ujyskQo16xFK+RBtX/EJ/Vi+xAgz5zTqdSeb0k653wmuRtE0S+Ua/7SrEQ5sH7pzBhY
-         l9I7UiQfJ+pXnFafQXzKCJrnt6ekKvH/Co9bUz/zbCndEZkJGcgOiNGeYOL4NnOWCDlP
-         PUSfLw5lkseztgwkFSKqkmmvUL6rBpZLlWe73dyY14K0p8bASqdaUDjlcn+fBeyAa60h
-         vPGQ/Kz57qs0xJiY0C3FtnfdoM8RYvkThn2gDA3jRyIlCXnZUkz/m3Eb4Z76fHPXMj0T
-         oNlQ==
-X-Gm-Message-State: AC+VfDz6AjiSMzdmiJfFGtqixz4j6fp5zHYzjDzpTg7ruDf6zyqE+hRy
-        bbGap5mUDYgt+WVzEFOL4Ag=
-X-Google-Smtp-Source: ACHHUZ6aSd8ko9LwiT1p/Y4sOJtZSnY3Z/munJAXGrvF4WuL83R/fb4/bH+qI5hWg4SkULozraJtkQ==
-X-Received: by 2002:a2e:800a:0:b0:2a7:96bd:9eb3 with SMTP id j10-20020a2e800a000000b002a796bd9eb3mr10581246ljg.3.1684348683477;
-        Wed, 17 May 2023 11:38:03 -0700 (PDT)
-Received: from [100.119.125.242] (95-31-187-187.broadband.corbina.ru. [95.31.187.187])
-        by smtp.gmail.com with ESMTPSA id t20-20020ac25494000000b004db0d26adb4sm3451405lfk.182.2023.05.17.11.38.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 11:38:02 -0700 (PDT)
-Message-ID: <5d7421b6a419a9645f97e6240b1dfbf47ffcab4e.camel@gmail.com>
-Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment
- option
-From:   Ivan Mikhaylov <fr0st61te@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Paul Fertser <fercerpav@gmail.com>
-Date:   Wed, 17 May 2023 21:38:02 +0000
-In-Reply-To: <38ae4ceb-da21-d73e-9625-1918b4ab4e16@linaro.org>
-References: <20230509143504.30382-1-fr0st61te@gmail.com>
-         <20230509143504.30382-4-fr0st61te@gmail.com>
-         <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
-         <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
-         <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
-         <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
-         <5b826dc7-2d02-d4ed-3b6a-63737abe732b@linaro.org>
-         <e6247cb39cc16a9328d9432e0595745b67c0aed5.camel@gmail.com>
-         <38ae4ceb-da21-d73e-9625-1918b4ab4e16@linaro.org>
+        bh=WVkaYtQTj8iUhQoCH4E7KYFvPTbFMzSMw0B5Ujo6j7U=;
+        b=R0c4/mFJQUbOGZtFQLsKrc1+P/nURVZeR+6wKbDVTIhO39pNTkGmVkBc65XzkraYDU
+         KzarpEsntX8zLnyOleLjqel8raSlD1SCAgFdmH01DEGMbm51zIsYkWoesvqVA65//CII
+         VNGzGSh3HXdT+s+uqc7Q+zOU1/GlMLeTBtM23LOnd0obqIwMcR/GDQxIMUezf4KDWlDR
+         8Wryxq26HQ8TBIm/UVOck5SHooj/qERUeIKJfAw4uoSnZBgAvWNYo6Cs5QZMazt7ElHW
+         yQExGzcxFv60oICCP0R6HvRYeppKh8WA25a0a68os46pbUelC7Mt1m4Q+mYZcIS6TstL
+         gk7A==
+X-Gm-Message-State: AC+VfDxYy3I5mFNYWKgdr4LL59jMt2oYi2u35dI1bjYkFZwhquIG3UWE
+        S1XYgo2ky1s4KWh6h0qJGwvrlDu3sPgKhCw=
+X-Google-Smtp-Source: ACHHUZ4fXXzkgZEE7kXW29z7xI8+JKUgG3Ttr9/nlpSJe9h8kBZqv80+Xkmr0bhvapKwvhzU0djTZltE3Lse/7w=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a50:aac5:0:b0:510:b4dc:1656 with SMTP id
+ r5-20020a50aac5000000b00510b4dc1656mr1476722edc.3.1684354112325; Wed, 17 May
+ 2023 13:08:32 -0700 (PDT)
+Date:   Wed, 17 May 2023 20:08:13 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230517200814.3157916-1-aliceryhl@google.com>
+Subject: [PATCH v1 1/2] rust: sync: add `Arc::ptr_eq`
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-17 at 10:36 +0200, Krzysztof Kozlowski wrote:
-> On 16/05/2023 13:47, Ivan Mikhaylov wrote:
-> hy this is property of the hardware. I
-> > > > > understand
-> > > > > that this is something you want Linux to do, but DT is not
-> > > > > for
-> > > > > that
-> > > > > purpose. Do not encode system policies into DT and what above
-> > > > > commit
-> > > > > says is a policy.
-> > > > >=20
-> > > >=20
-> > > > Krzysztof, okay then to which DT subsystem it should belong? To
-> > > > ftgmac100 after conversion?
-> > >=20
-> > > To my understanding, decision to add some numbers to MAC address
-> > > does
-> > > not look like DT property at all. Otherwise please help me to
-> > > understand
-> > > - why different boards with same device should have different
-> > > offset/value?
-> > >=20
-> > > Anyway, commit msg also lacks any justification for this.
-> > >=20
-> > > Best regards,
-> > > Krzysztof
-> > >=20
-> >=20
-> > Krzysztof, essentially some PCIe network cards have like an
-> > additional
-> > *MII interface which connects directly to a BMC (separate SoC for
-> > managing a motherboard) and by sending special ethernet type frames
-> > over that connection (called NC-SI) the BMC can obtain MAC, get
-> > link
-> > parameters etc. So it's natural for a vendor to allocate two MACs
-> > per
-> > such a board with PCIe card intergrated, with one MAC "flashed
-> > into"
-> > the network card, under the assumption that the BMC should
->=20
-> Who makes the assumption that next MAC should differ by 1 or 2?
+Add a method for comparing whether two `Arc` pointers reference the same
+underlying object.
 
-Krzysztof, in this above case BMC does, BMC should care about changing
-it and doing it with current codebase without any options just by some
-hardcoded numbers which is wrong.
+This comparison can already be done by getting a reference to the inner
+values and comparing whether the references have the same address.
+However, writing `Arc::ptr_eq(a, b)` is generally less error-prone than
+doing the same check on the references, since you might otherwise
+accidentally compare the two `&Arc<T>` references instead, which wont
+work because those are pointers to pointers to the inner value, when you
+just want to compare the pointers to the inner value.
 
->=20
-> > automatically use the next MAC. So it's the property of the
-> > hardware as
-> > the vendor designs it, not a matter of usage policy.
-> >=20
-> > Also at the nvmem binding tree is "nvmem-cell-cells" which is
-> > literally
-> > the same as what was proposed but on different level.
-> >=20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/Documentation/devicetree/bindings/nvmem?id=3D7e2805c203a6c8dc85c1cfda205=
-161ed39ae82d5
->=20
-> How is this similar? This points the location of mac address on some
-> NV
-> storage. You add fixed value which should be added to the Ethernet.
+Also, this method might optimize better because getting a reference to
+the inner value involves offsetting the pointer, which this method does
+not need to do.
 
-It's not the points the location, this particular option provides this
-increment for mac addresses to make use of them with multiple
-interfaces. Just part of above commit:
-"It's used as a base for calculating addresses for multiple interfaces.
-It's done by adding proper values. Actual offsets are picked by
-manufacturers and vary across devices."
+Co-developed-by: Wedson Almeida Filho <walmeida@microsoft.com>
+Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ rust/kernel/sync/arc.rs | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-It is same as we talked before about mac-address-increment in openwrt
-project, if you want examples, you can look into their github. And same
-as we trying to achieve here.
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index e6d206242465..274febe3bb06 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -221,6 +221,11 @@ impl<T: ?Sized> Arc<T> {
+         // reference can be created.
+         unsafe { ArcBorrow::new(self.ptr) }
+     }
++
++    /// Compare whether two [`Arc`] pointers reference the same underlying object.
++    pub fn ptr_eq(this: &Self, other: &Self) -> bool {
++        core::ptr::eq(this.ptr.as_ptr(), other.ptr.as_ptr())
++    }
+ }
+ 
+ impl<T: 'static> ForeignOwnable for Arc<T> {
 
-https://github.com/openwrt/openwrt/blob/master/target/linux/generic/pending=
--5.15/682-of_net-add-mac-address-increment-support.patch
-
-"Lots of embedded devices use the mac-address of other interface
-extracted from nvmem cells and increments it by one or two. Add two
-bindings to integrate this and directly use the right mac-address for
-the interface. Some example are some routers that use the gmac
-mac-address stored in the art partition and increments it by one for
-the
-wifi. mac-address-increment-byte bindings is used to tell what byte of
-the mac-address has to be increased (if not defined the last byte is
-increased) and mac-address-increment tells how much the byte decided
-early has to be increased."
-
-Don't you see similarity with nvmem commit?
-
->=20
-> I might be missing the context but there is no DTS example nor user
-> of
-> this property, so how can I get such?
->=20
-
-I don't see it either in linux kernel DTS tree but it in DTS doc.
-
-Also, just a little bit history about older propositions
-https://lore.kernel.org/all/?q=3Dmac-address-increment
-https://lore.kernel.org/all/20200919214941.8038-5-ansuelsmth@gmail.com/
-
-
-Thanks.
-
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.40.1.606.ga4b1b128d6-goog
 
