@@ -2,130 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08346706AE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21126706AE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 16:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjEQORV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 10:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S229692AbjEQOSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 10:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjEQORQ (ORCPT
+        with ESMTP id S229961AbjEQOSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 10:17:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184A33C3B
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 07:17:11 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pzHxX-0005eR-EI; Wed, 17 May 2023 16:16:55 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4E94F1C72FC;
-        Wed, 17 May 2023 14:16:53 +0000 (UTC)
-Date:   Wed, 17 May 2023 16:16:52 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-can@vger.kernel.org, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 1/4] dt-bindings: mfd: stm32f7: add binding definition
- for CAN3
-Message-ID: <20230517-corset-pelvis-5b0c41f519c9-mkl@pengutronix.de>
-References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
- <20230423172528.1398158-2-dario.binacchi@amarulasolutions.com>
- <20230424090229.GB8035@google.com>
+        Wed, 17 May 2023 10:18:12 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43744170F;
+        Wed, 17 May 2023 07:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
+        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+        List-Owner:List-Archive; bh=/cCcUVY0+p8UfDspSKk2zcUodO6pJN+rn+TO7JZm56Q=; b=u
+        r3oFjnyB/xtHBSlIrjLjSoW31w0Wl2pRo5uKToNTYG4ydhjfqEtd/8L9EJPtSAzQFgqstxmwYFW9D
+        gV70xDWFksLzeM8cLHm4dNqrqsMH8z49IHVKNexIOgtaA22eCJSEYN+2La6DCPfxRq65U9FO0JoOj
+        /VZWSB2xuzZWTmmQ=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:36332 helo=pettiford.lan)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pzHyh-0006rK-56; Wed, 17 May 2023 10:18:07 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 17 May 2023 10:17:46 -0400
+Message-Id: <20230517141745.3801238-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q5imvd4u3okupx2w"
-Content-Disposition: inline
-In-Reply-To: <20230424090229.GB8035@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: [PATCH] serial: sc16is7xx: mark IOCONTROL register as volatile
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
---q5imvd4u3okupx2w
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Bit SRESET (3) is cleared when a reset operation is completed. Having
+the IOCONTROL register as non-volatile will always read SRESET as 1.
+Therefore mark IOCONTROL register as a volatile register.
 
-Hey Lee Jones,
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+---
+ drivers/tty/serial/sc16is7xx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 24.04.2023 10:02:29, Lee Jones wrote:
-> On Sun, 23 Apr 2023, Dario Binacchi wrote:
->=20
-> > Add binding definition for CAN3 peripheral.
-> >=20
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> > ---
-> >=20
-> >  include/dt-bindings/mfd/stm32f7-rcc.h | 1 +
-> >  1 file changed, 1 insertion(+)
->=20
-> Applied, thanks
+diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+index 00054bb49780..a7c4da3cfd2b 100644
+--- a/drivers/tty/serial/sc16is7xx.c
++++ b/drivers/tty/serial/sc16is7xx.c
+@@ -488,6 +488,7 @@ static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
+ 	case SC16IS7XX_TXLVL_REG:
+ 	case SC16IS7XX_RXLVL_REG:
+ 	case SC16IS7XX_IOSTATE_REG:
++	case SC16IS7XX_IOCONTROL_REG:
+ 		return true;
+ 	default:
+ 		break;
+-- 
+2.30.2
 
-I upstreamed the v2 of this series
-(https://lore.kernel.org/all/20230427204540.3126234-1-dario.binacchi@amarul=
-asolutions.com/)
-that doesn't contain this change to net/main without noticing that the
-DT changes in that series depend on it.
-
-This broke the DT compilation of the stm32f746.dtsi in the net/main
-tree. I don't see the stm32f7-rcc.h changes in linus/master so I'm
-afraid this will break mainline too :/
-
-What are the possible solutions? I see:
-1) revert the stm32f746.dtsi changes via net/main
-2) upstream the stm32f7-rcc.h changes via net/main, too
-3) upstream the stm32f7-rcc.h changes via you tree, so that it hits
-   mainline in the v6.4 release cycle.
-
-I'm in favor of solution number 1. Thoughts?
-
-Sorry for the mess,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---q5imvd4u3okupx2w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRk4dAACgkQvlAcSiqK
-BOikxAf2M/Ykg/MJoF/7udP97hi5VrUGxB6DSWdGY2T6kl8FVmJbHgx+vib1h2X2
-/sj75GpkMhGNwdyysYP0KSFtzVnvI5bt/YHDwT/JnbljFw6xETEOllILKQbw5tat
-29kjQUDmlVwzC8+L3itlu//IEu0NpQzNDPc+H5sxxlqVOIm8//kp8EUAjlWnD4LN
-1fVKXi8UgK9paGixIiKbWYdvdLoYR5PcJFYFvWUEZEl0A7VtL0lXvZqdrnCo8ol5
-Iza8FIAN6dBUlxAIzw7u96gg7r4jo9Q+IjtVXbr4DrAQyA4eJ638VJKOU5fiHVzE
-qdyGlnD8b0opJO3QJPclwaQl3g/Q
-=epl8
------END PGP SIGNATURE-----
-
---q5imvd4u3okupx2w--
