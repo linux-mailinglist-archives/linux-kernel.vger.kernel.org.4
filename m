@@ -2,245 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2123F706FFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EF8706FFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 19:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbjEQRvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 13:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S229966AbjEQRvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 13:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjEQRv3 (ORCPT
+        with ESMTP id S229849AbjEQRvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 13:51:29 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6EB869E
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:51:15 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-76c6e795650so7100839f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 10:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1684345874; x=1686937874;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZeGga+wRA3DdbN6qGermomi0t82TyTTjoICSjLR9Oak=;
-        b=ZOWQ3xq8cR30z4CmAL/UBjRPsScKhCwFj+r8333u4PiRDsGDCMRjEyZtYqLGebnzpU
-         q5oLs3cbabusvm5yTKq6qdQCFw6hLBYsIz1N+iaC58wPfCvybwGcSaSM3pZxw6djOnJn
-         kx521tNH9qgu+ZeeWDlEo/3IqU+JpS4gD7z0U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684345874; x=1686937874;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZeGga+wRA3DdbN6qGermomi0t82TyTTjoICSjLR9Oak=;
-        b=QHNWMJeaMfxu5ByugaBTX7v4uBeUjtgf1tHC3yWU6UJ9r6oEz4zPEoH9sduFxKMN61
-         rXjwDyM7hpVW6bVwuZSG+cRxpuZk68EsiffYpBndahhHzbAZg4TKCA1G8ZMuUVoFaXnh
-         1IirTUxtIaP1G1YuSSIGGEZP1KO/QFaRoCn7BxV7Zdwc5auM2jG2isiSecKyvfTkWMor
-         KwA4hnl6pC1mnJHJ+x7oIDfExcILNJGXbPdsdvtZtt39etbcQnt8pszAiJkfm3EZXCxb
-         aur5PXP0VsHMf3bzVTQqFIUabTmrFcPlWhOlNnO8SYt/Sl8kQECooxLMZ0oryLZ5clV9
-         q82w==
-X-Gm-Message-State: AC+VfDzQMttJtHyrkPGWsHMGHV4nbRjzQosMwIi1d3FhIqx6s2PqDvJO
-        RP6snAN3gtGCPTdlO6bZBmiKEQ==
-X-Google-Smtp-Source: ACHHUZ7i6LAUJx7suPIRn5udDpxPFW5/BSsgRqwXtOB28GbGFRFVKLyVGxOIh0VXUQg4hV/aHq8YHA==
-X-Received: by 2002:a05:6602:371b:b0:76c:58d8:ff14 with SMTP id bh27-20020a056602371b00b0076c58d8ff14mr2537996iob.2.1684345874596;
-        Wed, 17 May 2023 10:51:14 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id l14-20020a6b750e000000b0076c872823b7sm4442428ioh.22.2023.05.17.10.51.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 10:51:14 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------ZntvF0xiKTz6Lpdvi5kYi38P"
-Message-ID: <eadfd317-7a66-2cf7-72ca-ee9b8b0aea91@linuxfoundation.org>
-Date:   Wed, 17 May 2023 11:51:13 -0600
+        Wed, 17 May 2023 13:51:50 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29A4544AB;
+        Wed, 17 May 2023 10:51:29 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3DF0D20F26A4;
+        Wed, 17 May 2023 10:51:28 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3DF0D20F26A4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1684345888;
+        bh=qpe8jAdw/uTx0WBX7F2OU2VfCTXiTsm/V82/ZFGMen0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MiC4f/ygA75UgAvtPkYRmlbjAm7/lP4XmodFNURRXYZpXK8o+biLnVoXSHPqFH2AU
+         sb1nu3zsVJEhyPCeJFr/9SuB2ZsiOiAD4ctbky6yWgmVmNwo+1h9OhRY+mqtMFcIhA
+         cNr5Og8uycMMz8xQiAWhin7wo22poEJH8qLO3ew4=
+Date:   Wed, 17 May 2023 10:51:21 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        dthaler@microsoft.com, brauner@kernel.org, hch@infradead.org
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+Message-ID: <20230517175121.GA200@W11-BEAU-MD.localdomain>
+References: <20230508163751.841-1-beaub@linux.microsoft.com>
+ <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
+ <20230509130111.62d587f1@rorschach.local.home>
+ <20230509163050.127d5123@rorschach.local.home>
+ <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
+ <20230515192407.GA85@W11-BEAU-MD.localdomain>
+ <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     torvalds@linux-foundation.org
-Cc:     skhan@linuxfoundation.org, shuah <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest fixes update for Linux 6.4-rc3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------ZntvF0xiKTz6Lpdvi5kYi38P
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Tue, May 16, 2023 at 05:36:28PM -0700, Alexei Starovoitov wrote:
+> On Mon, May 15, 2023 at 12:24:07PM -0700, Beau Belgrave wrote:
+> > > > 
+> > > > 	ret = pin_user_pages_remote(mm->mm, uaddr, 1, FOLL_WRITE | FOLL_NOFAULT,
+> > > > 				    &page, NULL, NULL);
+> > > 
+> > > ... which will call pin_user_pages_remote() in RCU CS.
+> > > This looks buggy, since pin_user_pages_remote() may schedule.
+> > > 
+> > 
+> > If it's possible to schedule, I can change this to cache the probe
+> > callbacks under RCU then drop it. However, when would
+> > pin_user_pages_remote() schedule with FOLL_NOFAULT? 
+> 
+> Are you saying that passing FOLL_NOFAULT makes it work in atomic context?
+> Is this documented anywhere?
+> 
+> > I couldn't pick up
+> > where it might schedule?
+> 
+> I think I see plenty of rw_semaphore access in the guts of GUP.
+> 
+> Have you tested user events with CONFIG_DEBUG_ATOMIC_SLEEP?
+> 
 
-Hi Linus,
+This pops on ATOMIC_SLEEP, thanks for pointing this out. I missed that
+the gup retry statement is a fallthrough. PROVE_RCU/LOCKING didn't catch
+this, lesson learned.
 
-Please pull the following Kselftest fixes update for Linux 6.4-rc3.
+[...]
 
-This Kselftest fixes update for Linux 6.4-rc3 consists of:
+> > 
+> > I thought it being a GPL export symbol that this kind of stuff would be
+> > documented somewhere if there are requirements to use the method. As it
+> 
+> EXPORT_SYMBOL_GPL(perf_trace_run_bpf_submit);
+> does not mean that any arbitrary code in the kernel or GPL-ed module
+> is free to call it whichever way they like.
+> It's an export symbol only because modules expose tracepoints.
+> It's an implementation detail of DECLARE_EVENT_CLASS macro and
+> can change at any time including removal of export symbol.
+> 
 
-- sgx test fix for false negatives.
-- ftrace output is hard to parse and it masks inappropriate skips etc.
-   This fix addresses the problems by integrating with kselftest runner.
+Ok, guess I'm looking for what best to do here that is least likely to
+break and also allows potentially the BPF program to grab further user
+memory within it (I guess this means using sleepable BPF, should I
+follow what uprobes did?).
 
-diff is attached.
+> > stands in the patch, the data that is sent to BPF is from the buffer
+> > returned from perf_trace_buf_alloc() after it has been copied from the
+> > user process.
+> > 
+> > If the process crashes, that shouldn't affect the actual data. The
+> > tracepoint remains even upon a crash. If you try to unregister the
+> > tracepoint while BPF is attached, it is prevented, as the tracepoints
+> > are ref-counted and cannot be unregistered if anything is using it
+> > (user processes, ftrace, perf/bpf).
+> > 
+> > We have been using libbpf to attach and monitor user_events with this
+> > patch and haven't hit issues for what we plan to use it for (decode
+> > the payload, aggregate, and track what's happening per-TID/PID). The
+> > data we care about is already in kernel memory via the perf trace
+> > buffer.
+> 
+> What bpf prog type do you use? How does libbpf attach it?
+> You have to provide a patch for selftest/bpf/ for us to meaningfully review it.
+> 
 
-thanks,
--- Shuah
+This is how I wired up libbpf via libbpf-bootstrap for the sample that's
+checked in:
+struct example {
+    unsigned long long unused;
+    int count;
+};
 
-----------------------------------------------------------------
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+SEC("tp/user_events/test")
+int handle_tp(struct example *ctx)
+{
+        int pid = bpf_get_current_pid_tgid() >> 32;
 
-   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+        bpf_printk("BPF triggered from PID %d, count=%d.\n", pid, ctx->count);
 
-are available in the Git repository at:
+        return 0;
+}
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.4-rc3
+I'm not sure if tp is referencing traditional tracepoint or not
+(guessing it is).
 
-for you to fetch changes up to dbcf76390eb9a65d5d0c37b0cd57335218564e37:
+> > 
+> > > In general we don't want bpf to be called in various parts of the kernel
+> > > just because bpf was used in similar parts elsewhere.
+> > > bpf needs to provide real value for a particular kernel subsystem.
+> > > 
+> > 
+> > For sure. I've had a lot of requests within Microsoft to wire up BPF to
+> > user_events which prompted this patch. I've been in a few conversations
+> > where we start talking about perf_event buffers and teams stop and ask
+> > why it cannot go to BPF directly.
+> 
+> So you need perf_event buffers or ftrace ring buffer (aka trace_pipe) ?
+> Which one do you want to use ?
+> 
 
-   selftests/ftrace: Improve integration with kselftest runner (2023-05-08 11:10:13 -0600)
+We use both, depending on the situation. Local debugging we typically
+use ftrace since it's quite easy to use. In production we use perf_event
+buffers mainly.
 
-----------------------------------------------------------------
-linux-kselftest-fixes-6.4-rc3
+> > Yeah, keep consistent was more about using the GPL export symbol, which
+> > the kernel tracepoints currently utilize. I wanted to avoid any special
+> > casing BPF needed to add for user_events, and I also expect users would
+> > like one way to write a BPF program for tracepoints/trace_events even
+> > if they are from user processes vs kernel.
+> 
+> BPF progs have three ways to access kernel tracepoints:
+> 1. traditional tracepoint
+> 2. raw tracepoint
+> 3. raw tracepoint with BTF
+> 
+> 1 was added first and now rarely used (only by old tools), since it's slow.
+> 2 was added later to address performance concerns.
+> 3 was added after BTF was introduced to provide accurate types.
+> 
+> 3 is the only one that bpf community recommends and is the one that is used most often.
+> 
+> As far as I know trace_events were never connected to bpf.
+> Unless somebody sneaked the code in without us seeing it.
+> 
+> I think you're trying to model user_events+bpf as 1.
+> Which means that you'll be repeating the same mistakes.
+> 
 
-This Kselftest fixes update for Linux 6.4-rc3 consists of:
+See above, asking for guidance.
 
-- sgx test fix for false negatives.
-- ftrace output is hard to parse and it masks inappropriate skips etc.
-   This fix addresses the problems by integrating with kselftest runner.
+> > 
+> > > Beau,
+> > > please provide a detailed explanation of your use case and how bpf helps.
+> > > 
+> > 
+> > There are teams that have existing BPF programs that want to also pull
+> > in data from user processes in addition to the data they already collect
+> > from the kernel.
+> > 
+> > We are also seeing a trend of teams wanting to drop buffering approaches
+> > and move into non-buffered analysis of problems. An example is as soon
+> > as a fault happens in a user-process, they would like the ability to see
+> > what that thread has done, what the kernel did a bit before the error
+> > (or other processes that have swapped in, etc).
+> 
+> Sounds like bpf prog would need to access user memory.
+> What we've learned the hard way that you cannot do it cleanly from the kernel
+> tracepoint/trace_event/perf_event (and user_event in your case).
+> The only clean way to do it is from uprobe where it's user context and it is
+> sleepable and fault-able. That's why we've added 'sleepable bpf uprobes'.
+> 
+> Just going with perf_trace_run_bpf_submit() you'll only have 'best effort' access
+> to user data. Not recommended.
+> 
 
-----------------------------------------------------------------
-Mark Brown (1):
-       selftests/ftrace: Improve integration with kselftest runner
+Good to know, do you recommend then how uprobes did this? These are in
+user context via write()/writev(). I don't see why I wouldn't pick
+sleepable / faultable if it offers better options to folks.
 
-Yi Lai (1):
-       selftests/sgx: Add "test_encl.elf" to TEST_FILES
+[...]
 
-  tools/testing/selftests/ftrace/Makefile        |  3 +-
-  tools/testing/selftests/ftrace/ftracetest      | 63 ++++++++++++++++++++++++--
-  tools/testing/selftests/ftrace/ftracetest-ktap |  8 ++++
-  tools/testing/selftests/sgx/Makefile           |  1 +
-  4 files changed, 71 insertions(+), 4 deletions(-)
-  create mode 100755 tools/testing/selftests/ftrace/ftracetest-ktap
-----------------------------------------------------------------
---------------ZntvF0xiKTz6Lpdvi5kYi38P
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-fixes-6.4-rc3.diff"
-Content-Disposition: attachment; filename="linux-kselftest-fixes-6.4-rc3.diff"
-Content-Transfer-Encoding: base64
+> > We've used branch + syscall approaches in Windows for a long time and
+> > have found them to work well in these locked down environments as well
+> > as for JIT'd languages like C#.
+> 
+> Ok. Looks like we've got to the main reason for user_events.
+> Re-phrasing above statement. User_events-like facility existed in Windows
+> and we've decided to implement the same in Linux to have common framework
+> to monitor applications in both OSes.
+> Are you planning to extend bpf-for-windows to attach to window's equivalent
+> of user_events ?
+> If so, we can allow bpf progs to be attached to user_events in Linux.
+> Please send a proper patch with [PATCH bpf-next] subject targeting bpf-next
+> with selftest and clear explanation of the true reason.
+> 
 
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS9NYWtlZmlsZSBi
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS9NYWtlZmlsZQppbmRleCBkNmUxMDZm
-YmNlMTEuLmExZTk1NWQyZGU0YyAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMvZnRyYWNlL01ha2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFj
-ZS9NYWtlZmlsZQpAQCAtMSw3ICsxLDggQEAKICMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6
-IEdQTC0yLjAKIGFsbDoKIAotVEVTVF9QUk9HUyA6PSBmdHJhY2V0ZXN0CitURVNUX1BST0dT
-X0VYVEVOREVEIDo9IGZ0cmFjZXRlc3QKK1RFU1RfUFJPR1MgOj0gZnRyYWNldGVzdC1rdGFw
-CiBURVNUX0ZJTEVTIDo9IHRlc3QuZCBzZXR0aW5ncwogRVhUUkFfQ0xFQU4gOj0gJChPVVRQ
-VVQpL2xvZ3MvKgogCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9mdHJh
-Y2UvZnRyYWNldGVzdCBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS9mdHJhY2V0
-ZXN0CmluZGV4IGMzMzExYzhjNDA4OS4uMjUwNjYyMWU3NWRmIDEwMDc1NQotLS0gYS90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9mdHJhY2UvZnRyYWNldGVzdAorKysgYi90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9mdHJhY2UvZnRyYWNldGVzdApAQCAtMTMsNiArMTMsNyBAQCBlY2hv
-ICJVc2FnZTogZnRyYWNldGVzdCBbb3B0aW9uc10gW3Rlc3RjYXNlKHMpXSBbdGVzdGNhc2Ut
-ZGlyZWN0b3J5KHMpXSIKIGVjaG8gIiBPcHRpb25zOiIKIGVjaG8gIgkJLWh8LS1oZWxwICBT
-aG93IGhlbHAgbWVzc2FnZSIKIGVjaG8gIgkJLWt8LS1rZWVwICBLZWVwIHBhc3NlZCB0ZXN0
-IGxvZ3MiCitlY2hvICIJCS1LfC0ta3RhcCAgT3V0cHV0IGluIEtUQVAgZm9ybWF0IgogZWNo
-byAiCQktdnwtLXZlcmJvc2UgSW5jcmVhc2UgdmVyYm9zaXR5IG9mIHRlc3QgbWVzc2FnZXMi
-CiBlY2hvICIJCS12diAgICAgICAgQWxpYXMgb2YgLXYgLXYgKFNob3cgYWxsIHJlc3VsdHMg
-aW4gc3Rkb3V0KSIKIGVjaG8gIgkJLXZ2diAgICAgICBBbGlhcyBvZiAtdiAtdiAtdiAoU2hv
-dyBhbGwgY29tbWFuZHMgaW1tZWRpYXRlbHkpIgpAQCAtODUsNiArODYsMTAgQEAgcGFyc2Vf
-b3B0cygpIHsgIyBvcHRzCiAgICAgICBLRUVQX0xPRz0xCiAgICAgICBzaGlmdCAxCiAgICAg
-OzsKKyAgICAtLWt0YXB8LUspCisgICAgICBLVEFQPTEKKyAgICAgIHNoaWZ0IDEKKyAgICA7
-OwogICAgIC0tdmVyYm9zZXwtdnwtdnZ8LXZ2dikKICAgICAgIGlmIFsgJFZFUkJPU0UgLWVx
-IC0xIF07IHRoZW4KIAl1c2FnZSAiLS1jb25zb2xlIGNhbiBub3QgdXNlIHdpdGggLS12ZXJi
-b3NlIgpAQCAtMTc4LDYgKzE4Myw3IEBAIFRFU1RfRElSPSRUT1BfRElSL3Rlc3QuZAogVEVT
-VF9DQVNFUz1gZmluZF90ZXN0Y2FzZXMgJFRFU1RfRElSYAogTE9HX0RJUj0kVE9QX0RJUi9s
-b2dzL2BkYXRlICslWSVtJWQtJUglTSVTYC8KIEtFRVBfTE9HPTAKK0tUQVA9MAogREVCVUc9
-MAogVkVSQk9TRT0wCiBVTlNVUFBPUlRFRF9SRVNVTFQ9MApAQCAtMjI5LDcgKzIzNSw3IEBA
-IHBybG9nKCkgeyAjIG1lc3NhZ2VzCiAgICAgbmV3bGluZT0KICAgICBzaGlmdAogICBmaQot
-ICBwcmludGYgIiQqJG5ld2xpbmUiCisgIFsgIiRLVEFQIiAhPSAiMSIgXSAmJiBwcmludGYg
-IiQqJG5ld2xpbmUiCiAgIFsgIiRMT0dfRklMRSIgXSAmJiBwcmludGYgIiQqJG5ld2xpbmUi
-IHwgc3RyaXBfZXNjID4+ICRMT0dfRklMRQogfQogY2F0bG9nKCkgeyAjZmlsZQpAQCAtMjYw
-LDExICsyNjYsMTEgQEAgVE9UQUxfUkVTVUxUPTAKIAogSU5TVEFOQ0U9CiBDQVNFTk89MAor
-Q0FTRU5BTUU9CiAKIHRlc3RjYXNlKCkgeyAjIHRlc3RmaWxlCiAgIENBU0VOTz0kKChDQVNF
-Tk8rMSkpCi0gIGRlc2M9YGdyZXAgIl4jWyBcdF0qZGVzY3JpcHRpb246IiAkMSB8IGN1dCAt
-ZjItIC1kOmAKLSAgcHJsb2cgLW4gIlskQ0FTRU5PXSRJTlNUQU5DRSRkZXNjIgorICBDQVNF
-TkFNRT1gZ3JlcCAiXiNbIFx0XSpkZXNjcmlwdGlvbjoiICQxIHwgY3V0IC1mMi0gLWQ6YAog
-fQogCiBjaGVja3JlcSgpIHsgIyB0ZXN0ZmlsZQpAQCAtMjc3LDQwICsyODMsNjggQEAgdGVz
-dF9vbl9pbnN0YW5jZSgpIHsgIyB0ZXN0ZmlsZQogICBncmVwIC1xICJeI1sgXHRdKmZsYWdz
-Oi4qaW5zdGFuY2UiICQxCiB9CiAKK2t0YXB0ZXN0KCkgeyAjIHJlc3VsdCBjb21tZW50Cisg
-IGlmIFsgIiRLVEFQIiAhPSAiMSIgXTsgdGhlbgorICAgIHJldHVybgorICBmaQorCisgIGxv
-Y2FsIHJlc3VsdD0KKyAgaWYgWyAiJDEiID0gIjEiIF07IHRoZW4KKyAgICByZXN1bHQ9Im9r
-IgorICBlbHNlCisgICAgcmVzdWx0PSJub3Qgb2siCisgIGZpCisgIHNoaWZ0CisKKyAgbG9j
-YWwgY29tbWVudD0kKgorICBpZiBbICIkY29tbWVudCIgIT0gIiIgXTsgdGhlbgorICAgIGNv
-bW1lbnQ9IiMgJGNvbW1lbnQiCisgIGZpCisKKyAgZWNobyAkQ0FTRU5PICRyZXN1bHQgJElO
-U1RBTkNFJENBU0VOQU1FICRjb21tZW50Cit9CisKIGV2YWxfcmVzdWx0KCkgeyAjIHNpZ3Zh
-bAogICBjYXNlICQxIGluCiAgICAgJFBBU1MpCiAgICAgICBwcmxvZyAiCVske2NvbG9yX2dy
-ZWVufVBBU1Mke2NvbG9yX3Jlc2V0fV0iCisgICAgICBrdGFwdGVzdCAxCiAgICAgICBQQVNT
-RURfQ0FTRVM9IiRQQVNTRURfQ0FTRVMgJENBU0VOTyIKICAgICAgIHJldHVybiAwCiAgICAg
-OzsKICAgICAkRkFJTCkKICAgICAgIHBybG9nICIJWyR7Y29sb3JfcmVkfUZBSUwke2NvbG9y
-X3Jlc2V0fV0iCisgICAgICBrdGFwdGVzdCAwCiAgICAgICBGQUlMRURfQ0FTRVM9IiRGQUlM
-RURfQ0FTRVMgJENBU0VOTyIKICAgICAgIHJldHVybiAxICMgdGhpcyBpcyBhIGJ1Zy4KICAg
-ICA7OwogICAgICRVTlJFU09MVkVEKQogICAgICAgcHJsb2cgIglbJHtjb2xvcl9ibHVlfVVO
-UkVTT0xWRUQke2NvbG9yX3Jlc2V0fV0iCisgICAgICBrdGFwdGVzdCAwIFVOUkVTT0xWRUQK
-ICAgICAgIFVOUkVTT0xWRURfQ0FTRVM9IiRVTlJFU09MVkVEX0NBU0VTICRDQVNFTk8iCiAg
-ICAgICByZXR1cm4gJFVOUkVTT0xWRURfUkVTVUxUICMgZGVwZW5kcyBvbiB1c2UgY2FzZQog
-ICAgIDs7CiAgICAgJFVOVEVTVEVEKQogICAgICAgcHJsb2cgIglbJHtjb2xvcl9ibHVlfVVO
-VEVTVEVEJHtjb2xvcl9yZXNldH1dIgorICAgICAga3RhcHRlc3QgMSBTS0lQCiAgICAgICBV
-TlRFU1RFRF9DQVNFUz0iJFVOVEVTVEVEX0NBU0VTICRDQVNFTk8iCiAgICAgICByZXR1cm4g
-MAogICAgIDs7CiAgICAgJFVOU1VQUE9SVEVEKQogICAgICAgcHJsb2cgIglbJHtjb2xvcl9i
-bHVlfVVOU1VQUE9SVEVEJHtjb2xvcl9yZXNldH1dIgorICAgICAga3RhcHRlc3QgMSBTS0lQ
-CiAgICAgICBVTlNVUFBPUlRFRF9DQVNFUz0iJFVOU1VQUE9SVEVEX0NBU0VTICRDQVNFTk8i
-CiAgICAgICByZXR1cm4gJFVOU1VQUE9SVEVEX1JFU1VMVCAjIGRlcGVuZHMgb24gdXNlIGNh
-c2UKICAgICA7OwogICAgICRYRkFJTCkKICAgICAgIHBybG9nICIJWyR7Y29sb3JfZ3JlZW59
-WEZBSUwke2NvbG9yX3Jlc2V0fV0iCisgICAgICBrdGFwdGVzdCAxIFhGQUlMCiAgICAgICBY
-RkFJTEVEX0NBU0VTPSIkWEZBSUxFRF9DQVNFUyAkQ0FTRU5PIgogICAgICAgcmV0dXJuIDAK
-ICAgICA7OwogICAgICopCiAgICAgICBwcmxvZyAiCVske2NvbG9yX2JsdWV9VU5ERUZJTkVE
-JHtjb2xvcl9yZXNldH1dIgorICAgICAga3RhcHRlc3QgMCBlcnJvcgogICAgICAgVU5ERUZJ
-TkVEX0NBU0VTPSIkVU5ERUZJTkVEX0NBU0VTICRDQVNFTk8iCiAgICAgICByZXR1cm4gMSAj
-IHRoaXMgbXVzdCBiZSBhIHRlc3QgYnVnCiAgICAgOzsKQEAgLTM3MSw2ICs0MDUsNyBAQCBf
-X3J1bl90ZXN0KCkgeyAjIHRlc3RmaWxlCiBydW5fdGVzdCgpIHsgIyB0ZXN0ZmlsZQogICBs
-b2NhbCB0ZXN0bmFtZT1gYmFzZW5hbWUgJDFgCiAgIHRlc3RjYXNlICQxCisgIHBybG9nIC1u
-ICJbJENBU0VOT10kSU5TVEFOQ0UkQ0FTRU5BTUUiCiAgIGlmIFsgISAteiAiJExPR19GSUxF
-IiBdIDsgdGhlbgogICAgIGxvY2FsIHRlc3Rsb2c9YG1rdGVtcCAkTE9HX0RJUi8ke0NBU0VO
-T30tJHt0ZXN0bmFtZX0tbG9nLlhYWFhYWGAKICAgZWxzZQpAQCAtNDA1LDYgKzQ0MCwxNyBA
-QCBydW5fdGVzdCgpIHsgIyB0ZXN0ZmlsZQogIyBsb2FkIGluIHRoZSBoZWxwZXIgZnVuY3Rp
-b25zCiAuICRURVNUX0RJUi9mdW5jdGlvbnMKIAoraWYgWyAiJEtUQVAiID0gIjEiIF07IHRo
-ZW4KKyAgZWNobyAiVEFQIHZlcnNpb24gMTMiCisKKyAgY2FzZWNvdW50PWBlY2hvICRURVNU
-X0NBU0VTIHwgd2MgLXdgCisgIGZvciB0IGluICRURVNUX0NBU0VTOyBkbworICAgIHRlc3Rf
-b25faW5zdGFuY2UgJHQgfHwgY29udGludWUKKyAgICBjYXNlY291bnQ9JCgoY2FzZWNvdW50
-KzEpKQorICBkb25lCisgIGVjaG8gIjEuLiR7Y2FzZWNvdW50fSIKK2ZpCisKICMgTWFpbiBs
-b29wCiBmb3IgdCBpbiAkVEVTVF9DQVNFUzsgZG8KICAgcnVuX3Rlc3QgJHQKQEAgLTQzOSw2
-ICs0ODUsMTcgQEAgcHJsb2cgIiMgb2YgdW5zdXBwb3J0ZWQ6ICIgYGVjaG8gJFVOU1VQUE9S
-VEVEX0NBU0VTIHwgd2MgLXdgCiBwcmxvZyAiIyBvZiB4ZmFpbGVkOiAiIGBlY2hvICRYRkFJ
-TEVEX0NBU0VTIHwgd2MgLXdgCiBwcmxvZyAiIyBvZiB1bmRlZmluZWQodGVzdCBidWcpOiAi
-IGBlY2hvICRVTkRFRklORURfQ0FTRVMgfCB3YyAtd2AKIAoraWYgWyAiJEtUQVAiID0gIjEi
-IF07IHRoZW4KKyAgZWNobyAtbiAiIyBUb3RhbHM6IgorICBlY2hvIC1uICIgcGFzczoiYGVj
-aG8gJFBBU1NFRF9DQVNFUyB8IHdjIC13YAorICBlY2hvIC1uICIgZmFpaToiYGVjaG8gJEZB
-SUxFRF9DQVNFUyB8IHdjIC13YAorICBlY2hvIC1uICIgeGZhaWw6ImBlY2hvICRYRkFJTEVE
-X0NBU0VTIHwgd2MgLXdgCisgIGVjaG8gLW4gIiB4cGFzczowIgorICBlY2hvIC1uICIgc2tp
-cDoiYGVjaG8gJFVOVEVTVEVEX0NBU0VTICRVTlNVUFBPUlRFRF9DQVNFUyB8IHdjIC13YAor
-ICBlY2hvIC1uICIgZXJyb3I6ImBlY2hvICRVTlJFU09MVkVEX0NBU0VTICRVTkRFRklORURf
-Q0FTRVMgfCB3YyAtd2AKKyAgZWNobworZmkKKwogY2xlYW51cAogCiAjIGlmIG5vIGVycm9y
-LCByZXR1cm4gMApkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZnRyYWNl
-L2Z0cmFjZXRlc3Qta3RhcCBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS9mdHJh
-Y2V0ZXN0LWt0YXAKbmV3IGZpbGUgbW9kZSAxMDA3NTUKaW5kZXggMDAwMDAwMDAwMDAwLi5i
-MzI4NDY3OWVmM2EKLS0tIC9kZXYvbnVsbAorKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9mdHJhY2UvZnRyYWNldGVzdC1rdGFwCkBAIC0wLDAgKzEsOCBAQAorIyEvYmluL3NoIC1l
-CisjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkKKyMKKyMgZnRyYWNl
-dGVzdC1rdGFwOiBXcmFwcGVyIHRvIGludGVncmF0ZSBmdHJhY2V0ZXN0IHdpdGggdGhlIGtz
-ZWxmdGVzdCBydW5uZXIKKyMKKyMgQ29weXJpZ2h0IChDKSBBcm0gTHRkLiwgMjAyMworCisu
-L2Z0cmFjZXRlc3QgLUsKZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Nn
-eC9NYWtlZmlsZSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3NneC9NYWtlZmlsZQppbmRl
-eCA3NWFmODY0ZTA3YjYuLjUwYWFiNmI1N2RhMyAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvc2d4L01ha2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L3NneC9NYWtlZmlsZQpAQCAtMTcsNiArMTcsNyBAQCBFTkNMX0NGTEFHUyA6PSAtV2FsbCAt
-V2Vycm9yIC1zdGF0aWMgLW5vc3RkbGliIC1ub3N0YXJ0ZmlsZXMgLWZQSUMgXAogCSAgICAg
-ICAtZm5vLXN0YWNrLXByb3RlY3RvciAtbXJkcm5kICQoSU5DTFVERVMpCiAKIFRFU1RfQ1VT
-VE9NX1BST0dTIDo9ICQoT1VUUFVUKS90ZXN0X3NneAorVEVTVF9GSUxFUyA6PSAkKE9VVFBV
-VCkvdGVzdF9lbmNsLmVsZgogCiBpZmVxICgkKENBTl9CVUlMRF9YODZfNjQpLCAxKQogYWxs
-OiAkKFRFU1RfQ1VTVE9NX1BST0dTKSAkKE9VVFBVVCkvdGVzdF9lbmNsLmVsZgo=
+Happy to.
 
---------------ZntvF0xiKTz6Lpdvi5kYi38P--
+> Also think hard whether repeating our prior tracepoint+bpf mistakes is
+> really want you want to do with user_events+bpf.
+
+It sounds like I should look into sleepable BPF, which I will do, but
+I'll wait to get you advice on this before sending a patch, etc.
+
+Thanks,
+-Beau
