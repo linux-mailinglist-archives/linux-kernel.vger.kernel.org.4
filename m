@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A92706ED0
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E5A706ED4
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 18:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjEQQxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 12:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S229721AbjEQQyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 12:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjEQQxQ (ORCPT
+        with ESMTP id S229642AbjEQQxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 12:53:16 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F03E10F5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:53:00 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f41dceb9caso1980405e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:53:00 -0700 (PDT)
+        Wed, 17 May 2023 12:53:51 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DB10E6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:53:49 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso1004692a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 09:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684342379; x=1686934379;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8dOJVIGMX/56gfv9vT65ZzraMpImyEbSMTyJtUPlCLo=;
-        b=2BVmhZvz4oCFmI5/DV5GvMVrMDeSuoxTJrL4iNd3Jxd8RMgHHaG2zBP3QGXd4XOrKH
-         hnCaxYsoji/6w9ykNXsu7Fi6zdPHszF1Q4gQwaYtYi+alCroMmK3dTCvf76H24m0hBNH
-         uPYMxYIcvwsv9oLoqcnRqkuJqG160ovtznAlXlPoISd+6G5FUe39gNEpXnHhlVhKSgAr
-         j7cJBOpVpVr6bIWkD/AWH7j1IIm/DQGL+hgxy/nADAKFAC150PQwk4fwE0f01qyGHD+P
-         Cp76uAflMqRUWC6k9pvk/7rn+QHXpv19LDYyCPOIgLeWLoQ8+IfQ09AyPHmlKEGKrCXG
-         SwVA==
+        d=linaro.org; s=google; t=1684342428; x=1686934428;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3hIDvPEdjftlVYbqhIG0JXGHdNlYOdLmSjve7aY9Eo0=;
+        b=LuAGyfOolGY2lv4bXLQZDUlCkYAFbMjVgJBhtQ35ZvoRANe0rP+NbkFwtPlSSeIKq/
+         Z1ELa4OdH1BhZPPVuEcS54mWAsAWMdI99jGP8mvKnKSUwftMqm5xSRaOfxTPxFqtkLxY
+         qdUkIgvZbQvT+RLeoqerdDueR+U+biU/Yr3n0d7E/Y5DiwxKMmqsHwOlN18at7sz3xX0
+         hix+tDpT085M0KrBRn5JxxVnqtP8l3xr6wG5PX+qP30zi+WThJQQGkTX+BzXAmY+WljI
+         684VChIFfk5qFuVy1ZK+D6QjxLctgUm4HmqkW+vvQDOPqCPVkbasYZ1D9Mdfy/5Rs9bJ
+         aCjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684342379; x=1686934379;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8dOJVIGMX/56gfv9vT65ZzraMpImyEbSMTyJtUPlCLo=;
-        b=btHrxSnYqVU6TaoqKnK4koFch/nGPnod6ER1onyBVeBRb5rvgxd9i0xUjkgoNNFeTX
-         xjagZFB4Xy1uurNWnKluGZw4i7tEFiA8LS+TtfWflPVQUKlQK1NDNvidE0TqFP39WWHW
-         dbkOjDZB/KmB9K5bkpGSjwMsJJTPo3atUcnZ56SIfgjDtXYM7czs2XMl0sX3MLpjX5SN
-         u3iMsedFjC+mC64PgiinXLTsbT10/Z58KTdwJwsC9YA97mTdou5FGumWmYgutD6se2i9
-         JTq4zQAYeRtsrQGFW0k7R9gVkiK61Opb7zAe97t02FvO5kArKuNQXZYS4la6dCsa5BlC
-         NE+w==
-X-Gm-Message-State: AC+VfDw93cNaU2qB30ANWg2fSTmNK+WNMSvJtwxG+nEmOz2MXW9MThRx
-        qhBxgsYddCI+FtIR/pZaPZk2HQ==
-X-Google-Smtp-Source: ACHHUZ5oWXHIEKdFAwIxANhWR9lMlqKmEiYA0FORJIMDBWG4zKRbrOzb0ppHIUnnzPT2YmO1WjO6DQ==
-X-Received: by 2002:a7b:cd01:0:b0:3f4:fe7f:3d18 with SMTP id f1-20020a7bcd01000000b003f4fe7f3d18mr2318552wmj.2.1684342378813;
-        Wed, 17 May 2023 09:52:58 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id u15-20020adfed4f000000b00307c46f4f08sm3267555wro.79.2023.05.17.09.52.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 09:52:58 -0700 (PDT)
-Message-ID: <94f8af4a-2555-052d-d04a-a0e54e0e2d13@baylibre.com>
-Date:   Wed, 17 May 2023 18:52:56 +0200
+        d=1e100.net; s=20221208; t=1684342428; x=1686934428;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3hIDvPEdjftlVYbqhIG0JXGHdNlYOdLmSjve7aY9Eo0=;
+        b=jRzAOWb89uxc1EyhVXG9o11PUWMak3ILdwaMunRvw4iOVs4qLnK3xt6zMaw7dinzN9
+         oFJkzUZNUip6UdH3WlmOqtf8SUl+qNXDdDnrEUp+0AYvybHKPdoqg1YnDjBqmnqf3h2w
+         s9Sb3Sk3DFWS3dwi3cO/4Q0sBv+qiPG1vurGC3WzS0H+gDuJpwTG0WZo8XpNTJzwIAj6
+         aINJjvuqLa4hLwifEKo58g21o0o/Xj5o3OTVQmG9+k2EvbIBD8p/tltmTWbAf9huTNTV
+         boKSDxlPU/G9CiiV2lb449SN4r0wC4XP35rm856sqS6qjnLj2qQwwFWzyxBiIbSjCplk
+         /1wQ==
+X-Gm-Message-State: AC+VfDwF5bvgB0qGIIVY7RmufPP1gbJwg5dzch1nhWSvn1vGQmCRGkc+
+        KSLQMgfUQajslMZmKcmwDHxchg==
+X-Google-Smtp-Source: ACHHUZ41XuiV/6uHDBhzp+l1Rm28KeZOiUPPrRFoy46T5x5hqEOTvHbPfGD88VINkhOzOmp9caPxnQ==
+X-Received: by 2002:a17:906:9b86:b0:96a:5a59:92cb with SMTP id dd6-20020a1709069b8600b0096a5a5992cbmr24102081ejc.47.1684342428067;
+        Wed, 17 May 2023 09:53:48 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id mc27-20020a170906eb5b00b00966330021e9sm12332628ejb.47.2023.05.17.09.53.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 09:53:47 -0700 (PDT)
+Date:   Wed, 17 May 2023 18:53:44 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Alexandre Bailon <abailon@baylibre.com>
+Cc:     conor+dt@kernel.org, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, matthias.bgg@gmail.com,
+        sumit.semwal@linaro.org, daniel@ffwll.ch, tzimmermann@suse.de,
+        christian.koenig@amd.com, linux-kernel@vger.kernel.org,
+        maarten.lankhorst@linux.intel.com,
+        linux-mediatek@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, linaro-mm-sig@lists.linaro.org,
+        airlied@gmail.com, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, bero@baylibre.com, mripard@kernel.org,
+        nbelin@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, khilman@baylibre.com, jstephan@baylibre.com
+Subject: Re: [PATCH 7/7] dt-bindings: Add bidings for mtk,apu-drm
+Message-ID: <20230517165344.6gzwzkwzu44noyqm@krzk-bin>
+References: <20230517145237.295461-1-abailon@baylibre.com>
+ <20230517145237.295461-8-abailon@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/2] clk/mediatek: Adjustments for MSDC rate accuracy
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, wenst@chromium.org,
-        chun-jie.chen@mediatek.com, mandyjh.liu@mediatek.com,
-        miles.chen@mediatek.com, zhaojh329@gmail.com,
-        daniel@makrotopia.org, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, Garmin.Chang@mediatek.com,
-        msp@baylibre.com, yangyingliang@huawei.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230516135205.372951-1-angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230516135205.372951-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230517145237.295461-8-abailon@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2023 15:52, AngeloGioacchino Del Regno wrote:
-> Changes in v2:
->    - Extended the changes in this series to MT8365 clocks
+On Wed, 17 May 2023 16:52:37 +0200, Alexandre Bailon wrote:
+> This adds the device tree bindings for the APU DRM driver.
 > 
-> This series stops unconditionally forcing CLK_SET_RATE_PARENT on
-> MediaTek muxes, as that should be set in the clock driver for each
-> clock requiring it, and removes CLK_SET_PARENT from all MSDC core
-> clocks to allow mtk-sd to select the right clock parent when doing
-> mclk setting, improving the rate accuracy and avoiding both under
-> and overclocks of the eMMC/SD/SDIO card, both improving performance
-> and stability of the attached storage.
-> 
-> This series was successfully tested on MT8173, MT8192, MT8195.
-> 
-> AngeloGioacchino Del Regno (2):
->    clk: mediatek: mux: Stop forcing CLK_SET_RATE_PARENT flag
->    clk: mediatek: Remove CLK_SET_PARENT from all MSDC core clocks
-> 
->   drivers/clk/mediatek/clk-mt6765.c          | 20 +++++-----
->   drivers/clk/mediatek/clk-mt6779.c          | 24 +++++------
->   drivers/clk/mediatek/clk-mt7981-topckgen.c | 12 +++---
->   drivers/clk/mediatek/clk-mt7986-topckgen.c | 12 +++---
->   drivers/clk/mediatek/clk-mt8173-topckgen.c | 24 +++++------
->   drivers/clk/mediatek/clk-mt8183.c          | 22 ++++++-----
->   drivers/clk/mediatek/clk-mt8186-topckgen.c | 24 +++++------
->   drivers/clk/mediatek/clk-mt8188-topckgen.c | 40 +++++++++++--------
->   drivers/clk/mediatek/clk-mt8192.c          | 23 +++++------
->   drivers/clk/mediatek/clk-mt8195-topckgen.c | 46 +++++++++++++---------
->   drivers/clk/mediatek/clk-mt8365.c          | 38 +++++++++---------
->   drivers/clk/mediatek/clk-mux.c             |  2 +-
->   12 files changed, 155 insertions(+), 132 deletions(-)
+> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
+> ---
+>  .../devicetree/bindings/gpu/mtk,apu-drm.yaml  | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
 > 
 
-I will try to test it next week on MT8365 SoC.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
--- 
-Regards,
-Alexandre
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml: 'maintainers' is a required property
+	hint: Metaschema for devicetree binding documentation
+	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+./Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/gpu/mtk,apu-drm.yaml#
+Documentation/devicetree/bindings/gpu/mtk,apu-drm.example.dts:18.15-22.11: Warning (unit_address_vs_reg): /example-0/apu@0: node has a unit name, but no reg or ranges property
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/mtk,apu-drm.example.dtb: apu@0: remoteproc: [[4294967295, 4294967295]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1782720
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
