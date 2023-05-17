@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB3D7072F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3731F7072FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 22:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjEQUZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 16:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S229733AbjEQUZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 16:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjEQUZG (ORCPT
+        with ESMTP id S229732AbjEQUZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 16:25:06 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2247AA9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:25:04 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ac785015d6so12322901fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:25:04 -0700 (PDT)
+        Wed, 17 May 2023 16:25:17 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3E283FA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:25:15 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2ac770a99e2so13174691fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 13:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684355103; x=1686947103;
+        d=linaro.org; s=google; t=1684355113; x=1686947113;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9e0TlWFJ4jnKLP48QttQ1EhOBYVUZ/hqG3PCu64KDjk=;
-        b=Nm5Z48j4L7l8aONmFdB0bPU503Vez21R0xjklG6FwEm856DgC0jTlLh+LlXqicg9qu
-         4QiujrQQnAlQmpGznZRLaJS0taDoMnPZF0fgC593g6VuQpcatPf44UBi+XCH2pFTvlX2
-         BC2ORFGHCscs4pmVjFlnUMH4E62Ct1kBs/t0HnljUAZMpgH3Y1zGadvgLslKTGJSO1Fh
-         cwKFiji4dhv5uhD+JJ+BkPgOCwIMJ9CpQgVWzJiohylg3lr0ZloBKQIepl1KEjkKxbxc
-         58fIpFL6oCDH/jROlikNU312tkq1IHEJUIE6DbHep1CHdHAyhU326KvOo9K9d+6NhEZL
-         Z7ig==
+        bh=gm3y2wIKXeo4RLdtNri9QzjjhdM2vmdYj4Pt4IbNgeQ=;
+        b=T3UU2KsQKVP7jzVL0YJ9F+QUdQsuiP1YJmhRbdmpoDAZBtYZASegDO0CGJ0SlOQoSV
+         QPRQHD4KchB4UXReT/BvncaFoxApXXHWzVtWBhaoUjuo3CS+p7rA8pGgi7wf9Wp+I25y
+         T4S/NQWlvOnp3aCcfBuhKbAc2ieIsaLhnYe5plu4ClZNDqAxFD44i65ORMH9CgV9W0Ph
+         g10aUdmJ70+dVSaJGtvYNKLL2DuJCN7CHlaFmxHCK+PvM5QRy7vgJu4IYlI3KuPkhUMM
+         OU4hByTHiiULBMS8WrbdWQl+QcsQfv8sCqp/FN985t56olljbCVr7pjrINH+/m5AtsO4
+         HQ9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684355103; x=1686947103;
+        d=1e100.net; s=20221208; t=1684355113; x=1686947113;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9e0TlWFJ4jnKLP48QttQ1EhOBYVUZ/hqG3PCu64KDjk=;
-        b=kVOmkHnadfw+BN4ZYBCuDy67tnh4GlXiv6damqAl5jE/zwFngiyJ2MhoCNuOifnJkF
-         C2/kRXgf6xpx/ItybIjSYYRA7cZIQKns/MRCcx0n26qxXdux7cw9/RoVfJt40Jcz1cew
-         9YDjK1jiL4W+MuTXnQsk0DjiBy/6qWAGNfZupyFUz94uAPvOjm/Ok6qRzyite+fcmZmp
-         Rn/LzAGu2okypha7eiRaypBl3hZ3getYXp1Q/Zfn9GC0qJA1UnXL/IX7ZtwSV9r/YPnK
-         F4AAPCxBzpPTkEQI4EdUP7agaeLEW4zTbfuAtgr+uXwchjIDa8cAXyOJ2k7grvik/HHg
-         6GnA==
-X-Gm-Message-State: AC+VfDyGubD7clZpoaInTDqJytL/qHdeDqq8y37K0k5J5fBZcIgrjfdo
-        /wzEaBTpEo099sy0vA26twcGKg==
-X-Google-Smtp-Source: ACHHUZ6AK0LriX0PjEwJvvd7rb1hrYTCrIWnDjpQQbNIWK8Yk/0ibBUzwrlcrCwrjv2/dIYoYawb3g==
-X-Received: by 2002:a2e:7a13:0:b0:2a6:1682:3a1e with SMTP id v19-20020a2e7a13000000b002a616823a1emr9930406ljc.31.1684355102763;
-        Wed, 17 May 2023 13:25:02 -0700 (PDT)
+        bh=gm3y2wIKXeo4RLdtNri9QzjjhdM2vmdYj4Pt4IbNgeQ=;
+        b=Axz3XNfPMQsFrcn748UYPddR3aBF5P/Kmkj7OkyZ51PTNlwFYRL9PaYUp0SnDjKkEC
+         MRvHtjwEv1tAUFt+J21iceKQ0H3E4cyZfVb9oBGcDMs7TKtfkiXwN/eA8HCzmhNr7q0Z
+         gItqPhQ/QM2Ur9uMuGV9l+jchWZkPfNbucS8p2uhRmfn+ZnhtWEoHRi2DKbG5XXIctzA
+         kSsmjhoVdL2Ekt8Kc+owqRyd7/1hADxqsr9w6T+NRp6eSmt9hy2MXOdhRtnbPBUqcdiF
+         oWyGDfkKJipMvmdmqH76JAMAhFChWYf402GIGlUs9QltqLdWNCTMtTq7/PHvnYhYuAUl
+         mu3g==
+X-Gm-Message-State: AC+VfDzTgs2wP2WCeCqPI3cxdMuvMtiXw3dLvPmXnDjx1sQGUciUv/q0
+        iYu4rmIRKUqE7KKceQLZu9zNUw==
+X-Google-Smtp-Source: ACHHUZ7R9mpYrHl5GpfD2kyel38ZdFHESzb8buFCHSAUaVXx3wxYh2W6X5t0lDlBw2zfZpGSaAA/NA==
+X-Received: by 2002:a2e:999a:0:b0:2ae:d269:5a1e with SMTP id w26-20020a2e999a000000b002aed2695a1emr5041062lji.21.1684355113248;
+        Wed, 17 May 2023 13:25:13 -0700 (PDT)
 Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id s23-20020a2e9c17000000b002ad90280503sm4079780lji.138.2023.05.17.13.25.01
+        by smtp.gmail.com with ESMTPSA id y5-20020a2e95c5000000b002addbc16a54sm2021760ljh.41.2023.05.17.13.25.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 13:25:02 -0700 (PDT)
-Message-ID: <763ab7b6-9e97-a2ee-2d49-5b666ca63941@linaro.org>
-Date:   Wed, 17 May 2023 22:25:00 +0200
+        Wed, 17 May 2023 13:25:12 -0700 (PDT)
+Message-ID: <13f7055b-8ec2-68c3-06a4-d650f76c0ac2@linaro.org>
+Date:   Wed, 17 May 2023 22:25:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 Subject: Re: [PATCH v2 00/18] Venus QoL / maintainability fixes
 Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -76,8 +76,9 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         stable@vger.kernel.org
 References: <20230228-topic-venus-v2-0-d95d14949c79@linaro.org>
  <f9904e82-4756-2add-3c7e-e019ce966515@linaro.org>
+ <049c7e3e-eaf2-0253-bf5b-83b9e8f949ab@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <f9904e82-4756-2add-3c7e-e019ce966515@linaro.org>
+In-Reply-To: <049c7e3e-eaf2-0253-bf5b-83b9e8f949ab@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,45 +93,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 12.05.2023 05:01, Bryan O'Donoghue wrote:
-> On 04/05/2023 09:00, Konrad Dybcio wrote:
->> Tested on 8250, but pretty please test it on your boards too!
+On 16.05.2023 14:57, Vikash Garodia wrote:
 > 
-> What's the definition of test here ?
+> On 5/12/2023 8:31 AM, Bryan O'Donoghue wrote:
+>> On 04/05/2023 09:00, Konrad Dybcio wrote:
+>>> Tested on 8250, but pretty please test it on your boards too!
+>>
+>> What's the definition of test here ?
+>>
+>> I ran this
+>>
+>> ffplay -codec:video h264_v4l2m2m FantasticFour-ROTSS.mp4
+>>
+>> and this
+>>
+>> ffplay -codec:video vp8_v4l2m2m /mnt/big-buck-bunny_trailer.webm
+>>
+>> on db410c with no errors. Then again I applied and disapplied the 8x8 264 fix to
+>> that branch and saw no discernable difference so I'm not very confident we have
+>> good coverage.
+>>
+>> @Stan @Vikash could you give some suggested tests for coverage here ?
 > 
-> I ran this
+> I could think of below test aspects for this series
+> 1. Suspend Resume
+> 2. Concurrency test
+> 3. Module load -> video usecase -> module unload -> module load -> video
+> usecase. This would ensure video firmware is reloaded and functional.
+> 4. Video playback and encode for all supported resolution and codecs.
+> 5. In general, video playback with more test content.
 > 
-> ffplay -codec:video h264_v4l2m2m FantasticFour-ROTSS.mp4
+> I would be testing the series with stability test suite on CrOS. That would be
+> either on sc7180 or sc7280 setup.
 > 
-> and this
-> 
-> ffplay -codec:video vp8_v4l2m2m /mnt/big-buck-bunny_trailer.webm
-> 
-> on db410c with no errors. Then again I applied and disapplied the 8x8 264 fix to that branch and saw no discernable difference so I'm not very confident we have good coverage.
-I don't think we have any coverage at all, especially considering
-there were 1 or 2 patches fixing vdec not working at all in the past
-few months.. Maybe CrOS has some internal pipelines for this.
-
-> 
-> @Stan @Vikash could you give some suggested tests for coverage here ?
-> 
-> @Konrad - get a db410c !
-Don't think they're even made anymore!
-
-> 
-> My superficial first-pass on this series looks good but, before giving a Tested-by here, I think we should define a set of coverage tests, run them - the upper end on sm8250 and lower end msm8916 "makes sense to me"
-> 
-> 20? different gstreamer tests at different formats and different sizes on our selected platforms db410c, rb5, rb3 I have - also an 820 I haven't booted and an enforce sdm660.
-> 
-> Which tests will we use to validate this series and subsequent series to ensure we don't have more regressions ?
-Personally I've done:
-
-- boot and check if venus still probes and doesn't shout in dmesg
-- decode and re-encode a H264 file
-
-which is far from perfect..
+> Konrad, you can post the new version as one patch needs to be dropped. Test can
+> be done on the new version. There are few patches in the series pending review,
+> which can be done in parallel.
+Sure, working on it!
 
 Konrad
 > 
-> ---
-> bod
+> -Vikash
+> 
+>>
+>> @Konrad - get a db410c !
+>>
+>> My superficial first-pass on this series looks good but, before giving a
+>> Tested-by here, I think we should define a set of coverage tests, run them - the
+>> upper end on sm8250 and lower end msm8916 "makes sense to me"
+>>
+>> 20? different gstreamer tests at different formats and different sizes on our
+>> selected platforms db410c, rb5, rb3 I have - also an 820 I haven't booted and an
+>> enforce sdm660.
+>>
+>> Which tests will we use to validate this series and subsequent series to ensure
+>> we don't have more regressions ?
+>>
+>> ---
+>> bod
