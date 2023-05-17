@@ -2,169 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0359706505
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE1B706504
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 12:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjEQKVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 06:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S230285AbjEQKUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 06:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjEQKVX (ORCPT
+        with ESMTP id S229501AbjEQKUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 06:21:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F2735A8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:21:20 -0700 (PDT)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QLptd06ZhzqSKP;
-        Wed, 17 May 2023 18:16:56 +0800 (CST)
-Received: from huawei.com (10.67.175.85) by kwepemi500009.china.huawei.com
- (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 17 May
- 2023 18:21:17 +0800
-From:   Xia Fukun <xiafukun@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <prajnoha@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <xiafukun@huawei.com>
-Subject: [PATCH v6] kobject: Fix global-out-of-bounds in kobject_action_type()
-Date:   Wed, 17 May 2023 18:19:57 +0800
-Message-ID: <20230517101957.14655-1-xiafukun@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 17 May 2023 06:20:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2322A35A8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 03:20:43 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pzEGm-0001Nd-Hf; Wed, 17 May 2023 12:20:32 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pzEGl-000opd-MS; Wed, 17 May 2023 12:20:31 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pzEGk-005JDj-UP; Wed, 17 May 2023 12:20:30 +0200
+Date:   Wed, 17 May 2023 12:20:30 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v17 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <20230517102030.b4nyo2dmpfl7v7fk@pengutronix.de>
+References: <20230421-neurology-trapezoid-b4fa29923a23@wendy>
+ <20230421-sleek-bottom-88b867f56609@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.85]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500009.china.huawei.com (7.221.188.199)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qa5qm3wv35pmobau"
+Content-Disposition: inline
+In-Reply-To: <20230421-sleek-bottom-88b867f56609@wendy>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following c language code can trigger KASAN's global variable
-out-of-bounds access error in kobject_action_type():
 
-int main() {
-    int fd;
-    char *filename = "/sys/block/ram12/uevent";
-    char str[86] = "offline";
-    int len = 86;
+--qa5qm3wv35pmobau
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    fd = open(filename, O_WRONLY);
-    if (fd == -1) {
-        printf("open");
-        exit(1);
-    }
+Hello Conor,
 
-    if (write(fd, str, len) == -1) {
-        printf("write");
-        exit(1);
-    }
+I found one remaining issue:
 
-    close(fd);
-    return 0;
-}
+On Fri, Apr 21, 2023 at 10:27:09AM +0100, Conor Dooley wrote:
+> +static u64 mchp_core_pwm_calc_duty(const struct pwm_state *state, u64 cl=
+k_rate,
+> +				   u8 prescale, u8 period_steps)
+> +{
+> +	u64 duty_steps, tmp;
+> +
+> +	/*
+> +	 * Calculate the duty cycle in multiples of the prescaled period:
+> +	 * duty_steps =3D duty_in_ns / step_in_ns
+> +	 * step_in_ns =3D (prescale * NSEC_PER_SEC) / clk_rate
+> +	 * The code below is rearranged slightly to only divide once.
+> +	 */
+> +	tmp =3D (prescale + 1) * NSEC_PER_SEC;
 
-Function kobject_action_type() receives the input parameters buf and count,
-where count is the length of the string buf.
+If prescale > 4 this overflows on 32bit archs, doesn't it?
+(I think prescale + 1 is promoted to unsigned int, then the
+multiplication is done and only then the range is extended to u64.
 
-In the use case we provided, count is 86, the count_first is 85.
-Buf points to a string with a length of 86, and its first seven
-characters are "offline".
-In line 87 of the code, kobject_actions[action] is the string "offline"
-with the length of 7,an out-of-boundary access will appear:
+> +	duty_steps =3D mul_u64_u64_div_u64(state->duty_cycle, clk_rate, tmp);
+> +
+> +	return duty_steps;
+> +}
 
-kobject_actions[action][85].
+Best regards
+Uwe
 
-Use sysfs_match_string() to replace the fragile and convoluted loop.
-This function is well-tested for parsing sysfs inputs. Moreover, this
-modification will not cause any functional changes.
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Fixes: f36776fafbaa ("kobject: support passing in variables for synthetic uevents")
-Signed-off-by: Xia Fukun <xiafukun@huawei.com>
----
-v5 -> v6:
-- Ensure that the following extensions remain effective:
-https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-uevent
+--qa5qm3wv35pmobau
+Content-Type: application/pgp-signature; name="signature.asc"
 
-v4 -> v5:
-- Fixed build errors and warnings, and retested the patch.
+-----BEGIN PGP SIGNATURE-----
 
-v3 -> v4:
-- Refactor the function to be more obviously correct and readable.
----
- include/linux/kobject.h |  3 +++
- lib/kobject_uevent.c    | 30 +++++++++++++++++-------------
- 2 files changed, 20 insertions(+), 13 deletions(-)
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRkqm4ACgkQj4D7WH0S
+/k6E4Af9GpPg42BTohU1ij/TFyI2WSTeDS3OHXIV92tExb/HLhS7FSfKT6abkvKE
+ypK/1B9fnczOdqCjkkU1EetSh+RpLL7D9iQTmpbVKiH6RNP4yzpluiURsYPs/FkX
+l13ixd0Twqfdm/YJC+I9bMxZMkSH/nQfz211qQXxdFDQ7gluRdNllcz0FZzx9goT
+naOJE1VjjAqzXEpcuSojE7ghI/ZG8zQihqmYgSRQV88rQoqupN7u69vvAKS/ji9g
+StJ3wFnLC3l5flUPz1ye32ZtXO/l7f7dewi+IpkDpcM54EY765Jiu4Mw53MTGUWm
+1b8HNXWdrt2LqRG9/l/0pUd6nJAJkQ==
+=4RDi
+-----END PGP SIGNATURE-----
 
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index c392c811d9ad..9d3ecce3c4f6 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -32,6 +32,9 @@
- #define UEVENT_NUM_ENVP			64	/* number of env pointers */
- #define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
- 
-+/* the maximum length of the string contained in kobject_actions[] */
-+#define UEVENT_KACT_STRSIZE		16
-+
- #ifdef CONFIG_UEVENT_HELPER
- /* path to the userspace helper executed on an event */
- extern char uevent_helper[];
-diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
-index 7c44b7ae4c5c..4030a928e9c6 100644
---- a/lib/kobject_uevent.c
-+++ b/lib/kobject_uevent.c
-@@ -66,7 +66,8 @@ static int kobject_action_type(const char *buf, size_t count,
- 	enum kobject_action action;
- 	size_t count_first;
- 	const char *args_start;
--	int ret = -EINVAL;
-+	int i, ret = -EINVAL;
-+	char kobj_act_buf[UEVENT_KACT_STRSIZE] = "";
- 
- 	if (count && (buf[count-1] == '\n' || buf[count-1] == '\0'))
- 		count--;
-@@ -77,21 +78,24 @@ static int kobject_action_type(const char *buf, size_t count,
- 	args_start = strnchr(buf, count, ' ');
- 	if (args_start) {
- 		count_first = args_start - buf;
-+		if (count_first > UEVENT_KACT_STRSIZE)
-+			goto out;
-+
- 		args_start = args_start + 1;
-+		strncpy(kobj_act_buf, buf, count_first);
-+		i = sysfs_match_string(kobject_actions, kobj_act_buf);
- 	} else
--		count_first = count;
-+		i = sysfs_match_string(kobject_actions, buf);
- 
--	for (action = 0; action < ARRAY_SIZE(kobject_actions); action++) {
--		if (strncmp(kobject_actions[action], buf, count_first) != 0)
--			continue;
--		if (kobject_actions[action][count_first] != '\0')
--			continue;
--		if (args)
--			*args = args_start;
--		*type = action;
--		ret = 0;
--		break;
--	}
-+	if (i < 0)
-+		goto out;
-+
-+	action = i;
-+	if (args)
-+		*args = args_start;
-+
-+	*type = action;
-+	ret = 0;
- out:
- 	return ret;
- }
--- 
-2.17.1
-
+--qa5qm3wv35pmobau--
