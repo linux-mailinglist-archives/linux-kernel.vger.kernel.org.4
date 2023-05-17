@@ -2,108 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EAA7061BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5331E7061BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 09:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjEQHwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 03:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S229634AbjEQHwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 03:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjEQHwh (ORCPT
+        with ESMTP id S229894AbjEQHwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 03:52:37 -0400
-Received: from out-59.mta1.migadu.com (out-59.mta1.migadu.com [95.215.58.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22D63AB5
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:52:36 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684309952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dyZ0cuqsL7jrvxzaZVQwwm8jIYz1ppUq/Jum/QlaPHY=;
-        b=OqE8aN8JSmdgKToLUX971c7a3DiU0pJ/sWtW/fk/TdEd7ve3MsuPqQUmLvJYFdYZAWuF/L
-        fY3RAA8bI8+JkKFtpGNXuWnggvdU95pfY1QJ/kI1njPSw/kCFj3CliY7MVbJz9tDqJudfU
-        OnoMOIJFePDXRG526clf0FUO/xpivRE=
+        Wed, 17 May 2023 03:52:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FF63A9D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:52:12 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510b6a249a8so774562a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 00:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684309931; x=1686901931;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xywzcWMXJ6fVrOF3nPW/4PclWe2qi/smTN8YvoKAJA4=;
+        b=vy0Jt/I5fwN4GLzB1zg7ceDB0CYpZf4by+TUQYDbTHA8u0/GXEkYvjcjaJAkIFCU5G
+         JeZuXb883bGD9ANX0YCo27fk/+xDBhlrMM2VygYWmuJQQS1I0V1InPdAL0rmtmPDnBe7
+         KR1K5fun6mO/82newmdgTHQbnO1bpPspnPpKAOzdDqJ3lgEgfy/U3cHisjUt6dRSuXku
+         imYenkL8uiaUiYN09QBQL4lRXQGZAE+996E1s0B5txdxX+77EWcwj39mK5m5FftARYVn
+         g2Qf4BlXO7NAh9IlbnqUUa+g3kbdj6rGmfPaPnOGVsNS6i5xjW4Izj4B/DqTpFiWVMn0
+         3Lsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684309931; x=1686901931;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xywzcWMXJ6fVrOF3nPW/4PclWe2qi/smTN8YvoKAJA4=;
+        b=IeCGZg8ToCfvcu9AVaGxLKw+mhrP2xe8LE01HBjDKLzgDbz7JyxYrJuqkwFXWMWdZb
+         rEnIN5XIvtQmCX5Ue2cQictyh2Fr+JMi7HFP5h+MURaT5akr2oLcTuOkf4UA1CE001qi
+         yuD56MdgHHmCzd4Pfp1V9qUuQblUoiVcQ2+nVa1L5sdNBkCcEbLJyLOYlDXRCzAdwP5u
+         Dmt5LmzhOiFnmK+qhyhw2Bl/sLW3nG6GXAUeXxznwtBQ/nsmwYasg/72Ogk+8mOvTqj9
+         1QeAphSMn0sRzFoYDblMo3y/qM7b4IqxrKcWCuYSvvLTNLeyUHHzG7LimtA9o/prWiiX
+         P5pA==
+X-Gm-Message-State: AC+VfDzpouwCOG8CTmxWAvLDv6an1f8+8hi0zT2g6Zy0NWBtXnc9WZ3H
+        mWtyT8FyF1QixQpu7EwwXTVFqw==
+X-Google-Smtp-Source: ACHHUZ7wuMXS45xKhuRUuJBC/7RfJyX9rNIqjM63B2vqZoVIpwAg416CLYHXF+qDfY0XgR79CPmu2w==
+X-Received: by 2002:aa7:d311:0:b0:50b:c689:8610 with SMTP id p17-20020aa7d311000000b0050bc6898610mr1394372edq.18.1684309930968;
+        Wed, 17 May 2023 00:52:10 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:c9ff:4c84:dd21:568d])
+        by smtp.gmail.com with ESMTPSA id d11-20020a05640208cb00b0050bd4b8ca8fsm8917257edz.14.2023.05.17.00.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 00:52:10 -0700 (PDT)
+Date:   Wed, 17 May 2023 09:52:08 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     devicetree@vger.kernel.org, "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: cache: qcom,llcc: Fix SM8550 description
+Message-ID: <20230517075208.hng4howl3khourl3@krzk-bin>
+References: <20230517-topic-kailua-llcc-v1-0-d57bd860c43e@linaro.org>
+ <20230517-topic-kailua-llcc-v1-1-d57bd860c43e@linaro.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] cgroup: fix missing cpus_read_{lock,unlock}() in
- cgroup_transfer_tasks()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20230517074545.2045035-1-qi.zheng@linux.dev>
-Date:   Wed, 17 May 2023 15:51:56 +0800
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Zhao Gongyi <zhaogongyi@bytedance.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <75E872A8-652F-40B0-80D0-378569E77775@linux.dev>
-References: <20230517074545.2045035-1-qi.zheng@linux.dev>
-To:     Qi Zheng <qi.zheng@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230517-topic-kailua-llcc-v1-1-d57bd860c43e@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 May 2023 04:18:49 +0200, Konrad Dybcio wrote:
+> SM8550 (LLCCv4.1) has 4 register regions, this was not described
+> between its addition and the restructurization that happened in
+> the commit referenced in the fixes tag.
+> 
+> Fix it.
+> 
+> Fixes: 43aa006e074c ("dt-bindings: arm: msm: Fix register regions used for LLCC banks")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/cache/qcom,llcc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
+
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/1782401
 
 
-> On May 17, 2023, at 15:45, Qi Zheng <qi.zheng@linux.dev> wrote:
->=20
-> From: Qi Zheng <zhengqi.arch@bytedance.com>
->=20
-> The commit 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> =
-cpus_read_lock()
-> deadlock") fixed the deadlock between cgroup_threadgroup_rwsem and
-> cpus_read_lock() by introducing cgroup_attach_{lock,unlock}() and =
-removing
-> cpus_read_{lock,unlock}() from cpuset_attach(). But =
-cgroup_transfer_tasks()
-> was missed and not handled, which will cause th following warning:
->=20
-> WARNING: CPU: 0 PID: 589 at kernel/cpu.c:526 =
-lockdep_assert_cpus_held+0x32/0x40
-> CPU: 0 PID: 589 Comm: kworker/1:4 Not tainted 6.4.0-rc2-next-20230517 =
-#50
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 =
-04/01/2014
-> Workqueue: events cpuset_hotplug_workfn
-> RIP: 0010:lockdep_assert_cpus_held+0x32/0x40
-> <...>
-> Call Trace:
->  <TASK>
->  cpuset_attach+0x40/0x240
->  cgroup_migrate_execute+0x452/0x5e0
->  ? _raw_spin_unlock_irq+0x28/0x40
->  cgroup_transfer_tasks+0x1f3/0x360
->  ? find_held_lock+0x32/0x90
->  ? cpuset_hotplug_workfn+0xc81/0xed0
->  cpuset_hotplug_workfn+0xcb1/0xed0
->  ? process_one_work+0x248/0x5b0
->  process_one_work+0x2b9/0x5b0
->  worker_thread+0x56/0x3b0
->  ? process_one_work+0x5b0/0x5b0
->  kthread+0xf1/0x120
->  ? kthread_complete_and_exit+0x20/0x20
->  ret_from_fork+0x1f/0x30
->  </TASK>
->=20
-> So just use the cgroup_attach_{lock,unlock}() helper to fix it.
->=20
-> Fixes: 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> =
-cpus_read_lock() deadlock")
-> Reported-by: Zhao Gongyi <zhaogongyi@bytedance.com>
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+system-cache-controller@25000000: reg: [[0, 620756992, 0, 8388608], [0, 629145600, 0, 2097152]] is too short
+	arch/arm64/boot/dts/qcom/sm8550-mtp.dtb
+	arch/arm64/boot/dts/qcom/sm8550-qrd.dtb
 
-Acked-by: Muchun Song <songmuchun@bytedance.com>
+system-cache-controller@25000000: reg-names:0: 'llcc0_base' was expected
+	arch/arm64/boot/dts/qcom/sm8550-mtp.dtb
+	arch/arm64/boot/dts/qcom/sm8550-qrd.dtb
 
-Thanks.
+system-cache-controller@25000000: reg-names:1: 'llcc1_base' was expected
+	arch/arm64/boot/dts/qcom/sm8550-mtp.dtb
+	arch/arm64/boot/dts/qcom/sm8550-qrd.dtb
 
+system-cache-controller@25000000: reg-names: ['llcc_base', 'llcc_broadcast_base'] is too short
+	arch/arm64/boot/dts/qcom/sm8550-mtp.dtb
+	arch/arm64/boot/dts/qcom/sm8550-qrd.dtb
