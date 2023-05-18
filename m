@@ -2,68 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F2A707CFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB33707CFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjERJdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S230110AbjERJeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjERJcy (ORCPT
+        with ESMTP id S230112AbjERJeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:32:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E8B2681
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:32:51 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F84E6605944;
-        Thu, 18 May 2023 10:32:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684402369;
-        bh=8CEs8jg1IBDKZGJzbEMInnqFtur20E0UOFQ/JDCj71c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A+0O3uUdkdzVVDXjDbLdPzKOXPoRj+YP+NsGJcElW54MqQ6451xj/ruGpYOZ8q+28
-         VWaIAiSVAksZjPxGEqNIIXc5sWfkTyQqubo+K2WmU/A7CkUIS4JrWzcvCbgr7+ufqv
-         uR1Nd8YB5pQP0DKv2QnICNCPGRAY0IjYXx7Pyqj9X6on0k3KWntxDniIqc1m2P/vSo
-         U7iQuY5pjeW3c7OJYgwNd0zJ5e9SlFksTfsfzBPXhhs4B4cy8E027tlGvtAr3Hyh1m
-         40ilNyp/qVUE8YE/t1eMSS9Dxo6gQ1JYVwrzJV1cxhveJn+1K8QkHcwXiIkqojcczm
-         jV4ARWX1y9Nkw==
-Message-ID: <795845ce-e32e-f503-198d-69e0a21c6f19@collabora.com>
-Date:   Thu, 18 May 2023 11:32:46 +0200
+        Thu, 18 May 2023 05:34:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 554B6212C
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:34:18 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADCEC1FB;
+        Thu, 18 May 2023 02:35:02 -0700 (PDT)
+Received: from bogus (unknown [10.57.22.192])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CDCA3F73F;
+        Thu, 18 May 2023 02:34:16 -0700 (PDT)
+Date:   Thu, 18 May 2023 10:34:14 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Radu Rendec <rrendec@redhat.com>, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
+ initializer
+Message-ID: <20230518093414.qhwyogcig4wv3r5s@bogus>
+References: <20230412185759.755408-1-rrendec@redhat.com>
+ <20230412185759.755408-2-rrendec@redhat.com>
+ <20230510191207.GA18514@ranerica-svr.sc.intel.com>
+ <20230515093608.etfprpqn3lmgybe6@bogus>
+ <20230518012703.GA19967@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] spmi: mediatek: add device id check
-Content-Language: en-US
-To:     Sen Chu <sen.chu@mediatek.com>, Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230518040729.8789-1-sen.chu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230518040729.8789-1-sen.chu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518012703.GA19967@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/05/23 06:07, Sen Chu ha scritto:
-> Add device id check for spmi write API.
+On Wed, May 17, 2023 at 06:27:03PM -0700, Ricardo Neri wrote:
+> On Mon, May 15, 2023 at 10:36:08AM +0100, Sudeep Holla wrote:
+> > On Wed, May 10, 2023 at 12:12:07PM -0700, Ricardo Neri wrote:
+> > > Hi,
+> > > 
+> > > I had posted a patchset[1] for x86 that initializes
+> > > ci_cacheinfo(cpu)->num_leaves during SMP boot.
+> > >
+> > 
+> > It is entirely clear to me if this is just a clean up or a fix to some
+> > issue you faced ? Just wanted to let you know Prateek from AMD has couple
+> > of fixes [2]
 > 
-> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
+> My first patch is a bug fix. The second patch is clean up that results
+> from fixing the bug in patch 1.
+> 
+> > 
+> > > This means that early_leaves and a late cache_leaves() are equal but
+> > > per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does not use
+> > > fetch_cache_info().
+> > > 
+> > > I think that we should check here that per_cpu_cacheinfo() has been allocated to
+> > > take care of the case in which early and late cache leaves remain the same:
+> > > 
+> > > -       if (cache_leaves(cpu) <= early_leaves)
+> > > +       if (cache_leaves(cpu) <= early_leaves && per_cpu_cacheinfo(cpu))
+> > > 
+> > > Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference from
+> > > last_level_cache_is_valid().
+> > >
+> > 
+> > I think this is different issue as Prateek was just observing wrong info
+> > after cpuhotplug operations. But the patches manage the cpumap_populated
+> > state better with the patches. Can you please look at that as weel ?
+> 
+> I verified that the patches from Prateek fix a different issue. I was able
+> to reproduce his issue. His patches fixes it.
+> 
+> I still see my issue after applying Prateek's patches.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Thanks, I thought it is different issue and good that you were able to test
+them as well. Please post a proper patch for the NULL ptr dereference you
+are hitting on x86.
 
-
+-- 
+Regards,
+Sudeep
