@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8B3708075
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABFA708078
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjERLwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
+        id S231228AbjERLxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjERLwr (ORCPT
+        with ESMTP id S231358AbjERLw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:52:47 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3592C0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:52:38 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-ba827a34ba8so2745855276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1684410758; x=1687002758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mBVrcck5s6OuGtzh+rhmsWfcN2VuaI9gIbet+WEeIh0=;
-        b=IBDQjG8w9HEylhywOl9vA5UIZfMIJ+hgwPjUGH9uO2EPPc35MaAWOzPXbLXGzuGgF5
-         rnmZ/vwuvY9uQanydicMziFTcVFah8uNnePp6rPNZxtDUGKcGoQbrFF5qXACHrR37bHc
-         dF4lF06QhJ95zo/CznbKZS48Iv+Fh7kS3DbhI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684410758; x=1687002758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mBVrcck5s6OuGtzh+rhmsWfcN2VuaI9gIbet+WEeIh0=;
-        b=GlSL2cXELCo0Kka2j6S8Gg3jbP+ncny7pcqA4uhhJqmeMgwx2eUOJA1+L6WBNQWrIw
-         +VKXkObJQdDrbwinzetk7BjkCiwLl9zLzwtH1qNQzSeKg45IqcaqcHTXwm0QW5/PnkqV
-         RBQPev3udILzi+3y3BTLaTEQf9fL54+yoq3eeb1ZRwUnhXOeu55YOt+0akP/ZzrfhjYl
-         9HzL31gIKhKtQd00PbM73/BXMktkfF0hhODqTNH0ibUbPodVvF6o6TxXXkGek4Be0Ska
-         rDEkVXZcE7O0qu1zs6qZA5RKDFvK3+NhVPlsDcv/J8frUmPtrebGjdSE6m+1bpkgYpGp
-         D2xg==
-X-Gm-Message-State: AC+VfDy970PdTbZyvYQCTjxOUj9MNevIAhonT8n5sbeRcR0MKg59Nf2X
-        fg4gyhgEg+Bcgghc0sWZjsQWW6azXzlvEAMOMkbOOg==
-X-Google-Smtp-Source: ACHHUZ548aNPyGdZgjeLL3XrPR2B6YAlN0Zu3cNB03mO7YKE5/94BhuZByCCpE5y5jDki39KJwQtDgcCv5qSvsFrCfs=
-X-Received: by 2002:a25:e70f:0:b0:b9e:3bea:ebd2 with SMTP id
- e15-20020a25e70f000000b00b9e3beaebd2mr944887ybh.31.1684410758177; Thu, 18 May
- 2023 04:52:38 -0700 (PDT)
+        Thu, 18 May 2023 07:52:59 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14E5C3;
+        Thu, 18 May 2023 04:52:52 -0700 (PDT)
+X-UUID: 80d980e6f57211edb20a276fd37b9834-20230518
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=AswqjqlgL9AGh9p9nkxsoOkIsJN0FnFVHRTAlCMqEfI=;
+        b=nxxy1D0eQMPaaOL6Ke3UNqTSmKbMdVUv7Fx9d7oxdZMzKjorb6RCbf+lFIJbv44fx03yqFfY9Yfz26+UiiKLJvCHPdpPSRYRQJBTsAbLbtQFc90SqfkDLzLF0RZn3BzJzbpLkkga8TkEbulqr9VF9apOqilfeJjy3ZDutxit/C0=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:89b454fa-6434-4859-b600-62d732cb1080,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.25,REQID:89b454fa-6434-4859-b600-62d732cb1080,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:f063993b-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:230518195247SR3GV0C6,BulkQuantity:0,Recheck:0,SF:19|48|38|29|28|17,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 80d980e6f57211edb20a276fd37b9834-20230518
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <shuijing.li@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1171412908; Thu, 18 May 2023 19:52:45 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.194) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 18 May 2023 19:52:36 +0800
+Received: from mszsdhlt06.gcn.mediatek.inc (10.16.6.206) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 18 May 2023 19:52:35 +0800
+From:   Shuijing Li <shuijing.li@mediatek.com>
+To:     <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>
+CC:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <jitao.shi@mediatek.com>, Shuijing Li <shuijing.li@mediatek.com>
+Subject: [PATCH v2] pwm: mtk_disp: Fix the disable flow of disp_pwm
+Date:   Thu, 18 May 2023 19:52:58 +0800
+Message-ID: <20230518115258.14320-1-shuijing.li@mediatek.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-3-aford173@gmail.com>
-In-Reply-To: <20230515235713.232939-3-aford173@gmail.com>
-From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Thu, 18 May 2023 17:22:26 +0530
-Message-ID: <CAMty3ZB9xrO+LPGVCcoDfdWo9CP_DLVhaKm33y768+ix6nP7cQ@mail.gmail.com>
-Subject: Re: [PATCH V6 2/6] drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
-To:     Adam Ford <aford173@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Inki Dae <inki.dae@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 5:27=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
-e:
->
-> According to Table 13-45 of the i.MX8M Mini Reference Manual, the min
-> and max values for M and the frequency range for the VCO_out
-> calculator were incorrect.  This information was contradicted in other
-> parts of the mini, nano and plus manuals.  After reaching out to my
-> NXP Rep, when confronting him about discrepencies in the Nano manual,
-> he responded with:
->  "Yes it is definitely wrong, the one that is part
->   of the NOTE in MIPI_DPHY_M_PLLPMS register table against PMS_P,
->   PMS_M and PMS_S is not correct. I will report this to Doc team,
->   the one customer should be take into account is the Table 13-40
->   DPHY PLL Parameters and the Note above."
->
-> These updated values also match what is used in the NXP downstream
-> kernel.
->
-> To fix this, make new variables to hold the min and max values of m
-> and the minimum value of VCO_out, and update the PMS calculator to
-> use these new variables instead of using hard-coded values to keep
-> the backwards compatibility with other parts using this driver.
->
-> Fixes: 4d562c70c4dc ("drm: bridge: samsung-dsim: Add i.MX8M Mini/Nano sup=
-port")
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> ---
+There is a flow error in the original mtk_disp_pwm_apply() function.
+If this function is called when the clock is disabled, there will be a
+chance to operate the disp_pwm register, resulting in disp_pwm exception.
+Fix this accordingly.
 
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
-Tested-by: Jagan Teki <jagan@amarulasolutions.com> # imx8mm-icore
+Signed-off-by: Shuijing Li <shuijing.li@mediatek.com>
+---
+Changes in v2:
+Use
+if (A && B) {
+	something();
+}
+instead of
+if (A) {
+	if (B) {
+		something();
+	}
+}
+per suggestion from the previous thread:
+https://lore.kernel.org/lkml/20230515140346.bxeu6xewi6a446nd@pengutronix.de/
+---
+ drivers/pwm/pwm-mtk-disp.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+index 79e321e96f56..2401b6733241 100644
+--- a/drivers/pwm/pwm-mtk-disp.c
++++ b/drivers/pwm/pwm-mtk-disp.c
+@@ -79,14 +79,11 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 	if (state->polarity != PWM_POLARITY_NORMAL)
+ 		return -EINVAL;
+ 
+-	if (!state->enabled) {
+-		mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
+-					 0x0);
+-
+-		if (mdp->enabled) {
+-			clk_disable_unprepare(mdp->clk_mm);
+-			clk_disable_unprepare(mdp->clk_main);
+-		}
++	if (!state->enabled && mdp->enabled) {
++		mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN,
++					 mdp->data->enable_mask, 0x0);
++		clk_disable_unprepare(mdp->clk_mm);
++		clk_disable_unprepare(mdp->clk_main);
+ 
+ 		mdp->enabled = false;
+ 		return 0;
+-- 
+2.40.1
+
