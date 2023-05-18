@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F020B7077FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B5F7077FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjERCUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S229563AbjERCVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 22:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjERCUj (ORCPT
+        with ESMTP id S229484AbjERCVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:20:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E718A2139
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:20:38 -0700 (PDT)
+        Wed, 17 May 2023 22:21:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A9C172E
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:21:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684376438; x=1715912438;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hC2J1w9UVcDCukApVbW8vB9WSP4jIPusaB43jqHzChY=;
-  b=AJB4T5uN14PWcqj0WvIB7OpjEgUDF/0yt2JCx3spssyrX2iW+oetL3Jx
-   mihPA7H7CXbbX4bF8Rx4qrvmq6sDKPnEqsaC7sEMy4qpVCDj0RuDbMXzo
-   fO6pP3kghw2qaUxcEeCfu+uZ2HwiFyOguvkJznMWiRD3oX/J8A1VUrRjF
-   hCViObjJVywdkwbtMPRpuLI3O1WLIAwD/xTAPrseKiktI1OZHOR1E7CFH
-   jPYb/2Kh/Zew9wztbgJWUeW/LEkjiDEX/e7yGPLSIgEGfij021dtISQnq
-   S+H5ltn8WOQfpdWedssOIk9weZ3S6Q09P07zVjlnZ8tqsOVDiheYx1YH6
+  t=1684376509; x=1715912509;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5R52rMefrg7AC6InG7PmqTlOvY+GWOInNf87oqgcKqM=;
+  b=ZeVA35bO6gQylIKyXe65jsryflX64HGVAXBNrPvFXjSzrHzo7xgGUymR
+   yFSRZWyMHd2OmGSfbgBxQ7Bwvbl7Cfu7e+uY/udJybq53Iu3cL6TDwK7M
+   +7uwPwdJLKSGuNObzKAw9R7OsMdZ50fMdsGKfmF5kQMmSjLCXIU6ezFTk
+   tKrPr5FHkIGbgvKnp/WDr4NFWxwWNkAGquUvPtoYjD9XpHauBWUyGzSws
+   R79M+oLDtzBxm0+cG3QjW6hOYXyYtCpgJ0max7+g1uYSD6ZM/RdxLQBfJ
+   4kMFIFNL1McY1KCQqzC7DDp85WGvI146t4XeP1H8QsbRaRKwwbM+FDdSL
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="336504781"
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="341339095"
 X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="336504781"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 19:20:38 -0700
+   d="scan'208";a="341339095"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 19:21:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="826195226"
-X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="826195226"
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="876255299"
+X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
+   d="scan'208";a="876255299"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 19:20:36 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 19:21:26 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH 3/3] soundwire: cadence: revisit parity injection
-Date:   Thu, 18 May 2023 10:41:19 +0800
-Message-Id: <20230518024119.164160-4-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH] soundwire: intel_bus_common: update error log
+Date:   Thu, 18 May 2023 10:42:15 +0800
+Message-Id: <20230518024215.164281-1-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230518024119.164160-1-yung-chuan.liao@linux.intel.com>
-References: <20230518024119.164160-1-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,57 +61,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-We want to wait for the CONFIG_UPDATE bit to clear before doing
-something else.
+We use __func__ in all calls of sdw_cdns_check_self_clearing_bits(),
+except in one case. Likely an editing miss when the code was
+refactored.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/cadence_master.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/soundwire/intel_bus_common.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/soundwire/cadence_master.c b/drivers/soundwire/cadence_master.c
-index 58686ae50bbf..0efc1c3bee5f 100644
---- a/drivers/soundwire/cadence_master.c
-+++ b/drivers/soundwire/cadence_master.c
-@@ -456,9 +456,9 @@ static int cdns_parity_error_injection(void *data, u64 value)
- 			CDNS_IP_MCP_CMDCTRL_INSERT_PARITY_ERR);
+diff --git a/drivers/soundwire/intel_bus_common.c b/drivers/soundwire/intel_bus_common.c
+index be0c93106fc8..e5ac3cc7cb79 100644
+--- a/drivers/soundwire/intel_bus_common.c
++++ b/drivers/soundwire/intel_bus_common.c
+@@ -182,8 +182,7 @@ int intel_start_bus_after_clock_stop(struct sdw_intel *sdw)
+ 		return ret;
+ 	}
  
- 	/* commit changes */
--	cdns_updatel(cdns, CDNS_MCP_CONFIG_UPDATE,
--		     CDNS_MCP_CONFIG_UPDATE_BIT,
--		     CDNS_MCP_CONFIG_UPDATE_BIT);
-+	ret = cdns_clear_bit(cdns, CDNS_MCP_CONFIG_UPDATE, CDNS_MCP_CONFIG_UPDATE_BIT);
-+	if (ret < 0)
-+		goto unlock;
+-	sdw_cdns_check_self_clearing_bits(cdns, "intel_resume_runtime no_quirks",
+-					  true, INTEL_MASTER_RESET_ITERATIONS);
++	sdw_cdns_check_self_clearing_bits(cdns, __func__, true, INTEL_MASTER_RESET_ITERATIONS);
  
- 	/* do a broadcast dummy read to avoid bus clashes */
- 	ret = sdw_bread_no_pm_unlocked(&cdns->bus, 0xf, SDW_SCP_DEVID_0);
-@@ -470,16 +470,17 @@ static int cdns_parity_error_injection(void *data, u64 value)
- 			0);
- 
- 	/* commit changes */
--	cdns_updatel(cdns, CDNS_MCP_CONFIG_UPDATE,
--		     CDNS_MCP_CONFIG_UPDATE_BIT,
--		     CDNS_MCP_CONFIG_UPDATE_BIT);
-+	ret = cdns_clear_bit(cdns, CDNS_MCP_CONFIG_UPDATE, CDNS_MCP_CONFIG_UPDATE_BIT);
-+	if (ret < 0)
-+		goto unlock;
- 
-+	/* Userspace changed the hardware state behind the kernel's back */
-+	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
-+
-+unlock:
- 	/* Continue bus operation with parity error injection disabled */
- 	mutex_unlock(&bus->bus_lock);
- 
--	/* Userspace changed the hardware state behind the kernel's back */
--	add_taint(TAINT_USER, LOCKDEP_STILL_OK);
--
- 	/*
- 	 * allow Master device to enter pm_runtime suspend. This may
- 	 * also result in Slave devices suspending.
+ 	return 0;
+ }
 -- 
 2.25.1
 
