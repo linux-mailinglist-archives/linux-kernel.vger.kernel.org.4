@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865D470787F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AAB707884
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjERDgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 23:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S229763AbjERDj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 23:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjERDgH (ORCPT
+        with ESMTP id S229500AbjERDjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 23:36:07 -0400
-Received: from out-2.mta0.migadu.com (out-2.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC92D30E6
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:36:03 -0700 (PDT)
-Date:   Wed, 17 May 2023 23:35:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684380961;
+        Wed, 17 May 2023 23:39:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38B630E6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684381116;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=R/xSxkO34rTHB5jgYq+EIG5zjckP6E+hsO+vx3uRhUA=;
-        b=kYDZkSKo3Vd+Vlz3v1TqKnv5UZZxWD+B7u0uWz6Dkfqr9ZyJBFtS6MByThfEB+n4utJGLM
-        rNGCmqvF4gzQQHhf299ssyn7P7e2uN7wJt5+ZNmfgQshSe4hzV+RJ++vjONiskQT+QYUZt
-        XF9WSVQIfHOOCRmlRkgYsI2hqFoVZfo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-Message-ID: <ZGWdHC3Jo7tFUC59@moria.home.lan>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
+        bh=RMQr1Z/SNdz396grr248udQlctmR65Q9JOFTWlK+K04=;
+        b=DoYz2mdVpNE1nVdrYb6fuYhuAJ9NlF7cbqHi6m9pVE5/NDeEjTh/z7GNxpMMo42f6Mb6Em
+        HMS45TBpDAWU/CoM1YblLCyPVbVRLwsJGggaOg+zNeQyM5RvWv8QXo5D05fLnjq5C3lMaV
+        8Z3NacO4fNw4pITi5Cqbf+SAczfD5/4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-187-WDmYr80jMCKJl0ULvIoExg-1; Wed, 17 May 2023 23:38:34 -0400
+X-MC-Unique: WDmYr80jMCKJl0ULvIoExg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0D0623C01E0B;
+        Thu, 18 May 2023 03:38:34 +0000 (UTC)
+Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 30F6040C6EC4;
+        Thu, 18 May 2023 03:38:31 +0000 (UTC)
+Date:   Thu, 18 May 2023 11:38:28 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+        willy@infradead.org, deller@gmx.de
+Subject: Re: [PATCH v5 RESEND 04/17] mm/ioremap: Define
+ generic_ioremap_prot() and generic_iounmap()
+Message-ID: <ZGWdtGdbBtRyxTor@MiWiFi-R3L-srv>
+References: <20230515090848.833045-1-bhe@redhat.com>
+ <20230515090848.833045-5-bhe@redhat.com>
+ <ZGR0YP/ky8IXf0oF@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308094106.227365-2-rppt@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZGR0YP/ky8IXf0oF@infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 11:41:02AM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On 05/16/23 at 11:29pm, Christoph Hellwig wrote:
+> On Mon, May 15, 2023 at 05:08:35PM +0800, Baoquan He wrote:
+> > From: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > 
+> > Define a generic version of ioremap_prot() and iounmap() that
+> > architectures can call after they have performed the necessary
+> > alteration to parameters and/or necessary verifications.
+> > 
+> > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > ---
+> >  include/asm-generic/io.h |  4 ++++
+> >  mm/ioremap.c             | 22 ++++++++++++++++------
+> >  2 files changed, 20 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+> > index 587e7e9b9a37..a7ca2099ba19 100644
+> > --- a/include/asm-generic/io.h
+> > +++ b/include/asm-generic/io.h
+> > @@ -1073,9 +1073,13 @@ static inline bool iounmap_allowed(void *addr)
+> >  }
+> >  #endif
+> >  
+> > +void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
+> > +				   pgprot_t prot);
+> > +
 > 
-> When set_memory or set_direct_map APIs used to change attribute or
-> permissions for chunks of several pages, the large PMD that maps these
-> pages in the direct map must be split. Fragmenting the direct map in such
-> manner causes TLB pressure and, eventually, performance degradation.
-> 
-> To avoid excessive direct map fragmentation, add ability to allocate
-> "unmapped" pages with __GFP_UNMAPPED flag that will cause removal of the
-> allocated pages from the direct map and use a cache of the unmapped pages.
-> 
-> This cache is replenished with higher order pages with preference for
-> PMD_SIZE pages when possible so that there will be fewer splits of large
-> pages in the direct map.
-> 
-> The cache is implemented as a buddy allocator, so it can serve high order
-> allocations of unmapped pages.
+> Formatting looks a bit weird here.  The normal styles are either to
+> indent with two tabs (my preference) or after the opening brace.
 
-So I'm late to this discussion, I stumbled in because of my own run in
-with executable memory allocation.
+Thanks a lot for careful reviewing on this series.
 
-I understand that post LSF this patchset seems to not be going anywhere,
-but OTOH there's also been a desire for better executable memory
-allocation; as noted by tglx and elsewhere, there _is_ a definite
-performance impact on page size with kernel text - I've seen numbers in
-the multiple single digit percentage range in the past.
+I check this place again, strange it looks good in code with identing
+after the opening brace, while in patch it looks messy. Will try again
+to see if I can fix it in patch too.
 
-This patchset does seem to me to be roughly the right approach for that,
-and coupled with the slab allocator for sub-page sized allocations it
-seems there's the potential for getting a nice interface that spans the
-full range of allocation sizes, from small bpf/trampoline allocations up
-to modules.
-
-Is this patchset worth reviving/continuing with? Was it really just the
-needed module refactoring that was the blocker?
