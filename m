@@ -2,205 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEBB7088B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29617088AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjERTxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 15:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        id S230010AbjERTxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 15:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbjERTxU (ORCPT
+        with ESMTP id S229968AbjERTxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 15:53:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CD610C6;
-        Thu, 18 May 2023 12:53:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E994651E7;
-        Thu, 18 May 2023 19:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C131EC433EF;
-        Thu, 18 May 2023 19:53:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684439591;
-        bh=97mz22yBYEwl0uvWrtuRvN7tEwZZw/SN6l1zVITlLDs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NTO9zbT3tTtj/wiMe3RV534PsCiKjDcTFx7Lmpa+7VeztrSVhtHUZxENUB9q9ZNRS
-         TN+dNPikgdKWGSym+QLjodbNSPibWLOJKdWUWxzihD6j7aF2bmnEhzO1ROaz9sdlqu
-         1TEdEtR2FFhd4hFIRSbcrCFgJ5KTj5anJF/LMRByTR4AW3NwPqWyZj5jF/r3hsGQ+i
-         7927PmZs0vRzQbX/QMeFjUz/mysprIGWNQBiZOnRZx59qP/mRMxZbg1xM3kRsyGgsb
-         7Ow0FODITuh3B8Q6YO7+TlJhvzW/4dQNzj1iQIDfqii/0+qSZtm2PJi4cawChCbOER
-         0m7Jt9EXo+RPg==
-Date:   Thu, 18 May 2023 20:53:05 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Yangtao Li <frank.li@vivo.com>,
-        Wei Fu <wefu@redhat.com>, Icenowy Zheng <uwu@icenowy.me>
-Subject: Re: [PATCH v2 4/9] dt-binding: riscv: add T-HEAD CPU reset
-Message-ID: <20230518-driving-secluding-793b3192776e@spud>
-References: <20230518184541.2627-1-jszhang@kernel.org>
- <20230518184541.2627-5-jszhang@kernel.org>
+        Thu, 18 May 2023 15:53:12 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F7E10CA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 12:53:08 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f38c23b06eso12709881cf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 12:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20221208.gappssmtp.com; s=20221208; t=1684439587; x=1687031587;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=X2ZIW3/zhnIFMYl2SIXYWW32n4UkaG67XbnF9QSk/Zo=;
+        b=3XJm5gCHLZOX3R1qQjvAG/qqS+kWajScO5VvbP50imfF5dc0ykewGK23RbdYI3nepx
+         mbgmmvEoKEo/U/p9KIUwoITDrm1EuDAtat83AlcRYdX1UMmAT89cSdQ5qCbq5YpBOSFT
+         4zpQcWlkd6du1fomIMn3L5hV5za1WI/rhUetD49WocbC/wHyDGpSC7VsMlgpLIR57Y2h
+         q38yrJIpnIeWIYv64MWkVQv0GXk0X7+KMGCW459GOOhsM1fwziJquc6iTEpOYcbQ1NUK
+         9Vw7iyFbYcmwAa/4EFixJc1/TrxfpyQxpxuvBexpf3iB0HLMozm68Y4h8wwfec6azTeh
+         6quQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684439587; x=1687031587;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X2ZIW3/zhnIFMYl2SIXYWW32n4UkaG67XbnF9QSk/Zo=;
+        b=QceMfbWCv3vhmp2rISvE18w0K/GWyB4dGfHk38SSxJde3n1FZUkQzfruPPtXCqyM9q
+         jmmk6NbxOSrzWjEe6V4omBF/34PyqZsbQGjNAgkA4Fi7OgLEeA+GCGjwKr3K3ty8NeHK
+         uHuCkKWih6EXThi/bqA+oSYYPYFNa8eQ6jR40zZc0833HQlJRpWEEccxR8rgXm+V8Gv0
+         LmHPn99WDtXCfEupzWBLNDvqRJ2LAbXl2BED1P8P6eQDTKKhCl/sz/TZCrRYW5clncKU
+         4lNCN2B2MZkYNEBOSxrjTU8z2qSPXcFDEgE0Uf9343cT8vAP+Xf+tpo5mtmxeplE2+oI
+         P5Qw==
+X-Gm-Message-State: AC+VfDxLvacvGvJH91181gemisA7kuMe5YQZkbW2nymwSbazT64TO79f
+        r6KFsLPPmpK28EE/Lk1AJYVE8g==
+X-Google-Smtp-Source: ACHHUZ400+fCF4iB93FLo6GI5Ln196cPScZGaszV7wbm14gR7sskZOOuCxe8qRLOx1wHhql9ypvElA==
+X-Received: by 2002:ac8:59d2:0:b0:3f4:e317:1dec with SMTP id f18-20020ac859d2000000b003f4e3171decmr1773453qtf.13.1684439587408;
+        Thu, 18 May 2023 12:53:07 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain ([2606:6d00:17:6c0::7a9])
+        by smtp.gmail.com with ESMTPSA id x5-20020ae9e905000000b0075931950b5esm612015qkf.74.2023.05.18.12.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 12:53:07 -0700 (PDT)
+Message-ID: <a9a9017cceb65aeca285a06c7b46970788301ce8.camel@ndufresne.ca>
+Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
+ i.MX8 ISI driver")
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 18 May 2023 15:53:06 -0400
+In-Reply-To: <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
+References: <ZElaVmxDsOkZj2DK@debian>
+         <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
+         <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4uiDuJOB38i7bEfg"
-Content-Disposition: inline
-In-Reply-To: <20230518184541.2627-5-jszhang@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---4uiDuJOB38i7bEfg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Jisheng,
-
-On Fri, May 19, 2023 at 02:45:36AM +0800, Jisheng Zhang wrote:
-> The secondary CPUs in T-HEAD SMP capable platforms need some special
-> handling. The first one is to write the warm reset entry to entry
-> register. The second one is write a SoC specific control value to
-> a SoC specific control reg. The last one is to clone some CSRs for
-> secondary CPUs to ensure these CSRs' values are the same as the
-> main boot CPU. This DT node is mainly used by opensbi firmware.
+Le lundi 08 mai 2023 =C3=A0 09:27 -0700, Linus Torvalds a =C3=A9crit=C2=A0:
+> End result: you and the media tree is on my shit-list, and I will not
+> take any pull requests from you that aren't just fixes.
 >=20
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  .../bindings/riscv/thead,cpu-reset.yaml       | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/riscv/thead,cpu-res=
-et.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml=
- b/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
-> new file mode 100644
-> index 000000000000..ba8c87583b6b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/riscv/thead,cpu-reset.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: T-HEAD cpu reset controller
-> +
-> +maintainers:
-> +  - Jisheng Zhang <jszhang@kernel.org>
-> +
-> +description: |
-> +  The secondary CPUs in T-HEAD SMP capable platforms need some special
-> +  handling. The first one is to write the warm reset entry to entry
-> +  register. The second one is write a SoC specific control value to
-> +  a SoC specific control reg. The last one is to clone some CSRs for
-> +  secondary CPUs to ensure these CSRs' values are the same as the
-> +  main boot CPU.
+> Not just this release, but the next one.
 
-Okay..
+I'm expected to be flamed for getting in the way, but whatever. To me this
+decision lacks any kind of consideration toward who will be affected. This =
+will
+hit those that makes the new features and are working hard to convince thei=
+r
+customers to go mainline first. None of Mauro or Hans will truly be affecte=
+d by
+this. Everyone affected by this decision were completely unaware of the pro=
+blem
+in the first place and could not help it.
 
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^cpurst"
+Punishment and shame is not something I encourage or think is nice in gener=
+al.
+Its the reflection of a strong frustration and the spontaneous need to hit
+somewhere it hurts. It brings no benefit to anyone and likely convince the
+skeptical to go away. In the end, it is the leaf contributors (the one that=
+ have
+the least authority on the project) that takes the hit, having to tell thei=
+r
+customers they'll only get their stuff mainline in 6.7 even though they mig=
+ht
+have done everything right to get things on time for the next window. This =
+kind
+of methods is purely negative for everyone, there is no win of any sort.
 
-Firstly, why the nodename enforcement? We have a compatible, so we
-should be okay, no?
-
-> +
-> +  compatible:
-> +    oneOf:
-> +      - description: CPU reset on T-HEAD TH1520 SoC
-> +        items:
-> +          - const: thead,reset-th1520
-
-You've only got one thing here, you don't need the oneOf.
-Also, s/reset-th1520/th1520-reset/ please - although I do not know if
-"reset" is the right word here. Do we know what the IP block is called
-in the TRM/T-Head docs? Perhaps Guo Ren does if not.
-
-> +  entry-reg:
-> +    $ref: /schemas/types.yaml#/definitions/uint64
-> +    description: |
-> +      The entry reg address.
-> +
-> +  entry-cnt:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      The entry reg count.
-> +
-> +  control-reg:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      The control reg address.
-> +
-> +  control-val:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      The value to be set into the control reg.
-> +
-> +  csr-copy:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description: |
-> +      The CSR registers to be cloned during CPU warm reset.
-
-All of these values set on a per-soc basis, right?
-If so, I don't think they should be in here at all since you should be
-able to figure out the offsets from the base & the values to write based
-on the compatible string alone, no?
-
-Putting register values into the DT is always "suspect"!
-
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    cpurst: cpurst@ffff019050 {
-               ^^^^^^^^^^^^^^^^^
-This is also "suspect" and implies that "entry reg" should just be a
-normal "reg" property.
-
-
-> +      compatible =3D "thead,reset-th1520";
-> +      entry-reg =3D <0xff 0xff019050>;
-> +      entry-cnt =3D <4>;
-> +      control-reg =3D <0xff 0xff015004>;
-> +      control-val =3D <0x1c>;
-> +      csr-copy =3D <0x7f3 0x7c0 0x7c1 0x7c2 0x7c3 0x7c5 0x7cc>;
-> +    };
-> --=20
-> 2.40.0
->=20
-
---4uiDuJOB38i7bEfg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGaCIQAKCRB4tDGHoIJi
-0n9SAP92K/2ImcXGHXRjUY3v5X+WdDMZxN/kIxZBW3btQoK6twD8CWE0LOA195ry
-vmZPV/di2h45fbZHO5L8dKmuh9vxHwU=
-=0QHL
------END PGP SIGNATURE-----
-
---4uiDuJOB38i7bEfg--
+regards,
+Nicolas
