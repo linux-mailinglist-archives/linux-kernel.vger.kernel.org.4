@@ -2,363 +2,487 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256B8707877
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B784707878
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjERDaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 23:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
+        id S229547AbjERDaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 23:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjERDaK (ORCPT
+        with ESMTP id S229814AbjERDaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 23:30:10 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD1A19B2;
-        Wed, 17 May 2023 20:30:07 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QMFpg3j7Rz4f3kkR;
-        Thu, 18 May 2023 11:30:03 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbG2m2VkMMu0Jg--.58916S3;
-        Thu, 18 May 2023 11:30:00 +0800 (CST)
-Subject: Re: INFO: task hung in blkdev_open bug
-To:     yang lan <lanyang0908@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        josef@toxicpanda.com, linux-block@vger.kernel.org,
-        nbd@other.debian.org, syzkaller-bugs@googlegroups.com,
-        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
-        haris.iqbal@ionos.com, jinpu.wang@ionos.com, brauner@kernel.org,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <CAAehj2=HQDk-AMYpVR7i91hbQC4G5ULKd9iYoP05u_9tay8VMw@mail.gmail.com>
- <ZGTGiNItObrI2Z34@casper.infradead.org>
- <CAAehj2k2Sjt-kMwdJTP2uDJTtDzF_hzzHQJ=YVg3FN4bZYo2tQ@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <c3391bd5-9e4a-226c-9f21-4474a0929cd4@huaweicloud.com>
-Date:   Thu, 18 May 2023 11:29:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 17 May 2023 23:30:13 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7A719B2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:30:11 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-53063897412so1368151a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:30:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684380610; x=1686972610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TcjpGUglMcAK5noEuv1H8C5d8wkM7rmUBBQyTlxZSYU=;
+        b=WM/hhNeh00EaRDOK8NcZHXkLUi0Ocisa1yoxDu+MCI4GLSXN9OC/d1JyWI+3vY2b2L
+         +ovydJDZ7OhouaiTVpTWfbY9+nphR5FuwbIchR0KpSRbpDP4wxhBEmxxgZYKJl2FXAos
+         h/JJHZz7douFtJ6W2wX079nPVjGneHsspNxFk7Llw//TPfBreeGqFnRrK5SGfSJ5ORE4
+         KAUcTQSqqwlY/9wzwRANPeHZwJlRPxGtPQX6aRR30vZ0/MZfL4uGFABHr49K7Lg4IFuK
+         RlkmcXw2PUGJ5vjJf5zKmDUPk4p5V4LxmJq2+/fCrMRSA459z/k5GcMPFCeFUsbW0qVb
+         WAxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684380610; x=1686972610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TcjpGUglMcAK5noEuv1H8C5d8wkM7rmUBBQyTlxZSYU=;
+        b=jF66CV3ius25q7U46JQ0OSvxokI91n9K2fHXgEELkfIWTPW9FOElkTc1YpAUJIifjK
+         MtDWelBMM1BqZ549eF4AjRKINsuScOyWtBmlYxEU3ar7PAZD9XGlRD8/QbPrA1rLuAm4
+         Dk7gy0+lD5AtGRU7VXXcyoIf2undO7Eo14gI2FQXxmSTmRmETFmPIFnai+WasiXpBV1b
+         aRiaD7P5yCZulCumfhybhz0eNMw4+WVm2h0EbJZRnRgmAyoJb9LelSaliwjaBoQQbL6M
+         ihVdtzKn4QpkcweW8Gp3X+R1aHYqFExGADf0AHBtJAVv8aRBfbEH/qClsNF3hjJfpt7n
+         lhqg==
+X-Gm-Message-State: AC+VfDxvtNXLhGGfj78dMJXt/Htu9okKZo6GAv9iTc3cvz76REmPHlE7
+        VNYarAB7jG8FCL6xvva/m9b7cDRbsoa313MHMs4=
+X-Google-Smtp-Source: ACHHUZ5+w8BGfv7i9PEI6nRaGJY7npjyoqvDGhnEG3pFVpXFqYL3Z7tJ/poc569ivix2FY7prFroYzVDmptk7tAbAjA=
+X-Received: by 2002:a17:90b:fc8:b0:253:2dc5:4e12 with SMTP id
+ gd8-20020a17090b0fc800b002532dc54e12mr1100134pjb.46.1684380610333; Wed, 17
+ May 2023 20:30:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAehj2k2Sjt-kMwdJTP2uDJTtDzF_hzzHQJ=YVg3FN4bZYo2tQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbG2m2VkMMu0Jg--.58916S3
-X-Coremail-Antispam: 1UD129KBjvAXoW3Kw17Jr4furyxXw1rKw48JFb_yoW8GryDGo
-        WrJas3uay8G345Jr17Gw4jg3srAw1vy3Z7ZF1Ik347Z3W7Ww45t3WDWr1UG3y3JrW8GFnx
-        C34ft3W0g347t3s7n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-        AaLaJ3UjIYCTnIWjp_UUUYs7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
-        8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7
-        CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI
-        62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
-        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280
-        aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43
-        ZEXa7IUbPEf5UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
+ <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
+ <CAHVXubj92O_dwGShOJgrYezqk2pA2NtFyhNFbAPyhn7=PztK6Q@mail.gmail.com>
+ <CAAYs2=gtfhVYUsXkSiCZdzF+Cr573AecWyBn6u_D1C4N4THNVw@mail.gmail.com>
+ <CAHVXubgjgMvFV0MOABbtKr+2TH85+0kow7wOrjxFCP5iXt1saQ@mail.gmail.com> <CAHVXubiD3Vg71LDK43-KS7U47Cd5UAwyzv4WUdOd5Vo4P9C18Q@mail.gmail.com>
+In-Reply-To: <CAHVXubiD3Vg71LDK43-KS7U47Cd5UAwyzv4WUdOd5Vo4P9C18Q@mail.gmail.com>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Thu, 18 May 2023 03:29:58 +0000
+Message-ID: <CAAYs2=jEPQLwe83UDVFStLuei4C+8ZuHJ98_J13RhobpjkGBVw@mail.gmail.com>
+Subject: Re: Bug report: kernel paniced when system hibernates
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Alexandre Ghiti <alexghiti@rivosinc.com> =E4=BA=8E2023=E5=B9=B45=E6=9C=8817=
+=E6=97=A5=E5=91=A8=E4=B8=89 14:42=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Sorry, pressed "reply" instead of "reply all"...
+>
+> ---------- Forwarded message ---------
+> From: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Date: Wed, May 17, 2023 at 4:40=E2=80=AFPM
+> Subject: Re: Bug report: kernel paniced when system hibernates
+> To: Song Shuai <suagrfillet@gmail.com>, Anup Patel
+> <anup@brainfault.org>, Atish Kumar Patra <atishp@rivosinc.com>
+>
+>
+> On Wed, May 17, 2023 at 1:05=E2=80=AFPM Song Shuai <suagrfillet@gmail.com=
+> wrote:
+> >
+> > Alexandre Ghiti <alexghiti@rivosinc.com> =E4=BA=8E2023=E5=B9=B45=E6=9C=
+=8817=E6=97=A5=E5=91=A8=E4=B8=89 08:58=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Tue, May 16, 2023 at 1:12=E2=80=AFPM Alexandre Ghiti <alexghiti@ri=
+vosinc.com> wrote:
+> > > >
+> > > > Hi Song,
+> > > >
+> > > > On Tue, May 16, 2023 at 11:24=E2=80=AFAM Song Shuai <suagrfillet@gm=
+ail.com> wrote:
+> > > > >
+> > > > > Description of problem:
+> > > > >
+> > > > > The latest hibernation support[1] of RISC-V Linux produced a kern=
+el panic.
+> > > > > The entire log has been posted at this link: https://termbin.com/=
+sphl .
+> > > > >
+> > > > > How reproducible:
+> > > > >
+> > > > > You can reproduce it with the following step :
+> > > > >
+> > > > > 1. prepare the environment with
+> > > > > - Qemu-virt v8.0.0 (with OpenSbi v1.2)
+> > > > > - Linux v6.4-rc1
+> > > > >
+> > > > > 2. start the Qemu virt
+> > > > > ```sh
+> > > > > $ cat ~/8_riscv/start_latest.sh
+> > > > > #!/bin/bash
+> > > > > /home/song/8_riscv/3_acpi/qemu/ooo/usr/local/bin/qemu-system-risc=
+v64 \
+> > > > > -smp 2 -m 4G -nographic -machine virt \
+> > > > > -kernel /home/song/9_linux/linux/00_rv_test/arch/riscv/boot/Image=
+ \
+> > > > > -append "root=3D/dev/vda ro eaylycon=3Duart8250,mmio,0x10000000
+> > > > > early_ioremap_debug console=3DttyS0 loglevel=3D8 memblock=3Ddebug
+> > > > > no_console_suspend audit=3D0 3" \
+> > > > > -drive file=3D/home/song/8_riscv/fedora/stage4-disk.img,format=3D=
+raw,id=3Dhd0 \
+> > > > > -device virtio-blk-device,drive=3Dhd0 \
+> > > > > -drive file=3D/home/song/8_riscv/fedora/adisk.qcow2,format=3Dqcow=
+2,id=3Dhd1 \
+> > > > > -device virtio-blk-device,drive=3Dhd1 \
+> > > > > -gdb tcp::1236 #-S
+> > > > > ```
+> > > > > 3. execute hibernation
+> > > > >
+> > > > > ```sh
+> > > > > swapon /dev/vdb2 # this is my swap disk
+> > > > >
+> > > > > echo disk > /sys/power/state
+> > > > > ```
+> > > > >
+> > > > > 4. Then you will encounter the kernel panic logged in the above l=
+ink
+> > > > >
+> > > > >
+> > > > > Other Information:
+> > > > >
+> > > > > After my initial and incomplete dig-up, the commit (3335068f8721
+> > > > > "riscv: Use PUD/P4D/PGD pages for the linear mapping")[2]
+> > > > > is closely related to this panic. This commit uses re-defined
+> > > > > `MIN_MEMBLOCK_ADDR` to discover the entire system memory
+> > > > > and extends the `va_pa_offset` from `kernel_map.phys_addr` to
+> > > > > `phys_ram_base` for linear memory mapping.
+> > > > >
+> > > > > If the firmware delivered the firmware memory region (like: a PMP
+> > > > > protected region in OpenSbi) without "no-map" propriety,
+> > > > > this commit will result in firmware memory being directly mapped =
+by
+> > > > > `create_linear_mapping_page_table()`.
+> > > > >
+> > > > > We can see the mapping via ptdump :
+> > > > > ```c
+> > > > > ---[ Linear mapping ]---
+> > > > > 0xff60000000000000-0xff60000000200000 0x0000000080000000 2M PMD D=
+ A G
+> > > > > . . W R V ------------- the firmware memory
+> > > > > 0xff60000000200000-0xff60000000c00000 0x0000000080200000 10M PMD =
+D A G . . . R V
+> > > > > 0xff60000000c00000-0xff60000001000000 0x0000000080c00000 4M PMD D=
+ A G . . W R V
+> > > > > 0xff60000001000000-0xff60000001600000 0x0000000081000000 6M PMD D=
+ A G . . . R V
+> > > > > 0xff60000001600000-0xff60000040000000 0x0000000081600000 1002M PM=
+D D A
+> > > > > G . . W R V
+> > > > > 0xff60000040000000-0xff60000100000000 0x00000000c0000000 3G PUD D=
+ A G . . W R V
+> > > > > ---[ Modules/BPF mapping ]---
+> > > > > ---[ Kernel mapping ]---
+> > > > > 0xffffffff80000000-0xffffffff80a00000 0x0000000080200000 10M PMD =
+D A G . X . R V
+> > > > > 0xffffffff80a00000-0xffffffff80c00000 0x0000000080c00000 2M PMD D=
+ A G . . . R V
+> > > > > 0xffffffff80c00000-0xffffffff80e00000 0x0000000080e00000 2M PMD D=
+ A G . . W R V
+> > > > > 0xffffffff80e00000-0xffffffff81400000 0x0000000081000000 6M PMD D=
+ A G . . . R V
+> > > > > 0xffffffff81400000-0xffffffff81800000 0x0000000081600000 4M PMD
+> > > > > ```
+> > > > >
+> > > > > In the hibernation process, `swsusp_save()` calls
+> > > > > `copy_data_pages(&copy_bm, &orig_bm)` to copy these two memory
+> > > > > bitmaps,
+> > > > > the Oops(load access fault) occurred while copying the page of
+> > > > > PAGE_OFFSET (which maps the firmware memory).
+> > > >
+> > > > I'm not saying that the hibernation process is in fault here, but
+> > > > that's weird that it is trying to access pages that are not availab=
+le
+> > > > to the kernel: this region is mapped in the page table so that we c=
+an
+> > > > use a 1GB page, but it is reserved so that it is not added to the
+> > > > kernel memory pool.
+> > Yes, my fault, the Test2 is not a correct testcase.
+> > > >
+> > > > >
+> > > > > I also did two other tests:
+> > > > > Test1:
+> > > > >
+> > > > > The hibernation works well in the kernel with the commit 3335068f=
+8721
+> > > > > reverted at least in the current environment.
+> > > > >
+> > > > > Test2:
+> > > > >
+> > > > > I built a simple kernel module to simulate the access of the valu=
+e of
+> > > > > `PAGE_OFFSET` address, and the same panic occurred with the load
+> > > > > access fault.
+> > > > > So hibernation seems not the only case to trigger this panic.
+> > > > >
+> > > > > Finally, should we always leave the firmware memory with
+> > > > > `MEMBLOCK_NOMAP` flag by some efforts from Linux or OpenSbi (at l=
+east
+> > > > > in the current environment) or any other suggestions?
+> > > > >
+> > > >
+> > > > I actually removed this flag a few years ago, and I have to admit t=
+hat
+> > > > I need to check if that's necessary: the goal of commit 3335068f872=
+1
+> > > > ("riscv: Use PUD/P4D/PGD pages for the linear mapping") is to expos=
+e
+> > > > the "right" start of DRAM so that we can align virtual and physical
+> > > > addresses on a 1GB boundary.
+> > > >
+> > > > So I have to check if a nomap region is actually added as a
+> > > > memblock.memory.regions[] or not: if yes, that's perfect, let's add
+> > > > the nomap attributes to the PMP regions, otherwise, I don't think t=
+hat
+> > > > is a good solution.
+> > >
+> > > So here is the current linear mapping without nomap in openSBI:
+> > >
+> > > ---[ Linear mapping ]---
+> > > 0xff60000000000000-0xff60000000200000    0x0000000080000000         2=
+M
+> > > PMD     D A G . . W R V
+> > > 0xff60000000200000-0xff60000000e00000    0x0000000080200000        12=
+M
+> > > PMD     D A G . . . R V
+> > >
+> > > And below the linear mapping with nomap in openSBI:
+> > >
+> > > ---[ Linear mapping ]---
+> > > 0xff60000000080000-0xff60000000200000    0x0000000080080000      1536=
+K
+> > > PTE     D A G . . W R V
+> > > 0xff60000000200000-0xff60000000e00000    0x0000000080200000        12=
+M
+> > > PMD     D A G . . . R V
+> > >
+> > > So adding nomap does not misalign virtual and physical addresses, it
+> > > prevents the usage of 1GB page for this area though, so that's a
+> > > solution, we just lose this 1GB page here.
+> > >
+> > > But even though that may be the fix, I think we also need to fix that
+> > > in the kernel as it would break compatibility with certain versions o=
+f
+> > > openSBI *if* we fix openSBI...So here are a few solutions:
+> > >
+> > > 1. we can mark all "mmode_resv" nodes in the device tree as nomap,
+> > > before the linear mapping is established (IIUC, those nodes are added
+> > > by openSBI to advertise PMP regions)
+> > >     -> This amounts to the same fix as opensbi and we lose the 1GB hu=
+gepage.
+> > > 2. we can tweak pfn_is_nosave function to *not* save pfn correspondin=
+g
+> > > to PMP regions
+> > >     -> We don't lose the 1GB hugepage \o/
+> > > 3. we can use register_nosave_region() to not save the "mmode_resv"
+> > > regions (x86 does that
+> > > https://elixir.bootlin.com/linux/v6.4-rc1/source/arch/x86/kernel/e820=
+.c#L753)
+> > >     -> We don't lose the 1GB hugepage \o/
+> > > 4. Given JeeHeng pointer to
+> > > https://elixir.bootlin.com/linux/v6.4-rc1/source/kernel/power/snapsho=
+t.c#L1340,
+> > > we can mark those pages as non-readable and make the hibernation
+> > > process not save those pages
+> > >     -> Very late-in-the-day idea, not sure what it's worth, we also
+> > > lose the 1GB hugepage...
+> > >
+> > > To me, the best solution is 3 as it would prepare for other similar
+> > > issues later, it is similar to x86 and it allows us to keep 1GB
+> > > hugepages.
+> >
+> > I agree,
+> > register_nosave_region() is a good way in the early initialization to
+> > set page frames (like the PMP regions) in forbidden_pages_map and mark
+> > them as no-savable for hibernation.
+> >
+> > Look forward to your fixing.
+>
+> Please find below the patch in question, which worked for me, if you
+> can give it a try. As mentioned by Conor, I'd like to make sure the
+> mmode_resv "interface" is really what we need to use before
+> upstreaming this fix @Anup Patel @Atish Kumar Patra
+>
+> diff --git a/arch/riscv/kernel/hibernate.c b/arch/riscv/kernel/hibernate.=
+c
+> index 264b2dcdd67e..9ad8bf5c956b 100644
+> --- a/arch/riscv/kernel/hibernate.c
+> +++ b/arch/riscv/kernel/hibernate.c
+> @@ -24,6 +24,8 @@
+>  #include <linux/sched.h>
+>  #include <linux/suspend.h>
+>  #include <linux/utsname.h>
+> +#include <linux/of_fdt.h>
+> +#include <linux/libfdt.h>
+>
+>  /* The logical cpu number we should resume on, initialised to a
+> non-cpu number. */
+>  static int sleep_cpu =3D -EINVAL;
+> @@ -67,6 +69,45 @@ static void arch_hdr_invariants(struct
+> arch_hibernate_hdr_invariants *i)
+>         memcpy(i->uts_version, init_utsname()->version, sizeof(i->uts_ver=
+sion));
+>  }
+>
+> +void __init register_nosave_regions(void)
+> +{
+> +#define MMODE_RESV     "mmode_resv"
+> +       int node, child;
+> +       const void *fdt =3D initial_boot_params;
+> +
+> +       node =3D fdt_path_offset(fdt, "/reserved-memory");
+> +       if (node < 0)
+> +               return;
+> +
+> +       fdt_for_each_subnode(child, fdt, node) {
+> +               phys_addr_t base, size;
+> +               const __be32 *prop;
+> +               const char *uname;
+> +               int len;
+> +               int t_len =3D (dt_root_addr_cells + dt_root_size_cells)
+> * sizeof(__be32);
+> +
+> +               uname =3D fdt_get_name(fdt, child, NULL);
+> +
+> +               if (!uname || strncmp(uname, MMODE_RESV,
+> sizeof(MMODE_RESV) - 1))
+> +                       continue;
+> +
+> +               prop =3D of_get_flat_dt_prop(child, "reg", &len);
+> +               if (!prop)
+> +                       continue;
+> +
+> +               while (len >=3D t_len) {
+> +                       base =3D dt_mem_next_cell(dt_root_addr_cells, &pr=
+op);
+> +                       size =3D dt_mem_next_cell(dt_root_size_cells, &pr=
+op);
+> +
+> +                       if (size)
+> +                               register_nosave_region(phys_to_pfn(base),
+> +
+> phys_to_pfn(base + size));
+> +
+> +                       len -=3D t_len;
+> +               }
+> +       }
+> +}
+> +
+>  /*
+>   * Check if the given pfn is in the 'nosave' section.
+>   */
+> @@ -421,6 +462,8 @@ static int __init riscv_hibernate_init(void)
+>         if (WARN_ON(!hibernate_cpu_context))
+>                 return -ENOMEM;
+>
+> +       register_nosave_regions();
+> +
+>         return 0;
+>  }
+>
+I encountered 2 (possible) problems in my test with the patch above.
+The full log has been posted here : https://termbin.com/qp3x .
 
-在 2023/05/18 0:27, yang lan 写道:
-> Hi,
-> 
-> Thank you for your response.
-> 
->> Does this reproduce on current kernels, eg 6.4-rc2?
-> 
-> Yeah, it can be reproduced on kernel 6.4-rc2.
-> 
+First, a `WARN_ON_ONCE()` was triggered in `memblock_alloc_internal()`
+when calling `register_nosave_regions()` although the `nosave_region`
+was allocated successfully.
+```
+[ 0.112658] memblock_alloc_try_nid: 32 bytes align=3D0x40 nid=3D-1
+from=3D0x0000000000000000 max_addr=3D0x0000000000000000
+register_nosave_region+0x54/0xd4
+[ 0.113698] ------------[ cut here ]------------
+[ 0.114185] WARNING: CPU: 0 PID: 1 at mm/memblock.c:1517
+memblock_alloc_internal+0x34/0xb0\
+...
+```
+The WARNING shows that slab is available at this time and
+`memblock_alloc()` shouldn't be used here.
+I think we should move the calling of `register_nosave_regions()` to
+somewhere eariler at least before `memblock_free_all()`
 
-Below log shows that io hang, can you collect following debugfs so
-that we can know where is the io now.
 
-cd /sys/kernel/debug/block/[test_device] && find . -type f -exec grep 
--aH . {} \;
+Second, the resume process failed with a Memory map mismatch.
+I didn't dig into it further and not sure it's this patch caused it
+(we couldn't hibernate successfully before this patch, right?)
+Just report it in this thread.
 
+```
+[ 2.991958] PM: Loading image data pages (88091 pages)...
+[ 2.995308] PM: Image loading progress: 0%
+[ 3.005533] PM: hibernation: [Firmware Bug]: Memory map mismatch at
+0x0 after hibernation
+[ 3.006343] PM: hibernation: Read 352364 kbytes in 0.01 seconds (35236.40 M=
+B/s)
+[ 3.007270] PM: hibernation: Failed to load image, recovering.
+```
+> > >
+> > > I have been thinking, and to me nomap does not provide anything since
+> > > the kernel should not address this memory range, so if it does, we
+> > > must fix the kernel.
+> > >
+> > > Let me know what you all think, I'll be preparing a PoC of 3 in the m=
+eantime!
+> > >
+> > > Alex
+> > >
+> > >
+> > >
+> > > >
+> > > > And a last word: Mike Rapoport recently gave a speech [1] where he
+> > > > states that mapping the linear mapping with hugepages does not give
+> > > > rise to better performance so *maybe* reverting this commit may be =
+a
+> > > > solution too as it may not provide the expected benefits (even thou=
+gh
+> > > > I'd rather have it and another benefit of mapping the linear mappin=
+g
+> > > > with 1GB hugepages is that it is faster to boot, but that needs to =
+be
+> > > > measured).
+> > > >
+> > > > [1] https://lwn.net/Articles/931406/
+> > > >
+> > > > > Please correct me if I'm wrong.
+> > > > >
+> > > > > [1]: https://lore.kernel.org/r/20230330064321.1008373-5-jeeheng.s=
+ia@starfivetech.com
+> > > > > [2]: https://lore.kernel.org/r/20230324155421.271544-4-alexghiti@=
+rivosinc.com
+> > > > >
+> > > > > --
+> > > > > Thanks,
+> > > > > Song
+> > > >
+> > > > Thanks for the thorough report!
+> > > >
+> > > > Alex
+> >
+> >
+> >
+> > --
+> > Thanks,
+> > Song
+
+
+
+--=20
 Thanks,
-Kuai
-> root@syzkaller:~# uname -a
-> Linux syzkaller 6.4.0-rc2 #1 SMP PREEMPT_DYNAMIC Wed May 17 22:58:52
-> CST 2023 x86_64 GNU/Linux
-> root@syzkaller:~# gcc poc_blkdev.c -o poc_blkdev
-> root@syzkaller:~# ./poc_blkdev
-> [  128.718051][ T7121] nbd0: detected capacity change from 0 to 4
-> [  158.917678][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 30 seconds
-> [  188.997677][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 60 seconds
-> [  219.077191][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 90 seconds
-> [  249.157312][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 120 seconds
-> [  279.237409][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 150 seconds
-> [  309.317843][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 180 seconds
-> [  339.397950][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 210 seconds
-> [  369.478031][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 240 seconds
-> [  399.558253][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 270 seconds
-> [  429.638372][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 300 seconds
-> [  459.718454][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 330 seconds
-> [  489.798571][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 360 seconds
-> [  519.878643][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 390 seconds
-> [  549.958966][  T998] block nbd0: Possible stuck request
-> ffff888016f08000: control (read@0,2048B). Runtime 420 seconds
-> [  571.719145][   T30] INFO: task systemd-udevd:7123 blocked for more
-> than 143 seconds.
-> [  571.719652][   T30]       Not tainted 6.4.0-rc2 #1
-> [  571.719900][   T30] "echo 0 >
-> /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  571.720307][   T30] task:systemd-udevd   state:D stack:26224
-> pid:7123  ppid:3998   flags:0x00004004
-> [  571.720756][   T30] Call Trace:
-> [  571.720923][   T30]  <TASK>
-> [  571.721073][   T30]  __schedule+0x9ca/0x2630
-> [  571.721348][   T30]  ? firmware_map_remove+0x1e0/0x1e0
-> [  571.721618][   T30]  ? find_held_lock+0x33/0x1c0
-> [  571.721866][   T30]  ? lock_release+0x3b9/0x690
-> [  571.722108][   T30]  ? do_read_cache_folio+0x4ff/0xb20
-> [  571.722447][   T30]  ? lock_downgrade+0x6b0/0x6b0
-> [  571.722785][   T30]  ? mark_held_locks+0xb0/0x110
-> [  571.723044][   T30]  schedule+0xd3/0x1b0
-> [  571.723264][   T30]  io_schedule+0x1b/0x70
-> [  571.723489][   T30]  ? do_read_cache_folio+0x58c/0xb20
-> [  571.723760][   T30]  do_read_cache_folio+0x58c/0xb20
-> [  571.724036][   T30]  ? blkdev_readahead+0x20/0x20
-> [  571.724319][   T30]  ? __filemap_get_folio+0x8e0/0x8e0
-> [  571.724588][   T30]  ? __sanitizer_cov_trace_switch+0x53/0x90
-> [  571.724885][   T30]  ? __sanitizer_cov_trace_pc+0x1e/0x50
-> [  571.725246][   T30]  ? format_decode+0x1cf/0xb50
-> [  571.725547][   T30]  ? __sanitizer_cov_trace_pc+0x1e/0x50
-> [  571.725837][   T30]  ? fill_ptr_key+0x30/0x30
-> [  571.726072][   T30]  ? default_pointer+0x4a0/0x4a0
-> [  571.726335][   T30]  ? __isolate_free_page+0x220/0x220
-> [  571.726608][   T30]  ? filemap_fdatawrite_wbc+0x1c0/0x1c0
-> [  571.726888][   T30]  ? __sanitizer_cov_trace_pc+0x1e/0x50
-> [  571.727172][   T30]  ? read_part_sector+0x229/0x420
-> [  571.727434][   T30]  ? adfspart_check_ADFS+0x560/0x560
-> [  571.727707][   T30]  read_part_sector+0xfa/0x420
-> [  571.727963][   T30]  adfspart_check_POWERTEC+0x90/0x690
-> [  571.728244][   T30]  ? adfspart_check_ADFS+0x560/0x560
-> [  571.728520][   T30]  ? __kasan_slab_alloc+0x33/0x70
-> [  571.728780][   T30]  ? adfspart_check_ICS+0x8f0/0x8f0
-> [  571.729889][   T30]  ? snprintf+0xb2/0xe0
-> [  571.730145][   T30]  ? vsprintf+0x30/0x30
-> [  571.730374][   T30]  ? __sanitizer_cov_trace_pc+0x1e/0x50
-> [  571.730659][   T30]  ? adfspart_check_ICS+0x8f0/0x8f0
-> [  571.730928][   T30]  bdev_disk_changed+0x674/0x1260
-> [  571.731189][   T30]  ? write_comp_data+0x1f/0x70
-> [  571.731439][   T30]  ? iput+0xd0/0x780
-> [  571.731646][   T30]  blkdev_get_whole+0x186/0x260
-> [  571.731886][   T30]  blkdev_get_by_dev+0x4ce/0xae0
-> [  571.732139][   T30]  blkdev_open+0x140/0x2c0
-> [  571.732366][   T30]  do_dentry_open+0x6de/0x1450
-> [  571.732612][   T30]  ? blkdev_close+0x80/0x80
-> [  571.732848][   T30]  path_openat+0xd6d/0x26d0
-> [  571.733084][   T30]  ? lock_downgrade+0x6b0/0x6b0
-> [  571.733336][   T30]  ? vfs_path_lookup+0x110/0x110
-> [  571.733591][   T30]  do_filp_open+0x1bb/0x290
-> [  571.733824][   T30]  ? may_open_dev+0xf0/0xf0
-> [  571.734061][   T30]  ? __phys_addr_symbol+0x30/0x70
-> [  571.734324][   T30]  ? do_raw_spin_unlock+0x176/0x260
-> [  571.734595][   T30]  do_sys_openat2+0x5fd/0x980
-> [  571.734837][   T30]  ? file_open_root+0x3f0/0x3f0
-> [  571.735087][   T30]  ? seccomp_notify_ioctl+0xff0/0xff0
-> [  571.735368][   T30]  do_sys_open+0xce/0x140
-> [  571.735596][   T30]  ? filp_open+0x80/0x80
-> [  571.735820][   T30]  ? __secure_computing+0x1e3/0x340
-> [  571.736090][   T30]  do_syscall_64+0x38/0x80
-> [  571.736325][   T30]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> [  571.736626][   T30] RIP: 0033:0x7fb212210840
-> [  571.736857][   T30] RSP: 002b:00007fffb37bbbe8 EFLAGS: 00000246
-> ORIG_RAX: 0000000000000002
-> [  571.737269][   T30] RAX: ffffffffffffffda RBX: 0000560e09072e10
-> RCX: 00007fb212210840
-> [  571.737651][   T30] RDX: 0000560e08e39fe3 RSI: 00000000000a0800
-> RDI: 0000560e090813b0
-> [  571.738037][   T30] RBP: 00007fffb37bbd60 R08: 0000560e08e39670
-> R09: 0000000000000010
-> [  571.738432][   T30] R10: 0000560e08e39d0c R11: 0000000000000246
-> R12: 00007fffb37bbcb0
-> [  571.739563][   T30] R13: 0000560e09087a70 R14: 0000000000000003
-> R15: 000000000000000e
-> [  571.739973][   T30]  </TASK>
-> [  571.740133][   T30]
-> [  571.740133][   T30] Showing all locks held in the system:
-> [  571.740495][   T30] 1 lock held by rcu_tasks_kthre/13:
-> [  571.740758][   T30]  #0: ffffffff8b6badd0
-> (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at:
-> rcu_tasks_one_gp+0x2b/0xdb0
-> [  571.741301][   T30] 1 lock held by rcu_tasks_trace/14:
-> [  571.741571][   T30]  #0: ffffffff8b6baad0
-> (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at:
-> rcu_tasks_one_gp+0x2b/0xdb0
-> [  571.742134][   T30] 1 lock held by khungtaskd/30:
-> [  571.742385][   T30]  #0: ffffffff8b6bb960
-> (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x5b/0x300
-> [  571.742947][   T30] 2 locks held by kworker/u8:0/50:
-> [  571.743198][   T30]  #0: ffff888016e7b138
-> ((wq_completion)nbd0-recv){+.+.}-{0:0}, at:
-> process_one_work+0x94b/0x17b0
-> [  571.743809][   T30]  #1: ffff888011e4fdd0
-> ((work_completion)(&args->work)){+.+.}-{0:0}, at:
-> process_one_work+0x984/0x17b0
-> [  571.744393][   T30] 1 lock held by in:imklog/6784:
-> [  571.744643][   T30]  #0: ffff88801106e368
-> (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100
-> [  571.745122][   T30] 1 lock held by systemd-udevd/7123:
-> [  571.745381][   T30]  #0: ffff8880431854c8
-> (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0x24b/0xae0
-> [  571.745885][   T30]
-> [  571.746008][   T30] =============================================
-> [  571.746008][   T30]
-> [  571.746424][   T30] NMI backtrace for cpu 1
-> [  571.746642][   T30] CPU: 1 PID: 30 Comm: khungtaskd Not tainted 6.4.0-rc2 #1
-> [  571.746989][   T30] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> 1996), BIOS 1.12.0-1 04/01/2014
-> [  571.747440][   T30] Call Trace:
-> [  571.747606][   T30]  <TASK>
-> [  571.747764][   T30]  dump_stack_lvl+0x91/0xf0
-> [  571.747997][   T30]  nmi_cpu_backtrace+0x21a/0x2b0
-> [  571.748257][   T30]  ? lapic_can_unplug_cpu+0xa0/0xa0
-> [  571.748525][   T30]  nmi_trigger_cpumask_backtrace+0x28c/0x2f0
-> [  571.748830][   T30]  watchdog+0xe4b/0x10c0
-> [  571.749057][   T30]  ? proc_dohung_task_timeout_secs+0x90/0x90
-> [  571.749366][   T30]  kthread+0x33b/0x430
-> [  571.749596][   T30]  ? kthread_complete_and_exit+0x40/0x40
-> [  571.749891][   T30]  ret_from_fork+0x1f/0x30
-> [  571.750126][   T30]  </TASK>
-> [  571.750347][   T30] Sending NMI from CPU 1 to CPUs 0:
-> [  571.750620][    C0] NMI backtrace for cpu 0
-> [  571.750626][    C0] CPU: 0 PID: 3987 Comm: systemd-journal Not
-> tainted 6.4.0-rc2 #1
-> [  571.750637][    C0] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> 1996), BIOS 1.12.0-1 04/01/2014
-> [  571.750643][    C0] RIP: 0033:0x7fb1d8c34bd1
-> [  571.750652][    C0] Code: ed 4d 89 cf 75 a3 0f 1f 00 48 85 ed 75 4b
-> 48 8b 54 24 28 48 8b 44 24 18 48 8b 7c 24 20 48 29 da 48 8b 70 20 48
-> 0f af 54 24 08 <48> 83 c4 38 5b 5d 41 5c 41 5d 41 5e 41 5f e9 ac f2 04
-> 00 0f 1f 40
-> [  571.750662][    C0] RSP: 002b:00007ffff9686c30 EFLAGS: 00000202
-> [  571.750670][    C0] RAX: 00007ffff9686e50 RBX: 0000000000000002
-> RCX: 0000000000000010
-> [  571.750677][    C0] RDX: 0000000000000010 RSI: 00007ffff9686d80
-> RDI: 00007ffff9686f20
-> [  571.750683][    C0] RBP: 0000000000000000 R08: 0000000000000010
-> R09: 00007ffff9686d90
-> [  571.750689][    C0] R10: 00007ffff9686fb0 R11: 00007fb1d8d6a060
-> R12: 00007ffff9686f30
-> [  571.750696][    C0] R13: 00007fb1d9d20ee0 R14: 00007ffff9686f30
-> R15: 00007ffff9686d90
-> [  571.750703][    C0] FS:  00007fb1da33d8c0 GS:  0000000000000000
-> [  571.752358][   T30] Kernel panic - not syncing: hung_task: blocked tasks
-> [  571.757337][   T30] CPU: 1 PID: 30 Comm: khungtaskd Not tainted 6.4.0-rc2 #1
-> [  571.757686][   T30] Hardware name: QEMU Standard PC (i440FX + PIIX,
-> 1996), BIOS 1.12.0-1 04/01/2014
-> [  571.758131][   T30] Call Trace:
-> [  571.758302][   T30]  <TASK>
-> [  571.758462][   T30]  dump_stack_lvl+0x91/0xf0
-> [  571.758714][   T30]  panic+0x62d/0x6a0
-> [  571.758926][   T30]  ? panic_smp_self_stop+0x90/0x90
-> [  571.759188][   T30]  ? preempt_schedule_common+0x1a/0xc0
-> [  571.759486][   T30]  ? preempt_schedule_thunk+0x1a/0x20
-> [  571.759785][   T30]  ? watchdog+0xc21/0x10c0
-> [  571.760020][   T30]  watchdog+0xc32/0x10c0
-> [  571.760240][   T30]  ? proc_dohung_task_timeout_secs+0x90/0x90
-> [  571.760541][   T30]  kthread+0x33b/0x430
-> [  571.760753][   T30]  ? kthread_complete_and_exit+0x40/0x40
-> [  571.761052][   T30]  ret_from_fork+0x1f/0x30
-> [  571.761286][   T30]  </TASK>
-> [  571.761814][   T30] Kernel Offset: disabled
-> [  571.762047][   T30] Rebooting in 86400 seconds..
-> 
->> You need to include poc_blkdev.c as part of your report.
-> 
-> It's a little confusing and I'm sorry for that.
-> The poc_blkdev.c is exactly the C reproducer
-> (https://pastebin.com/raw/6mg7uF8W).
-> 
->> I suspect you've done something that is known to not work (as root,
->> so we won't necessarily care).  But I can't really say without seeing
->> what you've done.  Running syzkaller is an art, and most people aren't
->> good at it.  It takes a lot of work to submit good quality bug reports,
->> see this article:
->>
->> https://blog.regehr.org/archives/2037
-> 
-> I have read this article and thanks for your recommendations.
-> I'm not familiar with this module and I haven't figured out the root
-> cause of this bug yet.
-> 
-> Regards,
-> 
-> Yang
-> 
-> Matthew Wilcox <willy@infradead.org> 于2023年5月17日周三 20:20写道：
->>
->> On Wed, May 17, 2023 at 07:12:23PM +0800, yang lan wrote:
->>> root@syzkaller:~# uname -a
->>> Linux syzkaller 5.10.179 #1 SMP PREEMPT Thu Apr 27 16:22:48 CST 2023
->>
->> Does this reproduce on current kernels, eg 6.4-rc2?
->>
->>> root@syzkaller:~# gcc poc_blkdev.c -o poc_blkdev
->>
->> You need to include poc_blkdev.c as part of your report.
->>
->>> Please let me know if I can provide any more information, and I hope I
->>> didn't mess up this bug report.
->>
->> I suspect you've done something that is known to not work (as root,
->> so we won't necessarily care).  But I can't really say without seeing
->> what you've done.  Running syzkaller is an art, and most people aren't
->> good at it.  It takes a lot of work to submit good quality bug reports,
->> see this article:
->>
->> https://blog.regehr.org/archives/2037
-> 
-> Matthew Wilcox <willy@infradead.org> 于2023年5月17日周三 20:20写道：
->>
->> On Wed, May 17, 2023 at 07:12:23PM +0800, yang lan wrote:
->>> root@syzkaller:~# uname -a
->>> Linux syzkaller 5.10.179 #1 SMP PREEMPT Thu Apr 27 16:22:48 CST 2023
->>
->> Does this reproduce on current kernels, eg 6.4-rc2?
->>
->>> root@syzkaller:~# gcc poc_blkdev.c -o poc_blkdev
->>
->> You need to include poc_blkdev.c as part of your report.
->>
->>> Please let me know if I can provide any more information, and I hope I
->>> didn't mess up this bug report.
->>
->> I suspect you've done something that is known to not work (as root,
->> so we won't necessarily care).  But I can't really say without seeing
->> what you've done.  Running syzkaller is an art, and most people aren't
->> good at it.  It takes a lot of work to submit good quality bug reports,
->> see this article:
->>
->> https://blog.regehr.org/archives/2037
-> .
-> 
-
+Song
