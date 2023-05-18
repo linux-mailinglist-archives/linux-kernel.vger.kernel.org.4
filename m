@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAE3707A83
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF764707A8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjERHDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
+        id S229922AbjERHF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjERHDt (ORCPT
+        with ESMTP id S229798AbjERHFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:03:49 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698ED2D63
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:03:46 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f41dceb9c9so11459075e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:03:46 -0700 (PDT)
+        Thu, 18 May 2023 03:05:24 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850371FFC
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:05:22 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510b6a249a8so2948712a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684393425; x=1686985425;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmE3Hw/g7PPXrHo8vcI6AjK/ohP/P6DVA7E2EEZA5aw=;
-        b=lNypA+WGF2vO1hR7ikW9cji9tuOPvcbtbUBOxHzGqO4xtpMGVB6DkS1/BXmv9xnBAj
-         L4XUoIwAROLoDGxQc7FPnw+nIJnpo0e5vuiaPH3mNf8/Qm9m4WgJUXgFSHOMVqF8kQF0
-         lGq98PFQ6c+vLqDalLC72hlWN0qUAALcjHXfF3pijF/1SVHSRbm3z5gN8zvLEWFu69aR
-         1Gw5PfG+ns+3qIjk+4WbR6QqLMby0ilKS4tz60gv8qfooG6Py867g57LRIEukAXUBzpm
-         D2thI7uvQKTaDqu89O5+AjN7X/RqPl6B4z+gsMxjNPlT9HOo3ORGOIDxnBauldOllBpk
-         vwfg==
+        d=linaro.org; s=google; t=1684393521; x=1686985521;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HB3cwJV0mSmYqqN+17Ku1gQOxvoolxHz8jVfs5CGGuY=;
+        b=Br4iCjwDzrKp05ZAWSLABuiOx30EM3t05C8aD/R+b3Gt8cMco6WYrPIUrZu7MZe2LX
+         gPPDa/BT9PCYVCekVhT1YVT2G5Rg/oEL6RLHEOhg+MCKLm/NhV4KZmmdTRg1qlex2oEX
+         PjoU811j6UlBAalG1Qo6GGNx1eEJnwi/tRekUB/DrqpelPMuyI4KPx0qjt93tlO2Et7o
+         qI1j6kK4bcaRzSEaw3NVP8b+28vN74iZ1WPb29O3PbTpmj6V51IjxB93v616prV+xo8i
+         wM5SJr0FTRHp5EeLhdIv8IB2QH7OyvnRHHmxxBHQ05EspTwvh9SBrQkWU5RuxPmGSn+a
+         CxbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684393425; x=1686985425;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cmE3Hw/g7PPXrHo8vcI6AjK/ohP/P6DVA7E2EEZA5aw=;
-        b=PnOKJh+Jt/BsB3K6XcfEkIxTE0O6IwHkN6//NAv3VAcMdAyASdj+/+iBM+iFXTev1W
-         0WNqnv+xxhE7Tqgl3T4PnP0/KSBWrHWWuzTynC2aWeFfatnhOzHMGXKAtyfrfVKiWAJH
-         w6pOpKRYjxxT39BMhC0/aLeTmTU0MTW9Z29wHXEAvzhWZ4I6+oJd2LvWVTGYvlNeWpnP
-         nj9sbTF35d6YicCnhZqbv/NNV8OLVmJBCzZL/0QJGNJ8/qgbkk6tk8QhVgRdXevfhzVT
-         bQCMYQ6JxPkvyBqJk1CcsihzJxpSRlT0QVB1VmIZeNeMoN8Jk4Efz3GTw8shBcTi7mXu
-         2oeA==
-X-Gm-Message-State: AC+VfDwWe8Ar1bAPw5fKsMlDI6P70vGqsWRYK8RFNWZ9yOpNtL5C6GQL
-        85wXnRCA+dQOmjWXGSlanTVoYQ==
-X-Google-Smtp-Source: ACHHUZ7KA7gW++urZQKvPGWLM/0di9BvXzgoPwnUHrCMESNRXMuASR1PwcyqGPzX8tXB+3miGBskrg==
-X-Received: by 2002:adf:fb08:0:b0:309:3c0c:b2c1 with SMTP id c8-20020adffb08000000b003093c0cb2c1mr572723wrr.23.1684393424852;
-        Thu, 18 May 2023 00:03:44 -0700 (PDT)
-Received: from hera (ppp176092130041.access.hol.gr. [176.92.130.41])
-        by smtp.gmail.com with ESMTPSA id d15-20020a5d644f000000b00307a83ea722sm1110439wrw.58.2023.05.18.00.03.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 00:03:44 -0700 (PDT)
-Date:   Thu, 18 May 2023 10:03:41 +0300
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Christoph Hellwig <hch@lst.de>, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 07/11] net: page_pool: add DMA-sync-for-CPU
- inline helpers
-Message-ID: <ZGXNzX77/5cXqAhe@hera>
-References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
- <20230516161841.37138-8-aleksander.lobakin@intel.com>
- <20230517211211.1d1bbd0b@kernel.org>
+        d=1e100.net; s=20221208; t=1684393521; x=1686985521;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HB3cwJV0mSmYqqN+17Ku1gQOxvoolxHz8jVfs5CGGuY=;
+        b=MGE4PQHxoKQeFlygd48ypnI46qeqTasKs8KAK9IbdttpaT9CMd3COKuwmYZNdANg4Y
+         cFdkTdPP9AIBu8bzOYTRKBfn3fGjGUMHSZ7MQ8iZG39h02yyryz0IaPIHSG/MlrYOGQg
+         foiL2uZYooUhltDHt2Gn0Ckr7yx87zxMMWBDa8lEdk7XFn+hboDr5cOFae+Q3bjBBCPy
+         2Usk5KnxPzN+KcbuDKIcXG07+hk5XX/PzGYqj2ICiticfv8W0QIP1+5JGGnLPKE+AL5q
+         PN1whMaf0+e5ROYcXxsXqsGfYjfz8iWgW5bgUwJ2l1lxwv7O4cz93dQXg2Q/TFNJIvgm
+         Huww==
+X-Gm-Message-State: AC+VfDybWs8eMQnhSqqElEpEYhglTiChQZ1T7c9mkpcy7owe1d/Ce+fP
+        7J1sEfQfGzkSnU1+e4JTZkKohA==
+X-Google-Smtp-Source: ACHHUZ6YGHm2Ye48O/6ou6X1U2dvgx77S0q7J8MRBOF4Mz4C2w69aPtohxBn0ToX9DTg5Zgy77w+HA==
+X-Received: by 2002:a17:907:6287:b0:94f:29f0:edc0 with SMTP id nd7-20020a170907628700b0094f29f0edc0mr42034234ejc.44.1684393520981;
+        Thu, 18 May 2023 00:05:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
+        by smtp.gmail.com with ESMTPSA id l18-20020a170906a41200b00965a52d2bf6sm567990ejz.88.2023.05.18.00.05.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 00:05:20 -0700 (PDT)
+Message-ID: <c969276f-9e29-9337-44f5-aac445e061eb@linaro.org>
+Date:   Thu, 18 May 2023 09:05:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517211211.1d1bbd0b@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc: convert
+ to yaml
+To:     Claudiu.Beznea@microchip.com, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Conor.Dooley@microchip.com,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230517094119.2894220-1-claudiu.beznea@microchip.com>
+ <20230517094119.2894220-3-claudiu.beznea@microchip.com>
+ <83f484ff-f170-6f32-f4b4-9743eb6d0b4c@linaro.org>
+ <d115cd4d-2a4f-552c-692c-c69ae49fe21e@microchip.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d115cd4d-2a4f-552c-692c-c69ae49fe21e@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,94 +82,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 18/05/2023 08:03, Claudiu.Beznea@microchip.com wrote:
+> On 17.05.2023 17:21, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On 17/05/2023 11:41, Claudiu Beznea wrote:
+>>> Convert Atmel PMC documentation to yaml. Along with it clock names
+>>> were adapted according to the current available device trees as
+>>> different controller versions accept different clock (some of them
+>>> have 3 clocks as input, some has 2 clocks as inputs and some with 2
+>>> input clocks uses different clock names).
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+>>
+>>> +
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - atmel,at91rm9200-pmc
+>>> +              - atmel,at91sam9260-pmc
+>>> +              - atmel,at91sam9g20-pmc
+>>> +    then:
+>>> +      properties:
+>>> +        clocks:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>>> +        clock-names:
+>>> +          items:
+>>> +            - const: slow_xtal
+>>> +            - const: main_xtal
+>>> +
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            enum:
+>>> +              - atmel,sama5d2-pmc
+>>> +              - atmel,sama5d3-pmc
+>>> +              - atmel,sama5d4-pmc
+>>> +    then:
+>>> +      properties:
+>>> +        clocks:
+>>> +          minItems: 2
+>>> +          maxItems: 2
+>>> +        clock-names:
+>>> +          items:
+>>> +            - const: slow_clk
+>>> +            - const: main_xtal
+>>
+>> This and previous if, should be squashed. You have exactly the same then:.
+> 
+> Clock names are different. Or do you propose to have a if for
+> clocks:
+>   minItems: 2
+>   maxItems: 2
+> 
+> and 2 ifs for clock names?
 
-> On Wed, May 17, 2023 at 09:12:11PM -0700, Jakub Kicinski wrote:
-> On Tue, 16 May 2023 18:18:37 +0200 Alexander Lobakin wrote:
-> > Each driver is responsible for syncing buffers written by HW for CPU
-> > before accessing them. Almost each PP-enabled driver uses the same
-> > pattern, which could be shorthanded into a static inline to make driver
-> > code a little bit more compact.
-> > Introduce a couple such functions. The first one takes the actual size
-> > of the data written by HW and is the main one to be used on Rx. The
-> > second does the same, but only if the PP performs DMA synchronizations
-> > at all. The last one picks max_len from the PP params and is designed
-> > for more extreme cases when the size is unknown, but the buffer still
-> > needs to be synced.
-> > Also constify pointer arguments of page_pool_get_dma_dir() and
-> > page_pool_get_dma_addr() to give a bit more room for optimization,
-> > as both of them are read-only.
->
-> Very neat.
->
-> > diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> > index 8435013de06e..f740c50b661f 100644
-> > --- a/include/net/page_pool.h
-> > +++ b/include/net/page_pool.h
-> > @@ -32,7 +32,7 @@
-> >
-> >  #include <linux/mm.h> /* Needed by ptr_ring */
-> >  #include <linux/ptr_ring.h>
-> > -#include <linux/dma-direction.h>
-> > +#include <linux/dma-mapping.h>
->
-> highly nit picky - but isn't dma-mapping.h pretty heavy?
-> And we include page_pool.h in skbuff.h. Not that it matters
-> today, but maybe one day we'll succeed putting skbuff.h
-> on a diet -- so perhaps it's better to put "inline helpers
-> with non-trivial dependencies" into a new header?
->
-> >  #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
-> >  					* map/unmap
->
-> > +/**
-> > + * page_pool_dma_sync_for_cpu - sync Rx page for CPU after it's written by HW
-> > + * @pool: page_pool which this page belongs to
-> > + * @page: page to sync
-> > + * @dma_sync_size: size of the data written to the page
-> > + *
-> > + * Can be used as a shorthand to sync Rx pages before accessing them in the
-> > + * driver. Caller must ensure the pool was created with %PP_FLAG_DMA_MAP.
-> > + */
-> > +static inline void page_pool_dma_sync_for_cpu(const struct page_pool *pool,
-> > +					      const struct page *page,
-> > +					      u32 dma_sync_size)
-> > +{
-> > +	dma_sync_single_range_for_cpu(pool->p.dev,
-> > +				      page_pool_get_dma_addr(page),
-> > +				      pool->p.offset, dma_sync_size,
-> > +				      page_pool_get_dma_dir(pool));
->
-> Likely a dumb question but why does this exist?
-> Is there a case where the "maybe" version is not safe?
->
+Ah, I see, they have different names - xtal -> clk.
 
-I got similar concerns here.  Syncing for the cpu is currently a
-responsibility for the driver.  The reason for having an automated DMA sync
-is that we know when we allocate buffers for the NIC to consume so we can
-safely sync them accordingly.  I am fine having a page pool version for the
-cpu sync, but do we really have to check the pp flags for that?  IOW if you
-are at the point that you need to sync a buffer for the cpu *someone*
-already mapped it for you.  Regardsless of who mapped it the sync is
-identical
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> > +}
-> > +
-> > +/**
-> > + * page_pool_dma_maybe_sync_for_cpu - sync Rx page for CPU if needed
-> > + * @pool: page_pool which this page belongs to
-> > + * @page: page to sync
-> > + * @dma_sync_size: size of the data written to the page
-> > + *
-> > + * Performs DMA sync for CPU, but only when required (swiotlb, IOMMU etc.).
-> > + */
-> > +static inline void
-> > +page_pool_dma_maybe_sync_for_cpu(const struct page_pool *pool,
-> > +				 const struct page *page, u32 dma_sync_size)
-> > +{
-> > +	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-> > +		page_pool_dma_sync_for_cpu(pool, page, dma_sync_size);
-> > +}
 
-Thanks
-/Ilias
+Best regards,
+Krzysztof
+
