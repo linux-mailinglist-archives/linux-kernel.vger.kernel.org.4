@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807A4707ACD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3F6707ACC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjERH2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S230101AbjERH2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjERH2A (ORCPT
+        with ESMTP id S229924AbjERH17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:28:00 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B311FC0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:27:59 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-25332b3915bso1464825a91.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:27:59 -0700 (PDT)
+        Thu, 18 May 2023 03:27:59 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E9A19B5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:27:58 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1b2so2699409a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684394879; x=1686986879;
+        d=linaro.org; s=google; t=1684394877; x=1686986877;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B0KPsRgZkrYOqM2qiaYRx/3vo+OhEcW+JKXrMqHHRi8=;
-        b=KifR2KEG+YkazDWDu+y0p8UbuCC4weUt9xdIUdiL/2Fp9jPiPoORyHkQElgFNju9WQ
-         6dyXWMSpb/owFxTwZNx3zadPTdMxpuQ4YyO7/MON7qezouH8njZwDuzJisTPkP9Nbivm
-         e52wQv4hQcph/C9JTH7yu67pJMbaDRXAX02GA=
+        bh=YaMbqKLIRk9uu0W+O1MKIWCGt/ANzy+JnOLOsBMnmMA=;
+        b=d2ZscMnfBdkDvEdeZLpee450DeBX/+FfgbcS+tqZLb/sXioIryO9K9up6dSvxWvzXa
+         CZIuhRQRaFzOHa7wkBZsM7i9QQigkDK4h5I1aHN/v0syOsFlWvnKXE6NSf5Vq9V7hQVY
+         EP0yiGHSF7+SdRYP2djSjnZs1tEPKRvdKkKz3jMV/T5gCyeCVXZCpSFG6Xdbt0gzf1nj
+         jbgZbZrwXo1/R4omcGB97d1FKqd59tCMFTkxz/Nh/j6NFPY0B7lPM8wRFqfaMfwBpm5L
+         oRUjEe9EexnkW1VUwDY/DqhiAUovB3aMKgeOdH7o/SUSyDY2Uaebj0BkPQ64NAuMPESC
+         qrsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684394879; x=1686986879;
+        d=1e100.net; s=20221208; t=1684394877; x=1686986877;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=B0KPsRgZkrYOqM2qiaYRx/3vo+OhEcW+JKXrMqHHRi8=;
-        b=QMPXEySaiBidd9EvyLz8OIs9XmJMqBxEwxsRoTbFkC+OWFfvXEB6ysNE2py3BXWiEV
-         8CpHFCerBp90yRQ5dGdU6ZfYRfLAlzt8riCJWGzPaqbmfhtiOP7w3Ih+xxITnFTTFs4l
-         zB8nIJae4eiP/y+BwDG1dB9KVFXlJiV+vgcu6b+MrJgMw7fs5hlbSyGj2ZB4189QB452
-         Zlis/8p6KiDMsyLfdx+Z8iEZ/BymI87geA8NnGfxrlNoNJEUB+aXzov5ZDSA7J4tq1wY
-         pvIwpkpKVN+NvFVENXMs30LjLGcRwmDSf4v0vw7ZeYDtq4KMEqrRmGWAyZcp3YcEG2Fu
-         r3ow==
-X-Gm-Message-State: AC+VfDyZMYt6DAn+10jU3sQYoNfe4sNyS7cFJ+cfh+axd/qoOvx9u4Yi
-        Af69JFDM/veOvhzhgK69abAhqA==
-X-Google-Smtp-Source: ACHHUZ6kn57EUT67NPJLEbc98mcDOFCe/2x+n9xYSKDeif2fpTykIqyWRQD5H+dOSl2BwPpI0wT93A==
-X-Received: by 2002:a17:90a:9f8d:b0:24e:4c8:3ae5 with SMTP id o13-20020a17090a9f8d00b0024e04c83ae5mr1852042pjp.28.1684394879222;
-        Thu, 18 May 2023 00:27:59 -0700 (PDT)
-Received: from localhost (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
-        by smtp.gmail.com with UTF8SMTPSA id g8-20020a17090adb0800b0025315f7fef7sm2788601pjv.33.2023.05.18.00.27.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 00:27:58 -0700 (PDT)
-From:   Ying Hsu <yinghsu@chromium.org>
-To:     netdev@vger.kernel.org
-Cc:     grundler@chromium.org, Ying Hsu <yinghsu@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] igb: Fix igb_down hung on surprise removal
-Date:   Thu, 18 May 2023 07:26:57 +0000
-Message-ID: <20230518072657.1.If9539da710217ed92e764cc0ba0f3d2d246a1aee@changeid>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+        bh=YaMbqKLIRk9uu0W+O1MKIWCGt/ANzy+JnOLOsBMnmMA=;
+        b=PCHSDfJc99ADBaKoBAAbl2Y0oERjmdKEWkuQvm8JK4K8zJX6fVIv4oakskCY0KQIq+
+         5PbzRHV4KdjMvHbAW9mKfg63BalOkdUZiOWNQDjXZHFNvSCnsRbI1NIZ7TYTZSrHr4lR
+         DeR6x0imeBIDBd8okSpabLyJ4OJgWKcE/CYrdYLeMHcdJbdNDQZ8wz1WGRzcAEsdE4CQ
+         a1wMpi6eFepx5hqxUdMDG8urx1FQzXBJEdlOt7jHaiuanV90Zj6Z8yOH954GnGMmFmsd
+         2xQ3xIWRehrDIo9J952mlvis2FZH+Pju6eSdZBEVQWAmr3eb/XAhGSHVgIjRSx0NdnDz
+         SCLw==
+X-Gm-Message-State: AC+VfDyNkqvXdVJJudBzv3PwxkUG1aubcrwCYwGW2U1QgHvjLgGkj/Li
+        qMjTXWjbw89vnkowLU2Ntf4wmcnL1scwTxFYbkbYsw==
+X-Google-Smtp-Source: ACHHUZ5SE+z7zBbyAA7sZJdfWN2AeIZzPJouJZzS41SDb9nbTXRDYA40EWH6G3vpDYL09eoqmSlZRA==
+X-Received: by 2002:a17:907:3f25:b0:969:edf8:f73b with SMTP id hq37-20020a1709073f2500b00969edf8f73bmr32752432ejc.60.1684394876834;
+        Thu, 18 May 2023 00:27:56 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
+        by smtp.gmail.com with ESMTPSA id g17-20020a17090669d100b00965aee5be9asm594241ejs.170.2023.05.18.00.27.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 00:27:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RESEND PATCH 00/12] ASoC: codecs: do not store status in state containe
+Date:   Thu, 18 May 2023 09:27:41 +0200
+Message-Id: <20230518072753.7361-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,82 +73,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a setup where a Thunderbolt hub connects to Ethernet and a display
-through USB Type-C, users may experience a hung task timeout when they
-remove the cable between the PC and the Thunderbolt hub.
-This is because the igb_down function is called multiple times when
-the Thunderbolt hub is unplugged. For example, the igb_io_error_detected
-triggers the first call, and the igb_remove triggers the second call.
-The second call to igb_down will block at napi_synchronize.
-Here's the call trace:
-    __schedule+0x3b0/0xddb
-    ? __mod_timer+0x164/0x5d3
-    schedule+0x44/0xa8
-    schedule_timeout+0xb2/0x2a4
-    ? run_local_timers+0x4e/0x4e
-    msleep+0x31/0x38
-    igb_down+0x12c/0x22a [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    __igb_close+0x6f/0x9c [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    igb_close+0x23/0x2b [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    __dev_close_many+0x95/0xec
-    dev_close_many+0x6e/0x103
-    unregister_netdevice_many+0x105/0x5b1
-    unregister_netdevice_queue+0xc2/0x10d
-    unregister_netdev+0x1c/0x23
-    igb_remove+0xa7/0x11c [igb 6615058754948bfde0bf01429257eb59f13030d4]
-    pci_device_remove+0x3f/0x9c
-    device_release_driver_internal+0xfe/0x1b4
-    pci_stop_bus_device+0x5b/0x7f
-    pci_stop_bus_device+0x30/0x7f
-    pci_stop_bus_device+0x30/0x7f
-    pci_stop_and_remove_bus_device+0x12/0x19
-    pciehp_unconfigure_device+0x76/0xe9
-    pciehp_disable_slot+0x6e/0x131
-    pciehp_handle_presence_or_link_change+0x7a/0x3f7
-    pciehp_ist+0xbe/0x194
-    irq_thread_fn+0x22/0x4d
-    ? irq_thread+0x1fd/0x1fd
-    irq_thread+0x17b/0x1fd
-    ? irq_forced_thread_fn+0x5f/0x5f
-    kthread+0x142/0x153
-    ? __irq_get_irqchip_state+0x46/0x46
-    ? kthread_associate_blkcg+0x71/0x71
-    ret_from_fork+0x1f/0x30
+Hi,
 
-In this case, igb_io_error_detected detaches the network interface
-and requests a PCIE slot reset, however, the PCIE reset callback is
-not being invoked and thus the Ethernet connection breaks down.
-As the PCIE error in this case is a non-fatal one, requesting a
-slot reset can be avoided.
-This patch fixes the task hung issue and preserves Ethernet
-connection by ignoring non-fatal PCIE errors.
+Resend due to missing cover letter, so adding per-series tags was
+not possible.
 
-Signed-off-by: Ying Hsu <yinghsu@chromium.org>
----
-This commit has been tested on a HP Elite Dragonfly Chromebook and
-a Caldigit TS3+ Thunderbolt hub. The Ethernet driver for the hub
-is igb. Non-fatal PCIE errors happen when users hot-plug the cables
-connected to the chromebook or to the external display.
+Added Rb tag.
 
- drivers/net/ethernet/intel/igb/igb_main.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Best regards,
+Krzysztof
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 58872a4c2540..a8b217368ca1 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -9581,6 +9581,11 @@ static pci_ers_result_t igb_io_error_detected(struct pci_dev *pdev,
- 	struct net_device *netdev = pci_get_drvdata(pdev);
- 	struct igb_adapter *adapter = netdev_priv(netdev);
- 
-+	if (state == pci_channel_io_normal) {
-+		dev_warn(&pdev->dev, "Non-correctable non-fatal error reported.\n");
-+		return PCI_ERS_RESULT_CAN_RECOVER;
-+	}
-+
- 	netif_device_detach(netdev);
- 
- 	if (state == pci_channel_io_perm_failure)
+Krzysztof Kozlowski (12):
+  ASoC: codecs: rt1308: do not store status in state container
+  ASoC: codecs: rt1316: do not store status in state container
+  ASoC: codecs: rt1318: do not store status in state container
+  ASoC: codecs: rt5682: do not store status in state container
+  ASoC: codecs: rt700: do not store status in state container
+  ASoC: codecs: rt711-sdca: do not store status in state container
+  ASoC: codecs: rt711: do not store status in state container
+  ASoC: codecs: rt712-sdca-dmic: do not store status in state container
+  ASoC: codecs: rt712-sdca: do not store status in state container
+  ASoC: codecs: rt715-sdca: do not store status in state container
+  ASoC: codecs: rt715: do not store status in state container
+  ASoC: codecs: rt722-sdca: do not store status in state container
+
+ sound/soc/codecs/rt1308-sdw.c      | 5 +----
+ sound/soc/codecs/rt1308-sdw.h      | 1 -
+ sound/soc/codecs/rt1316-sdw.c      | 5 +----
+ sound/soc/codecs/rt1316-sdw.h      | 1 -
+ sound/soc/codecs/rt1318-sdw.c      | 5 +----
+ sound/soc/codecs/rt1318-sdw.h      | 1 -
+ sound/soc/codecs/rt5682-sdw.c      | 5 +----
+ sound/soc/codecs/rt5682.h          | 1 -
+ sound/soc/codecs/rt700-sdw.c       | 5 +----
+ sound/soc/codecs/rt700.h           | 1 -
+ sound/soc/codecs/rt711-sdca-sdw.c  | 5 +----
+ sound/soc/codecs/rt711-sdca.h      | 1 -
+ sound/soc/codecs/rt711-sdw.c       | 5 +----
+ sound/soc/codecs/rt711.h           | 1 -
+ sound/soc/codecs/rt712-sdca-dmic.c | 5 +----
+ sound/soc/codecs/rt712-sdca-dmic.h | 1 -
+ sound/soc/codecs/rt712-sdca-sdw.c  | 5 +----
+ sound/soc/codecs/rt712-sdca.h      | 1 -
+ sound/soc/codecs/rt715-sdca-sdw.c  | 5 +----
+ sound/soc/codecs/rt715-sdca.h      | 1 -
+ sound/soc/codecs/rt715-sdw.c       | 4 +---
+ sound/soc/codecs/rt715.h           | 1 -
+ sound/soc/codecs/rt722-sdca-sdw.c  | 5 +----
+ sound/soc/codecs/rt722-sdca.h      | 1 -
+ 24 files changed, 12 insertions(+), 59 deletions(-)
+
 -- 
-2.40.1.606.ga4b1b128d6-goog
+2.34.1
 
