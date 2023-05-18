@@ -2,136 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F10708699
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DB470869C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjERRR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S229624AbjERRUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjERRR4 (ORCPT
+        with ESMTP id S229457AbjERRUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:17:56 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2111.outbound.protection.outlook.com [40.107.94.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD60E40;
-        Thu, 18 May 2023 10:17:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VWFiop35koH54geE09wMlSkkhuzy6EO0jUQf6jSW/LIlYQP44kzHNaO1HI+t0jjyiHxI/jmd/iB2znkbLN4edjSAxMcgB/UWzgPcMrfhiULSE4WMoEhHjv1p/Ll6cGVZZDOJbocrN5GP980BEPKl8D0GZvtt9AL51+OAMWainXM9nNLlXVvaFqTXjxdPSbg5YAGGrX5hDhx7ZO2HkHFz8KVzKLorNTf3sgcLqlXnNeDjnvBoMmSV7athRFpoNRoCqYw5xJHbpWSO8aWEuWzdDkuHbHD4z/s7sipY39fAzvhcSho7+aaMMM61F/Py4SrrPfGXXGOVPSIva7xQ6PctzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6/WgPp+EDvQlMSOXyi4rEdTMvAt6ar3TqDZrm4jAcZs=;
- b=HbbDTHMrldPN8AI/azA0AVqnW5J3FgJO5BP8Sxclk9q8pvNufNRNVcordvQq6zCwaBlgPr6gNnVn7E1NigpuUftd237JJmsU405u+tATczszB8Asi9iRvuk6P+jJdYoBkY1FEZDV6qiZbFCEJHx7TCy39oR+SpTZCFJ6mg52w0BrHAcb6cKi8yXGxVYE13lfBlqhjyUM+houLQAub814ZerBq7Ih/Gy/r2GU5ZzKR0ISwuovBlUnFQGbu4WNk7Ig6S5d7FuJgxltq4F6/TP6CpW9EVzIaUf/xOyUKcXFHgP/E9SzsbS5hyQoaGm1kgxf4f0fi8++FozR9l+82bzrHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6/WgPp+EDvQlMSOXyi4rEdTMvAt6ar3TqDZrm4jAcZs=;
- b=KhQ+3Y90UdIAT5r4tK+yoEpLnjmfBL4F22LTZ//1BpwKbGBWdBWTuLWwMeUYFDFqH3CGEzZTq/1pToz451jr7f+9Z8EF5wMNibJkmbS97RscCLZViQw/FBdtr/S56/GwqFpSohZPIPT0LBT16ZBBl7yWnLH7mtyB2VQVn5diVws=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ2PR13MB6118.namprd13.prod.outlook.com (2603:10b6:a03:4f5::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.27; Thu, 18 May
- 2023 17:17:52 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
- 17:17:52 +0000
-Date:   Thu, 18 May 2023 19:17:45 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     wei.fang@nxp.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, Frank.Li@freescale.com, shenwei.wang@nxp.com,
-        xiaoning.wang@nxp.com, netdev@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: fec: remove useless fec_enet_reset_skb()
-Message-ID: <ZGZduVeDx9TvlToT@corigine.com>
-References: <20230518130016.1615671-1-wei.fang@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518130016.1615671-1-wei.fang@nxp.com>
-X-ClientProxiedBy: AM0PR02CA0113.eurprd02.prod.outlook.com
- (2603:10a6:20b:28c::10) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 18 May 2023 13:20:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E92E43
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 241326510D
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97360C433EF;
+        Thu, 18 May 2023 17:20:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684430415;
+        bh=KPXg/5yPyrniXThCT2klHFRPnIFaUJrpaOqQCf5WrCc=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=eURGaxmzqCpj33xjMs8yJfH2oes/pBGH1tGKZPH8moIUkCOOzY+foi34bXgbbU9vW
+         z0ei2WKHm3pd5JZ8tolxqr2sPYl+K55xkYIWf8N0dCbPenyY04eEEh8X/4caLB/VZT
+         bOItT7NrEoGbp78vKCTZL0T2nm+bked0LQiZIE7ldCNL4iq5sNfpnPUdZjylrqtloH
+         tR7vm+i1EGFO9zD73W/2Q17Q5crdGjD75mklec0X1L8e5c2L6TWLEGJBIE0FD4vLDr
+         cuH5vVKK5ABf5oquK1lTqELF1ZZvN9xuSL7QJbouhOnD7YpuipT3rHjzTYwrEP2W7t
+         SE9wvszOOd8ig==
+From:   Mark Brown <broonie@kernel.org>
+To:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230517111416.424420-1-krzysztof.kozlowski@linaro.org>
+References: <20230517111416.424420-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 01/12] ASoC: codecs: rt1308: do not store status in
+ state container
+Message-Id: <168443041217.472592.17542478387194244341.b4-ty@kernel.org>
+Date:   Fri, 19 May 2023 02:20:12 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6118:EE_
-X-MS-Office365-Filtering-Correlation-Id: d780a7e3-9fb0-47a3-2035-08db57c3d008
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PGXxYEUVx2BnMt2V5VXgfNLbPxPvgCf8oGMRsmHsC1qzzlj7auWfNTCm94/cdJyx7idGUevQ8neN31pV58I0w0jItRNinm6PzKThbyLh+WTchCDheJMtbomXTslTW2Vn5cz0Hl03doSA7E0vloskzal3XBb+hYA7wh4Ruj3+uyT9rYF3qdG9Tx7xJBfgaOLeOr+UCsLlBqkglar2T97xFU9tmAamqYEelRVqfxubQ2I1lKrSHOKp3bR4w39/bHY96151mW0H56j/Y24cuSbBcs5OkRCGwsti7kAYnLAiuKT39dafCo3fzeqPFpntV40DEiuPLjlgX3CRj2ZqRm15Lbg/31ohMMGnaSi9rul96hgpYN0Mo4q7tkypiMVZT67/jLN7+3Y+XTm39Tm/i7+25Pn5+LLLdhtOSRyyzwnw/svaAgPn6JWOeyFDF+5AJsRPq9p4A+criZFygP3EvyuwVbqlc2GFa9T4FfkqvtrKMiLoVq/Tv5nOcuXXcFUMaCpzBZHtNTxUvRyhYbBSzMlCllUXiNi0haIbdku+k3BPY2cTEfhPPVnYPzKMnq2OLVZI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(346002)(376002)(39840400004)(451199021)(66476007)(6486002)(478600001)(6666004)(66946007)(66556008)(44832011)(36756003)(86362001)(41300700001)(4326008)(316002)(38100700002)(5660300002)(6506007)(8676002)(8936002)(186003)(4744005)(6916009)(2616005)(6512007)(7416002)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NHlOS/bz8RUzNE7LN0UwkSJ4twRPsfcHohc+37wfMyicdmdhvJAjwUyHepmA?=
- =?us-ascii?Q?EsYJeUGHClY3Wy9jWhEWsRZ4PP7ulNQLImsaVHDIQdQcusOY2C1D6bVwgjsj?=
- =?us-ascii?Q?id7SNFtrSo7y3YiuADj9FA7LeNI1gg4VPYMiqeisR8WW3NUfsETR+Hw99DTd?=
- =?us-ascii?Q?r7/Qs8jKXIM4NGE4QCJH89BK0saRoOh+F1n/WU3oW2as4KW6hSZkF4iV0EEV?=
- =?us-ascii?Q?rIUEALPXzChW7kM8/j/C2pl0eePv2D+mCiVusb2ZLA264+VpPUrIc08iJoBD?=
- =?us-ascii?Q?SUz3KaYkZSqijQYiqqaRgJESqfo3pYzMne5Qgxycm/84Tlo+B6fX4PbVeiE6?=
- =?us-ascii?Q?zPZXUlnqIaYYm6QTEVnzGfcwyEqaJl8BIhsQG2D66AHdj4E1/WPe8L2jihj8?=
- =?us-ascii?Q?YXsqsUom0sYYb8lQEVgciwdmQO0I5MIK58+WNW57YlZdaoTV32ELqfr7Bxt+?=
- =?us-ascii?Q?kJt0kxki8JsjyTBn5eFCxtOnFwRyBWrGH1I8Ee0W5Dl5JKg253GvytbtW2EJ?=
- =?us-ascii?Q?Vv9PhdelDEzP0ycF8GlLF5gWf1R9HwziSBH/Bp0mdW2RfoA0JFV4I0RU4+H2?=
- =?us-ascii?Q?xOI8BXFq03qXNAYpkApVMc+wMFdggwVLhiq9+1OSGxs8qdCrwEobwfcrs3sj?=
- =?us-ascii?Q?rqFF/BYmHITgBUcATUE+UOaJFJtQXphYrstVCoei+8FmGNa7hq5t+pYCS3u+?=
- =?us-ascii?Q?EXJU1K0VNP9M58DxgLrzWvCi1KG2+GCS6scQCGOzFJeNqCADdilOLYzFNYqk?=
- =?us-ascii?Q?8b5vCFUezqFqiUhYRZJzv8X5rRSWs+NW5lKtz4WKRECE61QlrtCGK1vR+L/V?=
- =?us-ascii?Q?GAtpn1WOqI27IhVdzfEHuIY6H6WccFCKJy/N6UcpYQHkLfA6rcFqQp51Qytg?=
- =?us-ascii?Q?VKb5X8Et0ZM68F1Wp3E0YYDuMJIHNakMcs5i9GfKZvHukbVGitlGq960+okw?=
- =?us-ascii?Q?GtWe4rA3NRXE7wFiX278yTDJf/fYsWzr9JD5lEZFHIDLr00iXs6ktYj0m2ru?=
- =?us-ascii?Q?cHmm/hViyU+pLOe3i0qJdnUKKuWTYkwjX10PYMdJE6ca+elmXfNXIyFtkAEm?=
- =?us-ascii?Q?CxgK4yF3TYoa2u0KpKy6zRQNdF3jPDCvprbuhx4CXB5WaDMIzp8bRcz9673L?=
- =?us-ascii?Q?psbajzjIr1cUYGKGlFWaf+9yBA81L+Kz1Mw9+orTKG1whFhod2I6BIK6Q0Tb?=
- =?us-ascii?Q?HSXZtOpZWO8vba7K/cHcLcXAhVPnhMJt5RYWykKU7sNY9sf7WEu8emvT7iT0?=
- =?us-ascii?Q?rqTO98aPPqASpjU0v8ZRuv8d4mUvKERnF1RBnZbWcB+lBkQjVVS478CkFOJC?=
- =?us-ascii?Q?w/MF8XjRKaoIQo/nOhO8ja6K/qK9eQ9l8Eb52EX8Oaq3VNVBIlbA22nKu1sn?=
- =?us-ascii?Q?pBZN43QpF58cKIh9OPMyfqjYYk+7aNcnzyBni6pS8rbB75uvo36E22W/z2nP?=
- =?us-ascii?Q?ZX3/2syL9BORk/nwoGOcsh9XI1AxIdW06It4Cf77zKOGF6VX10z0dEb3OW6T?=
- =?us-ascii?Q?E/I4dGTF7ZnpcjU90aA3nTsQObuo0hGUhb+IIZh+KqPuYG/e6Pf3E4oJSwsr?=
- =?us-ascii?Q?xNDVmQzA69xXrGe+iBwSj9Ik0fPkJXHaRI4sQYHQ8fjV4SgJMSfrxlfh63Hf?=
- =?us-ascii?Q?OD7YZGwwF3Dw+FdWICH5oV0vaVnsTcBf/RvzpR/YXl71TsfacyNJ4uST+Rsc?=
- =?us-ascii?Q?vqdokQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d780a7e3-9fb0-47a3-2035-08db57c3d008
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 17:17:52.5151
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: upkhjqLe9HPXzaoB8JKTGxP3DdNrMywXbsT/e4nq4RkXPVdr2szPDdPYhdDGzmrcdVfhkS0Fl6W8Pn78JawfMkIVS5a+rcLI7g/933dip24=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6118
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 09:00:16PM +0800, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
+On Wed, 17 May 2023 13:14:05 +0200, Krzysztof Kozlowski wrote:
+> Driver in its update status callback stores Soundwire device status in
+> state container but it never uses it later.  Simplify the code a bit.
 > 
-> This patch is a cleanup for fec driver. The fec_enet_reset_skb()
-> is used to free skb buffers for tx queues and is only invoked in
-> fec_restart(). However, fec_enet_bd_init() also resets skb buffers
-> and is invoked in fec_restart() too. So fec_enet_reset_skb() is
-> redundant and useless.
 > 
-> Fixes: 59d0f7465644 ("net: fec: init multi queue date structure")
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
 
-Hi Wei Fang,
+Applied to
 
-this change looks fine to me.
-But it feels much more like a cleanup than a fix to me:
-what user-visible problem is it fixing?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-If so, I suggest targeting against net-next without the fixes tag.
+Thanks!
+
+[01/12] ASoC: codecs: rt1308: do not store status in state container
+        commit: cc3ff544a296b5b4bb021f4dc415b53a6955b980
+[02/12] ASoC: codecs: rt1316: do not store status in state container
+        commit: 70207b95b2245502496443475c9fc4eb72ba3b66
+[03/12] ASoC: codecs: rt1318: do not store status in state container
+        commit: 28eb1e4224c3b3ff29fe4c29bcdc011d3a0ffd07
+[04/12] ASoC: codecs: rt5682: do not store status in state container
+        commit: 758665b15acc1adb21a833c6456746ffbce07ed7
+[05/12] ASoC: codecs: rt700: do not store status in state container
+        commit: 9564c9f691128bc2dc69de02f7eed205d9b2513f
+[06/12] ASoC: codecs: rt711-sdca: do not store status in state container
+        commit: 8322947e9228ef7f8c3dd13822d32c491f9488e7
+[07/12] ASoC: codecs: rt711: do not store status in state container
+        commit: 22e15c18b4a91c71bf66de06187b8a3199bb8cad
+[08/12] ASoC: codecs: rt712-sdca-dmic: do not store status in state container
+        commit: d7a79616fc723305094fd7391085428b7a893636
+[09/12] ASoC: codecs: rt712-sdca: do not store status in state container
+        commit: 5cd02f96f49a7e6d2f8b96ddc42092776b554873
+[10/12] ASoC: codecs: rt715-sdca: do not store status in state container
+        commit: cda72c89d082f5953fab9948fc1212ca0df11d96
+[11/12] ASoC: codecs: rt715: do not store status in state container
+        commit: 0315dac5406c9c0b8e334195aa01c4ec155adf47
+[12/12] ASoC: codecs: rt722-sdca: do not store status in state container
+        commit: b932f21f6678659bd434c0d47e3bebc94bae0a51
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
