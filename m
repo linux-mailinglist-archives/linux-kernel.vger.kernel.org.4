@@ -2,184 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D5B708B87
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96661708B89
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjERWZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S230314AbjERW0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjERWZt (ORCPT
+        with ESMTP id S229850AbjERW0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:25:49 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFDFE57;
-        Thu, 18 May 2023 15:25:41 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-199bffcfd21so1063173fac.1;
-        Thu, 18 May 2023 15:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684448741; x=1687040741;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NBnzViueWiSeaAyUH7qOpg9qLcoZlKiPDtOoCkjrY3Y=;
-        b=rSOPivk+T0fYowJPrSIxxuhMi7FvDcxqk8DOum1A+yf0j9RKdCe84YJhW3VdcbcHfE
-         dMsDgQXFXp5P4TI4JemYnB4qFt2k9juvZ/6D4JJPftaoLQbwgM0pl3DO1aTYaWLn9y68
-         a3hnpMyWL1llrD0378/Bz8kD0TsdTWolxXvzkLEh3OOY/nhnCy9zTVXgZnyh/h5P2oe6
-         10vlgHi3pcMy0WG4VwJeePWmskFU8xbLgKyhtaFbGGdH0f1/KmH/1pmLIUbMEyRCIXo9
-         yVYZijmt4Gmz8D/rW7uu8ycltHb8BQnZuFt7QQA2TUc7qnAtikOJ9vDTS9iNOW8IIbog
-         iiTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684448741; x=1687040741;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBnzViueWiSeaAyUH7qOpg9qLcoZlKiPDtOoCkjrY3Y=;
-        b=XWf3iUbkx58h8R4xyAZpZL6TZbrJTvRzeqhv1aUFj59NQsRc1Pw6L2218+D0w3iQjX
-         GEIW9ljTNYZ3gA05ZLPt6LfRfRTQ6rin0He2aZNK0jdM2kJVUblH4c1+9JjXW3I8uum4
-         g9zU+VNqiVimB8GjjpTYG7cR6QeYxkEtliJx/dfG9wIJDFsvMwOkXJjRdwnZwO0mjHDw
-         brSA0EZk/SoPuCnpPp/7Ize+F2DYKi5KUpeqUxXoZcgLlpn1kFb0VFRpsCCSDOatpBR4
-         40w722ivqWLTr/PA3bJzZZZMwDF1dNlBD59kcTPldRxl8B9zedVuhOY/dtHegSn2WPXL
-         XFlQ==
-X-Gm-Message-State: AC+VfDy/jxkEBy5LiaVbqYC/XcJu0w1scA8P92FuoZVQOpgBk6gq7nKU
-        5F8dk90syrt/xRqKGt5KcfM=
-X-Google-Smtp-Source: ACHHUZ6JXXbue5lGhuLkFH1GILeZ9GLc1vPwQuJVHq0FESjJXWqbRJQaoW1i7JUhQy0ES/I95xuD+w==
-X-Received: by 2002:a05:6870:1945:b0:199:ccb2:12f2 with SMTP id m5-20020a056870194500b00199ccb212f2mr122516oak.20.1684448741133;
-        Thu, 18 May 2023 15:25:41 -0700 (PDT)
-Received: from ?IPV6:2603:8081:140c:1a00:1b3d:4b6b:e581:f922? (2603-8081-140c-1a00-1b3d-4b6b-e581-f922.res6.spectrum.com. [2603:8081:140c:1a00:1b3d:4b6b:e581:f922])
-        by smtp.gmail.com with ESMTPSA id bd6-20020a056870d78600b00172ac40356csm1286417oab.50.2023.05.18.15.25.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 15:25:40 -0700 (PDT)
-Message-ID: <660e05c8-9016-f97a-1af3-341eec8e911e@gmail.com>
-Date:   Thu, 18 May 2023 17:25:39 -0500
+        Thu, 18 May 2023 18:26:36 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAE4E50
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 15:26:35 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id B78F75C00E7;
+        Thu, 18 May 2023 18:26:32 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 18 May 2023 18:26:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm2; t=1684448792; x=
+        1684535192; bh=6TwGgJbBVoZV95OFOrW5qUj6HCHeiZRKa7KzYY7F1mg=; b=E
+        vWSMR2s4WTMKBUieZOSrmpN+9MI1n8S3Efa9oWlQCGFG9fgHTxxd96RFURKl154d
+        ULoCNWAzdS1NimT4SteO+B5qJr5/OfBUBr8mHZpOgCybWF0msMnT6npHmft97ZID
+        YJGcpvL1cjz31VvhAMH4NPp7YBw766M3XbxmSf0+qhPnxkqtB8FgmKfadvtxs9pM
+        UF8dRl/uCWPUnIBDTHA9zYGxhrAbLDm2knPh4kvrLvLKj0AohwMqp1zZQDqx5y1T
+        0E8pW+V9Z8xJwXIhZTnJjpFReIG2hAIWaNtlg0+QsE9/wJalC0WSy2My5Npz2fpG
+        +CLgIIYiB+kw4v26enirA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; t=1684448792; x=1684535192; bh=6
+        TwGgJbBVoZV95OFOrW5qUj6HCHeiZRKa7KzYY7F1mg=; b=CI/1R4yYIaTvkAF2V
+        2s3rR2F/S7H1PSztrI10gu3k8kHmmBzOtbvBStMcaXhcbPRG+w96IADmAsPeQJCM
+        8G34s6EnWqGWoqReyTERnizPkT9QIwoMyGWoSEGEzo4FBeSiGCXSbKRE6AwHlPrY
+        5vDhnhWG/5N3FxG5TZSRCOjwDqE4kiFNON5ft2GpeUvq6hX23Knl+gU2fHBGowxi
+        n1MuTuKvtbL/L13aCoObDZaf6q0v1b/8ZqkYSC8oyfiMdKZNZfytZOGdzt5fqrDr
+        OO/p7n1G6DBUvd7fid2XutBAPhZoLNdBYd76lgPh9xfuy/R6S2b4kbBt0u5Q3Ieu
+        zZxrA==
+X-ME-Sender: <xms:F6ZmZLxR-KJOjDA2PTxY5Eo9DJhTchs95xMMqehGHPGtclbFAVwG3A>
+    <xme:F6ZmZDTRbyayWrzAhYGleNbl5yrUUCpTIwkn2jdmE3JeBTNMuws6CKvDO48owuqEn
+    7o8hId96sGqp3cx1pg>
+X-ME-Received: <xmr:F6ZmZFUj4b7rsDd7fJ6MvhwVHJZ32YnuCl1FH7HA7sf-jlbt_siVA4VnnbNp9X9YBLAtow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigedgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkfgggfgtsehtufertd
+    dttddvnecuhfhrohhmpefnuhhkvgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdgu
+    vghvqeenucggtffrrghtthgvrhhnpedugfdtfedtkeekhfdthedugfdufeeghfehffekje
+    dukeeljeehleduffeuhfejjeenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghr
+    nhgvlhdrohhrghdpshhpihhnihgtshdrnhgvthdplhhinhhugihmihhnthdrtghomhdphh
+    hprdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:F6ZmZFjV2RhmD_Z_S_-zVv4y5LMNYkYIB0hGxRLDUVNVuFKEKFBW4A>
+    <xmx:F6ZmZNCq0INHpUlEH7JJ9Hy9xjrRs-qvdv4jm4V_X6Jv1iqbX3ACDA>
+    <xmx:F6ZmZOI29vG_fRS-d53d06sRvAgsxyF8hskUn3AkpWCE-xaS-hdKBg>
+    <xmx:GKZmZFZopau2GuThF3VngsOL-Yyf1nvfy_kc6BcfnyqPyPNmL3zWUg>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 May 2023 18:26:26 -0400 (EDT)
+From:   Luke Jones <luke@ljones.dev>
+To:     linux-kernel@vger.kernel.org
+Cc:     tiwai@suse.com, sbinding@opensource.cirrus.com, perex@perex.cz,
+        tangmeng@uniontech.com, andy.chi@canonical.com, p.jungkamp@gmx.net,
+        kasper93@gmail.com, yangyuchi66@gmail.com, armas@codux.tech,
+        ealex95@gmail.com, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org
+Subject: CSC3551 and devices missing related _DSD bits
+Date:   Fri, 19 May 2023 10:26:22 +1200
+Message-ID: <1991650.PYKUYFuaPT@fedora>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH for-next v5 1/7] RDMA/rxe: Always defer tasks on responder
- and completer to workqueue
-To:     Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
-        linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
-        zyjzyj2000@gmail.com
-Cc:     linux-kernel@vger.kernel.org, yangx.jy@fujitsu.com,
-        lizhijian@fujitsu.com, y-goto@fujitsu.com
-References: <cover.1684397037.git.matsuda-daisuke@fujitsu.com>
- <3edbcfacf7ff4fbe8b527a372ef73d1a6db17144.1684397037.git.matsuda-daisuke@fujitsu.com>
-Content-Language: en-US
-From:   Bob Pearson <rpearsonhpe@gmail.com>
-In-Reply-To: <3edbcfacf7ff4fbe8b527a372ef73d1a6db17144.1684397037.git.matsuda-daisuke@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/23 03:21, Daisuke Matsuda wrote:
-> Both responder and completer need to sleep to execute page-fault when used
-> with ODP. It can happen when they are going to access user MRs, so tasks
-> must be executed in process context for such cases.
-> 
-> Additionally, current implementation seldom defers tasks to workqueue, but
-> instead defers to a softirq context running do_task(). It is called from
-> rxe_resp_queue_pkt() and rxe_comp_queue_pkt() in SOFTIRQ_NET_RX context and
-> can last until maximum RXE_MAX_ITERATIONS (=1024) loops are executed. The
-> problem is the that task execuion appears to be anonymous loads in the
-> system and that the loop can throttle other softirqs on the same CPU.
-> 
-> This patch makes responder and completer codes run in process context for
-> ODP and the problem described above.
-> 
-> Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
-> ---
->  drivers/infiniband/sw/rxe/rxe_comp.c        | 12 +-----------
->  drivers/infiniband/sw/rxe/rxe_hw_counters.c |  1 -
->  drivers/infiniband/sw/rxe/rxe_hw_counters.h |  1 -
->  drivers/infiniband/sw/rxe/rxe_resp.c        | 13 +------------
->  4 files changed, 2 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/infiniband/sw/rxe/rxe_comp.c b/drivers/infiniband/sw/rxe/rxe_comp.c
-> index db18ace74d2b..671fdb645030 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_comp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_comp.c
-> @@ -128,18 +128,8 @@ void retransmit_timer(struct timer_list *t)
->  
->  void rxe_comp_queue_pkt(struct rxe_qp *qp, struct sk_buff *skb)
->  {
-> -	int must_sched;
-> -
->  	skb_queue_tail(&qp->resp_pkts, skb);
-> -
-> -	must_sched = skb_queue_len(&qp->resp_pkts) > 1;
-> -	if (must_sched != 0)
-> -		rxe_counter_inc(SKB_TO_PKT(skb)->rxe, RXE_CNT_COMPLETER_SCHED);
-> -
-> -	if (must_sched)
-> -		rxe_sched_task(&qp->comp.task);
-> -	else
-> -		rxe_run_task(&qp->comp.task);
-> +	rxe_sched_task(&qp->comp.task);
->  }
->  
->  static inline enum comp_state get_wqe(struct rxe_qp *qp,
-> diff --git a/drivers/infiniband/sw/rxe/rxe_hw_counters.c b/drivers/infiniband/sw/rxe/rxe_hw_counters.c
-> index a012522b577a..dc23cf3a6967 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_hw_counters.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_hw_counters.c
-> @@ -14,7 +14,6 @@ static const struct rdma_stat_desc rxe_counter_descs[] = {
->  	[RXE_CNT_RCV_RNR].name             =  "rcvd_rnr_err",
->  	[RXE_CNT_SND_RNR].name             =  "send_rnr_err",
->  	[RXE_CNT_RCV_SEQ_ERR].name         =  "rcvd_seq_err",
-> -	[RXE_CNT_COMPLETER_SCHED].name     =  "ack_deferred",
->  	[RXE_CNT_RETRY_EXCEEDED].name      =  "retry_exceeded_err",
->  	[RXE_CNT_RNR_RETRY_EXCEEDED].name  =  "retry_rnr_exceeded_err",
->  	[RXE_CNT_COMP_RETRY].name          =  "completer_retry_err",
-> diff --git a/drivers/infiniband/sw/rxe/rxe_hw_counters.h b/drivers/infiniband/sw/rxe/rxe_hw_counters.h
-> index 71f4d4fa9dc8..303da0e3134a 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_hw_counters.h
-> +++ b/drivers/infiniband/sw/rxe/rxe_hw_counters.h
-> @@ -18,7 +18,6 @@ enum rxe_counters {
->  	RXE_CNT_RCV_RNR,
->  	RXE_CNT_SND_RNR,
->  	RXE_CNT_RCV_SEQ_ERR,
-> -	RXE_CNT_COMPLETER_SCHED,
->  	RXE_CNT_RETRY_EXCEEDED,
->  	RXE_CNT_RNR_RETRY_EXCEEDED,
->  	RXE_CNT_COMP_RETRY,
-> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-> index 68f6cd188d8e..ba0222bfce9e 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-> @@ -46,21 +46,10 @@ static char *resp_state_name[] = {
->  	[RESPST_EXIT]				= "EXIT",
->  };
->  
-> -/* rxe_recv calls here to add a request packet to the input queue */
->  void rxe_resp_queue_pkt(struct rxe_qp *qp, struct sk_buff *skb)
->  {
-> -	int must_sched;
-> -	struct rxe_pkt_info *pkt = SKB_TO_PKT(skb);
-> -
->  	skb_queue_tail(&qp->req_pkts, skb);
-> -
-> -	must_sched = (pkt->opcode == IB_OPCODE_RC_RDMA_READ_REQUEST) ||
-> -			(skb_queue_len(&qp->req_pkts) > 1);
-> -
-> -	if (must_sched)
-> -		rxe_sched_task(&qp->resp.task);
-> -	else
-> -		rxe_run_task(&qp->resp.task);
-> +	rxe_sched_task(&qp->resp.task);
->  }
->  
->  static inline enum resp_states get_req(struct rxe_qp *qp,
+Hi Takashi (and all others),
 
-Looks good.
+We're beginning to encounter more and more laptops from ASUS in the ROG range 
+where the bass speakers are connected to a cirrus amp, and the driver for 
+cirrus is unable to pick this up due to being missing a _DSD section in the 
+ACPI (SSDT). I've emailed engineers at ASUS I have contact with about this but 
+it is unlikely that we will see corrections for each and every model + variant 
+they have. The models we have seen so far are:
+- GX650P
+- GU604V
+- GA402X
+And there have been numerous forum postings in various places with the exact 
+same issue for other models from ASUS that are not in the ROG group I deal 
+with - oh and also some Lenovo and HP devices also.
 
-Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+Some of the logs are:
+
+[    5.542312] Serial bus multi instantiate pseudo device driver CSC3551:00: 
+Instantiated 2 I2C devices.
+[    5.717261] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0: Error: ACPI _DSD 
+Properties are missing for HID CSC3551.
+[    5.717269] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0: error -EINVAL: 
+Platform not supported
+[    5.717286] cs35l41-hda: probe of i2c-CSC3551:00-cs35l41-hda.0 failed with 
+error -22
+[    5.717734] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.1: Error: ACPI _DSD 
+Properties are missing for HID CSC3551.
+[    5.717737] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.1: error -EINVAL: 
+Platform not supported
+[    5.717750] cs35l41-hda: probe of i2c-CSC3551:00-cs35l41-hda.1 failed with 
+error -22
+
+and:
+
+[    3.343851] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.0: Error: ACPI _DSD 
+Properties are missing for HID CSC3551.
+[    3.343854] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.0: error -EINVAL: 
+Platform not supported
+[    3.343855] cs35l41-hda: probe of spi1-CSC3551:00-cs35l41-hda.0 failed with 
+error -22
+[    3.345544] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.1: Error: ACPI _DSD 
+Properties are missing for HID CSC3551.
+[    3.345546] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.1: error -EINVAL: 
+Platform not supported
+[    3.345548] cs35l41-hda: probe of spi1-CSC3551:00-cs35l41-hda.1 failed with 
+error -22
+
+So there are SPI connected, and I2C connected.
+
+Alex has already submitted the related patch_realtek work for the GU604V and 
+no doubt there will be some follow up patches from myself or others for the 
+other models. Alex has attempted to patch the Cirrus related parts in kernel 
+direct with:
+1. https://github.com/bno1/linux-xanmod-gu604/blob/acpi-hack/
+patch03_gu604v_speaker_acpi_hack.patch
+2. https://github.com/bno1/linux-xanmod-gu604/blob/acpi-hack/
+patch04_gu604v_spi_cs_gpio_hack.patch
+both of these patches have been tested and working for over a week.
+
+From what I see the patch04_gu604v_spi_cs_gpio_hack patch needs to shift to 
+the cirrus driver sound/pci/hda/cs35l41_hda.c, and that driver must now have a 
+quirk table - unless we can somehow add the cirrus related bits to the realtek 
+code? I've personally not played with this beyond keeping an eye on it all and 
+am reluctant to begin work on a solution until I've had some input on the 
+direction it should take.
+
+In any case, this is not an isolated issue and we could benefit from putting 
+in place some quirk or similar to accommodate for laptops where the vendor for 
+some reason does not include the _DSD parts for use with the cirrus driver. 
+The trend is looking so far like this practice will continue regardless of the 
+vendor.
+
+Known reports:
+- https://bugzilla.kernel.org/show_bug.cgi?id=216194
+- https://www.spinics.net/lists/alsa-devel/msg146434.html
+- https://gist.github.com/lamperez/862763881c0e1c812392b5574727f6ff
+- https://forums.linuxmint.com/viewtopic.php?t=392762
+- https://h30434.www3.hp.com/t5/Notebook-Operating-System-and-Recovery/Envy-x360-2022-13-b0074TU-Audio-not-working-in-Linux-Fedora/td-p/8644641
+
+Regards,
+Luke
+
 
 
