@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D81708C86
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E52708C87
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjERXrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 19:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S229546AbjERXwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 19:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjERXri (ORCPT
+        with ESMTP id S229487AbjERXw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 19:47:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CD3E57;
-        Thu, 18 May 2023 16:47:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=ZySnlc2Ml9xHMuunSy4Tjl3AX6LIZep9S+GkxtV0tZE=; b=yeNVEuhHvJPqncFuyGKgjR8JyH
-        MCruxXJ225HX1uwdRUGDxZBwPjW3z7fKLUw9JSYdonwqPrXv5Ah9KbkWkNClPpjOdrDyziQf77UbN
-        SGTedecdDzYGgMYAHaY5VKugybmf5/UtSb+a817qYka+zjcdQXtg+CKLeaWUs9AtOdkwfYZgAPsfX
-        DAhTxRD+WjMM4//yGTQurTd7hQS4NZMAEvJYsntLGnzjoEbXiRgrAkXx+8H0IkXW10cN/KNSPBN0a
-        ycXfjO7tqx4m+IC+pk9Ys2GZHLYDNfeNPs2qSZLRen8dvxp6ZoLhAVkYu6R0yczet7xpOtnKihkfZ
-        QV9IL1wg==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pznLM-00EUvN-30;
-        Thu, 18 May 2023 23:47:37 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Athanasios Oikonomou <athoik@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: [PATCH] media: frontend.h.rst.exceptions: add more dvb define exceptions
-Date:   Thu, 18 May 2023 16:47:35 -0700
-Message-Id: <20230518234735.20289-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        Thu, 18 May 2023 19:52:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8C5E7A
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 16:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684453948; x=1715989948;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IXmHbAMvAuGDv6jp5wg/LI21QGk/kwHV6av1y5qzHhI=;
+  b=RUnM27r+fSKOboMR/EwToD6c8mr3WSjiIJ745DjmKbadel0xmDLL+lcQ
+   zpySAT/jQjvi8XS3xzM45Qm0UcfHbGJRGTHcwpOr0GAoGogj7Q+5acQC4
+   CwHtfjcN9ds5OjSBZpbXJomaRe0eiEwysLBbrzAGzr7ZLrtAXyXY5t2DZ
+   6cX/M2+7Mf1M8OlaS/BE7ikSF7/7hc39bomXuL/3e+5bfAD1NNuBgeDPn
+   /+YRQxJTwvSKy1mIsDfVZsYw2QTn0gfg4Deb+QTPBIKpPh3V4j8lPLgc1
+   qQA9MTP3waXY14/uKnkaCG3goYmTfJ3g8YyvEpFkC4+NudLc/JStE8JpG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="438578301"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="438578301"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 16:52:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="705365734"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="705365734"
+Received: from wopr.jf.intel.com ([10.54.75.136])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 16:52:27 -0700
+Message-ID: <07caefbe35cab20ed881c9364c3d26204aea1653.camel@linux.intel.com>
+Subject: Re: [PATCH] mtd: spi-nor: Fix divide by zero for spi-nor-generic
+ flashes
+From:   Todd Brandt <todd.e.brandt@linux.intel.com>
+Reply-To: todd.e.brandt@linux.intel.com
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>,
+        miquel.raynal@bootlin.com, richard@nod.at, todd.e.brandt@intel.com
+Cc:     vigneshr@ti.com, pratyush@kernel.org, michael@walle.cc,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        regressions@leemhuis.info, bagasdotme@gmail.com,
+        regressions@lists.linux.dev, joneslee@google.com
+Date:   Thu, 18 May 2023 16:52:27 -0700
+In-Reply-To: <20230518085440.2363676-1-tudor.ambarus@linaro.org>
+References: <20230518085440.2363676-1-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,44 +67,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building documentation reports multiple warnings for undefined DVB
-frontend labels:
+Looks good, tested and confirmed
 
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
-Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
+Tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
 
-so add those symbols to the ignore list to prevent the build warnings.
+On Thu, 2023-05-18 at 08:54 +0000, Tudor Ambarus wrote:
+> We failed to initialize n_banks for spi-nor-generic flashes, which
+> caused a devide by zero when computing the bank_size.
+> 
+> By default we consider that all chips have a single bank. Initialize
+> the default number of banks for spi-nor-generic flashes. Even if the
+> bug is fixed with this simple initialization, check the n_banks value
+> before dividing so that we make sure this kind of bug won't occur
+> again
+> if some other struct instance is created uninitialized.
+> 
+> Suggested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217448
+> Fixes: 9d6c5d64f028 ("mtd: spi-nor: Introduce the concept of bank")
+> Link: 
+> https://lore.kernel.org/all/20230516225108.29194-1-todd.e.brandt@intel.com/
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  drivers/mtd/spi-nor/core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 0bb0ad14a2fc..5f29fac8669a 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -2018,6 +2018,7 @@ static const struct spi_nor_manufacturer
+> *manufacturers[] = {
+>  
+>  static const struct flash_info spi_nor_generic_flash = {
+>  	.name = "spi-nor-generic",
+> +	.n_banks = 1,
+>  	/*
+>  	 * JESD216 rev A doesn't specify the page size, therefore we
+> need a
+>  	 * sane default.
+> @@ -2921,7 +2922,8 @@ static void spi_nor_late_init_params(struct
+> spi_nor *nor)
+>  	if (nor->flags & SNOR_F_HAS_LOCK && !nor->params->locking_ops)
+>  		spi_nor_init_default_locking_ops(nor);
+>  
+> -	nor->params->bank_size = div64_u64(nor->params->size, nor-
+> >info->n_banks);
+> +	if (nor->info->n_banks > 1)
+> +		params->bank_size = div64_u64(params->size, nor->info-
+> >n_banks);
+>  }
+>  
+>  /**
+> @@ -2987,6 +2989,7 @@ static void spi_nor_init_default_params(struct
+> spi_nor *nor)
+>  	/* Set SPI NOR sizes. */
+>  	params->writesize = 1;
+>  	params->size = (u64)info->sector_size * info->n_sectors;
+> +	params->bank_size = params->size;
+>  	params->page_size = info->page_size;
+>  
+>  	if (!(info->flags & SPI_NOR_NO_FR)) {
 
-Fixes: 1825788e2a96 ("media: dvb: add missing DVB-S2X FEC parameter values")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/linux-media/202305162245.wtaLIXf3-lkp@intel.com/
-Cc: Athanasios Oikonomou <athoik@gmail.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
----
- Documentation/userspace-api/media/frontend.h.rst.exceptions |    4 ++++
- 1 file changed, 4 insertions(+)
-
-diff -- a/Documentation/userspace-api/media/frontend.h.rst.exceptions b/Documentation/userspace-api/media/frontend.h.rst.exceptions
---- a/Documentation/userspace-api/media/frontend.h.rst.exceptions
-+++ b/Documentation/userspace-api/media/frontend.h.rst.exceptions
-@@ -142,6 +142,10 @@ ignore symbol FEC_26_45
- ignore symbol FEC_28_45
- ignore symbol FEC_32_45
- ignore symbol FEC_77_90
-+ignore symbol FEC_11_45
-+ignore symbol FEC_4_15
-+ignore symbol FEC_14_45
-+ignore symbol FEC_7_15
- 
- ignore symbol TRANSMISSION_MODE_AUTO
- ignore symbol TRANSMISSION_MODE_1K
