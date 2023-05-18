@@ -2,119 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BE2707A5A
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE95707A59
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 08:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjERGs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 02:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjERGsZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229828AbjERGsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 18 May 2023 02:48:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC702D66
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684392457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZN6Ju1FP4FeoecC0E5LNzhZjtVHQZME+r88V+E/OwK4=;
-        b=eU4aFh27OYaUaNvb1xVbsKn1fRaOT16Ca0lJWLe+7Cuz7pJInlaeng/dUtNPQdCIB6BuRx
-        x9KaCAKH34MBvj1bkQDQSMEHbyzjwVYUMoMK5Yb4kkAINVCkTsm8+s/8ssSzZN5HOUOHSd
-        DH+Ek2HAu2WpZd8v/dxTbnYAlSNf7kk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-186-LvHjqBfXPCyfsftFReHO4A-1; Thu, 18 May 2023 02:47:35 -0400
-X-MC-Unique: LvHjqBfXPCyfsftFReHO4A-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f08900caadso2785065e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:47:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684392454; x=1686984454;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZN6Ju1FP4FeoecC0E5LNzhZjtVHQZME+r88V+E/OwK4=;
-        b=JOWNRWmVd7Zjr8aLh+qfZbbKoEbYZ50FPHKIBNHnUcezQ5E4++aVplheF3j6kR/Syo
-         Ljx1yhlKBTmGiA0vQmoxQemBFIWRkcV585ZWGgnepzp5zHQ8c77YmMmmmA0g8cMataAG
-         2ZxcYmwHQsoooA0RPWmjB4mA78HSaAzIpFd3bSr/pIlM8eGKe3rYl3ByQhI01nm5J1Tj
-         N+STWafISRIMDDIChVNJ2+1KSffcKb0rXz/Tz0Br2oXjlmmpjLpt3FEIGzGm/k5BwLPh
-         li8lJAhaC8ZDNmns4ROB7l78TTCHJQFX3JRhtcX1dv/UiXCcKqN7NEnTcaXnu8KVUmO4
-         ZS8A==
-X-Gm-Message-State: AC+VfDzcO3e/DjiJkg+koVVQTCYRX2BPPSg8421Wr6aCnXWcJGJVozZk
-        w4NRItZrkwkgBFbrNIhBOudzFwqce1XFk2bHIZAfoMmY4XZh3NW71g9IQLwZ+QyGpdD4WtN/DIR
-        iYMMMZRLVwO5IGBZqc/cwMWaN
-X-Received: by 2002:adf:e984:0:b0:309:3a72:3cea with SMTP id h4-20020adfe984000000b003093a723ceamr3157298wrm.0.1684392454638;
-        Wed, 17 May 2023 23:47:34 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7NAs5kv2mFpL8q2hjP8+Kb6Pg/BSYEPMO2lqh52LnPJx7S/ze/dGKFmh3+JCX6/3Rf/ZmhvQ==
-X-Received: by 2002:adf:e984:0:b0:309:3a72:3cea with SMTP id h4-20020adfe984000000b003093a723ceamr3157285wrm.0.1684392454338;
-        Wed, 17 May 2023 23:47:34 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-239-175.dyn.eolo.it. [146.241.239.175])
-        by smtp.gmail.com with ESMTPSA id h12-20020a5d688c000000b003047f7a7ad1sm1050075wru.71.2023.05.17.23.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 23:47:33 -0700 (PDT)
-Message-ID: <11ab22ff9ecf7e7a330ac45e9ac08bf04aa7f6df.camel@redhat.com>
-Subject: Re: linux-next: build failure after merge of the net tree
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Date:   Thu, 18 May 2023 08:47:32 +0200
-In-Reply-To: <20230517214200.33398f82@kernel.org>
-References: <20230518090634.6ec6b1e1@canb.auug.org.au>
-         <20230517214200.33398f82@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229566AbjERGsX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 18 May 2023 02:48:23 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8582111;
+        Wed, 17 May 2023 23:48:22 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HMFG8Q012878;
+        Wed, 17 May 2023 23:47:44 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=iST4eMZ3Y/H3jJ5jB58qB6a65/g7GndqiAsrabU2nCs=;
+ b=ZiTZEwyWgX5vQNpL/naZ0L/86pB9FhmzbKYVIdFWRdlsdMSzeYImUvf3FwX3gXd+YwPG
+ YOpI5q4HlJrvDpyfVnwP3HhOaHNg9crz7HZakZC53CdipDXpH+kzO+JyLqetBqenP5En
+ YRHM7pyjWemba1eW42RMTCI1I5AlFomN4gIuzP7wPdBxMTGwiPUl3lQxXmsZnUh/q7bX
+ NRS4sY0X2zghnw+AkmhROU8U3ksn961M+TPgPHDkwX8C7ZFwy1cprEHX5vU4Ah5k6Sts
+ atd+begOFNVfRcWA0Z+i6W8tZZ4EP3iuNuzA5yOfENYEg1JZAWTYHOxNJj8tJGmiYSY2 PA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3qn7jb9hh7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 23:47:44 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 17 May
+ 2023 23:47:42 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 17 May 2023 23:47:40 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <olivia@selenic.com>, <herbert@gondor.apana.org.au>,
+        <Jason@zx2c4.com>, <linux-crypto@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH] hwrng: cn10k: Add extended trng register support
+Date:   Thu, 18 May 2023 12:17:34 +0530
+Message-ID: <20230518064734.18819-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: vJntWTUk__tfLhKuKM5HH8ATwzib_3jG
+X-Proofpoint-ORIG-GUID: vJntWTUk__tfLhKuKM5HH8ATwzib_3jG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-18_05,2023-05-17_02,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-17 at 21:42 -0700, Jakub Kicinski wrote:
-> On Thu, 18 May 2023 09:06:34 +1000 Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the net tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f746-dis=
-co.dtb] Error 1
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f769-dis=
-co.dtb] Error 1
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> >=20
-> > Caused by commit
-> >=20
-> >   0920ccdf41e3 ("ARM: dts: stm32: add CAN support on stm32f746")
-> >=20
-> > I have used the net tree from next-20230517 for today.
->=20
-> Dario, Marc, can we get an immediate fix for this?
+The way random data is read from hardware has changed from
+Octeon CN10KA-B0 and later SoCs onwards. A new set of registers
+have been added to read random data and to verify whether the
+read data is valid or not. This patch extends and uses
+RNM_PF_TRNG_DAT and RNM_PF_TRNG_STS CSRs to read random number
+and status for the applicable silicon variants.
 
-Dario, Marc: we are supposed to send the net PR to Linus today. Lacking
-a fix, I'll be forced to revert the mentioned commit in a little time.
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+---
+ drivers/char/hw_random/cn10k-rng.c | 64 ++++++++++++++++++++++++++++--
+ 1 file changed, 60 insertions(+), 4 deletions(-)
 
-Thanks!
-
-Paolo
+diff --git a/drivers/char/hw_random/cn10k-rng.c b/drivers/char/hw_random/cn10k-rng.c
+index c1193f85982c..42e44705320c 100644
+--- a/drivers/char/hw_random/cn10k-rng.c
++++ b/drivers/char/hw_random/cn10k-rng.c
+@@ -23,14 +23,49 @@
+ #define RNM_PF_RANDOM		0x400
+ #define RNM_TRNG_RESULT		0x408
+ 
++/* Extended TRNG Read and Status Registers */
++#define RNM_PF_TRNG_DAT		0x1000
++#define RNM_PF_TRNG_RES		0x1008
++
+ struct cn10k_rng {
+ 	void __iomem *reg_base;
+ 	struct hwrng ops;
+ 	struct pci_dev *pdev;
++	/* Octeon CN10K-A A0/A1, CNF10K-A A0/A1 and CNF10K-B A0/B0
++	 * does not support extended TRNG registers
++	 */
++	bool extended_trng_regs;
+ };
+ 
+ #define PLAT_OCTEONTX_RESET_RNG_EBG_HEALTH_STATE     0xc2000b0f
+ 
++#define PCI_SUBSYS_DEVID_CN10K_A_RNG	0xB900
++#define PCI_SUBSYS_DEVID_CNF10K_A_RNG	0xBA00
++#define PCI_SUBSYS_DEVID_CNF10K_B_RNG	0xBC00
++
++static bool cn10k_is_extended_trng_regs_supported(struct pci_dev *pdev)
++{
++	/* CN10K-A A0/A1 */
++	if ((pdev->subsystem_device == PCI_SUBSYS_DEVID_CN10K_A_RNG) &&
++	    (!pdev->revision || (pdev->revision & 0xff) == 0x50 ||
++	     (pdev->revision & 0xff) == 0x51))
++		return false;
++
++	/* CNF10K-A A0 */
++	if ((pdev->subsystem_device == PCI_SUBSYS_DEVID_CNF10K_A_RNG) &&
++	    (!pdev->revision || (pdev->revision & 0xff) == 0x60 ||
++	     (pdev->revision & 0xff) == 0x61))
++		return false;
++
++	/* CNF10K-B A0/B0 */
++	if ((pdev->subsystem_device == PCI_SUBSYS_DEVID_CNF10K_B_RNG) &&
++	    (!pdev->revision || (pdev->revision & 0xff) == 0x70 ||
++	     (pdev->revision & 0xff) == 0x74))
++		return false;
++
++	return true;
++}
++
+ static unsigned long reset_rng_health_state(struct cn10k_rng *rng)
+ {
+ 	struct arm_smccc_res res;
+@@ -63,9 +98,22 @@ static int check_rng_health(struct cn10k_rng *rng)
+ 	return 0;
+ }
+ 
+-static void cn10k_read_trng(struct cn10k_rng *rng, u64 *value)
++static size_t cn10k_read_trng(struct cn10k_rng *rng, u64 *value)
+ {
++	u16 retry_count = 0;
+ 	u64 upper, lower;
++	u64 status;
++
++	if (rng->extended_trng_regs) {
++		do {
++			*value = readq(rng->reg_base + RNM_PF_TRNG_DAT);
++			if (*value)
++				return 8;
++			status = readq(rng->reg_base + RNM_PF_TRNG_RES);
++			if (!status && (retry_count++ > 0x1000))
++				return 0;
++		} while (!status);
++	}
+ 
+ 	*value = readq(rng->reg_base + RNM_PF_RANDOM);
+ 
+@@ -82,6 +130,7 @@ static void cn10k_read_trng(struct cn10k_rng *rng, u64 *value)
+ 
+ 		*value = (upper & 0xFFFFFFFF00000000) | (lower & 0xFFFFFFFF);
+ 	}
++	return 8;
+ }
+ 
+ static int cn10k_rng_read(struct hwrng *hwrng, void *data,
+@@ -100,7 +149,9 @@ static int cn10k_rng_read(struct hwrng *hwrng, void *data,
+ 	size = max;
+ 
+ 	while (size >= 8) {
+-		cn10k_read_trng(rng, &value);
++		err = cn10k_read_trng(rng, &value);
++		if (!err)
++			goto out;
+ 
+ 		*((u64 *)pos) = value;
+ 		size -= 8;
+@@ -108,7 +159,9 @@ static int cn10k_rng_read(struct hwrng *hwrng, void *data,
+ 	}
+ 
+ 	if (size > 0) {
+-		cn10k_read_trng(rng, &value);
++		err = cn10k_read_trng(rng, &value);
++		if (!err)
++			goto out;
+ 
+ 		while (size > 0) {
+ 			*pos = (u8)value;
+@@ -118,6 +171,7 @@ static int cn10k_rng_read(struct hwrng *hwrng, void *data,
+ 		}
+ 	}
+ 
++out:
+ 	return max - size;
+ }
+ 
+@@ -144,9 +198,11 @@ static int cn10k_rng_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (!rng->ops.name)
+ 		return -ENOMEM;
+ 
+-	rng->ops.read    = cn10k_rng_read;
++	rng->ops.read = cn10k_rng_read;
+ 	rng->ops.priv = (unsigned long)rng;
+ 
++	rng->extended_trng_regs = cn10k_is_extended_trng_regs_supported(pdev);
++
+ 	reset_rng_health_state(rng);
+ 
+ 	err = devm_hwrng_register(&pdev->dev, &rng->ops);
+-- 
+2.17.1
 
