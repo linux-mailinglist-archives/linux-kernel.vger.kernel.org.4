@@ -2,219 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B75D708310
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE6570831F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjERNpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 09:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S230411AbjERNrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 09:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjERNoo (ORCPT
+        with ESMTP id S229824AbjERNqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 09:44:44 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EA32134
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:44:18 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d11974b45so621822b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1684417458; x=1687009458;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0jd+oBsqIBnffM3Ua1/Cw49f5fKwtPjHQK21POnBYC0=;
-        b=Hpr6jVLOwD3j+Ul/LSJsic1pBDwPhwSInWqI8soEKKs+lxjBoBRNihQlDOEizSRrlN
-         +kWT9vRHrVVybvInEcZZB5gXRZqO3BKNaSwROK7f10Za30x3+z4QwQY9I7AT+O9Tar0n
-         9dI9aT9MtTp+ONVmjER7AWXRMbUhLauTmd3Po724nvBMYKAqob8TtUQkFX2zbHcvMh6/
-         daY5N+8HVYkALILBKS4Fpxiqy4pB+hzcKbrXK54Z5gjaUb8G+X0S46jKrUpbOffe23zH
-         f3iAXehDnhEInRoZ+uQZMIp4ouHl9V1Nh6I+Ckj0EmX8xJQTnkBAZcr9fdWu+XYfVL4e
-         KNpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684417458; x=1687009458;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0jd+oBsqIBnffM3Ua1/Cw49f5fKwtPjHQK21POnBYC0=;
-        b=MioVMWdxY6aK/PxMtGnWmUUhA+PvSbojusT3Gf0TieIoJYEe7W7/N+KEWvgehusNcL
-         FGMd5oW4hvqN4bhC//8quVxdZ3gXlLblz4UZVw8FnPcZDFeI4NFxrL3TfQWbEaYjhGmL
-         7jMcbqU1sJcXwIHy7Nbh0c2j266jzI3yZQClBekQq4xxpKx/8vVig4ZhY/niUkkn2bFN
-         QcYWHAk5i/R281qeE/ZI29qn9HHQPcJM4A7aGM5ZBzwS/ErJE8QEDs34ZWNCwjrcFj4x
-         fF3YMqA4PdRO5MlDd/r4A1TOb68a3iUXGBUel3+CSb+FoF5jTzBLpc5r8p1N+uT/31Ak
-         X96A==
-X-Gm-Message-State: AC+VfDwHZUY6UM2dfkzMsrW2uauuYn+QRATuXQgI/wFk1/SoNeM0gh39
-        4OwGrkNMgqXr2o5Yw7EFix1zzJbkmOKHJ5D7ub4=
-X-Google-Smtp-Source: ACHHUZ60lgSXFNiCl/RWO8oKMbqjwK2dr8CPYd9rWPVX+emq5qRdUofDVhaQtydRxk+vgIYS4Rhxhg==
-X-Received: by 2002:a05:6a20:72a5:b0:109:c161:704c with SMTP id o37-20020a056a2072a500b00109c161704cmr1329206pzk.28.1684417458002;
-        Thu, 18 May 2023 06:44:18 -0700 (PDT)
-Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
-        by smtp.gmail.com with ESMTPSA id h7-20020aa786c7000000b0063d24fcc2b7sm1370266pfo.1.2023.05.18.06.44.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 06:44:17 -0700 (PDT)
-Message-ID: <14badbda-9f27-bd5d-bd59-5515c9824886@9elements.com>
-Date:   Thu, 18 May 2023 19:14:14 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/2] mfd: max5970: Rename driver and remove wildcard
-To:     Lee Jones <lee@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-References: <20230427113046.3971425-1-Naresh.Solanki@9elements.com>
- <20230518101423.GE404509@google.com>
+        Thu, 18 May 2023 09:46:45 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A610E49;
+        Thu, 18 May 2023 06:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684417604; x=1715953604;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=itCxthsK1yxKNi37C1Sj/EKX5/xVxle24tc1wed2CAU=;
+  b=O2p13TYS72jjudj3kcidOewwWMFvEikJvF57hUph1lWuF+6Jd33QQuba
+   gOTDfQlhHD/0nz6iz55OqlseWaobeoNVoIIsJBi3HiRXguQDkzjDYDNJZ
+   W9rSXot9H9iMd0ORHmFjauLOkwbuNp/IlMJUqaEd1yGZR23VKlDdVdQGl
+   lamtNVbszNGYVk8eGgJd6NPV6UUJuFEHCb0L/1HV1MNnk9JD1CjyXvUlC
+   rk/kVPVKrPPPNlnU497FybDM+OjrpIEHF8V26tTluMEK9vYE/rPtJ6TOr
+   iWN62gMb+pMpJkwe+Mq2IvJwusueethFyW5gEp6iEAPugTJotoJAuPqlA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="332436015"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="332436015"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 06:46:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="1032191287"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="1032191287"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP; 18 May 2023 06:46:35 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 06:46:35 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 18 May 2023 06:46:35 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 18 May 2023 06:46:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EWbe+foDm10fIQUIdJFIgQnR32YTURpb1kNyjvfhsFAcwZwi8+kl6DD7Iqt0eMkv/uy8sX5iuzDV6r5TgmASc58nW5PfRzvJtRzvcL9HTf8M+SnGlGuAIUbwM3F16csOIaH6FeHu369QkBAPv4/WNh3urH9oIFP9e+HD6bgTOIGKwR6XKt2YQdu77oDfL2OqyMbnME5PCGyPi4wts6k8hcvjoNBWNoE3WTje5G+bWiq8+xfGf2x7ffIZQ4LS7aMk6mB8BCHyz5dJHyb/hBsgSkV8LCd4ez25r5wGtHb7AYwIxiijAcGgx59pOnTFEBbY9521Whnd1jYP73URz89Abw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qHHdFCg4iledKcQL96ipQRJVE2dtdWpTWQVholj9aFQ=;
+ b=gv8dwiXJT61m3Wls1sQ9HATwbsujnLCfNx1qJssgsvScuh968jwIWlj7KN3YElKEFmvsmjL1widsZ2x2f0jCQ3vwrRjZEbPPbOMB0FG+qsAqxnBwNaT42UE6GTV6Zw9KteMwGmXWMcAurwitIyID1EfSUi9kMRS2/vemabyDbQBgx6+yJCPMV8MHjACh+AbONu7C/NLvVx3vVNhV670Z8rOn53W30lQzF+Dw4Bps1T9Jl+B9G/uqFaaW5MsdGKYOfU/WbNY7W3JhuZp9HnQHqe0OQ+S/l8ADtvI8xRt4kT2cmlMXzsRlX2pXLOPTdgg6HhbdJQ1a5rW00Z9v7P2vQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by MN2PR11MB4614.namprd11.prod.outlook.com (2603:10b6:208:268::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
+ 2023 13:46:32 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 13:46:32 +0000
+Message-ID: <9feef136-7ff3-91a4-4198-237b07a91c0c@intel.com>
+Date:   Thu, 18 May 2023 15:45:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Intel-wired-lan] [PATCH net-next 07/11] net: page_pool: add
+ DMA-sync-for-CPU inline helpers
 Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <20230518101423.GE404509@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Jesper Dangaard Brouer <hawk@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        <netdev@vger.kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        <intel-wired-lan@lists.osuosl.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+ <20230516161841.37138-8-aleksander.lobakin@intel.com>
+ <20230517211211.1d1bbd0b@kernel.org>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <20230517211211.1d1bbd0b@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR0P281CA0167.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b4::13) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|MN2PR11MB4614:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83ab6f7f-ef19-4de1-8455-08db57a649d6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8+CoCdkYevW6fia7VXYb56GFlijtBSzNZcOU1RH2Mpg7TaRTSXyH4JiT+1CApjTTTmZ3ozvWcRqmmszm8YCkXVBi7Lv29QDwU/AqS/76uQOSADST2fdQ3d3ZdLFKSc6w9tJwiU0RsnGt/PYUJezjGll1gPS0GiCHoXOYRCBwu4Wqz8Q58E8rDfZWaKt68mse05Hi6lotcSJrEFq8QVk2LJwM+yuVcB9QGVHRCED0ignVJrj0XWC/c7yC4ZFdlxDYeP0ymrHEjXJkJofjrnAfwMbXD5K2nF3DdiRZKpl+IsrcH+2k6eY1SQHtp4ZVmnjkOoZzhTk23Uv8PO+XSSNLbAECzbqxEDpDiV9hyy2WTJq6LeXTQBm2T1E/GYYM1l3uUDlA5VwFGS+w+tKdHZjef0iG8OnrIWOV55mrl9SB3C4oqpcAtEn8nJLNUsNv9uzxPohKhTiSmMk5ksL+8gvFhGU5DzXXOygsZBdI3J3RCanqv152FYCAhkcPNjdMv1o37f1E/flYl5/4fgGyR5Li/MgIp64CmlEL1/04bm+0FmxI3zI5fp3kOycFg20wIhkX2ZxqX5KZNofhSIMmffK+xhdx90QXJxfyPMpWUnvqYxzpaUNCia2gFlOnaYDG67fOiHixJckmPUy5H8wdnmF3Kw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(396003)(366004)(39860400002)(451199021)(26005)(186003)(31686004)(107886003)(6512007)(6506007)(7416002)(5660300002)(2906002)(2616005)(83380400001)(8936002)(8676002)(41300700001)(6486002)(86362001)(31696002)(82960400001)(36756003)(316002)(54906003)(66556008)(66476007)(38100700002)(478600001)(6916009)(4326008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2F4cnlnQ3o5d2dmZUxhK0NVenB0MFpZL3ZYdXcxYzlmQWQxNDE4Vyt5aHFm?=
+ =?utf-8?B?WnM1LzUyYUhhY0laeTdRcVVWRVh6cytPYkR0RXpmNm82aTdRWTFDM25CWmxK?=
+ =?utf-8?B?dnhuS3JlN3FwbDZjTk8rZStZTk9mcGh6TWZKQjVsOTI3R01tR25WVDNGTXhC?=
+ =?utf-8?B?T003UjF6bnVRUm1SZzNNZzdWOVpQMWpidFVZQ0tpL3h1OC9EcFNiUXVwS0gy?=
+ =?utf-8?B?S21qZlVaQy9hdjRXTUN1UytaQ2g2YklJa0lDQ25SWXhYZmpPdVZ2Y3JKZk82?=
+ =?utf-8?B?MEdGSURhSHhPSHVmQTdhc053NzlpaG5oRFBHcUo0M1R6SWhEcFo2REpmSzBV?=
+ =?utf-8?B?ODBmOGljYjY1RVY1NEFYOU9UZjVLQjlGeWYzcFFDNmxpSEh6aWR5WTJIelVW?=
+ =?utf-8?B?MnpLeUE1ZUorbnd2bjBZeHRoYWt4UTFUckhwVm5tUFQwaW5kTEJMcFlGcVdj?=
+ =?utf-8?B?NzZHMGpzSWVES1NZZWdjcXQ1U1FhZ2VuT3ZPZHhZOVhNR1B6a3NjTGtadkVX?=
+ =?utf-8?B?YWUwNTNkQnFvOXdtdXFYczh3cjhIcm5oUUdCc2RaMERtVlFCTHRFdTRmNEx1?=
+ =?utf-8?B?NXpOMnYzQXZuSzN4andTbXArdjFiYmxqVTRYWEgwSS9IV2JpTWJTN2FoZHNW?=
+ =?utf-8?B?dWIvQStwbjdYbDYrUlhKWHE4c2VmQ3ZjOHFjWkR5cTI3OUxmVFhLMCtXS3BG?=
+ =?utf-8?B?Q28zL2YrZTl1TTNmdzF4K0FLeHpoSEVKaFRBdVZhT2JudDNsOFpEQ2s5UjlT?=
+ =?utf-8?B?Vjk1ZWVCS200VVp4NXdPZXhyb2dtbStYcEJqWlhVU1RyYkk1SmZhUUxZd3Na?=
+ =?utf-8?B?dlBlZnNzcUZUN0NrOXpzRDFkZ2ZlSjNsZkVTUUlUWCs4amhQSS9xN09HTUht?=
+ =?utf-8?B?YWt5alRqOVBWbU9zRXVQTFdScnVBM0plMzFBRVpsN1M2VW9TRDRhbFFTVVhV?=
+ =?utf-8?B?RnllUWs4U0U3YWloaGhQeFpRKzVGb0lGMUZrbGtQTXVRNHNjcHl2WUp6Tkw3?=
+ =?utf-8?B?N01DTDZEcktyTEh4OTNYWkhQK3pocG1jK1BmL3lzTkJWRHBjWXZGSzVxaENq?=
+ =?utf-8?B?NjZkQ3JjUUo2NHJROVhxem5FRDV2S1RKa2IwL2htdFZocllUZkZnRVNtVVBT?=
+ =?utf-8?B?ekJ0L3Fld0RmaWt2YkRHS2JpN3RFV3JJYVgwR0VKUkJveWpBL2lxS1ZZckph?=
+ =?utf-8?B?Tzh0VHZtMm01V09Rdi9RMGJ0WHdMZU5ldWpIN2E1NVN3b201RFJDemFweHBk?=
+ =?utf-8?B?d1dGSmdwNlk0WE94Ky9kRjlSQ2NGRzR3K3M4d0MrWWY4QllVVkcvOEdMSExa?=
+ =?utf-8?B?RVFJN1lWWUVNbTNGRllmYms5Y1hBbWppSlVKUkdwbXAzMmcvbHZ2ZXk5cCs5?=
+ =?utf-8?B?Qy9lQ2pMUk8yK1FNZFJ6Ulhnemc3eXJITE5qbVFrZVNrZ09yV3llSmpyWWM2?=
+ =?utf-8?B?UFl0MEd1NTlKRDFyTjI0RW85MjVPMnBtR1FsZC8vcEMxZlJsWVRDN3hWMTZ4?=
+ =?utf-8?B?R2o0cFNMVDJRMUJQczN2c1BxaVBqZ04zTmJaT0R2VjBqMHV3SGxzaEZqell3?=
+ =?utf-8?B?bk9xRzRXRUpPVi8wdXE0dU5MelhSMStaUk5HNXJWZ3FCeHJTb1k0dzFxVWVV?=
+ =?utf-8?B?YXpLN3ArbFplNmRpckdCTVZGSTNZV01pQkJobmhFcXd2L1RMb3l3OGtnNEFN?=
+ =?utf-8?B?cC9kTk1OZ1ZiRGRwei9IbEpTUTRpeWJDcEF6dzRLM2hRcUZBcndaZ3daN1NN?=
+ =?utf-8?B?eStUM2NaVGNpekU2VTFWYzB6SkZWUm9CMGdFaVlrZmxrZVBaV3krd0t3dnlp?=
+ =?utf-8?B?UXMxaXNWTnY3WFVpakV3ZysyMXRiZ29kZG5PMnZmZ28xVUw5Ykd6Z0c4bzR2?=
+ =?utf-8?B?M2Vqd2RnNllKVnFqV1JseERybEM2TDg2eCtaR2prMis5Tm9Bb2hSVlJDNFFr?=
+ =?utf-8?B?Z0lDNGpQOFhvbk15VVZHc012cFl3OXc1TDNQRFo0ZzFwdlVPdGFiUzk4cFRR?=
+ =?utf-8?B?VVZNUHY2dkhRMnNVRmx5aGxqOUdzVm1LOHBOQXhtQXEzVGZOS2J0RWowM3Yr?=
+ =?utf-8?B?ckVNUW9HOEt1YnRlcTFKMlNxYktncXpLMXUyeFlpYnBWM25iNTVMVGJIaUtF?=
+ =?utf-8?B?ODMyZjRhUHBrTUJtaVdjWkRBYmdOTkJaL3BVRTlHRTZaRSs4YVhCYU1VRmpK?=
+ =?utf-8?B?bmc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83ab6f7f-ef19-4de1-8455-08db57a649d6
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 13:46:32.4077
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: szimUc+L9fh7M/oDSHsvQq5zp7fnODRhe6qOC2XxNEuPpBmZaT9r+ulcS1nj2y1Cob6BysGnN0G7/cR6YI15K3A9FHJb3fszXVgHlY7Xkok=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4614
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+From: Jakub Kicinski <kuba@kernel.org>
+Date: Wed, 17 May 2023 21:12:11 -0700
 
-On 18-05-2023 03:44 pm, Lee Jones wrote:
-> On Thu, 27 Apr 2023, Naresh Solanki wrote:
+> On Tue, 16 May 2023 18:18:37 +0200 Alexander Lobakin wrote:
+>> Each driver is responsible for syncing buffers written by HW for CPU
+>> before accessing them. Almost each PP-enabled driver uses the same
+>> pattern, which could be shorthanded into a static inline to make driver
+>> code a little bit more compact.
+>> Introduce a couple such functions. The first one takes the actual size
+>> of the data written by HW and is the main one to be used on Rx. The
+>> second does the same, but only if the PP performs DMA synchronizations
+>> at all. The last one picks max_len from the PP params and is designed
+>> for more extreme cases when the size is unknown, but the buffer still
+>> needs to be synced.
+>> Also constify pointer arguments of page_pool_get_dma_dir() and
+>> page_pool_get_dma_addr() to give a bit more room for optimization,
+>> as both of them are read-only.
 > 
->> The previous version of this driver included wildcards in file names
->> and descriptions. This patch renames the driver to only support MAX5970
->> and MAX5978, which are the only chips that the driver actually supports.
+> Very neat.
 > 
-> So multiple devices are supported:
+>> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+>> index 8435013de06e..f740c50b661f 100644
+>> --- a/include/net/page_pool.h
+>> +++ b/include/net/page_pool.h
+>> @@ -32,7 +32,7 @@
+>>  
+>>  #include <linux/mm.h> /* Needed by ptr_ring */
+>>  #include <linux/ptr_ring.h>
+>> -#include <linux/dma-direction.h>
+>> +#include <linux/dma-mapping.h>
 > 
->    MAX5970  ... AND
->    MAX5978  ... thus
->    MAX597X  ... does make sense, no?
->   
->   What are you trying to achieve?
-Understood. It is important to note that there are indeed other 
-unrelated chips in addition to MAX5970 and MAX5978. Examples include 
-MAX5971, which is a Single-Port, 40W, IEEE 802.3af/at PSE Controller 
-with Integrated MOSFET, and MAX5974A, an Active-Clamped, 
-Spread-Spectrum, Current-Mode PWM Controller, among others.
+> highly nit picky - but isn't dma-mapping.h pretty heavy?
+> And we include page_pool.h in skbuff.h. Not that it matters
+> today, but maybe one day we'll succeed putting skbuff.h
+> on a diet -- so perhaps it's better to put "inline helpers
+> with non-trivial dependencies" into a new header?
 
-With this change, the intention is to be specific about the chips the 
-driver supports. Instead of using wildcards or a broad "MAX597X" 
-designation, the patch aims to exclusively support the MAX5970 and 
-MAX5978 chips.
+Maybe we could rather stop including page_pool.h into skbuff.h? It's
+used there only for  1 external, which could be declared directly in
+skbuff.h. When Matteo was developing PP recycling, he was storing
+mem_info in skb as well, but then it was optimized and we don't do that
+anymore.
+It annoys sometimes to see the whole kernel rebuilt each time I edit
+pag_pool.h :D In fact, only PP-enabled drivers and core code need it.
 
 > 
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   drivers/mfd/Kconfig                        |  4 ++--
->>   drivers/mfd/simple-mfd-i2c.c               | 18 +++++++++---------
->>   include/linux/mfd/{max597x.h => max5970.h} | 16 ++++++++--------
->>   3 files changed, 19 insertions(+), 19 deletions(-)
->>   rename include/linux/mfd/{max597x.h => max5970.h} (92%)
->>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index e90463c4441c..71231388e03c 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -266,8 +266,8 @@ config MFD_MADERA_SPI
->>   	  Support for the Cirrus Logic Madera platform audio SoC
->>   	  core functionality controlled via SPI.
->>   
->> -config MFD_MAX597X
->> -	tristate "Maxim 597x power switch and monitor"
->> +config MFD_MAX5970
->> +	tristate "Maxim 5970/5978 power switch and monitor"
->>   	depends on (I2C && OF)
->>   	select MFD_SIMPLE_MFD_I2C
->>   	help
->> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
->> index 20782b4dd172..1f1c007560d8 100644
->> --- a/drivers/mfd/simple-mfd-i2c.c
->> +++ b/drivers/mfd/simple-mfd-i2c.c
->> @@ -72,22 +72,22 @@ static const struct simple_mfd_data silergy_sy7636a = {
->>   	.mfd_cell_size = ARRAY_SIZE(sy7636a_cells),
->>   };
->>   
->> -static const struct mfd_cell max597x_cells[] = {
->> -	{ .name = "max597x-regulator", },
->> -	{ .name = "max597x-iio", },
->> -	{ .name = "max597x-led", },
->> +static const struct mfd_cell max5970_cells[] = {
->> +	{ .name = "max5970-regulator", },
->> +	{ .name = "max5970-iio", },
->> +	{ .name = "max5970-led", },
->>   };
->>   
->> -static const struct simple_mfd_data maxim_max597x = {
->> -	.mfd_cell = max597x_cells,
->> -	.mfd_cell_size = ARRAY_SIZE(max597x_cells),
->> +static const struct simple_mfd_data maxim_max5970 = {
->> +	.mfd_cell = max5970_cells,
->> +	.mfd_cell_size = ARRAY_SIZE(max5970_cells),
->>   };
->>   
->>   static const struct of_device_id simple_mfd_i2c_of_match[] = {
->>   	{ .compatible = "kontron,sl28cpld" },
->>   	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
->> -	{ .compatible = "maxim,max5970", .data = &maxim_max597x},
->> -	{ .compatible = "maxim,max5978", .data = &maxim_max597x},
->> +	{ .compatible = "maxim,max5970", .data = &maxim_max5970},
->> +	{ .compatible = "maxim,max5978", .data = &maxim_max5970},
->>   	{}
->>   };
->>   MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
->> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max5970.h
->> similarity index 92%
->> rename from include/linux/mfd/max597x.h
->> rename to include/linux/mfd/max5970.h
->> index a850b2e02e6a..762a7d40c843 100644
->> --- a/include/linux/mfd/max597x.h
->> +++ b/include/linux/mfd/max5970.h
->> @@ -7,25 +7,25 @@
->>    * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
->>    */
->>   
->> -#ifndef _MFD_MAX597X_H
->> -#define _MFD_MAX597X_H
->> +#ifndef _MFD_MAX5970_H
->> +#define _MFD_MAX5970_H
->>   
->>   #include <linux/regmap.h>
->>   
->>   #define MAX5970_NUM_SWITCHES 2
->>   #define MAX5978_NUM_SWITCHES 1
->> -#define MAX597X_NUM_LEDS     4
->> +#define MAX5970_NUM_LEDS     4
->>   
->> -struct max597x_data {
->> +struct max5970_data {
->>   	int num_switches;
->>   	u32 irng[MAX5970_NUM_SWITCHES];
->>   	u32 mon_rng[MAX5970_NUM_SWITCHES];
->>   	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
->>   };
->>   
->> -enum max597x_chip_type {
->> -	MAX597x_TYPE_MAX5978 = 1,
->> -	MAX597x_TYPE_MAX5970,
->> +enum max5970_chip_type {
->> +	TYPE_MAX5978 = 1,
->> +	TYPE_MAX5970,
->>   };
->>   
->>   #define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
->> @@ -93,4 +93,4 @@ enum max597x_chip_type {
->>   #define MAX_REGISTERS			0x49
->>   #define ADC_MASK			0x3FF
->>   
->> -#endif				/* _MFD_MAX597X_H */
->> +#endif				/* _MFD_MAX5970_H */
->>
->> base-commit: b4c288cfd2f84c44994330c408e14645d45dee5b
->> -- 
->> 2.39.1
->>
+>>  #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
+>>  					* map/unmap
 > 
+>> +/**
+>> + * page_pool_dma_sync_for_cpu - sync Rx page for CPU after it's written by HW
+>> + * @pool: page_pool which this page belongs to
+>> + * @page: page to sync
+>> + * @dma_sync_size: size of the data written to the page
+>> + *
+>> + * Can be used as a shorthand to sync Rx pages before accessing them in the
+>> + * driver. Caller must ensure the pool was created with %PP_FLAG_DMA_MAP.
+>> + */
+>> +static inline void page_pool_dma_sync_for_cpu(const struct page_pool *pool,
+>> +					      const struct page *page,
+>> +					      u32 dma_sync_size)
+>> +{
+>> +	dma_sync_single_range_for_cpu(pool->p.dev,
+>> +				      page_pool_get_dma_addr(page),
+>> +				      pool->p.offset, dma_sync_size,
+>> +				      page_pool_get_dma_dir(pool));
+> 
+> Likely a dumb question but why does this exist?
+> Is there a case where the "maybe" version is not safe?
 
-Regards,
-Naresh
+If the driver doesn't set DMA_SYNC_DEV flag, then the "maybe" version
+will never do anything. But we may want to use these helpers in such
+drivers too?
+
+> 
+>> +}
+>> +
+>> +/**
+>> + * page_pool_dma_maybe_sync_for_cpu - sync Rx page for CPU if needed
+>> + * @pool: page_pool which this page belongs to
+>> + * @page: page to sync
+>> + * @dma_sync_size: size of the data written to the page
+>> + *
+>> + * Performs DMA sync for CPU, but only when required (swiotlb, IOMMU etc.).
+>> + */
+>> +static inline void
+>> +page_pool_dma_maybe_sync_for_cpu(const struct page_pool *pool,
+>> +				 const struct page *page, u32 dma_sync_size)
+>> +{
+>> +	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+>> +		page_pool_dma_sync_for_cpu(pool, page, dma_sync_size);
+>> +}
+Thanks,
+Olek
