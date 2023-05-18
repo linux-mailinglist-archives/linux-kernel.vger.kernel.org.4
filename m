@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C267082DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D0F7082E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjERNgH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 18 May 2023 09:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S230359AbjERNgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 09:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjERNgF (ORCPT
+        with ESMTP id S230218AbjERNgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 09:36:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57306E0;
-        Thu, 18 May 2023 06:36:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC35364F7E;
-        Thu, 18 May 2023 13:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39973C433EF;
-        Thu, 18 May 2023 13:36:02 +0000 (UTC)
-Date:   Thu, 18 May 2023 09:36:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Thaler <dthaler@microsoft.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-ID: <20230518093600.3f119d68@rorschach.local.home>
-In-Reply-To: <CAADnVQLtTOjHG=k5uwP_zrM_af4RdS8d5zgmLnVFSmq_=5m0Cg@mail.gmail.com>
-References: <20230509130111.62d587f1@rorschach.local.home>
-        <20230509163050.127d5123@rorschach.local.home>
-        <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
-        <20230515192407.GA85@W11-BEAU-MD.localdomain>
-        <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
-        <20230516212658.2f5cc2c6@gandalf.local.home>
-        <20230517165028.GA71@W11-BEAU-MD.localdomain>
-        <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
-        <20230518001916.GB254@W11-BEAU-MD.localdomain>
-        <CAADnVQJwK3p1QyYEvAn9B86M4nkX69kuUvx2W0Yqwy0e=RSPPg@mail.gmail.com>
-        <20230518011814.GA294@W11-BEAU-MD.localdomain>
-        <20230517220800.3d4cbad2@gandalf.local.home>
-        <CAADnVQLtTOjHG=k5uwP_zrM_af4RdS8d5zgmLnVFSmq_=5m0Cg@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 18 May 2023 09:36:41 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2A0EE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:36:39 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-24e147c2012so918598a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684416999; x=1687008999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UDwcH7cU2Z4j4/nc6uJ/p7zWwFLs0nTsurbtyh0XnyM=;
+        b=OzX4noVCWIAJmzM3uYbq7kRW2CzMb3ne+8p1UQ22BK2rhd/f0dIzjmxZPRnzeP/AvF
+         FA6YRwALKKHDSOtt9pwF7kPKKtT6ZEAtv4k9EI719CCpt3WngXXLyobGjb4t0AVn/OTT
+         zi84c1dOL/HZStK3zM3iABUinFXlNoOPjZVTS/WnwV5A5HTL90bwIIfVy6pmDFC6dsYb
+         +VO3v/xlnYQw6VzMy/nhpqlw7MQqXXCmdCVpHTA7yneJsUbFmCmMjE4yb4gxrKiVvhEr
+         EtOBICFhta/kfPL6Qzg6eCWctnCODztpz0Jcg82XJf6puw78nqX8xM9VX36oModumTVJ
+         Do2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684416999; x=1687008999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UDwcH7cU2Z4j4/nc6uJ/p7zWwFLs0nTsurbtyh0XnyM=;
+        b=Zs4h+1hqYwvhmBx1z1AgHk0ZVJV+dzNNldIsuJ54FutFAn3Uuc2OAIv1SAUhsc20JL
+         VBo5WAz8ZP5vLlj9vLdVGdaHAFiMR39pboDeTwZmGP7t8qywb3Ry1L/4CSjRk1oQ4lpl
+         VJUD6/BG3NY48Ox7xBxQsi5aToalyoPTyxw/JhAOVNkQoDj5J6YbqtbwMOblMI0JYGhR
+         S3VqwfoLNrQNKrJPjWYoqFsRE4huWutLJNCfodulne9Y7jTKtvUzsSNYdkJuu7Oyqx4T
+         eCrfMvBt53pqGg+Bk2D/WiL+BN4pgSNRk8jpxUo/gqg/ukA84dibB88S4HKItdOlonGi
+         M4IA==
+X-Gm-Message-State: AC+VfDzkrAJTP+RGMsemfKN339r5jR3u9F8s+fmX//HNwVueom3IcZO/
+        5gx5jsKC0ThAM2YcIJ+o7CtcDPDvl80=
+X-Google-Smtp-Source: ACHHUZ4TYZewHWEX7Y0czl+9D0edvrcRViYE7+3bhPW4NoqK3p2sxbI4RNBbvWxOcLWI8z1A06zdgA==
+X-Received: by 2002:a17:90a:dc12:b0:252:977e:c257 with SMTP id i18-20020a17090adc1200b00252977ec257mr2601286pjv.23.1684416998991;
+        Thu, 18 May 2023 06:36:38 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-78.three.co.id. [180.214.233.78])
+        by smtp.gmail.com with ESMTPSA id s12-20020a17090aba0c00b0025289bc1ce4sm3437542pjr.17.2023.05.18.06.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 06:36:38 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id DAB0810558B; Thu, 18 May 2023 20:36:34 +0700 (WIB)
+Date:   Thu, 18 May 2023 20:36:34 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Regressions <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Todd Brandt <todd.e.brandt@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: Re: Fwd: BUG: Patch to spi-nor hangs Lenovo ThinkPad X1 Titanium
+ with divide by zero
+Message-ID: <ZGYp4jnJxZJlfpeB@debian.me>
+References: <b984f839-cf0a-fc25-41d5-656171774e4e@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="FwK44x7py3NWqpFz"
+Content-Disposition: inline
+In-Reply-To: <b984f839-cf0a-fc25-41d5-656171774e4e@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 20:14:31 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-> On Wed, May 17, 2023 at 7:08 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+--FwK44x7py3NWqpFz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > The delete IOCTL is different than reg/unreg. I don't see a problem with
-> > adding a CAP_SYSADMIN check on the delete IOCTL (and other delete paths)
-> > to prevent this. It shouldn't affect anything we are doing to add this
-> > and it makes it so non-admins cannot delete any events if they are given
-> > write access to the user_events_data file.  
-> 
-> sysadmin for delete is a pointless.
-> user_events_ioctl_reg() has the same issue.
-> Two different processes using you fancy TRACELOGGING_DEFINE_PROVIDER()
-> macro and picking the same name will race.
-> 
-> TRACELOGGING_DEFINE_PROVIDER( // defines the MyProvider symbol
->     MyProvider, // Name of the provider symbol to define
->     "MyCompany_MyComponent_MyProvider", // Human-readable provider
-> name, no ' ' or ':' chars.
->     // {d5b90669-1aad-5db8-16c9-6286a7fcfe33} // Provider guid
-> (ignored on Linux)
->     (0xd5b90669,0x1aad,0x5db8,0x16,0xc9,0x62,0x86,0xa7,0xfc,0xfe,0x33));
-> 
-> I totally get it that Beau is copy pasting these ideas from windows,
-> but windows is likely similarly broken if it's registering names
-> globally.
-> 
-> FD should be the isolation boundary.
-> fd = open("/sys/kernel/tracing/user_event")
-> and make sure all events are bound to that file.
-> when file is closed the events _should be auto deleted_.
-> 
-> That's another issue I just spotted.
-> Looks like user_events_release() is leaking memory.
-> user_event_refs are just lost.
-> 
-> tbh the more I look into the code the more I want to suggest to mark it
-> depends on BROKEN
-> and go back to redesign.
+On Thu, May 18, 2023 at 08:42:19AM +0700, Bagas Sanjaya wrote:
+> Fortunately, the reporter also sent out potential fix for this regression;
+> but to be sure it doesn't fall through cracks, I'm adding it to regzbot:
+>=20
+> #regzbot introduced: 9d6c5d64f0288a https://bugzilla.kernel.org/show_bug.=
+cgi?id=3D217448
+> #regzbot title: SPI NOR bank divide by zero on Lenovo ThinkPad X1 Titanium
+> #regzbot fix: MTD SPI-NOR: BUG FIX of divide by zero in new n_banks value
+>=20
 
-I don't think these changes require a redesign. I do like the idea that
-the events live with the fd. That is, when the fd dies, so does the event.
+Updating with formal fix:
 
-Although, we may keep it around for a bit (no new events, but being
-able to parse it. That is, the event itself isn't deleted until the fd
-is closed, and so is the tracing files being read are closed.
+#regzbot fix: mtd: spi-nor: Fix divide by zero for spi-nor-generic flashes
 
-Beau,
+Thanks.
 
-How hard is it to give the event an owner, but not for task or user,
-but with the fd. That way you don't need to worry about other tasks
-deleting the event. And it also automatically cleans itself up. If we
-leave it to the sysadmin to clean up, it's going to cause leaks,
-because it's not something the sysadmin will want to do, as they will
-need to keep track of what events are created.
+--=20
+An old man doll... just what I always wanted! - Clara
 
--- Steve
+--FwK44x7py3NWqpFz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-PS. I missed my connection due to unseasonal freezing temperatures, and
-my little airport didn't have a driver for the deicer, making my flight
-2 hours delayed (had to wait for the sun to come up and deice the
-plane!). Thus, instead of enjoying myself by the pool, I'm in an
-airport lounge without much to do.
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGYp4gAKCRD2uYlJVVFO
+o6NyAP9crcMtHqVvZVuAmBpiDGpDb/Jn+oi1scf4bv6fl0HF0AEA1DGDq43VZFFh
+jqQCoTtT4SqI67AgW4hDHcgkBWZlhgE=
+=5ubZ
+-----END PGP SIGNATURE-----
+
+--FwK44x7py3NWqpFz--
