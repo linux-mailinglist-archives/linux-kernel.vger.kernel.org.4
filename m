@@ -2,119 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4647081AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 14:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FB37081C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 14:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjERMqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 08:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        id S230049AbjERMt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 08:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjERMqx (ORCPT
+        with ESMTP id S230376AbjERMtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 08:46:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E806C9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 05:46:52 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ICQfbU021905;
-        Thu, 18 May 2023 12:46:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7B0Wi+x/9/t51/d3MOElUht9OWrjqjL8o0y56mjT0L0=;
- b=Arxzreo1KltSETP2xl7mXtDAkKYiGSErf3XT3A273itHeqtD7dnBb6jOiGoYbkmZ+hkJ
- lpqhD8507QmLPPR2F+fplB9mMxW596Q67dh5Wd5nP2BRADHhsUQf7wYtNFLO1P4+EERt
- wVGutobO95mpVmFd4x0hQd+KhC9H63ce9pMi2DH4voK1OSeBm3cAshNI/Q0KHXrnzcEF
- 4S0xwYb/oKbgpgVXjRlqBh+c5ZcCMPVzbTbeYNSBq/MpojCWx+UpVgjNk6AZ0A+XgIy1
- hY3iCDKD9J1v+XOZ6MJQORTefzg5hc37mC0Vgtbhp1XqO4XkF+NmVYMWytRQzwctozIw Dg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qn8d2hapa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 12:46:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ICkdXF024419
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 12:46:39 GMT
-Received: from [10.216.38.166] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
- 2023 05:46:29 -0700
-Message-ID: <e8e85d7d-edf1-7a8b-8cfe-9976dd9cfb0b@quicinc.com>
-Date:   Thu, 18 May 2023 18:16:25 +0530
+        Thu, 18 May 2023 08:49:52 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD211C9
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 05:49:50 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-7603d830533so114615839f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 05:49:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684414190; x=1687006190;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EL47r0F0+OEq9WYeDd2ivQLtcg9WFKpt2Zp7P+I2EZ4=;
+        b=PsXxB9b088PZp15t0QEcjTIP+IsusDUYUt4yilEnPYESv1+VRub8Yifh95OfU6VcN+
+         lIj4XlJr42k3uM63tU7D0PhUOM4nIUfP5t9eafqwAwukf7sYfnVWIuiTOWfo6P3ioiL7
+         e5MspL52vB4AN+Ho1LksTY5FJ2YEjucs/rxS7dYKRzBkCCaNDHdHMHN9M5f7FlQRtbrN
+         O1NkSuA4c5w60c/voIMqJ1mCuCCzkugQ0YBHNzj+sAI/Ojs/NIouRifGCV4uX1gjnIBd
+         4D9Bp4Qa6y3Ftv630mMgvRkpwi29dWVro880/Dv1IWhwoN0JbDNxL4g+N9ld9uScgag1
+         FKXQ==
+X-Gm-Message-State: AC+VfDyh1nfuoJrEe6TjKp4MKGajOYtrqc4/tYLR6euv1DogBJg51uIi
+        R/kVmzBafkfKhIZE5f2ZgJOGQ2lhhTfs/2BCGcwkXiCyvkVs
+X-Google-Smtp-Source: ACHHUZ6J949dumGBQtf6sjzvRdLuwX2MafPZRdnKIyLJZILQUKuz/Rif+CJnNEEAhvTf0CTJDNffRlU/vtUZI3vYAQmFSrwlXDx7
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V7 2/2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
- for shmem
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>
-CC:     <akpm@linux-foundation.org>, <willy@infradead.org>,
-        <markhemm@googlemail.com>, <rientjes@google.com>,
-        <surenb@google.com>, <shakeelb@google.com>, <fvdl@google.com>,
-        <quic_pkondeti@quicinc.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1676378702.git.quic_charante@quicinc.com>
- <631e42b6dffdcc4b4b24f5be715c37f78bf903db.1676378702.git.quic_charante@quicinc.com>
- <2d56e1dd-68b5-c99e-522f-f8dadf6ad69e@google.com>
- <eeeba374-9247-96fd-c9f5-8cba8761f1b9@quicinc.com>
- <aa4352d8-a549-32e5-874f-1cfee2a5b3e@google.com>
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-In-Reply-To: <aa4352d8-a549-32e5-874f-1cfee2a5b3e@google.com>
+X-Received: by 2002:a6b:b284:0:b0:76f:e71e:5f9d with SMTP id
+ b126-20020a6bb284000000b0076fe71e5f9dmr3511726iof.1.1684414190127; Thu, 18
+ May 2023 05:49:50 -0700 (PDT)
+Date:   Thu, 18 May 2023 05:49:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000075136e05fbf73d67@google.com>
+Subject: [syzbot] [hfs?] KASAN: slab-use-after-free Read in hfsplus_read_wrapper
+From:   syzbot <syzbot+4b52080e97cde107939d@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: wfrWaWblBL9eRR0HJ4EnJFi6l0XjIFcE
-X-Proofpoint-GUID: wfrWaWblBL9eRR0HJ4EnJFi6l0XjIFcE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_09,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- malwarescore=0 mlxlogscore=551 bulkscore=0 phishscore=0 spamscore=0
- suspectscore=0 clxscore=1015 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180101
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hugh, Thanks for the time and comments on this patch.
+Hello,
 
-On 5/17/2023 5:02 PM, Hugh Dickins wrote:
->> Sure, will include those range calculations for shmem pages too.
-> Oh, I forgot this issue, you would have liked me to look at V8 by now,
-> to see whether I agree with your resolution there.  Sorry, no, I've
-> not been able to divert my concentration to it yet.
-> 
-> And it's quite likely that I shall disagree, because I've a history of
-> disagreeing even with myself on such range widening/narrowing issues -
-> reconciling conflicting precedents is difficult :(
-> 
-If you can at least help by commenting which part of the patch you
-disagree with, I can try hard to convince you there:) .
+syzbot found the following issue on:
 
->> Please let me know if I'm missing something where I should be counting
->> these as NR_ISOLATED.
-> Please grep for NR_ISOLATED, to see where and how they get manipulated
-> already, and follow the existing examples.  The case that sticks in my
-> mind is in mm/mempolicy.c, where the migrate_pages() syscall can build
-> up a gigantic quantity of transiently isolated pages: your syscall can
-> do the same, so should account for itself in the same way.
+HEAD commit:    e922ba281a8d Add linux-next specific files for 20230512
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15aef2ea280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=17a4c2d44484b62f
+dashboard link: https://syzkaller.appspot.com/bug?extid=4b52080e97cde107939d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10190f7a280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11e7c33a280000
 
-I had a V8 posted without this into accounting. Let me make the changes
-to account for the NR_ISOLATED too.
-> 
-> I'm not claiming that mm/vmscan.c's too_many_isolated(), and the way it
-> gets used by shrink_inactive_list(), is perfect: not at all.  But please
-> follow existing convention.
-> 
-> Sorry, that's all for now.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2026345928c3/disk-e922ba28.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4fd686a0e4f4/vmlinux-e922ba28.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cd44b724fbdf/bzImage-e922ba28.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/ee7fe34360d1/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4b52080e97cde107939d@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in hfsplus_read_wrapper+0xf62/0x1020 fs/hfsplus/wrapper.c:225
+Read of size 2 at addr ffff88801566f800 by task syz-executor154/5030
+
+CPU: 0 PID: 5030 Comm: syz-executor154 Not tainted 6.4.0-rc1-next-20230512-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
+ print_report mm/kasan/report.c:462 [inline]
+ kasan_report+0x11c/0x130 mm/kasan/report.c:572
+ hfsplus_read_wrapper+0xf62/0x1020 fs/hfsplus/wrapper.c:225
+ hfsplus_fill_super+0x312/0x1c40 fs/hfsplus/super.c:413
+ mount_bdev+0x357/0x420 fs/super.c:1380
+ legacy_get_tree+0x109/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x8d/0x350 fs/super.c:1510
+ do_new_mount fs/namespace.c:3039 [inline]
+ path_mount+0x134b/0x1e40 fs/namespace.c:3369
+ do_mount fs/namespace.c:3382 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f816d82df0a
+Code: 48 c7 c2 c0 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 a8 00 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd9592d6f8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f816d82df0a
+RDX: 0000000020000500 RSI: 0000000020000080 RDI: 00007ffd9592d710
+RBP: 00007ffd9592d710 R08: 00007ffd9592d750 R09: 0000000000000614
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
+R13: 0000555556eac2c0 R14: 0000000000000000 R15: 00007ffd9592d750
+ </TASK>
+
+The buggy address belongs to the object at ffff88801566f800
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 0 bytes inside of
+ freed 512-byte region [ffff88801566f800, ffff88801566fa00)
+
+The buggy address belongs to the physical page:
+page:ffffea0000559b00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1566c
+head:ffffea0000559b00 order:2 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000010200 ffff888012441c80 dead000000000100 dead000000000122
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0x52000(__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP), pid 0, tgid 0 (swapper/0), ts 1778430890, free_ts 0
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
+ prep_new_page mm/page_alloc.c:1738 [inline]
+ get_page_from_freelist+0xf7c/0x2aa0 mm/page_alloc.c:3502
+ __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2112
+ alloc_pages+0x233/0x270 mm/mempolicy.c:2274
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x28e/0x380 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3192
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3291
+ __slab_alloc_node mm/slub.c:3344 [inline]
+ slab_alloc_node mm/slub.c:3441 [inline]
+ __kmem_cache_alloc_node+0x136/0x320 mm/slub.c:3490
+ kmalloc_trace+0x26/0xe0 mm/slab_common.c:1057
+ kmalloc include/linux/slab.h:559 [inline]
+ kzalloc include/linux/slab.h:680 [inline]
+ devcgroup_css_alloc+0x41/0x120 security/device_cgroup.c:226
+ cgroup_init_subsys+0x1bd/0x900 kernel/cgroup/cgroup.c:5988
+ cgroup_init+0xb83/0x1090 kernel/cgroup/cgroup.c:6107
+ start_kernel+0x398/0x490 init/main.c:1077
+ x86_64_start_reservations+0x18/0x30 arch/x86/kernel/head64.c:556
+ x86_64_start_kernel+0xb3/0xc0 arch/x86/kernel/head64.c:537
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff88801566f700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88801566f780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88801566f800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff88801566f880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88801566f900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
