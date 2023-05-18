@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2E7708506
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EB6708509
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjERPex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S231411AbjERPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjERPeY (ORCPT
+        with ESMTP id S231926AbjERPeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:34:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE70E43;
-        Thu, 18 May 2023 08:34:17 -0700 (PDT)
+        Thu, 18 May 2023 11:34:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F710199;
+        Thu, 18 May 2023 08:34:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FF5A64FE8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9027065032;
+        Thu, 18 May 2023 15:34:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A11C433A4;
         Thu, 18 May 2023 15:34:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96ECAC433A1;
-        Thu, 18 May 2023 15:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684424056;
-        bh=mtrxumyq0ZRmNVTAnw5KH+BUNijjTRh/kWJxJPGHbDU=;
+        s=k20201202; t=1684424060;
+        bh=tjHJaA4aRTqHjDCA/IBwb6cvsxUrvZf4t9KhrAVlN68=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SGbIB8w46x8K+bS/h1IrsArBKnSUDQbJusl259FltuEAMHQqWk3iv737Cdkla9WfR
-         Y+5uxpZ02rQObZCuaFvWsEIiinWanCxu6jg/3qHNmGFoo5Z1x0h5lD4WeK690TkIla
-         LncuBttq0p4NHcU2Qhdsbkb54XtzwUONOw2RtkU1MH9/12vAkY5lOZi/3i4OV+Rr/J
-         Sy31Qa+4U1sa8gUSvbBYGwVjh43c88H8+MX8SuN/KkMa9aLTAu6L0AxiOblcs8eT9w
-         Az6U5RvDBNn8sozrIWJwkPb70SXVvfDtjyFGVV/z2kZlIOffPPrufHk6WS4Q/th5E1
-         9QO4d4mtc/I6g==
+        b=N+2e8i1lfdMXruROpTVyKaDJ/BPI9Ea/5vVZZEyGCrfBBlPT6gtw4l29LlhUgmTui
+         kGstJMnnRklkzGtWGj/2rNoX2HiP7Q1t1wnyUtVPuFdaCwmL6a19JJp6itSOYx23JS
+         Z49MrEa1cQloXMVH9moLwlowYTZdGI06hWjxWgBhEt4pdYu8HtXCXWjY6g7gwvNje5
+         neofy3LGe2CH6NNOCrAJjxnXvT+1cdXJvzRXT5WekdeIR0Yxm1FsCCIVQ1+tFlxyy/
+         bMTiVJ88uwM3d6lLYSwT4iLWR/K56JAC8XWcYyDvWiNzgvj8zMaD6vbhcRUiZE0+LT
+         yI0Zl3R6xxZ7Q==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -45,18 +45,18 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Jiri Slaby <jirislaby@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v4 05/10] riscv: add the Bouffalolab SoC family Kconfig option
-Date:   Thu, 18 May 2023 23:22:39 +0800
-Message-Id: <20230518152244.2178-6-jszhang@kernel.org>
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v4 06/10] dt-bindings: riscv: Add bouffalolab bl808 board compatibles
+Date:   Thu, 18 May 2023 23:22:40 +0800
+Message-Id: <20230518152244.2178-7-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230518152244.2178-1-jszhang@kernel.org>
 References: <20230518152244.2178-1-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,31 +65,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Bouffalolab bl808 SoC contains three riscv CPUs, namely M0, D0 and
-LP. The D0 is 64bit RISC-V GC compatible, so can run linux.
+Several SoMs and boards are available that feature the Bouffalolab
+bl808 SoC. Document the compatible strings.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/Kconfig.socs | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../bindings/riscv/bouffalolab.yaml           | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
 
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index 1cf69f958f10..33220b5144bb 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -1,5 +1,10 @@
- menu "SoC selection"
- 
-+config ARCH_BOUFFALOLAB
-+	bool "Bouffalolab SoCs"
-+	help
-+	  This enables support for Bouffalolab SoC platforms.
+diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+new file mode 100644
+index 000000000000..3b25d1a5d04a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+@@ -0,0 +1,29 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- config ARCH_MICROCHIP_POLARFIRE
- 	def_bool SOC_MICROCHIP_POLARFIRE
- 
++title: Bouffalo Lab Technology SoC-based boards
++
++maintainers:
++  - Jisheng Zhang <jszhang@kernel.org>
++
++description:
++  Bouffalo Lab Technology SoC-based boards
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++      - description: Carrier boards for the Sipeed M1s SoM
++        items:
++          - enum:
++              - sipeed,m1s-dock
++          - const: sipeed,m1s
++          - const: bouffalolab,bl808
++
++additionalProperties: true
++
++...
 -- 
 2.40.0
 
