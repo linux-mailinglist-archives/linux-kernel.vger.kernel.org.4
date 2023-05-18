@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9708F7087F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C257087FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjERSsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 14:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S229597AbjERSt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 14:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjERSsE (ORCPT
+        with ESMTP id S230010AbjERStY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 14:48:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FD0E5E
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:48:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 467976518E
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:48:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC9FC433D2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684435681;
-        bh=keVuOeJQn7MUYbsAN7orx57MdKZnoEd10BmBQ0B0DpY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iqbg7GPcXvGJ8jHsEUSRhh+HbeOxVbSs284ElEG5RrCjw3gvZEfzlvvLQ5M0faBBL
-         RprpbhSg/5nSGt7U8qHCSApNn0qCzolxZFAxgsBAK5qipCS28lR5mqSjM/vjfaZG/A
-         UY8fj2ZTRwbpPctIoAaSFtfsoHj0TNeFQEWNsoUd9uLj5W4QLkqnofE0wFGZGuBVcN
-         1yPWtO2EenfvhPSKYdnxQoPXhGypSTiISqYPkekbWPRJ/DXvN7f7MsZ6Lpe/a/n+se
-         uPxAgaxEiDruKqyL6dfTBwc1A8GntsYAl/TXwdVsdzsK6lU9AipV+TKGvEIYOiRsl/
-         WBUr/PhKtmMQg==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ac79d4858dso25531891fa.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:48:00 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz5ZnmL5wBbSRcEGskD43nogPW0NLw1o5RoXn9DRNlbcJQmksaA
-        m4rSGU/Qvc0Hd/6794DEyWBvApqmZaPEqoHlNF4=
-X-Google-Smtp-Source: ACHHUZ5GX32LoEcP1z/j3+D+v55vn3QF43tBqfsGVqTwwnkb8WeJAYPR05RqCn4bpaS7RqDFaBIwUilge1pmtrD6XuE=
-X-Received: by 2002:a2e:9053:0:b0:2ac:7ab1:a441 with SMTP id
- n19-20020a2e9053000000b002ac7ab1a441mr11685597ljg.30.1684435678735; Thu, 18
- May 2023 11:47:58 -0700 (PDT)
+        Thu, 18 May 2023 14:49:24 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661E1E4F;
+        Thu, 18 May 2023 11:49:23 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IHuYvd009111;
+        Thu, 18 May 2023 18:48:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Ht8RdntEily+GKgk89bEEqXSuiTabzJwgELIJ8zSbaw=;
+ b=ZgXnKkBrd+exeBOkx6Ik0Husd0o2bc+l2xws0yaktEkH31Sltl99c9DYHQLNbse34BfN
+ kOCbydqLnPuRapEVOnpddor4HfGX4pYgdvKEdNLNajwX3c4FevlrphbBnZb8eYto4sGQ
+ FNgf1ywQqPD8+OyviN5e7T0BdMsmpCqGoJpo2px2ydBRA9/G0t0B5xxN/WCxYeZZ/KQl
+ bwu26We8vJvY0IVaJ6DcC6V2spGBzNytFJcZljippKO8JcesALxZRdnSgp4AihW6V5Jx
+ Qc5hBZ3RDW6DHgr06RMN/NZ0VaBS0vmCop6Phlbu/fA4N9KyqZ4Tg8P8aXcifRBCUsLS iw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnc30swc8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 18:48:55 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34IImrVv030047
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 18:48:53 GMT
+Received: from [10.110.64.80] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
+ 2023 11:48:52 -0700
+Message-ID: <b14475ca-95d5-a5a2-90bd-79e7b94cd8ab@quicinc.com>
+Date:   Thu, 18 May 2023 11:48:52 -0700
 MIME-Version: 1.0
-References: <20230308094106.227365-1-rppt@kernel.org> <20230308094106.227365-2-rppt@kernel.org>
- <ZGWdHC3Jo7tFUC59@moria.home.lan> <20230518152354.GD4967@kernel.org>
- <CAPhsuW541pcsMKYah=2U8mUs8is3jAiNKC8Erte=RkAUGFO9EA@mail.gmail.com>
- <ZGZW0v3nRShO7r+Z@moria.home.lan> <CAPhsuW5BbbxinaH2aO=2Wa0aSQ3pkNwvnrgJv7fG4QcPr_j7+Q@mail.gmail.com>
- <ZGZfLHA8vuRJwa0f@moria.home.lan>
-In-Reply-To: <ZGZfLHA8vuRJwa0f@moria.home.lan>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 18 May 2023 11:47:46 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6B3O_kWjWwr+UfYO3WRkznFqBNtcecFCSECBSiZBJDsA@mail.gmail.com>
-Message-ID: <CAPhsuW6B3O_kWjWwr+UfYO3WRkznFqBNtcecFCSECBSiZBJDsA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 14/18] firmware: qcom_scm: provide a read-modify-write
+ function
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <corbet@lwn.net>, <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-15-git-send-email-quic_mojha@quicinc.com>
+Content-Language: en-US
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <1683133352-10046-15-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: i8RM0WpSoeg1VDYk_FS0NbrlAD0efXR1
+X-Proofpoint-ORIG-GUID: i8RM0WpSoeg1VDYk_FS0NbrlAD0efXR1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-18_13,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ suspectscore=0 mlxlogscore=856 phishscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305180153
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,71 +89,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 10:24=E2=80=AFAM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
-> On Thu, May 18, 2023 at 10:00:39AM -0700, Song Liu wrote:
-> > On Thu, May 18, 2023 at 9:48=E2=80=AFAM Kent Overstreet
-> > <kent.overstreet@linux.dev> wrote:
-> > >
-> > > On Thu, May 18, 2023 at 09:33:20AM -0700, Song Liu wrote:
-> > > > I am working on patches based on the discussion in [1]. I am planni=
-ng to
-> > > > send v1 for review in a week or so.
-> > >
-> > > Hey Song, I was reviewing that thread too,
-> > >
-> > > Are you taking a different approach based on Thomas's feedback? I thi=
-nk
-> > > he had some fair points in that thread.
-> >
-> > Yes, the API is based on Thomas's suggestion, like 90% from the discuss=
-ions.
-> >
-> > >
-> > > My own feeling is that the buddy allocator is our tool for allocating
-> > > larger variable sized physically contiguous allocations, so I'd like =
-to
-> > > see something based on that - I think we could do a hybrid buddy/slab
-> > > allocator approach, like we have for regular memory allocations.
-> >
-> > I am planning to implement the allocator based on this (reuse
-> > vmap_area logic):
->
-> Ah, you're still doing vmap_area approach.
->
-> Mike's approach looks like it'll be _much_ lighter weight and higher
-> performance, to me. vmalloc is known to be slow compared to the buddy
-> allocator, and with Mike's approach we're only modifying mappings once
-> per 2 MB chunk.
->
-> I don't see anything in your code for sub-page sized allocations too, so
-> perhaps I should keep going with my slab allocator.
+On 5/3/2023 10:02 AM, Mukesh Ojha wrote:
+> It was realized by Srinivas K. that there is a need of
+> read-modify-write scm exported function so that it can
+> be used by multiple clients.
+> 
+> Let's introduce qcom_scm_io_update_field() which masks
+> out the bits and write the passed value to that
+> bit-offset. Subsequent patch will use this function.
+> 
+> Suggested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+>   drivers/firmware/qcom_scm.c            | 15 +++++++++++++++
+>   include/linux/firmware/qcom/qcom_scm.h |  2 ++
+>   2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index fde33acd..003cbcb 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -407,6 +407,21 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+>   }
+>   EXPORT_SYMBOL(qcom_scm_set_remote_state);
+>   
+> +int qcom_scm_io_update_field(phys_addr_t addr, unsigned int mask, unsigned int val)
+> +{
+> +	unsigned int old, new;
+> +	int ret;
+> +
+> +	ret = qcom_scm_io_readl(addr, &old);
+> +	if (ret)
+> +		return ret;
+> +
+> +	new = (old & ~mask) | val << (ffs(mask) - 1);
+> +
+> +	return qcom_scm_io_writel(addr, new);
+> +}
+> +EXPORT_SYMBOL(qcom_scm_io_update_field);
 
-The vmap_area approach handles sub-page allocations. In 5/5 of set [2],
-we showed that multiple BPF programs share the same page with some
-kernel text (_etext).
+EXPORT_SYMBOL_GPL?
 
-> Could you share your thoughts on your approach vs. Mike's? I'm newer to
-> this area of the code than you two so maybe there's an angle I've missed
-> :)
+There are other symbols in this driver marked as EXPORT_SYMBOL only. Can 
+you submit a separate patch to convert them into EXPORT_SYMBOL_GPL. OR I 
+want to know why we are marking them without _GPL.
 
-AFAICT, tree based solution (vmap_area) is more efficient than bitmap
-based solution.
+checkpatch should catch this as well? By default we should have all the 
+new additions as EXPORT_SYMBOL_GPL and only few existing APIs w/ 
+exceptions?
 
-First, for 2MiB page with 64B chunk size, we need a bitmap of
-     2MiB / 64B =3D 32k bit =3D 4k bytes
-While the tree based solution can adapt to the number of allocations within
-This 2MiB page. Also, searching a free range within 4kB of bitmap may
-actually be slower than searching in the tree.
+---Trilok Soni
 
-Second, bitmap based solution cannot handle > 2MiB allocation cleanly,
-while tree based solution can. For example, if a big driver uses 3MiB, the
-tree based allocator can allocate 4MiB for it, and use the rest 1MiB for
-smaller allocations.
-
-Thanks,
-Song
-
-[2] https://lore.kernel.org/linux-mm/20221107223921.3451913-6-song@kernel.o=
-rg/
