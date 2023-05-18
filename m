@@ -2,87 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F55F707894
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6170C707891
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjERDrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 23:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S229888AbjERDql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 23:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjERDrC (ORCPT
+        with ESMTP id S229879AbjERDqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 23:47:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EAD30F8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684381571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rb5WmlFpGhegcLzMxPINZKl6stSgxTh3qbMWfHpqSrc=;
-        b=IT8xCs/QpydRE9PDQRMlRKEfhsxyMv8Y8Bw46JcMXd2v7CdZccnjJ9B5T4uC7V+hXJTrRZ
-        IPy82HJC5bfeYe+Gk61an7SzIVAsIB+XyMuuVisoNAISAd2m/h1ndhUJ8n9Ldxyv9cMhao
-        WUknTIJp+sPaGsfkdyoCTAICeRQXpms=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-252-1CtSCAzqMoCBrsca4AJsrw-1; Wed, 17 May 2023 23:46:05 -0400
-X-MC-Unique: 1CtSCAzqMoCBrsca4AJsrw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 17 May 2023 23:46:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C26930F3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:46:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1F5A296A603;
-        Thu, 18 May 2023 03:46:04 +0000 (UTC)
-Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3D6D24078908;
-        Thu, 18 May 2023 03:46:01 +0000 (UTC)
-Date:   Thu, 18 May 2023 11:45:55 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-        willy@infradead.org, deller@gmx.de,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Subject: Re: [PATCH v5 RESEND 11/17] sh: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZGWfczugaXHvdpJ3@MiWiFi-R3L-srv>
-References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-12-bhe@redhat.com>
- <ZGR2Ql7zmwor/qR7@infradead.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3899B64C93
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:46:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26449C433D2;
+        Thu, 18 May 2023 03:46:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684381593;
+        bh=LVqrx9FSnoK95b2r+pfjkvtzhodfsQ3937DJvnW28Ac=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HQzkuB/y3n2cmA+kuausxtQnwtdrkxb12uwF1i8XLM7pz4rKIcSikpf+9HHSELfJj
+         fbFZVHrAYogVfor5Y6GsggiKlv0osTLVFUCxApy05k+QYCx9p2YHH7FMsm2uwMP/op
+         IiwkF9Ujrd6ADk1hBzEpK7x4WsUnNnjYS3BNQWjO1kydYAKZskzdnms0Iyu5WNZti3
+         BiSqFGyJllQuwPFQQ2mZlPikUd209OnGPmuTv/UFCcV7v+ZCkm5dI8/EFVC8SzF2sY
+         ZQBxewq1nPJPQx7PsJ0t8KDEg2OmS+RoSOWYCNEIdDvfGZIPpLixBSVuiaCY7G4MMu
+         Nzlv8ITNz+0dg==
+Date:   Wed, 17 May 2023 20:46:32 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sgoutham@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>, <sbhatta@marvell.com>,
+        <gakula@marvell.com>, <schalla@marvell.com>, <hkelam@marvell.com>
+Subject: Re: [PATH net-next v1] octeontx2-pf: Add support for page pool
+Message-ID: <20230517204632.5f80a7bf@kernel.org>
+In-Reply-To: <20230517041511.2532997-1-rkannoth@marvell.com>
+References: <20230517041511.2532997-1-rkannoth@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGR2Ql7zmwor/qR7@infradead.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/16/23 at 11:37pm, Christoph Hellwig wrote:
-> On Mon, May 15, 2023 at 05:08:42PM +0800, Baoquan He wrote:
-> > Meanwhile, add macro definitions for port|mm io functions since SuperH
-> > has its own implementation in arch/sh/kernel/iomap.c and
-> > arch/sh/include/asm/io_noioport.h. These will conflict with the port|mm io
-> > function definitions in include/asm-generic/io.h to cause compiling
-> > errors like below:
+On Wed, 17 May 2023 09:45:11 +0530 Ratheesh Kannoth wrote:
+> Page pool for each rx queue enhance rx side performance
+> by reclaiming buffers back to each queue specific pool. DMA
+> mapping is done only for first allocation of buffers.
+> As subsequent buffers allocation avoid DMA mapping,
+> it results in performance improvement.
 > 
-> Please split that inclusion of include/asm-generic/io.h and redefining
-> of the helpers into a separate prep patch.
+> Image        |  Performance with Linux kernel Packet Generator
+> ------------ | -----------------------------------------------
+> Vannila      |   3Mpps
+>              |
+> with this    |   42Mpps
+> change	     |
+> ----------------------------------------------------------------
+> 
+> Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
+> 
 
-Will do.
+Put an extra --- here, to place the change log outside the normal
+commit message.
 
-> 
-> Otherwise looks good:
-> 
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> 
+> ChangeLog
+> v0 -> v1: Removed CONFIG_PAGE_POOL #ifdefs in code
+> 	  Used compound page APIs
+> 	  Replaced page_pool_put_page API with page_pool_put_full_page API
 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> index f9286648e45c..49df1876eca3 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> @@ -518,11 +518,36 @@ void otx2_config_irq_coalescing(struct otx2_nic *pfvf, int qidx)
+>  		     (pfvf->hw.cq_ecount_wait - 1));
+>  }
+>  
+> +static int otx2_alloc_pool_buf(struct otx2_nic *pfvf, struct otx2_pool *pool,
+> +			       dma_addr_t *dma)
+> +{
+> +	unsigned int offset = 0;
+> +	struct page *page;
+> +	size_t sz;
+> +
+> +	sz = SKB_DATA_ALIGN(pool->rbsize);
+> +	sz = ALIGN(sz, OTX2_ALIGN);
+> +
+> +	page = page_pool_alloc_frag(pool->page_pool, &offset, sz,
+> +				    (in_interrupt() ? GFP_ATOMIC : GFP_KERNEL) |
+
+in_interrupt() should not be used in drivers, AFAIR.
+Pass the correct flags from the caller (or don't -- it seems like 
+the only caller assumes softirq context already).
+
+> +				    GFP_DMA);
+
+GFP_DMA? Why?
+
+> +	if (unlikely(!page)) {
+> +		netdev_err(pfvf->netdev, "Allocation of page pool failed\n");
+
+No prints on allocation errors, please, it only adds stress to 
+the system. You can add a statistic if you want.
+
+> +		return -ENOMEM;
+> +	}
+> +
+> +	*dma = page_pool_get_dma_addr(page) + offset;
+> +	return 0;
+> +}
+
+> +	pp_params.flags = PP_FLAG_PAGE_FRAG | PP_FLAG_DMA_MAP;
+> +	pp_params.pool_size = numptrs;
+> +	pp_params.nid = NUMA_NO_NODE;
+> +	pp_params.dev = pfvf->dev;
+> +	pp_params.dma_dir = DMA_FROM_DEVICE;
+> +	pool->page_pool = page_pool_create(&pp_params);
+> +	if (!pool->page_pool) {
+> +		netdev_err(pfvf->netdev, "Creation of page pool failed\n");
+> +		return -EFAULT;
+
+EFAULT == "Bad address", doesn't sound right
+
+> +	}
+> +
+>  	return 0;
+>  }
+-- 
+pw-bot: cr
