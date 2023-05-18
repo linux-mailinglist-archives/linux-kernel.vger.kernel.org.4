@@ -2,136 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E98D707854
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39D8707855
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjERDMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 23:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S229741AbjERDOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 23:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjERDMn (ORCPT
+        with ESMTP id S229461AbjERDOq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 23:12:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924BC2D49;
-        Wed, 17 May 2023 20:12:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D98E64C9B;
-        Thu, 18 May 2023 03:12:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B86C4339B;
-        Thu, 18 May 2023 03:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684379559;
-        bh=7aF5lH0mP5b6pCJtWjRF5xQjqv7LCMYgzHKEL4dYL4I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LCHrRgHWbIfGMvjrm/zmjKc0MH6hLhGXUMa8ZNHQrJSXmunuy16Jf8CQekbinK3Al
-         AZAdj56aToYF6/FXr6MFK9JnJU3vdf/2kWcCOP2+uAaDshqjBcRg5ckG+A8+bGce3d
-         Q9YXTCto9jt7nwLS0rks3MDZeaVu2ZLwt8DL3T0JpxUn8WP+TOEadcLcCzZ1f68rUs
-         GHAo8YtbgYlMRplzdCrbxdLoVQq3UKXRvAlAuZsAJ+sHahsYngzKJuRUluDHeEuvoq
-         DAypkNJILWUrYTpYZ4s9E+Gx/7kqTPxprAZHXcyOeNo17U1MLkg0Cpbjj5ZrzgFtgH
-         y9rE6heZP2+oA==
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-965d2749e2eso237320066b.1;
-        Wed, 17 May 2023 20:12:39 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzr87FzIj2d0lTYQE6SeqpgRKn01y6IgnLB5Ov5TDQLSWToMZGE
-        VZTVggybtMb7Tq8MwUiagAGil41fnn5kPZYSA1U=
-X-Google-Smtp-Source: ACHHUZ5B0XdPA0YzDWqpNxUW3XIZdTdARnHWWJ5MZGUZf4C+4WP3MVgjMX7O4nuMVw5vGUxMtsXPtdohE/I5LUQIAps=
-X-Received: by 2002:a17:906:794c:b0:969:fcfe:182c with SMTP id
- l12-20020a170906794c00b00969fcfe182cmr27428977ejo.68.1684379557716; Wed, 17
- May 2023 20:12:37 -0700 (PDT)
+        Wed, 17 May 2023 23:14:46 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232DB2D4C;
+        Wed, 17 May 2023 20:14:45 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4eed764a10cso1883477e87.0;
+        Wed, 17 May 2023 20:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684379683; x=1686971683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+m6r5KOgtp+lWQnV5oKIW5XgjK3Hvy6Rsikt8ZrXkvI=;
+        b=XbB1zc3tsIWE6i4QEMLnmu1l5tAMTDLjWRJBLfC/XpoKJHwSQG/b/Dc5z17SLHGKMF
+         2arjbOcYeSGy0PqnUf8sAgO839giXbyrJ+0Pp5JPPPXsjAk0AbtwKACAOAmDRjWM5zPJ
+         Flr5L/Gas/zNg72tqKBgIoc2QmZZn7iN3L2mjtNJS7RX9GDllSOQ/eb3ajjMLYObGKUr
+         +IgjzEg+B4lpBtgM0hdcRffXO8N4AoWB9KExZVR00OwqRFWCuzxNaPcMee9kjxYqpnK3
+         ypQZ95HPHTSFJ8LrAMRECqs8iyThWadCUGorAjuiu4RQIP8jRdrgf21C4oL6JVc4XGlA
+         i1zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684379683; x=1686971683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+m6r5KOgtp+lWQnV5oKIW5XgjK3Hvy6Rsikt8ZrXkvI=;
+        b=kNusrr/VpbXf0HsDrx/xolG+Lg6kdbv3zKGOdKdhbWOsNngfQDnzFo6zXvaTfWPw0p
+         WJJn4OZmYAChmy9GPCDjILZMUsQbSd0TGaUE2VqgOGi+cb9DECxyWsQF4Q4LODC/WBG2
+         a0lpO5BP51C+47C4/VD2deCQaGo4YENzmu0ciZTSuvJwbMfrseBHABGyJS/N9pGdkXye
+         ohSefTvyEg0IjB8karwpgWJapTl9ve6DebHumdRcNVPUCrqsb0RJTYzn0L6x0JZV2HoI
+         +nvk9/AR6GRN+XGLreZ9wKwW7tqO9HRCwLR6eFHzwfC/cLhD5dQpEki12B7lOCq9H5ya
+         gx3g==
+X-Gm-Message-State: AC+VfDyTMNuQVs0H6lpRouTghOCA/2anIrq3gyt25eEyT9L4nfBfmbk/
+        NQ9I5qPyWkZ/tAgFyoRl5yEEC6VUhoMwGV5VbRAunEEVuGw=
+X-Google-Smtp-Source: ACHHUZ79Bd0JCp/wqhDU9AQbtm81IjsmPQ+nG4B5LiYFUCyo6QoQRDDsdnGW49pLAatjSDK10Oxs92EELd7cd1TjQdo=
+X-Received: by 2002:ac2:42ce:0:b0:4f2:5e4b:3e3f with SMTP id
+ n14-20020ac242ce000000b004f25e4b3e3fmr717210lfl.61.1684379682997; Wed, 17 May
+ 2023 20:14:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <1683615352-10794-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7waE0gmSU09YKJMHDAnj7BV7ukiLqWs+JzzLrHDG5z8w@mail.gmail.com> <20230518030618.GB1068119@leoy-yangtze.lan>
-In-Reply-To: <20230518030618.GB1068119@leoy-yangtze.lan>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 18 May 2023 11:12:26 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6L9kNyGU2UrX7jyN_6O_pafSVSamP7DYHkzfMgmCxVXA@mail.gmail.com>
-Message-ID: <CAAhV-H6L9kNyGU2UrX7jyN_6O_pafSVSamP7DYHkzfMgmCxVXA@mail.gmail.com>
-Subject: Re: [PATCH] perf symbol: Add LoongArch case in get_plt_sizes()
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <20230509130111.62d587f1@rorschach.local.home> <20230509163050.127d5123@rorschach.local.home>
+ <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local> <20230515192407.GA85@W11-BEAU-MD.localdomain>
+ <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local> <20230516212658.2f5cc2c6@gandalf.local.home>
+ <20230517165028.GA71@W11-BEAU-MD.localdomain> <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
+ <20230518001916.GB254@W11-BEAU-MD.localdomain> <CAADnVQJwK3p1QyYEvAn9B86M4nkX69kuUvx2W0Yqwy0e=RSPPg@mail.gmail.com>
+ <20230518011814.GA294@W11-BEAU-MD.localdomain> <20230517220800.3d4cbad2@gandalf.local.home>
+In-Reply-To: <20230517220800.3d4cbad2@gandalf.local.home>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 17 May 2023 20:14:31 -0700
+Message-ID: <CAADnVQLtTOjHG=k5uwP_zrM_af4RdS8d5zgmLnVFSmq_=5m0Cg@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Thaler <dthaler@microsoft.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 11:06=E2=80=AFAM Leo Yan <leo.yan@linaro.org> wrote=
-:
+On Wed, May 17, 2023 at 7:08=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
 >
-> On Thu, May 18, 2023 at 10:11:27AM +0800, Huacai Chen wrote:
-> > Queued, thanks.
+> On Wed, 17 May 2023 18:18:14 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
 >
-> The patch is fine for me.
+> > We should tell folks to use a group and give access to the group like
+> > Steven said earlier.
 >
-> Should not perf patches are to be merged via Arnaldo's tree?
-I think both are OK, if Arnaldo takes this patch, I will drop it.
+> Could we possibly add an "owner" attribute to the event. That is, the
+> creator of the event is the only one that can write to that event. Or at
+> least by the user that created it (not actually the process).
+>
+> So if the user "rostedt" creates an event, only "rostedt" can write to or
+> delete the event.
 
-Huacai
->
-> Thanks,
-> Leo
->
-> > On Tue, May 9, 2023 at 2:56=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson=
-.cn> wrote:
-> > >
-> > > We can see the following definitions in bfd/elfnn-loongarch.c:
-> > >
-> > >   #define PLT_HEADER_INSNS 8
-> > >   #define PLT_HEADER_SIZE (PLT_HEADER_INSNS * 4)
-> > >
-> > >   #define PLT_ENTRY_INSNS 4
-> > >   #define PLT_ENTRY_SIZE (PLT_ENTRY_INSNS * 4)
-> > >
-> > > so plt header size is 32 and plt entry size is 16 on LoongArch,
-> > > let us add LoongArch case in get_plt_sizes().
-> > >
-> > > Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dblob;f=3Db=
-fd/elfnn-loongarch.c
-> > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> > > ---
-> > >
-> > > This is based on 6.4-rc1
-> > >
-> > >  tools/perf/util/symbol-elf.c | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-el=
-f.c
-> > > index b2ed9cc..5d409c2 100644
-> > > --- a/tools/perf/util/symbol-elf.c
-> > > +++ b/tools/perf/util/symbol-elf.c
-> > > @@ -411,6 +411,10 @@ static bool get_plt_sizes(struct dso *dso, GElf_=
-Ehdr *ehdr, GElf_Shdr *shdr_plt,
-> > >                 *plt_header_size =3D 32;
-> > >                 *plt_entry_size =3D 16;
-> > >                 return true;
-> > > +       case EM_LOONGARCH:
-> > > +               *plt_header_size =3D 32;
-> > > +               *plt_entry_size =3D 16;
-> > > +               return true;
-> > >         case EM_SPARC:
-> > >                 *plt_header_size =3D 48;
-> > >                 *plt_entry_size =3D 12;
-> > > --
-> > > 2.1.0
-> > >
-> > >
+That can work, but why name is global in the first place?
+Just make everything per-fd.
+
+> The delete IOCTL is different than reg/unreg. I don't see a problem with
+> adding a CAP_SYSADMIN check on the delete IOCTL (and other delete paths)
+> to prevent this. It shouldn't affect anything we are doing to add this
+> and it makes it so non-admins cannot delete any events if they are given
+> write access to the user_events_data file.
+
+sysadmin for delete is a pointless.
+user_events_ioctl_reg() has the same issue.
+Two different processes using you fancy TRACELOGGING_DEFINE_PROVIDER()
+macro and picking the same name will race.
+
+TRACELOGGING_DEFINE_PROVIDER( // defines the MyProvider symbol
+    MyProvider, // Name of the provider symbol to define
+    "MyCompany_MyComponent_MyProvider", // Human-readable provider
+name, no ' ' or ':' chars.
+    // {d5b90669-1aad-5db8-16c9-6286a7fcfe33} // Provider guid
+(ignored on Linux)
+    (0xd5b90669,0x1aad,0x5db8,0x16,0xc9,0x62,0x86,0xa7,0xfc,0xfe,0x33));
+
+I totally get it that Beau is copy pasting these ideas from windows,
+but windows is likely similarly broken if it's registering names
+globally.
+
+FD should be the isolation boundary.
+fd =3D open("/sys/kernel/tracing/user_event")
+and make sure all events are bound to that file.
+when file is closed the events _should be auto deleted_.
+
+That's another issue I just spotted.
+Looks like user_events_release() is leaking memory.
+user_event_refs are just lost.
+
+tbh the more I look into the code the more I want to suggest to mark it
+depends on BROKEN
+and go back to redesign.
