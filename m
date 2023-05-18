@@ -2,86 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483FE70849C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEF570846B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjERPGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S231775AbjERO6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjERPEU (ORCPT
+        with ESMTP id S231361AbjERO6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:04:20 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 89783E43
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:04:01 -0700 (PDT)
-Received: (qmail 916250 invoked by uid 1000); 18 May 2023 10:56:17 -0400
-Date:   Thu, 18 May 2023 10:56:17 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Helge Deller <deller@gmx.de>
-Cc:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, bernie@plugable.com,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
- dlfb_submit_urb/usb_submit_urb (2)
-Message-ID: <2905a85f-4a3b-4a4f-b8fb-a4d037d6c591@rowland.harvard.edu>
-References: <0000000000004a222005fbf00461@google.com>
- <ZGXVANMhn5j/jObU@ls3530>
- <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
- <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
+        Thu, 18 May 2023 10:58:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BFA1BD0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:57:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D180264FF2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7CCC433EF;
+        Thu, 18 May 2023 14:56:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684421805;
+        bh=falOcbL4ZZzvoQbqldjfq18URK37IBRaR29UBqVOjsk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dDDWYbaKviNkf6e5ZNGk+G/Cbzx/2OiZ2ynEHeldkHvdLZMetuHksyWOJmATx2ysB
+         uvQfUuFerlLwgNbz+KAD2e/oPzHYgHx/iL58dhb/Hue8WKHacs/NwB6gq7wWqbdT4K
+         BOyBNHIwj7aYjsMnuoljesAIG4CVio4ZyJZe3LnOYNaegS8PtbAfnljjSGKhVXT41l
+         BPk87oVE5+9u4zM5U2od2Rkn6oG5S8l+zQzPCDjv75/nB5ZE+wf7vWYlo1Cc47Kz2Q
+         fUcNN7RSTXcwXNUCajZgIOkEs0RZ34+oLCdsWRz4Y1PDw3emRweMsSqkLL0MJeyDRa
+         WVHqU0xDpaZeQ==
+Date:   Thu, 18 May 2023 07:56:43 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Jesper Dangaard Brouer <hawk@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        <netdev@vger.kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        <intel-wired-lan@lists.osuosl.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+Subject: Re: [Intel-wired-lan] [PATCH net-next 07/11] net: page_pool: add
+ DMA-sync-for-CPU inline helpers
+Message-ID: <20230518075643.3a242837@kernel.org>
+In-Reply-To: <9feef136-7ff3-91a4-4198-237b07a91c0c@intel.com>
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+        <20230516161841.37138-8-aleksander.lobakin@intel.com>
+        <20230517211211.1d1bbd0b@kernel.org>
+        <9feef136-7ff3-91a4-4198-237b07a91c0c@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 04:16:33PM +0200, Helge Deller wrote:
-> On 5/18/23 15:54, Alan Stern wrote:
-> > On Thu, May 18, 2023 at 09:34:24AM +0200, Helge Deller wrote:
-> > > I think this is an informational warning from the USB stack,
+On Thu, 18 May 2023 15:45:33 +0200 Alexander Lobakin wrote:
+> >> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> >> index 8435013de06e..f740c50b661f 100644
+> >> --- a/include/net/page_pool.h
+> >> +++ b/include/net/page_pool.h
+> >> @@ -32,7 +32,7 @@
+> >>  
+> >>  #include <linux/mm.h> /* Needed by ptr_ring */
+> >>  #include <linux/ptr_ring.h>
+> >> -#include <linux/dma-direction.h>
+> >> +#include <linux/dma-mapping.h>  
 > > 
-> > It is not informational.  It is a warning that the caller has a bug.
+> > highly nit picky - but isn't dma-mapping.h pretty heavy?
+> > And we include page_pool.h in skbuff.h. Not that it matters
+> > today, but maybe one day we'll succeed putting skbuff.h
+> > on a diet -- so perhaps it's better to put "inline helpers
+> > with non-trivial dependencies" into a new header?  
 > 
-> I'm not a USB expert, so I searched for such bug reports, and it seems
-> people sometimes faced this warning with different USB devices.
+> Maybe we could rather stop including page_pool.h into skbuff.h? It's
+> used there only for  1 external, which could be declared directly in
+> skbuff.h. When Matteo was developing PP recycling, he was storing
+> mem_info in skb as well, but then it was optimized and we don't do that
+> anymore.
+> It annoys sometimes to see the whole kernel rebuilt each time I edit
+> pag_pool.h :D In fact, only PP-enabled drivers and core code need it.
 
-Yes.
+Or maybe we can do both? I think that separating types, defines and
+simple wrappers from helpers should be considered good code hygiene.
 
-> > You can't fix a bug by changing the line that reports it from dev_WARN
-> > to printk!
+> >>  #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
+> >>  					* map/unmap  
+> >   
+> >> +/**
+> >> + * page_pool_dma_sync_for_cpu - sync Rx page for CPU after it's written by HW
+> >> + * @pool: page_pool which this page belongs to
+> >> + * @page: page to sync
+> >> + * @dma_sync_size: size of the data written to the page
+> >> + *
+> >> + * Can be used as a shorthand to sync Rx pages before accessing them in the
+> >> + * driver. Caller must ensure the pool was created with %PP_FLAG_DMA_MAP.
+> >> + */
+> >> +static inline void page_pool_dma_sync_for_cpu(const struct page_pool *pool,
+> >> +					      const struct page *page,
+> >> +					      u32 dma_sync_size)
+> >> +{
+> >> +	dma_sync_single_range_for_cpu(pool->p.dev,
+> >> +				      page_pool_get_dma_addr(page),
+> >> +				      pool->p.offset, dma_sync_size,
+> >> +				      page_pool_get_dma_dir(pool));  
+> > 
+> > Likely a dumb question but why does this exist?
+> > Is there a case where the "maybe" version is not safe?  
 > 
-> Of course this patch wasn't intended as "fix".
-> It was intended to see how the udlfb driver behaves in this situation, e.g.
-> if the driver then crashes afterwards.
-> 
-> Furthermore, why does usb_submit_urb() prints this WARNING and then continues?
-> If it's a real bug, why doesn't it returns an error instead?
-> So, in principle I still think this warning is kind of informational,
-> which of course points to some kind of problem which should be fixed.
+> If the driver doesn't set DMA_SYNC_DEV flag, then the "maybe" version
+> will never do anything. But we may want to use these helpers in such
+> drivers too?
 
-Depending on the situation, the bug may or may not lead to an error.  At 
-the time the dev_WARN was added, we were less careful about these sorts 
-of checks; I did not want to cause previously working devices to stop 
-working by failing the URB submission.
-
-> > In this case it looks like dlfb_usb_probe() or one of the routines it
-> > calls is wrong; it assumes that an endpoint has the expected type
-> > without checking.  More precisely, it thinks an endpoint is BULK when
-> > actually it is INTERRUPT.  That's what needs to be fixed.
-> 
-> Maybe usb_submit_urb() should return an error so that drivers can
-> react on it, instead of adding the same kind of checks to all drivers?
-
-Feel free to submit a patch doing this.  But the checks should be added 
-in any case; without them the drivers are simply wrong.
-
-Alan Stern
+Oh, I see, the polarity of the flag is awkward. Hm.
+Maybe just rename things, drop the "maybe_" and prefix the non-checking
+version with __ ? We expect drivers to call the version which check the
+flag mostly (AFAIU), so it should have the most obvious name.
+Plus perhaps a sentence in the kdoc explaining why __ exists would be
+good, if it wasn't obvious to me it may not be obvious to others..
