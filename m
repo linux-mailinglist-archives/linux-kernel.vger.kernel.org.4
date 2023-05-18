@@ -2,140 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F88708463
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483FE70849C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjERO51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        id S231354AbjERPGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjERO4z (ORCPT
+        with ESMTP id S231915AbjERPEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98E91FE6;
-        Thu, 18 May 2023 07:56:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6721165001;
-        Thu, 18 May 2023 14:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAB5DC433EF;
-        Thu, 18 May 2023 14:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684421768;
-        bh=yC1q2lmvQjUSReD7N0Uo4kMc1+QDGL5VVCy7s1obnkM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Piyb3MXkTWiyfdtcgxnfoOV3tTtXBdkcFE3OSX6Eu47XmD/Z6Z60UTPbaNHH0exOm
-         0JIFfaa656yPYz/DBBp+24wqQD/k5THt2uJsV3JgDrMpEjNv6akZmF7MwXVY8Rgfzx
-         Zhj+jVardbBUTGygkqKwiEU9AMYrzW94OgltjwmwiTgWaIzTajdaoTvMOZ2uyGcUVa
-         +I0i2bQfHyY3oIfsL5NvcIemq1sT2eEareQBH/eLrxPw2XR2RdMiRMF3WMl0Xbxx8N
-         d1H1Z3nwVwd+3uC1kh0pkpmzMkHXwOcQz5UYgcUMH+ViRUtnohdptEoLoxgCOpcot2
-         jeCUfjhWSED9A==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f24ceae142so2407662e87.3;
-        Thu, 18 May 2023 07:56:08 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxL7R30XtLmVW+SM7VgBiJBYjDkQj3aEHLxwzCC+mnT1gSkuLj+
-        G0igIM9ysI1Febq31DsOVITmRSo0K/wkSs55Xdw=
-X-Google-Smtp-Source: ACHHUZ7stjYfkb0GNkJmX/kWbfG3nyxAT6BIIbgmqhwZQn6FEW6jnX63A3+4Nf/egutzo/3170vVk0EV5GR+emFAM+8=
-X-Received: by 2002:a19:f80e:0:b0:4f1:4ed6:4a6e with SMTP id
- a14-20020a19f80e000000b004f14ed64a6emr1562627lff.28.1684421766869; Thu, 18
- May 2023 07:56:06 -0700 (PDT)
+        Thu, 18 May 2023 11:04:20 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 89783E43
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:04:01 -0700 (PDT)
+Received: (qmail 916250 invoked by uid 1000); 18 May 2023 10:56:17 -0400
+Date:   Thu, 18 May 2023 10:56:17 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Helge Deller <deller@gmx.de>
+Cc:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, bernie@plugable.com,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
+ dlfb_submit_urb/usb_submit_urb (2)
+Message-ID: <2905a85f-4a3b-4a4f-b8fb-a4d037d6c591@rowland.harvard.edu>
+References: <0000000000004a222005fbf00461@google.com>
+ <ZGXVANMhn5j/jObU@ls3530>
+ <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
+ <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
 MIME-Version: 1.0
-References: <20230508070330.582131-1-ardb@kernel.org> <20230508070330.582131-6-ardb@kernel.org>
- <6f858998-bb56-689b-76a7-0952d73f5ab8@amd.com>
-In-Reply-To: <6f858998-bb56-689b-76a7-0952d73f5ab8@amd.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 18 May 2023 16:55:55 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHjgrTs8m5XeCm0JqBfkk0pytQpNx0SFd=878onEAbxeQ@mail.gmail.com>
-Message-ID: <CAMj1kXHjgrTs8m5XeCm0JqBfkk0pytQpNx0SFd=878onEAbxeQ@mail.gmail.com>
-Subject: Re: [PATCH v2 05/20] x86: decompressor: Avoid the need for a stack in
- the 32-bit trampoline
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 at 00:40, Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 5/8/23 02:03, Ard Biesheuvel wrote:
-> > The 32-bit trampoline no longer uses the stack for anything except
-> > performing a long return back to long mode. Currently, this stack is
-> > allocated in the same page that carries the trampoline code, which means
-> > this page must be mapped writable and executable, and the stack is
-> > therefore executable as well.
-> >
-> > So let's do a long jump instead: that way, we can pre-calculate the
-> > return address and poke it into the code before we call it. In a later
-> > patch, we will take advantage of this by removing writable permissions
-> > (and adding executable ones) explicitly when booting via the EFI stub.
-> >
-> > Not playing with the stack pointer also makes it more straight-forward
-> > to call the trampoline code as an ordinary 64-bit function from C code.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >   arch/x86/boot/compressed/head_64.S    | 34 ++++----------------
-> >   arch/x86/boot/compressed/pgtable.h    |  6 ++--
-> >   arch/x86/boot/compressed/pgtable_64.c | 12 ++++++-
-> >   3 files changed, 21 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-> > index b1f8a867777120bb..3b5fc851737ffc39 100644
-> > --- a/arch/x86/boot/compressed/head_64.S
-> > +++ b/arch/x86/boot/compressed/head_64.S
-> > @@ -460,9 +460,6 @@ SYM_CODE_START(startup_64)
-> >       leaq    TRAMPOLINE_32BIT_CODE_OFFSET(%rax), %rax
-> >       call    *%rax
-> >
-> > -     /* Restore the stack, the 32-bit trampoline uses its own stack */
-> > -     leaq    rva(boot_stack_end)(%rbx), %rsp
-> > -
-> >       /*
-> >        * cleanup_trampoline() would restore trampoline memory.
-> >        *
-> > @@ -563,24 +560,17 @@ SYM_FUNC_END(.Lrelocated)
-> >    * EDI contains the base address of the trampoline memory.
-> >    * Non-zero ESI means trampoline needs to enable 5-level paging.
-> >    */
-> > +     .section ".rodata", "a", @progbits
-> >   SYM_CODE_START(trampoline_32bit_src)
-> > -     popq    %r8
-> >       /* Switch to compatibility mode (CS.L = 0 CS.D = 1) via far return */
-> >       pushq   $__KERNEL32_CS
-> >       leaq    0f(%rip), %rax
-> >       pushq   %rax
-> >       lretq
-> > +.Lret:       retq
->
-> Maybe just add a comment above this to explain that this is a target of
-> the long jump below to get back into long mode and be able to return
-> without setting up a new stack for the 32-bit code.
->
-> And then a corresponding comment on the long jump itself. I think it would
-> make it easier to understand what is going on in this part of the code.
->
+On Thu, May 18, 2023 at 04:16:33PM +0200, Helge Deller wrote:
+> On 5/18/23 15:54, Alan Stern wrote:
+> > On Thu, May 18, 2023 at 09:34:24AM +0200, Helge Deller wrote:
+> > > I think this is an informational warning from the USB stack,
+> > 
+> > It is not informational.  It is a warning that the caller has a bug.
+> 
+> I'm not a USB expert, so I searched for such bug reports, and it seems
+> people sometimes faced this warning with different USB devices.
 
-Fair point. I'll add that in the next version.
+Yes.
+
+> > You can't fix a bug by changing the line that reports it from dev_WARN
+> > to printk!
+> 
+> Of course this patch wasn't intended as "fix".
+> It was intended to see how the udlfb driver behaves in this situation, e.g.
+> if the driver then crashes afterwards.
+> 
+> Furthermore, why does usb_submit_urb() prints this WARNING and then continues?
+> If it's a real bug, why doesn't it returns an error instead?
+> So, in principle I still think this warning is kind of informational,
+> which of course points to some kind of problem which should be fixed.
+
+Depending on the situation, the bug may or may not lead to an error.  At 
+the time the dev_WARN was added, we were less careful about these sorts 
+of checks; I did not want to cause previously working devices to stop 
+working by failing the URB submission.
+
+> > In this case it looks like dlfb_usb_probe() or one of the routines it
+> > calls is wrong; it assumes that an endpoint has the expected type
+> > without checking.  More precisely, it thinks an endpoint is BULK when
+> > actually it is INTERRUPT.  That's what needs to be fixed.
+> 
+> Maybe usb_submit_urb() should return an error so that drivers can
+> react on it, instead of adding the same kind of checks to all drivers?
+
+Feel free to submit a patch doing this.  But the checks should be added 
+in any case; without them the drivers are simply wrong.
+
+Alan Stern
