@@ -2,90 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFE5707F5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27240707F60
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjERLcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S230388AbjERLeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjERLcd (ORCPT
+        with ESMTP id S229985AbjERLeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:32:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AE519B5;
-        Thu, 18 May 2023 04:32:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 18 May 2023 07:34:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7472A6;
+        Thu, 18 May 2023 04:34:16 -0700 (PDT)
+Received: from [192.168.2.250] (109-252-144-198.dynamic.spd-mgts.ru [109.252.144.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4357764E74;
-        Thu, 18 May 2023 11:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12784C4339C;
-        Thu, 18 May 2023 11:32:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684409544;
-        bh=tPMpgzLhB4+qp6UqQL+xY8X4kJc3RZ//RIRZC7aBtTg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=abiXFU3kXY3gNtksbgeKZF9niDk+C+FEfaDtZVhv49+jRuTzL+oOWbuJjwgPBTyez
-         T3QZmNgW1Cr/6fppRiRKuz6rGZlBhX8icz3DUF5QXvvcmfB9c7CxFpMNH3AvW6zjS1
-         Ims9EEDnyopqiZUhsvUnfQgrrph5dq4PJY0zJD9IVlcwot80L+V3d489IeCs7SGHCe
-         eguaZ3j10VSgqle5VBR7+TPjIXxiMKx4HqwHDKFEJtwWTluKzbI2W43zPe+1YAAacY
-         AuBfVtjL0+qkGJzgV3XCuUJsBjy2pka1EGxy1+J6QIzGL0Lf2r61fMEOOti/Ht4lI1
-         w1CmjO5tZrgIA==
-Date:   Thu, 18 May 2023 17:02:20 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        schnelle@linux.ibm.com, linux-s390@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/2] dmaengine: make QCOM_HIDMA depend on HAS_IOMEM
-Message-ID: <ZGYMxNCpACqT2nZ3@matsya>
-References: <20230506111628.712316-1-bhe@redhat.com>
- <20230506111628.712316-3-bhe@redhat.com>
- <ZGPD1wELeXafPJ/T@matsya>
- <ZGQdZhutT+lUdily@MiWiFi-R3L-srv>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 324EE6605960;
+        Thu, 18 May 2023 12:34:14 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684409655;
+        bh=+TXyxOTZP/Vtgt+QNo3AE10lvK4kwBR2oyQ8kg0soQA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BuHW3em0n62l2EvlF8YHFraBbbOz+lEuGXUMS6MqRGaPq0YpQfwMtYWwdexaU6z7Q
+         dH4b/jRSa4r/r9sOTX0VEKxyfcYl8rfj9m/gcQyRaDo5XJTgP9XXJKUrGzcbi+MaxW
+         Pcx8H6C9GdF2YdDmVdN6YzDWfWNr+dhyrdDldirKX2pvRoVSV7z8KCn6PsoNeCtELz
+         OpevP3Zee6BxnPmCyn21VMfJOKBJqTAoAjDRAmJW8qifonSwPmz+5a/H+0M9jsz/oJ
+         w2h99FOq4fPG9ghYNghWlLAaxsKqwEBE3d3lZ3XXOng7Du/oSISysSYKYt2Ih18nTi
+         Iqr12QDPslAUg==
+Message-ID: <b4a10313-adce-8d9c-8dd0-510511051185@collabora.com>
+Date:   Thu, 18 May 2023 14:34:11 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGQdZhutT+lUdily@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 1/5] kernel/reboot: emergency_restart: set correct
+ system_state
+Content-Language: en-US
+To:     Benjamin Bara <bbara93@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com
+Cc:     peterz@infradead.org, jonathanh@nvidia.com,
+        richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        stable@vger.kernel.org
+References: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
+ <20230327-tegra-pmic-reboot-v6-1-af44a4cd82e9@skidata.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230327-tegra-pmic-reboot-v6-1-af44a4cd82e9@skidata.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17-05-23, 08:18, Baoquan He wrote:
-> On 05/16/23 at 11:26pm, Vinod Koul wrote:
-> > On 06-05-23, 19:16, Baoquan He wrote:
-> > > On s390 systems (aka mainframes), it has classic channel devices for
-> > > networking and permanent storage that are currently even more common
-> > > than PCI devices. Hence it could have a fully functional s390 kernel
-> > > with CONFIG_PCI=n, then the relevant iomem mapping functions
-> > > [including ioremap(), devm_ioremap(), etc.] are not available.
-> > > 
-> > > Here let QCOM_HIDMA depend on HAS_IOMEM so that it won't be built to
-> > > cause below compiling error if PCI is unset.
-> > 
-> > I have 2/2 patch here, where is patch 1 of 2..?
+On 5/9/23 22:02, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
 > 
-> It's here, thanks for check.
-> https://lore.kernel.org/all/20230506111628.712316-2-bhe@redhat.com/T/#u
+> As the emergency restart does not call kernel_restart_prepare(), the
+> system_state stays in SYSTEM_RUNNING.
 > 
-> I used get_maintainer to get reivewers list, seems your contact is only
-> put in 2/2 patch. I also sent to lkml, linux-mm and s390 mailing list,
-> so the whole series can be seen in any of the ML.
+> Since bae1d3a05a8b, this hinders i2c_in_atomic_xfer_mode() from becoming
+> active, and therefore might lead to avoidable warnings in the restart
+> handlers, e.g.:
+> 
+> [   12.667612] WARNING: CPU: 1 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0x33c/0x6b0
+> [   12.676926] Voluntary context switch within RCU read-side critical section!
+> ...
+> [   12.742376]  schedule_timeout from wait_for_completion_timeout+0x90/0x114
+> [   12.749179]  wait_for_completion_timeout from tegra_i2c_wait_completion+0x40/0x70
+> ...
+> [   12.994527]  atomic_notifier_call_chain from machine_restart+0x34/0x58
+> [   13.001050]  machine_restart from panic+0x2a8/0x32c
+> 
+> Avoid these by setting the correct system_state.
+> 
+> Fixes: bae1d3a05a8b ("i2c: core: remove use of in_atomic()")
+> Cc: stable@vger.kernel.org # v5.2+
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+>  kernel/reboot.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index 3bba88c7ffc6..6ebef11c8876 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -74,6 +74,7 @@ void __weak (*pm_power_off)(void);
+>  void emergency_restart(void)
+>  {
+>  	kmsg_dump(KMSG_DUMP_EMERG);
+> +	system_state = SYSTEM_RESTART;
+>  	machine_emergency_restart();
+>  }
+>  EXPORT_SYMBOL_GPL(emergency_restart);
+> 
 
-Ideally these two could have been sent separately! If sending together
-add a cover and cc everyone, so that we know..
-
-Applied now
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
 -- 
-~Vinod
+Best regards,
+Dmitry
+
