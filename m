@@ -2,285 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78138707CD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B18707CE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjERJ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S229854AbjERJaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjERJ3X (ORCPT
+        with ESMTP id S230020AbjERJ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:29:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14C5211E
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:29:21 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 18 May 2023 05:29:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3030A26B6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:29:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AB0B6605861;
-        Thu, 18 May 2023 10:29:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684402160;
-        bh=nO1qbDSDKeG4upZYJigwBkYn0wg3Z18pIrTau60pRpQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NlxO0kvnAnt4rAqVLGHRALxbE9Npm3bdEo/S6HFWhtZ/wyKmU3EN3mR2ldnm9TiQu
-         hetmFjAQqdN1Vtn+tf5vnQFJllN0AIK3KgnHrqhiB4/53dn9n1NsyKrwCtvLbodE1x
-         nTFlicbGA4yt6qSNBXxWrSCPuZZ01Gg04v6xYf5Aqjquf5d71ybyA3O0/ypY9jqPkd
-         qxn4MMrorLli6Cywk0sYW1X1Ij6Dh7ok0HK0Lp7zoQ1t+t7iSTzUGyxHilxLScL5Us
-         O8N23b/Lk7BURDYMiipCS+N7jHO5ofdhyY6wnEVjI+aNHNT2T9o+Hl3sPl2a5C1R1Y
-         NVjwCQioqFDTA==
-Message-ID: <4ebdee84-9c02-b8fc-9f52-2da91fd3c82c@collabora.com>
-Date:   Thu, 18 May 2023 11:29:17 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B201064DC4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0437C4339C;
+        Thu, 18 May 2023 09:29:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684402183;
+        bh=ovRBMbfJ+0e2fp3fL3pzSwAhC4xZCypG0p8+sBPPWG4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dK4qFyZA0dN8yAUQzL0S7ZuaDDKgCMkUCp6ChHtGI8CYUiXzM5K7iCKLWZ8xYLxLT
+         bld7GfUibB0TpXwUu15G9AN6FShQKFDpCuyRFSH9EaEQRBuc4h/qGDwuI63K7rOaPH
+         oK7hByarOUsIsUtr5fo45qAzwAbEJKIJIDSAjyn9yu4/eECkOxOcq6OAqGZAKrBp3F
+         Ub4UDY9jICBvxWPGvuNAJ37SvuoGrGmWWH+Eg1c7q7bPSs7qqrpdmZj3WEGbIgQ1Uz
+         FDP9QLUjlRwYqFCv5pVv5HImXJOxi8E7QczE6vehmh67uQyaxgbfiPJv+Yu/ItG74E
+         Tg9ESaJozjm0w==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: fix to use le32_to_cpu() in RAW_IS_INODE()
+Date:   Thu, 18 May 2023 17:29:31 +0800
+Message-Id: <20230518092931.2280835-1-chao@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 1/2] drm/mediatek: Add ability to support dynamic
- connector selection
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Shawn Sung <shawn.sung@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Nathan Lu <nathan.lu@mediatek.com>
-References: <20230509150737.8075-1-jason-jh.lin@mediatek.com>
- <20230509150737.8075-2-jason-jh.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230509150737.8075-2-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/05/23 17:07, Jason-JH.Lin ha scritto:
-> 1. Move output drm connector from each ddp_path array to connector array.
-> 2. Add dynamic select available connector flow in crtc create and enable.
-> 
-> Signed-off-by: Nancy Lin <nancy.lin@mediatek.com>
-> Signed-off-by: Nathan Lu <nathan.lu@mediatek.com>
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> ---
->   drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   1 +
->   drivers/gpu/drm/mediatek/mtk_dpi.c          |   9 ++
->   drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 111 +++++++++++++++++++-
->   drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |   5 +-
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  27 +++++
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   8 ++
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |  44 ++++++--
->   drivers/gpu/drm/mediatek/mtk_drm_drv.h      |   8 ++
->   8 files changed, 202 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> index 2254038519e1..72c57442f965 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-> @@ -44,6 +44,7 @@ void mtk_dither_set_common(void __iomem *regs, struct cmdq_client_reg *cmdq_reg,
->   
->   void mtk_dpi_start(struct device *dev);
->   void mtk_dpi_stop(struct device *dev);
-> +int mtk_dpi_encoder_index(struct device *dev);
->   
->   void mtk_dsi_ddp_start(struct device *dev);
->   void mtk_dsi_ddp_stop(struct device *dev);
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 948a53f1f4b3..765fc976e41f 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -782,6 +782,15 @@ void mtk_dpi_stop(struct device *dev)
->   	mtk_dpi_power_off(dpi);
->   }
->   
-> +int mtk_dpi_encoder_index(struct device *dev)
-> +{
-> +	struct mtk_dpi *dpi = dev_get_drvdata(dev);
-> +	int encoder_index = drm_encoder_index(&dpi->encoder);
-> +
-> +	dev_dbg(dev, "encoder index:%d", encoder_index);
-> +	return encoder_index;
-> +}
-> +
->   static int mtk_dpi_bind(struct device *dev, struct device *master, void *data)
->   {
->   	struct mtk_dpi *dpi = dev_get_drvdata(dev);
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> index d40142842f85..54d48932b833 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
-> @@ -60,8 +60,12 @@ struct mtk_drm_crtc {
->   	struct device			*mmsys_dev;
->   	struct device			*dma_dev;
->   	struct mtk_mutex		*mutex;
-> +	unsigned int			ddp_comp_nr_ori;
-> +	unsigned int			max_ddp_comp_nr;
->   	unsigned int			ddp_comp_nr;
->   	struct mtk_ddp_comp		**ddp_comp;
-> +	unsigned int			conn_route_nr;
+__le32 type variable should be converted w/ le32_to_cpu() before access.
 
-`num_conn_routes` is clearer.
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/f2fs.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> +	const struct mtk_drm_route	*conn_routes;
->   
->   	/* lock for display hardware access */
->   	struct mutex			hw_lock;
-> @@ -649,6 +653,84 @@ static void mtk_drm_crtc_disable_vblank(struct drm_crtc *crtc)
->   	mtk_ddp_comp_disable_vblank(comp);
->   }
->   
-> +static unsigned int mtk_drm_crtc_max_num_route_comp(struct mtk_drm_crtc *mtk_crtc)
-> +{
-> +	unsigned int max_num = 0;
-> +	unsigned int i;
-> +
-> +	if (!mtk_crtc->conn_route_nr)
-> +		return 0;
-> +
-> +	for (i = 0; i < mtk_crtc->conn_route_nr; i++)
-> +		max_num = max(mtk_crtc->conn_routes[i].route_len, max_num);
-
-If we rename this to `num_routes` or `max_routes` it becomes a bit more
-understandable.
-
-> +
-> +	return max_num;
-> +}
-> +
-> +static int mtk_drm_crtc_update_output(struct drm_crtc *crtc,
-> +				      struct drm_atomic_state *state)
-> +{
-> +	const struct mtk_drm_route *conn_routes;
-> +	int crtc_index = drm_crtc_index(crtc);
-> +	int i;
-> +	struct device *dev;
-> +	struct drm_crtc_state *crtc_state = state->crtcs[crtc_index].new_state;
-> +	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
-> +	struct mtk_drm_private *priv = crtc->dev->dev_private;
-> +	unsigned int comp_id;
-> +	unsigned int encoder_mask = crtc_state->encoder_mask;
-> +	unsigned int route_len = 0, route_index = 0;
-> +
-> +	if (!mtk_crtc->conn_route_nr)
-> +		return 0;
-> +
-> +	priv = priv->all_drm_private[crtc_index];
-> +	dev = priv->dev;
-> +
-> +	dev_dbg(dev, "connector change:%d, encoder mask0x%x for crtc%d",
-> +		crtc_state->connectors_changed, encoder_mask, crtc_index);
-> +
-> +	if (!crtc_state->connectors_changed)
-> +		return 0;
-> +
-> +	conn_routes = mtk_crtc->conn_routes;
-> +
-> +	for (i = 0; i < mtk_crtc->conn_route_nr; i++) {
-> +		route_len = conn_routes[i].route_len;
-> +		if (route_len > 0) {
-
-route_len is unsigned, it can never be < 0, so...
-
-		if (route_len) {
-
-> +			comp_id = conn_routes[i].route_ddp[route_len - 1];
-> +			if (priv->comp_node[comp_id]) {
-> +				if ((1 << priv->ddp_comp[comp_id].encoder_index) == encoder_mask) {
-
-This is effectively BIT().
-
-if (encoder_mask == BIT(priv->ddp_comp[comp_id].encoder_index)) {
-
-P.S.: Are you sure that this shouldn't be (encoder_mask & BIT(encoder_index))??
-
-> +					route_index = i;
-> +					break;
-> +				}
-> +			}
-> +		}
-> +	}
-> +
-
-..snip..
-
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-> index 3e9046993d09..672b9c7afee6 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
-> @@ -8,6 +8,7 @@
->   
->   #include <drm/drm_crtc.h>
->   #include "mtk_drm_ddp_comp.h"
-> +#include "mtk_drm_drv.h"
->   #include "mtk_drm_plane.h"
->   
->   #define MTK_LUT_SIZE	512
-> @@ -18,7 +19,9 @@ void mtk_drm_crtc_commit(struct drm_crtc *crtc);
->   int mtk_drm_crtc_create(struct drm_device *drm_dev,
->   			const unsigned int *path,
->   			unsigned int path_len,
-> -			int priv_data_index);
-> +			int priv_data_index,
-> +			const struct mtk_drm_route *conn_routes,
-> +			unsigned int conn_routes_num);
-
-num_conn_routes looks better.
-
->   int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct drm_plane *plane,
->   			     struct mtk_plane_state *state);
->   void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane *plane,
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> index f114da4d36a9..fe20ce26b19f 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
-
-..snip..
-
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-> index febcaeef16a1..1c1d670cfe41 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
-> @@ -80,6 +80,7 @@ struct mtk_ddp_comp_funcs {
->   	void (*disconnect)(struct device *dev, struct device *mmsys_dev, unsigned int next);
->   	void (*add)(struct device *dev, struct mtk_mutex *mutex);
->   	void (*remove)(struct device *dev, struct mtk_mutex *mutex);
-> +	int (*encoder_index)(struct device *dev);
-
-drm_encoder_index returns an unsigned int type, so this one can never be negative:
-please change the return value of this function to unsigned int type.
-
->   };
->   
->   struct mtk_ddp_comp {
-> @@ -87,6 +88,7 @@ struct mtk_ddp_comp {
->   	int irq;
->   	unsigned int id;
->   	const struct mtk_ddp_comp_funcs *funcs;
-> +	int encoder_index;
-
-Same here, unsigned int.
-
->   };
->   
->   static inline int mtk_ddp_comp_clk_enable(struct mtk_ddp_comp *comp)
-
-Regards,
-Angelo
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 7f6c51a6b930..a4bff3b5b887 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -2840,7 +2840,11 @@ static inline void f2fs_radix_tree_insert(struct radix_tree_root *root,
+ 		cond_resched();
+ }
+ 
+-#define RAW_IS_INODE(p)	((p)->footer.nid == (p)->footer.ino)
++static inline bool RAW_IS_INODE(struct f2fs_node *node)
++{
++	return le32_to_cpu(node->footer.ino) ==
++			le32_to_cpu(node->footer.nid);
++}
+ 
+ static inline bool IS_INODE(struct page *page)
+ {
+-- 
+2.40.1
 
