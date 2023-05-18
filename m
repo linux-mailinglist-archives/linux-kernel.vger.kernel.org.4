@@ -2,77 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45547085A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564BC7085AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjERQKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 12:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S229524AbjERQK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 12:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjERQKI (ORCPT
+        with ESMTP id S229710AbjERQKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 12:10:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EB019A;
-        Thu, 18 May 2023 09:10:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4D616509D;
-        Thu, 18 May 2023 16:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 09DDCC433EF;
-        Thu, 18 May 2023 16:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684426207;
-        bh=WRniWxL3vdUXkieffXLRZIpU7rD7ns+rbyi1G617eyY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=WbogGFQe2J5CHqVIOi867St2e7R33eFu4ZaNAznQa5cFq08am7Eh4XUv6yub4PHD9
-         vpR05xidJPpakYj641tcId1vGeR9+uqbeN5o7hyIzSkAevYsErsX8DQxUfX0vhS0Bk
-         7a+uExr7Rbl3yoHyqOwTCe+Tu/fw8BmwZur/+cq3ed8S5t9HZwAml4yNZGQa3nOeei
-         CK1laWb9M4yhGNnN3FFCVZObnQn6LgjtMUSBOOKDGW4myx+DI/uTFMGmSFVjf93h8q
-         8DOdqApppFx3cmOXpTr9jI4fzVfCMSo6SKPRyf27yvoBJM6cJHI/Ltwz5R58tfLVZr
-         RH3KDG0sDjlyg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CF82FE54223;
-        Thu, 18 May 2023 16:10:06 +0000 (UTC)
-Subject: Re: [GIT PULL for v6.4-rc3] media fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230518092659.4a4de8ea@sal.lan>
-References: <20230518092659.4a4de8ea@sal.lan>
-X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230518092659.4a4de8ea@sal.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.4-3
-X-PR-Tracked-Commit-Id: 280a8ab81733da8bc442253c700a52c4c0886ffd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b802651bb6c90e53b30205b2a4358433e3be57c8
-Message-Id: <168442620677.7549.4912212264415676664.pr-tracker-bot@kernel.org>
-Date:   Thu, 18 May 2023 16:10:06 +0000
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 18 May 2023 12:10:52 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B725DFE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:10:51 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-ba86ea269e0so2872213276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684426251; x=1687018251;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QJ6fEh41sGhN6IZlpmir3nTFUB9eH0sY819Rneyh7hs=;
+        b=M5x2tqEeI57jIhJIrwT/dCbMeRbiRpHmvZNAWJiNpy40KrdFIp5OS9dYYy1e+D8dOn
+         IfwIEE0xaaAOOfDWXqcYDcFZXnf+CRUoShJLukUdSIMfeZrbDgH7G426eyZfVMceDYIK
+         b7tsc0oHq2U1GAI6umpCTWXoyWXMAn9vk4jP1zK8OrpYNxLrEtG1uT5cwT9WuPewW6ZF
+         DbFVz1U3IOl899F5VkE5pzMiqYp8+AhyAgt66xAScDz//OS/crWLfMBQ2MJoiQN/4Ia0
+         mIUHXz5mgHZvrKk+sstrxm5PC+9YnFIe8/y6//0SAK0knMZrMNjywfQBjn233QCCASuA
+         PDdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684426251; x=1687018251;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QJ6fEh41sGhN6IZlpmir3nTFUB9eH0sY819Rneyh7hs=;
+        b=czFLCOKJyEWJx+1vhu/oZtEm2wK7QHmzX0zgKS1cMLFYucGggYNsz9NywHe1zC+0Fr
+         d/9DYvVzK7oZ7hAVsUXJWerb2hOsg7qdeG5khXArkSXY6kcx3Z8oulKiMPuGRfGM7XwQ
+         i2+KZfPJXAo4JPZt84RCudSidOUK9dRxbF99P1Azoo1mpKkHtfsLrRO2WYo919YTMnib
+         Or/uiMi3mAalD/1BhGfQstRjb4j4ueqW6IoCAnHnRyGFfoA1je0R6U/T/hX1aguDJj12
+         MXmecdjHGdJ3dqnwhz12QmskNwLQRtOvSLuonTC+I95tb7aJN9hOAA38w9PyKKywpv41
+         s7Aw==
+X-Gm-Message-State: AC+VfDyWcFkJmNkgNToZhSd2gLrPp6Nfm7EUWaxlAQT4iPHDtwVKAjoj
+        6FeqfQp2ycjgLfrnbuRWiaZY5HuTDhQhjG6tFUq4Kg==
+X-Google-Smtp-Source: ACHHUZ6u/qM9qzGiehyROZJRL8PBkBdsgxRiwT6kRoso8gCcRwKce5PfQyVRrORdKNSrhUc3GOAbwMek5rHdCHurX1s=
+X-Received: by 2002:a25:d043:0:b0:ba8:2317:e74f with SMTP id
+ h64-20020a25d043000000b00ba82317e74fmr2068931ybg.60.1684426250788; Thu, 18
+ May 2023 09:10:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230517160948.811355-1-jiaqiyan@google.com> <20230517233020.GA10757@monkey>
+In-Reply-To: <20230517233020.GA10757@monkey>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Thu, 18 May 2023 09:10:39 -0700
+Message-ID: <CACw3F51iVe7AtaFDR_y1x+hc8HH1nAqKA7ZYtL=tte6Qmb5CGg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] Improve hugetlbfs read on HWPOISON hugepages
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     songmuchun@bytedance.com, naoya.horiguchi@nec.com,
+        shy828301@gmail.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duenwen@google.com,
+        axelrasmussen@google.com, jthoughton@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 18 May 2023 09:26:59 +0100:
+On Wed, May 17, 2023 at 4:30=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
+om> wrote:
+>
+> On 05/17/23 16:09, Jiaqi Yan wrote:
+> > Today when hardware memory is corrupted in a hugetlb hugepage,
+> > kernel leaves the hugepage in pagecache [1]; otherwise future mmap or
+> > read will suject to silent data corruption. This is implemented by
+> > returning -EIO from hugetlb_read_iter immediately if the hugepage has
+> > HWPOISON flag set.
+> >
+> > Since memory_failure already tracks the raw HWPOISON subpages in a
+> > hugepage, a natural improvement is possible: if userspace only asks for
+> > healthy subpages in the pagecache, kernel can return these data.
+>
+> Thanks for putting this together.
+>
+> I recall discussing this some time back, and deciding to wait and see
+> how HGM would progress.  Since it may be some time before HGM goes
+> upstream, it would be reasonable to consider this again.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/media/v6.4-3
+This improvement actually does NOT depend on HGM at all. No page table
+related stuff involved here. The other RFC [2] I sent earlier DOES
+require HGM. This improvement was brought up by James when we were
+working on [2]. In "Future Work" section of the cover letter, I
+thought HGM was needed but soon when I code it up, I found I was
+wrong.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b802651bb6c90e53b30205b2a4358433e3be57c8
+>
+> One quick question.
+> Do you have an actual use case for this?  It certainly is an improvement
+> over existing functionality.  However, I am not aware of too many (?any?)
+> users actually doing read() calls on hugetlb files.
 
-Thank you!
+I don't have any use case. I did search on Github for around half a
+hour and all the hugetlb usages are done via mmap.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> --
+> Mike Kravetz
+>
+> > This patchset implements this improvement. It consist of three parts.
+> > The 1st commit exports the functionality to tell if a subpage inside a
+> > hugetlb hugepage is a raw HWPOISON page. The 2nd commit teaches
+> > hugetlbfs_read_iter to return as many healthy bytes as possible.
+> > The 3rd commit properly tests this new feature.
+> >
+> > [1] commit 8625147cafaa ("hugetlbfs: don't delete error page from pagec=
+ache")
+
+[2] https://lore.kernel.org/linux-mm/20230428004139.2899856-6-jiaqiyan@goog=
+le.com/T/#m97c6edef8ad0cc9b064e1fd9369b8521dcfa43de
+
+> >
+> > Jiaqi Yan (3):
+> >   mm/hwpoison: find subpage in hugetlb HWPOISON list
+> >   hugetlbfs: improve read HWPOISON hugepage
+> >   selftests/mm: add tests for HWPOISON hugetlbfs read
+> >
+> >  fs/hugetlbfs/inode.c                          |  62 +++-
+> >  include/linux/mm.h                            |  23 ++
+> >  mm/memory-failure.c                           |  26 +-
+> >  tools/testing/selftests/mm/.gitignore         |   1 +
+> >  tools/testing/selftests/mm/Makefile           |   1 +
+> >  .../selftests/mm/hugetlb-read-hwpoison.c      | 322 ++++++++++++++++++
+> >  6 files changed, 419 insertions(+), 16 deletions(-)
+> >  create mode 100644 tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+> >
+> > --
+> > 2.40.1.606.ga4b1b128d6-goog
+> >
+
+(Sorry if you received twice, was sent in a wrong way a while ago)
