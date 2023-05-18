@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFC67082B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB987082BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjERNbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 09:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S231294AbjERNbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 09:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbjERNa6 (ORCPT
+        with ESMTP id S230200AbjERNbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 09:30:58 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB881A2;
-        Thu, 18 May 2023 06:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=fRqoAfEGrb69vxhTSyLB10x+JE5MQ4XwObAsHGXg2dw=; b=QT8cOkj6ZnwlK7KEFGou1i0Ims
-        a/OgxDUpB5KbydZR+HtiBc1t8bql/2eVlQ11ToWwMVibuBWJuOZz7IxC5jJ+6kZdkEyoGu3kIwOdc
-        wkKTzz3e4KrRVVQgo32dSpon6qaQcpPaMNyEKD65h0het0ZopPO8/72W31hn0FGrVnRY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55638 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1pzdiT-0004VO-SJ; Thu, 18 May 2023 09:30:50 -0400
-Date:   Thu, 18 May 2023 09:30:49 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20230518093049.1e1cdf9561ea326f4655af02@hugovil.com>
-In-Reply-To: <20230517-argue-unbeaten-b07405fdd313@spud>
-References: <20230517150746.3823249-1-hugo@hugovil.com>
-        <20230517-argue-unbeaten-b07405fdd313@spud>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        Thu, 18 May 2023 09:31:33 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B84FE;
+        Thu, 18 May 2023 06:31:30 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QMW8Z5gf5z9sbP;
+        Thu, 18 May 2023 15:31:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
+        s=MBO0001; t=1684416686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BYYC753MdUNsI3e8pjfC0ipVhim97KERMV0n3XYIbQU=;
+        b=TQ/Jbr9NYTiqNzy3J5xFj7wjV3GMgq8Il5hco8tG/l9qOUbRE+emWoSKoA5q5LVEJaJUdd
+        CRMsNgjc+3OBaHa66VBSl9f+il6JF0QQx8OIw9lfHuNLmJqwe+KhFKCPQC9sK0qfxek3q2
+        52eToyTuQOYIRr+nQMDBF9h12SF09S3S6c3f/HHipmc1SDNmC93Yb3ofuBelseIi6USOrM
+        B3MQoEukn1a/sXPXg+Li7bVHq066iV4HiHTH4xhVjbIz/0dpehcQBzEM8JpXpvr1fo8oQ4
+        uxh243+7ngACBKCtAgSSisTeky68MWEPHM3O2unzMH1+/oU67bXwJ3ILLNOUww==
+From:   Dylan Van Assche <me@dylanvanassche.be>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        pavel@ucw.cz, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        quic_fenglinw@quicinc.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        amartinz@shiftphones.com, Dylan Van Assche <me@dylanvanassche.be>
+Subject: [PATCH v3 0/3] arm64: dts: qcom: pmi8998: add and enable flash LED controller
+Date:   Thu, 18 May 2023 15:31:10 +0200
+Message-Id: <20230518133113.273880-1-me@dylanvanassche.be>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-Subject: Re: [PATCH 1/2] dt-bindings: sc16is7xx: Add property to change GPIO
- function
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 18:25:07 +0100
-Conor Dooley <conor@kernel.org> wrote:
+Qualcomm PMI8998 has support for 3 flash LEDs which got support in [1].
+Add this driver to the PMI8998 DTS and enable 2 flash LEDs in the SHIFTPHONES SHIFT6mq
+smartphone. This smartphone has a white and yellow flash LED.
 
-> On Wed, May 17, 2023 at 11:07:46AM -0400, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Some variants in this series of uart controllers have GPIO pins that
-> > are shared between GPIO and modem control lines.
-> > 
-> > The pin mux mode (GPIO or modem control lines) can be set for each
-> > ports (channels) supported by the variant.
-> > 
-> > This adds a property to the device tree to set the GPIO pin mux to
-> > modem control lines on selected ports if needed.
-> > 
-> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > ---
-> >  .../bindings/serial/nxp,sc16is7xx.txt         | 28 +++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > index 0fa8e3e43bf8..426b7285ad50 100644
-> > --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
-> > @@ -23,6 +23,9 @@ Optional properties:
-> >      1 = active low.
-> >  - irda-mode-ports: An array that lists the indices of the port that
-> >  		   should operate in IrDA mode.
-> > +- modem-control-line-ports: An array that lists the indices of the port that
-> > +			    should have shared GPIO lines configured as modem
-> > +			    control lines.
-> 
-> If this is an NXP specific property, should it not have an nxp, vendor
-> prefix?
+* Changelog *
 
-Yes, I will resubmit a V2 with nxp vendor prefix.
+Changes in v2:
+- Document compatible for PMI8998 to fix missing compatible in DTS.
+- Improved commit messages, following [2]
 
-Hugo.
+Changes in v3:
+- Adjust led-max-microamp and flash-max-microamp to better match downstream.
+- Add Acked-by and Reviewed-by tags
+
+[1] https://lore.kernel.org/all/20230507172941.364852-1-me@dylanvanassche.be
+[2] https://lore.kernel.org/all/20230516150202.188655-1-krzysztof.kozlowski@linaro.org/
+
+Kind regards,
+Dylan Van Assche
+
+Dylan Van Assche (3):
+  dt-bindings: leds: qcom,spmi-flash-led: add PMI8998
+  arm64: dts: qcom: pmi8998: add flash LED controller
+  arm64: dts: qcom: sdm845-shift-axolotl: enable flash LEDs
+
+ .../bindings/leds/qcom,spmi-flash-led.yaml    |  1 +
+ arch/arm64/boot/dts/qcom/pmi8998.dtsi         |  6 +++++
+ .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 22 +++++++++++++++++++
+ 3 files changed, 29 insertions(+)
+
+-- 
+2.40.1
+
