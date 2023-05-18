@@ -2,91 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC91E708734
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3B3708754
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbjERRsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S229576AbjERRwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbjERRsE (ORCPT
+        with ESMTP id S229498AbjERRwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:48:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CC997;
-        Thu, 18 May 2023 10:47:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7669865097;
-        Thu, 18 May 2023 17:47:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B473CC433D2;
-        Thu, 18 May 2023 17:47:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684432075;
-        bh=QQbT/H+RhsbZvXK7PdSe10D3Oq+2SsaxOfRTrjkPKT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=psL702gx1GrogPBlTwC+UYcP8IbOTuo/EBujZxTKJgoxloTQ01faEClLdpWXZp1RC
-         TQNWL/XkNQ5mgSbk+1L4Rf3qKNsEWnuTD2kVnFk0BaZlV4Pd3SDaJS4itJsXxO1gCG
-         kAYrS73B+MjCUXkfSznKtTXWvccBjlGyEcnU+PRQWFr/nIKQl26/GohstbrdJlbLb/
-         YuENcXDcLNmhz7RIz2r04Rnxks0PKHSdaHs0e7gNSQ8AM6gxw8agTyBNuF9cxJZfBe
-         gleuxThJQk3owQVerm+XLkZcBdLdmDTZGo97e4y4CHDOHLInfbUuM0nozDRu6RGz2C
-         u139V1XrohELw==
-Date:   Thu, 18 May 2023 13:47:54 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
-        arnd@arndb.de, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH AUTOSEL 6.3 6/7] powerpc/fsl_uli1575: Allow to disable
- FSL_ULI1575 support
-Message-ID: <ZGZkylhlTdJoZJ3V@sashalap>
-References: <20230509035455.59524-1-sashal@kernel.org>
- <20230509035455.59524-6-sashal@kernel.org>
- <62539831-1f8c-d908-bd7c-2a926702fa7f@infradead.org>
- <87jzxix9g7.fsf@mail.lhotse>
- <20230509071835.rrfefrhwtwsxlngy@pali>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+        Thu, 18 May 2023 13:52:12 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2094.outbound.protection.outlook.com [40.107.92.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB5EED;
+        Thu, 18 May 2023 10:52:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FXghUk9WRDEX9LZeZ++qyaTePKKFSpUzLblqQWr4eDOxOOtK2jtCzwJLMWxvcRuzuXHp10Q9gVrnQ7BB92y4Ylss6M4P78acp6VvAL1K/Ozzjuh2tFc4OIX8+FSPbCqzNNLZTkL8LIC5vLNmKahmfM7P5qH720GTfGkVyuxWuCTt6u0XHHRhiTVZIY70FUhf3DnD3jmxEX3NY0gx927g1yxvUvpYpNHJCbTuAcSojbZCzmpgro9jR4sN5Fzd14/hDXGhbEHBu31qqxE9vuNdPimYJf17BHy7vjYfcBj1XXqL36asAXJCyUmNItTiTlPoIXQDpFRbxzzUnrzKsKNh5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+S2pU4OqV8nO8czKIlE/qmmpG66UbBTt0nFBZXR2lMY=;
+ b=WLj66stZBv+fp101nhsyNldYftUQC0pV16GTeZTuJDitkqmjHQMWIz/EjKt8VfUAPJf4ujuFlWHVdtMmAWbe0QZK6C7dk+KCE+820ph4JpA5OrVClK/S5qnaWPeNWun6WsEbpA9Z3dYYeHlOl4ezldwSNpg+nAdhtcRCLswA/uizoXCcdal7n9dSmaHsPk/IPm94Nk4yIqdAB8IGOTU9sqdLkAsnCFAskNw3jCxF/pw1fHWPZcSnAq1v9g3QFbkXRg9bsfLnLvGDX7oA0MDIUgJWan0Z2p2v8MjO0Z8brhiJZt9q+N+3Dng2XrI70REiGiHF+XsjNARY43ByYuRTow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+S2pU4OqV8nO8czKIlE/qmmpG66UbBTt0nFBZXR2lMY=;
+ b=I5YfWrYf07kvJfV04KX6Az0+EV7Pb+jCFk+p1EzzGXyPnJ/SAddNuD/Whxeu8gRjiGTsEwXYT7xQIG/0wLHZtRXbfpXL2pdpbC+8MnPQSFWHGKFRjTctYQCxiO46Rz4tSiEOFe1yHTnro8u5ELkyoC7zYEU6OxQ4DlKmzlLlbuU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY3PR13MB4978.namprd13.prod.outlook.com (2603:10b6:a03:36f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
+ 2023 17:52:07 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 17:52:07 +0000
+Date:   Thu, 18 May 2023 19:52:01 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] MAINTAINERS: add myself as maintainer for enetc
+Message-ID: <ZGZlwT5Paj+vo3cN@corigine.com>
+References: <20230518154146.856687-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230509071835.rrfefrhwtwsxlngy@pali>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230518154146.856687-1-vladimir.oltean@nxp.com>
+X-ClientProxiedBy: AM0PR01CA0176.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:aa::45) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY3PR13MB4978:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab5b7fe0-9f42-4284-e2ca-08db57c898f2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l8m9oBWSeJlGlFsvQLV7Go7N367z2UaG1Hahsa6tw3763Iu4B+U3R0fG39IyOIFzyEpFDh0vvV4s1EdpnU9XGSWa9II2OKPwF+CnU26z96RLBU/zj5gVzjojWoeYZNwXgge+z8P/99Xldwxch2ne5qiyFocDO1/Vj/Wm4hVW/pYwbnVrupXKrAlBiclk5sPYF94K2k8aI2yvJ+eQsNmfuMiGqYV2Ykx+m0EJHN9jXPplo6JQuNJyhLP5KFFOQ+9SVU6MXcOxiELxd51bzf7oHIG3EfIFUqyw3XYcQHIGKENUfdwafJe/ZBf38BmvEZiuLK0U7DBOtfUBPs/G0TbyHnRkoQzWSzgpo4nfObtd1IHCF+V+jsk8h0wL2H0uAgj6jRSllSvl2VrKGL9VDDvYMBCuKBBOiFvC4LDIRQmHTeJyrYX6p5T4TZkccNOZOSTPE23YrEeK3J1WyKQgEd061SI+TsTkR12Q++H9opOpRlHHE7XsNLZTOaC+hZOa+jj9Oj1UX/1DPZKpVDI7ywPtrEUL4N7N41xQmxc48wKueAqXHVSJkN2xpVygCrqLGn9wknTP4GoRu3qRrHPCaKxLDg0LYQVKllFpaTAvKPECgnk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(136003)(39840400004)(366004)(451199021)(5660300002)(41300700001)(4744005)(2906002)(36756003)(2616005)(86362001)(38100700002)(6512007)(6506007)(8936002)(44832011)(8676002)(186003)(6486002)(66556008)(66946007)(6666004)(66476007)(54906003)(478600001)(4326008)(6916009)(316002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y7FSwSlIZXBvXxZ6cBXzmsaBVdTeuyVIJwNbropi4Mj7Hmr/yJuDYprNdfVm?=
+ =?us-ascii?Q?Ngi06jLFBnr2hdlSGeKAc1Y6z+ov9u8rGmR79qpns4N2GXNYHqdpv7Dc4Xnp?=
+ =?us-ascii?Q?rcR8NZ3euiu4zQtakGOLaJ2srLq8PaGIeikBatIMr6WxoXGK7l8y3QaN8kb1?=
+ =?us-ascii?Q?okIQ0WWxyPvueYD++HOTkvCy/5zN55ifuOQd+7w++bkKu2jTxzn1yCnkT2RA?=
+ =?us-ascii?Q?rWm5V0NGUv3wtvdQZTttd2GesCnYb1OeCq3IygIrA7Spk2JBJ/cpV6MCZd+C?=
+ =?us-ascii?Q?MEefGA5+KM0quQ3ERdT/zYRHjCNvWdcltdoRbC+LvOv2hetQZFcbAMckoREH?=
+ =?us-ascii?Q?5+ybllAFFxC7bQCtoF9Q/wB1Hp6Ll+HU1iuGyXj56BqLWJTKdwmhazHSOpld?=
+ =?us-ascii?Q?qsFpbjS22ro1n7SI+hDvLqCdJbemMPA2r1DYlAYPthAWh4DpkpyFd2pPP8RB?=
+ =?us-ascii?Q?VEwESMEMiMPy0XvTeL+m6+KNC4YysOgzEvLiihc9iuDVM05h0FxojZP2IclI?=
+ =?us-ascii?Q?xDC8Hx4qtbHnjuwWeLOnVDdjjrnTz/8FdbLkf8oS6c88ICksJNWC8EPOg3fJ?=
+ =?us-ascii?Q?G+LeBOCmf84XidkQS0c5n/8SeHFzqCx0yLe8affCpAVUgSOK35Nce1p1jZqV?=
+ =?us-ascii?Q?oDaYGgO5sf8buk5NSCvatnQ5xq/3h+X1wJvQhqcRWN44LQLJqEqNgh+x6Ues?=
+ =?us-ascii?Q?JfF96aHvBVrNpVH2E9aijTNhHoQKRr0qEhcqUMNg38dEVpyV6J7TFGLvRqa4?=
+ =?us-ascii?Q?AU94P0lKeSfC7+mtgmzLz18muM+YSWQHdKUtTPMA1dOGe9O0vF0qgdpZcxP0?=
+ =?us-ascii?Q?PqHD90G7wTscWKI77f95k0TzrPzX7Z4x9WnJu1H0qsPda3KCNxH+4Cybed8z?=
+ =?us-ascii?Q?eLn1R/YVDj8AtWjrQ8RJSwcYYRTtr2uvRi1Wr9C2AP7sS9vHD1m8kxGquiLT?=
+ =?us-ascii?Q?GppiEozUhtxVOYgGW/JTQb0xATThMSl5wI2XWJMlfW0+43Zs9X/gXtXSM5YX?=
+ =?us-ascii?Q?ALCLWNVR9IgVo9uCZpRsHo5GeTIvFJ7vhnV2Doxu7ysD/vI7FhZNgYB/P2ss?=
+ =?us-ascii?Q?wTOJBY3AwohYiXiiKULNERCXd99Fk55UgjRwSG+ZGuP6WiGxPOsC1PemC5DV?=
+ =?us-ascii?Q?maRBJNjuNyxGaK6HKLjc58j/Tu4NYagIsyCX7X93JFpK9FZfpEpCya+PLoxT?=
+ =?us-ascii?Q?ME6ggqOYK8ihBOtVMuMSUk2228THEztgExcswDHexXyWX3qN/hUhGP+txTCj?=
+ =?us-ascii?Q?9cap1whu1ek4HBExPoPBQP3O2VyWrjCczvFSErXvS1cFGKydYHYdiN82pHHl?=
+ =?us-ascii?Q?aAliBW9VZvx0tbbhCRa68a4R42AI9aTegsw2U9hexfVnLfAFLqGk5646J214?=
+ =?us-ascii?Q?j+McZd7hOCmhpK0CJErqHjIeE+nEXia39LvsfnK7y8lBmD4KGuXpTJbG2GeX?=
+ =?us-ascii?Q?srnvahDobUN5cNstFqXCDAER4Z/Fz3Uk/mQJfPZgRsVHWNT+27ZGLrlJbO4/?=
+ =?us-ascii?Q?L7T/kGa05ydNh4uaO0LV4y8yaiESQW+jhzNjrdLHOIkrvzOelgW3WSKLQAD3?=
+ =?us-ascii?Q?N9EEqRgyiDQBIpDuoXKyVh2KTzAcrwzZxSGc91F2VJk7+UoOB+8gnTC81pLr?=
+ =?us-ascii?Q?3QuC+O9Jc8QA7AxfdoWqVL4vtwmRiwZc76Qn3MsGpE45rc2M08zhkH9LIHJu?=
+ =?us-ascii?Q?wUoXGg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab5b7fe0-9f42-4284-e2ca-08db57c898f2
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 17:52:07.5813
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0plRbX/jTkvzT19cL/ak+7TNAX/HGDu2X8VzRFRH0oi+TaIQQ/+3xIm+N6GFEyooOnbJkrRQzgmEoruKZewrWVqtL6N4XHwtXzcdY7TdA64=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR13MB4978
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 09:18:35AM +0200, Pali Rohár wrote:
->On Tuesday 09 May 2023 17:14:48 Michael Ellerman wrote:
->> Randy Dunlap <rdunlap@infradead.org> writes:
->> > Hi--
->> >
->> > Just a heads up. This patch can cause build errors.
->> > I sent a patch for these on 2023-APR-28:
->> >   https://lore.kernel.org/linuxppc-dev/20230429043519.19807-1-rdunlap@infradead.org/
->> >
->> > Michael, I think this is your area if I'm not mistaken.
->>
->> Yes. The fix is in my fixes branch as:
->>   536d948a8dee ("powerpc/fsl_uli1575: fix kconfig warnings and build errors")
->>
->> But I don't think this commit (22fdf79171e8) really warrants going to
->> stable, it's a nice-to-have but doesn't fix any pressing bugs.
->
->Exactly. And also this patch alone without 1/8 would not work as in 1/8
->https://lore.kernel.org/all/20230409000812.18904-2-pali@kernel.org/ was
->added static inline variant of function which is used when ULI is
->disabled.
+On Thu, May 18, 2023 at 06:41:46PM +0300, Vladimir Oltean wrote:
+> I would like to be copied on new patches submitted on this driver.
+> I am relatively familiar with the code, having practically maintained
+> it for a while.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-I'll drop it, thanks!
-
--- 
-Thanks,
-Sasha
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
