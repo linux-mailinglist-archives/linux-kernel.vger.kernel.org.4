@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC40708485
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A91EA708488
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230330AbjERPCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
+        id S231774AbjERPDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjERPCw (ORCPT
+        with ESMTP id S231220AbjERPDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:02:52 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C540121
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:02:24 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-560ee0df572so33639387b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:02:24 -0700 (PDT)
+        Thu, 18 May 2023 11:03:38 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7374B1990
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:03:03 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d18d7738dso584142b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684422073; x=1687014073;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=COEcCFWgCbplE1MtlqGXZIriKuoSjyaM69XcEc43hFs=;
-        b=V4t31ISM6ddijUWJrMbzNdsub50JqaWK0bG2NFCCpmTFivM5lhHY9OWHzMC0C/HCMT
-         Ja37GZLQK+L91ygKXO4cJFqPAoIr3jFi1MTJXKDiS/EGFspP9Frt+o9dDL8Nt0rXY7Ua
-         Ausy7uWZTyz5+fN5nyBn1wmlxoKRTBGWLWJlig0yVzR79vIUv/RMFOFcXJiDrmQZoa6d
-         HQy+bLYpiwmqRs3B2j7jXF2JXzKsYXuDfjdrnYJNbxh/Km+HRilenhnoRg1cmJFynjeP
-         xxeuMJ42jYGmeu3M3IZ8qsQ+6U1GzhFBwKRh08c9gxKDFBu4fbkUTLHLge/Lo83UhALz
-         gvEA==
+        d=gmail.com; s=20221208; t=1684422136; x=1687014136;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CoK00IvDzsh9+aKqB45P/1hvIg+G2G4PV8ZXqUFsdcU=;
+        b=V1fbw1T77nRy/lhnGOpp6lridH1ahnJP6ytYDL0MYFtupEvD6uoYezzJsYe2+E3879
+         laMaQ9LsISaOIja7y6pYu3b8NQd5tMKkr/tjDzsYcxhRVoBTEbxmfyulNB7LldaFpsYO
+         WxzN1hjcHlYlu0XWY+Y4P7aBSCSi3nGrzehFBTvS848iOA1wNG2aB8KsYfHCVJD+392T
+         +zukQrqVmKd6Dv8DNLRStWH0CZJN/NCMfs97IyqyDDPsOPkPuZmuH2l2ssMTxR9z0T4r
+         nh5GHbz8iy58BKDk/SNC0TFQzaHGJNgUUr0fa9tqEqfODOBAs6a9HphFNMF4jsdNb8Gz
+         h4dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684422073; x=1687014073;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=COEcCFWgCbplE1MtlqGXZIriKuoSjyaM69XcEc43hFs=;
-        b=SdIFn4N+tvM++Z+R+4+64mHx64Cqcr9w2mwAX7Kvh26I7q0FPJBnfBQpyZaqLg1C6Z
-         j2locWs4IW0cSqIrsDesdUOzQ8BbzOyNwHLAOIyxnsS/RQ9a/PaSq24Qv5KzNIoF1S/v
-         6C9xSiprNIFZHJm5YtS5aNlNf8mwJUIdi5hroaSHN3YUj44WMlrMTseFywlEWcwg3Uts
-         3Q2EHk+ELdhOU+Mvtqc6TsCE+K9CtsEzwKwcE5ZcUOPhjYxHng3kEvszzJOIaYgah00t
-         rIgDgMQ7Ec8DKZnq+n6d4sqCLu481XsmByMgsTmO0QuBMWOnoY1WALWoonEoe1WJV8Ey
-         btUA==
-X-Gm-Message-State: AC+VfDzwUSYI30BbYG21cNbXqoBZtkGIdDoqdL543/IrCGj6CgQVJ3Re
-        0hhzM8kppQNVXSH0zAasFdjPyyWazTw=
-X-Google-Smtp-Source: ACHHUZ7IX6Wx0LSBkpzQqjr+OXaJS2pKyVuTTzwb3z0a97s/un34w9qdMEO5QA63WIOBuZvYpFhahx6OOmI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:e50e:0:b0:561:3149:d684 with SMTP id
- s14-20020a81e50e000000b005613149d684mr1180910ywl.10.1684422072950; Thu, 18
- May 2023 08:01:12 -0700 (PDT)
-Date:   Thu, 18 May 2023 08:01:11 -0700
-In-Reply-To: <babafe0f-3154-fb0a-346f-2bbea48a366e@gmail.com>
-Mime-Version: 1.0
-References: <71288f04-546c-9af3-e29a-eb3c44e0d948@gmail.com> <babafe0f-3154-fb0a-346f-2bbea48a366e@gmail.com>
-Message-ID: <ZGY9twXBuTWpliAB@google.com>
-Subject: Re: Fwd: Persistent rt_sigreturn segfaults on KVM VMs after upgrade
- to 5.15
-From:   Sean Christopherson <seanjc@google.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux KVM <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Theodor Milkov <tm@del.bg>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1684422136; x=1687014136;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CoK00IvDzsh9+aKqB45P/1hvIg+G2G4PV8ZXqUFsdcU=;
+        b=Im43OzjJtCEqNau13iEg3pOvaJOOJv93WfhkJiCCJZzpiENfZd4JmqoFhZNE0XqPPd
+         VaF58HQT13fpmM+hyilXN580rsNht2KgIgh2hGRIC5lUqb5f7nmEMd3I0A6NXG1tAFYv
+         sWk+x9ve3gFaJfKd84LIPQF61onElBxcANxjmD4ROuTzrmyrxu3paxFxNWSAfe3/fXT4
+         moNbZgDNJH0KDztjw43aHV8fY48mc7yJBK7cNT40f9mplU8YnSavMTjMNuhs2zNw3kTu
+         6nW/r9xsXDhIn8KApwkzL9UsMO2GIE96cdzkQ+iUaKsDwnpxo+eqz9cdFpltj2eODlXy
+         7vEw==
+X-Gm-Message-State: AC+VfDzk6ASBG9gcfgYMeeuGZLBpji4tKS1Ao4vAqFlqRkvzAUonI8rM
+        ua48hjZv7NJPP7uA7BvurJk2xr7/zDpiZ3plOMw=
+X-Google-Smtp-Source: ACHHUZ5qzHzd+aA8YOxF00DGxYrRuJgDbYOuvZESK2dR2HifWO/8GD9pCKskudbbvr8UsaZuio7iNQ==
+X-Received: by 2002:aa7:88cf:0:b0:625:efa4:4c01 with SMTP id k15-20020aa788cf000000b00625efa44c01mr5329631pff.3.1684422135734;
+        Thu, 18 May 2023 08:02:15 -0700 (PDT)
+Received: from [192.168.50.227] (n119236112082.netvigator.com. [119.236.112.82])
+        by smtp.gmail.com with ESMTPSA id e19-20020aa78c53000000b0063d2bb0d107sm1465767pfd.64.2023.05.18.08.02.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 08:02:15 -0700 (PDT)
+Message-ID: <ff35b3fa-5af8-ac9b-3fae-d60c422c4393@gmail.com>
+Date:   Thu, 18 May 2023 23:02:04 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [f2fs-dev] [PATCH 1/1] f2fs: pass I_NEW flag to trace event
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Chao Yu <chao@kernel.org>, Wu Bo <bo.wu@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <45eb63c6-a147-776a-99b5-7ac06848ede8@kernel.org>
+ <20230517035953.47810-1-bo.wu@vivo.com>
+ <94958409-f726-9da6-3b9f-76efa022ee9d@kernel.org>
+ <4a512db8-cfca-80a5-ba62-780f56d014f6@gmail.com>
+ <ZGVyOTqQy5ZhNvAr@google.com>
+Content-Language: en-US
+From:   Wu Bo <wubo.oduw@gmail.com>
+In-Reply-To: <ZGVyOTqQy5ZhNvAr@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,73 +80,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023, Bagas Sanjaya wrote:
-> On 5/18/23 20:57, Bagas Sanjaya wrote:
-> > Hi,
-> > 
-> > I notice a regression report on Bugzilla [1]. Quoting from it:
-> > 
-> >> I'm experiencing sporadic but persistent segmentation faults on the KVM
-> >> VMs I manage. These faults began appearing after upgrading from Linux
-> >> Kernel 4.x to 5.15.59. I further upgraded to 5.15.91 and transitioned the
-> >> userspace from Debian 10 (buster) to Debian 11 (bullseye), yet the issues
-> >> persist. Notably, the libc has also changed in the process as seen in the
-> >> following error logs:
+On 2023/5/18 08:32, Jaegeuk Kim wrote:
+> On 05/17, Wu Bo wrote:
+>> On 2023/5/17 16:36, Chao Yu wrote:
+>>> On 2023/5/17 11:59, Wu Bo wrote:
+>>>> On 2023/5/17 10:44, Chao Yu wrote:
+>>>>> On 2023/5/16 20:07, Wu Bo wrote:
+>>>>>> Modify the order between 'trace_f2fs_iget' &
+>>>>>> 'unlock_new_inode', so the
+>>>>>> I_NEW can pass to the trace event when the inode initialised.
+>>>>> Why is it needed? And trace_f2fs_iget() won't print inode->i_state?
+>>>> When connect a trace_probe to f2fs_iget, it will be able to
+>>>> determine whether
+>>>> the inode is new initialised in order to do different process.
+>>> I didn't get it, you want to hook __tracepoint_f2fs_iget() w/ your own
+>>> callback?
+>> Yes,  to use 'tracepoint_probe_register ' to register a probe at
+>> trace_f2fs_iget
+> Why?
 
-Was the host or guest kernel upgraded?  If the guest kernel was upgraded, it's
-unlikely, though still possible, that this is a KVM bug.
+Sorry, I don't understand what is your real question.
 
-> >> post.sh[21952]: bad frame in rt_sigreturn frame:000072db65961bb8
-> >> ip:6c25f82a9a5d sp:72db65962168 orax:ffffffffffffffff in
-> >> libc-2.28.so[6c25f8294000+147000]
-> >>
-> >> cron[7626]: bad frame in rt_sigreturn frame:000073ddebeb6ff8
-> >> ip:72ad9f44d594 sp:73ddebeb75a8 orax:ffffffffffffffff in
-> >> libc-2.28.so[72ad9f3a9000+147000]
-> >>
-> >> cron[64687]: bad frame in rt_sigreturn frame:000073265764b038
-> >> ip:67c7b5a0f14a sp:73265764b5f0 orax:ffffffffffffffff in
-> >> libc-2.31.so[67c7b596f000+159000]
-> >>
-> >> worker.py[54568]: bad frame in rt_sigreturn frame:000078eef6591cf8
-> >> ip:6c9f9b2a604e sp:78eef6592298 orax:ffffffffffffffff in
-> >> libpthread-2.31.so[6c9f9b29a000+10000]
-> >>
-> >>
-> >> The segmentation faults occur 1-3 times daily across approximately 1000
-> >> VMs running on hundreds of (supermicro, intel cpu) bare-metal servers.
-> >> Currently, there's no reliable way for me to reproduce the issue. I
-> >> initially considered this bug -
-> >> https://www.spinics.net/lists/linux-tip-commits/msg61293.html - as a
-> >> possible cause, but judging from the comments it likely isn't.
-> >>
-> >> The best approximation to a reproducer I have is a Python script that
-> >> initiates several child processes and continuously sends them a sigusr1
-> >> signal. Still, it takes a few hours to trigger the issue even when running
-> >> this script on several hundred VMs.
-> >>
-> >> Switching to the 6.x kernel isn't immediately feasible as these are
-> >> production systems with specific requirements. The transition is planned
-> >> but will likely take several months.
-> >>
-> >> I'm looking for suggestions on how to more reliably reproduce this
-> >> problem. Then I could try different old and new kernels and maybe narrow
-> >> it down.
-> > 
-> > See bugzilla for the full thread.
-> > 
-> > Anyway, I'm adding it to regzbot:
-> > 
-> > #regzbot introduced: v4.19..v5.15 https://bugzilla.kernel.org/show_bug.cgi?id=217457
-> > #regzbot title: bad frame in rt_sigreturn (libc-related?) regression after 5.15 upgrade
-> > 
-> 
-> Oops, I forgot to add the reporter:
-> 
-> #regzbot from: Theodor Milkov <tm@del.bg>
-> 
-> Sorry for inconvenience.
-> 
-> -- 
-> An old man doll... just what I always wanted! - Clara
-> 
+In my understanding, a trace_event is also a  non-volatile point in 
+kernel for probing.
+
+And for my case, I want to develop a tool by trace_probe to collect some 
+information.
+
+Thanks
+
+>
+>>> Thanks,
+>>>
+>>>>> Thanks,
+>>>>>
+>>>>>> Signed-off-by: Wu Bo <bo.wu@vivo.com>
+>>>>>> ---
+>>>>>>     fs/f2fs/inode.c | 2 +-
+>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>>>>>> index cf4327ad106c..caf959289fe7 100644
+>>>>>> --- a/fs/f2fs/inode.c
+>>>>>> +++ b/fs/f2fs/inode.c
+>>>>>> @@ -577,8 +577,8 @@ struct inode *f2fs_iget(struct super_block *sb,
+>>>>>> unsigned long ino)
+>>>>>>             file_dont_truncate(inode);
+>>>>>>         }
+>>>>>>     -    unlock_new_inode(inode);
+>>>>>>         trace_f2fs_iget(inode);
+>>>>>> +    unlock_new_inode(inode);
+>>>>>>         return inode;
+>>>>>>       bad_inode:
+>>>>>
+>>>>> _______________________________________________
+>>>>> Linux-f2fs-devel mailing list
+>>>>> Linux-f2fs-devel@lists.sourceforge.net
+>>>>> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+>>>>>
