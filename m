@@ -2,428 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531187079E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484E67079F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjERFvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 01:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S229765AbjERFzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 01:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjERFvr (ORCPT
+        with ESMTP id S229568AbjERFzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 01:51:47 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C671FE49;
-        Wed, 17 May 2023 22:51:45 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HMFhCh013340;
-        Wed, 17 May 2023 22:51:39 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=h5TMO00ETrLOVoBuYc6APgA6+967xXROx72pRVl/BCw=;
- b=ft+wGllask5CelhJOQnES51gHxWPsB6OCtrUohTiNU68utqWlix96I08NBmWnF3p/65m
- syyR3IE/TYKjhZSPxbUR/MiKKYAVLFRssDmygaXTUzOHoZVJsCaNlJ6Eko0w1dX53LaS
- NMS+t/BjEnokG/O0eMwsnUgcS6vGCqJrGKK1MG4P5c9Ts0BMg3lae/w56KZ0IFEzW2MR
- M/yklt6LA5NOu9UQ9P9RKZHbKml6ncZPmTS9JENjWworfXpZc/ywovauQJJCEvjxMoWa
- UhvvspINp91EN1XxRdPSxwymvK2+smMjWT80IYsVa7OsPpoqEhMSNHLLs2vHe7MgLFLl cg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3qn7jb9a0p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 17 May 2023 22:51:39 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 17 May
- 2023 22:51:37 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Wed, 17 May 2023 22:51:37 -0700
-Received: from localhost.localdomain (unknown [10.28.36.165])
-        by maili.marvell.com (Postfix) with ESMTP id 74C793F7062;
-        Wed, 17 May 2023 22:51:34 -0700 (PDT)
-From:   Ratheesh Kannoth <rkannoth@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <sbhatta@marvell.com>, <gakula@marvell.com>, <schalla@marvell.com>,
-        <hkelam@marvell.com>, "Ratheesh Kannoth" <rkannoth@marvell.com>
-Subject: [PATCH net-next v2] octeontx2-pf: Add support for page pool
-Date:   Thu, 18 May 2023 11:21:29 +0530
-Message-ID: <20230518055129.3129897-1-rkannoth@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 18 May 2023 01:55:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DD010F5;
+        Wed, 17 May 2023 22:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684389302; x=1715925302;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=tGSd2ndveozlp7aMyHG4OefEV8fScTkBhyYxa4n0A5g=;
+  b=wBi/cFHFQ9TrtHfOm38FNgx7fHyFhtK8yvyO17ScYrBo6+/oEd/f+le7
+   tqIAYWCCVsDitfx66TYA9BbJj9ffQS9hTtDN+k4XHZXKG5/aLSeyvB9Ae
+   scgE2s1z2adUyHN89JpUm7oEirco6g3zE5rZcX6QeR5p+F7a/3XkGna82
+   2scjPkm9PZCCbx7ZfoY9oyqTDikUgP/n4a2mZIBTkqfXLwzGTSQfx+cY8
+   YHs6FhrpRa9BLllNIOjy64fhguXsEtgamMxbKczDWmp8B/6yrBIxL1b/w
+   G+XqTv4Fr3nu1AmZ4nxwhB7K7s8OUz5P9rduL6+pepKJHRQ7jg1M2ryqb
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,284,1677567600"; 
+   d="scan'208";a="225873652"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 22:55:01 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 17 May 2023 22:55:01 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 17 May 2023 22:55:00 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fln34WFPs81EV1p1fhOyBNrHKyoyFRjaJ8Plwmm9Kg7sPid5HvxPOFcwouwqS/o48s6NjLNEq+FnOu0PHdQhqQDYazDx9ZY0FEeC+qYy5pCGQ2CSHv/JpONRw+FqNb7sVYY3r6BHpeiD1n3bC9JRWE7GNTGX39A2c5PgDVWSQVrPBvyIndVju+rgkI2J0yd+OVN7Fs7yDEoYfZhxVsW8XXwgTUjK18mI8YBqqRisERb6ou/CZtvnPTD1ewtK3Mp61hH5lEo0pKBXG+D4qqhsStVDtBwAdj7KHvypG4DWUgFoEVcjD2P1ylxOp8Mv+2DBEQZZZfAfCMVz+HTWjBymnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tGSd2ndveozlp7aMyHG4OefEV8fScTkBhyYxa4n0A5g=;
+ b=DnE1gNSg/gJbrYZ+tr4h+FTD37QfzElFOmLJouYVHKghDK4T+uBmDEv+eki2QCJRhbYjXmEG055tBuoXQiQ/SVupVSvUMy5R8nFBS/uCb2qFGtWpZWGjwE7XmGLiztnOO4MYLdP7mZYynfApTys3aB5GEeQc98BJI9lu84dwROsmlTYa3xkTVyW7EZg/V/z0Kaxw7cGSLzIQ/avExpzjYWCJDzCJbD7oTXbMiODb4recqoLVtxY4rbttmFCpN5OJU/YtylPeNq2Yoce5EO2e1Pa72U3MflmlZz5Bww7VfbKakWM13Tyjzxnbnx8lGhipUd9Ks2o1qj//caELbv7vFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tGSd2ndveozlp7aMyHG4OefEV8fScTkBhyYxa4n0A5g=;
+ b=rJNvMzj8A6icHm4muQfaxTtCePl5E1Ot4Ut5RufMGLWmmwlXM01+unZB8jeg1wG8Rge6xXvhUR5A3ZUZHGMjmFGPM0eaPOEobDQEatju/E70yzOP1qWDvJV9zSkN3DbSRjcZBHEUJGfiI+qVrrlT8HYQuWeon1XWlATaBrf/MeI=
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com (2603:10b6:a03:4c3::17)
+ by MW4PR11MB7029.namprd11.prod.outlook.com (2603:10b6:303:22e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Thu, 18 May
+ 2023 05:54:59 +0000
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be]) by SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 05:54:58 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Ryan.Wanner@microchip.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <linus.walleij@linaro.org>, <Ludovic.Desroches@microchip.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH 1/3] pinctrl: at91-pio4: Enable Push-Pull configuration
+Thread-Topic: [PATCH 1/3] pinctrl: at91-pio4: Enable Push-Pull configuration
+Thread-Index: AQHZiU1Gay4Js6/Z5k+xcK86PRuXHQ==
+Date:   Thu, 18 May 2023 05:54:58 +0000
+Message-ID: <c83ccbc9-bed9-1d2a-e181-02b105336701@microchip.com>
+References: <cover.1684313910.git.Ryan.Wanner@microchip.com>
+ <d898c31277f6bce6f7d830edf4332ff605498c7b.1684313910.git.Ryan.Wanner@microchip.com>
+ <c85c1f09-64c3-c8d4-7e8f-985665d1622e@microchip.com>
+In-Reply-To: <c85c1f09-64c3-c8d4-7e8f-985665d1622e@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ2PR11MB7648:EE_|MW4PR11MB7029:EE_
+x-ms-office365-filtering-correlation-id: c279a4ee-9567-462d-244c-08db576469f1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +dUsVHAeJEpH6vaDFF9YzZ1A4lyP/oVkVtob6ll0csTAEfUdCYKQHS/amNjYeRvHWMXBpEeYzuRl3Y1KxNwc9+7oHcclsxa595vD64EjEZHYrx6P1vEWncYEQ7P/WF1Y1ChBqDb76mZTFKNdwcib4ejmSbwZKwY8Cq8pd2IKT3z04rd9MxEUsW2uUiB0taBP4QenccgvgWQRVKIiDhrFZdvq3/wvh71lEKRV9XOcM71SpztEdgupJvb8cePajcByKAAObVjTnxlhjcE5lmeTc7/l1uEwWeCfFijoxhX8JyO45bFvM+T/rPmUbLagUa4KkpnAGe/k+Cs2seXwqUxnYqZk5T45YO8VBJMyDSJFYvfGoPtOKgtu6EK1KYAhkHJ4P9k4kSIRzktTcE5dLMq4j4tBR0eqTxv/mEi5lX3DJEss4mMX5BMVa7sIp8HdywEMnJ5gmHCWg/JVmmosa0VvXMUsYiRjeKNpPkTW2KQBmSXs7N+r6zJmp2GzjAT86fPEpoeGDEzRzuYjLwRnrgyEkLeIdff5VmrsBkqfZxN0khYDx6Rt/RXACQzQLobYendie4D1B9gd9tZZENM7bVTe/VUrXwnhNSEmFwaugH0Ia7hHa+jvAlEXPEXVyvs70V7v9Vtcsm5b0GaRG2ttFOUX9Im2VYN9CGvjVTAYqdZgtUk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7648.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(136003)(39860400002)(346002)(376002)(451199021)(2906002)(91956017)(41300700001)(54906003)(31696002)(86362001)(110136005)(71200400001)(478600001)(76116006)(4326008)(8676002)(64756008)(66946007)(66476007)(66446008)(31686004)(316002)(8936002)(5660300002)(6636002)(66556008)(186003)(966005)(38070700005)(6486002)(6512007)(38100700002)(26005)(6506007)(122000001)(53546011)(83380400001)(2616005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NTNvMnV2NFdZd2JuSm4wSTIyVWtaV2RSWENyZjBtRWtwSWR6OWFQb2N0Skdx?=
+ =?utf-8?B?Q29odjBlNytzUnVZYVZMS3ZVbEhTUjVaUkZ5a2VyL1ZtU3JacklnZmc2d055?=
+ =?utf-8?B?dG1RZmRWdjY4RytIemVyaWFRcE82NVdiSFVNQ1ZxbjU3N05XdlBOejZVeWl2?=
+ =?utf-8?B?OGpTMW5iVFZJWjBIcklqa1RYNnBuVEJJSnNyVHVPQVFZZWJVVjB1K0NEalRI?=
+ =?utf-8?B?c3BVOXo2Q1NsNmU1RzgxTnYxNlFaNTJ0L09SaE9IZEwrRTh3T1M4YWhWa1hz?=
+ =?utf-8?B?Y2VqRWlRaGRMSnhxUnA5dHhSWWd3WER4YlM1SE5pMnV6cm83RzVFQnVISWVh?=
+ =?utf-8?B?WmhhWVN1OVFUeW9ua0p0YjZYVmhLT0dqUnltN3JPMnVjQVI2RDRkL3JnWkZ2?=
+ =?utf-8?B?T3JvVTB4dnY2RVh0dTlrVHI0MTBoQzFHRlMvdEJZVFVSOFRmU25ucWxyNklw?=
+ =?utf-8?B?YjZSOTZ5SDJaVGRiNkFHOTB1b0xhZUZnYk0ybEJ3Y1h3SGd5bzBabUE3YzVQ?=
+ =?utf-8?B?VTJ2N0d3T1d6U1hSWEZHbHRnWmY1UDVJUGwvUDNDOU5ib01HUHBlVU9ZNUNt?=
+ =?utf-8?B?bHo5ZmMwTm9BajFiRGxkVHI4c3l3MklCUFVqbm5KM1Q1bTZxY3VuaVRhbVIy?=
+ =?utf-8?B?Y2tGQm1FVXpFbGNKam50MUhlMWVrSlU2eWxYRDZsQ003SEdkYWhsUHgwUWZG?=
+ =?utf-8?B?QmhBbkdNMUprMlpTQkIzVUc1ZDVXR2dOVjBTWWpDS3lpUVRscmhjcVVlbGoz?=
+ =?utf-8?B?enhsenRHZjRkWXFPZjZkemxyV2VEZkQ2YjhpQW0vKzRqUEFwOFc2eWNSWjRp?=
+ =?utf-8?B?SjhGSnkzandWSitLckJ5ak42YlNkdllBeElINEV4QitxVnpBcmdIME91M3BZ?=
+ =?utf-8?B?NE5KbGZmNHhGb2JsQkNIeGdiOC9SM2JoSGczNEZRbHV3REhuYmFFZWU5SjFw?=
+ =?utf-8?B?VzUyMWhGeXo3TjdBaUNaUHV4aGhCRmhhOGVOSS9HN2xubStDdENvbHVSRU1i?=
+ =?utf-8?B?QjFHVHhEbGVpd3ViRGwwaEYrTlZTNEtkcDN2ZDdRSW5BbnJDeXc4M0lJWE5C?=
+ =?utf-8?B?VG8yaG9CclNQRFhtT3oyWXNYNGFzbmJhOHp0blVHcUtqTEZJQkV0TmdtWVdi?=
+ =?utf-8?B?RWFVczNsTFcvZ1BUVnlseGl4UkdCOWVPVnNRTk16WGIwN1R1VkpjWHZ3SXFy?=
+ =?utf-8?B?S0NwYlUwYzNhUEpBbjJDZ1VPWS9udDZLTVV1dHhiYi81aWs3MElYUUlucFVq?=
+ =?utf-8?B?ZHhrZzAxaUF2RW4yaXNTbkJvZ0x3TWFqT0pkZkV2cnBSYXY2REdFTHRtSjNR?=
+ =?utf-8?B?UDM5YTVzUkNRMWVUM01WUlNjVENBZk5UbTc3cFJsQU43R1BweTFXMHpHMzBR?=
+ =?utf-8?B?THl0cHRZbWNubXN0ekVQZmhsTzZqS3R3R3RoajN0RmsvVjRjT3B3em5NZFZX?=
+ =?utf-8?B?SjVqYTcrWFViazhwYURONDVkRmdwTVBqS2pTMHI0TmZRWkNuYThxUkQ1MXE1?=
+ =?utf-8?B?YVd5RnVHRTNteDhCYmhvTGdBQkZLQUZtUDVNOHRrWXh0UGx5K3UvbXl2aVhG?=
+ =?utf-8?B?NGRvWlhHcloxYkN2Q3ZNbkJLaUJ4QlBYS3JqWlJ4TDd2RGdGR1hRRlpRdVpH?=
+ =?utf-8?B?dzBZOHNWeERjZHB5emJmNndTUG1Ici9UNnpEc1JXRWpzSEt0bEdRUHNWZkE2?=
+ =?utf-8?B?YWtmMnBnV3dNS2JyTEFyQnhmQ0N4bFNoRWNNb3MzVXRISmthcS9pV0NLblFZ?=
+ =?utf-8?B?WDBUUEZ6RGgyWHdPemFuTUN5dzJiYmorcHB0TW9PSHB0R1pQRm1RczZQeGZP?=
+ =?utf-8?B?czZablFFdkcrWmNabEQvMGNkK2xXcUpYVzl4V0U5MEZMUi8zZUN5UHZSQUp2?=
+ =?utf-8?B?MVBtanhtaEtsWEVNNzdPZ1BKcmtZZnVSdEZCNFB1a1hFcTMvMkZXa3RPd0tZ?=
+ =?utf-8?B?K1lyOVdUUTZSQndDNWRldHZKVlNKRmUwdUhhRFE2UjhjOXc2MFhxWEVZd0Rn?=
+ =?utf-8?B?WUducXVwbTJIMnc5cnppRUtRVTdkTXN1b2ltQlVVbGZLQ2RWRlRTOXh4bXo1?=
+ =?utf-8?B?YWJWbGhra2JkRU5Kc1ZJRUVnKzNaaVUrVEtMTmJyYnkwTm41T05ycnluMGJV?=
+ =?utf-8?Q?tsgnZP0HMnYZKAawWzHztyqiD?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <932802C8AA84F249BB013E91E9E59D18@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: Kwynbs7gz7UZrJDaItNOCnhPctI0n_Uj
-X-Proofpoint-ORIG-GUID: Kwynbs7gz7UZrJDaItNOCnhPctI0n_Uj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_03,2023-05-17_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7648.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c279a4ee-9567-462d-244c-08db576469f1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2023 05:54:58.8526
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aWS0uHri0maRVND/pG1kE+ByyZYLNQ3lr97F5jP1LDsEM67I0mgqRPMyplgpRjhVtyynUvUX+mqLYaUM6LrXn7ld+4a2k5zGfXKAnVFC7LA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7029
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Page pool for each rx queue enhance rx side performance
-by reclaiming buffers back to each queue specific pool. DMA
-mapping is done only for first allocation of buffers.
-As subsequent buffers allocation avoid DMA mapping,
-it results in performance improvement.
-
-Image        |  Performance with Linux kernel Packet Generator
------------- | -----------------------------------------------
-Vannila      |   3Mpps
-             |
-with this    |   42Mpps
-change	     |
--------------------------------------------------------------
-
-Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
----
-
-ChangeLog
-v1 -> v2:
- * Removed GFP_DMA flag
- * Returned correct err value
-
-v0 -> v1:
- * Removed CONFIG_PAGE_POOL #ifdefs in code
- * Used compound page APIs
- * Replaced page_pool_put_page API with page_pool_put_full_page API
----
- .../net/ethernet/marvell/octeontx2/Kconfig    |  1 +
- .../marvell/octeontx2/nic/otx2_common.c       | 75 ++++++++++++++++---
- .../marvell/octeontx2/nic/otx2_common.h       |  6 +-
- .../ethernet/marvell/octeontx2/nic/otx2_pf.c  | 11 ++-
- .../marvell/octeontx2/nic/otx2_txrx.c         | 19 +++--
- .../marvell/octeontx2/nic/otx2_txrx.h         |  1 +
- .../ethernet/marvell/octeontx2/nic/qos_sq.c   |  2 +-
- 7 files changed, 93 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-index 993ac180a5db..a32d85d6f599 100644
---- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
-+++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
-@@ -32,6 +32,7 @@ config OCTEONTX2_PF
- 	tristate "Marvell OcteonTX2 NIC Physical Function driver"
- 	select OCTEONTX2_MBOX
- 	select NET_DEVLINK
-+	select PAGE_POOL
- 	depends on (64BIT && COMPILE_TEST) || ARM64
- 	select DIMLIB
- 	depends on PCI
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index f9286648e45c..60476fd413e7 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -518,11 +518,32 @@ void otx2_config_irq_coalescing(struct otx2_nic *pfvf, int qidx)
- 		     (pfvf->hw.cq_ecount_wait - 1));
- }
- 
-+static int otx2_alloc_pool_buf(struct otx2_nic *pfvf, struct otx2_pool *pool,
-+			       dma_addr_t *dma)
-+{
-+	unsigned int offset = 0;
-+	struct page *page;
-+	size_t sz;
-+
-+	sz = SKB_DATA_ALIGN(pool->rbsize);
-+	sz = ALIGN(sz, OTX2_ALIGN);
-+
-+	page = page_pool_alloc_frag(pool->page_pool, &offset, sz, GFP_ATOMIC);
-+	if (unlikely(!page))
-+		return -ENOMEM;
-+
-+	*dma = page_pool_get_dma_addr(page) + offset;
-+	return 0;
-+}
-+
- static int __otx2_alloc_rbuf(struct otx2_nic *pfvf, struct otx2_pool *pool,
- 			     dma_addr_t *dma)
- {
- 	u8 *buf;
- 
-+	if (pool->page_pool)
-+		return otx2_alloc_pool_buf(pfvf, pool, dma);
-+
- 	buf = napi_alloc_frag_align(pool->rbsize, OTX2_ALIGN);
- 	if (unlikely(!buf))
- 		return -ENOMEM;
-@@ -1205,10 +1226,28 @@ void otx2_sq_free_sqbs(struct otx2_nic *pfvf)
- 	}
- }
- 
-+void otx2_free_bufs(struct otx2_nic *pfvf, struct otx2_pool *pool,
-+		    u64 iova, int size)
-+{
-+	u64 pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
-+	struct page *page = virt_to_head_page(phys_to_virt(pa));
-+
-+	if (pool->page_pool) {
-+		page_pool_put_full_page(pool->page_pool, page, true);
-+	} else {
-+		dma_unmap_page_attrs(pfvf->dev, iova, size,
-+				     DMA_FROM_DEVICE,
-+				     DMA_ATTR_SKIP_CPU_SYNC);
-+
-+		put_page(page);
-+	}
-+}
-+
- void otx2_free_aura_ptr(struct otx2_nic *pfvf, int type)
- {
- 	int pool_id, pool_start = 0, pool_end = 0, size = 0;
--	u64 iova, pa;
-+	struct otx2_pool *pool;
-+	u64 iova;
- 
- 	if (type == AURA_NIX_SQ) {
- 		pool_start = otx2_get_pool_idx(pfvf, type, 0);
-@@ -1224,15 +1263,13 @@ void otx2_free_aura_ptr(struct otx2_nic *pfvf, int type)
- 	/* Free SQB and RQB pointers from the aura pool */
- 	for (pool_id = pool_start; pool_id < pool_end; pool_id++) {
- 		iova = otx2_aura_allocptr(pfvf, pool_id);
-+		pool = &pfvf->qset.pool[pool_id];
- 		while (iova) {
- 			if (type == AURA_NIX_RQ)
- 				iova -= OTX2_HEAD_ROOM;
- 
--			pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
--			dma_unmap_page_attrs(pfvf->dev, iova, size,
--					     DMA_FROM_DEVICE,
--					     DMA_ATTR_SKIP_CPU_SYNC);
--			put_page(virt_to_page(phys_to_virt(pa)));
-+			otx2_free_bufs(pfvf, pool, iova, size);
-+
- 			iova = otx2_aura_allocptr(pfvf, pool_id);
- 		}
- 	}
-@@ -1250,6 +1287,8 @@ void otx2_aura_pool_free(struct otx2_nic *pfvf)
- 		pool = &pfvf->qset.pool[pool_id];
- 		qmem_free(pfvf->dev, pool->stack);
- 		qmem_free(pfvf->dev, pool->fc_addr);
-+		page_pool_destroy(pool->page_pool);
-+		pool->page_pool = NULL;
- 	}
- 	devm_kfree(pfvf->dev, pfvf->qset.pool);
- 	pfvf->qset.pool = NULL;
-@@ -1333,8 +1372,9 @@ int otx2_aura_init(struct otx2_nic *pfvf, int aura_id,
- }
- 
- int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
--		   int stack_pages, int numptrs, int buf_size)
-+		   int stack_pages, int numptrs, int buf_size, int type)
- {
-+	struct page_pool_params pp_params = { 0 };
- 	struct npa_aq_enq_req *aq;
- 	struct otx2_pool *pool;
- 	int err;
-@@ -1378,6 +1418,22 @@ int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
- 	aq->ctype = NPA_AQ_CTYPE_POOL;
- 	aq->op = NPA_AQ_INSTOP_INIT;
- 
-+	if (type != AURA_NIX_RQ) {
-+		pool->page_pool = NULL;
-+		return 0;
-+	}
-+
-+	pp_params.flags = PP_FLAG_PAGE_FRAG | PP_FLAG_DMA_MAP;
-+	pp_params.pool_size = numptrs;
-+	pp_params.nid = NUMA_NO_NODE;
-+	pp_params.dev = pfvf->dev;
-+	pp_params.dma_dir = DMA_FROM_DEVICE;
-+	pool->page_pool = page_pool_create(&pp_params);
-+	if (IS_ERR(pool->page_pool)) {
-+		netdev_err(pfvf->netdev, "Creation of page pool failed\n");
-+		return PTR_ERR(pool->page_pool);
-+	}
-+
- 	return 0;
- }
- 
-@@ -1412,7 +1468,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
- 
- 		/* Initialize pool context */
- 		err = otx2_pool_init(pfvf, pool_id, stack_pages,
--				     num_sqbs, hw->sqb_size);
-+				     num_sqbs, hw->sqb_size, AURA_NIX_SQ);
- 		if (err)
- 			goto fail;
- 	}
-@@ -1475,7 +1531,7 @@ int otx2_rq_aura_pool_init(struct otx2_nic *pfvf)
- 	}
- 	for (pool_id = 0; pool_id < hw->rqpool_cnt; pool_id++) {
- 		err = otx2_pool_init(pfvf, pool_id, stack_pages,
--				     num_ptrs, pfvf->rbsize);
-+				     num_ptrs, pfvf->rbsize, AURA_NIX_RQ);
- 		if (err)
- 			goto fail;
- 	}
-@@ -1659,7 +1715,6 @@ int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable)
- 	req->bpid_per_chan = 0;
- #endif
- 
--
- 	return otx2_sync_mbox_msg(&pfvf->mbox);
- }
- EXPORT_SYMBOL(otx2_nix_config_bp);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-index b2267c8bec37..a9ed15d1793a 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-@@ -976,7 +976,7 @@ int otx2_alloc_rbuf(struct otx2_nic *pfvf, struct otx2_pool *pool,
- int otx2_rxtx_enable(struct otx2_nic *pfvf, bool enable);
- void otx2_ctx_disable(struct mbox *mbox, int type, bool npa);
- int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable);
--void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq);
-+void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq, int qidx);
- void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq);
- int otx2_sq_init(struct otx2_nic *pfvf, u16 qidx, u16 sqb_aura);
- int otx2_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura);
-@@ -984,7 +984,7 @@ int cn10k_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura);
- int otx2_alloc_buffer(struct otx2_nic *pfvf, struct otx2_cq_queue *cq,
- 		      dma_addr_t *dma);
- int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
--		   int stack_pages, int numptrs, int buf_size);
-+		   int stack_pages, int numptrs, int buf_size, int type);
- int otx2_aura_init(struct otx2_nic *pfvf, int aura_id,
- 		   int pool_id, int numptrs);
- 
-@@ -1054,6 +1054,8 @@ u16 otx2_get_max_mtu(struct otx2_nic *pfvf);
- int otx2_handle_ntuple_tc_features(struct net_device *netdev,
- 				   netdev_features_t features);
- int otx2_smq_flush(struct otx2_nic *pfvf, int smq);
-+void otx2_free_bufs(struct otx2_nic *pfvf, struct otx2_pool *pool,
-+		    u64 iova, int size);
- 
- /* tc support */
- int otx2_init_tc(struct otx2_nic *nic);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-index e1883c3edda3..db3fcab1c8cd 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-@@ -1555,7 +1555,9 @@ static void otx2_free_hw_resources(struct otx2_nic *pf)
- 	struct nix_lf_free_req *free_req;
- 	struct mbox *mbox = &pf->mbox;
- 	struct otx2_cq_queue *cq;
-+	struct otx2_pool *pool;
- 	struct msg_req *req;
-+	int pool_id;
- 	int qidx;
- 
- 	/* Ensure all SQE are processed */
-@@ -1584,7 +1586,7 @@ static void otx2_free_hw_resources(struct otx2_nic *pf)
- 	for (qidx = 0; qidx < qset->cq_cnt; qidx++) {
- 		cq = &qset->cq[qidx];
- 		if (cq->cq_type == CQ_RX)
--			otx2_cleanup_rx_cqes(pf, cq);
-+			otx2_cleanup_rx_cqes(pf, cq, qidx);
- 		else
- 			otx2_cleanup_tx_cqes(pf, cq);
- 	}
-@@ -1594,6 +1596,13 @@ static void otx2_free_hw_resources(struct otx2_nic *pf)
- 	/* Free RQ buffer pointers*/
- 	otx2_free_aura_ptr(pf, AURA_NIX_RQ);
- 
-+	for (qidx = 0; qidx < pf->hw.rx_queues; qidx++) {
-+		pool_id = otx2_get_pool_idx(pf, AURA_NIX_RQ, qidx);
-+		pool = &pf->qset.pool[pool_id];
-+		page_pool_destroy(pool->page_pool);
-+		pool->page_pool = NULL;
-+	}
-+
- 	otx2_free_cq_res(pf);
- 
- 	/* Free all ingress bandwidth profiles allocated */
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-index e288f46b23a8..37d4e4b73816 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-@@ -217,9 +217,6 @@ static bool otx2_skb_add_frag(struct otx2_nic *pfvf, struct sk_buff *skb,
- 		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
- 				va - page_address(page) + off,
- 				len - off, pfvf->rbsize);
--
--		otx2_dma_unmap_page(pfvf, iova - OTX2_HEAD_ROOM,
--				    pfvf->rbsize, DMA_FROM_DEVICE);
- 		return true;
- 	}
- 
-@@ -382,6 +379,8 @@ static void otx2_rcv_pkt_handler(struct otx2_nic *pfvf,
- 	if (pfvf->netdev->features & NETIF_F_RXCSUM)
- 		skb->ip_summed = CHECKSUM_UNNECESSARY;
- 
-+	skb_mark_for_recycle(skb);
-+
- 	napi_gro_frags(napi);
- }
- 
-@@ -1186,11 +1185,13 @@ bool otx2_sq_append_skb(struct net_device *netdev, struct otx2_snd_queue *sq,
- }
- EXPORT_SYMBOL(otx2_sq_append_skb);
- 
--void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
-+void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq, int qidx)
- {
- 	struct nix_cqe_rx_s *cqe;
- 	int processed_cqe = 0;
--	u64 iova, pa;
-+	struct otx2_pool *pool;
-+	u16 pool_id;
-+	u64 iova;
- 
- 	if (pfvf->xdp_prog)
- 		xdp_rxq_info_unreg(&cq->xdp_rxq);
-@@ -1198,6 +1199,9 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
- 	if (otx2_nix_cq_op_status(pfvf, cq) || !cq->pend_cqe)
- 		return;
- 
-+	pool_id = otx2_get_pool_idx(pfvf, AURA_NIX_RQ, qidx);
-+	pool = &pfvf->qset.pool[pool_id];
-+
- 	while (cq->pend_cqe) {
- 		cqe = (struct nix_cqe_rx_s *)otx2_get_next_cqe(cq);
- 		processed_cqe++;
-@@ -1210,9 +1214,8 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
- 			continue;
- 		}
- 		iova = cqe->sg.seg_addr - OTX2_HEAD_ROOM;
--		pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
--		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize, DMA_FROM_DEVICE);
--		put_page(virt_to_page(phys_to_virt(pa)));
-+
-+		otx2_free_bufs(pfvf, pool, iova, pfvf->rbsize);
- 	}
- 
- 	/* Free CQEs to HW */
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
-index 7ab6db9a986f..b5d689eeff80 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
-@@ -118,6 +118,7 @@ struct otx2_cq_poll {
- struct otx2_pool {
- 	struct qmem		*stack;
- 	struct qmem		*fc_addr;
-+	struct page_pool	*page_pool;
- 	u16			rbsize;
- };
- 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c b/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
-index d96ed29c1567..9d887bfc3108 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
-@@ -63,7 +63,7 @@ static int otx2_qos_sq_aura_pool_init(struct otx2_nic *pfvf, int qidx)
- 
- 	/* Initialize pool context */
- 	err = otx2_pool_init(pfvf, pool_id, stack_pages,
--			     num_sqbs, hw->sqb_size);
-+			     num_sqbs, hw->sqb_size, AURA_NIX_SQ);
- 	if (err)
- 		goto aura_free;
- 
--- 
-2.25.1
-
+T24gMTguMDUuMjAyMyAwODo0MCwgQ2xhdWRpdSBCZXpuZWEgLSBNMTgwNjMgd3JvdGU6DQo+IE9u
+IDE3LjA1LjIwMjMgMTQ6NTQsIFJ5YW4uV2FubmVyQG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+PiBG
+cm9tOiBSeWFuIFdhbm5lciA8Unlhbi5XYW5uZXJAbWljcm9jaGlwLmNvbT4NCj4+DQo+PiBFbmFi
+bGUgcHVzaC1wdWxsIGNvbmZpZ3VyYXRpb24uIFJlbW92ZSBpbnRlZ2VyIHZhbHVlIGFyZ3VtZW50
+IGZyb20NCj4+IG9wZW4tZHJhaW4gY29uZmlndXJhdGlvbiBhcyBpdCBpcyBkaXNjYXJkZWQgd2hl
+biBwaW5jb25mIGZ1bmN0aW9uIGlzDQo+PiBjYWxsZWQgZnJvbSBncGlvbGliLg0KPiANCj4gQUZB
+SUNUIGl0IGlzIHN0aWxsIHRha2VuIGludG8gYWNjb3VudCB3aGVuIHBhc3NlZCB0b3VnaCBkcml2
+ZS1vcGVuLWRyYWluIERUDQo+IHByb3BlcnR5IGJ1dCBhdCB0aGUgbW9tZW50IHRoZXJlIGFyZSBu
+byBkZXZpY2UgdHJlZXMgdXNpbmcgdGhpcyBwcm9wZXJ0eS4NCg0KYWgsIGlnbm9yZSB0aGlzIGFz
+IEkndmUganVzdCBzYXcgeW91ciBxdWVzdGlvbiBhYm91dCB0aGlzIGhlcmU6DQpodHRwczovL2xv
+cmUua2VybmVsLm9yZy9hbGwvMTIwMTE3YjYtZmVkYS1lN2FhLTRmMDktYTEyNmEwNzQ3Mzg4QG1p
+Y3JvY2hpcC5jb20vDQoNCj4gDQo+PiBBZGQgcHVzaC1wdWxsIGRvIGRlYnVnIGFuZCBnZXQgZnVu
+Y3Rpb25zLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFJ5YW4gV2FubmVyIDxSeWFuLldhbm5lckBt
+aWNyb2NoaXAuY29tPg0KPj4gLS0tDQo+PiAgZHJpdmVycy9waW5jdHJsL3BpbmN0cmwtYXQ5MS1w
+aW80LmMgfCAxNSArKysrKysrKysrKy0tLS0NCj4+ICAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0
+aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9waW5j
+dHJsL3BpbmN0cmwtYXQ5MS1waW80LmMgYi9kcml2ZXJzL3BpbmN0cmwvcGluY3RybC1hdDkxLXBp
+bzQuYw0KPj4gaW5kZXggMmZlNDBhY2I2YTNlLi4zYzM5ZDYyYmJjM2MgMTAwNjQ0DQo+PiAtLS0g
+YS9kcml2ZXJzL3BpbmN0cmwvcGluY3RybC1hdDkxLXBpbzQuYw0KPj4gKysrIGIvZHJpdmVycy9w
+aW5jdHJsL3BpbmN0cmwtYXQ5MS1waW80LmMNCj4+IEBAIC03NjIsNiArNzYyLDExIEBAIHN0YXRp
+YyBpbnQgYXRtZWxfY29uZl9waW5fY29uZmlnX2dyb3VwX2dldChzdHJ1Y3QgcGluY3RybF9kZXYg
+KnBjdGxkZXYsDQo+PiAgCQkJcmV0dXJuIC1FSU5WQUw7DQo+PiAgCQlhcmcgPSAxOw0KPj4gIAkJ
+YnJlYWs7DQo+PiArCWNhc2UgUElOX0NPTkZJR19EUklWRV9QVVNIX1BVTEw6DQo+PiArCQlpZiAo
+cmVzICYgQVRNRUxfUElPX09QRF9NQVNLKQ0KPj4gKwkJCXJldHVybiAtRUlOVkFMOw0KPj4gKwkJ
+YXJnID0gMTsNCj4+ICsJCWJyZWFrOw0KPj4gIAljYXNlIFBJTl9DT05GSUdfSU5QVVRfU0NITUlU
+VF9FTkFCTEU6DQo+PiAgCQlpZiAoIShyZXMgJiBBVE1FTF9QSU9fU0NITUlUVF9NQVNLKSkNCj4+
+ICAJCQlyZXR1cm4gLUVJTlZBTDsNCj4+IEBAIC04MjcsMTAgKzgzMiwxMCBAQCBzdGF0aWMgaW50
+IGF0bWVsX2NvbmZfcGluX2NvbmZpZ19ncm91cF9zZXQoc3RydWN0IHBpbmN0cmxfZGV2ICpwY3Rs
+ZGV2LA0KPj4gIAkJCWNvbmYgJj0gKH5BVE1FTF9QSU9fUFVFTl9NQVNLKTsNCj4+ICAJCQlicmVh
+azsNCj4+ICAJCWNhc2UgUElOX0NPTkZJR19EUklWRV9PUEVOX0RSQUlOOg0KPj4gLQkJCWlmIChh
+cmcgPT0gMCkNCj4+IC0JCQkJY29uZiAmPSAofkFUTUVMX1BJT19PUERfTUFTSyk7DQo+PiAtCQkJ
+ZWxzZQ0KPj4gLQkJCQljb25mIHw9IEFUTUVMX1BJT19PUERfTUFTSzsNCj4+ICsJCQljb25mIHw9
+IEFUTUVMX1BJT19PUERfTUFTSzsNCj4+ICsJCQlicmVhazsNCj4+ICsJCWNhc2UgUElOX0NPTkZJ
+R19EUklWRV9QVVNIX1BVTEw6DQo+PiArCQkJY29uZiAmPSAofkFUTUVMX1BJT19PUERfTUFTSyk7
+DQo+PiAgCQkJYnJlYWs7DQo+PiAgCQljYXNlIFBJTl9DT05GSUdfSU5QVVRfU0NITUlUVF9FTkFC
+TEU6DQo+PiAgCQkJaWYgKGFyZyA9PSAwKQ0KPj4gQEAgLTk0OCw2ICs5NTMsOCBAQCBzdGF0aWMg
+dm9pZCBhdG1lbF9jb25mX3Bpbl9jb25maWdfZGJnX3Nob3coc3RydWN0IHBpbmN0cmxfZGV2ICpw
+Y3RsZGV2LA0KPj4gIAkJc2VxX3ByaW50ZihzLCAiJXMgIiwgImRlYm91bmNlIik7DQo+PiAgCWlm
+IChjb25mICYgQVRNRUxfUElPX09QRF9NQVNLKQ0KPj4gIAkJc2VxX3ByaW50ZihzLCAiJXMgIiwg
+Im9wZW4tZHJhaW4iKTsNCj4+ICsJaWYgKCEoY29uZiAmIEFUTUVMX1BJT19PUERfTUFTSykpDQo+
+IA0KPiBlbHNlIHdvdWxkIGZpdCBiZXR0ZXIgaGVyZS4NCj4gDQo+PiArCQlzZXFfcHJpbnRmKHMs
+ICIlcyAiLCAicHVzaC1wdWxsIik7DQo+PiAgCWlmIChjb25mICYgQVRNRUxfUElPX1NDSE1JVFRf
+TUFTSykNCj4+ICAJCXNlcV9wcmludGYocywgIiVzICIsICJzY2htaXR0Iik7DQo+PiAgCWlmIChh
+dG1lbF9waW9jdHJsLT5zbGV3X3JhdGVfc3VwcG9ydCAmJiAoY29uZiAmIEFUTUVMX1BJT19TUl9N
+QVNLKSkNCj4gDQoNCg==
