@@ -2,170 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FCA70894F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 22:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F15C708959
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 22:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjERUSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 16:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S229879AbjERUUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 16:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjERUSW (ORCPT
+        with ESMTP id S229826AbjERUUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 16:18:22 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D827010CF
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:18:20 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-561e5014336so18121697b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:18:20 -0700 (PDT)
+        Thu, 18 May 2023 16:20:47 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9838B10D2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:20:45 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510e5a8704bso544a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:20:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684441100; x=1687033100;
+        d=google.com; s=20221208; t=1684441244; x=1687033244;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vT9t62V6Ng7zAzJOoOv8Omp/rmWX41+dyHJ3EkYyjTs=;
-        b=UvYfhpIVnvt2TG2FBhPNupz8v8wmMjb+Y8gwjNSxEwf9KsJDSKtsVecFMrvgZO9g19
-         VR+kBs2SfEQriq5GBs+0kWDwKH9vyzNhGpjUXdYReuT5CZGlC5VUM0owPTmWoW2Nl1qF
-         ioggPgigCgmPDSEvzhoXfCYLd0/ODUNGMbznkbCyuu96JD+3Lb7iBgXbF8jHPFJgtgoT
-         iK/XvR9VCexp534pXTTUtTZSKmZzQWEOY+kfs3J4YdrrZGYRYYa+lCnTIeWGuSiY/HKi
-         gFd0GX27TAApjMknMfrCppRx106BhErdG/4EDlDNru1XKOhcSpuRXpXXXv2GwpEi88yg
-         T/YA==
+        bh=MTWuRRNk/cl6sDlbBMZskmGX+zk6elTnHmxsNN+hPKI=;
+        b=rdm8g1VfSvgnUqlC2P98NKJnhO16smcqE5rlZtC93FgGVUdOwnqPhxBW1aoWXVefas
+         NlmhhOfi6kUSpGnQRR32JUlqq7QQbq7nVf8d44+k77elnlG7VRB7WfOC4LLxUt0RmEFO
+         r3c+BwOPW5JMd/Pj6FZKqgV67+Xtp1lK+4l1251jlNuhpWsTR9xsKBq64zaNrHtu2/jx
+         Ck+gYRhuh8cKvF995++9baMmAtCxMnP3AKVUEGiMw36yXFaIApXBSP5dir+3vSkFp9Ay
+         2UtydFJ911sxfhPxw75zc5C2dbqjJ3YJcUCbLJfYgeZM/d7sWU9r44yAwu1Hzq9csPsm
+         8HVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684441100; x=1687033100;
+        d=1e100.net; s=20221208; t=1684441244; x=1687033244;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vT9t62V6Ng7zAzJOoOv8Omp/rmWX41+dyHJ3EkYyjTs=;
-        b=aDoTKdc8FHcz2kxhP5Dmzy2CTVZ9c31TRBbWlMmqNiMV8o7Bc9Gu0AWauCCx50r0VL
-         FXihRsJ456b5UpK6ip/jOHC5Pr4zglVrg7b++MLNOSoG6P2eToY5dyWS0qtFHv+qC1Y8
-         aD3eOoV9rF0Mfa5hXUXqcidJFyoz4evaH0gmR6r0vOKHajIEnXjY5MHxut4PDzTa6bJY
-         pZVGjgBtezAa/0LB0SlDSZs2vcGL2AZ4zzfIF1Y5sOc4SnKhCcqjPK1WYtUj5tOVzUpz
-         9D7TVVh4GL401nHSyGbqiMaQpDAzrFKhd7rF9ikEHeC/YXfLR/GiR049AHkjsnxVNtiP
-         bfPA==
-X-Gm-Message-State: AC+VfDyIUQ6NYWEzmQSten+mYcCb8in8fPazaoAj50pjMkhfU75W8eH6
-        RQ7LZN0qGPq2QU9aDA66eAOFFBQ/0ZQAsyI/2fh/
-X-Google-Smtp-Source: ACHHUZ5kqEcrFMzgs1IizDsrp297c/mz4qZ+Tcc3WrLuNQoy0GHcwcv9vxWknXnTtkZJar+k9ytS2C9NEkslq9O5lg4=
-X-Received: by 2002:a0d:d40f:0:b0:561:cb5c:17ac with SMTP id
- w15-20020a0dd40f000000b00561cb5c17acmr2511962ywd.27.1684441099971; Thu, 18
- May 2023 13:18:19 -0700 (PDT)
+        bh=MTWuRRNk/cl6sDlbBMZskmGX+zk6elTnHmxsNN+hPKI=;
+        b=J8pJJ8GVwhFha9RKhrqSKZCEmDIrHpuR06QN1iGOtyFWc63p8PtthVKowJ22RXZr/8
+         6P30lq+HqbRIeLMJfsWf/G/k9dLXusTXhAiB1+CLCRnBYAnA4NPFcALSoPrTnLX7lBqt
+         hdTtThK6vjA1cMt8W3rkgFikPlIaAoc8OM2D1aZOICrE2KFUfrmF7dREItzzob/FdqYn
+         Xann2gGEa44zUd3y9d82TyXXXjZmtmjyM/VSpgfyE/JO2nPoBArymly+F85ZWJ+uUxRq
+         9i4/pxZdZBXjWnBQzRAO+F7lK8u8QhxB4bkIhQJGAljYnIXGnUjsL3QsVtOvsOtcJCFp
+         cgZQ==
+X-Gm-Message-State: AC+VfDzUIfdqRvnF0f+6ax0Dq0XDhdYPdZwpYgzdmNRKyxxFMRN7jUQa
+        5JPpshjUibdX05Y/8jLmAIsNpkVkkjfPqy6QqgFFjw==
+X-Google-Smtp-Source: ACHHUZ4szDopDyKvT5uuGOC/RGIO4PSKNo0vEobwjmRHQfdAHmO+IiH6Y82C1wQQUgdrCaYZFjmP9jsUjXLcFNRwos4=
+X-Received: by 2002:a50:9ee3:0:b0:50b:f6ce:2f3d with SMTP id
+ a90-20020a509ee3000000b0050bf6ce2f3dmr4467edf.0.1684441243652; Thu, 18 May
+ 2023 13:20:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230511123213.722912-1-cgzones@googlemail.com> <6301fdfd0927df2b2fd7a4f2b384e477.paul@paul-moore.com>
-In-Reply-To: <6301fdfd0927df2b2fd7a4f2b384e477.paul@paul-moore.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 18 May 2023 16:18:09 -0400
-Message-ID: <CAHC9VhSSA04wzPFgx_Z4jf1gOdEO40hU-augjMqX1uGd-eHLQA@mail.gmail.com>
-Subject: Re: [PATCH] selinux: deprecated fs ocon
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        linux-kernel@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+ <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+ <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com> <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
+ <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com> <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
+ <b69f6809-b483-158f-8be9-4976fad918d8@intel.com> <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
+ <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com>
+In-Reply-To: <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Thu, 18 May 2023 13:20:06 -0700
+Message-ID: <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
+        jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 1:56=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
-> On May 11, 2023 =3D?UTF-8?q?Christian=3D20G=3DC3=3DB6ttsche?=3D <cgzones@=
-googlemail.com> wrote:
-> >
-> > The object context type `fs`, not to be confused with the well used
-> > object context type `fscon`, was introduced in the initial git commit
-> > 1da177e4c3f4 ("Linux-2.6.12-rc2") but never actually used since.
-> >
-> > The paper "A Security Policy Configuration for the Security-Enhanced
-> > Linux" [1] mentions it under `7.2 File System Contexts` but also states=
-:
-> >
-> >     Currently, this configuration is unused.
-> >
-> > The policy statement defining such object contexts is `fscon`, e.g.:
-> >
-> >     fscon 2 3 gen_context(system_u:object_r:conA_t,s0) gen_context(syst=
-em_u:object_r:conB_t,s0)
-> >
-> > It is not documented at selinuxproject.org or in the SELinux notebook
-> > and not supported by the Reference Policy buildsystem - the statement i=
-s
-> > not properly sorted - and thus not used in the Reference or Fedora
-> > Policy.
-> >
-> > Print a warning message at policy load for each such object context:
-> >
-> >     SELinux:  void and deprecated fs ocon 02:03
-> >
-> > This topic was initially highlighted by Nicolas Iooss [2].
-> >
-> > [1]: https://media.defense.gov/2021/Jul/29/2002815735/-1/-1/0/SELINUX-S=
-ECURITY-POLICY-CONFIGURATION-REPORT.PDF
-> > [2]: https://lore.kernel.org/selinux/CAJfZ7=3DmP2eJaq2BfO3y0VnwUJaY2cS2=
-p=3DHZMN71z1pKjzaT0Eg@mail.gmail.com/
-> >
-> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> > ---
-> >  security/selinux/ss/policydb.c | 4 ++++
-> >  security/selinux/ss/policydb.h | 2 +-
-> >  2 files changed, 5 insertions(+), 1 deletion(-)
->
-> Thanks, this is a nice catch, although some minor suggestions below ...
->
-> > diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/polic=
-ydb.c
-> > index 97c0074f9312..31b08b34c722 100644
-> > --- a/security/selinux/ss/policydb.c
-> > +++ b/security/selinux/ss/policydb.c
-> > @@ -2257,6 +2257,10 @@ static int ocontext_read(struct policydb *p, con=
-st struct policydb_compat_info *
-> >                               if (rc)
-> >                                       goto out;
-> >
-> > +                             if (i =3D=3D OCON_FS)
-> > +                                     pr_warn("SELinux:  void and depre=
-cated fs ocon %s\n",
-> > +                                             c->u.name);
->
-> Instead of having to check if 'i =3D=3D OCON_FS', why not simply put the
-> pr_warn() call up in the OCON_FS case block on line ~2249 and let it
-> continue to fallthrough to the OCON_NETIF block?
+Hello Dave,
 
-Bah, nevermind, you need to leave it here because of the 'c->u.name'
-in the pr_warn().  If you're okay with me adjusting the deprecation
-comment (below) during the merge I'll can merge this now ... ?
+Thanks for your email.
 
-> >                               rc =3D context_read_and_validate(&c->cont=
-ext[0], p, fp);
-> >                               if (rc)
-> >                                       goto out;
-> > diff --git a/security/selinux/ss/policydb.h b/security/selinux/ss/polic=
-ydb.h
-> > index ffc4e7bad205..39cd6222e1a8 100644
-> > --- a/security/selinux/ss/policydb.h
-> > +++ b/security/selinux/ss/policydb.h
-> > @@ -225,7 +225,7 @@ struct genfs {
-> >
-> >  /* object context array indices */
-> >  #define OCON_ISID    0 /* initial SIDs */
-> > -#define OCON_FS              1 /* unlabeled file systems */
-> > +#define OCON_FS              1 /* unlabeled file systems (deprecated i=
-n 6.5) */
+On Thu, May 18, 2023 at 8:38=E2=80=AFAM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
 >
-> Since you are likely re-spinning this (see above), I would just leave
-> it as "(deprecated)"; those that want to know where it was deprecated
-> can always check the git log/tags.
+> On 5/17/23 16:48, Jeff Xu wrote:
+> > However, there are a few challenges I have not yet worked through.
+> > First, the code needs to track when the first signaling entry occurs
+> > (saving the PKRU register to the thread struct) and when it is last
+> > returned (restoring the PKRU register from the thread struct).
 >
-> >  #define OCON_PORT    2 /* TCP and UDP port numbers */
-> >  #define OCON_NETIF   3 /* network interfaces */
-> >  #define OCON_NODE    4 /* nodes */
-> > --
-> > 2.40.1
+> Would tracking signal "depth" work in the face of things like siglongjmp?
+>
+Thank you for your question! I am eager to learn more about this area
+and I worry about blind spots. I will investigate and get back to you.
 
---=20
-paul-moore.com
+> Taking a step back...
+>
+> Here's my concern about this whole thing: it's headed down a rabbit hole
+> which is *highly* specialized both in the apps that will use it and the
+> attacks it will mitigate.  It probably *requires* turning off a bunch of
+> syscalls (like io_uring) that folks kinda like in general.
+>
+ChromeOS currently disabled io_uring, but it is not required to do so.
+io_uring supports the IORING_OP_MADVICE operation, which calls the
+do_madvise() function. This means that io_uring will have the same
+pkey checks as the madvice() system call.  From that perspective, we
+will fully support io_uring for this feature.
+
+> We're balancing that highly specialized mitigation with a feature that
+> add new ABI, touches core memory management code and signal handling.
+>
+The ABI change uses the existing flag field in pkey_alloc() which is
+reserved. The implementation is backward compatible with all existing
+pkey usages in both kernel and user space.  Or do you have other
+concerns about ABI in mind ?
+
+Yes, you are right about the risk of touching core mm code. To
+minimize the risk, I try to control the scope of the change (it is
+about 3 lines in mprotect, more in munmap but really just 3 effective
+lines from syscall entry). I added new self-tests in mm to make sure
+it doesn't regress in api behavior. I run those tests before and after
+my kernel code change to make sure the behavior remains the same, I
+tested it on 5.15 and 6.1 and 6.4-rc1.  Actually, the testing
+discovered a behavior change for mprotect() between 6.1 and 6.4  (not
+from this patch, there are refactoring works going on in mm) see this
+thread [1]
+I hope those steps will help to mitigate the risk.
+
+Agreed on signaling handling is a tough part: what do you think about
+the approach (modifying PKRU from saved stack after XSAVE), is there a
+blocker ?
+
+> On the x86 side, PKRU is a painfully special snowflake.  It's exposed in
+> the "XSAVE" ABIs, but not actually managed *with* XSAVE in the kernel.
+> This would be making it an even more special snowflake because it would
+
+I admit I'm quite ignorant on XSAVE  to understand the above
+statement, and how that is related. Could you explain it to me please
+? And what is in your mind that might improve the situation ?
+
+> need new altstack ABI and handling.
+>
+I thought adding protected memory support to signaling handling is an
+independent project with its own weight. As Jann Horn points out in
+[2]:  "we could prevent the attacker from corrupting the signal
+context if we can protect the signal stack with a pkey."   However,
+the kernel will send SIGSEGV when the stack is protected by PKEY,  so
+there is a benefit to make this work.  (Maybe Jann can share some more
+thoughts on the benefits)
+
+And I believe we could do this in a way with minimum ABI change, as below:
+- allocate PKEY with a new flag (PKEY_ALTSTACK)
+- at sigaltstack() call, detect the memory is PKEY_ALTSTACK protected,
+(similar as what mprotect does in this patch) and save it along with
+stack address/size.
+- at signaling handling, use the saved info to fill in PKRU.
+The ABI change is similar to PKEY_ENFORCE_API, and there is no
+backward compatibility issue.
+
+Will these mentioned help our case ? What do you think ?
+
+(Stephan has more info on gains,  as far as I know, V8 engineers have
+worked/thought really hard to come to a suitable solution to make
+chrome browser safer)
+
+[1] https://lore.kernel.org/linux-mm/20230516165754.pocx4kaagn3yyw3r@revolv=
+er/T/
+[2] https://docs.google.com/document/d/1OlnJbR5TMoaOAJsf4hHOc-FdTmYK2aDUI7d=
+2hfCZSOo/edit?resourcekey=3D0-v9UJXONYsnG5PlCBbcYqIw#
+
+Thanks!
+Best regards,
+-Jeff
