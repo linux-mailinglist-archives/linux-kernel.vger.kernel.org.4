@@ -2,152 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593E67086C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED13E7086E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjERR2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S229634AbjERR3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjERR2K (ORCPT
+        with ESMTP id S230071AbjERR3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:28:10 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA276E46;
-        Thu, 18 May 2023 10:28:08 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CB99A20FB193;
-        Thu, 18 May 2023 10:28:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CB99A20FB193
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1684430888;
-        bh=Z+BpnlCktMUYP6DQ/MtmLt1ScIRlrfnbfip3prrS7PM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DLHhwpYSirb2eD7DNpwsVlAn2BQVhRLG+MIjzJpEeSXJ2XbORdIPcoJUw3TNNxqN9
-         acvSEFaQQdorx3Fdp85Ifvuo3cjVkimxp8nkRY8IqrsKLX+Njat1z+/c7tsUcHQoNw
-         I4grDO3ClzegD+ry3i5gENKby74D1fS4gx2zQ02Q=
-Date:   Thu, 18 May 2023 10:28:02 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Thaler <dthaler@microsoft.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-ID: <20230518172802.GA71@W11-BEAU-MD.localdomain>
-References: <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
- <20230516212658.2f5cc2c6@gandalf.local.home>
- <20230517165028.GA71@W11-BEAU-MD.localdomain>
- <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
- <20230518001916.GB254@W11-BEAU-MD.localdomain>
- <CAADnVQJwK3p1QyYEvAn9B86M4nkX69kuUvx2W0Yqwy0e=RSPPg@mail.gmail.com>
- <20230518011814.GA294@W11-BEAU-MD.localdomain>
- <20230517220800.3d4cbad2@gandalf.local.home>
- <CAADnVQLtTOjHG=k5uwP_zrM_af4RdS8d5zgmLnVFSmq_=5m0Cg@mail.gmail.com>
- <20230518093600.3f119d68@rorschach.local.home>
+        Thu, 18 May 2023 13:29:16 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60E510F8;
+        Thu, 18 May 2023 10:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684430940; x=1715966940;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YbB0ITNWC6W+DKq+pyGIH80h6yd4xEjccS7jew/3CTQ=;
+  b=LvgOCBPppG56F7c62H+OqHCOLayG5MSgAP7pjnVJmAVRoe8ymVZg/7HW
+   OXdAsRuXNnXbphEGwy8OLEdPFt9UCpjQGWIrgNAkTK1a/tUVuU3PaKppv
+   KR5rTNtDJxYikVk6lOHp2cenrRpo4rXwTbkyHjNo2IfmXaa28VQ57vZeo
+   7vJh3lq5M9L95dDhKwdf7StfZZD/8FscmggqN0QcYHRhWbCn12XX4l0tE
+   0lsvmtuiY2BkHOkiTmpL9edIjlLbi5JyeEHFlfej4k82yLkTeQozm6BZl
+   jfVslEHNeLHTKFXBiJbgwtiZw6BIOgdqnqwS0a+IbABS/M87FTFp8vnq9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="354474558"
+X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
+   d="scan'208";a="354474558"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 10:28:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="702214993"
+X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
+   d="scan'208";a="702214993"
+Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.209.81.123]) ([10.209.81.123])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 10:28:58 -0700
+Message-ID: <cabdd839-71d5-aabb-aee6-d37ebcabf2ab@intel.com>
+Date:   Thu, 18 May 2023 10:28:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230518093600.3f119d68@rorschach.local.home>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 10/20] x86: xen: add missing prototypes
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>, x86@kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230516193549.544673-1-arnd@kernel.org>
+ <20230516193549.544673-11-arnd@kernel.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230516193549.544673-11-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 09:36:00AM -0400, Steven Rostedt wrote:
-> On Wed, 17 May 2023 20:14:31 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On 5/16/23 12:35, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> > On Wed, May 17, 2023 at 7:08 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > > The delete IOCTL is different than reg/unreg. I don't see a problem with
-> > > adding a CAP_SYSADMIN check on the delete IOCTL (and other delete paths)
-> > > to prevent this. It shouldn't affect anything we are doing to add this
-> > > and it makes it so non-admins cannot delete any events if they are given
-> > > write access to the user_events_data file.  
-> > 
-> > sysadmin for delete is a pointless.
-> > user_events_ioctl_reg() has the same issue.
-> > Two different processes using you fancy TRACELOGGING_DEFINE_PROVIDER()
-> > macro and picking the same name will race.
-> > 
-> > TRACELOGGING_DEFINE_PROVIDER( // defines the MyProvider symbol
-> >     MyProvider, // Name of the provider symbol to define
-> >     "MyCompany_MyComponent_MyProvider", // Human-readable provider
-> > name, no ' ' or ':' chars.
-> >     // {d5b90669-1aad-5db8-16c9-6286a7fcfe33} // Provider guid
-> > (ignored on Linux)
-> >     (0xd5b90669,0x1aad,0x5db8,0x16,0xc9,0x62,0x86,0xa7,0xfc,0xfe,0x33));
-> > 
-> > I totally get it that Beau is copy pasting these ideas from windows,
-> > but windows is likely similarly broken if it's registering names
-> > globally.
-> > 
-> > FD should be the isolation boundary.
-> > fd = open("/sys/kernel/tracing/user_event")
-> > and make sure all events are bound to that file.
-> > when file is closed the events _should be auto deleted_.
-> > 
-> > That's another issue I just spotted.
-> > Looks like user_events_release() is leaking memory.
-> > user_event_refs are just lost.
-> > 
-> > tbh the more I look into the code the more I want to suggest to mark it
-> > depends on BROKEN
-> > and go back to redesign.
-> 
-> I don't think these changes require a redesign. I do like the idea that
-> the events live with the fd. That is, when the fd dies, so does the event.
-> 
-> Although, we may keep it around for a bit (no new events, but being
-> able to parse it. That is, the event itself isn't deleted until the fd
-> is closed, and so is the tracing files being read are closed.
-> 
-> Beau,
-> 
-> How hard is it to give the event an owner, but not for task or user,
-> but with the fd. That way you don't need to worry about other tasks
-> deleting the event. And it also automatically cleans itself up. If we
-> leave it to the sysadmin to clean up, it's going to cause leaks,
-> because it's not something the sysadmin will want to do, as they will
-> need to keep track of what events are created.
-> 
+> arch/x86/xen/enlighten_pv.c:1233:34: error: no previous prototype for 'xen_start_kernel' [-Werror=missing-prototypes]
+> arch/x86/xen/irq.c:22:14: error: no previous prototype for 'xen_force_evtchn_callback' [-Werror=missing-prototypes]
+> arch/x86/xen/mmu_pv.c:358:20: error: no previous prototype for 'xen_pte_val' [-Werror=missing-prototypes]
+> arch/x86/xen/mmu_pv.c:366:20: error: no previous prototype for 'xen_pgd_val' [-Werror=missing-prototypes]
 
-We need to ensure that multiple processes can use the same event name:
-Example we have shared libraries that processes use to publish events.
+What's the deal with this one?
 
-We need to ensure that if the original FD closes and other processes/FDs
-are using it, those don't get ripped out from underneath it:
-Example we have perf attached and then the process exits.
+The patch is doing a bunch functions on top of the ones from the commit
+message.  Were you just showing a snippet of what the actual set of
+warnings is?
 
-I think we can accomodate that all neatly if we just make the event
-self-delete upon the last ref-count decrement. That way no one needs
-the delete IOCTL and we can prevent things piling up.
+Also, fwiw, it would be nice to have actual words in the changelog, even
+for these maddeningly repetitive series.  Even something like:
 
-We have flags in the struct, so we could either make this optional or
-default. I like this approach Steven.
-
-Thanks,
--Beau
-
-> -- Steve
-> 
-> PS. I missed my connection due to unseasonal freezing temperatures, and
-> my little airport didn't have a driver for the deicer, making my flight
-> 2 hours delayed (had to wait for the sun to come up and deice the
-> plane!). Thus, instead of enjoying myself by the pool, I'm in an
-> airport lounge without much to do.
+	Xen has a bunch of these because of how the paravirt code uses
+	inline assembly.
