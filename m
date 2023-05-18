@@ -2,62 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DA970887C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5306870887E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjERTlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 15:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S229980AbjERTlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 15:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjERTlE (ORCPT
+        with ESMTP id S229451AbjERTlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 15:41:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F3119F;
-        Thu, 18 May 2023 12:41:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 18 May 2023 15:41:49 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413C7E67;
+        Thu, 18 May 2023 12:41:48 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 902BB651D8;
-        Thu, 18 May 2023 19:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBA29C4339B;
-        Thu, 18 May 2023 19:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684438861;
-        bh=NU4ywM5dgREugZ4a6r1tYhbRQe1nLEkwPJTVqUYXj/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OiCdma3aE+CRL4/sUg38BiIizkEcRYHkYSx7QEPEIBxdt46LA7c3jUtVfj0XNoP8Q
-         q+0UplFyHN1f0goz+tWro61SCeclDHr4id3TH4yvkWCKM++RgovSeVMPuAD61pkiuE
-         KqD5pua1oo9K/WB1U7x/huAT6A37MSq4IEg+yRwYC6UWzcTKY5Ilwke90MXgtaHF6A
-         nGQxOEp9UP9YaGn6VfmcZ2UiL2DKf3+9xmWGrpwLoiZunoXn5v3CaPrCb5RqJibcuq
-         +lFC8LHUkZiscq0DonbwMutQNQ+lluvmj6HrdVLSg+j8W1xOjb+YdOUsf3yDVIOHbO
-         oiOsBN8uzIbXg==
-Date:   Thu, 18 May 2023 20:40:55 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Yangtao Li <frank.li@vivo.com>,
-        Wei Fu <wefu@redhat.com>, Icenowy Zheng <uwu@icenowy.me>
-Subject: Re: [PATCH v2 3/9] dt-bindings: riscv: Add T-HEAD TH1520 board
- compatibles
-Message-ID: <20230518-estate-scoff-c009f19aad5a@spud>
-References: <20230518184541.2627-1-jszhang@kernel.org>
- <20230518184541.2627-4-jszhang@kernel.org>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 996A12009B;
+        Thu, 18 May 2023 21:41:46 +0200 (CEST)
+Date:   Thu, 18 May 2023 21:41:45 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] drm/msm/dpu: drop DSPP_MSM8998_MASK from hw
+ catalog
+Message-ID: <kap4lpzbv5qihf2k7fdznmx72hrhpx4acjgcng45kxnshxo6ge@gzke6ruy3x6u>
+References: <20230428223646.23595-1-quic_abhinavk@quicinc.com>
+ <20230428223646.23595-4-quic_abhinavk@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lwMnHdNs4FO0hshN"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230518184541.2627-4-jszhang@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230428223646.23595-4-quic_abhinavk@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,77 +48,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-04-28 15:36:46, Abhinav Kumar wrote:
+> Since GC and IGC masks have now been dropped DSPP_MSM8998_MASK
+> is same as DSPP_SC7180_MASK. Since DSPP_SC7180_MASK is used more
 
---lwMnHdNs4FO0hshN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+is *the* same
 
-On Fri, May 19, 2023 at 02:45:35AM +0800, Jisheng Zhang wrote:
-> Several SoMs and boards are available that feature the T-HEAD TH1520
-> SoC. Document the compatible strings.
->=20
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> than DSPP_MSM8998_MASK, lets drop the latter.
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  .../devicetree/bindings/riscv/thead.yaml      | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/riscv/thead.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/riscv/thead.yaml b/Documen=
-tation/devicetree/bindings/riscv/thead.yaml
-> new file mode 100644
-> index 000000000000..e62f6821372e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/riscv/thead.yaml
-> @@ -0,0 +1,29 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/riscv/thead.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: T-HEAD SoC-based boards
-> +
-> +maintainers:
-> +  - Jisheng Zhang <jszhang@kernel.org>
-> +
-> +description:
-> +  T-HEAD SoC-based boards
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +      - description: Sipeed Lichee Pi 4A board for the Sipeed Lichee Mod=
-ule 4A
-> +        items:
-> +          - enum:
-> +              - sipeed,lichee-pi-4a
-> +          - const: sipeed,lichee-module-4a
-> +          - const: thead,th1520
+>  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 4 ++--
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c          | 2 --
+>  2 files changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> index bdcd554fc8a8..a4679f72a262 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> @@ -127,9 +127,9 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>  };
+>  
+>  static const struct dpu_dspp_cfg msm8998_dspp[] = {
+> -	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
+> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+>  		 &msm8998_dspp_sblk),
+> -	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_MSM8998_MASK,
+> +	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_SC7180_MASK,
+>  		 &msm8998_dspp_sblk),
+>  };
+>  
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 791a6fc8bdbf..efd466f6122b 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -91,8 +91,6 @@
+>  
+>  #define MERGE_3D_SM8150_MASK (0)
+>  
+> -#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC)
+> -
+>  #define DSPP_SC7180_MASK BIT(DPU_DSPP_PCC)
 
-Same here re: other SoMs I guess. Probably more interest in creating
-them here though!
+Should we add preliminary parenthesis around this?
 
-I heard on the grapevine that the boards people have now are perhaps not
-the same as the design that they're going to ship in the main production
-run?
-Do you know if there is a more detailed part number for the boards, just
-in case there are some software-visible changes?
+- Marijn
 
-Thanks,
-Conor.
-
---lwMnHdNs4FO0hshN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGZ/RwAKCRB4tDGHoIJi
-0jGSAQCY4kaOgHOoG9aRVof11tWusYqNws27HUKIe/mAvPbWQQD/eQDHmytrrfJ2
-CpIn9rLovTl/X8C4YidVVzmRuLVQuw0=
-=jiga
------END PGP SIGNATURE-----
-
---lwMnHdNs4FO0hshN--
+>  
+>  #define INTF_SDM845_MASK (0)
+> -- 
+> 2.40.1
+> 
