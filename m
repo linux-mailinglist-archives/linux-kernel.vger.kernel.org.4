@@ -2,118 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C07708875
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E640770887A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjERTjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 15:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S230224AbjERTkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 15:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjERTjh (ORCPT
+        with ESMTP id S229451AbjERTkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 15:39:37 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B711A6;
-        Thu, 18 May 2023 12:39:31 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-54f8b7a4feeso705911eaf.2;
-        Thu, 18 May 2023 12:39:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684438771; x=1687030771;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MDn5p8Ib+y9CgNrg+FXBfqG/I7AiFjWJTabxe3lq0Yo=;
-        b=ddQyndsHKhnN9Qool3IakuTy/45mjOyoN3HA1C3RFyZFaO5e6t4ma5Opi33vCazFE8
-         lBIZUwux60FsPYYNVxBty46mHYI+zDbT5Z8sH3SJJTcOIQYloPFbd4aJSZui9Or3MW8H
-         rGz5DcwLSZrRk+3D2LQP+YomIlfWNVIdZr+neaXrsl+f8DGceEP7Dm9THnMcbpsPdljb
-         bIHr92FUuvZ47f/Q2YDPJfIVkqiM8N/8RzWWkaVjQ9Y2wKvaUAV1cnyajJeXoRR06jX4
-         qZm7MnHWFZwvUrD314jtoKPkNCm/wwpuvB1aaQ4/5AXxrMefY7d3wrgHxGK6UQPZnHJC
-         gdcg==
-X-Gm-Message-State: AC+VfDwx+mCMXYOE/sp5nI08YG5vDB8QHinRJRkL8n9L9iFzu/88lR+Z
-        Zek78e/XJDMxNLAfolQ+TsrC/ONhnA==
-X-Google-Smtp-Source: ACHHUZ6Z5ocjGCz/xPSu9pMLuSMlz+bPgbUY8RawLZcETmIHHgksQOd/VkJV/2yOqFSssJd7wa3JJg==
-X-Received: by 2002:a05:6808:308a:b0:395:df6e:a845 with SMTP id bl10-20020a056808308a00b00395df6ea845mr2002207oib.4.1684438770739;
-        Thu, 18 May 2023 12:39:30 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i4-20020aca3b04000000b0039208555951sm983744oia.29.2023.05.18.12.39.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 12:39:30 -0700 (PDT)
-Received: (nullmailer pid 2547178 invoked by uid 1000);
-        Thu, 18 May 2023 19:39:29 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Thu, 18 May 2023 15:40:47 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A643198;
+        Thu, 18 May 2023 12:40:46 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 448AB203AE;
+        Thu, 18 May 2023 21:40:44 +0200 (CEST)
+Date:   Thu, 18 May 2023 21:40:43 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] drm/msm/dpu: remove GC and IGC related code from
+ dpu catalog
+Message-ID: <cwnoowgglhlsx7357sddgonyohj7vj3z23bqlgleaskozzpcu2@nnyxzzzyhgem>
+References: <20230428223646.23595-1-quic_abhinavk@quicinc.com>
+ <20230428223646.23595-3-quic_abhinavk@quicinc.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     linux-riscv@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yangtao Li <frank.li@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Icenowy Zheng <uwu@icenowy.me>, Wei Fu <wefu@redhat.com>,
-        Guo Ren <guoren@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-In-Reply-To: <20230518184541.2627-5-jszhang@kernel.org>
-References: <20230518184541.2627-1-jszhang@kernel.org>
- <20230518184541.2627-5-jszhang@kernel.org>
-Message-Id: <168443876898.2547162.12784151548808128613.robh@kernel.org>
-Subject: Re: [PATCH v2 4/9] dt-binding: riscv: add T-HEAD CPU reset
-Date:   Thu, 18 May 2023 14:39:29 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428223646.23595-3-quic_abhinavk@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 19 May 2023 02:45:36 +0800, Jisheng Zhang wrote:
-> The secondary CPUs in T-HEAD SMP capable platforms need some special
-> handling. The first one is to write the warm reset entry to entry
-> register. The second one is write a SoC specific control value to
-> a SoC specific control reg. The last one is to clone some CSRs for
-> secondary CPUs to ensure these CSRs' values are the same as the
-> main boot CPU. This DT node is mainly used by opensbi firmware.
+On 2023-04-28 15:36:45, Abhinav Kumar wrote:
+> Gamma Correction (GC) and Inverse Gamma Correction(IGC) is
+> currently unused. In addition dpu_dspp_sub_blks didn't even have an igc
+> member describing the block.
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Drop related code from the dpu hardware catalog otherwise this becomes a
+> burden to carry across chipsets in the catalog.
+> 
+> changes in v3:
+> 	- drop IGC related code from dpu_hw_catalog too
+> 	- update commit text accordingly
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
 > ---
->  .../bindings/riscv/thead,cpu-reset.yaml       | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  4 +---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 10 ----------
+>  2 files changed, 1 insertion(+), 13 deletions(-)
 > 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 5d994bce696f..791a6fc8bdbf 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -91,7 +91,7 @@
+>  
+>  #define MERGE_3D_SM8150_MASK (0)
+>  
+> -#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC) | BIT(DPU_DSPP_GC)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Oops we weren't even using parenthesis here before...
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/riscv/thead,cpu-reset.example.dts:18.35-25.11: Warning (unit_address_vs_reg): /example-0/cpurst@ffff019050: node has a unit name, but no reg or ranges property
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead,cpu-reset.example.dtb: cpurst@ffff019050: control-reg:0: [255, 4278276100] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230518184541.2627-5-jszhang@kernel.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+> +#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC)
+>  
+>  #define DSPP_SC7180_MASK BIT(DPU_DSPP_PCC)
+>  
+> @@ -449,8 +449,6 @@ static const struct dpu_lm_sub_blks qcm2290_lm_sblk = {
+>  static const struct dpu_dspp_sub_blks msm8998_dspp_sblk = {
+>  	.pcc = {.id = DPU_DSPP_PCC, .base = 0x1700,
+>  		.len = 0x90, .version = 0x10007},
+> -	.gc = { .id = DPU_DSPP_GC, .base = 0x17c0,
+> -		.len = 0x90, .version = 0x10007},
+>  };
+>  
+>  static const struct dpu_dspp_sub_blks sc7180_dspp_sblk = {
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 71584cd56fd7..1230739e37d4 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -127,13 +127,9 @@ enum {
+>  /**
+>   * DSPP sub-blocks
+>   * @DPU_DSPP_PCC             Panel color correction block
+> - * @DPU_DSPP_GC              Gamma correction block
+> - * @DPU_DSPP_IGC             Inverse gamma correction block
+>   */
+>  enum {
+>  	DPU_DSPP_PCC = 0x1,
+> -	DPU_DSPP_GC,
+> -	DPU_DSPP_IGC,
+>  	DPU_DSPP_MAX
+>  };
+>  
+> @@ -398,7 +394,6 @@ struct dpu_caps {
+>   * @hsic:
+>   * @memcolor:
+>   * @pcc_blk:
+> - * @igc_blk:
+>   * @format_list: Pointer to list of supported formats
+>   * @num_formats: Number of supported formats
+>   * @virt_format_list: Pointer to list of supported formats for virtual planes
+> @@ -419,7 +414,6 @@ struct dpu_sspp_sub_blks {
+>  	struct dpu_pp_blk hsic_blk;
+>  	struct dpu_pp_blk memcolor_blk;
+>  	struct dpu_pp_blk pcc_blk;
+> -	struct dpu_pp_blk igc_blk;
+>  
+>  	const u32 *format_list;
+>  	u32 num_formats;
+> @@ -433,22 +427,18 @@ struct dpu_sspp_sub_blks {
+>   * @maxwidth:               Max pixel width supported by this mixer
+>   * @maxblendstages:         Max number of blend-stages supported
+>   * @blendstage_base:        Blend-stage register base offset
+> - * @gc: gamma correction block
+>   */
+>  struct dpu_lm_sub_blks {
+>  	u32 maxwidth;
+>  	u32 maxblendstages;
+>  	u32 blendstage_base[MAX_BLOCKS];
+> -	struct dpu_pp_blk gc;
+>  };
+>  
+>  /**
+>   * struct dpu_dspp_sub_blks: Information of DSPP block
+> - * @gc : gamma correction block
+>   * @pcc: pixel color correction block
+>   */
+>  struct dpu_dspp_sub_blks {
+> -	struct dpu_pp_blk gc;
+>  	struct dpu_pp_blk pcc;
+>  };
+>  
+> -- 
+> 2.40.1
+> 
