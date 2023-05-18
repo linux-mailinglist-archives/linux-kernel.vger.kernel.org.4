@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523B4708B3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F17708B46
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjERWDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S230470AbjERWDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbjERWDT (ORCPT
+        with ESMTP id S229493AbjERWDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:03:19 -0400
+        Thu, 18 May 2023 18:03:18 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E080E6E;
-        Thu, 18 May 2023 15:03:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15BCE61;
+        Thu, 18 May 2023 15:03:17 -0700 (PDT)
 Date:   Thu, 18 May 2023 22:03:14 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1684447395;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=cBpMz4rE0JEZOPy7/OVV0tk2GJk3DPo5oNqv9QFqpmI=;
-        b=KwOjbB0IOJVFACU1Ow0TJ4Q0UhU6ZxnTWEwU3kF0O3VhRtzNmcmRAvuOZ+jmE21aY1hF9j
-        eItIy3PkSivFVYX88ONCrb35k+kK/V4tL6sbTiJHx5fUTtvEu78BYtCGyYSN05tCsptDUr
-        /4Z99l8ZZe7+2YsyHB6eYY1PY4bRXSsfPKRphVsGWnhTbos7h9C/UQGcMfKT8V36iYlds6
-        gdsudbeVZGqLrA4sIzXqrce4E9KhUaCcx3gw2GIWsX/0ENKGA2MSqjzvbyxTJKDPuUDqxv
-        huHSo8SGkIcsT0Thqj4L8nBnDSNXpY4fhb0HaX+K5Y7Ts35CAQpCBItgnDSiLw==
+        bh=CVVhUaVpd99ia/UHaFKuasy0L+DSdo1nXROm6c19S8s=;
+        b=BJHh4I6KTyln6s4ZrKUMz3X5OeC0hWIZLSZSk64KJKWRjLiqoMPZKTw30htJr+JbBqolJx
+        3MlpkXZb4comMsXzKfMUdgy2msXxGQ41ULvrwMCsFKJGx4R3FlXaoeFpcYZwYqg4vxbx8r
+        EZ/Fj8ic09gwdXsY+cJzxEz9aWlYEyP1G3kUoq3hjOywLxnpPSoMK70q8sejNay7U66fF9
+        iFwIPrz37BvxCZCHI6zdEcxMThj3qFZ/jW/eYLAjOu94u76uMtFSv+pvXtJXTwfSFXFeki
+        jMuhgKO7pdtjNITnFDFNuHO/4K7R/Vo3OFproZKABB0iwTBij03yOLuG/BZhCg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1684447395;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=cBpMz4rE0JEZOPy7/OVV0tk2GJk3DPo5oNqv9QFqpmI=;
-        b=HKUxvA2fddnqZADF2Ku2yk5/K0EiretlmgDsgDD2ajvf8LOSqmEJJidYqa+m8x2fdQNvbi
-        +8IrEFs6AXkMIrDg==
+        bh=CVVhUaVpd99ia/UHaFKuasy0L+DSdo1nXROm6c19S8s=;
+        b=FBcYtLYDj02ZBXy/qtJlUyj65uO5semr1KWF4RmmXHVBWslw5k9DBvXvuxzCpuH4ZoC3i6
+        J/bYCAi8oh6LkIAQ==
 From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/fpu: Include asm/fpu/regset.h
+Subject: [tip: x86/cleanups] x86: Avoid missing-prototype warnings for
+ doublefault code
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Alexander Lobakin <aleksander.lobakin@intel.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <168444739489.404.10346160308726239812.tip-bot2@tip-bot2>
+Message-ID: <168444739461.404.1026256630293999646.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,44 +63,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     16db7e9c6e974a0935494cd31179c819d4cbf86e
-Gitweb:        https://git.kernel.org/tip/16db7e9c6e974a0935494cd31179c819d4cbf86e
+Commit-ID:     c9664839305dfaccd098b1606c197b0eb21056dc
+Gitweb:        https://git.kernel.org/tip/c9664839305dfaccd098b1606c197b0eb21056dc
 Author:        Arnd Bergmann <arnd@arndb.de>
-AuthorDate:    Tue, 16 May 2023 21:35:35 +02:00
+AuthorDate:    Tue, 16 May 2023 21:35:36 +02:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 18 May 2023 11:56:18 -07:00
 
-x86/fpu: Include asm/fpu/regset.h
+x86: Avoid missing-prototype warnings for doublefault code
 
-The fpregs_soft_set/fpregs_soft_get functions are declared in a
-header that is not included in the file that defines them, causing
-a W=1 warning:
+Two functions in the 32-bit doublefault code are lacking a prototype:
 
-/home/arnd/arm-soc/arch/x86/math-emu/fpu_entry.c:638:5: error: no previous prototype for 'fpregs_soft_set' [-Werror=missing-prototypes]
-  638 | int fpregs_soft_set(struct task_struct *target,
-      |     ^~~~~~~~~~~~~~~
-/home/arnd/arm-soc/arch/x86/math-emu/fpu_entry.c:690:5: error: no previous prototype for 'fpregs_soft_get' [-Werror=missing-prototypes]
-  690 | int fpregs_soft_get(struct task_struct *target,
+arch/x86/kernel/doublefault_32.c:23:36: error: no previous prototype for 'doublefault_shim' [-Werror=missing-prototypes]
+   23 | asmlinkage noinstr void __noreturn doublefault_shim(void)
+      |                                    ^~~~~~~~~~~~~~~~
+arch/x86/kernel/doublefault_32.c:114:6: error: no previous prototype for 'doublefault_init_cpu_tss' [-Werror=missing-prototypes]
+  114 | void doublefault_init_cpu_tss(void)
 
-Include the file here to avoid the warning.
+The first one is only called from assembler, while the second one is
+declared in doublefault.h, but this file is not included.
+
+Include the header file and add the other declaration there as well.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Link: https://lore.kernel.org/all/20230516193549.544673-7-arnd%40kernel.org
+Link: https://lore.kernel.org/all/20230516193549.544673-8-arnd%40kernel.org
 ---
- arch/x86/math-emu/fpu_entry.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/include/asm/doublefault.h | 4 ++++
+ arch/x86/kernel/doublefault_32.c   | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/arch/x86/math-emu/fpu_entry.c b/arch/x86/math-emu/fpu_entry.c
-index 7fe56c5..91c52ea 100644
---- a/arch/x86/math-emu/fpu_entry.c
-+++ b/arch/x86/math-emu/fpu_entry.c
-@@ -32,6 +32,7 @@
- #include <asm/traps.h>
- #include <asm/user.h>
- #include <asm/fpu/api.h>
-+#include <asm/fpu/regset.h>
+diff --git a/arch/x86/include/asm/doublefault.h b/arch/x86/include/asm/doublefault.h
+index 54a6e4a..de0e88b 100644
+--- a/arch/x86/include/asm/doublefault.h
++++ b/arch/x86/include/asm/doublefault.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_X86_DOUBLEFAULT_H
+ #define _ASM_X86_DOUBLEFAULT_H
  
- #include "fpu_system.h"
- #include "fpu_emu.h"
++#include <linux/linkage.h>
++
+ #ifdef CONFIG_X86_32
+ extern void doublefault_init_cpu_tss(void);
+ #else
+@@ -10,4 +12,6 @@ static inline void doublefault_init_cpu_tss(void)
+ }
+ #endif
+ 
++asmlinkage void __noreturn doublefault_shim(void);
++
+ #endif /* _ASM_X86_DOUBLEFAULT_H */
+diff --git a/arch/x86/kernel/doublefault_32.c b/arch/x86/kernel/doublefault_32.c
+index 3b58d87..6eaf9a6 100644
+--- a/arch/x86/kernel/doublefault_32.c
++++ b/arch/x86/kernel/doublefault_32.c
+@@ -9,6 +9,7 @@
+ #include <asm/processor.h>
+ #include <asm/desc.h>
+ #include <asm/traps.h>
++#include <asm/doublefault.h>
+ 
+ #define ptr_ok(x) ((x) > PAGE_OFFSET && (x) < PAGE_OFFSET + MAXMEM)
+ 
