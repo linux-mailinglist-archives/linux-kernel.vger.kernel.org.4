@@ -2,152 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63203708A63
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CB8708A83
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjERV0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        id S230429AbjERV2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjERV0i (ORCPT
+        with ESMTP id S230233AbjERV2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:26:38 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6932E6E
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:26:36 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f13c577e36so3005729e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684445195; x=1687037195;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t5y+SJ44ed16wCOTDLmLDzgIx2JaLtLRHFSw4/rCRS4=;
-        b=Rdrjl1adp6g2FuL8l3mXU/M/JnPyPv9h9UaqAjcAT1BpEzKeS0JctH+d6BAHqfZpb3
-         lWJwAi1iEO16Dc5hIQyQ1dbfTkXyuiiuhpm8wn9le/4dqMpDvTfIpxJmevoMFfnfDrko
-         OHVjR2lwXz8eWHefFKwcSyJ8hOz8LOnbXxGtKeUll7PNYNQpV6zfpUelppZpZyNp8+kS
-         2d1PePsx8usr+8+inEeziFPWpHOrqNKc7l8pNiRDdkLXxyv1DyqJvl14Zju3a2QeP9iZ
-         5iBZFURpGWEHMEu9VseRhgFs5hmgpm3I2EC2MEcwRgeWXaRrULBYzhw6WQkP2pa2tYB7
-         SdEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684445195; x=1687037195;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t5y+SJ44ed16wCOTDLmLDzgIx2JaLtLRHFSw4/rCRS4=;
-        b=j2RjxQfImOrW7CedMAWmqp7NDzY96jt0mip73b9NctsQLTp6zFApvuUoe97Pu4RFxX
-         gc91zi7kbaTyVbn3Yq/AxoznBlaIU+pZXjBA06s+DvJ4u+MW5sQKHQLYoc5XU9VGjkJv
-         iGioiN2LJlq2j7aGfsAsJCfxLhnSnetvIzsbgux/CmX4Z22gSlfdfpE4lvDwEx3PBvuS
-         0e+bzZvkIXNvuvXGHt8xm/izQmRnLFrxebIvL94yhCX+424yJCz/iMhxIGylfbPweS7K
-         d8muwFxeK4QJM6thML0uOsKH1QmNtd68fcDLsrHTfB1sU6Z/KWLvTMgfD5wlHgvPA6v5
-         rx4Q==
-X-Gm-Message-State: AC+VfDz9/G7lMJQBfPDKIY3ZOy/0nsfezB0hqnYLdN7QxnIdaL7jvb3f
-        D1CeQX4B2Q+ybePu1gdc4KNKoA==
-X-Google-Smtp-Source: ACHHUZ7B1k1e6l4HEpUzye5ClfUpHuPl41iqsuHkLeVuwMzkdRBYUqoCzs/IgEyza1JzSDw/IQR0HQ==
-X-Received: by 2002:ac2:4c39:0:b0:4db:964:51b5 with SMTP id u25-20020ac24c39000000b004db096451b5mr74987lfq.41.1684445195029;
-        Thu, 18 May 2023 14:26:35 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id b20-20020ac247f4000000b004eaeb0a984csm369403lfp.88.2023.05.18.14.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 14:26:34 -0700 (PDT)
-Message-ID: <2c688487-a5b1-155c-f73a-69358d03e478@linaro.org>
-Date:   Fri, 19 May 2023 00:26:33 +0300
+        Thu, 18 May 2023 17:28:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B43E10C6;
+        Thu, 18 May 2023 14:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Dykfym+h/fBFI+QSChaFq+A6w9GQjFVudoBE08aqTKQ=; b=l6TwZDVz5xktrEEcffBG7ylf7C
+        bpzTOidYU8TPWGiDPdEDxlJmnzO04hUghnYE4dhVo+tg6EdhPMpCdifUYnPo7hfqKLjq86eqPFwAv
+        fsu4bDkEne8YpnQ1xG1s1q7swTXfB5B062/LWgGTzqYAgOtMjvfy6z75pR9SXHBiTuM9LIGiLKTSh
+        aXEScrSx+YI1EKFUAEM0BYB9Nan0JSF0nakGzNK+txQWnv9hZDrzTrONVy5tS6erH4taPU0fnqYjQ
+        6emQMv7pVrBx1F1GcVa24aBXsa5cTw5ZnsugmuC/tjFZqYAfDDltDhpj2iG2j3RXHD5vDqg/XhVbQ
+        zaYQJChw==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pzlA9-00EFRV-0z;
+        Thu, 18 May 2023 21:27:53 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Gerd Knorr <kraxel@bytesex.org>,
+        Oliver Neukum <oliver@neukum.org>,
+        Ali Akcaagac <aliakc@web.de>,
+        Jamie Lenehan <lenehan@twibble.org>, dc395x@twibble.org,
+        James Smart <james.smart@broadcom.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        Finn Thain <fthain@linux-m68k.org>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        megaraidlinux.pdl@broadcom.com,
+        Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH 00/11] Documentation/scsi: organize SCSI docs & make more readable
+Date:   Thu, 18 May 2023 14:27:38 -0700
+Message-Id: <20230518212749.18266-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 4/4] drm/msm/dpu: drop DSPP_MSM8998_MASK from hw
- catalog
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230428223646.23595-1-quic_abhinavk@quicinc.com>
- <20230428223646.23595-4-quic_abhinavk@quicinc.com>
- <kap4lpzbv5qihf2k7fdznmx72hrhpx4acjgcng45kxnshxo6ge@gzke6ruy3x6u>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <kap4lpzbv5qihf2k7fdznmx72hrhpx4acjgcng45kxnshxo6ge@gzke6ruy3x6u>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2023 22:41, Marijn Suijten wrote:
-> On 2023-04-28 15:36:46, Abhinav Kumar wrote:
->> Since GC and IGC masks have now been dropped DSPP_MSM8998_MASK
->> is same as DSPP_SC7180_MASK. Since DSPP_SC7180_MASK is used more
-> 
-> is *the* same
+Organize the SCSI documentation into categories instead of
+alphabetically by filename.
 
-And, I think, a comma is missing before DSPP_MSM8998_MASK.
+Modify several of the document chapter headings so that they are
+shorter and easier to find.
 
-Note: since the English language is not native for most of the 
-developers, I usually don't nitpick on these issues provided we can 
-understand the message without too much trouble (and the mistake doesn't 
-stand out aloud, begging for it to be fixed).
+Make several updates to the scsi-generic driver documentation.
 
-I will fix missing articles when applying, if I don't forget.
+ [PATCH 01/11] Docs/scsi: organize the SCSI documentation
+ [PATCH 02/11] Docs/scsi: introduction: multiple cleanups
+ [PATCH 03/11] Docs/scsi: arcmsr: use a chapter heading for clarity
+ [PATCH 04/11] Docs/scsi: scsi-changer: shorten the chapter heading
+ [PATCH 05/11] Docs/scsi: dc395x: shorten the chapter heading
+ [PATCH 06/11] Docs/scsi: scsi_fc_transport: fix typo in heading
+ [PATCH 07/11] Docs/scsi: scsi-generic: multiple cleanups
+ [PATCH 08/11] Docs/scsi: g_NCR5380: shorten chapter heading
+ [PATCH 09/11] Docs/scsi: megaraid: clarify chapter heading
+ [PATCH 10/11] Docs/scsi: ncr53c8xx: shorten chapter heading
+ [PATCH 11/11] Docs/scsi: sym53c8xx_2: shorten chapter heading
 
-> 
->> than DSPP_MSM8998_MASK, lets drop the latter.
->>
->> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 4 ++--
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c          | 2 --
->>   2 files changed, 2 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->> index bdcd554fc8a8..a4679f72a262 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->> @@ -127,9 +127,9 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
->>   };
->>   
->>   static const struct dpu_dspp_cfg msm8998_dspp[] = {
->> -	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
->> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
->>   		 &msm8998_dspp_sblk),
->> -	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_MSM8998_MASK,
->> +	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_SC7180_MASK,
->>   		 &msm8998_dspp_sblk),
->>   };
->>   
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 791a6fc8bdbf..efd466f6122b 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -91,8 +91,6 @@
->>   
->>   #define MERGE_3D_SM8150_MASK (0)
->>   
->> -#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC)
->> -
->>   #define DSPP_SC7180_MASK BIT(DPU_DSPP_PCC)
-> 
-> Should we add preliminary parenthesis around this?
-> 
-> - Marijn
-> 
->>   
->>   #define INTF_SDM845_MASK (0)
->> -- 
->> 2.40.1
->>
 
--- 
-With best wishes
-Dmitry
+ Documentation/scsi/arcmsr_spec.rst       |    1 
+ Documentation/scsi/dc395x.rst            |    6 +-
+ Documentation/scsi/g_NCR5380.rst         |    6 +-
+ Documentation/scsi/index.rst             |   37 ++++++++++++--
+ Documentation/scsi/megaraid.rst          |    6 +-
+ Documentation/scsi/ncr53c8xx.rst         |    6 +-
+ Documentation/scsi/scsi-changer.rst      |    6 +-
+ Documentation/scsi/scsi-generic.rst      |   53 ++++++++-------------
+ Documentation/scsi/scsi.rst              |   23 +++------
+ Documentation/scsi/scsi_fc_transport.rst |    8 +--
+ Documentation/scsi/sym53c8xx_2.rst       |    6 +-
+ 11 files changed, 86 insertions(+), 72 deletions(-)
 
+
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Gerd Knorr <kraxel@bytesex.org>
+Cc: Oliver Neukum <oliver@neukum.org>
+Cc: Ali Akcaagac <aliakc@web.de>
+Cc: Jamie Lenehan <lenehan@twibble.org>
+Cc: dc395x@twibble.org
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Doug Gilbert <dgilbert@interlog.com>
+Cc: Finn Thain <fthain@linux-m68k.org>
+Cc: Michael Schmitz <schmitzmic@gmail.com>
+Cc: Kashyap Desai <kashyap.desai@broadcom.com>
+Cc: Sumit Saxena <sumit.saxena@broadcom.com>
+Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+Cc: megaraidlinux.pdl@broadcom.com
+Cc: Matthew Wilcox <willy@infradead.org>
