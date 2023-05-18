@@ -2,276 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E99F707D5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB26707D68
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjERJzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S230305AbjERJ52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbjERJzR (ORCPT
+        with ESMTP id S229920AbjERJ50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:55:17 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB9C1BC3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:55:13 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2ac82912a59so19416141fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684403712; x=1686995712;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U4y39yQeXgfshTFx8LmSwMssJPh2RhRz9IxqW/7rapk=;
-        b=js8tUXvIUOpLgtCGl0gjJeo7q7Ptbvp9VUWF5RYmreXr0lBQRn0lJ6FfPrczx+njss
-         naQGYXPCVNmqgEg/lVmN9Kq3J3x+0tv88V/V9uzoedXHshbooWiY3uATOK+Idn8TG0Qu
-         4Uq4wRNyph/Sv9AQZDhfKUomUAZj/egf9D+ozic9g0K1oj+kQt5RkEDQiEIqiH+SRuGb
-         8lZLrsO93bEx7pZLHQG5NSJRmaDGGvSVanBw3iT35Mc4aZDd1ZmeNx1mE1t5GyS/DOc7
-         wvqbhfwJBz8kBDxG8gavbJlsQmRUjsKOZYarK7OCrpL7tP4XWIcrGVwVkZVjuarQVXJp
-         dA7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684403712; x=1686995712;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U4y39yQeXgfshTFx8LmSwMssJPh2RhRz9IxqW/7rapk=;
-        b=QcRs39ZDQkmT/PcmC5CKGnQTSpVWseBE4ZvRt5xgozv30C4eKh4jATZoelNx/x+8ql
-         6VYDDKQj8QHxyMomrUlJwxH1Ro2gjcKLe9/ZrukY7Nr1eNDY6xxceI2MU/OgNkySGf7P
-         6ouZT2hz4fLWjlDcpfp5+DMQGNneDYXPI/XPesksYPs5D1rKU7e2op67grvV7xGQfbJG
-         a71WG7GPwkRL2X0F+AxjuLLvJCQm21Myg251I33M7bgCEqP7/J32RMki9w/yljqp1gAG
-         7Ptg9C/sLIaQuNmK8VZoxx6FBPi1nxq6hY2EpR6T2t9684b27m/Jq7A9+t5qcuPY15WI
-         cNEA==
-X-Gm-Message-State: AC+VfDw9pyxD//gLo9aLvlkKkwnKOqG/i5dTHEQMcFeNL6+yUj+xi2o6
-        X2/3uCPAhdvphA6Kmjvvlqncpw==
-X-Google-Smtp-Source: ACHHUZ5n0ktk0pGSlf8ODuwS2HY5zZGV37C2wJ0GZgPIWg5BKM7dFIJcAX//tvNrRrreST+xVlo2yg==
-X-Received: by 2002:a2e:9091:0:b0:2ad:ac93:3c7d with SMTP id l17-20020a2e9091000000b002adac933c7dmr9481189ljg.38.1684403711998;
-        Thu, 18 May 2023 02:55:11 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id c16-20020a2e9490000000b002a93e0605ebsm215873ljh.8.2023.05.18.02.55.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 02:55:11 -0700 (PDT)
-Message-ID: <f4854178-613c-5ace-5714-d77b7f71a914@linaro.org>
-Date:   Thu, 18 May 2023 11:55:09 +0200
+        Thu, 18 May 2023 05:57:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD443E4E
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684403798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dazR50SKXuYIFVWThl0nrv2fyFSamN4MkmMLPefBMF0=;
+        b=X2gFKhXvosWcp8YL+9X5pR3n1H15RazWzM2IdeiWEReqij5QJEn/CHPRxXXz5jcz+DFLIs
+        1gtofvMVBUW7Uj8vmNlf1x8LcqOZNSwjaVOEOWpi7FYArIGNxV70iQ2kNp8t+1++xNgWRT
+        eNwWy59ICcGTc0A+ABNiT0L1o5wsIW8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-352-sNI4QCQWN4qCpwaF8aO8pg-1; Thu, 18 May 2023 05:56:35 -0400
+X-MC-Unique: sNI4QCQWN4qCpwaF8aO8pg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 07051800047;
+        Thu, 18 May 2023 09:56:34 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 66B3640C2063;
+        Thu, 18 May 2023 09:56:31 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230515093345.396978-4-dhowells@redhat.com>
+References: <20230515093345.396978-4-dhowells@redhat.com> <20230515093345.396978-1-dhowells@redhat.com>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH net-next v8 03/16] net: Add a function to splice pages into an skbuff for MSG_SPLICE_PAGES
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc8280xp: Add SDC2 and enable on CRD
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230517235217.1728548-1-quic_bjorande@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230517235217.1728548-1-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1347366.1684403790.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 18 May 2023 10:56:30 +0100
+Message-ID: <1347367.1684403790@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+    =
 
+Add a function to handle MSG_SPLICE_PAGES being passed internally to
+sendmsg().  Pages are spliced into the given socket buffer if possible and
+copied in if not (e.g. they're slab pages or have a zero refcount).
 
-On 18.05.2023 01:52, Bjorn Andersson wrote:
-> The CRD has Micro SD slot, introduce the necessary DeviceTree nodes for
-> enabling this.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - Order of pinctr-N and pinctrl-names
-> - Reset GCC_SDCC2_BCR and not sdc4
-b4 diff 20230517235217.1728548-1-quic_bjorande@quicinc.com also reveals:
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Eric Dumazet <edumazet@google.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: David Ahern <dsahern@kernel.org>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: netdev@vger.kernel.org
 
-- move cd-gpios
-- add interconnect OPP properties
+---
+Notes:
+    ver #8)
+     - Order local variables in reverse xmas tree order.
+     - Remove duplicate coalescence check.
+     - Warn if sendpage_ok() fails.
+    =
 
-nevertheless:
+    ver #7)
+     - Export function.
+     - Never copy data, return -EIO if sendpage_ok() returns false.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+ include/linux/skbuff.h |    3 +
+ net/core/skbuff.c      |   88 +++++++++++++++++++++++++++++++++++++++++++=
+++++++
+ 2 files changed, 91 insertions(+)
 
-Konrad
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 4c0ad48e38ca..1c5f0ac6f8c3 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -5097,5 +5097,8 @@ static inline void skb_mark_for_recycle(struct sk_bu=
+ff *skb)
+ #endif
+ }
+ =
 
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 81 +++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi    | 43 ++++++++++++
->  2 files changed, 124 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> index 5b25d54b9591..ff9cebbccfcb 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> @@ -308,6 +308,13 @@ vreg_l1c: ldo1 {
->  			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> +		vreg_l6c: ldo6 {
-> +			regulator-name = "vreg_l6c";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2960000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
->  		vreg_l7c: ldo7 {
->  			regulator-name = "vreg_l7c";
->  			regulator-min-microvolt = <2504000>;
-> @@ -318,6 +325,13 @@ vreg_l7c: ldo7 {
->  						   RPMH_REGULATOR_MODE_HPM>;
->  		};
->  
-> +		vreg_l9c: ldo9 {
-> +			regulator-name = "vreg_l9c";
-> +			regulator-min-microvolt = <2960000>;
-> +			regulator-max-microvolt = <2960000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
->  		vreg_l13c: ldo13 {
->  			regulator-name = "vreg_l13c";
->  			regulator-min-microvolt = <3072000>;
-> @@ -600,6 +614,19 @@ &remoteproc_nsp0 {
->  	status = "okay";
->  };
->  
-> +&sdc2 {
-> +	pinctrl-0 = <&sdc2_default_state>;
-> +	pinctrl-1 = <&sdc2_sleep_state>;
-> +	pinctrl-names = "default", "sleep";
-> +
-> +	vmmc-supply = <&vreg_l9c>;
-> +	vqmmc-supply = <&vreg_l6c>;
-> +
-> +	cd-gpios = <&tlmm 131 GPIO_ACTIVE_LOW>;
-> +
-> +	status = "okay";
-> +};
-> +
->  &uart17 {
->  	compatible = "qcom,geni-debug-uart";
->  
-> @@ -842,6 +869,60 @@ wake-n-pins {
->  		};
->  	};
->  
-> +	sdc2_default_state: sdc2-default-state {
-> +		clk-pins {
-> +			pins = "sdc2_clk";
-> +			drive-strength = <16>;
-> +			bias-disable;
-> +		};
-> +
-> +		cmd-pins {
-> +			pins = "sdc2_cmd";
-> +			drive-strength = <16>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		data-pins {
-> +			pins = "sdc2_data";
-> +			drive-strength = <16>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		card-detect-pins {
-> +			pins = "gpio131";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +		};
-> +	};
-> +
-> +	sdc2_sleep_state: sdc2-sleep-state {
-> +		clk-pins {
-> +			pins = "sdc2_clk";
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +		};
-> +
-> +		cmd-pins {
-> +			pins = "sdc2_cmd";
-> +			drive-strength = <2>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		data-pins {
-> +			pins = "sdc2_data";
-> +			drive-strength = <2>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		card-detect-pins {
-> +			pins = "gpio131";
-> +			function = "gpio";
-> +			drive-strength = <2>;
-> +			bias-disable;
-> +		};
-> +	};
-> +
->  	tpad_default: tpad-default-state {
->  		int-n-pins {
->  			pins = "gpio182";
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index 8fa9fbfe5d00..3711f109aeaf 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -2815,6 +2815,49 @@ data-pins {
->  			};
->  		};
->  
-> +		sdc2: mmc@8804000 {
-> +			compatible = "qcom,sc8280xp-sdhci", "qcom,sdhci-msm-v5";
-> +			reg = <0 0x08804000 0 0x1000>;
-> +
-> +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hc_irq", "pwr_irq";
-> +
-> +			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-> +				 <&gcc GCC_SDCC2_APPS_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "iface", "core", "xo";
-> +			resets = <&gcc GCC_SDCC2_BCR>;
-> +			interconnects = <&aggre2_noc MASTER_SDCC_2 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_SDCC_2 0>;
-> +			interconnect-names = "sdhc-ddr","cpu-sdhc";
-> +			iommus = <&apps_smmu 0x4e0 0x0>;
-> +			power-domains = <&rpmhpd SC8280XP_CX>;
-> +			operating-points-v2 = <&sdc2_opp_table>;
-> +			bus-width = <4>;
-> +			dma-coherent;
-> +
-> +			status = "disabled";
-> +
-> +			sdc2_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-100000000 {
-> +					opp-hz = /bits/ 64 <100000000>;
-> +					required-opps = <&rpmhpd_opp_low_svs>;
-> +					opp-peak-kBps = <1800000 400000>;
-> +					opp-avg-kBps = <100000 0>;
-> +				};
-> +
-> +				opp-202000000 {
-> +					opp-hz = /bits/ 64 <202000000>;
-> +					required-opps = <&rpmhpd_opp_svs_l1>;
-> +					opp-peak-kBps = <5400000 1600000>;
-> +					opp-avg-kBps = <200000 0>;
-> +				};
-> +			};
-> +		};
-> +
->  		usb_0_qmpphy: phy@88eb000 {
->  			compatible = "qcom,sc8280xp-qmp-usb43dp-phy";
->  			reg = <0 0x088eb000 0 0x4000>;
++ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
++			     ssize_t maxsize, gfp_t gfp);
++
+ #endif	/* __KERNEL__ */
+ #endif	/* _LINUX_SKBUFF_H */
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 7f53dcb26ad3..f4a5b51aed22 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -6892,3 +6892,91 @@ nodefer:	__kfree_skb(skb);
+ 	if (unlikely(kick) && !cmpxchg(&sd->defer_ipi_scheduled, 0, 1))
+ 		smp_call_function_single_async(cpu, &sd->defer_csd);
+ }
++
++static void skb_splice_csum_page(struct sk_buff *skb, struct page *page,
++				 size_t offset, size_t len)
++{
++	const char *kaddr;
++	__wsum csum;
++
++	kaddr =3D kmap_local_page(page);
++	csum =3D csum_partial(kaddr + offset, len, 0);
++	kunmap_local(kaddr);
++	skb->csum =3D csum_block_add(skb->csum, csum, skb->len);
++}
++
++/**
++ * skb_splice_from_iter - Splice (or copy) pages to skbuff
++ * @skb: The buffer to add pages to
++ * @iter: Iterator representing the pages to be added
++ * @maxsize: Maximum amount of pages to be added
++ * @gfp: Allocation flags
++ *
++ * This is a common helper function for supporting MSG_SPLICE_PAGES.  It
++ * extracts pages from an iterator and adds them to the socket buffer if
++ * possible, copying them to fragments if not possible (such as if they'r=
+e slab
++ * pages).
++ *
++ * Returns the amount of data spliced/copied or -EMSGSIZE if there's
++ * insufficient space in the buffer to transfer anything.
++ */
++ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
++			     ssize_t maxsize, gfp_t gfp)
++{
++	size_t frag_limit =3D READ_ONCE(sysctl_max_skb_frags);
++	struct page *pages[8], **ppages =3D pages;
++	ssize_t spliced =3D 0, ret =3D 0;
++	unsigned int i;
++
++	while (iter->count > 0) {
++		ssize_t space, nr;
++		size_t off, len;
++
++		ret =3D -EMSGSIZE;
++		space =3D frag_limit - skb_shinfo(skb)->nr_frags;
++		if (space < 0)
++			break;
++
++		/* We might be able to coalesce without increasing nr_frags */
++		nr =3D clamp_t(size_t, space, 1, ARRAY_SIZE(pages));
++
++		len =3D iov_iter_extract_pages(iter, &ppages, maxsize, nr, 0, &off);
++		if (len <=3D 0) {
++			ret =3D len ?: -EIO;
++			break;
++		}
++
++		i =3D 0;
++		do {
++			struct page *page =3D pages[i++];
++			size_t part =3D min_t(size_t, PAGE_SIZE - off, len);
++
++			ret =3D -EIO;
++			if (WARN_ON_ONCE(!sendpage_ok(page)))
++				goto out;
++
++			ret =3D skb_append_pagefrags(skb, page, off, part,
++						   frag_limit);
++			if (ret < 0) {
++				iov_iter_revert(iter, len);
++				goto out;
++			}
++
++			if (skb->ip_summed =3D=3D CHECKSUM_NONE)
++				skb_splice_csum_page(skb, page, off, part);
++
++			off =3D 0;
++			spliced +=3D part;
++			maxsize -=3D part;
++			len -=3D part;
++		} while (len > 0);
++
++		if (maxsize <=3D 0)
++			break;
++	}
++
++out:
++	skb_len_add(skb, spliced);
++	return spliced ?: ret;
++}
++EXPORT_SYMBOL(skb_splice_from_iter);
+
