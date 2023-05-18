@@ -2,167 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7DE707760
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5500370775D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjERBWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 21:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
+        id S229641AbjERBV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 21:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjERBWq (ORCPT
+        with ESMTP id S229635AbjERBV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 21:22:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3257130E4
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684372965; x=1715908965;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=kvsuCZV5nRL+RW1S2zTLxwGX75/5cDfIVioej0JSzEk=;
-  b=aC4ftNVGiE60G6gvUjOH24mpx5KZSNo5jCFNMVKhqfF3yKTTcQ5tWZcL
-   upGKO4slNMAYOzOWTM9ttYikssAuZjyVBiNNNprBknA5ChL0Ng4HCHJ20
-   wSCM1BOrKCsvQmuPic6ybdGC0ABSJSJ5Nh3KaKGBH88KdQ3agReaDfRK4
-   kyZ4n67Ql2f9RQOYE01ppjFThZB+DZt6Vyr/J2hbapG+J7gi+dlLS/KVX
-   8Bkn6spWphHjeF75ByLTvMG3krTt79BYhvCQvcBg3VlusHx8Ymv/hFzP8
-   VWcFNkD5npByo1y1MfgTVKoqsojPMpNS5287NYSgDAV62eSbdlxg9LjqK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="341327661"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="341327661"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 18:22:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="679493595"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="679493595"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 18:22:42 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        steven.sistare@oracle.com, mgorman@techsingularity.net,
-        khalid@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm, compaction: Skip all non-migratable pages during
- scan
-References: <20230517161555.84776-1-khalid.aziz@oracle.com>
-Date:   Thu, 18 May 2023 09:21:39 +0800
-In-Reply-To: <20230517161555.84776-1-khalid.aziz@oracle.com> (Khalid Aziz's
-        message of "Wed, 17 May 2023 10:15:54 -0600")
-Message-ID: <87o7mibfj0.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 17 May 2023 21:21:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC4D30DC
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:21:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73A7564C00
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:21:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD9D6C4339B;
+        Thu, 18 May 2023 01:21:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684372914;
+        bh=9mBeo1bPwQN65kk0OgivIYZG1AB/MG8gD1PgA7Tu1lA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kciJPMrpqZsjdguGnFei8agTPhKUpAglwSMt35c4VbBqJt95X+SD/AmwAgUFMSeTh
+         3XnC0gsgwt3njH8cnnrkMRFq23pu5fLwgqh06dtTJOYclXQPVpeTmkW1+/DkPkyP8x
+         mryqP9frXRh7DXMA9cil1BfU1IYFv70taIWU05g0QFmaGAujn7vYE7DQPvAwfZY3cO
+         LFhvLXbWb6T0T9NPjkUW6u1Soj8WYPspITI8s/HfDSENYWVsOEdlr//6yRxpda80yG
+         +G9JPVoy8yt7/FAWRdPxSrNkIe9rIunqdljDwPbljlu8QfpyEZ+aDs8a0uIjtvm9wV
+         Jqywdx4m5mWVA==
+Date:   Wed, 17 May 2023 18:21:53 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Daeho Jeong <daehojeong@google.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: maintain six open zones for zoned
+ devices
+Message-ID: <ZGV9saLA+9rM4t9p@google.com>
+References: <20230505155040.87561-1-jaegeuk@kernel.org>
+ <8c91663e-dfca-4b64-dc39-5a130fbb99a7@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c91663e-dfca-4b64-dc39-5a130fbb99a7@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Khalid Aziz <khalid.aziz@oracle.com> writes:
+Applied the below comments. Thanks.
 
-> Pages pinned in memory through extra refcounts can not be migrated.
-> Currently as isolate_migratepages_block() scans pages for
-> compaction, it skips any pinned anonymous pages. All non-migratable
-> pages should be skipped and not just the anonymous pinned pages.
-> This patch adds a check for extra refcounts on a page to determine
-> if the page can be migrated.  This was seen as a real issue on a
-> customer workload where a large number of pages were pinned by vfio
-> on the host and any attempts to allocate hugepages resulted in
-> significant amount of cpu time spent in either direct compaction or
-> in kcompactd scanning vfio pinned pages over and over again that can
-> not be migrated. 
->
-> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-> Suggested-by: Steve Sistare <steven.sistare@oracle.com>
-> ---
-> v3:
-> 	- Account for extra ref added by get_page_unless_zero() earlier
-> 	  in isolate_migratepages_block() (Suggested by Huang, Ying)
-> 	- Clean up computation of extra refs to be consistent 
-> 	  (Suggested by Huang, Ying)
->
-> v2:
-> 	- Update comments in the code (Suggested by Andrew)
-> 	- Use PagePrivate() instead of page_has_private() (Suggested
-> 	  by Matthew)
-> 	- Pass mapping to page_has_extrarefs() (Suggested by Matthew)
-> 	- Use page_ref_count() (Suggested by Matthew)
-> 	- Rename is_pinned_page() to reflect its function more
-> 	  accurately (Suggested by Matthew)
->
->  mm/compaction.c | 36 ++++++++++++++++++++++++++++++++----
->  1 file changed, 32 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 5a9501e0ae01..f04c00981172 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -764,6 +764,34 @@ static bool too_many_isolated(pg_data_t *pgdat)
->  	return too_many;
->  }
->  
-> +/*
-> + * Check if this base page should be skipped from isolation because
-> + * it has extra refcounts that will prevent it from being migrated.
-
-This appears duplicated with the comments in caller.  It's OK to keep
-one only?
-
-> + * This function is called for regular pages only, and not
-> + * for THP or hugetlbfs pages. This code is inspired by similar code
-> + * in migrate_vma_check_page(), can_split_folio() and
-> + * folio_migrate_mapping()
-
-It's not good to duplicate code.  Why not just use
-folio_expected_refs()?
-
-Best Regards,
-Huang, Ying
-
-> + */
-> +static inline bool page_has_extra_refs(struct page *page)
-> +{
-> +	/* caller holds a ref already from get_page_unless_zero() */
-> +	unsigned long extra_refs = 1;
-> +
-> +	/* anonymous page can have extra ref from swap cache */
-> +	if (PageAnon(page))
-> +		extra_refs += PageSwapCache(page) ? 1 : 0;
-> +	else
-> +		extra_refs += 1 + PagePrivate(page);
-> +
-> +	/*
-> +	 * This is an admittedly racy check but good enough to determine
-> +	 * if a page is pinned and can not be migrated
-> +	 */
-> +	if ((page_ref_count(page) - extra_refs) > page_mapcount(page))
-> +		return true;
-> +	return false;
-> +}
-> +
->  /**
->   * isolate_migratepages_block() - isolate all migrate-able pages within
->   *				  a single pageblock
-> @@ -992,12 +1020,12 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  			goto isolate_fail;
->  
->  		/*
-> -		 * Migration will fail if an anonymous page is pinned in memory,
-> -		 * so avoid taking lru_lock and isolating it unnecessarily in an
-> -		 * admittedly racy check.
-> +		 * Migration will fail if a page has extra refcounts
-> +		 * preventing it from migrating, so avoid taking
-> +		 * lru_lock and isolating it unnecessarily
->  		 */
->  		mapping = page_mapping(page);
-> -		if (!mapping && (page_count(page) - 1) > total_mapcount(page))
-> +		if (page_has_extra_refs(page))
->  			goto isolate_fail_put;
->  
->  		/*
+On 05/17, Chao Yu wrote:
+> On 2023/5/5 23:50, Jaegeuk Kim wrote:
+> > From: Daeho Jeong <daehojeong@google.com>
+> > 
+> > To keep six open zone constraints, make them not to be open over six
+> > open zones.
+> > 
+> > Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > ---
+> >   fs/f2fs/data.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++++
+> >   fs/f2fs/f2fs.h |  5 +++++
+> >   2 files changed, 62 insertions(+)
+> > 
+> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > index 7dd92a9028b1..bb9de0a02143 100644
+> > --- a/fs/f2fs/data.c
+> > +++ b/fs/f2fs/data.c
+> > @@ -383,6 +383,17 @@ static void f2fs_write_end_io(struct bio *bio)
+> >   	bio_put(bio);
+> >   }
+> > +#ifdef CONFIG_BLK_DEV_ZONED
+> > +static void f2fs_zone_write_end_io(struct bio *bio)
+> > +{
+> > +	struct f2fs_bio_info *io = (struct f2fs_bio_info *)bio->bi_private;
+> > +
+> > +	bio->bi_private = io->bi_private;
+> > +	complete(&io->zone_wait);
+> > +	f2fs_write_end_io(bio);
+> > +}
+> > +#endif
+> > +
+> >   struct block_device *f2fs_target_device(struct f2fs_sb_info *sbi,
+> >   		block_t blk_addr, sector_t *sector)
+> >   {
+> > @@ -639,6 +650,10 @@ int f2fs_init_write_merge_io(struct f2fs_sb_info *sbi)
+> >   			INIT_LIST_HEAD(&sbi->write_io[i][j].io_list);
+> >   			INIT_LIST_HEAD(&sbi->write_io[i][j].bio_list);
+> >   			init_f2fs_rwsem(&sbi->write_io[i][j].bio_list_lock);
+> > +#ifdef CONFIG_BLK_DEV_ZONED
+> 
+> init_completion(&io->zone_wait);
+> 
+> > +			sbi->write_io[i][j].zone_pending_bio = NULL;
+> > +			sbi->write_io[i][j].bi_private = NULL;
+> > +#endif
+> >   		}
+> >   	}
+> > @@ -965,6 +980,26 @@ int f2fs_merge_page_bio(struct f2fs_io_info *fio)
+> >   	return 0;
+> >   }
+> > +#ifdef CONFIG_BLK_DEV_ZONED
+> > +static bool is_end_zone_blkaddr(struct f2fs_sb_info *sbi, block_t blkaddr)
+> > +{
+> > +	int devi = 0;
+> > +
+> > +	if (f2fs_is_multi_device(sbi)) {
+> > +		devi = f2fs_target_device_index(sbi, blkaddr);
+> > +		if (blkaddr < FDEV(devi).start_blk ||
+> > +		    blkaddr > FDEV(devi).end_blk) {
+> > +			f2fs_err(sbi, "Invalid block %x", blkaddr);
+> > +			return false;
+> > +		}
+> > +		blkaddr -= FDEV(devi).start_blk;
+> > +	}
+> > +	return bdev_zoned_model(FDEV(devi).bdev) == BLK_ZONED_HM &&
+> > +		f2fs_blkz_is_seq(sbi, devi, blkaddr) &&
+> > +		(blkaddr % sbi->blocks_per_blkz == sbi->blocks_per_blkz - 1);
+> > +}
+> > +#endif
+> > +
+> >   void f2fs_submit_page_write(struct f2fs_io_info *fio)
+> >   {
+> >   	struct f2fs_sb_info *sbi = fio->sbi;
+> > @@ -975,6 +1010,16 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
+> >   	f2fs_bug_on(sbi, is_read_io(fio->op));
+> >   	f2fs_down_write(&io->io_rwsem);
+> > +
+> > +#ifdef CONFIG_BLK_DEV_ZONED
+> > +	if (f2fs_sb_has_blkzoned(sbi) && btype < META && io->zone_pending_bio) {
+> > +		wait_for_completion_io(&io->zone_wait);
+> > +		bio_put(io->zone_pending_bio);
+> > +		io->zone_pending_bio = NULL;
+> > +		io->bi_private = NULL;
+> > +	}
+> > +#endif
+> > +
+> >   next:
+> >   	if (fio->in_list) {
+> >   		spin_lock(&io->io_lock);
+> > @@ -1038,6 +1083,18 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
+> >   	if (fio->in_list)
+> >   		goto next;
+> >   out:
+> > +#ifdef CONFIG_BLK_DEV_ZONED
+> > +	if (f2fs_sb_has_blkzoned(sbi) && btype < META &&
+> > +			is_end_zone_blkaddr(sbi, fio->new_blkaddr)) {
+> > +		bio_get(io->bio);
+> > +		init_completion(&io->zone_wait);
+> 
+> reinit_completion(&io->zone_wait);
+> 
+> Thanks,
+> 
+> > +		io->bi_private = io->bio->bi_private;
+> > +		io->bio->bi_private = io;
+> > +		io->bio->bi_end_io = f2fs_zone_write_end_io;
+> > +		io->zone_pending_bio = io->bio;
+> > +		__submit_merged_bio(io);
+> > +	}
+> > +#endif
+> >   	if (is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN) ||
+> >   				!f2fs_is_checkpoint_ready(sbi))
+> >   		__submit_merged_bio(io);
+> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > index 7afc9aef127a..0f05c1dd633f 100644
+> > --- a/fs/f2fs/f2fs.h
+> > +++ b/fs/f2fs/f2fs.h
+> > @@ -1218,6 +1218,11 @@ struct f2fs_bio_info {
+> >   	struct bio *bio;		/* bios to merge */
+> >   	sector_t last_block_in_bio;	/* last block number */
+> >   	struct f2fs_io_info fio;	/* store buffered io info. */
+> > +#ifdef CONFIG_BLK_DEV_ZONED
+> > +	struct completion zone_wait;	/* condition value for the previous open zone to close */
+> > +	struct bio *zone_pending_bio;	/* pending bio for the previous zone */
+> > +	void *bi_private;		/* previous bi_private for pending bio */
+> > +#endif
+> >   	struct f2fs_rwsem io_rwsem;	/* blocking op for bio */
+> >   	spinlock_t io_lock;		/* serialize DATA/NODE IOs */
+> >   	struct list_head io_list;	/* track fios */
