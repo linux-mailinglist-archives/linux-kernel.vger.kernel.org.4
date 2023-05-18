@@ -2,181 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EEF707EB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC3D707ECC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjERLCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S230322AbjERLG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbjERLCE (ORCPT
+        with ESMTP id S229829AbjERLGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:02:04 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181D9E8;
-        Thu, 18 May 2023 04:02:03 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52cb78647ecso1249939a12.1;
-        Thu, 18 May 2023 04:02:03 -0700 (PDT)
+        Thu, 18 May 2023 07:06:55 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0765D3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:06:53 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so278994666b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:06:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684407722; x=1686999722;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHadosSVP1nYeUYor3LYCwEiSQu4WLzAMj39s4WmEiE=;
-        b=b2cQDMUYRU9sxfpMR/P4TVHYY/bVcXfROWLkpgM+keixBcZ0W7q+pABMmJekvpJccq
-         9BqAxS22ZtWWAzt35MCNz4Rzf7FYIJ3ut1MwIgmSDrVVCN3nPfCxEN52az9nHhWje+n/
-         +hwHfViwXxX4HWvdZorfM5/kb1EeAfI57NZfZEHkdPjXEWzdnrZMhUKWR8rsDgQXuMVF
-         HBQp3ClIR+GlF/s/dwxCeiIRbh2Rsj9yJpVoLTrudVrrIEAX4psuzGgEDT3PrGGvExh5
-         ew+zw6IrrNs45JW+MJXI2uLZ4Di4R42vYzr1Ztcx5GdNFcA6VKopMeyD21sCaNndNw81
-         wiqg==
+        d=linaro.org; s=google; t=1684408012; x=1687000012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yeJXFRF7sbuSmGTwl5/y2NHZf03i5D97leo/Mm1jmPA=;
+        b=MjfqNjnPpIzx92qYzyVccFfBlsVJ8+9ROZDV6w+QVISVgL4MVL3AdF3Mh8FrK8cnOm
+         wHW6IB6uWI3uRraA3KtEA5TtALuzerEdegGTu0l7Vl/8dN76rFSPm7KcFkPCBs9YO1Md
+         thRZobFoifwp8/WHXagA42ih2WHxzXczGWkEXITjkYC0PdXzIRqkPSNXaNxFZURmxNva
+         SUqZROTPUozLgNYTgx6yiHS8MLuGLETlulPv9WLkJxcCtcffY3PG+xxVsIJgX+Khv+1F
+         Tm/u5v1fRrrsCylilQDaaBR0QLZV4+ryfeqdOu5Un4DFcaPrICGHy5rGXSYwjbyFWTZ6
+         8Gew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684407722; x=1686999722;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZHadosSVP1nYeUYor3LYCwEiSQu4WLzAMj39s4WmEiE=;
-        b=coDEYRQqnac01uqiRlAnFJ6RVEXDWu2ubUYwt22oSAWQcLqqupxOHI25YA7jUTm7rF
-         c8goGiGAzonYmjMVn2lSUQ13beyJ+qd+bW7UVogwuBQcqJV/+9EdxcY6DmjeDdHeynVl
-         cK7spQfNXIqOnhwUN9BSGUiXUCBaSy4q/4F5M59n/2f/3Ipfp5JbhrrjrQFWXSuNNcYt
-         Fqvk8kQO3ZIeqMrxW+qBGCdODjosYf2S4SVYqMNZ8uiNpYurFZzRjt0S+6+IImmPGCuR
-         v9XfbHfYw/mFF9UvLw2WoSFEIooZHrcxkn6n+OJqph29ZG6W/Bge8SDoGd4dVI5GyGDR
-         fJEQ==
-X-Gm-Message-State: AC+VfDxiJnaVcjLikdtNXPxo8aoVOnvy1kaLHrVCA9Nm2Tw2OhEqD8mX
-        Axa5MVHwjXHRVlkWujiykCU9BUyZirU4ja6zbug=
-X-Google-Smtp-Source: ACHHUZ6QeMDKQ8o8d5u/L+MqMx0fcWHl7nyy9+bo9SijSMzn68BRMxKaYwM2W5mQz6LVCG+qibygS5qbq1DqOw2Xc5M=
-X-Received: by 2002:a17:902:7b8f:b0:1ae:2e0f:1cf6 with SMTP id
- w15-20020a1709027b8f00b001ae2e0f1cf6mr2036475pll.36.1684407722440; Thu, 18
- May 2023 04:02:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684408012; x=1687000012;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yeJXFRF7sbuSmGTwl5/y2NHZf03i5D97leo/Mm1jmPA=;
+        b=T4T39cylceAkbK7NHC3h8gkqafjvqEcQT+1iTwSmVhfBtEqIXIiV+hfuGOdYCSQ7BZ
+         hNZp69gwQuR6zvHwBvJ2NMD//dn6u/SOxOUuAGgjy0OeVDFTkK/a1Gv8iotfMmAfHgBn
+         aaEci609rMIhgHj12c+gI1tfZAu0HQrB1/JfBGtWFWpAVe+9gL9hJrxMl3vClLKBF19L
+         ClAg3Po1wO1uNtTPaCGkkGQEaj0kVg/0+Ga0tvO43gAPIosSUa+F1m7faOiMIH1+U1n0
+         S9/sMPcO3OkspkrNxXese5r6ojjiW2eOrX7qYgLFJcD9AdsnXcZS3UpOoBvFnG20YlCa
+         nZMg==
+X-Gm-Message-State: AC+VfDxZbXaOUwOEyTHOUmCE0MKRE/H5+gThf4NdDsoy+OtVtUwBpuNS
+        8zbqdBqzn6DCY+D3d/YYpqVxBA==
+X-Google-Smtp-Source: ACHHUZ77B3+5K0JTlWbBlEvuo7J0nvSd9qNSA6L2iF+zlVo6gn+LFWwwVl6YZjX6L8F1UPtYxDep4w==
+X-Received: by 2002:a17:907:31ca:b0:960:d28d:3368 with SMTP id xf10-20020a17090731ca00b00960d28d3368mr38722660ejb.60.1684408012085;
+        Thu, 18 May 2023 04:06:52 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
+        by smtp.gmail.com with ESMTPSA id pv27-20020a170907209b00b00882f9130eafsm824286ejb.26.2023.05.18.04.06.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 04:06:51 -0700 (PDT)
+Message-ID: <24b60ca3-b6b9-662f-03c8-df1536b52bc9@linaro.org>
+Date:   Thu, 18 May 2023 13:06:49 +0200
 MIME-Version: 1.0
-References: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
- <76943268-3982-deaf-9736-429dd51e01b0@gmail.com> <052bacf7-756b-5f63-965b-9a8480a9acf5@quicinc.com>
-In-Reply-To: <052bacf7-756b-5f63-965b-9a8480a9acf5@quicinc.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Thu, 18 May 2023 13:01:51 +0200
-Message-ID: <CAOX2RU4WcNXu42W6_459wKzyo+6onNRhE+=3usmSRB9AEF3MtA@mail.gmail.com>
-Subject: Re: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Praveenkumar I <quic_ipkumar@quicinc.com>
+References: <cover.1684140883.git.quic_varada@quicinc.com>
+ <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
+ <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
+ <20230516120426.GA1679@varda-linux.qualcomm.com>
+ <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
+ <20230517055726.GA3165@varda-linux.qualcomm.com>
+ <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
+ <20230518054054.GA998@varda-linux.qualcomm.com>
+ <fe1d81d2-52e6-7d2d-8d6c-ffdcbb8ccc89@linaro.org>
+ <20230518090503.GA9173@varda-linux.qualcomm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230518090503.GA9173@varda-linux.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 at 12:44, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->
->
->
-> On 5/18/2023 3:45 PM, Robert Marko wrote:
-> >
-> > On 16. 03. 2023. 16:14, Mukesh Ojha wrote:
-> >> During normal restart of a system download bit should
-> >> be cleared irrespective of whether download mode is
-> >> set or not.
-> >>
-> >> Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
-> >> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> >
-> > Hi, this has been backported to 5.15.111, however it seems to be
-> > breaking reboot
->
-> Thanks for reporting the issue, by any chance enabling
-> CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT + reboot works on
-> IPQ4019 ?
+On 18/05/2023 11:05, Varadarajan Narayanan wrote:
+> On Thu, May 18, 2023 at 09:09:12AM +0200, Krzysztof Kozlowski wrote:
+>> On 18/05/2023 07:40, Varadarajan Narayanan wrote:
+>>> On Wed, May 17, 2023 at 09:00:49AM +0200, Krzysztof Kozlowski wrote:
+>>>> On 17/05/2023 07:57, Varadarajan Narayanan wrote:
+>>>>> Part-1 is adding the 'const' entries at the beginning i.e.
+>>>>>
+>>>>> 	+      - const: qcom,tsens-v0_1
+>>>>> 	+      - const: qcom,tsens-v1
+>>>>> 	+      - const: qcom,tsens-v2
+>>>>> 	+      - const: qcom,ipq8074-tsens
+>>>>>
+>>>>> Part-2 is changing from one valid syntax to another i.e.
+>>>>>
+>>>>> 	+        items:
+>>>>> 	+          - enum:
+>>>>> 	+              - qcom,ipq9574-tsens
+>>>>> 	+          - const: qcom,ipq8074-tsens
+>>>>>
+>>>>> Without both of the above changes, either or both of dtbs_check
+>>>>> & dt_binding_check fails. So, it is not possible to just add the
+>>>>> "valid hunk" (part-2) alone.
+>>>>
+>>>> Of course it is. All schema files work like that...
+>>>>>
+>>>>> If having both part-1 and part-2 in the same patch is not
+>>>>> acceptable, shall I split them into two patches? Please let me know.
+>>>>
+>>>> No, hunk one is not justified.
+>>>
+>>> For the other compatibles, the enum entries and const/fallback
+>>> entries are different. For the 9574 & 8074 case, we want to have
+>>> qcom,ipq8074-tsens as both enum and const/fallback entry. Hence,
+>>> if we don't have the first hunk, dtbs_check fails for 8074
+>>> related dtbs
+>>>
+>>> 	ipq8074-hk01.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+>>> 		['qcom,ipq8074-tsens'] is too short
+>>
+>> Why? It is already there. Open the file and you will see that this is
+>> already covered.
+> 
+> I guess dtbs_check doesn't like the same value being a const and
+> a oneof entry.
 
-Unfortunately not, the board still hangs in SBL.
+I don't understand.
 
-Regards,
-Robert
+>  Have attached the file, please see if something is
+> not in order.
 
->
-> > on IPQ4019 by causing the board to then hang in SBL with:
-> > root@OpenWrt:/# reboot
-> > root@OpenWrt:/# [   76.473541] device lan1 left promiscuous mode
-> > [   76.474204] br-lan: port 1(lan1) entered disabled state
-> > [   76.527975] device lan2 left promiscuous mode
-> > [   76.530301] br-lan: port 2(lan2) entered disabled state
-> > [   76.579376] device lan3 left promiscuous mode
-> > [   76.581698] br-lan: port 3(lan3) entered disabled state
-> > [   76.638434] device lan4 left promiscuous mode
-> > [   76.638777] br-lan: port 4(lan4) entered disabled state
-> > [   76.978489] qca8k-ipq4019 c000000.switch wan: Link is Down
-> > [   76.978883] device eth0 left promiscuous mode
-> > [   76.987077] ipqess-edma c080000.ethernet eth0: Link is Down
-> > [
-> > Format: Log Type - Time(microsec) - Message - Optional Info
-> > Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
-> > S - QC_IMAGE_VERSION_STRING=BOOT.BF.3.1.1-00123
-> > S - IMAGE_VARIANT_STRING=DAABANAZA
-> > S - OEM_IMAGE_VERSION_STRING=CRM
-> > S - Boot Config, 0x00000021
-> > S - Reset status Config, 0x00000010
-> > S - Core 0 Frequency, 0 MHz
-> > B -       261 - PBL, Start
-> > B -      1339 - bootable_media_detect_entry, Start
-> > B -      1679 - bootable_media_detect_success, Start
-> > B -      1693 - elf_loader_entry, Start
-> > B -      5076 - auth_hash_seg_entry, Start
-> > B -      7223 - auth_hash_seg_exit, Start
-> > B -    578349 - elf_segs_hash_verify_entry, Start
-> > B -    696356 - PBL, End
-> > B -    696380 - SBL1, Start
-> > B -    787236 - pm_device_init, Start
-> > D -         7 - pm_device_init, Delta
-> > B -    788701 - boot_flash_init, Start
-> > D -     52782 - boot_flash_init, Delta
-> > B -    845625 - boot_config_data_table_init, Start
-> > D -      3836 - boot_config_data_table_init, Delta - (419 Bytes)
-> > B -    852841 - clock_init, Start
-> > D -      7566 - clock_init, Delta
-> > B -    864883 - CDT version:2,Platform ID:9,Major ID:0,Minor
-> > ID:0,Subtype:64
-> > B -    868413 - sbl1_ddr_set_params, Start
-> > B -    873402 - cpr_init, Start
-> > D -         2 - cpr_init, Delta
-> > B -    877842 - Pre_DDR_clock_init, Start
-> > D -         4 - Pre_DDR_clock_init, Delta
-> > D -     13234 - sbl1_ddr_set_params, Delta
-> > B -    891155 - pm_driver_init, Start
-> > D -         2 - pm_driver_init, Delta
-> > B -    909105 - Image Load, Start
-> > B -   1030210 - Boot error ocuured!. Error code: 303d
-> >
-> > Reverting the commit fixes rebooting.
-> >
-> > Regards,
-> > Robert
-> >
-> >> ---
-> >> Changes in v3:
-> >>    - Added Fixes tag.
-> >>    - Removed it from below patch series, as it makes sense to go this
-> >> independently.
-> >>
-> >> https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
-> >>
-> >> Changes in v2:
-> >>    - No change.
-> >>
-> >>   drivers/firmware/qcom_scm.c | 3 +--
-> >>   1 file changed, 1 insertion(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> >> index 468d4d5..3e020d1 100644
-> >> --- a/drivers/firmware/qcom_scm.c
-> >> +++ b/drivers/firmware/qcom_scm.c
-> >> @@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device
-> >> *pdev)
-> >>   static void qcom_scm_shutdown(struct platform_device *pdev)
-> >>   {
-> >>       /* Clean shutdown, disable download mode to allow normal restart */
-> >> -    if (download_mode)
-> >> -        qcom_scm_set_download_mode(false);
-> >> +    qcom_scm_set_download_mode(false);
-> >>   }
-> >>   static const struct of_device_id qcom_scm_dt_match[] = {
+I don't know what changed there. Please work on patches.
+
+> 
+>> If you remove it, then yes, you will see errors and the answer is: do
+>> not remove it.
+> 
+> I haven't removed it. 
+
+You did. Look:
+
+       - description: v2 of TSENS with combined interrupt
+-        enum:
+-          - qcom,ipq8074-tsens
+
+The first character in the diff (-) means removal.
+
+> For this patch, ipq8074-tsens changed from
+> being an oneof enum entry to a const entry. Probably, that is why
+> dtbs_check is giving these errors.
+
+You removed the entry which you should not have touched.
+
+> 
+>>> 	ipq8074-hk10-c2.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+>>> 		['qcom,ipq8074-tsens'] is too short
+>>>
+>>> 	ipq8074-hk10-c1.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
+>>> 		['qcom,ipq8074-tsens'] is too short
+>>>
+>>> I'm not sure of the correct solution. Having the first hunk
+>>> solves the above dtbs_check errors, so went with it. I'm able to
+>>> avoid dtbs_check errors with just one entry in the first hunk.
+>>
+>> You made multiple changes in one patch which is not correct. Your goal
+>> is to add only one change - ipq9574 followed by ipq8074. Add this one.
+>> Don't touch others.
+> 
+> But that breaks dtbs_check.
+
+All other cases, hundreds of other binding files, do not have problem.
+Only this one "breaks dtbs_check". No, it does not.
+
+Whatever is broken is result of your removal of unrelated pieces.
+
+> 
+>>>  	+      - const: qcom,ipq8074-tsens
+>>>
+>>> Please let me know if there is a better way to resolve this or we
+>>> can have just the 8074 entry in the first hunk.
+>>
+>> You only need to add new item on the oneOf list:
+>>  - enum
+>>      - ipq9574
+>>  - const: ipq8074
+> 
+> The "['qcom,ipq8074-tsens'] is too short" errors were generated
+> with the above snippet only. Please see the attachment
+
+It's not true. The error you see is result because you removed something
+you should not. I did not ask you to remove anything. So repeating -
+"add new item". Adding is not "removal and adding". Adding is just "adding".
+
+Best regards,
+Krzysztof
+
