@@ -2,97 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F0F7087CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FA07087CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjERS3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 14:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        id S229654AbjERS3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 14:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjERS3g (ORCPT
+        with ESMTP id S229819AbjERS3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 14:29:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CF7E46
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684434528;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZoOCyUhfshjqiWx1RRGNm+zxB7amhG6MwKVi2N7UXyc=;
-        b=UI/PjRfEAKrFiWKjf8fISTg6AEyXPzMiCsFhglIv+hvqLWQqNU373i70pzSrJteHYzEVZj
-        JYdiLTdoVvVqcHn7sTgEesR+d8qObsXVIyr6cqYjCO3MnQK9nlauo58lV4IUUKWUQc0LPi
-        oIaKpQFU34PN2YoqKlmwtSxBcoF/3WE=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-338-9-29MuU9M3CNBXtDEyOXwg-1; Thu, 18 May 2023 14:28:47 -0400
-X-MC-Unique: 9-29MuU9M3CNBXtDEyOXwg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f387b6d37fso34968631cf.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:28:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684434526; x=1687026526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZoOCyUhfshjqiWx1RRGNm+zxB7amhG6MwKVi2N7UXyc=;
-        b=GmfKlTG8y7o64ZaGSzmCD5AKkz4xiflG0YZeHVoe7jKMD/BFbF/mChNbobU7ovHtpd
-         +u3NsDWZI0Nu7HPwXBLBHvXfPEuzGnZO//W9cmRzWacboweZxRXuaqQ1wp8fmiCsmZnI
-         7nL47tUwV51RPs10+DdLWfThU+Zlg4441QcYEX58YBJnVbi13Q+z9Uee93tbMwKLv5WE
-         UD7ZAxeHPfULGnk8Y+E5RLi1l81MB1zyfnxQo6XseXGLL5Fw6QGTVLeeuhzX/tYuFCuX
-         XtUEuYIehbRy1/D9QGNO62Hqcw7M4UUqjP6LRYKQyHt0oEZIPV+sC/JBydiKwoTdgSLc
-         diag==
-X-Gm-Message-State: AC+VfDxY5P2WymrFKD/hWFiVa13wGKNdvd/uoUDIGt56ejnKnUCXiXs4
-        72Uy0rK2r0IGZJpZXVoTCM+aAqLR8iiWOLDFnKbKyE5N42uaCyLj9bgfBIiv5zxas5vBkFcCCvy
-        Sm/S/7Qgp2FWitasBG7g8gck2yMzcfTJGlI92kdCY/wE6rqbfI6BBmMItki+w4xKBcFMPoMJPex
-        TqjmdhtSuU
-X-Received: by 2002:a05:622a:152:b0:3f5:41d9:fddb with SMTP id v18-20020a05622a015200b003f541d9fddbmr1163447qtw.47.1684434526297;
-        Thu, 18 May 2023 11:28:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ78W2zAGWvSvDR1brUGAqTFQs3yXE6GKD14ttBdpFaqUXpLV7M9B6iNBpNGztxVS1Q6I6uXdw==
-X-Received: by 2002:a05:622a:152:b0:3f5:41d9:fddb with SMTP id v18-20020a05622a015200b003f541d9fddbmr1163415qtw.47.1684434526063;
-        Thu, 18 May 2023 11:28:46 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id x5-20020a05620a01e500b0074fb15e2319sm557599qkn.122.2023.05.18.11.28.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 11:28:45 -0700 (PDT)
-Date:   Thu, 18 May 2023 11:28:43 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>, stable@vger.kernel.org,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for more Lenovo devices
-Message-ID: <h7pelzgnae6kgrydhbp2ffoj4xctux3vx3s5yhiexskaykhcha@stxphc5cc3gy>
-References: <20230511005403.24689-1-jsnitsel@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511005403.24689-1-jsnitsel@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 18 May 2023 14:29:37 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC741B7;
+        Thu, 18 May 2023 11:29:36 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 0CE0D320031A;
+        Thu, 18 May 2023 14:29:31 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 18 May 2023 14:29:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684434571; x=1684520971; bh=tH
+        tWwVdk+T3dfEapGxc09loZU1s63o4Dx8wsL+VztSg=; b=tWPlNA2ekwKyDYeufo
+        88t/4k8oWwc451jqi6PVY+/gL7cxmTUih0drBDwQjypo979vXHqZjBFKVqdlIBan
+        p6S1lCYBAsJd6tUgkoqU3scgNgQsEl4XDiVrn7HYDuDFG8DstU3DkSSPk8DqXx8E
+        1PBjReF25/9i3PjC1Fe1Eso3Guj6+hrlGlez3dMx1CCjxM+5AuEb+S7sP16jnJFb
+        mRf+EipDj4IysuJOW3mr9VZdotOrGIfJZ1H2MbHhFOBhqQp+HW2MdcF13odCajlt
+        NCOqWSGB1HK8MKhHH7pLpC9SD/kAbENikCrNacUgGcn9DQ9nc3cnQccYgwNXfkUC
+        IrmQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684434571; x=1684520971; bh=tHtWwVdk+T3df
+        EapGxc09loZU1s63o4Dx8wsL+VztSg=; b=pWkTsO6vYdAYAWQsR9L4hxpX4HFbD
+        HfwUQSLtbhnVIHAyhlTaygSR3cFUF8k+Y+52iuvHv2g2zJMxABQg6hAwvJSpbkPn
+        f0Gt0bPuDAjCBEXyOUQ94Td4ujPQ4FdnGhB686kduwQIx6plLpSQeEFQCUmfzMV0
+        tRaH6Qc/G6MPwl3qbmCHYQyE+aY0EKsNwWYLqQaozIfdTJtEgCUat0VkDv2I4wWq
+        Gn/KLQ9gSIiP4cf2e8oFiFgF3sU7UyBpqJkLgH9VJk3m5ZgbctSEpK1lWAV2XFZP
+        iaPgCpxNYJggFF52emxRqztKW/jGBqmFHYU+Eoa9lq11FlR4wH230pujQ==
+X-ME-Sender: <xms:iW5mZHpfJqiABPUXVcci3BmPSGF9BabgIQFdEO_5PuQg2XS8cj8Iiw>
+    <xme:iW5mZBpfjCryiLtqhG9gcAtYurgTIJBQcenzL9uFaetOauJBbtXUkJ25hjr5OuiJ4
+    vdJyswW6J5vPC4bM4Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeifedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:iW5mZEMyjmpWw_wwGxSMEH5cmS-p6Sensm0cWcWBZRz5fj1g2gPgrQ>
+    <xmx:iW5mZK4EW9TJnP9rL3KDENV5pFNZIZG4JrSObBt-kSn1DoMtGUKVXg>
+    <xmx:iW5mZG4WoaFSSice931Jxp8ZLHMnLGO3dDzeY2qIXUdxZ3uaJ4ZpZQ>
+    <xmx:i25mZLadIciyHLTS_bb7KHjhBTrRxsz-qubajev4SYPQQ28elznzuQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6AA6CB60086; Thu, 18 May 2023 14:29:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com>
+In-Reply-To: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9>
+References: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9>
+Date:   Thu, 18 May 2023 20:29:09 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Palmer Dabbelt" <palmer@rivosinc.com>, guoren <guoren@kernel.org>
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+        "Anup Patel" <anup@brainfault.org>, shihua@iscas.ac.cn,
+        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
+        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
+        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
+        "Andy Chiu" <andy.chiu@sifive.com>,
+        "Vincent Chen" <vincent.chen@sifive.com>,
+        "Greentime Hu" <greentime.hu@sifive.com>,
+        "Jonathan Corbet" <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
+        "Jessica Clarke" <jrtc27@jrtc27.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Guo Ren" <guoren@linux.alibaba.com>
+Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on 64-bit
+ supervisor mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 05:54:03PM -0700, Jerry Snitselaar wrote:
-> The P360 Tiny suffers from an irq storm issue like the T490s, so add
-> an entry for it to tpm_tis_dmi_table, and force polling. There also
-> previously was a report from the previous attempt to enable interrupts
-> that involved a ThinkPad L490. So an entry is added for it as well.
-> 
-> Reported-by: Peter Zijlstra <peterz@infradead.org> # P360 Tiny
-> Closes: https://lore.kernel.org/linux-integrity/20230505130731.GO83892@hirez.programming.kicks-ass.net/
-> Cc: stable@vger.kernel.org # 6.2
+On Thu, May 18, 2023, at 17:38, Palmer Dabbelt wrote:
+> On Thu, 18 May 2023 06:09:51 PDT (-0700), guoren@kernel.org wrote:
+>> From: Guo Ren <guoren@linux.alibaba.com>
+>>
+>> This patch series adds s64ilp32 support to riscv. The term s64ilp32
+>> means smode-xlen=64 and -mabi=ilp32 (ints, longs, and pointers are all
+>> 32-bit), i.e., running 32-bit Linux kernel on pure 64-bit supervisor
+>> mode. There have been many 64ilp32 abis existing, such as mips-n32 [1],
+>> arm-aarch64ilp32 [2], and x86-x32 [3], but they are all about userspace.
+>> Thus, this should be the first time running a 32-bit Linux kernel with
+>> the 64ilp32 ABI at supervisor mode (If not, correct me).
+>
+> Does anyone actually want this?  At a bare minimum we'd need to add it 
+> to the psABI, which would presumably also be required on the compiler 
+> side of things.
+>
+> It's not even clear anyone wants rv64/ilp32 in userspace, the kernel 
+> seems like it'd be even less widely used.
 
-For the stable folks this can be ignored though it won't hurt anything if someone does
-backport it. The code enabling interrupts went into 6.4-rc1, not 6.2.
+We have had long discussions about supporting ilp32 userspace on
+arm64, and I think almost everyone is glad we never merged it into
+the mainline kernel, so we don't have to worry about supporting it
+in the future. The cost of supporting an extra user space ABI
+is huge, and I'm sure you don't want to go there. The other two
+cited examples (mips-n32 and x86-x32) are pretty much unused now
+as well, but still have a maintenance burden until they can finally
+get removed.
 
-Regards,
-Jerry
+If for some crazy reason you'd still want the 64ilp32 ABI in user
+space, running the kernel this way is probably still a bad idea,
+but that one is less clear. There is clearly a small memory
+penalty of running a 64-bit kernel for larger data structures
+(page, inode, task_struct, ...) and vmlinux, and there is no
+huge additional maintenance cost on top of the ABI itself
+that you'd need either way, but using a 64-bit address space
+in the kernel has some important advantages even when running
+32-bit userland: processes can use the entire 4GB virtual
+space, while the kernel can address more than 768MB of lowmem,
+and KASLR has more bits to work with for randomization. On
+RISCV, some additional features (VMAP_STACK, KASAN, KFENCE,
+...) depend on 64-bit kernels even though they don't
+strictly need that.
 
+     Arnd
